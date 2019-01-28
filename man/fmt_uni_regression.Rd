@@ -35,7 +35,7 @@ are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} defau
 (i.e. only Yes shown). To force both levels to be shown include the column
 name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
 
-\item{conf.level}{confidence level passed directly to \code{\link[broom]{tidy}}.
+\item{conf.level}{confidence level passed directly to \code{broom::tidy}.
 Default is 0.95.}
 
 \item{beta_fun}{function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}}
@@ -44,8 +44,8 @@ Default is 0.95.}
 }
 \description{
 The \code{fmt_uni_regression} function arguments are similar to the \code{\link{fmt_regression}}
-arguments. Review the
-\href{https://github.mskcc.org/pages/datadojo/biostatR/articles/fmt_regression.html#fmt_uni_regression}{\code{fmt_uni_regression} vignette}
+arguments. Review the \code{fmt_uni_regression}
+\href{http://www.danieldsjoberg.com/clintable/articles/fmt_regression.html#fmt_uni_regression}{vignette}
 for detailed examples.
 }
 \examples{

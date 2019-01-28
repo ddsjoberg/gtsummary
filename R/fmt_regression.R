@@ -1,11 +1,9 @@
 #' Turn a regression model object into a markdown-ready tibble.
 #'
-#' This function uses \code{\link[broom]{tidy}} from the `broom` or `broom.mixed` packages
-#' to perform the initial model formatting. Review the
-#' \href{https://github.mskcc.org/pages/datadojo/biostatR/articles/fmt_regression.html}{`fmt_regression` vignette}
+#' This function uses \code{broom::tidy} from the `broom` or `broom.mixed` packages
+#' to perform the initial model formatting. Review the `fmt_regression`
+#' \href{http://www.danieldsjoberg.com/clintable/articles/fmt_regression.html}{vignette}
 #' for detailed examples.
-#' If your class of model is not supported, please put in an
-#' \href{https://github.mskcc.org/datadojo/biostatR/issues}{issue} to request support.
 #'
 #' @param x regression model object
 #' @param exponentiate logical argument passed directly to
@@ -26,10 +24,10 @@
 #' @examples
 #' mod1 <- lm(hp ~ mpg + factor(cyl), mtcars)
 #' fmt_regression(mod1)
-#' 
+#'
 #' mod2 <- glm(response ~ age + grade + stage, trial, family = binomial(link = "logit"))
 #' fmt_regression(mod2, exponentiate = TRUE)
-#' 
+#'
 #' library(lme4)
 #' mod_glmer <- glmer(am ~ hp + (1 | gear), mtcars, family = binomial)
 #' fmt_regression(mod_glmer, exponentiate = TRUE)

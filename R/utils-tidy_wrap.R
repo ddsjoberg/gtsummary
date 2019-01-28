@@ -1,11 +1,11 @@
 #' Tidies regression object based on class
 #'
 #' The `tidy_wrap()` function has two primary functions.  First, using either
-#' \code{\link[broom]{tidy}} or `broom.mixed::tidy` (depending on model input class)
+#' `broom::tidy` or `broom.mixed::tidy` (depending on model input class)
 #' the regression model object is converted into a data frame. It then adjusts the
 #' output for use in the rest of \code{\link{fmt_regression}}.
 #'
-#' The output of \code{\link[broom]{tidy}} or `broom.mixed::tidy` will often include additional information
+#' The output of `broom::tidy` or `broom.mixed::tidy` will often include additional information
 #' that will not be included in a printed table from `fmt_regression()`
 #' (e.g. scale parameters, random effects, etc.).  This
 #' simple helper function deletes extraneous rows from the output.
@@ -13,9 +13,9 @@
 #' the rest of `fmt_regression()` depends on having a column called p.value.
 #'
 #' @param x regression model object
-#' @param exponentiate logical argument passed directly to \code{\link[broom]{tidy}}
+#' @param exponentiate logical argument passed directly to `broom::tidy`
 #' or `broom.mixed::tidy`.
-#' @param conf.level confidence level passed directly to \code{\link[broom]{tidy}}
+#' @param conf.level confidence level passed directly to `broom::tidy`
 #' or `broom.mixed::tidy`.
 #' @keywords internal
 

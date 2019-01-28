@@ -9,20 +9,20 @@ tidy_wrap(x, exponentiate, conf.level)
 \arguments{
 \item{x}{regression model object}
 
-\item{exponentiate}{logical argument passed directly to \code{\link[broom]{tidy}}
+\item{exponentiate}{logical argument passed directly to \code{broom::tidy}
 or \code{broom.mixed::tidy}.}
 
-\item{conf.level}{confidence level passed directly to \code{\link[broom]{tidy}}
+\item{conf.level}{confidence level passed directly to \code{broom::tidy}
 or \code{broom.mixed::tidy}.}
 }
 \description{
 The \code{tidy_wrap()} function has two primary functions.  First, using either
-\code{\link[broom]{tidy}} or \code{broom.mixed::tidy} (depending on model input class)
+\code{broom::tidy} or \code{broom.mixed::tidy} (depending on model input class)
 the regression model object is converted into a data frame. It then adjusts the
 output for use in the rest of \code{\link{fmt_regression}}.
 }
 \details{
-The output of \code{\link[broom]{tidy}} or \code{broom.mixed::tidy} will often include additional information
+The output of \code{broom::tidy} or \code{broom.mixed::tidy} will often include additional information
 that will not be included in a printed table from \code{fmt_regression()}
 (e.g. scale parameters, random effects, etc.).  This
 simple helper function deletes extraneous rows from the output.

@@ -1,8 +1,8 @@
 #' Creates table of univariate regression results
 #'
 #' The `fmt_uni_regression` function arguments are similar to the \code{\link{fmt_regression}}
-#' arguments. Review the
-#' \href{https://github.mskcc.org/pages/datadojo/biostatR/articles/fmt_regression.html#fmt_uni_regression}{`fmt_uni_regression` vignette}
+#' arguments. Review the `fmt_uni_regression`
+#' \href{http://www.danieldsjoberg.com/clintable/articles/fmt_regression.html#fmt_uni_regression}{vignette}
 #' for detailed examples.
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data frame
@@ -22,7 +22,7 @@
 #' are `c("No", "Yes")`, `c("no", "yes")`, or `c("NO", "YES")` default to dichotomous printing
 #' (i.e. only Yes shown). To force both levels to be shown include the column
 #' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
-#' @param conf.level confidence level passed directly to \code{\link[broom]{tidy}}.
+#' @param conf.level confidence level passed directly to \code{broom::tidy}.
 #' Default is 0.95.
 #' @param beta_fun function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{fmt_pvalue}}
