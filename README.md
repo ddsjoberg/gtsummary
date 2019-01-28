@@ -1,6 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![Travis build
+status](https://travis-ci.org/ddsjoberg/clintable.svg?branch=master)](https://travis-ci.org/ddsjoberg/clintable)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/clintable?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/clintable)
+[![Coverage
+status](https://codecov.io/gh/ddsjoberg/clintable/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/clintable?branch=master)
 A package of functions commonly used in the work of the
 biostatisticians. The goal of **clintable** is to make reporting of
 tabular analytic results simple, beautiful, and
