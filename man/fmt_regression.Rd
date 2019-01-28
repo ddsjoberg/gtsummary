@@ -35,12 +35,10 @@ in the output.  Default is \code{FALSE}}
 \item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{fmt_pvalue}}}
 }
 \description{
-This function uses \code{\link[broom]{tidy}} from the \code{broom} or \code{broom.mixed} packages
-to perform the initial model formatting. Review the
-\href{https://github.mskcc.org/pages/datadojo/biostatR/articles/fmt_regression.html}{\code{fmt_regression} vignette}
+This function uses \code{broom::tidy} from the \code{broom} or \code{broom.mixed} packages
+to perform the initial model formatting. Review the \code{fmt_regression}
+\href{http://www.danieldsjoberg.com/clintable/articles/fmt_regression.html}{vignette}
 for detailed examples.
-If your class of model is not supported, please put in an
-\href{https://github.mskcc.org/datadojo/biostatR/issues}{issue} to request support.
 }
 \examples{
 mod1 <- lm(hp ~ mpg + factor(cyl), mtcars)
