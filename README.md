@@ -19,18 +19,15 @@ You can install the production version of **clintable** with:
 
 ``` r
 install.packages("remotes")
-remotes::install_url("https://github.com/ddsjoberg/clintable.git")
+remotes::install_url("https://github.com/ddsjoberg/clintable/archive/master.zip")
 ```
 
-<!-- and the development version with: -->
+and the development version with:
 
-<!-- ``` r -->
-
-<!-- install.packages("remotes") -->
-
-<!-- remotes::install_url("https://github.mskcc.org/datadojo/biostatR/archive/development.zip") -->
-
-<!-- ``` -->
+``` r
+install.packages("remotes")
+remotes::install_url("https://github.com/ddsjoberg/clintable/archive/dev.zip")
+```
 
 ## Examples
 
