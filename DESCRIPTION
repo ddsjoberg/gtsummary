@@ -1,43 +1,44 @@
 Package: clintable
-Title: The goal of clintable is to make reporting of tabular analytic results easy, beautiful, and reproducible
+Title: The goal of clintable is to make reporting of tabular
+    analytic results easy, beautiful, and reproducible
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Daniel D.",
-             family = "Sjoberg",
-             role = c("aut", "cre"),
-             email = "danieldsjoberg@gmail.com")
-Description: Written with the goal to make
-    reporting of tabular analytic results simple, beautiful, and reproducible.
+           family = "Sjoberg",
+           role = c("aut", "cre"),
+           email = "danieldsjoberg@gmail.com")
+Description: Written with the goal to make reporting of tabular
+    analytic results simple, beautiful, and reproducible.
     Publication-ready tables are created with minimal code, and can be
     exported to Word, HTML, and PDF documents with the use of Rmarkdown.
     The clintable functions are flexible, allowing you to easily customize
-    the aesthetics of tables to suit your needs. 
+    the aesthetics of tables to suit your needs.
 License: MIT + file LICENSE
 Depends: 
-    R (>= 3.5)
+    R (>= 3.4)
 Imports: 
-    knitr,
-    magrittr,
-    purrr,
-    tibble,
+    broom (>= 0.5.1),
+    broom.mixed (>= 0.2.3),
+    car (>= 3.0.2),
+    dplyr (>= 0.7.8),
+    glue (>= 1.3.0),
+    knitr (>= 1.21),
+    magrittr (>= 1.5),
     MASS,
-    broom,
-    broom.mixed,
-    car,
-    dplyr,
-    glue,
-    rlang,
-    stringr,
-    tidyr
+    purrr (>= 0.3.0),
+    rlang (>= 0.3.1),
+    stringr (>= 1.3.1),
+    tibble (>= 2.0.1),
+    tidyr (>= 0.8.2)
 Suggests: 
-    ggplot2,
+    covr (>= 3.2.1),
+    ggplot2 (>= 3.1.0),
     kableExtra (>= 0.9.0),
     lme4 (>= 1.1.18.1),
-    rmarkdown,
+    rmarkdown (>= 1.11),
     spelling,
     survival,
-    testthat (>= 2.0.0),
-    covr
+    testthat (>= 2.0.0)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

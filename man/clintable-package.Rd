@@ -4,10 +4,11 @@
 \name{clintable-package}
 \alias{clintable}
 \alias{clintable-package}
-\title{clintable: The goal of clintable is to make reporting of tabular analytic results easy, beautiful, and reproducible}
+\title{clintable: The goal of clintable is to make reporting of tabular
+    analytic results easy, beautiful, and reproducible}
 \description{
-Written with the goal to make
-    reporting of tabular analytic results simple, beautiful, and reproducible.
+Written with the goal to make reporting of tabular
+    analytic results simple, beautiful, and reproducible.
     Publication-ready tables are created with minimal code, and can be
     exported to Word, HTML, and PDF documents with the use of Rmarkdown.
     The clintable functions are flexible, allowing you to easily customize
