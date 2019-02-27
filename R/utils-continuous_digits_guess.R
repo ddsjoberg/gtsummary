@@ -3,11 +3,9 @@
 #'
 #' @param x vector containing the values of a continuous variable. This can be
 #' raw data values or a vector of summary statistics themselves
-#'
 #' @return the rounded values
-#'
 #' @keywords internal
-#'
+#' @author Emily Zabor, Daniel Sjoberg
 
 # takes as the input a vector of variable and summary types
 continuous_digits_guess <- function(data,
@@ -15,7 +13,7 @@ continuous_digits_guess <- function(data,
                                     summary_type,
                                     class,
                                     digits = NULL) {
-  purrr::pmap_dbl(
+  pmap_dbl(
     list(variable, summary_type, class),
     ~ continuous_digits_guess_one(data, ..1, ..2, ..3, digits)
   )
@@ -44,7 +42,7 @@ continuous_digits_guess_one <- function(data,
     stats::quantile(data[[variable]], probs = c(0.05), na.rm = TRUE)
 
   # otherwise guess the number of dignits to use based on the spread
-  dplyr::case_when(
+  case_when(
     var_spread < 0.01 ~ 4,
     var_spread >= 0.01 & var_spread < 0.1 ~ 3,
     var_spread >= 0.1 & var_spread < 10 ~ 2,

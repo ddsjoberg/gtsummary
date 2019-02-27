@@ -7,8 +7,9 @@
 #' @param test list of user defined statistical tests and corresponding variables
 #' @return most appropriate test as text of the test function
 #' @keywords internal
+#' @author Daniel Sjoberg
 
-assign_test <- function(data, var, var_summary_type, by_var, test, id) {
+assign_test <- function(data, var, var_summary_type, by_var, test, group) {
   purrr::map2_chr(
     var, var_summary_type,
     ~ assign_test_one(
@@ -17,23 +18,23 @@ assign_test <- function(data, var, var_summary_type, by_var, test, id) {
       var_summary_type = .y,
       by_var = by_var,
       test = test,
-      id = id
+      group = group
     )
   )
 }
 
-assign_test_one <- function(data, var, var_summary_type, by_var, test, id) {
+assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # if the 'by' variable is null, no tests will be performed
   if (is.null(by_var)) return(NA_character_)
 
   # if user specifed test to be performed, do that test.
   if (!is.null(test[[var]])) return(test[[var]])
 
-  # if id variable supplied, fit a random effects model
-  if (!is.null(id) & length(unique(data[[by_var]])) == 2) return("re")
+  # if group variable supplied, fit a random effects model
+  if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("re")
 
   # unless by_var has >2 levels, then return NA with a message
-  if (!is.null(id) & length(unique(data[[by_var]])) > 2) {
+  if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
     message(paste0(var, ": P-value calculation for clustered data when by variables have >2 levels is not currently supported"))
     return(NA_character_)
   }
@@ -60,13 +61,13 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, id) {
 }
 
 # assign_test(data = mtcars, var = c("hp", "mpg"), var_summary_type = c("continuous","continuous"),
-#             by_var = NULL, test = NULL, id = NULL)
+#             by_var = NULL, test = NULL, group = NULL)
 # assign_test(data = mtcars, var = c("hp", "mpg"), var_summary_type = c("continuous","continuous"),
-#             by_var = "am", test = NULL, id = NULL)
+#             by_var = "am", test = NULL, group = NULL)
 # assign_test(data = mtcars, var = c("hp", "mpg", "cyl","vs"),
 #             var_summary_type = c("continuous","continuous", "categorical", "dichotomous"),
-#             by_var = "am", test = NULL, id = NULL)
+#             by_var = "am", test = NULL, group = NULL)
 
 # assign_test(data = mtcars, var = c("hp", "mpg", "cyl","vs"),
 #             var_summary_type = c("continuous","continuous", "categorical", "dichotomous"),
-#             by_var = "gear", test = NULL, id = "am")
+#             by_var = "gear", test = NULL, group = "am")

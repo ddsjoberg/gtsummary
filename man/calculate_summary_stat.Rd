@@ -38,4 +38,7 @@ zero counts ("always"). Default is "ifany".}
 \description{
 This function takes in the meta data table, and calls the appropriate summarize function.
 }
+\author{
+Daniel Sjoberg
+}
 \keyword{internal}

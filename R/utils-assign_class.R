@@ -8,27 +8,28 @@
 #' @param data data frame
 #' @param variable string vector of column names from data
 #' @keywords internal
+#' @author Daniel Sjoberg
 
 assign_class <- function(data, variable) {
   classes_expected <- c("character", "factor", "numeric", "logical", "integer", "double")
 
   # extracing the base R class
   classes_return <-
-    purrr::map(
+    map(
       variable,
       ~ class(data[[.x]]) %>% intersect(classes_expected)
     )
 
   # checking all columns returned a class
-  class_error <- purrr::map_lgl(classes_return, ~ identical(.x, character(0)))
+  class_error <- map_lgl(classes_return, ~ identical(.x, character(0)))
   if (any(class_error)) {
-    stop(glue::glue(
+    stop(glue(
       "Class of variable '{paste(variable[class_error], collapse = ', ')}' not supported"
     ))
   }
 
   # if column is all missing, return class NA
-  purrr::map2_chr(
+  map2_chr(
     variable, classes_return,
     ~ ifelse(data[[.x]] %>% is.na() %>% all(),
       NA_character_, .y

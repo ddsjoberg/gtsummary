@@ -7,9 +7,9 @@
 add_stat_label(x, iqr = TRUE)
 }
 \arguments{
-\item{x}{object with class \code{fmt_table1} from the \code{\link{fmt_table1}} function}
+\item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
 
-\item{iqr}{logical indicator whether '{q1}, {q2}' and '{p25}, {p75}' should
+\item{iqr}{logical indicator whether '{p25}, {p75}' should
 resolve to 'IQR'. Default is \code{TRUE}}
 }
 \description{
@@ -17,6 +17,6 @@ Rather than simply printing the summary statistics, with the use of \code{add_st
 a column labeling the summary statistics is added.
 }
 \examples{
-mtcars \%>\% fmt_table1() \%>\% add_stat_label()
-mtcars \%>\% fmt_table1(by = "am") \%>\% add_stat_label(iqr = FALSE)
+mtcars \%>\% tbl_summary() \%>\% add_stat_label()
+mtcars \%>\% tbl_summary(by = "am") \%>\% add_stat_label(iqr = FALSE)
 }

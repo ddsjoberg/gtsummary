@@ -17,4 +17,7 @@ if data is labeled with the \code{Hmisc} package the class of a string will
 be \code{c("labelled", "character")} rather than \code{c("character")} only.  This
 simple function extracts the base R class.
 }
+\author{
+Daniel Sjoberg
+}
 \keyword{internal}

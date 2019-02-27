@@ -5,12 +5,12 @@
 #' @param summary_type the type of summary statistics that will be calculated
 #' @param class class of \code{variable}
 #' @return value that will be printed in table for dichotomous data
-#'
 #' @keywords internal
+#' @author Daniel Sjoberg
 
 # wrapper for assign_dichotomous_value_one() function
 assign_dichotomous_value <- function(data, variable, summary_type, class) {
-  purrr::pmap(list(variable, summary_type, class), ~ assign_dichotomous_value_one(data, ..1, ..2, ..3))
+  pmap(list(variable, summary_type, class), ~ assign_dichotomous_value_one(data, ..1, ..2, ..3))
 }
 
 assign_dichotomous_value_one <- function(data, variable, summary_type, class) {

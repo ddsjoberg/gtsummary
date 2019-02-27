@@ -18,6 +18,7 @@
 #' never ("no"), only if the count is positive ("ifany") and even for
 #' zero counts ("always"). Default is "ifany".
 #' @keywords internal
+#' @author Daniel Sjoberg
 
 calculate_summary_stat <- function(data, variable, by, summary_type,
                                    dichotomous_value, var_label, stat_display,
@@ -28,7 +29,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     # empty results table when no by variable
     if (is.null(by)) {
       return(
-        dplyr::data_frame(
+        tibble(
           row_type = c("label", "missing"),
           label = c(var_label, "Unknown"),
           stat_overall = c(NA_character_, as.character(nrow(data)))
@@ -37,7 +38,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     }
     # empty results table when there is a by variable
     if (!is.null(by)) {
-      stat_col_names <- get_by_info(data, by)[["by_col"]]
+      stat_col_names <- df_by(data, by)[["by_col"]]
       return(
         dplyr::data_frame(
           row_type = c("label", "missing"),
@@ -47,10 +48,10 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
             table(data[[by]]) %>%
               as.matrix() %>%
               t() %>%
-              dplyr::as_data_frame() %>%
-              dplyr::mutate_all(as.character) %>%
-              purrr::set_names(stat_col_names) %>%
-              dplyr::mutate_(row_type = ~"missing")
+              as_tibble() %>%
+              mutate_all(as.character) %>%
+              set_names(stat_col_names) %>%
+              mutate_(row_type = ~"missing")
           )
       )
     }

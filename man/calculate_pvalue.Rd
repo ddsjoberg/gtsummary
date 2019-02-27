@@ -4,7 +4,7 @@
 \alias{calculate_pvalue}
 \title{This function takes in the meta-data and calculates an appropriate p-value}
 \usage{
-calculate_pvalue(data, variable, by, test, type, id)
+calculate_pvalue(data, variable, by, test, type, group)
 }
 \arguments{
 \item{data}{input data set}
@@ -17,12 +17,15 @@ calculate_pvalue(data, variable, by, test, type, id)
 
 \item{type}{the type of variable, one of categorical or continuous, from the metadata}
 
-\item{id}{the id variable for clustered data}
+\item{group}{the group variable for clustered data}
 }
 \value{
 a table of p-values for each variable
 }
 \description{
 This function takes in the meta-data and calculates an appropriate p-value
+}
+\author{
+Emily Zabor
 }
 \keyword{internal}

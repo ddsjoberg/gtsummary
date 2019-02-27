@@ -19,6 +19,13 @@ knitr::opts_chunk$set(
 A collection of functions commonly used in the work of the biostatisticians. The goal of **clintable** is to make reporting of tabular analytic results simple, beautiful, and reproducible.  
 <!-- Update the list of contributors from the git shell `git shortlog -s -n` -->
 
+## Notes for next release
+- should we change the `id` input for `tbl_summary` to something else like `no_print`.  Currently, we are assuming that any variable listed here is meant (and only meant) to be a grouping variable to calculate p-values for corelated data.  `no_print` would be a more general input to keep variables in `data` but don't print them in summary table.  
+- consolidate utility functions under the primary function they are used?  there are so many util files in the R folder  
+- look into gt packages fmt_ family of functions.  should we create a function that dictates formatting in our table, and then allows the format to be updated by calls similar to gt package?  
+- allow users to pass data frame to regression functions so we can grab the proper labels?  
+- currently pseudonyms for functions are NOT supported (i.e. q1 for p35, med for median, etc.)  
+
 ## Installation
 
 You can install the production version of **clintable** with:

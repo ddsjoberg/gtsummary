@@ -22,7 +22,7 @@ Vector summary types \code{c("continuous", "categorical", "dichotomous")}.
 }
 \description{
 For variables where the summary type was not specified in the function
-call of \code{fmt_table1}, \code{assign_summary_type} assigns a type based on class and
+call of \code{tbl_summary}, \code{assign_summary_type} assigns a type based on class and
 number of unique levels.
 }
 \examples{
@@ -30,5 +30,8 @@ number of unique levels.
 #                     variable =  names(mtcars),
 #                     class = apply(mtcars, 2, class),
 #                     summary_type = NULL)
+}
+\author{
+Daniel Sjoberg
 }
 \keyword{internal}

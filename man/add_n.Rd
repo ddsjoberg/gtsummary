@@ -7,7 +7,7 @@
 add_n(x, missing = FALSE, last = FALSE)
 }
 \arguments{
-\item{x}{object with class \code{fmt_table1} from the \code{\link{fmt_table1}} function}
+\item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
 
 \item{missing}{logical argument indicating whether to print N (\code{missing = FALSE}),
 or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
@@ -19,5 +19,5 @@ The function assumes the DEFAULT header are in use. Only modify header rows
 after all columns has been added.
 }
 \examples{
-trial \%>\% fmt_table1(by = "trt") \%>\% add_n()
+trial \%>\% tbl_summary(by = "trt") \%>\% add_n()
 }

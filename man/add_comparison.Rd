@@ -5,10 +5,10 @@
 \title{Adds p-values to the output comparing values across groups}
 \usage{
 add_comparison(x, test = NULL, pvalue_fun = fmt_pvalue,
-  id = x$inputs$id)
+  group = x$inputs$group)
 }
 \arguments{
-\item{x}{object with class \code{fmt_table1} from the \code{\link{fmt_table1}} function}
+\item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
 
 \item{test}{user defined list of statistical tests provided as a named
 character vector with variables as names and test functions as values.,
@@ -19,7 +19,7 @@ Options include "t.test" for a T-test,
 "chisq.test" for a Chi-squared test,
 "fisher.test" for a Fisher's exact test,
 and "re" for a random intercept model to account for clustered data.
-For "re" to be used "id" must also be specified in the function call.}
+For "re" to be used "group" must also be specified in the function call.}
 
 \item{pvalue_fun}{function for rounding/formatting p-values.  Default is \code{\link{fmt_pvalue}}.
 The function must have a single input (the numeric, exact p-value),
@@ -27,14 +27,17 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) fmt_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(fmt_pvalue, digits = 2)}).}
 
-\item{id}{Character vector of an ID or grouping variable.  Summary statistics
+\item{group}{Character vector of an ID or grouping variable.  Summary statistics
 will not be printed for this column, but they may be used in subsequent
-functions. For example, the ID column may be used in \code{add_comparison()} to
-include p-values with correlated data. Default is the \code{id = } input from \code{\link{fmt_table1}}}
+functions. For example, the group column may be used in \code{add_comparison()} to
+include p-values with correlated data. Default is the \code{group = } input from \code{\link{tbl_summary}}}
 }
 \description{
 Adds p-values to the output comparing values across groups
 }
 \examples{
-trial \%>\% fmt_table1(by = "trt") \%>\% add_comparison()
+trial \%>\% tbl_summary(by = "trt") \%>\% add_comparison()
+}
+\author{
+Daniel Sjoberg
 }

@@ -1,7 +1,7 @@
 #' Assigns summary type (e.g. continuous, categorical, or dichotomous).
 #'
 #' For variables where the summary type was not specified in the function
-#' call of `fmt_table1`, `assign_summary_type` assigns a type based on class and
+#' call of `tbl_summary`, `assign_summary_type` assigns a type based on class and
 #' number of unique levels.
 #'
 #' @param data Data frame.
@@ -12,16 +12,17 @@
 #' e.g. \code{summary_type = list(age = "continuous")}
 #' @return Vector summary types `c("continuous", "categorical", "dichotomous")`.
 #' @keywords internal
+#' @author Daniel Sjoberg
 #' @examples
 #' # assign_summary_type(data = mtcars,
 #' #                     variable =  names(mtcars),
 #' #                     class = apply(mtcars, 2, class),
 #' #                     summary_type = NULL)
 assign_summary_type <- function(data, variable, class, summary_type) {
-  purrr::map2_chr(
+  map2_chr(
     variable, class,
     ~ summary_type[[.x]] %||%
-      dplyr::case_when(
+      case_when(
         # logical variables will be dichotmous
         .y == "logical" ~
         "dichotomous",
