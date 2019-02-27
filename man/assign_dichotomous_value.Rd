@@ -21,4 +21,7 @@ value that will be printed in table for dichotomous data
 \description{
 For dichotomous data, returns that value that will be printed in table.
 }
+\author{
+Daniel Sjoberg
+}
 \keyword{internal}

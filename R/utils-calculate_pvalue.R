@@ -3,21 +3,21 @@
 #' @param data input data set
 #' @param variable categorical or continuous variable for which a test with \code{by_var} is desired
 #' @param by categorical variable
-#' @param id the id variable for clustered data
+#' @param group the group variable for clustered data
 #' @param type the type of variable, one of categorical or continuous, from the metadata
 #' @param test list of statistical tests from meta data
 #' @return a table of p-values for each variable
 #' @keywords internal
-#'
+#' @author Emily Zabor
 
-calculate_pvalue <- function(data, variable, by, test, type, id) {
+calculate_pvalue <- function(data, variable, by, test, type, group) {
   purrr::pmap_dbl(
     list(variable, by, test, type),
-    ~ calculate_pvalue_one(data, ..1, ..2, ..3, ..4, id)
+    ~ calculate_pvalue_one(data, ..1, ..2, ..3, ..4, group)
   )
 }
 
-calculate_pvalue_one <- function(data, variable, by, test, type, id) {
+calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 
   # if there is no by variable, and thus test is NA, return NA
   if (is.na(test)) return(NA)
@@ -26,7 +26,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, id) {
   data[[by]] <- data[[by]] %>% factor()
 
   # omitting missing values before calculating pvalues
-  data <- data %>% dplyr::select(c(id, variable, by)) %>% stats::na.omit()
+  data <- data %>% select(c(group, variable, by)) %>% stats::na.omit()
 
   # Wilcoxon and Kruskal-Wallis tests
   if (test %in% c("wilcox.test", "kruskal.test")) {
@@ -102,7 +102,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, id) {
 
   # Random effects - continuous or dichotomous
   if (test == "re" & type %in% c("continuous", "dichotomous")) {
-    form1 <- get("as.formula")(paste0(by, " ~ ", variable, " + (1 | ", id, ")"))
+    form1 <- get("as.formula")(paste0(by, " ~ ", variable, " + (1 | ", group, ")"))
     mod1 <- tryCatch(
       lme4::glmer(form1, data = get("na.omit")(data), family = get("binomial")),
       warning = function(w) {
@@ -121,10 +121,10 @@ calculate_pvalue_one <- function(data, variable, by, test, type, id) {
 
   # Random effects - categorical
   if (test == "re" & type == "categorical") {
-    form0 <- get("as.formula")(paste0(by, " ~ 1 + (1 | ", id, ")"))
+    form0 <- get("as.formula")(paste0(by, " ~ 1 + (1 | ", group, ")"))
     form1 <- get("as.formula")(paste0(
       by, " ~ factor(", variable,
-      ") + (1 | ", id, ")"
+      ") + (1 | ", group, ")"
     ))
     mod0 <- tryCatch(
       lme4::glmer(form0, data = get("na.omit")(data), family = get("binomial")),
@@ -154,18 +154,18 @@ calculate_pvalue_one <- function(data, variable, by, test, type, id) {
 
 
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      test = "wilcox.test", id = NULL, type = "continuous")
+#                      test = "wilcox.test", group = NULL, type = "continuous")
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      test = "kruskal.test", id = NULL, type = "continuous")
+#                      test = "kruskal.test", group = NULL, type = "continuous")
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      test = "t.test", id = NULL, type = "continuous")
+#                      test = "t.test", group = NULL, type = "continuous")
 # calculate_pvalue_one(data = mtcars, variable = "gear", by = "am",
-#                      test = "chisq.test", id = NULL, type = "categorical")
+#                      test = "chisq.test", group = NULL, type = "categorical")
 # calculate_pvalue_one(data = mtcars, variable = "gear", by = "am",
-#                      test = "fisher.test", id = NULL, type = "categorical")
+#                      test = "fisher.test", group = NULL, type = "categorical")
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      id = "gear", test = "re", type = "continuous")
+#                      group = "gear", test = "re", type = "continuous")
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      id = "gear", test = "re", type = "categorical")
+#                      group = "gear", test = "re", type = "categorical")
 # calculate_pvalue_one(data = mtcars, variable = "mpg", by = "am",
-#                      id = "gear", test = "re", type = "continuous")
+#                      group = "gear", test = "re", type = "continuous")

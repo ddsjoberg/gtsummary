@@ -19,4 +19,7 @@ the rounded values
 Guesses how many digits to use in rounding continuous variables
 or summary statistics
 }
+\author{
+Emily Zabor, Daniel Sjoberg
+}
 \keyword{internal}

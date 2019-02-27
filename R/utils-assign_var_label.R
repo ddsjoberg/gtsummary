@@ -10,10 +10,11 @@
 #' e.g. `var_label = list(age = "Age, yrs")`
 #' @return Vector variable labels.
 #' @keywords internal
+#' @author Daniel Sjoberg
 #' @examples
 #' # assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
 assign_var_label <- function(data, variable, var_label) {
-  purrr::map_chr(
+  map_chr(
     variable,
     ~ var_label[[.x]] %||%
       attr(data[[.x]], "label") %||%

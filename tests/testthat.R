@@ -1,4 +1,4 @@
 library(testthat)
-library(clintable)
+library(gtsummary)
 
-test_check("clintable")
+test_check("gtsummary")

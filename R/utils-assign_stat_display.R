@@ -8,6 +8,7 @@
 #' continuous or categorical. Can be \code{NULL}.
 #' @return vector of stat_display selections for each variable
 #' @keywords internal
+#' @author Daniel Sjoberg
 
 assign_stat_display <- function(summary_type, stat_display) {
   # dichotomous and categorical are treated in the same fashion here
@@ -15,13 +16,12 @@ assign_stat_display <- function(summary_type, stat_display) {
 
   # otherwise, return defaults
   return(
-    purrr::map_chr(
+    map_chr(
       summary_type,
-      ~ dplyr::case_when(
-        .x == "continuous" ~
-        purrr::`%||%`(stat_display[[.x]], "{median} ({q1}, {q3})"),
+      ~ case_when(
+        .x == "continuous" ~ stat_display[[.x]] %||% "{median} ({p25}, {p75})",
         .x %in% c("categorical", "dichotomous") ~
-        purrr::`%||%`(stat_display[[.x]], "{n} ({p}%)")
+          stat_display[[.x]] %||% "{n} ({p}%)"
       )
     )
   )

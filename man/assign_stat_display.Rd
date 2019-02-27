@@ -19,4 +19,7 @@ vector of stat_display selections for each variable
 Function that assigns default statistics to display, or if specified,
 assigns the user-defined statistics for display.
 }
+\author{
+Daniel Sjoberg
+}
 \keyword{internal}

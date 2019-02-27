@@ -1,73 +1,58 @@
-#' Adds a column with overall summary statistics to an existing `fmt_table1` object where descriptive
+#' Adds a column with overall summary statistics to an existing `tbl_summary` object where descriptive
 #' statistics are split by a variable
 #'
 #' The function assumes the DEFAULT headers are in use. Only modify header rows
 #' after Overall column has been added.
 #'
-#' @param x object with class `fmt_table1` from the \code{\link{fmt_table1}} function
+#' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
 #' @param last logical indicator to include overall  column last. Default is `FALSE`
 #' @export
 #' @examples
-#' trial %>% fmt_table1(by = "trt") %>% add_overall()
+#' trial %>% tbl_summary(by = "trt") %>% add_overall()
 add_overall <- function(x, last = FALSE) {
-  # checking that input is class fmt_table1
-  if (class(x) != "fmt_table1") stop("x must be class 'fmt_table1'")
+  # checking that input is class tbl_summary
+  if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
-  if (is.null(x$inputs[["by"]])) stop("Cannot add Overall column when no 'by' variable in original fmt_table1")
+  if (is.null(x$inputs[["by"]]))
+    stop("Cannot add Overall column when no 'by' variable in original tbl_summary")
 
   x_copy <- x
 
-  # removing by variable from data (so it won't show up in the overall fmt_table1)
-  x_copy$inputs[["data"]] <- x_copy$inputs[["data"]] %>% dplyr::select(-dplyr::one_of(x_copy$inputs[["by"]]))
+  # removing 'by' variable from data (so it won't show up in the overall tbl_summary)
+  x_copy$inputs[["data"]] <- x$inputs[["data"]] %>% select(-c(x[["by"]]))
 
   # replacing the function call by variable to NULL to get results overall
   x_copy$inputs[["by"]] <- NULL
 
   # calculating stats overall, and adding header row
-  header_n <- x$table1 %>%
-    dplyr::filter_("startsWith(row_type, 'header')") %>%
-    dplyr::pull("row_type") %>%
-    length()
-  if (header_n < 2) {
-    stop(glue::glue(
-      "Header must be at least two rows to accommodate Overall header. ",
-      "Run 'add_overall' before any modifications are made to header rows."
-    ))
-  }
-
   overall <-
-    do.call(fmt_table1, x_copy$inputs) %>%
-    modify_header(
-      stat_overall = fill_blanks(c("Overall", "N = {N}"), header_n),
-      label = fill_blanks(c("Variable", " "), header_n)
-    ) %>%
-    purrr::pluck("table1")
+    do.call(tbl_summary, x_copy$inputs) %>%
+    pluck("gt") %>%
+    pluck("table_body")
 
-  # checking the original fmt_table1 and the added overall, are the same before binding (excluding headers)
+  # checking the original tbl_summary and the added overall, are the same before binding (excluding headers)
   if (!identical(
-    x$table1 %>%
-      dplyr::select(dplyr::one_of(c("row_type", ".variable", "label"))) %>%
-      dplyr::filter_("!startsWith(row_type, 'header')"),
+    x$gt$table_body %>%
+      select(c("row_type", "variable", "label")),
     overall %>%
-      dplyr::select(dplyr::one_of(c("row_type", ".variable", "label"))) %>%
-      dplyr::filter_("!startsWith(row_type, 'header')")
+      select(c("row_type", "variable", "label"))
   )) {
-    stop("An error occured in 'add_overall()'")
+    stop("An error occured in 'add_overall()', cannot merge overall statistics")
   }
 
   # adding overall stat to the table1 data frame
   if (last == FALSE) {
-    x$table1 <-
-      dplyr::bind_cols(
+    x$gt$table_body <-
+      bind_cols(
         overall,
-        x$table1 %>% dplyr::select(-dplyr::one_of(c(".variable", "row_type", "label")))
+        x$gt$table_body %>% select(-c("variable", "row_type", "label"))
       )
   }
   if (last == TRUE) {
-    x$table1 <-
-      dplyr::bind_cols(
-        x$table1,
-        overall %>% dplyr::select(dplyr::one_of("stat_overall"))
+    x$gt$table_body <-
+      bind_cols(
+        x$gt$table_body,
+        overall %>% select(c("stat_0"))
       )
   }
 

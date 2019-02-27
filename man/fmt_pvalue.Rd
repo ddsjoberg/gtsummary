@@ -28,3 +28,6 @@ pvals <- c(
 fmt_pvalue(pvals)
 fmt_pvalue(pvals, digits = 2, prepend_p = TRUE)
 }
+\author{
+Daniel Sjoberg
+}

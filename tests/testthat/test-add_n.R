@@ -1,7 +1,7 @@
 context("test-add_n")
 
-t1 <- trial %>% fmt_table1()
-t2 <- trial %>% fmt_table1(by = "trt")
+t1 <- trial %>% tbl_summary()
+t2 <- trial %>% tbl_summary(by = "trt")
 test_that("no errors/warnings with standard use", {
   expect_error(t1 %>% add_n(), NA)
   expect_error(t2 %>% add_n(), NA)

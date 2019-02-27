@@ -4,7 +4,7 @@
 \alias{assign_test}
 \title{determine the appropriate test type given two variables}
 \usage{
-assign_test(data, var, var_summary_type, by_var, test, id)
+assign_test(data, var, var_summary_type, by_var, test, group)
 }
 \arguments{
 \item{data}{input data set}
@@ -22,5 +22,8 @@ most appropriate test as text of the test function
 }
 \description{
 determine the appropriate test type given two variables
+}
+\author{
+Daniel Sjoberg
 }
 \keyword{internal}

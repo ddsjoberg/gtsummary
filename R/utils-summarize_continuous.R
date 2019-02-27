@@ -14,7 +14,8 @@
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @return formatted summary statistics in a tibble.
 #' @keywords internal
-
+#' @author Daniel Sjoberg
+#' @importFrom stringr str_extract_all str_remove_all fixed
 
 summarize_continuous <- function(data, variable, by, digits,
                                  var_label, stat_display, missing) {
@@ -22,91 +23,132 @@ summarize_continuous <- function(data, variable, by, digits,
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
 
-  # keeping the variable and by and renaming each
-  data <-
-    data %>%
-    dplyr::select(dplyr::one_of(
-      c(variable, by)
-    )) %>%
-    purrr::set_names(
-      c(".variable", ".by")[1:length(c(variable, by))]
-    )
-
-  # grouping by variable (if applicable)
+  # grouping by var
   if (!is.null(by)) {
     data <-
       data %>%
-      dplyr::mutate_(
-        .by = ~ paste0("stat_by", as.numeric(factor(.by)))
-      ) %>%
-      dplyr::group_by_(".by")
+      select(c(variable, by)) %>%
+      set_names(c("variable", "by")) %>%
+      left_join(df_by(data, by), by = "by") %>%
+      select(c(variable, "by_col"))
+  }
+  else {
+    data <-
+      data %>%
+      select(c(variable)) %>%
+      set_names(c("variable")) %>%
+      mutate_(by_col = ~"stat_0") %>%
+      select(c(variable, "by_col"))
   }
 
-  # calculating summary stats and number unknown
-  results_long <-
+  # nesting data and changing by variable
+  data <-
     data %>%
-    dplyr::summarise_(
-      n_missing = ~ sum(is.na(.variable)),
-      median = ~ median(.variable, na.rm = TRUE),
-      q1 = ~ quantile(.variable, probs = 0.25, na.rm = TRUE),
-      q3 = ~ quantile(.variable, probs = 0.75, na.rm = TRUE),
-      min = ~ min(.variable, na.rm = TRUE),
-      max = ~ max(.variable, na.rm = TRUE),
-      mean = ~ mean(.variable, na.rm = TRUE),
-      sd = ~ stats::sd(.variable, na.rm = TRUE),
-      var = ~ sd^2,
-      # pseudonyms
-      med = ~median, q2 = ~median, p50 = ~median,
-      p25 = ~q1, p75 = ~q3,
-      minimum = ~min, maximum = ~max
-    ) %>%
-    dplyr::mutate_at(
-      c(
-        "median", "q1", "q3", "min", "max", "mean", "sd", "var",
-        "med", "q2", "p50", "p25", "p75", "minimum", "maximum"
-      ),
-      function(x) sprintf(glue::glue("%.{digits}f"), x)
-    ) %>%
-    dplyr::mutate_(
-      row_type = ~"label",
-      label = ~var_label,
-      stat = ~ as.character(glue::glue(stat_display))
-    ) %>%
-    dplyr::select(dplyr::one_of(c(dplyr::group_vars(data), "row_type", "label", "stat", "n_missing")))
+    group_by_("by_col") %>%
+    nest(.key = "data")
 
-  # appending missing N to bottom of data frame
-  results_long_missing <-
-    dplyr::bind_rows(
-      results_long %>%
-        dplyr::select(dplyr::one_of(c(dplyr::group_vars(data), "row_type", "label", "stat"))),
-      results_long %>%
-        dplyr::mutate_(
-          row_type = ~"missing",
-          label = ~"Unknown",
-          stat = ~ as.character(n_missing)
-        ) %>%
-        dplyr::select(dplyr::one_of(c(dplyr::group_vars(data), "row_type", "label", "stat")))
+  # nesting data and calculating descriptive stats
+  stats <-
+    data %>%
+    mutate_(
+      # extracting list of statisitcs that need to be calculated
+      stat_name_list = ~str_extract_all(stat_display, "\\{.*?\\}") %>%
+        map(str_remove_all, pattern = fixed("}")) %>%
+        map(str_remove_all, pattern = fixed("{")),
+      # calculating statistics
+      stat_result_list = ~map2(
+        data, stat_name_list,
+        ~ calculate_single_stat(.x[[1]], .y)
+      ),
+      # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
+      df_result = ~map2(
+        stat_name_list, stat_result_list,
+        ~ .y %>% t() %>% as_tibble() %>% set_names(.x)
+      ),
+      # rounding statistics and concatenating results
+      stat = ~map_chr(
+        df_result,
+        ~.x %>%
+          mutate_all(~sprintf(glue("%.{digits}f"), .)) %>%
+          mutate_(
+            stat = ~ as.character(glue(stat_display))
+          ) %>%
+          pull("stat")
+      )
+    ) %>%
+    select(c("by_col", "stat")) %>%
+    spread_("by_col", "stat") %>%
+    mutate_(
+      row_type = ~"label",
+      label = ~var_label
+    ) %>%
+    select(c("row_type", "label", starts_with("stat_")))
+
+  # number of missing observations
+  missing_count <-
+    data %>%
+    mutate_(
+      missing_count =
+        ~map_chr(
+          data,
+          ~.x[[1]] %>% is.na() %>% sum()
+        )
+    ) %>%
+    select(c("by_col", "missing_count")) %>%
+    spread_("by_col", "missing_count") %>%
+    mutate_(
+      row_type = ~"missing",
+      label = ~"Unknown"
     )
 
-  # transposing to wide (by levels have their own columns)
-  if (!is.null(by)) {
-    results_wide <-
-      results_long_missing %>%
-      tidyr::spread_(".by", "stat")
-  }
-  # if no by var, just rename stat to stat_overall
-  if (is.null(by)) {
-    results_wide <-
-      results_long_missing %>%
-      purrr::set_names("row_type", "label", "stat_overall")
-  }
+  # stacking stats and missing row
+  result <-
+    stats %>%
+    bind_rows(missing_count)
 
   # excluding missing row if indicated
   if (missing == "no" | (missing == "ifany" & tot_n_miss == 0)) {
-    results_wide <-
-      results_wide %>%
-      dplyr::filter_("row_type != 'missing'")
+    result <-
+      result %>%
+      filter_("row_type != 'missing'")
   }
 
-  return(results_wide)
+  result
 }
+
+# stat_name that are accepted
+calculate_single_stat <- function(x, stat_name) {
+
+    map_dbl(stat_name,
+      function(name) {
+        # calculating percentiles if requested
+        if (name %in% paste0("p", 0:100)) {
+          do.call(
+            "quantile",
+            list(
+              x,
+              probs = as.numeric(gsub("[^0-9\\.]", "", name))/100,
+              na.rm = TRUE
+            )
+          )
+         }
+        # calculating summary stats, input MUST be a function name
+        # first argument is x and must take argument 'na.rm = TRUE'
+        else do.call(name, list(x, na.rm = TRUE))
+      }
+  )
+}
+
+
+# calculate_single_stat(mtcars$mpg, c("p50", "p70"))
+#
+# summarize_continuous(
+#   data = mtcars, variable = "mpg", by = "vs", digits = 0,
+#   var_label = "MPG!", stat_display = "{p30} ({p98})", missing = "no"
+# )
+
+
+
+
+
+
