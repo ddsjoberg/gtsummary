@@ -1,4 +1,4 @@
-context("test-fmt_regression")
+context("test-tbl_regression")
 library(survival)
 library(lme4)
 
@@ -11,22 +11,22 @@ mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial
 
 
 test_that("lm: no errors/warnings with standard use", {
-  expect_error(fmt_regression(mod_lm), NA)
-  expect_warning(fmt_regression(mod_lm), NA)
+  expect_error(tbl_regression(mod_lm), NA)
+  expect_warning(tbl_regression(mod_lm), NA)
 })
 
 
 test_that("survreg: no errors/warnings with standard use", {
-  expect_error(fmt_regression(mod_survreg), NA)
-  expect_warning(fmt_regression(mod_survreg), NA)
+  expect_error(tbl_regression(mod_survreg), NA)
+  expect_warning(tbl_regression(mod_survreg), NA)
 })
 
 test_that("lmer: no errors/warnings with standard use", {
-  expect_error(fmt_regression(mod_lmer), NA)
-  expect_warning(fmt_regression(mod_lmer), NA)
+  expect_error(tbl_regression(mod_lmer), NA)
+  expect_warning(tbl_regression(mod_lmer), NA)
 })
 
 test_that("glmer: no errors/warnings with standard use", {
-  expect_error(fmt_regression(mod_glmer), NA)
-  expect_warning(fmt_regression(mod_glmer), NA)
+  expect_error(tbl_regression(mod_glmer), NA)
+  expect_warning(tbl_regression(mod_glmer), NA)
 })

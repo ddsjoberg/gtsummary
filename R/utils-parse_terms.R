@@ -26,7 +26,7 @@ parse_terms <- function(x, tidy_model, show_yesno) {
   tidy_list <- list()
 
   # if intercept is in model, extracting it
-  if (dplyr::last(tidy_model$term) == "(Intercept)") {
+  if (last(tidy_model$term) == "(Intercept)") {
     tidy_list[["(Intercept)"]] <- tidy_model[nrow(tidy_model), ]
     tidy_model <- tidy_model[-(nrow(tidy_model)), ]
   }
@@ -42,7 +42,7 @@ parse_terms <- function(x, tidy_model, show_yesno) {
     dichotomous <-
       !(v %in% show_yesno) &
         (
-          (purrr::map_lgl(
+          (map_lgl(
             list(c("No", "Yes", NA), c("no", "yes", NA), c("NO", "YES", NA)),
             ~ is.character(v) & setdiff(stats::model.frame(x)[[v]], .x) %>% length() == 0
           ) %>% any()) |
@@ -61,14 +61,14 @@ parse_terms <- function(x, tidy_model, show_yesno) {
     else {
       # making dataframe of the terms
       fct_terms <-
-        dplyr::data_frame(
+        tibble(
           level = stats::model.frame(x)[[v]] %>% unique()
         ) %>%
-        dplyr::mutate_(
+        mutate_(
           term = ~ paste0(v, level)
         ) %>%
-        dplyr::arrange_("level") %>%
-        dplyr::select("term")
+        arrange_("level") %>%
+        select("term")
 
       # checking that these new terms match any terms in model
       # if not, skipping this step. when there is a random effect
@@ -81,7 +81,7 @@ parse_terms <- function(x, tidy_model, show_yesno) {
       # extracting terms into the list
       tidy_list[[v]] <-
         fct_terms %>%
-        dplyr::left_join(tidy_model[1:(nrow(fct_terms) - 1), ], by = "term")
+        left_join(tidy_model[1:(nrow(fct_terms) - 1), ], by = "term")
 
       tidy_model <- tidy_model[-(1:(nrow(fct_terms) - 1)), ]
     }
