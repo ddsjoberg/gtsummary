@@ -13,7 +13,7 @@
 #' or <- c(100.2342, 11.234, 5.32423, 1.23423469, 0.234)
 #' fmt_beta(or)
 fmt_beta <- function(x) {
-  dplyr::case_when(
+  case_when(
     is.na(x) ~ NA_character_,
     abs(x) >= 100 ~ sprintf("%.0f", x),
     abs(x) >= 10 ~ sprintf("%.1f", x),

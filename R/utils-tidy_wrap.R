@@ -3,14 +3,14 @@
 #' The `tidy_wrap()` function has two primary functions.  First, using either
 #' `broom::tidy` or `broom.mixed::tidy` (depending on model input class)
 #' the regression model object is converted into a data frame. It then adjusts the
-#' output for use in the rest of \code{\link{fmt_regression}}.
+#' output for use in the rest of \code{\link{tbl_regression}}.
 #'
 #' The output of `broom::tidy` or `broom.mixed::tidy` will often include additional information
-#' that will not be included in a printed table from `fmt_regression()`
+#' that will not be included in a printed table from `tbl_regression()`
 #' (e.g. scale parameters, random effects, etc.).  This
 #' simple helper function deletes extraneous rows from the output.
 #' It also adds a column of NAs if the model does not calculate p.values, since
-#' the rest of `fmt_regression()` depends on having a column called p.value.
+#' the rest of `tbl_regression()` depends on having a column called p.value.
 #'
 #' @param x regression model object
 #' @param exponentiate logical argument passed directly to `broom::tidy`
@@ -42,7 +42,7 @@ tidy_wrap <- function(x, exponentiate, conf.level) {
   if (class(x)[1] == "survreg") {
     return(
       tidy_bit %>%
-        dplyr::filter_(~ term != "Log(scale)")
+        filter_(~ term != "Log(scale)")
     )
   }
 
