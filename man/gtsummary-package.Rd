@@ -17,5 +17,11 @@ Written with the goal to make reporting of tabular
 \author{
 \strong{Maintainer}: Daniel D. Sjoberg \email{danieldsjoberg@gmail.com}
 
+Authors:
+\itemize{
+  \item Emily C. Zabor
+  \item Margie Hannum
+}
+
 }
 \keyword{internal}

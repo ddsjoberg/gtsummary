@@ -3,10 +3,16 @@ Title: The goal of gtsummary is to make reporting of tabular
     analytic results easy, beautiful, and reproducible
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Daniel D.",
-           family = "Sjoberg",
-           role = c("aut", "cre"),
-           email = "danieldsjoberg@gmail.com")
+    c(person(given = "Daniel D.",
+             family = "Sjoberg",
+             role = c("aut", "cre"),
+             email = "danieldsjoberg@gmail.com"),
+      person(given = "Emily C.",
+             family = "Zabor",
+             role = "aut"),
+      person(given = "Margie",
+             family = "Hannum",
+             role = "aut"))
 Description: Written with the goal to make reporting of tabular
     analytic results simple, beautiful, and reproducible.
     Publication-ready tables are created with minimal code, and can be
@@ -27,12 +33,13 @@ Imports:
     stringr (>= 1.3.1),
     tibble (>= 2.0.1),
     tidyr (>= 0.8.2),
-    gt
+    gt,
+    knitr,
+    car
 Suggests: 
-    covr (>= 3.2.1),
+    covr,
     ggplot2 (>= 3.1.0),
     lme4 (>= 1.1.18.1),
-    knitr,
     rmarkdown (>= 1.11),
     spelling,
     survival,

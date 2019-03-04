@@ -33,19 +33,24 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
   # merging result with existing tbl_summary
   if (last == FALSE) {
     table_body <-
-      x$gt$table_body %>%
+      x$table_body %>%
       select(c("variable", "row_type", "label")) %>%
       left_join(counts, by = c("variable", "row_type")) %>%
-      left_join(x$gt$table_body, by = c("variable", "row_type", "label"))
+      left_join(x$table_body, by = c("variable", "row_type", "label"))
   }
   else if (last == TRUE) {
     table_body <-
-      x$gt$table_body %>%
+      x$table_body %>%
       left_join(counts, by = c("variable", "row_type"))
   }
 
+  # column headers
+  x[["gt_calls"]][[glue("cols_label:{ifelse(missing == FALSE, 'n', 'n_missing')}")]] <-
+    glue("gt::cols_label({ifelse(missing == FALSE, 'n', 'n_missing')} = ",
+         "gt::md('**{ifelse(missing == FALSE, 'N', 'N Missing')}**'))")
+
   # replacing old table_body with new
-  x$gt$table_body <- table_body
+  x$table_body <- table_body
 
   # adding indicator to output that add_overall was run on this data
   x$call_list <- c(x$call_list, list(add_overall = match.call()))

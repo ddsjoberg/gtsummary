@@ -62,14 +62,14 @@ add_stat_label <- function(x, iqr = TRUE) {
     select(c("variable", "row_type", "stat_label"))
 
   # merging in new labels to table_body
-  x$gt$table_body <-
-    x$gt$table_body %>%
+  x$table_body <-
+    x$table_body %>%
     select(c("variable", "row_type", "label")) %>%
     left_join(meta_data_stat_label, by = c("variable", "row_type")) %>%
-    left_join(x$gt$table_body, c("variable", "row_type", "label"))
+    left_join(x$table_body, c("variable", "row_type", "label"))
 
-  x$gt$table_body <-
-    x$gt$table_body %>%
+  x$table_body <-
+    x$table_body %>%
     mutate_(
       # adding in "n" for missing rows, and header
       stat_label = ~ case_when(
@@ -77,6 +77,11 @@ add_stat_label <- function(x, iqr = TRUE) {
         TRUE ~ stat_label
       )
     )
+
+  # column headers
+  x[["gt_calls"]][["cols_label:stat_label"]] <-
+    "gt::cols_label(stat_label = gt::md('**Statistic**'))"
+
 
   return(x)
 }
