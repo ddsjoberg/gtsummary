@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tidies regression object based on class — tidy_wrap • clintable</title>
+<title>Tidies regression object based on class — tidy_wrap • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -33,9 +33,9 @@
 <meta property="og:title" content="Tidies regression object based on class — tidy_wrap" />
 
 <meta property="og:description" content="The tidy_wrap() function has two primary functions.  First, using either
-tidy or broom.mixed::tidy (depending on model input class)
+broom::tidy or broom.mixed::tidy (depending on model input class)
 the regression model object is converted into a data frame. It then adjusts the
-output for use in the rest of fmt_regression." />
+output for use in the rest of tbl_regression." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -65,7 +65,7 @@ output for use in the rest of fmt_regression." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">clintable</a>
+        <a class="navbar-link" href="../index.html">gtsummary</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
       </span>
     </div>
@@ -89,10 +89,10 @@ output for use in the rest of fmt_regression." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/fmt_table1.html">fmt_table1()</a>
+      <a href="../articles/tbl_summary.html">tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/fmt_regression.html">fmt_regression()</a>
+      <a href="../articles/tbl_regression.html">tbl_regression()</a>
     </li>
   </ul>
 </li>
@@ -103,7 +103,7 @@ output for use in the rest of fmt_regression." />
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ddsjoberg/clintable">
+  <a href="https://github.com/ddsjoberg/gtsummary">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -128,9 +128,9 @@ output for use in the rest of fmt_regression." />
     <div class="ref-description">
     
     <p>The <code>tidy_wrap()</code> function has two primary functions.  First, using either
-<code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>tidy</a></code> or <code><a href='https://www.rdocumentation.org/packages/broom.mixed/topics/reexports'>broom.mixed::tidy</a></code> (depending on model input class)
+<code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a></code> or <code><a href='https://www.rdocumentation.org/packages/broom.mixed/topics/reexports'>broom.mixed::tidy</a></code> (depending on model input class)
 the regression model object is converted into a data frame. It then adjusts the
-output for use in the rest of <code><a href='fmt_regression.html'>fmt_regression</a></code>.</p>
+output for use in the rest of <code><a href='tbl_regression.html'>tbl_regression</a></code>.</p>
     
     </div>
 
@@ -145,24 +145,24 @@ output for use in the rest of <code><a href='fmt_regression.html'>fmt_regression
     </tr>
     <tr>
       <th>exponentiate</th>
-      <td><p>logical argument passed directly to <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>tidy</a></code>
+      <td><p>logical argument passed directly to <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a></code>
 or <code><a href='https://www.rdocumentation.org/packages/broom.mixed/topics/reexports'>broom.mixed::tidy</a></code>.</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
-      <td><p>confidence level passed directly to <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>tidy</a></code>
+      <td><p>confidence level passed directly to <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a></code>
 or <code><a href='https://www.rdocumentation.org/packages/broom.mixed/topics/reexports'>broom.mixed::tidy</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The output of <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>tidy</a></code> or <code><a href='https://www.rdocumentation.org/packages/broom.mixed/topics/reexports'>broom.mixed::tidy</a></code> will often include additional information
-that will not be included in a printed table from <code><a href='fmt_regression.html'>fmt_regression()</a></code>
+    <p>The output of <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a></code> or <code><a href='https://www.rdocumentation.org/packages/broom.mixed/topics/reexports'>broom.mixed::tidy</a></code> will often include additional information
+that will not be included in a printed table from <code><a href='tbl_regression.html'>tbl_regression()</a></code>
 (e.g. scale parameters, random effects, etc.).  This
 simple helper function deletes extraneous rows from the output.
 It also adds a column of NAs if the model does not calculate p.values, since
-the rest of <code><a href='fmt_regression.html'>fmt_regression()</a></code> depends on having a column called p.value.</p>
+the rest of <code><a href='tbl_regression.html'>tbl_regression()</a></code> depends on having a column called p.value.</p>
     
 
   </div>
@@ -179,7 +179,7 @@ the rest of <code><a href='fmt_regression.html'>fmt_regression()</a></code> depe
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg.</p>
+  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum.</p>
 </div>
 
 <div class="pkgdown">

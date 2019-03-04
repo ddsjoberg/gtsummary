@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds a column with N (or N missing) for each variable — add_n • gtsummary</title>
+<title>Add a column of q values to <code>tbl_uregression</code> object to account for
+multiple comparisons — add_q.tbl_uregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +31,12 @@
 
 
 
-<meta property="og:title" content="Adds a column with N (or N missing) for each variable — add_n" />
+<meta property="og:title" content="Add a column of q values to <code>tbl_uregression</code> object to account for
+multiple comparisons — add_q.tbl_uregression" />
 
-<meta property="og:description" content="The function assumes the DEFAULT header are in use. Only modify header rows
-after all columns has been added." />
+<meta property="og:description" content="The adjustments to the p-values is performed with
+stats::p.adjust.  The default method for correction
+is false discovery rate (&quot;fdr&quot;)" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,45 +121,59 @@ after all columns has been added." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds a column with N (or N missing) for each variable</h1>
+    <h1>Add a column of q values to <code>tbl_uregression</code> object to account for
+multiple comparisons</h1>
     
-    <div class="hidden name"><code>add_n.Rd</code></div>
+    <div class="hidden name"><code>add_q.tbl_uregression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The function assumes the DEFAULT header are in use. Only modify header rows
-after all columns has been added.</p>
+    <p>The adjustments to the p-values is performed with
+<code>stats::</code><code><a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>p.adjust</a></code>.  The default method for correction
+is false discovery rate (<code>"fdr"</code>)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_n</span>(<span class='no'>x</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>last</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_uregression</span>
+<span class='fu'><a href='add_q.html'>add_q</a></span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"fdr"</span>,
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>fmt_pvalue</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object with class <code>tbl_summary</code> from the <code><a href='tbl_summary.html'>tbl_summary</a></code> function</p></td>
+      <td><p><code>tbl_uregression</code> object</p></td>
     </tr>
     <tr>
-      <th>missing</th>
-      <td><p>logical argument indicating whether to print N (<code>missing = FALSE</code>),
-or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></td>
+      <th>method</th>
+      <td><p>character argument.  Methods from
+<code>stats::</code><code><a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>p.adjust</a></code> are accepted.  Default is <code>method = 'fdr'</code>.</p></td>
     </tr>
     <tr>
-      <th>last</th>
-      <td><p>logical indicator to include overall  column last. Default is <code>FALSE</code></p></td>
+      <th>pvalue_fun</th>
+      <td><p>function for rounding/formatting p-values.  Default is <code><a href='fmt_pvalue.html'>fmt_pvalue</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>further arguments passed to or from other methods</p></td>
     </tr>
     </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span> <span class='fu'>add_n</span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
+    <pre class="examples"><div class='input'><span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_uregression.html'>tbl_uregression</a></span>(
+    <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"lm"</span>,
+    <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"age"</span>
+  ) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_global.html'>add_global</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_q.html'>add_q</a></span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_table {
+#&gt; #vhoipeyooh .gt_table {
 #&gt;   display: table;
 #&gt;   border-collapse: collapse;
 #&gt;   margin-left: auto;
@@ -175,13 +192,13 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   /* table.border.top.color */
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_heading {
+#&gt; #vhoipeyooh .gt_heading {
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* heading.background.color */
 #&gt;   border-bottom-color: #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_title {
+#&gt; #vhoipeyooh .gt_title {
 #&gt;   color: #000000;
 #&gt;   font-size: 125%;
 #&gt;   /* heading.title.font.size */
@@ -192,7 +209,7 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   border-bottom-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_subtitle {
+#&gt; #vhoipeyooh .gt_subtitle {
 #&gt;   color: #000000;
 #&gt;   font-size: 85%;
 #&gt;   /* heading.subtitle.font.size */
@@ -203,7 +220,7 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   border-top-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_bottom_border {
+#&gt; #vhoipeyooh .gt_bottom_border {
 #&gt;   border-bottom-style: solid;
 #&gt;   /* heading.border.bottom.style */
 #&gt;   border-bottom-width: 2px;
@@ -212,7 +229,7 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   /* heading.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_column_spanner {
+#&gt; #vhoipeyooh .gt_column_spanner {
 #&gt;   border-bottom-style: solid;
 #&gt;   border-bottom-width: 2px;
 #&gt;   border-bottom-color: #A8A8A8;
@@ -220,7 +237,7 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   padding-bottom: 4px;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_col_heading {
+#&gt; #vhoipeyooh .gt_col_heading {
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* column_labels.background.color */
@@ -233,11 +250,11 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   margin: 10px;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_sep_right {
+#&gt; #vhoipeyooh .gt_sep_right {
 #&gt;   border-right: 5px solid #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_group_heading {
+#&gt; #vhoipeyooh .gt_group_heading {
 #&gt;   padding: 8px;
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
@@ -261,7 +278,7 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_empty_group_heading {
+#&gt; #vhoipeyooh .gt_empty_group_heading {
 #&gt;   padding: 0.5px;
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
@@ -285,29 +302,29 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_striped {
+#&gt; #vhoipeyooh .gt_striped {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_row {
+#&gt; #vhoipeyooh .gt_row {
 #&gt;   padding: 10px;
 #&gt;   /* row.padding */
 #&gt;   margin: 10px;
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_stub {
+#&gt; #vhoipeyooh .gt_stub {
 #&gt;   border-right-style: solid;
 #&gt;   border-right-width: 2px;
 #&gt;   border-right-color: #A8A8A8;
 #&gt;   padding-left: 12px;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_stub.gt_row {
+#&gt; #vhoipeyooh .gt_stub.gt_row {
 #&gt;   background-color: #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_summary_row {
+#&gt; #vhoipeyooh .gt_summary_row {
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* summary_row.background.color */
 #&gt;   padding: 6px;
@@ -316,13 +333,13 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   /* summary_row.text_transform */
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_first_summary_row {
+#&gt; #vhoipeyooh .gt_first_summary_row {
 #&gt;   border-top-style: solid;
 #&gt;   border-top-width: 2px;
 #&gt;   border-top-color: #A8A8A8;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_table_body {
+#&gt; #vhoipeyooh .gt_table_body {
 #&gt;   border-top-style: solid;
 #&gt;   /* field.border.top.style */
 #&gt;   border-top-width: 2px;
@@ -337,152 +354,176 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
 #&gt;   /* field.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_footnote {
+#&gt; #vhoipeyooh .gt_footnote {
 #&gt;   font-size: 90%;
 #&gt;   /* footnote.font.size */
 #&gt;   padding: 4px;
 #&gt;   /* footnote.padding */
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_sourcenote {
+#&gt; #vhoipeyooh .gt_sourcenote {
 #&gt;   font-size: 90%;
 #&gt;   /* sourcenote.font.size */
 #&gt;   padding: 4px;
 #&gt;   /* sourcenote.padding */
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_center {
+#&gt; #vhoipeyooh .gt_center {
 #&gt;   text-align: center;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_left {
+#&gt; #vhoipeyooh .gt_left {
 #&gt;   text-align: left;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_right {
+#&gt; #vhoipeyooh .gt_right {
 #&gt;   text-align: right;
 #&gt;   font-variant-numeric: tabular-nums;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_font_normal {
+#&gt; #vhoipeyooh .gt_font_normal {
 #&gt;   font-weight: normal;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_font_bold {
+#&gt; #vhoipeyooh .gt_font_bold {
 #&gt;   font-weight: bold;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_font_italic {
+#&gt; #vhoipeyooh .gt_font_italic {
 #&gt;   font-style: italic;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_super {
+#&gt; #vhoipeyooh .gt_super {
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; 
-#&gt; #afhqmlsyef .gt_footnote_glyph {
+#&gt; #vhoipeyooh .gt_footnote_glyph {
 #&gt;   font-style: italic;
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; &lt;/style&gt;
-#&gt; &lt;div id="afhqmlsyef" style="overflow-x:auto;"&gt;&lt;!--gt table start--&gt;
+#&gt; &lt;div id="vhoipeyooh" style="overflow-x:auto;"&gt;&lt;!--gt table start--&gt;
 #&gt; &lt;table class='gt_table'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;th class='gt_col_heading gt_left' rowspan='1' colspan='1'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;N&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;stat_1&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;stat_2&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Coefficient&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Confidence Interval&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;q-value&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;Age, yrs&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;Treatment Randomization&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;192&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;47 (39, 58)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;46 (36, 54)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.8&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;Unknown&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;5&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;Marker Level, ng/mL&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;192&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.61 (0.22, 1.20)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.72 (0.22, 1.63)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;Unknown&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Placebo&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;-2.03&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;-6.13, 2.08&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Marker Level, ng/mL&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;184&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.59&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;-1.89, 3.06&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.6&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.8&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;T Stage&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;200&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;192&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.5&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.8&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T1&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;25 (23%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;26 (28%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;26 (24%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;23 (25%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;2.05&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;-3.78, 7.88&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;29 (27%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;13 (14%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4.46&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;-1.56, 10.5&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;27 (25%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;31 (33%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;3.33&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;-2.17, 8.83&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Grade&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;200&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;192&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.8&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;38 (36%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;29 (31%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;34 (32%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;24 (26%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.34&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;-3.78, 6.45&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;35 (33%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;40 (43%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;4.03&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;-0.84, 8.90&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Tumor Response&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;191&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;52 (51%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;30 (33%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Unknown&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;183&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;-0.26&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;-4.53, 4.01&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&gt;0.9&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&gt;0.9&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
 #&gt; &lt;/table&gt;
@@ -497,6 +538,8 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
       <li><a href="#examples">Examples</a></li>
     </ul>
 
+    <h2>Author</h2>
+    <p>Esther Drill</p>
   </div>
 </div>
 

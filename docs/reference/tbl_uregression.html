@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds a column showing a label for the summary statistics shown in each row — add_stat_label • gtsummary</title>
+<title>Creates table of univariate regression results — tbl_uregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,12 @@
 
 
 
-<meta property="og:title" content="Adds a column showing a label for the summary statistics shown in each row — add_stat_label" />
+<meta property="og:title" content="Creates table of univariate regression results — tbl_uregression" />
 
-<meta property="og:description" content="Rather than simply printing the summary statistics, with the use of add_stat_label(),
-a column labeling the summary statistics is added." />
+<meta property="og:description" content="The tbl_uregression function arguments are similar to the tbl_regression
+arguments. Review the tbl_uregression
+vignette
+for detailed examples." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,41 +120,97 @@ a column labeling the summary statistics is added." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds a column showing a label for the summary statistics shown in each row</h1>
+    <h1>Creates table of univariate regression results</h1>
     
-    <div class="hidden name"><code>add_stat_label.Rd</code></div>
+    <div class="hidden name"><code>tbl_uregression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Rather than simply printing the summary statistics, with the use of <code>add_stat_label()</code>,
-a column labeling the summary statistics is added.</p>
+    <p>The <code>tbl_uregression</code> function arguments are similar to the <code><a href='tbl_regression.html'>tbl_regression</a></code>
+arguments. Review the <code>tbl_uregression</code>
+<a href='http://www.danieldsjoberg.com/clintable/articles/tbl_regression.html#tbl_uregression'>vignette</a>
+for detailed examples.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_stat_label</span>(<span class='no'>x</span>, <span class='kw'>iqr</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>tbl_uregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {.x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='no'>fmt_beta</span>,
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>fmt_pvalue</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>object with class <code>tbl_summary</code> from the <code><a href='tbl_summary.html'>tbl_summary</a></code> function</p></td>
+      <th>data</th>
+      <td><p>Data frame to be used in univariate regression modeling.  Data frame
+includes the outcome variable(s) and the independent variables.</p></td>
     </tr>
     <tr>
-      <th>iqr</th>
-      <td><p>logical indicator whether 'p25, p75' should
-resolve to 'IQR'. Default is <code>TRUE</code></p></td>
+      <th>method</th>
+      <td><p>Regression method (e.g. <code><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></code>, <code><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></code>,
+<code><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></code>, and more).</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>model outcome as a string (e.g. <code>y = 'recurrence'</code> or <code>y = 'Surv(time, recur)'</code>)</p></td>
+    </tr>
+    <tr>
+      <th>method.args</th>
+      <td><p>List of additional arguments passed on to the regression function defined by method.</p></td>
+    </tr>
+    <tr>
+      <th>formula</th>
+      <td><p>String that becomes the model formula.  Uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> syntax.
+Default is <code>"{y} ~ {.x}"</code>, where <code>{y}</code> is the dependent variable, and <code>{.x}</code>
+represents a single covariate. For a random intercept, the formula may be
+<code>formula = "{y} ~ {.x} + (1 | gear)"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>exponentiate</th>
+      <td><p>logical argument passed directly to <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy()</a></code>.
+Default is <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>list of labels to write in the output. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code></p></td>
+    </tr>
+    <tr>
+      <th>show_yesno</th>
+      <td><p>Vector of names of categorical and factor variables that
+are <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("No", "Yes")</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("no", "yes")</a></code>, or <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("NO", "YES")</a></code> default to dichotomous printing
+(i.e. only Yes shown). To force both levels to be shown include the column
+name in <code>show_yesno</code>, e.g. <code>show_yesno = c("highgrade", "female")</code></p></td>
+    </tr>
+    <tr>
+      <th>conf.level</th>
+      <td><p>confidence level passed directly to <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a></code>.
+Default is 0.95.</p></td>
+    </tr>
+    <tr>
+      <th>coef_fun</th>
+      <td><p>function to round and format beta coefficients.  Default is <code><a href='fmt_beta.html'>fmt_beta</a></code></p></td>
+    </tr>
+    <tr>
+      <th>pvalue_fun</th>
+      <td><p>function to round and format p-values.  Default is <code><a href='fmt_pvalue.html'>fmt_pvalue</a></code></p></td>
     </tr>
     </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'>add_stat_label</span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
+    <pre class="examples"><div class='input'><span class='fu'>tbl_uregression</span>(
+  <span class='no'>trial</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"glm"</span>,
+  <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
+  <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
+  <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</div><div class='output co'>#&gt; &lt;style&gt;html {
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_table {
+#&gt; #erwyoprgbx .gt_table {
 #&gt;   display: table;
 #&gt;   border-collapse: collapse;
 #&gt;   margin-left: auto;
@@ -171,13 +229,13 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   /* table.border.top.color */
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_heading {
+#&gt; #erwyoprgbx .gt_heading {
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* heading.background.color */
 #&gt;   border-bottom-color: #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_title {
+#&gt; #erwyoprgbx .gt_title {
 #&gt;   color: #000000;
 #&gt;   font-size: 125%;
 #&gt;   /* heading.title.font.size */
@@ -188,7 +246,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   border-bottom-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_subtitle {
+#&gt; #erwyoprgbx .gt_subtitle {
 #&gt;   color: #000000;
 #&gt;   font-size: 85%;
 #&gt;   /* heading.subtitle.font.size */
@@ -199,7 +257,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   border-top-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_bottom_border {
+#&gt; #erwyoprgbx .gt_bottom_border {
 #&gt;   border-bottom-style: solid;
 #&gt;   /* heading.border.bottom.style */
 #&gt;   border-bottom-width: 2px;
@@ -208,7 +266,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   /* heading.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_column_spanner {
+#&gt; #erwyoprgbx .gt_column_spanner {
 #&gt;   border-bottom-style: solid;
 #&gt;   border-bottom-width: 2px;
 #&gt;   border-bottom-color: #A8A8A8;
@@ -216,7 +274,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   padding-bottom: 4px;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_col_heading {
+#&gt; #erwyoprgbx .gt_col_heading {
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* column_labels.background.color */
@@ -229,11 +287,11 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   margin: 10px;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_sep_right {
+#&gt; #erwyoprgbx .gt_sep_right {
 #&gt;   border-right: 5px solid #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_group_heading {
+#&gt; #erwyoprgbx .gt_group_heading {
 #&gt;   padding: 8px;
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
@@ -257,7 +315,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_empty_group_heading {
+#&gt; #erwyoprgbx .gt_empty_group_heading {
 #&gt;   padding: 0.5px;
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
@@ -281,29 +339,29 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_striped {
+#&gt; #erwyoprgbx .gt_striped {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_row {
+#&gt; #erwyoprgbx .gt_row {
 #&gt;   padding: 10px;
 #&gt;   /* row.padding */
 #&gt;   margin: 10px;
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_stub {
+#&gt; #erwyoprgbx .gt_stub {
 #&gt;   border-right-style: solid;
 #&gt;   border-right-width: 2px;
 #&gt;   border-right-color: #A8A8A8;
 #&gt;   padding-left: 12px;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_stub.gt_row {
+#&gt; #erwyoprgbx .gt_stub.gt_row {
 #&gt;   background-color: #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_summary_row {
+#&gt; #erwyoprgbx .gt_summary_row {
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* summary_row.background.color */
 #&gt;   padding: 6px;
@@ -312,13 +370,13 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   /* summary_row.text_transform */
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_first_summary_row {
+#&gt; #erwyoprgbx .gt_first_summary_row {
 #&gt;   border-top-style: solid;
 #&gt;   border-top-width: 2px;
 #&gt;   border-top-color: #A8A8A8;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_table_body {
+#&gt; #erwyoprgbx .gt_table_body {
 #&gt;   border-top-style: solid;
 #&gt;   /* field.border.top.style */
 #&gt;   border-top-width: 2px;
@@ -333,185 +391,180 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   /* field.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_footnote {
+#&gt; #erwyoprgbx .gt_footnote {
 #&gt;   font-size: 90%;
 #&gt;   /* footnote.font.size */
 #&gt;   padding: 4px;
 #&gt;   /* footnote.padding */
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_sourcenote {
+#&gt; #erwyoprgbx .gt_sourcenote {
 #&gt;   font-size: 90%;
 #&gt;   /* sourcenote.font.size */
 #&gt;   padding: 4px;
 #&gt;   /* sourcenote.padding */
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_center {
+#&gt; #erwyoprgbx .gt_center {
 #&gt;   text-align: center;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_left {
+#&gt; #erwyoprgbx .gt_left {
 #&gt;   text-align: left;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_right {
+#&gt; #erwyoprgbx .gt_right {
 #&gt;   text-align: right;
 #&gt;   font-variant-numeric: tabular-nums;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_font_normal {
+#&gt; #erwyoprgbx .gt_font_normal {
 #&gt;   font-weight: normal;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_font_bold {
+#&gt; #erwyoprgbx .gt_font_bold {
 #&gt;   font-weight: bold;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_font_italic {
+#&gt; #erwyoprgbx .gt_font_italic {
 #&gt;   font-style: italic;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_super {
+#&gt; #erwyoprgbx .gt_super {
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_footnote_glyph {
+#&gt; #erwyoprgbx .gt_footnote_glyph {
 #&gt;   font-style: italic;
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; &lt;/style&gt;
-#&gt; &lt;div id="ljamkajowk" style="overflow-x:auto;"&gt;&lt;!--gt table start--&gt;
+#&gt; &lt;div id="erwyoprgbx" style="overflow-x:auto;"&gt;&lt;!--gt table start--&gt;
 #&gt; &lt;table class='gt_table'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;th class='gt_col_heading gt_left' rowspan='1' colspan='1'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Statistic&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;stat_0&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;N&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Coefficient&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Confidence Interval&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;mpg&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;19.2 (15.4, 22.8)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;Treatment Randomization&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;cyl&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;11 (34%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Placebo&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.47&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.26, 0.84&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.012&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;7 (22%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Age, yrs&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;183&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.00&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.98, 1.02&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&gt;0.9&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;14 (44%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;Marker Level, ng/mL&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;183&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.92&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.65, 1.30&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.6&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;disp&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;196 (121, 326)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;T Stage&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;191&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;hp&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;123 (96, 180)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;drat&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3.70 (3.08, 3.92)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;wt&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;3.33 (2.58, 3.61)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;qsec&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;17.71 (16.89, 18.90)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;vs&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;14 (44%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;am&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;13 (41%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;gear&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;15 (47%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.40&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.63, 3.14&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.4&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;12 (38%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.63&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.26, 1.50&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.3&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;5&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;5 (16%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.50&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.22, 1.11&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.089&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;carb&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;Grade&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;7 (22%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;2&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;10 (31%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.60&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.29, 1.25&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.2&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3 (9.4%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;10 (31%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1 (3.1%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1 (3.1%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.76&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.38, 1.51&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.4&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
 #&gt; &lt;/table&gt;
 #&gt; &lt;!--gt table end--&gt;
-#&gt; &lt;/div&gt;</div><div class='input'><span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"am"</span>) <span class='kw'>%&gt;%</span> <span class='fu'>add_stat_label</span>(<span class='kw'>iqr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; &lt;style&gt;html {
+#&gt; &lt;/div&gt;</div><div class='input'>
+<span class='co'># rounding pvalues to 2 decimal places, and adding global p-values</span>
+<span class='fu'>tbl_uregression</span>(
+  <span class='no'>trial</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"glm"</span>,
+  <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
+  <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
+  <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='fmt_pvalue.html'>fmt_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_global.html'>add_global</a></span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_table {
+#&gt; #bzpexapgxv .gt_table {
 #&gt;   display: table;
 #&gt;   border-collapse: collapse;
 #&gt;   margin-left: auto;
@@ -530,13 +583,13 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   /* table.border.top.color */
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_heading {
+#&gt; #bzpexapgxv .gt_heading {
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* heading.background.color */
 #&gt;   border-bottom-color: #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_title {
+#&gt; #bzpexapgxv .gt_title {
 #&gt;   color: #000000;
 #&gt;   font-size: 125%;
 #&gt;   /* heading.title.font.size */
@@ -547,7 +600,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   border-bottom-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_subtitle {
+#&gt; #bzpexapgxv .gt_subtitle {
 #&gt;   color: #000000;
 #&gt;   font-size: 85%;
 #&gt;   /* heading.subtitle.font.size */
@@ -558,7 +611,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   border-top-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_bottom_border {
+#&gt; #bzpexapgxv .gt_bottom_border {
 #&gt;   border-bottom-style: solid;
 #&gt;   /* heading.border.bottom.style */
 #&gt;   border-bottom-width: 2px;
@@ -567,7 +620,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   /* heading.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_column_spanner {
+#&gt; #bzpexapgxv .gt_column_spanner {
 #&gt;   border-bottom-style: solid;
 #&gt;   border-bottom-width: 2px;
 #&gt;   border-bottom-color: #A8A8A8;
@@ -575,7 +628,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   padding-bottom: 4px;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_col_heading {
+#&gt; #bzpexapgxv .gt_col_heading {
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* column_labels.background.color */
@@ -588,11 +641,11 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   margin: 10px;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_sep_right {
+#&gt; #bzpexapgxv .gt_sep_right {
 #&gt;   border-right: 5px solid #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_group_heading {
+#&gt; #bzpexapgxv .gt_group_heading {
 #&gt;   padding: 8px;
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
@@ -616,7 +669,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_empty_group_heading {
+#&gt; #bzpexapgxv .gt_empty_group_heading {
 #&gt;   padding: 0.5px;
 #&gt;   color: #000000;
 #&gt;   background-color: #FFFFFF;
@@ -640,29 +693,29 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_striped {
+#&gt; #bzpexapgxv .gt_striped {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_row {
+#&gt; #bzpexapgxv .gt_row {
 #&gt;   padding: 10px;
 #&gt;   /* row.padding */
 #&gt;   margin: 10px;
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_stub {
+#&gt; #bzpexapgxv .gt_stub {
 #&gt;   border-right-style: solid;
 #&gt;   border-right-width: 2px;
 #&gt;   border-right-color: #A8A8A8;
 #&gt;   padding-left: 12px;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_stub.gt_row {
+#&gt; #bzpexapgxv .gt_stub.gt_row {
 #&gt;   background-color: #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_summary_row {
+#&gt; #bzpexapgxv .gt_summary_row {
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* summary_row.background.color */
 #&gt;   padding: 6px;
@@ -671,13 +724,13 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   /* summary_row.text_transform */
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_first_summary_row {
+#&gt; #bzpexapgxv .gt_first_summary_row {
 #&gt;   border-top-style: solid;
 #&gt;   border-top-width: 2px;
 #&gt;   border-top-color: #A8A8A8;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_table_body {
+#&gt; #bzpexapgxv .gt_table_body {
 #&gt;   border-top-style: solid;
 #&gt;   /* field.border.top.style */
 #&gt;   border-top-width: 2px;
@@ -692,194 +745,161 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   /* field.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_footnote {
+#&gt; #bzpexapgxv .gt_footnote {
 #&gt;   font-size: 90%;
 #&gt;   /* footnote.font.size */
 #&gt;   padding: 4px;
 #&gt;   /* footnote.padding */
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_sourcenote {
+#&gt; #bzpexapgxv .gt_sourcenote {
 #&gt;   font-size: 90%;
 #&gt;   /* sourcenote.font.size */
 #&gt;   padding: 4px;
 #&gt;   /* sourcenote.padding */
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_center {
+#&gt; #bzpexapgxv .gt_center {
 #&gt;   text-align: center;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_left {
+#&gt; #bzpexapgxv .gt_left {
 #&gt;   text-align: left;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_right {
+#&gt; #bzpexapgxv .gt_right {
 #&gt;   text-align: right;
 #&gt;   font-variant-numeric: tabular-nums;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_font_normal {
+#&gt; #bzpexapgxv .gt_font_normal {
 #&gt;   font-weight: normal;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_font_bold {
+#&gt; #bzpexapgxv .gt_font_bold {
 #&gt;   font-weight: bold;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_font_italic {
+#&gt; #bzpexapgxv .gt_font_italic {
 #&gt;   font-style: italic;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_super {
+#&gt; #bzpexapgxv .gt_super {
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_footnote_glyph {
+#&gt; #bzpexapgxv .gt_footnote_glyph {
 #&gt;   font-style: italic;
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; &lt;/style&gt;
-#&gt; &lt;div id="npghmxkfrb" style="overflow-x:auto;"&gt;&lt;!--gt table start--&gt;
+#&gt; &lt;div id="bzpexapgxv" style="overflow-x:auto;"&gt;&lt;!--gt table start--&gt;
 #&gt; &lt;table class='gt_table'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;th class='gt_col_heading gt_left' rowspan='1' colspan='1'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Statistic&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;stat_1&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;stat_2&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;N&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Coefficient&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Confidence Interval&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;mpg&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;17.3 (14.9, 19.2)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;22.8 (21.0, 30.4)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;Treatment Randomization&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.011&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;cyl&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;3 (16%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;8 (62%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4 (21%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3 (23%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;12 (63%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;2 (15%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;disp&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;276 (196, 360)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;120 (79, 160)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;hp&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;175 (116, 192)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;109 (66, 113)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;drat&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3.15 (3.07, 3.70)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4.08 (3.85, 4.22)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;wt&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;3.52 (3.44, 3.84)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;2.32 (1.94, 2.78)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;qsec&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;17.82 (17.18, 19.17)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;17.02 (16.46, 18.61)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;vs&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;7 (37%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;7 (54%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;gear&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;15 (79%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Placebo&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.47&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.26, 0.84&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4 (21%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;8 (62%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Age, yrs&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;183&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.00&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.98, 1.02&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.90&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;5&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;Marker Level, ng/mL&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;183&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.92&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.65, 1.30&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.64&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;T Stage&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;191&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.055&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T1&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;5 (38%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;carb&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;3 (16%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;4 (31%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;2&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;6 (32%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4 (31%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;3 (16%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;7 (37%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3 (23%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1 (7.7%)&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1 (7.7%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.40&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.63, 3.14&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.63&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.26, 1.50&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.50&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.22, 1.11&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;Grade&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.40&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.60&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.29, 1.25&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.76&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.38, 1.51&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
 #&gt; &lt;/table&gt;
@@ -894,6 +914,8 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
+    <h2>Author</h2>
+    <p>Daniel Sjoberg</p>
   </div>
 </div>
 

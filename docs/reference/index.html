@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • clintable</title>
+<title>Function reference • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -59,7 +59,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">clintable</a>
+        <a class="navbar-link" href="../index.html">gtsummary</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
       </span>
     </div>
@@ -83,10 +83,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/fmt_table1.html">fmt_table1()</a>
+      <a href="../articles/tbl_summary.html">tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/fmt_regression.html">fmt_regression()</a>
+      <a href="../articles/tbl_regression.html">tbl_regression()</a>
     </li>
   </ul>
 </li>
@@ -97,7 +97,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ddsjoberg/clintable">
+  <a href="https://github.com/ddsjoberg/gtsummary">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -128,16 +128,16 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-table-functions" class="hasAnchor"><a href="#section-table-functions" class="anchor"></a>Table 1 Functions</h2>
-          <p class="section-desc"><p>Functions for creating and modifying Table 1</p></p>
+          <h2 id="section-summary-functions" class="hasAnchor"><a href="#section-summary-functions" class="anchor"></a>Summary Functions</h2>
+          <p class="section-desc"><p>Functions for creating and modifying summary tables</p></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="fmt_table1.html">fmt_table1()</a></code> </p>
+          <p><code><a href="tbl_summary.html">tbl_summary()</a></code> </p>
         </td>
-        <td><p>Calculates and formats descriptive statistics for Table 1.</p></td>
+        <td><p>Calculates and formats descriptive statistics for a data frame</p></td>
       </tr><tr>
         
         <td>
@@ -149,7 +149,7 @@
         <td>
           <p><code><a href="add_overall.html">add_overall()</a></code> </p>
         </td>
-        <td><p>Adds a column with overall summary statistics to an existing <code>fmt_table1</code> object where descriptive
+        <td><p>Adds a column with overall summary statistics to an existing <code>tbl_summary</code> object where descriptive
 statistics are split by a variable</p></td>
       </tr><tr>
         
@@ -166,52 +166,10 @@ statistics are split by a variable</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="add_q.fmt_table1.html">add_q(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
+          <p><code><a href="add_q.tbl_summary.html">add_q(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Add a column of q values to <code>fmt_table1</code> object to account for
+        <td><p>Add a column of q values to <code>tbl_summary</code> object to account for
 multiple comparisons in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="modify_header.fmt_table1.html">modify_header(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Modifies header rows for existing <code>fmt_table1</code> objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_labels.fmt_table1.html">bold_labels(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold variable labels for <code>fmt_table1</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_levels.fmt_table1.html">bold_levels(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold variable levels for <code>fmt_table1</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="italicize_labels.fmt_table1.html">italicize_labels(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Italicize or unitalicize labels for <code>fmt_table1</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="italicize_levels.fmt_table1.html">italicize_levels(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Italicize or unitalicize levels for <code>fmt_table1</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_p.fmt_table1.html">bold_p(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold p-values for <code>fmt_table1</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="inline_text.fmt_table1.html">inline_text(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Report statistics from <code>fmt_table1</code> inline in an Rmarkdown document</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -223,112 +181,34 @@ multiple comparisons in Rmarkdown</p></td>
       <tr>
         
         <td>
-          <p><code><a href="fmt_regression.html">fmt_regression()</a></code> </p>
+          <p><code><a href="tbl_regression.html">tbl_regression()</a></code> </p>
         </td>
         <td><p>Turn a regression model object into a markdown-ready tibble.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="add_global.fmt_regression.html">add_global(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
+          <p><code><a href="add_global.tbl_regression.html">add_global(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Adds the global p-value for a categorical variables in <code>fmt_regression</code> objects</p></td>
+        <td><p>Adds the global p-value for a categorical variables in <code>tbl_regression</code> objects</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="modify_header.fmt_regression.html">modify_header(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Modifies header rows for existing <code>fmt_regression</code> objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_labels.fmt_regression.html">bold_labels(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold variable labels for <code>fmt_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_levels.fmt_regression.html">bold_levels(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold variable levels for <code>fmt_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="italicize_labels.fmt_regression.html">italicize_labels(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Italicize or unitalicize labels for <code>fmt_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="italicize_levels.fmt_regression.html">italicize_levels(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Italicize or unitalicize levels for <code>fmt_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_p.fmt_regression.html">bold_p(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold p-values for <code>fmt_regression</code>  objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="inline_text.fmt_regression.html">inline_text(<i>&lt;fmt_regression&gt;</i>)</a></code> <code><a href="inline_text.fmt_regression.html">inline_text(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Report statistics from <code>fmt_regression</code> and <code>fmt_uni_regression</code> inline in an Rmarkdown document</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fmt_uni_regression.html">fmt_uni_regression()</a></code> </p>
+          <p><code><a href="tbl_uregression.html">tbl_uregression()</a></code> </p>
         </td>
         <td><p>Creates table of univariate regression results</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="add_global.fmt_uni_regression.html">add_global(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
+          <p><code><a href="add_global.tbl_uregression.html">add_global(<i>&lt;tbl_uregression&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Adds the global p-value for a categorical variables in <code>fmt_uni_regression</code> objects</p></td>
+        <td><p>Adds the global p-value for a categorical variables in <code>tbl_uregression</code> objects</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="add_q.fmt_uni_regression.html">add_q(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
+          <p><code><a href="add_q.tbl_uregression.html">add_q(<i>&lt;tbl_uregression&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Add a column of q values to <code>fmt_uni_regression</code> object to account for
+        <td><p>Add a column of q values to <code>tbl_uregression</code> object to account for
 multiple comparisons</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="modify_header.fmt_uni_regression.html">modify_header(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Modifies header rows for existing <code>fmt_uni_regression</code> objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_labels.fmt_uni_regression.html">bold_labels(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold variable labels for <code>fmt_uni_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_levels.fmt_uni_regression.html">bold_levels(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold variable levels for <code>fmt_uni_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="italicize_labels.fmt_uni_regression.html">italicize_labels(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Italicize or unitalicize labels for <code>fmt_uni_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="italicize_levels.fmt_uni_regression.html">italicize_levels(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Italicize or unitalicize levels for <code>fmt_uni_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_p.fmt_uni_regression.html">bold_p(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold or unbold p-values for <code>fmt_uni_regression</code> objects in Rmarkdown</p></td>
       </tr><tr>
         
         <td>
@@ -355,56 +235,6 @@ multiple comparisons</p></td>
           <p><code><a href="fmt_pvalue.html">fmt_pvalue()</a></code> </p>
         </td>
         <td><p>Formats p-values to be displayed in tables or text of report.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="indent_key.fmt_regression.html">indent_key(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Makes index of factor variables requiring indent from
-<code>fmt_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="indent_key.fmt_table1.html">indent_key(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Makes index of factors requiring indent from <code>fmt_table1</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="indent_key.fmt_uni_regression.html">indent_key(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Makes index of factor variables requiring indent from
-<code>fmt_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="indent_key.html">indent_key()</a></code> </p>
-        </td>
-        <td><p>Make indices compatible with <code><a href='https://www.rdocumentation.org/packages/kableExtra/topics/add_indent'>add_indent</a></code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="row_to_name.html">row_to_name()</a></code> </p>
-        </td>
-        <td><p>Renames columns to values in a row of data frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as_tibble.fmt_regression.html">as_tibble(<i>&lt;fmt_regression&gt;</i>)</a></code> <code><a href="as_tibble.fmt_regression.html">as_data_frame.fmt_regression()</a></code> </p>
-        </td>
-        <td><p>Convert <code>fmt_regression</code> objects to data frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as_tibble.fmt_table1.html">as_tibble(<i>&lt;fmt_table1&gt;</i>)</a></code> <code><a href="as_tibble.fmt_table1.html">as_data_frame.fmt_table1()</a></code> </p>
-        </td>
-        <td><p>Convert <code>fmt_table1</code> objects to data frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as_tibble.fmt_uni_regression.html">as_tibble(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> <code><a href="as_tibble.fmt_uni_regression.html">as_data_frame.fmt_uni_regression()</a></code> </p>
-        </td>
-        <td><p>Convert <code>fmt_uni_regression</code> objects to data frame</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -416,45 +246,51 @@ multiple comparisons</p></td>
       <tr>
         
         <td>
-          <p><code><a href="print.fmt_regression.html">print(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
+          <p><code><a href="print.tbl_regression.html">print(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print <code>fmt_regression</code> objects</p></td>
+        <td><p>Print gtsummary objects</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="print.fmt_table1.html">print(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
+          <p><code><a href="print.tbl_summary.html">print(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print <code>fmt_table1</code> objects</p></td>
+        <td><p>Print gtsummary objects</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="print.fmt_uni_regression.html">print(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
+          <p><code><a href="print.tbl_uregression.html">print(<i>&lt;tbl_uregression&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print <code>fmt_uni_regression</code> objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="knit_print.fmt_regression.html">knit_print(<i>&lt;fmt_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Print <code>fmt_regression</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="knit_print.fmt_table1.html">knit_print(<i>&lt;fmt_table1&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Print <code>fmt_table1</code> objects in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="knit_print.fmt_uni_regression.html">knit_print(<i>&lt;fmt_uni_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Print <code>fmt_uni_regression</code> objects in Rmarkdown</p></td>
+        <td><p>Print gtsummary objects</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="knit_print.html">knit_print</a></code> </p>
         </td>
-        <td><p>A custom printing function for Rmarkdown</p></td>
+        <td><p>A custom printing function</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="knit_print.tbl_regression.html">knit_print(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print gtsummary objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="knit_print.tbl_summary.html">knit_print(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print gtsummary objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="knit_print.tbl_uregression.html">knit_print(<i>&lt;tbl_uregression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print gtsummary objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as_gt.html">as_gt()</a></code> </p>
+        </td>
+        <td><p>Convert to gt_tbl object</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -468,20 +304,13 @@ multiple comparisons</p></td>
         <td>
           <p><code><a href="pipe.html">%>%</a></code> </p>
         </td>
-        <td><p><code>magrittr</code> Pipe operator <code>%&gt;%</code></p></td>
+        <td><p>magrittr forward-pipe operator</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="as_tibble.html">as_tibble</a></code> </p>
+          <p><code><a href="knit_print.html">knit_print</a></code> </p>
         </td>
-        <td><p>The <code>tibble</code> package's <code>as_tibble</code> function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as_data_frame.html">as_data_frame</a></code> </p>
-        </td>
-        <td><p>The <code>tibble</code> package's <code>as_data_frame</code> function is an
-alias for <code>tibble::as_tibble</code></p></td>
+        <td><p>A custom printing function</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -501,51 +330,8 @@ alias for <code>tibble::as_tibble</code></p></td>
         <td>
           <p><code><a href="add_q.html">add_q()</a></code> </p>
         </td>
-        <td><p>Add a column of q values to objects to account for
+        <td><p>Add a column of q values to account for
 multiple comparisons</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="modify_header.html">modify_header()</a></code> </p>
-        </td>
-        <td><p>Modifies header rows for existing <code>fmt_table1</code>, <code>fmt_regression</code>, and
-<code>fmt_uni_regression</code> objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_labels.html">bold_labels()</a></code> </p>
-        </td>
-        <td><p>Bold variable labels in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_levels.html">bold_levels()</a></code> </p>
-        </td>
-        <td><p>Bold variable levels in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="italicize_labels.html">italicize_labels()</a></code> </p>
-        </td>
-        <td><p>Italicize variable labels in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="italicize_levels.html">italicize_levels()</a></code> </p>
-        </td>
-        <td><p>Italicize variable levels in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bold_p.html">bold_p()</a></code> </p>
-        </td>
-        <td><p>Bold significant p-values in Rmarkdown</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="inline_text.html">inline_text()</a></code> </p>
-        </td>
-        <td><p>Report statistics from <code>fmt_table1</code> and <code>fmt_regression</code> inline in an Rmarkdown document</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -568,7 +354,7 @@ multiple comparisons</p></td>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-table-functions">Table 1 Functions</a></li>
+      <li><a href="#section-summary-functions">Summary Functions</a></li>
       <li><a href="#section-regression-model-functions">Regression Model Functions</a></li>
       <li><a href="#section-general-formatting-functions">General Formatting Functions</a></li>
       <li><a href="#section-default-printing-methods">Default Printing Methods</a></li>
@@ -581,7 +367,7 @@ multiple comparisons</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg.</p>
+  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum.</p>
 </div>
 
 <div class="pkgdown">

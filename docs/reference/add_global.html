@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds the global p-value for a categorical variables — add_global • clintable</title>
+<title>Adds the global p-value for a categorical variables — add_global • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -35,7 +35,7 @@
 <meta property="og:description" content="This function uses Anova from the car package with type = &quot;III&quot; to calculate global p-values.
 If a needed class of model is not supported by car::Anova, please put in an
 issue to request support.
-Output from fmt_regression and fmt_uni_regression objects supported." />
+Output from tbl_regression and tbl_uregression objects supported." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -65,7 +65,7 @@ Output from fmt_regression and fmt_uni_regression objects supported." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">clintable</a>
+        <a class="navbar-link" href="../index.html">gtsummary</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
       </span>
     </div>
@@ -89,10 +89,10 @@ Output from fmt_regression and fmt_uni_regression objects supported." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/fmt_table1.html">fmt_table1()</a>
+      <a href="../articles/tbl_summary.html">tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/fmt_regression.html">fmt_regression()</a>
+      <a href="../articles/tbl_regression.html">tbl_regression()</a>
     </li>
   </ul>
 </li>
@@ -103,7 +103,7 @@ Output from fmt_regression and fmt_uni_regression objects supported." />
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ddsjoberg/clintable">
+  <a href="https://github.com/ddsjoberg/gtsummary">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -129,8 +129,8 @@ Output from fmt_regression and fmt_uni_regression objects supported." />
     
     <p>This function uses <code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code> from the <code>car</code> package with <code>type = "III"</code> to calculate global p-values.
 If a needed class of model is not supported by <code>car::</code><code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code>, please put in an
-<a href='https://github.mskcc.org/datadojo/biostatR/issues'>issue</a> to request support.
-Output from <code>fmt_regression</code> and <code>fmt_uni_regression</code> objects supported.</p>
+<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.
+Output from <code>tbl_regression</code> and <code>tbl_uregression</code> objects supported.</p>
     
     </div>
 
@@ -141,7 +141,7 @@ Output from <code>fmt_regression</code> and <code>fmt_uni_regression</code> obje
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>fmt_regression</code> or <code>fmt_uni_regression</code> object</p></td>
+      <td><p><code>tbl_regression</code> or <code>tbl_uregression</code> object</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -151,7 +151,7 @@ Output from <code>fmt_regression</code> and <code>fmt_uni_regression</code> obje
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='add_global.fmt_regression.html'>add_global.fmt_regression</a></code>, <code><a href='add_global.fmt_uni_regression.html'>add_global.fmt_uni_regression</a></code></p></div>
+    <div class='dont-index'><p><code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>, <code><a href='add_global.tbl_uregression.html'>add_global.tbl_uregression</a></code></p></div>
     
 
   </div>
@@ -163,12 +163,14 @@ Output from <code>fmt_regression</code> and <code>fmt_uni_regression</code> obje
       <li><a href="#see-also">See also</a></li>
           </ul>
 
+    <h2>Author</h2>
+    <p>Daniel Sjoberg</p>
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg.</p>
+  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum.</p>
 </div>
 
 <div class="pkgdown">
