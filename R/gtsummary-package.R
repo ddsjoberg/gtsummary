@@ -1,6 +1,7 @@
 #' @keywords internal
 #' @import dplyr
 #' @import purrr
+#' @import gt
 #' @importFrom tidyr nest nest_ unnest unnest_ complete complete_ spread_ spread
 #' @importFrom tibble tibble as_tibble
 #' @importFrom rlang %||% set_names sym expr enexpr quo enquo eval_tidy :=
