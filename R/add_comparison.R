@@ -11,7 +11,8 @@
 #' "fisher.test" for a Fisher's exact test,
 #' and "re" for a random intercept model to account for clustered data.
 #' For "re" to be used "group" must also be specified in the function call.
-#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{fmt_pvalue}}.
+#' @param pvalue_fun function for rounding/formatting p-values.
+#' Default is \code{\link{fmt_pvalue}}.
 #' The function must have a single input (the numeric, exact p-value),
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' \code{pvalue_fun = function(x) fmt_pvalue(x, digits = 2)} or equivalently,
@@ -19,7 +20,8 @@
 #' @param group Character vector of an ID or grouping variable.  Summary statistics
 #' will not be printed for this column, but they may be used in subsequent
 #' functions. For example, the group column may be used in `add_comparison()` to
-#' include p-values with correlated data. Default is the `group = ` input from \code{\link{tbl_summary}}
+#' include p-values with correlated data. Default is the `group = ` input
+#' from \code{\link{tbl_summary}}
 #' @export
 #' @author Daniel Sjoberg
 #' @examples
@@ -44,16 +46,14 @@ add_comparison <- function(x, test = NULL, pvalue_fun = fmt_pvalue, group = x$in
         group = group
       ),
       # calculating pvalue
-      pvalue_exact = ~ calculate_pvalue(
+      pvalue = ~ calculate_pvalue(
         data = x$inputs$data,
         variable = variable,
         by = x$inputs$by,
         test = stat_test,
         type = summary_type,
         group = group
-      ),
-      # formatting pvalue
-      pvalue = ~ pvalue_fun(pvalue_exact)
+      )
     )
 
   # creating pvalue column for table_body merge
@@ -64,13 +64,21 @@ add_comparison <- function(x, test = NULL, pvalue_fun = fmt_pvalue, group = x$in
 
 
   table_body <-
-    x$gt$table_body %>%
+    x$table_body %>%
     dplyr::left_join(
       pvalue_column,
       by = c("variable", "row_type")
     )
 
-  x$gt$table_body <- table_body
+  x$table_body <- table_body
+  x$pvalue_fun <- pvalue_fun
+  # adding p-value formatting
+  x[["gt_calls"]][["fmt:pvalue"]] <-
+    "gt::fmt(columns = gt::vars(pvalue), rows = !is.na(pvalue), fns = x$pvalue_fun)"
+  # column headers
+  x[["gt_calls"]][["cols_label:pvalue"]] <-
+    "gt::cols_label(pvalue = gt::md('**p-value**'))"
+
   x$meta_data <- meta_data
   x$call_list <- c(x$call_list, list(add_comparison = match.call()))
 

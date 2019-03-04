@@ -1,4 +1,4 @@
-url: https://github.com/ddsjoberg/clintable
+url: https://github.com/ddsjoberg/gtsummary
 
 template:
   params:
@@ -13,57 +13,37 @@ navbar:
     href: reference/index.html
   - text: Tutorials
     menu:
-    - text: fmt_table1()
-      href: articles/fmt_table1.html
-    - text: fmt_regression()
-      href: articles/fmt_regression.html
+    - text: tbl_summary()
+      href: articles/tbl_summary.html
+    - text: tbl_regression()
+      href: articles/tbl_regression.html
   - text: News
     href: news/index.html
   right:
   - icon: fa-github fa-lg
-    href: https://github.com/ddsjoberg/clintable
+    href: https://github.com/ddsjoberg/gtsummary
 
 reference:
-  - title: "Table 1 Functions"
+  - title: "Summary Functions"
     desc: >
-      Functions for creating and modifying Table 1
+      Functions for creating and modifying summary tables
     contents:
-      - fmt_table1
+      - tbl_summary
       - add_comparison
       - add_overall
       - add_n
       - add_stat_label
-      - add_q.fmt_table1
-      - modify_header.fmt_table1
-      - bold_labels.fmt_table1
-      - bold_levels.fmt_table1
-      - italicize_labels.fmt_table1
-      - italicize_levels.fmt_table1
-      - bold_p.fmt_table1
-      - inline_text.fmt_table1
+      - add_q.tbl_summary
 
   - title: "Regression Model Functions"
     desc: >
       Functions for formatting regression model results
     contents:
-      - fmt_regression
-      - add_global.fmt_regression
-      - modify_header.fmt_regression
-      - bold_labels.fmt_regression
-      - bold_levels.fmt_regression
-      - italicize_labels.fmt_regression
-      - italicize_levels.fmt_regression
-      - bold_p.fmt_regression
-      - inline_text.fmt_regression
-      - fmt_uni_regression
-      - add_global.fmt_uni_regression
-      - add_q.fmt_uni_regression
-      - modify_header.fmt_uni_regression
-      - bold_labels.fmt_uni_regression
-      - bold_levels.fmt_uni_regression
-      - italicize_labels.fmt_uni_regression
-      - italicize_levels.fmt_uni_regression
-      - bold_p.fmt_uni_regression
+      - tbl_regression
+      - add_global.tbl_regression
+      - tbl_uregression
+      - add_global.tbl_uregression
+      - add_q.tbl_uregression
       - fmt_beta
 
   - title: "General Formatting Functions"
@@ -72,10 +52,6 @@ reference:
     contents:
       - fmt_percent
       - fmt_pvalue
-      - starts_with("indent_key")
-      - row_to_name
-      - starts_with("as_tibble.")
-      - starts_with("as_data_frame.")
 
   - title: "Default Printing Methods"
     desc: >
@@ -83,14 +59,14 @@ reference:
     contents:
       - starts_with("print")
       - starts_with("knit_print")
+      - starts_with("as_gt")
 
   - title: "Imports"
     desc: >
       Functions imported from other packages
     contents:
       - starts_with("%")
-      - as_tibble
-      - as_data_frame
+      - knit_print
 
   - title: "S3 Generic Functions"
     desc: >
@@ -98,13 +74,6 @@ reference:
     contents:
       - add_global
       - add_q
-      - modify_header
-      - bold_labels
-      - bold_levels
-      - italicize_labels
-      - italicize_levels
-      - bold_p
-      - inline_text
 
   - title: "Example Datasets"
     desc: >
