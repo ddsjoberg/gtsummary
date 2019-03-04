@@ -7,7 +7,7 @@
 tbl_uregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {.x}", exponentiate = FALSE, label = NULL,
   show_yesno = NULL, conf.level = 0.95, coef_fun = fmt_beta,
-  pvalue_fun = fmt_pvalue)
+  pvalue_fun = style_pvalue)
 }
 \arguments{
 \item{data}{Data frame to be used in univariate regression modeling.  Data frame
@@ -40,7 +40,7 @@ Default is 0.95.}
 
 \item{coef_fun}{function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}}
 
-\item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{fmt_pvalue}}}
+\item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{style_pvalue}}}
 }
 \description{
 The \code{tbl_uregression} function arguments are similar to the \code{\link{tbl_regression}}
@@ -64,7 +64,7 @@ tbl_uregression(
   y = "response",
   method.args = list(family = binomial),
   exponentiate = TRUE,
-  pvalue_fun = function(x) fmt_pvalue(x, digits = 2)
+  pvalue_fun = function(x) style_pvalue(x, digits = 2)
 ) \%>\%
   add_global()
 }

@@ -6,7 +6,7 @@
 multiple comparisons}
 \usage{
 \method{add_q}{tbl_uregression}(x, method = "fdr",
-  pvalue_fun = fmt_pvalue, ...)
+  pvalue_fun = style_pvalue, ...)
 }
 \arguments{
 \item{x}{\code{tbl_uregression} object}
@@ -14,7 +14,7 @@ multiple comparisons}
 \item{method}{character argument.  Methods from
 \code{stats::}\code{\link[stats]{p.adjust}} are accepted.  Default is \code{method = 'fdr'}.}
 
-\item{pvalue_fun}{function for rounding/formatting p-values.  Default is \code{\link{fmt_pvalue}}.}
+\item{pvalue_fun}{function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.}
 
 \item{...}{further arguments passed to or from other methods}
 }
