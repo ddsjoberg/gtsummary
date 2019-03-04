@@ -6,15 +6,14 @@
 \usage{
 tbl_regression(x, exponentiate = FALSE, label = NULL,
   include = names(stats::model.frame(x)), show_yesno = NULL,
-  conf.level = 0.95, intercept = FALSE, beta_fun = fmt_beta,
+  conf.level = 0.95, intercept = FALSE, coef_fun = fmt_beta,
   pvalue_fun = fmt_pvalue)
 }
 \arguments{
 \item{x}{regression model object}
 
 \item{exponentiate}{logical argument passed directly to
-\code{tidy} function
-Default is \code{FALSE}}
+\code{tidy} function. Default is \code{FALSE}}
 
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
@@ -30,14 +29,14 @@ name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
 \item{intercept}{logical argument indicates whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{beta_fun}{function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}}
+\item{coef_fun}{function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}}
 
 \item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{fmt_pvalue}}}
 }
 \description{
 This function uses \code{broom::tidy} from the \code{broom} or \code{broom.mixed} packages
 to perform the initial model formatting. Review the \code{tbl_regression}
-\href{http://www.danieldsjoberg.com/clintable/articles/tbl_regression.html}{vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
 for detailed examples.
 }
 \examples{
@@ -50,4 +49,7 @@ tbl_regression(mod2, exponentiate = TRUE)
 library(lme4)
 mod_glmer <- glmer(am ~ hp + (1 | gear), mtcars, family = binomial)
 tbl_regression(mod_glmer, exponentiate = TRUE)
+}
+\author{
+Daniel Sjoberg
 }

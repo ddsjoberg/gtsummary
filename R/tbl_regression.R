@@ -2,13 +2,12 @@
 #'
 #' This function uses \code{broom::tidy} from the `broom` or `broom.mixed` packages
 #' to perform the initial model formatting. Review the `tbl_regression`
-#' \href{http://www.danieldsjoberg.com/clintable/articles/tbl_regression.html}{vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
 #' for detailed examples.
 #'
 #' @param x regression model object
 #' @param exponentiate logical argument passed directly to
-#' `tidy` function
-#' Default is `FALSE`
+#' `tidy` function. Default is `FALSE`
 #' @param label list of labels to write in the output. `list(age60 = "Age > 60")`
 #' @param include names of variables to include in output.  Default is all variables.
 #' @param conf.level confidence level passed directly to `tidy` function. Default is 0.95.
@@ -18,8 +17,9 @@
 #' are `c("No", "Yes")`, `c("no", "yes")`, or `c("NO", "YES")` default to dichotomous printing
 #' (i.e. only Yes shown). To force both levels to be shown include the column
 #' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
-#' @param beta_fun function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}
+#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{fmt_pvalue}}
+#' @author Daniel Sjoberg
 #' @export
 #' @examples
 #' mod1 <- lm(hp ~ mpg + factor(cyl), mtcars)
@@ -35,8 +35,8 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
                            include = names(stats::model.frame(x)),
                            show_yesno = NULL,
                            conf.level = 0.95, intercept = FALSE,
-                           beta_fun = fmt_beta, pvalue_fun = fmt_pvalue) {
-  # will return call, and all object passed to in table1 call
+                           coef_fun = fmt_beta, pvalue_fun = fmt_pvalue) {
+  # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())
 
@@ -63,93 +63,93 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   }
   mod_list <- mod_list[names(mod_list) %in% include]
 
+  # model N
+  n = stats::model.frame(x) %>% nrow()
+
   # putting all results into tibble
-  raw_results <-
-    data_frame(variable = names(mod_list)) %>%
+  table_body <-
+    tibble(variable = names(mod_list)) %>%
     mutate_(
       estimates = ~mod_list,
       var_type = ~ map_chr(estimates, ~ ifelse(nrow(.x) > 1, "categorical", "continuous")),
       var_label = ~ map_chr(
         variable, ~ label[[.x]] %||% attr(stats::model.frame(x)[[.x]], "label") %||% .x
-      )
-    )
-
-  # number obs.
-  n <- stats::model.frame(x) %>% nrow()
-
-  # formatting raw results
-  model_tbl <-
-    raw_results %>%
-    mutate_(
-      # formatting stats
-      estimates = ~ map(estimates, ~ fmt_estimates(.x, beta_fun, pvalue_fun)),
-      # adding label
+      ),
       estimates = ~ pmap(
         list(var_type, estimates, var_label, variable),
         ~ add_label(..1, ..2, ..3, ..4)
       ),
       N = ~n
     ) %>%
-    tidyr::unnest_("estimates")
-
-  # removing intercept term if indicated
-  if (intercept == FALSE) {
-    # removing the last row if it's called (Intercept)
-    model_tbl <- model_tbl %>% filter(!(label == "(Intercept)" & row_number() == n()))
-  }
+    tidyr::unnest_("estimates") %>%
+    select(c(
+      "variable", "var_type", "row_type", "label", "N",
+      "estimate", "conf.low", "conf.high", "p.value"
+    )) %>%
+    set_names(c(
+      "variable", "var_type", "row_type", "label", "N",
+      "coef", "ll", "ul", "pvalue"
+    ))
 
   results <- list()
-  results[["gt"]][["table_body"]] <-
-    model_tbl %>%
-    select(c(
-      "row_type", "var_type", "variable", "label", "N",
-      "est", "ll", "ul", "ci", "pvalue_exact", "pvalue", "p_pvalue"
-    ))
+  results[["table_body"]] <- table_body
   results[["n"]] <- n
   results[["model_obj"]] <- x
   results[["inputs"]] <- func_inputs
+  results[["call_list"]] <- list(tbl_summary = match.call())
+
+  # returning all gt calls in a list
+  # first call to the gt function
+  results[["gt_calls"]][["gt"]] <- "gt::gt(data = x$table_body)"
+  # label column indented and left just
+  results[["gt_calls"]][["cols_align"]] <- glue(
+    "gt::cols_align(align = 'center') %>% ",
+    "gt::cols_align(align = 'left', columns = gt::vars(label))"
+  )
+  # do not print columns variable or row_type columns
+  results[["gt_calls"]][["cols_hide"]] <-
+    "gt::cols_hide(columns = gt::vars(variable, row_type, var_type, N))"
+  # NAs do not show in table
+  results[["gt_calls"]][["fmt_missing"]] <-
+    "gt::fmt_missing(columns = gt::everything(), missing_text = '')"
+  # # Show "---" for reference groups
+  # results[["gt_calls"]][["fmt_missing"]] <-
+  #   "gt::fmt_missing(columns = gt::everything(), rows = row_type == 'level', missing_text = '---')"
+
+  # column headers
+  results[["gt_calls"]][["cols_label"]] <- glue(
+    "gt::cols_label(",
+    "label = gt::md('**N = {n}**'), ",
+    "coef = gt::md('**Coefficient**'), ",
+    "ll = gt::md('**Confidence Interval**'), ",
+    "pvalue = gt::md('**p-value**')",
+    ")"
+  )
+  # adding p-value formatting (evaluate the expression with eval() function)
+  results[["gt_calls"]][["fmt:pvalue"]] <-
+    "gt::fmt(columns = gt::vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)"
+  # ceof and confidence interval formatting
+  results[["gt_calls"]][["fmt:coef"]] <-
+    "gt::fmt(columns = gt::vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)"
+  # combining ll and ul to print confidence interval
+  results[["gt_calls"]][["cols_merge:ci"]] <-
+    "gt::cols_merge(col_1 = gt::vars(ll), col_2 = gt::vars(ul), pattern = '{1}, {2}')"
+  # indenting levels and missing rows
+  results[["gt_calls"]][["tab_style:text_indent"]] <- glue(
+    "gt::tab_style(",
+    "style = gt::cells_styles(text_indent = gt::px(10), text_align = 'left'),",
+    "locations = gt::cells_data(",
+    "columns = gt::vars(label),",
+    "rows = row_type != 'label'",
+    "))"
+  )
+
 
   # assigning a class of tbl_regression (for special printing in Rmarkdown)
   class(results) <- "tbl_regression"
 
-  return(results)
+  results
 }
 
-# this function adds the label to the estimates tibble
-# for continuous variables this means adding a column with the label.
-# But for categorical, we add a row on top with the label
-add_label <- function(var_type, estimates, var_label, variable) {
-  case_when(
-    var_type == "continuous" ~ list(estimates %>% mutate_(row_type = ~"label", label = ~var_label)),
-    var_type == "categorical" ~ list(
-      bind_rows(
-        data_frame(row_type = "label", label = var_label),
-        estimates %>% mutate_(
-          row_type = ~"level",
-          label = ~ stringr::str_replace(term, stringr::fixed(variable), "")
-        )
-      )
-    )
-  ) %>%
-    pluck(1)
-}
 
-# little function that will round statistics,
-# and add "Ref." for a reference categorical variable
-fmt_estimates <- function(x, beta_fun, pvalue_fun) {
-  x %>%
-    mutate_(
-      est = ~ ifelse(is.na(estimate), "Ref.", beta_fun(estimate)),
-      ll = ~ beta_fun(conf.low),
-      ul = ~ beta_fun(conf.high),
-      ci = ~ ifelse(is.na(estimate), NA_character_, paste0(ll, ", ", ul)),
-      pvalue_exact = ~p.value,
-      pvalue = ~ pvalue_fun(p.value),
-      p_pvalue = ~ case_when(
-        is.na(pvalue) ~ NA_character_,
-        stringr::str_sub(pvalue, end = 1L) %in% c("<", ">") ~ paste0("p", pvalue),
-        TRUE ~ paste0("p=", pvalue)
-      )
-    )
-}
 
