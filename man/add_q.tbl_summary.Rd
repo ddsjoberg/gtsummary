@@ -5,8 +5,8 @@
 \title{Add a column of q values to \code{tbl_summary} object to account for
 multiple comparisons in Rmarkdown}
 \usage{
-\method{add_q}{tbl_summary}(x, method = "fdr", pvalue_fun = fmt_pvalue,
-  ...)
+\method{add_q}{tbl_summary}(x, method = "fdr",
+  pvalue_fun = style_pvalue, ...)
 }
 \arguments{
 \item{x}{\code{tbl_summary} object}
@@ -14,7 +14,7 @@ multiple comparisons in Rmarkdown}
 \item{method}{character argument.  Methods from
 \code{stats::}\code{\link[stats]{p.adjust}} are accepted.  Default is \code{method = 'fdr'}.}
 
-\item{pvalue_fun}{function for rounding/formatting p-values.  Default is \code{\link{fmt_pvalue}}.}
+\item{pvalue_fun}{function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.}
 
 \item{...}{further arguments passed to or from other methods}
 }

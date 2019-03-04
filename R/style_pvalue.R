@@ -12,9 +12,9 @@
 #'   1.5, 1, 0.999, 0.5, 0.25, 0.2, 0.197, 0.12, 0.10, 0.0999, 0.06,
 #'   0.03, 0.002, 0.001, 0.00099, 0.0002, 0.00002, -1
 #' )
-#' fmt_pvalue(pvals)
-#' fmt_pvalue(pvals, digits = 2, prepend_p = TRUE)
-fmt_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
+#' style_pvalue(pvals)
+#' style_pvalue(pvals, digits = 2, prepend_p = TRUE)
+style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
 
   # rounding large pvalues to 2 digits
   if (digits == 2) {

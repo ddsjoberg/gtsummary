@@ -137,7 +137,7 @@ for detailed examples.</p>
     <pre class="usage"><span class='fu'>tbl_uregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {.x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='no'>fmt_beta</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>fmt_pvalue</span>)</pre>
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,7 +194,7 @@ Default is 0.95.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.  Default is <code><a href='fmt_pvalue.html'>fmt_pvalue</a></code></p></td>
+      <td><p>function to round and format p-values.  Default is <code><a href='style_pvalue.html'>style_pvalue</a></code></p></td>
     </tr>
     </table>
     
@@ -558,7 +558,7 @@ Default is 0.95.</p></td>
   <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
   <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='fmt_pvalue.html'>fmt_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_global.html'>add_global</a></span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;

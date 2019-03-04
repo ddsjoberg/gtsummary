@@ -795,7 +795,7 @@ summarize_categorical <- function(data, variable, by, var_label,
     complete_("variable", fill = list(n = 0)) %>%
     mutate_(
       N = ~sum(n),
-      p = ~fmt_percent(n / N),
+      p = ~style_percent(n / N),
       stat = ~as.character(glue(stat_display))
     ) %>%
     select(c("by_col", "variable", "stat")) %>%

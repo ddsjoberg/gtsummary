@@ -25,7 +25,7 @@
 #' @param conf.level confidence level passed directly to \code{broom::tidy}.
 #' Default is 0.95.
 #' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}
-#' @param pvalue_fun function to round and format p-values.  Default is \code{\link{fmt_pvalue}}
+#' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
 #' @author Daniel Sjoberg
 #' @export
 #' @examples
@@ -44,14 +44,14 @@
 #'   y = "response",
 #'   method.args = list(family = binomial),
 #'   exponentiate = TRUE,
-#'   pvalue_fun = function(x) fmt_pvalue(x, digits = 2)
+#'   pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #' ) %>%
 #'   add_global()
 tbl_uregression <- function(data, method, y, method.args = NULL,
                                formula = "{y} ~ {.x}",
                                exponentiate = FALSE, label = NULL,
                                show_yesno = NULL, conf.level = 0.95,
-                               coef_fun = fmt_beta, pvalue_fun = fmt_pvalue) {
+                               coef_fun = fmt_beta, pvalue_fun = style_pvalue) {
 
   # data -----------------------------------------------------------------------
   # data is a data frame

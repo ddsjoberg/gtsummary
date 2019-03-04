@@ -7,7 +7,7 @@
 tbl_regression(x, exponentiate = FALSE, label = NULL,
   include = names(stats::model.frame(x)), show_yesno = NULL,
   conf.level = 0.95, intercept = FALSE, coef_fun = fmt_beta,
-  pvalue_fun = fmt_pvalue)
+  pvalue_fun = style_pvalue)
 }
 \arguments{
 \item{x}{regression model object}
@@ -31,7 +31,7 @@ in the output.  Default is \code{FALSE}}
 
 \item{coef_fun}{function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}}
 
-\item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{fmt_pvalue}}}
+\item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{style_pvalue}}}
 }
 \description{
 This function uses \code{broom::tidy} from the \code{broom} or \code{broom.mixed} packages
