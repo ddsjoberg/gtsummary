@@ -7,7 +7,7 @@
 #' @author Daniel Sjoberg
 #' @export
 
-fmt_bold_p <- function(x, ...) UseMethod("fmt_bold_p")
+tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 
 
 #' Bold significant p-values
@@ -20,7 +20,7 @@ fmt_bold_p <- function(x, ...) UseMethod("fmt_bold_p")
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
-fmt_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
+tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_comparison has been previously run
   if(is.null(x$call_list$add_comparison)) {
@@ -56,12 +56,12 @@ fmt_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
-fmt_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
+tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
   # returning threshold for bolding
   x[[glue("pvalue_bold_t")]] <- t
   # adding p-value formatting
-  x[["gt_calls"]][["fmt_bold_pvalue"]] <- glue(
+  x[["gt_calls"]][["tab_style_bold_pvalue"]] <- glue(
     "gt::tab_style(style = gt::cells_styles(text_weight = 'bold'), ",
     "locations = gt::cells_data(columns = gt::vars(pvalue),",
     "rows = pvalue <= x$pvalue_bold_t))"
@@ -80,7 +80,7 @@ fmt_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
-fmt_bold_p.tbl_uregression <- function(x, t = 0.05, q = FALSE, ...) {
+tab_style_bold_p.tbl_uregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_q has been previously run if bolding q-values
   if(q == TRUE & is.null(x$call_list$add_q)) {
