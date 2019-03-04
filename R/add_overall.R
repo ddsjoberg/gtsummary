@@ -27,12 +27,11 @@ add_overall <- function(x, last = FALSE) {
   # calculating stats overall, and adding header row
   overall <-
     do.call(tbl_summary, x_copy$inputs) %>%
-    pluck("gt") %>%
     pluck("table_body")
 
   # checking the original tbl_summary and the added overall, are the same before binding (excluding headers)
   if (!identical(
-    x$gt$table_body %>%
+    x$table_body %>%
       select(c("row_type", "variable", "label")),
     overall %>%
       select(c("row_type", "variable", "label"))
@@ -42,16 +41,16 @@ add_overall <- function(x, last = FALSE) {
 
   # adding overall stat to the table1 data frame
   if (last == FALSE) {
-    x$gt$table_body <-
+    x$table_body <-
       bind_cols(
         overall,
-        x$gt$table_body %>% select(-c("variable", "row_type", "label"))
+        x$table_body %>% select(-c("variable", "row_type", "label"))
       )
   }
   if (last == TRUE) {
-    x$gt$table_body <-
+    x$table_body <-
       bind_cols(
-        x$gt$table_body,
+        x$table_body,
         overall %>% select(c("stat_0"))
       )
   }
