@@ -100,11 +100,11 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the production version of gtsummary with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)
+remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</code></pre></div>
 <p>and the development version with:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>, <span class="dt">ref =</span> <span class="st">"dev"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)
+remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>, <span class="dt">ref =</span> <span class="st">"dev"</span>)</code></pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -113,14 +113,20 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <div id="table-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#table-1" class="anchor"></a>Table 1</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gtsummary)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/add_comparison.html">add_comparison</a></span>() </a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gtsummary)
+<span class="co">#&gt; Loading required package: gt</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'gtsummary'</span>
+<span class="co">#&gt; The following object is masked from 'package:gt':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     fmt_percent</span>
+<span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="reference/add_comparison.html">add_comparison</a></span>() </code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#lndcnjyoga .gt_table {
+#iqprcgzfqt .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -139,13 +145,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* table.border.top.color */
 }
 
-#lndcnjyoga .gt_heading {
+#iqprcgzfqt .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#lndcnjyoga .gt_title {
+#iqprcgzfqt .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -156,7 +162,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   border-bottom-width: 0;
 }
 
-#lndcnjyoga .gt_subtitle {
+#iqprcgzfqt .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -167,7 +173,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   border-top-width: 0;
 }
 
-#lndcnjyoga .gt_bottom_border {
+#iqprcgzfqt .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -176,7 +182,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* heading.border.bottom.color */
 }
 
-#lndcnjyoga .gt_column_spanner {
+#iqprcgzfqt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -184,7 +190,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   padding-bottom: 4px;
 }
 
-#lndcnjyoga .gt_col_heading {
+#iqprcgzfqt .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -197,11 +203,11 @@ A collection of functions commonly used in the work of the biostatisticians. The
   margin: 10px;
 }
 
-#lndcnjyoga .gt_sep_right {
+#iqprcgzfqt .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#lndcnjyoga .gt_group_heading {
+#iqprcgzfqt .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -225,7 +231,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   vertical-align: middle;
 }
 
-#lndcnjyoga .gt_empty_group_heading {
+#iqprcgzfqt .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -249,29 +255,29 @@ A collection of functions commonly used in the work of the biostatisticians. The
   vertical-align: middle;
 }
 
-#lndcnjyoga .gt_striped {
+#iqprcgzfqt .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#lndcnjyoga .gt_row {
+#iqprcgzfqt .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#lndcnjyoga .gt_stub {
+#iqprcgzfqt .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#lndcnjyoga .gt_stub.gt_row {
+#iqprcgzfqt .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#lndcnjyoga .gt_summary_row {
+#iqprcgzfqt .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -280,13 +286,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* summary_row.text_transform */
 }
 
-#lndcnjyoga .gt_first_summary_row {
+#iqprcgzfqt .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#lndcnjyoga .gt_table_body {
+#iqprcgzfqt .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -301,55 +307,55 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* field.border.bottom.color */
 }
 
-#lndcnjyoga .gt_footnote {
+#iqprcgzfqt .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#lndcnjyoga .gt_sourcenote {
+#iqprcgzfqt .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#lndcnjyoga .gt_center {
+#iqprcgzfqt .gt_center {
   text-align: center;
 }
 
-#lndcnjyoga .gt_left {
+#iqprcgzfqt .gt_left {
   text-align: left;
 }
 
-#lndcnjyoga .gt_right {
+#iqprcgzfqt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lndcnjyoga .gt_font_normal {
+#iqprcgzfqt .gt_font_normal {
   font-weight: normal;
 }
 
-#lndcnjyoga .gt_font_bold {
+#iqprcgzfqt .gt_font_bold {
   font-weight: bold;
 }
 
-#lndcnjyoga .gt_font_italic {
+#iqprcgzfqt .gt_font_italic {
   font-style: italic;
 }
 
-#lndcnjyoga .gt_super {
+#iqprcgzfqt .gt_super {
   font-size: 65%;
 }
 
-#lndcnjyoga .gt_footnote_glyph {
+#iqprcgzfqt .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="lndcnjyoga" style="overflow-x:auto;">
+<div id="iqprcgzfqt" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table table gt_table">
 <tr>
@@ -358,7 +364,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1">stat_2</th>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left">Age, yrs</td>
 <td class="gt_row gt_center">47 (39, 58)</td>
@@ -366,10 +372,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center">0.3</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">Unknown</td>
-<td class="gt_row gt_center gt_striped">3</td>
-<td class="gt_row gt_center gt_striped">5</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">Unknown</td>
+<td class="gt_row gt_center">3</td>
+<td class="gt_row gt_center">5</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left">Marker Level, ng/mL</td>
@@ -378,10 +384,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center">0.4</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">Unknown</td>
-<td class="gt_row gt_center gt_striped">4</td>
-<td class="gt_row gt_center gt_striped">4</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">Unknown</td>
+<td class="gt_row gt_center">4</td>
+<td class="gt_row gt_center">4</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left">T Stage</td>
@@ -390,10 +396,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center">0.13</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T1</td>
-<td class="gt_row gt_center gt_striped">25 (23%)</td>
-<td class="gt_row gt_center gt_striped">26 (28%)</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T1</td>
+<td class="gt_row gt_center">25 (23%)</td>
+<td class="gt_row gt_center">26 (28%)</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T2</td>
@@ -402,10 +408,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T3</td>
-<td class="gt_row gt_center gt_striped">29 (27%)</td>
-<td class="gt_row gt_center gt_striped">13 (14%)</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T3</td>
+<td class="gt_row gt_center">29 (27%)</td>
+<td class="gt_row gt_center">13 (14%)</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T4</td>
@@ -414,10 +420,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">Grade</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">0.3</td>
+<td class="gt_row gt_left">Grade</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.3</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">I</td>
@@ -426,10 +432,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">II</td>
-<td class="gt_row gt_center gt_striped">34 (32%)</td>
-<td class="gt_row gt_center gt_striped">24 (26%)</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">II</td>
+<td class="gt_row gt_center">34 (32%)</td>
+<td class="gt_row gt_center">24 (26%)</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">III</td>
@@ -438,10 +444,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">Tumor Response</td>
-<td class="gt_row gt_center gt_striped">52 (51%)</td>
-<td class="gt_row gt_center gt_striped">30 (33%)</td>
-<td class="gt_row gt_center gt_striped">0.017</td>
+<td class="gt_row gt_left">Tumor Response</td>
+<td class="gt_row gt_center">52 (51%)</td>
+<td class="gt_row gt_center">30 (33%)</td>
+<td class="gt_row gt_center">0.017</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">Unknown</td>
@@ -457,16 +463,16 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <div id="regression-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#regression-models" class="anchor"></a>Regression Models</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod1 =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(am <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(cyl), mtcars, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(<span class="dt">link =</span> <span class="st">"logit"</span>))</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, </a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">label =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">`</span><span class="dt">factor(cyl)</span><span class="st">`</span> =<span class="st"> "No. of Cylinders"</span>, <span class="dt">mpg =</span> <span class="st">"Miles per Gallon"</span>)</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1 =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(am <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(cyl), mtcars, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(<span class="dt">link =</span> <span class="st">"logit"</span>))
+<span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(
+  mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, 
+  <span class="dt">label =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">`</span><span class="dt">factor(cyl)</span><span class="st">`</span> =<span class="st"> "No. of Cylinders"</span>, <span class="dt">mpg =</span> <span class="st">"Miles per Gallon"</span>)
+)</code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#kkeeevkqai .gt_table {
+#jpzeigppbb .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -485,13 +491,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* table.border.top.color */
 }
 
-#kkeeevkqai .gt_heading {
+#jpzeigppbb .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#kkeeevkqai .gt_title {
+#jpzeigppbb .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -502,7 +508,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   border-bottom-width: 0;
 }
 
-#kkeeevkqai .gt_subtitle {
+#jpzeigppbb .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -513,7 +519,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   border-top-width: 0;
 }
 
-#kkeeevkqai .gt_bottom_border {
+#jpzeigppbb .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -522,7 +528,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* heading.border.bottom.color */
 }
 
-#kkeeevkqai .gt_column_spanner {
+#jpzeigppbb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -530,7 +536,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   padding-bottom: 4px;
 }
 
-#kkeeevkqai .gt_col_heading {
+#jpzeigppbb .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -543,11 +549,11 @@ A collection of functions commonly used in the work of the biostatisticians. The
   margin: 10px;
 }
 
-#kkeeevkqai .gt_sep_right {
+#jpzeigppbb .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#kkeeevkqai .gt_group_heading {
+#jpzeigppbb .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -571,7 +577,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   vertical-align: middle;
 }
 
-#kkeeevkqai .gt_empty_group_heading {
+#jpzeigppbb .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -595,29 +601,29 @@ A collection of functions commonly used in the work of the biostatisticians. The
   vertical-align: middle;
 }
 
-#kkeeevkqai .gt_striped {
+#jpzeigppbb .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#kkeeevkqai .gt_row {
+#jpzeigppbb .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#kkeeevkqai .gt_stub {
+#jpzeigppbb .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#kkeeevkqai .gt_stub.gt_row {
+#jpzeigppbb .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#kkeeevkqai .gt_summary_row {
+#jpzeigppbb .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -626,13 +632,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* summary_row.text_transform */
 }
 
-#kkeeevkqai .gt_first_summary_row {
+#jpzeigppbb .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#kkeeevkqai .gt_table_body {
+#jpzeigppbb .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -647,55 +653,55 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* field.border.bottom.color */
 }
 
-#kkeeevkqai .gt_footnote {
+#jpzeigppbb .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#kkeeevkqai .gt_sourcenote {
+#jpzeigppbb .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#kkeeevkqai .gt_center {
+#jpzeigppbb .gt_center {
   text-align: center;
 }
 
-#kkeeevkqai .gt_left {
+#jpzeigppbb .gt_left {
   text-align: left;
 }
 
-#kkeeevkqai .gt_right {
+#jpzeigppbb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kkeeevkqai .gt_font_normal {
+#jpzeigppbb .gt_font_normal {
   font-weight: normal;
 }
 
-#kkeeevkqai .gt_font_bold {
+#jpzeigppbb .gt_font_bold {
   font-weight: bold;
 }
 
-#kkeeevkqai .gt_font_italic {
+#jpzeigppbb .gt_font_italic {
   font-style: italic;
 }
 
-#kkeeevkqai .gt_super {
+#jpzeigppbb .gt_super {
   font-size: 65%;
 }
 
-#kkeeevkqai .gt_footnote_glyph {
+#jpzeigppbb .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="kkeeevkqai" style="overflow-x:auto;">
+<div id="jpzeigppbb" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table table gt_table">
 <tr>
@@ -704,7 +710,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>Confidence Interval</strong></th>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left">Miles per Gallon</td>
 <td class="gt_row gt_center">1.45</td>
@@ -712,10 +718,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center">0.080</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">No. of Cylinders</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left">No. of Cylinders</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">4</td>
@@ -724,10 +730,10 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">6</td>
-<td class="gt_row gt_center gt_striped">2.08</td>
-<td class="gt_row gt_center gt_striped">0.13, 39.0</td>
-<td class="gt_row gt_center gt_striped">0.6</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">6</td>
+<td class="gt_row gt_center">2.08</td>
+<td class="gt_row gt_center">0.13, 39.0</td>
+<td class="gt_row gt_center">0.6</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">8</td>
