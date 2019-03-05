@@ -37,7 +37,7 @@
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
-#' @return List of summary statistics formattable to a `gt` object
+#' @return List of summary statistics to be converted to a `gt` object
 #' @export
 #' @author Daniel Sjoberg
 
@@ -142,6 +142,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
   results[["meta_data"]] <- meta_data
   results[["inputs"]] <- tbl_summary_inputs
   results[["call_list"]] <- list(tbl_summary = match.call())
+
+  # adding headers
+  if(is.null(by)) results <- cols_label_summary(results, stat_overall = "**N = {N}**")
+  else results <- cols_label_summary(results, stat_by = "**{level}**, N = {n}")
 
   return(results)
 }

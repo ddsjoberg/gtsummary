@@ -8,7 +8,7 @@ multiple comparisons}
 add_q(x, ...)
 }
 \arguments{
-\item{x}{\code{tbl_summary} or \code{tbl_uregression} object}
+\item{x}{\code{tbl_summary} or \code{tbl_uvregression} object}
 
 \item{...}{further arguments passed to or from other methods.}
 }

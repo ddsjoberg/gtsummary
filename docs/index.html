@@ -16,7 +16,7 @@
     analytic results simple, beautiful, and reproducible.
     Publication-ready tables are created with minimal code, and can be
     exported to Word, HTML, and PDF documents with the use of Rmarkdown.
-    The clintable functions are flexible, allowing you to easily customize
+    The gtsummary functions are flexible, allowing you to easily customize
     the aesthetics of tables to suit your needs.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -114,13 +114,14 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <h3 class="hasAnchor">
 <a href="#table-1" class="anchor"></a>Table 1</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gtsummary)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/add_comparison.html">add_comparison</a></span>() </a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; Loading required package: gt</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/add_comparison.html">add_comparison</a></span>() </a></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#lndcnjyoga .gt_table {
+#gerotyrhxt .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -139,13 +140,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* table.border.top.color */
 }
 
-#lndcnjyoga .gt_heading {
+#gerotyrhxt .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#lndcnjyoga .gt_title {
+#gerotyrhxt .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -156,7 +157,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   border-bottom-width: 0;
 }
 
-#lndcnjyoga .gt_subtitle {
+#gerotyrhxt .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -167,7 +168,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   border-top-width: 0;
 }
 
-#lndcnjyoga .gt_bottom_border {
+#gerotyrhxt .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -176,7 +177,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* heading.border.bottom.color */
 }
 
-#lndcnjyoga .gt_column_spanner {
+#gerotyrhxt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -184,7 +185,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   padding-bottom: 4px;
 }
 
-#lndcnjyoga .gt_col_heading {
+#gerotyrhxt .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -197,11 +198,11 @@ A collection of functions commonly used in the work of the biostatisticians. The
   margin: 10px;
 }
 
-#lndcnjyoga .gt_sep_right {
+#gerotyrhxt .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#lndcnjyoga .gt_group_heading {
+#gerotyrhxt .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -225,7 +226,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   vertical-align: middle;
 }
 
-#lndcnjyoga .gt_empty_group_heading {
+#gerotyrhxt .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -249,29 +250,29 @@ A collection of functions commonly used in the work of the biostatisticians. The
   vertical-align: middle;
 }
 
-#lndcnjyoga .gt_striped {
+#gerotyrhxt .gt_striped {
   background-color: #f2f2f2;
 }
 
-#lndcnjyoga .gt_row {
+#gerotyrhxt .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#lndcnjyoga .gt_stub {
+#gerotyrhxt .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#lndcnjyoga .gt_stub.gt_row {
+#gerotyrhxt .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#lndcnjyoga .gt_summary_row {
+#gerotyrhxt .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -280,13 +281,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* summary_row.text_transform */
 }
 
-#lndcnjyoga .gt_first_summary_row {
+#gerotyrhxt .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#lndcnjyoga .gt_table_body {
+#gerotyrhxt .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -301,55 +302,55 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* field.border.bottom.color */
 }
 
-#lndcnjyoga .gt_footnote {
+#gerotyrhxt .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#lndcnjyoga .gt_sourcenote {
+#gerotyrhxt .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#lndcnjyoga .gt_center {
+#gerotyrhxt .gt_center {
   text-align: center;
 }
 
-#lndcnjyoga .gt_left {
+#gerotyrhxt .gt_left {
   text-align: left;
 }
 
-#lndcnjyoga .gt_right {
+#gerotyrhxt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lndcnjyoga .gt_font_normal {
+#gerotyrhxt .gt_font_normal {
   font-weight: normal;
 }
 
-#lndcnjyoga .gt_font_bold {
+#gerotyrhxt .gt_font_bold {
   font-weight: bold;
 }
 
-#lndcnjyoga .gt_font_italic {
+#gerotyrhxt .gt_font_italic {
   font-style: italic;
 }
 
-#lndcnjyoga .gt_super {
+#gerotyrhxt .gt_super {
   font-size: 65%;
 }
 
-#lndcnjyoga .gt_footnote_glyph {
+#gerotyrhxt .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="lndcnjyoga" style="overflow-x:auto;">
+<div id="gerotyrhxt" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table table gt_table">
 <tr>
@@ -466,7 +467,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#kkeeevkqai .gt_table {
+#xmipnmkqjh .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -485,13 +486,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* table.border.top.color */
 }
 
-#kkeeevkqai .gt_heading {
+#xmipnmkqjh .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#kkeeevkqai .gt_title {
+#xmipnmkqjh .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -502,7 +503,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   border-bottom-width: 0;
 }
 
-#kkeeevkqai .gt_subtitle {
+#xmipnmkqjh .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -513,7 +514,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   border-top-width: 0;
 }
 
-#kkeeevkqai .gt_bottom_border {
+#xmipnmkqjh .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -522,7 +523,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* heading.border.bottom.color */
 }
 
-#kkeeevkqai .gt_column_spanner {
+#xmipnmkqjh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -530,7 +531,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   padding-bottom: 4px;
 }
 
-#kkeeevkqai .gt_col_heading {
+#xmipnmkqjh .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -543,11 +544,11 @@ A collection of functions commonly used in the work of the biostatisticians. The
   margin: 10px;
 }
 
-#kkeeevkqai .gt_sep_right {
+#xmipnmkqjh .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#kkeeevkqai .gt_group_heading {
+#xmipnmkqjh .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -571,7 +572,7 @@ A collection of functions commonly used in the work of the biostatisticians. The
   vertical-align: middle;
 }
 
-#kkeeevkqai .gt_empty_group_heading {
+#xmipnmkqjh .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -595,29 +596,29 @@ A collection of functions commonly used in the work of the biostatisticians. The
   vertical-align: middle;
 }
 
-#kkeeevkqai .gt_striped {
+#xmipnmkqjh .gt_striped {
   background-color: #f2f2f2;
 }
 
-#kkeeevkqai .gt_row {
+#xmipnmkqjh .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#kkeeevkqai .gt_stub {
+#xmipnmkqjh .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#kkeeevkqai .gt_stub.gt_row {
+#xmipnmkqjh .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#kkeeevkqai .gt_summary_row {
+#xmipnmkqjh .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -626,13 +627,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* summary_row.text_transform */
 }
 
-#kkeeevkqai .gt_first_summary_row {
+#xmipnmkqjh .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#kkeeevkqai .gt_table_body {
+#xmipnmkqjh .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -647,55 +648,55 @@ A collection of functions commonly used in the work of the biostatisticians. The
   /* field.border.bottom.color */
 }
 
-#kkeeevkqai .gt_footnote {
+#xmipnmkqjh .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#kkeeevkqai .gt_sourcenote {
+#xmipnmkqjh .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#kkeeevkqai .gt_center {
+#xmipnmkqjh .gt_center {
   text-align: center;
 }
 
-#kkeeevkqai .gt_left {
+#xmipnmkqjh .gt_left {
   text-align: left;
 }
 
-#kkeeevkqai .gt_right {
+#xmipnmkqjh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kkeeevkqai .gt_font_normal {
+#xmipnmkqjh .gt_font_normal {
   font-weight: normal;
 }
 
-#kkeeevkqai .gt_font_bold {
+#xmipnmkqjh .gt_font_bold {
   font-weight: bold;
 }
 
-#kkeeevkqai .gt_font_italic {
+#xmipnmkqjh .gt_font_italic {
   font-style: italic;
 }
 
-#kkeeevkqai .gt_super {
+#xmipnmkqjh .gt_super {
   font-size: 65%;
 }
 
-#kkeeevkqai .gt_footnote_glyph {
+#xmipnmkqjh .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="kkeeevkqai" style="overflow-x:auto;">
+<div id="xmipnmkqjh" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table table gt_table">
 <tr>
@@ -707,8 +708,8 @@ A collection of functions commonly used in the work of the biostatisticians. The
 <tbody class="gt_table_body">
 <tr>
 <td class="gt_row gt_left">Miles per Gallon</td>
-<td class="gt_row gt_center">1.45</td>
-<td class="gt_row gt_center">1.03, 2.40</td>
+<td class="gt_row gt_center">1.4</td>
+<td class="gt_row gt_center">1.0, 2.4</td>
 <td class="gt_row gt_center">0.080</td>
 </tr>
 <tr>
@@ -725,13 +726,13 @@ A collection of functions commonly used in the work of the biostatisticians. The
 </tr>
 <tr>
 <td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">6</td>
-<td class="gt_row gt_center gt_striped">2.08</td>
-<td class="gt_row gt_center gt_striped">0.13, 39.0</td>
+<td class="gt_row gt_center gt_striped">2.1</td>
+<td class="gt_row gt_center gt_striped">0.13, 39</td>
 <td class="gt_row gt_center gt_striped">0.6</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">8</td>
-<td class="gt_row gt_center">2.02</td>
+<td class="gt_row gt_center">2.0</td>
 <td class="gt_row gt_center">0.04, 119</td>
 <td class="gt_row gt_center">0.7</td>
 </tr>

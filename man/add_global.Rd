@@ -7,7 +7,7 @@
 add_global(x, ...)
 }
 \arguments{
-\item{x}{\code{tbl_regression} or \code{tbl_uregression} object}
+\item{x}{\code{tbl_regression} or \code{tbl_uvregression} object}
 
 \item{...}{further arguments passed to or from other methods.}
 }
@@ -15,10 +15,10 @@ add_global(x, ...)
 This function uses \code{\link[car]{Anova}} from the \code{car} package with \code{type = "III"} to calculate global p-values.
 If a needed class of model is not supported by \code{car::}\code{\link[car]{Anova}}, please put in an
 \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
-Output from \code{tbl_regression} and \code{tbl_uregression} objects supported.
+Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
 \seealso{
-\code{\link{add_global.tbl_regression}}, \code{\link{add_global.tbl_uregression}}
+\code{\link{add_global.tbl_regression}}, \code{\link{add_global.tbl_uvregression}}
 }
 \author{
 Daniel Sjoberg

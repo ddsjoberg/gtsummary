@@ -1,7 +1,7 @@
 #' Add a column of q values to account for
 #' multiple comparisons
 #'
-#' @param x `tbl_summary` or `tbl_uregression` object
+#' @param x `tbl_summary` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
 #' @author Esther Drill
 #' @export
@@ -17,7 +17,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @param x `tbl_summary` object
 #' @param method character argument.  Methods from
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
-#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{fmt_pvalue}}.
+#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill
 #' @export
@@ -26,7 +26,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
 #'   add_q()
-add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = fmt_pvalue, ...) {
+add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...) {
 
   # This adjusts p-values for multiple testing. Default method is fdr.
   if (!("add_comparison" %in% names(x$call_list))) {
@@ -67,35 +67,35 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = fmt_pvalue, ...) {
 }
 
 
-#' Add a column of q values to `tbl_uregression` object to account for
+#' Add a column of q values to `tbl_uvregression` object to account for
 #' multiple comparisons
 #'
 #' The adjustments to the p-values is performed with
 #' `stats::`\code{\link[stats]{p.adjust}}.  The default method for correction
 #' is false discovery rate (`"fdr"`)
 #'
-#' @param x `tbl_uregression` object
+#' @param x `tbl_uvregression` object
 #' @param method character argument.  Methods from
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
-#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{fmt_pvalue}}.
+#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill
 #' @export
 #' @examples
 #' trial %>%
-#'   tbl_uregression(
+#'   tbl_uvregression(
 #'     method = "lm",
 #'     y = "age"
 #'   ) %>%
 #'   add_global() %>%
 #'   add_q()
-add_q.tbl_uregression <- function(x, method = "fdr", pvalue_fun = fmt_pvalue, ...) {
+add_q.tbl_uvregression <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...) {
 
   # This adjusts p-values for multiple testing but only when the global approach is used.
   # Default method is fdr.
   if (!("pvalue_global" %in% colnames(x$meta_data))) {
     stop("You need global p-values first. Use the function add_global() after
-    tbl_uregression() and before add_q()")
+    tbl_uvregression() and before add_q()")
   }
 
   # adding exact and printable q value to meta_data

@@ -34,6 +34,8 @@ reference:
       - add_n
       - add_stat_label
       - add_q.tbl_summary
+      - cols_label_summary
+      - tab_style_bold_p.tbl_summary
 
   - title: "Regression Model Functions"
     desc: >
@@ -41,17 +43,19 @@ reference:
     contents:
       - tbl_regression
       - add_global.tbl_regression
-      - tbl_uregression
-      - add_global.tbl_uregression
-      - add_q.tbl_uregression
-      - fmt_beta
+      - tab_style_bold_p.tbl_regression
+      - tbl_uvregression
+      - add_global.tbl_uvregression
+      - add_q.tbl_uvregression
+      - tab_style_bold_p.tbl_uvregression
 
   - title: "General Formatting Functions"
     desc: >
       Functions for formatting
     contents:
-      - fmt_percent
-      - fmt_pvalue
+      - style_percent
+      - style_pvalue
+      - style_sigfig
 
   - title: "Default Printing Methods"
     desc: >
@@ -74,6 +78,7 @@ reference:
     contents:
       - add_global
       - add_q
+      - tab_style_bold_p
 
   - title: "Example Datasets"
     desc: >
