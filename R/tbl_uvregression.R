@@ -132,51 +132,77 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     tbl_regression_list = tbl_regression_list,
     meta_data = meta_data,
     table_body = table_body,
-    call_list = list(tbl_uvregression = match.call())
+    call_list = list(tbl_uvregression = match.call()),
+    gt_calls = eval(gt_tbl_uvregression)
   )
 
-  # returning all gt calls in a list
-  # first call to the gt function
-  results[["gt_calls"]][["gt"]] <- "gt::gt(data = x$table_body)"
-  # label column indented and left just
-  results[["gt_calls"]][["cols_align"]] <- glue(
-    "gt::cols_align(align = 'center') %>% ",
-    "gt::cols_align(align = 'left', columns = gt::vars(label))"
-  )
-  # do not print columns variable or row_type columns
-  results[["gt_calls"]][["cols_hide"]] <-
-    "gt::cols_hide(columns = gt::vars(variable, row_type, var_type))"
-  # NAs do not show in table
-  results[["gt_calls"]][["fmt_missing"]] <-
-    "gt::fmt_missing(columns = gt::everything(), missing_text = '')"
-  # column headers
-  results[["gt_calls"]][["cols_label"]] <- glue(
-    "gt::cols_label(",
-    "label = gt::md('**Characteristic**'), ",
-    "N = gt::md('**N**'), ",
-    "coef = gt::md('**Coefficient**'), ",
-    "ll = gt::md('**Confidence Interval**'), ",
-    "pvalue = gt::md('**p-value**')",
-    ")"
-  )
-  # adding p-value formatting (evaluate the expression with eval() function)
-  results[["gt_calls"]][["fmt:pvalue"]] <-
-    "gt::fmt(columns = gt::vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)"
-  # ceof and confidence interval formatting
-  results[["gt_calls"]][["fmt:coef"]] <-
-    "gt::fmt(columns = gt::vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)"
-  # combining ll and ul to print confidence interval
-  results[["gt_calls"]][["cols_merge:ci"]] <-
-    "gt::cols_merge(col_1 = gt::vars(ll), col_2 = gt::vars(ul), pattern = '{1}, {2}')"
-  # indenting levels and missing rows
-  results[["gt_calls"]][["tab_style:text_indent"]] <- glue(
-    "gt::tab_style(",
-    "style = gt::cells_styles(text_indent = gt::px(10), text_align = 'left'),",
-    "locations = gt::cells_data(",
-    "columns = gt::vars(label),",
-    "rows = row_type != 'label'",
-    "))"
-  )
+
   class(results) <- "tbl_uvregression"
   results
 }
+
+# gt function calls ------------------------------------------------------------
+# quoting returns an expression to be evaluated later
+gt_tbl_uvregression <- quote(list(
+  # first call to the gt function
+  gt = "gt(data = x$table_body)",
+
+  # label column indented and left just
+  cols_align = glue(
+    "cols_align(align = 'center') %>% ",
+    "cols_align(align = 'left', columns = vars(label))"
+  ),
+
+  # do not print columns variable or row_type columns
+  cols_hide =
+    "cols_hide(columns = vars(variable, row_type, var_type))",
+
+  # NAs do not show in table
+  fmt_missing =
+    "fmt_missing(columns = everything(), missing_text = '')",
+
+  # Show "---" for reference groups
+  fmt_missing_ref =
+    "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')",
+
+  # column headers
+  cols_label = glue(
+    "cols_label(",
+    "label = md('**Characteristic**'), ",
+    "N = md('**N**'), ",
+    "coef = md('**Coefficient**'), ",
+    "ll = md('**{style_percent(conf.level, symbol = TRUE)} Confidence Interval**'), ",
+    "pvalue = md('**p-value**')",
+    ")"
+  ),
+
+  # adding p-value formatting (evaluate the expression with eval() function)
+  fmt_pvalue =
+    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)",
+
+  # ceof and confidence interval formatting
+  fmt_coef =
+    "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)",
+
+  # combining ll and ul to print confidence interval
+  cols_merge_ci =
+    "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')",
+
+  # indenting levels and missing rows
+  tab_style_text_indent = glue(
+    "tab_style(",
+    "style = cells_styles(text_indent = px(10), text_align = 'left'),",
+    "locations = cells_data(",
+    "columns = vars(label),",
+    "rows = row_type != 'label'",
+    "))"
+  )
+))
+
+
+
+
+
+
+
+

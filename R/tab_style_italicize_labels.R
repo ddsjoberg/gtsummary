@@ -13,8 +13,8 @@ tab_style_italicize_labels <- function(x) {
   # italicize labels ----------------------------------------------------------------
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_italicize_labels"]] <- glue(
-    "gt::tab_style(style = gt::cells_styles(text_style = 'italic'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "tab_style(style = cells_styles(text_style = 'italic'), ",
+    "locations = cells_data(columns = vars(label),",
     "rows = row_type == 'label'))"
   )
 

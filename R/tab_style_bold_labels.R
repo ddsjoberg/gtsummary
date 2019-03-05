@@ -13,8 +13,8 @@ tab_style_bold_labels <- function(x) {
   # bold labels ----------------------------------------------------------------
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_bold_labels"]] <- glue(
-    "gt::tab_style(style = gt::cells_styles(text_weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "tab_style(style = cells_styles(text_weight = 'bold'), ",
+    "locations = cells_data(columns = vars(label),",
     "rows = row_type == 'label'))"
   )
 

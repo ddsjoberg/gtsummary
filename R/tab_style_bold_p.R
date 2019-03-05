@@ -39,8 +39,8 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
   x[[glue("{col_name}_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][[gt_call_name]] <- glue(
-    "gt::tab_style(style = gt::cells_styles(text_weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars({col_name}),",
+    "tab_style(style = cells_styles(text_weight = 'bold'), ",
+    "locations = cells_data(columns = vars({col_name}),",
     "rows = {col_name} <= x${col_name}_bold_t))"
   )
 
@@ -62,8 +62,8 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
   x[[glue("pvalue_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_bold_pvalue"]] <- glue(
-    "gt::tab_style(style = gt::cells_styles(text_weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars(pvalue),",
+    "tab_style(style = cells_styles(text_weight = 'bold'), ",
+    "locations = cells_data(columns = vars(pvalue),",
     "rows = pvalue <= x$pvalue_bold_t))"
   )
 
@@ -95,8 +95,8 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
   x[[glue("{col_name}_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][[gt_call_name]] <- glue(
-    "gt::tab_style(style = gt::cells_styles(text_weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars({col_name}),",
+    "tab_style(style = cells_styles(text_weight = 'bold'), ",
+    "locations = cells_data(columns = vars({col_name}),",
     "rows = {col_name} <= x${col_name}_bold_t))"
   )
 

@@ -102,51 +102,58 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
     select(c("variable", "summary_type", "stat_table")) %>%
     unnest_("stat_table")
 
-  # assigning a class of tbl_summary (for special printing in Rmarkdown)
-  results <- list()
-  class(results) <- "tbl_summary"
-
   # returning all results in a list
-  # first call to the gt function
-  results[["gt_calls"]][["gt"]] <- "gt::gt(data = x$table_body)"
-  # column headers
-  results[["gt_calls"]][["cols_label:label"]] <-
-    "gt::cols_label(label = gt::md('**Characteristic**'))"
-  # label column indented and left just
-  results[["gt_calls"]][["cols_align"]] <- glue(
-    "gt::cols_align(align = 'center') %>% ",
-    "gt::cols_align(align = 'left', columns = gt::vars(label))"
-  )
-  # do not print columns variable or row_type columns
-  results[["gt_calls"]][["cols_hide"]] <-
-    "gt::cols_hide(columns = gt::vars(variable, row_type))"
-  # NAs do not show in table
-  results[["gt_calls"]][["fmt_missing"]] <-
-    "gt::fmt_missing(columns = gt::everything(), missing_text = '')"
-
-  # indenting levels and missing rows
-  results[["gt_calls"]][["tab_style:text_indent"]] <- glue(
-    "gt::tab_style(",
-    "style = gt::cells_styles(text_indent = gt::px(10), text_align = 'left'),",
-    "locations = gt::cells_data(",
-    "columns = gt::vars(label),",
-    "rows = row_type != 'label'",
-    "))"
+  results <- list(
+    gt_calls = eval(gt_tbl_summary),
+    table_body = table_body %>% select(-c("summary_type")),
+    meta_data = meta_data,
+    inputs = tbl_summary_inputs,
+    call_list = list(tbl_summary = match.call())
   )
 
-  results[["table_body"]] <- table_body %>% select(-c("summary_type"))
   if (!is.null(by)){
     results[["by"]] <- by
     results[["df_by"]] <- df_by(data, by)
   }
-  results[["meta_data"]] <- meta_data
-  results[["inputs"]] <- tbl_summary_inputs
-  results[["call_list"]] <- list(tbl_summary = match.call())
 
-  # adding headers
+  # assigning a class of tbl_summary (for special printing in Rmarkdown)
+  class(results) <- "tbl_summary"
+
+    # adding headers
   if(is.null(by)) results <- cols_label_summary(results, stat_overall = "**N = {N}**")
   else results <- cols_label_summary(results, stat_by = "**{level}**, N = {n}")
 
   return(results)
 }
 
+# gt function calls ------------------------------------------------------------
+# quoting returns an expression to be evaluated later
+gt_tbl_summary <- quote(list(
+  # first call to the gt function
+  gt = "gt(data = x$table_body)",
+
+  # column headers
+  cols_label_label = "cols_label(label = md('**Characteristic**'))",
+
+  # label column indented and left just
+  cols_align = glue(
+    "cols_align(align = 'center') %>% ",
+    "cols_align(align = 'left', columns = vars(label))"
+  ),
+
+  # do not print columns variable or row_type columns
+  cols_hide = "cols_hide(columns = vars(variable, row_type))",
+
+  # NAs do not show in table
+  fmt_missing = "fmt_missing(columns = everything(), missing_text = '')",
+
+  # indenting levels and missing rows
+  tab_style_text_indent = glue(
+    "tab_style(",
+    "style = cells_styles(text_indent = px(10), text_align = 'left'),",
+    "locations = cells_data(",
+    "columns = vars(label),",
+    "rows = row_type != 'label'",
+    "))"
+  )
+))
