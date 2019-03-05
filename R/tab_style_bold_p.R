@@ -16,7 +16,7 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #'
 #' @param x an object created using `tbl_summary` function
 #' @param t Determines the threshold below which p-values get bolded. Default is 0.05.
-#' @param q logical argument. When TRUE will bold or unbold the q-value column rather than the p-values
+#' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
@@ -76,7 +76,7 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #'
 #' @param x an object created using `tbl_uregression` function
 #' @param t Determines the threshold below which p-values get bolded. Default is 0.05.
-#' @param q logical argument. When TRUE will bold or unbold the q-value column rather than the p-values
+#' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
