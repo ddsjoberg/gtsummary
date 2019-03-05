@@ -143,6 +143,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
   results[["inputs"]] <- tbl_summary_inputs
   results[["call_list"]] <- list(tbl_summary = match.call())
 
+  # adding headers
+  if(is.null(by)) results <- cols_label_summary(results, stat_overall = "**N = {N}**")
+  else results <- cols_label_summary(results, stat_by = "**{level}**, N = {n}")
+
   return(results)
 }
 
