@@ -6,7 +6,7 @@
 \usage{
 tbl_uregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {.x}", exponentiate = FALSE, label = NULL,
-  show_yesno = NULL, conf.level = 0.95, coef_fun = fmt_beta,
+  show_yesno = NULL, conf.level = 0.95, coef_fun = style_sigfig,
   pvalue_fun = style_pvalue)
 }
 \arguments{
@@ -38,14 +38,14 @@ name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
 \item{conf.level}{confidence level passed directly to \code{broom::tidy}.
 Default is 0.95.}
 
-\item{coef_fun}{function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}}
+\item{coef_fun}{function to round and format beta coefficients.  Default is \code{\link{style_sigfig}}}
 
 \item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{style_pvalue}}}
 }
 \description{
 The \code{tbl_uregression} function arguments are similar to the \code{\link{tbl_regression}}
 arguments. Review the \code{tbl_uregression}
-\href{http://www.danieldsjoberg.com/clintable/articles/tbl_regression.html#tbl_uregression}{vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uregression}{vignette}
 for detailed examples.
 }
 \examples{
