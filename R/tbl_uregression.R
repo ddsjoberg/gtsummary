@@ -2,7 +2,7 @@
 #'
 #' The `tbl_uregression` function arguments are similar to the \code{\link{tbl_regression}}
 #' arguments. Review the `tbl_uregression`
-#' \href{http://www.danieldsjoberg.com/clintable/articles/tbl_regression.html#tbl_uregression}{vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uregression}{vignette}
 #' for detailed examples.
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data frame
@@ -24,7 +24,7 @@
 #' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
 #' @param conf.level confidence level passed directly to \code{broom::tidy}.
 #' Default is 0.95.
-#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{fmt_beta}}
+#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_sigfig}}
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
 #' @author Daniel Sjoberg
 #' @export
@@ -51,7 +51,7 @@ tbl_uregression <- function(data, method, y, method.args = NULL,
                                formula = "{y} ~ {.x}",
                                exponentiate = FALSE, label = NULL,
                                show_yesno = NULL, conf.level = 0.95,
-                               coef_fun = fmt_beta, pvalue_fun = style_pvalue) {
+                               coef_fun = style_sigfig, pvalue_fun = style_pvalue) {
 
   # data -----------------------------------------------------------------------
   # data is a data frame

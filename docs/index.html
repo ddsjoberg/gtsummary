@@ -16,7 +16,7 @@
     analytic results simple, beautiful, and reproducible.
     Publication-ready tables are created with minimal code, and can be
     exported to Word, HTML, and PDF documents with the use of Rmarkdown.
-    The clintable functions are flexible, allowing you to easily customize
+    The gtsummary functions are flexible, allowing you to easily customize
     the aesthetics of tables to suit your needs.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -115,18 +115,13 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
 <a href="#table-1" class="anchor"></a>Table 1</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gtsummary)
 <span class="co">#&gt; Loading required package: gt</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'gtsummary'</span>
-<span class="co">#&gt; The following object is masked from 'package:gt':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     fmt_percent</span>
 <span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="reference/add_comparison.html">add_comparison</a></span>() </code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#ddsuatyzaf .gt_table {
+#krnvhiwaxx .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -145,13 +140,13 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   /* table.border.top.color */
 }
 
-#ddsuatyzaf .gt_heading {
+#krnvhiwaxx .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#ddsuatyzaf .gt_title {
+#krnvhiwaxx .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -162,7 +157,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   border-bottom-width: 0;
 }
 
-#ddsuatyzaf .gt_subtitle {
+#krnvhiwaxx .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -173,7 +168,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   border-top-width: 0;
 }
 
-#ddsuatyzaf .gt_bottom_border {
+#krnvhiwaxx .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -182,7 +177,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   /* heading.border.bottom.color */
 }
 
-#ddsuatyzaf .gt_column_spanner {
+#krnvhiwaxx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -190,7 +185,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   padding-bottom: 4px;
 }
 
-#ddsuatyzaf .gt_col_heading {
+#krnvhiwaxx .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -203,11 +198,11 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   margin: 10px;
 }
 
-#ddsuatyzaf .gt_sep_right {
+#krnvhiwaxx .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#ddsuatyzaf .gt_group_heading {
+#krnvhiwaxx .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -231,7 +226,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   vertical-align: middle;
 }
 
-#ddsuatyzaf .gt_empty_group_heading {
+#krnvhiwaxx .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -255,29 +250,29 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   vertical-align: middle;
 }
 
-#ddsuatyzaf .gt_striped tr:nth-child(even) {
+#krnvhiwaxx .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#ddsuatyzaf .gt_row {
+#krnvhiwaxx .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#ddsuatyzaf .gt_stub {
+#krnvhiwaxx .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#ddsuatyzaf .gt_stub.gt_row {
+#krnvhiwaxx .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#ddsuatyzaf .gt_summary_row {
+#krnvhiwaxx .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -286,13 +281,13 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   /* summary_row.text_transform */
 }
 
-#ddsuatyzaf .gt_first_summary_row {
+#krnvhiwaxx .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#ddsuatyzaf .gt_table_body {
+#krnvhiwaxx .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -307,55 +302,55 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   /* field.border.bottom.color */
 }
 
-#ddsuatyzaf .gt_footnote {
+#krnvhiwaxx .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#ddsuatyzaf .gt_sourcenote {
+#krnvhiwaxx .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#ddsuatyzaf .gt_center {
+#krnvhiwaxx .gt_center {
   text-align: center;
 }
 
-#ddsuatyzaf .gt_left {
+#krnvhiwaxx .gt_left {
   text-align: left;
 }
 
-#ddsuatyzaf .gt_right {
+#krnvhiwaxx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ddsuatyzaf .gt_font_normal {
+#krnvhiwaxx .gt_font_normal {
   font-weight: normal;
 }
 
-#ddsuatyzaf .gt_font_bold {
+#krnvhiwaxx .gt_font_bold {
   font-weight: bold;
 }
 
-#ddsuatyzaf .gt_font_italic {
+#krnvhiwaxx .gt_font_italic {
   font-style: italic;
 }
 
-#ddsuatyzaf .gt_super {
+#krnvhiwaxx .gt_super {
   font-size: 65%;
 }
 
-#ddsuatyzaf .gt_footnote_glyph {
+#krnvhiwaxx .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="ddsuatyzaf" style="overflow-x:auto;">
+<div id="krnvhiwaxx" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table table gt_table">
 <tr>
@@ -472,7 +467,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#rdjegeiqpb .gt_table {
+#hqkpjgckwo .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -491,13 +486,13 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   /* table.border.top.color */
 }
 
-#rdjegeiqpb .gt_heading {
+#hqkpjgckwo .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#rdjegeiqpb .gt_title {
+#hqkpjgckwo .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -508,7 +503,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   border-bottom-width: 0;
 }
 
-#rdjegeiqpb .gt_subtitle {
+#hqkpjgckwo .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -519,7 +514,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   border-top-width: 0;
 }
 
-#rdjegeiqpb .gt_bottom_border {
+#hqkpjgckwo .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -528,7 +523,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   /* heading.border.bottom.color */
 }
 
-#rdjegeiqpb .gt_column_spanner {
+#hqkpjgckwo .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -536,7 +531,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   padding-bottom: 4px;
 }
 
-#rdjegeiqpb .gt_col_heading {
+#hqkpjgckwo .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -549,11 +544,11 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   margin: 10px;
 }
 
-#rdjegeiqpb .gt_sep_right {
+#hqkpjgckwo .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#rdjegeiqpb .gt_group_heading {
+#hqkpjgckwo .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -577,7 +572,7 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   vertical-align: middle;
 }
 
-#rdjegeiqpb .gt_empty_group_heading {
+#hqkpjgckwo .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -601,29 +596,29 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   vertical-align: middle;
 }
 
-#rdjegeiqpb .gt_striped tr:nth-child(even) {
+#hqkpjgckwo .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#rdjegeiqpb .gt_row {
+#hqkpjgckwo .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#rdjegeiqpb .gt_stub {
+#hqkpjgckwo .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#rdjegeiqpb .gt_stub.gt_row {
+#hqkpjgckwo .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#rdjegeiqpb .gt_summary_row {
+#hqkpjgckwo .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -632,13 +627,13 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   /* summary_row.text_transform */
 }
 
-#rdjegeiqpb .gt_first_summary_row {
+#hqkpjgckwo .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#rdjegeiqpb .gt_table_body {
+#hqkpjgckwo .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -653,55 +648,55 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
   /* field.border.bottom.color */
 }
 
-#rdjegeiqpb .gt_footnote {
+#hqkpjgckwo .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#rdjegeiqpb .gt_sourcenote {
+#hqkpjgckwo .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#rdjegeiqpb .gt_center {
+#hqkpjgckwo .gt_center {
   text-align: center;
 }
 
-#rdjegeiqpb .gt_left {
+#hqkpjgckwo .gt_left {
   text-align: left;
 }
 
-#rdjegeiqpb .gt_right {
+#hqkpjgckwo .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rdjegeiqpb .gt_font_normal {
+#hqkpjgckwo .gt_font_normal {
   font-weight: normal;
 }
 
-#rdjegeiqpb .gt_font_bold {
+#hqkpjgckwo .gt_font_bold {
   font-weight: bold;
 }
 
-#rdjegeiqpb .gt_font_italic {
+#hqkpjgckwo .gt_font_italic {
   font-style: italic;
 }
 
-#rdjegeiqpb .gt_super {
+#hqkpjgckwo .gt_super {
   font-size: 65%;
 }
 
-#rdjegeiqpb .gt_footnote_glyph {
+#hqkpjgckwo .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="rdjegeiqpb" style="overflow-x:auto;">
+<div id="hqkpjgckwo" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table table gt_table">
 <tr>
@@ -713,8 +708,8 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
 <tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left">Miles per Gallon</td>
-<td class="gt_row gt_center">1.45</td>
-<td class="gt_row gt_center">1.03, 2.40</td>
+<td class="gt_row gt_center">1.4</td>
+<td class="gt_row gt_center">1.0, 2.4</td>
 <td class="gt_row gt_center">0.080</td>
 </tr>
 <tr>
@@ -731,13 +726,13 @@ remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocument
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">6</td>
-<td class="gt_row gt_center">2.08</td>
-<td class="gt_row gt_center">0.13, 39.0</td>
+<td class="gt_row gt_center">2.1</td>
+<td class="gt_row gt_center">0.13, 39</td>
 <td class="gt_row gt_center">0.6</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">8</td>
-<td class="gt_row gt_center">2.02</td>
+<td class="gt_row gt_center">2.0</td>
 <td class="gt_row gt_center">0.04, 119</td>
 <td class="gt_row gt_center">0.7</td>
 </tr>

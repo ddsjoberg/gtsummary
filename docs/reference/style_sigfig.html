@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert <code>fmt_table1</code> objects to data frame — as_tibble.fmt_table1 • clintable</title>
+<title>Implement significant figure like formatting — style_sigfig • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,13 @@
 
 
 
-<meta property="og:title" content="Convert <code>fmt_table1</code> objects to data frame — as_tibble.fmt_table1" />
+<meta property="og:title" content="Implement significant figure like formatting — style_sigfig" />
 
-<meta property="og:description" content="Convert fmt_table1 objects to data frame" />
+<meta property="og:description" content="Converts a numeric argument into a string that has been rounded to a
+significant figure-like number. Scientific notation output
+is avoided, however, and additional significant figures may be displayed for
+numbers large numbers.  For example, if the number of significant digits
+requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -62,7 +66,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">clintable</a>
+        <a class="navbar-link" href="../index.html">gtsummary</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
       </span>
     </div>
@@ -86,10 +90,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/fmt_table1.html">fmt_table1()</a>
+      <a href="../articles/tbl_summary.html">tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/fmt_regression.html">fmt_regression()</a>
+      <a href="../articles/tbl_regression.html">tbl_regression()</a>
     </li>
   </ul>
 </li>
@@ -100,7 +104,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/ddsjoberg/clintable">
+  <a href="https://github.com/ddsjoberg/gtsummary">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -117,46 +121,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert <code>fmt_table1</code> objects to data frame</h1>
+    <h1>Implement significant figure like formatting</h1>
     
-    <div class="hidden name"><code>as_tibble.fmt_table1.Rd</code></div>
+    <div class="hidden name"><code>style_sigfig.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Convert <code>fmt_table1</code> objects to data frame</p>
+    <p>Converts a numeric argument into a string that has been rounded to a
+significant figure-like number. Scientific notation output
+is avoided, however, and additional significant figures may be displayed for
+numbers large numbers.  For example, if the number of significant digits
+requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for fmt_table1</span>
-<span class='fu'><a href='as_tibble.html'>as_tibble</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='fu'>as_data_frame.fmt_table1</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>style_sigfig</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object of class <code>fmt_table1</code> object from <code><a href='fmt_table1.html'>fmt_table1</a></code>
-function</p></td>
+      <td><p>numeric vector</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>further arguments passed to individual methods.</p></td>
+      <th>digits</th>
+      <td><p>integer specifying the minimum number of significant
+digits to display</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>as_data_frame.fmt_table1 is alias.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='fmt_table1.html'>fmt_table1</a></code>, <code><a href='as_tibble.fmt_regression.html'>as_tibble.fmt_regression</a></code>,
-<code><a href='as_tibble.fmt_uni_regression.html'>as_tibble.fmt_uni_regression</a></code>, <code><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></code></p></div>
+    <p>If 2 sig figs are input, the number is rounded to 2 decimal places
+when <code>abs(x) &lt; 1</code>, 1 decimal place when <code>abs(x) &gt;= 1 &amp; abs(x) &lt; 10</code>,
+and to the nearest integer when <code>abs(x) &gt;= 10</code>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.123</span>, <span class='fl'>0.9</span>, <span class='fl'>1.1234</span>, <span class='fl'>12.345</span>, -<span class='fl'>0.123</span>, -<span class='fl'>0.9</span>, -<span class='fl'>1.1234</span>, -<span class='fl'>12.345</span>) <span class='kw'>%&gt;%</span>
+<span class='fu'>style_sigfig</span>()</div><div class='output co'>#&gt; [1] "0.12"  "0.90"  "1.1"   "12"    "-0.12" "-0.90" "-1.1"  "-12"  </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -164,16 +169,16 @@ function</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg.</p>
+  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum.</p>
 </div>
 
 <div class="pkgdown">

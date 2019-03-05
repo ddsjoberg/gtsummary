@@ -136,7 +136,7 @@ for detailed examples.</p>
 
     <pre class="usage"><span class='fu'>tbl_regression</span>(<span class='no'>x</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame</a></span>(<span class='no'>x</span>)), <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='no'>fmt_beta</span>,
+  <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='no'>style_sigfig</span>,
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -177,7 +177,7 @@ in the output.  Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>coef_fun</th>
-      <td><p>function to round and format beta coefficients.  Default is <code><a href='fmt_beta.html'>fmt_beta</a></code></p></td>
+      <td><p>function to round and format beta coefficients.  Default is <code><a href='style_sigfig.html'>style_sigfig</a></code></p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
@@ -432,8 +432,8 @@ in the output.  Default is <code>FALSE</code></p></td>
 #&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;mpg&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;-3.33&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;-7.70, 1.04&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;-3.3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;-7.7, 1.0&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.13&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
@@ -450,14 +450,14 @@ in the output.  Default is <code>FALSE</code></p></td>
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;16.6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;-30.9, 64.1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;17&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;-31, 64&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.5&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;88.1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;29.1, 147&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;88&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;29, 147&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.005&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
@@ -709,8 +709,8 @@ in the output.  Default is <code>FALSE</code></p></td>
 #&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Age, yrs&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1.00&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.98, 1.02&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;1.0&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.98, 1.0&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.9&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
@@ -728,13 +728,13 @@ in the output.  Default is <code>FALSE</code></p></td>
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.55&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.25, 1.19&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.25, 1.2&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.13&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.79&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.38, 1.64&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.38, 1.6&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.5&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
@@ -751,20 +751,20 @@ in the output.  Default is <code>FALSE</code></p></td>
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1.49&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.64, 3.49&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;1.5&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.64, 3.5&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.4&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.65&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.26, 1.58&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.26, 1.6&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.3&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.51&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.22, 1.14&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.22, 1.1&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.10&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
@@ -1017,7 +1017,7 @@ in the output.  Default is <code>FALSE</code></p></td>
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;hp&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.99&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.95, 1.03&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;0.95, 1.0&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;0.5&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;

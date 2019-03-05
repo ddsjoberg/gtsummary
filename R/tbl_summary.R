@@ -37,7 +37,7 @@
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
-#' @return List of summary statistics formattable to a `gt` object
+#' @return List of summary statistics to be converted to a `gt` object
 #' @export
 #' @author Daniel Sjoberg
 
