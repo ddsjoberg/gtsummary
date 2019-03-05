@@ -11,7 +11,7 @@
 
 \item{t}{Determines the threshold below which p-values get bolded. Default is 0.05.}
 
-\item{q}{logical argument. When TRUE will bold or unbold the q-value column rather than the p-values}
+\item{q}{logical argument. When TRUE will bold the q-value column rather than the p-values}
 
 \item{...}{not used}
 }
