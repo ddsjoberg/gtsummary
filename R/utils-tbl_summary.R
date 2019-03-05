@@ -1195,3 +1195,67 @@ tbl_summary_input_checks <- function(data, by, label, type,
 #   stat_display = NULL, digits = NULL, pvalue_fun = NULL
 # )
 
+# provide a vector of stat_display and get labels back i.e. {mean} ({sd}) gives Mean (SD)
+stat_label_match <- function(stat_display, iqr = TRUE) {
+  labels <-
+    tibble::tribble(
+      ~stat, ~label,
+      "{min}", "minimum",
+      "{max}", "maximum",
+      "{median}", "median",
+      "{mean}", "mean",
+      "{sd}", "SD",
+      "{var}", "variance",
+      "{n}", "n",
+      "{N}", "N",
+      "{p}%", "%",
+      "{p}", "%"
+    ) %>%
+    bind_rows(
+      tibble(stat = paste0("{p", 0:100, "}")) %>%
+        mutate_(label = ~paste0(gsub("[^0-9\\.]", "", stat), "%"))
+    )
+
+  # adding IQR replacements if indicated
+  if (iqr == TRUE) {
+    labels <-
+      bind_rows(
+        tibble::tribble(
+          ~stat, ~label,
+          "{p25}, {p75}", "IQR"
+        ),
+        labels
+      )
+  }
+
+  # replacing statistics in {}, with their labels
+  for (i in 1:nrow(labels)) {
+    stat_display <-
+      stringr::str_replace_all(
+        stat_display,
+        stringr::fixed(labels$stat[i]),
+        labels$label[i]
+      )
+  }
+
+  stat_display
+}
+
+
+# stat_label footnote maker
+footnote_stat_label <- function(meta_data) {
+  meta_data %>%
+    select(c("summary_type", "stat_label")) %>%
+    mutate_(
+      summary_type = ~dplyr::case_when(
+        summary_type == "dichotomous" ~ "categorical",
+        TRUE ~ summary_type
+      ),
+      message = ~glue("{stat_label} for {summary_type} variables")
+    ) %>%
+    distinct() %>%
+    pull("message") %>%
+    paste(collapse = ", ") %>%
+    paste0("Statistics presented: ", .)
+}
+

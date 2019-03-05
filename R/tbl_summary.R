@@ -37,13 +37,15 @@
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
+#' @param iqr logical indicator whether '{p25}, {p75}' should
+#' resolve to 'IQR' in statistic label. Default is `TRUE`
 #' @return List of summary statistics to be converted to a `gt` object
 #' @export
 #' @author Daniel Sjoberg
 
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
-                        missing = c("ifany", "always", "no")) {
+                        missing = c("ifany", "always", "no"), iqr = TRUE) {
   missing <- match.arg(missing)
   # ungrouping data
   data <- data %>% ungroup()
@@ -76,6 +78,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
       dichotomous_value = ~assign_dichotomous_value(data, variable, summary_type, class),
       var_label = ~assign_var_label(data, variable, label),
       stat_display = ~assign_stat_display(summary_type, statistic),
+      stat_label = ~stat_label_match(stat_display, iqr),
       digits = ~continuous_digits_guess(
         data, variable, summary_type, class, digits
       )
@@ -155,5 +158,14 @@ gt_tbl_summary <- quote(list(
     "columns = vars(label),",
     "rows = row_type != 'label'",
     "))"
+  ),
+
+  # adding footnote listing statistics presented in table
+  footnote_stat_label = glue(
+    "tab_footnote(",
+    "  footnote = '{footnote_stat_label(meta_data)}',",
+    "  locations = cells_column_labels(",
+    "    columns = vars(label))",
+    ")"
   )
 ))
