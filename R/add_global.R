@@ -3,11 +3,11 @@
 #' This function uses \code{\link[car]{Anova}} from the `car` package with `type = "III"` to calculate global p-values.
 #' If a needed class of model is not supported by `car::`\code{\link[car]{Anova}}, please put in an
 #' \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
-#' Output from `tbl_regression` and `tbl_uregression` objects supported.
+#' Output from `tbl_regression` and `tbl_uvregression` objects supported.
 #'
-#' @param x `tbl_regression` or `tbl_uregression` object
+#' @param x `tbl_regression` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
-#' @seealso \code{\link{add_global.tbl_regression}}, \code{\link{add_global.tbl_uregression}}
+#' @seealso \code{\link{add_global.tbl_regression}}, \code{\link{add_global.tbl_uvregression}}
 #' @author Daniel Sjoberg
 #' @export
 add_global <- function(x, ...) UseMethod("add_global")
@@ -94,17 +94,17 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
   return(x)
 }
 
-#' Adds the global p-value for a categorical variables in `tbl_uregression` objects
+#' Adds the global p-value for a categorical variables in `tbl_uvregression` objects
 #'
 #' This function uses \code{\link[car]{Anova}} from the `car` package with `type = "III"` to calculate global p-values.
 #' If a needed class of model is not supported by \code{\link[car]{Anova}}, please put in an
 #' issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 #'
-#' @param x object with class `tbl_uregression` from the \code{\link{tbl_uregression}} function
+#' @param x object with class `tbl_uvregression` from the \code{\link{tbl_uvregression}} function
 #' @param ... arguments to be passed to \code{\link[car]{Anova}}.  Adding `test.statistic = `
 #' can change the type of test (e.g. Likelihood-ratio, Wald, etc.).
 #' @examples
-#' tbl_uregression(
+#' tbl_uvregression(
 #'   trial,
 #'   method = "glm",
 #'   y = "response",
@@ -114,7 +114,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'   add_global()
 #' @export
 
-add_global.tbl_uregression <- function(x, ...) {
+add_global.tbl_uvregression <- function(x, ...) {
 
   # calculating global pvalues
   global_p <-

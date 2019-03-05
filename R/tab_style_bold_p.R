@@ -72,15 +72,15 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
 #' Bold significant p-values
 #'
-#' Bold p-values in tables created by \code{\link{tbl_uregression}}
+#' Bold p-values in tables created by \code{\link{tbl_uvregression}}
 #'
-#' @param x an object created using `tbl_uregression` function
+#' @param x an object created using `tbl_uvregression` function
 #' @param t Determines the threshold below which p-values get bolded. Default is 0.05.
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
-tab_style_bold_p.tbl_uregression <- function(x, t = 0.05, q = FALSE, ...) {
+tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_q has been previously run if bolding q-values
   if(q == TRUE & is.null(x$call_list$add_q)) {

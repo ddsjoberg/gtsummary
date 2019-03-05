@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Print gtsummary objects — knit_print.tbl_uregression • gtsummary</title>
+<title>Bold significant p-values — tab_style_bold_p.tbl_uvregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Print gtsummary objects — knit_print.tbl_uregression" />
+<meta property="og:title" content="Bold significant p-values — tab_style_bold_p.tbl_uvregression" />
 
-<meta property="og:description" content="Print gtsummary objects" />
+<meta property="og:description" content="Bold p-values in tables created by tbl_uvregression" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,30 +117,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Print gtsummary objects</h1>
+    <h1>Bold significant p-values</h1>
     
-    <div class="hidden name"><code>knit_print.tbl_uregression.Rd</code></div>
+    <div class="hidden name"><code>tab_style_bold_p.tbl_uvregression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Print gtsummary objects</p>
+    <p>Bold p-values in tables created by <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_uregression</span>
-<span class='fu'><a href='knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
+<span class='fu'><a href='tab_style_bold_p.html'>tab_style_bold_p</a></span>(<span class='no'>x</span>, <span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>q</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object of class <code>tbl_uregression</code> object from <code><a href='tbl_uregression.html'>tbl_uregression</a></code> function</p></td>
+      <td><p>an object created using <code>tbl_uvregression</code> function</p></td>
+    </tr>
+    <tr>
+      <th>t</th>
+      <td><p>Determines the threshold below which p-values get bolded. Default is 0.05.</p></td>
+    </tr>
+    <tr>
+      <th>q</th>
+      <td><p>logical argument. When TRUE will bold the q-value column rather than the p-values</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to or from other methods.</p></td>
+      <td><p>not used</p></td>
     </tr>
     </table>
     
@@ -152,6 +161,8 @@
       <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
+    <h2>Author</h2>
+    <p>Daniel Sjoberg</p>
   </div>
 </div>
 

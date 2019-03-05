@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates table of univariate regression results — tbl_uregression • gtsummary</title>
+<title>Creates table of univariate regression results — tbl_uvregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Creates table of univariate regression results — tbl_uregression" />
+<meta property="og:title" content="Creates table of univariate regression results — tbl_uvregression" />
 
-<meta property="og:description" content="The tbl_uregression function arguments are similar to the tbl_regression
-arguments. Review the tbl_uregression
+<meta property="og:description" content="The tbl_uvregression function arguments are similar to the tbl_regression
+arguments. Review the tbl_uvregression
 vignette
 for detailed examples." />
 <meta name="twitter:card" content="summary" />
@@ -122,19 +122,19 @@ for detailed examples." />
     <div class="page-header">
     <h1>Creates table of univariate regression results</h1>
     
-    <div class="hidden name"><code>tbl_uregression.Rd</code></div>
+    <div class="hidden name"><code>tbl_uvregression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The <code>tbl_uregression</code> function arguments are similar to the <code><a href='tbl_regression.html'>tbl_regression</a></code>
-arguments. Review the <code>tbl_uregression</code>
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uregression'>vignette</a>
+    <p>The <code>tbl_uvregression</code> function arguments are similar to the <code><a href='tbl_regression.html'>tbl_regression</a></code>
+arguments. Review the <code>tbl_uvregression</code>
+<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression'>vignette</a>
 for detailed examples.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_uregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>tbl_uvregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {.x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='no'>style_sigfig</span>,
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>)</pre>
@@ -200,14 +200,14 @@ Default is 0.95.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>tbl_uregression</span>(
+    <pre class="examples"><div class='input'><span class='fu'>tbl_uvregression</span>(
   <span class='no'>trial</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"glm"</span>,
   <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
   <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</div><div class='output co'>#&gt; &lt;style&gt;html {
-#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
 #&gt; #erwyoprgbx .gt_table {
@@ -339,7 +339,7 @@ Default is 0.95.</p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #erwyoprgbx .gt_striped tr:nth-child(even) {
+#&gt; #erwyoprgbx .gt_striped {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
@@ -448,7 +448,7 @@ Default is 0.95.</p></td>
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Confidence Interval&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
-#&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
+#&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Treatment Randomization&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
@@ -457,11 +457,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Placebo&lt;/td&gt;
@@ -471,11 +471,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.012&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;Age, yrs&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;183&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1.00&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.98, 1.0&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&gt;0.9&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Age, yrs&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;183&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.00&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.98, 1.0&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&gt;0.9&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Marker Level, ng/mL&lt;/td&gt;
@@ -485,11 +485,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.6&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;T Stage&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;T Stage&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;191&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T1&lt;/td&gt;
@@ -499,11 +499,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1.4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.63, 3.1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.63, 3.1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.4&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
@@ -513,11 +513,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.3&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.50&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.22, 1.1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.089&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.50&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.22, 1.1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.089&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Grade&lt;/td&gt;
@@ -527,11 +527,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
@@ -541,18 +541,18 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.2&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.76&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.38, 1.5&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.76&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.38, 1.5&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.4&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
 #&gt; &lt;/table&gt;
 #&gt; &lt;!--gt table end--&gt;
 #&gt; &lt;/div&gt;</div><div class='input'>
 <span class='co'># rounding pvalues to 2 decimal places, and adding global p-values</span>
-<span class='fu'>tbl_uregression</span>(
+<span class='fu'>tbl_uvregression</span>(
   <span class='no'>trial</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"glm"</span>,
   <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
@@ -561,7 +561,7 @@ Default is 0.95.</p></td>
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_global.html'>add_global</a></span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
-#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
 #&gt; #bzpexapgxv .gt_table {
@@ -693,7 +693,7 @@ Default is 0.95.</p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #bzpexapgxv .gt_striped tr:nth-child(even) {
+#&gt; #bzpexapgxv .gt_striped {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
@@ -802,7 +802,7 @@ Default is 0.95.</p></td>
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Confidence Interval&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
-#&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
+#&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Treatment Randomization&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
@@ -811,11 +811,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.011&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Placebo&lt;/td&gt;
@@ -825,11 +825,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;Age, yrs&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;183&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1.00&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.98, 1.0&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.90&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Age, yrs&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;183&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.00&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.98, 1.0&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.90&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Marker Level, ng/mL&lt;/td&gt;
@@ -839,11 +839,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.64&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;T Stage&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.055&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;T Stage&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;191&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.055&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T1&lt;/td&gt;
@@ -853,11 +853,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1.4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.63, 3.1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.63, 3.1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
@@ -867,11 +867,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.50&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.22, 1.1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.50&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.22, 1.1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Grade&lt;/td&gt;
@@ -881,11 +881,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.40&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
@@ -895,11 +895,11 @@ Default is 0.95.</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.76&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.38, 1.5&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.76&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.38, 1.5&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
 #&gt; &lt;/table&gt;

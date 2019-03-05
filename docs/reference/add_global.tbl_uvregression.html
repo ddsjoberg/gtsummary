@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds the global p-value for a categorical variables in <code>tbl_uregression</code> objects — add_global.tbl_uregression • gtsummary</title>
+<title>Adds the global p-value for a categorical variables in <code>tbl_uvregression</code> objects — add_global.tbl_uvregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Adds the global p-value for a categorical variables in <code>tbl_uregression</code> objects — add_global.tbl_uregression" />
+<meta property="og:title" content="Adds the global p-value for a categorical variables in <code>tbl_uvregression</code> objects — add_global.tbl_uvregression" />
 
 <meta property="og:description" content="This function uses Anova from the car package with type = &quot;III&quot; to calculate global p-values.
 If a needed class of model is not supported by Anova, please put in an
@@ -119,9 +119,9 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds the global p-value for a categorical variables in <code>tbl_uregression</code> objects</h1>
+    <h1>Adds the global p-value for a categorical variables in <code>tbl_uvregression</code> objects</h1>
     
-    <div class="hidden name"><code>add_global.tbl_uregression.Rd</code></div>
+    <div class="hidden name"><code>add_global.tbl_uvregression.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -132,7 +132,7 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_uregression</span>
+    <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
 <span class='fu'><a href='add_global.html'>add_global</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -140,7 +140,7 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object with class <code>tbl_uregression</code> from the <code><a href='tbl_uregression.html'>tbl_uregression</a></code> function</p></td>
+      <td><p>object with class <code>tbl_uvregression</code> from the <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code> function</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -151,7 +151,7 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='tbl_uregression.html'>tbl_uregression</a></span>(
+    <pre class="examples"><div class='input'><span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
   <span class='no'>trial</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"glm"</span>,
   <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
@@ -159,7 +159,7 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 ) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_global.html'>add_global</a></span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
-#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
 #&gt; #hrtfztbnsr .gt_table {
@@ -291,7 +291,7 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_striped tr:nth-child(even) {
+#&gt; #hrtfztbnsr .gt_striped {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
@@ -400,7 +400,7 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Confidence Interval&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
-#&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
+#&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Treatment Randomization&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
@@ -409,11 +409,11 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.011&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;Drug&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;Placebo&lt;/td&gt;
@@ -423,11 +423,11 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;Age, yrs&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;183&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1.00&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.98, 1.0&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&gt;0.9&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Age, yrs&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;183&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.00&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.98, 1.0&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&gt;0.9&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Marker Level, ng/mL&lt;/td&gt;
@@ -437,11 +437,11 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.6&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;T Stage&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;191&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.055&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;T Stage&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;191&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.055&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T1&lt;/td&gt;
@@ -451,11 +451,11 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1.4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.63, 3.1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1.4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.63, 3.1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
@@ -465,11 +465,11 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.50&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.22, 1.1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.50&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.22, 1.1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;Grade&lt;/td&gt;
@@ -479,11 +479,11 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;0.4&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
@@ -493,11 +493,11 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.76&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.38, 1.5&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.76&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.38, 1.5&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
 #&gt; &lt;/table&gt;
