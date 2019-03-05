@@ -80,7 +80,7 @@ add_stat_label <- function(x, iqr = TRUE) {
 
   # column headers
   x[["gt_calls"]][["cols_label:stat_label"]] <-
-    "gt::cols_label(stat_label = gt::md('**Statistic**'))"
+    "cols_label(stat_label = md('**Statistic**'))"
 
 
   return(x)

@@ -24,7 +24,7 @@ Must specify \code{by} along with \code{stat_by}.}
 
 \item{text_method}{Method for text interpretation.
 Default is \code{gt::\link{md}}.  Also accepts \code{gt::\link{html}} and
-\code{gt::\link{I}}.}
+\code{\link{I}}.}
 }
 \description{
 Column labels can be modified using data from the data frame
