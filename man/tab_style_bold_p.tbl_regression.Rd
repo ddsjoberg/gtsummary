@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an object created using \code{tbl_regression} function}
 
-\item{t}{Determines the threshold below which p-values get bolded. Default is 0.05.}
+\item{t}{Determines the threshold below which p-values will be bold. Default is 0.05.}
 
 \item{...}{not used}
 }
