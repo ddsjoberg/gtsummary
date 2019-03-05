@@ -149,7 +149,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'>add_stat_label</span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
-#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 #&gt; }
 #&gt; 
 #&gt; #ljamkajowk .gt_table {
@@ -281,7 +281,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_striped {
+#&gt; #ljamkajowk .gt_striped tr:nth-child(even) {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
@@ -386,18 +386,18 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;tr&gt;
 #&gt; &lt;th class='gt_col_heading gt_left' rowspan='1' colspan='1'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Statistic&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;stat_0&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;N = 32&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
-#&gt; &lt;tbody class='gt_table_body'&gt;
+#&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;mpg&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;Median (IQR)&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;19.2 (15.4, 22.8)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;cyl&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;cyl&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
@@ -405,9 +405,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;11 (34%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;7 (22%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;7 (22%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
@@ -415,9 +415,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;14 (44%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;disp&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;196 (121, 326)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;disp&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;Median (IQR)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;196 (121, 326)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;hp&lt;/td&gt;
@@ -425,9 +425,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;123 (96, 180)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;drat&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3.70 (3.08, 3.92)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;drat&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;Median (IQR)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;3.70 (3.08, 3.92)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;wt&lt;/td&gt;
@@ -435,9 +435,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;3.33 (2.58, 3.61)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;qsec&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;17.71 (16.89, 18.90)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;qsec&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;Median (IQR)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;17.71 (16.89, 18.90)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;vs&lt;/td&gt;
@@ -445,9 +445,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;14 (44%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;am&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;13 (41%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;am&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;13 (41%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;gear&lt;/td&gt;
@@ -455,9 +455,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;15 (47%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;15 (47%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
@@ -465,9 +465,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;12 (38%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;5&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;5 (16%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;5&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;5 (16%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;carb&lt;/td&gt;
@@ -475,9 +475,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;7 (22%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;7 (22%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;2&lt;/td&gt;
@@ -485,9 +485,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;10 (31%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3 (9.4%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;3 (9.4%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
@@ -495,9 +495,9 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;10 (31%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1 (3.1%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;1 (3.1%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
@@ -508,7 +508,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;/table&gt;
 #&gt; &lt;!--gt table end--&gt;
 #&gt; &lt;/div&gt;</div><div class='input'><span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"am"</span>) <span class='kw'>%&gt;%</span> <span class='fu'>add_stat_label</span>(<span class='kw'>iqr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; &lt;style&gt;html {
-#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 #&gt; }
 #&gt; 
 #&gt; #npghmxkfrb .gt_table {
@@ -640,7 +640,7 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #npghmxkfrb .gt_striped {
+#&gt; #npghmxkfrb .gt_striped tr:nth-child(even) {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
@@ -745,10 +745,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;tr&gt;
 #&gt; &lt;th class='gt_col_heading gt_left' rowspan='1' colspan='1'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Statistic&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;stat_1&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;stat_2&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;0&lt;/strong&gt;, N = 19&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;1&lt;/strong&gt;, N = 13&lt;/th&gt;
 #&gt; &lt;/tr&gt;
-#&gt; &lt;tbody class='gt_table_body'&gt;
+#&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;mpg&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;Median (25%, 75%)&lt;/td&gt;
@@ -756,10 +756,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;22.8 (21.0, 30.4)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;cyl&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;cyl&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
@@ -768,10 +768,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;8 (62%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4 (21%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3 (23%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;4 (21%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;3 (23%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
@@ -780,10 +780,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;2 (15%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;disp&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;276 (196, 360)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;120 (79, 160)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;disp&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;Median (25%, 75%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;276 (196, 360)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;120 (79, 160)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;hp&lt;/td&gt;
@@ -792,10 +792,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;109 (66, 113)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;drat&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3.15 (3.07, 3.70)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4.08 (3.85, 4.22)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;drat&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;Median (25%, 75%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;3.15 (3.07, 3.70)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;4.08 (3.85, 4.22)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;wt&lt;/td&gt;
@@ -804,10 +804,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;2.32 (1.94, 2.78)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;qsec&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;Median (25%, 75%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;17.82 (17.18, 19.17)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;17.02 (16.46, 18.61)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;qsec&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;Median (25%, 75%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;17.82 (17.18, 19.17)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;17.02 (16.46, 18.61)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;vs&lt;/td&gt;
@@ -816,10 +816,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;7 (54%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;gear&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;gear&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
@@ -828,10 +828,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4 (21%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;8 (62%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;4 (21%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;8 (62%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;5&lt;/td&gt;
@@ -840,10 +840,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;5 (38%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;carb&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left'&gt;carb&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;1&lt;/td&gt;
@@ -852,10 +852,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;4 (31%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;2&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;6 (32%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;4 (31%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;2&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;6 (32%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;4 (31%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
@@ -864,10 +864,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;7 (37%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3 (23%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;7 (37%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;3 (23%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
@@ -876,10 +876,10 @@ resolve to 'IQR'. Default is <code>TRUE</code></p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;1 (7.7%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1 (7.7%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center'&gt;1 (7.7%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
 #&gt; &lt;/table&gt;
