@@ -33,7 +33,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
   # storing column names and gt_call name
   col_name = ifelse(q == FALSE, 'pvalue', 'qvalue')
-  gt_call_name = glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
+  gt_call_name = glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bolding
   x[[glue("{col_name}_bold_t")]] <- t

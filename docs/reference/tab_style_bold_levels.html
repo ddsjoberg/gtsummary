@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Relabel columns in summary table — cols_label_summary • gtsummary</title>
+<title>Bold levels in gtsummary tables — tab_style_bold_levels • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Relabel columns in summary table — cols_label_summary" />
+<meta property="og:title" content="Bold levels in gtsummary tables — tab_style_bold_levels" />
 
-<meta property="og:description" content="Column labels can be modified using data from the data frame" />
+<meta property="og:description" content="Bold levels in gtsummary tables" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,48 +117,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Relabel columns in summary table</h1>
+    <h1>Bold levels in gtsummary tables</h1>
     
-    <div class="hidden name"><code>cols_label_summary.Rd</code></div>
+    <div class="hidden name"><code>tab_style_bold_levels.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Column labels can be modified using data from the data frame</p>
+    <p>Bold levels in gtsummary tables</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>cols_label_summary</span>(<span class='no'>x</span>, <span class='kw'>stat_overall</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>text_method</span> <span class='kw'>=</span> <span class='st'>"md"</span>)</pre>
+    <pre class="usage"><span class='fu'>tab_style_bold_levels</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_summary</code> object</p></td>
-    </tr>
-    <tr>
-      <th>stat_overall</th>
-      <td><p>string vector including text to appear above the overall summary
-statistics. <code>N</code>, the total number of observations, is available for use in the
-description.</p></td>
-    </tr>
-    <tr>
-      <th>stat_by</th>
-      <td><p>string vector of text to include above the summary statistics
-stratified by a variable.  The following fields are available for use in the
-headers: <code>n</code>, <code>N</code>, <code>p</code>, <code>name</code>, and <code>level</code>.  <code>n</code> is the number of observations in
-each by group. <code>N</code> is the total number of observations. <code>p</code> is the percentage of rows
-in a by group. <code>name</code> is the name of the by variable. <code>level</code> is the by variable level.
-Syntax follows the <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a></code> function, e.g. <code>stat_by = c("{level}", "N = {n} ({p}\%)")</code>.
-Must specify <code>by</code> along with <code>stat_by</code>.</p></td>
-    </tr>
-    <tr>
-      <th>text_method</th>
-      <td><p>Method for text interpretation.
-Default is <code><a href='https://www.rdocumentation.org/packages/gt/topics/md'>gt::md</a></code>.  Also accepts <code><a href='https://www.rdocumentation.org/packages/gt/topics/html'>gt::html</a></code> and
-<code>gt::<a href='https://www.rdocumentation.org/packages/base/topics/AsIs'>I</a></code>.</p></td>
+      <td><p>an object created using gtsummary functions</p></td>
     </tr>
     </table>
     
