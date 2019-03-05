@@ -29,3 +29,6 @@ Default is \code{gt::\link{md}}.  Also accepts \code{gt::\link{html}} and
 \description{
 Column labels can be modified using data from the data frame
 }
+\author{
+Daniel Sjoberg
+}
