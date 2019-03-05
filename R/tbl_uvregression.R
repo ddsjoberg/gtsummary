@@ -1,8 +1,8 @@
 #' Creates table of univariate regression results
 #'
-#' The `tbl_uregression` function arguments are similar to the \code{\link{tbl_regression}}
-#' arguments. Review the `tbl_uregression`
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uregression}{vignette}
+#' The `tbl_uvregression` function arguments are similar to the \code{\link{tbl_regression}}
+#' arguments. Review the `tbl_uvregression`
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}
 #' for detailed examples.
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data frame
@@ -29,7 +29,7 @@
 #' @author Daniel Sjoberg
 #' @export
 #' @examples
-#' tbl_uregression(
+#' tbl_uvregression(
 #'   trial,
 #'   method = "glm",
 #'   y = "response",
@@ -38,7 +38,7 @@
 #' )
 #'
 #' # rounding pvalues to 2 decimal places, and adding global p-values
-#' tbl_uregression(
+#' tbl_uvregression(
 #'   trial,
 #'   method = "glm",
 #'   y = "response",
@@ -47,7 +47,7 @@
 #'   pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #' ) %>%
 #'   add_global()
-tbl_uregression <- function(data, method, y, method.args = NULL,
+tbl_uvregression <- function(data, method, y, method.args = NULL,
                                formula = "{y} ~ {.x}",
                                exponentiate = FALSE, label = NULL,
                                show_yesno = NULL, conf.level = 0.95,
@@ -69,7 +69,7 @@ tbl_uregression <- function(data, method, y, method.args = NULL,
 
   # will return call, and all object passed to in table1 call
   # the object func_inputs is a list of every object passed to the function
-  tbl_uregression_inputs <- as.list(environment())
+  tbl_uvregression_inputs <- as.list(environment())
 
   # get all x vars
   x_vars <- names(data) %>%
@@ -128,11 +128,11 @@ tbl_uregression <- function(data, method, y, method.args = NULL,
 
   # returning named list of results
   results <- list(
-    inputs = tbl_uregression_inputs,
+    inputs = tbl_uvregression_inputs,
     tbl_regression_list = tbl_regression_list,
     meta_data = meta_data,
     table_body = table_body,
-    call_list = list(tbl_uregression = match.call())
+    call_list = list(tbl_uvregression = match.call())
   )
 
   # returning all gt calls in a list
@@ -177,6 +177,6 @@ tbl_uregression <- function(data, method, y, method.args = NULL,
     "rows = row_type != 'label'",
     "))"
   )
-  class(results) <- "tbl_uregression"
+  class(results) <- "tbl_uvregression"
   results
 }
