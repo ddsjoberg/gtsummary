@@ -4,7 +4,7 @@
 \alias{add_comparison}
 \title{Adds p-values to the output comparing values across groups}
 \usage{
-add_comparison(x, test = NULL, pvalue_fun = fmt_pvalue,
+add_comparison(x, test = NULL, pvalue_fun = style_pvalue,
   group = x$inputs$group)
 }
 \arguments{
@@ -22,11 +22,11 @@ and "re" for a random intercept model to account for clustered data.
 For "re" to be used "group" must also be specified in the function call.}
 
 \item{pvalue_fun}{function for rounding/formatting p-values.
-Default is \code{\link{fmt_pvalue}}.
+Default is \code{\link{style_pvalue}}.
 The function must have a single input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
-\code{pvalue_fun = function(x) fmt_pvalue(x, digits = 2)} or equivalently,
-\code{purrr::partial(fmt_pvalue, digits = 2)}).}
+\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+\code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{group}{Character vector of an ID or grouping variable.  Summary statistics
 will not be printed for this column, but they may be used in subsequent

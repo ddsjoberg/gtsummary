@@ -58,5 +58,8 @@ add_overall <- function(x, last = FALSE) {
   # adding indicator to output that add_overall was run on this data
   x$call_list <- c(x$call_list, list(add_overall = match.call()))
 
-  return(x)
+  # adding header
+  x <- cols_label_summary(x, stat_overall = "**Overall**, N = {N}")
+
+  x
 }

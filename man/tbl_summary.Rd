@@ -50,7 +50,7 @@ never (\code{"no"}), only if the count is positive (\code{"ifany"}) and even for
 zero counts (\code{"always"}). Default is \code{"ifany"}.}
 }
 \value{
-List of summary statistics formattable to a \code{gt} object
+List of summary statistics to be converted to a \code{gt} object
 }
 \description{
 The \code{tbl_summary} function calculates descriptive statistics by groups for

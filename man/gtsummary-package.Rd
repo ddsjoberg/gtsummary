@@ -11,7 +11,7 @@ Written with the goal to make reporting of tabular
     analytic results simple, beautiful, and reproducible.
     Publication-ready tables are created with minimal code, and can be
     exported to Word, HTML, and PDF documents with the use of Rmarkdown.
-    The clintable functions are flexible, allowing you to easily customize
+    The gtsummary functions are flexible, allowing you to easily customize
     the aesthetics of tables to suit your needs.
 }
 \author{

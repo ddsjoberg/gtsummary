@@ -16,12 +16,12 @@ test_that("no errors/warnings with standard use after tbl_regression", {
   )
 })
 
-test_that("no errors/warnings with standard use after tbl_uregression", {
+test_that("no errors/warnings with standard use after tbl_uvregression", {
   expect_error(
-    trial %>% tbl_uregression(method = "lm", y = "age") %>% add_global(), NA
+    trial %>% tbl_uvregression(method = "lm", y = "age") %>% add_global(), NA
   )
   expect_warning(
-    trial %>% tbl_uregression(method = "lm", y = "age") %>% add_global(), NA
+    trial %>% tbl_uvregression(method = "lm", y = "age") %>% add_global(), NA
   )
 
 })
