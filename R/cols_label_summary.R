@@ -16,7 +16,9 @@
 #' @param text_method Method for text interpretation.
 #' Default is \code{gt::\link{md}}.  Also accepts \code{gt::\link{html}} and
 #' \code{gt::\link{I}}.
+#' @author Daniel Sjoberg
 #' @export
+
 
 cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL, text_method = "md") {
   # input checks ---------------------------------------------------------------
