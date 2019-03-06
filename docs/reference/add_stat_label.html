@@ -144,7 +144,7 @@ a column labeling the summary statistics is added.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'>add_stat_label</span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
-#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
 #&gt; #ljamkajowk .gt_table {
@@ -276,7 +276,7 @@ a column labeling the summary statistics is added.</p>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #ljamkajowk .gt_striped tr:nth-child(even) {
+#&gt; #ljamkajowk .gt_striped {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
@@ -383,16 +383,16 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Statistic&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;N = 32&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
-#&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
+#&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;mpg&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;median (IQR)&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;19.2 (15.4, 22.8)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;cyl&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;cyl&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
@@ -400,9 +400,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;11 (34%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;7 (22%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;7 (22%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;
@@ -410,9 +410,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;14 (44%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;disp&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;196 (121, 326)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;disp&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;median (IQR)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;196 (121, 326)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;hp&lt;/td&gt;
@@ -420,9 +420,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;123 (96, 180)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;drat&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;3.70 (3.08, 3.92)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;drat&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;median (IQR)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3.70 (3.08, 3.92)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;wt&lt;/td&gt;
@@ -430,9 +430,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;3.33 (2.58, 3.61)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;qsec&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;median (IQR)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;17.71 (16.89, 18.90)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;qsec&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;median (IQR)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;17.71 (16.89, 18.90)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;vs&lt;/td&gt;
@@ -440,9 +440,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;14 (44%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;am&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;13 (41%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;am&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;13 (41%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;gear&lt;/td&gt;
@@ -450,9 +450,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;15 (47%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;15 (47%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
@@ -460,9 +460,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;12 (38%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;5&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;5 (16%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;5&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;5 (16%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;carb&lt;/td&gt;
@@ -470,9 +470,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;7 (22%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;7 (22%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;2&lt;/td&gt;
@@ -480,9 +480,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;10 (31%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;3 (9.4%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;3 (9.4%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;4&lt;/td&gt;
@@ -490,9 +490,9 @@ a column labeling the summary statistics is added.</p>
 #&gt; &lt;td class='gt_row gt_center'&gt;10 (31%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;n (%)&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;1 (3.1%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;6&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;n (%)&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;1 (3.1%)&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;8&lt;/td&gt;

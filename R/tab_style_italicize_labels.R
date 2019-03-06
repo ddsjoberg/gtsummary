@@ -6,8 +6,8 @@
 
 tab_style_italicize_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if(!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvsummary")) {
-    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvsummary'")
+  if(!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression")) {
+    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvregression'")
   }
 
   # italicize labels ----------------------------------------------------------------
@@ -17,6 +17,8 @@ tab_style_italicize_labels <- function(x) {
     "locations = cells_data(columns = vars(label),",
     "rows = row_type == 'label'))"
   )
+
+  x$call_list <- c(x$call_list, list(tab_style_italicize_labels = match.call()))
 
   x
 }
