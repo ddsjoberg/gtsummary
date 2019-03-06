@@ -6,8 +6,8 @@
 
 tab_style_italicize_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if(!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvsummary")) {
-    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvsummary'")
+  if(!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression")) {
+    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvregression'")
   }
 
   # italicize levels -----------------------------------------------------------
@@ -17,6 +17,8 @@ tab_style_italicize_levels <- function(x) {
     "locations = cells_data(columns = vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
   )
+
+  x$call_list <- c(x$call_list, list(tab_style_italicize_levels = match.call()))
 
   x
 }

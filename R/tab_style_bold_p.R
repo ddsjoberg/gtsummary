@@ -44,6 +44,8 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
     "rows = {col_name} <= x${col_name}_bold_t))"
   )
 
+  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
+
   x
 }
 
@@ -66,6 +68,8 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
     "locations = cells_data(columns = vars(pvalue),",
     "rows = pvalue <= x$pvalue_bold_t))"
   )
+
+  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
 
   x
 }
@@ -99,6 +103,8 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
     "locations = cells_data(columns = vars({col_name}),",
     "rows = {col_name} <= x${col_name}_bold_t))"
   )
+
+  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
 
   x
 }
