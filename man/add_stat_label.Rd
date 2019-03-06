@@ -4,13 +4,10 @@
 \alias{add_stat_label}
 \title{Adds a column showing a label for the summary statistics shown in each row}
 \usage{
-add_stat_label(x, iqr = TRUE)
+add_stat_label(x)
 }
 \arguments{
 \item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
-
-\item{iqr}{logical indicator whether '{p25}, {p75}' should
-resolve to 'IQR'. Default is \code{TRUE}}
 }
 \description{
 Rather than simply printing the summary statistics, with the use of \code{add_stat_label()},
@@ -18,5 +15,4 @@ a column labeling the summary statistics is added.
 }
 \examples{
 mtcars \%>\% tbl_summary() \%>\% add_stat_label()
-mtcars \%>\% tbl_summary(by = "am") \%>\% add_stat_label(iqr = FALSE)
 }

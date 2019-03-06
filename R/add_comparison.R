@@ -73,11 +73,11 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
   x$table_body <- table_body
   x$pvalue_fun <- pvalue_fun
   # adding p-value formatting
-  x[["gt_calls"]][["fmt:pvalue"]] <-
-    "gt::fmt(columns = gt::vars(pvalue), rows = !is.na(pvalue), fns = x$pvalue_fun)"
+  x[["gt_calls"]][["fmt_pvalue"]] <-
+    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$pvalue_fun)"
   # column headers
-  x[["gt_calls"]][["cols_label:pvalue"]] <-
-    "gt::cols_label(pvalue = gt::md('**p-value**'))"
+  x[["gt_calls"]][["cols_label_pvalue"]] <-
+    "cols_label(pvalue = md('**p-value**'))"
 
   x$meta_data <- meta_data
   x$call_list <- c(x$call_list, list(add_comparison = match.call()))

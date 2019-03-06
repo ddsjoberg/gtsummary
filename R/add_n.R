@@ -46,8 +46,8 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
 
   # column headers
   x[["gt_calls"]][[glue("cols_label:{ifelse(missing == FALSE, 'n', 'n_missing')}")]] <-
-    glue("gt::cols_label({ifelse(missing == FALSE, 'n', 'n_missing')} = ",
-         "gt::md('**{ifelse(missing == FALSE, 'N', 'N Missing')}**'))")
+    glue("cols_label({ifelse(missing == FALSE, 'n', 'n_missing')} = ",
+         "md('**{ifelse(missing == FALSE, 'N', 'N Missing')}**'))")
 
   # replacing old table_body with new
   x$table_body <- table_body

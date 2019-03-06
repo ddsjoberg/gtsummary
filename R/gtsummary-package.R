@@ -1,4 +1,3 @@
-#' @keywords internal
 #' @import dplyr
 #' @import purrr
 #' @import gt
@@ -7,6 +6,7 @@
 #' @importFrom rlang %||% set_names sym expr enexpr quo enquo eval_tidy :=
 #' @importFrom glue glue glue_data
 #' @importFrom stats sd var quantile
+#' @keywords internal
 "_PACKAGE"
 
 # allowing for the use of the dot when piping

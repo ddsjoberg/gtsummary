@@ -15,7 +15,7 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #' Bold p-values in tables created by \code{\link{tbl_summary}}
 #'
 #' @param x an object created using `tbl_summary` function
-#' @param t Determines the threshold below which p-values get bolded. Default is 0.05.
+#' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @author Daniel Sjoberg
@@ -33,16 +33,18 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
   # storing column names and gt_call name
   col_name = ifelse(q == FALSE, 'pvalue', 'qvalue')
-  gt_call_name = glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
+  gt_call_name = glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bolding
   x[[glue("{col_name}_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][[gt_call_name]] <- glue(
-    "gt::tab_style(style = gt::cells_styles(text_weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars({col_name}),",
+    "tab_style(style = cells_styles(text_weight = 'bold'), ",
+    "locations = cells_data(columns = vars({col_name}),",
     "rows = {col_name} <= x${col_name}_bold_t))"
   )
+
+  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
 
   x
 }
@@ -52,7 +54,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' Bold p-values in tables created by \code{\link{tbl_regression}}
 #'
 #' @param x an object created using `tbl_regression` function
-#' @param t Determines the threshold below which p-values get bolded. Default is 0.05.
+#' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
@@ -62,10 +64,12 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
   x[[glue("pvalue_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_bold_pvalue"]] <- glue(
-    "gt::tab_style(style = gt::cells_styles(text_weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars(pvalue),",
+    "tab_style(style = cells_styles(text_weight = 'bold'), ",
+    "locations = cells_data(columns = vars(pvalue),",
     "rows = pvalue <= x$pvalue_bold_t))"
   )
+
+  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
 
   x
 }
@@ -75,7 +79,7 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #' Bold p-values in tables created by \code{\link{tbl_uvregression}}
 #'
 #' @param x an object created using `tbl_uvregression` function
-#' @param t Determines the threshold below which p-values get bolded. Default is 0.05.
+#' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @author Daniel Sjoberg
@@ -95,10 +99,12 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
   x[[glue("{col_name}_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][[gt_call_name]] <- glue(
-    "gt::tab_style(style = gt::cells_styles(text_weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars({col_name}),",
+    "tab_style(style = cells_styles(text_weight = 'bold'), ",
+    "locations = cells_data(columns = vars({col_name}),",
     "rows = {col_name} <= x${col_name}_bold_t))"
   )
+
+  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
 
   x
 }

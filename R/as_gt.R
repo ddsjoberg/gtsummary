@@ -14,6 +14,9 @@
 #' trial %>% tbl_summary(by = "trt") %>% as_gt()
 
 as_gt <- function(x, omit = NULL) {
+  # user cannot omit the first 'gt' command
+  omit <- omit %>% setdiff("gt")
+
   # taking each gt function call, concatenating them with %>% separating them
   x$gt_calls[names(x$gt_calls) %>% setdiff(omit)] %>%
     paste0(collapse = " %>% ") %>%
