@@ -177,9 +177,9 @@ Each of the modification functions have additional options outlined in their res
 
 ##  Report Results Inline (coming soon!)
 
-## Under the Hood
+## Advanced Customization
 
-When you print the output from the `tbl_summary()` function into the R console or into an Rmarkdown, there are default printing functions that are called in the background: `print.tbl_summary()` and `knit_print.tbl_summary()`.  The true output from `tbl_summary()` is a named list, but when you print the list a formatted version of `.$table_body` is displayed.  All modifications are made using the `gt` package.
+When you print the output from the `tbl_summary()` function into the R console or into an Rmarkdown, there are default printing functions that are called in the background: `print.tbl_summary()` and `knit_print.tbl_summary()`.  The true output from `tbl_summary()` is a named list, but when you print the list a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the `gt` package.
 
 ```{r}
 tbl_summary(trial2) %>% names()
@@ -202,7 +202,7 @@ tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% head(n = 3)
 
 The gt functions are called in the order they appear in the list, always beginning with `gt()`.  They are only run when the object is printed with `print` or `knit_print`.  Each of these printing functions is simple, consisting of `as_gt()` only.
 
-If the user does not want a specific gt function to run, any gt call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_summary()` call creates the many gt function calls: *`r tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% names()`*.  Any one of these can be omitted with the following code.  In this example, the default footnote will be omitted from the output.
+If the user does not want a specific gt function to run, any gt call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_summary()` call creates the many gt function calls: *`r tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be omitted with the following code.  In this example, the default footnote will be omitted from the output.
 
 ```{r remedy001}
 tbl_summary(trial2) %>%
