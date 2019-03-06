@@ -57,10 +57,10 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...)
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt:qvalue"]] <-
-    "gt::fmt(columns = gt::vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)"
+    "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)"
   # column headers
   x[["gt_calls"]][["cols_label:qvalue"]] <-
-    "gt::cols_label(qvalue = gt::md('**q-value**'))"
+    "cols_label(qvalue = md('**q-value**'))"
 
   # Returns the table 1 object
   return(x)
@@ -121,10 +121,10 @@ add_q.tbl_uvregression <- function(x, method = "fdr", pvalue_fun = style_pvalue,
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt:qvalue"]] <-
-    "gt::fmt(columns = gt::vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)"
+    "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)"
   # column headers
   x[["gt_calls"]][["cols_label:qvalue"]] <-
-    "gt::cols_label(qvalue = gt::md('**q-value**'))"
+    "cols_label(qvalue = md('**q-value**'))"
 
   return(x)
 }

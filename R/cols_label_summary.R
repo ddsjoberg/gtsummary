@@ -15,8 +15,10 @@
 #' description.
 #' @param text_method Method for text interpretation.
 #' Default is \code{gt::\link{md}}.  Also accepts \code{gt::\link{html}} and
-#' \code{gt::\link{I}}.
+#' \code{\link{I}}.
+#' @author Daniel Sjoberg
 #' @export
+
 
 cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL, text_method = "md") {
   # input checks ---------------------------------------------------------------
@@ -58,12 +60,12 @@ col_label_by <- function(df_by, stat_by, text_method) {
     ) %>%
     dplyr::pull("col_label_code") %>%
     paste(collapse = ", ") %>%
-    {glue::glue("gt::cols_label({.})")}
+    {glue::glue("cols_label({.})")}
 }
 
 col_label_overall <- function(stat_overall, N, text_method) {
   glue(stat_overall) %>%
-  {glue("gt::cols_label(stat_0 = {text_method}('{.}'))")}
+  {glue("cols_label(stat_0 = {text_method}('{.}'))")}
 }
 
 # t <-
@@ -115,10 +117,10 @@ col_label_by <- function(df_by, stat_by, text_method) {
     ) %>%
     dplyr::pull("col_label_code") %>%
     paste(collapse = ", ") %>%
-    {glue::glue("gt::cols_label({.})")}
+    {glue::glue("cols_label({.})")}
 }
 
 col_label_overall <- function(stat_overall, N, text_method) {
   glue(stat_overall) %>%
-  {glue("gt::cols_label(stat_0 = {text_method}('{.}'))")}
+  {glue("cols_label(stat_0 = {text_method}('{.}'))")}
 }
