@@ -132,8 +132,8 @@ gt_tbl_regression <- quote(list(
   cols_label = glue(
     "cols_label(",
     "label = md('**N = {n}**'), ",
-    "coef = md('**Coefficient**'), ",
-    "ll = md('**{style_percent(conf.level, symbol = TRUE)} Confidence Interval**'), ",
+    "coef = md('**{coef_header(x, exponentiate)}**'), ",
+    "ll = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
     "pvalue = md('**p-value**')",
     ")"
   ),
@@ -161,4 +161,27 @@ gt_tbl_regression <- quote(list(
   )
 ))
 
+# idenfies headers for common models (logistic, poisson, and cox regression)
+coef_header <- function(x, exponentiate) {
+  # generalized linear models
+  if(class(x)[1] == "glm") {
+    # logistic regression
+    if(exponentiate == TRUE & x$family$family == "binomial" & x$family$link == "logit")
+      return("OR")
+    if(exponentiate == FALSE & x$family$family == "binomial" & x$family$link == "logit")
+      return("log(OR)")
 
+    # poisson regression with log link
+    if(exponentiate == TRUE & x$family$family == "poisson" & x$family$link == "log")
+      return("IRR")
+    if(exponentiate == FALSE & x$family$family == "poisson" & x$family$link == "log")
+      return("log(IRR)")
+  }
+  # Cox PH Regression
+  if(class(x)[1] == "coxph" & exponentiate == TRUE) return("HR")
+  if(class(x)[1] == "coxph" & exponentiate == FALSE) return("log(HR)")
+
+  # Other models
+  if(exponentiate == TRUE) return("exp(Coefficient)")
+  return("Coefficient")
+}
