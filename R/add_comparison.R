@@ -82,5 +82,39 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
   x$meta_data <- meta_data
   x$call_list <- c(x$call_list, list(add_comparison = match.call()))
 
-  return(x)
+  # adding footnote listing statistics presented in table
+  x[["gt_calls"]][["footnote_add_comparison"]] <- glue(
+    "tab_footnote(",
+    "  footnote = '{footnote_add_comparison(meta_data)}',",
+    "  locations = cells_column_labels(",
+    "    columns = vars(pvalue))",
+    ")"
+  )
+
+  x
 }
+
+# creates a tibble linking test names to labels
+stat_test_names <- tibble::tribble(
+  ~stat_test, ~stat_test_label,
+  "t.test", "t-test",
+  "fisher.test", "Fisher's exact test",
+  "wilcox.test", "Wilcoxon signed-rank test",
+  "kruskal.test", "Kruskal-Wallis test",
+  "chisq.test", "chi-square test",
+  "re", "mixed-effects regression model with random intercept"
+)
+
+# function to create text for footnote
+footnote_add_comparison <- function(meta_data) {
+  meta_data %>%
+    select("stat_test") %>%
+    distinct() %>%
+    left_join(stat_test_names, by = "stat_test") %>%
+    pull("stat_test_label") %>%
+    paste(collapse = ", ") %>%
+    paste0("Statistical tests performed: ", .)
+
+}
+
+
