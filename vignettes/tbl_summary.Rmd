@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(gtsummary)
 ```
 
 ## Introduction
@@ -37,7 +38,7 @@ Here's how this translates into the use of `tbl_summary()`.
     
 ## Basic Usage
 
-We'll be using the `trial` data set throughout this example.  This set contains data from 200 patients randomized to a new drug therapy or placebo.  The outcome is a binary tumor response.  Each variable in the data frame has been assigned an attribute label (e.g. `attr(trial$trt, "label") = "Treatment Randomization")`. These labels are displayed in the output table by default.  A data frame without labels will print variable names.
+We'll be using the `trial` data set throughout this example.  This set contains data from `r nrow(trial)` patients randomized to a new drug therapy or placebo.  The outcome is a binary tumor response.  Each variable in the data frame has been assigned an attribute label (e.g. `attr(trial$trt, "label") = "Treatment Randomization")`. These labels are displayed in the output table by default.  A data frame without labels will print variable names.
 
     trt      Treatment Randomization
     age      Age, yrs
