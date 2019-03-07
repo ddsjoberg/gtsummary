@@ -116,16 +116,16 @@ stage    T Stage
 grade    Grade
 response Tumor Response</code></pre>
 <p>The default output from <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> is meant to be publication ready. Let’s start by creating a regression model table from the <code>trial</code> data set included in the <code>gtsummary</code> package. We will predict tumor response using age, stage, and grade using a logistic regression model.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># build logistic regression model</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">m1 =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(response <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>stage <span class="op">+</span><span class="st"> </span>grade, trial, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(<span class="dt">link =</span> <span class="st">"logit"</span>))</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co"># format results into data frame</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(m1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># build logistic regression model</span>
+m1 =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(response <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>stage <span class="op">+</span><span class="st"> </span>grade, trial, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(<span class="dt">link =</span> <span class="st">"logit"</span>))
+
+<span class="co"># format results into data frame</span>
+<span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(m1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#innyoqtcba .gt_table {
+#jpgwozmkek .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -144,13 +144,13 @@ response Tumor Response</code></pre>
   /* table.border.top.color */
 }
 
-#innyoqtcba .gt_heading {
+#jpgwozmkek .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#innyoqtcba .gt_title {
+#jpgwozmkek .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -161,7 +161,7 @@ response Tumor Response</code></pre>
   border-bottom-width: 0;
 }
 
-#innyoqtcba .gt_subtitle {
+#jpgwozmkek .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -172,7 +172,7 @@ response Tumor Response</code></pre>
   border-top-width: 0;
 }
 
-#innyoqtcba .gt_bottom_border {
+#jpgwozmkek .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -181,7 +181,7 @@ response Tumor Response</code></pre>
   /* heading.border.bottom.color */
 }
 
-#innyoqtcba .gt_column_spanner {
+#jpgwozmkek .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -189,7 +189,7 @@ response Tumor Response</code></pre>
   padding-bottom: 4px;
 }
 
-#innyoqtcba .gt_col_heading {
+#jpgwozmkek .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -202,11 +202,11 @@ response Tumor Response</code></pre>
   margin: 10px;
 }
 
-#innyoqtcba .gt_sep_right {
+#jpgwozmkek .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#innyoqtcba .gt_group_heading {
+#jpgwozmkek .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -230,7 +230,7 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#innyoqtcba .gt_empty_group_heading {
+#jpgwozmkek .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -254,29 +254,29 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#innyoqtcba .gt_striped {
+#jpgwozmkek .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#innyoqtcba .gt_row {
+#jpgwozmkek .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#innyoqtcba .gt_stub {
+#jpgwozmkek .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#innyoqtcba .gt_stub.gt_row {
+#jpgwozmkek .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#innyoqtcba .gt_summary_row {
+#jpgwozmkek .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -285,13 +285,13 @@ response Tumor Response</code></pre>
   /* summary_row.text_transform */
 }
 
-#innyoqtcba .gt_first_summary_row {
+#jpgwozmkek .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#innyoqtcba .gt_table_body {
+#jpgwozmkek .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -306,55 +306,55 @@ response Tumor Response</code></pre>
   /* field.border.bottom.color */
 }
 
-#innyoqtcba .gt_footnote {
+#jpgwozmkek .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#innyoqtcba .gt_sourcenote {
+#jpgwozmkek .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#innyoqtcba .gt_center {
+#jpgwozmkek .gt_center {
   text-align: center;
 }
 
-#innyoqtcba .gt_left {
+#jpgwozmkek .gt_left {
   text-align: left;
 }
 
-#innyoqtcba .gt_right {
+#jpgwozmkek .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#innyoqtcba .gt_font_normal {
+#jpgwozmkek .gt_font_normal {
   font-weight: normal;
 }
 
-#innyoqtcba .gt_font_bold {
+#jpgwozmkek .gt_font_bold {
   font-weight: bold;
 }
 
-#innyoqtcba .gt_font_italic {
+#jpgwozmkek .gt_font_italic {
   font-style: italic;
 }
 
-#innyoqtcba .gt_super {
+#jpgwozmkek .gt_super {
   font-size: 65%;
 }
 
-#innyoqtcba .gt_footnote_glyph {
+#jpgwozmkek .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="innyoqtcba" style="overflow-x:auto;">
+<div id="jpgwozmkek" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -363,7 +363,7 @@ response Tumor Response</code></pre>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>95% CI</strong></th>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left">Age, yrs</td>
 <td class="gt_row gt_center">1.0</td>
@@ -371,10 +371,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.9</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">T Stage</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left">T Stage</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T1</td>
@@ -383,10 +383,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T2</td>
-<td class="gt_row gt_center gt_striped">1.5</td>
-<td class="gt_row gt_center gt_striped">0.64, 3.5</td>
-<td class="gt_row gt_center gt_striped">0.4</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T2</td>
+<td class="gt_row gt_center">1.5</td>
+<td class="gt_row gt_center">0.64, 3.5</td>
+<td class="gt_row gt_center">0.4</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T3</td>
@@ -395,10 +395,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.3</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T4</td>
-<td class="gt_row gt_center gt_striped">0.51</td>
-<td class="gt_row gt_center gt_striped">0.22, 1.1</td>
-<td class="gt_row gt_center gt_striped">0.10</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T4</td>
+<td class="gt_row gt_center">0.51</td>
+<td class="gt_row gt_center">0.22, 1.1</td>
+<td class="gt_row gt_center">0.10</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">Grade</td>
@@ -407,10 +407,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">I</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">I</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">II</td>
@@ -419,10 +419,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.13</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">III</td>
-<td class="gt_row gt_center gt_striped">0.79</td>
-<td class="gt_row gt_center gt_striped">0.38, 1.6</td>
-<td class="gt_row gt_center gt_striped">0.5</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">III</td>
+<td class="gt_row gt_center">0.79</td>
+<td class="gt_row gt_center">0.38, 1.6</td>
+<td class="gt_row gt_center">0.5</td>
 </tr>
 </tbody>
 </table>
@@ -430,14 +430,14 @@ response Tumor Response</code></pre>
 </div>
 <p>Because the variables in the data set were labeled, the labels were carried through into the model regression results table. (Had the data not been labeled, the default is to display the variable name.) The model was recognized as logistic regression with coefficients exponentiated, so the header displayed “OR” for odds ratio. The correct reference group has also been added to the table.</p>
 <p>Imagine you are not interested in the individual p-values for the stage and grade levels. You can use the <code><a href="../reference/add_global.html">add_global()</a></code> function to add a global p-value for each. The <code><a href="../reference/add_global.html">add_global()</a></code> function is a wrapper for <code>cars::Anova()</code>, which calculates LRT and Wald test statistics (a few other methods are also available depending on the type of model). The p-value presented is the default from <code>cars::Anova()</code> for your type of model. You can pass arguments to this function via <code><a href="../reference/add_global.html">add_global()</a></code> to change the defaults.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># format results into data frame with global p-values</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(m1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="../reference/add_global.html">add_global</a></span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># format results into data frame with global p-values</span>
+<span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(m1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="../reference/add_global.html">add_global</a></span>()</code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#ldilcriydn .gt_table {
+#upmdsbjkjz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -456,13 +456,13 @@ response Tumor Response</code></pre>
   /* table.border.top.color */
 }
 
-#ldilcriydn .gt_heading {
+#upmdsbjkjz .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#ldilcriydn .gt_title {
+#upmdsbjkjz .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -473,7 +473,7 @@ response Tumor Response</code></pre>
   border-bottom-width: 0;
 }
 
-#ldilcriydn .gt_subtitle {
+#upmdsbjkjz .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -484,7 +484,7 @@ response Tumor Response</code></pre>
   border-top-width: 0;
 }
 
-#ldilcriydn .gt_bottom_border {
+#upmdsbjkjz .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -493,7 +493,7 @@ response Tumor Response</code></pre>
   /* heading.border.bottom.color */
 }
 
-#ldilcriydn .gt_column_spanner {
+#upmdsbjkjz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -501,7 +501,7 @@ response Tumor Response</code></pre>
   padding-bottom: 4px;
 }
 
-#ldilcriydn .gt_col_heading {
+#upmdsbjkjz .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -514,11 +514,11 @@ response Tumor Response</code></pre>
   margin: 10px;
 }
 
-#ldilcriydn .gt_sep_right {
+#upmdsbjkjz .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#ldilcriydn .gt_group_heading {
+#upmdsbjkjz .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -542,7 +542,7 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#ldilcriydn .gt_empty_group_heading {
+#upmdsbjkjz .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -566,29 +566,29 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#ldilcriydn .gt_striped {
+#upmdsbjkjz .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#ldilcriydn .gt_row {
+#upmdsbjkjz .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#ldilcriydn .gt_stub {
+#upmdsbjkjz .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#ldilcriydn .gt_stub.gt_row {
+#upmdsbjkjz .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#ldilcriydn .gt_summary_row {
+#upmdsbjkjz .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -597,13 +597,13 @@ response Tumor Response</code></pre>
   /* summary_row.text_transform */
 }
 
-#ldilcriydn .gt_first_summary_row {
+#upmdsbjkjz .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#ldilcriydn .gt_table_body {
+#upmdsbjkjz .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -618,55 +618,55 @@ response Tumor Response</code></pre>
   /* field.border.bottom.color */
 }
 
-#ldilcriydn .gt_footnote {
+#upmdsbjkjz .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#ldilcriydn .gt_sourcenote {
+#upmdsbjkjz .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#ldilcriydn .gt_center {
+#upmdsbjkjz .gt_center {
   text-align: center;
 }
 
-#ldilcriydn .gt_left {
+#upmdsbjkjz .gt_left {
   text-align: left;
 }
 
-#ldilcriydn .gt_right {
+#upmdsbjkjz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ldilcriydn .gt_font_normal {
+#upmdsbjkjz .gt_font_normal {
   font-weight: normal;
 }
 
-#ldilcriydn .gt_font_bold {
+#upmdsbjkjz .gt_font_bold {
   font-weight: bold;
 }
 
-#ldilcriydn .gt_font_italic {
+#upmdsbjkjz .gt_font_italic {
   font-style: italic;
 }
 
-#ldilcriydn .gt_super {
+#upmdsbjkjz .gt_super {
   font-size: 65%;
 }
 
-#ldilcriydn .gt_footnote_glyph {
+#upmdsbjkjz .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="ldilcriydn" style="overflow-x:auto;">
+<div id="upmdsbjkjz" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -675,7 +675,7 @@ response Tumor Response</code></pre>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>95% CI</strong></th>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left">Age, yrs</td>
 <td class="gt_row gt_center">1.0</td>
@@ -683,10 +683,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.9</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">T Stage</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">0.057</td>
+<td class="gt_row gt_left">T Stage</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.057</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T1</td>
@@ -695,10 +695,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T2</td>
-<td class="gt_row gt_center gt_striped">1.5</td>
-<td class="gt_row gt_center gt_striped">0.64, 3.5</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T2</td>
+<td class="gt_row gt_center">1.5</td>
+<td class="gt_row gt_center">0.64, 3.5</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T3</td>
@@ -707,10 +707,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T4</td>
-<td class="gt_row gt_center gt_striped">0.51</td>
-<td class="gt_row gt_center gt_striped">0.22, 1.1</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T4</td>
+<td class="gt_row gt_center">0.51</td>
+<td class="gt_row gt_center">0.22, 1.1</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left">Grade</td>
@@ -719,10 +719,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.3</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">I</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">I</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">II</td>
@@ -731,10 +731,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">III</td>
-<td class="gt_row gt_center gt_striped">0.79</td>
-<td class="gt_row gt_center gt_striped">0.38, 1.6</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">III</td>
+<td class="gt_row gt_center">0.79</td>
+<td class="gt_row gt_center">0.38, 1.6</td>
+<td class="gt_row gt_center"></td>
 </tr>
 </tbody>
 </table>
@@ -745,15 +745,15 @@ response Tumor Response</code></pre>
 <h2 class="hasAnchor">
 <a href="#format-model-results" class="anchor"></a>Format Model Results</h2>
 <p>There are formatting options available, such as bolding and italicizing rows. In the example below, variable labels are bolded, and the levels of categorical levels are italicized.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># format results into data frame with global p-values</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(m1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="../reference/tab_style_bold_labels.html">tab_style_bold_labels</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="../reference/tab_style_italicize_levels.html">tab_style_italicize_levels</a></span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># format results into data frame with global p-values</span>
+<span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(m1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="../reference/tab_style_bold_labels.html">tab_style_bold_labels</a></span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="../reference/tab_style_italicize_levels.html">tab_style_italicize_levels</a></span>()</code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#oyzcadwoec .gt_table {
+#ulffemvdfx .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -772,13 +772,13 @@ response Tumor Response</code></pre>
   /* table.border.top.color */
 }
 
-#oyzcadwoec .gt_heading {
+#ulffemvdfx .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#oyzcadwoec .gt_title {
+#ulffemvdfx .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -789,7 +789,7 @@ response Tumor Response</code></pre>
   border-bottom-width: 0;
 }
 
-#oyzcadwoec .gt_subtitle {
+#ulffemvdfx .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -800,7 +800,7 @@ response Tumor Response</code></pre>
   border-top-width: 0;
 }
 
-#oyzcadwoec .gt_bottom_border {
+#ulffemvdfx .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -809,7 +809,7 @@ response Tumor Response</code></pre>
   /* heading.border.bottom.color */
 }
 
-#oyzcadwoec .gt_column_spanner {
+#ulffemvdfx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -817,7 +817,7 @@ response Tumor Response</code></pre>
   padding-bottom: 4px;
 }
 
-#oyzcadwoec .gt_col_heading {
+#ulffemvdfx .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -830,11 +830,11 @@ response Tumor Response</code></pre>
   margin: 10px;
 }
 
-#oyzcadwoec .gt_sep_right {
+#ulffemvdfx .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#oyzcadwoec .gt_group_heading {
+#ulffemvdfx .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -858,7 +858,7 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#oyzcadwoec .gt_empty_group_heading {
+#ulffemvdfx .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -882,29 +882,29 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#oyzcadwoec .gt_striped {
+#ulffemvdfx .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#oyzcadwoec .gt_row {
+#ulffemvdfx .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#oyzcadwoec .gt_stub {
+#ulffemvdfx .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#oyzcadwoec .gt_stub.gt_row {
+#ulffemvdfx .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#oyzcadwoec .gt_summary_row {
+#ulffemvdfx .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -913,13 +913,13 @@ response Tumor Response</code></pre>
   /* summary_row.text_transform */
 }
 
-#oyzcadwoec .gt_first_summary_row {
+#ulffemvdfx .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#oyzcadwoec .gt_table_body {
+#ulffemvdfx .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -934,55 +934,55 @@ response Tumor Response</code></pre>
   /* field.border.bottom.color */
 }
 
-#oyzcadwoec .gt_footnote {
+#ulffemvdfx .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#oyzcadwoec .gt_sourcenote {
+#ulffemvdfx .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#oyzcadwoec .gt_center {
+#ulffemvdfx .gt_center {
   text-align: center;
 }
 
-#oyzcadwoec .gt_left {
+#ulffemvdfx .gt_left {
   text-align: left;
 }
 
-#oyzcadwoec .gt_right {
+#ulffemvdfx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#oyzcadwoec .gt_font_normal {
+#ulffemvdfx .gt_font_normal {
   font-weight: normal;
 }
 
-#oyzcadwoec .gt_font_bold {
+#ulffemvdfx .gt_font_bold {
   font-weight: bold;
 }
 
-#oyzcadwoec .gt_font_italic {
+#ulffemvdfx .gt_font_italic {
   font-style: italic;
 }
 
-#oyzcadwoec .gt_super {
+#ulffemvdfx .gt_super {
   font-size: 65%;
 }
 
-#oyzcadwoec .gt_footnote_glyph {
+#ulffemvdfx .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="oyzcadwoec" style="overflow-x:auto;">
+<div id="ulffemvdfx" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -991,7 +991,7 @@ response Tumor Response</code></pre>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>95% CI</strong></th>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left" style="font-weight:bold;">Age, yrs</td>
 <td class="gt_row gt_center">1.0</td>
@@ -999,10 +999,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.9</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="font-weight:bold;">T Stage</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="font-weight:bold;">T Stage</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;font-style:italic;">T1</td>
@@ -1011,10 +1011,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;font-style:italic;">T2</td>
-<td class="gt_row gt_center gt_striped">1.5</td>
-<td class="gt_row gt_center gt_striped">0.64, 3.5</td>
-<td class="gt_row gt_center gt_striped">0.4</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;font-style:italic;">T2</td>
+<td class="gt_row gt_center">1.5</td>
+<td class="gt_row gt_center">0.64, 3.5</td>
+<td class="gt_row gt_center">0.4</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;font-style:italic;">T3</td>
@@ -1023,10 +1023,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.3</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;font-style:italic;">T4</td>
-<td class="gt_row gt_center gt_striped">0.51</td>
-<td class="gt_row gt_center gt_striped">0.22, 1.1</td>
-<td class="gt_row gt_center gt_striped">0.10</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;font-style:italic;">T4</td>
+<td class="gt_row gt_center">0.51</td>
+<td class="gt_row gt_center">0.22, 1.1</td>
+<td class="gt_row gt_center">0.10</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="font-weight:bold;">Grade</td>
@@ -1035,10 +1035,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;font-style:italic;">I</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;font-style:italic;">I</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;font-style:italic;">II</td>
@@ -1047,27 +1047,27 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.13</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;font-style:italic;">III</td>
-<td class="gt_row gt_center gt_striped">0.79</td>
-<td class="gt_row gt_center gt_striped">0.38, 1.6</td>
-<td class="gt_row gt_center gt_striped">0.5</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;font-style:italic;">III</td>
+<td class="gt_row gt_center">0.79</td>
+<td class="gt_row gt_center">0.38, 1.6</td>
+<td class="gt_row gt_center">0.5</td>
 </tr>
 </tbody>
 </table>
 <!--gt table end-->
 </div>
 <p>The <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> has default methods for rounding p-values and model coefficients. The default p-value formatting function is <code><a href="../reference/style_pvalue.html">style_pvalue()</a></code> and <code><a href="../reference/style_sigfig.html">style_sigfig()</a></code> for the coefficients. In the example below, the large large p-values were rounded to 1 decimal place rather than 2.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># format results into data frame with global p-values</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  m1, </a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, </a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="dt">pvalue_fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../reference/style_pvalue.html">style_pvalue</a></span>(x, <span class="dt">digits =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">) </a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># format results into data frame with global p-values</span>
+<span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(
+  m1, 
+  <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, 
+  <span class="dt">pvalue_fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../reference/style_pvalue.html">style_pvalue</a></span>(x, <span class="dt">digits =</span> <span class="dv">2</span>)
+) </code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#xlqvrpolpy .gt_table {
+#kqijyumctw .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1086,13 +1086,13 @@ response Tumor Response</code></pre>
   /* table.border.top.color */
 }
 
-#xlqvrpolpy .gt_heading {
+#kqijyumctw .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#xlqvrpolpy .gt_title {
+#kqijyumctw .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1103,7 +1103,7 @@ response Tumor Response</code></pre>
   border-bottom-width: 0;
 }
 
-#xlqvrpolpy .gt_subtitle {
+#kqijyumctw .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1114,7 +1114,7 @@ response Tumor Response</code></pre>
   border-top-width: 0;
 }
 
-#xlqvrpolpy .gt_bottom_border {
+#kqijyumctw .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1123,7 +1123,7 @@ response Tumor Response</code></pre>
   /* heading.border.bottom.color */
 }
 
-#xlqvrpolpy .gt_column_spanner {
+#kqijyumctw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1131,7 +1131,7 @@ response Tumor Response</code></pre>
   padding-bottom: 4px;
 }
 
-#xlqvrpolpy .gt_col_heading {
+#kqijyumctw .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -1144,11 +1144,11 @@ response Tumor Response</code></pre>
   margin: 10px;
 }
 
-#xlqvrpolpy .gt_sep_right {
+#kqijyumctw .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#xlqvrpolpy .gt_group_heading {
+#kqijyumctw .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1172,7 +1172,7 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#xlqvrpolpy .gt_empty_group_heading {
+#kqijyumctw .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1196,29 +1196,29 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#xlqvrpolpy .gt_striped {
+#kqijyumctw .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#xlqvrpolpy .gt_row {
+#kqijyumctw .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#xlqvrpolpy .gt_stub {
+#kqijyumctw .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#xlqvrpolpy .gt_stub.gt_row {
+#kqijyumctw .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#xlqvrpolpy .gt_summary_row {
+#kqijyumctw .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -1227,13 +1227,13 @@ response Tumor Response</code></pre>
   /* summary_row.text_transform */
 }
 
-#xlqvrpolpy .gt_first_summary_row {
+#kqijyumctw .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#xlqvrpolpy .gt_table_body {
+#kqijyumctw .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -1248,55 +1248,55 @@ response Tumor Response</code></pre>
   /* field.border.bottom.color */
 }
 
-#xlqvrpolpy .gt_footnote {
+#kqijyumctw .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#xlqvrpolpy .gt_sourcenote {
+#kqijyumctw .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#xlqvrpolpy .gt_center {
+#kqijyumctw .gt_center {
   text-align: center;
 }
 
-#xlqvrpolpy .gt_left {
+#kqijyumctw .gt_left {
   text-align: left;
 }
 
-#xlqvrpolpy .gt_right {
+#kqijyumctw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xlqvrpolpy .gt_font_normal {
+#kqijyumctw .gt_font_normal {
   font-weight: normal;
 }
 
-#xlqvrpolpy .gt_font_bold {
+#kqijyumctw .gt_font_bold {
   font-weight: bold;
 }
 
-#xlqvrpolpy .gt_font_italic {
+#kqijyumctw .gt_font_italic {
   font-style: italic;
 }
 
-#xlqvrpolpy .gt_super {
+#kqijyumctw .gt_super {
   font-size: 65%;
 }
 
-#xlqvrpolpy .gt_footnote_glyph {
+#kqijyumctw .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="xlqvrpolpy" style="overflow-x:auto;">
+<div id="kqijyumctw" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -1305,7 +1305,7 @@ response Tumor Response</code></pre>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>95% CI</strong></th>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left">Age, yrs</td>
 <td class="gt_row gt_center">1.0</td>
@@ -1313,10 +1313,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.89</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">T Stage</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left">T Stage</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T1</td>
@@ -1325,10 +1325,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T2</td>
-<td class="gt_row gt_center gt_striped">1.5</td>
-<td class="gt_row gt_center gt_striped">0.64, 3.5</td>
-<td class="gt_row gt_center gt_striped">0.35</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T2</td>
+<td class="gt_row gt_center">1.5</td>
+<td class="gt_row gt_center">0.64, 3.5</td>
+<td class="gt_row gt_center">0.35</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T3</td>
@@ -1337,10 +1337,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.35</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T4</td>
-<td class="gt_row gt_center gt_striped">0.51</td>
-<td class="gt_row gt_center gt_striped">0.22, 1.1</td>
-<td class="gt_row gt_center gt_striped">0.10</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T4</td>
+<td class="gt_row gt_center">0.51</td>
+<td class="gt_row gt_center">0.22, 1.1</td>
+<td class="gt_row gt_center">0.10</td>
 </tr>
 <tr>
 <td class="gt_row gt_left">Grade</td>
@@ -1349,10 +1349,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">I</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">I</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">II</td>
@@ -1361,10 +1361,10 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.13</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">III</td>
-<td class="gt_row gt_center gt_striped">0.79</td>
-<td class="gt_row gt_center gt_striped">0.38, 1.6</td>
-<td class="gt_row gt_center gt_striped">0.52</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">III</td>
+<td class="gt_row gt_center">0.79</td>
+<td class="gt_row gt_center">0.38, 1.6</td>
+<td class="gt_row gt_center">0.52</td>
 </tr>
 </tbody>
 </table>
@@ -1379,9 +1379,9 @@ response Tumor Response</code></pre>
 <h2 class="hasAnchor">
 <a href="#under-the-hood" class="anchor"></a>Under the Hood</h2>
 <p>When you print the output from the <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function into the R console or into an Rmarkdown, there are default printing functions that are called in the background: <code><a href="../reference/print.tbl_regression.html">print.tbl_regression()</a></code> and <code><a href="../reference/knit_print.tbl_regression.html">knit_print.tbl_regression()</a></code>. The true output from <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> is a named list, but when you print into the R console the interesting portions are displayed from the <code>.$table_body</code> data frame.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ls">ls</a></span>(m1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>())</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; [1] "call_list"  "gt_calls"   "inputs"     "model_obj"  "n"         </span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; [6] "table_body"</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ls">ls</a></span>(m1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>())
+<span class="co">#&gt; [1] "call_list"  "gt_calls"   "inputs"     "model_obj"  "n"         </span>
+<span class="co">#&gt; [6] "table_body"</span></code></pre></div>
 <p>There is additional information stored in the <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> output list.</p>
 <ul>
 <li>
@@ -1393,182 +1393,182 @@ response Tumor Response</code></pre>
 <li>
 <code>inputs</code> Inputs from the function call. Not only is the call stored, but the values of the inputs as well.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print.listof</a></span>(m1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>())</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; table_body :</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; # A tibble: 10 x 9</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt;    variable var_type row_type label     N      coef       ll      ul pvalue</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;  1 age      continu~ label    Age,~   183   0.00150  -0.0196  0.0228  0.889</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;  2 stage    categor~ label    T St~   183  NA        NA      NA      NA    </span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;  3 stage    categor~ level    T1      183  NA        NA      NA      NA    </span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;  4 stage    categor~ level    T2      183   0.399    -0.439   1.25    0.353</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;  5 stage    categor~ level    T3      183  -0.428    -1.34    0.460   0.348</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt;  6 stage    categor~ level    T4      183  -0.675    -1.50    0.132   0.103</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt;  7 grade    categor~ label    Grade   183  NA        NA      NA      NA    </span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;  8 grade    categor~ level    I       183  NA        NA      NA      NA    </span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;  9 grade    categor~ level    II      183  -0.591    -1.37    0.173   0.132</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; 10 grade    categor~ level    III     183  -0.238    -0.974   0.494   0.523</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; n :</span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; [1] 183</span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; model_obj :</span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt; Call:  glm(formula = response ~ age + stage + grade, family = binomial(link = "logit"), </span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt;     data = trial)</span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; Coefficients:</span></a>
-<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; (Intercept)          age      stageT2      stageT3      stageT4  </span></a>
-<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt;    0.127164     0.001502     0.399070    -0.428039    -0.675289  </span></a>
-<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt;     gradeII     gradeIII  </span></a>
-<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt;   -0.590765    -0.238397  </span></a>
-<a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; Degrees of Freedom: 182 Total (i.e. Null);  176 Residual</span></a>
-<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt;   (17 observations deleted due to missingness)</span></a>
-<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; Null Deviance:       250.8 </span></a>
-<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; Residual Deviance: 241.4     AIC: 255.4</span></a>
-<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; inputs :</span></a>
-<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; $x</span></a>
-<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt; Call:  glm(formula = response ~ age + stage + grade, family = binomial(link = "logit"), </span></a>
-<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt;     data = trial)</span></a>
-<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt; Coefficients:</span></a>
-<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt; (Intercept)          age      stageT2      stageT3      stageT4  </span></a>
-<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt;    0.127164     0.001502     0.399070    -0.428039    -0.675289  </span></a>
-<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt;     gradeII     gradeIII  </span></a>
-<a class="sourceLine" id="cb8-46" data-line-number="46"><span class="co">#&gt;   -0.590765    -0.238397  </span></a>
-<a class="sourceLine" id="cb8-47" data-line-number="47"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-48" data-line-number="48"><span class="co">#&gt; Degrees of Freedom: 182 Total (i.e. Null);  176 Residual</span></a>
-<a class="sourceLine" id="cb8-49" data-line-number="49"><span class="co">#&gt;   (17 observations deleted due to missingness)</span></a>
-<a class="sourceLine" id="cb8-50" data-line-number="50"><span class="co">#&gt; Null Deviance:       250.8 </span></a>
-<a class="sourceLine" id="cb8-51" data-line-number="51"><span class="co">#&gt; Residual Deviance: 241.4     AIC: 255.4</span></a>
-<a class="sourceLine" id="cb8-52" data-line-number="52"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-53" data-line-number="53"><span class="co">#&gt; $exponentiate</span></a>
-<a class="sourceLine" id="cb8-54" data-line-number="54"><span class="co">#&gt; [1] FALSE</span></a>
-<a class="sourceLine" id="cb8-55" data-line-number="55"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-56" data-line-number="56"><span class="co">#&gt; $label</span></a>
-<a class="sourceLine" id="cb8-57" data-line-number="57"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb8-58" data-line-number="58"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-59" data-line-number="59"><span class="co">#&gt; $include</span></a>
-<a class="sourceLine" id="cb8-60" data-line-number="60"><span class="co">#&gt; [1] "response" "age"      "stage"    "grade"   </span></a>
-<a class="sourceLine" id="cb8-61" data-line-number="61"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-62" data-line-number="62"><span class="co">#&gt; $show_yesno</span></a>
-<a class="sourceLine" id="cb8-63" data-line-number="63"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb8-64" data-line-number="64"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-65" data-line-number="65"><span class="co">#&gt; $conf.level</span></a>
-<a class="sourceLine" id="cb8-66" data-line-number="66"><span class="co">#&gt; [1] 0.95</span></a>
-<a class="sourceLine" id="cb8-67" data-line-number="67"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-68" data-line-number="68"><span class="co">#&gt; $intercept</span></a>
-<a class="sourceLine" id="cb8-69" data-line-number="69"><span class="co">#&gt; [1] FALSE</span></a>
-<a class="sourceLine" id="cb8-70" data-line-number="70"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-71" data-line-number="71"><span class="co">#&gt; $coef_fun</span></a>
-<a class="sourceLine" id="cb8-72" data-line-number="72"><span class="co">#&gt; function (x, digits = 2) </span></a>
-<a class="sourceLine" id="cb8-73" data-line-number="73"><span class="co">#&gt; {</span></a>
-<a class="sourceLine" id="cb8-74" data-line-number="74"><span class="co">#&gt;     purrr::map(digits:1, ~glue::glue("abs(x) &lt; 10^{digits - .x} ~ sprintf('%.{.x}f', x)")) %&gt;% </span></a>
-<a class="sourceLine" id="cb8-75" data-line-number="75"><span class="co">#&gt;         paste(collapse = ", ") %&gt;% {</span></a>
-<a class="sourceLine" id="cb8-76" data-line-number="76"><span class="co">#&gt;         glue::glue("dplyr::case_when({.}, TRUE ~ sprintf('%.0f', x))")</span></a>
-<a class="sourceLine" id="cb8-77" data-line-number="77"><span class="co">#&gt;     } %&gt;% parse(text = .) %&gt;% eval()</span></a>
-<a class="sourceLine" id="cb8-78" data-line-number="78"><span class="co">#&gt; }</span></a>
-<a class="sourceLine" id="cb8-79" data-line-number="79"><span class="co">#&gt; &lt;bytecode: 0x000000001daf8338&gt;</span></a>
-<a class="sourceLine" id="cb8-80" data-line-number="80"><span class="co">#&gt; &lt;environment: namespace:gtsummary&gt;</span></a>
-<a class="sourceLine" id="cb8-81" data-line-number="81"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-82" data-line-number="82"><span class="co">#&gt; $pvalue_fun</span></a>
-<a class="sourceLine" id="cb8-83" data-line-number="83"><span class="co">#&gt; function (x, digits = 1, prepend_p = FALSE) </span></a>
-<a class="sourceLine" id="cb8-84" data-line-number="84"><span class="co">#&gt; {</span></a>
-<a class="sourceLine" id="cb8-85" data-line-number="85"><span class="co">#&gt;     if (digits == 2) {</span></a>
-<a class="sourceLine" id="cb8-86" data-line-number="86"><span class="co">#&gt;         p_fmt &lt;- dplyr::case_when(x &gt; 1 ~ NA_character_, x &lt; </span></a>
-<a class="sourceLine" id="cb8-87" data-line-number="87"><span class="co">#&gt;             0 ~ NA_character_, x &gt; 0.99 ~ "&gt;0.99", round(x, 2) &gt;= </span></a>
-<a class="sourceLine" id="cb8-88" data-line-number="88"><span class="co">#&gt;             0.1 ~ sprintf("%.2f", x), x &gt;= 0.001 ~ sprintf("%.3f", </span></a>
-<a class="sourceLine" id="cb8-89" data-line-number="89"><span class="co">#&gt;             x), x &lt; 0.001 ~ "&lt;0.001")</span></a>
-<a class="sourceLine" id="cb8-90" data-line-number="90"><span class="co">#&gt;     }</span></a>
-<a class="sourceLine" id="cb8-91" data-line-number="91"><span class="co">#&gt;     if (digits == 1) {</span></a>
-<a class="sourceLine" id="cb8-92" data-line-number="92"><span class="co">#&gt;         p_fmt &lt;- dplyr::case_when(x &gt; 1 ~ NA_character_, x &lt; </span></a>
-<a class="sourceLine" id="cb8-93" data-line-number="93"><span class="co">#&gt;             0 ~ NA_character_, x &gt; 0.9 ~ "&gt;0.9", round(x, 1) &gt;= </span></a>
-<a class="sourceLine" id="cb8-94" data-line-number="94"><span class="co">#&gt;             0.2 ~ sprintf("%.1f", x), round(x, 2) &gt;= 0.1 ~ sprintf("%.2f", </span></a>
-<a class="sourceLine" id="cb8-95" data-line-number="95"><span class="co">#&gt;             x), x &gt;= 0.001 ~ sprintf("%.3f", x), x &lt; 0.001 ~ </span></a>
-<a class="sourceLine" id="cb8-96" data-line-number="96"><span class="co">#&gt;             "&lt;0.001")</span></a>
-<a class="sourceLine" id="cb8-97" data-line-number="97"><span class="co">#&gt;     }</span></a>
-<a class="sourceLine" id="cb8-98" data-line-number="98"><span class="co">#&gt;     if (prepend_p == TRUE) {</span></a>
-<a class="sourceLine" id="cb8-99" data-line-number="99"><span class="co">#&gt;         p_fmt &lt;- dplyr::case_when(is.na(p_fmt) ~ NA_character_, </span></a>
-<a class="sourceLine" id="cb8-100" data-line-number="100"><span class="co">#&gt;             stringr::str_sub(p_fmt, end = 1L) %in% c("&lt;", "&gt;") ~ </span></a>
-<a class="sourceLine" id="cb8-101" data-line-number="101"><span class="co">#&gt;                 paste0("p", p_fmt), TRUE ~ paste0("p=", p_fmt))</span></a>
-<a class="sourceLine" id="cb8-102" data-line-number="102"><span class="co">#&gt;     }</span></a>
-<a class="sourceLine" id="cb8-103" data-line-number="103"><span class="co">#&gt;     return(p_fmt)</span></a>
-<a class="sourceLine" id="cb8-104" data-line-number="104"><span class="co">#&gt; }</span></a>
-<a class="sourceLine" id="cb8-105" data-line-number="105"><span class="co">#&gt; &lt;bytecode: 0x000000001db02bf8&gt;</span></a>
-<a class="sourceLine" id="cb8-106" data-line-number="106"><span class="co">#&gt; &lt;environment: namespace:gtsummary&gt;</span></a>
-<a class="sourceLine" id="cb8-107" data-line-number="107"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-108" data-line-number="108"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-109" data-line-number="109"><span class="co">#&gt; call_list :</span></a>
-<a class="sourceLine" id="cb8-110" data-line-number="110"><span class="co">#&gt; $tbl_summary</span></a>
-<a class="sourceLine" id="cb8-111" data-line-number="111"><span class="co">#&gt; tbl_regression(x = .)</span></a>
-<a class="sourceLine" id="cb8-112" data-line-number="112"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-113" data-line-number="113"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-114" data-line-number="114"><span class="co">#&gt; gt_calls :</span></a>
-<a class="sourceLine" id="cb8-115" data-line-number="115"><span class="co">#&gt; $gt</span></a>
-<a class="sourceLine" id="cb8-116" data-line-number="116"><span class="co">#&gt; [1] "gt(data = x$table_body)"</span></a>
-<a class="sourceLine" id="cb8-117" data-line-number="117"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-118" data-line-number="118"><span class="co">#&gt; $gt_calls</span></a>
-<a class="sourceLine" id="cb8-119" data-line-number="119"><span class="co">#&gt; cols_align(align = 'center') %&gt;% cols_align(align = 'left', columns = vars(label))</span></a>
-<a class="sourceLine" id="cb8-120" data-line-number="120"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-121" data-line-number="121"><span class="co">#&gt; $cols_hide</span></a>
-<a class="sourceLine" id="cb8-122" data-line-number="122"><span class="co">#&gt; [1] "cols_hide(columns = vars(variable, row_type, var_type, N))"</span></a>
-<a class="sourceLine" id="cb8-123" data-line-number="123"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-124" data-line-number="124"><span class="co">#&gt; $fmt_missing</span></a>
-<a class="sourceLine" id="cb8-125" data-line-number="125"><span class="co">#&gt; [1] "fmt_missing(columns = everything(), missing_text = '')"</span></a>
-<a class="sourceLine" id="cb8-126" data-line-number="126"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-127" data-line-number="127"><span class="co">#&gt; $fmt_missing_ref</span></a>
-<a class="sourceLine" id="cb8-128" data-line-number="128"><span class="co">#&gt; [1] "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')"</span></a>
-<a class="sourceLine" id="cb8-129" data-line-number="129"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-130" data-line-number="130"><span class="co">#&gt; $cols_label</span></a>
-<a class="sourceLine" id="cb8-131" data-line-number="131"><span class="co">#&gt; cols_label(label = md('**N = 183**'), coef = md('**log(OR)**'), ll = md('**95% CI**'), pvalue = md('**p-value**'))</span></a>
-<a class="sourceLine" id="cb8-132" data-line-number="132"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-133" data-line-number="133"><span class="co">#&gt; $fmt_pvalue</span></a>
-<a class="sourceLine" id="cb8-134" data-line-number="134"><span class="co">#&gt; [1] "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)"</span></a>
-<a class="sourceLine" id="cb8-135" data-line-number="135"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-136" data-line-number="136"><span class="co">#&gt; $fmt_coef</span></a>
-<a class="sourceLine" id="cb8-137" data-line-number="137"><span class="co">#&gt; [1] "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)"</span></a>
-<a class="sourceLine" id="cb8-138" data-line-number="138"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-139" data-line-number="139"><span class="co">#&gt; $cols_merge_ci</span></a>
-<a class="sourceLine" id="cb8-140" data-line-number="140"><span class="co">#&gt; [1] "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')"</span></a>
-<a class="sourceLine" id="cb8-141" data-line-number="141"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-142" data-line-number="142"><span class="co">#&gt; $tab_style_text_indent</span></a>
-<a class="sourceLine" id="cb8-143" data-line-number="143"><span class="co">#&gt; tab_style(style = cells_styles(text_indent = px(10), text_align = 'left'),locations = cells_data(columns = vars(label),rows = row_type != 'label'))</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print.listof</a></span>(m1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>())
+<span class="co">#&gt; table_body :</span>
+<span class="co">#&gt; # A tibble: 10 x 9</span>
+<span class="co">#&gt;    variable var_type row_type label     N      coef       ll      ul pvalue</span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 age      continu~ label    Age,~   183   0.00150  -0.0196  0.0228  0.889</span>
+<span class="co">#&gt;  2 stage    categor~ label    T St~   183  NA        NA      NA      NA    </span>
+<span class="co">#&gt;  3 stage    categor~ level    T1      183  NA        NA      NA      NA    </span>
+<span class="co">#&gt;  4 stage    categor~ level    T2      183   0.399    -0.439   1.25    0.353</span>
+<span class="co">#&gt;  5 stage    categor~ level    T3      183  -0.428    -1.34    0.460   0.348</span>
+<span class="co">#&gt;  6 stage    categor~ level    T4      183  -0.675    -1.50    0.132   0.103</span>
+<span class="co">#&gt;  7 grade    categor~ label    Grade   183  NA        NA      NA      NA    </span>
+<span class="co">#&gt;  8 grade    categor~ level    I       183  NA        NA      NA      NA    </span>
+<span class="co">#&gt;  9 grade    categor~ level    II      183  -0.591    -1.37    0.173   0.132</span>
+<span class="co">#&gt; 10 grade    categor~ level    III     183  -0.238    -0.974   0.494   0.523</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; n :</span>
+<span class="co">#&gt; [1] 183</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; model_obj :</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:  glm(formula = response ~ age + stage + grade, family = binomial(link = "logit"), </span>
+<span class="co">#&gt;     data = trial)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt; (Intercept)          age      stageT2      stageT3      stageT4  </span>
+<span class="co">#&gt;    0.127164     0.001502     0.399070    -0.428039    -0.675289  </span>
+<span class="co">#&gt;     gradeII     gradeIII  </span>
+<span class="co">#&gt;   -0.590765    -0.238397  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Degrees of Freedom: 182 Total (i.e. Null);  176 Residual</span>
+<span class="co">#&gt;   (17 observations deleted due to missingness)</span>
+<span class="co">#&gt; Null Deviance:       250.8 </span>
+<span class="co">#&gt; Residual Deviance: 241.4     AIC: 255.4</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; inputs :</span>
+<span class="co">#&gt; $x</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:  glm(formula = response ~ age + stage + grade, family = binomial(link = "logit"), </span>
+<span class="co">#&gt;     data = trial)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt; (Intercept)          age      stageT2      stageT3      stageT4  </span>
+<span class="co">#&gt;    0.127164     0.001502     0.399070    -0.428039    -0.675289  </span>
+<span class="co">#&gt;     gradeII     gradeIII  </span>
+<span class="co">#&gt;   -0.590765    -0.238397  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Degrees of Freedom: 182 Total (i.e. Null);  176 Residual</span>
+<span class="co">#&gt;   (17 observations deleted due to missingness)</span>
+<span class="co">#&gt; Null Deviance:       250.8 </span>
+<span class="co">#&gt; Residual Deviance: 241.4     AIC: 255.4</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $exponentiate</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $label</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $include</span>
+<span class="co">#&gt; [1] "response" "age"      "stage"    "grade"   </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $show_yesno</span>
+<span class="co">#&gt; NULL</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $conf.level</span>
+<span class="co">#&gt; [1] 0.95</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $intercept</span>
+<span class="co">#&gt; [1] FALSE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $coef_fun</span>
+<span class="co">#&gt; function (x, digits = 2) </span>
+<span class="co">#&gt; {</span>
+<span class="co">#&gt;     purrr::map(digits:1, ~glue::glue("abs(x) &lt; 10^{digits - .x} ~ sprintf('%.{.x}f', x)")) %&gt;% </span>
+<span class="co">#&gt;         paste(collapse = ", ") %&gt;% {</span>
+<span class="co">#&gt;         glue::glue("dplyr::case_when({.}, TRUE ~ sprintf('%.0f', x))")</span>
+<span class="co">#&gt;     } %&gt;% parse(text = .) %&gt;% eval()</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; &lt;bytecode: 0x000000000d2e2f58&gt;</span>
+<span class="co">#&gt; &lt;environment: namespace:gtsummary&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $pvalue_fun</span>
+<span class="co">#&gt; function (x, digits = 1, prepend_p = FALSE) </span>
+<span class="co">#&gt; {</span>
+<span class="co">#&gt;     if (digits == 2) {</span>
+<span class="co">#&gt;         p_fmt &lt;- dplyr::case_when(x &gt; 1 ~ NA_character_, x &lt; </span>
+<span class="co">#&gt;             0 ~ NA_character_, x &gt; 0.99 ~ "&gt;0.99", round(x, 2) &gt;= </span>
+<span class="co">#&gt;             0.1 ~ sprintf("%.2f", x), x &gt;= 0.001 ~ sprintf("%.3f", </span>
+<span class="co">#&gt;             x), x &lt; 0.001 ~ "&lt;0.001")</span>
+<span class="co">#&gt;     }</span>
+<span class="co">#&gt;     if (digits == 1) {</span>
+<span class="co">#&gt;         p_fmt &lt;- dplyr::case_when(x &gt; 1 ~ NA_character_, x &lt; </span>
+<span class="co">#&gt;             0 ~ NA_character_, x &gt; 0.9 ~ "&gt;0.9", round(x, 1) &gt;= </span>
+<span class="co">#&gt;             0.2 ~ sprintf("%.1f", x), round(x, 2) &gt;= 0.1 ~ sprintf("%.2f", </span>
+<span class="co">#&gt;             x), x &gt;= 0.001 ~ sprintf("%.3f", x), x &lt; 0.001 ~ </span>
+<span class="co">#&gt;             "&lt;0.001")</span>
+<span class="co">#&gt;     }</span>
+<span class="co">#&gt;     if (prepend_p == TRUE) {</span>
+<span class="co">#&gt;         p_fmt &lt;- dplyr::case_when(is.na(p_fmt) ~ NA_character_, </span>
+<span class="co">#&gt;             stringr::str_sub(p_fmt, end = 1L) %in% c("&lt;", "&gt;") ~ </span>
+<span class="co">#&gt;                 paste0("p", p_fmt), TRUE ~ paste0("p=", p_fmt))</span>
+<span class="co">#&gt;     }</span>
+<span class="co">#&gt;     return(p_fmt)</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; &lt;bytecode: 0x000000000d2e9ba8&gt;</span>
+<span class="co">#&gt; &lt;environment: namespace:gtsummary&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; call_list :</span>
+<span class="co">#&gt; $tbl_summary</span>
+<span class="co">#&gt; tbl_regression(x = .)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; gt_calls :</span>
+<span class="co">#&gt; $gt</span>
+<span class="co">#&gt; [1] "gt(data = x$table_body)"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $gt_calls</span>
+<span class="co">#&gt; cols_align(align = 'center') %&gt;% cols_align(align = 'left', columns = vars(label))</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cols_hide</span>
+<span class="co">#&gt; [1] "cols_hide(columns = vars(variable, row_type, var_type, N))"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $fmt_missing</span>
+<span class="co">#&gt; [1] "fmt_missing(columns = everything(), missing_text = '')"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $fmt_missing_ref</span>
+<span class="co">#&gt; [1] "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cols_label</span>
+<span class="co">#&gt; cols_label(label = md('**N = 183**'), coef = md('**log(OR)**'), ll = md('**95% CI**'), pvalue = md('**p-value**'))</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $fmt_pvalue</span>
+<span class="co">#&gt; [1] "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $fmt_coef</span>
+<span class="co">#&gt; [1] "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cols_merge_ci</span>
+<span class="co">#&gt; [1] "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $tab_style_text_indent</span>
+<span class="co">#&gt; tab_style(style = cells_styles(text_indent = px(10), text_align = 'left'),locations = cells_data(columns = vars(label),rows = row_type != 'label'))</span></code></pre></div>
 </div>
 <div id="tbl_uvregression" class="section level2">
 <h2 class="hasAnchor">
 <a href="#tbl_uvregression" class="anchor"></a>tbl_uvregression</h2>
 <p>The <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> produces a table of univariate regression results. The function is a wrapper for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>, and as a result, accepts nearly identical function arguments. The function’s results can be modified in similar ways to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> as well.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># rounding pvalues to 2 decimal places, </span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co"># and adding global p-values,</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co"># and bold_labels</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span>(</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"> trial,</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"> <span class="dt">method =</span> <span class="st">"glm"</span>,</a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"> <span class="dt">y =</span> <span class="st">"response"</span>,</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"> <span class="dt">method.args =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">family =</span> binomial),</a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"> <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"> <span class="dt">pvalue_fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../reference/style_pvalue.html">style_pvalue</a></span>(x, <span class="dt">digits =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb9-11" data-line-number="11">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="st">  </span><span class="co"># overrides the default that shows p-values for each level</span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="../reference/add_global.html">add_global</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="st">  </span><span class="co"># adjusts global p-values for multiple testing (default method: FDR)</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="st">  </span><span class="kw"><a href="../reference/add_q.html">add_q</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="st">  </span><span class="co"># bold p-values under a given threshold (default 0.05)</span></a>
-<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="st">  </span><span class="kw"><a href="../reference/tab_style_bold_p.html">tab_style_bold_p</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="st">  </span><span class="co"># now bold q-values under the threshold of 0.10</span></a>
-<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="st">  </span><span class="kw"><a href="../reference/tab_style_bold_p.html">tab_style_bold_p</a></span>(</a>
-<a class="sourceLine" id="cb9-20" data-line-number="20">    <span class="dt">t =</span> <span class="fl">0.10</span>,</a>
-<a class="sourceLine" id="cb9-21" data-line-number="21">    <span class="dt">q =</span> <span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb9-22" data-line-number="22">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="st">  </span><span class="kw"><a href="../reference/tab_style_bold_labels.html">tab_style_bold_labels</a></span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># rounding pvalues to 2 decimal places, </span>
+<span class="co"># and adding global p-values,</span>
+<span class="co"># and bold_labels</span>
+<span class="kw"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span>(
+ trial,
+ <span class="dt">method =</span> <span class="st">"glm"</span>,
+ <span class="dt">y =</span> <span class="st">"response"</span>,
+ <span class="dt">method.args =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">family =</span> binomial),
+ <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>,
+ <span class="dt">pvalue_fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../reference/style_pvalue.html">style_pvalue</a></span>(x, <span class="dt">digits =</span> <span class="dv">2</span>)
+) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co"># overrides the default that shows p-values for each level</span>
+<span class="st">  </span><span class="kw"><a href="../reference/add_global.html">add_global</a></span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co"># adjusts global p-values for multiple testing (default method: FDR)</span>
+<span class="st">  </span><span class="kw"><a href="../reference/add_q.html">add_q</a></span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co"># bold p-values under a given threshold (default 0.05)</span>
+<span class="st">  </span><span class="kw"><a href="../reference/tab_style_bold_p.html">tab_style_bold_p</a></span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># now bold q-values under the threshold of 0.10</span>
+<span class="st">  </span><span class="kw"><a href="../reference/tab_style_bold_p.html">tab_style_bold_p</a></span>(
+    <span class="dt">t =</span> <span class="fl">0.10</span>,
+    <span class="dt">q =</span> <span class="ot">TRUE</span>
+  ) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/tab_style_bold_labels.html">tab_style_bold_labels</a></span>()</code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#onalnfsqot .gt_table {
+#moymhlpoxe .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1587,13 +1587,13 @@ response Tumor Response</code></pre>
   /* table.border.top.color */
 }
 
-#onalnfsqot .gt_heading {
+#moymhlpoxe .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#onalnfsqot .gt_title {
+#moymhlpoxe .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1604,7 +1604,7 @@ response Tumor Response</code></pre>
   border-bottom-width: 0;
 }
 
-#onalnfsqot .gt_subtitle {
+#moymhlpoxe .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1615,7 +1615,7 @@ response Tumor Response</code></pre>
   border-top-width: 0;
 }
 
-#onalnfsqot .gt_bottom_border {
+#moymhlpoxe .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1624,7 +1624,7 @@ response Tumor Response</code></pre>
   /* heading.border.bottom.color */
 }
 
-#onalnfsqot .gt_column_spanner {
+#moymhlpoxe .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1632,7 +1632,7 @@ response Tumor Response</code></pre>
   padding-bottom: 4px;
 }
 
-#onalnfsqot .gt_col_heading {
+#moymhlpoxe .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -1645,11 +1645,11 @@ response Tumor Response</code></pre>
   margin: 10px;
 }
 
-#onalnfsqot .gt_sep_right {
+#moymhlpoxe .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#onalnfsqot .gt_group_heading {
+#moymhlpoxe .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1673,7 +1673,7 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#onalnfsqot .gt_empty_group_heading {
+#moymhlpoxe .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1697,29 +1697,29 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#onalnfsqot .gt_striped {
+#moymhlpoxe .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#onalnfsqot .gt_row {
+#moymhlpoxe .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#onalnfsqot .gt_stub {
+#moymhlpoxe .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#onalnfsqot .gt_stub.gt_row {
+#moymhlpoxe .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#onalnfsqot .gt_summary_row {
+#moymhlpoxe .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -1728,13 +1728,13 @@ response Tumor Response</code></pre>
   /* summary_row.text_transform */
 }
 
-#onalnfsqot .gt_first_summary_row {
+#moymhlpoxe .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#onalnfsqot .gt_table_body {
+#moymhlpoxe .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -1749,55 +1749,55 @@ response Tumor Response</code></pre>
   /* field.border.bottom.color */
 }
 
-#onalnfsqot .gt_footnote {
+#moymhlpoxe .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#onalnfsqot .gt_sourcenote {
+#moymhlpoxe .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#onalnfsqot .gt_center {
+#moymhlpoxe .gt_center {
   text-align: center;
 }
 
-#onalnfsqot .gt_left {
+#moymhlpoxe .gt_left {
   text-align: left;
 }
 
-#onalnfsqot .gt_right {
+#moymhlpoxe .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#onalnfsqot .gt_font_normal {
+#moymhlpoxe .gt_font_normal {
   font-weight: normal;
 }
 
-#onalnfsqot .gt_font_bold {
+#moymhlpoxe .gt_font_bold {
   font-weight: bold;
 }
 
-#onalnfsqot .gt_font_italic {
+#moymhlpoxe .gt_font_italic {
   font-style: italic;
 }
 
-#onalnfsqot .gt_super {
+#moymhlpoxe .gt_super {
   font-size: 65%;
 }
 
-#onalnfsqot .gt_footnote_glyph {
+#moymhlpoxe .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="onalnfsqot" style="overflow-x:auto;">
+<div id="moymhlpoxe" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -1808,7 +1808,7 @@ response Tumor Response</code></pre>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>q-value</strong></th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left" style="font-weight:bold;">Treatment Randomization</td>
 <td class="gt_row gt_center">191</td>
@@ -1818,12 +1818,12 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center" style="font-weight:bold;">0.055</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">Drug</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">Drug</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">Placebo</td>
@@ -1834,12 +1834,12 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="font-weight:bold;">Age, yrs</td>
-<td class="gt_row gt_center gt_striped">183</td>
-<td class="gt_row gt_center gt_striped">1.00</td>
-<td class="gt_row gt_center gt_striped">0.98, 1.0</td>
-<td class="gt_row gt_center gt_striped">0.90</td>
-<td class="gt_row gt_center gt_striped">&gt;0.9</td>
+<td class="gt_row gt_left" style="font-weight:bold;">Age, yrs</td>
+<td class="gt_row gt_center">183</td>
+<td class="gt_row gt_center">1.00</td>
+<td class="gt_row gt_center">0.98, 1.0</td>
+<td class="gt_row gt_center">0.90</td>
+<td class="gt_row gt_center">&gt;0.9</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="font-weight:bold;">Marker Level, ng/mL</td>
@@ -1850,12 +1850,12 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.8</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="font-weight:bold;">T Stage</td>
-<td class="gt_row gt_center gt_striped">191</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">0.055</td>
-<td class="gt_row gt_center gt_striped">0.14</td>
+<td class="gt_row gt_left" style="font-weight:bold;">T Stage</td>
+<td class="gt_row gt_center">191</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.055</td>
+<td class="gt_row gt_center">0.14</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T1</td>
@@ -1866,12 +1866,12 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T2</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">1.4</td>
-<td class="gt_row gt_center gt_striped">0.63, 3.1</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T2</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">1.4</td>
+<td class="gt_row gt_center">0.63, 3.1</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T3</td>
@@ -1882,12 +1882,12 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T4</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">0.50</td>
-<td class="gt_row gt_center gt_striped">0.22, 1.1</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T4</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.50</td>
+<td class="gt_row gt_center">0.22, 1.1</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="font-weight:bold;">Grade</td>
@@ -1898,12 +1898,12 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center">0.7</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">I</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped">—</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">I</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">II</td>
@@ -1914,12 +1914,12 @@ response Tumor Response</code></pre>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">III</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">0.76</td>
-<td class="gt_row gt_center gt_striped">0.38, 1.5</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">III</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.76</td>
+<td class="gt_row gt_center">0.38, 1.5</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 </tbody>
 </table>
