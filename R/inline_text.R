@@ -32,14 +32,16 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 
 inline_text.tbl_summary <-
   function(x, variable, level = NULL,
-           column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-           pvalue_fun = purrr::partial(style_pvalue, prepend_p = TRUE), ...) {
+             column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
+             pvalue_fun = purrr::partial(style_pvalue, prepend_p = TRUE), ...) {
     # checking column ----------------------------------------------------------
     # the follwing code converts the column input to a column name in x$table_body
-    col_lookup_table <- tibble(input = names(x$table_body),
-                               column_name =  names(x$table_body))
+    col_lookup_table <- tibble(
+      input = names(x$table_body),
+      column_name = names(x$table_body)
+    )
     # adding levels if there is a by variable
-    if(!is.null(x$by)) {
+    if (!is.null(x$by)) {
       col_lookup_table <-
         col_lookup_table %>%
         bind_rows(
@@ -52,12 +54,14 @@ inline_text.tbl_summary <-
       slice(1) %>%
       pull("column_name")
 
-    if(length(column) == 0) stop(
-      stop(glue(
-        "No column selected.  Must be one of: ",
-        "{paste(col_lookup_table, collapse = ', ')}"
-      ))
-    )
+    if (length(column) == 0) {
+      stop(
+        stop(glue(
+          "No column selected.  Must be one of: ",
+          "{paste(col_lookup_table, collapse = ', ')}"
+        ))
+      )
+    }
 
 
 
@@ -68,22 +72,24 @@ inline_text.tbl_summary <-
       filter(!!parse_expr(glue("variable ==  '{variable}'")))
 
     # select variable level ----------------------------------------------------
-    if(is.null(level)) {
+    if (is.null(level)) {
       result <- result %>% slice(1)
     }
     else {
       result <-
-        result %>% filter(!!parse_expr(glue("label ==  '{level}'")))
+        result %>%
+        filter(!!parse_expr(glue("label ==  '{level}'")))
     }
 
-    if(nrow(result) == 0)
+    if (nrow(result) == 0) {
       stop("No statistic selected. Is the variable name and/or level spelled correctly?")
+    }
 
     # select column ------------------------------------------------------------
     result <- result %>% pull(column)
 
     # return statistic ---------------------------------------------------------
-    if(column %in% c("pvalue", "qvalue")) {
+    if (column %in% c("pvalue", "qvalue")) {
       return(pvalue_fun(result))
     }
 
@@ -114,9 +120,9 @@ inline_text.tbl_summary <-
 
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
-           pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {pvalue})",
-           coef_fun = x$inputs$coef_fun,
-           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+             pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {pvalue})",
+             coef_fun = x$inputs$coef_fun,
+             pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
@@ -135,16 +141,18 @@ inline_text.tbl_regression <-
       filter(!!parse_expr(glue("variable ==  '{variable}'")))
 
     # select variable level ----------------------------------------------------
-    if(is.null(level)) {
+    if (is.null(level)) {
       result <- result %>% slice(1)
     }
     else {
       result <-
-        result %>% filter(!!parse_expr(glue("label ==  '{level}'")))
+        result %>%
+        filter(!!parse_expr(glue("label ==  '{level}'")))
     }
 
-    if(nrow(result) == 0)
+    if (nrow(result) == 0) {
       stop("No statistic selected. Is the variable name and/or level spelled correctly?")
+    }
 
     # calculating statistic ----------------------------------------------------
     pvalue_cols <- names(result) %>% intersect(c("pvalue", "qvalue"))
@@ -153,8 +161,8 @@ inline_text.tbl_regression <-
       mutate_at(vars(one_of(c("coef", "ll", "ul"))), coef_fun) %>%
       mutate_at(vars(one_of(pvalue_cols)), pvalue_fun) %>%
       mutate_(
-        conf.level = ~x$inputs$conf.level,
-        stat = ~glue(pattern)
+        conf.level = ~ x$inputs$conf.level,
+        stat = ~ glue(pattern)
       ) %>%
       pull("stat")
 

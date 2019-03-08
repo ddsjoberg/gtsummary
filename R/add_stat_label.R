@@ -43,4 +43,3 @@ add_stat_label <- function(x) {
 
   return(x)
 }
-

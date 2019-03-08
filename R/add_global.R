@@ -85,7 +85,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
     x$table_body <-
       x$table_body %>%
       mutate_(
-        pvalue = ~if_else(variable %in% terms & row_type == "level", NA_real_, pvalue)
+        pvalue = ~ if_else(variable %in% terms & row_type == "level", NA_real_, pvalue)
       )
   }
 

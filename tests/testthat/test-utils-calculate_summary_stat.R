@@ -38,4 +38,3 @@ test_that("Testing when all values are NA", {
     NA
   )
 })
-

@@ -24,10 +24,10 @@
 #' @examples
 #' mod1 <- lm(hp ~ mpg + factor(cyl), mtcars)
 #' tbl_regression(mod1)
-#'
+#' 
 #' mod2 <- glm(response ~ age + grade + stage, trial, family = binomial(link = "logit"))
 #' tbl_regression(mod2, exponentiate = TRUE)
-#'
+#' 
 #' library(lme4)
 #' mod_glmer <- glmer(am ~ hp + (1 | gear), mtcars, family = binomial)
 #' tbl_regression(mod_glmer, exponentiate = TRUE)
@@ -64,7 +64,7 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   mod_list <- mod_list[names(mod_list) %in% include]
 
   # model N
-  n = stats::model.frame(x) %>% nrow()
+  n <- stats::model.frame(x) %>% nrow()
 
   # putting all results into tibble
   table_body <-
@@ -164,24 +164,28 @@ gt_tbl_regression <- quote(list(
 # idenfies headers for common models (logistic, poisson, and cox regression)
 coef_header <- function(x, exponentiate) {
   # generalized linear models
-  if(class(x)[1] == "glm") {
+  if (class(x)[1] == "glm") {
     # logistic regression
-    if(exponentiate == TRUE & x$family$family == "binomial" & x$family$link == "logit")
+    if (exponentiate == TRUE & x$family$family == "binomial" & x$family$link == "logit") {
       return("OR")
-    if(exponentiate == FALSE & x$family$family == "binomial" & x$family$link == "logit")
+    }
+    if (exponentiate == FALSE & x$family$family == "binomial" & x$family$link == "logit") {
       return("log(OR)")
+    }
 
     # poisson regression with log link
-    if(exponentiate == TRUE & x$family$family == "poisson" & x$family$link == "log")
+    if (exponentiate == TRUE & x$family$family == "poisson" & x$family$link == "log") {
       return("IRR")
-    if(exponentiate == FALSE & x$family$family == "poisson" & x$family$link == "log")
+    }
+    if (exponentiate == FALSE & x$family$family == "poisson" & x$family$link == "log") {
       return("log(IRR)")
+    }
   }
   # Cox PH Regression
-  if(class(x)[1] == "coxph" & exponentiate == TRUE) return("HR")
-  if(class(x)[1] == "coxph" & exponentiate == FALSE) return("log(HR)")
+  if (class(x)[1] == "coxph" & exponentiate == TRUE) return("HR")
+  if (class(x)[1] == "coxph" & exponentiate == FALSE) return("log(HR)")
 
   # Other models
-  if(exponentiate == TRUE) return("exp(Coefficient)")
+  if (exponentiate == TRUE) return("exp(Coefficient)")
   return("Coefficient")
 }

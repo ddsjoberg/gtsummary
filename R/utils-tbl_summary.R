@@ -32,7 +32,7 @@ assign_class <- function(data, variable) {
   map2_chr(
     variable, classes_return,
     ~ ifelse(data[[.x]] %>% is.na() %>% all(),
-             NA_character_, .y
+      NA_character_, .y
     )
   )
 }
@@ -71,26 +71,26 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class) {
   # the value is "Yes" (or "yes")
   if (class == "factor") {
     if (setequal(var_vector, c("Yes", "No")) |
-        setequal(var_vector, "Yes") |
-        setequal(var_vector, "No")) {
+      setequal(var_vector, "Yes") |
+      setequal(var_vector, "No")) {
       return("Yes")
     }
     if (setequal(var_vector, c("yes", "no")) |
-        setequal(var_vector, "yes") |
-        setequal(var_vector, "no")) {
+      setequal(var_vector, "yes") |
+      setequal(var_vector, "no")) {
       return("yes")
     }
     if (setequal(var_vector, c("YES", "NO")) |
-        setequal(var_vector, "YES") |
-        setequal(var_vector, "NO")) {
+      setequal(var_vector, "YES") |
+      setequal(var_vector, "NO")) {
       return("YES")
     }
   }
 
   # if column provided is all zeros and ones (or exclusively either one), the the value is one
   if (setequal(var_vector, c(0, 1)) |
-      setequal(var_vector, 0) |
-      setequal(var_vector, 1)) {
+    setequal(var_vector, 0) |
+    setequal(var_vector, 1)) {
     return(1)
   }
 
@@ -132,7 +132,7 @@ assign_stat_display <- function(summary_type, stat_display) {
       ~ case_when(
         .x == "continuous" ~ stat_display[[.x]] %||% "{median} ({p25}, {p75})",
         .x %in% c("categorical", "dichotomous") ~
-          stat_display[[.x]] %||% "{n} ({p}%)"
+        stat_display[[.x]] %||% "{n} ({p}%)"
       )
     )
   )
@@ -175,7 +175,7 @@ assign_summary_type <- function(data, variable, class, summary_type) {
       case_when(
         # logical variables will be dichotmous
         .y == "logical" ~
-          "dichotomous",
+        "dichotomous",
 
         # numeric variables that are 0 and 1 only, will be dichotomous
         .y %in% c("integer", "numeric") & length(setdiff(na.omit(data[[.x]]), c(0, 1))) == 0
@@ -191,7 +191,7 @@ assign_summary_type <- function(data, variable, class, summary_type) {
 
         # factors and characters are categorical
         .y %in% c("factor", "character") ~
-          "categorical",
+        "categorical",
 
         # numeric variables with fewer than 10 levels will be categorical
         .y %in% c("integer", "numeric") & length(unique(na.omit(data[[.x]]))) < 10
@@ -298,7 +298,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   min_exp <-
     expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
     dplyr::mutate_(exp = ~ Var1 * Var2 /
-                     sum(table(data[[var]], data[[by_var]]))) %>%
+      sum(table(data[[var]], data[[by_var]]))) %>%
     dplyr::pull(exp) %>%
     min()
 
@@ -715,7 +715,7 @@ df_by <- function(data, by) {
     select(c(by)) %>%
     set_names("by") %>%
     count_("by") %>%
-    mutate_(N = ~sum(n), p = ~n / N) %>%
+    mutate_(N = ~ sum(n), p = ~ n / N) %>%
     arrange_("by") %>%
     mutate_(
       by_id = ~ 1:n(), # 'by' variable ID
@@ -801,15 +801,15 @@ summarize_categorical <- function(data, variable, by, var_label,
     count_("variable") %>%
     complete_("variable", fill = list(n = 0)) %>%
     mutate_(
-      N = ~sum(n),
-      p = ~style_percent(n / N),
-      stat = ~as.character(glue(stat_display))
+      N = ~ sum(n),
+      p = ~ style_percent(n / N),
+      stat = ~ as.character(glue(stat_display))
     ) %>%
     select(c("by_col", "variable", "stat")) %>%
     spread_("by_col", "stat") %>%
     mutate_(
       row_type = ~"level",
-      label = ~variable %>% as.character()
+      label = ~ variable %>% as.character()
     ) %>%
     select(c("variable", "row_type", "label", starts_with("stat_")))
 
@@ -819,7 +819,7 @@ summarize_categorical <- function(data, variable, by, var_label,
     group_by_("by_col") %>%
     nest() %>%
     mutate_(
-      missing_count = ~map_chr(data, ~.x[[1]] %>% is.na() %>% sum())
+      missing_count = ~ map_chr(data, ~ .x[[1]] %>% is.na() %>% sum())
     ) %>%
     select(c("by_col", "missing_count")) %>%
     spread_("by_col", "missing_count") %>%
@@ -942,24 +942,24 @@ summarize_continuous <- function(data, variable, by, digits,
     data %>%
     mutate_(
       # extracting list of statisitcs that need to be calculated
-      stat_name_list = ~str_extract_all(stat_display, "\\{.*?\\}") %>%
+      stat_name_list = ~ str_extract_all(stat_display, "\\{.*?\\}") %>%
         map(str_remove_all, pattern = fixed("}")) %>%
         map(str_remove_all, pattern = fixed("{")),
       # calculating statistics
-      stat_result_list = ~map2(
+      stat_result_list = ~ map2(
         data, stat_name_list,
         ~ calculate_single_stat(.x[[1]], .y)
       ),
       # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
-      df_result = ~map2(
+      df_result = ~ map2(
         stat_name_list, stat_result_list,
         ~ .y %>% t() %>% as_tibble() %>% set_names(.x)
       ),
       # rounding statistics and concatenating results
-      stat = ~map_chr(
+      stat = ~ map_chr(
         df_result,
-        ~.x %>%
-          mutate_all(~sprintf(glue("%.{digits}f"), .)) %>%
+        ~ .x %>%
+          mutate_all(~ sprintf(glue("%.{digits}f"), .)) %>%
           mutate_(
             stat = ~ as.character(glue(stat_display))
           ) %>%
@@ -979,9 +979,9 @@ summarize_continuous <- function(data, variable, by, digits,
     data %>%
     mutate_(
       missing_count =
-        ~map_chr(
+        ~ map_chr(
           data,
-          ~.x[[1]] %>% is.na() %>% sum()
+          ~ .x[[1]] %>% is.na() %>% sum()
         )
     ) %>%
     select(c("by_col", "missing_count")) %>%
@@ -1008,24 +1008,26 @@ summarize_continuous <- function(data, variable, by, digits,
 
 # stat_name that are accepted
 calculate_single_stat <- function(x, stat_name) {
-
-  map_dbl(stat_name,
-          function(name) {
-            # calculating percentiles if requested
-            if (name %in% paste0("p", 0:100)) {
-              do.call(
-                "quantile",
-                list(
-                  x,
-                  probs = as.numeric(gsub("[^0-9\\.]", "", name))/100,
-                  na.rm = TRUE
-                )
-              )
-            }
-            # calculating summary stats, input MUST be a function name
-            # first argument is x and must take argument 'na.rm = TRUE'
-            else do.call(name, list(x, na.rm = TRUE))
-          }
+  map_dbl(
+    stat_name,
+    function(name) {
+      # calculating percentiles if requested
+      if (name %in% paste0("p", 0:100)) {
+        do.call(
+          "quantile",
+          list(
+            x,
+            probs = as.numeric(gsub("[^0-9\\.]", "", name)) / 100,
+            na.rm = TRUE
+          )
+        )
+      }
+      # calculating summary stats, input MUST be a function name
+      # first argument is x and must take argument 'na.rm = TRUE'
+      else {
+        do.call(name, list(x, na.rm = TRUE))
+      }
+    }
   )
 }
 
@@ -1220,7 +1222,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
     ) %>%
     bind_rows(
       tibble(stat = paste0("{p", 0:100, "}")) %>%
-        mutate_(label = ~paste0(gsub("[^0-9\\.]", "", stat), "%"))
+        mutate_(label = ~ paste0(gsub("[^0-9\\.]", "", stat), "%"))
     )
 
   # adding IQR replacements if indicated
@@ -1254,15 +1256,14 @@ footnote_stat_label <- function(meta_data) {
   meta_data %>%
     select(c("summary_type", "stat_label")) %>%
     mutate_(
-      summary_type = ~dplyr::case_when(
+      summary_type = ~ dplyr::case_when(
         summary_type == "dichotomous" ~ "categorical",
         TRUE ~ summary_type
       ),
-      message = ~glue("{stat_label} for {summary_type} variables")
+      message = ~ glue("{stat_label} for {summary_type} variables")
     ) %>%
     distinct() %>%
     pull("message") %>%
     paste(collapse = ", ") %>%
     paste0("Statistics presented: ", .)
 }
-

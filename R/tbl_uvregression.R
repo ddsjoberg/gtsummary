@@ -36,7 +36,7 @@
 #'   method.args = list(family = binomial),
 #'   exponentiate = TRUE
 #' )
-#'
+#' 
 #' # rounding pvalues to 2 decimal places, and adding global p-values
 #' tbl_uvregression(
 #'   trial,
@@ -48,10 +48,10 @@
 #' ) %>%
 #'   add_global()
 tbl_uvregression <- function(data, method, y, method.args = NULL,
-                               formula = "{y} ~ {.x}",
-                               exponentiate = FALSE, label = NULL,
-                               show_yesno = NULL, conf.level = 0.95,
-                               coef_fun = style_sigfig, pvalue_fun = style_pvalue) {
+                             formula = "{y} ~ {.x}",
+                             exponentiate = FALSE, label = NULL,
+                             show_yesno = NULL, conf.level = 0.95,
+                             coef_fun = style_sigfig, pvalue_fun = style_pvalue) {
 
   # data -----------------------------------------------------------------------
   # data is a data frame
@@ -117,7 +117,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
       ~ .x %>% pluck("table_body")
     ) %>%
     mutate_(
-      N = ~if_else(row_type == "label", N, NA_integer_)
+      N = ~ if_else(row_type == "label", N, NA_integer_)
     )
 
   # creating a meta_data table (this will be used in subsequent functions, eg add_global)
@@ -199,11 +199,3 @@ gt_tbl_uvregression <- quote(list(
     "))"
   )
 ))
-
-
-
-
-
-
-
-
