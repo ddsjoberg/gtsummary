@@ -95,7 +95,14 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class) {
   }
 
   # otherwise, the value that will be displayed on is the largest value
-  return(max(data[[variable]], na.rm = TRUE))
+  data %>%
+    select(c(variable)) %>%
+    stats::na.omit() %>%
+    arrange_(c(variable)) %>%
+    slice(n()) %>%
+    pull(c(variable))
+
+  # return(max(data[[variable]], na.rm = TRUE))
 }
 
 # assign_dichotomous_value_one(mtcars, "am", "dichotomous", "double")
