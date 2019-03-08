@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table. `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `coxph()`, `survreg()` and more). If your class of model is not supported by `broom::tidy()`, please request support at github.com/ddsjoberg/clintable/issues.  In most cases, it is simple to support a new class of model.
+This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table. `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `coxph()`, `survreg()` and more). If your class of model is not supported by `broom::tidy()`, please request support at github.com/ddsjoberg/gtsummary/issues.  In most cases, it is simple to support a new class of model.
 
 To start, a quick note on the `magrittr` package's pipe function, `%>%`.  By default the pipe operator puts whatever is on the left hand side of `%>%` into the first argument of the function on the right hand side.  The pipe function can be used to make the code relating to `tbl_regression()` easier to use, but it is *not* required.  Here are a few examples of how `%>%` translates into typical R notation.
 

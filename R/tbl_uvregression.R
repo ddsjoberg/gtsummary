@@ -141,6 +141,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   results
 }
 
+
 # gt function calls ------------------------------------------------------------
 # quoting returns an expression to be evaluated later
 gt_tbl_uvregression <- quote(list(
@@ -170,8 +171,8 @@ gt_tbl_uvregression <- quote(list(
     "cols_label(",
     "label = md('**Characteristic**'), ",
     "N = md('**N**'), ",
-    "coef = md('**Coefficient**'), ",
-    "ll = md('**{style_percent(conf.level, symbol = TRUE)} Confidence Interval**'), ",
+    "coef = md('**{coef_header(model_obj_list[1][[1]], exponentiate)}**'), ",
+    "ll = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
     "pvalue = md('**p-value**')",
     ")"
   ),
