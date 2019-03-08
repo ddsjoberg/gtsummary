@@ -162,7 +162,7 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>marker</span> ~ <span class='no'>stage</span> + <span class='no'>grade</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_global.html'>add_global</a></span>()</div><div class='output co'>#&gt; &lt;style&gt;html {
-#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
 #&gt; #weaikfkbkz .gt_table {
@@ -294,7 +294,7 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #weaikfkbkz .gt_striped tr:nth-child(even) {
+#&gt; #weaikfkbkz .gt_striped {
 #&gt;   background-color: #f2f2f2;
 #&gt; }
 #&gt; 
@@ -402,7 +402,7 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
-#&gt; &lt;tbody class='gt_table_body gt_striped'&gt;
+#&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left'&gt;T Stage&lt;/td&gt;
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
@@ -410,10 +410,10 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&gt;0.9&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T1&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;—&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;—&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T1&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;—&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;—&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T2&lt;/td&gt;
@@ -422,10 +422,10 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.11&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;-0.25, 0.48&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;T3&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.11&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;-0.25, 0.48&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;T4&lt;/td&gt;
@@ -434,10 +434,10 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;Grade&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.6&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;Grade&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.6&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;I&lt;/td&gt;
@@ -446,10 +446,10 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
 #&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;0.17&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;-0.15, 0.48&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_left gt_striped' style="text-align:left;text-indent:10px;"&gt;II&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;0.17&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;-0.15, 0.48&lt;/td&gt;
+#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tr&gt;
 #&gt; &lt;td class='gt_row gt_left' style="text-align:left;text-indent:10px;"&gt;III&lt;/td&gt;

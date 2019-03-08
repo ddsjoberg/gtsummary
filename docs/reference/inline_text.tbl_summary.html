@@ -155,8 +155,8 @@ Can also specify the 'Unknown' row.  Default is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>column</th>
-      <td><p>name column to return.  Default is <code>stat_0</code>, when
-no by variable is passed to <code><a href='tbl_summary.html'>tbl_summary()</a></code>.  See below for details.</p></td>
+      <td><p>name column name to return from <code>x$table_body</code>.
+Can also pass the level of a by variable.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
@@ -173,26 +173,13 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="selecting-columns"><a class="anchor" href="#selecting-columns"></a>Selecting Columns</h2>
-
-    
-    <p>Using the <code>column</code> argument, select the column to return.  The argument
-accepts any column name in the <code>.$table_body</code> data frame.  Overall statistics
-are saved in <code>stat_0</code>.  When a <code>by</code> argument is passed to <code><a href='tbl_summary.html'>tbl_summary()</a></code>, the
-first by level (when ordered) is <code>stat_1</code>, the second is <code>stat_2</code>, and so on.
-A helper function <code>by_level</code> is available to aid in selecting the correct
-column.  If a <code>by</code> variable has levels 'Drug' and 'Placebo',
-then <code><a href='by_level.html'>by_level('Drug')</a></code> would return <code>stat_1</code></p>
-    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#selecting-columns">Selecting Columns</a></li>
-          </ul>
+                </ul>
 
     <h2>Author</h2>
     <p>Daniel Sjoberg</p>

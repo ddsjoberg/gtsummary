@@ -16,8 +16,8 @@
 \item{level}{level of the variable to display for categorical variables.
 Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
-\item{column}{name column to return.  Default is \code{stat_0}, when
-no by variable is passed to \code{tbl_summary()}.  See below for details.}
+\item{column}{name column name to return from \code{x$table_body}.
+Can also pass the level of a by variable.}
 
 \item{pvalue_fun}{function for rounding/formatting p-values.
 Default is \code{\link{style_pvalue}}.
@@ -33,17 +33,6 @@ Functions takes an object with class \code{tbl_summary}, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document
 }
-\section{Selecting Columns}{
-
-Using the \code{column} argument, select the column to return.  The argument
-accepts any column name in the \code{.$table_body} data frame.  Overall statistics
-are saved in \code{stat_0}.  When a \code{by} argument is passed to \code{tbl_summary()}, the
-first by level (when ordered) is \code{stat_1}, the second is \code{stat_2}, and so on.
-A helper function \code{by_level} is available to aid in selecting the correct
-column.  If a \code{by} variable has levels 'Drug' and 'Placebo',
-then \code{by_level('Drug')} would return \code{stat_1}
-}
-
 \author{
 Daniel Sjoberg
 }
