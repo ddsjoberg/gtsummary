@@ -23,26 +23,26 @@
 cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL, text_method = "md") {
   # input checks ---------------------------------------------------------------
   # x input is of type tbl_summary
-  if(class(x) != "tbl_summary") {
+  if (class(x) != "tbl_summary") {
     stop("Class of 'x' must be tbl_summary")
   }
   # checking whether input is consistent with by variables
-  if(!is.null(stat_by) & is.null(x$by)) {
+  if (!is.null(stat_by) & is.null(x$by)) {
     stop("Cannot specify 'stat_by' without first including 'by' in 'tbl_summary'")
   }
-  if(!is.null(stat_overall) & !is.null(x$by) & is.null(x$call_list$add_overall)) {
+  if (!is.null(stat_overall) & !is.null(x$by) & is.null(x$call_list$add_overall)) {
     stop(glue(
       "Cannot specify 'stat_overall' when no overall statistics are present in 'tbl_summary'"
     ))
   }
 
   # stat_by --------------------------------------------------------------------
-  if(!is.null(stat_by)) {
+  if (!is.null(stat_by)) {
     x[["gt_calls"]][["cols_label_by"]] <- col_label_by(x$df_by, stat_by, text_method)
   }
 
   # stat_overall ---------------------------------------------------------------
-  if(!is.null(stat_overall)) {
+  if (!is.null(stat_overall)) {
     x[["gt_calls"]][["cols_label_overall"]] <-
       col_label_overall(stat_overall, x$inputs$data %>% nrow(), text_method)
   }
@@ -55,17 +55,20 @@ col_label_by <- function(df_by, stat_by, text_method) {
     dplyr::select(c("by_col", "by_chr", "n", "N", "p")) %>%
     rlang::set_names(c("by_col", "level", "n", "N", "p")) %>%
     dplyr::mutate_(
-      col_label = ~glue::glue(stat_by),
-      col_label_code = ~glue::glue("{by_col} = {text_method}('{col_label}')")
+      col_label = ~ glue::glue(stat_by),
+      col_label_code = ~ glue::glue("{by_col} = {text_method}('{col_label}')")
     ) %>%
     dplyr::pull("col_label_code") %>%
     paste(collapse = ", ") %>%
-    {glue::glue("cols_label({.})")}
+    {
+      glue::glue("cols_label({.})")
+    }
 }
 
 col_label_overall <- function(stat_overall, N, text_method) {
-  glue(stat_overall) %>%
-  {glue("cols_label(stat_0 = {text_method}('{.}'))")}
+  glue(stat_overall) %>% {
+    glue("cols_label(stat_0 = {text_method}('{.}'))")
+  }
 }
 
 # t <-

@@ -5,7 +5,7 @@ test_df <-
   tibble::tibble(
     v1 = factor(c("no")),
     v2 = factor(c("yes", "no")),
-    v3 = factor(c("YeS","No"), levels = c("YeS", "No"))
+    v3 = factor(c("YeS", "No"), levels = c("YeS", "No"))
   )
 
 test_that("assign_dichotomous_value_one for yes/no factors", {
@@ -26,4 +26,3 @@ test_that("assign_dichotomous_value_one for yes/no factors", {
     "yes"
   )
 })
-

@@ -7,8 +7,9 @@ mod_lm <- lm(hp ~ am, data = mtcars)
 mod_survreg <- survreg(Surv(time, status) ~ age + ph.ecog, data = lung)
 mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
 mod_poisson <- glm(count ~ age + trt,
-                   trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
-                   family = poisson)
+  trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
+  family = poisson
+)
 mod_lmer <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
 

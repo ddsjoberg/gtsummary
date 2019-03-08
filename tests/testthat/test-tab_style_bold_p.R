@@ -15,8 +15,8 @@ test_that("expect error with use in tbl_summary() but NO add_comparison()", {
     tbl_summary(mtcars, by = "am")
 
   expect_error(tab_style_bold_p(table1_without_comp),
-               "Before bolding p-values, run add_comparison() to calculate the p-values",
-               fixed = TRUE
+    "Before bolding p-values, run add_comparison() to calculate the p-values",
+    fixed = TRUE
   )
 })
 
@@ -39,8 +39,8 @@ test_that("expect error with q=TRUE and add_q() NOT USED in tbl_summary", {
     add_comparison()
 
   expect_error(tab_style_bold_p(table1_comp_without_q, q = TRUE),
-               "Before bolding q-values, run add_q() to calculate the q-values",
-               fixed = TRUE
+    "Before bolding q-values, run add_q() to calculate the q-values",
+    fixed = TRUE
   )
 })
 

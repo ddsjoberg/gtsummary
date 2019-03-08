@@ -12,7 +12,6 @@
 #' @author Daniel Sjoberg
 #' @examples
 #' trial %>% tbl_summary(by = "trt") %>% as_gt()
-
 as_gt <- function(x, omit = NULL) {
   # user cannot omit the first 'gt' command
   omit <- omit %>% setdiff("gt")

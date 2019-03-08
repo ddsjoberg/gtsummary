@@ -26,5 +26,5 @@ and to the nearest integer when \code{abs(x) >= 10}.
 }
 \examples{
 c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345) \%>\%
-style_sigfig()
+  style_sigfig()
 }

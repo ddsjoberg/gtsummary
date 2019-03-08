@@ -114,7 +114,4 @@ footnote_add_comparison <- function(meta_data) {
     pull("stat_test_label") %>%
     paste(collapse = ", ") %>%
     paste0("Statistical tests performed: ", .)
-
 }
-
-

@@ -98,13 +98,13 @@ parse_terms <- function(x, tidy_model, show_yesno) {
     # idenfiying variables to print on a single row (no yes)
     dichotomous <-
       !(v %in% show_yesno) &
-      (
-        (map_lgl(
-          list(c("No", "Yes", NA), c("no", "yes", NA), c("NO", "YES", NA)),
-          ~ is.character(v) & setdiff(stats::model.frame(x)[[v]], .x) %>% length() == 0
-        ) %>% any()) |
-          (is.factor(v) & attr(stats::model.frame(x)[[v]], "levels") %>% toupper() %>% identical(c("NO", "YES")))
-      )
+        (
+          (map_lgl(
+            list(c("No", "Yes", NA), c("no", "yes", NA), c("NO", "YES", NA)),
+            ~ is.character(v) & setdiff(stats::model.frame(x)[[v]], .x) %>% length() == 0
+          ) %>% any()) |
+            (is.factor(v) & attr(stats::model.frame(x)[[v]], "levels") %>% toupper() %>% identical(c("NO", "YES")))
+        )
 
     # matching if not factor (i.e. single line)
     if (v == tidy_model$term[1] | dichotomous == TRUE) {
@@ -166,4 +166,3 @@ add_label <- function(var_type, estimates, var_label, variable) {
   ) %>%
     pluck(1)
 }
-
