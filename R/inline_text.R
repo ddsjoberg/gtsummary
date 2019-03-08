@@ -43,10 +43,9 @@ inline_text.tbl_summary <-
            column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
            pvalue_fun = purrr::partial(style_pvalue, prepend_p = TRUE), ...) {
     # evaluating column --------------------------------------------------------
-    # the by column cna be passed as a string, or as a function that results
+    # the by column can be passed as a string, or as a function that results
     # in a string.  Here, we evaluate the possible function to ensuer a string
-    column <- glue("{column}")
-    print(column)
+    column <- column
 
     # select variable ----------------------------------------------------------
     # grabbing rows matching variable
@@ -169,23 +168,33 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #'
 #' @param by_chr a level of the by variable inline_text.tbl_regression and
 #' inline_text.tbl_uvregression only
+#' @param x tbl_summary object, the same one passed to tbl_summary
 #' @author Daniel Sjoberg
 #' @export
-by_level <-  function(by_chr) {
+by_level <-  function(by_chr, x = x) {
   # this function can only be run in environment
   # where there is an object x that is atbl_summary class
   result <-
-    parse(text="x$df_by") %>% # hiding this in a string so i don't get a global variables warning
+    x$df_by %>%
     eval() %>%
-    dplyr::filter(!!parse_expr(glue::glue("by_chr ==  '{by_chr}'"))) %>%
-    dplyr::pull("by_col")
+    filter(!!parse_expr(glue("by_chr ==  '{by_chr}'"))) %>%
+    pull("by_col")
 
   if(length(result) == 0) {
-    glue::glue("'{x$df_by$by_chr}'") %>%
+    glue("'{.x$df_by$by_chr}'") %>%
       paste(collapse = ", ") %>%
-      {glue::glue("No by column selected. Choose one of: {.}")} %>%
+      {glue("No by column selected. Choose one of: {.}")} %>%
       stop()
   }
 
   result
 }
+
+# t =
+#   trial %>%
+#   tbl_summary(by = "trt")
+#
+#
+# inline_text(t, variable = "age", column = "stat_1")
+# inline_text(t, variable = "age", column = by_level("Placebo", t))
+
