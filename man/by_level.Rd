@@ -4,11 +4,13 @@
 \alias{by_level}
 \title{Convert level of by variable to column name}
 \usage{
-by_level(by_chr)
+by_level(by_chr, x = x)
 }
 \arguments{
 \item{by_chr}{a level of the by variable inline_text.tbl_regression and
 inline_text.tbl_uvregression only}
+
+\item{x}{tbl_summary object}
 }
 \description{
 To be used in the column argument of
