@@ -71,18 +71,30 @@ inline_text.tbl_summary <-
       x$table_body %>%
       filter(!!parse_expr(glue("variable ==  '{variable}'")))
 
+    if (nrow(result) == 0) {
+      stop(glue(
+        "Is the variable name spelled correctly? variable must be one of: ",
+          "{purrr::pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
+      ))
+    }
+
     # select variable level ----------------------------------------------------
     if (is.null(level)) {
       result <- result %>% slice(1)
     }
     else {
+      # if the length of this is 0, there are no levels to select.  Should we print an error here?
+      levels_obs <- result %>% filter_('row_type != "label"') %>% pull("label")
       result <-
         result %>%
         filter(!!parse_expr(glue("label ==  '{level}'")))
     }
 
     if (nrow(result) == 0) {
-      stop("No statistic selected. Is the variable name and/or level spelled correctly?")
+      stop(glue(
+        "Is the variable level spelled correctly? level must be one of: ",
+        "{levels_obs %>% paste(collapse = ', ')}"
+      ))
     }
 
     # select column ------------------------------------------------------------
@@ -140,18 +152,30 @@ inline_text.tbl_regression <-
       x$table_body %>%
       filter(!!parse_expr(glue("variable ==  '{variable}'")))
 
+    if (nrow(result) == 0) {
+      stop(glue(
+        "Is the variable name spelled correctly? variable must be one of: ",
+        "{purrr::pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
+      ))
+    }
+
     # select variable level ----------------------------------------------------
     if (is.null(level)) {
       result <- result %>% slice(1)
     }
     else {
+      # if the length of this is 0, there are no levels to select.  Should we print an error here?
+      levels_obs <- result %>% filter_('row_type != "label"') %>% pull("label")
       result <-
         result %>%
         filter(!!parse_expr(glue("label ==  '{level}'")))
     }
 
     if (nrow(result) == 0) {
-      stop("No statistic selected. Is the variable name and/or level spelled correctly?")
+      stop(glue(
+        "Is the variable level spelled correctly? level must be one of: ",
+        "{levels_obs %>% paste(collapse = ', ')}"
+      ))
     }
 
     # calculating statistic ----------------------------------------------------
