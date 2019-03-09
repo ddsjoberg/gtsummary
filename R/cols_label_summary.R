@@ -64,9 +64,9 @@ col_label_by <- function(df_by, stat_by) {
   df_by %>%
     select(c("by_col", "by_chr", "n", "N", "p")) %>%
     set_names(c("by_col", "level", "n", "N", "p")) %>%
-    mutate_(
-      col_label = ~ glue(stat_by),
-      col_label_code = ~ glue("{by_col} = {col_label}")
+    mutate(
+      col_label = glue(stat_by),
+      col_label_code = glue("{by_col} = {col_label}")
     ) %>%
     pull("col_label_code") %>%
     paste(collapse = ", ") %>%

@@ -18,10 +18,10 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
   counts <-
     x$meta_data %>%
     select(c("variable")) %>%
-    mutate_(
-      row_type = ~"label",
-      n_var = ~ map_chr(
-        variable,
+    mutate(
+      row_type = "label",
+      n_var = map_chr(
+        .data$variable,
         ~ case_when(
           missing == FALSE ~ sum(!is.na(x$inputs$data[[.x]])),
           missing == TRUE ~ sum(is.na(x$inputs$data[[.x]]))
