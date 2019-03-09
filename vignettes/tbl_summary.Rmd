@@ -176,7 +176,31 @@ trial2 %>%
 
 Each of the modification functions have additional options outlined in their respective help files.
 
-##  Report Results Inline (coming soon!)
+##  Report Results Inline
+
+Reproducible reports are an import part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
+
+Let's first create a basic summary table.
+
+```{r}
+tab1 = tbl_summary(trial2, by = "trt")
+tab1
+```
+
+To report the median (IQR) of the marker levels in each group, use the following commands inline.
+
+> The median (IQR) marker level in the drug and placebo groups are `` `r
+inline_text(tab1, variable = "marker", column = "Drug")` `` and `` `r
+inline_text(tab1, variable = "marker", column = "Placebo")` ``, respectively.
+
+Here's how the line will appear in your report.
+
+> The median (IQR) marker level in the drug and placebo groups are `r inline_text(tab1, variable = "marker", column = "Drug")` and `r inline_text(tab1, variable = "marker", column = "Placebo")`, respectively.
+
+If you display a statistic from a categorical variable, include the `level` argument.  
+
+> `` `r
+inline_text(tab1, variable = "stage", level = "T1", column = "Drug")` `` resolves to "`r inline_text(tab1, variable = "stage", level = "T1", column = "Drug")`"
 
 ## Advanced Customization
 
