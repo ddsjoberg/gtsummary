@@ -36,7 +36,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
   model_terms <- x %>%
     pluck("table_body") %>%
     select(c("var_type", "variable")) %>%
-    filter_(~ var_type == "categorical") %>%
+    filter(!!parse_expr('var_type == "categorical"')) %>%
     distinct() %>%
     pull("variable")
 
@@ -63,7 +63,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
     car::Anova(type = "III", ...) %>%
     as.data.frame() %>%
     tibble::rownames_to_column(var = "variable") %>%
-    filter_(~ variable %in% terms) %>%
+    filter(!!parse_expr("variable %in% terms")) %>%
     select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
     set_names(c("variable", "pvalue_global")) %>%
     mutate_(row_type = ~"label")
@@ -123,7 +123,7 @@ add_global.tbl_uvregression <- function(x, ...) {
       ~ car::Anova(.x[["model_obj"]], type = "III") %>%
         as.data.frame() %>%
         tibble::rownames_to_column(var = "variable") %>%
-        filter_(~ variable == .y) %>%
+        filter(variable == .y) %>%
         select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
         set_names(c("variable", "pvalue_global"))
     ) %>%

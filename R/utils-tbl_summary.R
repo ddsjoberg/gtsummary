@@ -98,11 +98,9 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class) {
   data %>%
     select(c(variable)) %>%
     stats::na.omit() %>%
-    arrange_(c(variable)) %>%
+    arrange(variable) %>%
     slice(n()) %>%
     pull(c(variable))
-
-  # return(max(data[[variable]], na.rm = TRUE))
 }
 
 # assign_dichotomous_value_one(mtcars, "am", "dichotomous", "double")
@@ -714,9 +712,9 @@ df_by <- function(data, by) {
   data %>%
     select(c(by)) %>%
     set_names("by") %>%
-    count_("by") %>%
+    count(!!sym("by")) %>%
     mutate_(N = ~ sum(n), p = ~ n / N) %>%
-    arrange_("by") %>%
+    arrange(!!sym("by")) %>%
     mutate_(
       by_id = ~ 1:n(), # 'by' variable ID
       by_chr = ~ as.character(by), # Character version of 'by' variable
@@ -797,16 +795,16 @@ summarize_categorical <- function(data, variable, by, var_label,
   tab <-
     data %>%
     stats::na.omit() %>%
-    group_by_("by_col") %>%
-    count_("variable") %>%
-    complete_("variable", fill = list(n = 0)) %>%
+    group_by(!!sym("by_col")) %>%
+    count(!!sym("variable")) %>%
+    complete(!!sym("variable"), fill = list(n = 0)) %>%
     mutate_(
       N = ~ sum(n),
       p = ~ style_percent(n / N),
       stat = ~ as.character(glue(stat_display))
     ) %>%
     select(c("by_col", "variable", "stat")) %>%
-    spread_("by_col", "stat") %>%
+    spread(!!sym("by_col"), !!sym("stat")) %>%
     mutate_(
       row_type = ~"level",
       label = ~ variable %>% as.character()
@@ -816,13 +814,13 @@ summarize_categorical <- function(data, variable, by, var_label,
   # number of missing observations
   missing_count <-
     data %>%
-    group_by_("by_col") %>%
+    group_by(!!sym("by_col")) %>%
     nest() %>%
     mutate_(
       missing_count = ~ map_chr(data, ~ .x[[1]] %>% is.na() %>% sum())
     ) %>%
     select(c("by_col", "missing_count")) %>%
-    spread_("by_col", "missing_count") %>%
+    spread(!!sym("by_col"), !!sym("missing_count")) %>%
     mutate_(
       row_type = ~"missing",
       label = ~"Unknown"
@@ -833,7 +831,7 @@ summarize_categorical <- function(data, variable, by, var_label,
   if (!is.null(dichotomous_value)) {
     results <-
       tab %>%
-      filter_("variable == dichotomous_value") %>%
+      filter(!!parse_expr("variable == dichotomous_value")) %>%
       mutate_(
         row_type = ~"label",
         label = ~var_label
@@ -856,7 +854,7 @@ summarize_categorical <- function(data, variable, by, var_label,
   if (missing == "no" | (missing == "ifany" & tot_n_miss == 0)) {
     results <-
       results %>%
-      filter_("row_type != 'missing'")
+      filter(!!parse_expr("row_type != 'missing'"))
   }
 
   results
@@ -934,7 +932,7 @@ summarize_continuous <- function(data, variable, by, digits,
   # nesting data and changing by variable
   data <-
     data %>%
-    group_by_("by_col") %>%
+    group_by(!!sym("by_col")) %>%
     nest(.key = "data")
 
   # nesting data and calculating descriptive stats
@@ -967,7 +965,7 @@ summarize_continuous <- function(data, variable, by, digits,
       )
     ) %>%
     select(c("by_col", "stat")) %>%
-    spread_("by_col", "stat") %>%
+    spread(!!sym("by_col"), !!sym("stat")) %>%
     mutate_(
       row_type = ~"label",
       label = ~var_label
@@ -985,7 +983,7 @@ summarize_continuous <- function(data, variable, by, digits,
         )
     ) %>%
     select(c("by_col", "missing_count")) %>%
-    spread_("by_col", "missing_count") %>%
+    spread(!!sym("by_col"), !!sym("missing_count")) %>%
     mutate_(
       row_type = ~"missing",
       label = ~"Unknown"
@@ -1000,7 +998,7 @@ summarize_continuous <- function(data, variable, by, digits,
   if (missing == "no" | (missing == "ifany" & tot_n_miss == 0)) {
     result <-
       result %>%
-      filter_("row_type != 'missing'")
+      filter(!!parse_expr("row_type != 'missing'"))
   }
 
   result

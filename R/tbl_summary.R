@@ -63,9 +63,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
   # creating a table with meta data about each variable
   meta_data <- tibble(variable = names(data))
   # excluding by variable
-  if (!is.null(by)) meta_data <- meta_data %>% filter_(~ variable != by)
+  if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
   # excluding id variable
-  if (!is.null(group)) meta_data <- meta_data %>% filter_(~ !variable %in% group)
+  if (!is.null(group)) meta_data <- meta_data %>% filter(!!parse_expr("!variable %in% group"))
 
   # assigning variable characteristics
   meta_data <- meta_data %>%
@@ -103,7 +103,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
       )
     ) %>%
     select(c("variable", "summary_type", "stat_table")) %>%
-    unnest_("stat_table")
+    unnest(!!sym("stat_table"))
 
   # returning all results in a list
   results <- list(

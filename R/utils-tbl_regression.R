@@ -42,7 +42,7 @@ tidy_wrap <- function(x, exponentiate, conf.level) {
   if (class(x)[1] == "survreg") {
     return(
       tidy_bit %>%
-        filter_(~ term != "Log(scale)")
+        filter(!!parse_expr('term != "Log(scale)"'))
     )
   }
 
@@ -124,7 +124,7 @@ parse_terms <- function(x, tidy_model, show_yesno) {
         mutate_(
           term = ~ paste0(v, level)
         ) %>%
-        arrange_("level") %>%
+        arrange(!!sym("level")) %>%
         select("term")
 
       # checking that these new terms match any terms in model
