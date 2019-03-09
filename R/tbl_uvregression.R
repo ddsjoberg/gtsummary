@@ -123,7 +123,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   # creating a meta_data table (this will be used in subsequent functions, eg add_global)
   meta_data <-
     table_body %>%
-    filter_(~ row_type == "label") %>%
+    filter(!!parse_expr('row_type == "label"')) %>%
     select(c("variable", "var_type", "label", "N"))
 
   # returning named list of results

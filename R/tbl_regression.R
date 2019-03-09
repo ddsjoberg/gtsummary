@@ -81,7 +81,7 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
       ),
       N = ~n
     ) %>%
-    tidyr::unnest_("estimates") %>%
+    unnest(!!sym("estimates")) %>%
     select(c(
       "variable", "var_type", "row_type", "label", "N",
       "estimate", "conf.low", "conf.high", "p.value"
