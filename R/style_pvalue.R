@@ -19,7 +19,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
   # rounding large pvalues to 2 digits
   if (digits == 2) {
     p_fmt <-
-      dplyr::case_when(
+      case_when(
         x > 1 ~ NA_character_,
         x < 0 ~ NA_character_,
         x > 0.99 ~ ">0.99",
@@ -32,7 +32,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
   # rounding large pvalues to 1 digit
   if (digits == 1) {
     p_fmt <-
-      dplyr::case_when(
+      case_when(
         x > 1 ~ NA_character_,
         x < 0 ~ NA_character_,
         x > 0.9 ~ ">0.9",
@@ -45,7 +45,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
 
   # prepending a p = in front of value
   if (prepend_p == TRUE) {
-    p_fmt <- dplyr::case_when(
+    p_fmt <- case_when(
       is.na(p_fmt) ~ NA_character_,
       stringr::str_sub(p_fmt, end = 1L) %in% c("<", ">") ~ paste0("p", p_fmt),
       TRUE ~ paste0("p=", p_fmt)

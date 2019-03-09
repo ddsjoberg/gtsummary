@@ -17,7 +17,7 @@
 #' are `c("No", "Yes")`, `c("no", "yes")`, or `c("NO", "YES")` default to dichotomous printing
 #' (i.e. only Yes shown). To force both levels to be shown include the column
 #' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
-#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_sigfig}}
+#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_coef}}
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
 #' @author Daniel Sjoberg
 #' @export
@@ -35,7 +35,7 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
                            include = names(stats::model.frame(x)),
                            show_yesno = NULL,
                            conf.level = 0.95, intercept = FALSE,
-                           coef_fun = style_sigfig, pvalue_fun = style_pvalue) {
+                           coef_fun = style_coef, pvalue_fun = style_pvalue) {
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())
@@ -57,31 +57,31 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
 
   # keeping variables indicated in `include`
   if ((names(mod_list) %in% include) %>% any() == FALSE) {
-    stop(glue::glue(
+    stop(glue(
       "'include' must be in '{paste(names(mod_list), collapse = ', ')}'"
     ))
   }
   mod_list <- mod_list[names(mod_list) %in% include]
 
   # model N
-  n = stats::model.frame(x) %>% nrow()
+  n <- stats::model.frame(x) %>% nrow()
 
   # putting all results into tibble
   table_body <-
     tibble(variable = names(mod_list)) %>%
-    mutate_(
-      estimates = ~mod_list,
-      var_type = ~ map_chr(estimates, ~ ifelse(nrow(.x) > 1, "categorical", "continuous")),
-      var_label = ~ map_chr(
-        variable, ~ label[[.x]] %||% attr(stats::model.frame(x)[[.x]], "label") %||% .x
+    mutate(
+      estimates = mod_list,
+      var_type = map_chr(.data$estimates, ~ ifelse(nrow(.x) > 1, "categorical", "continuous")),
+      var_label = map_chr(
+        .data$variable, ~ label[[.x]] %||% attr(stats::model.frame(x)[[.x]], "label") %||% .x
       ),
-      estimates = ~ pmap(
-        list(var_type, estimates, var_label, variable),
+      estimates = pmap(
+        list(.data$var_type, .data$estimates, .data$var_label, .data$variable),
         ~ add_label(..1, ..2, ..3, ..4)
       ),
-      N = ~n
+      N = n
     ) %>%
-    tidyr::unnest_("estimates") %>%
+    unnest(!!sym("estimates")) %>%
     select(c(
       "variable", "var_type", "row_type", "label", "N",
       "estimate", "conf.low", "conf.high", "p.value"
@@ -90,6 +90,18 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
       "variable", "var_type", "row_type", "label", "N",
       "coef", "ll", "ul", "pvalue"
     ))
+
+  # footnote abbreviation details
+  footnote_abbr <-
+    coef_header(x, exponentiate) %>%
+    attr("footnote") %>%
+    c("CI = Confidence Interval") %>%
+    paste(collapse = ", ")
+  footnote_location <- ifelse(
+    is.null(attr(coef_header(x, exponentiate), "footnote")),
+    "vars(ll)",
+    "vars(coef, ll)"
+  )
 
   results <- list(
     table_body = table_body,
@@ -138,6 +150,15 @@ gt_tbl_regression <- quote(list(
     ")"
   ),
 
+  # column headers abbreviations footnote
+  footnote_abbreviation = glue(
+    "tab_footnote(",
+    "  footnote = '{footnote_abbr}',",
+    "  locations = cells_column_labels(",
+    "    columns = {footnote_location})",
+    ")"
+  ),
+
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
     "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)",
@@ -164,24 +185,41 @@ gt_tbl_regression <- quote(list(
 # idenfies headers for common models (logistic, poisson, and cox regression)
 coef_header <- function(x, exponentiate) {
   # generalized linear models
-  if(class(x)[1] == "glm") {
+  if (class(x)[1] == "glm") {
     # logistic regression
-    if(exponentiate == TRUE & x$family$family == "binomial" & x$family$link == "logit")
-      return("OR")
-    if(exponentiate == FALSE & x$family$family == "binomial" & x$family$link == "logit")
-      return("log(OR)")
+    if (exponentiate == TRUE & x$family$family == "binomial" & x$family$link == "logit") {
+      header <- "OR"
+      attr(header, "footnote") <- "OR = Odds Ratio"
+    }
+    else if (exponentiate == FALSE & x$family$family == "binomial" & x$family$link == "logit") {
+      header <- "log(OR)"
+      attr(header, "footnote") <- "OR = Odds Ratio"
+    }
 
     # poisson regression with log link
-    if(exponentiate == TRUE & x$family$family == "poisson" & x$family$link == "log")
-      return("IRR")
-    if(exponentiate == FALSE & x$family$family == "poisson" & x$family$link == "log")
-      return("log(IRR)")
+    else if (exponentiate == TRUE & x$family$family == "poisson" & x$family$link == "log") {
+      header <- "IRR"
+      attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
+    }
+    else if (exponentiate == FALSE & x$family$family == "poisson" & x$family$link == "log") {
+      header <- "log(IRR)"
+      attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
+    }
   }
   # Cox PH Regression
-  if(class(x)[1] == "coxph" & exponentiate == TRUE) return("HR")
-  if(class(x)[1] == "coxph" & exponentiate == FALSE) return("log(HR)")
+  else if (class(x)[1] == "coxph" & exponentiate == TRUE) {
+    header <- "HR"
+    attr(header, "footnote") <- "HR = Hazard Ratio"
+  }
+  else if (class(x)[1] == "coxph" & exponentiate == FALSE) {
+    header <- "log(HR)"
+    attr(header, "footnote") <- "HR = Hazard Ratio"
+  }
+
 
   # Other models
-  if(exponentiate == TRUE) return("exp(Coefficient)")
-  return("Coefficient")
+  else if (exponentiate == TRUE) header <- "exp(Coefficient)"
+  else  header <- "exp(Coefficient)"
+
+  header
 }

@@ -23,5 +23,4 @@ test_that("no errors/warnings with standard use after tbl_uvregression", {
   expect_warning(
     trial %>% tbl_uvregression(method = "lm", y = "age") %>% add_global(), NA
   )
-
 })

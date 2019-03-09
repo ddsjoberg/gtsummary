@@ -42,7 +42,7 @@ tidy_wrap <- function(x, exponentiate, conf.level) {
   if (class(x)[1] == "survreg") {
     return(
       tidy_bit %>%
-        filter_(~ term != "Log(scale)")
+        filter(!!parse_expr('term != "Log(scale)"'))
     )
   }
 
@@ -98,13 +98,13 @@ parse_terms <- function(x, tidy_model, show_yesno) {
     # idenfiying variables to print on a single row (no yes)
     dichotomous <-
       !(v %in% show_yesno) &
-      (
-        (map_lgl(
-          list(c("No", "Yes", NA), c("no", "yes", NA), c("NO", "YES", NA)),
-          ~ is.character(v) & setdiff(stats::model.frame(x)[[v]], .x) %>% length() == 0
-        ) %>% any()) |
-          (is.factor(v) & attr(stats::model.frame(x)[[v]], "levels") %>% toupper() %>% identical(c("NO", "YES")))
-      )
+        (
+          (map_lgl(
+            list(c("No", "Yes", NA), c("no", "yes", NA), c("NO", "YES", NA)),
+            ~ is.character(v) & setdiff(stats::model.frame(x)[[v]], .x) %>% length() == 0
+          ) %>% any()) |
+            (is.factor(v) & attr(stats::model.frame(x)[[v]], "levels") %>% toupper() %>% identical(c("NO", "YES")))
+        )
 
     # matching if not factor (i.e. single line)
     if (v == tidy_model$term[1] | dichotomous == TRUE) {
@@ -121,10 +121,10 @@ parse_terms <- function(x, tidy_model, show_yesno) {
         tibble(
           level = stats::model.frame(x)[[v]] %>% unique()
         ) %>%
-        mutate_(
-          term = ~ paste0(v, level)
+        mutate(
+          term = paste0(v, .data$level)
         ) %>%
-        arrange_("level") %>%
+        arrange(!!sym("level")) %>%
         select("term")
 
       # checking that these new terms match any terms in model
@@ -153,17 +153,16 @@ parse_terms <- function(x, tidy_model, show_yesno) {
 # for categorical, we add a row on top with the label
 add_label <- function(var_type, estimates, var_label, variable) {
   case_when(
-    var_type == "continuous" ~ list(estimates %>% mutate_(row_type = ~"label", label = ~var_label)),
+    var_type == "continuous" ~ list(estimates %>% mutate(row_type = "label", label = var_label)),
     var_type == "categorical" ~ list(
       bind_rows(
         tibble(row_type = "label", label = var_label),
-        estimates %>% mutate_(
-          row_type = ~"level",
-          label = ~ stringr::str_replace(term, stringr::fixed(variable), "")
+        estimates %>% mutate(
+          row_type = "level",
+          label = stringr::str_replace(.data$term, stringr::fixed(variable), "")
         )
       )
     )
   ) %>%
     pluck(1)
 }
-

@@ -6,7 +6,7 @@
 
 tab_style_italicize_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if(!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression")) {
+  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression")) {
     stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvregression'")
   }
 

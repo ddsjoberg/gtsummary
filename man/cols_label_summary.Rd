@@ -4,30 +4,37 @@
 \alias{cols_label_summary}
 \title{Relabel columns in summary table}
 \usage{
-cols_label_summary(x, stat_overall = NULL, stat_by = NULL,
-  text_method = "md")
+cols_label_summary(x, stat_overall = NULL, stat_by = NULL)
 }
 \arguments{
 \item{x}{\code{tbl_summary} object}
 
 \item{stat_overall}{string vector including text to appear above the overall summary
 statistics. \code{N}, the total number of observations, is available for use in the
-description.}
+description. e.g. \code{stat_overall = md("**All Patients**, N = {N}")}}
 
 \item{stat_by}{string vector of text to include above the summary statistics
 stratified by a variable.  The following fields are available for use in the
-headers: \code{n}, \code{N}, \code{p}, \code{name}, and \code{level}.  \code{n} is the number of observations in
-each by group. \code{N} is the total number of observations. \code{p} is the percentage of rows
-in a by group. \code{name} is the name of the by variable. \code{level} is the by variable level.
-Syntax follows the \code{glue::\link{glue}} function, e.g. \code{stat_by = c("{level}", "N = {n} ({p}\\\%)")}.
+headers: \code{n}, \code{N}, \code{p}, and \code{level}.  \code{n} is the number of observations in
+each by group. \code{N} is the total number of observations. \code{p} is the percent
+in a by group. \code{level} is the by variable level.
+Syntax follows the \code{glue::\link{glue}} function,
+e.g. \code{stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")}.
 Must specify \code{by} along with \code{stat_by}.}
-
-\item{text_method}{Method for text interpretation.
-Default is \code{gt::\link{md}}.  Also accepts \code{gt::\link{html}} and
-\code{\link{I}}.}
 }
 \description{
 Column labels can be modified using data from the data frame
+}
+\examples{
+trial \%>\%
+  tbl_summary() \%>\%
+  cols_label_summary(stat_overall = md("**All Patients**, N = {N}"))
+trial \%>\%
+  tbl_summary(by = "trt") \%>\%
+  cols_label_summary(stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"))
+}
+\seealso{
+\link{tbl_summary}, \link[gt]{md}, \link[gt]{html}
 }
 \author{
 Daniel Sjoberg

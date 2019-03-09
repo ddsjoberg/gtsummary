@@ -3,7 +3,7 @@
 #' @param x object created from a gtsummary funciton
 #' @param ... further arguments passed to or from other methods.
 #' @author Daniel Sjoberg
-#' @seealso \link{inline_text.tbl_summary}, \link{tbl_summary}, \link{tbl_regression}, \link{tbl_uvregression}
+#' @seealso \link{inline_text.tbl_summary}, \link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression}, \link{tbl_summary}, \link{tbl_regression}, \link{tbl_uvregression}
 #' @export
 inline_text <- function(x, ...) UseMethod("inline_text")
 
@@ -24,7 +24,7 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 #' The function must have a single input (the numeric, exact p-value),
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-#'  \code{purrr::partial(style_pvalue, digits = 2)}).
+#'  \code{partial(style_pvalue, digits = 2)}).
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
@@ -32,14 +32,16 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 
 inline_text.tbl_summary <-
   function(x, variable, level = NULL,
-           column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-           pvalue_fun = purrr::partial(style_pvalue, prepend_p = TRUE), ...) {
+             column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
+             pvalue_fun = partial(style_pvalue, prepend_p = TRUE), ...) {
     # checking column ----------------------------------------------------------
     # the follwing code converts the column input to a column name in x$table_body
-    col_lookup_table <- tibble(input = names(x$table_body),
-                               column_name =  names(x$table_body))
+    col_lookup_table <- tibble(
+      input = names(x$table_body),
+      column_name = names(x$table_body)
+    )
     # adding levels if there is a by variable
-    if(!is.null(x$by)) {
+    if (!is.null(x$by)) {
       col_lookup_table <-
         col_lookup_table %>%
         bind_rows(
@@ -52,12 +54,14 @@ inline_text.tbl_summary <-
       slice(1) %>%
       pull("column_name")
 
-    if(length(column) == 0) stop(
-      stop(glue(
-        "No column selected.  Must be one of: ",
-        "{paste(col_lookup_table, collapse = ', ')}"
-      ))
-    )
+    if (length(column) == 0) {
+      stop(
+        stop(glue(
+          "No column selected.  Must be one of: ",
+          "{paste(col_lookup_table, collapse = ', ')}"
+        ))
+      )
+    }
 
 
 
@@ -67,23 +71,37 @@ inline_text.tbl_summary <-
       x$table_body %>%
       filter(!!parse_expr(glue("variable ==  '{variable}'")))
 
+    if (nrow(result) == 0) {
+      stop(glue(
+        "Is the variable name spelled correctly? variable must be one of: ",
+          "{pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
+      ))
+    }
+
     # select variable level ----------------------------------------------------
-    if(is.null(level)) {
+    if (is.null(level)) {
       result <- result %>% slice(1)
     }
     else {
+      # if the length of this is 0, there are no levels to select.  Should we print an error here?
+      levels_obs <- result %>% filter(!!parse_expr('row_type != "label"')) %>% pull("label")
       result <-
-        result %>% filter(!!parse_expr(glue("label ==  '{level}'")))
+        result %>%
+        filter(!!parse_expr(glue("label ==  '{level}'")))
     }
 
-    if(nrow(result) == 0)
-      stop("No statistic selected. Is the variable name and/or level spelled correctly?")
+    if (nrow(result) == 0) {
+      stop(glue(
+        "Is the variable level spelled correctly? level must be one of: ",
+        "{levels_obs %>% paste(collapse = ', ')}"
+      ))
+    }
 
     # select column ------------------------------------------------------------
     result <- result %>% pull(column)
 
     # return statistic ---------------------------------------------------------
-    if(column %in% c("pvalue", "qvalue")) {
+    if (column %in% c("pvalue", "qvalue")) {
       return(pvalue_fun(result))
     }
 
@@ -114,16 +132,16 @@ inline_text.tbl_summary <-
 
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
-           pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {pvalue})",
-           coef_fun = x$inputs$coef_fun,
-           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+             pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {pvalue})",
+             coef_fun = x$inputs$coef_fun,
+             pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
     x$table_body <-
-      dplyr::left_join(
+      left_join(
         x$table_body %>% select(-"N"),
-        x$table_body %>% filter_('row_type == "label"') %>% select(c("variable", "N")),
+        x$table_body %>% filter(!!parse_expr('row_type != "label"')) %>% select(c("variable", "N")) %>% distinct(),
         by = "variable"
       )
 
@@ -134,17 +152,31 @@ inline_text.tbl_regression <-
       x$table_body %>%
       filter(!!parse_expr(glue("variable ==  '{variable}'")))
 
+    if (nrow(result) == 0) {
+      stop(glue(
+        "Is the variable name spelled correctly? variable must be one of: ",
+        "{pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
+      ))
+    }
+
     # select variable level ----------------------------------------------------
-    if(is.null(level)) {
+    if (is.null(level)) {
       result <- result %>% slice(1)
     }
     else {
+      # if the length of this is 0, there are no levels to select.  Should we print an error here?
+      levels_obs <- result %>% filter(!!parse_expr('row_type != "label"')) %>% pull("label")
       result <-
-        result %>% filter(!!parse_expr(glue("label ==  '{level}'")))
+        result %>%
+        filter(!!parse_expr(glue("label ==  '{level}'")))
     }
 
-    if(nrow(result) == 0)
-      stop("No statistic selected. Is the variable name and/or level spelled correctly?")
+    if (nrow(result) == 0) {
+      stop(glue(
+        "Is the variable level spelled correctly? level must be one of: ",
+        "{levels_obs %>% paste(collapse = ', ')}"
+      ))
+    }
 
     # calculating statistic ----------------------------------------------------
     pvalue_cols <- names(result) %>% intersect(c("pvalue", "qvalue"))
@@ -152,9 +184,9 @@ inline_text.tbl_regression <-
       result %>%
       mutate_at(vars(one_of(c("coef", "ll", "ul"))), coef_fun) %>%
       mutate_at(vars(one_of(pvalue_cols)), pvalue_fun) %>%
-      mutate_(
-        conf.level = ~x$inputs$conf.level,
-        stat = ~glue(pattern)
+      mutate(
+        conf.level = x$inputs$conf.level,
+        stat = glue(pattern)
       ) %>%
       pull("stat")
 

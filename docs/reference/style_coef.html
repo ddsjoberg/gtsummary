@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Report statistics from summary tables inline — inline_text.tbl_summary • gtsummary</title>
+<title>Implement significant figure like formatting for regression coefficients — style_coef • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,12 @@
 
 
 
-<meta property="og:title" content="Report statistics from summary tables inline — inline_text.tbl_summary" />
+<meta property="og:title" content="Implement significant figure like formatting for regression coefficients — style_coef" />
 
-<meta property="og:description" content="Functions takes an object with class tbl_summary, and the
-location of the statistic to report and returns the statistic for reporting
-inline in an R markdown document" />
+<meta property="og:description" content="Converts a numeric argument into a string that has been rounded to a
+significant figure-like number suitable for regresion model coefficients.
+Values with magnitude less than 1, are rounded to two significant figures, and magnitudes
+larger than 1 are rounded to three significant figures" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,67 +120,50 @@ inline in an R markdown document" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Report statistics from summary tables inline</h1>
+    <h1>Implement significant figure like formatting for regression coefficients</h1>
     
-    <div class="hidden name"><code>inline_text.tbl_summary.Rd</code></div>
+    <div class="hidden name"><code>style_coef.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Functions takes an object with class <code>tbl_summary</code>, and the
-location of the statistic to report and returns the statistic for reporting
-inline in an R markdown document</p>
+    <p>Converts a numeric argument into a string that has been rounded to a
+significant figure-like number suitable for regresion model coefficients.
+Values with magnitude less than 1, are rounded to two significant figures, and magnitudes
+larger than 1 are rounded to three significant figures</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='no'>variable</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>column</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NULL'>is.null</a></span>(<span class='no'>x</span>$<span class='no'>by</span>), <span class='st'>"stat_0"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stop'>stop</a></span>(<span class='st'>"Must specify column"</span>)),
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='fu'>partial</span>(<span class='no'>style_pvalue</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>style_coef</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object created from  <a href='tbl_summary.html'>tbl_summary</a></p></td>
-    </tr>
-    <tr>
-      <th>variable</th>
-      <td><p>variable name of statistic to present</p></td>
-    </tr>
-    <tr>
-      <th>level</th>
-      <td><p>level of the variable to display for categorical variables.
-Can also specify the 'Unknown' row.  Default is <code>NULL</code></p></td>
-    </tr>
-    <tr>
-      <th>column</th>
-      <td><p>name column name to return from <code>x$table_body</code>.
-Can also pass the level of a by variable.</p></td>
-    </tr>
-    <tr>
-      <th>pvalue_fun</th>
-      <td><p>function for rounding/formatting p-values.
-Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
-The function must have a single input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code>partial(style_pvalue, digits = 2)</code>).</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>numeric vector</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
+    <div class='dont-index'><p>style_sigfig</p></div>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.123</span>, <span class='fl'>0.9</span>, <span class='fl'>1.1234</span>, <span class='fl'>12.345</span>, <span class='fl'>101.234</span>, -<span class='fl'>0.123</span>, -<span class='fl'>0.9</span>, -<span class='fl'>1.1234</span>, -<span class='fl'>12.345</span>, -<span class='fl'>101.234</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>style_coef</span>()</div><div class='output co'>#&gt;  [1] "0.12"  "0.90"  "1.12"  "12.3"  "101"   "-0.12" "-0.90" "-1.12" "-12.3"
+#&gt; [10] "-101" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>Daniel Sjoberg</p>
