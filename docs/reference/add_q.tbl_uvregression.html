@@ -137,7 +137,7 @@ is false discovery rate (<code>"fdr"</code>)</p>
 
     <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
 <span class='fu'><a href='add_q.html'>add_q</a></span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"fdr"</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>pvalue_fun</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -407,10 +407,10 @@ is false discovery rate (<code>"fdr"</code>)</p>
 #&gt; &lt;tr&gt;
 #&gt; &lt;th class='gt_col_heading gt_left' rowspan='1' colspan='1'&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;N&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;exp(Coefficient)&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;Coefficient&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;sup class='gt_footnote_glyph'&gt;1&lt;/sup&gt;&lt;/th&gt;
 #&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;q-value&lt;/strong&gt;&lt;/th&gt;
+#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;&lt;strong&gt;q-value&lt;/strong&gt;&lt;sup class='gt_footnote_glyph'&gt;2&lt;/sup&gt;&lt;/th&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;tbody class='gt_table_body'&gt;
 #&gt; &lt;tr&gt;
@@ -526,7 +526,11 @@ is false discovery rate (<code>"fdr"</code>)</p>
 #&gt; &lt;td class='gt_row gt_center gt_striped'&gt;&gt;0.9&lt;/td&gt;
 #&gt; &lt;/tr&gt;
 #&gt; &lt;/tbody&gt;
-#&gt; &lt;/table&gt;
+#&gt; &lt;tfoot&gt;
+#&gt; &lt;tr&gt;
+#&gt; &lt;td colspan='6' class='gt_footnote'&gt;&lt;sup class='gt_footnote_glyph'&gt;&lt;em&gt;1&lt;/em&gt;&lt;/sup&gt; CI = Confidence Interval&lt;br /&gt;&lt;sup class='gt_footnote_glyph'&gt;&lt;em&gt;2&lt;/em&gt;&lt;/sup&gt; False discovery rate correction&lt;/td&gt;
+#&gt; &lt;/tr&gt;
+#&gt; &lt;/tfoot&gt;&lt;/table&gt;
 #&gt; &lt;!--gt table end--&gt;
 #&gt; &lt;/div&gt;</div></pre>
   </div>
@@ -539,7 +543,7 @@ is false discovery rate (<code>"fdr"</code>)</p>
     </ul>
 
     <h2>Author</h2>
-    <p>Esther Drill</p>
+    <p>Esther Drill, Daniel Sjoberg</p>
   </div>
 </div>
 
