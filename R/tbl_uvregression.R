@@ -24,7 +24,7 @@
 #' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
 #' @param conf.level confidence level passed directly to \code{broom::tidy}.
 #' Default is 0.95.
-#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_sigfig}}
+#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_coef}}
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
 #' @author Daniel Sjoberg
 #' @export
@@ -51,7 +51,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {.x}",
                              exponentiate = FALSE, label = NULL,
                              show_yesno = NULL, conf.level = 0.95,
-                             coef_fun = style_sigfig, pvalue_fun = style_pvalue) {
+                             coef_fun = style_coef, pvalue_fun = style_pvalue) {
 
   # data -----------------------------------------------------------------------
   # data is a data frame
