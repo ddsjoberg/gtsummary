@@ -6,7 +6,7 @@
 multiple comparisons}
 \usage{
 \method{add_q}{tbl_uvregression}(x, method = "fdr",
-  pvalue_fun = style_pvalue, ...)
+  pvalue_fun = x$inputs$pvalue_fun, ...)
 }
 \arguments{
 \item{x}{\code{tbl_uvregression} object}
@@ -33,5 +33,5 @@ trial \%>\%
   add_q()
 }
 \author{
-Esther Drill
+Esther Drill, Daniel Sjoberg
 }

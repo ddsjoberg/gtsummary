@@ -17,5 +17,5 @@ Add a column of q values to account for
 multiple comparisons
 }
 \author{
-Esther Drill
+Esther Drill, Daniel Sjoberg
 }
