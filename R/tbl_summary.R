@@ -124,9 +124,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
 
   # adding headers
   if (is.null(by)) {
-    results <- cols_label_summary(results, stat_overall = "**N = {N}**")
+    results <- cols_label_summary(results, stat_overall = md("**N = {N}**"))
   } else {
-    results <- cols_label_summary(results, stat_by = "**{level}**, N = {n}")
+    results <- cols_label_summary(results, stat_by = md("**{level}**, N = {n}"))
   }
 
   return(results)
