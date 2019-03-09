@@ -6,7 +6,7 @@
 \usage{
 \method{inline_text}{tbl_summary}(x, variable, level = NULL,
   column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-  pvalue_fun = purrr::partial(style_pvalue, prepend_p = TRUE), ...)
+  pvalue_fun = partial(style_pvalue, prepend_p = TRUE), ...)
 }
 \arguments{
 \item{x}{object created from  \link{tbl_summary}}
@@ -24,7 +24,7 @@ Default is \code{\link{style_pvalue}}.
 The function must have a single input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-\code{purrr::partial(style_pvalue, digits = 2)}).}
+\code{partial(style_pvalue, digits = 2)}).}
 
 \item{...}{not used}
 }

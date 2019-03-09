@@ -16,7 +16,7 @@
 #' The function must have a single input (the numeric, exact p-value),
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-#'  \code{purrr::partial(style_pvalue, digits = 2)}).
+#'  \code{partial(style_pvalue, digits = 2)}).
 #' @param group Character vector of an ID or grouping variable.  Summary statistics
 #' will not be printed for this column, but they may be used in subsequent
 #' functions. For example, the group column may be used in `add_comparison()` to
@@ -35,23 +35,23 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
   # getting the test name and pvalue
   meta_data <-
     x$meta_data %>%
-    mutate_(
+    mutate(
       # assigning statistical test to perform
-      stat_test = ~ assign_test(
+      stat_test = assign_test(
         data = x$inputs$data,
-        var = variable,
-        var_summary_type = summary_type,
+        var = .data$variable,
+        var_summary_type = .data$summary_type,
         by_var = x$inputs$by,
         test = test,
         group = group
       ),
       # calculating pvalue
-      pvalue = ~ calculate_pvalue(
+      pvalue = calculate_pvalue(
         data = x$inputs$data,
-        variable = variable,
+        variable = .data$variable,
         by = x$inputs$by,
-        test = stat_test,
-        type = summary_type,
+        test = .data$stat_test,
+        type = .data$summary_type,
         group = group
       )
     )
@@ -60,12 +60,12 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
   pvalue_column <-
     meta_data %>%
     select(c("variable", "pvalue")) %>%
-    mutate_(row_type = ~"label")
+    mutate(row_type = "label")
 
 
   table_body <-
     x$table_body %>%
-    dplyr::left_join(
+    left_join(
       pvalue_column,
       by = c("variable", "row_type")
     )
@@ -114,7 +114,4 @@ footnote_add_comparison <- function(meta_data) {
     pull("stat_test_label") %>%
     paste(collapse = ", ") %>%
     paste0("Statistical tests performed: ", .)
-
 }
-
-

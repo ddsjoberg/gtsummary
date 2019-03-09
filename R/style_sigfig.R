@@ -16,21 +16,23 @@
 #' @export
 #' @examples
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345) %>%
-#' style_sigfig()
-
+#'   style_sigfig()
 style_sigfig <- function(x, digits = 2) {
 
   # the purrr portion creates a list of lenghts {digits} with each
   # condition for rounding.  The are in the order they are run.
-  # They are in the format of dplyr::case_when
-  purrr::map(digits:1,
-             ~ glue::glue("abs(x) < 10^{digits - .x} ~ sprintf('%.{.x}f', x)")
+  # They are in the format of case_when
+  map(
+    digits:1,
+    ~ glue("abs(x) < 10^{digits - .x} ~ sprintf('%.{.x}f', x)")
   ) %>%
     # pasting together all conditions
     paste(collapse = ", ") %>%
     # adding the case_when function, as well as a final
     # condition to round to nearest integer
-    {glue::glue("dplyr::case_when({.}, TRUE ~ sprintf('%.0f', x))")}  %>%
+    {
+      glue("case_when({.}, TRUE ~ sprintf('%.0f', x))")
+    } %>%
     # converting strings into expressions to run
     parse(text = .) %>%
     eval()

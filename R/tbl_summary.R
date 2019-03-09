@@ -63,38 +63,38 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
   # creating a table with meta data about each variable
   meta_data <- tibble(variable = names(data))
   # excluding by variable
-  if (!is.null(by)) meta_data <- meta_data %>% filter_(~ variable != by)
+  if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
   # excluding id variable
-  if (!is.null(group)) meta_data <- meta_data %>% filter_(~ !variable %in% group)
+  if (!is.null(group)) meta_data <- meta_data %>% filter(!!parse_expr("!variable %in% group"))
 
   # assigning variable characteristics
   meta_data <- meta_data %>%
-    mutate_(
+    mutate(
       # assigning class, if entire var is NA, then assigning class NA
-      class = ~assign_class(data, variable),
-      summary_type = ~assign_summary_type(
-        data, variable, class, type
+      class = assign_class(data, .data$variable),
+      summary_type = assign_summary_type(
+        data, .data$variable, .data$class, type
       ),
-      dichotomous_value = ~assign_dichotomous_value(data, variable, summary_type, class),
-      var_label = ~assign_var_label(data, variable, label),
-      stat_display = ~assign_stat_display(summary_type, statistic),
-      stat_label = ~stat_label_match(stat_display, iqr),
-      digits = ~continuous_digits_guess(
-        data, variable, summary_type, class, digits
+      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class),
+      var_label = assign_var_label(data, .data$variable, label),
+      stat_display = assign_stat_display(.data$summary_type, statistic),
+      stat_label = stat_label_match(.data$stat_display, iqr),
+      digits = continuous_digits_guess(
+        data, .data$variable, .data$summary_type, .data$class, digits
       )
     )
 
   # calculating summary statistics
   table_body <-
     meta_data %>%
-    mutate_(
+    mutate(
       # creating summary stat table formatted properly
-      stat_table = ~pmap(
+      stat_table = pmap(
         list(
-          variable, summary_type, dichotomous_value,
-          var_label, stat_display, digits, class
+          .data$variable, .data$summary_type, .data$dichotomous_value,
+          .data$var_label, .data$stat_display, .data$digits, .data$class
         ),
-        ~calculate_summary_stat(
+        ~ calculate_summary_stat(
           data,
           variable = ..1, by = get("by"), summary_type = ..2,
           dichotomous_value = ..3, var_label = ..4, stat_display = ..5,
@@ -103,7 +103,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
       )
     ) %>%
     select(c("variable", "summary_type", "stat_table")) %>%
-    unnest_("stat_table")
+    unnest(!!sym("stat_table"))
 
   # returning all results in a list
   results <- list(
@@ -114,7 +114,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
     call_list = list(tbl_summary = match.call())
   )
 
-  if (!is.null(by)){
+  if (!is.null(by)) {
     results[["by"]] <- by
     results[["df_by"]] <- df_by(data, by)
   }
@@ -122,9 +122,12 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
   # assigning a class of tbl_summary (for special printing in Rmarkdown)
   class(results) <- "tbl_summary"
 
-    # adding headers
-  if(is.null(by)) results <- cols_label_summary(results, stat_overall = "**N = {N}**")
-  else results <- cols_label_summary(results, stat_by = "**{level}**, N = {n}")
+  # adding headers
+  if (is.null(by)) {
+    results <- cols_label_summary(results, stat_overall = md("**N = {N}**"))
+  } else {
+    results <- cols_label_summary(results, stat_by = md("**{level}**, N = {n}"))
+  }
 
   return(results)
 }

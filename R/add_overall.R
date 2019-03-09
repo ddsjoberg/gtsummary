@@ -13,8 +13,9 @@ add_overall <- function(x, last = FALSE) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
-  if (is.null(x$inputs[["by"]]))
+  if (is.null(x$inputs[["by"]])) {
     stop("Cannot add Overall column when no 'by' variable in original tbl_summary")
+  }
 
   x_copy <- x
 

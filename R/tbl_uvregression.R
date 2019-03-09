@@ -24,7 +24,7 @@
 #' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
 #' @param conf.level confidence level passed directly to \code{broom::tidy}.
 #' Default is 0.95.
-#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_sigfig}}
+#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_coef}}
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
 #' @author Daniel Sjoberg
 #' @export
@@ -48,15 +48,15 @@
 #' ) %>%
 #'   add_global()
 tbl_uvregression <- function(data, method, y, method.args = NULL,
-                               formula = "{y} ~ {.x}",
-                               exponentiate = FALSE, label = NULL,
-                               show_yesno = NULL, conf.level = 0.95,
-                               coef_fun = style_sigfig, pvalue_fun = style_pvalue) {
+                             formula = "{y} ~ {.x}",
+                             exponentiate = FALSE, label = NULL,
+                             show_yesno = NULL, conf.level = 0.95,
+                             coef_fun = style_coef, pvalue_fun = style_pvalue) {
 
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
-    stop(glue::glue(
+    stop(glue(
       "'data' input must be a data frame."
     ))
   }
@@ -88,7 +88,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
         what = method,
         args = c(
           list(
-            formula = glue::glue(formula) %>% stats::as.formula(),
+            formula = glue(formula) %>% stats::as.formula(),
             data = data
           ),
           method.args
@@ -116,14 +116,14 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
       tbl_regression_list,
       ~ .x %>% pluck("table_body")
     ) %>%
-    mutate_(
-      N = ~if_else(row_type == "label", N, NA_integer_)
+    mutate(
+      N = if_else(.data$row_type == "label", .data$N, NA_integer_)
     )
 
   # creating a meta_data table (this will be used in subsequent functions, eg add_global)
   meta_data <-
     table_body %>%
-    filter_(~ row_type == "label") %>%
+    filter(!!parse_expr('row_type == "label"')) %>%
     select(c("variable", "var_type", "label", "N"))
 
   # returning named list of results
@@ -199,11 +199,3 @@ gt_tbl_uvregression <- quote(list(
     "))"
   )
 ))
-
-
-
-
-
-
-
-

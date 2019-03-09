@@ -42,3 +42,25 @@ test_that("inline_text.tbl_summary: with by", {
   )
 })
 
+inline3 <- lm(marker ~ age + stage, trial) %>% tbl_regression()
+inline4 <- glm(response ~ trt + age + stage, trial, family = binomial) %>%
+  tbl_regression(exponentiate = TRUE)
+
+test_that("inline_text.regression", {
+  expect_error(
+    inline_text(inline3, variable = "age"),
+    NA
+  )
+  expect_warning(
+    inline_text(inline3, variable = "age"),
+    NA
+  )
+  expect_error(
+    inline_text(inline4, variable = "stage", level = "T2"),
+    NA
+  )
+  expect_warning(
+    inline_text(inline4, variable = "stage", level = "T2"),
+    NA
+  )
+})

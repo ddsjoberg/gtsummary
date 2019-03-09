@@ -18,13 +18,13 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
   counts <-
     x$meta_data %>%
     select(c("variable")) %>%
-    mutate_(
-      row_type = ~"label",
-      n_var = ~map_chr(
-        variable,
-        ~case_when(
+    mutate(
+      row_type = "label",
+      n_var = map_chr(
+        .data$variable,
+        ~ case_when(
           missing == FALSE ~ sum(!is.na(x$inputs$data[[.x]])),
-          missing == TRUE  ~ sum( is.na(x$inputs$data[[.x]]))
+          missing == TRUE ~ sum(is.na(x$inputs$data[[.x]]))
         )
       )
     ) %>%
@@ -46,8 +46,10 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
 
   # column headers
   x[["gt_calls"]][[glue("cols_label:{ifelse(missing == FALSE, 'n', 'n_missing')}")]] <-
-    glue("cols_label({ifelse(missing == FALSE, 'n', 'n_missing')} = ",
-         "md('**{ifelse(missing == FALSE, 'N', 'N Missing')}**'))")
+    glue(
+      "cols_label({ifelse(missing == FALSE, 'n', 'n_missing')} = ",
+      "md('**{ifelse(missing == FALSE, 'N', 'N Missing')}**'))"
+    )
 
   # replacing old table_body with new
   x$table_body <- table_body

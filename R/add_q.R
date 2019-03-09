@@ -37,8 +37,8 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...)
   # adding exact and printable q value to meta_data
   x$meta_data <-
     x$meta_data %>%
-    mutate_(
-      qvalue = ~ p.adjust(pvalue, method = method)
+    mutate(
+      qvalue = stats::p.adjust(.data$pvalue, method = method)
     )
 
   # adding q value to summary table
@@ -47,7 +47,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...)
     left_join(
       x$meta_data %>%
         select(c("variable", "qvalue")) %>%
-        mutate_(row_type = ~"label"),
+        mutate(row_type = "label"),
       by = c("variable", "row_type")
     )
 
@@ -101,8 +101,8 @@ add_q.tbl_uvregression <- function(x, method = "fdr", pvalue_fun = style_pvalue,
   # adding exact and printable q value to meta_data
   x$meta_data <-
     x$meta_data %>%
-    mutate_(
-      qvalue_global = ~ p.adjust(pvalue_global, method = method)
+    mutate(
+      qvalue_global = stats::p.adjust(.data$pvalue_global, method = method)
     )
 
   # adding q value to display table
@@ -112,7 +112,7 @@ add_q.tbl_uvregression <- function(x, method = "fdr", pvalue_fun = style_pvalue,
       x$meta_data %>%
         select(c("variable", "qvalue_global")) %>%
         set_names(c("variable", "qvalue")) %>%
-        mutate_(row_type = ~"label"),
+        mutate(row_type = "label"),
       by = c("variable", "row_type")
     )
 

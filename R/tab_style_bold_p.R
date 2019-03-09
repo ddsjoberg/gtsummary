@@ -23,17 +23,17 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_comparison has been previously run
-  if(is.null(x$call_list$add_comparison)) {
+  if (is.null(x$call_list$add_comparison)) {
     stop("Before bolding p-values, run add_comparison() to calculate the p-values")
   }
   # checking that add_q has been previously run if bolding q-values
-  if(q == TRUE & is.null(x$call_list$add_q)) {
+  if (q == TRUE & is.null(x$call_list$add_q)) {
     stop("Before bolding q-values, run add_q() to calculate the q-values")
   }
 
   # storing column names and gt_call name
-  col_name = ifelse(q == FALSE, 'pvalue', 'qvalue')
-  gt_call_name = glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
+  col_name <- ifelse(q == FALSE, "pvalue", "qvalue")
+  gt_call_name <- glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bolding
   x[[glue("{col_name}_bold_t")]] <- t
@@ -87,13 +87,13 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_q has been previously run if bolding q-values
-  if(q == TRUE & is.null(x$call_list$add_q)) {
+  if (q == TRUE & is.null(x$call_list$add_q)) {
     stop("Before bolding q-values, run add_q() to calculate the q-values")
   }
 
   # storing column names and gt_call name
-  col_name = ifelse(q == FALSE, 'pvalue', 'qvalue')
-  gt_call_name = glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
+  col_name <- ifelse(q == FALSE, "pvalue", "qvalue")
+  gt_call_name <- glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bolding
   x[[glue("{col_name}_bold_t")]] <- t
