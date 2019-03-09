@@ -171,7 +171,7 @@ gt_tbl_uvregression <- quote(list(
     "cols_label(",
     "label = md('**Characteristic**'), ",
     "N = md('**N**'), ",
-    "coef = md('**{coef_header(model_obj_list[1][[1]], exponentiate)}**'), ",
+    "coef = md('**{coef_header(model_obj_list[[1]], exponentiate)}**'), ",
     "ll = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
     "pvalue = md('**p-value**')",
     ")"
@@ -197,5 +197,11 @@ gt_tbl_uvregression <- quote(list(
     "columns = vars(label),",
     "rows = row_type != 'label'",
     "))"
-  )
+  ),
+
+  # column headers abbreviations footnote
+  # extracting from the first variable regression model
+  footnote_abbreviation =
+    tbl_regression_list %>%
+    pluck(1, "gt_calls", "footnote_abbreviation")
 ))

@@ -204,7 +204,7 @@ inline_text(tab1, variable = "stage", level = "T1", column = "Drug")` `` resolve
 
 ## Advanced Customization
 
-When you print the output from the `tbl_summary()` function into the R console or into an Rmarkdown, there are default printing functions that are called in the background: `print.tbl_summary()` and `knit_print.tbl_summary()`.  The true output from `tbl_summary()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the `gt` package.
+When you print the output from the `tbl_summary()` function into the R console or into an R markdown, there are default printing functions that are called in the background: `print.tbl_summary()` and `knit_print.tbl_summary()`.  The true output from `tbl_summary()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the `gt` package.
 
 ```{r}
 tbl_summary(trial2) %>% names()
@@ -219,7 +219,7 @@ These are the additional data stored in the `tbl_summary()` output list.
   > `inputs` Inputs from the `tbl_summary()` function call  
   > `gt_calls` Named list of gt function calls  
 
-`gt_calls` is a named list of saved gt function calls.  The gt calls are run when the object is print to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_summary()`:
+`gt_calls` is a named list of saved gt function calls.  The gt calls are run when the object is printed to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_summary()`:
 
 ```{r}
 tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% head(n = 3)
