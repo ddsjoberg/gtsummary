@@ -3,7 +3,7 @@
 #'
 #' @param x `tbl_summary` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
-#' @author Esther Drill
+#' @author Esther Drill, Daniel Sjoberg
 #' @export
 add_q <- function(x, ...) UseMethod("add_q")
 
@@ -19,14 +19,14 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
 #' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
 #' @param ...	further arguments passed to or from other methods
-#' @author Esther Drill
+#' @author Esther Drill, Daniel Sjoberg
 #' @export
 #' @examples
 #' trial %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
 #'   add_q()
-add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...) {
+add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...) {
 
   # This adjusts p-values for multiple testing. Default method is fdr.
   if (!("add_comparison" %in% names(x$call_list))) {
@@ -54,6 +54,12 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...)
   # keep track of what functions have been called
   x$call_list <- c(x$call_list, list(add_q = match.call()))
 
+  # footnote text
+  footnote_text <-
+    method %>%
+    {filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))} %>%
+    pull("method_label")
+
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt:qvalue"]] <-
@@ -61,6 +67,14 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...)
   # column headers
   x[["gt_calls"]][["cols_label:qvalue"]] <-
     "cols_label(qvalue = md('**q-value**'))"
+  # column headers abbreviations footnote
+  x[["gt_calls"]][["footnote_q_method"]] = glue(
+    "tab_footnote(",
+    "  footnote = '{footnote_text}',",
+    "  locations = cells_column_labels(",
+    "    columns = vars(qvalue))",
+    ")"
+  )
 
   # Returns the table 1 object
   return(x)
@@ -79,7 +93,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...)
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
 #' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
 #' @param ...	further arguments passed to or from other methods
-#' @author Esther Drill
+#' @author Esther Drill, Daniel Sjoberg
 #' @export
 #' @examples
 #' trial %>%
@@ -89,7 +103,8 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...)
 #'   ) %>%
 #'   add_global() %>%
 #'   add_q()
-add_q.tbl_uvregression <- function(x, method = "fdr", pvalue_fun = style_pvalue, ...) {
+add_q.tbl_uvregression <- function(x, method = "fdr",
+                                   pvalue_fun = x$inputs$pvalue_fun, ...) {
 
   # This adjusts p-values for multiple testing but only when the global approach is used.
   # Default method is fdr.
@@ -118,6 +133,12 @@ add_q.tbl_uvregression <- function(x, method = "fdr", pvalue_fun = style_pvalue,
 
   x$call_list <- c(x$call_list, list(add_q = match.call()))
 
+  # footnote text
+  footnote_text <-
+    method %>%
+    {filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))} %>%
+    pull("method_label")
+
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt:qvalue"]] <-
@@ -125,6 +146,28 @@ add_q.tbl_uvregression <- function(x, method = "fdr", pvalue_fun = style_pvalue,
   # column headers
   x[["gt_calls"]][["cols_label:qvalue"]] <-
     "cols_label(qvalue = md('**q-value**'))"
+  # column headers abbreviations footnote
+  x[["gt_calls"]][["footnote_q_method"]] = glue(
+    "tab_footnote(",
+    "  footnote = '{footnote_text}',",
+    "  locations = cells_column_labels(",
+    "    columns = vars(qvalue))",
+    ")"
+  )
 
   return(x)
 }
+
+
+# match method input to display name
+add_q_method_lookup <- tibble::tribble(
+  ~method, ~method_label,
+  "holm", "Holm correction",
+  "hochberg", "Hochberg correction",
+  "hommel", "Hommel correction",
+  "bonferroni", "Bonferroni correction",
+  "BH", "Benjamini & Hochberg correction",
+  "BY", "Benjamini & Yekutieli correction",
+  "fdr", "False discovery rate correction",
+  "none", "No correction"
+)
