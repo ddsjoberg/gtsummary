@@ -24,10 +24,10 @@
 #' @examples
 #' mod1 <- lm(hp ~ mpg + factor(cyl), mtcars)
 #' tbl_regression(mod1)
-#' 
+#'
 #' mod2 <- glm(response ~ age + grade + stage, trial, family = binomial(link = "logit"))
 #' tbl_regression(mod2, exponentiate = TRUE)
-#' 
+#'
 #' library(lme4)
 #' mod_glmer <- glmer(am ~ hp + (1 | gear), mtcars, family = binomial)
 #' tbl_regression(mod_glmer, exponentiate = TRUE)
@@ -57,7 +57,7 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
 
   # keeping variables indicated in `include`
   if ((names(mod_list) %in% include) %>% any() == FALSE) {
-    stop(glue::glue(
+    stop(glue(
       "'include' must be in '{paste(names(mod_list), collapse = ', ')}'"
     ))
   }

@@ -62,21 +62,21 @@ cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL) {
 
 col_label_by <- function(df_by, stat_by) {
   df_by %>%
-    dplyr::select(c("by_col", "by_chr", "n", "N", "p")) %>%
-    rlang::set_names(c("by_col", "level", "n", "N", "p")) %>%
-    dplyr::mutate_(
-      col_label = ~ glue::glue(stat_by),
-      col_label_code = ~ glue::glue("{by_col} = {col_label}")
+    select(c("by_col", "by_chr", "n", "N", "p")) %>%
+    set_names(c("by_col", "level", "n", "N", "p")) %>%
+    mutate_(
+      col_label = ~ glue(stat_by),
+      col_label_code = ~ glue("{by_col} = {col_label}")
     ) %>%
-    dplyr::pull("col_label_code") %>%
+    pull("col_label_code") %>%
     paste(collapse = ", ") %>%
     {
-      glue::glue("cols_label({.})")
+      glue("cols_label({.})")
     }
 }
 
 col_label_overall <- function(stat_overall, N) {
-  glue::glue(stat_overall) %>%
-  {glue::glue("cols_label(stat_0 = {.})")}
+  glue(stat_overall) %>%
+  {glue("cols_label(stat_0 = {.})")}
 }
 

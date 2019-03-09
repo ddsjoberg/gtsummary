@@ -26,7 +26,7 @@ Default is \code{\link{style_pvalue}}.
 The function must have a single input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-\code{purrr::partial(style_pvalue, digits = 2)}).}
+\code{partial(style_pvalue, digits = 2)}).}
 
 \item{group}{Character vector of an ID or grouping variable.  Summary statistics
 will not be printed for this column, but they may be used in subsequent

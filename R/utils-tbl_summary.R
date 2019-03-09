@@ -205,7 +205,7 @@ assign_summary_type <- function(data, variable, class, summary_type) {
 
 
 # n = 50
-# dta = dplyr::data_frame(
+# dta = tibble(
 #   age = rnorm(n) + 35,
 #   female = sample(c(T, F), size = n, replace = T),
 #   male = as.numeric(female),
@@ -215,8 +215,8 @@ assign_summary_type <- function(data, variable, class, summary_type) {
 #   family_size = sample(1:5, size = n, replace = T)
 # )
 # #adding missing values
-# dta = dplyr::mutate_all(dta, dplyr::funs( ifelse(runif(n) < 0.25, NA, .)) ) %>%
-#   dplyr::mutate(
+# dta = mutate_all(dta, funs( ifelse(runif(n) < 0.25, NA, .)) ) %>%
+#   mutate(
 #     sex = as.factor(sex),
 #     male_fct = ifelse(female == TRUE, "No", "Yes") %>% factor()
 #   )
@@ -224,22 +224,22 @@ assign_summary_type <- function(data, variable, class, summary_type) {
 #
 # # creating base meta data dataframe
 # meta_data =
-#   dplyr::data_frame(
+#   tibble(
 #     variable = names(dta),
-#     class = purrr::map_chr(variable, ~ class(dta[[.x]]))
+#     class = map_chr(variable, ~ class(dta[[.x]]))
 #   )
 # meta_data
 #
 # # tesing function's guessing ability
 # meta_data %>%
-#   dplyr::mutate(
+#   mutate(
 #     assign_summary_type = assign_summary_type(dta, variable, class, NULL)
 #   )
 #
 #
 # # tesing function's ability when type assigned
 # meta_data %>%
-#   dplyr::mutate(
+#   mutate(
 #     assign_summary_type = assign_summary_type(dta, variable, class, list(shoe_size = "categorical"))
 #   )
 
@@ -257,7 +257,7 @@ assign_summary_type <- function(data, variable, class, summary_type) {
 #' @author Daniel Sjoberg
 
 assign_test <- function(data, var, var_summary_type, by_var, test, group) {
-  purrr::map2_chr(
+  map2_chr(
     var, var_summary_type,
     ~ assign_test_one(
       data = data,
@@ -297,9 +297,9 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # calculate expected counts
   min_exp <-
     expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
-    dplyr::mutate_(exp = ~ Var1 * Var2 /
+    mutate_(exp = ~ Var1 * Var2 /
       sum(table(data[[var]], data[[by_var]]))) %>%
-    dplyr::pull(exp) %>%
+    pull(exp) %>%
     min()
 
   # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
@@ -345,7 +345,7 @@ assign_var_label <- function(data, variable, var_label) {
 }
 
 # n = 10
-# dta = dplyr::data_frame(
+# dta = tibble(
 #   age = rnorm(n),
 #   sex = 1
 # )
@@ -354,12 +354,12 @@ assign_var_label <- function(data, variable, var_label) {
 # var_label_one(dta, "age", NULL)
 #
 # meta =
-#   dplyr::data_frame(
+#   tibble(
 #     variable = names(dta)
 #   )
 #
-# dplyr::mutate(meta, var_label = var_label(dta, variable, NULL))
-# dplyr::mutate(meta, var_label = var_label(dta, variable, list(sex = "Gender")))
+# mutate(meta, var_label = var_label(dta, variable, NULL))
+# mutate(meta, var_label = var_label(dta, variable, list(sex = "Gender")))
 
 
 
@@ -376,7 +376,7 @@ assign_var_label <- function(data, variable, var_label) {
 #' @author Emily Zabor
 
 calculate_pvalue <- function(data, variable, by, test, type, group) {
-  purrr::pmap_dbl(
+  pmap_dbl(
     list(variable, by, test, type),
     ~ calculate_pvalue_one(data, ..1, ..2, ..3, ..4, group)
   )
@@ -580,11 +580,11 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     if (!is.null(by)) {
       stat_col_names <- df_by(data, by)[["by_col"]]
       return(
-        dplyr::data_frame(
+        tibble(
           row_type = c("label", "missing"),
           label = c(var_label, "Unknown")
         ) %>%
-          dplyr::left_join(
+          left_join(
             table(data[[by]]) %>%
               as.matrix() %>%
               t() %>%
@@ -1256,7 +1256,7 @@ footnote_stat_label <- function(meta_data) {
   meta_data %>%
     select(c("summary_type", "stat_label")) %>%
     mutate_(
-      summary_type = ~ dplyr::case_when(
+      summary_type = ~ case_when(
         summary_type == "dichotomous" ~ "categorical",
         TRUE ~ summary_type
       ),

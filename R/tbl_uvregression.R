@@ -36,7 +36,7 @@
 #'   method.args = list(family = binomial),
 #'   exponentiate = TRUE
 #' )
-#' 
+#'
 #' # rounding pvalues to 2 decimal places, and adding global p-values
 #' tbl_uvregression(
 #'   trial,
@@ -56,7 +56,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
-    stop(glue::glue(
+    stop(glue(
       "'data' input must be a data frame."
     ))
   }
@@ -88,7 +88,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
         what = method,
         args = c(
           list(
-            formula = glue::glue(formula) %>% stats::as.formula(),
+            formula = glue(formula) %>% stats::as.formula(),
             data = data
           ),
           method.args
