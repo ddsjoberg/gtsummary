@@ -3,7 +3,7 @@
 #' @param x object created from a gtsummary funciton
 #' @param ... further arguments passed to or from other methods.
 #' @author Daniel Sjoberg
-#' @seealso \link{inline_text.tbl_summary}, \link{tbl_summary}, \link{tbl_regression}, \link{tbl_uvregression}
+#' @seealso \link{inline_text.tbl_summary}, \link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression}, \link{tbl_summary}, \link{tbl_regression}, \link{tbl_uvregression}
 #' @export
 inline_text <- function(x, ...) UseMethod("inline_text")
 
@@ -141,7 +141,7 @@ inline_text.tbl_regression <-
     x$table_body <-
       left_join(
         x$table_body %>% select(-"N"),
-        x$table_body %>% filter(!!parse_expr('row_type != "label"')) %>% select(c("variable", "N")),
+        x$table_body %>% filter(!!parse_expr('row_type != "label"')) %>% select(c("variable", "N")) %>% distinct(),
         by = "variable"
       )
 
