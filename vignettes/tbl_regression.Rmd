@@ -61,57 +61,155 @@ tbl_regression(m1, exponentiate = TRUE) %>%
   add_global()
 ```
 
-## Format Model Results
+## Customize Regression Table Output
 
-There are formatting options available, such as bolding and italicizing rows.  In the example below, variable labels are bolded, and the levels of categorical levels are italicized.
+There are four primary was to customize the output of the regression model table.
+
+1. Modify `tbl_regression()` function input arguments
+1. Add additional data/information to a summary table with `add_*()` functions
+1. Modify summary table appearance with the gtsummary functions
+1. Modify table appearance with gt package functions
+
+### Modifying function arguments
+
+The `tbl_regression()` function includes many input options for modifying the appearance.
+
+  > `label` modify the variable labels printed in the table  
+  > `exponentiate` exponentiriate model coefficients
+  > `include` names of variables to include in output. Default is all variables.
+  > `show_yesno` Show both levels fo yes/no variables. Default prints on single row.
+  > `conf.level` confidence leve of confidence interval  
+  > `intercept` logical argument indicates whether to include the intercept in output
+  > `coef_fun` function to round and format beta coefficients  
+  > `pvalue_fun` function to round and format p-values  
+
+### Functions to add information
+
+The gtsummary package has built-in functions for adding to results from `tbl_regression()`.  The following functions add columns and/or information to the regression table.
+
+  > `add_global()` Adds the global p-value for a categorical variables   
+
+### gtsummary functions to format table
+
+The gtsummary package comes with functions specifically made to modify and format summary tables.  These functions share the same prefixes as functions from the gt package to ease use.
+
+  > `tab_style_bold_labels()` Bold variable labels  
+  > `tab_style_bold_levels()` Bold variable levels  
+  > `tab_style_italicize_labels()` Italicize variable labels  
+  > `tab_style_italicize_levels()` Italicize variable levels  
+  > `tab_style_bold_p()` Bold significant p-values  
+
+### gt functions to format table
+
+The gt package is packed with many great functions for modifying table output---too many to list here.  Review the package's website for a full listing. https://gt.rstudio.com/index.html
+
+To use the gt package functions with gtsummary tables, the regression table must first be converted into a `gt` object.  To this end, use the `as_gt()` function after modifications have been completed with gtsummary functions.
+
+```
+m1 %>%
+  tbl_regression(exponentiate = TRUE) %>%
+  <gt functions>
+```
+### Example
+
+There are formatting options available, such as bolding and italicizing rows.  In the example below,  
+
+1. Variable labels are bold  
+1. Levels of categorical levels are italicized  
+1. P-values less than 0.10 are bold  
+1. Large p-values are rounded to two decimal places  
+1. Coefficients are exponentiated to give odds ratios  
+1. Coefficients are rounded to 3 significant figures
 
 ```{r, message=FALSE}
 # format results into data frame with global p-values
-tbl_regression(m1, exponentiate = TRUE) %>% 
+m1 %>%
+  tbl_regression( 
+    exponentiate = TRUE, 
+    pvalue_fun = function(x) style_pvalue(x, digits = 2),
+    coef_fun = function(x) style_sigfig(x, digits = 3)
+  )  %>% 
+  add_global() %>%
+  tab_style_bold_p(t = 0.10) %>%
   tab_style_bold_labels() %>% 
   tab_style_italicize_levels()
 ```
 
-The `tbl_regression()` has default methods for rounding p-values and model coefficients.  The default p-value formatting function is `style_pvalue()` and `style_sigfig()` for the coefficients.  In the example below, the large large p-values were rounded to 1 decimal place rather than 2.
+##  Report Results Inline
 
-```{r, message=FALSE}
-# format results into data frame with global p-values
-tbl_regression(
-  m1, 
-  exponentiate = TRUE, 
-  pvalue_fun = function(x) style_pvalue(x, digits = 2)
-) 
-```
+Reproducible reports are an import part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
 
-##  Report Results Inline (coming soon!)
-
-## Under the Hood
-
-When you print the output from the `tbl_regression()` function into the R console or into an Rmarkdown, there are default printing functions that are called in the background: `print.tbl_regression()` and `knit_print.tbl_regression()`.  The true output from `tbl_regression()` is a named list, but when you print into the R console the interesting portions are displayed from the `.$table_body` data frame.
+Let's first create a regression model table.
 
 ```{r}
-ls(m1 %>% tbl_regression())
+tbl_m1 = tbl_regression(m1, exponentiate = TRUE)
+tbl_m1
 ```
 
-There is additional information stored in the `tbl_regression()` output list. 
+To report the result for `age`, use the following commands inline.
 
-- `table_body` data frame with regression summary statistics
-- `model_obj` regression model object
-- `n` sample size
-- `inputs` Inputs from the function call. Not only is the call stored, but the values of the inputs as well.  
+> `` `r
+inline_text(tbl_m1, variable = "age")` `` 
+
+Here's how the line will appear in your report.
+
+> `r inline_text(tbl_m1, variable = "age")`
+
+It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows the `glue::glue()` format with referenced R objects being inserted between curly brackets.  You have access to following fields within the `pattern` argument.  The default is `pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {pvalue})"`
+
+    {coef}       Primary estimate (e.g. odds ratio, model coefficient)
+    {ll}         Rounded lower limit of confidence interval
+    {ul}         Rounded upper limit of confidence interval
+    {pvalue}     Rounded p-value
+    {conf.level} Confidence level of interval
+
+The `inline_text` function has has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`coef_fun`).
+
+> Age was not significantly associated with tumor response `` `r
+inline_text(tbl_m1, variable = "age", pattern = "(OR {coef}; 95% CI {ll}, {ul}; {pvalue})")` ``.
+
+> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = "age", pattern = "(OR {coef}; 95% CI {ll}, {ul}; {pvalue})")`.
+
+If you're printing results from a categorical variable, include `level` argument, e.g. `inline_text(tbl_m1, variable = "stage", level = "T3")` resolves to "`r inline_text(tbl_m1, variable = "stage", level = "T3")`".  
+
+
+## Advanced Customization
+
+When you print the output from the `tbl_regression()` function into the R console or into an Rmarkdown, there are default printing functions that are called in the background: `print.tbl_regression()` and `knit_print.tbl_regression()`.  The true output from `tbl_regression()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the `gt` package.
 
 ```{r}
-print.listof(m1 %>% tbl_regression())
+tbl_regression(m1) %>% names()
+```
+
+These are the additional data stored in the `tbl_regression()` output list. 
+
+  > `table_body` Data frame with summary statistics  
+  > `n` N included in model  
+  > `model_obj` the model object passed to `tbl_regression`  
+  > `call_list` Named list of each function called on the `tbl_regression` object  
+  > `inputs` Inputs from the `tbl_regression()` function call  
+  > `gt_calls` Named list of gt function calls  
+
+`gt_calls` is a named list of saved gt function calls.  The gt calls are run when the object is print to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_regression()`:
+
+```{r}
+tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% head(n = 3)
+```
+
+The gt functions are called in the order they appear, always beginning with the `gt()` function.
+
+If the user does not want a specific gt function to run, any gt call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_regression()` call creates many named gt function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be omitted.  In this example, the default indentation will be omitted from the output.
+
+```{r remedy001}
+tbl_regression(m1) %>%
+  as_gt(omit = "tab_style_text_indent")
 ```
 
 ## tbl_uvregression
 
-The `tbl_uvregression()` produces a table of univariate regression results.  The function is a wrapper for `tbl_regression()`, and as a result, accepts nearly identical function arguments.  The function's results can be modified in similar ways to `tbl_regression()` as well.
+The `tbl_uvregression()` produces a table of univariate regression results.  The function is a wrapper for `tbl_regression()`, and as a result, accepts nearly identical function arguments.  The function's results can be modified in similar ways to `tbl_regression()` and the results reported inline similarly to `tbl_regression()`.
 
 ```{r tbl_uvregression}
-# rounding pvalues to 2 decimal places, 
-# and adding global p-values,
-# and bold_labels
 tbl_uvregression(
  trial,
  method = "glm",
@@ -127,10 +225,7 @@ tbl_uvregression(
   # bold p-values under a given threshold (default 0.05)
   tab_style_bold_p() %>% 
   # now bold q-values under the threshold of 0.10
-  tab_style_bold_p(
-    t = 0.10,
-    q = TRUE
-  ) %>%
+  tab_style_bold_p(t = 0.10, q = TRUE) %>%
   tab_style_bold_labels()
 ```
 
