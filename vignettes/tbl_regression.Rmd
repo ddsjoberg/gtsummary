@@ -175,7 +175,7 @@ If you're printing results from a categorical variable, include `level` argument
 
 ## Advanced Customization
 
-When you print the output from the `tbl_regression()` function into the R console or into an Rmarkdown, there are default printing functions that are called in the background: `print.tbl_regression()` and `knit_print.tbl_regression()`.  The true output from `tbl_regression()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the `gt` package.
+When you print the output from the `tbl_regression()` function into the R console or into an R markdown, there are default printing functions that are called in the background: `print.tbl_regression()` and `knit_print.tbl_regression()`.  The true output from `tbl_regression()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the `gt` package.
 
 ```{r}
 tbl_regression(m1) %>% names()
@@ -190,7 +190,7 @@ These are the additional data stored in the `tbl_regression()` output list.
   > `inputs` Inputs from the `tbl_regression()` function call  
   > `gt_calls` Named list of gt function calls  
 
-`gt_calls` is a named list of saved gt function calls.  The gt calls are run when the object is print to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_regression()`:
+`gt_calls` is a named list of saved gt function calls.  The gt calls are run when the object is printed to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_regression()`:
 
 ```{r}
 tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% head(n = 3)
@@ -223,7 +223,7 @@ tbl_uvregression(
   # adjusts global p-values for multiple testing (default method: FDR)
   add_q() %>%
   # bold p-values under a given threshold (default 0.05)
-  tab_style_bold_p() %>% 
+  tab_style_bold_p() %>%
   # now bold q-values under the threshold of 0.10
   tab_style_bold_p(t = 0.10, q = TRUE) %>%
   tab_style_bold_labels()
