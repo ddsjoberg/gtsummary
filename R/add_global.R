@@ -51,7 +51,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
   # check that terms selected appear in model.
   if (!all(terms %in% model_terms)) {
-    stop(glue::glue(
+    stop(glue(
       "Terms selected are not categorical terms from model: ",
       "{paste(terms[!(terms %in% model_terms)], collpase = ', ')}"
     ))

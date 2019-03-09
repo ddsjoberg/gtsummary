@@ -24,7 +24,7 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 #' The function must have a single input (the numeric, exact p-value),
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-#'  \code{purrr::partial(style_pvalue, digits = 2)}).
+#'  \code{partial(style_pvalue, digits = 2)}).
 #' @param ... not used
 #' @author Daniel Sjoberg
 #' @export
@@ -33,7 +33,7 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 inline_text.tbl_summary <-
   function(x, variable, level = NULL,
              column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-             pvalue_fun = purrr::partial(style_pvalue, prepend_p = TRUE), ...) {
+             pvalue_fun = partial(style_pvalue, prepend_p = TRUE), ...) {
     # checking column ----------------------------------------------------------
     # the follwing code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
@@ -74,7 +74,7 @@ inline_text.tbl_summary <-
     if (nrow(result) == 0) {
       stop(glue(
         "Is the variable name spelled correctly? variable must be one of: ",
-          "{purrr::pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
+          "{pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
       ))
     }
 
@@ -139,7 +139,7 @@ inline_text.tbl_regression <-
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
     x$table_body <-
-      dplyr::left_join(
+      left_join(
         x$table_body %>% select(-"N"),
         x$table_body %>% filter_('row_type == "label"') %>% select(c("variable", "N")),
         by = "variable"
@@ -155,7 +155,7 @@ inline_text.tbl_regression <-
     if (nrow(result) == 0) {
       stop(glue(
         "Is the variable name spelled correctly? variable must be one of: ",
-        "{purrr::pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
+        "{pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
       ))
     }
 
