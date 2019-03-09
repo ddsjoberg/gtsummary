@@ -219,7 +219,7 @@ coef_header <- function(x, exponentiate) {
 
   # Other models
   else if (exponentiate == TRUE) header <- "exp(Coefficient)"
-  else  header <- "exp(Coefficient)"
+  else  header <- "Coefficient"
 
   header
 }
