@@ -295,7 +295,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # calculate expected counts
   min_exp <-
     expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
-    mutate_(exp = ~ Var1 * Var2 /
+    mutate(exp = .data$Var1 * .data$Var2 /
       sum(table(data[[var]], data[[by_var]]))) %>%
     pull(exp) %>%
     min()
@@ -589,7 +589,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
               as_tibble() %>%
               mutate_all(as.character) %>%
               set_names(stat_col_names) %>%
-              mutate_(row_type = ~"missing")
+              mutate(row_type = "missing")
           )
       )
     }
@@ -713,12 +713,12 @@ df_by <- function(data, by) {
     select(c(by)) %>%
     set_names("by") %>%
     count(!!sym("by")) %>%
-    mutate_(N = ~ sum(n), p = ~ n / N) %>%
+    mutate(N = sum(.data$n), p = .data$n / .data$N) %>%
     arrange(!!sym("by")) %>%
-    mutate_(
-      by_id = ~ 1:n(), # 'by' variable ID
-      by_chr = ~ as.character(by), # Character version of 'by' variable
-      by_col = ~ paste0("stat_", by_id) # Column name of in fmt_table1 output
+    mutate(
+      by_id = 1:n(), # 'by' variable ID
+      by_chr = as.character(.data$by), # Character version of 'by' variable
+      by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
     ) %>%
     select(starts_with("by"), everything())
 }
@@ -787,7 +787,7 @@ summarize_categorical <- function(data, variable, by, var_label,
       data %>%
       select(c(variable)) %>%
       set_names(c("variable")) %>%
-      mutate_(by_col = ~"stat_0") %>%
+      mutate(by_col = "stat_0") %>%
       select(c(variable, "by_col"))
   }
 
@@ -798,16 +798,16 @@ summarize_categorical <- function(data, variable, by, var_label,
     group_by(!!sym("by_col")) %>%
     count(!!sym("variable")) %>%
     complete(!!sym("variable"), fill = list(n = 0)) %>%
-    mutate_(
-      N = ~ sum(n),
-      p = ~ style_percent(n / N),
-      stat = ~ as.character(glue(stat_display))
+    mutate(
+      N = sum(.data$n),
+      p = style_percent(.data$n / .data$N),
+      stat = as.character(glue(stat_display))
     ) %>%
     select(c("by_col", "variable", "stat")) %>%
     spread(!!sym("by_col"), !!sym("stat")) %>%
-    mutate_(
-      row_type = ~"level",
-      label = ~ variable %>% as.character()
+    mutate(
+      row_type = "level",
+      label = .data$variable %>% as.character()
     ) %>%
     select(c("variable", "row_type", "label", starts_with("stat_")))
 
@@ -816,14 +816,14 @@ summarize_categorical <- function(data, variable, by, var_label,
     data %>%
     group_by(!!sym("by_col")) %>%
     nest() %>%
-    mutate_(
-      missing_count = ~ map_chr(data, ~ .x[[1]] %>% is.na() %>% sum())
+    mutate(
+      missing_count = map_chr(data, ~ .x[[1]] %>% is.na() %>% sum())
     ) %>%
     select(c("by_col", "missing_count")) %>%
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
-    mutate_(
-      row_type = ~"missing",
-      label = ~"Unknown"
+    mutate(
+      row_type = "missing",
+      label = "Unknown"
     )
 
 
@@ -832,9 +832,9 @@ summarize_categorical <- function(data, variable, by, var_label,
     results <-
       tab %>%
       filter(!!parse_expr("variable == dichotomous_value")) %>%
-      mutate_(
-        row_type = ~"label",
-        label = ~var_label
+      mutate(
+        row_type = "label",
+        label = var_label
       ) %>%
       select(-c(variable)) %>%
       bind_rows(missing_count)
@@ -925,7 +925,7 @@ summarize_continuous <- function(data, variable, by, digits,
       data %>%
       select(c(variable)) %>%
       set_names(c("variable")) %>%
-      mutate_(by_col = ~"stat_0") %>%
+      mutate(by_col = "stat_0") %>%
       select(c(variable, "by_col"))
   }
 
@@ -938,55 +938,55 @@ summarize_continuous <- function(data, variable, by, digits,
   # nesting data and calculating descriptive stats
   stats <-
     data %>%
-    mutate_(
+    mutate(
       # extracting list of statisitcs that need to be calculated
-      stat_name_list = ~ str_extract_all(stat_display, "\\{.*?\\}") %>%
+      stat_name_list = str_extract_all(stat_display, "\\{.*?\\}") %>%
         map(str_remove_all, pattern = fixed("}")) %>%
         map(str_remove_all, pattern = fixed("{")),
       # calculating statistics
-      stat_result_list = ~ map2(
-        data, stat_name_list,
+      stat_result_list = map2(
+        data, .data$stat_name_list,
         ~ calculate_single_stat(.x[[1]], .y)
       ),
       # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
-      df_result = ~ map2(
-        stat_name_list, stat_result_list,
+      df_result = map2(
+        .data$stat_name_list, .data$stat_result_list,
         ~ .y %>% t() %>% as_tibble() %>% set_names(.x)
       ),
       # rounding statistics and concatenating results
-      stat = ~ map_chr(
-        df_result,
+      stat = map_chr(
+        .data$df_result,
         ~ .x %>%
           mutate_all(~ sprintf(glue("%.{digits}f"), .)) %>%
-          mutate_(
-            stat = ~ as.character(glue(stat_display))
+          mutate(
+            stat = as.character(glue(stat_display))
           ) %>%
           pull("stat")
       )
     ) %>%
     select(c("by_col", "stat")) %>%
     spread(!!sym("by_col"), !!sym("stat")) %>%
-    mutate_(
-      row_type = ~"label",
-      label = ~var_label
+    mutate(
+      row_type = "label",
+      label = var_label
     ) %>%
     select(c("row_type", "label", starts_with("stat_")))
 
   # number of missing observations
   missing_count <-
     data %>%
-    mutate_(
+    mutate(
       missing_count =
-        ~ map_chr(
+        map_chr(
           data,
           ~ .x[[1]] %>% is.na() %>% sum()
         )
     ) %>%
     select(c("by_col", "missing_count")) %>%
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
-    mutate_(
-      row_type = ~"missing",
-      label = ~"Unknown"
+    mutate(
+      row_type = "missing",
+      label = "Unknown"
     )
 
   # stacking stats and missing row
@@ -1220,7 +1220,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
     ) %>%
     bind_rows(
       tibble(stat = paste0("{p", 0:100, "}")) %>%
-        mutate_(label = ~ paste0(gsub("[^0-9\\.]", "", stat), "%"))
+        mutate(label = paste0(gsub("[^0-9\\.]", "", .data$stat), "%"))
     )
 
   # adding IQR replacements if indicated
@@ -1253,12 +1253,12 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
 footnote_stat_label <- function(meta_data) {
   meta_data %>%
     select(c("summary_type", "stat_label")) %>%
-    mutate_(
-      summary_type = ~ case_when(
+    mutate(
+      summary_type = case_when(
         summary_type == "dichotomous" ~ "categorical",
-        TRUE ~ summary_type
+        TRUE ~ .data$summary_type
       ),
-      message = ~ glue("{stat_label} for {summary_type} variables")
+      message = glue("{stat_label} for {summary_type} variables")
     ) %>%
     distinct() %>%
     pull("message") %>%

@@ -121,8 +121,8 @@ parse_terms <- function(x, tidy_model, show_yesno) {
         tibble(
           level = stats::model.frame(x)[[v]] %>% unique()
         ) %>%
-        mutate_(
-          term = ~ paste0(v, level)
+        mutate(
+          term = paste0(v, .data$level)
         ) %>%
         arrange(!!sym("level")) %>%
         select("term")
@@ -153,13 +153,13 @@ parse_terms <- function(x, tidy_model, show_yesno) {
 # for categorical, we add a row on top with the label
 add_label <- function(var_type, estimates, var_label, variable) {
   case_when(
-    var_type == "continuous" ~ list(estimates %>% mutate_(row_type = ~"label", label = ~var_label)),
+    var_type == "continuous" ~ list(estimates %>% mutate(row_type = "label", label = var_label)),
     var_type == "categorical" ~ list(
       bind_rows(
         tibble(row_type = "label", label = var_label),
-        estimates %>% mutate_(
-          row_type = ~"level",
-          label = ~ stringr::str_replace(term, stringr::fixed(variable), "")
+        estimates %>% mutate(
+          row_type = "level",
+          label = stringr::str_replace(.data$term, stringr::fixed(variable), "")
         )
       )
     )

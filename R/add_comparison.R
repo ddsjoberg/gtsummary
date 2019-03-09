@@ -35,23 +35,23 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
   # getting the test name and pvalue
   meta_data <-
     x$meta_data %>%
-    mutate_(
+    mutate(
       # assigning statistical test to perform
-      stat_test = ~ assign_test(
+      stat_test = assign_test(
         data = x$inputs$data,
-        var = variable,
-        var_summary_type = summary_type,
+        var = .data$variable,
+        var_summary_type = .data$summary_type,
         by_var = x$inputs$by,
         test = test,
         group = group
       ),
       # calculating pvalue
-      pvalue = ~ calculate_pvalue(
+      pvalue = calculate_pvalue(
         data = x$inputs$data,
-        variable = variable,
+        variable = .data$variable,
         by = x$inputs$by,
-        test = stat_test,
-        type = summary_type,
+        test = .data$stat_test,
+        type = .data$summary_type,
         group = group
       )
     )
@@ -60,7 +60,7 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
   pvalue_column <-
     meta_data %>%
     select(c("variable", "pvalue")) %>%
-    mutate_(row_type = ~"label")
+    mutate(row_type = "label")
 
 
   table_body <-

@@ -116,8 +116,8 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
       tbl_regression_list,
       ~ .x %>% pluck("table_body")
     ) %>%
-    mutate_(
-      N = ~ if_else(row_type == "label", N, NA_integer_)
+    mutate(
+      N = if_else(.data$row_type == "label", .data$N, NA_integer_)
     )
 
   # creating a meta_data table (this will be used in subsequent functions, eg add_global)

@@ -146,7 +146,7 @@ trial2 %>%
     by = "trt",
     # change variable labels
     label = list(
-      marker = "Pretreatment Marker Level, ng/mL",
+      marker = "Marker, ng/mL",
       stage = "Clinical T Stage"
       ),
     # change statistics printed in table
@@ -170,7 +170,7 @@ trial2 %>%
   tab_style_bold_p(t = 0.2) %>%
   # include percent in headers
   cols_label_summary(
-    stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"
+    stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
   )
 ```
 

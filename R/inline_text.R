@@ -184,9 +184,9 @@ inline_text.tbl_regression <-
       result %>%
       mutate_at(vars(one_of(c("coef", "ll", "ul"))), coef_fun) %>%
       mutate_at(vars(one_of(pvalue_cols)), pvalue_fun) %>%
-      mutate_(
-        conf.level = ~ x$inputs$conf.level,
-        stat = ~ glue(pattern)
+      mutate(
+        conf.level = x$inputs$conf.level,
+        stat = glue(pattern)
       ) %>%
       pull("stat")
 

@@ -69,17 +69,17 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   # putting all results into tibble
   table_body <-
     tibble(variable = names(mod_list)) %>%
-    mutate_(
-      estimates = ~mod_list,
-      var_type = ~ map_chr(estimates, ~ ifelse(nrow(.x) > 1, "categorical", "continuous")),
-      var_label = ~ map_chr(
-        variable, ~ label[[.x]] %||% attr(stats::model.frame(x)[[.x]], "label") %||% .x
+    mutate(
+      estimates = mod_list,
+      var_type = map_chr(.data$estimates, ~ ifelse(nrow(.x) > 1, "categorical", "continuous")),
+      var_label = map_chr(
+        .data$variable, ~ label[[.x]] %||% attr(stats::model.frame(x)[[.x]], "label") %||% .x
       ),
-      estimates = ~ pmap(
-        list(var_type, estimates, var_label, variable),
+      estimates = pmap(
+        list(.data$var_type, .data$estimates, .data$var_label, .data$variable),
         ~ add_label(..1, ..2, ..3, ..4)
       ),
-      N = ~n
+      N = n
     ) %>%
     unnest(!!sym("estimates")) %>%
     select(c(

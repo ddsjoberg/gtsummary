@@ -66,7 +66,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
     filter(!!parse_expr("variable %in% terms")) %>%
     select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
     set_names(c("variable", "pvalue_global")) %>%
-    mutate_(row_type = ~"label")
+    mutate(row_type = "label")
 
   # merging in global pvalue
   x$table_body <-
@@ -75,8 +75,8 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
       global_p,
       by = c("row_type", "variable")
     ) %>%
-    mutate_(
-      pvalue = ~ coalesce(pvalue, pvalue_global)
+    mutate(
+      pvalue = coalesce(.data$pvalue, .data$pvalue_global)
     ) %>%
     select(-c("pvalue_global"))
 
@@ -84,8 +84,8 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
   if (keep == FALSE) {
     x$table_body <-
       x$table_body %>%
-      mutate_(
-        pvalue = ~ if_else(variable %in% terms & row_type == "level", NA_real_, pvalue)
+      mutate(
+        pvalue = if_else(.data$variable %in% terms & .data$row_type == "level", NA_real_, .data$pvalue)
       )
   }
 
@@ -144,7 +144,7 @@ add_global.tbl_uvregression <- function(x, ...) {
     left_join(
       global_p %>%
         set_names(c("variable", "pvalue")) %>%
-        mutate_(row_type = ~"label"),
+        mutate(row_type = "label"),
       by = c("row_type", "variable")
     )
 
