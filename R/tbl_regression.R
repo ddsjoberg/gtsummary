@@ -91,6 +91,18 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
       "coef", "ll", "ul", "pvalue"
     ))
 
+  # footnote abbreviation details
+  footnote_abbr <-
+    coef_header(x, exponentiate) %>%
+    attr("footnote") %>%
+    c("CI = Confidence Interval") %>%
+    paste(collapse = ", ")
+  footnote_location <- ifelse(
+    is.null(attr(coef_header(x, exponentiate), "footnote")),
+    "vars(ll)",
+    "vars(coef, ll)"
+  )
+
   results <- list(
     table_body = table_body,
     n = n,
@@ -138,6 +150,15 @@ gt_tbl_regression <- quote(list(
     ")"
   ),
 
+  # column headers abbreviations footnote
+  footnote_abbreviation = glue(
+    "tab_footnote(",
+    "  footnote = '{footnote_abbr}',",
+    "  locations = cells_column_labels(",
+    "    columns = {footnote_location})",
+    ")"
+  ),
+
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
     "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)",
@@ -167,25 +188,38 @@ coef_header <- function(x, exponentiate) {
   if (class(x)[1] == "glm") {
     # logistic regression
     if (exponentiate == TRUE & x$family$family == "binomial" & x$family$link == "logit") {
-      return("OR")
+      header <- "OR"
+      attr(header, "footnote") <- "OR = Odds Ratio"
     }
-    if (exponentiate == FALSE & x$family$family == "binomial" & x$family$link == "logit") {
-      return("log(OR)")
+    else if (exponentiate == FALSE & x$family$family == "binomial" & x$family$link == "logit") {
+      header <- "log(OR)"
+      attr(header, "footnote") <- "OR = Odds Ratio"
     }
 
     # poisson regression with log link
-    if (exponentiate == TRUE & x$family$family == "poisson" & x$family$link == "log") {
-      return("IRR")
+    else if (exponentiate == TRUE & x$family$family == "poisson" & x$family$link == "log") {
+      header <- "IRR"
+      attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
     }
-    if (exponentiate == FALSE & x$family$family == "poisson" & x$family$link == "log") {
-      return("log(IRR)")
+    else if (exponentiate == FALSE & x$family$family == "poisson" & x$family$link == "log") {
+      header <- "log(IRR)"
+      attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
     }
   }
   # Cox PH Regression
-  if (class(x)[1] == "coxph" & exponentiate == TRUE) return("HR")
-  if (class(x)[1] == "coxph" & exponentiate == FALSE) return("log(HR)")
+  else if (class(x)[1] == "coxph" & exponentiate == TRUE) {
+    header <- "HR"
+    attr(header, "footnote") <- "HR = Hazard Ratio"
+  }
+  else if (class(x)[1] == "coxph" & exponentiate == FALSE) {
+    header <- "log(HR)"
+    attr(header, "footnote") <- "HR = Hazard Ratio"
+  }
+
 
   # Other models
-  if (exponentiate == TRUE) return("exp(Coefficient)")
-  return("Coefficient")
+  else if (exponentiate == TRUE) header <- "exp(Coefficient)"
+  else  header <- "exp(Coefficient)"
+
+  header
 }
