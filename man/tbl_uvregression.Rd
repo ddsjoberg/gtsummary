@@ -16,7 +16,7 @@ includes the outcome variable(s) and the independent variables.}
 \item{method}{Regression method (e.g. \code{\link[stats]{lm}}, \code{\link[stats]{glm}},
 \code{\link[survival]{coxph}}, and more).}
 
-\item{y}{model outcome as a string (e.g. \code{y = 'recurrence'} or \code{y = 'Surv(time, recur)'})}
+\item{y}{model outcome as a string (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
 
 \item{method.args}{List of additional arguments passed on to the regression function defined by method.}
 
@@ -51,8 +51,8 @@ for detailed examples.
 \examples{
 tbl_uvregression(
   trial,
-  method = "glm",
-  y = "response",
+  method = glm,
+  y = response,
   method.args = list(family = binomial),
   exponentiate = TRUE
 )
@@ -60,8 +60,8 @@ tbl_uvregression(
 # rounding pvalues to 2 decimal places, and adding global p-values
 tbl_uvregression(
   trial,
-  method = "glm",
-  y = "response",
+  method = glm,
+  y = response,
   method.args = list(family = binomial),
   exponentiate = TRUE,
   pvalue_fun = function(x) style_pvalue(x, digits = 2)

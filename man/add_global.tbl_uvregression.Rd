@@ -20,8 +20,8 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 \examples{
 tbl_uvregression(
   trial,
-  method = "glm",
-  y = "response",
+  method = glm,
+  y = response,
   method.args = list(family = binomial),
   exponentiate = TRUE
 ) \%>\%

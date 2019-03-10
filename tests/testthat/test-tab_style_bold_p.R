@@ -57,8 +57,8 @@ test_that("no errors/warnings with standard use in tbl_regression()", {
 test_that("no errors/warnings with standard use in tbl_uvregression()", {
   fmt_uni_reg <- trial %>%
     tbl_uvregression(
-      method = "lm",
-      y = "age"
+      method = lm,
+      y = age
     )
 
   expect_error(tab_style_bold_p(fmt_uni_reg, p = 0.3), NA)
@@ -69,8 +69,8 @@ test_that("no errors/warnings with standard use in tbl_uvregression()", {
 test_that("no errors/warnings with use in tbl_uvregression() with add_global()", {
   fmt_uni_reg_global_p <- trial %>%
     tbl_uvregression(
-      method = "lm",
-      y = "age"
+      method = lm,
+      y = age
     ) %>%
     add_global()
 
