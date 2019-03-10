@@ -11,9 +11,9 @@
 #' \code{\link[survival]{coxph}}, and more).
 #' @param y model outcome as a string (e.g. `y = recurrence` or `y = Surv(time, recur)`)
 #' @param formula String that becomes the model formula.  Uses \code{\link[glue]{glue}} syntax.
-#' Default is `"{y} ~ {.x}"`, where `{y}` is the dependent variable, and `{.x}`
+#' Default is `"{y} ~ {x}"`, where `{y}` is the dependent variable, and `{x}`
 #' represents a single covariate. For a random intercept, the formula may be
-#' `formula = "{y} ~ {.x} + (1 | gear)"`.
+#' `formula = "{y} ~ {x} + (1 | gear)"`.
 #' @param method.args List of additional arguments passed on to the regression function defined by method.
 #' @param exponentiate logical argument passed directly to `broom::tidy()`.
 #' Default is `FALSE`
@@ -26,6 +26,7 @@
 #' Default is 0.95.
 #' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_coef}}
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
+#' @importFrom stringr word str_detect fixed
 #' @author Daniel Sjoberg
 #' @export
 #' @examples
@@ -48,7 +49,7 @@
 #' ) %>%
 #'   add_global()
 tbl_uvregression <- function(data, method, y, method.args = NULL,
-                             formula = "{y} ~ {.x}",
+                             formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
                              show_yesno = NULL, conf.level = 0.95,
                              coef_fun = style_coef, pvalue_fun = style_pvalue) {
@@ -66,15 +67,15 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     ))
   }
 
-  # varnames -------------------------------------------------------------------
-  # ".x" cannot be a variable name
-  if (".x" %in% names(data)) {
-    stop("'.x' is reserved and cannot be a column name in data frame.")
-  }
-
   # will return call, and all object passed to in table1 call
   # the object func_inputs is a list of every object passed to the function
   tbl_uvregression_inputs <- as.list(environment())
+
+  # checking that '{x}' appears on RHS of formula
+  if(word(formula, start = 2L, sep = fixed("~")) %>%
+    str_detect(pattern = fixed("{x}")) == FALSE) {
+    stop("'{x}' must appear on RHS of '~' in formula argument")
+  }
 
   # get all x vars
   x_vars <- names(data) %>%
@@ -82,14 +83,15 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
       paste0(y, "~1") %>% stats::as.formula() %>% all.vars()
     ) %>%
     setdiff( # removing potential variables added to model formula (e.g. random intercepts)
-      all.vars(stats::as.formula(formula)[[3]])
+      all.vars(stats::as.formula(formula)[[3]]) %>% remove_one_x() # the one x removed is the {x}
     )
 
   # bulding regression models
   model_obj_list <-
     map(
       x_vars,
-      ~ do.call(
+      function(x)
+        do.call(
         what = method,
         args = c(
           list(
@@ -210,3 +212,13 @@ gt_tbl_uvregression <- quote(list(
     tbl_regression_list %>%
     pluck(1, "gt_calls", "footnote_abbreviation")
 ))
+
+# helper function to remove one value of "x" from a vector
+remove_one_x <- function(v) {
+  index_remove <-
+    (v == "x") %>%
+    which() %>%
+    min()
+
+  v[-index_remove]
+}

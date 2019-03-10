@@ -37,7 +37,7 @@ test_that("glmer: no errors/warnings with standard use", {
       tbl_uvregression(
         method = glmer,
         y = am,
-        formula = "{y} ~ {.x} + (1 | gear)",
+        formula = "{y} ~ {x} + (1 | gear)",
         method.args = list(family = binomial)
       ), NA
   )
@@ -47,7 +47,7 @@ test_that("glmer: no errors/warnings with standard use", {
       tbl_uvregression(
         method = glmer,
         y = am,
-        formula = "{y} ~ {.x} + (1 | gear)",
+        formula = "{y} ~ {x} + (1 | gear)",
         method.args = list(family = binomial)
       ), NA
   )
