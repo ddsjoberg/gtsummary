@@ -6,7 +6,7 @@
 \usage{
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   statistic = NULL, digits = NULL, group = NULL,
-  missing = c("ifany", "always", "no"), iqr = TRUE)
+  missing = c("ifany", "always", "no"))
 }
 \arguments{
 \item{data}{a data frame}
@@ -48,9 +48,6 @@ calculate p-values with correlated data. Default is \code{NULL}}
 if the table includes counts of \code{NA} values: the allowed values correspond to
 never (\code{"no"}), only if the count is positive (\code{"ifany"}) and even for
 zero counts (\code{"always"}). Default is \code{"ifany"}.}
-
-\item{iqr}{logical indicator whether '{p25}, {p75}' should
-resolve to 'IQR' in statistic label. Default is \code{TRUE}}
 }
 \value{
 List of summary statistics to be converted to a \code{gt} object
