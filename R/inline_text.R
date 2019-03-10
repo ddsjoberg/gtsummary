@@ -1,6 +1,6 @@
 #' Report statistics from gtsummary tables inline
 #'
-#' @param x object created from a gtsummary funciton
+#' @param x object created from a gtsummary function
 #' @param ... further arguments passed to or from other methods.
 #' @author Daniel Sjoberg
 #' @seealso \link{inline_text.tbl_summary}, \link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression}, \link{tbl_summary}, \link{tbl_regression}, \link{tbl_uvregression}
