@@ -5,7 +5,7 @@
 \title{Creates table of univariate regression results}
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
-  formula = "{y} ~ {.x}", exponentiate = FALSE, label = NULL,
+  formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
   show_yesno = NULL, conf.level = 0.95, coef_fun = style_coef,
   pvalue_fun = style_pvalue)
 }
@@ -21,9 +21,9 @@ includes the outcome variable(s) and the independent variables.}
 \item{method.args}{List of additional arguments passed on to the regression function defined by method.}
 
 \item{formula}{String that becomes the model formula.  Uses \code{\link[glue]{glue}} syntax.
-Default is \code{"{y} ~ {.x}"}, where \code{{y}} is the dependent variable, and \code{{.x}}
+Default is \code{"{y} ~ {x}"}, where \code{{y}} is the dependent variable, and \code{{x}}
 represents a single covariate. For a random intercept, the formula may be
-\code{formula = "{y} ~ {.x} + (1 | gear)"}.}
+\code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
 \item{exponentiate}{logical argument passed directly to \code{broom::tidy()}.
 Default is \code{FALSE}}
