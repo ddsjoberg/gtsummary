@@ -12,7 +12,7 @@ print.tbl_summary <- function(x, ...) as_gt(x) %>% print()
 #' @export
 knit_print.tbl_summary <- function(x, ...) {
   if ("word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
-    warning("Output 'word_document' is not suported by the {gt} package.  Try 'output: rtf_document' for output compatible with MS Word.")
+    warning("Output 'word_document' is not suported by the {gt} package. Use 'output: rtf_document' for output compatible with MS Word.")
   }
   as_gt(x) %>% knitr::knit_print()
 }
