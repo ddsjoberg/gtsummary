@@ -98,8 +98,8 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' @examples
 #' trial %>%
 #'   tbl_uvregression(
-#'     method = "lm",
-#'     y = "age"
+#'     method = lm,
+#'     y = age
 #'   ) %>%
 #'   add_global() %>%
 #'   add_q()

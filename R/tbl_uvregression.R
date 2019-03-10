@@ -9,7 +9,7 @@
 #' includes the outcome variable(s) and the independent variables.
 #' @param method Regression method (e.g. \code{\link[stats]{lm}}, \code{\link[stats]{glm}},
 #' \code{\link[survival]{coxph}}, and more).
-#' @param y model outcome as a string (e.g. `y = 'recurrence'` or `y = 'Surv(time, recur)'`)
+#' @param y model outcome as a string (e.g. `y = recurrence` or `y = Surv(time, recur)`)
 #' @param formula String that becomes the model formula.  Uses \code{\link[glue]{glue}} syntax.
 #' Default is `"{y} ~ {.x}"`, where `{y}` is the dependent variable, and `{.x}`
 #' represents a single covariate. For a random intercept, the formula may be
@@ -31,8 +31,8 @@
 #' @examples
 #' tbl_uvregression(
 #'   trial,
-#'   method = "glm",
-#'   y = "response",
+#'   method = glm,
+#'   y = response,
 #'   method.args = list(family = binomial),
 #'   exponentiate = TRUE
 #' )
@@ -40,8 +40,8 @@
 #' # rounding pvalues to 2 decimal places, and adding global p-values
 #' tbl_uvregression(
 #'   trial,
-#'   method = "glm",
-#'   y = "response",
+#'   method = glm,
+#'   y = response,
 #'   method.args = list(family = binomial),
 #'   exponentiate = TRUE,
 #'   pvalue_fun = function(x) style_pvalue(x, digits = 2)
@@ -52,6 +52,11 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
                              exponentiate = FALSE, label = NULL,
                              show_yesno = NULL, conf.level = 0.95,
                              coef_fun = style_coef, pvalue_fun = style_pvalue) {
+  # bare to string -------------------------------------------------------------
+  # updated method and y inputs to be bare, and converting them to strings
+  # to be compatible with the rest of the function that assumes character input
+  method <- deparse(substitute(method)) %>% as.character()
+  y <- deparse(substitute(y)) %>% as.character()
 
   # data -----------------------------------------------------------------------
   # data is a data frame

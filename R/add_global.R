@@ -106,8 +106,8 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' @examples
 #' tbl_uvregression(
 #'   trial,
-#'   method = "glm",
-#'   y = "response",
+#'   method = glm,
+#'   y = response,
 #'   method.args = list(family = binomial),
 #'   exponentiate = TRUE
 #' ) %>%

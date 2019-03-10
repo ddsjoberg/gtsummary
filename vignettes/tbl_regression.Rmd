@@ -212,8 +212,8 @@ The `tbl_uvregression()` produces a table of univariate regression results.  The
 ```{r tbl_uvregression}
 tbl_uvregression(
  trial,
- method = "glm",
- y = "response",
+ method = glm,
+ y = response,
  method.args = list(family = binomial),
  exponentiate = TRUE,
  pvalue_fun = function(x) style_pvalue(x, digits = 2)
