@@ -28,7 +28,7 @@ If type not specified for a variable, the function
 will default to an appropriate summary type.}
 
 \item{statistic}{A list of the type of statistics to return.  The list can contain
-two names lists (\code{continuous} and \code{categorical}).  The value within the list is the types of
+two named elements (\code{continuous} and \code{categorical}).  The value within the list is the types of
 summary statistics to be returned.  For continuous variables the choices are:
 \code{median}, \code{p25} (first quartile), \code{p75} (third quartile), \code{mean}, \code{sd} (standard deviation),
 \code{min} (minimum), \code{max} (maximum).  For categorical variables the choices are \code{n} (frequency),
