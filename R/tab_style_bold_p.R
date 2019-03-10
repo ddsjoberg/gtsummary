@@ -88,7 +88,7 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_q has been previously run if bolding q-values
   if (q == TRUE & is.null(x$call_list$add_q)) {
-    stop("Before bolding q-values, run add_q() to calculate the q-values")
+    stop("Before q-values are bolded, run add_q() to calculate the q-values")
   }
 
   # storing column names and gt_call name
