@@ -7,7 +7,7 @@
 inline_text(x, ...)
 }
 \arguments{
-\item{x}{object created from a gtsummary funciton}
+\item{x}{object created from a gtsummary function}
 
 \item{...}{further arguments passed to or from other methods.}
 }
