@@ -37,15 +37,13 @@
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
-#' @param iqr logical indicator whether '{p25}, {p75}' should
-#' resolve to 'IQR' in statistic label. Default is `TRUE`
 #' @return List of summary statistics to be converted to a `gt` object
 #' @export
 #' @author Daniel Sjoberg
 
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
-                        missing = c("ifany", "always", "no"), iqr = TRUE) {
+                        missing = c("ifany", "always", "no")) {
   missing <- match.arg(missing)
   # ungrouping data
   data <- data %>% ungroup()
@@ -78,7 +76,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
       dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class),
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$summary_type, statistic),
-      stat_label = stat_label_match(.data$stat_display, iqr),
+      stat_label = stat_label_match(.data$stat_display),
       digits = continuous_digits_guess(
         data, .data$variable, .data$summary_type, .data$class, digits
       )
