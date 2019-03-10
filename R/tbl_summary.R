@@ -20,7 +20,7 @@
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type.
 #' @param statistic A list of the type of statistics to return.  The list can contain
-#' two names lists (`continuous` and `categorical`).  The value within the list is the types of
+#' two named elements (`continuous` and `categorical`).  The value within the list is the types of
 #' summary statistics to be returned.  For continuous variables the choices are:
 #' `median`, `p25` (first quartile), `p75` (third quartile), `mean`, `sd` (standard deviation),
 #' `min` (minimum), `max` (maximum).  For categorical variables the choices are `n` (frequency),
