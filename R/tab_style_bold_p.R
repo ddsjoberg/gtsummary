@@ -19,16 +19,22 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @author Daniel Sjoberg
+#' @examples
+#' tbl_bold_p <-
+#'   trial %>%
+#'   tbl_summary(by = "trt") %>%
+#'   add_comparison() %>%
+#'   tab_style_bold_p()
 #' @export
 tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_comparison has been previously run
   if (is.null(x$call_list$add_comparison)) {
-    stop("Before bolding p-values, run add_comparison() to calculate the p-values")
+    stop("Before p-values are bolded, run add_comparison() to calculate the p-values")
   }
   # checking that add_q has been previously run if bolding q-values
   if (q == TRUE & is.null(x$call_list$add_q)) {
-    stop("Before bolding q-values, run add_q() to calculate the q-values")
+    stop("Before q-values are bolded, run add_q() to calculate the q-values")
   }
 
   # storing column names and gt_call name
@@ -57,6 +63,11 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
 #' @param ... not used
 #' @author Daniel Sjoberg
+#' @examples
+#' tbl_lm_bold_p <-
+#'   lm(age ~ marker + trt + stage, trial) %>%
+#'   tbl_regression() %>%
+#'   tab_style_bold_p(t = 0.3)
 #' @export
 tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
@@ -88,7 +99,7 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_q has been previously run if bolding q-values
   if (q == TRUE & is.null(x$call_list$add_q)) {
-    stop("Before bolding q-values, run add_q() to calculate the q-values")
+    stop("Before q-values are bolded, run add_q() to calculate the q-values")
   }
 
   # storing column names and gt_call name

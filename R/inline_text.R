@@ -1,6 +1,6 @@
 #' Report statistics from gtsummary tables inline
 #'
-#' @param x object created from a gtsummary funciton
+#' @param x object created from a gtsummary function
 #' @param ... further arguments passed to or from other methods.
 #' @author Daniel Sjoberg
 #' @seealso \link{inline_text.tbl_summary}, \link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression}, \link{tbl_summary}, \link{tbl_regression}, \link{tbl_uvregression}
@@ -11,7 +11,8 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 #'
 #' Functions takes an object with class `tbl_summary`, and the
 #' location of the statistic to report and returns the statistic for reporting
-#' inline in an R markdown document
+#' inline in an R markdown document.  Detailed examples in the
+#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{`tbl_summary` vignette}
 #'
 #' @param x object created from  \link{tbl_summary}
 #' @param variable variable name of statistic to present
@@ -26,6 +27,7 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 #'  \code{partial(style_pvalue, digits = 2)}).
 #' @param ... not used
+#' @seealso \link{tbl_summary}
 #' @author Daniel Sjoberg
 #' @export
 
@@ -113,7 +115,8 @@ inline_text.tbl_summary <-
 #'
 #' Functions takes an object with class `tbl_regression`, and the
 #' location of the statistic to report and returns the statistic for reporting
-#' inline in an R markdown document
+#' inline in an R markdown document.  Detailed examples in the
+#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{`tbl_regression` vignette}
 #'
 #' @param x object created from  \link{tbl_regression}
 #' @param variable variable name of statistic to present
@@ -128,6 +131,7 @@ inline_text.tbl_summary <-
 #' Default is `function(x) style_pvalue(x, prepend_p = TRUE)`
 #' @param ... not used
 #' @author Daniel Sjoberg
+#' @seealso \link{tbl_regression}
 #' @export
 
 inline_text.tbl_regression <-
@@ -198,7 +202,8 @@ inline_text.tbl_regression <-
 #'
 #' Functions takes an object with class `tbl_uvregression`, and the
 #' location of the statistic to report and returns the statistic for reporting
-#' inline in an R markdown document
+#' inline in an R markdown document. Detailed examples in the
+#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{`tbl_regression` vignette}
 #'
 #' @inherit inline_text.tbl_regression
 #' @export

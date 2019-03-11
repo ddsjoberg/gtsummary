@@ -75,10 +75,10 @@ There are four primary was to customize the output of the regression model table
 The `tbl_regression()` function includes many input options for modifying the appearance.
 
   > `label` modify the variable labels printed in the table  
-  > `exponentiate` exponentiriate model coefficients
+  > `exponentiate` exponentiate model coefficients
   > `include` names of variables to include in output. Default is all variables.
-  > `show_yesno` Show both levels fo yes/no variables. Default prints on single row.
-  > `conf.level` confidence leve of confidence interval  
+  > `show_yesno` Show both levels of yes/no variables. Default prints on single row.
+  > `conf.level` confidence level of confidence interval  
   > `intercept` logical argument indicates whether to include the intercept in output
   > `coef_fun` function to round and format beta coefficients  
   > `pvalue_fun` function to round and format p-values  
@@ -212,8 +212,8 @@ The `tbl_uvregression()` produces a table of univariate regression results.  The
 ```{r tbl_uvregression}
 tbl_uvregression(
  trial,
- method = "glm",
- y = "response",
+ method = glm,
+ y = response,
  method.args = list(family = binomial),
  exponentiate = TRUE,
  pvalue_fun = function(x) style_pvalue(x, digits = 2)

@@ -17,5 +17,5 @@ The function assumes the DEFAULT headers are in use. Only modify header rows
 after Overall column has been added.
 }
 \examples{
-trial \%>\% tbl_summary(by = "trt") \%>\% add_overall()
+tbl_overall <- trial \%>\% tbl_summary(by = "trt") \%>\% add_overall()
 }

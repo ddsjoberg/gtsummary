@@ -25,8 +25,8 @@ test_that("expect error if no p value in table 1", {
 test_that("no errors/warnings with standard use after tbl_uvregression() and add_global()", {
   uni_reg <- trial %>%
     tbl_uvregression(
-      method = "lm",
-      y = "age"
+      method = lm,
+      y = age
     ) %>%
     add_global()
 
@@ -38,8 +38,8 @@ test_that("no errors/warnings with standard use after tbl_uvregression() and add
 
 test_that("expect error with no global p value in tbl_uvregression", {
   uni_reg <- trial %>% tbl_uvregression(
-    method = "lm",
-    y = "age"
+    method = lm,
+    y = age
   )
 
   expect_error(

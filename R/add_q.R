@@ -22,7 +22,8 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @author Esther Drill, Daniel Sjoberg
 #' @export
 #' @examples
-#' trial %>%
+#' tbl_q <-
+#'   trial %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
 #'   add_q()
@@ -96,10 +97,11 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' @author Esther Drill, Daniel Sjoberg
 #' @export
 #' @examples
-#' trial %>%
+#' tbl_q <-
+#'   trial %>%
 #'   tbl_uvregression(
-#'     method = "lm",
-#'     y = "age"
+#'     method = lm,
+#'     y = age
 #'   ) %>%
 #'   add_global() %>%
 #'   add_q()

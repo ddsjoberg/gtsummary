@@ -26,10 +26,12 @@ Must specify \code{by} along with \code{stat_by}.}
 Column labels can be modified using data from the data frame
 }
 \examples{
-trial \%>\%
+tbl_col1 <-
+  trial \%>\%
   tbl_summary() \%>\%
   cols_label_summary(stat_overall = md("**All Patients**, N = {N}"))
-trial \%>\%
+tbl_col2 <-
+  trial \%>\%
   tbl_summary(by = "trt") \%>\%
   cols_label_summary(stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"))
 }

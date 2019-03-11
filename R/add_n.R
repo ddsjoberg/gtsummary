@@ -9,7 +9,7 @@
 #' @param last logical indicator to include overall  column last. Default is `FALSE`
 #' @export
 #' @examples
-#' trial %>% tbl_summary(by = "trt") %>% add_n()
+#' tbl_n <- trial %>% tbl_summary(by = "trt") %>% add_n()
 add_n <- function(x, missing = FALSE, last = FALSE) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")

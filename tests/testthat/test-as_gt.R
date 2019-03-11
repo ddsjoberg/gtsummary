@@ -11,6 +11,6 @@ test_that("tbl_regression", {
 })
 
 test_that("tbl_uvregression", {
-  expect_error(trial %>% tbl_uvregression(method = "lm", y = "age") %>% as_gt(), NA)
-  expect_warning(trial %>% tbl_uvregression(method = "lm", y = "age") %>% as_gt(), NA)
+  expect_error(trial %>% tbl_uvregression(method = lm, y = age) %>% as_gt(), NA)
+  expect_warning(trial %>% tbl_uvregression(method = lm, y = age) %>% as_gt(), NA)
 })

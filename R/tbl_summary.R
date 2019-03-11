@@ -13,21 +13,24 @@
 #' @param label A list of variable labels,
 #' e.g. `list(age = "Age, yrs", ptstage = "Path T Stage")`.  If `NULL`, the function
 #' will take the label attribute (`attr(data$age, "label")`).  If
-#' the label doesn't exist, then the label is assigned as the variable name.
+#' the label doesn't exist, the variable name will be used.
 #' @param type A list that includes specified summary types.  Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
 #' e.g. `type = list(age = "continuous", female = "dichotomous")`.
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type.
 #' @param statistic A list of the type of statistics to return.  The list can contain
-#' two names lists (`continuous` and `categorical`).  The value within the list is the types of
-#' summary statistics to be returned.  For continuous variables the choices are:
-#' `median`, `p25` (first quartile), `p75` (third quartile), `mean`, `sd` (standard deviation),
-#' `min` (minimum), `max` (maximum).  For categorical variables the choices are `n` (frequency),
-#' `N` (denominator, or cohort size), `p` (percent).  The defaults are
-#' `continuous = "{median} ({p25}, {p75})"` and `categorical = "{n} ({p}\%)"`.
-#' The syntax follows from the \code{\link[glue]{glue}} function.  Dichotomous variables
-#' follow the same format as categorical.
+#' two named elements (`continuous` and `categorical`). The default is
+#' `list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}\%)")`.
+#' The syntax follows from the \code{\link[glue]{glue}} function.
+#' For categorical variables the choices the following statistics are available to
+#' report: `{n}` (frequency), `{N}` (denominator, or cohort size), `{p}` (percent).
+#' For continuous variables, any quantile may be returned with `{p##}`, where ##
+#' is any integer from 0 to 100. For example, `{p25}` and `{p75}` returns
+#' the 25th and 75th quantiles.  The median (`{median}`), mean (`{mean}`),
+#' standard deviation (`{sd}`), variance (`{var}`), minimum (`{min}`), and
+#' maximum (`{max}`) are available.  In fact, any function that takes the form
+#' `foo(x, na.rm = TRUE)` should work.
 #' @param digits integer indicating the number of decimal places to round continuous
 #' summary statistics. `sprintf(glue::glue("%.{digits}f"), x)`
 #' @param group Character vector of an ID or grouping variable.  Summary statistics
@@ -37,15 +40,17 @@
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
-#' @param iqr logical indicator whether '{p25}, {p75}' should
-#' resolve to 'IQR' in statistic label. Default is `TRUE`
 #' @return List of summary statistics to be converted to a `gt` object
-#' @export
 #' @author Daniel Sjoberg
+#' @export
+#' @examples
+#' tbl_overall <- tbl_summary(trial)
+#' tbl_trt <- tbl_summary(trial, by = "trt")
+#' tbl_lbls <- mtcars %>% tbl_summary(label = list(cyl = "No. Cylinders"))
 
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
-                        missing = c("ifany", "always", "no"), iqr = TRUE) {
+                        missing = c("ifany", "always", "no")) {
   missing <- match.arg(missing)
   # ungrouping data
   data <- data %>% ungroup()
@@ -78,7 +83,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
       dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class),
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$summary_type, statistic),
-      stat_label = stat_label_match(.data$stat_display, iqr),
+      stat_label = stat_label_match(.data$stat_display),
       digits = continuous_digits_guess(
         data, .data$variable, .data$summary_type, .data$class, digits
       )

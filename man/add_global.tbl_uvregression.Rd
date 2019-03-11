@@ -18,12 +18,13 @@ If a needed class of model is not supported by \code{\link[car]{Anova}}, please 
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 }
 \examples{
-tbl_uvregression(
-  trial,
-  method = "glm",
-  y = "response",
-  method.args = list(family = binomial),
-  exponentiate = TRUE
-) \%>\%
+tbl_uv <-
+  tbl_uvregression(
+    trial,
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  ) \%>\%
   add_global()
 }

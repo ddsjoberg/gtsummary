@@ -31,7 +31,11 @@ and return a string that is the rounded/formatted p-value (e.g.
 \description{
 Functions takes an object with class \code{tbl_summary}, and the
 location of the statistic to report and returns the statistic for reporting
-inline in an R markdown document
+inline in an R markdown document.  Detailed examples in the
+\href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
+}
+\seealso{
+\link{tbl_summary}
 }
 \author{
 Daniel Sjoberg
