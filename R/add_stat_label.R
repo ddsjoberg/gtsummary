@@ -6,7 +6,7 @@
 #' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
 #' @export
 #' @examples
-#' mtcars %>% tbl_summary() %>% add_stat_label()
+#' tbl_stat <- mtcars %>% tbl_summary() %>% add_stat_label()
 add_stat_label <- function(x) {
 
   # adding some meta data only needed for merging (i.e. the row_type)

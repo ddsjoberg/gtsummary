@@ -8,7 +8,7 @@
 #' @param last logical indicator to include overall  column last. Default is `FALSE`
 #' @export
 #' @examples
-#' trial %>% tbl_summary(by = "trt") %>% add_overall()
+#' tbl_overall <- trial %>% tbl_summary(by = "trt") %>% add_overall()
 add_overall <- function(x, last = FALSE) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")

@@ -24,7 +24,8 @@ The adjustments to the p-values is performed with
 is false discovery rate (\code{method = "fdr"})
 }
 \examples{
-trial \%>\%
+tbl_q <-
+  trial \%>\%
   tbl_summary(by = "trt") \%>\%
   add_comparison() \%>\%
   add_q()

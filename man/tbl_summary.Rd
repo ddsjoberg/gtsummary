@@ -19,7 +19,7 @@ are calculated using all observations.}
 \item{label}{A list of variable labels,
 e.g. \code{list(age = "Age, yrs", ptstage = "Path T Stage")}.  If \code{NULL}, the function
 will take the label attribute (\code{attr(data$age, "label")}).  If
-the label doesn't exist, then the label is assigned as the variable name.}
+the label doesn't exist, the variable name will be used.}
 
 \item{type}{A list that includes specified summary types.  Accepted values
 are \code{c("continuous", "categorical", "dichotomous")},
@@ -28,14 +28,17 @@ If type not specified for a variable, the function
 will default to an appropriate summary type.}
 
 \item{statistic}{A list of the type of statistics to return.  The list can contain
-two named elements (\code{continuous} and \code{categorical}).  The value within the list is the types of
-summary statistics to be returned.  For continuous variables the choices are:
-\code{median}, \code{p25} (first quartile), \code{p75} (third quartile), \code{mean}, \code{sd} (standard deviation),
-\code{min} (minimum), \code{max} (maximum).  For categorical variables the choices are \code{n} (frequency),
-\code{N} (denominator, or cohort size), \code{p} (percent).  The defaults are
-\code{continuous = "{median} ({p25}, {p75})"} and \code{categorical = "{n} ({p}\\\%)"}.
-The syntax follows from the \code{\link[glue]{glue}} function.  Dichotomous variables
-follow the same format as categorical.}
+two named elements (\code{continuous} and \code{categorical}). The default is
+\code{list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}\\\%)")}.
+The syntax follows from the \code{\link[glue]{glue}} function.
+For categorical variables the choices the following statistics are available to
+report: \code{{n}} (frequency), \code{{N}} (denominator, or cohort size), \code{{p}} (percent).
+For continuous variables, any quantile may be returned with \code{{p##}}, where ##
+is any integer from 0 to 100. For example, \code{{p25}} and \code{{p75}} returns
+the 25th and 75th quantiles.  The median (\code{{median}}), mean (\code{{mean}}),
+standard deviation (\code{{sd}}), variance (\code{{var}}), minimum (\code{{min}}), and
+maximum (\code{{max}}) are available.  In fact, any function that takes the form
+\code{foo(x, na.rm = TRUE)} should work.}
 
 \item{digits}{integer indicating the number of decimal places to round continuous
 summary statistics. \code{sprintf(glue::glue("\%.{digits}f"), x)}}
@@ -57,6 +60,11 @@ The \code{tbl_summary} function calculates descriptive statistics by groups for
 continuous, categorical, and dichotomous variables.  Review the
 \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
 for detailed examples.
+}
+\examples{
+tbl_overall <- tbl_summary(trial)
+tbl_trt <- tbl_summary(trial, by = "trt")
+tbl_lbls <- mtcars \%>\% tbl_summary(label = list(cyl = "No. Cylinders"))
 }
 \author{
 Daniel Sjoberg

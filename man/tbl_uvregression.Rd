@@ -49,23 +49,25 @@ arguments. Review the \code{tbl_uvregression}
 for detailed examples.
 }
 \examples{
-tbl_uvregression(
-  trial,
-  method = glm,
-  y = response,
-  method.args = list(family = binomial),
-  exponentiate = TRUE
-)
+tbl_uv <-
+ tbl_uvregression(
+   trial,
+   method = glm,
+   y = response,
+   method.args = list(family = binomial),
+   exponentiate = TRUE
+ )
 
 # rounding pvalues to 2 decimal places, and adding global p-values
-tbl_uvregression(
-  trial,
-  method = glm,
-  y = response,
-  method.args = list(family = binomial),
-  exponentiate = TRUE,
-  pvalue_fun = function(x) style_pvalue(x, digits = 2)
-) \%>\%
+tbl_uv2 <-
+  tbl_uvregression(
+    trial,
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE,
+    pvalue_fun = function(x) style_pvalue(x, digits = 2)
+  ) \%>\%
   add_global()
 }
 \author{

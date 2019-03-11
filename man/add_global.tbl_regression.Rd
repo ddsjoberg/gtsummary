@@ -24,5 +24,5 @@ If a needed class of model is not supported by \code{\link[car]{Anova}}, please 
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 }
 \examples{
-lm(marker ~ stage + grade, trial) \%>\% tbl_regression() \%>\% add_global()
+tbl_lm <- lm(marker ~ stage + grade, trial) \%>\% tbl_regression() \%>\% add_global()
 }

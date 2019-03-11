@@ -38,7 +38,7 @@ from \code{\link{tbl_summary}}}
 Adds p-values to the output comparing values across groups
 }
 \examples{
-trial \%>\% tbl_summary(by = "trt") \%>\% add_comparison()
+comp <- trial \%>\% tbl_summary(by = "trt") \%>\% add_comparison()
 }
 \author{
 Daniel Sjoberg
