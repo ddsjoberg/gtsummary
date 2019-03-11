@@ -19,7 +19,7 @@ if they wish to add customized formatting available via the
 \href{https://gt.rstudio.com/index.html}{gt package}
 }
 \examples{
-trial \%>\% tbl_summary(by = "trt") \%>\% as_gt()
+tbl_gt <- trial \%>\% tbl_summary(by = "trt") \%>\% as_gt()
 }
 \author{
 Daniel Sjoberg

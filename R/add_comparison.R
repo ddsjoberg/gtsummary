@@ -25,7 +25,7 @@
 #' @export
 #' @author Daniel Sjoberg
 #' @examples
-#' trial %>% tbl_summary(by = "trt") %>% add_comparison()
+#' comp <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
 add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$inputs$group) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")

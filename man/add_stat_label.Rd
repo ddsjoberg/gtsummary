@@ -14,5 +14,5 @@ Rather than simply printing the summary statistics, with the use of \code{add_st
 a column labeling the summary statistics is added.
 }
 \examples{
-mtcars \%>\% tbl_summary() \%>\% add_stat_label()
+tbl_stat <- mtcars \%>\% tbl_summary() \%>\% add_stat_label()
 }

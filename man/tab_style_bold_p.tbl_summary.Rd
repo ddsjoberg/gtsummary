@@ -18,6 +18,13 @@
 \description{
 Bold p-values in tables created by \code{\link{tbl_summary}}
 }
+\examples{
+tbl_bold_p <-
+  trial \%>\%
+  tbl_summary(by = "trt") \%>\%
+  add_comparison() \%>\%
+  tab_style_bold_p()
+}
 \author{
 Daniel Sjoberg
 }

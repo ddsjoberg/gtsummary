@@ -27,7 +27,7 @@ add_global <- function(x, ...) UseMethod("add_global")
 #' @param ... arguments to be passed to \code{\link[car]{Anova}}.  Adding `test.statistic = `
 #' can change the type of test (e.g. Likelihood-ratio, Wald, etc.).
 #' @examples
-#' lm(marker ~ stage + grade, trial) %>% tbl_regression() %>% add_global()
+#' tbl_lm <- lm(marker ~ stage + grade, trial) %>% tbl_regression() %>% add_global()
 #' @export
 
 add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
@@ -104,13 +104,14 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' @param ... arguments to be passed to \code{\link[car]{Anova}}.  Adding `test.statistic = `
 #' can change the type of test (e.g. Likelihood-ratio, Wald, etc.).
 #' @examples
-#' tbl_uvregression(
-#'   trial,
-#'   method = glm,
-#'   y = response,
-#'   method.args = list(family = binomial),
-#'   exponentiate = TRUE
-#' ) %>%
+#' tbl_uv <-
+#'   tbl_uvregression(
+#'     trial,
+#'     method = glm,
+#'     y = response,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE
+#'   ) %>%
 #'   add_global()
 #' @export
 

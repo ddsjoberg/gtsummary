@@ -3,6 +3,15 @@
 #' @name bold_italicize_labels_levels
 #' @param x an object created using gtsummary functions
 #' @author Daniel Sjoberg
+#' @examples
+#' tbl_bold_ital <-
+#'   trial %>%
+#'   tbl_summary() %>%
+#'   tab_style_bold_labels() %>%
+#'   tab_style_bold_levels() %>%
+#'   tab_style_italicize_labels() %>%
+#'   tab_style_italicize_levels()
+#'
 NULL
 
 
