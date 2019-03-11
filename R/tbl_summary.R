@@ -2,7 +2,7 @@
 #'
 #' The `tbl_summary` function calculates descriptive statistics by groups for
 #' continuous, categorical, and dichotomous variables.  Review the
-#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{`tbl_summary` vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{`tbl_summary` vignette}
 #' for detailed examples.
 #'
 #' @param data a data frame
