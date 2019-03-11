@@ -58,7 +58,7 @@ List of summary statistics to be converted to a \code{gt} object
 \description{
 The \code{tbl_summary} function calculates descriptive statistics by groups for
 continuous, categorical, and dichotomous variables.  Review the
-\href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
 for detailed examples.
 }
 \examples{
