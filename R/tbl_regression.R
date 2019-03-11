@@ -185,26 +185,33 @@ gt_tbl_regression <- quote(list(
   )
 ))
 
-# idenfies headers for common models (logistic, poisson, and cox regression)
+# identifies headers for common models (logistic, poisson, and cox regression)
 coef_header <- function(x, exponentiate) {
-  # generalized linear models
-  if (class(x)[1] == "glm") {
+  if (
+    (class(x)[1] == "glm") | # generalized linear models
+    (class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
+  ) {
+    if(class(x)[1] == "glm") family = x$family
+    else if(class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4")
+      family = x@resp$family
+    else stop("Error occured in 'coef_header' function")
+
     # logistic regression
-    if (exponentiate == TRUE & x$family$family == "binomial" & x$family$link == "logit") {
+    if (exponentiate == TRUE & family$family == "binomial" & family$link == "logit") {
       header <- "OR"
       attr(header, "footnote") <- "OR = Odds Ratio"
     }
-    else if (exponentiate == FALSE & x$family$family == "binomial" & x$family$link == "logit") {
+    else if (exponentiate == FALSE & family$family == "binomial" & family$link == "logit") {
       header <- "log(OR)"
       attr(header, "footnote") <- "OR = Odds Ratio"
     }
 
     # poisson regression with log link
-    else if (exponentiate == TRUE & x$family$family == "poisson" & x$family$link == "log") {
+    else if (exponentiate == TRUE & family$family == "poisson" & family$link == "log") {
       header <- "IRR"
       attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
     }
-    else if (exponentiate == FALSE & x$family$family == "poisson" & x$family$link == "log") {
+    else if (exponentiate == FALSE & family$family == "poisson" & family$link == "log") {
       header <- "log(IRR)"
       attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
     }
@@ -218,7 +225,6 @@ coef_header <- function(x, exponentiate) {
     header <- "log(HR)"
     attr(header, "footnote") <- "HR = Hazard Ratio"
   }
-
 
   # Other models
   else if (exponentiate == TRUE) header <- "exp(Coefficient)"
