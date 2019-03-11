@@ -21,7 +21,7 @@
 #' will default to an appropriate summary type.
 #' @param statistic A list of the type of statistics to return.  The list can contain
 #' two named elements (`continuous` and `categorical`). The default is
-#' `list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}\%)")`.
+#' `list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}%)")`.
 #' The syntax follows from the \code{\link[glue]{glue}} function.
 #' For categorical variables the choices the following statistics are available to
 #' report: `{n}` (frequency), `{N}` (denominator, or cohort size), `{p}` (percent).
