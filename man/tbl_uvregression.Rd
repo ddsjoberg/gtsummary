@@ -5,7 +5,7 @@
 \title{Creates table of univariate regression results}
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
-  formula = "{y} ~ {.x}", exponentiate = FALSE, label = NULL,
+  formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
   show_yesno = NULL, conf.level = 0.95, coef_fun = style_coef,
   pvalue_fun = style_pvalue)
 }
@@ -16,14 +16,14 @@ includes the outcome variable(s) and the independent variables.}
 \item{method}{Regression method (e.g. \code{\link[stats]{lm}}, \code{\link[stats]{glm}},
 \code{\link[survival]{coxph}}, and more).}
 
-\item{y}{model outcome as a string (e.g. \code{y = 'recurrence'} or \code{y = 'Surv(time, recur)'})}
+\item{y}{model outcome as a string (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
 
 \item{method.args}{List of additional arguments passed on to the regression function defined by method.}
 
 \item{formula}{String that becomes the model formula.  Uses \code{\link[glue]{glue}} syntax.
-Default is \code{"{y} ~ {.x}"}, where \code{{y}} is the dependent variable, and \code{{.x}}
+Default is \code{"{y} ~ {x}"}, where \code{{y}} is the dependent variable, and \code{{x}}
 represents a single covariate. For a random intercept, the formula may be
-\code{formula = "{y} ~ {.x} + (1 | gear)"}.}
+\code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
 \item{exponentiate}{logical argument passed directly to \code{broom::tidy()}.
 Default is \code{FALSE}}
@@ -49,23 +49,25 @@ arguments. Review the \code{tbl_uvregression}
 for detailed examples.
 }
 \examples{
-tbl_uvregression(
-  trial,
-  method = "glm",
-  y = "response",
-  method.args = list(family = binomial),
-  exponentiate = TRUE
-)
+tbl_uv <-
+ tbl_uvregression(
+   trial,
+   method = glm,
+   y = response,
+   method.args = list(family = binomial),
+   exponentiate = TRUE
+ )
 
 # rounding pvalues to 2 decimal places, and adding global p-values
-tbl_uvregression(
-  trial,
-  method = "glm",
-  y = "response",
-  method.args = list(family = binomial),
-  exponentiate = TRUE,
-  pvalue_fun = function(x) style_pvalue(x, digits = 2)
-) \%>\%
+tbl_uv2 <-
+  tbl_uvregression(
+    trial,
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE,
+    pvalue_fun = function(x) style_pvalue(x, digits = 2)
+  ) \%>\%
   add_global()
 }
 \author{

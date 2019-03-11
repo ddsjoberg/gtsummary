@@ -22,15 +22,18 @@
 #' @author Daniel Sjoberg
 #' @export
 #' @examples
-#' mod1 <- lm(hp ~ mpg + factor(cyl), mtcars)
-#' tbl_regression(mod1)
+#' mod1 <-
+#'   lm(hp ~ mpg + factor(cyl), mtcars) %>%
+#'   tbl_regression()
 #'
-#' mod2 <- glm(response ~ age + grade + stage, trial, family = binomial(link = "logit"))
-#' tbl_regression(mod2, exponentiate = TRUE)
+#' mod2 <-
+#'   glm(response ~ age + grade + stage, trial, family = binomial(link = "logit")) %>%
+#'   tbl_regression(exponentiate = TRUE)
 #'
 #' library(lme4)
-#' mod_glmer <- glmer(am ~ hp + (1 | gear), mtcars, family = binomial)
-#' tbl_regression(mod_glmer, exponentiate = TRUE)
+#' mod_glmer <-
+#'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
+#'   tbl_regression(exponentiate = TRUE)
 tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
                            include = names(stats::model.frame(x)),
                            show_yesno = NULL,

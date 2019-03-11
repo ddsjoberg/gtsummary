@@ -19,5 +19,5 @@ The function assumes the DEFAULT header are in use. Only modify header rows
 after all columns has been added.
 }
 \examples{
-trial \%>\% tbl_summary(by = "trt") \%>\% add_n()
+tbl_n <- trial \%>\% tbl_summary(by = "trt") \%>\% add_n()
 }

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Italicize levels in gtsummary tables — tab_style_italicize_levels • gtsummary</title>
+<title>print and knit_print methods for gtsummary objects — print_gtsummary • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Italicize levels in gtsummary tables — tab_style_italicize_levels" />
+<meta property="og:title" content="print and knit_print methods for gtsummary objects — print_gtsummary" />
 
-<meta property="og:description" content="Italicize levels in gtsummary tables" />
+<meta property="og:description" content="print and knit_print methods for gtsummary objects" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,18 +117,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Italicize levels in gtsummary tables</h1>
+    <h1>print and knit_print methods for gtsummary objects</h1>
     
-    <div class="hidden name"><code>tab_style_italicize_levels.Rd</code></div>
+    <div class="hidden name"><code>print_gtsummary.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Italicize levels in gtsummary tables</p>
+    <p>print and knit_print methods for gtsummary objects</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tab_style_italicize_levels</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_summary</span>
+<span class='fu'><a href='knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_regression</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_regression</span>
+<span class='fu'><a href='knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_uvregression</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_uvregression</span>
+<span class='fu'><a href='knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,7 +153,15 @@
       <th>x</th>
       <td><p>an object created using gtsummary functions</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>not used</p></td>
+    </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='tbl_summary.html'>tbl_summary</a> <a href='tbl_regression.html'>tbl_regression</a> <a href='tbl_uvregression.html'>tbl_uvregression</a></p></div>
     
 
   </div>
@@ -145,7 +169,9 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
     <h2>Author</h2>
     <p>Daniel Sjoberg</p>

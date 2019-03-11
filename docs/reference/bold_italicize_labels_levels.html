@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Italicize labels in gtsummary tables — tab_style_italicize_labels • gtsummary</title>
+<title>Bold or Italicize labels or levels in gtsummary tables — bold_italicize_labels_levels • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Italicize labels in gtsummary tables — tab_style_italicize_labels" />
+<meta property="og:title" content="Bold or Italicize labels or levels in gtsummary tables — bold_italicize_labels_levels" />
 
-<meta property="og:description" content="Italicize labels in gtsummary tables" />
+<meta property="og:description" content="Bold or Italicize labels or levels in gtsummary tables" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,18 +117,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Italicize labels in gtsummary tables</h1>
+    <h1>Bold or Italicize labels or levels in gtsummary tables</h1>
     
-    <div class="hidden name"><code>tab_style_italicize_labels.Rd</code></div>
+    <div class="hidden name"><code>bold_italicize_labels_levels.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Italicize labels in gtsummary tables</p>
+    <p>Bold or Italicize labels or levels in gtsummary tables</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tab_style_italicize_labels</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>tab_style_bold_labels</span>(<span class='no'>x</span>)
+
+<span class='fu'>tab_style_bold_levels</span>(<span class='no'>x</span>)
+
+<span class='fu'>tab_style_italicize_labels</span>(<span class='no'>x</span>)
+
+<span class='fu'>tab_style_italicize_levels</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,13 +145,34 @@
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
+    <ul>
+<li><p><code>tab_style_bold_labels</code>: Bold labels in gtsummary tables</p></li>
+<li><p><code>tab_style_bold_levels</code>: Bold levels in gtsummary tables</p></li>
+<li><p><code>tab_style_italicize_labels</code>: Italicize labels in gtsummary tables</p></li>
+<li><p><code>tab_style_italicize_levels</code>: Italicize levels in gtsummary tables</p></li>
+</ul>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tbl_bold_ital</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>tab_style_bold_labels</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>tab_style_bold_levels</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>tab_style_italicize_labels</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>tab_style_italicize_levels</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#functions">Functions</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>Daniel Sjoberg</p>

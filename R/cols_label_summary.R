@@ -17,10 +17,12 @@
 #' @author Daniel Sjoberg
 #' @seealso \link{tbl_summary}, \link[gt]{md}, \link[gt]{html}
 #' @examples
-#' trial %>%
+#' tbl_col1 <-
+#'   trial %>%
 #'   tbl_summary() %>%
 #'   cols_label_summary(stat_overall = md("**All Patients**, N = {N}"))
-#' trial %>%
+#' tbl_col2 <-
+#'   trial %>%
 #'   tbl_summary(by = "trt") %>%
 #'   cols_label_summary(stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"))
 #' @export

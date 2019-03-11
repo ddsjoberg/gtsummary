@@ -136,7 +136,7 @@ for detailed examples.</p>
 
     <pre class="usage"><span class='fu'>tbl_summary</span>(<span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>), <span class='kw'>iqr</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,7 +157,7 @@ are calculated using all observations.</p></td>
       <td><p>A list of variable labels,
 e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age = "Age, yrs", ptstage = "Path T Stage")</a></code>.  If <code>NULL</code>, the function
 will take the label attribute (<code><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr(data$age, "label")</a></code>).  If
-the label doesn't exist, then the label is assigned as the variable name.</p></td>
+the label doesn't exist, the variable name will be used.</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -170,14 +170,17 @@ will default to an appropriate summary type.</p></td>
     <tr>
       <th>statistic</th>
       <td><p>A list of the type of statistics to return.  The list can contain
-two names lists (<code>continuous</code> and <code>categorical</code>).  The value within the list is the types of
-summary statistics to be returned.  For continuous variables the choices are:
-<code>median</code>, <code>p25</code> (first quartile), <code>p75</code> (third quartile), <code>mean</code>, <code>sd</code> (standard deviation),
-<code>min</code> (minimum), <code>max</code> (maximum).  For categorical variables the choices are <code>n</code> (frequency),
-<code>N</code> (denominator, or cohort size), <code>p</code> (percent).  The defaults are
-<code>continuous = "{median} ({p25}, {p75})"</code> and <code>categorical = "{n} ({p}\%)"</code>.
-The syntax follows from the <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> function.  Dichotomous variables
-follow the same format as categorical.</p></td>
+two named elements (<code>continuous</code> and <code>categorical</code>). The default is
+<code>list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}\%)")</code>.
+The syntax follows from the <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> function.
+For categorical variables the choices the following statistics are available to
+report: <code>{n}</code> (frequency), <code>{N}</code> (denominator, or cohort size), <code>{p}</code> (percent).
+For continuous variables, any quantile may be returned with <code>{p##}</code>, where ##
+is any integer from 0 to 100. For example, <code>{p25}</code> and <code>{p75}</code> returns
+the 25th and 75th quantiles.  The median (<code>{median}</code>), mean (<code>{mean}</code>),
+standard deviation (<code>{sd}</code>), variance (<code>{var}</code>), minimum (<code>{min}</code>), and
+maximum (<code>{max}</code>) are available.  In fact, any function that takes the form
+<code>foo(x, na.rm = TRUE)</code> should work.</p></td>
     </tr>
     <tr>
       <th>digits</th>
@@ -197,11 +200,6 @@ if the table includes counts of <code>NA</code> values: the allowed values corre
 never (<code>"no"</code>), only if the count is positive (<code>"ifany"</code>) and even for
 zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
     </tr>
-    <tr>
-      <th>iqr</th>
-      <td><p>logical indicator whether 'p25, p75' should
-resolve to 'IQR' in statistic label. Default is <code>TRUE</code></p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -209,6 +207,10 @@ resolve to 'IQR' in statistic label. Default is <code>TRUE</code></p></td>
     <p>List of summary statistics to be converted to a <code>gt</code> object</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tbl_overall</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_summary</span>(<span class='no'>trial</span>)
+<span class='no'>tbl_trt</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_summary</span>(<span class='no'>trial</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>)
+<span class='no'>tbl_lbls</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'>tbl_summary</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>cyl</span> <span class='kw'>=</span> <span class='st'>"No. Cylinders"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -216,7 +218,9 @@ resolve to 'IQR' in statistic label. Default is <code>TRUE</code></p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>Daniel Sjoberg</p>

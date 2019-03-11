@@ -11,7 +11,7 @@ style_coef(x)
 }
 \description{
 Converts a numeric argument into a string that has been rounded to a
-significant figure-like number suitable for regresion model coefficients.
+significant figure-like number suitable for regression model coefficients.
 Values with magnitude less than 1, are rounded to two significant figures, and magnitudes
 larger than 1 are rounded to three significant figures
 }
