@@ -4,7 +4,7 @@
 \alias{assign_dichotomous_value}
 \title{For dichotomous data, returns that value that will be printed in table.}
 \usage{
-assign_dichotomous_value(data, variable, summary_type, class)
+assign_dichotomous_value(data, variable, summary_type, class, value)
 }
 \arguments{
 \item{data}{data frame}

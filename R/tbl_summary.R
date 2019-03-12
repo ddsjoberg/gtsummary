@@ -18,7 +18,9 @@
 #' are `c("continuous", "categorical", "dichotomous")`,
 #' e.g. `type = list(age = "continuous", female = "dichotomous")`.
 #' If type not specified for a variable, the function
-#' will default to an appropriate summary type.
+#' will default to an appropriate summary type.  See below for details.
+#' @param value A list that specifies the value to display for dichotomous
+#' values only.  See below for details.
 #' @param statistic A list of the type of statistics to return.  The list can contain
 #' two named elements (`continuous` and `categorical`). The default is
 #' `list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}%)")`.
@@ -42,13 +44,22 @@
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @return List of summary statistics to be converted to a `gt` object
 #' @author Daniel Sjoberg
+#' @section Specifying Variable Types:
+#' tbl_summary displays summary statistics for three types of data:
+#' continuous, categorical, and dichotomous. If the type is not specified,
+#' tbl_summary will do its best to guess the type.  Dichotomous variables
+#' are categorical variables that are displayed on a single row in the
+#' outupt table, rather than one row per level of the variable.  For dichotomous
+#' variables coded as TRUE/FALSE, 0/1, or yes/no, the TRUE, 1, and yes rows
+#' will be displayed.  Otherwise, the value to display must be specified in
+#' the `value` argument, e.g. `value = list(varname = "level to show")`
 #' @export
 #' @examples
 #' tbl_overall <- tbl_summary(trial)
 #' tbl_trt <- tbl_summary(trial, by = "trt")
 #' tbl_lbls <- mtcars %>% tbl_summary(label = list(cyl = "No. Cylinders"))
 
-tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
+tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
                         missing = c("ifany", "always", "no")) {
   missing <- match.arg(missing)
@@ -61,7 +72,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
 
   # checking function inputs
   tbl_summary_input_checks(
-    data, by, label, type,
+    data, by, label, type, value,
     statistic, digits, missing, group
   )
 
@@ -78,9 +89,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL,
       # assigning class, if entire var is NA, then assigning class NA
       class = assign_class(data, .data$variable),
       summary_type = assign_summary_type(
-        data, .data$variable, .data$class, type
+        data, .data$variable, .data$class, type, value
       ),
-      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class),
+      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$summary_type, statistic),
       stat_label = stat_label_match(.data$stat_display),
