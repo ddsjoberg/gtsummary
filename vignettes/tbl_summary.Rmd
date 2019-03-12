@@ -73,7 +73,7 @@ This is a great table, but for trial data the summary statistics should be split
 tbl_summary(trial2, by = "trt") %>% add_comparison()
 ```
 
-## Customize Summary Table Output
+## Customize Output
 
 There are four primary was to customize the output of the summary table.
 
@@ -86,31 +86,31 @@ There are four primary was to customize the output of the summary table.
 
 The `tbl_summary()` function includes many input options for modifying the appearance.
 
-  > `label` modify the variable labels printed in the table  
-  > `statistic` change the summary statistics presented  
-  > `digits` number of digits the summary statistics will be rounded to  
-  > `missing` whether to display a row with the number of missing observations  
+    label       modify the variable labels printed in the table  
+    statistic   change the summary statistics presented  
+    digits      number of digits the summary statistics will be rounded to  
+    missing     whether to display a row with the number of missing observations  
 
 ### Functions to add information
 
 The gtsummary package has built-in functions for adding to results from `tbl_summary()`.  The following functions add columns and/or information to the summary table.
 
-  > `add_comparison()` Adds p-values to the output comparing values across groups   
-  > `add_overall()` Adds a column with overall summary statistics   
-  > `add_n()` Adds a column with N (or N missing) for each variable   
-  > `add_stat_label()` Adds a column showing a label for the summary statistics shown in each row   
-  > `add_q()` Add a column of q values to control for multiple comparisons   
+    add_comparison()  add p-values to the output comparing values across groups   
+    add_overall()     add a column with overall summary statistics   
+    add_n()           add a column with N (or N missing) for each variable   
+    add_stat_label()  add a column showing a label for the summary statistics shown in each row   
+    add_q()           add a column of q values to control for multiple comparisons   
 
 ### gtsummary functions to format table
 
 The gtsummary package comes with functions specifically made to modify and format summary tables.  These functions share the same prefixes as functions from the gt package to ease use.
 
-  > `cols_label_summary()` Relabel columns in summary table using data from the table (i.e. N, percent, etc.)  
-  > `tab_style_bold_labels()` Bold variable labels  
-  > `tab_style_bold_levels()` Bold variable levels  
-  > `tab_style_italicize_labels()` Italicize variable labels  
-  > `tab_style_italicize_levels()` Italicize variable levels  
-  > `tab_style_bold_p()` Bold significant p-values  
+    cols_label_summary()          relabel columns in summary table  
+    tab_style_bold_labels()       bold variable labels  
+    tab_style_bold_levels()       bold variable levels  
+    tab_style_italicize_labels()  italicize variable labels  
+    tab_style_italicize_levels()  italicize variable levels  
+    tab_style_bold_p()            bold significant p-values  
 
 ### gt functions to format table
 
@@ -212,12 +212,12 @@ tbl_summary(trial2) %>% names()
 
 These are the additional data stored in the `tbl_summary()` output list. 
 
-  > `table_body` Data frame with summary statistics  
-  > `meta_data` Data frame that is one row per variable with data about each  
-  > `by` and `df_by` The by variable name, and a  data frame with information about the by variable  
-  > `call_list` Named list of each function called on the `tbl_summary` object  
-  > `inputs` Inputs from the `tbl_summary()` function call  
-  > `gt_calls` Named list of gt function calls  
+    table_body  data frame with summary statistics  
+    meta_data   data frame that is one row per variable with data about each  
+    by, df_by   the by variable name, and a  data frame with information about the by variable  
+    call_list   named list of each function called on the `tbl_summary` object  
+    inputs      inputs from the `tbl_summary()` function call  
+    gt_calls    named list of gt function calls  
 
 `gt_calls` is a named list of saved gt function calls.  The gt calls are run when the object is printed to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_summary()`:
 
