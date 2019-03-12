@@ -4,7 +4,7 @@
 \alias{assign_summary_type}
 \title{Assigns summary type (e.g. continuous, categorical, or dichotomous).}
 \usage{
-assign_summary_type(data, variable, class, summary_type)
+assign_summary_type(data, variable, class, summary_type, value)
 }
 \arguments{
 \item{data}{Data frame.}
@@ -29,7 +29,7 @@ number of unique levels.
 # assign_summary_type(data = mtcars,
 #                     variable =  names(mtcars),
 #                     class = apply(mtcars, 2, class),
-#                     summary_type = NULL)
+#                     summary_type = NULL, value = NULL)
 }
 \author{
 Daniel Sjoberg

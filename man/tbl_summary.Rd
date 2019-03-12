@@ -5,7 +5,7 @@
 \title{Calculates and formats descriptive statistics for a data frame}
 \usage{
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
-  statistic = NULL, digits = NULL, group = NULL,
+  value = NULL, statistic = NULL, digits = NULL, group = NULL,
   missing = c("ifany", "always", "no"))
 }
 \arguments{
@@ -25,11 +25,14 @@ the label doesn't exist, the variable name will be used.}
 are \code{c("continuous", "categorical", "dichotomous")},
 e.g. \code{type = list(age = "continuous", female = "dichotomous")}.
 If type not specified for a variable, the function
-will default to an appropriate summary type.}
+will default to an appropriate summary type.  See below for details.}
+
+\item{value}{A list that specifies the value to display for dichotomous
+values only.  See below for details.}
 
 \item{statistic}{A list of the type of statistics to return.  The list can contain
 two named elements (\code{continuous} and \code{categorical}). The default is
-\code{list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}\\\%)")}.
+\code{list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}\%)")}.
 The syntax follows from the \code{\link[glue]{glue}} function.
 For categorical variables the choices the following statistics are available to
 report: \code{{n}} (frequency), \code{{N}} (denominator, or cohort size), \code{{p}} (percent).
@@ -58,9 +61,21 @@ List of summary statistics to be converted to a \code{gt} object
 \description{
 The \code{tbl_summary} function calculates descriptive statistics by groups for
 continuous, categorical, and dichotomous variables.  Review the
-\href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
 for detailed examples.
 }
+\section{Specifying Variable Types}{
+
+tbl_summary displays summary statistics for three types of data:
+continuous, categorical, and dichotomous. If the type is not specified,
+tbl_summary will do its best to guess the type.  Dichotomous variables
+are categorical variables that are displayed on a single row in the
+outupt table, rather than one row per level of the variable.  For dichotomous
+variables coded as TRUE/FALSE, 0/1, or yes/no, the TRUE, 1, and yes rows
+will be displayed.  Otherwise, the value to display must be specified in
+the \code{value} argument, e.g. \code{value = list(varname = "level to show")}
+}
+
 \examples{
 tbl_overall <- tbl_summary(trial)
 tbl_trt <- tbl_summary(trial, by = "trt")
