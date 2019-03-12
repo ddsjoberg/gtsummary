@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2018 Emily C. Zabor, Daniel D. Sjoberg, Patrick Hilden
+Copyright (c) 2019 Daniel D. Sjoberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

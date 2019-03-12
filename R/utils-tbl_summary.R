@@ -48,11 +48,14 @@ assign_class <- function(data, variable) {
 #' @author Daniel Sjoberg
 
 # wrapper for assign_dichotomous_value_one() function
-assign_dichotomous_value <- function(data, variable, summary_type, class) {
-  pmap(list(variable, summary_type, class), ~ assign_dichotomous_value_one(data, ..1, ..2, ..3))
+assign_dichotomous_value <- function(data, variable, summary_type, class, value) {
+  pmap(
+    list(variable, summary_type, class),
+    ~ assign_dichotomous_value_one(data, ..1, ..2, ..3, value)
+  )
 }
 
-assign_dichotomous_value_one <- function(data, variable, summary_type, class) {
+assign_dichotomous_value_one <- function(data, variable, summary_type, class, value) {
 
   # only assign value for dichotomous data
   if (summary_type != "dichotomous") {
@@ -62,48 +65,46 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class) {
   # removing all NA values
   var_vector <- data[[variable]][!is.na(data[[variable]])]
 
+  # if 'value' provided, then dichotomous_value is the provided one
+  if (!is.null(value[[variable]])) {
+    return(value[[variable]])
+  }
+
   # if class is logical, then value will be TRUE
   if (class == "logical") {
-    return(TRUE)
+    if (setequal(var_vector, c(TRUE, FALSE))) {
+      return(TRUE)
+    }
   }
 
   # if column provided is a factor with "Yes" and "No" (or "yes" and "no") then
   # the value is "Yes" (or "yes")
-  if (class == "factor") {
-    if (setequal(var_vector, c("Yes", "No")) |
-      setequal(var_vector, "Yes") |
-      setequal(var_vector, "No")) {
+  if (class %in% c("factor", "character")) {
+    if (setequal(var_vector, c("Yes", "No"))) {
       return("Yes")
     }
-    if (setequal(var_vector, c("yes", "no")) |
-      setequal(var_vector, "yes") |
-      setequal(var_vector, "no")) {
+    if (setequal(var_vector, c("yes", "no"))) {
       return("yes")
     }
-    if (setequal(var_vector, c("YES", "NO")) |
-      setequal(var_vector, "YES") |
-      setequal(var_vector, "NO")) {
+    if (setequal(var_vector, c("YES", "NO"))) {
       return("YES")
     }
   }
 
   # if column provided is all zeros and ones (or exclusively either one), the the value is one
-  if (setequal(var_vector, c(0, 1)) |
-    setequal(var_vector, 0) |
-    setequal(var_vector, 1)) {
+  if (setequal(var_vector, c(0, 1))) {
     return(1)
   }
 
-  # otherwise, the value that will be displayed on is the largest value
-  data %>%
-    select(c(variable)) %>%
-    stats::na.omit() %>%
-    arrange(variable) %>%
-    slice(n()) %>%
-    pull(c(variable))
+  # otherwise, the value must be passed from the values argument to tbl_summary
+  stop(glue(
+    "'{variable}' is dichotomous, but I was unable to determine the ",
+    "level to display. Use the 'value = list({variable} = <level>)' argument ",
+    "to specify level."
+  ))
 }
 
-# assign_dichotomous_value_one(mtcars, "am", "dichotomous", "double")
+# assign_dichotomous_value_one(mtcars, "am", "dichotomous", "double", NULL)
 
 
 
@@ -165,15 +166,20 @@ assign_stat_display <- function(summary_type, stat_display) {
 #' # assign_summary_type(data = mtcars,
 #' #                     variable =  names(mtcars),
 #' #                     class = apply(mtcars, 2, class),
-#' #                     summary_type = NULL)
-assign_summary_type <- function(data, variable, class, summary_type) {
+#' #                     summary_type = NULL, value = NULL)
+assign_summary_type <- function(data, variable, class, summary_type, value) {
+
   map2_chr(
     variable, class,
     ~ summary_type[[.x]] %||%
       case_when(
+        # if a value to display was supplied, then dichotomous
+        !is.null(value[[.x]]) &
+          length(intersect(value[[.x]], data[[.x]]))
+        ~ "dichotomous",
+
         # logical variables will be dichotmous
-        .y == "logical" ~
-        "dichotomous",
+        .y == "logical" ~ "dichotomous",
 
         # numeric variables that are 0 and 1 only, will be dichotomous
         .y %in% c("integer", "numeric") & length(setdiff(na.omit(data[[.x]]), c(0, 1))) == 0
@@ -189,7 +195,7 @@ assign_summary_type <- function(data, variable, class, summary_type) {
 
         # factors and characters are categorical
         .y %in% c("factor", "character") ~
-        "categorical",
+          "categorical",
 
         # numeric variables with fewer than 10 levels will be categorical
         .y %in% c("integer", "numeric") & length(unique(na.omit(data[[.x]]))) < 10
@@ -1045,7 +1051,7 @@ calculate_single_stat <- function(x, stat_name) {
 # function that checks the inputs to \code{\link{tbl_summary}}
 # this should include EVERY input of \code{\link{tbl_summary}} in the same order
 # copy and paste them from \code{\link{tbl_summary}}
-tbl_summary_input_checks <- function(data, by, label, type,
+tbl_summary_input_checks <- function(data, by, label, type, value,
                                      statistic, digits, missing, group) {
   # data -----------------------------------------------------------------------
   # data is a data frame
@@ -1083,7 +1089,7 @@ tbl_summary_input_checks <- function(data, by, label, type,
     summary_type_not_in_data <- setdiff(names(type), names(data))
     if (length(summary_type_not_in_data) > 0) {
       message(glue(
-        "The following names from 'summary_type' are not found in 'data' and ",
+        "The following names from 'type' are not found in 'data' and ",
         "were ignored: {paste0(summary_type_not_in_data, collapse = ', ')}"
       ))
     }
@@ -1096,19 +1102,33 @@ tbl_summary_input_checks <- function(data, by, label, type,
       )
     if (length(summary_type_value_not_valid) > 0) {
       stop(glue(
-        "'summary_type' values must be 'continuous', 'categorical', or 'dichotomous'. ",
+        "'type' values must be 'continuous', 'categorical', or 'dichotomous'. ",
         "'{paste0(summary_type_value_not_valid, collapse = ', ')}' not valid."
       ))
     }
   }
 
+  # value ----------------------------------------------------------------------
+  if (!is.null(value)) {
+    value %>%
+      imap(
+        ~data[[.y]] %>%
+          stats::na.omit() %>%
+          intersect(.x) %>%
+          {ifelse(
+            length(.) > 0,
+            NA,
+            stop(glue("'{.x}' not a level of the variable '{.y}'"))
+          )}
+      )
+  }
   # label ----------------------------------------------------------------------
   if (!is.null(label)) {
     # checking that all names in list are variable names from data.
     var_label_not_in_data <- setdiff(names(label), names(data))
     if (length(var_label_not_in_data) > 0) {
       message(glue(
-        "The following names from 'var_label' are not found in 'data' and ",
+        "The following names from 'label' are not found in 'data' and ",
         "were ignored: {paste0(var_label_not_in_data, collapse = ', ')}"
       ))
     }
@@ -1121,7 +1141,7 @@ tbl_summary_input_checks <- function(data, by, label, type,
     if (length(stat_display_names_not_valid) > 0) {
       message(glue(
         "Expecting list names 'continuous' and 'categorical'. ",
-        "The following names from 'stat_display' are not valid and ",
+        "The following names from 'statistic' are not valid and ",
         "were ignored: {paste0(stat_display_names_not_valid, collapse = ', ')}"
       ))
     }
