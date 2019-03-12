@@ -70,7 +70,7 @@ tbl_summary displays summary statistics for three types of data:
 continuous, categorical, and dichotomous. If the type is not specified,
 tbl_summary will do its best to guess the type.  Dichotomous variables
 are categorical variables that are displayed on a single row in the
-outupt table, rather than one row per level of the variable.  For dichotomous
+output table, rather than one row per level of the variable.  For dichotomous
 variables coded as TRUE/FALSE, 0/1, or yes/no, the TRUE, 1, and yes rows
 will be displayed.  Otherwise, the value to display must be specified in
 the \code{value} argument, e.g. \code{value = list(varname = "level to show")}

@@ -35,7 +35,7 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 inline_text.tbl_summary <-
   function(x, variable, level = NULL,
              column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-             pvalue_fun = partial(style_pvalue, prepend_p = TRUE), ...) {
+             pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # checking column ----------------------------------------------------------
     # the follwing code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
@@ -121,7 +121,7 @@ inline_text.tbl_summary <-
 #' @param level level of the variable to display for categorical variables.
 #' Default is `NULL`, returning the top row in the table for the variable.
 #' @param pattern statistics to return.  Uses \link[glue]{glue} formatting.
-#' Default is "{coef} ({conf.level}% CI {ll}, {ul}; {pvalue})".  All columns from
+#' Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
 #' `.$table_body` are available to print as well as the confidence level (conf.level)
 #' @param coef_fun function to style model coefficients.
 #' Columns 'coef', 'll', and 'ul' are formatted. Default is `x$inputs$coef_fun`
