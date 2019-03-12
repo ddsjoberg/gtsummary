@@ -57,12 +57,10 @@ inline_text.tbl_summary <-
       pull("column_name")
 
     if (length(column) == 0) {
-      stop(
-        stop(glue(
-          "No column selected.  Must be one of: ",
-          "{paste(col_lookup_table, collapse = ', ')}"
-        ))
-      )
+      stop(glue(
+        "No column selected.  Must be one of: ",
+        "{paste(col_lookup_table, collapse = ', ')}"
+      ))
     }
 
 
