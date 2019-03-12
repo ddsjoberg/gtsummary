@@ -1089,7 +1089,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     summary_type_not_in_data <- setdiff(names(type), names(data))
     if (length(summary_type_not_in_data) > 0) {
       message(glue(
-        "The following names from 'summary_type' are not found in 'data' and ",
+        "The following names from 'type' are not found in 'data' and ",
         "were ignored: {paste0(summary_type_not_in_data, collapse = ', ')}"
       ))
     }
@@ -1102,7 +1102,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
       )
     if (length(summary_type_value_not_valid) > 0) {
       stop(glue(
-        "'summary_type' values must be 'continuous', 'categorical', or 'dichotomous'. ",
+        "'type' values must be 'continuous', 'categorical', or 'dichotomous'. ",
         "'{paste0(summary_type_value_not_valid, collapse = ', ')}' not valid."
       ))
     }
@@ -1128,7 +1128,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     var_label_not_in_data <- setdiff(names(label), names(data))
     if (length(var_label_not_in_data) > 0) {
       message(glue(
-        "The following names from 'var_label' are not found in 'data' and ",
+        "The following names from 'label' are not found in 'data' and ",
         "were ignored: {paste0(var_label_not_in_data, collapse = ', ')}"
       ))
     }
@@ -1141,7 +1141,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     if (length(stat_display_names_not_valid) > 0) {
       message(glue(
         "Expecting list names 'continuous' and 'categorical'. ",
-        "The following names from 'stat_display' are not valid and ",
+        "The following names from 'statistic' are not valid and ",
         "were ignored: {paste0(stat_display_names_not_valid, collapse = ', ')}"
       ))
     }
