@@ -129,13 +129,13 @@ for detailed examples." />
     
     <p>The <code>tbl_summary</code> function calculates descriptive statistics by groups for
 continuous, categorical, and dichotomous variables.  Review the
-<a href='https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html'><code>tbl_summary</code> vignette</a>
+<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'><code>tbl_summary</code> vignette</a>
 for detailed examples.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>tbl_summary</span>(<span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -165,13 +165,18 @@ the label doesn't exist, the variable name will be used.</p></td>
 are <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("continuous", "categorical", "dichotomous")</a></code>,
 e.g. <code>type = list(age = "continuous", female = "dichotomous")</code>.
 If type not specified for a variable, the function
-will default to an appropriate summary type.</p></td>
+will default to an appropriate summary type.  See below for details.</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>A list that specifies the value to display for dichotomous
+values only.  See below for details.</p></td>
     </tr>
     <tr>
       <th>statistic</th>
       <td><p>A list of the type of statistics to return.  The list can contain
 two named elements (<code>continuous</code> and <code>categorical</code>). The default is
-<code>list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}\%)")</code>.
+<code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}%)")</a></code>.
 The syntax follows from the <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> function.
 For categorical variables the choices the following statistics are available to
 report: <code>{n}</code> (frequency), <code>{N}</code> (denominator, or cohort size), <code>{p}</code> (percent).
@@ -206,6 +211,18 @@ zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
 
     <p>List of summary statistics to be converted to a <code>gt</code> object</p>
     
+    <h2 class="hasAnchor" id="specifying-variable-types"><a class="anchor" href="#specifying-variable-types"></a>Specifying Variable Types</h2>
+
+    
+    <p>tbl_summary displays summary statistics for three types of data:
+continuous, categorical, and dichotomous. If the type is not specified,
+tbl_summary will do its best to guess the type.  Dichotomous variables
+are categorical variables that are displayed on a single row in the
+output table, rather than one row per level of the variable.  For dichotomous
+variables coded as TRUE/FALSE, 0/1, or yes/no, the TRUE, 1, and yes rows
+will be displayed.  Otherwise, the value to display must be specified in
+the <code>value</code> argument, e.g. <code>value = list(varname = "level to show")</code></p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_overall</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_summary</span>(<span class='no'>trial</span>)
@@ -218,6 +235,8 @@ zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#specifying-variable-types">Specifying Variable Types</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

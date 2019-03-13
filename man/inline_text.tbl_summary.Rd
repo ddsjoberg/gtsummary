@@ -6,7 +6,7 @@
 \usage{
 \method{inline_text}{tbl_summary}(x, variable, level = NULL,
   column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-  pvalue_fun = partial(style_pvalue, prepend_p = TRUE), ...)
+  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...)
 }
 \arguments{
 \item{x}{object created from  \link{tbl_summary}}

@@ -137,7 +137,7 @@ inline in an R markdown document.  Detailed examples in the
     <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
 <span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='no'>variable</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>column</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NULL'>is.null</a></span>(<span class='no'>x</span>$<span class='no'>by</span>), <span class='st'>"stat_0"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stop'>stop</a></span>(<span class='st'>"Must specify column"</span>)),
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='fu'>partial</span>(<span class='no'>style_pvalue</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>...</span>)</pre>
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
