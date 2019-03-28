@@ -6,7 +6,8 @@
 \usage{
 tbl_regression(x, exponentiate = FALSE, label = NULL,
   include = names(stats::model.frame(x)), show_yesno = NULL,
-  conf.level = 0.95, intercept = FALSE, coef_fun = style_coef,
+  conf.level = 0.95, intercept = FALSE,
+  coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
   pvalue_fun = style_pvalue)
 }
 \arguments{
@@ -29,7 +30,9 @@ name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
 \item{intercept}{logical argument indicates whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{coef_fun}{function to round and format beta coefficients.  Default is \code{\link{style_coef}}}
+\item{coef_fun}{function to round and format beta coefficients.  Default
+is \code{\link{style_sigfig}} when the coefficients are printed, and
+\code{\link{style_ratio}} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{style_pvalue}}}
 }
