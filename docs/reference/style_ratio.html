@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Implement significant figure-like formatting — style_sigfig • gtsummary</title>
+<title>Implement significant figure-like formatting for ratios — style_ratio • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,14 @@
 
 
 
-<meta property="og:title" content="Implement significant figure-like formatting — style_sigfig" />
+<meta property="og:title" content="Implement significant figure-like formatting for ratios — style_ratio" />
 
-<meta property="og:description" content="Converts a numeric argument into a string that has been rounded to a
-significant figure-like number. Scientific notation output
-is avoided, however, and additional significant figures may be displayed for
-numbers large numbers.  For example, if the number of significant digits
-requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2)." />
+<meta property="og:description" content="When reporting ratios, such as relative risk, or an odds ratio, we'll often
+want the rounding to be similar on each side of the number 1.  For example,
+if we report an odds ratio of 0.95 with a confidence interval of 0.70 to 1.24,
+we would want to round to two decimal places for all values. In other words,
+2 significant figures for numbers less than 1 and 3 significant figures 1 and
+larger. style_ratio() performs significant figure-like formatting in this manner." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -121,22 +122,23 @@ requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Implement significant figure-like formatting</h1>
+    <h1>Implement significant figure-like formatting for ratios</h1>
     
-    <div class="hidden name"><code>style_sigfig.Rd</code></div>
+    <div class="hidden name"><code>style_ratio.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Converts a numeric argument into a string that has been rounded to a
-significant figure-like number. Scientific notation output
-is avoided, however, and additional significant figures may be displayed for
-numbers large numbers.  For example, if the number of significant digits
-requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).</p>
+    <p>When reporting ratios, such as relative risk, or an odds ratio, we'll often
+want the rounding to be similar on each side of the number 1.  For example,
+if we report an odds ratio of 0.95 with a confidence interval of 0.70 to 1.24,
+we would want to round to two decimal places for all values. In other words,
+2 significant figures for numbers less than 1 and 3 significant figures 1 and
+larger. <code>style_ratio()</code> performs significant figure-like formatting in this manner.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>style_sigfig</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
+    <pre class="usage"><span class='fu'>style_ratio</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,32 +149,35 @@ requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).</p>
     </tr>
     <tr>
       <th>digits</th>
-      <td><p>integer specifying the minimum number of significant
-digits to display</p></td>
+      <td><p>integer specifying the number of significant
+digits to display for numbers below 1. Numbers larger than 1 will be be <code>digits + 1</code>.
+Default is <code>digits = 2</code>.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>If 2 sig figs are input, the number is rounded to 2 decimal places
-when <code>abs(x) &lt; 1</code>, 1 decimal place when <code>abs(x) &gt;= 1 &amp; abs(x) &lt; 10</code>,
-and to the nearest integer when <code>abs(x) &gt;= 10</code>.</p>
+    <div class='dont-index'><p><code><a href='style_sigfig.html'>style_sigfig</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.123</span>, <span class='fl'>0.9</span>, <span class='fl'>1.1234</span>, <span class='fl'>12.345</span>, -<span class='fl'>0.123</span>, -<span class='fl'>0.9</span>, -<span class='fl'>1.1234</span>, -<span class='fl'>12.345</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>style_sigfig</span>()</div><div class='output co'>#&gt; [1] "0.12"  "0.90"  "1.1"   "12"    "-0.12" "-0.90" "-1.1"  "-12"  </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.123</span>, <span class='fl'>0.9</span>, <span class='fl'>1.1234</span>, <span class='fl'>12.345</span>, <span class='fl'>101.234</span>, -<span class='fl'>0.123</span>,
+  -<span class='fl'>0.9</span>, -<span class='fl'>1.1234</span>, -<span class='fl'>12.345</span>, -<span class='fl'>101.234</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>style_ratio</span>()</div><div class='output co'>#&gt;  [1] "0.12"  "0.90"  "1.12"  "12.3"  "101"   "-0.12" "-0.90" "-1.12" "-12.3"
+#&gt; [10] "-101" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#details">Details</a></li>
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
 
+    <h2>Author</h2>
+    <p>Daniel Sjoberg</p>
   </div>
 </div>
 

@@ -104,10 +104,10 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the production version of gtsummary with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)
+remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</code></pre></div>
 <p>and the development version with:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>, <span class="dt">ref =</span> <span class="st">"dev"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>, <span class="dt">ref =</span> <span class="st">"dev"</span>)</code></pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -116,15 +116,15 @@
 <div id="summary-table" class="section level3">
 <h3 class="hasAnchor">
 <a href="#summary-table" class="anchor"></a>Summary Table</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gtsummary)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; Loading required package: gt</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/add_comparison.html">add_comparison</a></span>() </a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gtsummary)
+<span class="co">#&gt; Loading required package: gt</span>
+<span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="reference/add_comparison.html">add_comparison</a></span>() </code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#cnmthxyayq .gt_table {
+#paasjgwstj .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -143,13 +143,13 @@
   /* table.border.top.color */
 }
 
-#cnmthxyayq .gt_heading {
+#paasjgwstj .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#cnmthxyayq .gt_title {
+#paasjgwstj .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -160,7 +160,7 @@
   border-bottom-width: 0;
 }
 
-#cnmthxyayq .gt_subtitle {
+#paasjgwstj .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -171,7 +171,7 @@
   border-top-width: 0;
 }
 
-#cnmthxyayq .gt_bottom_border {
+#paasjgwstj .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -180,7 +180,7 @@
   /* heading.border.bottom.color */
 }
 
-#cnmthxyayq .gt_column_spanner {
+#paasjgwstj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -188,7 +188,7 @@
   padding-bottom: 4px;
 }
 
-#cnmthxyayq .gt_col_heading {
+#paasjgwstj .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -201,11 +201,11 @@
   margin: 10px;
 }
 
-#cnmthxyayq .gt_sep_right {
+#paasjgwstj .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#cnmthxyayq .gt_group_heading {
+#paasjgwstj .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -229,7 +229,7 @@
   vertical-align: middle;
 }
 
-#cnmthxyayq .gt_empty_group_heading {
+#paasjgwstj .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -253,29 +253,29 @@
   vertical-align: middle;
 }
 
-#cnmthxyayq .gt_striped {
+#paasjgwstj .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#cnmthxyayq .gt_row {
+#paasjgwstj .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#cnmthxyayq .gt_stub {
+#paasjgwstj .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#cnmthxyayq .gt_stub.gt_row {
+#paasjgwstj .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#cnmthxyayq .gt_summary_row {
+#paasjgwstj .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -284,13 +284,13 @@
   /* summary_row.text_transform */
 }
 
-#cnmthxyayq .gt_first_summary_row {
+#paasjgwstj .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#cnmthxyayq .gt_table_body {
+#paasjgwstj .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -305,55 +305,55 @@
   /* field.border.bottom.color */
 }
 
-#cnmthxyayq .gt_footnote {
+#paasjgwstj .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#cnmthxyayq .gt_sourcenote {
+#paasjgwstj .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#cnmthxyayq .gt_center {
+#paasjgwstj .gt_center {
   text-align: center;
 }
 
-#cnmthxyayq .gt_left {
+#paasjgwstj .gt_left {
   text-align: left;
 }
 
-#cnmthxyayq .gt_right {
+#paasjgwstj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cnmthxyayq .gt_font_normal {
+#paasjgwstj .gt_font_normal {
   font-weight: normal;
 }
 
-#cnmthxyayq .gt_font_bold {
+#paasjgwstj .gt_font_bold {
   font-weight: bold;
 }
 
-#cnmthxyayq .gt_font_italic {
+#paasjgwstj .gt_font_italic {
   font-style: italic;
 }
 
-#cnmthxyayq .gt_super {
+#paasjgwstj .gt_super {
   font-size: 65%;
 }
 
-#cnmthxyayq .gt_footnote_glyph {
+#paasjgwstj .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="cnmthxyayq" style="overflow-x:auto;">
+<div id="paasjgwstj" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table table gt_table">
 <tr>
@@ -368,7 +368,7 @@
 <strong>p-value</strong><sup class="gt_footnote_glyph">2</sup>
 </th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left">Age, yrs</td>
 <td class="gt_row gt_center">47 (39, 58)</td>
@@ -376,10 +376,10 @@
 <td class="gt_row gt_center">0.3</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">Unknown</td>
-<td class="gt_row gt_center gt_striped">3</td>
-<td class="gt_row gt_center gt_striped">5</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">Unknown</td>
+<td class="gt_row gt_center">3</td>
+<td class="gt_row gt_center">5</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left">Marker Level, ng/mL</td>
@@ -388,10 +388,10 @@
 <td class="gt_row gt_center">0.4</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">Unknown</td>
-<td class="gt_row gt_center gt_striped">4</td>
-<td class="gt_row gt_center gt_striped">4</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">Unknown</td>
+<td class="gt_row gt_center">4</td>
+<td class="gt_row gt_center">4</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left">T Stage</td>
@@ -400,10 +400,10 @@
 <td class="gt_row gt_center">0.13</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T1</td>
-<td class="gt_row gt_center gt_striped">25 (23%)</td>
-<td class="gt_row gt_center gt_striped">26 (28%)</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T1</td>
+<td class="gt_row gt_center">25 (23%)</td>
+<td class="gt_row gt_center">26 (28%)</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T2</td>
@@ -412,10 +412,10 @@
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">T3</td>
-<td class="gt_row gt_center gt_striped">29 (27%)</td>
-<td class="gt_row gt_center gt_striped">13 (14%)</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T3</td>
+<td class="gt_row gt_center">29 (27%)</td>
+<td class="gt_row gt_center">13 (14%)</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">T4</td>
@@ -424,10 +424,10 @@
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">Grade</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped">0.3</td>
+<td class="gt_row gt_left">Grade</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.3</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">I</td>
@@ -436,10 +436,10 @@
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">II</td>
-<td class="gt_row gt_center gt_striped">34 (32%)</td>
-<td class="gt_row gt_center gt_striped">24 (26%)</td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">II</td>
+<td class="gt_row gt_center">34 (32%)</td>
+<td class="gt_row gt_center">24 (26%)</td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">III</td>
@@ -448,10 +448,10 @@
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">Tumor Response</td>
-<td class="gt_row gt_center gt_striped">52 (51%)</td>
-<td class="gt_row gt_center gt_striped">30 (33%)</td>
-<td class="gt_row gt_center gt_striped">0.017</td>
+<td class="gt_row gt_left">Tumor Response</td>
+<td class="gt_row gt_center">52 (51%)</td>
+<td class="gt_row gt_center">30 (33%)</td>
+<td class="gt_row gt_center">0.017</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">Unknown</td>
@@ -471,16 +471,16 @@
 <div id="regression-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#regression-models" class="anchor"></a>Regression Models</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">mod1 =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(am <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(cyl), mtcars, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(<span class="dt">link =</span> <span class="st">"logit"</span>))</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, </a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">label =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">`</span><span class="dt">factor(cyl)</span><span class="st">`</span> =<span class="st"> "No. of Cylinders"</span>, <span class="dt">mpg =</span> <span class="st">"Miles per Gallon"</span>)</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1 =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(am <span class="op">~</span><span class="st"> </span>mpg <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(cyl), mtcars, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(<span class="dt">link =</span> <span class="st">"logit"</span>))
+<span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(
+  mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, 
+  <span class="dt">label =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">`</span><span class="dt">factor(cyl)</span><span class="st">`</span> =<span class="st"> "No. of Cylinders"</span>, <span class="dt">mpg =</span> <span class="st">"Miles per Gallon"</span>)
+)</code></pre></div>
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#okzuvtzzoq .gt_table {
+#eteibwqlfd .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -499,13 +499,13 @@
   /* table.border.top.color */
 }
 
-#okzuvtzzoq .gt_heading {
+#eteibwqlfd .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#okzuvtzzoq .gt_title {
+#eteibwqlfd .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -516,7 +516,7 @@
   border-bottom-width: 0;
 }
 
-#okzuvtzzoq .gt_subtitle {
+#eteibwqlfd .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -527,7 +527,7 @@
   border-top-width: 0;
 }
 
-#okzuvtzzoq .gt_bottom_border {
+#eteibwqlfd .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -536,7 +536,7 @@
   /* heading.border.bottom.color */
 }
 
-#okzuvtzzoq .gt_column_spanner {
+#eteibwqlfd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -544,7 +544,7 @@
   padding-bottom: 4px;
 }
 
-#okzuvtzzoq .gt_col_heading {
+#eteibwqlfd .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -557,11 +557,11 @@
   margin: 10px;
 }
 
-#okzuvtzzoq .gt_sep_right {
+#eteibwqlfd .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#okzuvtzzoq .gt_group_heading {
+#eteibwqlfd .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -585,7 +585,7 @@
   vertical-align: middle;
 }
 
-#okzuvtzzoq .gt_empty_group_heading {
+#eteibwqlfd .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -609,29 +609,29 @@
   vertical-align: middle;
 }
 
-#okzuvtzzoq .gt_striped {
+#eteibwqlfd .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#okzuvtzzoq .gt_row {
+#eteibwqlfd .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#okzuvtzzoq .gt_stub {
+#eteibwqlfd .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#okzuvtzzoq .gt_stub.gt_row {
+#eteibwqlfd .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#okzuvtzzoq .gt_summary_row {
+#eteibwqlfd .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -640,13 +640,13 @@
   /* summary_row.text_transform */
 }
 
-#okzuvtzzoq .gt_first_summary_row {
+#eteibwqlfd .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#okzuvtzzoq .gt_table_body {
+#eteibwqlfd .gt_table_body {
   border-top-style: solid;
   /* field.border.top.style */
   border-top-width: 2px;
@@ -661,55 +661,55 @@
   /* field.border.bottom.color */
 }
 
-#okzuvtzzoq .gt_footnote {
+#eteibwqlfd .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#okzuvtzzoq .gt_sourcenote {
+#eteibwqlfd .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#okzuvtzzoq .gt_center {
+#eteibwqlfd .gt_center {
   text-align: center;
 }
 
-#okzuvtzzoq .gt_left {
+#eteibwqlfd .gt_left {
   text-align: left;
 }
 
-#okzuvtzzoq .gt_right {
+#eteibwqlfd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#okzuvtzzoq .gt_font_normal {
+#eteibwqlfd .gt_font_normal {
   font-weight: normal;
 }
 
-#okzuvtzzoq .gt_font_bold {
+#eteibwqlfd .gt_font_bold {
   font-weight: bold;
 }
 
-#okzuvtzzoq .gt_font_italic {
+#eteibwqlfd .gt_font_italic {
   font-style: italic;
 }
 
-#okzuvtzzoq .gt_super {
+#eteibwqlfd .gt_super {
   font-size: 65%;
 }
 
-#okzuvtzzoq .gt_footnote_glyph {
+#eteibwqlfd .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="okzuvtzzoq" style="overflow-x:auto;">
+<div id="eteibwqlfd" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table table gt_table">
 <tr>
@@ -722,7 +722,7 @@
 </th>
 <th class="gt_col_heading gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
 </tr>
-<tbody class="gt_table_body">
+<tbody class="gt_table_body gt_striped">
 <tr>
 <td class="gt_row gt_left">Miles per Gallon</td>
 <td class="gt_row gt_center">1.45</td>
@@ -730,10 +730,10 @@
 <td class="gt_row gt_center">0.080</td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped">No. of Cylinders</td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
-<td class="gt_row gt_center gt_striped"></td>
+<td class="gt_row gt_left">No. of Cylinders</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">4</td>
@@ -742,10 +742,10 @@
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left gt_striped" style="text-align:left;text-indent:10px;">6</td>
-<td class="gt_row gt_center gt_striped">2.08</td>
-<td class="gt_row gt_center gt_striped">0.13, 39.0</td>
-<td class="gt_row gt_center gt_striped">0.6</td>
+<td class="gt_row gt_left" style="text-align:left;text-indent:10px;">6</td>
+<td class="gt_row gt_center">2.08</td>
+<td class="gt_row gt_center">0.13, 39.0</td>
+<td class="gt_row gt_center">0.6</td>
 </tr>
 <tr>
 <td class="gt_row gt_left" style="text-align:left;text-indent:10px;">8</td>
