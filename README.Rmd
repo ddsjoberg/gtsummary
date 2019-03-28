@@ -57,9 +57,11 @@ t1 <-
 
 ```{r regress, include = TRUE}
 mod1 = glm(am ~ mpg + factor(cyl), mtcars, family = binomial(link = "logit"))
-tbl_regression(
-  mod1, exponentiate = TRUE, 
-  label = list(`factor(cyl)` = "No. of Cylinders", mpg = "Miles per Gallon")
-)
+t2 <-
+  tbl_regression(
+    mod1, exponentiate = TRUE, 
+    label = list(`factor(cyl)` = "No. of Cylinders", mpg = "Miles per Gallon")
+  )
 ```
 
+![](table-images/README-tbl_regression.png)
