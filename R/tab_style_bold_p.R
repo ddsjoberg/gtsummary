@@ -32,7 +32,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
   if (is.null(x$call_list$add_comparison)) {
     stop("Before p-values are bolded, run add_comparison() to calculate the p-values")
   }
-  # checking that add_q has been previously run if bolding q-values
+  # checking that add_q has been previously run if bold q-values
   if (q == TRUE & is.null(x$call_list$add_q)) {
     stop("Before q-values are bolded, run add_q() to calculate the q-values")
   }
@@ -41,7 +41,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
   col_name <- ifelse(q == FALSE, "pvalue", "qvalue")
   gt_call_name <- glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
-  # returning threshold for bolding
+  # returning threshold for bold
   x[[glue("{col_name}_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][[gt_call_name]] <- glue(
@@ -71,7 +71,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @export
 tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
-  # returning threshold for bolding
+  # returning threshold for bold
   x[[glue("pvalue_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_bold_pvalue"]] <- glue(
@@ -97,7 +97,7 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #' @export
 tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
-  # checking that add_q has been previously run if bolding q-values
+  # checking that add_q has been previously run if bold q-values
   if (q == TRUE & is.null(x$call_list$add_q)) {
     stop("Before q-values are bolded, run add_q() to calculate the q-values")
   }
@@ -106,7 +106,7 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
   col_name <- ifelse(q == FALSE, "pvalue", "qvalue")
   gt_call_name <- glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
-  # returning threshold for bolding
+  # returning threshold for bold
   x[[glue("{col_name}_bold_t")]] <- t
   # adding p-value formatting
   x[["gt_calls"]][[gt_call_name]] <- glue(
