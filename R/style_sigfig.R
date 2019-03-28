@@ -1,4 +1,4 @@
-#' Implement significant figure like formatting
+#' Implement significant figure-like formatting
 #'
 #' Converts a numeric argument into a string that has been rounded to a
 #' significant figure-like number. Scientific notation output
@@ -38,5 +38,3 @@ style_sigfig <- function(x, digits = 2) {
     eval()
 }
 
-c(0.123, 0.9, 1.1234, 12.345) %>%
-  style_sigfig()
