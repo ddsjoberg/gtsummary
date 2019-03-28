@@ -17,7 +17,9 @@
 #' are `c("No", "Yes")`, `c("no", "yes")`, or `c("NO", "YES")` default to dichotomous printing
 #' (i.e. only Yes shown). To force both levels to be shown include the column
 #' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
-#' @param coef_fun function to round and format beta coefficients.  Default is \code{\link{style_coef}}
+#' @param coef_fun function to round and format beta coefficients.  Default
+#' is \code{\link{style_sigfig}} when the coefficients are printed, and
+#' \code{\link{style_ratio}} when the coefficients have been exponentiated.
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
 #' @author Daniel Sjoberg
 #' @export
@@ -38,7 +40,8 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
                            include = names(stats::model.frame(x)),
                            show_yesno = NULL,
                            conf.level = 0.95, intercept = FALSE,
-                           coef_fun = style_coef, pvalue_fun = style_pvalue) {
+                           coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
+                           pvalue_fun = style_pvalue) {
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())

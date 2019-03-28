@@ -6,7 +6,8 @@
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
-  show_yesno = NULL, conf.level = 0.95, coef_fun = style_coef,
+  show_yesno = NULL, conf.level = 0.95,
+  coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
   pvalue_fun = style_pvalue)
 }
 \arguments{
@@ -38,7 +39,9 @@ name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
 \item{conf.level}{confidence level passed directly to \code{broom::tidy}.
 Default is 0.95.}
 
-\item{coef_fun}{function to round and format beta coefficients.  Default is \code{\link{style_coef}}}
+\item{coef_fun}{function to round and format beta coefficients.  Default
+is \code{\link{style_sigfig}} when the coefficients are printed, and
+\code{\link{style_ratio}} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{style_pvalue}}}
 }
