@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) -->
 [![Travis build status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.org/ddsjoberg/gtsummary)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/gtsummary?branch=master)
@@ -46,9 +46,12 @@ The vignettes/tutorials for the primary gtsummary functions have detailed exampl
 
 ```{r t1, include = TRUE}
 library(gtsummary)
-tbl_summary(trial, by = "trt") %>% 
+t1 <-
+  tbl_summary(trial, by = "trt") %>% 
   add_comparison() 
 ```
+
+![](table-images/README-tbl_summary.png)
 
 ### Regression Models
 
@@ -59,3 +62,4 @@ tbl_regression(
   label = list(`factor(cyl)` = "No. of Cylinders", mpg = "Miles per Gallon")
 )
 ```
+
