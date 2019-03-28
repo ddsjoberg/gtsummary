@@ -164,12 +164,12 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
 # match method input to display name
 add_q_method_lookup <- tibble::tribble(
   ~method, ~method_label,
-  "holm", "Holm correction",
-  "hochberg", "Hochberg correction",
-  "hommel", "Hommel correction",
-  "bonferroni", "Bonferroni correction",
-  "BH", "Benjamini & Hochberg correction",
-  "BY", "Benjamini & Yekutieli correction",
-  "fdr", "False discovery rate correction",
-  "none", "No correction"
+  "holm", "Holm correction for multiple testing",
+  "hochberg", "Hochberg correction for multiple testing",
+  "hommel", "Hommel correction for multiple testing",
+  "bonferroni", "Bonferroni correction for multiple testing",
+  "BH", "Benjamini & Hochberg correction for multiple testing",
+  "BY", "Benjamini & Yekutieli correction for multiple testing",
+  "fdr", "False discovery rate correction for multiple testing",
+  "none", "No correction for multiple testing"
 )
