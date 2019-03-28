@@ -40,7 +40,7 @@ t1 <-
   add_comparison() 
 ```
 
-![](table-images/README-tbl_summary.png)
+![](man/figures/README-tbl_summary.png)
 
 ### Regression Models
 
@@ -53,4 +53,4 @@ t2 <-
   )
 ```
 
-![](table-images/README-tbl_regression.png)
+![](man/figures/README-tbl_regression.png)
