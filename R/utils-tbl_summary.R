@@ -803,7 +803,9 @@ summarize_categorical <- function(data, variable, by, var_label,
     stats::na.omit() %>%
     group_by(!!sym("by_col")) %>%
     count(!!sym("variable")) %>%
-    complete(!!sym("variable"), fill = list(n = 0)) %>%
+    ungroup() %>%
+    complete(!!sym("by_col"), !!sym("variable"), fill = list(n = 0)) %>%
+    group_by(!!sym("by_col")) %>%
     mutate(
       N = sum(.data$n),
       p = style_percent(.data$n / .data$N),
