@@ -98,7 +98,7 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
 stat_test_names <- tibble::tribble(
   ~stat_test, ~stat_test_label,
   "t.test", "t-test",
-  "fisher.test", "Fisher's exact test",
+  "fisher.test", "Fisher exact test",
   "wilcox.test", "Wilcoxon rank-sum test",
   "kruskal.test", "Kruskal-Wallis test",
   "chisq.test", "chi-square test of independence",
