@@ -99,9 +99,9 @@ stat_test_names <- tibble::tribble(
   ~stat_test, ~stat_test_label,
   "t.test", "t-test",
   "fisher.test", "Fisher's exact test",
-  "wilcox.test", "Wilcoxon signed-rank test",
+  "wilcox.test", "Wilcoxon rank-sum test",
   "kruskal.test", "Kruskal-Wallis test",
-  "chisq.test", "chi-square test",
+  "chisq.test", "chi-square test of independence",
   "re", "mixed-effects regression model with random intercept"
 )
 
