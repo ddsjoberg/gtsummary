@@ -1282,6 +1282,6 @@ footnote_stat_label <- function(meta_data) {
     ) %>%
     distinct() %>%
     pull("message") %>%
-    paste(collapse = ", ") %>%
+    paste(collapse = "; ") %>%
     paste0("Statistics presented: ", .)
 }
