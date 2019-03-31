@@ -84,11 +84,11 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
 
   # adding footnote listing statistics presented in table
   x[["gt_calls"]][["footnote_add_comparison"]] <- glue(
-    "tab_footnote(",
-    "  footnote = '{footnote_add_comparison(meta_data)}',",
-    "  locations = cells_column_labels(",
-    "    columns = vars(pvalue))",
-    ")"
+    'tab_footnote(',
+    'footnote = "{footnote_add_comparison(meta_data)}",',
+    'locations = cells_column_labels(',
+    'columns = vars(pvalue))',
+    ')'
   )
 
   x
@@ -98,7 +98,7 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
 stat_test_names <- tibble::tribble(
   ~stat_test, ~stat_test_label,
   "t.test", "t-test",
-  "fisher.test", "Fisher exact test",
+  "fisher.test", "Fisher's exact test",
   "wilcox.test", "Wilcoxon rank-sum test",
   "kruskal.test", "Kruskal-Wallis test",
   "chisq.test", "chi-square test of independence",
