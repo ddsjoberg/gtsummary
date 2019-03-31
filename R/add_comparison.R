@@ -112,6 +112,6 @@ footnote_add_comparison <- function(meta_data) {
     distinct() %>%
     left_join(stat_test_names, by = "stat_test") %>%
     pull("stat_test_label") %>%
-    paste(collapse = ", ") %>%
+    paste(collapse = "; ") %>%
     paste0("Statistical tests performed: ", .)
 }
