@@ -18,6 +18,6 @@ be \code{c("labelled", "character")} rather than \code{c("character")} only.  Th
 simple function extracts the base R class.
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

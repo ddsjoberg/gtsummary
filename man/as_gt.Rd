@@ -25,5 +25,5 @@ tbl_gt <- trial \%>\% tbl_summary(by = "trt") \%>\% as_gt()
 \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }

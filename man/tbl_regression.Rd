@@ -63,6 +63,6 @@ Other tbl_regression: \code{\link{add_global.tbl_regression}},
   \code{\link{tab_style_bold_p.tbl_regression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \concept{tbl_regression}

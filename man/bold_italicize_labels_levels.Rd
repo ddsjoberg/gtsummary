@@ -65,7 +65,7 @@ Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
   \code{\link{tbl_uvregression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \concept{tbl_regression}
 \concept{tbl_summary}

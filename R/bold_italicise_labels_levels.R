@@ -2,7 +2,7 @@
 #'
 #' @name bold_italicize_labels_levels
 #' @param x an object created using gtsummary functions
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @family tbl_summary
 #' @family tbl_regression
 #' @family tbl_uvregression

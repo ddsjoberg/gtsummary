@@ -29,7 +29,7 @@
 #' \code{\link{style_ratio}} when the coefficients have been exponentiated.
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
 #' @importFrom stringr word str_detect fixed
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @family tbl_uvregression
 #' @export
 #' @examples

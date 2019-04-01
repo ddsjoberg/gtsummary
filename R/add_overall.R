@@ -7,7 +7,7 @@
 #' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
 #' @param last logical indicator to include overall  column last. Default is `FALSE`
 #' @family tbl_summary
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @export
 #' @examples
 #' tbl_overall <- trial %>% tbl_summary(by = "trt") %>% add_overall()

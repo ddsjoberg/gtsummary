@@ -41,6 +41,6 @@ Other tbl_summary: \code{\link{add_comparison}},
   \code{\link{tbl_summary}}
 }
 \author{
-Esther Drill, Daniel Sjoberg
+Esther Drill, Daniel D. Sjoberg
 }
 \concept{tbl_summary}

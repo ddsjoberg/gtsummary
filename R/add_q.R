@@ -3,7 +3,7 @@
 #'
 #' @param x `tbl_summary` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
-#' @author Esther Drill, Daniel Sjoberg
+#' @author Esther Drill, Daniel D. Sjoberg
 #' @seealso \code{\link{tbl_summary}}, \code{\link{tbl_regression}},
 #' \code{\link{tbl_uvregression}}
 #' @export
@@ -21,7 +21,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
 #' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
 #' @param ...	further arguments passed to or from other methods
-#' @author Esther Drill, Daniel Sjoberg
+#' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary
 #' @export
 #' @examples
@@ -99,7 +99,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
 #' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
 #' @param ...	further arguments passed to or from other methods
-#' @author Esther Drill, Daniel Sjoberg
+#' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_uvregression
 #' @export
 #' @examples

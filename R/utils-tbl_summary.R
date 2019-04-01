@@ -8,7 +8,7 @@
 #' @param data data frame
 #' @param variable string vector of column names from data
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 
 assign_class <- function(data, variable) {
   classes_expected <- c("character", "factor", "numeric", "logical", "integer", "double")
@@ -45,7 +45,7 @@ assign_class <- function(data, variable) {
 #' @param class class of \code{variable}
 #' @return value that will be printed in table for dichotomous data
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 
 # wrapper for assign_dichotomous_value_one() function
 assign_dichotomous_value <- function(data, variable, summary_type, class, value) {
@@ -118,7 +118,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 #' continuous or categorical. Can be \code{NULL}.
 #' @return vector of stat_display selections for each variable
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 
 assign_stat_display <- function(summary_type, stat_display) {
   # dichotomous and categorical are treated in the same fashion here
@@ -161,7 +161,7 @@ assign_stat_display <- function(summary_type, stat_display) {
 #' e.g. \code{summary_type = list(age = "continuous")}
 #' @return Vector summary types `c("continuous", "categorical", "dichotomous")`.
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @examples
 #' # assign_summary_type(data = mtcars,
 #' #                     variable =  names(mtcars),
@@ -258,7 +258,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
 #' @param test list of user defined statistical tests and corresponding variables
 #' @return most appropriate test as text of the test function
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 
 assign_test <- function(data, var, var_summary_type, by_var, test, group) {
   map2_chr(
@@ -336,7 +336,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 #' e.g. `var_label = list(age = "Age, yrs")`
 #' @return Vector variable labels.
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @examples
 #' # assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
 assign_var_label <- function(data, variable, var_label) {
@@ -562,7 +562,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 #' never ("no"), only if the count is positive ("ifany") and even for
 #' zero counts ("always"). Default is "ifany".
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 
 calculate_summary_stat <- function(data, variable, by, summary_type,
                                    dichotomous_value, var_label, stat_display,
@@ -655,7 +655,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
 #' raw data values or a vector of summary statistics themselves
 #' @return the rounded values
 #' @keywords internal
-#' @author Emily Zabor, Daniel Sjoberg
+#' @author Emily Zabor, Daniel D. Sjoberg
 
 # takes as the input a vector of variable and summary types
 continuous_digits_guess <- function(data,
@@ -712,7 +712,7 @@ continuous_digits_guess_one <- function(data,
 #' @param data data frame
 #' @param by character name of the `by` variable found in data
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 
 df_by <- function(data, by) {
   data %>%
@@ -761,7 +761,7 @@ df_by <- function(data, by) {
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @return formatted summary statistics in a tibble.
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 
 summarize_categorical <- function(data, variable, by, var_label,
                                   stat_display, dichotomous_value, missing) {
@@ -910,7 +910,7 @@ summarize_categorical <- function(data, variable, by, var_label,
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @return formatted summary statistics in a tibble.
 #' @keywords internal
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @importFrom stringr str_extract_all str_remove_all fixed
 
 summarize_continuous <- function(data, variable, by, digits,
