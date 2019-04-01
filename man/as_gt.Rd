@@ -21,6 +21,9 @@ if they wish to add customized formatting available via the
 \examples{
 tbl_gt <- trial \%>\% tbl_summary(by = "trt") \%>\% as_gt()
 }
+\seealso{
+\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
+}
 \author{
 Daniel Sjoberg
 }

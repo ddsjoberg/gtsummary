@@ -73,6 +73,14 @@ tbl_uv2 <-
   ) \%>\%
   add_global()
 }
+\seealso{
+Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{add_q.tbl_uvregression}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{tab_style_bold_p.tbl_uvregression}}
+}
 \author{
 Daniel Sjoberg
 }
+\concept{tbl_uvregression}

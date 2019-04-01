@@ -3,6 +3,9 @@
 #' @name bold_italicize_labels_levels
 #' @param x an object created using gtsummary functions
 #' @author Daniel Sjoberg
+#' @family tbl_summary
+#' @family tbl_regression
+#' @family tbl_uvregression
 #' @examples
 #' tbl_bold_ital <-
 #'   trial %>%

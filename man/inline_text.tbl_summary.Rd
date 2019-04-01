@@ -35,8 +35,16 @@ inline in an R markdown document.  Detailed examples in the
 \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
 }
 \seealso{
-\link{tbl_summary}
+Other tbl_summary: \code{\link{add_comparison}},
+  \code{\link{add_n}}, \code{\link{add_overall}},
+  \code{\link{add_q.tbl_summary}},
+  \code{\link{add_stat_label}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{cols_label_summary}},
+  \code{\link{tab_style_bold_p.tbl_summary}},
+  \code{\link{tbl_summary}}
 }
 \author{
 Daniel Sjoberg
 }
+\concept{tbl_summary}

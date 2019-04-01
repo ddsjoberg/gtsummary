@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_summary.R
 \name{tbl_summary}
 \alias{tbl_summary}
-\title{Calculates and formats descriptive statistics for a data frame}
+\title{Display summary statistics table}
 \usage{
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,
@@ -70,8 +70,9 @@ tbl_summary displays summary statistics for three types of data:
 continuous, categorical, and dichotomous. If the type is not specified,
 tbl_summary will do its best to guess the type.  Dichotomous variables
 are categorical variables that are displayed on a single row in the
-output table, rather than one row per level of the variable.  For dichotomous
-variables coded as TRUE/FALSE, 0/1, or yes/no, the TRUE, 1, and yes rows
+output table, rather than one row per level of the variable.
+Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
+and the TRUE, 1, and yes rows
 will be displayed.  Otherwise, the value to display must be specified in
 the \code{value} argument, e.g. \code{value = list(varname = "level to show")}
 }
@@ -81,6 +82,17 @@ tbl_overall <- tbl_summary(trial)
 tbl_trt <- tbl_summary(trial, by = "trt")
 tbl_lbls <- mtcars \%>\% tbl_summary(label = list(cyl = "No. Cylinders"))
 }
+\seealso{
+Other tbl_summary: \code{\link{add_comparison}},
+  \code{\link{add_n}}, \code{\link{add_overall}},
+  \code{\link{add_q.tbl_summary}},
+  \code{\link{add_stat_label}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{cols_label_summary}},
+  \code{\link{inline_text.tbl_summary}},
+  \code{\link{tab_style_bold_p.tbl_summary}}
+}
 \author{
 Daniel Sjoberg
 }
+\concept{tbl_summary}

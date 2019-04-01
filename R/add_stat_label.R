@@ -4,6 +4,8 @@
 #' a column labeling the summary statistics is added.
 #'
 #' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
+#' @family tbl_summary
+#' @author Daniel Sjoberg
 #' @export
 #' @examples
 #' tbl_stat <- mtcars %>% tbl_summary() %>% add_stat_label()
@@ -36,7 +38,7 @@ add_stat_label <- function(x) {
 
   # column headers
   x[["gt_calls"]][["cols_label:stat_label"]] <-
-    "cols_label(stat_label = md('**Statistic**'))"
+    glue("cols_label(stat_label = md('**Statistic**'))")
 
   # removing previous footnote about which statistics are presented
   x[["gt_calls"]][["footnote_stat_label"]] <- NULL

@@ -15,7 +15,9 @@ inline_text(x, ...)
 Report statistics from gtsummary tables inline
 }
 \seealso{
-\link{inline_text.tbl_summary}, \link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression}, \link{tbl_summary}, \link{tbl_regression}, \link{tbl_uvregression}
+\code{\link{inline_text.tbl_summary}},
+\code{\link{inline_text.tbl_regression}},
+\link{inline_text.tbl_uvregression}
 }
 \author{
 Daniel Sjoberg
