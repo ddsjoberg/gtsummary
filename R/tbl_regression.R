@@ -20,7 +20,12 @@
 #' @param coef_fun function to round and format beta coefficients.  Default
 #' is \code{\link{style_sigfig}} when the coefficients are printed, and
 #' \code{\link{style_ratio}} when the coefficients have been exponentiated.
-#' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
+#' @param pvalue_fun function to round and format p-values.
+#' Default is \code{\link{style_pvalue}}.
+#' The function must have a numeric vector input (the numeric, exact p-value),
+#' and return a string that is the rounded/formatted p-value (e.g.
+#' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+#'  \code{purrr::partial(style_pvalue, digits = 2)}).
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @export

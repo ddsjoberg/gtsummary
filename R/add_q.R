@@ -19,7 +19,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @param x `tbl_summary` object
 #' @param method character argument.  Methods from
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
-#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
+#' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary
@@ -97,7 +97,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' @param x `tbl_uvregression` object
 #' @param method character argument.  Methods from
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
-#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
+#' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_uvregression
