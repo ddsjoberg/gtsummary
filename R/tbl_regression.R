@@ -21,7 +21,7 @@
 #' is \code{\link{style_sigfig}} when the coefficients are printed, and
 #' \code{\link{style_ratio}} when the coefficients have been exponentiated.
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @export
 #' @examples

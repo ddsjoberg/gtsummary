@@ -33,6 +33,6 @@ Other tbl_regression: \code{\link{bold_italicize_labels_levels}},
   \code{\link{tbl_regression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \concept{tbl_regression}

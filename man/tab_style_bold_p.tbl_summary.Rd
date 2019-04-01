@@ -36,6 +36,6 @@ Other tbl_summary: \code{\link{add_comparison}},
   \code{\link{tbl_summary}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \concept{tbl_summary}

@@ -81,6 +81,6 @@ Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
   \code{\link{tab_style_bold_p.tbl_uvregression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \concept{tbl_uvregression}

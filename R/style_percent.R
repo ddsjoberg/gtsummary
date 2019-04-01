@@ -4,7 +4,7 @@
 #' @param symbol logical indicator to include percent symbol in output.  Default is FALSE.
 #' @return Formatted percentages
 #' @export
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @examples
 #' percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
 #' style_percent(percent_vals)

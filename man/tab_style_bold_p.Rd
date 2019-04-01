@@ -20,5 +20,5 @@ Bold p-values in tables create by gtsummary
 \code{\link{tab_style_bold_p.tbl_uvregression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }

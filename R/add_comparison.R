@@ -24,7 +24,7 @@
 #' from \code{\link{tbl_summary}}
 #' @family tbl_summary
 #' @export
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @examples
 #' comp <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
 add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$inputs$group) {

@@ -20,5 +20,5 @@ Report statistics from gtsummary tables inline
 \link{inline_text.tbl_uvregression}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }

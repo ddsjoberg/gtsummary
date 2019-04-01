@@ -8,7 +8,7 @@
 #' or N missing (`missing = TRUE`).  Default is `FALSE`
 #' @param last logical indicator to include overall  column last. Default is `FALSE`
 #' @family tbl_summary
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @export
 #' @examples
 #' tbl_n <- trial %>% tbl_summary(by = "trt") %>% add_n()

@@ -93,6 +93,6 @@ Other tbl_summary: \code{\link{add_comparison}},
   \code{\link{tab_style_bold_p.tbl_summary}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \concept{tbl_summary}

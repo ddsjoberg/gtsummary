@@ -2,7 +2,7 @@
 #'
 #' @param x object created from a gtsummary function
 #' @param ... further arguments passed to or from other methods.
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @seealso \code{\link{inline_text.tbl_summary}},
 #' \code{\link{inline_text.tbl_regression}},
 #' \link{inline_text.tbl_uvregression}
@@ -30,7 +30,7 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 #'  \code{partial(style_pvalue, digits = 2)}).
 #' @param ... not used
 #' @family tbl_summary
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @export
 
 
@@ -130,7 +130,7 @@ inline_text.tbl_summary <-
 #' @param pvalue_fun function to style p-values and/or q-values.
 #' Default is `function(x) style_pvalue(x, prepend_p = TRUE)`
 #' @param ... not used
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @export
 

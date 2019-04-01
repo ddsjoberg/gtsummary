@@ -30,5 +30,5 @@ c(0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
 \code{\link{style_sigfig}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }

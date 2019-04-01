@@ -55,7 +55,7 @@
 #' the `value` argument, e.g. `value = list(varname = "level to show")`
 #' @export
 #' @family tbl_summary
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_overall <- tbl_summary(trial)
 #' tbl_trt <- tbl_summary(trial, by = "trt")

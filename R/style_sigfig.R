@@ -14,6 +14,7 @@
 #' @param digits integer specifying the minimum number of significant
 #' digits to display
 #' @export
+#' @author Daniel D. Sjoberg
 #' @examples
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345) %>%
 #'   style_sigfig()

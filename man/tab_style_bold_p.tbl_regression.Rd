@@ -29,6 +29,6 @@ Other tbl_regression: \code{\link{add_global.tbl_regression}},
   \code{\link{tbl_regression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \concept{tbl_regression}

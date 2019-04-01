@@ -34,6 +34,6 @@ formatted summary statistics in a tibble.
 Calculates and formats summary statistics for continuous data
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

@@ -36,6 +36,6 @@ Other tbl_uvregression: \code{\link{add_q.tbl_uvregression}},
   \code{\link{tbl_uvregression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \concept{tbl_uvregression}

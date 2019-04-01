@@ -5,7 +5,7 @@
 #'
 #' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
 #' @family tbl_summary
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @export
 #' @examples
 #' tbl_stat <- mtcars %>% tbl_summary() %>% add_stat_label()

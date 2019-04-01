@@ -21,5 +21,5 @@ multiple comparisons
 \code{\link{tbl_uvregression}}
 }
 \author{
-Esther Drill, Daniel Sjoberg
+Esther Drill, Daniel D. Sjoberg
 }

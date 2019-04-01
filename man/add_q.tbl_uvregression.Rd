@@ -41,6 +41,6 @@ Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
   \code{\link{tbl_uvregression}}
 }
 \author{
-Esther Drill, Daniel Sjoberg
+Esther Drill, Daniel D. Sjoberg
 }
 \concept{tbl_uvregression}
