@@ -3,7 +3,9 @@
 #' @param x object created from a gtsummary function
 #' @param ... further arguments passed to or from other methods.
 #' @author Daniel Sjoberg
-#' @seealso \link{inline_text.tbl_summary}, \link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression}, \link{tbl_summary}, \link{tbl_regression}, \link{tbl_uvregression}
+#' @seealso \code{\link{inline_text.tbl_summary}},
+#' \code{\link{inline_text.tbl_regression}},
+#' \link{inline_text.tbl_uvregression}
 #' @export
 inline_text <- function(x, ...) UseMethod("inline_text")
 
@@ -27,7 +29,7 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 #'  \code{partial(style_pvalue, digits = 2)}).
 #' @param ... not used
-#' @seealso \link{tbl_summary}
+#' @family tbl_summary
 #' @author Daniel Sjoberg
 #' @export
 
@@ -129,7 +131,7 @@ inline_text.tbl_summary <-
 #' Default is `function(x) style_pvalue(x, prepend_p = TRUE)`
 #' @param ... not used
 #' @author Daniel Sjoberg
-#' @seealso \link{tbl_regression}
+#' @family tbl_regression
 #' @export
 
 inline_text.tbl_regression <-
@@ -204,6 +206,7 @@ inline_text.tbl_regression <-
 #' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{`tbl_regression` vignette}
 #'
 #' @inherit inline_text.tbl_regression
+#' @family tbl_uvregression
 #' @export
 
 inline_text.tbl_uvregression <- inline_text.tbl_regression

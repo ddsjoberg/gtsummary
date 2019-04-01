@@ -30,6 +30,17 @@ tbl_q <-
   add_comparison() \%>\%
   add_q()
 }
+\seealso{
+Other tbl_summary: \code{\link{add_comparison}},
+  \code{\link{add_n}}, \code{\link{add_overall}},
+  \code{\link{add_stat_label}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{cols_label_summary}},
+  \code{\link{inline_text.tbl_summary}},
+  \code{\link{tab_style_bold_p.tbl_summary}},
+  \code{\link{tbl_summary}}
+}
 \author{
 Esther Drill, Daniel Sjoberg
 }
+\concept{tbl_summary}

@@ -33,6 +33,14 @@ tbl_q <-
   add_global() \%>\%
   add_q()
 }
+\seealso{
+Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{tab_style_bold_p.tbl_uvregression}},
+  \code{\link{tbl_uvregression}}
+}
 \author{
 Esther Drill, Daniel Sjoberg
 }
+\concept{tbl_uvregression}

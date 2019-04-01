@@ -30,6 +30,7 @@
 #' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel Sjoberg
+#' @family tbl_uvregression
 #' @export
 #' @examples
 #' tbl_uv <-
@@ -158,7 +159,8 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
 # quoting returns an expression to be evaluated later
 gt_tbl_uvregression <- quote(list(
   # first call to the gt function
-  gt = "gt(data = x$table_body)",
+  gt = "gt(data = x$table_body)" %>%
+    glue(),
 
   # label column indented and left just
   cols_align = glue(
@@ -168,15 +170,18 @@ gt_tbl_uvregression <- quote(list(
 
   # do not print columns variable or row_type columns
   cols_hide =
-    "cols_hide(columns = vars(variable, row_type, var_type))",
+    "cols_hide(columns = vars(variable, row_type, var_type))" %>%
+    glue(),
 
   # NAs do not show in table
   fmt_missing =
-    "fmt_missing(columns = everything(), missing_text = '')",
+    "fmt_missing(columns = everything(), missing_text = '')" %>%
+    glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')",
+    "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')" %>%
+    glue(),
 
   # column headers
   cols_label = glue(
@@ -191,11 +196,13 @@ gt_tbl_uvregression <- quote(list(
 
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)",
+    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)" %>%
+    glue(),
 
   # ceof and confidence interval formatting
   fmt_coef =
-    "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)",
+    "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)" %>%
+    glue(),
 
   # combining ll and ul to print confidence interval
   cols_merge_ci =

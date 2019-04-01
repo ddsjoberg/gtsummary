@@ -16,6 +16,10 @@ add_q(x, ...)
 Add a column of q values to account for
 multiple comparisons
 }
+\seealso{
+\code{\link{tbl_summary}}, \code{\link{tbl_regression}},
+\code{\link{tbl_uvregression}}
+}
 \author{
 Esther Drill, Daniel Sjoberg
 }

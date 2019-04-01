@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculates and formats descriptive statistics for a data frame — tbl_summary • gtsummary</title>
+<title>Display summary statistics table — tbl_summary • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Calculates and formats descriptive statistics for a data frame — tbl_summary" />
+<meta property="og:title" content="Display summary statistics table — tbl_summary" />
 
 <meta property="og:description" content="The tbl_summary function calculates descriptive statistics by groups for
 continuous, categorical, and dichotomous variables.  Review the
@@ -120,7 +120,7 @@ for detailed examples." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculates and formats descriptive statistics for a data frame</h1>
+    <h1>Display summary statistics table</h1>
     
     <div class="hidden name"><code>tbl_summary.Rd</code></div>
     </div>
@@ -218,10 +218,22 @@ zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
 continuous, categorical, and dichotomous. If the type is not specified,
 tbl_summary will do its best to guess the type.  Dichotomous variables
 are categorical variables that are displayed on a single row in the
-output table, rather than one row per level of the variable.  For dichotomous
-variables coded as TRUE/FALSE, 0/1, or yes/no, the TRUE, 1, and yes rows
+output table, rather than one row per level of the variable.
+Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
+and the TRUE, 1, and yes rows
 will be displayed.  Otherwise, the value to display must be specified in
 the <code>value</code> argument, e.g. <code>value = list(varname = "level to show")</code></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other tbl_summary: <code><a href='add_comparison.html'>add_comparison</a></code>,
+  <code><a href='add_n.html'>add_n</a></code>, <code><a href='add_overall.html'>add_overall</a></code>,
+  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
+  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
+  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
+  <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -237,6 +249,8 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
       <li><a href="#value">Value</a></li>
 
       <li><a href="#specifying-variable-types">Specifying Variable Types</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

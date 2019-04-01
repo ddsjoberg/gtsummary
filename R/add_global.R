@@ -26,6 +26,8 @@ add_global <- function(x, ...) UseMethod("add_global")
 #' levels of the categorical variable. Default is `FALSE`
 #' @param ... arguments to be passed to \code{\link[car]{Anova}}.  Adding `test.statistic = `
 #' can change the type of test (e.g. Likelihood-ratio, Wald, etc.).
+#' @author Daniel Sjoberg
+#' @family tbl_regression
 #' @examples
 #' tbl_lm <- lm(marker ~ stage + grade, trial) %>% tbl_regression() %>% add_global()
 #' @export
@@ -103,6 +105,8 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' @param x object with class `tbl_uvregression` from the \code{\link{tbl_uvregression}} function
 #' @param ... arguments to be passed to \code{\link[car]{Anova}}.  Adding `test.statistic = `
 #' can change the type of test (e.g. Likelihood-ratio, Wald, etc.).
+#' @author Daniel Sjoberg
+#' @family tbl_uvregression
 #' @examples
 #' tbl_uv <-
 #'   tbl_uvregression(

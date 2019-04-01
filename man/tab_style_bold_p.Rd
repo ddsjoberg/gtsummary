@@ -14,6 +14,11 @@ tab_style_bold_p(x, ...)
 \description{
 Bold p-values in tables create by gtsummary
 }
+\seealso{
+\code{\link{tab_style_bold_p.tbl_summary}},
+\code{\link{tab_style_bold_p.tbl_regression}},
+\code{\link{tab_style_bold_p.tbl_uvregression}}
+}
 \author{
 Daniel Sjoberg
 }

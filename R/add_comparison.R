@@ -22,6 +22,7 @@
 #' functions. For example, the group column may be used in `add_comparison()` to
 #' include p-values with correlated data. Default is the `group = ` input
 #' from \code{\link{tbl_summary}}
+#' @family tbl_summary
 #' @export
 #' @author Daniel Sjoberg
 #' @examples
@@ -74,10 +75,12 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
   x$pvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt_pvalue"]] <-
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$pvalue_fun)"
+    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$pvalue_fun)" %>%
+    glue()
   # column headers
   x[["gt_calls"]][["cols_label_pvalue"]] <-
-    "cols_label(pvalue = md('**p-value**'))"
+    "cols_label(pvalue = md('**p-value**'))" %>%
+    glue()
 
   x$meta_data <- meta_data
   x$call_list <- c(x$call_list, list(add_comparison = match.call()))
