@@ -19,12 +19,12 @@ Can also specify the 'Unknown' row.  Default is \code{NULL}}
 \item{column}{name column name to return from \code{x$table_body}.
 Can also pass the level of a by variable.}
 
-\item{pvalue_fun}{function for rounding/formatting p-values.
+\item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
-The function must have a single input (the numeric, exact p-value),
+The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-\code{partial(style_pvalue, digits = 2)}).}
+\code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{...}{not used}
 }

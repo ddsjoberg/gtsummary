@@ -5,29 +5,18 @@
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}
 #' for detailed examples.
 #'
-#' @param data Data frame to be used in univariate regression modeling.  Data frame
-#' includes the outcome variable(s) and the independent variables.
-#' @param method Regression method (e.g. \code{\link[stats]{lm}}, \code{\link[stats]{glm}},
-#' \code{\link[survival]{coxph}}, and more).
+#' @param data Data frame to be used in univariate regression modeling.  Data
+#' frame includes the outcome variable(s) and the independent variables.
+#' @param method Regression method (e.g. \code{\link[stats]{lm}},
+#' \code{\link[stats]{glm}}, \code{\link[survival]{coxph}}, and more).
 #' @param y model outcome as a string (e.g. `y = recurrence` or `y = Surv(time, recur)`)
-#' @param formula String that becomes the model formula.  Uses \code{\link[glue]{glue}} syntax.
-#' Default is `"{y} ~ {x}"`, where `{y}` is the dependent variable, and `{x}`
-#' represents a single covariate. For a random intercept, the formula may be
-#' `formula = "{y} ~ {x} + (1 | gear)"`.
-#' @param method.args List of additional arguments passed on to the regression function defined by method.
-#' @param exponentiate logical argument passed directly to `broom::tidy()`.
-#' Default is `FALSE`
-#' @param label list of labels to write in the output. `list(age60 = "Age > 60")`
-#' @param show_yesno Vector of names of categorical and factor variables that
-#' are `c("No", "Yes")`, `c("no", "yes")`, or `c("NO", "YES")` default to dichotomous printing
-#' (i.e. only Yes shown). To force both levels to be shown include the column
-#' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
-#' @param conf.level confidence level passed directly to \code{broom::tidy}.
-#' Default is 0.95.
-#' @param coef_fun function to round and format beta coefficients.  Default
-#' is \code{\link{style_sigfig}} when the coefficients are printed, and
-#' \code{\link{style_ratio}} when the coefficients have been exponentiated.
-#' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
+#' @param formula String that becomes the model formula.
+#' Uses \code{\link[glue]{glue}} syntax. Default is `"{y} ~ {x}"`, where `{y}`
+#' is the dependent variable, and `{x}` represents a single covariate. For a
+#' random intercept, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
+#' @param method.args List of additional arguments passed on to the regression
+#' function defined by method.
+#' @inheritParams tbl_regression
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression

@@ -34,7 +34,12 @@ in the output.  Default is \code{FALSE}}
 is \code{\link{style_sigfig}} when the coefficients are printed, and
 \code{\link{style_ratio}} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{style_pvalue}}}
+\item{pvalue_fun}{function to round and format p-values.
+Default is \code{\link{style_pvalue}}.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+\code{purrr::partial(style_pvalue, digits = 2)}).}
 }
 \description{
 This function uses \code{broom::tidy} from the \code{broom} or \code{broom.mixed} packages

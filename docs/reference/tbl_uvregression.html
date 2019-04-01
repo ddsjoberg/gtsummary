@@ -145,13 +145,13 @@ for detailed examples.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>Data frame to be used in univariate regression modeling.  Data frame
-includes the outcome variable(s) and the independent variables.</p></td>
+      <td><p>Data frame to be used in univariate regression modeling.  Data
+frame includes the outcome variable(s) and the independent variables.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Regression method (e.g. <code><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></code>, <code><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></code>,
-<code><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></code>, and more).</p></td>
+      <td><p>Regression method (e.g. <code><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></code>,
+<code><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></code>, <code><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></code>, and more).</p></td>
     </tr>
     <tr>
       <th>y</th>
@@ -159,19 +159,20 @@ includes the outcome variable(s) and the independent variables.</p></td>
     </tr>
     <tr>
       <th>method.args</th>
-      <td><p>List of additional arguments passed on to the regression function defined by method.</p></td>
+      <td><p>List of additional arguments passed on to the regression
+function defined by method.</p></td>
     </tr>
     <tr>
       <th>formula</th>
-      <td><p>String that becomes the model formula.  Uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> syntax.
-Default is <code>"{y} ~ {x}"</code>, where <code>{y}</code> is the dependent variable, and <code>{x}</code>
-represents a single covariate. For a random intercept, the formula may be
-<code>formula = "{y} ~ {x} + (1 | gear)"</code>.</p></td>
+      <td><p>String that becomes the model formula.
+Uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> syntax. Default is <code>"{y} ~ {x}"</code>, where <code>{y}</code>
+is the dependent variable, and <code>{x}</code> represents a single covariate. For a
+random intercept, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</code>.</p></td>
     </tr>
     <tr>
       <th>exponentiate</th>
-      <td><p>logical argument passed directly to <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy()</a></code>.
-Default is <code>FALSE</code></p></td>
+      <td><p>logical argument passed directly to
+<code>tidy</code> function. Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>label</th>
@@ -186,8 +187,7 @@ name in <code>show_yesno</code>, e.g. <code>show_yesno = c("highgrade", "female"
     </tr>
     <tr>
       <th>conf.level</th>
-      <td><p>confidence level passed directly to <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a></code>.
-Default is 0.95.</p></td>
+      <td><p>confidence level passed directly to <code>tidy</code> function. Default is 0.95.</p></td>
     </tr>
     <tr>
       <th>coef_fun</th>
@@ -197,7 +197,12 @@ is <code><a href='style_sigfig.html'>style_sigfig</a></code> when the coefficien
     </tr>
     <tr>
       <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.  Default is <code><a href='style_pvalue.html'>style_pvalue</a></code></p></td>
+      <td><p>function to round and format p-values.
+Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
     </tr>
     </table>
     

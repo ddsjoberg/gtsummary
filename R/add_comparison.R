@@ -11,17 +11,8 @@
 #' "fisher.test" for a Fisher's exact test,
 #' and "re" for a random intercept model to account for clustered data.
 #' For "re" to be used "group" must also be specified in the function call.
-#' @param pvalue_fun function for rounding/formatting p-values.
-#' Default is \code{\link{style_pvalue}}.
-#' The function must have a single input (the numeric, exact p-value),
-#' and return a string that is the rounded/formatted p-value (e.g.
-#' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-#'  \code{partial(style_pvalue, digits = 2)}).
-#' @param group Character vector of an ID or grouping variable.  Summary statistics
-#' will not be printed for this column, but they may be used in subsequent
-#' functions. For example, the group column may be used in `add_comparison()` to
-#' include p-values with correlated data. Default is the `group = ` input
-#' from \code{\link{tbl_summary}}
+#' @inheritParams tbl_regression
+#' @inheritParams tbl_summary
 #' @family tbl_summary
 #' @export
 #' @author Daniel D. Sjoberg

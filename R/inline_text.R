@@ -22,12 +22,7 @@ inline_text <- function(x, ...) UseMethod("inline_text")
 #' Can also specify the 'Unknown' row.  Default is `NULL`
 #' @param column name column name to return from `x$table_body`.
 #' Can also pass the level of a by variable.
-#' @param pvalue_fun function for rounding/formatting p-values.
-#' Default is \code{\link{style_pvalue}}.
-#' The function must have a single input (the numeric, exact p-value),
-#' and return a string that is the rounded/formatted p-value (e.g.
-#' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-#'  \code{partial(style_pvalue, digits = 2)}).
+#' @inheritParams tbl_regression
 #' @param ... not used
 #' @family tbl_summary
 #' @author Daniel D. Sjoberg
