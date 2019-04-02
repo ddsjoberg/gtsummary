@@ -26,6 +26,6 @@ argument, then to a label attribute attached to the data frame
 # assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

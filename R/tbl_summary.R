@@ -1,4 +1,4 @@
-#' Calculates and formats descriptive statistics for a data frame
+#' Display summary statistics table
 #'
 #' The `tbl_summary` function calculates descriptive statistics by groups for
 #' continuous, categorical, and dichotomous variables.  Review the
@@ -43,17 +43,19 @@
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @return List of summary statistics to be converted to a `gt` object
-#' @author Daniel Sjoberg
 #' @section Specifying Variable Types:
 #' tbl_summary displays summary statistics for three types of data:
 #' continuous, categorical, and dichotomous. If the type is not specified,
 #' tbl_summary will do its best to guess the type.  Dichotomous variables
 #' are categorical variables that are displayed on a single row in the
-#' output table, rather than one row per level of the variable.  For dichotomous
-#' variables coded as TRUE/FALSE, 0/1, or yes/no, the TRUE, 1, and yes rows
+#' output table, rather than one row per level of the variable.
+#' Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
+#' and the TRUE, 1, and yes rows
 #' will be displayed.  Otherwise, the value to display must be specified in
 #' the `value` argument, e.g. `value = list(varname = "level to show")`
 #' @export
+#' @family tbl_summary
+#' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_overall <- tbl_summary(trial)
 #' tbl_trt <- tbl_summary(trial, by = "trt")
@@ -152,10 +154,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 # quoting returns an expression to be evaluated later
 gt_tbl_summary <- quote(list(
   # first call to the gt function
-  gt = "gt(data = x$table_body)",
+  gt = glue("gt(data = x$table_body)"),
 
   # column headers
-  cols_label_label = "cols_label(label = md('**Characteristic**'))",
+  cols_label_label = glue("cols_label(label = md('**Characteristic**'))"),
 
   # label column indented and left just
   cols_align = glue(
@@ -164,10 +166,10 @@ gt_tbl_summary <- quote(list(
   ),
 
   # do not print columns variable or row_type columns
-  cols_hide = "cols_hide(columns = vars(variable, row_type))",
+  cols_hide = glue("cols_hide(columns = vars(variable, row_type))"),
 
   # NAs do not show in table
-  fmt_missing = "fmt_missing(columns = everything(), missing_text = '')",
+  fmt_missing = glue("fmt_missing(columns = everything(), missing_text = '')"),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
@@ -182,9 +184,9 @@ gt_tbl_summary <- quote(list(
   # adding footnote listing statistics presented in table
   footnote_stat_label = glue(
     "tab_footnote(",
-    "  footnote = '{footnote_stat_label(meta_data)}',",
-    "  locations = cells_column_labels(",
-    "    columns = vars(label))",
+    "footnote = '{footnote_stat_label(meta_data)}',",
+    "locations = cells_column_labels(",
+    "columns = vars(label))",
     ")"
   )
 ))

@@ -21,5 +21,5 @@ Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 \code{\link{add_global.tbl_regression}}, \code{\link{add_global.tbl_uvregression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }

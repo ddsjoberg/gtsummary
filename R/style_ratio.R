@@ -13,7 +13,7 @@
 #' Default is `digits = 2`.
 #' @export
 #' @seealso \code{\link{style_sigfig}}
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @examples
 #' c(0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
 #'   -0.9, -1.1234, -12.345, -101.234) %>%

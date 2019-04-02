@@ -14,7 +14,12 @@ multiple comparisons in Rmarkdown}
 \item{method}{character argument.  Methods from
 \code{stats::}\code{\link[stats]{p.adjust}} are accepted.  Default is \code{method = 'fdr'}.}
 
-\item{pvalue_fun}{function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.}
+\item{pvalue_fun}{function to round and format p-values.
+Default is \code{\link{style_pvalue}}.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+\code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{...}{further arguments passed to or from other methods}
 }
@@ -30,6 +35,17 @@ tbl_q <-
   add_comparison() \%>\%
   add_q()
 }
-\author{
-Esther Drill, Daniel Sjoberg
+\seealso{
+Other tbl_summary: \code{\link{add_comparison}},
+  \code{\link{add_n}}, \code{\link{add_overall}},
+  \code{\link{add_stat_label}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{cols_label_summary}},
+  \code{\link{inline_text.tbl_summary}},
+  \code{\link{tab_style_bold_p.tbl_summary}},
+  \code{\link{tbl_summary}}
 }
+\author{
+Esther Drill, Daniel D. Sjoberg
+}
+\concept{tbl_summary}

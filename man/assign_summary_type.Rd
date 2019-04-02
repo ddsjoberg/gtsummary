@@ -32,6 +32,6 @@ number of unique levels.
 #                     summary_type = NULL, value = NULL)
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

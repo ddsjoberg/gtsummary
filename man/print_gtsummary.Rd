@@ -34,5 +34,5 @@ print and knit_print methods for gtsummary objects
 \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }

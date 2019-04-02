@@ -14,8 +14,9 @@
 #' @param stat_overall string vector including text to appear above the overall summary
 #' statistics. `N`, the total number of observations, is available for use in the
 #' description. e.g. `stat_overall = md("**All Patients**, N = {N}")`
-#' @author Daniel Sjoberg
-#' @seealso \link{tbl_summary}, \link[gt]{md}, \link[gt]{html}
+#' @family tbl_summary
+#' @author Daniel D. Sjoberg
+#' @seealso \link[gt]{md}, \link[gt]{html}
 #' @examples
 #' tbl_col1 <-
 #'   trial %>%
@@ -26,7 +27,6 @@
 #'   tbl_summary(by = "trt") %>%
 #'   cols_label_summary(stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"))
 #' @export
-
 
 cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL) {
   # converting calls to un-evaluated string ------------------------------------

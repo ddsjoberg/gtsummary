@@ -22,6 +22,6 @@ value that will be printed in table for dichotomous data
 For dichotomous data, returns that value that will be printed in table.
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

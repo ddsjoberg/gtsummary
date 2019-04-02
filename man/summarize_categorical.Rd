@@ -35,6 +35,6 @@ formatted summary statistics in a tibble.
 Calculates and formats N's and percentages for categorical and dichotomous data
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

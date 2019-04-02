@@ -153,13 +153,29 @@ is false discovery rate (<code>method = "fdr"</code>)</p>
     </tr>
     <tr>
       <th>pvalue_fun</th>
-      <td><p>function for rounding/formatting p-values.  Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.</p></td>
+      <td><p>function to round and format p-values.
+Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>further arguments passed to or from other methods</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other tbl_summary: <code><a href='add_comparison.html'>add_comparison</a></code>,
+  <code><a href='add_n.html'>add_n</a></code>, <code><a href='add_overall.html'>add_overall</a></code>,
+  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
+  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
+  <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
+  <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -173,12 +189,14 @@ is false discovery rate (<code>method = "fdr"</code>)</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#see-also">See also</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
-    <p>Esther Drill, Daniel Sjoberg</p>
+    <p>Esther Drill, Daniel D. Sjoberg</p>
   </div>
 </div>
 

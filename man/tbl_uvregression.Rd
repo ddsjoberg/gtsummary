@@ -11,23 +11,24 @@ tbl_uvregression(data, method, y, method.args = NULL,
   pvalue_fun = style_pvalue)
 }
 \arguments{
-\item{data}{Data frame to be used in univariate regression modeling.  Data frame
-includes the outcome variable(s) and the independent variables.}
+\item{data}{Data frame to be used in univariate regression modeling.  Data
+frame includes the outcome variable(s) and the independent variables.}
 
-\item{method}{Regression method (e.g. \code{\link[stats]{lm}}, \code{\link[stats]{glm}},
-\code{\link[survival]{coxph}}, and more).}
+\item{method}{Regression method (e.g. \code{\link[stats]{lm}},
+\code{\link[stats]{glm}}, \code{\link[survival]{coxph}}, and more).}
 
 \item{y}{model outcome as a string (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
 
-\item{method.args}{List of additional arguments passed on to the regression function defined by method.}
+\item{method.args}{List of additional arguments passed on to the regression
+function defined by method.}
 
-\item{formula}{String that becomes the model formula.  Uses \code{\link[glue]{glue}} syntax.
-Default is \code{"{y} ~ {x}"}, where \code{{y}} is the dependent variable, and \code{{x}}
-represents a single covariate. For a random intercept, the formula may be
-\code{formula = "{y} ~ {x} + (1 | gear)"}.}
+\item{formula}{String that becomes the model formula.
+Uses \code{\link[glue]{glue}} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
+is the dependent variable, and \code{{x}} represents a single covariate. For a
+random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
-\item{exponentiate}{logical argument passed directly to \code{broom::tidy()}.
-Default is \code{FALSE}}
+\item{exponentiate}{logical argument passed directly to
+\code{tidy} function. Default is \code{FALSE}}
 
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
@@ -36,14 +37,18 @@ are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} defau
 (i.e. only Yes shown). To force both levels to be shown include the column
 name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
 
-\item{conf.level}{confidence level passed directly to \code{broom::tidy}.
-Default is 0.95.}
+\item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
 
 \item{coef_fun}{function to round and format beta coefficients.  Default
 is \code{\link{style_sigfig}} when the coefficients are printed, and
 \code{\link{style_ratio}} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{function to round and format p-values.  Default is \code{\link{style_pvalue}}}
+\item{pvalue_fun}{function to round and format p-values.
+Default is \code{\link{style_pvalue}}.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+\code{purrr::partial(style_pvalue, digits = 2)}).}
 }
 \description{
 The \code{tbl_uvregression} function arguments are similar to the \code{\link{tbl_regression}}
@@ -73,6 +78,14 @@ tbl_uv2 <-
   ) \%>\%
   add_global()
 }
-\author{
-Daniel Sjoberg
+\seealso{
+Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{add_q.tbl_uvregression}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{tab_style_bold_p.tbl_uvregression}}
 }
+\author{
+Daniel D. Sjoberg
+}
+\concept{tbl_uvregression}

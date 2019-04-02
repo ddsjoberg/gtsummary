@@ -6,7 +6,7 @@
 #' @param prepend_p logical. Should 'p=' be prepended to formatted p-value. Default is FALSE
 #' @return Formatted p-values
 #' @export
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @examples
 #' pvals <- c(
 #'   1.5, 1, 0.999, 0.5, 0.25, 0.2, 0.197, 0.12, 0.10, 0.0999, 0.06,

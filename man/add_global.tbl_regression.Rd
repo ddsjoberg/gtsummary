@@ -26,3 +26,13 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 \examples{
 tbl_lm <- lm(marker ~ stage + grade, trial) \%>\% tbl_regression() \%>\% add_global()
 }
+\seealso{
+Other tbl_regression: \code{\link{bold_italicize_labels_levels}},
+  \code{\link{inline_text.tbl_regression}},
+  \code{\link{tab_style_bold_p.tbl_regression}},
+  \code{\link{tbl_regression}}
+}
+\author{
+Daniel D. Sjoberg
+}
+\concept{tbl_regression}
