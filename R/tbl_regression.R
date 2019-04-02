@@ -20,8 +20,14 @@
 #' @param coef_fun function to round and format beta coefficients.  Default
 #' is \code{\link{style_sigfig}} when the coefficients are printed, and
 #' \code{\link{style_ratio}} when the coefficients have been exponentiated.
-#' @param pvalue_fun function to round and format p-values.  Default is \code{\link{style_pvalue}}
-#' @author Daniel Sjoberg
+#' @param pvalue_fun function to round and format p-values.
+#' Default is \code{\link{style_pvalue}}.
+#' The function must have a numeric vector input (the numeric, exact p-value),
+#' and return a string that is the rounded/formatted p-value (e.g.
+#' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+#'  \code{purrr::partial(style_pvalue, digits = 2)}).
+#' @author Daniel D. Sjoberg
+#' @family tbl_regression
 #' @export
 #' @examples
 #' mod1 <-
@@ -128,7 +134,8 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
 # quoting returns an expression to be evaluated later
 gt_tbl_regression <- quote(list(
   # first call to the gt function
-  gt = "gt(data = x$table_body)",
+  gt = "gt(data = x$table_body)" %>%
+    glue(),
 
   # label column indented and left just
   gt_calls = glue(
@@ -137,14 +144,17 @@ gt_tbl_regression <- quote(list(
   ),
 
   # do not print columns variable or row_type columns
-  cols_hide = "cols_hide(columns = vars(variable, row_type, var_type, N))",
+  cols_hide = "cols_hide(columns = vars(variable, row_type, var_type, N))" %>%
+    glue(),
 
   # NAs do not show in table
-  fmt_missing = "fmt_missing(columns = everything(), missing_text = '')",
+  fmt_missing = "fmt_missing(columns = everything(), missing_text = '')" %>%
+    glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')",
+    "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')" %>%
+    glue(),
 
   # column headers
   cols_label = glue(
@@ -167,11 +177,13 @@ gt_tbl_regression <- quote(list(
 
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)",
+    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)" %>%
+    glue(),
 
   # ceof and confidence interval formatting
   fmt_coef =
-    "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)",
+    "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)" %>%
+    glue(),
 
   # combining ll and ul to print confidence interval
   cols_merge_ci =

@@ -28,3 +28,6 @@ and to the nearest integer when \code{abs(x) >= 10}.
 c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345) \%>\%
   style_sigfig()
 }
+\author{
+Daniel D. Sjoberg
+}

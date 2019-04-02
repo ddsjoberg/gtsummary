@@ -23,5 +23,5 @@ style_percent(percent_vals)
 style_percent(percent_vals, symbol = TRUE)
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }

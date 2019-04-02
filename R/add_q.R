@@ -3,7 +3,9 @@
 #'
 #' @param x `tbl_summary` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
-#' @author Esther Drill, Daniel Sjoberg
+#' @author Esther Drill, Daniel D. Sjoberg
+#' @seealso \code{\link{tbl_summary}}, \code{\link{tbl_regression}},
+#' \code{\link{tbl_uvregression}}
 #' @export
 add_q <- function(x, ...) UseMethod("add_q")
 
@@ -17,9 +19,10 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @param x `tbl_summary` object
 #' @param method character argument.  Methods from
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
-#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
+#' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
-#' @author Esther Drill, Daniel Sjoberg
+#' @author Esther Drill, Daniel D. Sjoberg
+#' @family tbl_summary
 #' @export
 #' @examples
 #' tbl_q <-
@@ -31,8 +34,10 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 
   # This adjusts p-values for multiple testing. Default method is fdr.
   if (!("add_comparison" %in% names(x$call_list))) {
-    stop("There are no p-values yet. You need to use the function add_comparison()
-    after tbl_summary() and before add_q()")
+    stop(glue(
+      "There are no p-values yet. You need to use the function add_comparison(), ",
+      "after tbl_summary() and before add_q()"
+    ))
   }
 
   # adding exact and printable q value to meta_data
@@ -92,9 +97,10 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' @param x `tbl_uvregression` object
 #' @param method character argument.  Methods from
 #' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
-#' @param pvalue_fun function for rounding/formatting p-values.  Default is \code{\link{style_pvalue}}.
+#' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
-#' @author Esther Drill, Daniel Sjoberg
+#' @author Esther Drill, Daniel D. Sjoberg
+#' @family tbl_uvregression
 #' @export
 #' @examples
 #' tbl_q <-
@@ -111,8 +117,10 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   # This adjusts p-values for multiple testing but only when the global approach is used.
   # Default method is fdr.
   if (!("pvalue_global" %in% colnames(x$meta_data))) {
-    stop("You need global p-values first. Use the function add_global() after
-    tbl_uvregression() and before add_q()")
+    stop(glue(
+      "You need global p-values first. Use the function add_global() after",
+      "tbl_uvregression() and before add_q()"
+    ))
   }
 
   # adding exact and printable q value to meta_data
@@ -144,16 +152,18 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt:qvalue"]] <-
-    "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)"
+    "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)" %>%
+    glue()
   # column headers
   x[["gt_calls"]][["cols_label:qvalue"]] <-
-    "cols_label(qvalue = md('**q-value**'))"
+    "cols_label(qvalue = md('**q-value**'))"%>%
+    glue()
   # column headers abbreviations footnote
   x[["gt_calls"]][["footnote_q_method"]] = glue(
     "tab_footnote(",
-    "  footnote = '{footnote_text}',",
-    "  locations = cells_column_labels(",
-    "    columns = vars(qvalue))",
+    "footnote = '{footnote_text}',",
+    "locations = cells_column_labels(",
+    "columns = vars(qvalue))",
     ")"
   )
 

@@ -19,6 +19,6 @@ version of the levels, and the column name for each level in the \code{\link{tbl
 output data frame.
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

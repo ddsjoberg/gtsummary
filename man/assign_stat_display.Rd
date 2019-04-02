@@ -20,6 +20,6 @@ Function that assigns default statistics to display, or if specified,
 assigns the user-defined statistics for display.
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

@@ -24,6 +24,6 @@ most appropriate test as text of the test function
 determine the appropriate test type given two variables
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
 \keyword{internal}

@@ -36,8 +36,12 @@ inline in an R markdown document.  Detailed examples in the
 \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{\code{tbl_regression} vignette}
 }
 \seealso{
-\link{tbl_regression}
+Other tbl_regression: \code{\link{add_global.tbl_regression}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{tab_style_bold_p.tbl_regression}},
+  \code{\link{tbl_regression}}
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }
+\concept{tbl_regression}

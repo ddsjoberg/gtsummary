@@ -15,8 +15,10 @@ test_that("expect error if no p value in table 1", {
 
   expect_error(
     add_q(table1),
-    "There are no p-values yet. You need to use the function add_comparison()
-    after tbl_summary() and before add_q()",
+    glue(
+      "There are no p-values yet. You need to use the function add_comparison(), ",
+      "after tbl_summary() and before add_q()"
+    ),
     fixed = TRUE
   )
 })
@@ -44,8 +46,10 @@ test_that("expect error with no global p value in tbl_uvregression", {
 
   expect_error(
     add_q(uni_reg),
-    "You need global p-values first. Use the function add_global() after
-    tbl_uvregression() and before add_q()",
+    glue(
+      "You need global p-values first. Use the function add_global() after",
+      "tbl_uvregression() and before add_q()"
+    ),
     fixed = TRUE
   )
 })

@@ -3,7 +3,7 @@
 #' @name print_gtsummary
 #' @param x an object created using gtsummary functions
 #' @param ... not used
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @seealso \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
 NULL
 

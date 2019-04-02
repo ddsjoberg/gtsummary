@@ -11,19 +11,11 @@
 #' "fisher.test" for a Fisher's exact test,
 #' and "re" for a random intercept model to account for clustered data.
 #' For "re" to be used "group" must also be specified in the function call.
-#' @param pvalue_fun function for rounding/formatting p-values.
-#' Default is \code{\link{style_pvalue}}.
-#' The function must have a single input (the numeric, exact p-value),
-#' and return a string that is the rounded/formatted p-value (e.g.
-#' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-#'  \code{partial(style_pvalue, digits = 2)}).
-#' @param group Character vector of an ID or grouping variable.  Summary statistics
-#' will not be printed for this column, but they may be used in subsequent
-#' functions. For example, the group column may be used in `add_comparison()` to
-#' include p-values with correlated data. Default is the `group = ` input
-#' from \code{\link{tbl_summary}}
+#' @inheritParams tbl_regression
+#' @inheritParams tbl_summary
+#' @family tbl_summary
 #' @export
-#' @author Daniel Sjoberg
+#' @author Daniel D. Sjoberg
 #' @examples
 #' comp <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
 add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$inputs$group) {
@@ -74,21 +66,23 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$
   x$pvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt_pvalue"]] <-
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$pvalue_fun)"
+    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$pvalue_fun)" %>%
+    glue()
   # column headers
   x[["gt_calls"]][["cols_label_pvalue"]] <-
-    "cols_label(pvalue = md('**p-value**'))"
+    "cols_label(pvalue = md('**p-value**'))" %>%
+    glue()
 
   x$meta_data <- meta_data
   x$call_list <- c(x$call_list, list(add_comparison = match.call()))
 
   # adding footnote listing statistics presented in table
   x[["gt_calls"]][["footnote_add_comparison"]] <- glue(
-    "tab_footnote(",
-    "  footnote = '{footnote_add_comparison(meta_data)}',",
-    "  locations = cells_column_labels(",
-    "    columns = vars(pvalue))",
-    ")"
+    'tab_footnote(',
+    'footnote = "{footnote_add_comparison(meta_data)}",',
+    'locations = cells_column_labels(',
+    'columns = vars(pvalue))',
+    ')'
   )
 
   x
@@ -112,6 +106,6 @@ footnote_add_comparison <- function(meta_data) {
     distinct() %>%
     left_join(stat_test_names, by = "stat_test") %>%
     pull("stat_test_label") %>%
-    paste(collapse = ", ") %>%
+    paste(collapse = "; ") %>%
     paste0("Statistical tests performed: ", .)
 }

@@ -29,5 +29,5 @@ style_pvalue(pvals)
 style_pvalue(pvals, digits = 2, prepend_p = TRUE)
 }
 \author{
-Daniel Sjoberg
+Daniel D. Sjoberg
 }

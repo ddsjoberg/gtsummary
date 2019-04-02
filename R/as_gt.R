@@ -9,7 +9,8 @@
 #' (e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})
 #' @param omit vector of gt commands to omit. Default is `NULL`
 #' @export
-#' @author Daniel Sjoberg
+#' @seealso \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
+#' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_gt <- trial %>% tbl_summary(by = "trt") %>% as_gt()
 as_gt <- function(x, omit = NULL) {
