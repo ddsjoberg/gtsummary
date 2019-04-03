@@ -5,7 +5,7 @@
 #' @author Daniel D. Sjoberg
 #' @seealso \code{\link{inline_text.tbl_summary}},
 #' \code{\link{inline_text.tbl_regression}},
-#' \link{inline_text.tbl_uvregression}
+#' \code{\link{inline_text.tbl_uvregression}}
 #' @export
 inline_text <- function(x, ...) UseMethod("inline_text")
 
