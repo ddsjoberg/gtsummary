@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Results from a simulated trial of Placebo vs Drug — trial • gtsummary</title>
+<title>Report statistics from survival summary tables inline — inline_text.tbl_survival • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,11 @@
 
 
 
-<meta property="og:title" content="Results from a simulated trial of Placebo vs Drug — trial" />
+<meta property="og:title" content="Report statistics from survival summary tables inline — inline_text.tbl_survival" />
 
-<meta property="og:description" content="A dataset containing the baseline characteristics of 200 patients
-randomized to Placebo or Drug.  Dataset also contains the trial outcome:
-tumor response to the treatment." />
+<meta property="og:description" content="Functions takes an object with class tbl_survival, and the
+location of the statistic to report and returns the statistic for reporting
+inline in an R markdown document." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,41 +119,48 @@ tumor response to the treatment." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Results from a simulated trial of Placebo vs Drug</h1>
+    <h1>Report statistics from survival summary tables inline</h1>
     
-    <div class="hidden name"><code>trial.Rd</code></div>
+    <div class="hidden name"><code>inline_text.tbl_survival.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>A dataset containing the baseline characteristics of 200 patients
-randomized to Placebo or Drug.  Dataset also contains the trial outcome:
-tumor response to the treatment.</p>
+    <p>Functions takes an object with class <code>tbl_survival</code>, and the
+location of the statistic to report and returns the statistic for reporting
+inline in an R markdown document.</p>
     
     </div>
 
-    <pre class="usage"><span class='no'>trial</span></pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <pre class="usage"><span class='co'># S3 method for tbl_survival</span>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object created from  <a href='tbl_survival.html'>tbl_survival</a></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>not used</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>A data frame with 200 rows--one row per patient</p><dl class='dl-horizontal'>
-<dt>trt</dt><dd><p>Treatment Randomization</p></dd>
-<dt>age</dt><dd><p>Age, yrs</p></dd>
-<dt>marker</dt><dd><p>Marker Level, ng/mL</p></dd>
-<dt>stage</dt><dd><p>T Stage</p></dd>
-<dt>grade</dt><dd><p>Grade</p></dd>
-<dt>response</dt><dd><p>Tumor Response</p></dd>
-<dt>death</dt><dd><p>Patient Died</p></dd>
-<dt>ttdeath</dt><dd><p>Years from Randomization to Death/Censor</p></dd>
-</dl>
+    <div class='dont-index'><p>Other tbl_survival: <code><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a></code>,
+  <code><a href='tbl_survival.html'>tbl_survival</a></code></p></div>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#format">Format</a></li>
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>
