@@ -43,6 +43,11 @@ survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
     time_label = "{time} Years"
   )
 }
+\seealso{
+Other tbl_survival: \code{\link{inline_text.tbl_survival}},
+  \code{\link{tbl_survival}}
+}
 \author{
 Daniel D. Sjoberg
 }
+\concept{tbl_survival}

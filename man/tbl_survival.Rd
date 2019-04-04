@@ -15,10 +15,10 @@ tbl_survival(x, ...)
 Tabulate survival probabilites for time-to-event endpoints
 }
 \seealso{
-\code{\link{tbl_survival.survfit}},
-\code{\link{inline_text.tbl_regression}},
-\link{inline_text.tbl_uvregression}
+Other tbl_survival: \code{\link{inline_text.tbl_survival}},
+  \code{\link{tbl_survival.survfit}}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{tbl_survival}
