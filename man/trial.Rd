@@ -12,8 +12,6 @@
 \item{stage}{T Stage}
 \item{grade}{Grade}
 \item{response}{Tumor Response}
-\item{death}{Patient Died}
-\item{ttdeath}{Years from Randomization to Death/Censor}
 }}
 \usage{
 trial
