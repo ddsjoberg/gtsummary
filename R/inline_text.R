@@ -5,7 +5,7 @@
 #' @author Daniel D. Sjoberg
 #' @seealso \code{\link{inline_text.tbl_summary}},
 #' \code{\link{inline_text.tbl_regression}},
-#' \code{\link{inline_text.tbl_uvregression}}
+#' \link{inline_text.tbl_uvregression}
 #' @export
 inline_text <- function(x, ...) UseMethod("inline_text")
 
@@ -205,19 +205,3 @@ inline_text.tbl_regression <-
 #' @export
 
 inline_text.tbl_uvregression <- inline_text.tbl_regression
-
-
-#' Report statistics from survival summary tables inline
-#'
-#' Functions takes an object with class `tbl_survival`, and the
-#' location of the statistic to report and returns the statistic for reporting
-#' inline in an R markdown document.
-#'
-#' @param x object created from  \link{tbl_survival}
-#' @param ... not used
-#' @family tbl_survival
-#' @export
-
-inline_text.tbl_survival <- function(x, ...){
-  print("Needs to be written!")
-}

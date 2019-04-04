@@ -169,9 +169,9 @@ gt_tbl_regression <- quote(list(
   # column headers abbreviations footnote
   footnote_abbreviation = glue(
     "tab_footnote(",
-    "footnote = '{footnote_abbr}',",
-    "locations = cells_column_labels(",
-    "columns = {footnote_location})",
+    "  footnote = '{footnote_abbr}',",
+    "  locations = cells_column_labels(",
+    "    columns = {footnote_location})",
     ")"
   ),
 
@@ -187,8 +187,7 @@ gt_tbl_regression <- quote(list(
 
   # combining ll and ul to print confidence interval
   cols_merge_ci =
-    "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')" %>%
-    glue::as_glue(),
+    "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')",
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
