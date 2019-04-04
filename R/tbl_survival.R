@@ -3,9 +3,7 @@
 #' @param x survival object
 #' @param ... further arguments passed to or from other methods.
 #' @author Daniel D. Sjoberg
-#' @seealso \code{\link{tbl_survival.survfit}},
-#' \code{\link{inline_text.tbl_regression}},
-#' \link{inline_text.tbl_uvregression}
+#' @family tbl_survival
 #' @export
 tbl_survival <- function(x, ...) {
   ellipsis::check_dots_used()
@@ -34,6 +32,7 @@ tbl_survival <- function(x, ...) {
 #' estimate.  Default is 'Survival Probability'
 #' @param ... not used
 #' @importFrom stringr str_split
+#' @family tbl_survival
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
