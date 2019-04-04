@@ -119,7 +119,7 @@ There are formatting options available, such as adding bold and italics to text.
 - P-values less than 0.10 are bold  
 - Large p-values are rounded to two decimal places  
 - Coefficients are exponentiated to give odds ratios  
-- Coefficients are rounded to 3 significant figures
+- Odds ratios are rounded to 2 or 3 significant figures
 
 ```{r, message=FALSE}
 # format results into data frame with global p-values
@@ -127,7 +127,7 @@ m1 %>%
   tbl_regression( 
     exponentiate = TRUE, 
     pvalue_fun = function(x) style_pvalue(x, digits = 2),
-    coef_fun = function(x) style_sigfig(x, digits = 3)
+    coef_fun = function(x) style_ratio(x, digits = 3)
   )  %>% 
   add_global() %>%
   tab_style_bold_p(t = 0.10) %>%
@@ -210,14 +210,15 @@ tbl_regression(m1) %>%
 The `tbl_uvregression()` produces a table of univariate regression results.  The function is a wrapper for `tbl_regression()`, and as a result, accepts nearly identical function arguments.  The function's results can be modified in similar ways to `tbl_regression()` and the results reported inline similarly to `tbl_regression()`.
 
 ```{r tbl_uvregression}
-tbl_uvregression(
- trial,
- method = glm,
- y = response,
- method.args = list(family = binomial),
- exponentiate = TRUE,
- pvalue_fun = function(x) style_pvalue(x, digits = 2)
-) %>%
+trial %>%
+  select(-death, -ttdeath) %>%
+  tbl_uvregression(
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE,
+    pvalue_fun = function(x) style_pvalue(x, digits = 2)
+  ) %>%
   # overrides the default that shows p-values for each level
   add_global() %>%
   # adjusts global p-values for multiple testing (default method: FDR)
