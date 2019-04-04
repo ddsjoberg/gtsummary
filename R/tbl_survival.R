@@ -38,17 +38,11 @@ tbl_survival <- function(x, ...) {
 #' @export
 #' @examples
 #' library(survival)
-#' lung %>%
-#'   dplyr::mutate(
-#'     sex_fct = factor(sex, labels = c("Male", "Female"))
-#'   ) %>%
-#'   survfit(Surv(time, status) ~ sex_fct, .) %>%
+#' survfit(Surv(ttdeath, death) ~ trt, trial) %>%
 #'   tbl_survival(
-#'     times = c(30, 60, 90),
-#'     time_label = "{time} Days",
-#'     level_label = "{level}, N = {n}"
+#'     times = 1:2,
+#'     time_label = "{time} Years"
 #'   )
-
 
 tbl_survival.survfit <- function(x, times, time_label = "{time}",
                                  level_label = "{level}, N = {n}",

@@ -5,7 +5,8 @@
 \title{Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints}
 \usage{
 \method{tbl_survival}{survfit}(x, times, time_label = "{time}",
-  level_label = "{level}", header = "Survival Probability", ...)
+  level_label = "{level}, N = {n}", header = "Survival Probability",
+  ...)
 }
 \arguments{
 \item{x}{\code{survfit} object. While \code{survfit()} allows stratifcation by multiple
@@ -21,7 +22,7 @@ would resolve to "6 Months" or "12 Months" depending on the times requested.}
 \item{level_label}{used when the input 'x' results are stratified by a variable.
 It is a string defining the label shown.  The input uses
 \code{\link[glue]{glue}} notation to convert the string into a label.
-The default is "{level}", which will print the level of the stratifying
+The default is "{level}, N = {n}", which will print the level of the stratifying
 variable.  Other information available to call are {n}', '{variable}',
 and '{strata}'.}
 
@@ -36,15 +37,10 @@ summary of the results
 }
 \examples{
 library(survival)
-lung \%>\%
-  dplyr::mutate(
-    sex_fct = factor(sex, labels = c("Male", "Female"))
-  ) \%>\%
-  survfit(Surv(time, status) ~ sex_fct, .) \%>\%
+survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
   tbl_survival(
-    times = c(30, 60, 90),
-    time_label = "{time} Days",
-    level_label = "{level}, N = {n}"
+    times = 1:2,
+    time_label = "{time} Years"
   )
 }
 \author{
