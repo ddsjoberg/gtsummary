@@ -17,7 +17,8 @@ tbl_survival <- function(x, ...) {
 #' Function accepts a `survfit` object, and provides a tablulated and formmated
 #' summary of the results
 #'
-#' @param x `survfit` object
+#' @param x `survfit` object. While `survfit()` allows stratifcation by multiple
+#' variables, including more than one variable will result in display problems.
 #' @param times numeric vector of survival times
 #' @param time_label string defining the label shown for the time column.
 #' Default is "{time}".  The input uses \code{\link[glue]{glue}} notation to
@@ -26,9 +27,11 @@ tbl_survival <- function(x, ...) {
 #' @param level_label used when the input 'x' results are stratified by a variable.
 #' It is a string defining the label shown.  The input uses
 #' \code{\link[glue]{glue}} notation to convert the string into a label.
-#' The default is "{level}", which will print the level of the stratifying
+#' The default is "{level}, N = {n}", which will print the level of the stratifying
 #' variable.  Other information available to call are {n}', '{variable}',
 #' and '{strata}'.
+#' @param header string to be displayed as column header of the Kaplan-Meier
+#' estimate.  Default is 'Survival Probability'
 #' @param ... not used
 #' @importFrom stringr str_split
 #' @author Daniel D. Sjoberg
@@ -36,14 +39,20 @@ tbl_survival <- function(x, ...) {
 #' @examples
 #' library(survival)
 #' lung %>%
-#' dplyr::mutate(
-#'   sex_fct = factor(sex, labels = c("Male", "Female"))
-#' ) %>%
-#' survfit(Surv(time, status) ~ sex_fct, .) %>%
-#' tbl_survival(times = c(30, 60, 90), time_label = "{time} Days")
+#'   dplyr::mutate(
+#'     sex_fct = factor(sex, labels = c("Male", "Female"))
+#'   ) %>%
+#'   survfit(Surv(time, status) ~ sex_fct, .) %>%
+#'   tbl_survival(
+#'     times = c(30, 60, 90),
+#'     time_label = "{time} Days",
+#'     level_label = "{level}, N = {n}"
+#'   )
+
 
 tbl_survival.survfit <- function(x, times, time_label = "{time}",
-                                 level_label = "{level}", ...) {
+                                 level_label = "{level}, N = {n}",
+                                 header = "Survival Probability", ...) {
 
   # getting survival estimates
   x_summary <- x %>%
@@ -61,7 +70,7 @@ tbl_survival.survfit <- function(x, times, time_label = "{time}",
       table_body %>%
       left_join(
         tibble(
-          strata = x_summary$strata %>% attr("levels") %>% factor(),
+          strata = table_body$strata %>% unique(),
           n = x_summary$n
         ),
         by = "strata"
@@ -96,7 +105,7 @@ tbl_survival.survfit <- function(x, times, time_label = "{time}",
     # first call to gt
     gt = glue("gt(data = x$table_body)"),
     # centering columns except time
-    cols_align = glue("cols_align(align = 'center') %>%",
+    cols_align = glue("cols_align(align = 'center') %>%" ,
                       "cols_align(align = 'left', columns = vars(time_label))"),
     # hiding columns not for printing
     cols_hide = glue("cols_hide(columns = vars(time, n.risk, strata, variable, level, n))"),
@@ -105,7 +114,7 @@ tbl_survival.survfit <- function(x, times, time_label = "{time}",
       glue("cols_move_to_start(columns = vars(time_label, surv, lower, upper))"),
     # labelling columns
     cols_label =
-      glue('cols_label(time_label = "", surv = "Survival Probability", lower = "{x$conf.int*100}% CI")'),
+      glue('cols_label(time_label = "", surv = "{header}", lower = "{x$conf.int*100}% CI")'),
     # styling the percentages
     fmt_percent =
       glue("fmt(columns = vars(surv, lower, upper), fns = partial(style_percent, symbol = TRUE))"),
