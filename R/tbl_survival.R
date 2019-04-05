@@ -29,9 +29,10 @@ tbl_survival <- function(x, ...) {
 #' variable.  Other information available to call are {n}', '{variable}',
 #' and '{strata}'.
 #' @param header string to be displayed as column header of the Kaplan-Meier
-#' estimate.  Default is 'Survival Probability'
+#' estimate.  Default is \code{md('**Probability**')}
 #' @param ... not used
 #' @importFrom stringr str_split
+#' @seealso \link[gt]{md}, \link[gt]{html}
 #' @family tbl_survival
 #' @author Daniel D. Sjoberg
 #' @export
@@ -45,7 +46,9 @@ tbl_survival <- function(x, ...) {
 
 tbl_survival.survfit <- function(x, times, time_label = "{time}",
                                  level_label = "{level}, N = {n}",
-                                 header = "Survival Probability", ...) {
+                                 header = md('**Probability**'), ...) {
+  # converting header to un-evaluated string ------------------------------------
+  header <- deparse(substitute(header))
 
   # getting survival estimates
   x_summary <- x %>%
@@ -107,11 +110,11 @@ tbl_survival.survfit <- function(x, times, time_label = "{time}",
       glue("cols_move_to_start(columns = vars(time_label, surv, lower, upper))"),
     # labelling columns
     cols_label =
-      glue('cols_label(time_label = "", surv = "{header}", lower = "{x$conf.int*100}% CI")'),
+      glue('cols_label(time_label = "", surv = {header}, lower = md("**{x$conf.int*100}% CI**"))'),
     # styling the percentages
     fmt_percent =
       glue("fmt(columns = vars(surv, lower, upper), fns = partial(style_percent, symbol = TRUE))"),
-    # mergin upper adn lower limits of CI
+    # mergin upper and lower limits of CI
     cols_merge_ci =
       "cols_merge(col_1 = vars(lower), col_2 = vars(upper), pattern = '{1}, {2}')" %>%
       glue::as_glue(),

@@ -5,7 +5,7 @@
 \title{Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints}
 \usage{
 \method{tbl_survival}{survfit}(x, times, time_label = "{time}",
-  level_label = "{level}, N = {n}", header = "Survival Probability",
+  level_label = "{level}, N = {n}", header = md("**Probability**"),
   ...)
 }
 \arguments{
@@ -27,7 +27,7 @@ variable.  Other information available to call are {n}', '{variable}',
 and '{strata}'.}
 
 \item{header}{string to be displayed as column header of the Kaplan-Meier
-estimate.  Default is 'Survival Probability'}
+estimate.  Default is \code{md('**Probability**')}}
 
 \item{...}{not used}
 }
@@ -44,6 +44,8 @@ survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
   )
 }
 \seealso{
+\link[gt]{md}, \link[gt]{html}
+
 Other tbl_survival: \code{\link{inline_text.tbl_survival}},
   \code{\link{tbl_survival}}
 }
