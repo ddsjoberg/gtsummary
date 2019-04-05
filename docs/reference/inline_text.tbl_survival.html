@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>print and knit_print methods for gtsummary objects — print_gtsummary • gtsummary</title>
+<title>Report statistics from survival summary tables inline — inline_text.tbl_survival • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="print and knit_print methods for gtsummary objects — print_gtsummary" />
+<meta property="og:title" content="Report statistics from survival summary tables inline — inline_text.tbl_survival" />
 
-<meta property="og:description" content="print and knit_print methods for gtsummary objects" />
+<meta property="og:description" content="Functions takes an object with class tbl_survival, and the
+location of the statistic to report and returns the statistic for reporting
+inline in an R markdown document." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,47 +119,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>print and knit_print methods for gtsummary objects</h1>
+    <h1>Report statistics from survival summary tables inline</h1>
     
-    <div class="hidden name"><code>print_gtsummary.Rd</code></div>
+    <div class="hidden name"><code>inline_text.tbl_survival.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>print and knit_print methods for gtsummary objects</p>
+    <p>Functions takes an object with class <code>tbl_survival</code>, and the
+location of the statistic to report and returns the statistic for reporting
+inline in an R markdown document.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for tbl_summary</span>
-<span class='fu'><a href='knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for tbl_regression</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for tbl_regression</span>
-<span class='fu'><a href='knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for tbl_uvregression</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for tbl_uvregression</span>
-<span class='fu'><a href='knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for tbl_survival</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for tbl_survival</span>
-<span class='fu'><a href='knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_survival</span>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='no'>pattern</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>an object created using gtsummary functions</p></td>
+      <td><p>object created from  <a href='tbl_survival.html'>tbl_survival</a></p></td>
+    </tr>
+    <tr>
+      <th>pattern</th>
+      <td><p>Default is <code>'{surv} ({conf.level.100}% {lower}, {upper})'</code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -165,22 +152,14 @@
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='tbl_summary.html'>tbl_summary</a> <a href='tbl_regression.html'>tbl_regression</a> <a href='tbl_uvregression.html'>tbl_uvregression</a></p></div>
-    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+                </ul>
 
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 
