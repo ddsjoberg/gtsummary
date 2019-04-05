@@ -21,18 +21,20 @@
 #' will default to an appropriate summary type.  See below for details.
 #' @param value A list that specifies the value to display for dichotomous
 #' values only.  See below for details.
-#' @param statistic A list of the type of statistics to return.  The list can contain
-#' two named elements (`continuous` and `categorical`). The default is
-#' `list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}%)")`.
+#' @param statistic A list of the type of statistics to return for each variable
+#' or variable class.  The named list contains variable names or `..continuous..`
+#' or `..categorical..` to apply a statistic format to all variables on that
+#' type. The default is
+#' `list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")`.
 #' The syntax follows from the \code{\link[glue]{glue}} function.
 #' For categorical variables the choices the following statistics are available to
 #' report: `{n}` (frequency), `{N}` (denominator, or cohort size), `{p}` (percent).
 #' For continuous variables, any quantile may be returned with `{p##}`, where ##
-#' is any integer from 0 to 100. For example, `{p25}` and `{p75}` returns
-#' the 25th and 75th quantiles.  The median (`{median}`), mean (`{mean}`),
+#' is any integer from 0 to 100. For example, `{p5}`, `{p25}`, and `{p75}` return
+#' the 5th, 25th, and 75th quantiles.  The median (`{median}`), mean (`{mean}`),
 #' standard deviation (`{sd}`), variance (`{var}`), minimum (`{min}`), and
 #' maximum (`{max}`) are available.  In fact, any function that takes the form
-#' `foo(x, na.rm = TRUE)` should work.
+#' `foo(x, na.rm = TRUE)` is accepted.
 #' @param digits integer indicating the number of decimal places to round continuous
 #' summary statistics. `sprintf(glue::glue("%.{digits}f"), x)`
 #' @param group Character vector of an ID or grouping variable.  Summary statistics
@@ -95,7 +97,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
       ),
       dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
       var_label = assign_var_label(data, .data$variable, label),
-      stat_display = assign_stat_display(.data$summary_type, statistic),
+      stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
       stat_label = stat_label_match(.data$stat_display),
       digits = continuous_digits_guess(
         data, .data$variable, .data$summary_type, .data$class, digits

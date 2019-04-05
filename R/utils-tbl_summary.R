@@ -113,6 +113,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 #' Function that assigns default statistics to display, or if specified,
 #' assigns the user-defined statistics for display.
 #'
+#' @param variable Vector of variable names
 #' @param summary_type A list that includes specified summary types
 #' @param stat_display List with up to two named elements.  Names must be
 #' continuous or categorical. Can be \code{NULL}.
@@ -120,18 +121,23 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
-assign_stat_display <- function(summary_type, stat_display) {
+assign_stat_display <- function(variable, summary_type, stat_display) {
   # dichotomous and categorical are treated in the same fashion here
   summary_type <- ifelse(summary_type == "dichotomous", "categorical", summary_type)
 
   # otherwise, return defaults
   return(
-    map_chr(
-      summary_type,
+    map2_chr(
+      variable, summary_type,
       ~ case_when(
-        .x == "continuous" ~ stat_display[[.x]] %||% "{median} ({p25}, {p75})",
-        .x %in% c("categorical", "dichotomous") ~
-        stat_display[[.x]] %||% "{n} ({p}%)"
+        .y == "continuous" ~
+          stat_display[[.x]] %||%
+          stat_display[["..continuous.."]] %||%
+          "{median} ({p25}, {p75})",
+        .y %in% c("categorical", "dichotomous") ~
+          stat_display[[.x]] %||%
+          stat_display[["..categorical.."]] %||%
+          "{n} ({p}%)"
       )
     )
   )
@@ -1139,10 +1145,12 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   # statistic ------------------------------------------------------------------
   if (!is.null(statistic)) {
     # checking that all names in list are continuous or categorical
-    stat_display_names_not_valid <- setdiff(names(statistic), c("continuous", "categorical"))
+    stat_display_names_not_valid <-
+      names(statistic) %>%
+      setdiff(c(names(data) %>% setdiff(c(by, group)), "..continuous..", "..categorical.."))
     if (length(stat_display_names_not_valid) > 0) {
       message(glue(
-        "Expecting list names 'continuous' and 'categorical'. ",
+        "Expecting list names '..continuous..',  '..categorical..', or a column name from 'data'. ",
         "The following names from 'statistic' are not valid and ",
         "were ignored: {paste0(stat_display_names_not_valid, collapse = ', ')}"
       ))
