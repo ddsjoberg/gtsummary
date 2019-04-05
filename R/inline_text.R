@@ -5,8 +5,12 @@
 #' @author Daniel D. Sjoberg
 #' @seealso \code{\link{inline_text.tbl_summary}},
 #' \code{\link{inline_text.tbl_regression}},
+<<<<<<< HEAD
 #' \code{\link{inline_text.tbl_uvregression}},
 #' \code{\link{inline_text.tbl_survival}}
+=======
+#' \link{inline_text.tbl_uvregression}
+>>>>>>> origin/master
 #' @export
 inline_text <- function(x, ...) {
   UseMethod("inline_text")
@@ -208,6 +212,7 @@ inline_text.tbl_regression <-
 #' @export
 
 inline_text.tbl_uvregression <- inline_text.tbl_regression
+<<<<<<< HEAD
 
 
 #' Report statistics from survival summary tables inline
@@ -225,3 +230,5 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 inline_text.tbl_survival <- function(x, pattern, ...){
   print("Needs to be written!")
 }
+=======
+>>>>>>> origin/master
