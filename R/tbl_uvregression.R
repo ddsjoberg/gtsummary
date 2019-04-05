@@ -195,8 +195,7 @@ gt_tbl_uvregression <- quote(list(
 
   # combining ll and ul to print confidence interval
   cols_merge_ci =
-    "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')" %>%
-    glue::as_glue(),
+    "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')",
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(

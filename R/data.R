@@ -12,7 +12,10 @@
 #'     \item{stage}{T Stage}
 #'     \item{grade}{Grade}
 #'     \item{response}{Tumor Response}
+<<<<<<< HEAD
 #'     \item{death}{Patient Died}
 #'     \item{ttdeath}{Months from Randomization to Death/Censor}
+=======
+>>>>>>> origin/master
 #' }
 "trial"
