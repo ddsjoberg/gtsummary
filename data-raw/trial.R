@@ -18,9 +18,9 @@ trial <-
       exp(1 + 0.2 * response +
             -0.1 * as.numeric(stage) +
             -0.1 * as.numeric(grade) +
-            rnorm(n, sd = 0.5)),
-    death = ifelse(ttdeath_true <= 2, 1L, 0L),
-    ttdeath = pmin(ttdeath_true, 2) %>% round(digits = 3)
+            rnorm(n, sd = 0.5)) * 12,
+    death = ifelse(ttdeath_true <= 24, 1L, 0L),
+    ttdeath = pmin(ttdeath_true, 24) %>% round(digits = 2)
   ) %>%
   dplyr::mutate(
     age = ifelse(runif(n) < 0.95, age, NA_real_),
@@ -37,6 +37,6 @@ attr(trial$stage, "label") <- "T Stage"
 attr(trial$grade, "label") <- "Grade"
 attr(trial$response, "label") <- "Tumor Response"
 attr(trial$death, "label") <- "Patient Died"
-attr(trial$ttdeath, "label") <- "Years from Randomization to Death/Censor"
+attr(trial$ttdeath, "label") <- "Months from Randomization to Death/Censor"
 
 usethis::use_data(trial, overwrite = TRUE)
