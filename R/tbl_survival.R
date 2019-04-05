@@ -28,12 +28,20 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_survival(
-#'   trial,
-#'   Surv(ttdeath, death) ~ trt,
-#'   times = 1:2,
-#'   time_label = "{time} Years"
-#' )
+#' tbl_strata <-
+#'   tbl_survival(
+#'     trial,
+#'     Surv(ttdeath, death) ~ trt,
+#'     times = c(12, 24),
+#'     time_label = "{time} Months"
+#'   )
+#' tbl_nostrata <-
+#'   tbl_survival(
+#'     trial,
+#'     Surv(ttdeath, death) ~ 1,
+#'     times = c(12, 24),
+#'     time_label = "{time} Months"
+#'   )
 
 tbl_survival <- function(data, formula, times,
                                  time_label = "{time}",

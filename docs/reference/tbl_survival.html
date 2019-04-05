@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tabulate survival probabilites for time-to-event endpoints — tbl_survival • gtsummary</title>
+<title>Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints — tbl_survival • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Tabulate survival probabilites for time-to-event endpoints — tbl_survival" />
+<meta property="og:title" content="Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints — tbl_survival" />
 
-<meta property="og:description" content="Tabulate survival probabilites for time-to-event endpoints" />
+<meta property="og:description" content="Function calculates a survfit object, and provides a tablulated and formmated
+summary of the results" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,38 +118,108 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tabulate survival probabilites for time-to-event endpoints</h1>
+    <h1>Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints</h1>
     
     <div class="hidden name"><code>tbl_survival.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Tabulate survival probabilites for time-to-event endpoints</p>
+    <p>Function calculates a <code>survfit</code> object, and provides a tablulated and formmated
+summary of the results</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_survival</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>tbl_survival</span>(<span class='no'>data</span>, <span class='no'>formula</span>, <span class='no'>times</span>, <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time}"</span>,
+  <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>, <span class='kw'>header_time</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Time**"</span>),
+  <span class='kw'>header_prob</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Probability**"</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>survival object</p></td>
+      <th>data</th>
+      <td><p>a data frame in which to interpret the variables named in the formula</p></td>
+    </tr>
+    <tr>
+      <th>formula</th>
+      <td><p>a formula object, which must have a Surv object as the response on the
+left of the ~ operator.  A single stratification variable maybe included
+right of the ~ operator. For an unstratified survival estimate the
+right hand side should be <code>~ 1</code>.</p></td>
+    </tr>
+    <tr>
+      <th>times</th>
+      <td><p>numeric vector of survival times</p></td>
+    </tr>
+    <tr>
+      <th>time_label</th>
+      <td><p>string defining the label shown for the time column.
+Default is <code>"{time}"</code>.  The input uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> notation to
+convert the string into a label.  A common label may be <code>"{time} Months"</code>, which
+would resolve to "6 Months" or "12 Months" depending on the times requested.</p></td>
+    </tr>
+    <tr>
+      <th>level_label</th>
+      <td><p>used when survival results are stratified.
+It is a string defining the label shown.  The input uses
+<code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> notation to convert the string into a label.
+The default is <code>"{level}, N = {n}"</code>.  Other information available to call are <code>'{n}'</code>, <code>'{variable}'</code>,
+and <code>'{strata}'</code>.</p></td>
+    </tr>
+    <tr>
+      <th>header_time</th>
+      <td><p>string to be displayed as column header of the time column.
+Default is <code>md('**Time**')</code></p></td>
+    </tr>
+    <tr>
+      <th>header_prob</th>
+      <td><p>string to be displayed as column header of the Kaplan-Meier
+estimate.  Default is <code>md('**Probability**')</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to or from other methods.</p></td>
+      <td><p>Arguments passed on to <code><a href='https://www.rdocumentation.org/packages/survival/topics/survfit.formula'>survival::survfit.formula</a></code></p><dl class='dl-horizontal'>
+  <dt>weights</dt><dd><p>The weights must be nonnegative and it is strongly recommended that  
+    they be strictly positive, since zero weights are ambiguous, compared 
+    to use of the <code>subset</code> argument.</p></dd>
+  <dt>subset</dt><dd><p>expression saying that only a subset of the rows of the data 
+    should be used in the fit.</p></dd>
+  <dt>na.action</dt><dd><p>a missing-data filter function, applied to the model frame, after any 
+    <code>subset</code> argument has been used. 
+    Default is <code>options()$na.action</code>.</p></dd>
+  <dt>etype</dt><dd><p>a variable giving the type of event.  This has been superseded by
+    multi-state Surv objects; see example below.</p></dd>
+  <dt>id</dt><dd><p>identifies individual subjects, when a given person can have multiple
+    lines of data.</p></dd>
+  <dt>istate</dt><dd><p>for multi-state models, identifies the initial state of
+    each subject</p></dd>
+  <dt>timefix</dt><dd><p>process times through the <code>aeqSurv</code> function to
+  eliminate potential roundoff issues.</p></dd>
+</dl></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_survival: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code>,
-  <code><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a></code></p></div>
+    <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>html</a></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tbl_strata</span> <span class='kw'>&lt;-</span>
+  <span class='fu'>tbl_survival</span>(
+    <span class='no'>trial</span>,
+    <span class='fu'><a href='Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>,
+    <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+    <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
+  )
+<span class='no'>tbl_nostrata</span> <span class='kw'>&lt;-</span>
+  <span class='fu'>tbl_survival</span>(
+    <span class='no'>trial</span>,
+    <span class='fu'><a href='Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>,
+    <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+    <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -156,7 +227,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>Daniel D. Sjoberg</p>
