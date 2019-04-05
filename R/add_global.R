@@ -11,7 +11,6 @@
 #' @author Daniel D. Sjoberg
 #' @export
 add_global <- function(x, ...) {
-  ellipsis::check_dots_used()
   UseMethod("add_global")
 }
 

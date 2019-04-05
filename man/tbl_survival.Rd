@@ -2,23 +2,92 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival}
 \alias{tbl_survival}
-\title{Tabulate survival probabilites for time-to-event endpoints}
+\title{Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints}
 \usage{
-tbl_survival(x, ...)
+tbl_survival(data, formula, times, time_label = "{time}",
+  level_label = "{level}, N = {n}", header_time = md("**Time**"),
+  header_prob = md("**Probability**"), ...)
 }
 \arguments{
-\item{x}{survival object}
+\item{data}{a data frame in which to interpret the variables named in the formula}
 
-\item{...}{further arguments passed to or from other methods.}
+\item{formula}{a formula object, which must have a Surv object as the response on the
+left of the ~ operator.  A single stratification variable maybe included
+right of the ~ operator. For an unstratified survival estimate the
+right hand side should be \code{~ 1}.}
+
+\item{times}{numeric vector of survival times}
+
+\item{time_label}{string defining the label shown for the time column.
+Default is \code{"{time}"}.  The input uses \code{\link[glue]{glue}} notation to
+convert the string into a label.  A common label may be \code{"{time} Months"}, which
+would resolve to "6 Months" or "12 Months" depending on the times requested.}
+
+\item{level_label}{used when survival results are stratified.
+It is a string defining the label shown.  The input uses
+\code{\link[glue]{glue}} notation to convert the string into a label.
+The default is \code{"{level}, N = {n}"}.  Other information available to call are \code{'{n}'}, \code{'{variable}'},
+and \code{'{strata}'}.}
+
+\item{header_time}{string to be displayed as column header of the time column.
+Default is \code{md('**Time**')}}
+
+\item{header_prob}{string to be displayed as column header of the Kaplan-Meier
+estimate.  Default is \code{md('**Probability**')}}
+
+\item{...}{Arguments passed on to \code{survival::survfit.formula}
+\describe{
+  \item{weights}{
+    The weights must be nonnegative and it is strongly recommended that  
+    they be strictly positive, since zero weights are ambiguous, compared 
+    to use of the \code{subset} argument.
+  }
+  \item{subset}{
+    expression saying that only a subset of the rows of the data 
+    should be used in the fit. 
+  }
+  \item{na.action}{
+    a missing-data filter function, applied to the model frame, after any 
+    \code{subset} argument has been used. 
+    Default is \code{options()$na.action}. 
+  }
+  \item{stype}{the method to be used estimation of the survival curve:
+    1 = direct,  2 = exp(cumulative hazard). }
+  \item{ctype}{the method to be used for estimation of the cumulative
+    hazard: 1 = Nelson-Aalen formula, 2 = Fleming-Harrington correction
+    for tied events.}
+  \item{id}{
+    identifies individual subjects, when a given person can have multiple
+    lines of data.
+  }
+  \item{cluster}{used to group observations for the infinitesmal
+    jackknife variance estimate, defaults to the value of id}
+  \item{istate}{for multi-state models, identifies the initial state of
+    each subject or observation}
+  \item{timefix}{process times through the \code{aeqSurv} function to
+  eliminate potential roundoff issues.}
+  \item{etype}{
+    a variable giving the type of event.  This has been superseded by
+    multi-state Surv objects and is depricated; see example below.
+  }
+  \item{error}{this argument is no longer used}
+}}
 }
 \description{
-Tabulate survival probabilites for time-to-event endpoints
+Function calculates a \code{survfit} object, and provides a tablulated and formmated
+summary of the results
+}
+\examples{
+tbl_survival(
+  trial,
+  Surv(ttdeath, death) ~ trt,
+  times = 1:2,
+  time_label = "{time} Years"
+)
 }
 \seealso{
-Other tbl_survival: \code{\link{inline_text.tbl_survival}},
-  \code{\link{tbl_survival.survfit}}
+\link[gt]{md}, \link[gt]{html}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_survival}
