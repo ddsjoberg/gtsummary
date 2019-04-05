@@ -214,7 +214,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' inline in an R markdown document.
 #'
 #' @param x object created from  \link{tbl_survival}
-#' @param pattern Default is '{surv} ({conf.level.100}% {lower}, {upper})'
+#' @param pattern Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}
 #' @param ... not used
 #' @family tbl_survival
 #' @export

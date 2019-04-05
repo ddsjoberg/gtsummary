@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
 
-\item{pattern}{Default is '{surv} ({conf.level.100}% {lower}, {upper})'}
+\item{pattern}{Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}}
 
 \item{...}{not used}
 }
