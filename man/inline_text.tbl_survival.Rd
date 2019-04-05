@@ -18,8 +18,4 @@ Functions takes an object with class \code{tbl_survival}, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.
 }
-\seealso{
-Other tbl_survival: \code{\link{tbl_survival.survfit}},
-  \code{\link{tbl_survival}}
-}
 \concept{tbl_survival}

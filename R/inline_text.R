@@ -5,10 +5,10 @@
 #' @author Daniel D. Sjoberg
 #' @seealso \code{\link{inline_text.tbl_summary}},
 #' \code{\link{inline_text.tbl_regression}},
-#' \code{\link{inline_text.tbl_uvregression}}
+#' \code{\link{inline_text.tbl_uvregression}},
+#' \code{\link{inline_text.tbl_survival}}
 #' @export
 inline_text <- function(x, ...) {
-  ellipsis::check_dots_used()
   UseMethod("inline_text")
 }
 
@@ -59,7 +59,7 @@ inline_text.tbl_summary <-
     if (length(column) == 0) {
       stop(glue(
         "No column selected.  Must be one of: ",
-        "{paste(col_lookup_table, collapse = ', ')}"
+        "{paste(col_lookup_table$input, collapse = ', ')}"
       ))
     }
 
