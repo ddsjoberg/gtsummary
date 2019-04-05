@@ -7,7 +7,10 @@
 #' \code{\link{inline_text.tbl_regression}},
 #' \code{\link{inline_text.tbl_uvregression}}
 #' @export
-inline_text <- function(x, ...) UseMethod("inline_text")
+inline_text <- function(x, ...) {
+  ellipsis::check_dots_used()
+  UseMethod("inline_text")
+}
 
 #' Report statistics from summary tables inline
 #'
