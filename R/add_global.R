@@ -10,8 +10,9 @@
 #' @seealso \code{\link{add_global.tbl_regression}}, \code{\link{add_global.tbl_uvregression}}
 #' @author Daniel D. Sjoberg
 #' @export
-add_global <- function(x, ...) UseMethod("add_global")
-
+add_global <- function(x, ...) {
+  UseMethod("add_global")
+}
 
 #' Adds the global p-value for a categorical variables in `tbl_regression` objects
 #'

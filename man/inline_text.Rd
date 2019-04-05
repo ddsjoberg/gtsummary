@@ -17,7 +17,8 @@ Report statistics from gtsummary tables inline
 \seealso{
 \code{\link{inline_text.tbl_summary}},
 \code{\link{inline_text.tbl_regression}},
-\link{inline_text.tbl_uvregression}
+\code{\link{inline_text.tbl_uvregression}},
+\code{\link{inline_text.tbl_survival}}
 }
 \author{
 Daniel D. Sjoberg
