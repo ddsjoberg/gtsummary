@@ -4,10 +4,12 @@
 \alias{inline_text.tbl_survival}
 \title{Report statistics from survival summary tables inline}
 \usage{
-\method{inline_text}{tbl_survival}(x, ...)
+\method{inline_text}{tbl_survival}(x, pattern, ...)
 }
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
+
+\item{pattern}{Default is '{surv} ({conf.level.100}% {lower}, {upper})'}
 
 \item{...}{not used}
 }
