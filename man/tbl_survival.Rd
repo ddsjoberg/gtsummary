@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival}
 \alias{tbl_survival}
-\title{Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints}
+\title{Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints}
 \usage{
 tbl_survival(data, formula, times, time_label = "{time}",
   level_label = "{level}, N = {n}", header_time = md("**Time**"),
@@ -74,8 +74,8 @@ estimate.  Default is \code{md('**Probability**')}}
 }}
 }
 \description{
-Function calculates a \code{survfit} object, and provides a tablulated and formmated
-summary of the results
+Function calculates a \code{survfit} object, and provides a tabulated and
+formatted summary of the results
 }
 \examples{
 tbl_strata <-
