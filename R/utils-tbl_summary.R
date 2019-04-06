@@ -1300,7 +1300,7 @@ footnote_stat_label <- function(meta_data) {
         summary_type == "dichotomous" ~ "categorical",
         TRUE ~ .data$summary_type
       ),
-      message = glue("{stat_label} for {summary_type} variables")
+      message = glue("{stat_label}")
     ) %>%
     distinct() %>%
     pull("message") %>%
