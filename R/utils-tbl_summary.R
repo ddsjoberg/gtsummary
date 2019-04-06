@@ -1088,6 +1088,11 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     ))
   }
 
+  # cannot include variables named ..continuous.. or ..categorical..
+  if (c("..continuous..", "..categorical..") %in% names(data) %>% any()) {
+    stop("Column names '..continuous..' and '..categorical..' are not allowed.")
+  }
+
   # by -------------------------------------------------------------------------
   # by is a variable in data
   if (!is.null(by)) {
