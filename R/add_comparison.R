@@ -3,7 +3,10 @@
 #' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
 #' @param test user defined list of statistical tests provided as a named
 #' character vector with variables as names and test functions as values.,
-#' e.g. \code{list(age = "t.test", ptstage = "fisher.test")}.
+#' e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
+#' `..continuous..` and `..categorical..` to perform a test to all variables
+#' of that type (categorical requests are applied to both categorical and
+#' dichotomous variables).
 #' Options include "t.test" for a T-test,
 #' "wilcox.test" for a Wilcoxon rank sum test,
 #' "kruskal.test" for a Kruskal-Wallis rank sum test,
@@ -18,11 +21,14 @@
 #' @author Daniel D. Sjoberg
 #' @examples
 #' comp <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
-add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue, group = x$inputs$group) {
+add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
+                           group = x$inputs$group) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
-  if (is.null(x$inputs[["by"]])) stop("Cannot add comparison when no 'by' variable in original tbl_summary() call")
+  if (is.null(x$inputs[["by"]])) {
+    stop("Cannot add comparison when no 'by' variable in original tbl_summary() call")
+  }
 
   # getting the test name and pvalue
   meta_data <-
