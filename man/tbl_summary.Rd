@@ -45,8 +45,11 @@ standard deviation (\code{{sd}}), variance (\code{{var}}), minimum (\code{{min}}
 maximum (\code{{max}}) are available.  In fact, any function that takes the form
 \code{foo(x, na.rm = TRUE)} is accepted.}
 
-\item{digits}{integer indicating the number of decimal places to round continuous
-summary statistics. \code{sprintf(glue::glue("\%.{digits}f"), x)}}
+\item{digits}{A named list of integers indicating the number of decimal
+places to round continuous summary statistics. Names of the list can be any
+continuous variable in 'data', or \code{"..continuous"} to apply to all
+variables.  If not specified, \code{tbl_summary} does its best to guess an
+appropriate level to round statistics.}
 
 \item{group}{Character vector of an ID or grouping variable.  Summary statistics
 will not be printed for this column. The column may be used in \code{\link{add_comparison}} to

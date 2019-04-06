@@ -35,8 +35,11 @@
 #' standard deviation (`{sd}`), variance (`{var}`), minimum (`{min}`), and
 #' maximum (`{max}`) are available.  In fact, any function that takes the form
 #' `foo(x, na.rm = TRUE)` is accepted.
-#' @param digits integer indicating the number of decimal places to round continuous
-#' summary statistics. `sprintf(glue::glue("%.{digits}f"), x)`
+#' @param digits A named list of integers indicating the number of decimal
+#' places to round continuous summary statistics. Names of the list can be any
+#' continuous variable in 'data', or `"..continuous"` to apply to all
+#' variables.  If not specified, `tbl_summary` does its best to guess an
+#' appropriate level to round statistics.
 #' @param group Character vector of an ID or grouping variable.  Summary statistics
 #' will not be printed for this column. The column may be used in \code{\link{add_comparison}} to
 #' calculate p-values with correlated data. Default is `NULL`

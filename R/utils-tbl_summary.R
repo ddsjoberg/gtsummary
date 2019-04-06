@@ -684,11 +684,15 @@ continuous_digits_guess_one <- function(data,
   # if class is NA (meaning all values are NA), returning NA
   if (is.na(class)) return(NA)
 
-  # if the number of digits is specified, return specified number
-  if (!is.null(digits[[variable]])) return(digits[[variable]])
-
   # if the variable is not continuous type, return NA
   if (summary_type != "continuous") return(NA)
+
+  # if the number of digits is specified for a variable, return specified number
+  if (!is.null(digits[[variable]])) return(digits[[variable]])
+
+  # if the number of digits is specified for a all continuous variables,
+  # return specified number
+  if (!is.null(digits[["..continuous.."]])) return(digits[["..continuous.."]])
 
   # if class is integer, then round everythng to nearest integer
   if (class == "integer") return(0)
@@ -1160,7 +1164,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   # digits ---------------------------------------------------------------------
   if (!is.null(digits)) {
     # checking that all names in list are variable names from data.
-    digits_not_in_data <- setdiff(names(digits), names(data))
+    digits_not_in_data <- setdiff(names(digits), c(names(data), "..continuous.."))
     if (length(digits_not_in_data) > 0) {
       message(glue(
         "The following names from 'digits' are not found in 'data' and ",
