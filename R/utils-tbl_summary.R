@@ -287,6 +287,14 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # if user specifed test to be performed, do that test.
   if (!is.null(test[[var]])) return(test[[var]])
 
+  # if user specifed test to be performed for ..continuous.. or
+  # ..categorical.., do that test for that class of variable
+  if (!is.null(test[["..continuous.."]]) & var_summary_type == "continuous")
+    return(test[["..continuous.."]])
+  if (!is.null(test[["..categorical.."]]) &
+      var_summary_type %in% c("categorical", "dichotomous"))
+    return(test[["..categorical.."]])
+
   # if group variable supplied, fit a random effects model
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("re")
 
