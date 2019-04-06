@@ -113,6 +113,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 #' Function that assigns default statistics to display, or if specified,
 #' assigns the user-defined statistics for display.
 #'
+#' @param variable Vector of variable names
 #' @param summary_type A list that includes specified summary types
 #' @param stat_display List with up to two named elements.  Names must be
 #' continuous or categorical. Can be \code{NULL}.
@@ -120,18 +121,23 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
-assign_stat_display <- function(summary_type, stat_display) {
+assign_stat_display <- function(variable, summary_type, stat_display) {
   # dichotomous and categorical are treated in the same fashion here
   summary_type <- ifelse(summary_type == "dichotomous", "categorical", summary_type)
 
   # otherwise, return defaults
   return(
-    map_chr(
-      summary_type,
+    map2_chr(
+      variable, summary_type,
       ~ case_when(
-        .x == "continuous" ~ stat_display[[.x]] %||% "{median} ({p25}, {p75})",
-        .x %in% c("categorical", "dichotomous") ~
-        stat_display[[.x]] %||% "{n} ({p}%)"
+        .y == "continuous" ~
+          stat_display[[.x]] %||%
+          stat_display[["..continuous.."]] %||%
+          "{median} ({p25}, {p75})",
+        .y %in% c("categorical", "dichotomous") ~
+          stat_display[[.x]] %||%
+          stat_display[["..categorical.."]] %||%
+          "{n} ({p}%)"
       )
     )
   )
@@ -280,6 +286,14 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 
   # if user specifed test to be performed, do that test.
   if (!is.null(test[[var]])) return(test[[var]])
+
+  # if user specifed test to be performed for ..continuous.. or
+  # ..categorical.., do that test for that class of variable
+  if (!is.null(test[["..continuous.."]]) & var_summary_type == "continuous")
+    return(test[["..continuous.."]])
+  if (!is.null(test[["..categorical.."]]) &
+      var_summary_type %in% c("categorical", "dichotomous"))
+    return(test[["..categorical.."]])
 
   # if group variable supplied, fit a random effects model
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("re")
@@ -678,11 +692,15 @@ continuous_digits_guess_one <- function(data,
   # if class is NA (meaning all values are NA), returning NA
   if (is.na(class)) return(NA)
 
-  # if the number of digits is specified, return specified number
-  if (!is.null(digits[[variable]])) return(digits[[variable]])
-
   # if the variable is not continuous type, return NA
   if (summary_type != "continuous") return(NA)
+
+  # if the number of digits is specified for a variable, return specified number
+  if (!is.null(digits[[variable]])) return(digits[[variable]])
+
+  # if the number of digits is specified for a all continuous variables,
+  # return specified number
+  if (!is.null(digits[["..continuous.."]])) return(digits[["..continuous.."]])
 
   # if class is integer, then round everythng to nearest integer
   if (class == "integer") return(0)
@@ -1070,6 +1088,11 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     ))
   }
 
+  # cannot include variables named ..continuous.. or ..categorical..
+  if (c("..continuous..", "..categorical..") %in% names(data) %>% any()) {
+    stop("Column names '..continuous..' and '..categorical..' are not allowed.")
+  }
+
   # by -------------------------------------------------------------------------
   # by is a variable in data
   if (!is.null(by)) {
@@ -1139,10 +1162,12 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   # statistic ------------------------------------------------------------------
   if (!is.null(statistic)) {
     # checking that all names in list are continuous or categorical
-    stat_display_names_not_valid <- setdiff(names(statistic), c("continuous", "categorical"))
+    stat_display_names_not_valid <-
+      names(statistic) %>%
+      setdiff(c(names(data) %>% setdiff(c(by, group)), "..continuous..", "..categorical.."))
     if (length(stat_display_names_not_valid) > 0) {
       message(glue(
-        "Expecting list names 'continuous' and 'categorical'. ",
+        "Expecting list names '..continuous..',  '..categorical..', or a column name from 'data'. ",
         "The following names from 'statistic' are not valid and ",
         "were ignored: {paste0(stat_display_names_not_valid, collapse = ', ')}"
       ))
@@ -1152,7 +1177,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   # digits ---------------------------------------------------------------------
   if (!is.null(digits)) {
     # checking that all names in list are variable names from data.
-    digits_not_in_data <- setdiff(names(digits), names(data))
+    digits_not_in_data <- setdiff(names(digits), c(names(data), "..continuous.."))
     if (length(digits_not_in_data) > 0) {
       message(glue(
         "The following names from 'digits' are not found in 'data' and ",
@@ -1280,7 +1305,7 @@ footnote_stat_label <- function(meta_data) {
         summary_type == "dichotomous" ~ "categorical",
         TRUE ~ .data$summary_type
       ),
-      message = glue("{stat_label} for {summary_type} variables")
+      message = glue("{stat_label}")
     ) %>%
     distinct() %>%
     pull("message") %>%

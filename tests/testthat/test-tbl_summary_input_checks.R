@@ -11,7 +11,7 @@ test_that("input check", {
   )
   expect_message(
     tbl_summary(trial, statistic = list(conti5555nuous = "{median}")),
-    "Expecting list names 'continuous' and 'categorical'.*"
+    "Expecting list names*"
   )
   expect_error(
     tbl_summary(trial, type = list(age = "cont555inuous")),
