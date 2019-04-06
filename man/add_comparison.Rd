@@ -12,7 +12,10 @@ add_comparison(x, test = NULL, pvalue_fun = style_pvalue,
 
 \item{test}{user defined list of statistical tests provided as a named
 character vector with variables as names and test functions as values.,
-e.g. \code{list(age = "t.test", ptstage = "fisher.test")}.
+e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
+\code{..continuous..} and \code{..categorical..} to perform a test to all variables
+of that type (categorical requests are applied to both categorical and
+dichotomous variables).
 Options include "t.test" for a T-test,
 "wilcox.test" for a Wilcoxon rank sum test,
 "kruskal.test" for a Kruskal-Wallis rank sum test,

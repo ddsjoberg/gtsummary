@@ -4,9 +4,11 @@
 \alias{assign_stat_display}
 \title{Assign type of summary statistic}
 \usage{
-assign_stat_display(summary_type, stat_display)
+assign_stat_display(variable, summary_type, stat_display)
 }
 \arguments{
+\item{variable}{Vector of variable names}
+
 \item{summary_type}{A list that includes specified summary types}
 
 \item{stat_display}{List with up to two named elements.  Names must be

@@ -30,21 +30,26 @@ will default to an appropriate summary type.  See below for details.}
 \item{value}{A list that specifies the value to display for dichotomous
 values only.  See below for details.}
 
-\item{statistic}{A list of the type of statistics to return.  The list can contain
-two named elements (\code{continuous} and \code{categorical}). The default is
-\code{list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}\%)")}.
+\item{statistic}{A list of the type of statistics to return for each variable
+or variable class.  The named list contains variable names or \code{..continuous..}
+or \code{..categorical..} to apply a statistic format to all variables on that
+type. The default is
+\code{list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}\%)")}.
 The syntax follows from the \code{\link[glue]{glue}} function.
 For categorical variables the choices the following statistics are available to
 report: \code{{n}} (frequency), \code{{N}} (denominator, or cohort size), \code{{p}} (percent).
 For continuous variables, any quantile may be returned with \code{{p##}}, where ##
-is any integer from 0 to 100. For example, \code{{p25}} and \code{{p75}} returns
-the 25th and 75th quantiles.  The median (\code{{median}}), mean (\code{{mean}}),
+is any integer from 0 to 100. For example, \code{{p5}}, \code{{p25}}, and \code{{p75}} return
+the 5th, 25th, and 75th quantiles.  The median (\code{{median}}), mean (\code{{mean}}),
 standard deviation (\code{{sd}}), variance (\code{{var}}), minimum (\code{{min}}), and
 maximum (\code{{max}}) are available.  In fact, any function that takes the form
-\code{foo(x, na.rm = TRUE)} should work.}
+\code{foo(x, na.rm = TRUE)} is accepted.}
 
-\item{digits}{integer indicating the number of decimal places to round continuous
-summary statistics. \code{sprintf(glue::glue("\%.{digits}f"), x)}}
+\item{digits}{A named list of integers indicating the number of decimal
+places to round continuous summary statistics. Names of the list can be any
+continuous variable in 'data', or \code{"..continuous"} to apply to all
+variables.  If not specified, \code{tbl_summary} does its best to guess an
+appropriate level to round statistics.}
 
 \item{group}{Character vector of an ID or grouping variable.  Summary statistics
 will not be printed for this column. The column may be used in \code{\link{add_comparison}} to
