@@ -45,7 +45,7 @@ tbl_merge <- function(tbls,
   # merging tables -------------------------------------------------------------
   table_body <-
     tbls[[1]]$table_body %>%
-    dplyr::rename_at(
+    rename_at(
       dplyr::vars(-c("variable", "var_type", "row_type", "label")),
       ~glue::glue("{.}_1")
     )
@@ -55,7 +55,7 @@ tbl_merge <- function(tbls,
       table_body %>%
       full_join(
         tbls[[i + 1]]$table_body %>%
-          dplyr::rename_at(
+          rename_at(
             dplyr::vars(-c("variable", "var_type", "row_type", "label")),
             ~glue::glue("{.}_{i + 1}")
           ),
@@ -103,6 +103,7 @@ tbl_merge <- function(tbls,
     table_body = table_body,
     coef_funs = map(tbl_inputs(tbls), pluck("coef_fun")),
     pvalue_funs = map(tbl_inputs(tbls), pluck("pvalue_fun")),
+    qvalue_funs = map(tbls, pluck("qvalue_fun")),
     gt_calls = eval(gt_tbl_merge)
   )
 
@@ -136,9 +137,11 @@ gt_tbl_merge <- quote(list(
     glue(),
 
   # Show "---" for reference groups
-  # fmt_missing_ref =
-  #   "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')" %>%
-  #   glue(),
+  # e.g. fmt_missing(columns = vars(coef_1, ll_1, ul_1, coef_2, ll_2, ul_2), rows = row_type == 'level', missing_text = '---')
+  fmt_missing_ref =
+    glue::glue("coef_{1:tbls_length}, ll_{1:tbls_length}, ul_{1:tbls_length}") %>%
+    glue::glue_collapse(sep = ", ") %>%
+    {glue::glue("fmt_missing(columns = vars({.}), rows = row_type == 'level', missing_text = '---')")},
 
   # column headers
   cols_label = glue("cols_label({cols_label_base_vars})"),
@@ -198,7 +201,63 @@ gt_tbl_merge <- quote(list(
     glue::glue(
       "tab_spanner(label = '{tab_spanner}', columns = ends_with('_{1:tbls_length}'))"
     ) %>%
-    glue::glue_collapse(sep = " %>% ")
+    glue::glue_collapse(sep = " %>% "),
+
+  # qvalue format
+  fmt_qvalue =
+    tbls %>%
+    purrr::map(purrr::pluck("qvalue_fun")) %>%
+    purrr::imap(
+      function(x, y) {
+        if(is.null(x)) return(NULL)
+        glue::glue("fmt(columns = vars(qvalue_{y}), rows = !is.na(qvalue_{y}), fns = x$qvalue_funs[[{y}]])")
+      }
+    ) %>%
+    purrr::compact() %>%
+    glue_collapse_null(" %>% "),
+
+  # qvalue column header
+  cols_label_qvalue =
+    tbls %>%
+    purrr::map(purrr::pluck("qvalue_fun")) %>%
+    purrr::imap(
+      function(x, y) {
+        if(is.null(x)) return(NULL)
+        glue::glue("cols_label(qvalue_{y} = md('**q-value**'))")
+      }
+    ) %>%
+    purrr::compact() %>%
+    glue_collapse_null(" %>% "),
+
+  # qvalue method footnote
+  footnote_q_method =
+    tbls %>%
+    purrr::map(purrr::pluck("qvalue_method")) %>%
+    purrr::imap_dfr(
+      function(x, y) {
+        if(is.null(x)) return(tibble::tibble(i = y, method = NA_character_, var = paste0("qvalue_", i)))
+        return(tibble::tibble(i = y, method = x, var = paste0("qvalue_", i)))
+      }
+    ) %>%
+    stats::na.omit() %>%
+    left_join(add_q_method_lookup, by = "method") %>%
+    group_by(method_label) %>%
+    tidyr::nest() %>%
+    mutate(
+      var_list = purrr::map_chr(
+        data,
+        ~.x$var %>% paste(collapse = ", ")
+      ),
+      gt_call = glue::glue(
+        "tab_footnote(",
+        "footnote = '{method_label}', ",
+        "locations = cells_column_labels(",
+        "columns = vars({var_list}))",
+        ")"
+      )
+    ) %>%
+    pull("gt_call") %>%
+    glue_collapse_null(sep = " %>% ")
 ))
 
 
@@ -215,4 +274,10 @@ tbl_inputs <- function(tbl) {
         return(pluck(tbl, "tbl_regression_list", 1, "inputs"))
     }
   )
+}
+
+# this function is glue_collapse, but returns NULL is passed nothing
+glue_collapse_null <- function(x, sep = " %>% ") {
+  if (length(x) == 0) return(NULL)
+  glue::glue_collapse(x, sep)
 }
