@@ -9,11 +9,16 @@
 #' library(survival)
 #' t1 <-
 #'   glm(response ~ trt + grade + age, trial, family = binomial) %>%
-#'   tbl_regression(exponentiate = TRUE)
+#'   tbl_regression(
+#'     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
+#'     exponentiate = TRUE
+#'   )
 #' t2 <-
 #'   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
-#'   tbl_regression(exponentiate = TRUE)
-#'
+#'   tbl_regression(
+#'     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
+#'     exponentiate = TRUE
+#'   )
 #' t3 <-
 #'   tbl_merge(
 #'     tbls = list(t1, t2),
