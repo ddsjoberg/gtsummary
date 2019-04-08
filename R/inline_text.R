@@ -217,8 +217,9 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' inline in an R markdown document.
 #'
 #' @param x object created from  \link{tbl_survival}
-#' @param strata if tbl_survival has multiple strata, name of strata of statistic to present. Default is `NULL` when tbl_survival have no specified strata.
-#' @param timepoint timepoint for which to return survival probability.
+#' @param strata if `tbl_survival` estimates are stratfied, level of the stratum
+#' report. Default is `NULL` when `tbl_survival` have no specified strata.
+#' @param time time for which to return survival probability.
 #' @param pattern statistics to return.  Uses \link[glue]{glue} formatting.
 #' Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
 #' `.$table_body` are available to print as well as the confidence level (conf.level)
@@ -226,18 +227,30 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @author Karissa Whiting
 #' @family tbl_survival
 #' @export
+#' @examples
+#' trial %>%
+#'   tbl_survival(
+#'     Surv(ttdeath, death) ~ trt,
+#'     times = c(12, 24)
+#'   ) %>%
+#'   inline_text(
+#'     strata = "Drug",
+#'     time = 12
+#'   )
 
 
 inline_text.tbl_survival <-
   function(x, strata = NULL,
-           timepoint,
-           pattern = "{surv} ({conf.level*100}% CI {lower}, {upper})") {
+           time,
+           pattern = "{surv} ({conf.level*100}% CI {lower}, {upper})",
+           ...) {
 
-    if(timepoint < 0) stop("Must specify a positive timepoint.")
+    if(time < 0) stop("Must specify a positive 'time'.")
+    if(length(time) != 1) stop("'time' must be length 1")
 
     result <- x$table_body
 
-    # select strata ----------------------------------------------------------
+    # select strata ------------------------------------------------------------
     # if multiple strata exist in tbl_survival, grab rows matching specified strata
     if("strata" %in% names(x$table_body)) {
 
@@ -264,19 +277,16 @@ inline_text.tbl_survival <-
 
     }
 
-    # select timepoint --------------------------------------------------------
-    # get timepoint to display in result
-    all_times <- x$table_body %>%
-      select(time) %>%
-      pull()
+    # select time ----------------------------======----------------------------
+    # get time to display in result
+    all_times <- x$table_body$time
 
-    # when specified timpoint is not in tbl_survival, return result for closest timepoint and give warning
-    if (timepoint %in% all_times) {
-      display_time <- timepoint
-
-    } else {
-      display_time <- all_times[which.min(abs(all_times - timepoint))]
-      warning(glue('Selected timepoint not in tbl_survival$table_body. Displaying survival for nearest timepoint: {display_time}'))
+    # when specified timpoint is not in tbl_survival,
+    # return result for closest time and give warning
+    display_time <- all_times[which.min(abs(all_times - time))]
+    if (!time %in% all_times) {
+      message(glue("Specified 'time' not in 'x', 'time = {time}'. Displaying estimate ",
+                   "for nearest specified 'time': {display_time}"))
     }
 
     result <-
@@ -285,7 +295,8 @@ inline_text.tbl_survival <-
 
     result <-
       result %>%
-      mutate_at(vars(one_of(c("surv", "lower", "upper"))), style_percent) %>%
+      mutate_at(vars(one_of(c("surv", "lower", "upper"))),
+                ~style_percent(., symbol = TRUE)) %>%
       mutate(
         conf.level = x$survfit$conf.int,
         stat = glue(pattern)
@@ -293,7 +304,6 @@ inline_text.tbl_survival <-
       pull("stat")
 
     result
-
   }
 
 

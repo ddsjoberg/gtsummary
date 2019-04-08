@@ -4,15 +4,16 @@
 \alias{inline_text.tbl_survival}
 \title{Report statistics from survival summary tables inline}
 \usage{
-\method{inline_text}{tbl_survival}(x, strata = NULL, timepoint,
-  pattern = "{surv} ({conf.level*100}\% CI {lower}, {upper})")
+\method{inline_text}{tbl_survival}(x, strata = NULL, time,
+  pattern = "{surv} ({conf.level*100}\% CI {lower}, {upper})", ...)
 }
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
 
-\item{strata}{if tbl_survival has multiple strata, name of strata of statistic to present. Default is \code{NULL} when tbl_survival have no specified strata.}
+\item{strata}{if \code{tbl_survival} estimates are stratfied, level of the stratum
+report. Default is \code{NULL} when \code{tbl_survival} have no specified strata.}
 
-\item{timepoint}{timepoint for which to return survival probability.}
+\item{time}{time for which to return survival probability.}
 
 \item{pattern}{statistics to return.  Uses \link[glue]{glue} formatting.
 Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
@@ -24,6 +25,17 @@ Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns f
 Functions takes an object with class \code{tbl_survival}, and the
 location of the statistic to report and return the statistic for reporting
 inline in an R markdown document.
+}
+\examples{
+trial \%>\%
+  tbl_survival(
+    Surv(ttdeath, death) ~ trt,
+    times = c(12, 24)
+  ) \%>\%
+  inline_text(
+    strata = "Drug",
+    time = 12
+  )
 }
 \author{
 Karissa Whiting
