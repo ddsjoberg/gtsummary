@@ -68,10 +68,10 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
-  x[["gt_calls"]][["fmt:qvalue"]] <-
+  x[["gt_calls"]][["fmt_qvalue"]] <-
     "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)"
   # column headers
-  x[["gt_calls"]][["cols_label:qvalue"]] <-
+  x[["gt_calls"]][["cols_label_qvalue"]] <-
     "cols_label(qvalue = md('**q-value**'))"
   # column headers abbreviations footnote
   x[["gt_calls"]][["footnote_q_method"]] = glue(
@@ -151,11 +151,11 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
 
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
-  x[["gt_calls"]][["fmt:qvalue"]] <-
+  x[["gt_calls"]][["fmt_qvalue"]] <-
     "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)" %>%
     glue()
   # column headers
-  x[["gt_calls"]][["cols_label:qvalue"]] <-
+  x[["gt_calls"]][["cols_label_qvalue"]] <-
     "cols_label(qvalue = md('**q-value**'))"%>%
     glue()
   # column headers abbreviations footnote
