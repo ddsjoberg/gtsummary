@@ -213,15 +213,87 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' Report statistics from survival summary tables inline
 #'
 #' Functions takes an object with class `tbl_survival`, and the
-#' location of the statistic to report and returns the statistic for reporting
+#' location of the statistic to report and return the statistic for reporting
 #' inline in an R markdown document.
 #'
 #' @param x object created from  \link{tbl_survival}
-#' @param pattern Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}
+#' @param strata if tbl_survival has multiple strata, name of strata of statistic to present. Default is `NULL` when tbl_survival have no specified strata.
+#' @param timepoint timepoint for which to return survival probability.
+#' @param pattern statistics to return.  Uses \link[glue]{glue} formatting.
+#' Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
+#' `.$table_body` are available to print as well as the confidence level (conf.level)
 #' @param ... not used
+#' @author Karissa Whiting
 #' @family tbl_survival
 #' @export
 
-inline_text.tbl_survival <- function(x, pattern, ...){
-  print("Needs to be written!")
-}
+
+inline_text.tbl_survival <-
+  function(x, strata = NULL,
+           timepoint,
+           pattern = "{surv} ({conf.level*100}% CI {lower}, {upper})") {
+
+    if(timepoint < 0) stop("Must specify a positive timepoint.")
+
+    result <- x$table_body
+
+    # select strata ----------------------------------------------------------
+    # if multiple strata exist in tbl_survival, grab rows matching specified strata
+    if("strata" %in% names(x$table_body)) {
+
+      if(is.null(strata)) {
+        stop(glue("Must specify one of the following strata: ",
+                  "{pluck(x, 'table_body', 'level') %>% unique() %>% paste(collapse = ', ')}"))
+      }
+
+      result <-
+        result %>%
+        filter(!!parse_expr(glue("level == '{strata}'")))
+
+      if (nrow(result) == 0) {
+        stop(glue(
+          "Is the strata name spelled correctly? strata must be one of: ",
+          "{pluck(x, 'table_body', 'level') %>% unique() %>% paste(collapse = ', ')}"
+        ))
+
+      }
+    } else {
+      if(!is.null(strata)) {
+        warning(glue("Ignoring strata = '{strata}'. No strata in tbl_survival. "))
+      }
+
+    }
+
+    # select timepoint --------------------------------------------------------
+    # get timepoint to display in result
+    all_times <- x$table_body %>%
+      select(time) %>%
+      pull()
+
+    # when specified timpoint is not in tbl_survival, return result for closest timepoint and give warning
+    if (timepoint %in% all_times) {
+      display_time <- timepoint
+
+    } else {
+      display_time <- all_times[which.min(abs(all_times - timepoint))]
+      warning(glue('Selected timepoint not in tbl_survival$table_body. Displaying survival for nearest timepoint: {display_time}'))
+    }
+
+    result <-
+      result %>%
+      filter(time == display_time)
+
+    result <-
+      result %>%
+      mutate_at(vars(one_of(c("surv", "lower", "upper"))), style_percent) %>%
+      mutate(
+        conf.level = x$survfit$conf.int,
+        stat = glue(pattern)
+      ) %>%
+      pull("stat")
+
+    result
+
+  }
+
+
