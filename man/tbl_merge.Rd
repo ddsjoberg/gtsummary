@@ -35,3 +35,6 @@ t3 <-
     tab_spanner = c("Tumor Response", "Time to Death")
   )
 }
+\author{
+Daniel D. Sjoberg
+}
