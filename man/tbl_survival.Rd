@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival}
 \alias{tbl_survival}
-\title{Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints}
+\title{Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints}
 \usage{
 tbl_survival(data, formula, times, time_label = "{time}",
   level_label = "{level}, N = {n}", header_time = md("**Time**"),
@@ -51,31 +51,23 @@ estimate.  Default is \code{md('**Probability**')}}
     \code{subset} argument has been used. 
     Default is \code{options()$na.action}. 
   }
-  \item{stype}{the method to be used estimation of the survival curve:
-    1 = direct,  2 = exp(cumulative hazard). }
-  \item{ctype}{the method to be used for estimation of the cumulative
-    hazard: 1 = Nelson-Aalen formula, 2 = Fleming-Harrington correction
-    for tied events.}
+  \item{etype}{
+    a variable giving the type of event.  This has been superseded by
+    multi-state Surv objects; see example below.
+  }
   \item{id}{
     identifies individual subjects, when a given person can have multiple
     lines of data.
   }
-  \item{cluster}{used to group observations for the infinitesmal
-    jackknife variance estimate, defaults to the value of id}
   \item{istate}{for multi-state models, identifies the initial state of
-    each subject or observation}
+    each subject}
   \item{timefix}{process times through the \code{aeqSurv} function to
   eliminate potential roundoff issues.}
-  \item{etype}{
-    a variable giving the type of event.  This has been superseded by
-    multi-state Surv objects and is depricated; see example below.
-  }
-  \item{error}{this argument is no longer used}
 }}
 }
 \description{
-Function calculates a \code{survfit} object, and provides a tablulated and formmated
-summary of the results
+Function calculates a \code{survfit} object, and provides a tabulated and
+formatted summary of the results
 }
 \examples{
 tbl_strata <-

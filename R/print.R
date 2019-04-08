@@ -43,3 +43,11 @@ print.tbl_survival <- print.tbl_summary
 #' @rdname print_gtsummary
 #' @export
 knit_print.tbl_survival <- knit_print.tbl_summary
+
+#' @rdname print_gtsummary
+#' @export
+print.tbl_merge <- print.tbl_summary
+
+#' @rdname print_gtsummary
+#' @export
+knit_print.tbl_merge <- knit_print.tbl_summary

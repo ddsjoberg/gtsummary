@@ -19,7 +19,9 @@ as_gt <- function(x, omit = NULL) {
 
   # taking each gt function call, concatenating them with %>% separating them
   x$gt_calls[names(x$gt_calls) %>% setdiff(omit)] %>%
-    paste0(collapse = " %>% ") %>%
+    # removing NULL elements
+    compact() %>%
+    glue::glue_collapse(sep = " %>% ") %>%
     # converting strings into expressions to run
     parse(text = .) %>%
     eval()
