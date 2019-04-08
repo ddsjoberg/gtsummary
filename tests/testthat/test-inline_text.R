@@ -1,6 +1,8 @@
 context("test-inline_text")
 
 
+# inline_text.tbl_summary tests --------------
+
 test_inline1 <- trial %>% tbl_summary()
 test_inline2 <- trial %>% tbl_summary(by = "trt")
 test_inline2b <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
@@ -51,6 +53,7 @@ test_that("inline_text.tbl_summary: with by", {
   )
 })
 
+
 test_that("inline_text.tbl_summary: with by -  expect errors", {
   expect_error(
     inline_text(test_inline2, variable = "age", column = "Pla5cebo"),
@@ -67,6 +70,9 @@ test_that("inline_text.tbl_summary: with by -  expect errors", {
   )
 
 })
+
+
+# inline_text.regression tests --------------
 
 test_inline3 <- lm(marker ~ age + stage, trial) %>% tbl_regression()
 test_inline4 <- glm(response ~ trt + age + stage, trial, family = binomial) %>%
@@ -103,4 +109,57 @@ test_that("inline_text.regression -  expect errors", {
     "Is the variable name spelled correctly.*"
   )
 
+})
+
+# inline_text.tbl_survival tests  --------------
+
+test_inline_surv_strata <-
+  tbl_survival(
+    trial,
+    Surv(ttdeath, death) ~ trt,
+    times = c(12, 24),
+    time_label = "{time} Months"
+  )
+test_inline_surv_nostrata <-
+  tbl_survival(
+    trial,
+    Surv(ttdeath, death) ~ 1,
+    times = c(12, 24),
+    time_label = "{time} Months"
+  )
+
+# test tbl_survival with strata
+test_that("inline_text.tbl_survival - with strata", {
+  expect_error(
+    inline_text(test_inline_surv_strata, strata = "Drug", timepoint = 24),
+    NA
+  )
+  expect_warning(
+    inline_text(test_inline_surv_strata, strata = "Drug", timepoint = 30),
+    "Selected timepoint not in*"
+  )
+  expect_error(
+    inline_text(test_inline_surv_strata, strata = "Drug", timepoint = -2),
+    "Must specify a positive timepoint."
+  )
+  expect_error(
+    inline_text(test_inline_surv_strata, strata =  NULL, timepoint = 24),
+    "Must specify one of the following strata:*"
+  )
+  expect_error(
+    inline_text(test_inline_surv_strata, strata =  "Drururuug", timepoint = 24),
+    "Is the strata name spelled correctly*"
+  )
+})
+
+# test tbl_survival with no strata
+test_that("inline_text.tbl_survival - no strata", {
+  expect_error(
+    inline_text(test_inline_surv_nostrata, timepoint = 24),
+    NA
+  )
+  expect_warning(
+    inline_text(test_inline_surv_nostrata, strata = "Drug", timepoint = 24),
+    "Ignoring strata =*"
+  )
 })

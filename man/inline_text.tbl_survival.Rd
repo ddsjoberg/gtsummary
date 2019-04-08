@@ -4,18 +4,28 @@
 \alias{inline_text.tbl_survival}
 \title{Report statistics from survival summary tables inline}
 \usage{
-\method{inline_text}{tbl_survival}(x, pattern, ...)
+\method{inline_text}{tbl_survival}(x, strata = NULL, timepoint,
+  pattern = "{surv} ({conf.level*100}\% CI {lower}, {upper})")
 }
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
 
-\item{pattern}{Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}}
+\item{strata}{if tbl_survival has multiple strata, name of strata of statistic to present. Default is \code{NULL} when tbl_survival have no specified strata.}
+
+\item{timepoint}{timepoint for which to return survival probability.}
+
+\item{pattern}{statistics to return.  Uses \link[glue]{glue} formatting.
+Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
+\code{.$table_body} are available to print as well as the confidence level (conf.level)}
 
 \item{...}{not used}
 }
 \description{
 Functions takes an object with class \code{tbl_survival}, and the
-location of the statistic to report and returns the statistic for reporting
+location of the statistic to report and return the statistic for reporting
 inline in an R markdown document.
+}
+\author{
+Karissa Whiting
 }
 \concept{tbl_survival}
