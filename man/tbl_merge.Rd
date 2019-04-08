@@ -4,14 +4,29 @@
 \alias{tbl_merge}
 \title{Merge two or more gtsummary regression objects}
 \usage{
-tbl_merge(tbls, header_span = NULL)
+tbl_merge(tbls, tab_spanner = paste0(c("Model "), 1:length(tbls)))
 }
 \arguments{
 \item{tbls}{list of gtsummary regression objects}
 
-\item{header_span}{Spanning headers.  Vector with same length as \code{tbls}}
+\item{tab_spanner}{Spanning headers.  Vector with same length as \code{tbls}}
 }
 \description{
 The \code{tbl_merge} function merges two or more \code{tbl_regression} or
 \code{tbl_uvregression} objects and adds appropriate spanning headers.
+}
+\examples{
+library(survival)
+t1 <-
+  glm(response ~ trt + grade + age, trial, family = binomial) \%>\%
+  tbl_regression(exponentiate = TRUE)
+t2 <-
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) \%>\%
+  tbl_regression(exponentiate = TRUE)
+
+t3 <-
+  tbl_merge(
+    tbls = list(t1, t2),
+    tab_spanner = c("Tumor Response", "Time to Death")
+  )
 }
