@@ -60,6 +60,9 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   # keep track of what functions have been called
   x$call_list <- c(x$call_list, list(add_q = match.call()))
 
+  # returning qvalue method
+  x$qvalue_method <- method
+
   # footnote text
   footnote_text <-
     method %>%
@@ -142,6 +145,9 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     )
 
   x$call_list <- c(x$call_list, list(add_q = match.call()))
+
+  # returning qvalue method
+  x$qvalue_method <- method
 
   # footnote text
   footnote_text <-
