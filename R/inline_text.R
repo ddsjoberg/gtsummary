@@ -293,6 +293,7 @@ inline_text.tbl_survival <-
       result %>%
       filter(time == display_time)
 
+    # formatting result and returning ------------------------------------------
     result <-
       result %>%
       mutate_at(vars(one_of(c("surv", "lower", "upper"))),
