@@ -175,7 +175,7 @@ gt_tbl_merge <- quote(list(
   #   cols_merge(col_1 = vars(ll_2), col_2 = vars(ul_2), pattern = '{1}, {2}')
   cols_merge_ci =
     purrr::map(
-      1:2,
+      1:tbls_length,
       ~paste0(
         "cols_merge(",
         glue::glue("col_1 = vars(ll_{.x}), col_2 = vars(ul_{.x}), "),
