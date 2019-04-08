@@ -10,6 +10,8 @@
 \alias{knit_print.tbl_uvregression}
 \alias{print.tbl_survival}
 \alias{knit_print.tbl_survival}
+\alias{print.tbl_merge}
+\alias{knit_print.tbl_merge}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
 \method{print}{tbl_summary}(x, ...)
@@ -27,6 +29,10 @@
 \method{print}{tbl_survival}(x, ...)
 
 \method{knit_print}{tbl_survival}(x, ...)
+
+\method{print}{tbl_merge}(x, ...)
+
+\method{knit_print}{tbl_merge}(x, ...)
 }
 \arguments{
 \item{x}{an object created using gtsummary functions}

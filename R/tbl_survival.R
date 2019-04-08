@@ -1,7 +1,7 @@
-#' Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints
+#' Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints
 #'
-#' Function calculates a `survfit` object, and provides a tablulated and formmated
-#' summary of the results
+#' Function calculates a `survfit` object, and provides a tabulated and
+#' formatted summary of the results
 #'
 #' @param data a data frame in which to interpret the variables named in the formula
 #' @param formula a formula object, which must have a Surv object as the response on the

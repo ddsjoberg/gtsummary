@@ -174,23 +174,28 @@ values only.  See below for details.</p></td>
     </tr>
     <tr>
       <th>statistic</th>
-      <td><p>A list of the type of statistics to return.  The list can contain
-two named elements (<code>continuous</code> and <code>categorical</code>). The default is
-<code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(continuous = "{median} ({p25}, {p75})", categorical = "{n} ({p}%)")</a></code>.
+      <td><p>A list of the type of statistics to return for each variable
+or variable class.  The named list contains variable names or <code>..continuous..</code>
+or <code>..categorical..</code> to apply a statistic format to all variables on that
+type. The default is
+<code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")</a></code>.
 The syntax follows from the <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> function.
 For categorical variables the choices the following statistics are available to
 report: <code>{n}</code> (frequency), <code>{N}</code> (denominator, or cohort size), <code>{p}</code> (percent).
 For continuous variables, any quantile may be returned with <code>{p##}</code>, where ##
-is any integer from 0 to 100. For example, <code>{p25}</code> and <code>{p75}</code> returns
-the 25th and 75th quantiles.  The median (<code>{median}</code>), mean (<code>{mean}</code>),
+is any integer from 0 to 100. For example, <code>{p5}</code>, <code>{p25}</code>, and <code>{p75}</code> return
+the 5th, 25th, and 75th quantiles.  The median (<code>{median}</code>), mean (<code>{mean}</code>),
 standard deviation (<code>{sd}</code>), variance (<code>{var}</code>), minimum (<code>{min}</code>), and
 maximum (<code>{max}</code>) are available.  In fact, any function that takes the form
-<code>foo(x, na.rm = TRUE)</code> should work.</p></td>
+<code>foo(x, na.rm = TRUE)</code> is accepted.</p></td>
     </tr>
     <tr>
       <th>digits</th>
-      <td><p>integer indicating the number of decimal places to round continuous
-summary statistics. <code><a href='https://www.rdocumentation.org/packages/base/topics/sprintf'>sprintf(glue::glue("%.{digits}f"), x)</a></code></p></td>
+      <td><p>A named list of integers indicating the number of decimal
+places to round continuous summary statistics. Names of the list can be any
+continuous variable in 'data', or <code>"..continuous"</code> to apply to all
+variables.  If not specified, <code>tbl_summary</code> does its best to guess an
+appropriate level to round statistics.</p></td>
     </tr>
     <tr>
       <th>group</th>
@@ -262,7 +267,7 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum.</p>
+  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
 </div>
 
 <div class="pkgdown">

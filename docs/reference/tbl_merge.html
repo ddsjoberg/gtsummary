@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds p-values to the output comparing values across groups — add_comparison • gtsummary</title>
+<title>Merge two or more gtsummary regression objects — tbl_merge • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Adds p-values to the output comparing values across groups — add_comparison" />
+<meta property="og:title" content="Merge two or more gtsummary regression objects — tbl_merge" />
 
-<meta property="og:description" content="Adds p-values to the output comparing values across groups" />
+<meta property="og:description" content="The tbl_merge function merges two or more tbl_regression or
+tbl_uvregression objects and adds appropriate spanning headers." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,83 +118,59 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds p-values to the output comparing values across groups</h1>
+    <h1>Merge two or more gtsummary regression objects</h1>
     
-    <div class="hidden name"><code>add_comparison.Rd</code></div>
+    <div class="hidden name"><code>tbl_merge.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Adds p-values to the output comparing values across groups</p>
+    <p>The <code>tbl_merge</code> function merges two or more <code>tbl_regression</code> or
+<code>tbl_uvregression</code> objects and adds appropriate spanning headers.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_comparison</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>,
-  <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>group</span>)</pre>
+    <pre class="usage"><span class='fu'>tbl_merge</span>(<span class='no'>tbls</span>, <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Model "</span>), <span class='fl'>1</span>:<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>tbls</span>)))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>object with class <code>tbl_summary</code> from the <code><a href='tbl_summary.html'>tbl_summary</a></code> function</p></td>
+      <th>tbls</th>
+      <td><p>list of gtsummary regression objects</p></td>
     </tr>
     <tr>
-      <th>test</th>
-      <td><p>user defined list of statistical tests provided as a named
-character vector with variables as names and test functions as values.,
-e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age = "t.test", ptstage = "fisher.test")</a></code>. Use the names
-<code>..continuous..</code> and <code>..categorical..</code> to perform a test to all variables
-of that type (categorical requests are applied to both categorical and
-dichotomous variables).
-Options include "t.test" for a T-test,
-"wilcox.test" for a Wilcoxon rank sum test,
-"kruskal.test" for a Kruskal-Wallis rank sum test,
-"chisq.test" for a Chi-squared test,
-"fisher.test" for a Fisher's exact test,
-and "re" for a random intercept model to account for clustered data.
-For "re" to be used "group" must also be specified in the function call.</p></td>
-    </tr>
-    <tr>
-      <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.
-Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
-    </tr>
-    <tr>
-      <th>group</th>
-      <td><p>Character vector of an ID or grouping variable.  Summary statistics
-will not be printed for this column. The column may be used in <code>add_comparison</code> to
-calculate p-values with correlated data. Default is <code>NULL</code></p></td>
+      <th>tab_spanner</th>
+      <td><p>Spanning headers.  Vector with same length as <code>tbls</code></p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other tbl_summary: <code><a href='add_n.html'>add_n</a></code>,
-  <code><a href='add_overall.html'>add_overall</a></code>,
-  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
-  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
-  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
-  <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
-  <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>comp</span> <span class='kw'>&lt;-</span> <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span> <span class='fu'>add_comparison</span>()</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
+<span class='no'>t1</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>age</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment"</span>, <span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Age"</span>),
+    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  )
+<span class='no'>t2</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></span>(<span class='fu'><a href='Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>age</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment"</span>, <span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Age"</span>),
+    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  )
+<span class='no'>t3</span> <span class='kw'>&lt;-</span>
+  <span class='fu'>tbl_merge</span>(
+    <span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>),
+    <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Tumor Response"</span>, <span class='st'>"Time to Death"</span>)
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#see-also">See also</a></li>
-      
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 
