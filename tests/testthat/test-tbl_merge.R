@@ -1,6 +1,7 @@
 context("test-tbl_merge")
 
 library(survival)
+# univariate regression models
 t0 <-
   trial %>%
   dplyr::select(response, trt, grade, age) %>%
@@ -11,24 +12,25 @@ t0 <-
     exponentiate = TRUE,
     label = list(trt = "Treatment", grade = "Grade", age = "Age")
   )
-
+#MVA logistic regression
 t1 <-
   glm(response ~ trt + grade + age, trial, family = binomial) %>%
   tbl_regression(
     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
     exponentiate = TRUE
   )
+#MVA cox regression
 t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
   tbl_regression(
     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
     exponentiate = TRUE
   )
-
+# putting all tables together
 t3 <-
   tbl_merge(
     tbls = list(t0, t1, t2),
-    tab_spanner = c("UVA Tumor Respons", "MVA Tumor Response", "Time to Death")
+    tab_spanner = c("UVA Tumor Response", "MVA Tumor Response", "MVA Time to Death")
   )
 
 test_that("no errors/warnings with standard use", {
