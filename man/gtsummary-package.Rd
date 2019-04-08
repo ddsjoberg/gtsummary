@@ -21,6 +21,7 @@ Authors:
 \itemize{
   \item Emily C. Zabor
   \item Margie Hannum
+  \item Karissa Whiting
 }
 
 }
