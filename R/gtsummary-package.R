@@ -4,7 +4,7 @@
 #' @importFrom tidyr nest unnest complete spread
 #' @importFrom tibble tibble as_tibble
 #' @importFrom rlang .data %||% set_names sym expr enexpr quo enquo parse_expr
-#' @importFrom glue glue
+#' @importFrom glue glue as_glue glue_collapse
 #' @keywords internal
 "_PACKAGE"
 
