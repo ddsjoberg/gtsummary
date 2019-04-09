@@ -1,13 +1,9 @@
 #' Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints
 #'
-#' Function calculates a `survfit` object, and provides a tabulated and
+#' Function takes a `survfit` object as an argument, and provides a tabulated and
 #' formatted summary of the results
 #'
-#' @param data a data frame in which to interpret the variables named in the formula
-#' @param formula a formula object, which must have a Surv object as the response on the
-#' left of the ~ operator.  A single stratification variable maybe included
-#' right of the ~ operator. For an unstratified survival estimate the
-#' right hand side should be `~ 1`.
+#' @param x a survfit object with a single stratifying variable
 #' @param times numeric vector of survival times
 #' @param time_label string defining the label shown for the time column.
 #' Default is `"{time}"`.  The input uses \code{\link[glue]{glue}} notation to
@@ -16,8 +12,8 @@
 #' @param level_label used when survival results are stratified.
 #' It is a string defining the label shown.  The input uses
 #' \code{\link[glue]{glue}} notation to convert the string into a label.
-#' The default is \code{"{level}, N = {n}"}.  Other information available to call are `'{n}'`, `'{variable}'`,
-#' and `'{strata}'`.
+#' The default is \code{"{level}, N = {n}"}.  Other information available to
+#' call are `'{n}'`, `'{level}'`, `'{variable}'`, `'{n.event.tot}'`, and `'{strata}'`.
 #' @param header_time string to be displayed as column header of the time column.
 #' Default is \code{md('**Time**')}
 #' @param header_prob string to be displayed as column header of the Kaplan-Meier
@@ -28,47 +24,40 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
+#' library(survival)
+#' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 #' tbl_strata <-
 #'   tbl_survival(
-#'     trial,
-#'     Surv(ttdeath, death) ~ trt,
+#'     fit1,
 #'     times = c(12, 24),
 #'     time_label = "{time} Months"
 #'   )
+#'
+#' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' tbl_nostrata <-
 #'   tbl_survival(
-#'     trial,
-#'     Surv(ttdeath, death) ~ 1,
+#'     fit2,
 #'     times = c(12, 24),
 #'     time_label = "{time} Months"
 #'   )
 
-tbl_survival <- function(data, formula, times,
-                                 time_label = "{time}",
-                                 level_label = "{level}, N = {n}",
-                                 header_time = md('**Time**'),
-                                 header_prob = md('**Probability**'),
-                                 ...) {
+tbl_survival <- function(x, times,
+                         time_label = "{time}",
+                         level_label = "{level}, N = {n}",
+                         header_time = md('**Time**'),
+                         header_prob = md('**Probability**')) {
   # converting headers to un-evaluated string ----------------------------------
   header_time <- deparse(substitute(header_time))
   header_prob <- deparse(substitute(header_prob))
 
-  # checking that only a single stratification variable passed in formula
-  if (all.vars(formula[-2]) %>% length() > 1) {
-    stop("tbl_survival allows only a single stratification variable")
-  }
-
-  # estimating survfit object
-  survfit <- survival::survfit(formula, data, ...)
-
   # getting survival estimates
-  survfit_summary <- survfit %>%
+  survfit_summary <- x %>%
     summary(times = times)
 
   # converting output into tibble
   table_body <-
     survfit_summary %>%
-    {.[names(.) %in% c("strata", "time", "surv", "lower", "upper", "n.risk")]} %>%
+    {.[names(.) %in% c("strata", "time", "surv", "lower", "upper", "n.risk", "n.event")]} %>%
     as_tibble()
 
   # if there are strata, extract n, name, levels of variable name
@@ -78,7 +67,10 @@ tbl_survival <- function(data, formula, times,
       left_join(
         tibble(
           strata = table_body$strata %>% unique(),
-          n = survfit_summary$n
+          n = survfit_summary$n,
+          n.event.tot = x %>%
+            summary(times = max(x$time)) %>%
+            purrr::pluck("n.event")
         ),
         by = "strata"
       ) %>%
@@ -93,7 +85,10 @@ tbl_survival <- function(data, formula, times,
     table_body <-
       table_body %>%
       mutate(
-        n = survfit_summary$n
+        n = survfit_summary$n,
+        n.event.tot = x %>%
+          summary(times = max(x$time)) %>%
+          purrr::pluck("n.event")
       )
   }
 
@@ -107,13 +102,13 @@ tbl_survival <- function(data, formula, times,
 
   # list of variable to hide when printing
   if ("strata" %in% names(table_body))
-    cols_hide_list <- "time, n.risk, strata, variable, level, n"
-  else cols_hide_list <- "time, n.risk, n"
+    cols_hide_list <- "time, n.risk, n, n.event, n.event.tot, strata, variable, level"
+  else cols_hide_list <- "time, n.risk, n, n.event, n.event.tot"
 
   # creating return results object
   result = list()
   result[["table_body"]] <- table_body
-  result[["survfit"]] <- survfit
+  result[["survfit"]] <- x
   result[["gt_calls"]] <- list(
     # first call to gt
     gt = glue("gt(data = x$table_body)"),
@@ -124,7 +119,7 @@ tbl_survival <- function(data, formula, times,
     cols_hide = glue("cols_hide(columns = vars({cols_hide_list}))"),
     # labelling columns
     cols_label =
-      glue('cols_label(time_label = {header_time}, surv = {header_prob}, lower = md("**{survfit$conf.int*100}% CI**"))'),
+      glue('cols_label(time_label = {header_time}, surv = {header_prob}, lower = md("**{x$conf.int*100}% CI**"))'),
     # styling the percentages
     fmt_percent =
       glue("fmt(columns = vars(surv, lower, upper), fns = partial(style_percent, symbol = TRUE))"),
