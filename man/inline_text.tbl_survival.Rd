@@ -27,9 +27,9 @@ location of the statistic to report and return the statistic for reporting
 inline in an R markdown document.
 }
 \examples{
-trial \%>\%
+library(survival)
+survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
   tbl_survival(
-    Surv(ttdeath, death) ~ trt,
     times = c(12, 24)
   ) \%>\%
   inline_text(

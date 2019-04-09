@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints — tbl_survival" />
 
-<meta property="og:description" content="Function calculates a survfit object, and provides a tabulated and
+<meta property="og:description" content="Function takes a survfit object as an argument, and provides a tabulated and
 formatted summary of the results" />
 <meta name="twitter:card" content="summary" />
 
@@ -125,28 +125,21 @@ formatted summary of the results" />
 
     <div class="ref-description">
     
-    <p>Function calculates a <code>survfit</code> object, and provides a tabulated and
+    <p>Function takes a <code>survfit</code> object as an argument, and provides a tabulated and
 formatted summary of the results</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_survival</span>(<span class='no'>data</span>, <span class='no'>formula</span>, <span class='no'>times</span>, <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time}"</span>,
+    <pre class="usage"><span class='fu'>tbl_survival</span>(<span class='no'>x</span>, <span class='no'>times</span>, <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time}"</span>,
   <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>, <span class='kw'>header_time</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Time**"</span>),
-  <span class='kw'>header_prob</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Probability**"</span>), <span class='no'>...</span>)</pre>
+  <span class='kw'>header_prob</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Probability**"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>a data frame in which to interpret the variables named in the formula</p></td>
-    </tr>
-    <tr>
-      <th>formula</th>
-      <td><p>a formula object, which must have a Surv object as the response on the
-left of the ~ operator.  A single stratification variable maybe included
-right of the ~ operator. For an unstratified survival estimate the
-right hand side should be <code>~ 1</code>.</p></td>
+      <th>x</th>
+      <td><p>a survfit object with a single stratifying variable</p></td>
     </tr>
     <tr>
       <th>times</th>
@@ -164,8 +157,8 @@ would resolve to "6 Months" or "12 Months" depending on the times requested.</p>
       <td><p>used when survival results are stratified.
 It is a string defining the label shown.  The input uses
 <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> notation to convert the string into a label.
-The default is <code>"{level}, N = {n}"</code>.  Other information available to call are <code>'{n}'</code>, <code>'{variable}'</code>,
-and <code>'{strata}'</code>.</p></td>
+The default is <code>"{level}, N = {n}"</code>.  Other information available to
+call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{variable}'</code>, <code>'{n.event.tot}'</code>, and <code>'{strata}'</code>.</p></td>
     </tr>
     <tr>
       <th>header_time</th>
@@ -206,17 +199,19 @@ estimate.  Default is <code>md('**Probability**')</code></p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_strata</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
+<span class='no'>tbl_strata</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_survival</span>(
-    <span class='no'>trial</span>,
-    <span class='fu'><a href='Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>,
+    <span class='no'>fit1</span>,
     <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
     <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
   )
+
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
 <span class='no'>tbl_nostrata</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_survival</span>(
-    <span class='no'>trial</span>,
-    <span class='fu'><a href='Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>,
+    <span class='no'>fit2</span>,
     <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
     <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
   )</div></pre>
