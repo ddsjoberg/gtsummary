@@ -228,9 +228,9 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @family tbl_survival
 #' @export
 #' @examples
-#' trial %>%
+#' library(survival)
+#' survfit(Surv(ttdeath, death) ~ trt, trial) %>%
 #'   tbl_survival(
-#'     Surv(ttdeath, death) ~ trt,
 #'     times = c(12, 24)
 #'   ) %>%
 #'   inline_text(

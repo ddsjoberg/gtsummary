@@ -18,7 +18,7 @@
 #' @inheritParams tbl_summary
 #' @family tbl_summary
 #' @export
-#' @author Daniel D. Sjoberg
+#' @author Daniel D. Sjoberg, Emily Zabor
 #' @examples
 #' comp <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
 add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
