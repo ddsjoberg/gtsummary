@@ -18,7 +18,6 @@
 #' Default is \code{md('**Time**')}
 #' @param header_prob string to be displayed as column header of the Kaplan-Meier
 #' estimate.  Default is \code{md('**Probability**')}
-#' @inheritDotParams survival::survfit.formula -data -formula
 #' @importFrom stringr str_split
 #' @seealso \link[gt]{md}, \link[gt]{html}
 #' @author Daniel D. Sjoberg
