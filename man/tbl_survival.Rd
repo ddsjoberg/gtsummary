@@ -29,36 +29,6 @@ Default is \code{md('**Time**')}}
 
 \item{header_prob}{string to be displayed as column header of the Kaplan-Meier
 estimate.  Default is \code{md('**Probability**')}}
-
-\item{...}{Arguments passed on to \code{survival::survfit.formula}
-\describe{
-  \item{weights}{
-    The weights must be nonnegative and it is strongly recommended that  
-    they be strictly positive, since zero weights are ambiguous, compared 
-    to use of the \code{subset} argument.
-  }
-  \item{subset}{
-    expression saying that only a subset of the rows of the data 
-    should be used in the fit. 
-  }
-  \item{na.action}{
-    a missing-data filter function, applied to the model frame, after any 
-    \code{subset} argument has been used. 
-    Default is \code{options()$na.action}. 
-  }
-  \item{etype}{
-    a variable giving the type of event.  This has been superseded by
-    multi-state Surv objects; see example below.
-  }
-  \item{id}{
-    identifies individual subjects, when a given person can have multiple
-    lines of data.
-  }
-  \item{istate}{for multi-state models, identifies the initial state of
-    each subject}
-  \item{timefix}{process times through the \code{aeqSurv} function to
-  eliminate potential roundoff issues.}
-}}
 }
 \description{
 Function takes a \code{survfit} object as an argument, and provides a tabulated and
