@@ -112,18 +112,16 @@ test_that("inline_text.regression -  expect errors", {
 })
 
 # inline_text.tbl_survival tests  --------------
-
+library(survival)
 test_inline_surv_strata <-
+  survfit(Surv(ttdeath, death) ~ trt, trial) %>%
   tbl_survival(
-    trial,
-    Surv(ttdeath, death) ~ trt,
     times = c(12, 24),
     time_label = "{time} Months"
   )
 test_inline_surv_nostrata <-
+  survfit(Surv(ttdeath, death) ~ 1, trial) %>%
   tbl_survival(
-    trial,
-    Surv(ttdeath, death) ~ 1,
     times = c(12, 24),
     time_label = "{time} Months"
   )

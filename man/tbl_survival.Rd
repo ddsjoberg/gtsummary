@@ -4,17 +4,12 @@
 \alias{tbl_survival}
 \title{Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints}
 \usage{
-tbl_survival(data, formula, times, time_label = "{time}",
+tbl_survival(x, times, time_label = "{time}",
   level_label = "{level}, N = {n}", header_time = md("**Time**"),
-  header_prob = md("**Probability**"), ...)
+  header_prob = md("**Probability**"))
 }
 \arguments{
-\item{data}{a data frame in which to interpret the variables named in the formula}
-
-\item{formula}{a formula object, which must have a Surv object as the response on the
-left of the ~ operator.  A single stratification variable maybe included
-right of the ~ operator. For an unstratified survival estimate the
-right hand side should be \code{~ 1}.}
+\item{x}{a survfit object with a single stratifying variable}
 
 \item{times}{numeric vector of survival times}
 
@@ -26,8 +21,8 @@ would resolve to "6 Months" or "12 Months" depending on the times requested.}
 \item{level_label}{used when survival results are stratified.
 It is a string defining the label shown.  The input uses
 \code{\link[glue]{glue}} notation to convert the string into a label.
-The default is \code{"{level}, N = {n}"}.  Other information available to call are \code{'{n}'}, \code{'{variable}'},
-and \code{'{strata}'}.}
+The default is \code{"{level}, N = {n}"}.  Other information available to
+call are \code{'{n}'}, \code{'{level}'}, \code{'{variable}'}, \code{'{n.event.tot}'}, and \code{'{strata}'}.}
 
 \item{header_time}{string to be displayed as column header of the time column.
 Default is \code{md('**Time**')}}
@@ -66,21 +61,23 @@ estimate.  Default is \code{md('**Probability**')}}
 }}
 }
 \description{
-Function calculates a \code{survfit} object, and provides a tabulated and
+Function takes a \code{survfit} object as an argument, and provides a tabulated and
 formatted summary of the results
 }
 \examples{
+library(survival)
+fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 tbl_strata <-
   tbl_survival(
-    trial,
-    Surv(ttdeath, death) ~ trt,
+    fit1,
     times = c(12, 24),
     time_label = "{time} Months"
   )
+
+fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 tbl_nostrata <-
   tbl_survival(
-    trial,
-    Surv(ttdeath, death) ~ 1,
+    fit2,
     times = c(12, 24),
     time_label = "{time} Months"
   )
