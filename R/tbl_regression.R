@@ -204,10 +204,10 @@ gt_tbl_regression <- quote(list(
 # identifies headers for common models (logistic, poisson, and cox regression)
 coef_header <- function(x, exponentiate) {
   if (
-    (class(x)[1] == "glm") | # generalized linear models
+    (class(x)[1] %in% c("glm", "geeglm")) | # generalized linear models, and GEE GLMs
     (class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
   ) {
-    if(class(x)[1] == "glm") family = x$family
+    if(class(x)[1] %in% c("glm", "geeglm")) family = x$family
     else if(class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4")
       family = x@resp$family
     else stop("Error occured in 'coef_header' function")
@@ -244,7 +244,7 @@ coef_header <- function(x, exponentiate) {
 
   # Other models
   else if (exponentiate == TRUE) header <- "exp(Coefficient)"
-  else  header <- "Coefficient"
+  else header <- "Coefficient"
 
   header
 }
