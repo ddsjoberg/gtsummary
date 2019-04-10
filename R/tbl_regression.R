@@ -103,6 +103,18 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
       "coef", "ll", "ul", "pvalue"
     ))
 
+  # if model is a cox model, adding number of events as well
+  if(class(x)[1] == "coxph"){
+    table_body <-
+      table_body %>%
+      mutate(
+        N_event = x %>%
+          survival::coxph.detail() %>%
+          pluck("nevent") %>%
+          sum()
+      )
+  }
+
   # footnote abbreviation details
   footnote_abbr <-
     coef_header(x, exponentiate) %>%
@@ -144,8 +156,12 @@ gt_tbl_regression <- quote(list(
   ),
 
   # do not print columns variable or row_type columns
-  cols_hide = "cols_hide(columns = vars(variable, row_type, var_type, N))" %>%
-    glue(),
+  # here i do a setdiff of the variables i want to print by default
+  cols_hide = glue(
+    "cols_hide(columns = vars(",
+    "{names(table_body) %>% setdiff(c('label', 'coef', 'll', 'ul', 'pvalue')) %>% paste(collapse = ', ')}",
+    "))"
+    ),
 
   # NAs do not show in table
   fmt_missing = "fmt_missing(columns = everything(), missing_text = '')" %>%
@@ -204,10 +220,10 @@ gt_tbl_regression <- quote(list(
 # identifies headers for common models (logistic, poisson, and cox regression)
 coef_header <- function(x, exponentiate) {
   if (
-    (class(x)[1] == "glm") | # generalized linear models
+    (class(x)[1] %in% c("glm", "geeglm")) | # generalized linear models, and GEE GLMs
     (class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
   ) {
-    if(class(x)[1] == "glm") family = x$family
+    if(class(x)[1] %in% c("glm", "geeglm")) family = x$family
     else if(class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4")
       family = x@resp$family
     else stop("Error occured in 'coef_header' function")
@@ -244,7 +260,7 @@ coef_header <- function(x, exponentiate) {
 
   # Other models
   else if (exponentiate == TRUE) header <- "exp(Coefficient)"
-  else  header <- "Coefficient"
+  else header <- "Coefficient"
 
   header
 }
