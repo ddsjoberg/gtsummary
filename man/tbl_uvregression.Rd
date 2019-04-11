@@ -80,6 +80,7 @@ tbl_uv2 <-
 }
 \seealso{
 Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{add_nevent.tbl_uvregerssion}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},

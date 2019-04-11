@@ -37,6 +37,7 @@ inline in an R markdown document. Detailed examples in the
 }
 \seealso{
 Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{add_nevent.tbl_uvregerssion}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{tab_style_bold_p.tbl_uvregression}},

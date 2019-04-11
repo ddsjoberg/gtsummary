@@ -37,6 +37,7 @@ inline in an R markdown document.  Detailed examples in the
 }
 \seealso{
 Other tbl_regression: \code{\link{add_global.tbl_regression}},
+  \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_regression}}
