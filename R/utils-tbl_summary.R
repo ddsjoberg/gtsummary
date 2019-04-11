@@ -977,7 +977,7 @@ summarize_continuous <- function(data, variable, by, digits,
       # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
       df_result = map2(
         .data$stat_name_list, .data$stat_result_list,
-        ~ .y %>% t() %>% as_tibble() %>% set_names(.x)
+        ~ .y %>% t() %>% as_tibble(.name_repair = "minimal") %>% set_names(.x)
       ),
       # rounding statistics and concatenating results
       stat = map_chr(
