@@ -27,6 +27,7 @@
 #' random intercept, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
 #' @param method.args List of additional arguments passed on to the regression
 #' function defined by method.
+#' @param hide_n Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
@@ -56,6 +57,7 @@
 tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
+                             hide_n = FALSE,
                              show_yesno = NULL, conf.level = 0.95,
                              coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
                              pvalue_fun = style_pvalue) {
@@ -148,6 +150,12 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     call_list = list(tbl_uvregression = match.call()),
     gt_calls = eval(gt_tbl_uvregression)
   )
+
+  # hiding N column if requested
+  if(hide_n ==TRUE) {
+    results$gt_calls[["cols_hide_n"]] <-
+      glue("cols_hide(columns = vars(N))")
+  }
 
 
   class(results) <- "tbl_uvregression"
