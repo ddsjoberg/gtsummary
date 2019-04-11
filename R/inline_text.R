@@ -218,7 +218,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' inline in an R markdown document.
 #'
 #' @param x object created from  \link{tbl_survival}
-#' @param strata if `tbl_survival` estimates are stratfied, level of the stratum
+#' @param strata if `tbl_survival` estimates are stratified, level of the stratum
 #' report. Default is `NULL` when `tbl_survival` have no specified strata.
 #' @param time time for which to return survival probability.
 #' @param pattern statistics to return.  Uses \link[glue]{glue} formatting.

@@ -5,6 +5,17 @@
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}
 #' for detailed examples.
 #'
+#' @section Note:
+#' The N reported in the `tbl_uvregression()` output is the number of observations
+#' in the data frame `model.frame(x)`. Depending on the model input, this N
+#' may represent different quantities. In most cases, it is the number of people or
+#' units in your model.  Here are some common exceptions.
+#' 1. Survival regression models including time dependent covariates.
+#' 2. Random- or mixed-effects regression models with clustered data.
+#' 3. GEE regression models with clustered data.
+#'
+#' This list is not exhaustive, and care should be taken for each number reported.
+#'
 #' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
 #' @param method Regression method (e.g. \code{\link[stats]{lm}},

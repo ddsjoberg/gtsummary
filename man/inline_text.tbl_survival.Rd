@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
 
-\item{strata}{if \code{tbl_survival} estimates are stratfied, level of the stratum
+\item{strata}{if \code{tbl_survival} estimates are stratified, level of the stratum
 report. Default is \code{NULL} when \code{tbl_survival} have no specified strata.}
 
 \item{time}{time for which to return survival probability.}

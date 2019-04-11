@@ -47,6 +47,21 @@ to perform the initial model formatting. Review the \code{tbl_regression}
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
 for detailed examples.
 }
+\section{Note}{
+
+The N reported in the \code{tbl_uvregression()} output is the number of observations
+in the data frame \code{model.frame(x)}. Depending on the model input, this N
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.
+\enumerate{
+\item Survival regression models including time dependent covariates.
+\item Random- or mixed-effects regression models with clustered data.
+\item GEE regression models with clustered data.
+}
+
+This list is not exhaustive, and care should be taken for each number reported.
+}
+
 \examples{
 mod1 <-
   lm(hp ~ mpg + factor(cyl), mtcars) \%>\%
