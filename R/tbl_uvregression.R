@@ -159,11 +159,9 @@ gt_tbl_uvregression <- quote(list(
 
   # do not print columns variable or row_type columns
   # here i do a setdiff of the variables i want to print by default
-  cols_hide = glue(
-    "cols_hide(columns = vars(",
-    "{names(table_body) %>% setdiff(c('label', 'N', 'coef', 'll', 'ul', 'pvalue')) %>% paste(collapse = ', ')}",
-    "))"
-  ),
+  cols_hide =
+    "cols_hide(columns = vars(variable, row_type, var_type))" %>%
+    glue(),
 
   # NAs do not show in table
   fmt_missing =
