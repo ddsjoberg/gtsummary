@@ -140,10 +140,11 @@ inline_text.tbl_regression <-
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
+    n_vars <- names(x$table_body) %>% intersect(c("N", "nevent"))
     x$table_body <-
       left_join(
-        x$table_body %>% select(-"N"),
-        x$table_body %>% filter(!!parse_expr('row_type != "label"')) %>% select(c("variable", "N")) %>% distinct(),
+        x$table_body %>% select(-n_vars),
+        x$table_body %>% filter(!!parse_expr('row_type == "label"')) %>% select(c("variable", n_vars)) %>% distinct(),
         by = "variable"
       )
 

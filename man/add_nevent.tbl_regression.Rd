@@ -4,7 +4,7 @@
 \alias{add_nevent.tbl_regression}
 \title{Add number of events to a {gtsummary} regression table}
 \usage{
-\method{add_nevent}{tbl_regression}(x, ..)
+\method{add_nevent}{tbl_regression}(x, ...)
 }
 \arguments{
 \item{x}{\code{tbl_regerssion} object}
@@ -12,13 +12,20 @@
 \item{...}{not used}
 }
 \description{
-This function adds a columns of the number of events to tables creates with
-\code{\link{tbl_regression}}.  Supported
+This function adds a column of the number of events to tables created with
+\code{\link{tbl_regression}} or \code{\link{tbl_uvregression}}.  Supported
 model types include GLMs with binomial distribution family (e.g.
 \code{\link[stats]{glm}}, \code{\link[lme4]{glmer}}, and
 \code{\link[geepack]{geeglm}}) and Cox
 Proportion Hazards regression models (\code{\link[survival]{coxph}}).
 }
+\section{Reporting Event N}{
+
+The number of events is added to the internal \code{.$table_body} tibble,
+and not printed in the default output table (similar to N). The number
+of events is accessible via the \code{inline_text()} function for printing in a report.
+}
+
 \examples{
 glm(response ~ trt, trial, family = binomial) \%>\%
   tbl_regression() \%>\%

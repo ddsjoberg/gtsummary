@@ -126,12 +126,12 @@ gt_tbl_merge <- quote(list(
   ),
 
   # do not print columns variable or row_type columns
-  cols_hide = glue(
-    "cols_hide(columns = vars(variable, row_type, var_type, ",
-    # making list of N_* columns, e.g.g N_1, N_2...not sure why starts_with('N_') doesn't work?
-    "{paste0('N_', 1:tbls_length) %>% paste(collapse = ', ')}",
-    "))"
-  ),
+  cols_hide = c(
+      "cols_hide(columns = vars(variable, row_type, var_type))",
+      "cols_hide(columns = starts_with('N_'))",
+      "cols_hide(columns = starts_with('nevent_'))"
+    ) %>%
+    glue_collapse(sep = " %>% "),
 
   # NAs do not show in table
   fmt_missing = "fmt_missing(columns = everything(), missing_text = '')" %>%
