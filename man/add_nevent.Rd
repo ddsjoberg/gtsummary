@@ -4,7 +4,7 @@
 \alias{add_nevent}
 \title{Add number of events to a {gtsummary} regression table}
 \usage{
-add_nevent(x, ..)
+add_nevent(x, ...)
 }
 \arguments{
 \item{x}{\code{tbl_regerssion} or \code{tbl_uvregression} object}
@@ -12,7 +12,7 @@ add_nevent(x, ..)
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-This function adds a columns of the number of events to tables creates with
+This function adds a column of the number of events to tables created with
 \code{\link{tbl_regression}} or \code{\link{tbl_uvregression}}.  Supported
 model types include GLMs with binomial distribution family (e.g.
 \code{\link[stats]{glm}}, \code{\link[lme4]{glmer}}, and
@@ -20,7 +20,7 @@ model types include GLMs with binomial distribution family (e.g.
 Proportion Hazards regression models (\code{\link[survival]{coxph}}).
 }
 \seealso{
-\code{\link{tbl_regression}}, \code{\link{tbl_uvregression}}
+\code{\link{add_nevent.tbl_regression}}, \code{\link{add_nevent.tbl_uvregression}}, \code{\link{tbl_regression}}, \code{\link{tbl_uvregression}}
 }
 \author{
 Daniel D. Sjoberg
