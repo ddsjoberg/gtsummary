@@ -4,11 +4,10 @@
 \alias{tbl_regression}
 \title{Turn a regression model object into a markdown-ready tibble.}
 \usage{
-tbl_regression(x, exponentiate = FALSE, label = NULL,
-  include = names(stats::model.frame(x)), show_yesno = NULL,
-  conf.level = 0.95, intercept = FALSE,
-  coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-  pvalue_fun = style_pvalue)
+tbl_regression(x, exponentiate = FALSE, label = NULL, include = NULL,
+  exclude = NULL, show_yesno = NULL, conf.level = 0.95,
+  intercept = FALSE, coef_fun = ifelse(exponentiate == TRUE,
+  style_ratio, style_sigfig), pvalue_fun = style_pvalue)
 }
 \arguments{
 \item{x}{regression model object}
