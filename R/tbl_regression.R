@@ -54,7 +54,8 @@
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
 tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
-                           include = names(stats::model.frame(x)),
+                           include = NULL,
+                           exclude = NULL,
                            show_yesno = NULL,
                            conf.level = 0.95, intercept = FALSE,
                            coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
@@ -71,48 +72,29 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
 
   # parsing the terms from model and variable names
   # outputing a named list--one entry per variable
-  mod_list <- parse_terms(x, tidy_model, show_yesno)
+  table_body <- parse_fit(x, tidy_model, label)
+  # mod_list <- parse_terms(x, tidy_model, show_yesno)
 
-  # keeping intercept if requested
+  # including and excluding variables/intercept indicated
   # Note, include = names(stats::model.frame(mod_nlme))
   # has an error for nlme because it is "reStruct"
-  if (intercept == TRUE) include <- c(include, "(Intercept)")
+  if (!is.null(include)) {
+    include_err <- include %>% setdiff(table_body$variable %>% unique())
+    if(length(include_err) > 0) stop(
+      "'include' must be '{paste(names(table_body$variable %>% unique()), collapse = ', ')}'"
+    )
+  }
+  if (is.null(include)) include <-  table_body$variable %>% unique()
+  if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
+  include <- include %>% setdiff(exclude)
 
   # keeping variables indicated in `include`
-  if ((names(mod_list) %in% include) %>% any() == FALSE) {
-    stop(glue(
-      "'include' must be in '{paste(names(mod_list), collapse = ', ')}'"
-    ))
-  }
-  mod_list <- mod_list[names(mod_list) %in% include]
+  table_body <-
+    table_body %>%
+    filter(.data$variable %in% include)
 
   # model N
   n <- stats::model.frame(x) %>% nrow()
-
-  # putting all results into tibble
-  table_body <-
-    tibble(variable = names(mod_list)) %>%
-    mutate(
-      estimates = mod_list,
-      var_type = map_chr(.data$estimates, ~ ifelse(nrow(.x) > 1, "categorical", "continuous")),
-      var_label = map_chr(
-        .data$variable, ~ label[[.x]] %||% attr(stats::model.frame(x)[[.x]], "label") %||% .x
-      ),
-      estimates = pmap(
-        list(.data$var_type, .data$estimates, .data$var_label, .data$variable),
-        ~ add_label(..1, ..2, ..3, ..4)
-      ),
-      N = n
-    ) %>%
-    unnest(!!sym("estimates")) %>%
-    select(c(
-      "variable", "var_type", "row_type", "label", "N",
-      "estimate", "conf.low", "conf.high", "p.value"
-    )) %>%
-    set_names(c(
-      "variable", "var_type", "row_type", "label", "N",
-      "coef", "ll", "ul", "pvalue"
-    ))
 
   # footnote abbreviation details
   footnote_abbr <-

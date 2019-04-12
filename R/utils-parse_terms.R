@@ -235,9 +235,8 @@ parse_final_touches <- function(group, group_lbl, single_row, type, data, model_
       ul = conf.high,
       pvalue = p.value
     ) %>%
-    select(variable, row_type, label, coef, ll, ul, pvalue)
+    mutate(N = nrow(model_frame)) %>%
+    select(variable, row_type, label, N, coef, ll, ul, pvalue)
 }
 
-fit = lm(age ~ trt*grade, trial)
-t = broom::tidy(fit, conf.int = TRUE)
-parse_fit(fit, t, label = list(trt = "YAY TX"))
+
