@@ -1,10 +1,9 @@
-library(tidyverse)
-fit = lm(age ~ grade:trt*response, trial)
-t = broom::tidy(fit, conf.int = TRUE)
 
-parse_ugh <- function(fit, tidy) {
+# this function takea a model object and a tidied version (fomr the broom package)
+# and returns a parsed table of all results with labels and reference rows included
+parse_fit <- function(fit, tidy, label) {
   # extracting model frame
-  mf <- model.frame(fit)
+  model_frame <- model.frame(fit)
 
   # all terms in model ---------------------------------------------------------
   # this code looks over the model terms, and extracts a list of each term
@@ -28,15 +27,15 @@ parse_ugh <- function(fit, tidy) {
 
   # match term to variable -----------------------------------------------------
   # cycling over variables and assigning to terms in model
-  for(v in (names(mf) %>% rev())){
+  for(v in (names(model_frame) %>% rev())){
 
     # checking character and factor levels
-    if(class(mf[[v]]) %in% c("character", "factor")){
+    if(class(model_frame[[v]]) %in% c("character", "factor")){
       term_match <-
         term_match %>%
         mutate(
           variable = ifelse(
-            str_starts(term, v) & term %in% paste0(v, unique(mf[[v]])) & is.na(variable),
+            str_starts(term, v) & term %in% paste0(v, unique(model_frame[[v]])) & is.na(variable),
             v,
             variable
           )
@@ -54,13 +53,14 @@ parse_ugh <- function(fit, tidy) {
     }
   }
 
-  # creating labels ------------------------------------------------------------
-  # this is one line per term, where a sinlge interaction term gets more than one row
+  # tidy_long ------------------------------------------------------------------
+  # this is one line per term, AND interaction terms have one row per variable in the interaction
   tidy_long <-
     tidy %>%
     mutate(
       # making a table with info about variables and levels
       term_id = 1:n(),
+      # term_split finds all the variables invovled in interaction terms
       term_split = map(
         term,
         ~str_split_fixed(
@@ -73,6 +73,7 @@ parse_ugh <- function(fit, tidy) {
     ) %>%
     unnest(term_split) %>%
     mutate(
+      # matching the variable name to each term in the model
       variable = map_chr(
         term_split,
         ~ term_match %>%
@@ -83,7 +84,7 @@ parse_ugh <- function(fit, tidy) {
       # variable labels
       variable_lbl = map_chr(
         variable,
-        ~ attr(mf[[.x]], "label") %||% .x
+        ~ label[[.x]] %||% attr(model_frame[[.x]], "label") %||% .x
       ),
       variable_lbl = ifelse(is.na(variable_lbl) & term == "(Intercept)",
                             "(Intercept)",
@@ -92,7 +93,7 @@ parse_ugh <- function(fit, tidy) {
       variable_type = map_chr(
         variable,
         ~ case_when(
-          class(mf[[.x]]) %in% c("character", "factor") ~ "categorical",
+          class(model_frame[[.x]]) %in% c("character", "factor") ~ "categorical",
           TRUE ~ "continuous"
         )
       ),
@@ -109,16 +110,21 @@ parse_ugh <- function(fit, tidy) {
     )
 
 
+  # tidy_term ------------------------------------------------------------------
   # one line per term in the model
   tidy_term <-
     tidy_long %>%
     group_by(term_id, term) %>%
     mutate(
+      # indicating whether obs is an interaction term or not
       interaction = n() > 1,
+      # groups are terms that belong to the same variable (or interaction set)
       group = variable %>% paste(collapse = ":"),
       group = ifelse(term == "(Intercept)" & is.na(variable), "(Intercept)", group),
+      # the collpase only comes into play when there are interactions present
       group_lbl = variable_lbl %>% paste(collapse = " * "),
       level_lbl = level %>% paste(collapse = " * "),
+      # types are continuous, categorical, and interaction
       type = ifelse(interaction, "interaction", variable_type),
     ) %>%
     select(-term_split, -variable, -variable_lbl, -variable_type, -level) %>%
@@ -126,7 +132,8 @@ parse_ugh <- function(fit, tidy) {
     distinct()
 
 
-  # grouped by variable (categorical variables on one line)
+  # tidy_group -----------------------------------------------------------------
+  # groups are terms that belong to the same variable (or interaction set)
   tidy_group <-
     tidy_term %>%
     group_by(group, group_lbl, type) %>%
@@ -148,80 +155,89 @@ parse_ugh <- function(fit, tidy) {
       )
     )
 
+  # final touches to result ----------------------------------------------------
+  # adding in refernce rows, and header rows for categorical and interaction variables
   result =
     tidy_group %>%
     mutate(
       table = pmap(
         list(group, group_lbl, single_row, type, data),
-        function(group, group_lbl, single_row, type, data) {
-          if(single_row == TRUE) {
-            result = data %>%
-              mutate(
-                variable = group,
-                row_type = "label",
-                label = group_lbl
-              )
-          }
-          else if(single_row == FALSE){
-            # for interaction, do not add reference rows (just a header)
-            if(type == "interaction") {
-              result = data %>%
-                mutate(
-                  variable = group,
-                  row_type = "level",
-                  label = level_lbl
-                ) %>%
-                {bind_rows(
-                  tibble(
-                    variable = group,
-                    row_type = "label",
-                    label = group_lbl
-                  ), . # levels go below the header
-                )}
-            }
-            if(type == "categorical") {
-              result <-
-                tibble(
-                  level_lbl = mf[[group]] %>% unique() %>% sort() %>% as.character()
-                ) %>%
-                left_join(
-                  data,
-                  by = "level_lbl"
-                ) %>%
-                mutate(
-                  variable = group,
-                  row_type = "level",
-                  label = level_lbl
-                ) %>%
-                {bind_rows(
-                  tibble(
-                    variable = group,
-                    row_type = "label",
-                    label = group_lbl
-                  ),
-                  . # levels go below the header
-                )}
-            }
-          }
-          result %>%
-            rename(
-              coef = estimate,
-              ll = conf.low,
-              ul = conf.high,
-              pvalue = p.value
-            ) %>%
-            select(variable, row_type, label, coef, ll, ul, pvalue)
-        }
+        ~parse_final_touches(group = ..1,
+                             group_lbl = ..2,
+                             single_row = ..3,
+                             type = ..4,
+                             data = ..5,
+                             model_frame = model_frame)
       )
     )
 
+  # returning final formatted tibble of results
   map_dfr(result$table, ~.x)
 }
 
-r = parse_ugh(fit, t)
-r
+# adding in refernce rows, and header rows for categorical and interaction variables
+parse_final_touches <- function(group, group_lbl, single_row, type, data, model_frame) {
+  # this is for continuous variables, and numeric on numeric interactions
+  if(single_row == TRUE) {
+    result = data %>%
+      mutate(
+        variable = group,
+        row_type = "label",
+        label = group_lbl
+      )
+  }
+  # for interaction, do not add reference rows (just a header)
+  else if(type == "interaction") {
+    result = data %>%
+      mutate(
+        variable = group,
+        row_type = "level",
+        label = level_lbl
+      ) %>%
+      {bind_rows(
+        tibble(
+          variable = group,
+          row_type = "label",
+          label = group_lbl
+        ), . # levels go below the header
+      )}
+  }
+  # adding reference rows AND header row for categorical variables
+  else if(type == "categorical") {
+    result <-
+      tibble(
+        level_lbl = model_frame[[group]] %>% unique() %>% sort() %>% as.character()
+      ) %>%
+      left_join(
+        data,
+        by = "level_lbl"
+      ) %>%
+      mutate(
+        variable = group,
+        row_type = "level",
+        label = level_lbl
+      ) %>%
+      {bind_rows(
+        tibble(
+          variable = group,
+          row_type = "label",
+          label = group_lbl
+        ),
+        . # levels go below the header
+      )}
+  }
 
+  # keeping necessary vars and renaming
+  result %>%
+    rename(
+      coef = estimate,
+      ll = conf.low,
+      ul = conf.high,
+      pvalue = p.value
+    ) %>%
+    select(variable, row_type, label, coef, ll, ul, pvalue)
+}
 
-fit = lm(age ~ marker + grade:trt*response, trial)
+fit = lm(age ~ trt*grade, trial)
 t = broom::tidy(fit, conf.int = TRUE)
-parse_ugh(fit, t)
+parse_fit(fit, t, label = list(trt = "YAY TX"))
