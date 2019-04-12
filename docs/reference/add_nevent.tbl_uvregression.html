@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a column of q values to <code>tbl_uvregression</code> object to account for
-multiple comparisons — add_q.tbl_uvregression • gtsummary</title>
+<title>Add number of events to a gtsummary regression table — add_nevent.tbl_uvregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,12 +30,14 @@ multiple comparisons — add_q.tbl_uvregression • gtsummary</title>
 
 
 
-<meta property="og:title" content="Add a column of q values to <code>tbl_uvregression</code> object to account for
-multiple comparisons — add_q.tbl_uvregression" />
+<meta property="og:title" content="Add number of events to a gtsummary regression table — add_nevent.tbl_uvregression" />
 
-<meta property="og:description" content="The adjustments to the p-values is performed with
-stats::p.adjust.  The default method for correction
-is false discovery rate (&quot;fdr&quot;)" />
+<meta property="og:description" content="This function adds a column of the number of events to tables created with
+tbl_regression or tbl_uvregression.  Supported
+model types include GLMs with binomial distribution family (e.g.
+glm, glmer, and
+geeglm) and Cox
+Proportion Hazards regression models (coxph)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -121,55 +122,49 @@ is false discovery rate (&quot;fdr&quot;)" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a column of q values to <code>tbl_uvregression</code> object to account for
-multiple comparisons</h1>
+    <h1>Add number of events to a gtsummary regression table</h1>
     
-    <div class="hidden name"><code>add_q.tbl_uvregression.Rd</code></div>
+    <div class="hidden name"><code>add_nevent.tbl_uvregression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The adjustments to the p-values is performed with
-<code>stats::</code><code><a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>p.adjust</a></code>.  The default method for correction
-is false discovery rate (<code>"fdr"</code>)</p>
+    <p>This function adds a column of the number of events to tables created with
+<code><a href='tbl_regression.html'>tbl_regression</a></code> or <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code>.  Supported
+model types include GLMs with binomial distribution family (e.g.
+<code><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></code>, <code><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>glmer</a></code>, and
+<code><a href='https://www.rdocumentation.org/packages/geepack/topics/geeglm'>geeglm</a></code>) and Cox
+Proportion Hazards regression models (<code><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></code>).</p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
-<span class='fu'><a href='add_q.html'>add_q</a></span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"fdr"</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>pvalue_fun</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='add_nevent.html'>add_nevent</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_uvregression</code> object</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>character argument.  Methods from
-<code>stats::</code><code><a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>p.adjust</a></code> are accepted.  Default is <code>method = 'fdr'</code>.</p></td>
-    </tr>
-    <tr>
-      <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.
-Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+      <td><p><code>tbl_uvregerssion</code> object</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to or from other methods</p></td>
+      <td><p>not used</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="reporting-event-n"><a class="anchor" href="#reporting-event-n"></a>Reporting Event N</h2>
+
+    
+    <p>The number of events is added to the internal <code>.$table_body</code> tibble,
+and printed to the right of the N column. The number of events is also
+accessible via the <code><a href='inline_text.html'>inline_text()</a></code> function for printing in a report.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_uvregression: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
-  <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
+  <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
   <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
@@ -177,27 +172,29 @@ and return a string that is the rounded/formatted p-value (e.g.
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_q</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_nevent</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
-    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>lm</span>,
-    <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>age</span>
+    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
+    <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
+    <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>)
   ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global.html'>add_global</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_q.html'>add_q</a></span>()</div></pre>
+  <span class='fu'><a href='add_nevent.html'>add_nevent</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#reporting-event-n">Reporting Event N</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
-    <p>Esther Drill, Daniel D. Sjoberg</p>
+    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 

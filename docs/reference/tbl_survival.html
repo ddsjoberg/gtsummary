@@ -170,27 +170,6 @@ Default is <code>md('**Time**')</code></p></td>
       <td><p>string to be displayed as column header of the Kaplan-Meier
 estimate.  Default is <code>md('**Probability**')</code></p></td>
     </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Arguments passed on to <code><a href='https://www.rdocumentation.org/packages/survival/topics/survfit.formula'>survival::survfit.formula</a></code></p><dl class='dl-horizontal'>
-  <dt>weights</dt><dd><p>The weights must be nonnegative and it is strongly recommended that  
-    they be strictly positive, since zero weights are ambiguous, compared 
-    to use of the <code>subset</code> argument.</p></dd>
-  <dt>subset</dt><dd><p>expression saying that only a subset of the rows of the data 
-    should be used in the fit.</p></dd>
-  <dt>na.action</dt><dd><p>a missing-data filter function, applied to the model frame, after any 
-    <code>subset</code> argument has been used. 
-    Default is <code>options()$na.action</code>.</p></dd>
-  <dt>etype</dt><dd><p>a variable giving the type of event.  This has been superseded by
-    multi-state Surv objects; see example below.</p></dd>
-  <dt>id</dt><dd><p>identifies individual subjects, when a given person can have multiple
-    lines of data.</p></dd>
-  <dt>istate</dt><dd><p>for multi-state models, identifies the initial state of
-    each subject</p></dd>
-  <dt>timefix</dt><dd><p>process times through the <code>aeqSurv</code> function to
-  eliminate potential roundoff issues.</p></dd>
-</dl></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
