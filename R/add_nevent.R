@@ -122,7 +122,8 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' @family tbl_uvregression
 #' @export
 #' @examples
-#' trial %>%
+#' tbl_nevent <-
+#'   trial %>%
 #'   tbl_uvregression(
 #'     method = glm,
 #'     y = response,

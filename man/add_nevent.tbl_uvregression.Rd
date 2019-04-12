@@ -27,7 +27,8 @@ accessible via the \code{inline_text()} function for printing in a report.
 }
 
 \examples{
-trial \%>\%
+tbl_nevent <-
+  trial \%>\%
   tbl_uvregression(
     method = glm,
     y = response,

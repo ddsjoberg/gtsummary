@@ -95,7 +95,7 @@ parse_terms <- function(x, tidy_model, show_yesno) {
     # if all varnames have been assigned, then work is done
     if (nrow(tidy_model) == 0) break
 
-    # idenfiying variables to print on a single row (no yes)
+    # identifying variables to print on a single row (no yes)
     dichotomous <-
       !(v %in% show_yesno) &
         (
