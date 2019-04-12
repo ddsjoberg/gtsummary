@@ -2,6 +2,7 @@
 #'
 #' The `tbl_merge` function merges two or more `tbl_regression` or
 #' `tbl_uvregression` objects and adds appropriate spanning headers.
+#'
 #' @param tbls list of gtsummary regression objects
 #' @param tab_spanner Spanning headers.  Vector with same length as `tbls`
 #' @author Daniel D. Sjoberg

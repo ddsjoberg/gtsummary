@@ -155,7 +155,7 @@ add_nevent.tbl_uvregression <- function(x, ...) {
       by = c("variable", "var_type", "row_type", "label")
     )
 
-  x$gt_calls[["fmt_nevent"]] <-
+  x$gt_calls[["cols_nevent"]] <-
     list("cols_move(columns = vars(nevent), after = vars(N))",
          "cols_label(nevent = md('**Event N**'))") %>%
     glue_collapse(sep = " %>% ")
