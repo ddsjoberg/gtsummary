@@ -91,7 +91,7 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
         term_match %>%
         mutate(
           variable = ifelse(
-            stringr::str_starts(.data$term, v) &
+            stringr::str_starts(stringr::fixed(.data$term), stringr::fixed(v)) &
               .data$term %in% paste0(v, unique(model_frame[[v]])) &
               is.na(.data$variable),
             v,
@@ -109,6 +109,39 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
           )
         )
     }
+  }
+
+  # if the variable name contains a ':', weird formatting will likely happen
+  if(stringr::str_detect(stringr::fixed(names(model_frame)), stringr::fixed(":")) %>% any()) {
+    warning(glue(
+      "Some variable names contain ':', which may cause formatting issues. ",
+      "Please rename columns without ':'."
+    ))
+  }
+
+  # if the variable value contains a ':', weird formatting will likely happen
+  var_values_contain_colon <-
+    map_lgl(
+      names(model_frame),
+      function(x) {
+        if(class(model_frame[[x]]) %in% c("factor", "character")) {
+          unique(model_frame[[x]]) %>%
+            as.character() %>%
+            stringr::fixed() %>%
+            stringr::str_detect(stringr::fixed(":")) %>%
+            any() %>%
+            return()
+        }
+        else {return(FALSE)}
+      }
+    ) %>%
+    any()
+  # if the variable values contains a ':', weird formatting may occur
+  if(var_values_contain_colon) {
+    warning(glue(
+      "Some variable values contain ':', which may cause formatting issues. ",
+      "Please re-level values without ':'."
+    ))
   }
 
   # show yes-no ----------------------------------------------------------------
@@ -187,7 +220,6 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
         }
       )
     )
-
 
   # tidy_term ------------------------------------------------------------------
   # one line per term in the model
