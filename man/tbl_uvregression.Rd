@@ -34,10 +34,9 @@ random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
 \item{hide_n}{Hide N column. Default is \code{FALSE}}
 
-\item{show_yesno}{Vector of names of categorical and factor variables that
-are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} default to dichotomous printing
-(i.e. only Yes shown). To force both levels to be shown include the column
-name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
+\item{show_yesno}{By default yes/no categorical variables are printed on a single row,
+when the 'No' category is the reference group.  To print both levels in the output table, include
+the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
 
 \item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
 
