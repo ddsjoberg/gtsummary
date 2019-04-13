@@ -25,10 +25,9 @@
 #' @param conf.level confidence level passed directly to `tidy` function. Default is 0.95.
 #' @param intercept logical argument indicates whether to include the intercept
 #' in the output.  Default is `FALSE`
-#' @param show_yesno Vector of names of categorical and factor variables that
-#' are `c("No", "Yes")`, `c("no", "yes")`, or `c("NO", "YES")` default to dichotomous printing
-#' (i.e. only Yes shown). To force both levels to be shown include the column
-#' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
+#' @param show_yesno By default yes/no categorical variables are printed on a single row,
+#' when the 'No' category is the reference group.  To print both levels in the output table, include
+#' the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``
 #' @param coef_fun function to round and format beta coefficients.  Default
 #' is \code{\link{style_sigfig}} when the coefficients are printed, and
 #' \code{\link{style_ratio}} when the coefficients have been exponentiated.
@@ -94,9 +93,6 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   table_body <-
     table_body %>%
     filter(.data$variable %in% include)
-
-  print("table_body")
-  print(table_body)
 
   # model N
   n <- stats::model.frame(x) %>% nrow()
