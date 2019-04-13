@@ -16,7 +16,7 @@
 \item{time_label}{string defining the label shown for the time column.
 Default is \code{"{time}"}.  The input uses \code{\link[glue]{glue}} notation to
 convert the string into a label.  A common label may be \code{"{time} Months"}, which
-would resolve to "6 Months" or "12 Months" depending on specfied \code{times}.}
+would resolve to "6 Months" or "12 Months" depending on specified \code{times}.}
 
 \item{level_label}{used when survival results are stratified.
 It is a string defining the label shown.  The input uses
@@ -44,12 +44,12 @@ The \code{level_label} is used to modify the stratum labels. The default is
 brackets evaluate to stratum-specific values.  For example, in the trial
 data set, there is a column called \code{trt} with levels 'Drug' and 'Placebo'.
 In this example, {level} would evaluate to either 'Drug' or 'Placebo'
-depending on the stratum.  Other quatities available to print are:
-\tabular{ll}{
-\code{{level}} \tab level of the statification variable \cr
-\code{{n}} \tab number of observations in stratum \cr
-\code{{n.event.tot}} \tab total number of events observed durign followup in stratum \cr
-\code{{strata}} \tab raw stratum specification from \code{survfit} object
+depending on the stratum.  Other quantities available to print are:
+\enumerate{
+\item \code{{level}} level of the stratification variable
+\item \code{{n}} number of observations in stratum
+\item \code{{n.event.tot}} total number of events observed during follow-up in stratum
+\item \code{{strata}} raw stratum specification from \code{survfit} object
 }
 }
 
