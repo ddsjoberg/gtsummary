@@ -20,7 +20,8 @@
 #' @param exponentiate logical argument passed directly to
 #' `tidy` function. Default is `FALSE`
 #' @param label list of labels to write in the output. `list(age60 = "Age > 60")`
-#' @param include names of variables to include in output.  Default is all variables.
+#' @param include names of variables to include in output.
+#' @param exclude names of variables to exclude from output.
 #' @param conf.level confidence level passed directly to `tidy` function. Default is 0.95.
 #' @param intercept logical argument indicates whether to include the intercept
 #' in the output.  Default is `FALSE`
@@ -67,12 +68,13 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   # using broom and broom.mixed to tidy up regression results, and
   # then reversing order of data frame
   tidy_model <-
-    tidy_wrap(x, exponentiate, conf.level) %>%
-    map_df(rev) # reverses order of data frame
+    tidy_wrap(x, exponentiate, conf.level)
 
   # parsing the terms from model and variable names
-  # outputing a named list--one entry per variable
-  table_body <- parse_fit(x, tidy_model, label)
+  # outputing a tibble of the parsed model with
+  # rows for reference groups, and headers for
+  # categorical variables
+  table_body <- parse_fit(x, tidy_model, label, show_yesno)
   # mod_list <- parse_terms(x, tidy_model, show_yesno)
 
   # including and excluding variables/intercept indicated
@@ -92,6 +94,9 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   table_body <-
     table_body %>%
     filter(.data$variable %in% include)
+
+  print("table_body")
+  print(table_body)
 
   # model N
   n <- stats::model.frame(x) %>% nrow()
@@ -225,6 +230,10 @@ coef_header <- function(x, exponentiate) {
       header <- "log(IRR)"
       attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
     }
+
+    # Other models
+    else if (exponentiate == TRUE) header <- "exp(Coefficient)"
+    else header <- "Coefficient"
   }
   # Cox PH Regression
   else if (class(x)[1] == "coxph" & exponentiate == TRUE) {
