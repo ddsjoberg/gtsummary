@@ -16,13 +16,14 @@
 \item{time_label}{string defining the label shown for the time column.
 Default is \code{"{time}"}.  The input uses \code{\link[glue]{glue}} notation to
 convert the string into a label.  A common label may be \code{"{time} Months"}, which
-would resolve to "6 Months" or "12 Months" depending on the times requested.}
+would resolve to "6 Months" or "12 Months" depending on specfied \code{times}.}
 
 \item{level_label}{used when survival results are stratified.
 It is a string defining the label shown.  The input uses
 \code{\link[glue]{glue}} notation to convert the string into a label.
 The default is \code{"{level}, N = {n}"}.  Other information available to
-call are \code{'{n}'}, \code{'{level}'}, \code{'{variable}'}, \code{'{n.event.tot}'}, and \code{'{strata}'}.}
+call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, and \code{'{strata}'}. See
+below for details.}
 
 \item{header_time}{string to be displayed as column header of the time column.
 Default is \code{md('**Time**')}}
@@ -36,6 +37,22 @@ estimate.  Default is \code{md('**Probability**')}}
 Function takes a \code{survfit} object as an argument, and provides a tabulated and
 formatted summary of the results
 }
+\section{Specifying \code{level_label}}{
+
+The \code{level_label} is used to modify the stratum labels. The default is
+\code{level_label = "{level}, N = {n}"}. The quantities in the curly
+brackets evaluate to stratum-specific values.  For example, in the trial
+data set, there is a column called \code{trt} with levels 'Drug' and 'Placebo'.
+In this example, {level} would evaluate to either 'Drug' or 'Placebo'
+depending on the stratum.  Other quatities available to print are:
+\tabular{ll}{
+\code{{level}} \tab level of the statification variable \cr
+\code{{n}} \tab number of observations in stratum \cr
+\code{{n.event.tot}} \tab total number of events observed durign followup in stratum \cr
+\code{{strata}} \tab raw stratum specification from \code{survfit} object
+}
+}
+
 \examples{
 library(survival)
 fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
