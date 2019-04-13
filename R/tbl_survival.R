@@ -13,17 +13,33 @@ tbl_survival <- function(x, ...) {
 #' Function takes a `survfit` object as an argument, and provides a tabulated and
 #' formatted summary of the results
 #'
+#' @section Specifying `level_label`:
+#' The `level_label` is used to modify the stratum labels. The default is
+#' \code{level_label = "{level}, N = {n}"}. The quantities in the curly
+#' brackets evaluate to stratum-specific values.  For example, in the trial
+#' data set, there is a column called `trt` with levels 'Drug' and 'Placebo'.
+#' In this example, {level} would evaluate to either 'Drug' or 'Placebo'
+#' depending on the stratum.  Other quatities available to print are:
+#' \tabular{ll}{
+#' \code{{level}} \tab level of the statification variable \cr
+#' \code{{n}} \tab number of observations in stratum \cr
+#' \code{{n.event.tot}} \tab total number of events observed durign followup in stratum \cr
+#' \code{{strata}} \tab raw stratum specification from \code{survfit} object
+#' }
+#'
+#'
 #' @param x a survfit object with a single stratifying variable
 #' @param times numeric vector of survival times
 #' @param time_label string defining the label shown for the time column.
 #' Default is `"{time}"`.  The input uses \code{\link[glue]{glue}} notation to
 #' convert the string into a label.  A common label may be `"{time} Months"`, which
-#' would resolve to "6 Months" or "12 Months" depending on the times requested.
+#' would resolve to "6 Months" or "12 Months" depending on specfied \code{times}.
 #' @param level_label used when survival results are stratified.
 #' It is a string defining the label shown.  The input uses
 #' \code{\link[glue]{glue}} notation to convert the string into a label.
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
-#' call are `'{n}'`, `'{level}'`, `'{variable}'`, `'{n.event.tot}'`, and `'{strata}'`.
+#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, and `'{strata}'`. See
+#' below for details.
 #' @param header_time string to be displayed as column header of the time column.
 #' Default is \code{md('**Time**')}
 #' @param header_prob string to be displayed as column header of the Kaplan-Meier
@@ -81,7 +97,7 @@ tbl_survival.survfit <- function(x, times,
           n = survfit_summary$n,
           n.event.tot = x %>%
             summary(times = max(x$time)) %>%
-            purrr::pluck("n.event")
+            pluck("n.event")
         ),
         by = "strata"
       ) %>%
@@ -90,6 +106,17 @@ tbl_survival.survfit <- function(x, times,
         level = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(pluck(2)),
         groupname = glue(level_label)
       )
+
+    print(names(table_body))
+    # checking that the 'level_label' uniquely identifies the stratum
+    if((table_body$strata %>% unique() %>% length()) !=
+       (table_body$groupname %>% unique() %>% length())) {
+      stop(
+        "Argument 'level_label' does not uniquely identify the stratum. ",
+        "Include a unique level identifyer such as {level} or use the default level label. ",
+        "See `?tbl_survival.survfit` for details and examples."
+      )
+    }
   }
   # else if no strata, adding n to table_body
   else {
@@ -99,7 +126,7 @@ tbl_survival.survfit <- function(x, times,
         n = survfit_summary$n,
         n.event.tot = x %>%
           summary(times = max(x$time)) %>%
-          purrr::pluck("n.event")
+          pluck("n.event")
       )
   }
 
@@ -136,7 +163,7 @@ tbl_survival.survfit <- function(x, times,
       glue("fmt(columns = vars(surv, lower, upper), fns = partial(style_percent, symbol = TRUE))"),
     cols_merge_ci =
       "cols_merge(col_1 = vars(lower), col_2 = vars(upper), pattern = '{1}, {2}')" %>%
-      glue::as_glue(),
+      as_glue(),
     # adding CI footnote
     footnote_abbreviation =
       glue("tab_footnote(footnote = 'CI = Confidence Interval',",
