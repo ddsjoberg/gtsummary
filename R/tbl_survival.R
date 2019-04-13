@@ -1,3 +1,13 @@
+#' Tabulate univariate statistics for time-to-event endpoints
+#'
+#' @param x a survfit or cuminc object
+#' @param ... further arguments passed to other methods
+#' @seealso \code{\link{tbl_survival.survfit}}
+#' @export
+tbl_survival <- function(x, ...) {
+  UseMethod("tbl_survival")
+}
+
 #' Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints
 #'
 #' Function takes a `survfit` object as an argument, and provides a tabulated and
@@ -18,6 +28,7 @@
 #' Default is \code{md('**Time**')}
 #' @param header_prob string to be displayed as column header of the Kaplan-Meier
 #' estimate.  Default is \code{md('**Probability**')}
+#' @param ... not used
 #' @importFrom stringr str_split
 #' @seealso \link[gt]{md}, \link[gt]{html}
 #' @author Daniel D. Sjoberg
@@ -40,11 +51,12 @@
 #'     time_label = "{time} Months"
 #'   )
 
-tbl_survival <- function(x, times,
-                         time_label = "{time}",
-                         level_label = "{level}, N = {n}",
-                         header_time = md('**Time**'),
-                         header_prob = md('**Probability**')) {
+tbl_survival.survfit <- function(x, times,
+                                 time_label = "{time}",
+                                 level_label = "{level}, N = {n}",
+                                 header_time = md('**Time**'),
+                                 header_prob = md('**Probability**'),
+                                 ...) {
   # converting headers to un-evaluated string ----------------------------------
   header_time <- deparse(substitute(header_time))
   header_prob <- deparse(substitute(header_prob))
