@@ -17,7 +17,9 @@ tbl_regression(x, exponentiate = FALSE, label = NULL, include = NULL,
 
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
-\item{include}{names of variables to include in output.  Default is all variables.}
+\item{include}{names of variables to include in output.}
+
+\item{exclude}{names of variables to exclude from output.}
 
 \item{show_yesno}{Vector of names of categorical and factor variables that
 are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} default to dichotomous printing

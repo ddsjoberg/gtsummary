@@ -1,23 +1,23 @@
 
 # this function takea a model object and a tidied version (fomr the broom package)
 # and returns a parsed table of all results with labels and reference rows included
-parse_fit <- function(fit, tidy, label) {
+parse_fit <- function(fit, tidy, label, show_yesno) {
   # extracting model frame
-  model_frame <- model.frame(fit)
+  model_frame <- stats::model.frame(fit)
 
   # all terms in model ---------------------------------------------------------
   # this code looks over the model terms, and extracts a list of each term
   # for interaction terms, the terms are reported separately
   # for example, trtDrug:age will result in trt:Drug and age.
   # counting number of colons in term names
-  n_colon <- tidy$term %>% str_count(pattern = ":")
+  n_colon <- tidy$term %>% stringr::str_count(pattern = ":")
 
   # putting unique terms in tibble (to later be matched to the parent variable)
   # parsing terms and separating interactions (sep by :)
   term_match <-
     tibble(
       term = tidy$term %>%
-        str_split_fixed(pattern = ":", n_colon + 1) %>%
+        stringr::str_split_fixed(pattern = ":", n_colon + 1) %>%
         keep(~ . != "") %>%
         discard(~ . == "(Intercept)") %>%
         unique() %>%
@@ -35,9 +35,11 @@ parse_fit <- function(fit, tidy, label) {
         term_match %>%
         mutate(
           variable = ifelse(
-            str_starts(term, v) & term %in% paste0(v, unique(model_frame[[v]])) & is.na(variable),
+            stringr::str_starts(.data$term, v) &
+              .data$term %in% paste0(v, unique(model_frame[[v]])) &
+              is.na(.data$variable),
             v,
-            variable
+            .data$variable
           )
         )
     }
@@ -47,11 +49,32 @@ parse_fit <- function(fit, tidy, label) {
         term_match %>%
         mutate(
           variable = ifelse(
-            term == v & is.na(variable), v, variable
+            .data$term == v & is.na(.data$variable), v, .data$variable
           )
         )
     }
   }
+
+  # show yes-no ----------------------------------------------------------------
+  # creating a list of variables that are yes/no that will,
+  # by default, be printed on a single row
+  yesno_levels <- list(c("No", "Yes"), c("no", "yes"), c("NO", "YES"))
+  yesno_variables <- NULL
+  for(v in term_match$variable) {
+    for(yn in yesno_levels){
+      if ("character" %in% class(model_frame[[v]]) &
+          model_frame[[v]] %>% stats::na.omit() %>% setequal(yn)) {
+        yesno_variables <- c(yesno_variables, v)
+      }
+      # for factors the ORDER must be no THEN yes (making no the reference group)
+      else if ("factor" %in% class(model_frame[[v]]) &
+               attr(model_frame[[v]], "level") %>% identical(yn)) {
+        yesno_variables <- c(yesno_variables, v)
+      }
+    }
+  }
+  # removing variables user requested to show both levels
+  yesno_variables <- yesno_variables %>% setdiff(show_yesno)
 
   # tidy_long ------------------------------------------------------------------
   # this is one line per term, AND interaction terms have one row per variable in the interaction
@@ -62,36 +85,36 @@ parse_fit <- function(fit, tidy, label) {
       term_id = 1:n(),
       # term_split finds all the variables invovled in interaction terms
       term_split = map(
-        term,
-        ~str_split_fixed(
+        .data$term,
+        ~stringr::str_split_fixed(
           .x,
           pattern = ":",
-          str_count(.x, pattern = ":") + 1
+          stringr::str_count(.x, pattern = ":") + 1
         ) %>%
           as.character()
       )
     ) %>%
-    unnest(term_split) %>%
+    unnest(.data$term_split) %>%
     mutate(
       # matching the variable name to each term in the model
       variable = map_chr(
-        term_split,
+        .data$term_split,
         ~ term_match %>%
-          filter(term == .x) %>%
-          pull(variable) %>%
+          filter(.data$term == .x) %>%
+          pull(.data$variable) %>%
           {ifelse(.x == "(Intercept)", NA, .)}
       ),
       # variable labels
       variable_lbl = map_chr(
-        variable,
+        .data$variable,
         ~ label[[.x]] %||% attr(model_frame[[.x]], "label") %||% .x
       ),
-      variable_lbl = ifelse(is.na(variable_lbl) & term == "(Intercept)",
+      variable_lbl = ifelse(is.na(.data$variable_lbl) & .data$term == "(Intercept)",
                             "(Intercept)",
-                            variable_lbl),
+                            .data$variable_lbl),
       # indicating whether each variable is categorical or continuous
       variable_type = map_chr(
-        variable,
+        .data$variable,
         ~ case_when(
           class(model_frame[[.x]]) %in% c("character", "factor") ~ "categorical",
           TRUE ~ "continuous"
@@ -101,10 +124,10 @@ parse_fit <- function(fit, tidy, label) {
       # if variable is categorical, remove the variable name from term and report level,
       # if variable is not categorical, replace the varname with the label
       level = pmap_chr(
-        list(term_split, variable, variable_lbl, variable_type),
+        list(.data$term_split, .data$variable, .data$variable_lbl, .data$variable_type),
         function(term_split, variable, variable_lbl, variable_type) {
           if (variable_type == "continuous") return(variable_lbl)
-          str_remove(term_split, pattern = fixed(variable))
+          stringr::str_remove(term_split, pattern = stringr::fixed(variable))
         }
       )
     )
@@ -114,39 +137,39 @@ parse_fit <- function(fit, tidy, label) {
   # one line per term in the model
   tidy_term <-
     tidy_long %>%
-    group_by(term_id, term) %>%
+    group_by(.data$term_id, .data$term) %>%
     mutate(
       # indicating whether obs is an interaction term or not
       interaction = n() > 1,
       # groups are terms that belong to the same variable (or interaction set)
-      group = variable %>% paste(collapse = ":"),
-      group = ifelse(term == "(Intercept)" & is.na(variable), "(Intercept)", group),
+      group = .data$variable %>% paste(collapse = ":"),
+      group = ifelse(.data$term == "(Intercept)" & is.na(.data$variable), "(Intercept)", .data$group),
       # the collpase only comes into play when there are interactions present
-      group_lbl = variable_lbl %>% paste(collapse = " * "),
-      level_lbl = level %>% paste(collapse = " * "),
+      group_lbl = .data$variable_lbl %>% paste(collapse = " * "),
+      level_lbl = .data$level %>% paste(collapse = " * "),
       # types are continuous, categorical, and interaction
-      type = ifelse(interaction, "interaction", variable_type),
+      var_type = ifelse(.data$interaction, "interaction", .data$variable_type),
     ) %>%
-    select(-term_split, -variable, -variable_lbl, -variable_type, -level) %>%
+    select(-c("term_split", "variable", "variable_lbl", "variable_type", "level")) %>%
     ungroup() %>%
     distinct()
-
 
   # tidy_group -----------------------------------------------------------------
   # groups are terms that belong to the same variable (or interaction set)
   tidy_group <-
     tidy_term %>%
-    group_by(group, group_lbl, type) %>%
+    group_by(.data$group, .data$group_lbl, .data$var_type) %>%
     nest() %>%
     mutate(
       # assess how many line to display results one (one or more than one)
       single_row = pmap_lgl(
-        list(type, group_lbl, data),
-        function(type, group_lbl, data) {
-          if(type == "continuous") return(TRUE)
-          if(type == "categorical") return(FALSE)
+        list(.data$var_type, .data$group, .data$group_lbl, .data$data),
+        function(var_type, group, group_lbl, data) {
+          if(var_type == "continuous") return(TRUE)
+          if(var_type == "categorical" & group %in% yesno_variables) return(TRUE)
+          if(var_type == "categorical") return(FALSE)
           # display on single line of it a numeric-numeric interaction
-          if(type == "interaction") {
+          if(var_type == "interaction") {
             if(nrow(data) > 1) return(FALSE)
             else if(group_lbl == data$level_lbl) return(TRUE)
             else return(FALSE)
@@ -161,11 +184,11 @@ parse_fit <- function(fit, tidy, label) {
     tidy_group %>%
     mutate(
       table = pmap(
-        list(group, group_lbl, single_row, type, data),
+        list(.data$group, .data$group_lbl, .data$single_row, .data$var_type, .data$data),
         ~parse_final_touches(group = ..1,
                              group_lbl = ..2,
                              single_row = ..3,
-                             type = ..4,
+                             var_type = ..4,
                              data = ..5,
                              model_frame = model_frame)
       )
@@ -176,7 +199,7 @@ parse_fit <- function(fit, tidy, label) {
 }
 
 # adding in refernce rows, and header rows for categorical and interaction variables
-parse_final_touches <- function(group, group_lbl, single_row, type, data, model_frame) {
+parse_final_touches <- function(group, group_lbl, single_row, var_type, data, model_frame) {
   # this is for continuous variables, and numeric on numeric interactions
   if(single_row == TRUE) {
     result = data %>%
@@ -187,12 +210,12 @@ parse_final_touches <- function(group, group_lbl, single_row, type, data, model_
       )
   }
   # for interaction, do not add reference rows (just a header)
-  else if(type == "interaction") {
+  else if(var_type == "interaction") {
     result = data %>%
       mutate(
         variable = group,
         row_type = "level",
-        label = level_lbl
+        label = .data$level_lbl
       ) %>%
       {bind_rows(
         tibble(
@@ -203,7 +226,7 @@ parse_final_touches <- function(group, group_lbl, single_row, type, data, model_
       )}
   }
   # adding reference rows AND header row for categorical variables
-  else if(type == "categorical") {
+  else if(var_type == "categorical") {
     result <-
       tibble(
         level_lbl = model_frame[[group]] %>% unique() %>% sort() %>% as.character()
@@ -215,7 +238,7 @@ parse_final_touches <- function(group, group_lbl, single_row, type, data, model_
       mutate(
         variable = group,
         row_type = "level",
-        label = level_lbl
+        label = .data$level_lbl
       ) %>%
       {bind_rows(
         tibble(
@@ -230,13 +253,16 @@ parse_final_touches <- function(group, group_lbl, single_row, type, data, model_
   # keeping necessary vars and renaming
   result %>%
     rename(
-      coef = estimate,
-      ll = conf.low,
-      ul = conf.high,
-      pvalue = p.value
+      coef = .data$estimate,
+      ll = .data$conf.low,
+      ul = .data$conf.high,
+      pvalue = .data$p.value
     ) %>%
-    mutate(N = nrow(model_frame)) %>%
-    select(variable, row_type, label, N, coef, ll, ul, pvalue)
+    mutate(
+      N = nrow(model_frame),
+      var_type = var_type
+    ) %>%
+    select(c("variable", "var_type", "row_type", "label", "N", "coef", "ll", "ul", "pvalue"))
 }
 
 
