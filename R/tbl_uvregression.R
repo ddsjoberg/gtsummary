@@ -1,4 +1,4 @@
-#' Creates table of univariate regression results
+#' Display univariate regression model results in table
 #'
 #' The `tbl_uvregression` function arguments are similar to the \code{\link{tbl_regression}}
 #' arguments. Review the `tbl_uvregression`

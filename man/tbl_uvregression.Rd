@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_uvregression.R
 \name{tbl_uvregression}
 \alias{tbl_uvregression}
-\title{Creates table of univariate regression results}
+\title{Display univariate regression model results in table}
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
