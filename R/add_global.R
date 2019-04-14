@@ -1,13 +1,16 @@
 #' Adds the global p-value for a categorical variables
 #'
-#' This function uses \code{\link[car]{Anova}} from the `car` package with `type = "III"` to calculate global p-values.
-#' If a needed class of model is not supported by `car::`\code{\link[car]{Anova}}, please put in an
+#' This function uses \code{\link[car]{Anova}} from the `car` package with
+#' `type = "III"` to calculate global p-values.
+#' If a needed class of model is not supported by
+#' `car::`\code{\link[car]{Anova}}, please put in an
 #' \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
 #' Output from `tbl_regression` and `tbl_uvregression` objects supported.
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
-#' @seealso \code{\link{add_global.tbl_regression}}, \code{\link{add_global.tbl_uvregression}}
+#' @seealso \code{\link{add_global.tbl_regression}},
+#' \code{\link{add_global.tbl_uvregression}}
 #' @author Daniel D. Sjoberg
 #' @export
 add_global <- function(x, ...) {
@@ -16,21 +19,26 @@ add_global <- function(x, ...) {
 
 #' Adds the global p-value for a categorical variables in `tbl_regression` objects
 #'
-#' This function uses \code{\link[car]{Anova}} from the `car` package with `type = "III"` to calculate global p-values.
-#' If a needed class of model is not supported by \code{\link[car]{Anova}}, please put in an
+#' This function uses \code{\link[car]{Anova}} from the `car` package with
+#' `type = "III"` to calculate global p-values.
+#' If a needed class of model is not supported by \code{\link[car]{Anova}},
+#' please put in an
 #' issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 #'
-#' @param x object with class `tbl_regression` from the \code{\link{tbl_regression}} function
+#' @param x object with class `tbl_regression` from the
+#' \code{\link{tbl_regression}} function
 #' @param terms Character vector of terms for which to add global p-values.  Default
 #' is `NULL` which will add global p-values for all categorical variables
 #' @param keep logical argument whether to keep the individual p-values for the
 #' levels of the categorical variable. Default is `FALSE`
-#' @param ... arguments to be passed to \code{\link[car]{Anova}}.  Adding `test.statistic = `
-#' can change the type of test (e.g. Likelihood-ratio, Wald, etc.).
+#' @param ... arguments to be passed to \code{\link[car]{Anova}}
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @examples
-#' tbl_lm <- lm(marker ~ stage + grade, trial) %>% tbl_regression() %>% add_global()
+#' tbl_lm <-
+#'   lm(marker ~ stage + grade, trial) %>%
+#'   tbl_regression() %>%
+#'   add_global()
 #' @export
 
 add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
@@ -99,13 +107,15 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
 #' Adds the global p-value for a categorical variables in `tbl_uvregression` objects
 #'
-#' This function uses \code{\link[car]{Anova}} from the `car` package with `type = "III"` to calculate global p-values.
-#' If a needed class of model is not supported by \code{\link[car]{Anova}}, please put in an
+#' This function uses \code{\link[car]{Anova}} from the `car` package with
+#' `type = "III"` to calculate global p-values.
+#' If a needed class of model is not supported by \code{\link[car]{Anova}},
+#' please put in an
 #' issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 #'
-#' @param x object with class `tbl_uvregression` from the \code{\link{tbl_uvregression}} function
-#' @param ... arguments to be passed to \code{\link[car]{Anova}}.  Adding `test.statistic = `
-#' can change the type of test (e.g. Likelihood-ratio, Wald, etc.).
+#' @param x object with class `tbl_uvregression` from the
+#' \code{\link{tbl_uvregression}} function
+#' @param ... arguments to be passed to \code{\link[car]{Anova}}.
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression
 #' @examples
@@ -122,11 +132,16 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
 add_global.tbl_uvregression <- function(x, ...) {
 
+  # converting the passed ... to a list, OR if nothing passed to NULL
+  if(length(list(...)) == 0) passed_dots <- NULL
+  else passed_dots <- list(...)
+
   # calculating global pvalues
   global_p <-
     imap_dfr(
       x$tbl_regression_list,
-      ~ car::Anova(.x[["model_obj"]], type = "III") %>%
+      ~ do.call(car::Anova, c(list(mod = .x[["model_obj"]], type = "III"), passed_dots)) %>%
+        # ~ car::Anova(.x[["model_obj"]], type = "III") %>%
         as.data.frame() %>%
         tibble::rownames_to_column(var = "variable") %>%
         filter(variable == .y) %>%
