@@ -7,14 +7,16 @@
 \method{add_global}{tbl_uvregression}(x, ...)
 }
 \arguments{
-\item{x}{object with class \code{tbl_uvregression} from the \code{\link{tbl_uvregression}} function}
+\item{x}{object with class \code{tbl_uvregression} from the
+\code{\link{tbl_uvregression}} function}
 
-\item{...}{arguments to be passed to \code{\link[car]{Anova}}.  Adding \code{test.statistic = }
-can change the type of test (e.g. Likelihood-ratio, Wald, etc.).}
+\item{...}{arguments to be passed to \code{\link[car]{Anova}}.}
 }
 \description{
-This function uses \code{\link[car]{Anova}} from the \code{car} package with \code{type = "III"} to calculate global p-values.
-If a needed class of model is not supported by \code{\link[car]{Anova}}, please put in an
+This function uses \code{\link[car]{Anova}} from the \code{car} package with
+\code{type = "III"} to calculate global p-values.
+If a needed class of model is not supported by \code{\link[car]{Anova}},
+please put in an
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 }
 \examples{
