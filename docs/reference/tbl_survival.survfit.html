@@ -206,9 +206,8 @@ depending on the stratum.  Other quantities available to print are:</p><ol>
     <span class='no'>fit1</span>,
     <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
     <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
-  )</div><div class='output co'>#&gt;  [1] "time"        "n.risk"      "n.event"     "surv"        "strata"     
-#&gt;  [6] "lower"       "upper"       "n"           "n.event.tot" "variable"   
-#&gt; [11] "level"       "groupname"  </div><div class='input'>
+  )
+
 <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
 <span class='no'>tbl_nostrata</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
