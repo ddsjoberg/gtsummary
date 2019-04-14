@@ -41,7 +41,7 @@ We will use the `trial` data set throughout this example.  This set contains dat
     grade    Grade
     response Tumor Response
 
-The default output from `tbl_regression()` is meant to be publication ready.  Let's start by creating a regression model table from the `trial` data set included in the `gtsummary` package.  We will predict tumor response using age, stage, and grade using a logistic regression model.  
+The default output from `tbl_regression()` is meant to be publication ready.  Let's start by creating a regression model table from the `trial` data set included in the {gtsummary} package.  We will predict tumor response using age, stage, and grade using a logistic regression model.  
 
 ```{r, message=FALSE}
 # build logistic regression model
@@ -67,8 +67,8 @@ There are four primary was to customize the output of the regression model table
 
 1. Modify `tbl_regression()` function input arguments
 1. Add additional data/information to a summary table with `add_*()` functions
-1. Modify summary table appearance with the gtsummary functions
-1. Modify table appearance with gt package functions
+1. Modify summary table appearance with the {gtsummary} functions
+1. Modify table appearance with {gt} package functions
 
 ### Modifying function arguments
 
@@ -85,13 +85,14 @@ The `tbl_regression()` function includes many input options for modifying the ap
 
 ### Functions to add information
 
-The gtsummary package has built-in functions for adding to results from `tbl_regression()`.  The following functions add columns and/or information to the regression table.
+The {gtsummary} package has built-in functions for adding to results from `tbl_regression()`.  The following functions add columns and/or information to the regression table.
 
-    add_global() adds the global p-value for a categorical variables   
+    add_global()  adds the global p-value for a categorical variables   
+    add_nevent()  adds the number of observed events to the results object    
 
-### gtsummary functions to format table
+### {gtsummary} functions to format table
 
-The gtsummary package comes with functions specifically made to modify and format summary tables.  These functions share the same prefixes as functions from the gt package to ease use.
+The {gtsummary} package comes with functions specifically made to modify and format summary tables.  These functions share the same prefixes as functions from the {gt} package to ease use.
 
     tab_style_bold_labels()       bold variable labels  
     tab_style_bold_levels()       bold variable levels  
@@ -99,11 +100,11 @@ The gtsummary package comes with functions specifically made to modify and forma
     tab_style_italicize_levels()  italicize variable levels  
     tab_style_bold_p()            bold significant p-values  
 
-### gt functions to format table
+### {gt} functions to format table
 
-The gt package is packed with many great functions for modifying table output---too many to list here.  Review the package's website for a full listing. https://gt.rstudio.com/index.html
+The {gt} package is packed with many great functions for modifying table output---too many to list here.  Review the package's website for a full listing. https://gt.rstudio.com/index.html
 
-To use the gt package functions with gtsummary tables, the regression table must first be converted into a `gt` object.  To this end, use the `as_gt()` function after modifications have been completed with gtsummary functions.
+To use the {gt} package functions with {gtsummary} tables, the regression table must first be converted into a {gt} object.  To this end, use the `as_gt()` function after modifications have been completed with {gtsummary} functions.
 
 ```
 m1 %>%
@@ -124,11 +125,9 @@ There are formatting options available, such as adding bold and italics to text.
 ```{r, message=FALSE}
 # format results into data frame with global p-values
 m1 %>%
-  tbl_regression( 
-    exponentiate = TRUE, 
-    pvalue_fun = function(x) style_pvalue(x, digits = 2),
-    coef_fun = function(x) style_ratio(x, digits = 3)
-  )  %>% 
+  tbl_regression(exponentiate = TRUE, 
+                 pvalue_fun = function(x) style_pvalue(x, digits = 2),
+                 coef_fun = function(x) style_ratio(x, digits = 3))  %>% 
   add_global() %>%
   tab_style_bold_p(t = 0.10) %>%
   tab_style_bold_labels() %>% 
@@ -175,7 +174,7 @@ If you're printing results from a categorical variable, include `level` argument
 
 ## Advanced Customization
 
-When you print the output from the `tbl_regression()` function into the R console or into an R markdown, there are default printing functions that are called in the background: `print.tbl_regression()` and `knit_print.tbl_regression()`.  The true output from `tbl_regression()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the `gt` package.
+When you print the output from the `tbl_regression()` function into the R console or into an R markdown, there are default printing functions that are called in the background: `print.tbl_regression()` and `knit_print.tbl_regression()`.  The true output from `tbl_regression()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the {gt} package.
 
 ```{r}
 tbl_regression(m1) %>% names()
@@ -188,17 +187,17 @@ These are the additional data stored in the `tbl_regression()` output list.
     model_obj   the model object passed to `tbl_regression`  
     call_list   named list of each function called on the `tbl_regression` object  
     inputs      inputs from the `tbl_regression()` function call  
-    gt_calls    named list of gt function calls  
+    gt_calls    named list of {gt} function calls  
 
-`gt_calls` is a named list of saved gt function calls.  The gt calls are run when the object is printed to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_regression()`:
+`gt_calls` is a named list of saved {gt} function calls.  The {gt} calls are run when the object is printed to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_regression()`:
 
 ```{r}
 tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% head(n = 3)
 ```
 
-The gt functions are called in the order they appear, always beginning with the `gt()` function.
+The {gt} functions are called in the order they appear, always beginning with the `gt()` function.
 
-If the user does not want a specific gt function to run, any gt call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_regression()` call creates many named gt function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be omitted.  In this example, the default indentation will be omitted from the output.
+If the user does not want a specific {gt} function to run, any {gt} call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_regression()` call creates many named {gt} function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be omitted.  In this example, the default indentation will be omitted from the output.
 
 ```{r remedy001}
 tbl_regression(m1) %>%
@@ -211,14 +210,12 @@ The `tbl_uvregression()` produces a table of univariate regression results.  The
 
 ```{r tbl_uvregression}
 trial %>%
-  select(-death, -ttdeath) %>%
-  tbl_uvregression(
-    method = glm,
-    y = response,
-    method.args = list(family = binomial),
-    exponentiate = TRUE,
-    pvalue_fun = function(x) style_pvalue(x, digits = 2)
-  ) %>%
+  select(-death, -ttdeath, -stage) %>%
+  tbl_uvregression(method = glm,
+                   y = response,
+                   method.args = list(family = binomial),
+                   exponentiate = TRUE,
+                   pvalue_fun = function(x) style_pvalue(x, digits = 2)) %>%
   # overrides the default that shows p-values for each level
   add_global() %>%
   # adjusts global p-values for multiple testing (default method: FDR)

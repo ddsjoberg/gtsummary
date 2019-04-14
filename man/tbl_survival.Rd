@@ -2,59 +2,18 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival}
 \alias{tbl_survival}
-\title{Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints}
+\title{Tabulate univariate statistics for time-to-event endpoints}
 \usage{
-tbl_survival(x, times, time_label = "{time}",
-  level_label = "{level}, N = {n}", header_time = md("**Time**"),
-  header_prob = md("**Probability**"))
+tbl_survival(x, ...)
 }
 \arguments{
-\item{x}{a survfit object with a single stratifying variable}
+\item{x}{a survfit or cuminc object}
 
-\item{times}{numeric vector of survival times}
-
-\item{time_label}{string defining the label shown for the time column.
-Default is \code{"{time}"}.  The input uses \code{\link[glue]{glue}} notation to
-convert the string into a label.  A common label may be \code{"{time} Months"}, which
-would resolve to "6 Months" or "12 Months" depending on the times requested.}
-
-\item{level_label}{used when survival results are stratified.
-It is a string defining the label shown.  The input uses
-\code{\link[glue]{glue}} notation to convert the string into a label.
-The default is \code{"{level}, N = {n}"}.  Other information available to
-call are \code{'{n}'}, \code{'{level}'}, \code{'{variable}'}, \code{'{n.event.tot}'}, and \code{'{strata}'}.}
-
-\item{header_time}{string to be displayed as column header of the time column.
-Default is \code{md('**Time**')}}
-
-\item{header_prob}{string to be displayed as column header of the Kaplan-Meier
-estimate.  Default is \code{md('**Probability**')}}
+\item{...}{further arguments passed to other methods}
 }
 \description{
-Function takes a \code{survfit} object as an argument, and provides a tabulated and
-formatted summary of the results
-}
-\examples{
-library(survival)
-fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-tbl_strata <-
-  tbl_survival(
-    fit1,
-    times = c(12, 24),
-    time_label = "{time} Months"
-  )
-
-fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
-tbl_nostrata <-
-  tbl_survival(
-    fit2,
-    times = c(12, 24),
-    time_label = "{time} Months"
-  )
+Tabulate univariate statistics for time-to-event endpoints
 }
 \seealso{
-\link[gt]{md}, \link[gt]{html}
-}
-\author{
-Daniel D. Sjoberg
+\code{\link{tbl_survival.survfit}}
 }
