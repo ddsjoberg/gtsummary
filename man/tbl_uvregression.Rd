@@ -2,11 +2,11 @@
 % Please edit documentation in R/tbl_uvregression.R
 \name{tbl_uvregression}
 \alias{tbl_uvregression}
-\title{Creates table of univariate regression results}
+\title{Display univariate regression model results in table}
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
-  show_yesno = NULL, conf.level = 0.95,
+  hide_n = FALSE, show_yesno = NULL, conf.level = 0.95,
   coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
   pvalue_fun = style_pvalue)
 }
@@ -32,6 +32,8 @@ random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
+\item{hide_n}{Hide N column. Default is \code{FALSE}}
+
 \item{show_yesno}{Vector of names of categorical and factor variables that
 are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} default to dichotomous printing
 (i.e. only Yes shown). To force both levels to be shown include the column
@@ -56,6 +58,21 @@ arguments. Review the \code{tbl_uvregression}
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}
 for detailed examples.
 }
+\section{Note}{
+
+The N reported in the \code{tbl_uvregression()} output is the number of observations
+in the data frame \code{model.frame(x)}. Depending on the model input, this N
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.
+\enumerate{
+\item Survival regression models including time dependent covariates.
+\item Random- or mixed-effects regression models with clustered data.
+\item GEE regression models with clustered data.
+}
+
+This list is not exhaustive, and care should be taken for each number reported.
+}
+
 \examples{
 tbl_uv <-
  tbl_uvregression(
@@ -80,6 +97,7 @@ tbl_uv2 <-
 }
 \seealso{
 Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},

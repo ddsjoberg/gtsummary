@@ -1,9 +1,20 @@
-#' Creates table of univariate regression results
+#' Display univariate regression model results in table
 #'
 #' The `tbl_uvregression` function arguments are similar to the \code{\link{tbl_regression}}
 #' arguments. Review the `tbl_uvregression`
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}
 #' for detailed examples.
+#'
+#' @section Note:
+#' The N reported in the `tbl_uvregression()` output is the number of observations
+#' in the data frame `model.frame(x)`. Depending on the model input, this N
+#' may represent different quantities. In most cases, it is the number of people or
+#' units in your model.  Here are some common exceptions.
+#' 1. Survival regression models including time dependent covariates.
+#' 2. Random- or mixed-effects regression models with clustered data.
+#' 3. GEE regression models with clustered data.
+#'
+#' This list is not exhaustive, and care should be taken for each number reported.
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
@@ -16,6 +27,7 @@
 #' random intercept, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
 #' @param method.args List of additional arguments passed on to the regression
 #' function defined by method.
+#' @param hide_n Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
@@ -45,6 +57,7 @@
 tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
+                             hide_n = FALSE,
                              show_yesno = NULL, conf.level = 0.95,
                              coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
                              pvalue_fun = style_pvalue) {
@@ -138,6 +151,12 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     gt_calls = eval(gt_tbl_uvregression)
   )
 
+  # hiding N column if requested
+  if(hide_n ==TRUE) {
+    results$gt_calls[["cols_hide_n"]] <-
+      glue("cols_hide(columns = vars(N))")
+  }
+
 
   class(results) <- "tbl_uvregression"
   results
@@ -159,11 +178,9 @@ gt_tbl_uvregression <- quote(list(
 
   # do not print columns variable or row_type columns
   # here i do a setdiff of the variables i want to print by default
-  cols_hide = glue(
-    "cols_hide(columns = vars(",
-    "{names(table_body) %>% setdiff(c('label', 'N', 'coef', 'll', 'ul', 'pvalue')) %>% paste(collapse = ', ')}",
-    "))"
-  ),
+  cols_hide =
+    "cols_hide(columns = vars(variable, row_type, var_type))" %>%
+    glue(),
 
   # NAs do not show in table
   fmt_missing =

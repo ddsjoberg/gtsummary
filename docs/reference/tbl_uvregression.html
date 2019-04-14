@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates table of univariate regression results — tbl_uvregression • gtsummary</title>
+<title>Display univariate regression model results in table — tbl_uvregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Creates table of univariate regression results — tbl_uvregression" />
+<meta property="og:title" content="Display univariate regression model results in table — tbl_uvregression" />
 
 <meta property="og:description" content="The tbl_uvregression function arguments are similar to the tbl_regression
 arguments. Review the tbl_uvregression
@@ -120,7 +120,7 @@ for detailed examples." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Creates table of univariate regression results</h1>
+    <h1>Display univariate regression model results in table</h1>
     
     <div class="hidden name"><code>tbl_uvregression.Rd</code></div>
     </div>
@@ -136,7 +136,7 @@ for detailed examples.</p>
 
     <pre class="usage"><span class='fu'>tbl_uvregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
   <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>, <span class='no'>style_ratio</span>, <span class='no'>style_sigfig</span>),
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>)</pre>
     
@@ -179,6 +179,10 @@ random intercept, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</c
       <td><p>list of labels to write in the output. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code></p></td>
     </tr>
     <tr>
+      <th>hide_n</th>
+      <td><p>Hide N column. Default is <code>FALSE</code></p></td>
+    </tr>
+    <tr>
       <th>show_yesno</th>
       <td><p>Vector of names of categorical and factor variables that
 are <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("No", "Yes")</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("no", "yes")</a></code>, or <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("NO", "YES")</a></code> default to dichotomous printing
@@ -206,9 +210,23 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    
+    <p>The N reported in the <code>tbl_uvregression()</code> output is the number of observations
+in the data frame <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame(x)</a></code>. Depending on the model input, this N
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.</p><ol>
+<li><p>Survival regression models including time dependent covariates.</p></li>
+<li><p>Random- or mixed-effects regression models with clustered data.</p></li>
+<li><p>GEE regression models with clustered data.</p></li>
+</ol>
+    <p>This list is not exhaustive, and care should be taken for each number reported.</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_uvregression: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
+  <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
   <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
@@ -242,6 +260,8 @@ and return a string that is the rounded/formatted p-value (e.g.
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#note">Note</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>

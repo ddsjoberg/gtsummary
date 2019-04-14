@@ -1,9 +1,20 @@
-#' Turn a regression model object into a markdown-ready tibble.
+#' Display regression model results in table
 #'
 #' This function uses \code{broom::tidy} from the `broom` or `broom.mixed` packages
 #' to perform the initial model formatting. Review the `tbl_regression`
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
 #' for detailed examples.
+#'
+#' @section Note:
+#' The N reported in the `tbl_uvregression()` output is the number of observations
+#' in the data frame `model.frame(x)`. Depending on the model input, this N
+#' may represent different quantities. In most cases, it is the number of people or
+#' units in your model.  Here are some common exceptions.
+#' 1. Survival regression models including time dependent covariates.
+#' 2. Random- or mixed-effects regression models with clustered data.
+#' 3. GEE regression models with clustered data.
+#'
+#' This list is not exhaustive, and care should be taken for each number reported.
 #'
 #' @param x regression model object
 #' @param exponentiate logical argument passed directly to
@@ -103,18 +114,6 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
       "coef", "ll", "ul", "pvalue"
     ))
 
-  # if model is a cox model, adding number of events as well
-  if(class(x)[1] == "coxph"){
-    table_body <-
-      table_body %>%
-      mutate(
-        N_event = x %>%
-          survival::coxph.detail() %>%
-          pluck("nevent") %>%
-          sum()
-      )
-  }
-
   # footnote abbreviation details
   footnote_abbr <-
     coef_header(x, exponentiate) %>%
@@ -157,11 +156,8 @@ gt_tbl_regression <- quote(list(
 
   # do not print columns variable or row_type columns
   # here i do a setdiff of the variables i want to print by default
-  cols_hide = glue(
-    "cols_hide(columns = vars(",
-    "{names(table_body) %>% setdiff(c('label', 'coef', 'll', 'ul', 'pvalue')) %>% paste(collapse = ', ')}",
-    "))"
-    ),
+  cols_hide = "cols_hide(columns = vars(variable, row_type, var_type, N))" %>%
+    glue(),
 
   # NAs do not show in table
   fmt_missing = "fmt_missing(columns = everything(), missing_text = '')" %>%

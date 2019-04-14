@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_regression.R
 \name{tbl_regression}
 \alias{tbl_regression}
-\title{Turn a regression model object into a markdown-ready tibble.}
+\title{Display regression model results in table}
 \usage{
 tbl_regression(x, exponentiate = FALSE, label = NULL,
   include = names(stats::model.frame(x)), show_yesno = NULL,
@@ -47,6 +47,21 @@ to perform the initial model formatting. Review the \code{tbl_regression}
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
 for detailed examples.
 }
+\section{Note}{
+
+The N reported in the \code{tbl_uvregression()} output is the number of observations
+in the data frame \code{model.frame(x)}. Depending on the model input, this N
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.
+\enumerate{
+\item Survival regression models including time dependent covariates.
+\item Random- or mixed-effects regression models with clustered data.
+\item GEE regression models with clustered data.
+}
+
+This list is not exhaustive, and care should be taken for each number reported.
+}
+
 \examples{
 mod1 <-
   lm(hp ~ mpg + factor(cyl), mtcars) \%>\%
@@ -63,6 +78,7 @@ mod_glmer <-
 }
 \seealso{
 Other tbl_regression: \code{\link{add_global.tbl_regression}},
+  \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
   \code{\link{tab_style_bold_p.tbl_regression}}
