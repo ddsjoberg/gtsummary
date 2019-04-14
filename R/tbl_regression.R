@@ -1,4 +1,4 @@
-#' Turn a regression model object into a markdown-ready tibble.
+#' Display regression model results in table
 #'
 #' This function uses \code{broom::tidy} from the `broom` or `broom.mixed` packages
 #' to perform the initial model formatting. Review the `tbl_regression`

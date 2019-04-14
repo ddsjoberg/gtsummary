@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_regression.R
 \name{tbl_regression}
 \alias{tbl_regression}
-\title{Turn a regression model object into a markdown-ready tibble.}
+\title{Display regression model results in table}
 \usage{
 tbl_regression(x, exponentiate = FALSE, label = NULL,
   include = names(stats::model.frame(x)), show_yesno = NULL,
