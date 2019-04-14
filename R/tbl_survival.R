@@ -104,7 +104,6 @@ tbl_survival.survfit <- function(x, times,
         groupname = glue(level_label)
       )
 
-    print(names(table_body))
     # checking that the 'level_label' uniquely identifies the stratum
     if((table_body$strata %>% unique() %>% length()) !=
        (table_body$groupname %>% unique() %>% length())) {
