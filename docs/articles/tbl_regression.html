@@ -39,7 +39,7 @@
 <li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -48,7 +48,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Tutorials
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -68,7 +68,7 @@
 <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
     <span class="fa fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -79,22 +79,22 @@
 </div>
 <!--/.navbar -->
 
-      
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Tutorial: tbl_regression</h1>
                         <h4 class="author">Daniel D. Sjoberg</h4>
-            
+
             <h4 class="date">Last Updated: November 29, 2018</h4>
-      
-      
+
+
       <div class="hidden name"><code>tbl_regression.Rmd</code></div>
 
     </div>
 
-    
-    
+
+
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
@@ -787,30 +787,30 @@ response Tumor Response</code></pre>
 <h3 class="hasAnchor">
 <a href="#modifying-function-arguments" class="anchor"></a>Modifying function arguments</h3>
 <p>The <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function includes many input options for modifying the appearance.</p>
-<pre><code>label         modify the variable labels printed in the table.  
-exponentiate  exponentiate model coefficients.  
-include       names of variables to include in output. Default is all variables.  
-show_yesno    show both levels of yes/no variables. Default prints on single row.  
-conf.level    confidence level of confidence interval.  
-intercept     logical argument indicates whether to include the intercept in output.  
-coef_fun      function to round and format beta coefficients.  
+<pre><code>label         modify the variable labels printed in the table.
+exponentiate  exponentiate model coefficients.
+include       names of variables to include in output. Default is all variables.
+show_yesno    show both levels of yes/no variables. Default prints on single row.
+conf.level    confidence level of confidence interval.
+intercept     logical argument indicates whether to include the intercept in output.
+coef_fun      function to round and format beta coefficients.
 pvalue_fun    function to round and format p-values.  </code></pre>
 </div>
 <div id="functions-to-add-information" class="section level3">
 <h3 class="hasAnchor">
 <a href="#functions-to-add-information" class="anchor"></a>Functions to add information</h3>
 <p>The {gtsummary} package has built-in functions for adding to results from <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>. The following functions add columns and/or information to the regression table.</p>
-<pre><code>add_global()  adds the global p-value for a categorical variables   
+<pre><code>add_global()  adds the global p-value for a categorical variables
 add_nevent()  adds the number of observed events to the results object    </code></pre>
 </div>
 <div id="gtsummary-functions-to-format-table" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gtsummary-functions-to-format-table" class="anchor"></a>{gtsummary} functions to format table</h3>
 <p>The {gtsummary} package comes with functions specifically made to modify and format summary tables. These functions share the same prefixes as functions from the {gt} package to ease use.</p>
-<pre><code>tab_style_bold_labels()       bold variable labels  
-tab_style_bold_levels()       bold variable levels  
-tab_style_italicize_labels()  italicize variable labels  
-tab_style_italicize_levels()  italicize variable levels  
+<pre><code>tab_style_bold_labels()       bold variable labels
+tab_style_bold_levels()       bold variable levels
+tab_style_italicize_labels()  italicize variable labels
+tab_style_italicize_levels()  italicize variable levels
 tab_style_bold_p()            bold significant p-values  </code></pre>
 </div>
 <div id="gt-functions-to-format-table" class="section level3">
@@ -1534,11 +1534,11 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
 <a class="sourceLine" id="cb12-2" title="2"><span class="co">#&gt; [1] "table_body" "n"          "model_obj"  "inputs"     "call_list" </span></a>
 <a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt; [6] "gt_calls"</span></a></code></pre></div>
 <p>These are the additional data stored in the <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> output list.</p>
-<pre><code>table_body  data frame with summary statistics  
-n           N included in model  
-model_obj   the model object passed to `tbl_regression`  
-call_list   named list of each function called on the `tbl_regression` object  
-inputs      inputs from the `tbl_regression()` function call  
+<pre><code>table_body  data frame with summary statistics
+n           N included in model
+model_obj   the model object passed to `tbl_regression`
+call_list   named list of each function called on the `tbl_regression` object
+inputs      inputs from the `tbl_regression()` function call
 gt_calls    named list of {gt} function calls  </code></pre>
 <p><code>gt_calls</code> is a named list of saved {gt} function calls. The {gt} calls are run when the object is printed to the console or in an R markdown document. Here’s an example of the first few calls saved with <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(m1) <span class="op">%&gt;%</span><span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span>(<span class="st">"gt_calls"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="dt">n =</span> <span class="dv">3</span>)</a>
@@ -2268,7 +2268,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
       </footer>
 </div>
 
-  
+
 
   </body>
 </html>

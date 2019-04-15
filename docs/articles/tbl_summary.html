@@ -39,7 +39,7 @@
 <li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -48,7 +48,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Tutorials
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -68,7 +68,7 @@
 <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
     <span class="fa fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -79,22 +79,22 @@
 </div>
 <!--/.navbar -->
 
-      
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Tutorial: tbl_summary</h1>
                         <h4 class="author">Daniel D. Sjoberg</h4>
-            
+
             <h4 class="date">Last Updated: November 29, 2018</h4>
-      
-      
+
+
       <div class="hidden name"><code>tbl_summary.Rmd</code></div>
 
     </div>
 
-    
-    
+
+
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
@@ -1077,30 +1077,30 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
 <h3 class="hasAnchor">
 <a href="#modifying-function-arguments" class="anchor"></a>Modifying function arguments</h3>
 <p>The <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> function includes many input options for modifying the appearance.</p>
-<pre><code>label       modify the variable labels printed in the table  
-statistic   change the summary statistics presented  
-digits      number of digits the summary statistics will be rounded to  
+<pre><code>label       modify the variable labels printed in the table
+statistic   change the summary statistics presented
+digits      number of digits the summary statistics will be rounded to
 missing     whether to display a row with the number of missing observations  </code></pre>
 </div>
 <div id="functions-to-add-information" class="section level3">
 <h3 class="hasAnchor">
 <a href="#functions-to-add-information" class="anchor"></a>Functions to add information</h3>
 <p>The {gtsummary} package has built-in functions for adding to results from <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. The following functions add columns and/or information to the summary table.</p>
-<pre><code>add_comparison()  add p-values to the output comparing values across groups   
-add_overall()     add a column with overall summary statistics   
-add_n()           add a column with N (or N missing) for each variable   
-add_stat_label()  add a column showing a label for the summary statistics shown in each row   
+<pre><code>add_comparison()  add p-values to the output comparing values across groups
+add_overall()     add a column with overall summary statistics
+add_n()           add a column with N (or N missing) for each variable
+add_stat_label()  add a column showing a label for the summary statistics shown in each row
 add_q()           add a column of q values to control for multiple comparisons   </code></pre>
 </div>
 <div id="gtsummary-functions-to-format-table" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gtsummary-functions-to-format-table" class="anchor"></a>{gtsummary} functions to format table</h3>
 <p>The {gtsummary} package comes with functions specifically made to modify and format summary tables. These functions share the same prefixes as functions from the {gt} package to ease use.</p>
-<pre><code>cols_label_summary()          relabel columns in summary table  
-tab_style_bold_labels()       bold variable labels  
-tab_style_bold_levels()       bold variable levels  
-tab_style_italicize_labels()  italicize variable labels  
-tab_style_italicize_levels()  italicize variable levels  
+<pre><code>cols_label_summary()          relabel columns in summary table
+tab_style_bold_labels()       bold variable labels
+tab_style_bold_levels()       bold variable levels
+tab_style_italicize_labels()  italicize variable labels
+tab_style_italicize_levels()  italicize variable levels
 tab_style_bold_p()            bold significant p-values  </code></pre>
 </div>
 <div id="gt-functions-to-format-table" class="section level3">
@@ -1794,11 +1794,11 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>()</a>
 <a class="sourceLine" id="cb13-2" title="2"><span class="co">#&gt; [1] "gt_calls"   "table_body" "meta_data"  "inputs"     "call_list"</span></a></code></pre></div>
 <p>These are the additional data stored in the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> output list.</p>
-<pre><code>table_body  data frame with summary statistics  
-meta_data   data frame that is one row per variable with data about each  
-by, df_by   the by variable name, and a  data frame with information about the by variable  
-call_list   named list of each function called on the `tbl_summary` object  
-inputs      inputs from the `tbl_summary()` function call  
+<pre><code>table_body  data frame with summary statistics
+meta_data   data frame that is one row per variable with data about each
+by, df_by   the by variable name, and a  data frame with information about the by variable
+call_list   named list of each function called on the `tbl_summary` object
+inputs      inputs from the `tbl_summary()` function call
 gt_calls    named list of {gt} function calls  </code></pre>
 <p><code>gt_calls</code> is a named list of saved {gt} function calls. The {gt} calls are run when the object is printed to the console or in an R markdown document. Here’s an example of the first few calls saved with <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial2) <span class="op">%&gt;%</span><span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span>(<span class="st">"gt_calls"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="dt">n =</span> <span class="dv">3</span>)</a>
@@ -2141,7 +2141,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
       </footer>
 </div>
 
-  
+
 
   </body>
 </html>
