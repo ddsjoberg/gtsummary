@@ -32,8 +32,10 @@
 
 <meta property="og:title" content="Adds the global p-value for a categorical variables in <code>tbl_regression</code> objects — add_global.tbl_regression" />
 
-<meta property="og:description" content="This function uses Anova from the car package with type = &quot;III&quot; to calculate global p-values.
-If a needed class of model is not supported by Anova, please put in an
+<meta property="og:description" content="This function uses Anova from the car package with
+type = &quot;III&quot; to calculate global p-values.
+If a needed class of model is not supported by Anova,
+please put in an
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support." />
 <meta name="twitter:card" content="summary" />
 
@@ -126,8 +128,10 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support." />
 
     <div class="ref-description">
     
-    <p>This function uses <code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code> from the <code>car</code> package with <code>type = "III"</code> to calculate global p-values.
-If a needed class of model is not supported by <code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code>, please put in an
+    <p>This function uses <code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code> from the <code>car</code> package with
+<code>type = "III"</code> to calculate global p-values.
+If a needed class of model is not supported by <code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code>,
+please put in an
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.</p>
     
     </div>
@@ -140,7 +144,8 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object with class <code>tbl_regression</code> from the <code><a href='tbl_regression.html'>tbl_regression</a></code> function</p></td>
+      <td><p>object with class <code>tbl_regression</code> from the
+<code><a href='tbl_regression.html'>tbl_regression</a></code> function</p></td>
     </tr>
     <tr>
       <th>terms</th>
@@ -154,8 +159,7 @@ levels of the categorical variable. Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>arguments to be passed to <code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code>.  Adding <code>test.statistic = </code>
-can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
+      <td><p>arguments to be passed to <code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code></p></td>
     </tr>
     </table>
     
@@ -169,7 +173,10 @@ can change the type of test (e.g. Likelihood-ratio, Wald, etc.).</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_lm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>marker</span> ~ <span class='no'>stage</span> + <span class='no'>grade</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_global.html'>add_global</a></span>()</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tbl_lm</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>marker</span> ~ <span class='no'>stage</span> + <span class='no'>grade</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_global.html'>add_global</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

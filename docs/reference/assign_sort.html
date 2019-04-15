@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Merge two or more gtsummary regression objects — tbl_merge • gtsummary</title>
+<title>Assigns categorical variables sort type ("alphanumeric" or "frequency") — assign_sort • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Merge two or more gtsummary regression objects — tbl_merge" />
+<meta property="og:title" content="Assigns categorical variables sort type ("alphanumeric" or "frequency") — assign_sort" />
 
-<meta property="og:description" content="The tbl_merge function merges two or more tbl_regression or
-tbl_uvregression objects and adds appropriate spanning headers." />
+<meta property="og:description" content="Assigns categorical variables sort type (&quot;alphanumeric&quot; or &quot;frequency&quot;)" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,61 +117,46 @@ tbl_uvregression objects and adds appropriate spanning headers." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Merge two or more gtsummary regression objects</h1>
+    <h1>Assigns categorical variables sort type ("alphanumeric" or "frequency")</h1>
     
-    <div class="hidden name"><code>tbl_merge.Rd</code></div>
+    <div class="hidden name"><code>assign_sort.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The <code>tbl_merge</code> function merges two or more <code>tbl_regression</code> or
-<code>tbl_uvregression</code> objects and adds appropriate spanning headers.</p>
+    <p>Assigns categorical variables sort type ("alphanumeric" or "frequency")</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_merge</span>(<span class='no'>tbls</span>, <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Model "</span>), <span class='fl'>1</span>:<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>tbls</span>)))</pre>
+    <pre class="usage"><span class='fu'>assign_sort</span>(<span class='no'>variable</span>, <span class='no'>summary_type</span>, <span class='no'>sort</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tbls</th>
-      <td><p>list of gtsummary regression objects</p></td>
+      <th>variable</th>
+      <td><p>variable name</p></td>
     </tr>
     <tr>
-      <th>tab_spanner</th>
-      <td><p>Spanning headers.  Vector with same length as <code>tbls</code></p></td>
+      <th>summary_type</th>
+      <td><p>the type of variable ("continuous", "categorical", "dichotomous")</p></td>
+    </tr>
+    <tr>
+      <th>sort</th>
+      <td><p>named list indicating the type of sorting to perform. Default is NULL.
+The names of the list elements are variable names or '..categorical..' for assigning
+all variables of that type.  If both a variable name and '..categorical..' are
+specified, the variable name takes precedent</p></td>
     </tr>
     </table>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
-<span class='no'>t1</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>age</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment"</span>, <span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Age"</span>),
-    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-  )
-<span class='no'>t2</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>age</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment"</span>, <span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Age"</span>),
-    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-  )
-<span class='no'>t3</span> <span class='kw'>&lt;-</span>
-  <span class='fu'>tbl_merge</span>(
-    <span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>),
-    <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Tumor Response"</span>, <span class='st'>"Time to Death"</span>)
-  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
     <h2>Author</h2>
     <p>Daniel D. Sjoberg</p>
