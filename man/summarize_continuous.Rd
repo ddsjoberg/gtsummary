@@ -5,7 +5,7 @@
 \title{Calculates and formats summary statistics for continuous data}
 \usage{
 summarize_continuous(data, variable, by, digits, var_label, stat_display,
-  missing)
+  missing, missing_text)
 }
 \arguments{
 \item{data}{data frame}
@@ -26,6 +26,8 @@ The syntax follows \code{\link[glue]{glue}} inputs with n, N, and p as input opt
 if the table includes counts of \code{NA} values: the allowed values correspond to
 never (\code{"no"}), only if the count is positive (\code{"ifany"}) and even for
 zero counts (\code{"always"}). Default is \code{"ifany"}.}
+
+\item{missing_text}{String to display for count of missing observations.}
 }
 \value{
 formatted summary statistics in a tibble.

@@ -47,6 +47,8 @@
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
+#' @param missing_text String to display for count of missing observations.
+#' Default is `"Unknown"`.
 #' @param sort named list indicating the type of sorting to perform. Default is NULL.
 #' Options are 'frequency' where results are sorted in
 #' descending order of frequency and 'alphanumeric'
@@ -72,7 +74,7 @@
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
                         missing = c("ifany", "always", "no"),
-                        sort = NULL) {
+                        missing_text = "Unknown", sort = NULL) {
   missing <- match.arg(missing)
   # ungrouping data
   data <- data %>% ungroup()
@@ -83,8 +85,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 
   # checking function inputs
   tbl_summary_input_checks(
-    data, by, label, type, value,
-    statistic, digits, missing, group, sort
+    data, by, label, type, value, statistic,
+    digits, missing, missing_text, group, sort
   )
 
   # creating a table with meta data about each variable
@@ -128,7 +130,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
           data,
           variable = ..1, by = get("by"), summary_type = ..2,
           dichotomous_value = ..3, var_label = ..4, stat_display = ..5,
-          digits = ..6, class = ..7, missing = missing, sort = ..8
+          digits = ..6, class = ..7, missing = missing,
+          missing_text = missing_text, sort = ..8
         )
       )
     ) %>%
