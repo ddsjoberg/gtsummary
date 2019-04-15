@@ -6,7 +6,8 @@
 \usage{
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,
-  missing = c("ifany", "always", "no"), sort = NULL)
+  missing = c("ifany", "always", "no"), missing_text = "Unknown",
+  sort = NULL)
 }
 \arguments{
 \item{data}{a data frame}
@@ -59,6 +60,9 @@ calculate p-values with correlated data. Default is \code{NULL}}
 if the table includes counts of \code{NA} values: the allowed values correspond to
 never (\code{"no"}), only if the count is positive (\code{"ifany"}) and even for
 zero counts (\code{"always"}). Default is \code{"ifany"}.}
+
+\item{missing_text}{String to display for count of missing observations.
+Default is \code{"Unknown"}.}
 
 \item{sort}{named list indicating the type of sorting to perform. Default is NULL.
 Options are 'frequency' where results are sorted in
