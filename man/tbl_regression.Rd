@@ -4,11 +4,10 @@
 \alias{tbl_regression}
 \title{Display regression model results in table}
 \usage{
-tbl_regression(x, exponentiate = FALSE, label = NULL,
-  include = names(stats::model.frame(x)), show_yesno = NULL,
-  conf.level = 0.95, intercept = FALSE,
-  coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-  pvalue_fun = style_pvalue)
+tbl_regression(x, exponentiate = FALSE, label = NULL, include = NULL,
+  exclude = NULL, show_yesno = NULL, conf.level = 0.95,
+  intercept = FALSE, coef_fun = ifelse(exponentiate == TRUE,
+  style_ratio, style_sigfig), pvalue_fun = style_pvalue)
 }
 \arguments{
 \item{x}{regression model object}
@@ -18,12 +17,13 @@ tbl_regression(x, exponentiate = FALSE, label = NULL,
 
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
-\item{include}{names of variables to include in output.  Default is all variables.}
+\item{include}{names of variables to include in output.}
 
-\item{show_yesno}{Vector of names of categorical and factor variables that
-are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} default to dichotomous printing
-(i.e. only Yes shown). To force both levels to be shown include the column
-name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
+\item{exclude}{names of variables to exclude from output.}
+
+\item{show_yesno}{By default yes/no categorical variables are printed on a single row,
+when the 'No' category is the reference group.  To print both levels in the output table, include
+the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
 
 \item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
 
