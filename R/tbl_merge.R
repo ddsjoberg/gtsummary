@@ -82,21 +82,26 @@ tbl_merge <- function(tbls,
   # creating list of footnote information
   footnote_abbreviation <- list()
   footnote_abbreviation[["footnote"]] <-
-    imap_chr(
+    imap(
       tbl_inputs(tbls),
       ~coef_header(.x$x, .x$exponentiate) %>% attr("footnote")
     ) %>%
     unique() %>%
+    compact() %>%
+    unlist() %>%
     c("CI = Confidence Interval") %>%
    glue_collapse(sep = ", ")
 
   footnote_abbreviation[["columns"]] <-
     imap_lgl(
       tbl_inputs(tbls),
-      ~coef_header(.x$x, .x$exponentiate) %>% attr("footnote") %>% {!is.null(.)}
+      ~coef_header(.x$x, .x$exponentiate) %>%
+        attr("footnote") %>%
+        {!is.null(.)}
     ) %>%
     which() %>%
-    {paste0("coef_", .)} %>%
+    # if any abbreviations, include coef_{i} in abbreviation list, otherwise return NULL
+    {switch(length(.) == 0 +  1, paste0("coef_", .), NULL)} %>%
     c(paste0("ll_", 1:tbls_length)) %>%
    glue_collapse(sep = ", ")
 
