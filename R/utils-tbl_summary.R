@@ -845,8 +845,6 @@ summarize_categorical <- function(data, variable, by, var_label,
       label = .data$variable %>% as.character()
     )
 
-  print("tab")
-  print(tab)
   # if sort == "frequency", then sort data before moving forward
   if(sort == "frequency") {
     tab <-
@@ -858,8 +856,6 @@ summarize_categorical <- function(data, variable, by, var_label,
       tab %>%
       arrange(.data$variable)
   }
-  print("tab")
-  print(tab)
 
   # keeping needed vars
   tab <-
