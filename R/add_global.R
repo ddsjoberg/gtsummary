@@ -14,6 +14,11 @@
 #' @author Daniel D. Sjoberg
 #' @export
 add_global <- function(x, ...) {
+  # must have car package installed to use this function
+  if (!requireNamespace("car", quietly = TRUE)) {
+    stop("The 'car' package is required for 'add_global'. Install with install.packages('car')",
+         call. = FALSE)
+  }
   UseMethod("add_global")
 }
 
