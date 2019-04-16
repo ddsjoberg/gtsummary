@@ -1,22 +1,33 @@
-#' Turn a regression model object into a markdown-ready tibble.
+#' Display regression model results in table
 #'
 #' This function uses \code{broom::tidy} from the `broom` or `broom.mixed` packages
 #' to perform the initial model formatting. Review the `tbl_regression`
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
 #' for detailed examples.
 #'
+#' @section Note:
+#' The N reported in the `tbl_uvregression()` output is the number of observations
+#' in the data frame `model.frame(x)`. Depending on the model input, this N
+#' may represent different quantities. In most cases, it is the number of people or
+#' units in your model.  Here are some common exceptions.
+#' 1. Survival regression models including time dependent covariates.
+#' 2. Random- or mixed-effects regression models with clustered data.
+#' 3. GEE regression models with clustered data.
+#'
+#' This list is not exhaustive, and care should be taken for each number reported.
+#'
 #' @param x regression model object
 #' @param exponentiate logical argument passed directly to
 #' `tidy` function. Default is `FALSE`
 #' @param label list of labels to write in the output. `list(age60 = "Age > 60")`
-#' @param include names of variables to include in output.  Default is all variables.
+#' @param include names of variables to include in output.
+#' @param exclude names of variables to exclude from output.
 #' @param conf.level confidence level passed directly to `tidy` function. Default is 0.95.
 #' @param intercept logical argument indicates whether to include the intercept
 #' in the output.  Default is `FALSE`
-#' @param show_yesno Vector of names of categorical and factor variables that
-#' are `c("No", "Yes")`, `c("no", "yes")`, or `c("NO", "YES")` default to dichotomous printing
-#' (i.e. only Yes shown). To force both levels to be shown include the column
-#' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
+#' @param show_yesno By default yes/no categorical variables are printed on a single row,
+#' when the 'No' category is the reference group.  To print both levels in the output table, include
+#' the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``
 #' @param coef_fun function to round and format beta coefficients.  Default
 #' is \code{\link{style_sigfig}} when the coefficients are printed, and
 #' \code{\link{style_ratio}} when the coefficients have been exponentiated.
@@ -43,7 +54,8 @@
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
 tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
-                           include = names(stats::model.frame(x)),
+                           include = NULL,
+                           exclude = NULL,
                            show_yesno = NULL,
                            conf.level = 0.95, intercept = FALSE,
                            coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
@@ -55,53 +67,35 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   # using broom and broom.mixed to tidy up regression results, and
   # then reversing order of data frame
   tidy_model <-
-    tidy_wrap(x, exponentiate, conf.level) %>%
-    map_df(rev) # reverses order of data frame
+    tidy_wrap(x, exponentiate, conf.level)
 
   # parsing the terms from model and variable names
-  # outputing a named list--one entry per variable
-  mod_list <- parse_terms(x, tidy_model, show_yesno)
+  # outputing a tibble of the parsed model with
+  # rows for reference groups, and headers for
+  # categorical variables
+  table_body <- parse_fit(x, tidy_model, label, show_yesno)
+  # mod_list <- parse_terms(x, tidy_model, show_yesno)
 
-  # keeping intercept if requested
+  # including and excluding variables/intercept indicated
   # Note, include = names(stats::model.frame(mod_nlme))
   # has an error for nlme because it is "reStruct"
-  if (intercept == TRUE) include <- c(include, "(Intercept)")
+  if (!is.null(include)) {
+    include_err <- include %>% setdiff(table_body$variable %>% unique())
+    if(length(include_err) > 0) stop(
+      "'include' must be '{paste(names(table_body$variable %>% unique()), collapse = ', ')}'"
+    )
+  }
+  if (is.null(include)) include <-  table_body$variable %>% unique()
+  if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
+  include <- include %>% setdiff(exclude)
 
   # keeping variables indicated in `include`
-  if ((names(mod_list) %in% include) %>% any() == FALSE) {
-    stop(glue(
-      "'include' must be in '{paste(names(mod_list), collapse = ', ')}'"
-    ))
-  }
-  mod_list <- mod_list[names(mod_list) %in% include]
+  table_body <-
+    table_body %>%
+    filter(.data$variable %in% include)
 
   # model N
   n <- stats::model.frame(x) %>% nrow()
-
-  # putting all results into tibble
-  table_body <-
-    tibble(variable = names(mod_list)) %>%
-    mutate(
-      estimates = mod_list,
-      var_type = map_chr(.data$estimates, ~ ifelse(nrow(.x) > 1, "categorical", "continuous")),
-      var_label = map_chr(
-        .data$variable, ~ label[[.x]] %||% attr(stats::model.frame(x)[[.x]], "label") %||% .x
-      ),
-      estimates = pmap(
-        list(.data$var_type, .data$estimates, .data$var_label, .data$variable),
-        ~ add_label(..1, ..2, ..3, ..4)
-      ),
-      N = n
-    ) %>%
-    unnest(!!sym("estimates")) %>%
-    select(c(
-      "variable", "var_type", "row_type", "label", "N",
-      "estimate", "conf.low", "conf.high", "p.value"
-    )) %>%
-    set_names(c(
-      "variable", "var_type", "row_type", "label", "N",
-      "coef", "ll", "ul", "pvalue"
-    ))
 
   # footnote abbreviation details
   footnote_abbr <-
@@ -144,6 +138,7 @@ gt_tbl_regression <- quote(list(
   ),
 
   # do not print columns variable or row_type columns
+  # here i do a setdiff of the variables i want to print by default
   cols_hide = "cols_hide(columns = vars(variable, row_type, var_type, N))" %>%
     glue(),
 
@@ -204,10 +199,10 @@ gt_tbl_regression <- quote(list(
 # identifies headers for common models (logistic, poisson, and cox regression)
 coef_header <- function(x, exponentiate) {
   if (
-    (class(x)[1] == "glm") | # generalized linear models
+    (class(x)[1] %in% c("glm", "geeglm")) | # generalized linear models, and GEE GLMs
     (class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
   ) {
-    if(class(x)[1] == "glm") family = x$family
+    if(class(x)[1] %in% c("glm", "geeglm")) family = x$family
     else if(class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4")
       family = x@resp$family
     else stop("Error occured in 'coef_header' function")
@@ -231,6 +226,10 @@ coef_header <- function(x, exponentiate) {
       header <- "log(IRR)"
       attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
     }
+
+    # Other models
+    else if (exponentiate == TRUE) header <- "exp(Coefficient)"
+    else header <- "Coefficient"
   }
   # Cox PH Regression
   else if (class(x)[1] == "coxph" & exponentiate == TRUE) {
@@ -244,7 +243,7 @@ coef_header <- function(x, exponentiate) {
 
   # Other models
   else if (exponentiate == TRUE) header <- "exp(Coefficient)"
-  else  header <- "Coefficient"
+  else header <- "Coefficient"
 
   header
 }

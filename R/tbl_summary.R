@@ -47,6 +47,11 @@
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
+#' @param missing_text String to display for count of missing observations.
+#' Default is `"Unknown"`.
+#' @param sort named list indicating the type of sorting to perform. Default is NULL.
+#' Options are 'frequency' where results are sorted in
+#' descending order of frequency and 'alphanumeric'
 #' @return List of summary statistics to be converted to a `gt` object
 #' @section Specifying Variable Types:
 #' tbl_summary displays summary statistics for three types of data:
@@ -68,7 +73,8 @@
 
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
-                        missing = c("ifany", "always", "no")) {
+                        missing = c("ifany", "always", "no"),
+                        missing_text = "Unknown", sort = NULL) {
   missing <- match.arg(missing)
   # ungrouping data
   data <- data %>% ungroup()
@@ -79,8 +85,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 
   # checking function inputs
   tbl_summary_input_checks(
-    data, by, label, type, value,
-    statistic, digits, missing, group
+    data, by, label, type, value, statistic,
+    digits, missing, missing_text, group, sort
   )
 
   # creating a table with meta data about each variable
@@ -91,7 +97,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   if (!is.null(group)) meta_data <- meta_data %>% filter(!!parse_expr("!variable %in% group"))
 
   # assigning variable characteristics
-  meta_data <- meta_data %>%
+  meta_data <-
+    meta_data %>%
     mutate(
       # assigning class, if entire var is NA, then assigning class NA
       class = assign_class(data, .data$variable),
@@ -104,7 +111,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
       stat_label = stat_label_match(.data$stat_display),
       digits = continuous_digits_guess(
         data, .data$variable, .data$summary_type, .data$class, digits
-      )
+      ),
+      sort = assign_sort(.data$variable, .data$summary_type, sort)
     )
 
   # calculating summary statistics
@@ -115,13 +123,15 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
       stat_table = pmap(
         list(
           .data$variable, .data$summary_type, .data$dichotomous_value,
-          .data$var_label, .data$stat_display, .data$digits, .data$class
+          .data$var_label, .data$stat_display, .data$digits, .data$class,
+          .data$sort
         ),
         ~ calculate_summary_stat(
           data,
           variable = ..1, by = get("by"), summary_type = ..2,
           dichotomous_value = ..3, var_label = ..4, stat_display = ..5,
-          digits = ..6, class = ..7, missing = missing
+          digits = ..6, class = ..7, missing = missing,
+          missing_text = missing_text, sort = ..8
         )
       )
     ) %>%

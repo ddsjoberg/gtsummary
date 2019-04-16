@@ -53,6 +53,6 @@ Other tbl_summary: \code{\link{add_n}},
   \code{\link{tbl_summary}}
 }
 \author{
-Daniel D. Sjoberg
+Daniel D. Sjoberg, Emily Zabor
 }
 \concept{tbl_summary}

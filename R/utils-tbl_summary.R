@@ -575,12 +575,15 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 #' if the table includes counts of NA values: the allowed values correspond to
 #' never ("no"), only if the count is positive ("ifany") and even for
 #' zero counts ("always"). Default is "ifany".
+#' @param missing_text String to display for count of missing observations.
+#' @param sort string indicating whether to sort categorical
+#' variables by 'alphanumeric' or 'frequency'
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 calculate_summary_stat <- function(data, variable, by, summary_type,
                                    dichotomous_value, var_label, stat_display,
-                                   digits, class, missing) {
+                                   digits, class, missing, missing_text, sort) {
 
   # if class is NA, then do not calculate summary statistics
   if (is.na(class)) {
@@ -589,7 +592,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
       return(
         tibble(
           row_type = c("label", "missing"),
-          label = c(var_label, "Unknown"),
+          label = c(var_label, missing_text),
           stat_overall = c(NA_character_, as.character(nrow(data)))
         )
       )
@@ -600,7 +603,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
       return(
         tibble(
           row_type = c("label", "missing"),
-          label = c(var_label, "Unknown")
+          label = c(var_label, missing_text)
         ) %>%
           left_join(
             table(data[[by]]) %>%
@@ -620,7 +623,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     return(
       summarize_continuous(
         data, variable, by, digits,
-        var_label, stat_display, missing
+        var_label, stat_display, missing, missing_text
       )
     )
   }
@@ -630,7 +633,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     return(
       summarize_categorical(
         data, variable, by, var_label,
-        stat_display, dichotomous_value, missing
+        stat_display, dichotomous_value, missing, missing_text, sort
       )
     )
   }
@@ -777,12 +780,16 @@ df_by <- function(data, by) {
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
+#' @param missing_text String to display for count of missing observations.
+#' @param sort string indicating whether to sort categorical
+#' variables by 'alphanumeric' or 'frequency'
 #' @return formatted summary statistics in a tibble.
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 summarize_categorical <- function(data, variable, by, var_label,
-                                  stat_display, dichotomous_value, missing) {
+                                  stat_display, dichotomous_value, missing,
+                                  missing_text, sort) {
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -823,18 +830,36 @@ summarize_categorical <- function(data, variable, by, var_label,
     count(!!sym("variable")) %>%
     ungroup() %>%
     complete(!!sym("by_col"), !!sym("variable"), fill = list(n = 0)) %>%
+    group_by(!!sym("variable")) %>%
+    mutate(var_level_freq = sum(.data$n)) %>%
     group_by(!!sym("by_col")) %>%
     mutate(
       N = sum(.data$n),
       p = style_percent(.data$n / .data$N),
       stat = as.character(glue(stat_display))
     ) %>%
-    select(c("by_col", "variable", "stat")) %>%
+    select(c("by_col", "var_level_freq", "variable", "stat")) %>%
     spread(!!sym("by_col"), !!sym("stat")) %>%
     mutate(
       row_type = "level",
       label = .data$variable %>% as.character()
-    ) %>%
+    )
+
+  # if sort == "frequency", then sort data before moving forward
+  if(sort == "frequency") {
+    tab <-
+      tab %>%
+      arrange(desc(.data$var_level_freq))
+  }
+  else if(sort == "alphanumeric") {
+    tab <-
+      tab %>%
+      arrange(.data$variable)
+  }
+
+  # keeping needed vars
+  tab <-
+    tab %>%
     select(c("variable", "row_type", "label", starts_with("stat_")))
 
   # number of missing observations
@@ -849,9 +874,8 @@ summarize_categorical <- function(data, variable, by, var_label,
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
     mutate(
       row_type = "missing",
-      label = "Unknown"
+      label = missing_text
     )
-
 
   # formatting for dichotomous variables
   if (!is.null(dichotomous_value)) {
@@ -926,13 +950,14 @@ summarize_categorical <- function(data, variable, by, var_label,
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
+#' @param missing_text String to display for count of missing observations.
 #' @return formatted summary statistics in a tibble.
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @importFrom stringr str_extract_all str_remove_all fixed
 
 summarize_continuous <- function(data, variable, by, digits,
-                                 var_label, stat_display, missing) {
+                                 var_label, stat_display, missing, missing_text) {
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -977,7 +1002,7 @@ summarize_continuous <- function(data, variable, by, digits,
       # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
       df_result = map2(
         .data$stat_name_list, .data$stat_result_list,
-        ~ .y %>% t() %>% as_tibble() %>% set_names(.x)
+        ~ .y %>% t() %>% as_tibble(.name_repair = "minimal") %>% set_names(.x)
       ),
       # rounding statistics and concatenating results
       stat = map_chr(
@@ -1012,7 +1037,7 @@ summarize_continuous <- function(data, variable, by, digits,
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
     mutate(
       row_type = "missing",
-      label = "Unknown"
+      label = missing_text
     )
 
   # stacking stats and missing row
@@ -1029,6 +1054,45 @@ summarize_continuous <- function(data, variable, by, digits,
 
   result
 }
+
+#' Assigns categorical variables sort type ("alphanumeric" or "frequency")
+#'
+#' @param variable variable name
+#' @param summary_type the type of variable ("continuous", "categorical", "dichotomous")
+#' @param sort named list indicating the type of sorting to perform. Default is NULL.
+#' The names of the list elements are variable names or '..categorical..' for assigning
+#' all variables of that type.  If both a variable name and '..categorical..' are
+#' specified, the variable name takes precedent
+#' @keywords internal
+#' @author Daniel D. Sjoberg
+
+# this function assigns categorical variables sort type ("alphanumeric" or "frequency")
+assign_sort <- function(variable, summary_type, sort) {
+
+  purrr::map2_chr(
+    variable, summary_type,
+    function(variable, summary_type) {
+      # only assigning sort type for caegorical data
+      if(summary_type == "dichotomous") return("alphanumeric")
+      if(summary_type != "categorical") return(NA_character_)
+
+      # if variable was specified, then use that
+      if(!is.null(sort[[variable]])) return(sort[[variable]])
+
+      # if the sort list has ..categorical.. name, then use that for all categorical variables
+      if(!is.null(sort[["..categorical.."]])) return(sort[["..categorical.."]])
+
+      # otherwise, return "alphanumeric"
+      return("alphanumeric")
+    }
+  )
+}
+
+# assign_sort(variable = c("trt", "grade", "stage", "age"),
+#             summary_type = c("categorical", "categorical", "categorical", "continuous"),
+#             sort = list(..categorical.. = "frequency",
+#                         stage = "alphanumeric"))
+
 
 # stat_name that are accepted
 calculate_single_stat <- function(x, stat_name) {
@@ -1072,7 +1136,8 @@ calculate_single_stat <- function(x, stat_name) {
 # this should include EVERY input of \code{\link{tbl_summary}} in the same order
 # copy and paste them from \code{\link{tbl_summary}}
 tbl_summary_input_checks <- function(data, by, label, type, value,
-                                     statistic, digits, missing, group) {
+                                     statistic, digits, missing, missing_text,
+                                     group, sort) {
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
@@ -1196,12 +1261,45 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     }
   }
 
+  # missing_text ---------------------------------------------------------------
+  #input must be character
+  if(!"character" %in% class(missing_text)) {
+    stop("Argument 'missing_text' must be a character string.")
+  }
+  # checking the length is one
+  if(length(missing_text) != 1) {
+    stop("Argument 'missing_text' must be a character string of length 1.")
+  }
+
   # group ----------------------------------------------------------------------
   if (length(group) > 1) {
     stop(
       "'group' must be `NULL` or length 1."
     )
   }
+
+  # sort -----------------------------------------------------------------------
+  if (!is.null(sort)) {
+    # checking that all names in list are variable names from data.
+    var_sort_not_in_data <- setdiff(names(sort), c(names(data), "..categorical.."))
+    if (length(var_sort_not_in_data) > 0) {
+      message(glue(
+        "The following names from 'sort' are not valid ",
+        "were ignored: {paste0(var_sort_not_in_data, collapse = ', ')}"
+      ))
+    }
+
+    # checking that all the values are length 1
+    if(map_lgl(sort, ~length(.x) != 1) %>% any()) {
+      stop("The length of all elements in 'sort' must be 1.")
+    }
+    # checking that all values are "alphanumeric" OR "frequency"
+    if(unlist(sort) %>% setdiff(c("alphanumeric", "frequency")) %>% length() > 0) {
+      stop("Elements of 'sort' must be one of 'frequency' or 'alphanumeric'")
+    }
+  }
+
+
 }
 
 # # data
@@ -1312,3 +1410,5 @@ footnote_stat_label <- function(meta_data) {
     paste(collapse = "; ") %>%
     paste0("Statistics presented: ", .)
 }
+
+

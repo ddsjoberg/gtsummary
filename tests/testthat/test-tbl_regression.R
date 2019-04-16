@@ -13,6 +13,7 @@ mod_poisson <- glm(count ~ age + trt,
 mod_lmer <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
 
+mod_lm_interaction <- lm(age ~ trt*grade*response, data = trial)
 
 
 test_that("glm: logistic and poisson regression", {
@@ -46,4 +47,9 @@ test_that("lmer: no errors/warnings with standard use", {
 test_that("glmer: no errors/warnings with standard use", {
   expect_error(tbl_regression(mod_glmer), NA)
   expect_warning(tbl_regression(mod_glmer), NA)
+})
+
+test_that("lm with interactions: no errors/warnings with standard use", {
+  expect_error(tbl_regression(mod_lm_interaction), NA)
+  expect_warning(tbl_regression(mod_lm_interaction), NA)
 })

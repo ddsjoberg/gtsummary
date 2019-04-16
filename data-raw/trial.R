@@ -37,6 +37,6 @@ attr(trial$stage, "label") <- "T Stage"
 attr(trial$grade, "label") <- "Grade"
 attr(trial$response, "label") <- "Tumor Response"
 attr(trial$death, "label") <- "Patient Died"
-attr(trial$ttdeath, "label") <- "Months from Randomization to Death/Censor"
+attr(trial$ttdeath, "label") <- "Months to Death/Censor"
 
 usethis::use_data(trial, overwrite = TRUE)
