@@ -101,7 +101,7 @@ tbl_merge <- function(tbls,
     ) %>%
     which() %>%
     # if any abbreviations, include coef_{i} in abbreviation list, otherwise return NULL
-    {switch(length(.) == 0 +  1, paste0("coef_", .), NULL)} %>%
+    {switch(length(.) > 0 +  1, paste0("coef_", .), NULL)} %>%
     c(paste0("ll_", 1:tbls_length)) %>%
    glue_collapse(sep = ", ")
 
@@ -144,11 +144,34 @@ gt_tbl_merge <- quote(list(
     glue(),
 
   # Show "---" for reference groups
-  # e.g. fmt_missing(columns = vars(coef_1, ll_1, ul_1, coef_2, ll_2, ul_2), rows = row_type == 'level', missing_text = '---')
+  # e.g.fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable %in% c('trt') & row_type == 'level'), missing_text = '---') %>%
+  #     fmt_missing(columns = vars(coef_3, ll_3, ul_3), rows = (variable %in% c('trt', 'grade') & row_type == 'level'), missing_text = '---')
   fmt_missing_ref =
-   glue("coef_{1:tbls_length}, ll_{1:tbls_length}, ul_{1:tbls_length}") %>%
-   glue_collapse(sep = ", ") %>%
-    {glue("fmt_missing(columns = vars({.}), rows = row_type == 'level', missing_text = '---')")},
+    purrr::imap(
+      tbls,
+      function(x, y) {
+        cat_var <-
+          purrr::pluck(x, "table_body") %>%
+          dplyr::filter(var_type == "categorical") %>%
+          dplyr::pull("variable") %>%
+          unique()
+
+        if(length(cat_var) == 0) return(NULL)
+        paste0("\'", cat_var, "\'", collapse = ", ") %>%
+          {glue::glue(
+            "fmt_missing(",
+            "columns = vars({paste(c('coef', 'll', 'ul'), y, sep = '_', collapse = ', ')}), ",
+            "rows = (variable %in% c({.}) & row_type == 'level'), ",
+            "missing_text = '---')"
+          )}
+      }
+    ) %>%
+    purrr::compact() %>%
+    glue_collapse_null(),
+
+   # glue("coef_{1:tbls_length}, ll_{1:tbls_length}, ul_{1:tbls_length}") %>%
+   # glue_collapse(sep = ", ") %>%
+   #  {glue("fmt_missing(columns = vars({.}), rows = row_type == 'level', missing_text = '---')")},
 
   # column headers
   cols_label = glue("cols_label({cols_label_base_vars})"),
