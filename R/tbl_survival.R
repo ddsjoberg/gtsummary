@@ -27,7 +27,7 @@ tbl_survival <- function(x, ...) {
 #'
 #' @param x a survfit object with a single stratifying variable
 #' @param times numeric vector of survival times
-#' @param time_label string defining the label shown for the time column.
+#' @param label string defining the label shown for the time column.
 #' Default is `"{time}"`.  The input uses \code{\link[glue]{glue}} notation to
 #' convert the string into a label.  A common label may be `"{time} Months"`, which
 #' would resolve to "6 Months" or "12 Months" depending on specified \code{times}.
@@ -37,10 +37,12 @@ tbl_survival <- function(x, ...) {
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
 #' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, and `'{strata}'`. See
 #' below for details.
-#' @param header_time string to be displayed as column header of the time column.
+#' @param header_label string to be displayed as column header of the time column.
 #' Default is \code{md('**Time**')}
-#' @param header_prob string to be displayed as column header of the Kaplan-Meier
+#' @param header_estimate string to be displayed as column header of the Kaplan-Meier
 #' estimate.  Default is \code{md('**Probability**')}
+#' @param failure Calculate failure probabilities rather than survival.
+#' Default is `FALSE`
 #' @param ... not used
 #' @importFrom stringr str_split
 #' @seealso \link[gt]{md}, \link[gt]{html}
@@ -53,7 +55,7 @@ tbl_survival <- function(x, ...) {
 #'   tbl_survival(
 #'     fit1,
 #'     times = c(12, 24),
-#'     time_label = "{time} Months"
+#'     label = "{time} Months"
 #'   )
 #'
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
@@ -61,19 +63,81 @@ tbl_survival <- function(x, ...) {
 #'   tbl_survival(
 #'     fit2,
 #'     times = c(12, 24),
-#'     time_label = "{time} Months"
+#'     label = "{time} Months"
 #'   )
 
-tbl_survival.survfit <- function(x, times,
-                                 time_label = "{time}",
+tbl_survival.survfit <- function(x, times = NULL, quantiles = NULL,
+                                 label = "{time}",
                                  level_label = "{level}, N = {n}",
-                                 header_time = md('**Time**'),
-                                 header_prob = md('**Probability**'),
+                                 header_label = md('**Time**'),
+                                 header_estimate = md('**Probability**'),
+                                 failure = FALSE,
                                  ...) {
-  # converting headers to un-evaluated string ----------------------------------
-  header_time <- deparse(substitute(header_time))
-  header_prob <- deparse(substitute(header_prob))
+  # input checks ---------------------------------------------------------------
+  if(c(is.null(times), is.null(quantiles)) %>% sum() != 1) {
+    stop("One and only one of 'times' and 'quantiles' must be specified.")
+  }
 
+  # converting headers to un-evaluated string ----------------------------------
+  header_label <- deparse(substitute(header_label))
+  header_estimate <- deparse(substitute(header_estimate))
+
+  # performing analysis for times ----------------------------------------------
+  table_body <-
+    survfit_times(x = x, times = times, level_label = level_label)
+
+  # performing analysis survival quantiles--------------------------------------
+  ##### ADD THIS~
+  # performing analysis survival quantiles--------------------------------------
+
+
+
+  # creating time label
+  table_body <-
+    table_body %>%
+    mutate(
+      label = glue(label)
+    )  %>%
+    select(c("label", "estimate", "lower", "upper"), everything())
+
+  # list of variable to hide when printing
+  if ("strata" %in% names(table_body))
+    cols_hide_list <- "time, n.risk, n, n.event, n.event.tot, strata, variable, level"
+  else cols_hide_list <- "time, n.risk, n, n.event, n.event.tot"
+
+  # creating return results object
+  result = list()
+  result[["table_body"]] <- table_body
+  result[["survfit"]] <- x
+  result[["gt_calls"]] <- list(
+    # first call to gt
+    gt = glue("gt(data = x$table_body)"),
+    # centering columns except time
+    cols_align = glue("cols_align(align = 'center') %>%" ,
+                      "cols_align(align = 'left', columns = vars(label))"),
+    # hiding columns not for printing
+    cols_hide = glue("cols_hide(columns = vars({cols_hide_list}))"),
+    # labelling columns
+    cols_label =
+      glue('cols_label(label = {header_label}, estimate = {header_estimate}, lower = md("**{x$conf.int*100}% CI**"))'),
+    # styling the percentages
+    fmt_percent =
+      glue("fmt(columns = vars(estimate, lower, upper), fns = partial(style_percent, symbol = TRUE))"),
+    cols_merge_ci =
+      "cols_merge(col_1 = vars(lower), col_2 = vars(upper), pattern = '{1}, {2}')" %>%
+      as_glue(),
+    # adding CI footnote
+    footnote_abbreviation =
+      glue("tab_footnote(footnote = 'CI = Confidence Interval',",
+           "locations = cells_column_labels(columns = vars(lower)))")
+
+  )
+
+  class(result) <- "tbl_survival"
+  result
+}
+
+survfit_times <- function(x, times, level_label){
   # getting survival estimates
   survfit_summary <- x %>%
     summary(times = times)
@@ -81,8 +145,10 @@ tbl_survival.survfit <- function(x, times,
   # converting output into tibble
   table_body <-
     survfit_summary %>%
-    {.[names(.) %in% c("strata", "time", "surv", "lower", "upper", "n.risk", "n.event")]} %>%
-    as_tibble()
+    {.[names(.) %in% c("strata", "time", "surv",
+                       "lower", "upper", "n.risk", "n.event")]} %>%
+    as_tibble() %>%
+    rename(estimate = .data$surv)
 
   # if there are strata, extract n, name, levels of variable name
   if ("strata" %in% names(table_body)) {
@@ -125,48 +191,5 @@ tbl_survival.survfit <- function(x, times,
           pluck("n.event")
       )
   }
-
-  # creating time label
-  table_body <-
-    table_body %>%
-    mutate(
-      time_label = glue(time_label)
-    )  %>%
-    select(c("time_label", "surv", "lower", "upper"), everything())
-
-  # list of variable to hide when printing
-  if ("strata" %in% names(table_body))
-    cols_hide_list <- "time, n.risk, n, n.event, n.event.tot, strata, variable, level"
-  else cols_hide_list <- "time, n.risk, n, n.event, n.event.tot"
-
-  # creating return results object
-  result = list()
-  result[["table_body"]] <- table_body
-  result[["survfit"]] <- x
-  result[["gt_calls"]] <- list(
-    # first call to gt
-    gt = glue("gt(data = x$table_body)"),
-    # centering columns except time
-    cols_align = glue("cols_align(align = 'center') %>%" ,
-                      "cols_align(align = 'left', columns = vars(time_label))"),
-    # hiding columns not for printing
-    cols_hide = glue("cols_hide(columns = vars({cols_hide_list}))"),
-    # labelling columns
-    cols_label =
-      glue('cols_label(time_label = {header_time}, surv = {header_prob}, lower = md("**{x$conf.int*100}% CI**"))'),
-    # styling the percentages
-    fmt_percent =
-      glue("fmt(columns = vars(surv, lower, upper), fns = partial(style_percent, symbol = TRUE))"),
-    cols_merge_ci =
-      "cols_merge(col_1 = vars(lower), col_2 = vars(upper), pattern = '{1}, {2}')" %>%
-      as_glue(),
-    # adding CI footnote
-    footnote_abbreviation =
-      glue("tab_footnote(footnote = 'CI = Confidence Interval',",
-           "locations = cells_column_labels(columns = vars(lower)))")
-
-  )
-
-  class(result) <- "tbl_survival"
-  result
+  table_body
 }
