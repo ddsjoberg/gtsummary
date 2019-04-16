@@ -48,7 +48,7 @@ The vignettes/tutorials for the primary gtsummary functions have detailed exampl
 library(gtsummary)
 t1 <-
   trial %>%
-  dplyr::select(trt, age, marker, grade, response) %>%
+  dplyr::select(trt, age, grade, response) %>%
   tbl_summary(by = "trt") %>% 
   add_comparison() 
 ```

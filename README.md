@@ -48,7 +48,7 @@ library(gtsummary)
 #> Loading required package: gt
 t1 <-
   trial %>%
-  dplyr::select(trt, age, marker, grade, response) %>%
+  dplyr::select(trt, age, grade, response) %>%
   tbl_summary(by = "trt") %>% 
   add_comparison() 
 ```
