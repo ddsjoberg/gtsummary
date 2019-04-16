@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
 
-\item{strata}{if \code{tbl_survival} estimates are stratfied, level of the stratum
+\item{strata}{if \code{tbl_survival} estimates are stratified, level of the stratum
 report. Default is \code{NULL} when \code{tbl_survival} have no specified strata.}
 
 \item{time}{time for which to return survival probability.}
@@ -27,9 +27,9 @@ location of the statistic to report and return the statistic for reporting
 inline in an R markdown document.
 }
 \examples{
-trial \%>\%
+library(survival)
+survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
   tbl_survival(
-    Surv(ttdeath, death) ~ trt,
     times = c(12, 24)
   ) \%>\%
   inline_text(

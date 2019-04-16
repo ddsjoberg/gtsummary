@@ -7,7 +7,8 @@ test_that("Testing when all values are NA", {
     calculate_summary_stat(
       data = trial %>% dplyr::mutate(nas = NA), variable = nas, by = NULL,
       summary_type = "continuous", dichotomous_value = NULL, var_label = "All NA",
-      stat_display = "{median}", digits = NA, class = NA, missing = "no"
+      stat_display = "{median}", digits = NA, class = NA, missing = "no",
+      missing_text = "Unknown"
     ),
     NA
   )
@@ -15,7 +16,8 @@ test_that("Testing when all values are NA", {
     calculate_summary_stat(
       data = trial %>% dplyr::mutate(nas = NA), variable = nas, by = NULL,
       summary_type = "continuous", dichotomous_value = NULL, var_label = "All NA",
-      stat_display = "{median}", digits = NA, class = NA, missing = "no"
+      stat_display = "{median}", digits = NA, class = NA, missing = "no",
+      missing_text = "Unknown"
     ),
     NA
   )
@@ -25,7 +27,8 @@ test_that("Testing when all values are NA", {
     calculate_summary_stat(
       data = trial %>% dplyr::mutate(nas = NA), variable = nas, by = "trt",
       summary_type = "continuous", dichotomous_value = NULL, var_label = "All NA",
-      stat_display = "{median}", digits = NA, class = NA, missing = "no"
+      stat_display = "{median}", digits = NA, class = NA, missing = "no",
+      missing_text = "Unknown"
     ),
     NA
   )
@@ -33,7 +36,8 @@ test_that("Testing when all values are NA", {
     calculate_summary_stat(
       data = trial %>% dplyr::mutate(nas = NA), variable = nas, by = "trt",
       summary_type = "continuous", dichotomous_value = NULL, var_label = "All NA",
-      stat_display = "{median}", digits = NA, class = NA, missing = "no"
+      stat_display = "{median}", digits = NA, class = NA, missing = "no",
+      missing_text = "Unknown"
     ),
     NA
   )

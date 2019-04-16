@@ -37,7 +37,7 @@ reference:
       - cols_label_summary
       - tab_style_bold_p.tbl_summary
       - inline_text.tbl_summary
-      - tbl_survival
+      - tbl_survival.survfit
       - inline_text.tbl_survival
 
   - title: "Regression Model Functions"
@@ -46,13 +46,16 @@ reference:
     contents:
       - tbl_regression
       - add_global.tbl_regression
+      - add_nevent.tbl_regression
       - tab_style_bold_p.tbl_regression
       - inline_text.tbl_regression
       - tbl_uvregression
       - add_global.tbl_uvregression
+      - add_nevent.tbl_uvregression
       - add_q.tbl_uvregression
       - tab_style_bold_p.tbl_uvregression
       - inline_text.tbl_uvregression
+      - tbl_merge
 
   - title: "General Formatting Functions"
     desc: >
@@ -81,16 +84,17 @@ reference:
     contents:
       - starts_with("%")
       - knit_print
-      - Surv
 
   - title: "S3 Generic Functions"
     desc: >
       Class-based method functions
     contents:
       - add_global
+      - add_nevent
       - add_q
-      - tab_style_bold_p
       - inline_text
+      - tbl_survival
+      - tab_style_bold_p
 
   - title: "Example Datasets"
     desc: >

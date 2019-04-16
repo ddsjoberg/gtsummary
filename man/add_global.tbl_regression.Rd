@@ -7,7 +7,8 @@
 \method{add_global}{tbl_regression}(x, terms = NULL, keep = FALSE, ...)
 }
 \arguments{
-\item{x}{object with class \code{tbl_regression} from the \code{\link{tbl_regression}} function}
+\item{x}{object with class \code{tbl_regression} from the
+\code{\link{tbl_regression}} function}
 
 \item{terms}{Character vector of terms for which to add global p-values.  Default
 is \code{NULL} which will add global p-values for all categorical variables}
@@ -15,19 +16,24 @@ is \code{NULL} which will add global p-values for all categorical variables}
 \item{keep}{logical argument whether to keep the individual p-values for the
 levels of the categorical variable. Default is \code{FALSE}}
 
-\item{...}{arguments to be passed to \code{\link[car]{Anova}}.  Adding \code{test.statistic = }
-can change the type of test (e.g. Likelihood-ratio, Wald, etc.).}
+\item{...}{arguments to be passed to \code{\link[car]{Anova}}}
 }
 \description{
-This function uses \code{\link[car]{Anova}} from the \code{car} package with \code{type = "III"} to calculate global p-values.
-If a needed class of model is not supported by \code{\link[car]{Anova}}, please put in an
+This function uses \code{\link[car]{Anova}} from the \code{car} package with
+\code{type = "III"} to calculate global p-values.
+If a needed class of model is not supported by \code{\link[car]{Anova}},
+please put in an
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 }
 \examples{
-tbl_lm <- lm(marker ~ stage + grade, trial) \%>\% tbl_regression() \%>\% add_global()
+tbl_lm <-
+  lm(marker ~ stage + grade, trial) \%>\%
+  tbl_regression() \%>\%
+  add_global()
 }
 \seealso{
-Other tbl_regression: \code{\link{bold_italicize_labels_levels}},
+Other tbl_regression: \code{\link{add_nevent.tbl_regression}},
+  \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
   \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_regression}}

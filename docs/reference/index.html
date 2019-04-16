@@ -191,9 +191,9 @@ multiple comparisons in Rmarkdown</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tbl_survival.html">tbl_survival()</a></code> </p>
+          <p><code><a href="tbl_survival.survfit.html">tbl_survival(<i>&lt;survfit&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints</p></td>
+        <td><p>Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints</p></td>
       </tr><tr>
         
         <td>
@@ -213,13 +213,19 @@ multiple comparisons in Rmarkdown</p></td>
         <td>
           <p><code><a href="tbl_regression.html">tbl_regression()</a></code> </p>
         </td>
-        <td><p>Turn a regression model object into a markdown-ready tibble.</p></td>
+        <td><p>Display regression model results in table</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="add_global.tbl_regression.html">add_global(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Adds the global p-value for a categorical variables in <code>tbl_regression</code> objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_nevent.tbl_regression.html">add_nevent(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add number of events to a gtsummary regression table</p></td>
       </tr><tr>
         
         <td>
@@ -237,13 +243,19 @@ multiple comparisons in Rmarkdown</p></td>
         <td>
           <p><code><a href="tbl_uvregression.html">tbl_uvregression()</a></code> </p>
         </td>
-        <td><p>Creates table of univariate regression results</p></td>
+        <td><p>Display univariate regression model results in table</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="add_global.tbl_uvregression.html">add_global(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Adds the global p-value for a categorical variables in <code>tbl_uvregression</code> objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_nevent.tbl_uvregression.html">add_nevent(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Add number of events to a gtsummary regression table</p></td>
       </tr><tr>
         
         <td>
@@ -263,6 +275,12 @@ multiple comparisons</p></td>
           <p><code><a href="inline_text.tbl_uvregression.html">inline_text(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Report statistics from regression summary tables inline</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tbl_merge.html">tbl_merge()</a></code> </p>
+        </td>
+        <td><p>Merge two or more gtsummary regression objects</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -312,7 +330,7 @@ multiple comparisons</p></td>
       <tr>
         
         <td>
-          <p><code><a href="print_gtsummary.html">print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_survival&gt;</i>)</a></code> </p>
+          <p><code><a href="print_gtsummary.html">print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_merge&gt;</i>)</a></code> </p>
         </td>
         <td><p>print and knit_print methods for gtsummary objects</p></td>
       </tr><tr>
@@ -347,12 +365,6 @@ multiple comparisons</p></td>
           <p><code><a href="knit_print.html">knit_print</a></code> </p>
         </td>
         <td><p>A custom printing function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="Surv.html">Surv</a></code> </p>
-        </td>
-        <td><p>Create a Survival Object</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -370,6 +382,12 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="add_nevent.html">add_nevent()</a></code> </p>
+        </td>
+        <td><p>Add number of events to a gtsummary regression table</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="add_q.html">add_q()</a></code> </p>
         </td>
         <td><p>Add a column of q values to account for
@@ -377,15 +395,21 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.html">tab_style_bold_p()</a></code> </p>
-        </td>
-        <td><p>Bold significant p-values</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="inline_text.html">inline_text()</a></code> </p>
         </td>
         <td><p>Report statistics from gtsummary tables inline</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tbl_survival.html">tbl_survival()</a></code> </p>
+        </td>
+        <td><p>Tabulate univariate statistics for time-to-event endpoints</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tab_style_bold_p.html">tab_style_bold_p()</a></code> </p>
+        </td>
+        <td><p>Bold significant p-values</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -421,7 +445,7 @@ multiple comparisons</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum.</p>
+  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
 </div>
 
 <div class="pkgdown">

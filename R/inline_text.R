@@ -140,10 +140,11 @@ inline_text.tbl_regression <-
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
+    n_vars <- names(x$table_body) %>% intersect(c("N", "nevent"))
     x$table_body <-
       left_join(
-        x$table_body %>% select(-"N"),
-        x$table_body %>% filter(!!parse_expr('row_type != "label"')) %>% select(c("variable", "N")) %>% distinct(),
+        x$table_body %>% select(-n_vars),
+        x$table_body %>% filter(!!parse_expr('row_type == "label"')) %>% select(c("variable", n_vars)) %>% distinct(),
         by = "variable"
       )
 
@@ -217,7 +218,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' inline in an R markdown document.
 #'
 #' @param x object created from  \link{tbl_survival}
-#' @param strata if `tbl_survival` estimates are stratfied, level of the stratum
+#' @param strata if `tbl_survival` estimates are stratified, level of the stratum
 #' report. Default is `NULL` when `tbl_survival` have no specified strata.
 #' @param time time for which to return survival probability.
 #' @param pattern statistics to return.  Uses \link[glue]{glue} formatting.
@@ -228,9 +229,9 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @family tbl_survival
 #' @export
 #' @examples
-#' trial %>%
+#' library(survival)
+#' survfit(Surv(ttdeath, death) ~ trt, trial) %>%
 #'   tbl_survival(
-#'     Surv(ttdeath, death) ~ trt,
 #'     times = c(12, 24)
 #'   ) %>%
 #'   inline_text(
@@ -293,6 +294,7 @@ inline_text.tbl_survival <-
       result %>%
       filter(time == display_time)
 
+    # formatting result and returning ------------------------------------------
     result <-
       result %>%
       mutate_at(vars(one_of(c("surv", "lower", "upper"))),

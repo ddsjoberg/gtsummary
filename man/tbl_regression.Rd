@@ -2,13 +2,12 @@
 % Please edit documentation in R/tbl_regression.R
 \name{tbl_regression}
 \alias{tbl_regression}
-\title{Turn a regression model object into a markdown-ready tibble.}
+\title{Display regression model results in table}
 \usage{
-tbl_regression(x, exponentiate = FALSE, label = NULL,
-  include = names(stats::model.frame(x)), show_yesno = NULL,
-  conf.level = 0.95, intercept = FALSE,
-  coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-  pvalue_fun = style_pvalue)
+tbl_regression(x, exponentiate = FALSE, label = NULL, include = NULL,
+  exclude = NULL, show_yesno = NULL, conf.level = 0.95,
+  intercept = FALSE, coef_fun = ifelse(exponentiate == TRUE,
+  style_ratio, style_sigfig), pvalue_fun = style_pvalue)
 }
 \arguments{
 \item{x}{regression model object}
@@ -18,12 +17,13 @@ tbl_regression(x, exponentiate = FALSE, label = NULL,
 
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
-\item{include}{names of variables to include in output.  Default is all variables.}
+\item{include}{names of variables to include in output.}
 
-\item{show_yesno}{Vector of names of categorical and factor variables that
-are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} default to dichotomous printing
-(i.e. only Yes shown). To force both levels to be shown include the column
-name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
+\item{exclude}{names of variables to exclude from output.}
+
+\item{show_yesno}{By default yes/no categorical variables are printed on a single row,
+when the 'No' category is the reference group.  To print both levels in the output table, include
+the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
 
 \item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
 
@@ -47,6 +47,21 @@ to perform the initial model formatting. Review the \code{tbl_regression}
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
 for detailed examples.
 }
+\section{Note}{
+
+The N reported in the \code{tbl_uvregression()} output is the number of observations
+in the data frame \code{model.frame(x)}. Depending on the model input, this N
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.
+\enumerate{
+\item Survival regression models including time dependent covariates.
+\item Random- or mixed-effects regression models with clustered data.
+\item GEE regression models with clustered data.
+}
+
+This list is not exhaustive, and care should be taken for each number reported.
+}
+
 \examples{
 mod1 <-
   lm(hp ~ mpg + factor(cyl), mtcars) \%>\%
@@ -63,6 +78,7 @@ mod_glmer <-
 }
 \seealso{
 Other tbl_regression: \code{\link{add_global.tbl_regression}},
+  \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
   \code{\link{tab_style_bold_p.tbl_regression}}

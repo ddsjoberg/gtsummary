@@ -129,7 +129,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>summarize_categorical</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>var_label</span>, <span class='no'>stat_display</span>,
-  <span class='no'>dichotomous_value</span>, <span class='no'>missing</span>)</pre>
+  <span class='no'>dichotomous_value</span>, <span class='no'>missing</span>, <span class='no'>sort</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,6 +168,11 @@ if the table includes counts of <code>NA</code> values: the allowed values corre
 never (<code>"no"</code>), only if the count is positive (<code>"ifany"</code>) and even for
 zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
     </tr>
+    <tr>
+      <th>sort</th>
+      <td><p>string indicating whether to sort categorical
+variables by 'alphanumeric' or 'frequency'</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -191,7 +196,7 @@ zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum.</p>
+  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
 </div>
 
 <div class="pkgdown">
