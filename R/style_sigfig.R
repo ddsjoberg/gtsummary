@@ -16,7 +16,7 @@
 #' @export
 #' @author Daniel D. Sjoberg
 #' @examples
-#' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345) %>%
+#' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345, NA) %>%
 #'   style_sigfig()
 style_sigfig <- function(x, digits = 2) {
 
@@ -32,7 +32,7 @@ style_sigfig <- function(x, digits = 2) {
     # adding the case_when function, as well as a final
     # condition to round to nearest integer
     {
-      glue("case_when({.}, TRUE ~ sprintf('%.0f', x))")
+      glue("case_when({.}, TRUE ~ ifelse(is.na(x), NA, sprintf('%.0f', x)))")
     } %>%
     # converting strings into expressions to run
     parse(text = .) %>%
