@@ -90,10 +90,20 @@ will be displayed.  Otherwise, the value to display must be specified in
 the \code{value} argument, e.g. \code{value = list(varname = "level to show")}
 }
 
+\section{Figures}{
+
+\if{html}{\figure{tbl_summary_ex1.png}{options: width=50\%}}
+
+\if{html}{\figure{tbl_summary_ex2.png}{options: width=50\%}}
+
+\if{html}{\figure{tbl_summary_ex3.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_overall <- tbl_summary(trial)
-tbl_trt <- tbl_summary(trial, by = "trt")
-tbl_lbls <- mtcars \%>\% tbl_summary(label = list(cyl = "No. Cylinders"))
+tbl_summary_ex1 <- tbl_summary(trial)
+tbl_summary_ex2 <- tbl_summary(trial, by = "trt")
+tbl_summary_ex3 <- mtcars \%>\% tbl_summary(label = list(cyl = "No. Cylinders"))
+
 }
 \seealso{
 Other tbl_summary: \code{\link{add_comparison}},

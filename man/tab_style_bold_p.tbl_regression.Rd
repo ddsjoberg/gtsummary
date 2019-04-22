@@ -16,8 +16,13 @@
 \description{
 Bold p-values in tables created by \code{\link{tbl_regression}}
 }
+\section{Figures}{
+
+\if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_lm_bold_p <-
+tbl_lm_bold_p_ex <-
   lm(age ~ marker + trt + stage, trial) \%>\%
   tbl_regression() \%>\%
   tab_style_bold_p(t = 0.3)

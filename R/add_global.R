@@ -40,11 +40,14 @@ add_global <- function(x, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @examples
-#' tbl_lm <-
+#' tbl_lm_global_ex1 <-
 #'   lm(marker ~ stage + grade, trial) %>%
 #'   tbl_regression() %>%
 #'   add_global()
 #' @export
+#' @section Figures:
+#' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
+#'
 
 add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
@@ -124,7 +127,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression
 #' @examples
-#' tbl_uv <-
+#' tbl_uv_global_ex2 <-
 #'   tbl_uvregression(
 #'     trial,
 #'     method = glm,
@@ -134,7 +137,9 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'   ) %>%
 #'   add_global()
 #' @export
-
+#' @section Figures:
+#' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
+#'
 add_global.tbl_uvregression <- function(x, ...) {
 
   # converting the passed ... to a list, OR if nothing passed to NULL

@@ -33,15 +33,19 @@ Bold or Italicize labels or levels in gtsummary tables
 \item \code{tab_style_italicize_levels}: Italicize levels in gtsummary tables
 }}
 
+\section{Figures}{
+
+\if{html}{\figure{tbl_bold_ital_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_bold_ital <-
+tbl_bold_ital_ex <-
   trial \%>\%
   tbl_summary() \%>\%
   tab_style_bold_labels() \%>\%
   tab_style_bold_levels() \%>\%
   tab_style_italicize_labels() \%>\%
   tab_style_italicize_levels()
-
 }
 \seealso{
 Other tbl_summary: \code{\link{add_comparison}},

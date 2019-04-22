@@ -67,10 +67,17 @@
 #' @family tbl_summary
 #' @author Daniel D. Sjoberg
 #' @examples
-#' tbl_overall <- tbl_summary(trial)
-#' tbl_trt <- tbl_summary(trial, by = "trt")
-#' tbl_lbls <- mtcars %>% tbl_summary(label = list(cyl = "No. Cylinders"))
-
+#' tbl_summary_ex1 <- tbl_summary(trial)
+#' tbl_summary_ex2 <- tbl_summary(trial, by = "trt")
+#' tbl_summary_ex3 <- mtcars %>% tbl_summary(label = list(cyl = "No. Cylinders"))
+#'
+#' @section Figures:
+#' \if{html}{\figure{tbl_summary_ex1.png}{options: width=50\%}}
+#'
+#' \if{html}{\figure{tbl_summary_ex2.png}{options: width=50\%}}
+#'
+#' \if{html}{\figure{tbl_summary_ex3.png}{options: width=50\%}}
+#'
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
                         missing = c("ifany", "always", "no"),
