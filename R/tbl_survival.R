@@ -49,7 +49,7 @@ tbl_survival <- function(x, ...) {
 #' @examples
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-#' tbl_strata <-
+#' tbl_strata_ex <-
 #'   tbl_survival(
 #'     fit1,
 #'     times = c(12, 24),
@@ -57,13 +57,17 @@ tbl_survival <- function(x, ...) {
 #'   )
 #'
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
-#' tbl_nostrata <-
+#' tbl_nostrata_ex <-
 #'   tbl_survival(
 #'     fit2,
 #'     times = c(12, 24),
 #'     time_label = "{time} Months"
 #'   )
-
+#' @section Figures:
+#' \if{html}{\figure{tbl_strata_ex.png}{options: width=50\%}}
+#'
+#' \if{html}{\figure{tbl_nostrata_ex.png}{options: width=50\%}}
+#'
 tbl_survival.survfit <- function(x, times,
                                  time_label = "{time}",
                                  level_label = "{level}, N = {n}",

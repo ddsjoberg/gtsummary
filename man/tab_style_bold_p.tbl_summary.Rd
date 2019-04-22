@@ -18,8 +18,13 @@
 \description{
 Bold p-values in tables created by \code{\link{tbl_summary}}
 }
+\section{Figures}{
+
+\if{html}{\figure{tbl_sum_bold_p_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_bold_p <-
+tbl_sum_bold_p_ex <-
   trial \%>\%
   tbl_summary(by = "trt") \%>\%
   add_comparison() \%>\%

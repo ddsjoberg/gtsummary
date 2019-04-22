@@ -24,11 +24,13 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #' @family tbl_summary
 #' @author Daniel D. Sjoberg
 #' @examples
-#' tbl_bold_p <-
+#' tbl_sum_bold_p_ex <-
 #'   trial %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
 #'   tab_style_bold_p()
+#' @section Figures:
+#' \if{html}{\figure{tbl_sum_bold_p_ex.png}{options: width=50\%}}
 #' @export
 tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
@@ -69,11 +71,14 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @examples
-#' tbl_lm_bold_p <-
+#' tbl_lm_bold_p_ex <-
 #'   lm(age ~ marker + trt + stage, trial) %>%
 #'   tbl_regression() %>%
 #'   tab_style_bold_p(t = 0.3)
+#' @section Figures:
+#' \if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
 #' @export
+#'
 tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
   # returning threshold for bold

@@ -20,7 +20,10 @@
 #' @export
 #' @author Daniel D. Sjoberg, Emily Zabor
 #' @examples
-#' comp <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
+#' add_comp_ex1 <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
+#' @section Figures:
+#' \if{html}{\figure{add_comp_ex1.png}{options: width=50\%}}
+#'
 add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
                            group = x$inputs$group) {
   # checking that input is class tbl_summary

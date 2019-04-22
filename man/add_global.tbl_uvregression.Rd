@@ -19,8 +19,13 @@ If a needed class of model is not supported by \code{\link[car]{Anova}},
 please put in an
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 }
+\section{Figures}{
+
+\if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_uv <-
+tbl_uv_global_ex2 <-
   tbl_uvregression(
     trial,
     method = glm,

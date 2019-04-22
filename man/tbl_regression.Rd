@@ -62,19 +62,29 @@ units in your model.  Here are some common exceptions.
 This list is not exhaustive, and care should be taken for each number reported.
 }
 
+\section{Figures}{
+
+\if{html}{\figure{tbl_regression_ex1.png}{options: width=50\%}}
+
+\if{html}{\figure{tbl_regression_ex2.png}{options: width=50\%}}
+
+\if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
+}
+
 \examples{
-mod1 <-
+tbl_regression_ex1 <-
   lm(hp ~ mpg + factor(cyl), mtcars) \%>\%
   tbl_regression()
 
-mod2 <-
+tbl_regression_ex2 <-
   glm(response ~ age + grade + stage, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE)
 
 library(lme4)
-mod_glmer <-
+tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
+
 }
 \seealso{
 Other tbl_regression: \code{\link{add_global.tbl_regression}},

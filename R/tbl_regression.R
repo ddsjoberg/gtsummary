@@ -41,18 +41,26 @@
 #' @family tbl_regression
 #' @export
 #' @examples
-#' mod1 <-
+#' tbl_regression_ex1 <-
 #'   lm(hp ~ mpg + factor(cyl), mtcars) %>%
 #'   tbl_regression()
 #'
-#' mod2 <-
+#' tbl_regression_ex2 <-
 #'   glm(response ~ age + grade + stage, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
 #'
 #' library(lme4)
-#' mod_glmer <-
+#' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
+#'
+#' @section Figures:
+#' \if{html}{\figure{tbl_regression_ex1.png}{options: width=50\%}}
+#'
+#' \if{html}{\figure{tbl_regression_ex2.png}{options: width=50\%}}
+#'
+#' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
+#'
 tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
                            include = NULL,
                            exclude = NULL,

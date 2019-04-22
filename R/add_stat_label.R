@@ -8,7 +8,10 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_stat <- mtcars %>% tbl_summary() %>% add_stat_label()
+#' tbl_stat_ex <- mtcars %>% tbl_summary() %>% add_stat_label()
+#' @section Figures:
+#' \if{html}{\figure{tbl_stat_ex.png}{options: width=50\%}}
+#'
 add_stat_label <- function(x) {
 
   # adding some meta data only needed for merging (i.e. the row_type)

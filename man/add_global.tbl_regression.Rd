@@ -25,8 +25,13 @@ If a needed class of model is not supported by \code{\link[car]{Anova}},
 please put in an
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 }
+\section{Figures}{
+
+\if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_lm <-
+tbl_lm_global_ex1 <-
   lm(marker ~ stage + grade, trial) \%>\%
   tbl_regression() \%>\%
   add_global()
