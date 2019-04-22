@@ -246,66 +246,66 @@ inline_text.tbl_survival <-
            pattern = "{surv} ({conf.level*100}% CI {lower}, {upper})",
            ...) {
 
-    if(time < 0) stop("Must specify a positive 'time'.")
-    if(length(time) != 1) stop("'time' must be length 1")
-
-    result <- x$table_body
-
-    # select strata ------------------------------------------------------------
-    # if multiple strata exist in tbl_survival, grab rows matching specified strata
-    if("strata" %in% names(x$table_body)) {
-
-      if(is.null(strata)) {
-        stop(glue("Must specify one of the following strata: ",
-                  "{pluck(x, 'table_body', 'level') %>% unique() %>% paste(collapse = ', ')}"))
-      }
-
-      result <-
-        result %>%
-        filter(!!parse_expr(glue("level == '{strata}'")))
-
-      if (nrow(result) == 0) {
-        stop(glue(
-          "Is the strata name spelled correctly? strata must be one of: ",
-          "{pluck(x, 'table_body', 'level') %>% unique() %>% paste(collapse = ', ')}"
-        ))
-
-      }
-    } else {
-      if(!is.null(strata)) {
-        warning(glue("Ignoring strata = '{strata}'. No strata in tbl_survival. "))
-      }
-
-    }
-
-    # select time ----------------------------======----------------------------
-    # get time to display in result
-    all_times <- x$table_body$time
-
-    # when specified timpoint is not in tbl_survival,
-    # return result for closest time and give warning
-    display_time <- all_times[which.min(abs(all_times - time))]
-    if (!time %in% all_times) {
-      message(glue("Specified 'time' not in 'x', 'time = {time}'. Displaying estimate ",
-                   "for nearest specified 'time': {display_time}"))
-    }
-
-    result <-
-      result %>%
-      filter(time == display_time)
-
-    # formatting result and returning ------------------------------------------
-    result <-
-      result %>%
-      mutate_at(vars(one_of(c("surv", "lower", "upper"))),
-                ~style_percent(., symbol = TRUE)) %>%
-      mutate(
-        conf.level = x$survfit$conf.int,
-        stat = glue(pattern)
-      ) %>%
-      pull("stat")
-
-    result
+    # if(time < 0) stop("Must specify a positive 'time'.")
+    # if(length(time) != 1) stop("'time' must be length 1")
+    #
+    # result <- x$table_body
+    #
+    # # select strata ------------------------------------------------------------
+    # # if multiple strata exist in tbl_survival, grab rows matching specified strata
+    # if("strata" %in% names(x$table_body)) {
+    #
+    #   if(is.null(strata)) {
+    #     stop(glue("Must specify one of the following strata: ",
+    #               "{pluck(x, 'table_body', 'level') %>% unique() %>% paste(collapse = ', ')}"))
+    #   }
+    #
+    #   result <-
+    #     result %>%
+    #     filter(!!parse_expr(glue("level == '{strata}'")))
+    #
+    #   if (nrow(result) == 0) {
+    #     stop(glue(
+    #       "Is the strata name spelled correctly? strata must be one of: ",
+    #       "{pluck(x, 'table_body', 'level') %>% unique() %>% paste(collapse = ', ')}"
+    #     ))
+    #
+    #   }
+    # } else {
+    #   if(!is.null(strata)) {
+    #     warning(glue("Ignoring strata = '{strata}'. No strata in tbl_survival. "))
+    #   }
+    #
+    # }
+    #
+    # # select time ----------------------------======----------------------------
+    # # get time to display in result
+    # all_times <- x$table_body$time
+    #
+    # # when specified timpoint is not in tbl_survival,
+    # # return result for closest time and give warning
+    # display_time <- all_times[which.min(abs(all_times - time))]
+    # if (!time %in% all_times) {
+    #   message(glue("Specified 'time' not in 'x', 'time = {time}'. Displaying estimate ",
+    #                "for nearest specified 'time': {display_time}"))
+    # }
+    #
+    # result <-
+    #   result %>%
+    #   filter(time == display_time)
+    #
+    # # formatting result and returning ------------------------------------------
+    # result <-
+    #   result %>%
+    #   mutate_at(vars(one_of(c("surv", "lower", "upper"))),
+    #             ~style_percent(., symbol = TRUE)) %>%
+    #   mutate(
+    #     conf.level = x$survfit$conf.int,
+    #     stat = glue(pattern)
+    #   ) %>%
+    #   pull("stat")
+    #
+    # result
   }
 
 
