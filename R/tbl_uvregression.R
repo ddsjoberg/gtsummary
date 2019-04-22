@@ -34,7 +34,7 @@
 #' @family tbl_uvregression
 #' @export
 #' @examples
-#' tbl_uv <-
+#' tbl_uv_ex1 <-
 #'  tbl_uvregression(
 #'    trial,
 #'    method = glm,
@@ -44,7 +44,7 @@
 #'  )
 #'
 #' # rounding pvalues to 2 decimal places, and adding global p-values
-#' tbl_uv2 <-
+#' tbl_uv_ex2 <-
 #'   tbl_uvregression(
 #'     trial,
 #'     method = glm,
@@ -54,6 +54,12 @@
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   ) %>%
 #'   add_global()
+#'
+#' @section Figures:
+#' \if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
+#'
+#' \if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
+#'
 tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,

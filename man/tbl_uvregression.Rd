@@ -72,8 +72,15 @@ units in your model.  Here are some common exceptions.
 This list is not exhaustive, and care should be taken for each number reported.
 }
 
+\section{Figures}{
+
+\if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
+
+\if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_uv <-
+tbl_uv_ex1 <-
  tbl_uvregression(
    trial,
    method = glm,
@@ -83,7 +90,7 @@ tbl_uv <-
  )
 
 # rounding pvalues to 2 decimal places, and adding global p-values
-tbl_uv2 <-
+tbl_uv_ex2 <-
   tbl_uvregression(
     trial,
     method = glm,
@@ -93,6 +100,7 @@ tbl_uv2 <-
     pvalue_fun = function(x) style_pvalue(x, digits = 2)
   ) \%>\%
   add_global()
+
 }
 \seealso{
 Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},

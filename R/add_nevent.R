@@ -29,17 +29,19 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' and not printed in the default output table (similar to N). The number
 #' of events is accessible via the `inline_text()` function for printing in a report.
 #'
-#' @param x `tbl_regerssion` object
+#' @param x `tbl_regression` object
 #' @param ... not used
 #' @export
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @export
 #' @examples
-#' glm(response ~ trt, trial, family = binomial) %>%
+#' tbl_reg_nevent_ex <- glm(response ~ trt, trial, family = binomial) %>%
 #'   tbl_regression() %>%
-#'   add_nevent() %>%
-#'   purrr::pluck("table_body")
+#'   add_nevent()
+#' @section Figures:
+#' \if{html}{\figure{tbl_reg_nevent_ex.png}{options: width=50\%}}
+#'
 
 add_nevent.tbl_regression <- function(x, ...) {
   # if model is a cox model, adding number of events as well
@@ -122,7 +124,7 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' @family tbl_uvregression
 #' @export
 #' @examples
-#' tbl_nevent <-
+#' tbl_uv_nevent_ex <-
 #'   trial %>%
 #'   tbl_uvregression(
 #'     method = glm,
@@ -130,7 +132,9 @@ add_nevent.tbl_regression <- function(x, ...) {
 #'     method.args = list(family = binomial)
 #'   ) %>%
 #'   add_nevent()
-
+#' @section Figures:
+#' \if{html}{\figure{tbl_uv_nevent_ex.png}{options: width=50\%}}
+#'
 add_nevent.tbl_uvregression <- function(x, ...) {
 
   # adding nevent to each tbl_regression object

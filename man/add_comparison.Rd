@@ -38,8 +38,13 @@ calculate p-values with correlated data. Default is \code{NULL}}
 \description{
 Adds p-values to the output comparing values across groups
 }
+\section{Figures}{
+
+\if{html}{\figure{add_comp_ex1.png}{options: width=50\%}}
+}
+
 \examples{
-comp <- trial \%>\% tbl_summary(by = "trt") \%>\% add_comparison()
+add_comp_ex1 <- trial \%>\% tbl_summary(by = "trt") \%>\% add_comparison()
 }
 \seealso{
 Other tbl_summary: \code{\link{add_n}},

@@ -26,8 +26,13 @@ and printed to the right of the N column. The number of events is also
 accessible via the \code{inline_text()} function for printing in a report.
 }
 
+\section{Figures}{
+
+\if{html}{\figure{tbl_uv_nevent_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_nevent <-
+tbl_uv_nevent_ex <-
   trial \%>\%
   tbl_uvregression(
     method = glm,

@@ -21,12 +21,14 @@
 #'     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
 #'     exponentiate = TRUE
 #'   )
-#' t3 <-
+#' tbl_merge_ex <-
 #'   tbl_merge(
 #'     tbls = list(t1, t2),
 #'     tab_spanner = c("Tumor Response", "Time to Death")
 #'   )
-
+#' @section Figures:
+#' \if{html}{\figure{tbl_merge_ex.png}{options: width=50\%}}
+#'
 tbl_merge <- function(tbls,
                       tab_spanner = paste0(c("Model "), 1:length(tbls))) {
   # input checks ---------------------------------------------------------------

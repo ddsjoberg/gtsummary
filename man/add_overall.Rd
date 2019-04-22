@@ -16,8 +16,13 @@ add_overall(x, last = FALSE)
 The function assumes the DEFAULT headers are in use. Only modify header rows
 after Overall column has been added.
 }
+\section{Figures}{
+
+\if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_overall <- trial \%>\% tbl_summary(by = "trt") \%>\% add_overall()
+tbl_overall_ex <- trial \%>\% tbl_summary(by = "trt") \%>\% add_overall()
 }
 \seealso{
 Other tbl_summary: \code{\link{add_comparison}},
