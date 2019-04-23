@@ -145,6 +145,11 @@ tbl_uvregression objects and adds appropriate spanning headers." />
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="figures"><a class="anchor" href="#figures"></a>Figures</h2>
+
+    
+    <p><img src='figures/tbl_merge_ex.png' width=50% /></p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
@@ -160,7 +165,7 @@ tbl_uvregression objects and adds appropriate spanning headers." />
     <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment"</span>, <span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>, <span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Age"</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )
-<span class='no'>t3</span> <span class='kw'>&lt;-</span>
+<span class='no'>tbl_merge_ex</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_merge</span>(
     <span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>),
     <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Tumor Response"</span>, <span class='st'>"Time to Death"</span>)
@@ -170,7 +175,9 @@ tbl_uvregression objects and adds appropriate spanning headers." />
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#figures">Figures</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -156,6 +156,12 @@ Must specify <code>by</code> along with <code>stat_by</code>.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="figures"><a class="anchor" href="#figures"></a>Figures</h2>
+
+    
+    <p><img src='figures/tbl_col_ex1.png' width=50% /></p>
+<p><img src='figures/tbl_col_ex2.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>html</a></p>
@@ -170,11 +176,11 @@ Must specify <code>by</code> along with <code>stat_by</code>.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_col1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_col_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'>cols_label_summary</span>(<span class='kw'>stat_overall</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**All Patients**, N = {N}"</span>))
-<span class='no'>tbl_col2</span> <span class='kw'>&lt;-</span>
+<span class='no'>tbl_col_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>cols_label_summary</span>(<span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</span>))</div></pre>
@@ -184,6 +190,8 @@ Must specify <code>by</code> along with <code>stat_by</code>.</p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#figures">Figures</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>

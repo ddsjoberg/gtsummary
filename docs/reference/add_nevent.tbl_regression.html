@@ -146,7 +146,7 @@ Proportion Hazards regression models (<code><a href='https://www.rdocumentation.
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_regerssion</code> object</p></td>
+      <td><p><code>tbl_regression</code> object</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -161,6 +161,11 @@ Proportion Hazards regression models (<code><a href='https://www.rdocumentation.
 and not printed in the default output table (similar to N). The number
 of events is accessible via the <code><a href='inline_text.html'>inline_text()</a></code> function for printing in a report.</p>
     
+    <h2 class="hasAnchor" id="figures"><a class="anchor" href="#figures"></a>Figures</h2>
+
+    
+    <p><img src='figures/tbl_reg_nevent_ex.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_regression: <code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
@@ -171,15 +176,9 @@ of events is accessible via the <code><a href='inline_text.html'>inline_text()</
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_reg_nevent_ex</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_nevent.html'>add_nevent</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>purrr</span><span class='kw ns'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/pluck.html'>pluck</a></span>(<span class='st'>"table_body"</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 10</span><span>
-#&gt;   variable var_type  row_type label      N    coef     ll      ul  pvalue nevent
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> trt      categori~ label    Treat~   191  </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>     </span><span style='color: #BB0000;'>NA</span><span>     </span><span style='color: #BB0000;'>NA</span><span>          83
-#&gt; </span><span style='color: #555555;'>2</span><span> trt      categori~ level    Drug     191  </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>     </span><span style='color: #BB0000;'>NA</span><span>     </span><span style='color: #BB0000;'>NA</span><span>          83
-#&gt; </span><span style='color: #555555;'>3</span><span> trt      categori~ level    Place~   191  -</span><span style='color: #BB0000;'>0.718</span><span>  -</span><span style='color: #BB0000;'>1.31</span><span>  -</span><span style='color: #BB0000;'>0.136</span><span>  0.016</span><span style='text-decoration: underline;'>4</span><span>     83</div></span></pre>
+  <span class='fu'><a href='add_nevent.html'>add_nevent</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -187,6 +186,8 @@ of events is accessible via the <code><a href='inline_text.html'>inline_text()</
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#reporting-event-n">Reporting Event N</a></li>
+
+      <li><a href="#figures">Figures</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

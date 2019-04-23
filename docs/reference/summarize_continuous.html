@@ -129,7 +129,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>summarize_continuous</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>digits</span>, <span class='no'>var_label</span>, <span class='no'>stat_display</span>,
-  <span class='no'>missing</span>)</pre>
+  <span class='no'>missing</span>, <span class='no'>missing_text</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,6 +166,10 @@ The syntax follows <code><a href='https://www.rdocumentation.org/packages/glue/t
 if the table includes counts of <code>NA</code> values: the allowed values correspond to
 never (<code>"no"</code>), only if the count is positive (<code>"ifany"</code>) and even for
 zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>missing_text</th>
+      <td><p>String to display for count of missing observations.</p></td>
     </tr>
     </table>
     
