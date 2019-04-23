@@ -136,6 +136,7 @@ gt_tbl_merge <- quote(list(
   # do not print columns variable or row_type columns
   cols_hide = c(
       "cols_hide(columns = vars(variable, row_type, var_type))",
+      "cols_hide(columns = starts_with('row_ref_'))",
       "cols_hide(columns = starts_with('N_'))",
       "cols_hide(columns = starts_with('nevent_'))"
     ) %>%
@@ -155,17 +156,18 @@ gt_tbl_merge <- quote(list(
         cat_var <-
           purrr::pluck(x, "table_body") %>%
           dplyr::filter(.data$var_type == "categorical",
-                        is.na(.data$coef),
+                        .data$row_ref == TRUE,
                         .data$row_type == "level") %>%
-          dplyr::select(c("variable", "label"))
+          dplyr::select(c("variable", "row_ref"))
 
+        print(cat_var)
         if(nrow(cat_var) == 0) return(NULL)
-        purrr::map2(
-          cat_var$variable, cat_var$label,
+        purrr::map(
+          cat_var$variable,
           ~glue(
             "fmt_missing(",
             "columns = vars({paste(c('coef', 'll', 'ul'), y, sep = '_', collapse = ', ')}), ",
-            "rows = (variable == '{.x}' & row_type == 'level' & label == '{.y}'), ",
+            "rows = (variable == '{.x}' & row_type == 'level' & row_ref_{y} == TRUE), ",
             "missing_text = '---')"
           )
         )
