@@ -146,28 +146,32 @@ gt_tbl_merge <- quote(list(
     glue(),
 
   # Show "---" for reference groups
-  # e.g.fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable %in% c('trt') & row_type == 'level'), missing_text = '---') %>%
-  #     fmt_missing(columns = vars(coef_3, ll_3, ul_3), rows = (variable %in% c('trt', 'grade') & row_type == 'level'), missing_text = '---')
+  # e.g.fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable == 'trt' & row_type == 'level' & label == \'Drug\'), missing_text = '---') %>%
+  #     fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable == 'grade' & row_type == 'level' & label == \'I\'), missing_text = '---')
   fmt_missing_ref =
     purrr::imap(
       tbls,
       function(x, y) {
         cat_var <-
           purrr::pluck(x, "table_body") %>%
-          dplyr::filter(var_type == "categorical") %>%
-          dplyr::pull("variable") %>%
-          unique()
+          dplyr::filter(.data$var_type == "categorical",
+                        is.na(.data$coef),
+                        .data$row_type == "level") %>%
+          dplyr::select(c("variable", "label"))
 
-        if(length(cat_var) == 0) return(NULL)
-        paste0("\'", cat_var, "\'", collapse = ", ") %>%
-          {glue::glue(
+        if(nrow(cat_var) == 0) return(NULL)
+        purrr::map2(
+          cat_var$variable, cat_var$label,
+          ~glue(
             "fmt_missing(",
             "columns = vars({paste(c('coef', 'll', 'ul'), y, sep = '_', collapse = ', ')}), ",
-            "rows = (variable %in% c({.}) & row_type == 'level'), ",
+            "rows = (variable == '{.x}' & row_type == 'level' & label == '{.y}'), ",
             "missing_text = '---')"
-          )}
+          )
+        )
       }
     ) %>%
+    unlist() %>%
     purrr::compact() %>%
     glue_collapse_null(),
 
