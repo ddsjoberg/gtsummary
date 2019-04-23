@@ -160,7 +160,6 @@ gt_tbl_merge <- quote(list(
                         .data$row_type == "level") %>%
           dplyr::select(c("variable", "row_ref"))
 
-        print(cat_var)
         if(nrow(cat_var) == 0) return(NULL)
         purrr::map(
           cat_var$variable,
