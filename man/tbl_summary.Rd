@@ -90,19 +90,28 @@ will be displayed.  Otherwise, the value to display must be specified in
 the \code{value} argument, e.g. \code{value = list(varname = "level to show")}
 }
 
-\section{Figures}{
+\section{Example Output}{
 
-\if{html}{\figure{tbl_summary_ex1.png}{options: width=50\%}}
+\if{html}{Example 1}
 
-\if{html}{\figure{tbl_summary_ex2.png}{options: width=50\%}}
+\if{html}{\figure{tbl_summary_ex1.png}{options: width=40\%}}
 
-\if{html}{\figure{tbl_summary_ex3.png}{options: width=50\%}}
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_summary_ex2.png}{options: width=55\%}}
 }
 
 \examples{
-tbl_summary_ex1 <- tbl_summary(trial)
-tbl_summary_ex2 <- tbl_summary(trial, by = "trt")
-tbl_summary_ex3 <- mtcars \%>\% tbl_summary(label = list(cyl = "No. Cylinders"))
+library(dplyr)
+tbl_summary_ex1 <-
+  trial \%>\%
+  select(age, grade, response) \%>\%
+  tbl_summary()
+tbl_summary_ex2 <-
+  trial \%>\%
+  select(age, grade, response, trt) \%>\%
+  tbl_summary(by = "trt",
+              label = list(age = "Patient Age"))
 
 }
 \seealso{
