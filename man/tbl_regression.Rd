@@ -62,11 +62,17 @@ units in your model.  Here are some common exceptions.
 This list is not exhaustive, and care should be taken for each number reported.
 }
 
-\section{Figures}{
+\section{Example Output}{
+
+\if{html}{Example 1}
 
 \if{html}{\figure{tbl_regression_ex1.png}{options: width=50\%}}
 
+\if{html}{Example 2}
+
 \if{html}{\figure{tbl_regression_ex2.png}{options: width=50\%}}
+
+\if{html}{Example 3}
 
 \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 }
