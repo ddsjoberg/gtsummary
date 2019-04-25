@@ -20,9 +20,14 @@
 #' @export
 #' @author Daniel D. Sjoberg, Emily Zabor
 #' @examples
-#' add_comp_ex1 <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
-#' @section Figures:
-#' \if{html}{\figure{add_comp_ex1.png}{options: width=50\%}}
+#' add_comp_ex1 <-
+#'   trial %>%
+#'   dplyr::select(age, grade, response, trt) %>%
+#'   tbl_summary(by = "trt") %>%
+#'   add_comparison()
+#'
+#' @section Example Output:
+#' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
 #'
 add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
                            group = x$inputs$group) {
