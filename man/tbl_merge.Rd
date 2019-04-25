@@ -15,7 +15,7 @@ tbl_merge(tbls, tab_spanner = paste0(c("Model "), 1:length(tbls)))
 The \code{tbl_merge} function merges two or more \code{tbl_regression} or
 \code{tbl_uvregression} objects and adds appropriate spanning headers.
 }
-\section{Figures}{
+\section{Example Output}{
 
 \if{html}{\figure{tbl_merge_ex.png}{options: width=50\%}}
 }

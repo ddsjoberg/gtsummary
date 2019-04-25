@@ -26,10 +26,11 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #' @examples
 #' tbl_sum_bold_p_ex <-
 #'   trial %>%
+#'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
 #'   tab_style_bold_p()
-#' @section Figures:
+#' @section Example Output:
 #' \if{html}{\figure{tbl_sum_bold_p_ex.png}{options: width=50\%}}
 #' @export
 tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
@@ -75,7 +76,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #'   lm(age ~ marker + trt + stage, trial) %>%
 #'   tbl_regression() %>%
 #'   tab_style_bold_p(t = 0.3)
-#' @section Figures:
+#' @section Example Output:
 #' \if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
 #' @export
 #'
@@ -106,6 +107,21 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression
 #' @export
+#' @examples
+#' tbl_uvglm_bold_p_ex <-
+#'   trial %>%
+#'   dplyr::select(age, marker, response, grade) %>%
+#'   tbl_uvregression(
+#'     method = glm,
+#'     y = response,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE
+#'   ) %>%
+#'   tab_style_bold_p(t = 0.25)
+#'
+#' @section Example Output:
+#' \if{html}{\figure{tbl_uvglm_bold_p_ex.png}{options: width=50\%}}
+
 tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_q has been previously run if bold q-values

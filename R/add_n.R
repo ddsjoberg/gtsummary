@@ -11,8 +11,11 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_n_ex <- trial %>% tbl_summary(by = "trt") %>% add_n()
-#' @section Figures:
+#' tbl_n_ex <-
+#'   trial %>%
+#'   tbl_summary(by = "trt") %>%
+#'   add_n()
+#' @section Example Output:
 #' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
 #'
 add_n <- function(x, missing = FALSE, last = FALSE) {

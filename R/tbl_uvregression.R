@@ -36,27 +36,30 @@
 #' @examples
 #' tbl_uv_ex1 <-
 #'  tbl_uvregression(
-#'    trial,
+#'    trial %>% dplyr::select(response, age, grade, response),
 #'    method = glm,
 #'    y = response,
 #'    method.args = list(family = binomial),
 #'    exponentiate = TRUE
 #'  )
 #'
-#' # rounding pvalues to 2 decimal places, and adding global p-values
+#' # rounding pvalues to 2 decimal places
 #' tbl_uv_ex2 <-
 #'   tbl_uvregression(
-#'     trial,
+#'     trial %>% dplyr::select(response, age, grade, response),
 #'     method = glm,
 #'     y = response,
 #'     method.args = list(family = binomial),
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
-#'   ) %>%
-#'   add_global()
+#'   )
 #'
-#' @section Figures:
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
 #' \if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
+#'
+#' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
 #'
