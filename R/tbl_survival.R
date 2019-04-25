@@ -79,7 +79,7 @@ tbl_survival <- function(x, ...) {
 #'
 
 tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
-                                 label = ifelse(is.null(probs), "{time}", "{prob}%"),
+                                 label = ifelse(is.null(probs), "{time}", "{prob*100}%"),
                                  level_label = "{level}, N = {n}",
                                  header_label = NULL,
                                  header_estimate = NULL,
@@ -262,7 +262,8 @@ surv_quantile <- function(x, probs) {
       rename(estimate = .data$quantile)
   }
 
-  table_body
+  table_body %>%
+    mutate(prob = as.numeric(.data$prob) / 100)
 }
 
 
