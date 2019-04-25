@@ -126,10 +126,25 @@ test_inline_surv_nostrata <-
     time_label = "{time} Months"
   )
 
+test_inline_surv_strata2 <-
+  survfit(Surv(ttdeath, death) ~ trt, trial) %>%
+  tbl_survival(
+    probs = c(0.2, 0.5)
+  )
+test_inline_surv_nostrata2 <-
+  survfit(Surv(ttdeath, death) ~ 1, trial) %>%
+  tbl_survival(
+    probs = c(0.2, 0.5)
+  )
+
 # test tbl_survival with strata
 test_that("inline_text.tbl_survival - with strata", {
   expect_error(
     inline_text(test_inline_surv_strata, strata = "Drug", time = 24),
+    NA
+  )
+  expect_error(
+    inline_text(test_inline_surv_strata2, strata = "Drug", prob = 0.2),
     NA
   )
   expect_message(
@@ -154,6 +169,10 @@ test_that("inline_text.tbl_survival - with strata", {
 test_that("inline_text.tbl_survival - no strata", {
   expect_error(
     inline_text(test_inline_surv_nostrata, time = 24),
+    NA
+  )
+  expect_error(
+    inline_text(test_inline_surv_nostrata2, prob = 0.2),
     NA
   )
   expect_warning(
