@@ -78,6 +78,7 @@ tbl_merge <- function(tbls,
           .data$table, .data$data,
           function(table, data) {
             if(is.null(table)) return(data)
+            if(is.null(data)) return(table)
             full_join(table, data, by = c("row_type", "label"))
           }
         )
