@@ -8,8 +8,12 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_stat_ex <- mtcars %>% tbl_summary() %>% add_stat_label()
-#' @section Figures:
+#' tbl_stat_ex <-
+#'   mtcars %>%
+#'   dplyr::select(mpg, cyl, hp) %>%
+#'   tbl_summary() %>%
+#'   add_stat_label()
+#' @section Example Output:
 #' \if{html}{\figure{tbl_stat_ex.png}{options: width=50\%}}
 #'
 add_stat_label <- function(x) {

@@ -45,7 +45,7 @@ add_global <- function(x, ...) {
 #'   tbl_regression() %>%
 #'   add_global()
 #' @export
-#' @section Figures:
+#' @section Example Output:
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
 #'
 
@@ -128,8 +128,9 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' @family tbl_uvregression
 #' @examples
 #' tbl_uv_global_ex2 <-
-#'   tbl_uvregression(
-#'     trial,
+#'  trial %>%
+#'  dplyr::select(response, trt, age, grade) %>%
+#'  tbl_uvregression(
 #'     method = glm,
 #'     y = response,
 #'     method.args = list(family = binomial),
@@ -137,7 +138,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'   ) %>%
 #'   add_global()
 #' @export
-#' @section Figures:
+#' @section Example Output:
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'
 add_global.tbl_uvregression <- function(x, ...) {

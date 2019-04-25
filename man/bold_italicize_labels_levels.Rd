@@ -33,7 +33,7 @@ Bold or Italicize labels or levels in gtsummary tables
 \item \code{tab_style_italicize_levels}: Italicize levels in gtsummary tables
 }}
 
-\section{Figures}{
+\section{Example Output}{
 
 \if{html}{\figure{tbl_bold_ital_ex.png}{options: width=50\%}}
 }
@@ -41,6 +41,7 @@ Bold or Italicize labels or levels in gtsummary tables
 \examples{
 tbl_bold_ital_ex <-
   trial \%>\%
+  dplyr::select(trt, age, grade) \%>\%
   tbl_summary() \%>\%
   tab_style_bold_labels() \%>\%
   tab_style_bold_levels() \%>\%
