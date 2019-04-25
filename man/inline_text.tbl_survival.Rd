@@ -4,8 +4,9 @@
 \alias{inline_text.tbl_survival}
 \title{Report statistics from survival summary tables inline}
 \usage{
-\method{inline_text}{tbl_survival}(x, strata = NULL, time,
-  pattern = "{surv} ({conf.level*100}\% CI {lower}, {upper})", ...)
+\method{inline_text}{tbl_survival}(x, strata = NULL, time = NULL,
+  prob = NULL,
+  pattern = "{estimate} ({conf.level*100}\% CI {lower}, {upper})", ...)
 }
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
@@ -14,6 +15,8 @@
 report. Default is \code{NULL} when \code{tbl_survival} have no specified strata.}
 
 \item{time}{time for which to return survival probability.}
+
+\item{prob}{probability for which to return survival time.}
 
 \item{pattern}{statistics to return.  Uses \link[glue]{glue} formatting.
 Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
