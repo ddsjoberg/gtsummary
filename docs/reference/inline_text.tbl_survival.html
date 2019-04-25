@@ -133,8 +133,9 @@ inline in an R markdown document.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_survival</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='kw'>strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>time</span>,
-  <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{surv} ({conf.level*100}% CI {lower}, {upper})"</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='kw'>strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>prob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{estimate} ({conf.level*100}% CI {ci})"</span>,
+  <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,6 +152,10 @@ report. Default is <code>NULL</code> when <code>tbl_survival</code> have no spec
     <tr>
       <th>time</th>
       <td><p>time for which to return survival probability.</p></td>
+    </tr>
+    <tr>
+      <th>prob</th>
+      <td><p>probability for which to return survival time.</p></td>
     </tr>
     <tr>
       <th>pattern</th>
@@ -174,7 +179,7 @@ Default is <code>'{surv} ({conf.level.100}% {lower}, {upper})'</code>.  All colu
   <span class='fu'><a href='inline_text.html'>inline_text</a></span>(
     <span class='kw'>strata</span> <span class='kw'>=</span> <span class='st'>"Drug"</span>,
     <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>12</span>
-  )</div><div class='output co'>#&gt; NULL</div></pre>
+  )</div><div class='output co'>#&gt; 87% (95% CI 81%, 94%)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

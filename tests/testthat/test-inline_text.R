@@ -112,52 +112,71 @@ test_that("inline_text.regression -  expect errors", {
 })
 
 # inline_text.tbl_survival tests  --------------
-# library(survival)
-# test_inline_surv_strata <-
-#   survfit(Surv(ttdeath, death) ~ trt, trial) %>%
-#   tbl_survival(
-#     times = c(12, 24),
-#     time_label = "{time} Months"
-#   )
-# test_inline_surv_nostrata <-
-#   survfit(Surv(ttdeath, death) ~ 1, trial) %>%
-#   tbl_survival(
-#     times = c(12, 24),
-#     time_label = "{time} Months"
-#   )
-#
-# # test tbl_survival with strata
-# test_that("inline_text.tbl_survival - with strata", {
-#   expect_error(
-#     inline_text(test_inline_surv_strata, strata = "Drug", time = 24),
-#     NA
-#   )
-#   expect_message(
-#     inline_text(test_inline_surv_strata, strata = "Drug", time = 30),
-#     "Specified 'time' not in 'x'*"
-#   )
-#   expect_error(
-#     inline_text(test_inline_surv_strata, strata = "Drug", time = -2),
-#     "Must specify a positive 'time'."
-#   )
-#   expect_error(
-#     inline_text(test_inline_surv_strata, strata =  NULL, time = 24),
-#     "Must specify one of the following strata:*"
-#   )
-#   expect_error(
-#     inline_text(test_inline_surv_strata, strata =  "Drururuug", time = 24),
-#     "Is the strata name spelled correctly*"
-#   )
-# })
-#
-# # test tbl_survival with no strata
-# test_that("inline_text.tbl_survival - no strata", {
-#   expect_error(
-#     inline_text(test_inline_surv_nostrata, time = 24),
-#     NA
-#   )
-#   expect_warning(
-#     inline_text(test_inline_surv_nostrata, strata = "Drug", time = 24),
-#     "Ignoring strata =*"
-#   )
-# })
+library(survival)
+test_inline_surv_strata <-
+  survfit(Surv(ttdeath, death) ~ trt, trial) %>%
+  tbl_survival(
+    times = c(12, 24),
+    time_label = "{time} Months"
+  )
+test_inline_surv_nostrata <-
+  survfit(Surv(ttdeath, death) ~ 1, trial) %>%
+  tbl_survival(
+    times = c(12, 24),
+    time_label = "{time} Months"
+  )
+
+test_inline_surv_strata2 <-
+  survfit(Surv(ttdeath, death) ~ trt, trial) %>%
+  tbl_survival(
+    probs = c(0.2, 0.5)
+  )
+test_inline_surv_nostrata2 <-
+  survfit(Surv(ttdeath, death) ~ 1, trial) %>%
+  tbl_survival(
+    probs = c(0.2, 0.5)
+  )
+
+# test tbl_survival with strata
+test_that("inline_text.tbl_survival - with strata", {
+  expect_error(
+    inline_text(test_inline_surv_strata, strata = "Drug", time = 24),
+    NA
+  )
+  expect_error(
+    inline_text(test_inline_surv_strata2, strata = "Drug", prob = 0.2),
+    NA
+  )
+  expect_message(
+    inline_text(test_inline_surv_strata, strata = "Drug", time = 30),
+    "Specified 'time'*"
+  )
+  expect_error(
+    inline_text(test_inline_surv_strata, strata = "Drug", time = -2),
+    "Must specify a positive 'time'."
+  )
+  expect_error(
+    inline_text(test_inline_surv_strata, strata =  NULL, time = 24),
+    "Must specify one of the following strata:*"
+  )
+  expect_error(
+    inline_text(test_inline_surv_strata, strata =  "Drururuug", time = 24),
+    "Is the strata name spelled correctly*"
+  )
+})
+
+# test tbl_survival with no strata
+test_that("inline_text.tbl_survival - no strata", {
+  expect_error(
+    inline_text(test_inline_surv_nostrata, time = 24),
+    NA
+  )
+  expect_error(
+    inline_text(test_inline_surv_nostrata2, prob = 0.2),
+    NA
+  )
+  expect_warning(
+    inline_text(test_inline_surv_nostrata, strata = "Drug", time = 24),
+    "Ignoring strata =*"
+  )
+})
