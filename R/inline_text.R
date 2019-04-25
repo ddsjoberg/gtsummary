@@ -244,7 +244,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 inline_text.tbl_survival <-
   function(x, strata = NULL,
            time = NULL, prob = NULL,
-           pattern = "{estimate} ({conf.level*100}% CI {lower}, {upper})",
+           pattern = "{estimate} ({conf.level*100}% CI {ci})",
            ...) {
 
     # input checks ---------------------------------------------------------------

@@ -5,8 +5,8 @@
 \title{Report statistics from survival summary tables inline}
 \usage{
 \method{inline_text}{tbl_survival}(x, strata = NULL, time = NULL,
-  prob = NULL,
-  pattern = "{estimate} ({conf.level*100}\% CI {lower}, {upper})", ...)
+  prob = NULL, pattern = "{estimate} ({conf.level*100}\% CI {ci})",
+  ...)
 }
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
