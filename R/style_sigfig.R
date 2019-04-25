@@ -32,7 +32,7 @@ style_sigfig <- function(x, digits = 2) {
     # adding the case_when function, as well as a final
     # condition to round to nearest integer
     {
-      glue("case_when({.}, TRUE ~ ifelse(is.na(x), NA, sprintf('%.0f', x)))")
+      glue("case_when({.}, TRUE ~ ifelse(is.na(x), NA_character_, sprintf('%.0f', x)))")
     } %>%
     # converting strings into expressions to run
     parse(text = .) %>%
