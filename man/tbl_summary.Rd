@@ -40,7 +40,10 @@ See below for details.}
 places to round continuous summary statistics. Names of the list can be any
 continuous variable in 'data', or \code{"..continuous"} to apply to all
 variables.  If not specified, \code{tbl_summary} does its best to guess an
-appropriate level to round statistics.}
+appropriate level to round statistics.  To round statistics to different
+levels, supply a vector rather than an interger.  For example, if the
+statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
+to 1 decimal place, and the SD to 2 use \code{digits = list(age = c(1, 2))}.}
 
 \item{group}{Character vector of an ID or grouping variable.  Summary statistics
 will not be printed for this column. The column may be used in \code{\link{add_comparison}} to
