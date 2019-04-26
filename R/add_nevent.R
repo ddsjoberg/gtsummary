@@ -1,7 +1,7 @@
 #' Add number of events to a {gtsummary} regression table
 #'
 #' This function adds a column of the number of events to tables created with
-#' \code{\link{tbl_regression}} or \code{\link{tbl_uvregression}}.  Supported
+#' [tbl_regression] or [tbl_uvregression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
 #' \code{\link[stats]{glm}}, \code{\link[lme4]{glmer}}, and
 #' \code{\link[geepack]{geeglm}}) and Cox
@@ -11,7 +11,8 @@
 #' @param ... further arguments passed to or from other methods.
 #' @export
 #' @author Daniel D. Sjoberg
-#' @seealso \code{\link{add_nevent.tbl_regression}}, \code{\link{add_nevent.tbl_uvregression}}, \code{\link{tbl_regression}}, \code{\link{tbl_uvregression}}
+#' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],
+#' [tbl_regression], [tbl_uvregression]
 
 add_nevent <- function(x, ...) UseMethod("add_nevent")
 

@@ -1,8 +1,8 @@
-#' Display summary statistics table
+#' Creates a table of summary statistics
 #'
 #' The `tbl_summary` function calculates descriptive statistics by groups for
 #' continuous, categorical, and dichotomous variables.  Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{`tbl_summary` vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' for detailed examples.
 #'
 #' @param data a data frame
@@ -89,14 +89,13 @@
 #' @family tbl_summary
 #' @author Daniel D. Sjoberg
 #' @examples
-#' library(dplyr)
 #' tbl_summary_ex1 <-
 #'   trial %>%
-#'   select(age, grade, response) %>%
+#'   dplyr::select(age, grade, response) %>%
 #'   tbl_summary()
 #' tbl_summary_ex2 <-
 #'   trial %>%
-#'   select(age, grade, response, trt) %>%
+#'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt",
 #'               label = list(age = "Patient Age"))
 #'
