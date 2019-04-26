@@ -58,7 +58,7 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_regression_ex1.png}{options: width=67\%}}
+#' \if{html}{\figure{tbl_regression_ex1.png}{options: width=64\%}}
 #'
 #' \if{html}{Example 2}
 #'
