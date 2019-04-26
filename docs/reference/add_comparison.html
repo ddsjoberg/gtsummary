@@ -136,23 +136,23 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object with class <code>tbl_summary</code> from the <code><a href='tbl_summary.html'>tbl_summary</a></code> function</p></td>
+      <td><p>object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function</p></td>
     </tr>
     <tr>
       <th>test</th>
       <td><p>user defined list of statistical tests provided as a named
 character vector with variables as names and test functions as values.,
 e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age = "t.test", ptstage = "fisher.test")</a></code>. Use the names
-<code>..continuous..</code> and <code>..categorical..</code> to perform a test to all variables
-of that type (categorical requests are applied to both categorical and
+<code>..continuous..</code> and <code>..categorical..</code> to specify a test for all variables
+of that type (<code>..categorical..</code> is applied to both categorical and
 dichotomous variables).
-Options include "t.test" for a T-test,
-"wilcox.test" for a Wilcoxon rank sum test,
-"kruskal.test" for a Kruskal-Wallis rank sum test,
+Options include "t.test" for a t-test,
+"wilcox.test" for a Wilcoxon rank-sum test,
+"kruskal.test" for a Kruskal-Wallis rank-sum test,
 "chisq.test" for a Chi-squared test,
 "fisher.test" for a Fisher's exact test,
-and "re" for a random intercept model to account for clustered data.
-For "re" to be used "group" must also be specified in the function call.</p></td>
+and "lme4" for a random intercept model to account for clustered data.
+For "lme4" to be used "group" must also be specified in the <a href='tbl_summary.html'>tbl_summary</a> call.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>

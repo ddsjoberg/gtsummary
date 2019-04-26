@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Display summary statistics table — tbl_summary • gtsummary</title>
+<title>Creates a table of summary statistics — tbl_summary • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Display summary statistics table — tbl_summary" />
+<meta property="og:title" content="Creates a table of summary statistics — tbl_summary" />
 
 <meta property="og:description" content="The tbl_summary function calculates descriptive statistics by groups for
 continuous, categorical, and dichotomous variables.  Review the
@@ -120,7 +120,7 @@ for detailed examples." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Display summary statistics table</h1>
+    <h1>Creates a table of summary statistics</h1>
     
     <div class="hidden name"><code>tbl_summary.Rd</code></div>
     </div>
@@ -129,7 +129,7 @@ for detailed examples." />
     
     <p>The <code>tbl_summary</code> function calculates descriptive statistics by groups for
 continuous, categorical, and dichotomous variables.  Review the
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'><code>tbl_summary</code> vignette</a>
+<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>tbl_summary vignette</a>
 for detailed examples.</p>
     
     </div>
@@ -175,20 +175,10 @@ values only.  See below for details.</p></td>
     </tr>
     <tr>
       <th>statistic</th>
-      <td><p>A list of the type of statistics to return for each variable
-or variable class.  The named list contains variable names or <code>..continuous..</code>
-or <code>..categorical..</code> to apply a statistic format to all variables on that
-type. The default is
+      <td><p>A named list of the type of statistics to return for each variable
+or variable class.  The default is
 <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")</a></code>.
-The syntax follows from the <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> function.
-For categorical variables the choices the following statistics are available to
-report: <code>{n}</code> (frequency), <code>{N}</code> (denominator, or cohort size), <code>{p}</code> (percent).
-For continuous variables, any quantile may be returned with <code>{p##}</code>, where ##
-is any integer from 0 to 100. For example, <code>{p5}</code>, <code>{p25}</code>, and <code>{p75}</code> return
-the 5th, 25th, and 75th quantiles.  The median (<code>{median}</code>), mean (<code>{mean}</code>),
-standard deviation (<code>{sd}</code>), variance (<code>{var}</code>), minimum (<code>{min}</code>), and
-maximum (<code>{max}</code>) are available.  In fact, any function that takes the form
-<code>foo(x, na.rm = TRUE)</code> is accepted.</p></td>
+See below for details.</p></td>
     </tr>
     <tr>
       <th>digits</th>
@@ -196,7 +186,10 @@ maximum (<code>{max}</code>) are available.  In fact, any function that takes th
 places to round continuous summary statistics. Names of the list can be any
 continuous variable in 'data', or <code>"..continuous"</code> to apply to all
 variables.  If not specified, <code>tbl_summary</code> does its best to guess an
-appropriate level to round statistics.</p></td>
+appropriate level to round statistics.  To round statistics to different
+levels, supply a vector rather than an interger.  For example, if the
+statistic being calculated is <code>"{mean} ({sd})"</code> and you want the mean rounded
+to 1 decimal place, and the SD to 2 use <code>digits = list(age = c(1, 2))</code>.</p></td>
     </tr>
     <tr>
       <th>group</th>
@@ -228,7 +221,35 @@ descending order of frequency and 'alphanumeric'</p></td>
 
     <p>List of summary statistics to be converted to a <code>gt</code> object</p>
     
-    <h2 class="hasAnchor" id="specifying-variable-types"><a class="anchor" href="#specifying-variable-types"></a>Specifying Variable Types</h2>
+    <h2 class="hasAnchor" id="statistic-argument"><a class="anchor" href="#statistic-argument"></a>statistic argument</h2>
+
+    
+    <p>The statistic argument specifies the statistics presented in the table. The
+input is a named list where the names correspond the column names from the
+input 'data' and the elements specify the statistic to report. For example,
+<code>statistic = list(age = "{mean} ({sd})")</code> would report the mean and
+standard deviation for age. A statistic name that appears between curly brackets
+will be replaced with the numeric statistic (see <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a>).</p>
+<p>For categorical variables the following statistics are available to display.</p><ul>
+<li><p><code>{n}</code> frequency</p></li>
+<li><p><code>{N}</code> denominator, or cohort size</p></li>
+<li><p><code>{p}</code> percent formatted by <a href='style_percent.html'>style_percent</a></p></li>
+<li><p><code>{p##}</code> any integer percentile, where <code>##</code> is an integer from 0 to 100</p></li>
+</ul><p>For continuous variables the following statistics are available to display.</p><ul>
+<li><p><code>{median}</code> median</p></li>
+<li><p><code>{mean}</code> mean</p></li>
+<li><p><code>{sd}</code> standard deviation</p></li>
+<li><p><code>{var}</code> variance</p></li>
+<li><p><code>{min}</code> minimum</p></li>
+<li><p><code>{max}</code> maximum</p></li>
+<li><p><code>{foo}</code> any function of the form <code>foo(x)</code> is accepted where <code>x</code> is a numeric vector</p></li>
+</ul>
+    <p>If all continuous or categorical variables will be summarized with the same
+statistics, the <code>..continuous..</code> and <code>..categorical..</code> shortcuts can be used
+in place of the individual column names.  Dichotomous variables are summarized
+as categorical variables.</p>
+    
+    <h2 class="hasAnchor" id="type-argument"><a class="anchor" href="#type-argument"></a>type argument</h2>
 
     
     <p>tbl_summary displays summary statistics for three types of data:
@@ -245,9 +266,9 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
 
     
     <p>Example 1</p>
-<p><img src='figures/tbl_summary_ex1.png' width=40% /></p>
+<p><img src='figures/tbl_summary_ex1.png' width=31% /></p>
 <p>Example 2</p>
-<p><img src='figures/tbl_summary_ex2.png' width=55% /></p>
+<p><img src='figures/tbl_summary_ex2.png' width=45% /></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -262,20 +283,14 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:testthat':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>()
+
 <span class='no'>tbl_summary_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>,
               <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Patient Age"</span>))</div></pre>
   </div>
@@ -286,7 +301,9 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#specifying-variable-types">Specifying Variable Types</a></li>
+      <li><a href="#statistic-argument">statistic argument</a></li>
+
+      <li><a href="#type-argument">type argument</a></li>
 
       <li><a href="#example-output">Example Output</a></li>
 
