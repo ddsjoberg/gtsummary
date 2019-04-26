@@ -163,6 +163,11 @@ levels of the categorical variable. Default is <code>FALSE</code></p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p><img src='figures/tbl_lm_global_ex1.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_regression: <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
@@ -173,7 +178,7 @@ levels of the categorical variable. Default is <code>FALSE</code></p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_lm</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_lm_global_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>marker</span> ~ <span class='no'>stage</span> + <span class='no'>grade</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_global.html'>add_global</a></span>()</div></pre>
@@ -183,6 +188,8 @@ levels of the categorical variable. Default is <code>FALSE</code></p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#example-output">Example Output</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>

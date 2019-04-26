@@ -136,7 +136,8 @@ for detailed examples.</p>
 
     <pre class="usage"><span class='fu'>tbl_summary</span>(<span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>), <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>), <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>,
+  <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,6 +212,11 @@ never (<code>"no"</code>), only if the count is positive (<code>"ifany"</code>) 
 zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
     </tr>
     <tr>
+      <th>missing_text</th>
+      <td><p>String to display for count of missing observations.
+Default is <code>"Unknown"</code>.</p></td>
+    </tr>
+    <tr>
       <th>sort</th>
       <td><p>named list indicating the type of sorting to perform. Default is NULL.
 Options are 'frequency' where results are sorted in
@@ -235,6 +241,14 @@ and the TRUE, 1, and yes rows
 will be displayed.  Otherwise, the value to display must be specified in
 the <code>value</code> argument, e.g. <code>value = list(varname = "level to show")</code></p>
     
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p>Example 1</p>
+<p><img src='figures/tbl_summary_ex1.png' width=40% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_summary_ex2.png' width=55% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary: <code><a href='add_comparison.html'>add_comparison</a></code>,
@@ -248,9 +262,22 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_overall</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_summary</span>(<span class='no'>trial</span>)
-<span class='no'>tbl_trt</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_summary</span>(<span class='no'>trial</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>)
-<span class='no'>tbl_lbls</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span> <span class='kw'>%&gt;%</span> <span class='fu'>tbl_summary</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>cyl</span> <span class='kw'>=</span> <span class='st'>"No. Cylinders"</span>))</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:testthat':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>tbl_summary</span>()
+<span class='no'>tbl_summary_ex2</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>tbl_summary</span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>,
+              <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Patient Age"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -260,6 +287,8 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
       <li><a href="#value">Value</a></li>
 
       <li><a href="#specifying-variable-types">Specifying Variable Types</a></li>
+
+      <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

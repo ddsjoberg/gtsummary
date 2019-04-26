@@ -10,7 +10,14 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_overall <- trial %>% tbl_summary(by = "trt") %>% add_overall()
+#' tbl_overall_ex <-
+#'   trial %>%
+#'   dplyr::select(age, response, grade, trt) %>%
+#'   tbl_summary(by = "trt") %>%
+#'   add_overall()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
+#'
 add_overall <- function(x, last = FALSE) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")

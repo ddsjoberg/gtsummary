@@ -184,10 +184,9 @@ random intercept, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</c
     </tr>
     <tr>
       <th>show_yesno</th>
-      <td><p>Vector of names of categorical and factor variables that
-are <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("No", "Yes")</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("no", "yes")</a></code>, or <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("NO", "YES")</a></code> default to dichotomous printing
-(i.e. only Yes shown). To force both levels to be shown include the column
-name in <code>show_yesno</code>, e.g. <code>show_yesno = c("highgrade", "female")</code></p></td>
+      <td><p>By default yes/no categorical variables are printed on a single row,
+when the 'No' category is the reference group.  To print both levels in the output table, include
+the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
@@ -223,6 +222,14 @@ units in your model.  Here are some common exceptions.</p><ol>
 </ol>
     <p>This list is not exhaustive, and care should be taken for each number reported.</p>
     
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p>Example 1</p>
+<p><img src='figures/tbl_uv_ex1.png' width=50% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_uv_ex2.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_uvregression: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
@@ -234,26 +241,25 @@ units in your model.  Here are some common exceptions.</p><ol>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_uv</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_uv_ex1</span> <span class='kw'>&lt;-</span>
  <span class='fu'>tbl_uvregression</span>(
-   <span class='no'>trial</span>,
+   <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>),
    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
    <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
    <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
  )
 
-<span class='co'># rounding pvalues to 2 decimal places, and adding global p-values</span>
-<span class='no'>tbl_uv2</span> <span class='kw'>&lt;-</span>
+<span class='co'># rounding pvalues to 2 decimal places</span>
+<span class='no'>tbl_uv_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
-    <span class='no'>trial</span>,
+    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>),
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
     <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
     <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-  ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global.html'>add_global</a></span>()</div></pre>
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -261,6 +267,8 @@ units in your model.  Here are some common exceptions.</p><ol>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#note">Note</a></li>
+
+      <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

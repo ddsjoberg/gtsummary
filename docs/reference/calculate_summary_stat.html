@@ -129,7 +129,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>calculate_summary_stat</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>summary_type</span>, <span class='no'>dichotomous_value</span>,
-  <span class='no'>var_label</span>, <span class='no'>stat_display</span>, <span class='no'>digits</span>, <span class='no'>class</span>, <span class='no'>missing</span>, <span class='no'>sort</span>)</pre>
+  <span class='no'>var_label</span>, <span class='no'>stat_display</span>, <span class='no'>digits</span>, <span class='no'>class</span>, <span class='no'>missing</span>, <span class='no'>missing_text</span>, <span class='no'>sort</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,6 +180,10 @@ summary statistics will be calculated.</p></td>
 if the table includes counts of NA values: the allowed values correspond to
 never ("no"), only if the count is positive ("ifany") and even for
 zero counts ("always"). Default is "ifany".</p></td>
+    </tr>
+    <tr>
+      <th>missing_text</th>
+      <td><p>String to display for count of missing observations.</p></td>
     </tr>
     <tr>
       <th>sort</th>

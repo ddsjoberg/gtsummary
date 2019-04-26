@@ -47,11 +47,13 @@ The vignettes/tutorials for the primary gtsummary functions have detailed exampl
 ```{r t1, include = TRUE}
 library(gtsummary)
 t1 <-
-  tbl_summary(trial, by = "trt") %>% 
+  trial %>%
+  dplyr::select(trt, age, grade, response) %>%
+  tbl_summary(by = "trt") %>% 
   add_comparison() 
 ```
 
-![](man/figures/README-tbl_summary.png)
+![](man/figures/README-tbl_summary.png){ width=60% }
 
 ### Regression Models
 
@@ -59,9 +61,15 @@ t1 <-
 mod1 = glm(am ~ mpg + factor(cyl), mtcars, family = binomial(link = "logit"))
 t2 <-
   tbl_regression(
-    mod1, exponentiate = TRUE, 
-    label = list(`factor(cyl)` = "No. of Cylinders", mpg = "Miles per Gallon")
+    mod1, 
+    exponentiate = TRUE, 
+    label = list(`factor(cyl)` = "No. of Cylinders",
+                 mpg = "Miles per Gallon")
   )
 ```
 
-![](man/figures/README-tbl_regression.png)
+![](man/figures/README-tbl_regression.png){ width=35% }
+
+Thank you to all contributors!  
+<!-- UPDATE THIS LIST! usethis::use_tidy_thanks() -->
+[&#x0040;ddsjoberg](https://github.com/ddsjoberg), [&#x0040;karissawhiting](https://github.com/karissawhiting), and [&#x0040;michaelcurry1123](https://github.com/michaelcurry1123)

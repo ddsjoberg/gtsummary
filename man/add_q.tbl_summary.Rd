@@ -28,8 +28,13 @@ The adjustments to the p-values is performed with
 \code{stats::}\code{\link[stats]{p.adjust}}.  The default method for correction
 is false discovery rate (\code{method = "fdr"})
 }
+\section{Example Output}{
+
+\if{html}{\figure{tbl_sum_q_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_q <-
+tbl_sum_q_ex <-
   trial \%>\%
   tbl_summary(by = "trt") \%>\%
   add_comparison() \%>\%

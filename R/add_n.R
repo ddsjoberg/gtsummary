@@ -11,7 +11,13 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_n <- trial %>% tbl_summary(by = "trt") %>% add_n()
+#' tbl_n_ex <-
+#'   trial %>%
+#'   tbl_summary(by = "trt") %>%
+#'   add_n()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
+#'
 add_n <- function(x, missing = FALSE, last = FALSE) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")

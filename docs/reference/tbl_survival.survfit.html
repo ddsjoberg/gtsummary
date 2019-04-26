@@ -131,9 +131,11 @@ formatted summary of the results</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for survfit</span>
-<span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>x</span>, <span class='no'>times</span>, <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time}"</span>,
-  <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>, <span class='kw'>header_time</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Time**"</span>),
-  <span class='kw'>header_prob</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Probability**"</span>), <span class='no'>...</span>)</pre>
+<span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>x</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NULL'>is.null</a></span>(<span class='no'>probs</span>), <span class='st'>"{time}"</span>, <span class='st'>"{prob*100}%"</span>),
+  <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>, <span class='kw'>header_label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>failure</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"-"</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,7 +149,12 @@ formatted summary of the results</p>
       <td><p>numeric vector of survival times</p></td>
     </tr>
     <tr>
-      <th>time_label</th>
+      <th>probs</th>
+      <td><p>numeric vector of probabilities with values in (0,1)
+specifying the survival quantiles to return</p></td>
+    </tr>
+    <tr>
+      <th>label</th>
       <td><p>string defining the label shown for the time column.
 Default is <code>"{time}"</code>.  The input uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> notation to
 convert the string into a label.  A common label may be <code>"{time} Months"</code>, which
@@ -163,14 +170,30 @@ call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code
 below for details.</p></td>
     </tr>
     <tr>
-      <th>header_time</th>
+      <th>header_label</th>
       <td><p>string to be displayed as column header of the time column.
 Default is <code>md('**Time**')</code></p></td>
     </tr>
     <tr>
-      <th>header_prob</th>
+      <th>header_estimate</th>
       <td><p>string to be displayed as column header of the Kaplan-Meier
 estimate.  Default is <code>md('**Probability**')</code></p></td>
+    </tr>
+    <tr>
+      <th>failure</th>
+      <td><p>Calculate failure probabilities rather than survival.
+Default is <code>FALSE</code>.  Does NOT apply to survival quantile requests</p></td>
+    </tr>
+    <tr>
+      <th>missing</th>
+      <td><p>character string indicating what to replace missing confidence
+limits with in output.  Default is <code>missing = "-"</code></p></td>
+    </tr>
+    <tr>
+      <th>estimate_fun</th>
+      <td><p>function used to format the estimate and confidence limits.
+The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE)</a></code> for survival probabilities, and
+<code><a href='style_sigfig.html'>style_sigfig(x, digits = 3)</a></code> for time estimates.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -193,6 +216,14 @@ depending on the stratum.  Other quantities available to print are:</p><ol>
 <li><p><code>{strata}</code> raw stratum specification from <code>survfit</code> object</p></li>
 </ol>
     
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p>Example 1</p>
+<p><img src='figures/tbl_strata_ex1.png' width=50% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_nostrata_ex2.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>html</a></p></div>
@@ -201,19 +232,19 @@ depending on the stratum.  Other quantities available to print are:</p><ol>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
-<span class='no'>tbl_strata</span> <span class='kw'>&lt;-</span>
+<span class='no'>tbl_strata_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
     <span class='no'>fit1</span>,
     <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-    <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
   )
 
 <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
-<span class='no'>tbl_nostrata</span> <span class='kw'>&lt;-</span>
+<span class='no'>tbl_nostrata_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
     <span class='no'>fit2</span>,
     <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-    <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
   )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -222,6 +253,8 @@ depending on the stratum.  Other quantities available to print are:</p><ol>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#specifying-level-label">Specifying <code>level_label</code></a></li>
+
+      <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

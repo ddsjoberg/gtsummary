@@ -575,6 +575,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 #' if the table includes counts of NA values: the allowed values correspond to
 #' never ("no"), only if the count is positive ("ifany") and even for
 #' zero counts ("always"). Default is "ifany".
+#' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
 #' @keywords internal
@@ -582,7 +583,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 
 calculate_summary_stat <- function(data, variable, by, summary_type,
                                    dichotomous_value, var_label, stat_display,
-                                   digits, class, missing, sort) {
+                                   digits, class, missing, missing_text, sort) {
 
   # if class is NA, then do not calculate summary statistics
   if (is.na(class)) {
@@ -591,7 +592,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
       return(
         tibble(
           row_type = c("label", "missing"),
-          label = c(var_label, "Unknown"),
+          label = c(var_label, missing_text),
           stat_overall = c(NA_character_, as.character(nrow(data)))
         )
       )
@@ -602,7 +603,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
       return(
         tibble(
           row_type = c("label", "missing"),
-          label = c(var_label, "Unknown")
+          label = c(var_label, missing_text)
         ) %>%
           left_join(
             table(data[[by]]) %>%
@@ -622,7 +623,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     return(
       summarize_continuous(
         data, variable, by, digits,
-        var_label, stat_display, missing
+        var_label, stat_display, missing, missing_text
       )
     )
   }
@@ -632,7 +633,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     return(
       summarize_categorical(
         data, variable, by, var_label,
-        stat_display, dichotomous_value, missing, sort
+        stat_display, dichotomous_value, missing, missing_text, sort
       )
     )
   }
@@ -779,6 +780,7 @@ df_by <- function(data, by) {
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
+#' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
 #' @return formatted summary statistics in a tibble.
@@ -787,7 +789,7 @@ df_by <- function(data, by) {
 
 summarize_categorical <- function(data, variable, by, var_label,
                                   stat_display, dichotomous_value, missing,
-                                  sort) {
+                                  missing_text, sort) {
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -849,6 +851,11 @@ summarize_categorical <- function(data, variable, by, var_label,
       tab %>%
       arrange(desc(.data$var_level_freq))
   }
+  else if(sort == "alphanumeric") {
+    tab <-
+      tab %>%
+      arrange(.data$variable)
+  }
 
   # keeping needed vars
   tab <-
@@ -867,7 +874,7 @@ summarize_categorical <- function(data, variable, by, var_label,
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
     mutate(
       row_type = "missing",
-      label = "Unknown"
+      label = missing_text
     )
 
   # formatting for dichotomous variables
@@ -943,13 +950,14 @@ summarize_categorical <- function(data, variable, by, var_label,
 #' if the table includes counts of `NA` values: the allowed values correspond to
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
+#' @param missing_text String to display for count of missing observations.
 #' @return formatted summary statistics in a tibble.
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @importFrom stringr str_extract_all str_remove_all fixed
 
 summarize_continuous <- function(data, variable, by, digits,
-                                 var_label, stat_display, missing) {
+                                 var_label, stat_display, missing, missing_text) {
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -1029,7 +1037,7 @@ summarize_continuous <- function(data, variable, by, digits,
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
     mutate(
       row_type = "missing",
-      label = "Unknown"
+      label = missing_text
     )
 
   # stacking stats and missing row
@@ -1128,7 +1136,8 @@ calculate_single_stat <- function(x, stat_name) {
 # this should include EVERY input of \code{\link{tbl_summary}} in the same order
 # copy and paste them from \code{\link{tbl_summary}}
 tbl_summary_input_checks <- function(data, by, label, type, value,
-                                     statistic, digits, missing, group, sort) {
+                                     statistic, digits, missing, missing_text,
+                                     group, sort) {
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
@@ -1252,6 +1261,16 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     }
   }
 
+  # missing_text ---------------------------------------------------------------
+  #input must be character
+  if(!"character" %in% class(missing_text)) {
+    stop("Argument 'missing_text' must be a character string.")
+  }
+  # checking the length is one
+  if(length(missing_text) != 1) {
+    stop("Argument 'missing_text' must be a character string of length 1.")
+  }
+
   # group ----------------------------------------------------------------------
   if (length(group) > 1) {
     stop(
@@ -1279,6 +1298,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
       stop("Elements of 'sort' must be one of 'frequency' or 'alphanumeric'")
     }
   }
+
+
 }
 
 # # data

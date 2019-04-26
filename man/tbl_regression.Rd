@@ -4,11 +4,10 @@
 \alias{tbl_regression}
 \title{Display regression model results in table}
 \usage{
-tbl_regression(x, exponentiate = FALSE, label = NULL,
-  include = names(stats::model.frame(x)), show_yesno = NULL,
-  conf.level = 0.95, intercept = FALSE,
-  coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-  pvalue_fun = style_pvalue)
+tbl_regression(x, exponentiate = FALSE, label = NULL, include = NULL,
+  exclude = NULL, show_yesno = NULL, conf.level = 0.95,
+  intercept = FALSE, coef_fun = ifelse(exponentiate == TRUE,
+  style_ratio, style_sigfig), pvalue_fun = style_pvalue)
 }
 \arguments{
 \item{x}{regression model object}
@@ -18,12 +17,13 @@ tbl_regression(x, exponentiate = FALSE, label = NULL,
 
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
-\item{include}{names of variables to include in output.  Default is all variables.}
+\item{include}{names of variables to include in output.}
 
-\item{show_yesno}{Vector of names of categorical and factor variables that
-are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} default to dichotomous printing
-(i.e. only Yes shown). To force both levels to be shown include the column
-name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
+\item{exclude}{names of variables to exclude from output.}
+
+\item{show_yesno}{By default yes/no categorical variables are printed on a single row,
+when the 'No' category is the reference group.  To print both levels in the output table, include
+the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
 
 \item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
 
@@ -62,19 +62,35 @@ units in your model.  Here are some common exceptions.
 This list is not exhaustive, and care should be taken for each number reported.
 }
 
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_regression_ex1.png}{options: width=50\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_regression_ex2.png}{options: width=50\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
+}
+
 \examples{
-mod1 <-
+tbl_regression_ex1 <-
   lm(hp ~ mpg + factor(cyl), mtcars) \%>\%
   tbl_regression()
 
-mod2 <-
+tbl_regression_ex2 <-
   glm(response ~ age + grade + stage, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE)
 
 library(lme4)
-mod_glmer <-
+tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
+
 }
 \seealso{
 Other tbl_regression: \code{\link{add_global.tbl_regression}},

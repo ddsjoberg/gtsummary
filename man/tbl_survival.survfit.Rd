@@ -4,16 +4,21 @@
 \alias{tbl_survival.survfit}
 \title{Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints}
 \usage{
-\method{tbl_survival}{survfit}(x, times, time_label = "{time}",
-  level_label = "{level}, N = {n}", header_time = md("**Time**"),
-  header_prob = md("**Probability**"), ...)
+\method{tbl_survival}{survfit}(x, times = NULL, probs = NULL,
+  label = ifelse(is.null(probs), "{time}", "{prob*100}\%"),
+  level_label = "{level}, N = {n}", header_label = NULL,
+  header_estimate = NULL, failure = FALSE, missing = "-",
+  estimate_fun = NULL, ...)
 }
 \arguments{
 \item{x}{a survfit object with a single stratifying variable}
 
 \item{times}{numeric vector of survival times}
 
-\item{time_label}{string defining the label shown for the time column.
+\item{probs}{numeric vector of probabilities with values in (0,1)
+specifying the survival quantiles to return}
+
+\item{label}{string defining the label shown for the time column.
 Default is \code{"{time}"}.  The input uses \code{\link[glue]{glue}} notation to
 convert the string into a label.  A common label may be \code{"{time} Months"}, which
 would resolve to "6 Months" or "12 Months" depending on specified \code{times}.}
@@ -25,11 +30,21 @@ The default is \code{"{level}, N = {n}"}.  Other information available to
 call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, and \code{'{strata}'}. See
 below for details.}
 
-\item{header_time}{string to be displayed as column header of the time column.
+\item{header_label}{string to be displayed as column header of the time column.
 Default is \code{md('**Time**')}}
 
-\item{header_prob}{string to be displayed as column header of the Kaplan-Meier
+\item{header_estimate}{string to be displayed as column header of the Kaplan-Meier
 estimate.  Default is \code{md('**Probability**')}}
+
+\item{failure}{Calculate failure probabilities rather than survival.
+Default is \code{FALSE}.  Does NOT apply to survival quantile requests}
+
+\item{missing}{character string indicating what to replace missing confidence
+limits with in output.  Default is \code{missing = "-"}}
+
+\item{estimate_fun}{function used to format the estimate and confidence limits.
+The default is \code{style_percent(x, symbol = TRUE)} for survival probabilities, and
+\code{style_sigfig(x, digits = 3)} for time estimates.}
 
 \item{...}{not used}
 }
@@ -53,22 +68,33 @@ depending on the stratum.  Other quantities available to print are:
 }
 }
 
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_strata_ex1.png}{options: width=50\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_nostrata_ex2.png}{options: width=50\%}}
+}
+
 \examples{
 library(survival)
 fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-tbl_strata <-
+tbl_strata_ex1 <-
   tbl_survival(
     fit1,
     times = c(12, 24),
-    time_label = "{time} Months"
+    label = "{time} Months"
   )
 
 fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
-tbl_nostrata <-
+tbl_nostrata_ex2 <-
   tbl_survival(
     fit2,
     times = c(12, 24),
-    time_label = "{time} Months"
+    label = "{time} Months"
   )
 }
 \seealso{

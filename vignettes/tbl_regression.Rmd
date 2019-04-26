@@ -109,6 +109,7 @@ To use the {gt} package functions with {gtsummary} tables, the regression table 
 ```
 m1 %>%
   tbl_regression(exponentiate = TRUE) %>%
+  as_gt() %>%
   <gt functions>
 ```
 ### Example

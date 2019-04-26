@@ -7,7 +7,7 @@
 \method{add_nevent}{tbl_regression}(x, ...)
 }
 \arguments{
-\item{x}{\code{tbl_regerssion} object}
+\item{x}{\code{tbl_regression} object}
 
 \item{...}{not used}
 }
@@ -26,11 +26,16 @@ and not printed in the default output table (similar to N). The number
 of events is accessible via the \code{inline_text()} function for printing in a report.
 }
 
+\section{Example Output}{
+
+\if{html}{\figure{tbl_reg_nevent_ex.png}{options: width=50\%}}
+}
+
 \examples{
-glm(response ~ trt, trial, family = binomial) \%>\%
+tbl_reg_nevent_ex <-
+  glm(response ~ trt, trial, family = binomial) \%>\%
   tbl_regression() \%>\%
-  add_nevent() \%>\%
-  purrr::pluck("table_body")
+  add_nevent()
 }
 \seealso{
 Other tbl_regression: \code{\link{add_global.tbl_regression}},
