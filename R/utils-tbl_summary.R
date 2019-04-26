@@ -1113,7 +1113,8 @@ calculate_single_stat <- function(x, stat_name) {
       # calculating summary stats, input MUST be a function name
       # first argument is x and must take argument 'na.rm = TRUE'
       else {
-        do.call(name, list(x, na.rm = TRUE))
+        do.call(name, list(stats::na.omit(x)))
+        # do.call(name, list(x, na.rm = TRUE))
       }
     }
   )
@@ -1363,10 +1364,22 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       "{p}%", "%",
       "{p}", "%"
     ) %>%
+    # adding in quartiles
     bind_rows(
       tibble(stat = paste0("{p", 0:100, "}")) %>%
         mutate(label = paste0(gsub("[^0-9\\.]", "", .data$stat), "%"))
+    ) %>%
+    # if function does not appear in above list, the print the function name
+    bind_rows(
+      tibble(
+        stat = str_extract_all(stat_display, "\\{.*?\\}") %>%
+          unlist() %>% unique(),
+        label = .data$stat %>%
+          str_remove_all(pattern = fixed("}")) %>%
+          str_remove_all(pattern = fixed("{"))
+      )
     )
+  print(labels, n = Inf)
 
   # adding IQR replacements if indicated
   if (iqr == TRUE) {
@@ -1392,7 +1405,6 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
 
   stat_display
 }
-
 
 # stat_label footnote maker
 footnote_stat_label <- function(meta_data) {
