@@ -36,10 +36,11 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @family tbl_regression
 #' @export
 #' @examples
-#' tbl_reg_nevent_ex <- glm(response ~ trt, trial, family = binomial) %>%
+#' tbl_reg_nevent_ex <-
+#'   glm(response ~ trt, trial, family = binomial) %>%
 #'   tbl_regression() %>%
 #'   add_nevent()
-#' @section Figures:
+#' @section Example Output:
 #' \if{html}{\figure{tbl_reg_nevent_ex.png}{options: width=50\%}}
 #'
 
@@ -126,13 +127,14 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' @examples
 #' tbl_uv_nevent_ex <-
 #'   trial %>%
+#'   dplyr::select(response, trt, age, grade) %>%
 #'   tbl_uvregression(
 #'     method = glm,
 #'     y = response,
 #'     method.args = list(family = binomial)
 #'   ) %>%
 #'   add_nevent()
-#' @section Figures:
+#' @section Example Output:
 #' \if{html}{\figure{tbl_uv_nevent_ex.png}{options: width=50\%}}
 #'
 add_nevent.tbl_uvregression <- function(x, ...) {

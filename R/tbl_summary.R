@@ -67,16 +67,25 @@
 #' @family tbl_summary
 #' @author Daniel D. Sjoberg
 #' @examples
-#' tbl_summary_ex1 <- tbl_summary(trial)
-#' tbl_summary_ex2 <- tbl_summary(trial, by = "trt")
-#' tbl_summary_ex3 <- mtcars %>% tbl_summary(label = list(cyl = "No. Cylinders"))
+#' library(dplyr)
+#' tbl_summary_ex1 <-
+#'   trial %>%
+#'   select(age, grade, response) %>%
+#'   tbl_summary()
+#' tbl_summary_ex2 <-
+#'   trial %>%
+#'   select(age, grade, response, trt) %>%
+#'   tbl_summary(by = "trt",
+#'               label = list(age = "Patient Age"))
 #'
-#' @section Figures:
-#' \if{html}{\figure{tbl_summary_ex1.png}{options: width=50\%}}
+#' @section Example Output:
+#' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_summary_ex2.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_summary_ex1.png}{options: width=40\%}}
 #'
-#' \if{html}{\figure{tbl_summary_ex3.png}{options: width=50\%}}
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{tbl_summary_ex2.png}{options: width=55\%}}
 #'
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
