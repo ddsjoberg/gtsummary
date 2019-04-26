@@ -8,7 +8,7 @@ test_that("guess digits: mtcars$drat", {
       summary_type = "continuous",
       class = "numeric",
       digits = NULL
-    ),
+    )[[1]],
     2
   )
 })

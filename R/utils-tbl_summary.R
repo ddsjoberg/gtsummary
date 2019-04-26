@@ -680,7 +680,7 @@ continuous_digits_guess <- function(data,
                                     summary_type,
                                     class,
                                     digits = NULL) {
-  pmap_dbl(
+  pmap(
     list(variable, summary_type, class),
     ~ continuous_digits_guess_one(data, ..1, ..2, ..3, digits)
   )
@@ -942,7 +942,8 @@ summarize_categorical <- function(data, variable, by, var_label,
 #' @param variable Character variable name in `data` that will be tabulated
 #' @param by Character variable name in `data` that Summary statistics for
 #' `variable` are stratified
-#' @param digits integer indicating the number of decimal places to be used.
+#' @param digits vector of integers (or single integer) indicating the number
+#' of decimal places to be used for rounding.
 #' @param var_label string label
 #' @param stat_display String that specifies the format of the displayed statistics.
 #' The syntax follows \code{\link[glue]{glue}} inputs with n, N, and p as input options.
@@ -999,16 +1000,22 @@ summarize_continuous <- function(data, variable, by, digits,
         data, .data$stat_name_list,
         ~ calculate_single_stat(.x[[1]], .y)
       ),
+      # getting a vector indicating the number of digits to round each requested statistic
+      round_digits = map(.data$stat_result_list, ~rep(digits, length.out = length(.x))),
+      # rounding each statistic
+      stat_result_list_fmt = map2(
+        .data$stat_result_list, .data$round_digits,
+        ~map2_chr(.x, .y, function(stat, digit) sprintf(glue("%.{digit}f"), stat))
+      ),
       # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
       df_result = map2(
-        .data$stat_name_list, .data$stat_result_list,
+        .data$stat_name_list, .data$stat_result_list_fmt,
         ~ .y %>% t() %>% as_tibble(.name_repair = "minimal") %>% set_names(.x)
       ),
       # rounding statistics and concatenating results
       stat = map_chr(
         .data$df_result,
         ~ .x %>%
-          mutate_all(~ sprintf(glue("%.{digits}f"), .)) %>%
           mutate(
             stat = as.character(glue(stat_display))
           ) %>%

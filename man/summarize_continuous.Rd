@@ -15,7 +15,8 @@ summarize_continuous(data, variable, by, digits, var_label, stat_display,
 \item{by}{Character variable name in \code{data} that Summary statistics for
 \code{variable} are stratified}
 
-\item{digits}{integer indicating the number of decimal places to be used.}
+\item{digits}{vector of integers (or single integer) indicating the number
+of decimal places to be used for rounding.}
 
 \item{var_label}{string label}
 
