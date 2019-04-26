@@ -12,10 +12,10 @@ add_global(x, ...)
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-This function uses \code{\link[car]{Anova}} from the \code{car} package with
+This function uses the \link[car:Anova]{car::Anova} function with
 \code{type = "III"} to calculate global p-values.
 If a needed class of model is not supported by
-\code{car::}\code{\link[car]{Anova}}, please put in an
+\link[car:Anova]{car::Anova}, please put in an
 \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
 Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }

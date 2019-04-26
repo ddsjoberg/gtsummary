@@ -3,7 +3,7 @@
 #' The function assumes the DEFAULT header are in use. Only modify header rows
 #' after all columns has been added.
 #'
-#' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
+#' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param missing logical argument indicating whether to print N (`missing = FALSE`),
 #' or N missing (`missing = TRUE`).  Default is `FALSE`
 #' @param last logical indicator to include overall  column last. Default is `FALSE`

@@ -16,12 +16,12 @@ is \code{NULL} which will add global p-values for all categorical variables}
 \item{keep}{logical argument whether to keep the individual p-values for the
 levels of the categorical variable. Default is \code{FALSE}}
 
-\item{...}{arguments to be passed to \code{\link[car]{Anova}}}
+\item{...}{arguments to be passed to \link[car:Anova]{car::Anova}}
 }
 \description{
-This function uses \code{\link[car]{Anova}} from the \code{car} package with
+This function uses \link[car:Anova]{car::Anova} from the \code{car} package with
 \code{type = "III"} to calculate global p-values.
-If a needed class of model is not supported by \code{\link[car]{Anova}},
+If a needed class of model is not supported by \link[car:Anova]{car::Anova},
 please put in an
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 }

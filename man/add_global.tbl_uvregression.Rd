@@ -10,12 +10,12 @@
 \item{x}{object with class \code{tbl_uvregression} from the
 \code{\link{tbl_uvregression}} function}
 
-\item{...}{arguments to be passed to \code{\link[car]{Anova}}.}
+\item{...}{arguments to be passed to \link[car:Anova]{car::Anova}.}
 }
 \description{
-This function uses \code{\link[car]{Anova}} from the \code{car} package with
+This function uses \link[car:Anova]{car::Anova} from the \code{car} package with
 \code{type = "III"} to calculate global p-values.
-If a needed class of model is not supported by \code{\link[car]{Anova}},
+If a needed class of model is not supported by \link[car:Anova]{car::Anova},
 please put in an
 issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 }

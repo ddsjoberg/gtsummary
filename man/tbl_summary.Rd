@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_summary.R
 \name{tbl_summary}
 \alias{tbl_summary}
-\title{Display summary statistics table}
+\title{Creates a table of summary statistics}
 \usage{
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,
@@ -64,7 +64,7 @@ List of summary statistics to be converted to a \code{gt} object
 \description{
 The \code{tbl_summary} function calculates descriptive statistics by groups for
 continuous, categorical, and dichotomous variables.  Review the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 for detailed examples.
 }
 \section{statistic argument}{
@@ -125,14 +125,13 @@ the \code{value} argument, e.g. \code{value = list(varname = "level to show")}
 }
 
 \examples{
-library(dplyr)
 tbl_summary_ex1 <-
   trial \%>\%
-  select(age, grade, response) \%>\%
+  dplyr::select(age, grade, response) \%>\%
   tbl_summary()
 tbl_summary_ex2 <-
   trial \%>\%
-  select(age, grade, response, trt) \%>\%
+  dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(by = "trt",
               label = list(age = "Patient Age"))
 

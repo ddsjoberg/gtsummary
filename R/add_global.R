@@ -1,9 +1,9 @@
 #' Adds the global p-value for a categorical variables
 #'
-#' This function uses \code{\link[car]{Anova}} from the `car` package with
+#' This function uses the [car::Anova] function with
 #' `type = "III"` to calculate global p-values.
 #' If a needed class of model is not supported by
-#' `car::`\code{\link[car]{Anova}}, please put in an
+#' [car::Anova], please put in an
 #' \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
 #' Output from `tbl_regression` and `tbl_uvregression` objects supported.
 #'
@@ -24,9 +24,9 @@ add_global <- function(x, ...) {
 
 #' Adds the global p-value for a categorical variables in `tbl_regression` objects
 #'
-#' This function uses \code{\link[car]{Anova}} from the `car` package with
+#' This function uses [car::Anova] from the `car` package with
 #' `type = "III"` to calculate global p-values.
-#' If a needed class of model is not supported by \code{\link[car]{Anova}},
+#' If a needed class of model is not supported by [car::Anova],
 #' please put in an
 #' issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 #'
@@ -36,7 +36,7 @@ add_global <- function(x, ...) {
 #' is `NULL` which will add global p-values for all categorical variables
 #' @param keep logical argument whether to keep the individual p-values for the
 #' levels of the categorical variable. Default is `FALSE`
-#' @param ... arguments to be passed to \code{\link[car]{Anova}}
+#' @param ... arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @examples
@@ -115,15 +115,15 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
 #' Adds the global p-value for a categorical variables in `tbl_uvregression` objects
 #'
-#' This function uses \code{\link[car]{Anova}} from the `car` package with
+#' This function uses [car::Anova] from the `car` package with
 #' `type = "III"` to calculate global p-values.
-#' If a needed class of model is not supported by \code{\link[car]{Anova}},
+#' If a needed class of model is not supported by [car::Anova],
 #' please put in an
 #' issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 #'
 #' @param x object with class `tbl_uvregression` from the
 #' \code{\link{tbl_uvregression}} function
-#' @param ... arguments to be passed to \code{\link[car]{Anova}}.
+#' @param ... arguments to be passed to [car::Anova].
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression
 #' @examples

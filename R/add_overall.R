@@ -1,10 +1,9 @@
-#' Adds a column with overall summary statistics to an existing `tbl_summary` object where descriptive
-#' statistics are split by a variable
+#' Adds a column with overall summary statistics
 #'
-#' The function assumes the DEFAULT headers are in use. Only modify header rows
-#' after Overall column has been added.
+#' This function adds a column with overall summary statistics to tables
+#' created by `tbl_summary`.
 #'
-#' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
+#' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param last logical indicator to include overall  column last. Default is `FALSE`
 #' @family tbl_summary
 #' @author Daniel D. Sjoberg
@@ -69,7 +68,7 @@ add_overall <- function(x, last = FALSE) {
   x$call_list <- c(x$call_list, list(add_overall = match.call()))
 
   # adding header
-  x <- cols_label_summary(x, stat_overall = "**Overall**, N = {N}")
+  x <- cols_label_summary(x, stat_overall = md("**Overall**, N = {N}"))
 
   x
 }
