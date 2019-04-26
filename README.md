@@ -13,7 +13,8 @@ status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)
 
 A collection of functions commonly used in the work of the
 biostatisticians. The goal of gtsummary is to make reporting of tabular
-analytic results simple, beautiful, and reproducible.  
+analytic results simple, beautiful, and
+reproducible.  
 <!-- Update the list of contributors from the git shell `git shortlog -s -n` -->
 
 ## Installation
