@@ -69,3 +69,10 @@ t2 <-
 ```
 
 ![](man/figures/README-tbl_regression.png)
+
+Thank you to all
+contributors\!  
+<!-- [@ddsjoberg](https://github.com/ddsjoberg), [@karissawhiting](https://github.com/karissawhiting), [@michaelcurry1123](https://github.com/michaelcurry1123) -->
+[@ddsjoberg](https://github.com/ddsjoberg),
+[@karissawhiting](https://github.com/karissawhiting), and
+[@michaelcurry1123](https://github.com/michaelcurry1123)
