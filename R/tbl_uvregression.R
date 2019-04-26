@@ -1,8 +1,8 @@
 #' Display univariate regression model results in table
 #'
-#' The `tbl_uvregression` function arguments are similar to the \code{\link{tbl_regression}}
-#' arguments. Review the `tbl_uvregression`
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}
+#' The `tbl_uvregression` function arguments are similar to the [tbl_regression]
+#' arguments. Review the
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 #' for detailed examples.
 #'
 #' @section Note:
@@ -36,7 +36,7 @@
 #' @examples
 #' tbl_uv_ex1 <-
 #'  tbl_uvregression(
-#'    trial %>% dplyr::select(response, age, grade, response),
+#'    trial %>% dplyr::select(response, age, grade),
 #'    method = glm,
 #'    y = response,
 #'    method.args = list(family = binomial),
@@ -44,12 +44,13 @@
 #'  )
 #'
 #' # rounding pvalues to 2 decimal places
+#' library(survival)
 #' tbl_uv_ex2 <-
 #'   tbl_uvregression(
-#'     trial %>% dplyr::select(response, age, grade, response),
-#'     method = glm,
-#'     y = response,
-#'     method.args = list(family = binomial),
+#'     trial %>% dplyr::select(ttdeath, death, age, grade, response),
+#'     method = coxph,
+#'     y = Surv(ttdeath, death),
+#'     label = list(grade = "Grade"),
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )

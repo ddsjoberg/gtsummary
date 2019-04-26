@@ -296,7 +296,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
     return(test[["..categorical.."]])
 
   # if group variable supplied, fit a random effects model
-  if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("re")
+  if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("lme4")
 
   # unless by_var has >2 levels, then return NA with a message
   if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
@@ -484,7 +484,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
   }
 
   # Random effects - continuous or dichotomous
-  if (test == "re" & type %in% c("continuous", "dichotomous")) {
+  if (test == "lme4" & type %in% c("continuous", "dichotomous")) {
     form1 <- get("as.formula")(paste0(by, " ~ ", variable, " + (1 | ", group, ")"))
     mod1 <- tryCatch(
       lme4::glmer(form1, data = get("na.omit")(data), family = get("binomial")),
@@ -503,7 +503,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
   }
 
   # Random effects - categorical
-  if (test == "re" & type == "categorical") {
+  if (test == "lme4" & type == "categorical") {
     form0 <- get("as.formula")(paste0(by, " ~ 1 + (1 | ", group, ")"))
     form1 <- get("as.formula")(paste0(
       by, " ~ factor(", variable,
@@ -547,11 +547,11 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 # calculate_pvalue_one(data = mtcars, variable = "gear", by = "am",
 #                      test = "fisher.test", group = NULL, type = "categorical")
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      group = "gear", test = "re", type = "continuous")
+#                      group = "gear", test = "lme4", type = "continuous")
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      group = "gear", test = "re", type = "categorical")
+#                      group = "gear", test = "lme4", type = "categorical")
 # calculate_pvalue_one(data = mtcars, variable = "mpg", by = "am",
-#                      group = "gear", test = "re", type = "continuous")
+#                      group = "gear", test = "lme4", type = "continuous")
 
 
 
@@ -680,7 +680,7 @@ continuous_digits_guess <- function(data,
                                     summary_type,
                                     class,
                                     digits = NULL) {
-  pmap_dbl(
+  pmap(
     list(variable, summary_type, class),
     ~ continuous_digits_guess_one(data, ..1, ..2, ..3, digits)
   )
@@ -942,7 +942,8 @@ summarize_categorical <- function(data, variable, by, var_label,
 #' @param variable Character variable name in `data` that will be tabulated
 #' @param by Character variable name in `data` that Summary statistics for
 #' `variable` are stratified
-#' @param digits integer indicating the number of decimal places to be used.
+#' @param digits vector of integers (or single integer) indicating the number
+#' of decimal places to be used for rounding.
 #' @param var_label string label
 #' @param stat_display String that specifies the format of the displayed statistics.
 #' The syntax follows \code{\link[glue]{glue}} inputs with n, N, and p as input options.
@@ -999,16 +1000,22 @@ summarize_continuous <- function(data, variable, by, digits,
         data, .data$stat_name_list,
         ~ calculate_single_stat(.x[[1]], .y)
       ),
+      # getting a vector indicating the number of digits to round each requested statistic
+      round_digits = map(.data$stat_result_list, ~rep(digits, length.out = length(.x))),
+      # rounding each statistic
+      stat_result_list_fmt = map2(
+        .data$stat_result_list, .data$round_digits,
+        ~map2_chr(.x, .y, function(stat, digit) sprintf(glue("%.{digit}f"), stat))
+      ),
       # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
       df_result = map2(
-        .data$stat_name_list, .data$stat_result_list,
+        .data$stat_name_list, .data$stat_result_list_fmt,
         ~ .y %>% t() %>% as_tibble(.name_repair = "minimal") %>% set_names(.x)
       ),
       # rounding statistics and concatenating results
       stat = map_chr(
         .data$df_result,
         ~ .x %>%
-          mutate_all(~ sprintf(glue("%.{digits}f"), .)) %>%
           mutate(
             stat = as.character(glue(stat_display))
           ) %>%
@@ -1113,7 +1120,8 @@ calculate_single_stat <- function(x, stat_name) {
       # calculating summary stats, input MUST be a function name
       # first argument is x and must take argument 'na.rm = TRUE'
       else {
-        do.call(name, list(x, na.rm = TRUE))
+        do.call(name, list(stats::na.omit(x)))
+        # do.call(name, list(x, na.rm = TRUE))
       }
     }
   )
@@ -1363,9 +1371,20 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       "{p}%", "%",
       "{p}", "%"
     ) %>%
+    # adding in quartiles
     bind_rows(
       tibble(stat = paste0("{p", 0:100, "}")) %>%
         mutate(label = paste0(gsub("[^0-9\\.]", "", .data$stat), "%"))
+    ) %>%
+    # if function does not appear in above list, the print the function name
+    bind_rows(
+      tibble(
+        stat = str_extract_all(stat_display, "\\{.*?\\}") %>%
+          unlist() %>% unique(),
+        label = .data$stat %>%
+          str_remove_all(pattern = fixed("}")) %>%
+          str_remove_all(pattern = fixed("{"))
+      )
     )
 
   # adding IQR replacements if indicated
@@ -1392,7 +1411,6 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
 
   stat_display
 }
-
 
 # stat_label footnote maker
 footnote_stat_label <- function(meta_data) {

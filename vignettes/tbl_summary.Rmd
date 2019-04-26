@@ -133,6 +133,7 @@ trial %>%
 The code below calculates the standard table with summary statistics split by treatment randomization with the following modifications
 
 - Report 'mean (SD)' and 'n / N (\%)'  
+- Round the marker mean and SD to 1 and 2 places, respectively
 - Modify variable labels in the table 
 - Use t-test instead of Wilcoxon rank-sum 
 - Round large p-values to two decimal place  
@@ -150,7 +151,8 @@ trial2 %>%
                            stage = "Clinical T Stage"),
               # change statistics printed in table
               statistic = list(..continuous.. = "{mean} ({sd})",
-                               ..categorical.. = "{n} / {N} ({p}%)")) %>%
+                               ..categorical.. = "{n} / {N} ({p}%)"),
+              digits = list(marker = c(1, 2))) %>%
   # add p-values, report t-test, round large pvalues to two decimal place
   add_comparison(test = list(marker = "t.test"),
                  pvalue_fun = function(x) style_pvalue(x, digits = 2)) %>%
