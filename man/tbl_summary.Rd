@@ -6,7 +6,8 @@
 \usage{
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,
-  missing = c("ifany", "always", "no"), sort = NULL)
+  missing = c("ifany", "always", "no"), missing_text = "Unknown",
+  sort = NULL)
 }
 \arguments{
 \item{data}{a data frame}
@@ -60,6 +61,9 @@ if the table includes counts of \code{NA} values: the allowed values correspond 
 never (\code{"no"}), only if the count is positive (\code{"ifany"}) and even for
 zero counts (\code{"always"}). Default is \code{"ifany"}.}
 
+\item{missing_text}{String to display for count of missing observations.
+Default is \code{"Unknown"}.}
+
 \item{sort}{named list indicating the type of sorting to perform. Default is NULL.
 Options are 'frequency' where results are sorted in
 descending order of frequency and 'alphanumeric'}
@@ -86,10 +90,29 @@ will be displayed.  Otherwise, the value to display must be specified in
 the \code{value} argument, e.g. \code{value = list(varname = "level to show")}
 }
 
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_summary_ex1.png}{options: width=40\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_summary_ex2.png}{options: width=55\%}}
+}
+
 \examples{
-tbl_overall <- tbl_summary(trial)
-tbl_trt <- tbl_summary(trial, by = "trt")
-tbl_lbls <- mtcars \%>\% tbl_summary(label = list(cyl = "No. Cylinders"))
+library(dplyr)
+tbl_summary_ex1 <-
+  trial \%>\%
+  select(age, grade, response) \%>\%
+  tbl_summary()
+tbl_summary_ex2 <-
+  trial \%>\%
+  select(age, grade, response, trt) \%>\%
+  tbl_summary(by = "trt",
+              label = list(age = "Patient Age"))
+
 }
 \seealso{
 Other tbl_summary: \code{\link{add_comparison}},

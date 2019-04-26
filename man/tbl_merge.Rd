@@ -15,6 +15,11 @@ tbl_merge(tbls, tab_spanner = paste0(c("Model "), 1:length(tbls)))
 The \code{tbl_merge} function merges two or more \code{tbl_regression} or
 \code{tbl_uvregression} objects and adds appropriate spanning headers.
 }
+\section{Example Output}{
+
+\if{html}{\figure{tbl_merge_ex.png}{options: width=50\%}}
+}
+
 \examples{
 library(survival)
 t1 <-
@@ -29,7 +34,7 @@ t2 <-
     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
     exponentiate = TRUE
   )
-t3 <-
+tbl_merge_ex <-
   tbl_merge(
     tbls = list(t1, t2),
     tab_spanner = c("Tumor Response", "Time to Death")

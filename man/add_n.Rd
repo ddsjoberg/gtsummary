@@ -18,8 +18,16 @@ or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 The function assumes the DEFAULT header are in use. Only modify header rows
 after all columns has been added.
 }
+\section{Example Output}{
+
+\if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_n <- trial \%>\% tbl_summary(by = "trt") \%>\% add_n()
+tbl_n_ex <-
+  trial \%>\%
+  tbl_summary(by = "trt") \%>\%
+  add_n()
 }
 \seealso{
 Other tbl_summary: \code{\link{add_comparison}},

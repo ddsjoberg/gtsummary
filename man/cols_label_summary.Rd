@@ -25,15 +25,30 @@ Must specify \code{by} along with \code{stat_by}.}
 \description{
 Column labels can be modified using data from the data frame
 }
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_col_ex1.png}{options: width=50\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_col_ex2.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_col1 <-
+tbl_col_ex1 <-
   trial \%>\%
+  dplyr::select(age, grade, response) \%>\%
   tbl_summary() \%>\%
   cols_label_summary(stat_overall = md("**All Patients**, N = {N}"))
-tbl_col2 <-
+tbl_col_ex2 <-
   trial \%>\%
+  dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(by = "trt") \%>\%
-  cols_label_summary(stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"))
+  cols_label_summary(
+    stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
+   )
 }
 \seealso{
 \link[gt]{md}, \link[gt]{html}
