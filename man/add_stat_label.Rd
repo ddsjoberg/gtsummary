@@ -13,13 +13,17 @@ add_stat_label(x)
 Rather than simply printing the summary statistics, with the use of \code{add_stat_label()},
 a column labeling the summary statistics is added.
 }
-\section{Figures}{
+\section{Example Output}{
 
 \if{html}{\figure{tbl_stat_ex.png}{options: width=50\%}}
 }
 
 \examples{
-tbl_stat_ex <- mtcars \%>\% tbl_summary() \%>\% add_stat_label()
+tbl_stat_ex <-
+  mtcars \%>\%
+  dplyr::select(mpg, cyl, hp) \%>\%
+  tbl_summary() \%>\%
+  add_stat_label()
 }
 \seealso{
 Other tbl_summary: \code{\link{add_comparison}},

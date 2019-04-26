@@ -10,8 +10,12 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_overall_ex <- trial %>% tbl_summary(by = "trt") %>% add_overall()
-#' @section Figures:
+#' tbl_overall_ex <-
+#'   trial %>%
+#'   dplyr::select(age, response, grade, trt) %>%
+#'   tbl_summary(by = "trt") %>%
+#'   add_overall()
+#' @section Example Output:
 #' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
 #'
 add_overall <- function(x, last = FALSE) {

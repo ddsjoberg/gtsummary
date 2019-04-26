@@ -54,10 +54,16 @@
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
 #'
-#' @section Figures:
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
 #' \if{html}{\figure{tbl_regression_ex1.png}{options: width=50\%}}
 #'
+#' \if{html}{Example 2}
+#'
 #' \if{html}{\figure{tbl_regression_ex2.png}{options: width=50\%}}
+#'
+#' \if{html}{Example 3}
 #'
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 #'

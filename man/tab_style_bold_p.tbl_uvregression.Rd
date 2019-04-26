@@ -19,6 +19,24 @@
 \description{
 Bold p-values in tables created by \code{\link{tbl_uvregression}}
 }
+\section{Example Output}{
+
+\if{html}{\figure{tbl_uvglm_bold_p_ex.png}{options: width=50\%}}
+}
+
+\examples{
+tbl_uvglm_bold_p_ex <-
+  trial \%>\%
+  dplyr::select(age, marker, response, grade) \%>\%
+  tbl_uvregression(
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  ) \%>\%
+  tab_style_bold_p(t = 0.25)
+
+}
 \seealso{
 Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},

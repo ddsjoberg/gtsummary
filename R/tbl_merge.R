@@ -26,7 +26,7 @@
 #'     tbls = list(t1, t2),
 #'     tab_spanner = c("Tumor Response", "Time to Death")
 #'   )
-#' @section Figures:
+#' @section Example Output:
 #' \if{html}{\figure{tbl_merge_ex.png}{options: width=50\%}}
 #'
 tbl_merge <- function(tbls,

@@ -16,7 +16,7 @@
 \description{
 Bold p-values in tables created by \code{\link{tbl_regression}}
 }
-\section{Figures}{
+\section{Example Output}{
 
 \if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
 }
