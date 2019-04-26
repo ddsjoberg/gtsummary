@@ -23,28 +23,28 @@ test_that("testing statistical tests", {
   expect_error(
     calculate_pvalue_one(
       data = trial, variable = "age", by = "trt",
-      test = "re", type = "continuous", group = "stage"
+      test = "lme4", type = "continuous", group = "stage"
     ),
     NA
   )
   expect_warning(
     calculate_pvalue_one(
       data = trial, variable = "age", by = "trt",
-      test = "re", type = "continuous", group = "stage"
+      test = "lme4", type = "continuous", group = "stage"
     ),
     NA
   )
   expect_error(
     calculate_pvalue_one(
       data = trial, variable = "response", by = "trt",
-      test = "re", type = "categorical", group = "stage"
+      test = "lme4", type = "categorical", group = "stage"
     ),
     NA
   )
   expect_warning(
     calculate_pvalue_one(
       data = trial, variable = "response", by = "trt",
-      test = "re", type = "categorical", group = "stage"
+      test = "lme4", type = "categorical", group = "stage"
     ),
     NA
   )
