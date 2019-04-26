@@ -47,25 +47,50 @@ tbl_merge <- function(tbls,
   }
 
   # merging tables -------------------------------------------------------------
-  table_body <-
-    tbls[[1]]$table_body %>%
-    rename_at(
-      dplyr::vars(-c("variable", "var_type", "row_type", "label")),
-      ~glue("{.}_1")
+  # nesting data by variable (one line per variable), and renaming columns with number suffix
+  nested_table <-
+    tbls %>%
+    imap(
+      function(x, y) {
+        pluck(x, "table_body") %>%
+          rename_at(
+            vars(-c("variable", "var_type", "row_type", "label")),
+            ~glue("{.}_{y}")
+          ) %>%
+          nest(-c("variable", "var_type"))
+      }
     )
 
-  for(i in 1:(tbls_length - 1)) {
-    table_body <-
-      table_body %>%
-      full_join(
-        tbls[[i + 1]]$table_body %>%
-          rename_at(
-            dplyr::vars(-c("variable", "var_type", "row_type", "label")),
-            ~glue("{.}_{i + 1}")
-          ),
-        by = c("variable", "var_type", "row_type", "label")
-      )
+  # merging formatted objects together
+  merged_table  <-
+    nested_table[[1]] %>%
+    rename(
+      table = .data$data
+    )
+
+  # cycling through all tbls, merging results into a column tibble called table
+  for(i in 2:tbls_length) {
+    merged_table <-
+      merged_table %>%
+      full_join(nested_table[[i]], by = c("variable", "var_type")) %>%
+      mutate(
+        table = map2(
+          .data$table, .data$data,
+          function(table, data) {
+            if(is.null(table)) return(data)
+            if(is.null(data)) return(table)
+            full_join(table, data, by = c("row_type", "label"))
+          }
+        )
+      ) %>%
+      select(-c("data"))
   }
+
+  # unnesting results from within variable column tibbles
+  table_body <-
+    merged_table %>%
+    unnest()
+
 
   # creating column headers and footnotes --------------------------------------
   # creating column header for base variable (label, coef, ll, and pvalue)
@@ -136,6 +161,7 @@ gt_tbl_merge <- quote(list(
   # do not print columns variable or row_type columns
   cols_hide = c(
       "cols_hide(columns = vars(variable, row_type, var_type))",
+      "cols_hide(columns = starts_with('row_ref_'))",
       "cols_hide(columns = starts_with('N_'))",
       "cols_hide(columns = starts_with('nevent_'))"
     ) %>%
@@ -146,29 +172,33 @@ gt_tbl_merge <- quote(list(
     glue(),
 
   # Show "---" for reference groups
-  # e.g.fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable %in% c('trt') & row_type == 'level'), missing_text = '---') %>%
-  #     fmt_missing(columns = vars(coef_3, ll_3, ul_3), rows = (variable %in% c('trt', 'grade') & row_type == 'level'), missing_text = '---')
+  # e.g.fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable == 'trt' & row_type == 'level' & label == \'Drug\'), missing_text = '---') %>%
+  #     fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable == 'grade' & row_type == 'level' & label == \'I\'), missing_text = '---')
   fmt_missing_ref =
-    purrr::imap(
+    imap(
       tbls,
       function(x, y) {
         cat_var <-
-          purrr::pluck(x, "table_body") %>%
-          dplyr::filter(var_type == "categorical") %>%
-          dplyr::pull("variable") %>%
-          unique()
+          pluck(x, "table_body") %>%
+          filter(.data$var_type == "categorical",
+                        .data$row_ref == TRUE,
+                        .data$row_type == "level") %>%
+          select(c("variable", "row_ref"))
 
-        if(length(cat_var) == 0) return(NULL)
-        paste0("\'", cat_var, "\'", collapse = ", ") %>%
-          {glue::glue(
+        if(nrow(cat_var) == 0) return(NULL)
+        map(
+          cat_var$variable,
+          ~glue(
             "fmt_missing(",
             "columns = vars({paste(c('coef', 'll', 'ul'), y, sep = '_', collapse = ', ')}), ",
-            "rows = (variable %in% c({.}) & row_type == 'level'), ",
+            "rows = (variable == '{.x}' & row_type == 'level' & row_ref_{y} == TRUE), ",
             "missing_text = '---')"
-          )}
+          )
+        )
       }
     ) %>%
-    purrr::compact() %>%
+    unlist() %>%
+    compact() %>%
     glue_collapse_null(),
 
    # glue("coef_{1:tbls_length}, ll_{1:tbls_length}, ul_{1:tbls_length}") %>%

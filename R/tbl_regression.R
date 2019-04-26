@@ -153,7 +153,7 @@ gt_tbl_regression <- quote(list(
 
   # do not print columns variable or row_type columns
   # here i do a setdiff of the variables i want to print by default
-  cols_hide = "cols_hide(columns = vars(variable, row_type, var_type, N))" %>%
+  cols_hide = "cols_hide(columns = vars(variable, row_ref, row_type, var_type, N))" %>%
     glue(),
 
   # NAs do not show in table

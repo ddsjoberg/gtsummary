@@ -5,7 +5,7 @@
 \title{Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints}
 \usage{
 \method{tbl_survival}{survfit}(x, times = NULL, probs = NULL,
-  label = ifelse(is.null(probs), "{time}", "{prob}\%"),
+  label = ifelse(is.null(probs), "{time}", "{prob*100}\%"),
   level_label = "{level}, N = {n}", header_label = NULL,
   header_estimate = NULL, failure = FALSE, missing = "-",
   estimate_fun = NULL, ...)

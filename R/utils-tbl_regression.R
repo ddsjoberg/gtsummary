@@ -294,7 +294,8 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
       mutate(
         variable = group,
         row_type = "label",
-        label = group_lbl
+        label = group_lbl,
+        row_ref = NA
       )
   }
   # for interaction, do not add reference rows (just a header)
@@ -303,7 +304,8 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
       mutate(
         variable = group,
         row_type = "level",
-        label = .data$level_lbl
+        label = .data$level_lbl,
+        row_ref = NA
       ) %>%
       {bind_rows(
         tibble(
@@ -326,7 +328,8 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
       mutate(
         variable = group,
         row_type = "level",
-        label = .data$level_lbl
+        label = .data$level_lbl,
+        row_ref = is.na(.data$estimate)
       ) %>%
       {bind_rows(
         tibble(
@@ -350,7 +353,7 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
       N = nrow(model_frame),
       var_type = var_type
     ) %>%
-    select(c("variable", "var_type", "row_type", "label", "N", "coef", "ll", "ul", "pvalue"))
+    select(c("variable", "var_type", "row_ref", "row_type", "label", "N", "coef", "ll", "ul", "pvalue"))
 }
 
 
