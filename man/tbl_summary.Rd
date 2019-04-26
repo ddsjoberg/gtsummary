@@ -31,20 +31,10 @@ will default to an appropriate summary type.  See below for details.}
 \item{value}{A list that specifies the value to display for dichotomous
 values only.  See below for details.}
 
-\item{statistic}{A list of the type of statistics to return for each variable
-or variable class.  The named list contains variable names or \code{..continuous..}
-or \code{..categorical..} to apply a statistic format to all variables on that
-type. The default is
+\item{statistic}{A named list of the type of statistics to return for each variable
+or variable class.  The default is
 \code{list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}\%)")}.
-The syntax follows from the \code{\link[glue]{glue}} function.
-For categorical variables the choices the following statistics are available to
-report: \code{{n}} (frequency), \code{{N}} (denominator, or cohort size), \code{{p}} (percent).
-For continuous variables, any quantile may be returned with \code{{p##}}, where ##
-is any integer from 0 to 100. For example, \code{{p5}}, \code{{p25}}, and \code{{p75}} return
-the 5th, 25th, and 75th quantiles.  The median (\code{{median}}), mean (\code{{mean}}),
-standard deviation (\code{{sd}}), variance (\code{{var}}), minimum (\code{{min}}), and
-maximum (\code{{max}}) are available.  In fact, any function that takes the form
-\code{foo(x, na.rm = TRUE)} is accepted.}
+See below for details.}
 
 \item{digits}{A named list of integers indicating the number of decimal
 places to round continuous summary statistics. Names of the list can be any
@@ -77,7 +67,40 @@ continuous, categorical, and dichotomous variables.  Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
 for detailed examples.
 }
-\section{Specifying Variable Types}{
+\section{statistic argument}{
+
+The statistic argument specifies the statistics presented in the table. The
+input is a named list where the names correspond the column names from the
+input 'data' and the elements specify the statistic to report. For example,
+\code{statistic = list(age = "{mean} ({sd})")} would report the mean and
+standard deviation for age. A statistic name that appears between curly brackets
+will be replaced with the numeric statistic (see \link[glue:glue]{glue::glue}).
+
+For categorical variables the following statistics are available to display.
+\itemize{
+\item \code{{n}} frequency
+\item \code{{N}} denominator, or cohort size
+\item \code{{p}} percent formatted by \link{style_percent}
+\item \code{{p##}} any integer percentile, where \code{##} is an integer from 0 to 100
+}
+For continuous variables the following statistics are available to display.
+\itemize{
+\item \code{{median}} median
+\item \code{{mean}} mean
+\item \code{{sd}} standard deviation
+\item \code{{var}} variance
+\item \code{{min}} minimum
+\item \code{{max}} maximum
+\item \code{{foo}} any function of the form \code{foo(x, na.rm = TRUE)} is accepted
+}
+
+If all continuous or categorical variables will be summarized with the same
+statistics, the \code{..continuous..} and \code{..categorical..} shortcuts can be used
+in place of the individual column names.  Dichotomous variables are summarized
+as categorical variables.
+}
+
+\section{type argument}{
 
 tbl_summary displays summary statistics for three types of data:
 continuous, categorical, and dichotomous. If the type is not specified,
@@ -94,11 +117,11 @@ the \code{value} argument, e.g. \code{value = list(varname = "level to show")}
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_summary_ex1.png}{options: width=40\%}}
+\if{html}{\figure{tbl_summary_ex1.png}{options: width=31\%}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_summary_ex2.png}{options: width=55\%}}
+\if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
 }
 
 \examples{
