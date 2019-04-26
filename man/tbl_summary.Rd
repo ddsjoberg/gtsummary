@@ -91,7 +91,7 @@ For continuous variables the following statistics are available to display.
 \item \code{{var}} variance
 \item \code{{min}} minimum
 \item \code{{max}} maximum
-\item \code{{foo}} any function of the form \code{foo(x, na.rm = TRUE)} is accepted
+\item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
 
 If all continuous or categorical variables will be summarized with the same
@@ -129,6 +129,7 @@ tbl_summary_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, response) \%>\%
   tbl_summary()
+
 tbl_summary_ex2 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%

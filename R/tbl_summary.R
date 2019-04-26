@@ -67,7 +67,7 @@
 #'   \item `{var}` variance
 #'   \item `{min}` minimum
 #'   \item `{max}` maximum
-#'   \item `{foo}` any function of the form `foo(x, na.rm = TRUE)` is accepted
+#'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }
 #'
 #' If all continuous or categorical variables will be summarized with the same
@@ -93,6 +93,7 @@
 #'   trial %>%
 #'   dplyr::select(age, grade, response) %>%
 #'   tbl_summary()
+#'
 #' tbl_summary_ex2 <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
