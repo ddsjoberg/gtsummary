@@ -1,6 +1,6 @@
 #' Adds p-values to the output comparing values across groups
 #'
-#' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
+#' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param test user defined list of statistical tests provided as a named
 #' character vector with variables as names and test functions as values.,
 #' e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
@@ -12,8 +12,8 @@
 #' "kruskal.test" for a Kruskal-Wallis rank-sum test,
 #' "chisq.test" for a Chi-squared test,
 #' "fisher.test" for a Fisher's exact test,
-#' and "re" for a random intercept model to account for clustered data.
-#' For "re" to be used "group" must also be specified in the function call.
+#' and "lme4" for a random intercept model to account for clustered data.
+#' For "lme4" to be used "group" must also be specified in the [tbl_summary] call.
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary
@@ -110,7 +110,7 @@ stat_test_names <- tibble::tribble(
   "wilcox.test", "Wilcoxon rank-sum test",
   "kruskal.test", "Kruskal-Wallis test",
   "chisq.test", "chi-square test of independence",
-  "re", "mixed-effects regression model with random intercept"
+  "lme4", "mixed-effects regression model with random intercept"
 )
 
 # function to create text for footnote

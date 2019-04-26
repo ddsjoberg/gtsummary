@@ -296,7 +296,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
     return(test[["..categorical.."]])
 
   # if group variable supplied, fit a random effects model
-  if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("re")
+  if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("lme4")
 
   # unless by_var has >2 levels, then return NA with a message
   if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
@@ -484,7 +484,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
   }
 
   # Random effects - continuous or dichotomous
-  if (test == "re" & type %in% c("continuous", "dichotomous")) {
+  if (test == "lme4" & type %in% c("continuous", "dichotomous")) {
     form1 <- get("as.formula")(paste0(by, " ~ ", variable, " + (1 | ", group, ")"))
     mod1 <- tryCatch(
       lme4::glmer(form1, data = get("na.omit")(data), family = get("binomial")),
@@ -503,7 +503,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
   }
 
   # Random effects - categorical
-  if (test == "re" & type == "categorical") {
+  if (test == "lme4" & type == "categorical") {
     form0 <- get("as.formula")(paste0(by, " ~ 1 + (1 | ", group, ")"))
     form1 <- get("as.formula")(paste0(
       by, " ~ factor(", variable,
@@ -547,11 +547,11 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 # calculate_pvalue_one(data = mtcars, variable = "gear", by = "am",
 #                      test = "fisher.test", group = NULL, type = "categorical")
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      group = "gear", test = "re", type = "continuous")
+#                      group = "gear", test = "lme4", type = "continuous")
 # calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      group = "gear", test = "re", type = "categorical")
+#                      group = "gear", test = "lme4", type = "categorical")
 # calculate_pvalue_one(data = mtcars, variable = "mpg", by = "am",
-#                      group = "gear", test = "re", type = "continuous")
+#                      group = "gear", test = "lme4", type = "continuous")
 
 
 

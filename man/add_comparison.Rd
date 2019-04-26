@@ -8,7 +8,7 @@ add_comparison(x, test = NULL, pvalue_fun = style_pvalue,
   group = x$inputs$group)
 }
 \arguments{
-\item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
+\item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
 \item{test}{user defined list of statistical tests provided as a named
 character vector with variables as names and test functions as values.,
@@ -21,8 +21,8 @@ Options include "t.test" for a t-test,
 "kruskal.test" for a Kruskal-Wallis rank-sum test,
 "chisq.test" for a Chi-squared test,
 "fisher.test" for a Fisher's exact test,
-and "re" for a random intercept model to account for clustered data.
-For "re" to be used "group" must also be specified in the function call.}
+and "lme4" for a random intercept model to account for clustered data.
+For "lme4" to be used "group" must also be specified in the \link{tbl_summary} call.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
