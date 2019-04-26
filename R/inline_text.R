@@ -221,6 +221,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @param strata if `tbl_survival` estimates are stratified, level of the stratum
 #' report. Default is `NULL` when `tbl_survival` have no specified strata.
 #' @param time time for which to return survival probability.
+#' @param prob probability for which to return survival time.
 #' @param pattern statistics to return.  Uses \link[glue]{glue} formatting.
 #' Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
 #' `.$table_body` are available to print as well as the confidence level (conf.level)
@@ -242,70 +243,91 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 
 inline_text.tbl_survival <-
   function(x, strata = NULL,
-           time,
-           pattern = "{surv} ({conf.level*100}% CI {lower}, {upper})",
+           time = NULL, prob = NULL,
+           pattern = "{estimate} ({conf.level*100}% CI {ci})",
            ...) {
 
-    # if(time < 0) stop("Must specify a positive 'time'.")
-    # if(length(time) != 1) stop("'time' must be length 1")
-    #
-    # result <- x$table_body
-    #
-    # # select strata ------------------------------------------------------------
-    # # if multiple strata exist in tbl_survival, grab rows matching specified strata
-    # if("strata" %in% names(x$table_body)) {
-    #
-    #   if(is.null(strata)) {
-    #     stop(glue("Must specify one of the following strata: ",
-    #               "{pluck(x, 'table_body', 'level') %>% unique() %>% paste(collapse = ', ')}"))
-    #   }
-    #
-    #   result <-
-    #     result %>%
-    #     filter(!!parse_expr(glue("level == '{strata}'")))
-    #
-    #   if (nrow(result) == 0) {
-    #     stop(glue(
-    #       "Is the strata name spelled correctly? strata must be one of: ",
-    #       "{pluck(x, 'table_body', 'level') %>% unique() %>% paste(collapse = ', ')}"
-    #     ))
-    #
-    #   }
-    # } else {
-    #   if(!is.null(strata)) {
-    #     warning(glue("Ignoring strata = '{strata}'. No strata in tbl_survival. "))
-    #   }
-    #
-    # }
-    #
-    # # select time ----------------------------======----------------------------
-    # # get time to display in result
-    # all_times <- x$table_body$time
-    #
-    # # when specified timpoint is not in tbl_survival,
-    # # return result for closest time and give warning
-    # display_time <- all_times[which.min(abs(all_times - time))]
-    # if (!time %in% all_times) {
-    #   message(glue("Specified 'time' not in 'x', 'time = {time}'. Displaying estimate ",
-    #                "for nearest specified 'time': {display_time}"))
-    # }
-    #
-    # result <-
-    #   result %>%
-    #   filter(time == display_time)
-    #
-    # # formatting result and returning ------------------------------------------
-    # result <-
-    #   result %>%
-    #   mutate_at(vars(one_of(c("surv", "lower", "upper"))),
-    #             ~style_percent(., symbol = TRUE)) %>%
-    #   mutate(
-    #     conf.level = x$survfit$conf.int,
-    #     stat = glue(pattern)
-    #   ) %>%
-    #   pull("stat")
-    #
-    # result
+    # input checks ---------------------------------------------------------------
+    if(c(is.null(time), is.null(prob)) %>% sum() != 1) {
+      stop("One and only one of 'time' and 'prob' must be specified.")
+    }
+    if(!is.null(time)) {
+      if(time < 0) stop("Must specify a positive 'time'.")
+    }
+    if(!is.null(prob)) {
+      if(prob < 0 | prob > 1) stop("Must specify a 'prob' between 0 and 1.")
+    }
+
+    # creating a var that is either time or prob (the fixed variable)
+    fixed_val = time %||% prob
+
+    if(length(fixed_val) != 1) stop("'time' or 'prob' must be length 1")
+
+    if(!is.null(time)) {
+      result <-
+        x$table_long %>%
+        mutate(fixed_var = time)
+    }
+    if(!is.null(prob)) {
+      result <-
+        x$table_long %>%
+        mutate(fixed_var = prob)
+    }
+
+
+
+    # select strata ------------------------------------------------------------
+    # if multiple strata exist in tbl_survival, grab rows matching specified strata
+    if("strata" %in% names(x$table_long)) {
+
+      if(is.null(strata)) {
+        stop(glue("Must specify one of the following strata: ",
+                  "{pluck(x, 'table_long', 'level') %>% unique() %>% paste(collapse = ', ')}"))
+      }
+
+      result <-
+        result %>%
+        filter(!!parse_expr(glue("level == '{strata}'")))
+
+      if (nrow(result) == 0) {
+        stop(glue(
+          "Is the strata name spelled correctly? strata must be one of: ",
+          "{pluck(x, 'table_long', 'level') %>% unique() %>% paste(collapse = ', ')}"
+        ))
+
+      }
+    } else {
+      if(!is.null(strata)) {
+        warning(glue("Ignoring strata = '{strata}'. No strata in tbl_survival. "))
+      }
+
+    }
+
+    # select time --------------------------------------------------------------
+    # when specified timpoint is not in tbl_survival,
+    # return result for closest time and give warning
+    display_fixed <- result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
+    if (!fixed_val %in% result$fixed_var) {
+      message(glue("Specified 'time' or 'prob' not in 'x': '{fixed_val}'. ",
+                   "Displaying nearest estimate: {display_fixed}"))
+    }
+
+    result <-
+      result %>%
+      filter(.data$fixed_var == display_fixed)
+
+    # formatting result and returning ------------------------------------------
+    result <-
+      result %>%
+      mutate_at(vars(c("estimate", "lower", "upper")),
+                ~x$estimate_fun(.)) %>%
+      mutate(
+        conf.level = x$survfit$conf.int,
+        stat = glue(pattern)
+      ) %>%
+      pull("stat")
+
+    result
   }
 
 

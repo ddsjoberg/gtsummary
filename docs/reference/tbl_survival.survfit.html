@@ -132,7 +132,7 @@ formatted summary of the results</p>
 
     <pre class="usage"><span class='co'># S3 method for survfit</span>
 <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>x</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NULL'>is.null</a></span>(<span class='no'>probs</span>), <span class='st'>"{time}"</span>, <span class='st'>"{prob}%"</span>),
+  <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NULL'>is.null</a></span>(<span class='no'>probs</span>), <span class='st'>"{time}"</span>, <span class='st'>"{prob*100}%"</span>),
   <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>, <span class='kw'>header_label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>failure</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"-"</span>,
   <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>

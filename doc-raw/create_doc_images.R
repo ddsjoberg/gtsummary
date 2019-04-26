@@ -56,6 +56,7 @@ save_html_then_png <- function(x, obj_name) {
 
   webshot::webshot(
     url = glue::glue("file://{here()}/man/figures/", "{obj_name}", ".html"),
+    # url = glue::glue("{here()}/man/figures/", "{obj_name}", ".html"),
     file = glue::glue("{here()}/man/figures/", "{obj_name}",".png"),
     selector = "table", zoom =2, expand = NULL
   )
@@ -67,7 +68,8 @@ save_html_then_png <- function(x, obj_name) {
 
 # Run Code to Create Figures for all files  -----------------------------------
 
-all_files <- list.files(here("man"), full.names = TRUE)
+all_files <- list.files(here("man"), full.names = TRUE) %>%
+  purrr::discard(!stringr::str_ends(., pattern = ".Rd"))
 map(all_files, ~update_table_png(.x))
 
 # Or Run on individual files as needed::
