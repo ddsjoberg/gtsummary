@@ -161,7 +161,7 @@ Proportion Hazards regression models (<code><a href='https://www.rdocumentation.
 and not printed in the default output table (similar to N). The number
 of events is accessible via the <code><a href='inline_text.html'>inline_text()</a></code> function for printing in a report.</p>
     
-    <h2 class="hasAnchor" id="figures"><a class="anchor" href="#figures"></a>Figures</h2>
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
     <p><img src='figures/tbl_reg_nevent_ex.png' width=50% /></p>
@@ -176,7 +176,8 @@ of events is accessible via the <code><a href='inline_text.html'>inline_text()</
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_reg_nevent_ex</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_reg_nevent_ex</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_nevent.html'>add_nevent</a></span>()</div></pre>
   </div>
@@ -187,7 +188,7 @@ of events is accessible via the <code><a href='inline_text.html'>inline_text()</
       
       <li><a href="#reporting-event-n">Reporting Event N</a></li>
 
-      <li><a href="#figures">Figures</a></li>
+      <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

@@ -153,7 +153,7 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.</p>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="figures"><a class="anchor" href="#figures"></a>Figures</h2>
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
     <p><img src='figures/tbl_uv_global_ex2.png' width=50% /></p>
@@ -170,8 +170,9 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_uv_global_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
-    <span class='no'>trial</span>,
+ <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+ <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
+ <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
     <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
@@ -184,7 +185,7 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#figures">Figures</a></li>
+      <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

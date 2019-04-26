@@ -216,11 +216,13 @@ depending on the stratum.  Other quantities available to print are:</p><ol>
 <li><p><code>{strata}</code> raw stratum specification from <code>survfit</code> object</p></li>
 </ol>
     
-    <h2 class="hasAnchor" id="figures"><a class="anchor" href="#figures"></a>Figures</h2>
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
-    <p><img src='figures/tbl_strata_ex.png' width=50% /></p>
-<p><img src='figures/tbl_nostrata_ex.png' width=50% /></p>
+    <p>Example 1</p>
+<p><img src='figures/tbl_strata_ex1.png' width=50% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_nostrata_ex2.png' width=50% /></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -230,7 +232,7 @@ depending on the stratum.  Other quantities available to print are:</p><ol>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
-<span class='no'>tbl_strata_ex</span> <span class='kw'>&lt;-</span>
+<span class='no'>tbl_strata_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
     <span class='no'>fit1</span>,
     <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
@@ -238,7 +240,7 @@ depending on the stratum.  Other quantities available to print are:</p><ol>
   )
 
 <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
-<span class='no'>tbl_nostrata_ex</span> <span class='kw'>&lt;-</span>
+<span class='no'>tbl_nostrata_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
     <span class='no'>fit2</span>,
     <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
@@ -252,7 +254,7 @@ depending on the stratum.  Other quantities available to print are:</p><ol>
       
       <li><a href="#specifying-level-label">Specifying <code>level_label</code></a></li>
 
-      <li><a href="#figures">Figures</a></li>
+      <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>
       
