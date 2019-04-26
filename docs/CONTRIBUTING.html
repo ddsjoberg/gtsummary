@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculates and formats summary statistics for continuous data — summarize_continuous • gtsummary</title>
+<title>Contributing to gtsummary • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -25,15 +25,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
-<meta property="og:title" content="Calculates and formats summary statistics for continuous data — summarize_continuous" />
-
-<meta property="og:description" content="Calculates and formats summary statistics for continuous data" />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Contributing to gtsummary" />
 
 
 
@@ -50,7 +47,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -62,7 +59,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">gtsummary</a>
+        <a class="navbar-link" href="index.html">gtsummary</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
       </span>
     </div>
@@ -70,13 +67,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fa fa-home"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -86,15 +83,15 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">tbl_summary()</a>
+      <a href="articles/tbl_summary.html">tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">tbl_regression()</a>
+      <a href="articles/tbl_regression.html">tbl_regression()</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="news/index.html">News</a>
 </li>
       </ul>
       
@@ -115,83 +112,56 @@
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>Calculates and formats summary statistics for continuous data</h1>
-    
-    <div class="hidden name"><code>summarize_continuous.Rd</code></div>
+      <h1>Contributing to gtsummary</h1>
     </div>
 
-    <div class="ref-description">
-    
-    <p>Calculates and formats summary statistics for continuous data</p>
-    
-    </div>
+<div id="contributing-to-gtsummary" class="section level1">
 
-    <pre class="usage"><span class='fu'>summarize_continuous</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>digits</span>, <span class='no'>var_label</span>, <span class='no'>stat_display</span>,
-  <span class='no'>missing</span>, <span class='no'>missing_text</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>data</th>
-      <td><p>data frame</p></td>
-    </tr>
-    <tr>
-      <th>variable</th>
-      <td><p>Character variable name in <code>data</code> that will be tabulated</p></td>
-    </tr>
-    <tr>
-      <th>by</th>
-      <td><p>Character variable name in <code>data</code> that Summary statistics for
-<code>variable</code> are stratified</p></td>
-    </tr>
-    <tr>
-      <th>digits</th>
-      <td><p>vector of integers (or single integer) indicating the number
-of decimal places to be used for rounding.</p></td>
-    </tr>
-    <tr>
-      <th>var_label</th>
-      <td><p>string label</p></td>
-    </tr>
-    <tr>
-      <th>stat_display</th>
-      <td><p>String that specifies the format of the displayed statistics.
-The syntax follows <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> inputs with n, N, and p as input options.</p></td>
-    </tr>
-    <tr>
-      <th>missing</th>
-      <td><p>whether to include <code>NA</code> values in the table. <code>missing</code> controls
-if the table includes counts of <code>NA</code> values: the allowed values correspond to
-never (<code>"no"</code>), only if the count is positive (<code>"ifany"</code>) and even for
-zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
-    </tr>
-    <tr>
-      <th>missing_text</th>
-      <td><p>String to display for count of missing observations.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>formatted summary statistics in a tibble.</p>
-    
-
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
-
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
-  </div>
+<p>This outlines how to propose a change to gtsummary.</p>
+<div id="fixing-typos" class="section level3">
+<h3 class="hasAnchor">
+<a href="#fixing-typos" class="anchor"></a>Fixing typos</h3>
+<p>Small typos or grammatical errors in documentation may be edited directly using the GitHub web interface, so long as the changes are made in the <em>source</em> file.</p>
+<ul>
+<li>YES: you edit a roxygen comment in a <code>.R</code> file below <code>R/</code>.</li>
+<li>NO: you edit an <code>.Rd</code> file below <code>man/</code>.</li>
+</ul>
 </div>
+<div id="prerequisites" class="section level3">
+<h3 class="hasAnchor">
+<a href="#prerequisites" class="anchor"></a>Prerequisites</h3>
+<p>Before you make a substantial pull request, you should always file an issue and make sure someone from the team agrees that it’s a problem. If you’ve found a bug, create an associated issue and illustrate the bug with a minimal <a href="https://www.tidyverse.org/help/#reprex">reprex</a>.</p>
+</div>
+<div id="pull-request-process" class="section level3">
+<h3 class="hasAnchor">
+<a href="#pull-request-process" class="anchor"></a>Pull request process</h3>
+<ul>
+<li>We recommend that you create a Git branch for each pull request (PR).<br>
+</li>
+<li>Look at the Travis and AppVeyor build status before and after making changes. The <code>README</code> should contain badges for any continuous integration services used by the package.<br>
+</li>
+<li>New code should follow the tidyverse <a href="http://style.tidyverse.org">style guide</a>. You can use the <a href="https://CRAN.R-project.org/package=styler">styler</a> package to apply these styles, but please don’t restyle code that has nothing to do with your PR.<br>
+</li>
+<li>We use <a href="https://cran.r-project.org/package=roxygen2">roxygen2</a>, with <a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html">Markdown syntax</a>, for documentation.<br>
+</li>
+<li>We use <a href="https://cran.r-project.org/package=testthat">testthat</a>. Contributions with test cases included are easier to accept.<br>
+</li>
+<li>For user-facing changes, add a bullet to the top of <code>NEWS.md</code> below the current development version header describing the changes made followed by your GitHub username, and links to relevant issue(s)/PR(s).</li>
+</ul>
+</div>
+<div id="code-of-conduct" class="section level3">
+<h3 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h3>
+<p>Please note that the gtsummary project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project you agree to abide by its terms.</p>
+</div>
+</div>
+
+  </div>
+
+</div>
+
 
       <footer>
       <div class="copyright">

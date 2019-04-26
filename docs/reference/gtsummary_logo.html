@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculates and formats summary statistics for continuous data — summarize_continuous • gtsummary</title>
+<title>The biostatR logo, using ASCII or Unicode characters — gtsummary_logo • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Calculates and formats summary statistics for continuous data — summarize_continuous" />
+<meta property="og:title" content="The biostatR logo, using ASCII or Unicode characters — gtsummary_logo" />
 
-<meta property="og:description" content="Calculates and formats summary statistics for continuous data" />
+<meta property="og:description" content="Use crayon::strip_style() to get rid of the colors." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,79 +117,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculates and formats summary statistics for continuous data</h1>
+    <h1>The biostatR logo, using ASCII or Unicode characters</h1>
     
-    <div class="hidden name"><code>summarize_continuous.Rd</code></div>
+    <div class="hidden name"><code>gtsummary_logo.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculates and formats summary statistics for continuous data</p>
+    <p>Use <code><a href='https://www.rdocumentation.org/packages/crayon/topics/strip_style'>crayon::strip_style()</a></code> to get rid of the colors.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>summarize_continuous</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>digits</span>, <span class='no'>var_label</span>, <span class='no'>stat_display</span>,
-  <span class='no'>missing</span>, <span class='no'>missing_text</span>)</pre>
+    <pre class="usage"><span class='fu'>gtsummary_logo</span>(<span class='kw'>unicode</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/l10n_info'>l10n_info</a></span>()$<span class='no'>`UTF-8`</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>data frame</p></td>
-    </tr>
-    <tr>
-      <th>variable</th>
-      <td><p>Character variable name in <code>data</code> that will be tabulated</p></td>
-    </tr>
-    <tr>
-      <th>by</th>
-      <td><p>Character variable name in <code>data</code> that Summary statistics for
-<code>variable</code> are stratified</p></td>
-    </tr>
-    <tr>
-      <th>digits</th>
-      <td><p>vector of integers (or single integer) indicating the number
-of decimal places to be used for rounding.</p></td>
-    </tr>
-    <tr>
-      <th>var_label</th>
-      <td><p>string label</p></td>
-    </tr>
-    <tr>
-      <th>stat_display</th>
-      <td><p>String that specifies the format of the displayed statistics.
-The syntax follows <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> inputs with n, N, and p as input options.</p></td>
-    </tr>
-    <tr>
-      <th>missing</th>
-      <td><p>whether to include <code>NA</code> values in the table. <code>missing</code> controls
-if the table includes counts of <code>NA</code> values: the allowed values correspond to
-never (<code>"no"</code>), only if the count is positive (<code>"ifany"</code>) and even for
-zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p></td>
-    </tr>
-    <tr>
-      <th>missing_text</th>
-      <td><p>String to display for count of missing observations.</p></td>
+      <th>unicode</th>
+      <td><p>Whether to use Unicode symbols. Default is <code>TRUE</code>
+on UTF-8 platforms.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>formatted summary statistics in a tibble.</p>
-    
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>gtsummary_logo</span>()</div><div class='output co'>#&gt; <span style='color: #0000BB;'>   </span><span style='color: #BB0000;'>*</span><span style='color: #0000BB;'>      __  </span><span style='color: #BBBB00;'>.</span><span style='color: #0000BB;'>            </span><span style='color: #00BB00;'>o</span><span style='color: #0000BB;'>               </span><span style='color: #BB00BB;'>*</span><span style='color: #0000BB;'>    </span><span style='color: #00BBBB;'>.</span><span>
+#&gt; </span><span style='color: #0000BB;'>    ___ _/ /_ ___ __ ____ _  __ _  ___ _______ __</span><span>
+#&gt; </span><span style='color: #0000BB;'> </span><span style='color: #00BBBB;'>*</span><span style='color: #0000BB;'> / _ `/ __/(_-&lt;/ // /  ' \/  ' \/ _ `/ __/ // /</span><span>
+#&gt; </span><span style='color: #0000BB;'>   \_, /\__//___/\_,_/_/_/_/_/_/_/\_,_/_/  \_, / </span><span>
+#&gt; </span><span style='color: #0000BB;'>  /___/  </span><span style='color: #BBBB00;'>*</span><span style='color: #0000BB;'>        </span><span style='color: #00BB00;'>.</span><span style='color: #0000BB;'>       </span><span style='color: #BBBBBB;'>o</span><span style='color: #0000BB;'>     </span><span style='color: #BB00BB;'>.</span><span style='color: #0000BB;'>        </span><span style='color: #00BBBB;'>*</span><span style='color: #0000BB;'>/___/  </span><span>
+#&gt; </span><span style='color: #0000BB;'>                                                 </span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 

@@ -2,19 +2,18 @@
 % Please edit documentation in R/add_overall.R
 \name{add_overall}
 \alias{add_overall}
-\title{Adds a column with overall summary statistics to an existing \code{tbl_summary} object where descriptive
-statistics are split by a variable}
+\title{Adds a column with overall summary statistics}
 \usage{
 add_overall(x, last = FALSE)
 }
 \arguments{
-\item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
+\item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
 \item{last}{logical indicator to include overall  column last. Default is \code{FALSE}}
 }
 \description{
-The function assumes the DEFAULT headers are in use. Only modify header rows
-after Overall column has been added.
+This function adds a column with overall summary statistics to tables
+created by \code{tbl_summary}.
 }
 \section{Example Output}{
 

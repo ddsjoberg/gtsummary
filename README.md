@@ -58,21 +58,21 @@ t1 <-
 ### Regression Models
 
 ``` r
-mod1 = glm(am ~ mpg + factor(cyl), mtcars, family = binomial(link = "logit"))
+mod1 <- 
+  glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
 t2 <-
-  tbl_regression(
-    mod1, 
-    exponentiate = TRUE, 
-    label = list(`factor(cyl)` = "No. of Cylinders",
-                 mpg = "Miles per Gallon")
-  )
+  tbl_regression(mod1,
+                 exponentiate = TRUE)
 ```
 
 ![](man/figures/README-tbl_regression.png)
 
-Thank you to all
-contributors\!  
-<!-- [@ddsjoberg](https://github.com/ddsjoberg), [@karissawhiting](https://github.com/karissawhiting), [@michaelcurry1123](https://github.com/michaelcurry1123) -->
+Thank you to all contributors\!  
+<!-- UPDATE THIS LIST! usethis::use_tidy_thanks() -->
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@karissawhiting](https://github.com/karissawhiting), and
 [@michaelcurry1123](https://github.com/michaelcurry1123)
+
+Please note that the ‘gtsummary’ project is released with a [Contributor
+Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
+project, you agree to abide by its terms.

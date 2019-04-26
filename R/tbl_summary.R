@@ -1,8 +1,8 @@
-#' Display summary statistics table
+#' Creates a table of summary statistics
 #'
 #' The `tbl_summary` function calculates descriptive statistics by groups for
 #' continuous, categorical, and dichotomous variables.  Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{`tbl_summary` vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' for detailed examples.
 #'
 #' @param data a data frame
@@ -21,25 +21,18 @@
 #' will default to an appropriate summary type.  See below for details.
 #' @param value A list that specifies the value to display for dichotomous
 #' values only.  See below for details.
-#' @param statistic A list of the type of statistics to return for each variable
-#' or variable class.  The named list contains variable names or `..continuous..`
-#' or `..categorical..` to apply a statistic format to all variables on that
-#' type. The default is
+#' @param statistic A named list of the type of statistics to return for each variable
+#' or variable class.  The default is
 #' `list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")`.
-#' The syntax follows from the \code{\link[glue]{glue}} function.
-#' For categorical variables the choices the following statistics are available to
-#' report: `{n}` (frequency), `{N}` (denominator, or cohort size), `{p}` (percent).
-#' For continuous variables, any quantile may be returned with `{p##}`, where ##
-#' is any integer from 0 to 100. For example, `{p5}`, `{p25}`, and `{p75}` return
-#' the 5th, 25th, and 75th quantiles.  The median (`{median}`), mean (`{mean}`),
-#' standard deviation (`{sd}`), variance (`{var}`), minimum (`{min}`), and
-#' maximum (`{max}`) are available.  In fact, any function that takes the form
-#' `foo(x, na.rm = TRUE)` is accepted.
+#' See below for details.
 #' @param digits A named list of integers indicating the number of decimal
 #' places to round continuous summary statistics. Names of the list can be any
 #' continuous variable in 'data', or `"..continuous"` to apply to all
 #' variables.  If not specified, `tbl_summary` does its best to guess an
-#' appropriate level to round statistics.
+#' appropriate level to round statistics.  To round statistics to different
+#' levels, supply a vector rather than an interger.  For example, if the
+#' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
+#' to 1 decimal place, and the SD to 2 use `digits = list(age = c(1, 2))`.
 #' @param group Character vector of an ID or grouping variable.  Summary statistics
 #' will not be printed for this column. The column may be used in \code{\link{add_comparison}} to
 #' calculate p-values with correlated data. Default is `NULL`
@@ -53,7 +46,39 @@
 #' Options are 'frequency' where results are sorted in
 #' descending order of frequency and 'alphanumeric'
 #' @return List of summary statistics to be converted to a `gt` object
-#' @section Specifying Variable Types:
+#'
+#' @section statistic argument:
+#' The statistic argument specifies the statistics presented in the table. The
+#' input is a named list where the names correspond the column names from the
+#' input 'data' and the elements specify the statistic to report. For example,
+#' `statistic = list(age = "{mean} ({sd})")` would report the mean and
+#' standard deviation for age. A statistic name that appears between curly brackets
+#' will be replaced with the numeric statistic (see [glue::glue]).
+#'
+#' For categorical variables the following statistics are available to display.
+#' \itemize{
+#'   \item `{n}` frequency
+#'   \item `{N}` denominator, or cohort size
+#'   \item `{p}` percent formatted by [style_percent]
+#'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
+#' }
+#' For continuous variables the following statistics are available to display.
+#' \itemize{
+#'   \item `{median}` median
+#'   \item `{mean}` mean
+#'   \item `{sd}` standard deviation
+#'   \item `{var}` variance
+#'   \item `{min}` minimum
+#'   \item `{max}` maximum
+#'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
+#' }
+#'
+#' If all continuous or categorical variables will be summarized with the same
+#' statistics, the `..continuous..` and `..categorical..` shortcuts can be used
+#' in place of the individual column names.  Dichotomous variables are summarized
+#' as categorical variables.
+#'
+#' @section type argument:
 #' tbl_summary displays summary statistics for three types of data:
 #' continuous, categorical, and dichotomous. If the type is not specified,
 #' tbl_summary will do its best to guess the type.  Dichotomous variables
@@ -67,25 +92,25 @@
 #' @family tbl_summary
 #' @author Daniel D. Sjoberg
 #' @examples
-#' library(dplyr)
 #' tbl_summary_ex1 <-
 #'   trial %>%
-#'   select(age, grade, response) %>%
+#'   dplyr::select(age, grade, response) %>%
 #'   tbl_summary()
+#'
 #' tbl_summary_ex2 <-
 #'   trial %>%
-#'   select(age, grade, response, trt) %>%
+#'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt",
 #'               label = list(age = "Patient Age"))
 #'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_summary_ex1.png}{options: width=40\%}}
+#' \if{html}{\figure{tbl_summary_ex1.png}{options: width=31\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_summary_ex2.png}{options: width=55\%}}
+#' \if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
 #'
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL,
                         statistic = NULL, digits = NULL, group = NULL,

@@ -7,7 +7,7 @@
 add_n(x, missing = FALSE, last = FALSE)
 }
 \arguments{
-\item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
+\item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
 \item{missing}{logical argument indicating whether to print N (\code{missing = FALSE}),
 or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
