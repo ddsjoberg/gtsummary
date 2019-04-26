@@ -58,7 +58,8 @@ t1 <-
 ### Regression Models
 
 ```{r regress, include = TRUE}
-mod1 = glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
+mod1 <- 
+  glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
 t2 <-
   tbl_regression(mod1,
                  exponentiate = TRUE)
@@ -69,3 +70,5 @@ t2 <-
 Thank you to all contributors!  
 <!-- UPDATE THIS LIST! usethis::use_tidy_thanks() -->
 [&#x0040;ddsjoberg](https://github.com/ddsjoberg), [&#x0040;karissawhiting](https://github.com/karissawhiting), and [&#x0040;michaelcurry1123](https://github.com/michaelcurry1123)
+
+Please note that the 'gtsummary' project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
