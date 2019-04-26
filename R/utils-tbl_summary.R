@@ -1379,7 +1379,6 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
           str_remove_all(pattern = fixed("{"))
       )
     )
-  print(labels, n = Inf)
 
   # adding IQR replacements if indicated
   if (iqr == TRUE) {
