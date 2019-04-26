@@ -55,8 +55,8 @@ save_html_then_png <- function(x, obj_name) {
     gtsave(glue::glue("{here()}/man/figures/","{obj_name}", ".html"))
 
   webshot::webshot(
-    url = glue::glue("file://{here()}/man/figures/", "{obj_name}", ".html"),
-    # url = glue::glue("{here()}/man/figures/", "{obj_name}", ".html"),
+    # url = glue::glue("file://{here()}/man/figures/", "{obj_name}", ".html"),
+    url = glue::glue("{here()}/man/figures/", "{obj_name}", ".html"),
     file = glue::glue("{here()}/man/figures/", "{obj_name}",".png"),
     selector = "table", zoom =2, expand = NULL
   )

@@ -41,12 +41,13 @@
 #' @family tbl_regression
 #' @export
 #' @examples
+#' library(survival)
 #' tbl_regression_ex1 <-
-#'   lm(hp ~ mpg + factor(cyl), mtcars) %>%
-#'   tbl_regression()
+#'   coxph(Surv(ttdeath, death) ~ age + marker, trial) %>%
+#'   tbl_regression(exponentiate = TRUE)
 #'
 #' tbl_regression_ex2 <-
-#'   glm(response ~ age + grade + stage, trial, family = binomial(link = "logit")) %>%
+#'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
 #'
 #' library(lme4)
@@ -57,7 +58,7 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_regression_ex1.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_regression_ex1.png}{options: width=67\%}}
 #'
 #' \if{html}{Example 2}
 #'
