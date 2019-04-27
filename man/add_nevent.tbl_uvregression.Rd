@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_nevent.R
 \name{add_nevent.tbl_uvregression}
 \alias{add_nevent.tbl_uvregression}
-\title{Add number of events to a {gtsummary} regression table}
+\title{Add number of events to a regression table}
 \usage{
 \method{add_nevent}{tbl_uvregression}(x, ...)
 }
@@ -13,17 +13,17 @@
 }
 \description{
 This function adds a column of the number of events to tables created with
-\code{\link{tbl_regression}} or \code{\link{tbl_uvregression}}.  Supported
+\link{tbl_regression} or \link{tbl_uvregression}.  Supported
 model types include GLMs with binomial distribution family (e.g.
-\code{\link[stats]{glm}}, \code{\link[lme4]{glmer}}, and
-\code{\link[geepack]{geeglm}}) and Cox
-Proportion Hazards regression models (\code{\link[survival]{coxph}}).
+\link[stats:glm]{stats::glm}, \link[lme4:glmer]{lme4::glmer}, and
+\link[geepack:geeglm]{geepack::geeglm}) and Cox
+Proportion Hazards regression models (\link[survival:coxph]{survival::coxph}).
 }
 \section{Reporting Event N}{
 
 The number of events is added to the internal \code{.$table_body} tibble,
 and printed to the right of the N column. The number of events is also
-accessible via the \code{inline_text()} function for printing in a report.
+accessible via the \link{inline_text} function for printing in a report.
 }
 
 \section{Example Output}{

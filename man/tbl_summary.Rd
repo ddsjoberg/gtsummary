@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_summary.R
 \name{tbl_summary}
 \alias{tbl_summary}
-\title{Creates a table of summary statistics}
+\title{Create a table of summary statistics}
 \usage{
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,

@@ -92,12 +92,11 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 }
 
 
-#' Add a column of q values to `tbl_uvregression` object to account for
+#' Add a column of q values to account for
 #' multiple comparisons
 #'
 #' The adjustments to the p-values is performed with
-#' `stats::`\code{\link[stats]{p.adjust}}.  The default method for correction
-#' is false discovery rate (`"fdr"`)
+#' [stats::p.adjust].
 #'
 #' @param x `tbl_uvregression` object
 #' @param method character argument.  Methods from

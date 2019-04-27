@@ -41,8 +41,8 @@ the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")
 \item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
 
 \item{coef_fun}{function to round and format beta coefficients.  Default
-is \code{\link{style_sigfig}} when the coefficients are printed, and
-\code{\link{style_ratio}} when the coefficients have been exponentiated.}
+is \link{style_sigfig} when the coefficients are printed, and
+\link{style_ratio} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.

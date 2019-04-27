@@ -12,7 +12,7 @@ tab_style_bold_p(x, ...)
 \item{...}{further arguments passed to other methods.}
 }
 \description{
-Bold p-values in tables create by gtsummary
+Bold p-values in tables created by gtsummary
 }
 \seealso{
 \code{\link{tab_style_bold_p.tbl_summary}},

@@ -1,12 +1,14 @@
 #' Display regression model results in table
 #'
-#' This function uses \code{broom::tidy} from the `broom` or `broom.mixed` packages
-#' to perform the initial model formatting. Review the `tbl_regression`
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
+#' This function uses [broom::tidy](https://broom.tidyverse.org/reference/brms_tidiers.html) and
+#' [broom.mixed::tidy](https://github.com/bbolker/broom.mixed)
+#' to perform the initial model formatting. Subsequently, the results are formatted
+#' for display. Review the
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
 #' @section Note:
-#' The N reported in the `tbl_uvregression()` output is the number of observations
+#' The N reported in the `tbl_regression()` output is the number of observations
 #' in the data frame `model.frame(x)`. Depending on the model input, this N
 #' may represent different quantities. In most cases, it is the number of people or
 #' units in your model.  Here are some common exceptions.
@@ -29,8 +31,8 @@
 #' when the 'No' category is the reference group.  To print both levels in the output table, include
 #' the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``
 #' @param coef_fun function to round and format beta coefficients.  Default
-#' is \code{\link{style_sigfig}} when the coefficients are printed, and
-#' \code{\link{style_ratio}} when the coefficients have been exponentiated.
+#' is [style_sigfig] when the coefficients are printed, and
+#' [style_ratio] when the coefficients have been exponentiated.
 #' @param pvalue_fun function to round and format p-values.
 #' Default is \code{\link{style_pvalue}}.
 #' The function must have a numeric vector input (the numeric, exact p-value),
