@@ -2,8 +2,8 @@
 % Please edit documentation in R/add_q.R
 \name{add_q.tbl_summary}
 \alias{add_q.tbl_summary}
-\title{Add a column of q values to \code{tbl_summary} object to account for
-multiple comparisons in Rmarkdown}
+\title{Add a column of q values to account for
+multiple comparisons}
 \usage{
 \method{add_q}{tbl_summary}(x, method = "fdr",
   pvalue_fun = x$pvalue_fun, ...)
@@ -12,7 +12,7 @@ multiple comparisons in Rmarkdown}
 \item{x}{\code{tbl_summary} object}
 
 \item{method}{character argument.  Methods from
-\code{stats::}\code{\link[stats]{p.adjust}} are accepted.  Default is \code{method = 'fdr'}.}
+\link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = 'fdr'}.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
@@ -25,8 +25,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 }
 \description{
 The adjustments to the p-values is performed with
-\code{stats::}\code{\link[stats]{p.adjust}}.  The default method for correction
-is false discovery rate (\code{method = "fdr"})
+\link[stats:p.adjust]{stats::p.adjust}.
 }
 \section{Example Output}{
 
@@ -36,6 +35,7 @@ is false discovery rate (\code{method = "fdr"})
 \examples{
 tbl_sum_q_ex <-
   trial \%>\%
+  dplyr::select(trt, age, grade, response) \%>\%
   tbl_summary(by = "trt") \%>\%
   add_comparison() \%>\%
   add_q()

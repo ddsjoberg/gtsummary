@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_overall.R
 \name{add_overall}
 \alias{add_overall}
-\title{Adds a column with overall summary statistics}
+\title{Add column with overall summary statistics}
 \usage{
 add_overall(x, last = FALSE)
 }

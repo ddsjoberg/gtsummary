@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints — tbl_survival.survfit • gtsummary</title>
+<title>Creates table of survival probabilities — tbl_survival.survfit • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints — tbl_survival.survfit" />
+<meta property="og:title" content="Creates table of survival probabilities — tbl_survival.survfit" />
 
 <meta property="og:description" content="Function takes a survfit object as an argument, and provides a tabulated and
 formatted summary of the results" />
@@ -118,7 +118,7 @@ formatted summary of the results" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints</h1>
+    <h1>Creates table of survival probabilities</h1>
     
     <div class="hidden name"><code>tbl_survival.survfit.Rd</code></div>
     </div>
@@ -155,8 +155,8 @@ specifying the survival quantiles to return</p></td>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>string defining the label shown for the time column.
-Default is <code>"{time}"</code>.  The input uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> notation to
+      <td><p>string defining the label shown for the time or prob column.
+Default is <code>"{time}"</code> or <code>"{prob*100}%"</code>.  The input uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> notation to
 convert the string into a label.  A common label may be <code>"{time} Months"</code>, which
 would resolve to "6 Months" or "12 Months" depending on specified <code>times</code>.</p></td>
     </tr>
@@ -164,7 +164,7 @@ would resolve to "6 Months" or "12 Months" depending on specified <code>times</c
       <th>level_label</th>
       <td><p>used when survival results are stratified.
 It is a string defining the label shown.  The input uses
-<code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> notation to convert the string into a label.
+<a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> notation to convert the string into a label.
 The default is <code>"{level}, N = {n}"</code>.  Other information available to
 call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, and <code>'{strata}'</code>. See
 below for details.</p></td>
@@ -172,12 +172,14 @@ below for details.</p></td>
     <tr>
       <th>header_label</th>
       <td><p>string to be displayed as column header of the time column.
-Default is <code>md('**Time**')</code></p></td>
+Default is <code>md('**Time**')</code> when <code>time</code> is specified, and
+<code>md('**Quantile**')</code> when <code>probs</code> is specified.</p></td>
     </tr>
     <tr>
       <th>header_estimate</th>
       <td><p>string to be displayed as column header of the Kaplan-Meier
-estimate.  Default is <code>md('**Probability**')</code></p></td>
+estimate.  Default is <code>md('**Probability**')</code> when <code>time</code> is specified, and
+<code>md('**Time**')</code> when <code>probs</code> is specified.</p></td>
     </tr>
     <tr>
       <th>failure</th>
@@ -201,7 +203,7 @@ The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="specifying-level-label"><a class="anchor" href="#specifying-level-label"></a>Specifying <code>level_label</code></h2>
+    <h2 class="hasAnchor" id="level-label-argument"><a class="anchor" href="#level-label-argument"></a>level_label argument</h2>
 
     
     <p>The <code>level_label</code> is used to modify the stratum labels. The default is
@@ -209,50 +211,47 @@ The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE
 brackets evaluate to stratum-specific values.  For example, in the trial
 data set, there is a column called <code>trt</code> with levels 'Drug' and 'Placebo'.
 In this example, level would evaluate to either 'Drug' or 'Placebo'
-depending on the stratum.  Other quantities available to print are:</p><ol>
+depending on the stratum.  Other quantities available to print are:</p><ul>
 <li><p><code>{level}</code> level of the stratification variable</p></li>
-<li><p><code>{n}</code> number of observations in stratum</p></li>
-<li><p><code>{n.event.tot}</code> total number of events observed during follow-up in stratum</p></li>
+<li><p><code>{n}</code> number of observations, or number within stratum</p></li>
+<li><p><code>{n.event.tot}</code> total number of events, or total within stratum</p></li>
 <li><p><code>{strata}</code> raw stratum specification from <code>survfit</code> object</p></li>
-</ol>
+</ul>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
     <p>Example 1</p>
-<p><img src='figures/tbl_strata_ex1.png' width=50% /></p>
+<p><img src='figures/tbl_strata_ex1.png' width=40% /></p>
 <p>Example 2</p>
-<p><img src='figures/tbl_nostrata_ex2.png' width=50% /></p>
+<p><img src='figures/tbl_nostrata_ex2.png' width=40% /></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>html</a></p></div>
+    <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>gt::md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>gt::html</a></p>
+<p>Other tbl_survival tools: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
 <span class='no'>tbl_strata_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
-    <span class='no'>fit1</span>,
-    <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
-  )
+  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit1</span>,
+               <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+               <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>)
 
 <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
 <span class='no'>tbl_nostrata_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
-    <span class='no'>fit2</span>,
-    <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
-  )</div></pre>
+  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit2</span>,
+               <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
+               <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Months**"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#specifying-level-label">Specifying <code>level_label</code></a></li>
+      <li><a href="#level-label-argument">level_label argument</a></li>
 
       <li><a href="#example-output">Example Output</a></li>
 

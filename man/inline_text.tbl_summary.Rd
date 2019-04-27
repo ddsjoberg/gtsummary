@@ -16,7 +16,7 @@
 \item{level}{level of the variable to display for categorical variables.
 Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
-\item{column}{name column name to return from \code{x$table_body}.
+\item{column}{column name to return from \code{x$table_body}.
 Can also pass the level of a by variable.}
 
 \item{pvalue_fun}{function to round and format p-values.
@@ -32,7 +32,15 @@ and return a string that is the rounded/formatted p-value (e.g.
 Functions takes an object with class \code{tbl_summary}, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
-\href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
+\href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+}
+\examples{
+t1 <- tbl_summary(trial)
+t2 <- tbl_summary(trial, by = "trt") \%>\% add_comparison()
+
+inline_text(t1, variable = "age")
+inline_text(t2, variable = "grade", level = "I", column = "Drug")
+inline_text(t2, variable = "grade", column = "pvalue")
 }
 \seealso{
 Other tbl_summary tools: \code{\link{add_comparison}},

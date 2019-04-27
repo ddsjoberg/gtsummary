@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_n.R
 \name{add_n}
 \alias{add_n}
-\title{Adds a column with N (or N missing) for each variable}
+\title{Add column with N}
 \usage{
 add_n(x, missing = FALSE, last = FALSE)
 }
@@ -15,8 +15,8 @@ or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 \item{last}{logical indicator to include overall  column last. Default is \code{FALSE}}
 }
 \description{
-The function assumes the DEFAULT header are in use. Only modify header rows
-after all columns has been added.
+For each variable in the table, the \code{add_n} function adds a column with the
+number of non-missing (or missing) observations
 }
 \section{Example Output}{
 
