@@ -19,7 +19,8 @@ Default is \code{NULL}, returning the top row in the table for the variable.}
 
 \item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
 Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
-\code{x$table_body} are available to print as well as the confidence level (conf.level)}
+\code{x$table_body} are available to print as well as the confidence level (conf.level).
+Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
 
 \item{coef_fun}{function to style model coefficients.
 Columns 'coef', 'll', and 'ul' are formatted. Default is \code{x$inputs$coef_fun}}
@@ -35,6 +36,21 @@ location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
 \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 }
+\section{pattern argument}{
+
+The following items are available to print.  Use \code{print(x$table_body)} to
+print the table the estimates are extracted from.
+\itemize{
+\item \code{{coef}} coeficient estiamte formatted with 'coef_fun'
+\item \code{{ll}} lower limit of confidence interval formmated with 'coef_fun'
+\item \code{{ul}} upper limit of confidence interval formmated with 'coef_fun'
+\item \code{{ci}} confidence interval formmated with x$estimate_fun
+\item \code{{pvalue}} p-value formatted with 'pvalue_fun'
+\item \code{{N}} number of observations in model
+\item \code{{label}} variable/variable level label
+}
+}
+
 \examples{
 inline_text_ex1 <-
   glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
