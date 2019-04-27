@@ -89,7 +89,7 @@
 #' will be displayed.  Otherwise, the value to display must be specified in
 #' the `value` argument, e.g. `value = list(varname = "level to show")`
 #' @export
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_summary_ex1 <-

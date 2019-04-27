@@ -37,13 +37,12 @@ tbl_lm_global_ex1 <-
   add_global()
 }
 \seealso{
-Other tbl_regression: \code{\link{add_nevent.tbl_regression}},
+Other tbl_regression tools: \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_regression}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression}
+\concept{tbl_regression tools}

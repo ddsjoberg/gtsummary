@@ -14,7 +14,7 @@
 #' @param stat_overall string vector including text to appear above the overall summary
 #' statistics. `N`, the total number of observations, is available for use in the
 #' description. e.g. `stat_overall = md("**All Patients**, N = {N}")`
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @seealso \link[gt]{md}, \link[gt]{html}
 #' @examples

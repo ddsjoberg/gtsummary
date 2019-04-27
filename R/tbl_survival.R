@@ -53,6 +53,7 @@ tbl_survival <- function(x, ...) {
 #' @param ... not used
 #' @importFrom stringr str_split
 #' @seealso \link[gt]{md}, \link[gt]{html}
+#' @family tbl_survival tools
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples

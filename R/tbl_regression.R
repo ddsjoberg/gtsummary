@@ -38,7 +38,7 @@
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 #'  \code{purrr::partial(style_pvalue, digits = 2)}).
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @export
 #' @examples
 #' library(survival)
