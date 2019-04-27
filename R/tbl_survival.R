@@ -1,48 +1,38 @@
-#' Tabulate univariate statistics for time-to-event endpoints
+#' Creates table of univariate statistics for time-to-event endpoints
 #'
 #' @param x a survfit or cuminc object
 #' @param ... further arguments passed to other methods
-#' @seealso \code{\link{tbl_survival.survfit}}
+#' @seealso [tbl_survival.survfit]
 #' @export
 tbl_survival <- function(x, ...) {
   UseMethod("tbl_survival")
 }
 
-#' Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints
+#' Creates table of survival probabilities
 #'
 #' Function takes a `survfit` object as an argument, and provides a tabulated and
 #' formatted summary of the results
-#'
-#' @section Specifying `level_label`:
-#' The `level_label` is used to modify the stratum labels. The default is
-#' \code{level_label = "{level}, N = {n}"}. The quantities in the curly
-#' brackets evaluate to stratum-specific values.  For example, in the trial
-#' data set, there is a column called `trt` with levels 'Drug' and 'Placebo'.
-#' In this example, {level} would evaluate to either 'Drug' or 'Placebo'
-#' depending on the stratum.  Other quantities available to print are:
-#' 1. \code{{level}} level of the stratification variable
-#' 2. \code{{n}} number of observations in stratum
-#' 3. \code{{n.event.tot}} total number of events observed during follow-up in stratum
-#' 4. \code{{strata}} raw stratum specification from \code{survfit} object
 #'
 #' @param x a survfit object with a single stratifying variable
 #' @param times numeric vector of survival times
 #' @param probs numeric vector of probabilities with values in (0,1)
 #' specifying the survival quantiles to return
-#' @param label string defining the label shown for the time column.
-#' Default is `"{time}"`.  The input uses \code{\link[glue]{glue}} notation to
+#' @param label string defining the label shown for the time or prob column.
+#' Default is `"{time}"` or `"{prob*100}%"`.  The input uses [glue::glue] notation to
 #' convert the string into a label.  A common label may be `"{time} Months"`, which
 #' would resolve to "6 Months" or "12 Months" depending on specified \code{times}.
 #' @param level_label used when survival results are stratified.
 #' It is a string defining the label shown.  The input uses
-#' \code{\link[glue]{glue}} notation to convert the string into a label.
+#' [glue::glue] notation to convert the string into a label.
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
 #' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, and `'{strata}'`. See
 #' below for details.
 #' @param header_label string to be displayed as column header of the time column.
-#' Default is \code{md('**Time**')}
+#' Default is \code{md('**Time**')} when `time` is specified, and
+#' \code{md('**Quantile**')} when `probs` is specified.
 #' @param header_estimate string to be displayed as column header of the Kaplan-Meier
-#' estimate.  Default is \code{md('**Probability**')}
+#' estimate.  Default is \code{md('**Probability**')} when `time` is specified, and
+#' \code{md('**Time**')} when `probs` is specified.
 #' @param failure Calculate failure probabilities rather than survival.
 #' Default is `FALSE`.  Does NOT apply to survival quantile requests
 #' @param missing character string indicating what to replace missing confidence
@@ -52,7 +42,7 @@ tbl_survival <- function(x, ...) {
 #' `style_sigfig(x, digits = 3)` for time estimates.
 #' @param ... not used
 #' @importFrom stringr str_split
-#' @seealso \link[gt]{md}, \link[gt]{html}
+#' @seealso [gt::md], [gt::html]
 #' @family tbl_survival tools
 #' @author Daniel D. Sjoberg
 #' @export
@@ -60,27 +50,38 @@ tbl_survival <- function(x, ...) {
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 #' tbl_strata_ex1 <-
-#'   tbl_survival(
-#'     fit1,
-#'     times = c(12, 24),
-#'     label = "{time} Months"
-#'   )
+#'   tbl_survival(fit1,
+#'                times = c(12, 24),
+#'                label = "{time} Months")
 #'
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' tbl_nostrata_ex2 <-
-#'   tbl_survival(
-#'     fit2,
-#'     times = c(12, 24),
-#'     label = "{time} Months"
-#'   )
+#'   tbl_survival(fit2,
+#'                probs = c(0.1, 0.2),
+#'                header_estimate = md("**Months**"))
+#'
+#' @section level_label argument:
+#' The `level_label` is used to modify the stratum labels. The default is
+#' \code{level_label = "{level}, N = {n}"}. The quantities in the curly
+#' brackets evaluate to stratum-specific values.  For example, in the trial
+#' data set, there is a column called `trt` with levels 'Drug' and 'Placebo'.
+#' In this example, {level} would evaluate to either 'Drug' or 'Placebo'
+#' depending on the stratum.  Other quantities available to print are:
+#' \itemize{
+#'   \item `{level}` level of the stratification variable
+#'   \item `{n}` number of observations, or number within stratum
+#'   \item `{n.event.tot}` total number of events, or total within stratum
+#'   \item `{strata}` raw stratum specification from \code{survfit} object
+#' }
+#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_strata_ex1.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_strata_ex1.png}{options: width=40\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_nostrata_ex2.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_nostrata_ex2.png}{options: width=40\%}}
 #'
 
 tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
@@ -126,10 +127,9 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
         tibble(
           strata = x$strata %>% names(),
           n = x$n,
-          n.event.strata = x %>%
+          n.event.tot = x %>%
             summary(times = max(x$time)) %>%
-            pluck("n.event"),
-          n.event.tot = sum(.data$n.event.strata)
+            pluck("n.event")
         ),
         by = "strata"
       ) %>%
@@ -170,7 +170,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
 
   cols_hide_list <-
     c("prob", "time", "strata", "n.risk", "n.event", "n",
-      "n.event.strata", "n.event.tot", "variable", "level", "lower", "upper") %>%
+      "n.event.tot", "variable", "level", "lower", "upper") %>%
     intersect(names(table_body)) %>%
     paste(collapse = ", ")
 

@@ -1,7 +1,7 @@
-#' Adds a column with N (or N missing) for each variable
+#' Add column with N
 #'
-#' The function assumes the DEFAULT header are in use. Only modify header rows
-#' after all columns has been added.
+#' For each variable in the table, the `add_n` function adds a column with the
+#' number of non-missing (or missing) observations
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param missing logical argument indicating whether to print N (`missing = FALSE`),

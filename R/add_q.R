@@ -8,16 +8,15 @@
 #' @export
 add_q <- function(x, ...) UseMethod("add_q")
 
-#' Add a column of q values to `tbl_summary` object to account for
-#' multiple comparisons in Rmarkdown
+#' Add a column of q values to account for
+#' multiple comparisons
 #'
 #' The adjustments to the p-values is performed with
-#' `stats::`\code{\link[stats]{p.adjust}}.  The default method for correction
-#' is false discovery rate (`method = "fdr"`)
+#' [stats::p.adjust].
 #'
 #' @param x `tbl_summary` object
 #' @param method character argument.  Methods from
-#' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
+#' [stats::p.adjust] are accepted.  Default is `method = 'fdr'`.
 #' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
@@ -26,12 +25,13 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @examples
 #' tbl_sum_q_ex <-
 #'   trial %>%
+#'   dplyr::select(trt, age, grade, response) %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
 #'   add_q()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_q_ex.png}{options: width=50\%}}
-#'
+
 add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...) {
 
   # This adjusts p-values for multiple testing. Default method is fdr.
@@ -119,7 +119,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #'   add_q()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uvr_q_ex.png}{options: width=50\%}}
-#'
+
 add_q.tbl_uvregression <- function(x, method = "fdr",
                                    pvalue_fun = x$inputs$pvalue_fun, ...) {
 

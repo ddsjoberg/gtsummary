@@ -18,7 +18,7 @@ stratified by a variable.  The following fields are available for use in the
 headers: \code{n}, \code{N}, \code{p}, and \code{level}.  \code{n} is the number of observations in
 each by group. \code{N} is the total number of observations. \code{p} is the percent
 in a by group. \code{level} is the by variable level.
-Syntax follows the \code{glue::\link{glue}} function,
+Syntax follows the \link[glue:glue]{glue::glue} function,
 e.g. \code{stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")}.
 Must specify \code{by} along with \code{stat_by}.}
 }
@@ -29,7 +29,7 @@ Column labels can be modified using data from the data frame
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_col_ex1.png}{options: width=50\%}}
+\if{html}{\figure{tbl_col_ex1.png}{options: width=31\%}}
 
 \if{html}{Example 2}
 
@@ -51,7 +51,7 @@ tbl_col_ex2 <-
    )
 }
 \seealso{
-\link[gt]{md}, \link[gt]{html}
+\link[gt:md]{gt::md}, \link[gt:html]{gt::html}
 
 Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{add_n}}, \code{\link{add_overall}},

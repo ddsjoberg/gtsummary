@@ -1,4 +1,4 @@
-#' Adds a column with overall summary statistics
+#' Add column with overall summary statistics
 #'
 #' This function adds a column with overall summary statistics to tables
 #' created by `tbl_summary`.

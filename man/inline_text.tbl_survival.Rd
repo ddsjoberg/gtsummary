@@ -18,7 +18,7 @@ report. Default is \code{NULL} when \code{tbl_survival} have no specified strata
 
 \item{prob}{probability for which to return survival time.}
 
-\item{pattern}{statistics to return.  Uses \link[glue]{glue} formatting.
+\item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
 Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
 \code{.$table_body} are available to print as well as the confidence level (conf.level)}
 
@@ -32,13 +32,9 @@ inline in an R markdown document.
 \examples{
 library(survival)
 survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
-  tbl_survival(
-    times = c(12, 24)
-  ) \%>\%
-  inline_text(
-    strata = "Drug",
-    time = 12
-  )
+  tbl_survival(times = c(12, 24)) \%>\%
+  inline_text(strata = "Drug",
+              time = 12)
 }
 \seealso{
 Other tbl_survival tools: \code{\link{tbl_survival.survfit}}
