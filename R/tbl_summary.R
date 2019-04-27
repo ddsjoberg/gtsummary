@@ -1,4 +1,4 @@
-#' Creates a table of summary statistics
+#' Create a table of summary statistics
 #'
 #' The `tbl_summary` function calculates descriptive statistics by groups for
 #' continuous, categorical, and dichotomous variables.  Review the

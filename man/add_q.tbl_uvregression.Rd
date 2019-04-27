@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_q.R
 \name{add_q.tbl_uvregression}
 \alias{add_q.tbl_uvregression}
-\title{Add a column of q values to \code{tbl_uvregression} object to account for
+\title{Add a column of q values to account for
 multiple comparisons}
 \usage{
 \method{add_q}{tbl_uvregression}(x, method = "fdr",
@@ -25,8 +25,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 }
 \description{
 The adjustments to the p-values is performed with
-\code{stats::}\code{\link[stats]{p.adjust}}.  The default method for correction
-is false discovery rate (\code{"fdr"})
+\link[stats:p.adjust]{stats::p.adjust}.
 }
 \section{Example Output}{
 

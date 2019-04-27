@@ -2,22 +2,22 @@
 % Please edit documentation in R/add_global.R
 \name{add_global.tbl_uvregression}
 \alias{add_global.tbl_uvregression}
-\title{Adds the global p-value for a categorical variables in \code{tbl_uvregression} objects}
+\title{Adds the global p-value for categorical variables}
 \usage{
 \method{add_global}{tbl_uvregression}(x, ...)
 }
 \arguments{
 \item{x}{object with class \code{tbl_uvregression} from the
-\code{\link{tbl_uvregression}} function}
+\link{tbl_uvregression} function}
 
 \item{...}{arguments to be passed to \link[car:Anova]{car::Anova}.}
 }
 \description{
-This function uses \link[car:Anova]{car::Anova} from the \code{car} package with
-\code{type = "III"} to calculate global p-values.
+This function uses \link[car:Anova]{car::Anova} with argument
+\code{type = "III"} to calculate global p-values for categorical variables.
 If a needed class of model is not supported by \link[car:Anova]{car::Anova},
-please put in an
-issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
+please create an
+\href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
 }
 \section{Example Output}{
 
