@@ -965,11 +965,17 @@ summarize_continuous <- function(data, variable, by, digits,
 
   # grouping by var
   if (!is.null(by)) {
+    # left_join throws warning `has different attributes on LHS and RHS of join`
+    # when variable has label.  So deleting it.
+    df_by <- df_by(data, by)
+    attr(df_by[["by"]], "label") <- NULL
+    attr(data[[by]], "label") <- NULL
+
     data <-
       data %>%
       select(c(variable, by)) %>%
       set_names(c("variable", "by")) %>%
-      left_join(df_by(data, by), by = "by") %>%
+      left_join(df_by, by = "by") %>%
       select(c(variable, "by_col"))
   }
   else {
