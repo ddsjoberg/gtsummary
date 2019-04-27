@@ -174,7 +174,7 @@ gt_tbl_regression <- quote(list(
     "label = md('**N = {n}**'), ",
     "coef = md('**{coef_header(x, exponentiate)}**'), ",
     "ll = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
-    "pvalue = md('**p-value**')",
+    "p.value = md('**p-value**')",
     ")"
   ),
 
@@ -189,7 +189,7 @@ gt_tbl_regression <- quote(list(
 
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)" %>%
+    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
     glue(),
 
   # ceof and confidence interval formatting
