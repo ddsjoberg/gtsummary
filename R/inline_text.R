@@ -27,7 +27,7 @@ inline_text <- function(x, ...) {
 #' Can also pass the level of a by variable.
 #' @inheritParams tbl_regression
 #' @param ... not used
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
 
@@ -129,7 +129,7 @@ inline_text.tbl_summary <-
 #' Default is `function(x) style_pvalue(x, prepend_p = TRUE)`
 #' @param ... not used
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @export
 
 inline_text.tbl_regression <-
@@ -205,7 +205,7 @@ inline_text.tbl_regression <-
 #' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{`tbl_regression` vignette}
 #'
 #' @inherit inline_text.tbl_regression
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @export
 
 inline_text.tbl_uvregression <- inline_text.tbl_regression
@@ -227,7 +227,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' `.$table_body` are available to print as well as the confidence level (conf.level)
 #' @param ... not used
 #' @author Karissa Whiting
-#' @family tbl_survival
+#' @family tbl_survival tools
 #' @export
 #' @examples
 #' library(survival)

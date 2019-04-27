@@ -5,6 +5,8 @@
 #'
 #' @param tbls list of gtsummary regression objects
 #' @param tab_spanner Spanning headers.  Vector with same length as `tbls`
+#' @family tbl_regression tools
+#' @family tbl_uvregression tools
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples

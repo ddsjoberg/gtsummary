@@ -107,14 +107,14 @@ tbl_uv_ex2 <-
 
 }
 \seealso{
-Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}}
+  \code{\link{tbl_merge}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_uvregression}
+\concept{tbl_uvregression tools}

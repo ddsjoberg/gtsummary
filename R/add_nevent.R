@@ -34,7 +34,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @param ... not used
 #' @export
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @export
 #' @examples
 #' tbl_reg_nevent_ex <-
@@ -123,7 +123,7 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' @param x `tbl_uvregerssion` object
 #' @param ... not used
 #' @author Daniel D. Sjoberg
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @export
 #' @examples
 #' tbl_uv_nevent_ex <-

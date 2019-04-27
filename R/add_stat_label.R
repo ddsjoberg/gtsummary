@@ -4,7 +4,7 @@
 #' a column labeling the summary statistics is added.
 #'
 #' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples

@@ -38,7 +38,7 @@ add_global <- function(x, ...) {
 #' levels of the categorical variable. Default is `FALSE`
 #' @param ... arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @examples
 #' tbl_lm_global_ex1 <-
 #'   lm(marker ~ stage + grade, trial) %>%
@@ -125,7 +125,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' \code{\link{tbl_uvregression}} function
 #' @param ... arguments to be passed to [car::Anova].
 #' @author Daniel D. Sjoberg
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @examples
 #' tbl_uv_global_ex2 <-
 #'  trial %>%

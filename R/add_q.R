@@ -21,7 +21,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @export
 #' @examples
 #' tbl_sum_q_ex <-
@@ -105,7 +105,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @export
 #' @examples
 #' tbl_uvr_q_ex <-

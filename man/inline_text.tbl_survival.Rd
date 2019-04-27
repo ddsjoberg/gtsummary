@@ -40,7 +40,10 @@ survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
     time = 12
   )
 }
+\seealso{
+Other tbl_survival tools: \code{\link{tbl_survival.survfit}}
+}
 \author{
 Karissa Whiting
 }
-\concept{tbl_survival}
+\concept{tbl_survival tools}

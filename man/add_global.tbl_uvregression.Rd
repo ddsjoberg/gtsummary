@@ -37,14 +37,13 @@ tbl_uv_global_ex2 <-
   add_global()
 }
 \seealso{
-Other tbl_uvregression: \code{\link{add_nevent.tbl_uvregression}},
+Other tbl_uvregression tools: \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_uvregression}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_uvregression}
+\concept{tbl_uvregression tools}
