@@ -6,7 +6,7 @@
 \usage{
 \method{inline_text}{tbl_survival}(x, strata = NULL, time = NULL,
   prob = NULL, pattern = "{estimate} ({conf.level*100}\% CI {ci})",
-  ...)
+  estimate_fun = x$estimate_fun, ...)
 }
 \arguments{
 \item{x}{object created from  \link{tbl_survival}}
@@ -19,8 +19,13 @@ report. Default is \code{NULL} when \code{tbl_survival} have no specified strata
 \item{prob}{probability for which to return survival time.}
 
 \item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
-Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
-\code{.$table_body} are available to print as well as the confidence level (conf.level)}
+Default is \code{'{estimate} ({conf.level*100}\% {ci})'}.  All columns from
+\code{x$table_long} are available to print as well as the confidence level (conf.level).
+Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
+
+\item{estimate_fun}{function to round/style estimate and lower/upper confidence
+interval estimates.  Notably, this does not style the 'ci' column, which is
+pre-styled in 'x'. Default is x$estimate_fun}
 
 \item{...}{not used}
 }
@@ -29,6 +34,26 @@ Functions takes an object with class \code{tbl_survival}, and the
 location of the statistic to report and return the statistic for reporting
 inline in an R markdown document.
 }
+\section{pattern argument}{
+
+The following items are available to print.  Use \code{print(x$table_long)} to
+print the table the estimates are extracted from.
+\itemize{
+\item \code{{label}} time or prob label
+\item \code{{estimate}} survival or survival time estimate formatted with 'estimate_fun'
+\item \code{{lower}} lower limit of confidence interval formmated with 'estimate_fun'
+\item \code{{upper}} upper limit of confidence interval formmated with 'estimate_fun'
+\item \code{{ci}} confidence interval formmated with x$estimate_fun (pre-formatted)
+\item \code{{time}/{prob}} time of survival quantile (numeric)
+\item \code{{n.risk}} number at risk at 'time' (within stratum if applicable)
+\item \code{{n.event}} number of observed events at 'time' (within stratum if applicable)
+\item \code{{n}} number of observations (within stratum if applicable)
+\item \code{{variable}} stratum variable (if applicable)
+\item \code{{level}} stratum level (if applicable )
+\item \code{{groupname}} label_level from original \code{tbl_survival()} call
+}
+}
+
 \examples{
 library(survival)
 survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
