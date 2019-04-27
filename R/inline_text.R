@@ -126,11 +126,12 @@ inline_text.tbl_summary <-
 #' @param level level of the variable to display for categorical variables.
 #' Default is `NULL`, returning the top row in the table for the variable.
 #' @param pattern statistics to return.  Uses [glue::glue] formatting.
-#' Default is \code{"{coef} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.  All columns from
+#' Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.  All columns from
 #' `x$table_body` are available to print as well as the confidence level (conf.level).
 #' Uses [glue::glue] formatting. See below for details.
-#' @param coef_fun function to style model coefficients.
-#' Columns 'coef', 'conf.low', and 'conf.high' are formatted. Default is `x$inputs$coef_fun`
+#' @param estimate_fun function to style model coefficient estimates.
+#' Columns 'estimate', 'conf.low', and 'conf.high' are formatted.
+#' Default is `x$inputs$estimate_fun`
 #' @param pvalue_fun function to style p-values and/or q-values.
 #' Default is `function(x) style_pvalue(x, prepend_p = TRUE)`
 #'
@@ -138,9 +139,9 @@ inline_text.tbl_summary <-
 #' The following items are available to print.  Use `print(x$table_body)` to
 #' print the table the estimates are extracted from.
 #' \itemize{
-#'   \item `{coef}` coeficient estiamte formatted with 'coef_fun'
-#'   \item `{conf.low}` lower limit of confidence interval formmated with 'coef_fun'
-#'   \item `{conf.high}` upper limit of confidence interval formmated with 'coef_fun'
+#'   \item `{estimate}` coeficient estiamte formatted with 'estimate_fun'
+#'   \item `{conf.low}` lower limit of confidence interval formmated with 'estimate_fun'
+#'   \item `{conf.high}` upper limit of confidence interval formmated with 'estimate_fun'
 #'   \item `{ci}` confidence interval formmated with x$estimate_fun
 #'   \item `{p.value}` p-value formatted with 'pvalue_fun'
 #'   \item `{N}` number of observations in model
