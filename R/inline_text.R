@@ -127,7 +127,7 @@ inline_text.tbl_summary <-
 #' Default is `NULL`, returning the top row in the table for the variable.
 #' @param pattern statistics to return.  Uses [glue::glue] formatting.
 #' Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
-#' `.$table_body` are available to print as well as the confidence level (conf.level)
+#' `x$table_body` are available to print as well as the confidence level (conf.level)
 #' @param coef_fun function to style model coefficients.
 #' Columns 'coef', 'll', and 'ul' are formatted. Default is `x$inputs$coef_fun`
 #' @param pvalue_fun function to style p-values and/or q-values.
@@ -248,9 +248,30 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @param time time for which to return survival probability.
 #' @param prob probability for which to return survival time.
 #' @param pattern statistics to return.  Uses [glue::glue] formatting.
-#' Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
-#' `.$table_body` are available to print as well as the confidence level (conf.level)
+#' Default is \code{'{estimate} ({conf.level*100}\% {ci})'}.  All columns from
+#' `x$table_long` are available to print as well as the confidence level (conf.level).
+#' Uses [glue::glue] formatting. See below for details.
+#' @param estimate_fun function to round/style estimate and lower/upper confidence
+#' interval estimates.  Notably, this does not style the 'ci' column, which is
+#' pre-styled in 'x'. Default is x$estimate_fun
 #' @param ... not used
+#'
+#' @section pattern argument:
+#' The following items are available to print.
+#' \itemize{
+#'   \item `{label}` time or prob label
+#'   \item `{estimate}` survival or survival time estimate formatted with x$estimate_fun
+#'   \item `{lower}` lower limit of confidence interval formmated with x$estimate_fun
+#'   \item `{upper}` upper limit of confidence interval formmated with x$estimate_fun
+#'   \item `{ci}` confidence interval formmated with x$estimate_fun
+#'   \item `{time}/{prob}` time of survival quantile (numeric)
+#'   \item `{n.risk}` number at risk at 'time' (within stratum if applicable)
+#'   \item `{n.event}` number of observed events at 'time' (within stratum if applicable)
+#'   \item `{n}` number of observations (within stratum if applicable)
+#'   \item `{variable}` stratum variable (if applicable)
+#'   \item `{level}` stratum level (if applicable )
+#'   \item `{groupname}` label_level from original `tbl_survival()` call
+#' }
 #' @author Karissa Whiting
 #' @family tbl_survival tools
 #' @export
@@ -266,6 +287,7 @@ inline_text.tbl_survival <-
   function(x, strata = NULL,
            time = NULL, prob = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {ci})",
+           estimate_fun = x$estimate_fun,
            ...) {
 
     # input checks ---------------------------------------------------------------
@@ -341,7 +363,7 @@ inline_text.tbl_survival <-
     result <-
       result %>%
       mutate_at(vars(c("estimate", "lower", "upper")),
-                ~x$estimate_fun(.)) %>%
+                estimate_fun) %>%
       mutate(
         conf.level = x$survfit$conf.int,
         stat = glue(pattern)
