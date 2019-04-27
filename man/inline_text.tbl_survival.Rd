@@ -24,7 +24,8 @@ Default is \code{'{estimate} ({conf.level*100}\% {ci})'}.  All columns from
 Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
 
 \item{estimate_fun}{function to round/style estimate and lower/upper confidence
-interval estimates.  Default is x$estimate_fun}
+interval estimates.  Notably, this does not style the 'ci' column, which is
+pre-styled in 'x'. Default is x$estimate_fun}
 
 \item{...}{not used}
 }
@@ -35,13 +36,14 @@ inline in an R markdown document.
 }
 \section{pattern argument}{
 
-The following items are available to print.
+The following items are available to print.  Use \code{print(x$table_long)} to
+print the table the estimates are extracted from.
 \itemize{
 \item \code{{label}} time or prob label
-\item \code{{estimate}} survival or survival time estimate formatted with x$estimate_fun
-\item \code{{lower}} lower limit of confidence interval formmated with x$estimate_fun
-\item \code{{upper}} upper limit of confidence interval formmated with x$estimate_fun
-\item \code{{ci}} confidence interval formmated with x$estimate_fun
+\item \code{{estimate}} survival or survival time estimate formatted with 'estimate_fun'
+\item \code{{lower}} lower limit of confidence interval formmated with 'estimate_fun'
+\item \code{{upper}} upper limit of confidence interval formmated with 'estimate_fun'
+\item \code{{ci}} confidence interval formmated with x$estimate_fun (pre-formatted)
 \item \code{{time}/{prob}} time of survival quantile (numeric)
 \item \code{{n.risk}} number at risk at 'time' (within stratum if applicable)
 \item \code{{n.event}} number of observed events at 'time' (within stratum if applicable)
