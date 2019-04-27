@@ -30,7 +30,7 @@
 #' @param show_yesno By default yes/no categorical variables are printed on a single row,
 #' when the 'No' category is the reference group.  To print both levels in the output table, include
 #' the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``
-#' @param coef_fun function to round and format beta coefficients.  Default
+#' @param estimate_fun function to round and format beta coefficient estimates.  Default
 #' is [style_sigfig] when the coefficients are printed, and
 #' [style_ratio] when the coefficients have been exponentiated.
 #' @param pvalue_fun function to round and format p-values.
@@ -75,7 +75,7 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
                            exclude = NULL,
                            show_yesno = NULL,
                            conf.level = 0.95, intercept = FALSE,
-                           coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
+                           estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
                            pvalue_fun = style_pvalue) {
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
@@ -116,14 +116,14 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
 
   # footnote abbreviation details
   footnote_abbr <-
-    coef_header(x, exponentiate) %>%
+    estimate_header(x, exponentiate) %>%
     attr("footnote") %>%
     c("CI = Confidence Interval") %>%
     paste(collapse = ", ")
   footnote_location <- ifelse(
-    is.null(attr(coef_header(x, exponentiate), "footnote")),
-    "vars(ll)",
-    "vars(coef, ll)"
+    is.null(attr(estimate_header(x, exponentiate), "footnote")),
+    "vars(conf.low)",
+    "vars(estimate, conf.low)"
   )
 
   results <- list(
@@ -165,15 +165,15 @@ gt_tbl_regression <- quote(list(
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')" %>%
+    "fmt_missing(columns = vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
     glue(),
 
   # column headers
   cols_label = glue(
     "cols_label(",
     "label = md('**N = {n}**'), ",
-    "coef = md('**{coef_header(x, exponentiate)}**'), ",
-    "ll = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
+    "estimate = md('**{estimate_header(x, exponentiate)}**'), ",
+    "conf.low = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
     "p.value = md('**p-value**')",
     ")"
   ),
@@ -193,13 +193,13 @@ gt_tbl_regression <- quote(list(
     glue(),
 
   # ceof and confidence interval formatting
-  fmt_coef =
-    "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)" %>%
+  fmt_estimate =
+    "fmt(columns = vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
     glue(),
 
-  # combining ll and ul to print confidence interval
+  # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
-    "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')" %>%
+    "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
     glue::as_glue(),
 
   # indenting levels and missing rows
@@ -214,7 +214,7 @@ gt_tbl_regression <- quote(list(
 ))
 
 # identifies headers for common models (logistic, poisson, and cox regression)
-coef_header <- function(x, exponentiate) {
+estimate_header <- function(x, exponentiate) {
   if (
     (class(x)[1] %in% c("glm", "geeglm")) | # generalized linear models, and GEE GLMs
     (class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
@@ -222,7 +222,7 @@ coef_header <- function(x, exponentiate) {
     if(class(x)[1] %in% c("glm", "geeglm")) family = x$family
     else if(class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4")
       family = x@resp$family
-    else stop("Error occured in 'coef_header' function")
+    else stop("Error occured in 'estimate_header' function")
 
     # logistic regression
     if (exponentiate == TRUE & family$family == "binomial" & family$link == "logit") {

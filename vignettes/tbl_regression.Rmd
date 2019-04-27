@@ -80,7 +80,7 @@ The `tbl_regression()` function includes many input options for modifying the ap
     show_yesno    show both levels of yes/no variables. Default prints on single row.  
     conf.level    confidence level of confidence interval.  
     intercept     logical argument indicates whether to include the intercept in output.  
-    coef_fun      function to round and format beta coefficients.  
+    estimate_fun  function to round and format beta coefficient estimates.  
     pvalue_fun    function to round and format p-values.  
 
 ### Functions to add information
@@ -128,7 +128,7 @@ There are formatting options available, such as adding bold and italics to text.
 m1 %>%
   tbl_regression(exponentiate = TRUE, 
                  pvalue_fun = function(x) style_pvalue(x, digits = 2),
-                 coef_fun = function(x) style_ratio(x, digits = 3))  %>% 
+                 estimate_fun = function(x) style_ratio(x, digits = 3))  %>% 
   add_global() %>%
   tab_style_bold_p(t = 0.10) %>%
   tab_style_bold_labels() %>% 
@@ -155,20 +155,20 @@ Here's how the line will appear in your report.
 
 > `r inline_text(tbl_m1, variable = "age")`
 
-It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows the `glue::glue()` format with referenced R objects being inserted between curly brackets.  You have access to following fields within the `pattern` argument.  The default is `pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {p.value})"`
+It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows the `glue::glue()` format with referenced R objects being inserted between curly brackets.  You have access to following fields within the `pattern` argument.  The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`
 
-    {coef}       primary estimate (e.g. model coefficient, odds ratio)
-    {ll}         lower limit of confidence interval
-    {ul}         upper limit of confidence interval
+    {estimate}   primary estimate (e.g. model coefficient, odds ratio)
+    {conf.low}   lower limit of confidence interval
+    {conf.high}  upper limit of confidence interval
     {p.value}    p-value
     {conf.level} confidence level of interval
 
-The `inline_text` function has has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`coef_fun`).
+The `inline_text` function has has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`estimate_fun`).
 
 > Age was not significantly associated with tumor response `` `r
-inline_text(tbl_m1, variable = "age", pattern = "(OR {coef}; 95% CI {ll}, {ul}; {p.value})")` ``.
+inline_text(tbl_m1, variable = "age", pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")` ``.
 
-> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = "age", pattern = "(OR {coef}; 95% CI {ll}, {ul}; {p.value})")`.
+> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = "age", pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`.
 
 If you're printing results from a categorical variable, include `level` argument, e.g. `inline_text(tbl_m1, variable = "stage", level = "T3")` resolves to "`r inline_text(tbl_m1, variable = "stage", level = "T3")`".  
 

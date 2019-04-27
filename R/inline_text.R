@@ -126,11 +126,11 @@ inline_text.tbl_summary <-
 #' @param level level of the variable to display for categorical variables.
 #' Default is `NULL`, returning the top row in the table for the variable.
 #' @param pattern statistics to return.  Uses [glue::glue] formatting.
-#' Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {p.value})"}.  All columns from
+#' Default is \code{"{coef} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.  All columns from
 #' `x$table_body` are available to print as well as the confidence level (conf.level).
 #' Uses [glue::glue] formatting. See below for details.
 #' @param coef_fun function to style model coefficients.
-#' Columns 'coef', 'll', and 'ul' are formatted. Default is `x$inputs$coef_fun`
+#' Columns 'coef', 'conf.low', and 'conf.high' are formatted. Default is `x$inputs$coef_fun`
 #' @param pvalue_fun function to style p-values and/or q-values.
 #' Default is `function(x) style_pvalue(x, prepend_p = TRUE)`
 #'
@@ -139,8 +139,8 @@ inline_text.tbl_summary <-
 #' print the table the estimates are extracted from.
 #' \itemize{
 #'   \item `{coef}` coeficient estiamte formatted with 'coef_fun'
-#'   \item `{ll}` lower limit of confidence interval formmated with 'coef_fun'
-#'   \item `{ul}` upper limit of confidence interval formmated with 'coef_fun'
+#'   \item `{conf.low}` lower limit of confidence interval formmated with 'coef_fun'
+#'   \item `{conf.high}` upper limit of confidence interval formmated with 'coef_fun'
 #'   \item `{ci}` confidence interval formmated with x$estimate_fun
 #'   \item `{p.value}` p-value formatted with 'pvalue_fun'
 #'   \item `{N}` number of observations in model
@@ -160,8 +160,8 @@ inline_text.tbl_summary <-
 
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
-             pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {p.value})",
-             coef_fun = x$inputs$coef_fun,
+             pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
+             estimate_fun = x$inputs$estimate_fun,
              pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
@@ -211,7 +211,7 @@ inline_text.tbl_regression <-
     pvalue_cols <- names(result) %>% intersect(c("p.value", "q.value"))
     result <-
       result %>%
-      mutate_at(vars(one_of(c("coef", "ll", "ul"))), coef_fun) %>%
+      mutate_at(vars(one_of(c("estimate", "conf.low", "conf.high"))), estimate_fun) %>%
       mutate_at(vars(one_of(pvalue_cols)), pvalue_fun) %>%
       mutate(
         conf.level = x$inputs$conf.level,
@@ -276,8 +276,8 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' \itemize{
 #'   \item `{label}` time or prob label
 #'   \item `{estimate}` survival or survival time estimate formatted with 'estimate_fun'
-#'   \item `{lower}` lower limit of confidence interval formmated with 'estimate_fun'
-#'   \item `{upper}` upper limit of confidence interval formmated with 'estimate_fun'
+#'   \item `{conf.low}` lower limit of confidence interval formmated with 'estimate_fun'
+#'   \item `{conf.high}` upper limit of confidence interval formmated with 'estimate_fun'
 #'   \item `{ci}` confidence interval formmated with x$estimate_fun (pre-formatted)
 #'   \item `{time}/{prob}` time of survival quantile (numeric)
 #'   \item `{n.risk}` number at risk at 'time' (within stratum if applicable)
@@ -377,7 +377,7 @@ inline_text.tbl_survival <-
     # formatting result and returning ------------------------------------------
     result <-
       result %>%
-      mutate_at(vars(c("estimate", "lower", "upper")),
+      mutate_at(vars(c("estimate", "conf.low", "conf.high")),
                 estimate_fun) %>%
       mutate(
         conf.level = x$survfit$conf.int,

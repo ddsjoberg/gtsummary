@@ -95,13 +95,13 @@ tbl_merge <- function(tbls,
 
 
   # creating column headers and footnotes --------------------------------------
-  # creating column header for base variable (label, coef, ll, and p.value)
+  # creating column header for base variable (label, estimate, conf.low, and p.value)
   cols_label_base_vars <-
     imap_chr(
       tbl_inputs(tbls),
       ~glue(
-        "coef_{.y} = md('**{coef_header(.x$x, .x$exponentiate)}**'), ",
-        "ll_{.y} = md('**{.x$conf.level*100}% CI**'), ",
+        "estimate_{.y} = md('**{estimate_header(.x$x, .x$exponentiate)}**'), ",
+        "conf.low_{.y} = md('**{.x$conf.level*100}% CI**'), ",
         "p.value_{.y} = md('**p-value**')"
       )
     ) %>%
@@ -113,7 +113,7 @@ tbl_merge <- function(tbls,
   footnote_abbreviation[["footnote"]] <-
     imap(
       tbl_inputs(tbls),
-      ~coef_header(.x$x, .x$exponentiate) %>% attr("footnote")
+      ~estimate_header(.x$x, .x$exponentiate) %>% attr("footnote")
     ) %>%
     unique() %>%
     compact() %>%
@@ -124,20 +124,20 @@ tbl_merge <- function(tbls,
   footnote_abbreviation[["columns"]] <-
     imap_lgl(
       tbl_inputs(tbls),
-      ~coef_header(.x$x, .x$exponentiate) %>%
+      ~estimate_header(.x$x, .x$exponentiate) %>%
         attr("footnote") %>%
         {!is.null(.)}
     ) %>%
     which() %>%
-    # if any abbreviations, include coef_{i} in abbreviation list, otherwise return NULL
-    {switch(length(.) > 0 +  1, paste0("coef_", .), NULL)} %>%
-    c(paste0("ll_", 1:tbls_length)) %>%
+    # if any abbreviations, include estimate_{i} in abbreviation list, otherwise return NULL
+    {switch(length(.) > 0 +  1, paste0("estimate_", .), NULL)} %>%
+    c(paste0("conf.low_", 1:tbls_length)) %>%
    glue_collapse(sep = ", ")
 
   # returning results
   results <- list(
     table_body = table_body,
-    coef_funs = map(tbl_inputs(tbls), pluck("coef_fun")),
+    estimate_funs = map(tbl_inputs(tbls), pluck("estimate_fun")),
     pvalue_funs = map(tbl_inputs(tbls), pluck("pvalue_fun")),
     qvalue_funs = map(tbls, pluck("qvalue_fun")),
     gt_calls = eval(gt_tbl_merge)
@@ -174,8 +174,8 @@ gt_tbl_merge <- quote(list(
     glue(),
 
   # Show "---" for reference groups
-  # e.g.fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable == 'trt' & row_type == 'level' & label == \'Drug\'), missing_text = '---') %>%
-  #     fmt_missing(columns = vars(coef_2, ll_2, ul_2), rows = (variable == 'grade' & row_type == 'level' & label == \'I\'), missing_text = '---')
+  # e.g.fmt_missing(columns = vars(estimate_2, conf.low_2, conf.high_2), rows = (variable == 'trt' & row_type == 'level' & label == \'Drug\'), missing_text = '---') %>%
+  #     fmt_missing(columns = vars(estimate_2, conf.low_2, conf.high_2), rows = (variable == 'grade' & row_type == 'level' & label == \'I\'), missing_text = '---')
   fmt_missing_ref =
     imap(
       tbls,
@@ -192,7 +192,7 @@ gt_tbl_merge <- quote(list(
           cat_var$variable,
           ~glue(
             "fmt_missing(",
-            "columns = vars({paste(c('coef', 'll', 'ul'), y, sep = '_', collapse = ', ')}), ",
+            "columns = vars({paste(c('estimate', 'conf.low', 'conf.high'), y, sep = '_', collapse = ', ')}), ",
             "rows = (variable == '{.x}' & row_type == 'level' & row_ref_{y} == TRUE), ",
             "missing_text = '---')"
           )
@@ -203,7 +203,7 @@ gt_tbl_merge <- quote(list(
     compact() %>%
     glue_collapse_null(),
 
-   # glue("coef_{1:tbls_length}, ll_{1:tbls_length}, ul_{1:tbls_length}") %>%
+   # glue("estimate_{1:tbls_length}, conf.low_{1:tbls_length}, conf.high_{1:tbls_length}") %>%
    # glue_collapse(sep = ", ") %>%
    #  {glue("fmt_missing(columns = vars({.}), rows = row_type == 'level', missing_text = '---')")},
 
@@ -228,24 +228,24 @@ gt_tbl_merge <- quote(list(
    glue_collapse(" %>% "),
 
   # ceof and confidence interval formatting
-  fmt_coef =
+  fmt_estimate =
     map(
       1:tbls_length,
-      ~paste0(c("coef_", "ll_", "ul_"), .x, collapse = ", ") %>%
-      {glue("fmt(columns = vars({.}), rows = !is.na(coef_{.x}), fns = x$coef_funs[[{.x}]])")}
+      ~paste0(c("estimate_", "conf.low_", "conf.high_"), .x, collapse = ", ") %>%
+      {glue("fmt(columns = vars({.}), rows = !is.na(estimate_{.x}), fns = x$estimate_funs[[{.x}]])")}
     ) %>%
    glue_collapse(" %>% "),
 
-  # combining ll and ul to print confidence interval
+  # combining conf.low and conf.high to print confidence interval
   # example result:
-  # cols_merge(col_1 = vars(ll_1), col_2 = vars(ul_1), pattern = '{1}, {2}') %>%
-  #   cols_merge(col_1 = vars(ll_2), col_2 = vars(ul_2), pattern = '{1}, {2}')
+  # cols_merge(col_1 = vars(conf.low_1), col_2 = vars(conf.high_1), pattern = '{1}, {2}') %>%
+  #   cols_merge(col_1 = vars(conf.low_2), col_2 = vars(conf.high_2), pattern = '{1}, {2}')
   cols_merge_ci =
     map(
       1:tbls_length,
       ~paste0(
         "cols_merge(",
-       glue("col_1 = vars(ll_{.x}), col_2 = vars(ul_{.x}), "),
+       glue("col_1 = vars(conf.low_{.x}), col_2 = vars(conf.high_{.x}), "),
         "pattern = '{1}, {2}')")
     ) %>%
    glue_collapse(" %>% "),

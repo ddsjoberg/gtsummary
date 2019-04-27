@@ -7,7 +7,7 @@
 tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
   hide_n = FALSE, show_yesno = NULL, conf.level = 0.95,
-  coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
+  estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
   pvalue_fun = style_pvalue)
 }
 \arguments{
@@ -40,7 +40,7 @@ the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")
 
 \item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
 
-\item{coef_fun}{function to round and format beta coefficients.  Default
+\item{estimate_fun}{function to round and format beta coefficient estimates.  Default
 is \link{style_sigfig} when the coefficients are printed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
