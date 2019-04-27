@@ -1,6 +1,6 @@
 #' Bold significant p-values
 #'
-#' Bold p-values in tables create by gtsummary
+#' Bold p-values in tables created by gtsummary
 #'
 #' @param x an object created using gtsummary functions
 #' @param ... further arguments passed to other methods.
@@ -73,9 +73,9 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @family tbl_regression
 #' @examples
 #' tbl_lm_bold_p_ex <-
-#'   lm(age ~ marker + trt + stage, trial) %>%
-#'   tbl_regression() %>%
-#'   tab_style_bold_p(t = 0.3)
+#'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
+#'   tbl_regression(exponentiate = TRUE) %>%
+#'   tab_style_bold_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
 #' @export

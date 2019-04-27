@@ -1,11 +1,11 @@
-#' Add number of events to a {gtsummary} regression table
+#' Add number of events to a regression table
 #'
 #' This function adds a column of the number of events to tables created with
 #' [tbl_regression] or [tbl_uvregression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
-#' \code{\link[stats]{glm}}, \code{\link[lme4]{glmer}}, and
-#' \code{\link[geepack]{geeglm}}) and Cox
-#' Proportion Hazards regression models (\code{\link[survival]{coxph}}).
+#' [stats::glm], [lme4::glmer], and
+#' [geepack::geeglm]) and Cox
+#' Proportion Hazards regression models ([survival::coxph]).
 #'
 #' @param x `tbl_regerssion` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
@@ -16,25 +16,25 @@
 
 add_nevent <- function(x, ...) UseMethod("add_nevent")
 
-#' Add number of events to a {gtsummary} regression table
+#' Add number of events to a regression table
 #'
 #' This function adds a column of the number of events to tables created with
-#' \code{\link{tbl_regression}} or \code{\link{tbl_uvregression}}.  Supported
+#' [tbl_regression] or [tbl_uvregression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
-#' \code{\link[stats]{glm}}, \code{\link[lme4]{glmer}}, and
-#' \code{\link[geepack]{geeglm}}) and Cox
-#' Proportion Hazards regression models (\code{\link[survival]{coxph}}).
+#' [stats::glm], [lme4::glmer], and
+#' [geepack::geeglm]) and Cox
+#' Proportion Hazards regression models ([survival::coxph]).
 #'
 #' @section Reporting Event N:
 #' The number of events is added to the internal `.$table_body` tibble,
 #' and not printed in the default output table (similar to N). The number
-#' of events is accessible via the `inline_text()` function for printing in a report.
+#' of events is accessible via the [inline_text] function for printing in a report.
 #'
 #' @param x `tbl_regression` object
 #' @param ... not used
 #' @export
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @export
 #' @examples
 #' tbl_reg_nevent_ex <-
@@ -106,24 +106,24 @@ add_nevent.tbl_regression <- function(x, ...) {
   x
 }
 
-#' Add number of events to a {gtsummary} regression table
+#' Add number of events to a regression table
 #'
 #' This function adds a column of the number of events to tables created with
-#' \code{\link{tbl_regression}} or \code{\link{tbl_uvregression}}.  Supported
+#' [tbl_regression] or [tbl_uvregression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
-#' \code{\link[stats]{glm}}, \code{\link[lme4]{glmer}}, and
-#' \code{\link[geepack]{geeglm}}) and Cox
-#' Proportion Hazards regression models (\code{\link[survival]{coxph}}).
+#' [stats::glm], [lme4::glmer], and
+#' [geepack::geeglm]) and Cox
+#' Proportion Hazards regression models ([survival::coxph]).
 #'
 #' @section Reporting Event N:
 #' The number of events is added to the internal `.$table_body` tibble,
 #' and printed to the right of the N column. The number of events is also
-#' accessible via the `inline_text()` function for printing in a report.
+#' accessible via the [inline_text] function for printing in a report.
 #'
 #' @param x `tbl_uvregerssion` object
 #' @param ... not used
 #' @author Daniel D. Sjoberg
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @export
 #' @examples
 #' tbl_uv_nevent_ex <-

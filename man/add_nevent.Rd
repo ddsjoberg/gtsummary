@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_nevent.R
 \name{add_nevent}
 \alias{add_nevent}
-\title{Add number of events to a {gtsummary} regression table}
+\title{Add number of events to a regression table}
 \usage{
 add_nevent(x, ...)
 }
@@ -15,9 +15,9 @@ add_nevent(x, ...)
 This function adds a column of the number of events to tables created with
 \link{tbl_regression} or \link{tbl_uvregression}.  Supported
 model types include GLMs with binomial distribution family (e.g.
-\code{\link[stats]{glm}}, \code{\link[lme4]{glmer}}, and
-\code{\link[geepack]{geeglm}}) and Cox
-Proportion Hazards regression models (\code{\link[survival]{coxph}}).
+\link[stats:glm]{stats::glm}, \link[lme4:glmer]{lme4::glmer}, and
+\link[geepack:geeglm]{geepack::geeglm}) and Cox
+Proportion Hazards regression models (\link[survival:coxph]{survival::coxph}).
 }
 \seealso{
 \link{add_nevent.tbl_regression}, \link{add_nevent.tbl_uvregression},

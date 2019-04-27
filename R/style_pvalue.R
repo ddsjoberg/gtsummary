@@ -1,4 +1,4 @@
-#' Formats p-values to be displayed in tables or text of report.
+#' Style p-values to be displayed in tables or text
 #'
 #' @param x numeric vector of p-values.
 #' @param digits number of digits large p-values are rounded. Must be 1 or 2.

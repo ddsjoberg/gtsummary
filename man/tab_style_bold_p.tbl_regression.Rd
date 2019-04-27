@@ -23,16 +23,9 @@ Bold p-values in tables created by \code{\link{tbl_regression}}
 
 \examples{
 tbl_lm_bold_p_ex <-
-  lm(age ~ marker + trt + stage, trial) \%>\%
-  tbl_regression() \%>\%
-  tab_style_bold_p(t = 0.3)
-}
-\seealso{
-Other tbl_regression: \code{\link{add_global.tbl_regression}},
-  \code{\link{add_nevent.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_regression}},
-  \code{\link{tbl_regression}}
+  glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
+  tbl_regression(exponentiate = TRUE) \%>\%
+  tab_style_bold_p()
 }
 \author{
 Daniel D. Sjoberg

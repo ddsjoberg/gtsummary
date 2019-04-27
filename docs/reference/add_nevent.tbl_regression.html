@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add number of events to a gtsummary regression table — add_nevent.tbl_regression • gtsummary</title>
+<title>Add number of events to a regression table — add_nevent.tbl_regression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,14 +30,14 @@
 
 
 
-<meta property="og:title" content="Add number of events to a gtsummary regression table — add_nevent.tbl_regression" />
+<meta property="og:title" content="Add number of events to a regression table — add_nevent.tbl_regression" />
 
 <meta property="og:description" content="This function adds a column of the number of events to tables created with
 tbl_regression or tbl_uvregression.  Supported
 model types include GLMs with binomial distribution family (e.g.
-glm, glmer, and
-geeglm) and Cox
-Proportion Hazards regression models (coxph)." />
+stats::glm, lme4::glmer, and
+geepack::geeglm) and Cox
+Proportion Hazards regression models (survival::coxph)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,7 +122,7 @@ Proportion Hazards regression models (coxph)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add number of events to a gtsummary regression table</h1>
+    <h1>Add number of events to a regression table</h1>
     
     <div class="hidden name"><code>add_nevent.tbl_regression.Rd</code></div>
     </div>
@@ -130,11 +130,11 @@ Proportion Hazards regression models (coxph)." />
     <div class="ref-description">
     
     <p>This function adds a column of the number of events to tables created with
-<code><a href='tbl_regression.html'>tbl_regression</a></code> or <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code>.  Supported
+<a href='tbl_regression.html'>tbl_regression</a> or <a href='tbl_uvregression.html'>tbl_uvregression</a>.  Supported
 model types include GLMs with binomial distribution family (e.g.
-<code><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></code>, <code><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>glmer</a></code>, and
-<code><a href='https://www.rdocumentation.org/packages/geepack/topics/geeglm'>geeglm</a></code>) and Cox
-Proportion Hazards regression models (<code><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></code>).</p>
+<a href='https://www.rdocumentation.org/packages/stats/topics/glm'>stats::glm</a>, <a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>lme4::glmer</a>, and
+<a href='https://www.rdocumentation.org/packages/geepack/topics/geeglm'>geepack::geeglm</a>) and Cox
+Proportion Hazards regression models (<a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>survival::coxph</a>).</p>
     
     </div>
 
@@ -159,7 +159,7 @@ Proportion Hazards regression models (<code><a href='https://www.rdocumentation.
     
     <p>The number of events is added to the internal <code>.$table_body</code> tibble,
 and not printed in the default output table (similar to N). The number
-of events is accessible via the <code><a href='inline_text.html'>inline_text()</a></code> function for printing in a report.</p>
+of events is accessible via the <a href='inline_text.html'>inline_text</a> function for printing in a report.</p>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
@@ -168,11 +168,10 @@ of events is accessible via the <code><a href='inline_text.html'>inline_text()</
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_regression: <code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
+    <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code>,
-  <code><a href='tbl_regression.html'>tbl_regression</a></code></p></div>
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

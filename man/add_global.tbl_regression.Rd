@@ -2,13 +2,13 @@
 % Please edit documentation in R/add_global.R
 \name{add_global.tbl_regression}
 \alias{add_global.tbl_regression}
-\title{Adds the global p-value for a categorical variables in \code{tbl_regression} objects}
+\title{Adds the global p-value for categorical variables}
 \usage{
 \method{add_global}{tbl_regression}(x, terms = NULL, keep = FALSE, ...)
 }
 \arguments{
 \item{x}{object with class \code{tbl_regression} from the
-\code{\link{tbl_regression}} function}
+\link{tbl_regression} function}
 
 \item{terms}{Character vector of terms for which to add global p-values.  Default
 is \code{NULL} which will add global p-values for all categorical variables}
@@ -19,11 +19,11 @@ levels of the categorical variable. Default is \code{FALSE}}
 \item{...}{arguments to be passed to \link[car:Anova]{car::Anova}}
 }
 \description{
-This function uses \link[car:Anova]{car::Anova} from the \code{car} package with
-\code{type = "III"} to calculate global p-values.
+This function uses \link[car:Anova]{car::Anova} with argument
+\code{type = "III"} to calculate global p-values for categorical variables.
 If a needed class of model is not supported by \link[car:Anova]{car::Anova},
-please put in an
-issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
+please create an
+\href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
 }
 \section{Example Output}{
 
@@ -32,18 +32,17 @@ issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
 
 \examples{
 tbl_lm_global_ex1 <-
-  lm(marker ~ stage + grade, trial) \%>\%
+  lm(marker ~ age + grade, trial) \%>\%
   tbl_regression() \%>\%
   add_global()
 }
 \seealso{
-Other tbl_regression: \code{\link{add_nevent.tbl_regression}},
+Other tbl_regression tools: \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_regression}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression}
+\concept{tbl_regression tools}

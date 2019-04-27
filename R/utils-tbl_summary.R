@@ -391,7 +391,7 @@ assign_var_label <- function(data, variable, var_label) {
 #' @param test list of statistical tests from meta data
 #' @return a table of p-values for each variable
 #' @keywords internal
-#' @author Emily Zabor
+#' @author Emily C. Zabor
 
 calculate_pvalue <- function(data, variable, by, test, type, group) {
   pmap_dbl(

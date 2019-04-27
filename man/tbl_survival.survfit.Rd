@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival.survfit}
 \alias{tbl_survival.survfit}
-\title{Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints}
+\title{Creates table of survival probabilities}
 \usage{
 \method{tbl_survival}{survfit}(x, times = NULL, probs = NULL,
   label = ifelse(is.null(probs), "{time}", "{prob*100}\%"),
@@ -18,23 +18,25 @@
 \item{probs}{numeric vector of probabilities with values in (0,1)
 specifying the survival quantiles to return}
 
-\item{label}{string defining the label shown for the time column.
-Default is \code{"{time}"}.  The input uses \code{\link[glue]{glue}} notation to
+\item{label}{string defining the label shown for the time or prob column.
+Default is \code{"{time}"} or \code{"{prob*100}\%"}.  The input uses \link[glue:glue]{glue::glue} notation to
 convert the string into a label.  A common label may be \code{"{time} Months"}, which
 would resolve to "6 Months" or "12 Months" depending on specified \code{times}.}
 
 \item{level_label}{used when survival results are stratified.
 It is a string defining the label shown.  The input uses
-\code{\link[glue]{glue}} notation to convert the string into a label.
+\link[glue:glue]{glue::glue} notation to convert the string into a label.
 The default is \code{"{level}, N = {n}"}.  Other information available to
 call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, and \code{'{strata}'}. See
 below for details.}
 
 \item{header_label}{string to be displayed as column header of the time column.
-Default is \code{md('**Time**')}}
+Default is \code{md('**Time**')} when \code{time} is specified, and
+\code{md('**Quantile**')} when \code{probs} is specified.}
 
 \item{header_estimate}{string to be displayed as column header of the Kaplan-Meier
-estimate.  Default is \code{md('**Probability**')}}
+estimate.  Default is \code{md('**Probability**')} when \code{time} is specified, and
+\code{md('**Time**')} when \code{probs} is specified.}
 
 \item{failure}{Calculate failure probabilities rather than survival.
 Default is \code{FALSE}.  Does NOT apply to survival quantile requests}
@@ -52,7 +54,7 @@ The default is \code{style_percent(x, symbol = TRUE)} for survival probabilities
 Function takes a \code{survfit} object as an argument, and provides a tabulated and
 formatted summary of the results
 }
-\section{Specifying \code{level_label}}{
+\section{level_label argument}{
 
 The \code{level_label} is used to modify the stratum labels. The default is
 \code{level_label = "{level}, N = {n}"}. The quantities in the curly
@@ -60,10 +62,10 @@ brackets evaluate to stratum-specific values.  For example, in the trial
 data set, there is a column called \code{trt} with levels 'Drug' and 'Placebo'.
 In this example, {level} would evaluate to either 'Drug' or 'Placebo'
 depending on the stratum.  Other quantities available to print are:
-\enumerate{
+\itemize{
 \item \code{{level}} level of the stratification variable
-\item \code{{n}} number of observations in stratum
-\item \code{{n.event.tot}} total number of events observed during follow-up in stratum
+\item \code{{n}} number of observations, or number within stratum
+\item \code{{n.event.tot}} total number of events, or total within stratum
 \item \code{{strata}} raw stratum specification from \code{survfit} object
 }
 }
@@ -72,34 +74,34 @@ depending on the stratum.  Other quantities available to print are:
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_strata_ex1.png}{options: width=50\%}}
+\if{html}{\figure{tbl_strata_ex1.png}{options: width=40\%}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_nostrata_ex2.png}{options: width=50\%}}
+\if{html}{\figure{tbl_nostrata_ex2.png}{options: width=40\%}}
 }
 
 \examples{
 library(survival)
 fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 tbl_strata_ex1 <-
-  tbl_survival(
-    fit1,
-    times = c(12, 24),
-    label = "{time} Months"
-  )
+  tbl_survival(fit1,
+               times = c(12, 24),
+               label = "{time} Months")
 
 fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 tbl_nostrata_ex2 <-
-  tbl_survival(
-    fit2,
-    times = c(12, 24),
-    label = "{time} Months"
-  )
+  tbl_survival(fit2,
+               probs = c(0.1, 0.2),
+               header_estimate = md("**Months**"))
+
 }
 \seealso{
-\link[gt]{md}, \link[gt]{html}
+\link[gt:md]{gt::md}, \link[gt:html]{gt::html}
+
+Other tbl_survival tools: \code{\link{inline_text.tbl_survival}}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{tbl_survival tools}

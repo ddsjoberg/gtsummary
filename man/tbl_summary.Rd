@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_summary.R
 \name{tbl_summary}
 \alias{tbl_summary}
-\title{Creates a table of summary statistics}
+\title{Create a table of summary statistics}
 \usage{
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,
@@ -41,7 +41,7 @@ places to round continuous summary statistics. Names of the list can be any
 continuous variable in 'data', or \code{"..continuous"} to apply to all
 variables.  If not specified, \code{tbl_summary} does its best to guess an
 appropriate level to round statistics.  To round statistics to different
-levels, supply a vector rather than an interger.  For example, if the
+levels, supply a vector rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
 to 1 decimal place, and the SD to 2 use \code{digits = list(age = c(1, 2))}.}
 
@@ -141,16 +141,15 @@ tbl_summary_ex2 <-
 
 }
 \seealso{
-Other tbl_summary: \code{\link{add_comparison}},
+Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{add_n}}, \code{\link{add_overall}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
-  \code{\link{inline_text.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}}
+  \code{\link{inline_text.tbl_summary}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_summary}
+\concept{tbl_summary tools}

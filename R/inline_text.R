@@ -3,10 +3,8 @@
 #' @param x object created from a gtsummary function
 #' @param ... further arguments passed to or from other methods.
 #' @author Daniel D. Sjoberg
-#' @seealso \code{\link{inline_text.tbl_summary}},
-#' \code{\link{inline_text.tbl_regression}},
-#' \code{\link{inline_text.tbl_uvregression}},
-#' \code{\link{inline_text.tbl_survival}}
+#' @seealso [inline_text.tbl_summary], [inline_text.tbl_regression],
+#' [inline_text.tbl_uvregression], [inline_text.tbl_survival]
 #' @export
 inline_text <- function(x, ...) {
   UseMethod("inline_text")
@@ -17,19 +15,26 @@ inline_text <- function(x, ...) {
 #' Functions takes an object with class `tbl_summary`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document.  Detailed examples in the
-#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{`tbl_summary` vignette}
+#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #'
-#' @param x object created from  \link{tbl_summary}
+#' @param x object created from  [tbl_summary]
 #' @param variable variable name of statistic to present
 #' @param level level of the variable to display for categorical variables.
 #' Can also specify the 'Unknown' row.  Default is `NULL`
-#' @param column name column name to return from `x$table_body`.
+#' @param column column name to return from `x$table_body`.
 #' Can also pass the level of a by variable.
 #' @inheritParams tbl_regression
 #' @param ... not used
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @examples
+#' t1 <- tbl_summary(trial)
+#' t2 <- tbl_summary(trial, by = "trt") %>% add_comparison()
+#'
+#' inline_text(t1, variable = "age")
+#' inline_text(t2, variable = "grade", level = "I", column = "Drug")
+#' inline_text(t2, variable = "grade", column = "pvalue")
 
 
 inline_text.tbl_summary <-
@@ -114,13 +119,13 @@ inline_text.tbl_summary <-
 #' Functions takes an object with class `tbl_regression`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document.  Detailed examples in the
-#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{`tbl_regression` vignette}
+#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #'
-#' @param x object created from  \link{tbl_regression}
+#' @param x object created from  [tbl_regression]
 #' @param variable variable name of statistic to present
 #' @param level level of the variable to display for categorical variables.
 #' Default is `NULL`, returning the top row in the table for the variable.
-#' @param pattern statistics to return.  Uses \link[glue]{glue} formatting.
+#' @param pattern statistics to return.  Uses [glue::glue] formatting.
 #' Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
 #' `.$table_body` are available to print as well as the confidence level (conf.level)
 #' @param coef_fun function to style model coefficients.
@@ -129,8 +134,15 @@ inline_text.tbl_summary <-
 #' Default is `function(x) style_pvalue(x, prepend_p = TRUE)`
 #' @param ... not used
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @export
+#' @examples
+#' inline_text_ex1 <-
+#'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
+#'   tbl_regression(exponentiate = TRUE)
+#'
+#' inline_text(inline_text_ex1, variable = "age")
+#' inline_text(inline_text_ex1, variable = "grade", level = "III")
 
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
@@ -202,11 +214,24 @@ inline_text.tbl_regression <-
 #' Functions takes an object with class `tbl_uvregression`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document. Detailed examples in the
-#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{`tbl_regression` vignette}
+#' \href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #'
 #' @inherit inline_text.tbl_regression
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @export
+#' @examples
+#' inline_text_ex1 <-
+#'   trial %>%
+#'   dplyr::select(response, age, grade) %>%
+#'   tbl_uvregression(
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'     y = response,
+#'     exponentiate = TRUE
+#'   )
+#'
+#' inline_text(inline_text_ex1, variable = "age")
+#' inline_text(inline_text_ex1, variable = "grade", level = "III")
 
 inline_text.tbl_uvregression <- inline_text.tbl_regression
 
@@ -217,28 +242,24 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' location of the statistic to report and return the statistic for reporting
 #' inline in an R markdown document.
 #'
-#' @param x object created from  \link{tbl_survival}
+#' @param x object created from  [tbl_survival]
 #' @param strata if `tbl_survival` estimates are stratified, level of the stratum
 #' report. Default is `NULL` when `tbl_survival` have no specified strata.
 #' @param time time for which to return survival probability.
 #' @param prob probability for which to return survival time.
-#' @param pattern statistics to return.  Uses \link[glue]{glue} formatting.
+#' @param pattern statistics to return.  Uses [glue::glue] formatting.
 #' Default is \code{'{surv} ({conf.level.100}\% {lower}, {upper})'}.  All columns from
 #' `.$table_body` are available to print as well as the confidence level (conf.level)
 #' @param ... not used
 #' @author Karissa Whiting
-#' @family tbl_survival
+#' @family tbl_survival tools
 #' @export
 #' @examples
 #' library(survival)
 #' survfit(Surv(ttdeath, death) ~ trt, trial) %>%
-#'   tbl_survival(
-#'     times = c(12, 24)
-#'   ) %>%
-#'   inline_text(
-#'     strata = "Drug",
-#'     time = 12
-#'   )
+#'   tbl_survival(times = c(12, 24)) %>%
+#'   inline_text(strata = "Drug",
+#'               time = 12)
 
 
 inline_text.tbl_survival <-

@@ -2,7 +2,7 @@
 % Please edit documentation in R/style_sigfig.R
 \name{style_sigfig}
 \alias{style_sigfig}
-\title{Implement significant figure-like formatting}
+\title{Implement significant figure-like rounding}
 \usage{
 style_sigfig(x, digits = 2)
 }

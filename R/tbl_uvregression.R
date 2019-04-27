@@ -31,7 +31,7 @@
 #' @inheritParams tbl_regression
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @export
 #' @examples
 #' tbl_uv_ex1 <-

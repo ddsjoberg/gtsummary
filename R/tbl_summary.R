@@ -1,4 +1,4 @@
-#' Creates a table of summary statistics
+#' Create a table of summary statistics
 #'
 #' The `tbl_summary` function calculates descriptive statistics by groups for
 #' continuous, categorical, and dichotomous variables.  Review the
@@ -30,7 +30,7 @@
 #' continuous variable in 'data', or `"..continuous"` to apply to all
 #' variables.  If not specified, `tbl_summary` does its best to guess an
 #' appropriate level to round statistics.  To round statistics to different
-#' levels, supply a vector rather than an interger.  For example, if the
+#' levels, supply a vector rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list(age = c(1, 2))`.
 #' @param group Character vector of an ID or grouping variable.  Summary statistics
@@ -89,7 +89,7 @@
 #' will be displayed.  Otherwise, the value to display must be specified in
 #' the `value` argument, e.g. `value = list(varname = "level to show")`
 #' @export
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_summary_ex1 <-

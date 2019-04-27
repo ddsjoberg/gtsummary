@@ -32,9 +32,11 @@
 
 <meta property="og:title" content="Display regression model results in table — tbl_regression" />
 
-<meta property="og:description" content="This function uses broom::tidy from the broom or broom.mixed packages
-to perform the initial model formatting. Review the tbl_regression
-vignette
+<meta property="og:description" content="This function uses broom::tidy and
+broom.mixed::tidy
+to perform the initial model formatting. Subsequently, the results are formatted
+for display. Review the
+tbl_regression vignette
 for detailed examples." />
 <meta name="twitter:card" content="summary" />
 
@@ -127,9 +129,11 @@ for detailed examples." />
 
     <div class="ref-description">
     
-    <p>This function uses <code><a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a></code> from the <code>broom</code> or <code>broom.mixed</code> packages
-to perform the initial model formatting. Review the <code>tbl_regression</code>
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html'>vignette</a>
+    <p>This function uses <a href='https://broom.tidyverse.org/reference/brms_tidiers.html'>broom::tidy</a> and
+<a href='https://github.com/bbolker/broom.mixed'>broom.mixed::tidy</a>
+to perform the initial model formatting. Subsequently, the results are formatted
+for display. Review the
+<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html'>tbl_regression vignette</a>
 for detailed examples.</p>
     
     </div>
@@ -181,8 +185,8 @@ in the output.  Default is <code>FALSE</code></p></td>
     <tr>
       <th>coef_fun</th>
       <td><p>function to round and format beta coefficients.  Default
-is <code><a href='style_sigfig.html'>style_sigfig</a></code> when the coefficients are printed, and
-<code><a href='style_ratio.html'>style_ratio</a></code> when the coefficients have been exponentiated.</p></td>
+is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are printed, and
+<a href='style_ratio.html'>style_ratio</a> when the coefficients have been exponentiated.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
@@ -198,7 +202,7 @@ and return a string that is the rounded/formatted p-value (e.g.
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     
-    <p>The N reported in the <code><a href='tbl_uvregression.html'>tbl_uvregression()</a></code> output is the number of observations
+    <p>The N reported in the <code>tbl_regression()</code> output is the number of observations
 in the data frame <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame(x)</a></code>. Depending on the model input, this N
 may represent different quantities. In most cases, it is the number of people or
 units in your model.  Here are some common exceptions.</p><ol>
@@ -220,11 +224,11 @@ units in your model.  Here are some common exceptions.</p><ol>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_regression: <code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
+    <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
   <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code></p></div>
+  <code><a href='tbl_merge.html'>tbl_merge</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

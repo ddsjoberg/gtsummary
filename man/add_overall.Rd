@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_overall.R
 \name{add_overall}
 \alias{add_overall}
-\title{Adds a column with overall summary statistics}
+\title{Add column with overall summary statistics}
 \usage{
 add_overall(x, last = FALSE)
 }
@@ -28,16 +28,15 @@ tbl_overall_ex <-
   add_overall()
 }
 \seealso{
-Other tbl_summary: \code{\link{add_comparison}},
+Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{add_n}}, \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_summary}
+\concept{tbl_summary tools}

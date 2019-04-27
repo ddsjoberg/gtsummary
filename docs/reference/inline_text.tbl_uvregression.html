@@ -130,7 +130,7 @@ tbl_regression vignette" />
     <p>Functions takes an object with class <code>tbl_uvregression</code>, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document. Detailed examples in the
-<a href='https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html'><code>tbl_regression</code> vignette</a></p>
+<a href='https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html'>tbl_regression vignette</a></p>
     
     </div>
 
@@ -158,7 +158,7 @@ Default is <code>NULL</code>, returning the top row in the table for the variabl
     </tr>
     <tr>
       <th>pattern</th>
-      <td><p>statistics to return.  Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a> formatting.
+      <td><p>statistics to return.  Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting.
 Default is <code>"{coef} ({conf.level }% CI  {ll}, {ul}; {pvalue})"</code>.  All columns from
 <code>.$table_body</code> are available to print as well as the confidence level (conf.level)</p></td>
     </tr>
@@ -180,14 +180,25 @@ Default is <code>function(x) style_pvalue(x, prepend_p = TRUE)</code></p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_uvregression: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
+    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
   <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
   <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
-  <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>inline_text_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
+    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
+    <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
+    <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
+    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  )
+
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; 1.00 (95% CI 0.98, 1.02; p=0.7)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"III"</span>)</div><div class='output co'>#&gt; 0.76 (95% CI 0.38, 1.49; p=0.4)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -195,7 +206,9 @@ Default is <code>function(x) style_pvalue(x, prepend_p = TRUE)</code></p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

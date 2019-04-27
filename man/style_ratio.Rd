@@ -2,7 +2,7 @@
 % Please edit documentation in R/style_ratio.R
 \name{style_ratio}
 \alias{style_ratio}
-\title{Implement significant figure-like formatting for ratios}
+\title{Implement significant figure-like rounding for ratios}
 \usage{
 style_ratio(x, digits = 2)
 }
@@ -19,7 +19,7 @@ want the rounding to be similar on each side of the number 1.  For example,
 if we report an odds ratio of 0.95 with a confidence interval of 0.70 to 1.24,
 we would want to round to two decimal places for all values. In other words,
 2 significant figures for numbers less than 1 and 3 significant figures 1 and
-larger. \code{style_ratio()} performs significant figure-like formatting in this manner.
+larger. \code{style_ratio()} performs significant figure-like rounding in this manner.
 }
 \examples{
 c(0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,

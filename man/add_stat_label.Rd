@@ -2,16 +2,16 @@
 % Please edit documentation in R/add_stat_label.R
 \name{add_stat_label}
 \alias{add_stat_label}
-\title{Adds a column showing a label for the summary statistics shown in each row}
+\title{Add statistic labels column}
 \usage{
 add_stat_label(x)
 }
 \arguments{
-\item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
+\item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 }
 \description{
 Rather than simply printing the summary statistics, with the use of \code{add_stat_label()},
-a column labeling the summary statistics is added.
+a column labeling the summary statistics is added
 }
 \section{Example Output}{
 
@@ -20,22 +20,21 @@ a column labeling the summary statistics is added.
 
 \examples{
 tbl_stat_ex <-
-  mtcars \%>\%
-  dplyr::select(mpg, cyl, hp) \%>\%
+  trial \%>\%
+  dplyr::select(trt, age, grade, response) \%>\%
   tbl_summary() \%>\%
   add_stat_label()
 }
 \seealso{
-Other tbl_summary: \code{\link{add_comparison}},
+Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{add_n}}, \code{\link{add_overall}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_summary}
+\concept{tbl_summary tools}

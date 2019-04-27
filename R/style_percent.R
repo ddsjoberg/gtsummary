@@ -1,4 +1,4 @@
-#' Formats percentages to be displayed in tables or text of report.
+#' Style percentages to be displayed in tables or text
 #'
 #' @param x numeric vector of percentages
 #' @param symbol logical indicator to include percent symbol in output.  Default is FALSE.
