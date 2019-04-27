@@ -160,7 +160,8 @@ Default is <code>NULL</code>, returning the top row in the table for the variabl
       <th>pattern</th>
       <td><p>statistics to return.  Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting.
 Default is <code>"{coef} ({conf.level }% CI  {ll}, {ul}; {pvalue})"</code>.  All columns from
-<code>.$table_body</code> are available to print as well as the confidence level (conf.level)</p></td>
+<code>x$table_body</code> are available to print as well as the confidence level (conf.level).
+Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting. See below for details.</p></td>
     </tr>
     <tr>
       <th>coef_fun</th>
@@ -177,6 +178,20 @@ Default is <code>function(x) style_pvalue(x, prepend_p = TRUE)</code></p></td>
       <td><p>not used</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="pattern-argument"><a class="anchor" href="#pattern-argument"></a>pattern argument</h2>
+
+    
+    <p>The following items are available to print.  Use <code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print(x$table_body)</a></code> to
+print the table the estimates are extracted from.</p><ul>
+<li><p><code>{coef}</code> coeficient estiamte formatted with 'coef_fun'</p></li>
+<li><p><code>{ll}</code> lower limit of confidence interval formmated with 'coef_fun'</p></li>
+<li><p><code>{ul}</code> upper limit of confidence interval formmated with 'coef_fun'</p></li>
+<li><p><code>{ci}</code> confidence interval formmated with x$estimate_fun</p></li>
+<li><p><code>{pvalue}</code> p-value formatted with 'pvalue_fun'</p></li>
+<li><p><code>{N}</code> number of observations in model</p></li>
+<li><p><code>{label}</code> variable/variable level label</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -198,6 +213,8 @@ Default is <code>function(x) style_pvalue(x, prepend_p = TRUE)</code></p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#pattern-argument">pattern argument</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
