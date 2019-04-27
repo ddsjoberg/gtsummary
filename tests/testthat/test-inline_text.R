@@ -44,11 +44,11 @@ test_that("inline_text.tbl_summary: with by", {
     NA
   )
   expect_error(
-    inline_text(test_inline2b, variable = "stage", column = "pvalue"),
+    inline_text(test_inline2b, variable = "stage", column = "p.value"),
     NA
   )
   expect_warning(
-    inline_text(test_inline2b, variable = "stage", column = "pvalue"),
+    inline_text(test_inline2b, variable = "stage", column = "p.value"),
     NA
   )
 })

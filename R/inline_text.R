@@ -34,7 +34,7 @@ inline_text <- function(x, ...) {
 #'
 #' inline_text(t1, variable = "age")
 #' inline_text(t2, variable = "grade", level = "I", column = "Drug")
-#' inline_text(t2, variable = "grade", column = "pvalue")
+#' inline_text(t2, variable = "grade", column = "p.value")
 
 
 inline_text.tbl_summary <-
@@ -106,7 +106,7 @@ inline_text.tbl_summary <-
     result <- result %>% pull(column)
 
     # return statistic ---------------------------------------------------------
-    if (column %in% c("pvalue", "qvalue")) {
+    if (column %in% c("p.value", "q.value")) {
       return(pvalue_fun(result))
     }
 
@@ -126,7 +126,7 @@ inline_text.tbl_summary <-
 #' @param level level of the variable to display for categorical variables.
 #' Default is `NULL`, returning the top row in the table for the variable.
 #' @param pattern statistics to return.  Uses [glue::glue] formatting.
-#' Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
+#' Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {p.value})"}.  All columns from
 #' `x$table_body` are available to print as well as the confidence level (conf.level).
 #' Uses [glue::glue] formatting. See below for details.
 #' @param coef_fun function to style model coefficients.
@@ -142,7 +142,7 @@ inline_text.tbl_summary <-
 #'   \item `{ll}` lower limit of confidence interval formmated with 'coef_fun'
 #'   \item `{ul}` upper limit of confidence interval formmated with 'coef_fun'
 #'   \item `{ci}` confidence interval formmated with x$estimate_fun
-#'   \item `{pvalue}` p-value formatted with 'pvalue_fun'
+#'   \item `{p.value}` p-value formatted with 'pvalue_fun'
 #'   \item `{N}` number of observations in model
 #'   \item `{label}` variable/variable level label
 #' }
@@ -160,7 +160,7 @@ inline_text.tbl_summary <-
 
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
-             pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {pvalue})",
+             pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {p.value})",
              coef_fun = x$inputs$coef_fun,
              pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # table_body preformatting -------------------------------------------------
@@ -208,7 +208,7 @@ inline_text.tbl_regression <-
     }
 
     # calculating statistic ----------------------------------------------------
-    pvalue_cols <- names(result) %>% intersect(c("pvalue", "qvalue"))
+    pvalue_cols <- names(result) %>% intersect(c("p.value", "q.value"))
     result <-
       result %>%
       mutate_at(vars(one_of(c("coef", "ll", "ul"))), coef_fun) %>%

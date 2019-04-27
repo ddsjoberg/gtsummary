@@ -5,7 +5,7 @@
 \title{Report statistics from regression summary tables inline}
 \usage{
 \method{inline_text}{tbl_regression}(x, variable, level = NULL,
-  pattern = "{coef} ({conf.level*100}\% CI {ll}, {ul}; {pvalue})",
+  pattern = "{coef} ({conf.level*100}\% CI {ll}, {ul}; {p.value})",
   coef_fun = x$inputs$coef_fun, pvalue_fun = function(x)
   style_pvalue(x, prepend_p = TRUE), ...)
 }
@@ -18,7 +18,7 @@
 Default is \code{NULL}, returning the top row in the table for the variable.}
 
 \item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
-Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
+Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {p.value})"}.  All columns from
 \code{x$table_body} are available to print as well as the confidence level (conf.level).
 Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
 
@@ -45,7 +45,7 @@ print the table the estimates are extracted from.
 \item \code{{ll}} lower limit of confidence interval formmated with 'coef_fun'
 \item \code{{ul}} upper limit of confidence interval formmated with 'coef_fun'
 \item \code{{ci}} confidence interval formmated with x$estimate_fun
-\item \code{{pvalue}} p-value formatted with 'pvalue_fun'
+\item \code{{p.value}} p-value formatted with 'pvalue_fun'
 \item \code{{N}} number of observations in model
 \item \code{{label}} variable/variable level label
 }

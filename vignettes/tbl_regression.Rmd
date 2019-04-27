@@ -155,20 +155,20 @@ Here's how the line will appear in your report.
 
 > `r inline_text(tbl_m1, variable = "age")`
 
-It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows the `glue::glue()` format with referenced R objects being inserted between curly brackets.  You have access to following fields within the `pattern` argument.  The default is `pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {pvalue})"`
+It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows the `glue::glue()` format with referenced R objects being inserted between curly brackets.  You have access to following fields within the `pattern` argument.  The default is `pattern = "{coef} ({conf.level*100}% CI {ll}, {ul}; {p.value})"`
 
     {coef}       primary estimate (e.g. model coefficient, odds ratio)
     {ll}         lower limit of confidence interval
     {ul}         upper limit of confidence interval
-    {pvalue}     p-value
+    {p.value}    p-value
     {conf.level} confidence level of interval
 
 The `inline_text` function has has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`coef_fun`).
 
 > Age was not significantly associated with tumor response `` `r
-inline_text(tbl_m1, variable = "age", pattern = "(OR {coef}; 95% CI {ll}, {ul}; {pvalue})")` ``.
+inline_text(tbl_m1, variable = "age", pattern = "(OR {coef}; 95% CI {ll}, {ul}; {p.value})")` ``.
 
-> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = "age", pattern = "(OR {coef}; 95% CI {ll}, {ul}; {pvalue})")`.
+> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = "age", pattern = "(OR {coef}; 95% CI {ll}, {ul}; {p.value})")`.
 
 If you're printing results from a categorical variable, include `level` argument, e.g. `inline_text(tbl_m1, variable = "stage", level = "T3")` resolves to "`r inline_text(tbl_m1, variable = "stage", level = "T3")`".  
 

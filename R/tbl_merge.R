@@ -95,14 +95,14 @@ tbl_merge <- function(tbls,
 
 
   # creating column headers and footnotes --------------------------------------
-  # creating column header for base variable (label, coef, ll, and pvalue)
+  # creating column header for base variable (label, coef, ll, and p.value)
   cols_label_base_vars <-
     imap_chr(
       tbl_inputs(tbls),
       ~glue(
         "coef_{.y} = md('**{coef_header(.x$x, .x$exponentiate)}**'), ",
         "ll_{.y} = md('**{.x$conf.level*100}% CI**'), ",
-        "pvalue_{.y} = md('**p-value**')"
+        "p.value_{.y} = md('**p-value**')"
       )
     ) %>%
    glue_collapse(sep = ", ") %>%
@@ -223,7 +223,7 @@ gt_tbl_merge <- quote(list(
   fmt_pvalue =
     map(
       1:tbls_length,
-      ~glue("fmt(columns = vars(pvalue_{.x}), rows = !is.na(pvalue_{.x}), fns = x$pvalue_funs[[{.x}]])")
+      ~glue("fmt(columns = vars(p.value_{.x}), rows = !is.na(p.value_{.x}), fns = x$pvalue_funs[[{.x}]])")
     ) %>%
    glue_collapse(" %>% "),
 
@@ -274,7 +274,7 @@ gt_tbl_merge <- quote(list(
     imap(
       function(x, y) {
         if(is.null(x)) return(NULL)
-       glue("fmt(columns = vars(qvalue_{y}), rows = !is.na(qvalue_{y}), fns = x$qvalue_funs[[{y}]])")
+       glue("fmt(columns = vars(q.value_{y}), rows = !is.na(q.value_{y}), fns = x$qvalue_funs[[{y}]])")
       }
     ) %>%
     compact() %>%
@@ -287,7 +287,7 @@ gt_tbl_merge <- quote(list(
     imap(
       function(x, y) {
         if(is.null(x)) return(NULL)
-       glue("cols_label(qvalue_{y} = md('**q-value**'))")
+       glue("cols_label(q.value_{y} = md('**q-value**'))")
       }
     ) %>%
     compact() %>%
@@ -299,8 +299,8 @@ gt_tbl_merge <- quote(list(
     map(pluck("qvalue_method")) %>%
     imap_dfr(
       function(x, y) {
-        if(is.null(x)) return(tibble(i = y, method = NA_character_, var = paste0("qvalue_", i)))
-        return(tibble(i = y, method = x, var = paste0("qvalue_", i)))
+        if(is.null(x)) return(tibble(i = y, method = NA_character_, var = paste0("q.value_", i)))
+        return(tibble(i = y, method = x, var = paste0("q.value_", i)))
       }
     ) %>%
     stats::na.omit() %>%

@@ -209,13 +209,13 @@ gt_tbl_uvregression <- quote(list(
     "N = md('**N**'), ",
     "coef = md('**{coef_header(model_obj_list[[1]], exponentiate)}**'), ",
     "ll = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
-    "pvalue = md('**p-value**')",
+    "p.value = md('**p-value**')",
     ")"
   ),
 
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)" %>%
+    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
     glue(),
 
   # ceof and confidence interval formatting
