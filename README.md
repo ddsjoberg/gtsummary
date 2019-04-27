@@ -73,6 +73,6 @@ Thank you to all contributors\!
 [@karissawhiting](https://github.com/karissawhiting), and
 [@michaelcurry1123](https://github.com/michaelcurry1123)
 
-Please note that the ‘gtsummary’ project is released with a [Contributor
+Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms.
