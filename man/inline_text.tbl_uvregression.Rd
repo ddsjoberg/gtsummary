@@ -19,7 +19,7 @@ Default is \code{NULL}, returning the top row in the table for the variable.}
 
 \item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
 Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
-\code{.$table_body} are available to print as well as the confidence level (conf.level)}
+\code{x$table_body} are available to print as well as the confidence level (conf.level)}
 
 \item{coef_fun}{function to style model coefficients.
 Columns 'coef', 'll', and 'ul' are formatted. Default is \code{x$inputs$coef_fun}}
