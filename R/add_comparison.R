@@ -16,9 +16,9 @@
 #' For "lme4" to be used "group" must also be specified in the [tbl_summary] call.
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @export
-#' @author Daniel D. Sjoberg, Emily Zabor
+#' @author Emily C. Zabor, Daniel D. Sjoberg
 #' @examples
 #' add_comp_ex1 <-
 #'   trial %>%

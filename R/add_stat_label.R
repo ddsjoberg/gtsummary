@@ -1,16 +1,16 @@
-#' Adds a column showing a label for the summary statistics shown in each row
+#' Add statistic labels column
 #'
 #' Rather than simply printing the summary statistics, with the use of `add_stat_label()`,
-#' a column labeling the summary statistics is added.
+#' a column labeling the summary statistics is added
 #'
-#' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
-#' @family tbl_summary
+#' @param x object with class `tbl_summary` from the [tbl_summary] function
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
 #' tbl_stat_ex <-
-#'   mtcars %>%
-#'   dplyr::select(mpg, cyl, hp) %>%
+#'   trial %>%
+#'   dplyr::select(trt, age, grade, response) %>%
 #'   tbl_summary() %>%
 #'   add_stat_label()
 #' @section Example Output:

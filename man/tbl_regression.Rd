@@ -31,8 +31,8 @@ the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")
 in the output.  Default is \code{FALSE}}
 
 \item{coef_fun}{function to round and format beta coefficients.  Default
-is \code{\link{style_sigfig}} when the coefficients are printed, and
-\code{\link{style_ratio}} when the coefficients have been exponentiated.}
+is \link{style_sigfig} when the coefficients are printed, and
+\link{style_ratio} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
@@ -42,14 +42,16 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 }
 \description{
-This function uses \code{broom::tidy} from the \code{broom} or \code{broom.mixed} packages
-to perform the initial model formatting. Review the \code{tbl_regression}
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
+This function uses \href{https://broom.tidyverse.org/reference/brms_tidiers.html}{broom::tidy} and
+\href{https://github.com/bbolker/broom.mixed}{broom.mixed::tidy}
+to perform the initial model formatting. Subsequently, the results are formatted
+for display. Review the
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 for detailed examples.
 }
 \section{Note}{
 
-The N reported in the \code{tbl_uvregression()} output is the number of observations
+The N reported in the \code{tbl_regression()} output is the number of observations
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
 may represent different quantities. In most cases, it is the number of people or
 units in your model.  Here are some common exceptions.
@@ -94,13 +96,13 @@ tbl_regression_ex3 <-
 
 }
 \seealso{
-Other tbl_regression: \code{\link{add_global.tbl_regression}},
+Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}}
+  \code{\link{tbl_merge}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression}
+\concept{tbl_regression tools}

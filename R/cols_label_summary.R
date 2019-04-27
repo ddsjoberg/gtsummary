@@ -8,15 +8,15 @@
 #' headers: `n`, `N`, `p`, and `level`.  `n` is the number of observations in
 #' each by group. `N` is the total number of observations. `p` is the percent
 #' in a by group. `level` is the by variable level.
-#' Syntax follows the \code{glue::\link{glue}} function,
+#' Syntax follows the [glue::glue] function,
 #' e.g. `stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")`.
 #' Must specify `by` along with `stat_by`.
 #' @param stat_overall string vector including text to appear above the overall summary
 #' statistics. `N`, the total number of observations, is available for use in the
 #' description. e.g. `stat_overall = md("**All Patients**, N = {N}")`
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
-#' @seealso \link[gt]{md}, \link[gt]{html}
+#' @seealso [gt::md], [gt::html]
 #' @examples
 #' tbl_col_ex1 <-
 #'   trial %>%
@@ -34,7 +34,7 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_col_ex1.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_col_ex1.png}{options: width=31\%}}
 #'
 #' \if{html}{Example 2}
 #'

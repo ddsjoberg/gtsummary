@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival}
 \alias{tbl_survival}
-\title{Tabulate univariate statistics for time-to-event endpoints}
+\title{Creates table of univariate statistics for time-to-event endpoints}
 \usage{
 tbl_survival(x, ...)
 }
@@ -12,8 +12,8 @@ tbl_survival(x, ...)
 \item{...}{further arguments passed to other methods}
 }
 \description{
-Tabulate univariate statistics for time-to-event endpoints
+Creates table of univariate statistics for time-to-event endpoints
 }
 \seealso{
-\code{\link{tbl_survival.survfit}}
+\link{tbl_survival.survfit}
 }

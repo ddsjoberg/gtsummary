@@ -2,7 +2,7 @@
 % Please edit documentation in R/gtsummary_logo.R
 \name{gtsummary_logo}
 \alias{gtsummary_logo}
-\title{The biostatR logo, using ASCII or Unicode characters}
+\title{The gtsummary logo, using ASCII or Unicode characters}
 \usage{
 gtsummary_logo(unicode = l10n_info()$`UTF-8`)
 }

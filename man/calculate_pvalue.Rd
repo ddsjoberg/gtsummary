@@ -26,6 +26,6 @@ a table of p-values for each variable
 This function takes in the meta-data and calculates an appropriate p-value
 }
 \author{
-Emily Zabor
+Emily C. Zabor
 }
 \keyword{internal}

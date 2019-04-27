@@ -1,4 +1,4 @@
-#' Implement significant figure-like formatting
+#' Implement significant figure-like rounding
 #'
 #' Converts a numeric argument into a string that has been rounded to a
 #' significant figure-like number. Scientific notation output

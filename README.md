@@ -11,15 +11,14 @@ status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)
 
 ## gtsummary
 
-A collection of functions commonly used in the work of the
-biostatisticians. The goal of gtsummary is to make reporting of tabular
-analytic results simple, beautiful, and
-reproducible.  
-<!-- Update the list of contributors from the git shell `git shortlog -s -n` -->
+The goal of gtsummary is to make reporting of tabular analytic results
+simple, beautiful, and reproducible. The package’s focus is on quickly
+summarizing a data set, and formatting the results of regression models
+(with help from the {broom} package).
 
 ## Installation
 
-You can install the production version of gtsummary with:
+You can install the production version of {gtsummary} with:
 
 ``` r
 install.packages("remotes")
@@ -34,12 +33,9 @@ remotes::install_github("ddsjoberg/gtsummary", ref = "dev")
 
 ## Examples
 
-The vignettes/tutorials for the primary gtsummary functions have
+The vignettes/tutorials for the primary {gtsummary} functions have
 detailed examples and can be found at
 [danieldsjoberg.com/gtsummary](http://www.danieldsjoberg.com/gtsummary).
-Each vignette is an Rmarkdown file (\*.Rmd) and a copy of the files can
-be found here:
-<https://github.com/ddsjoberg/gtsummary/tree/master/vignettes>.
 
 ### Summary Table
 
@@ -73,6 +69,6 @@ Thank you to all contributors\!
 [@karissawhiting](https://github.com/karissawhiting), and
 [@michaelcurry1123](https://github.com/michaelcurry1123)
 
-Please note that the ‘gtsummary’ project is released with a [Contributor
+Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_n.R
 \name{add_n}
 \alias{add_n}
-\title{Adds a column with N (or N missing) for each variable}
+\title{Add column with N}
 \usage{
 add_n(x, missing = FALSE, last = FALSE)
 }
@@ -15,8 +15,8 @@ or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 \item{last}{logical indicator to include overall  column last. Default is \code{FALSE}}
 }
 \description{
-The function assumes the DEFAULT header are in use. Only modify header rows
-after all columns has been added.
+For each variable in the table, the \code{add_n} function adds a column with the
+number of non-missing (or missing) observations
 }
 \section{Example Output}{
 
@@ -30,17 +30,16 @@ tbl_n_ex <-
   add_n()
 }
 \seealso{
-Other tbl_summary: \code{\link{add_comparison}},
+Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{add_overall}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_summary}
+\concept{tbl_summary tools}

@@ -1,10 +1,10 @@
 #' Adds the global p-value for a categorical variables
 #'
-#' This function uses the [car::Anova] function with
-#' `type = "III"` to calculate global p-values.
+#' This function uses [car::Anova] with argument
+#' `type = "III"` to calculate global p-values for categorical variables.
 #' If a needed class of model is not supported by
-#' [car::Anova], please put in an
-#' \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
+#' [car::Anova], please create an
+#' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #' Output from `tbl_regression` and `tbl_uvregression` objects supported.
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object
@@ -22,26 +22,26 @@ add_global <- function(x, ...) {
   UseMethod("add_global")
 }
 
-#' Adds the global p-value for a categorical variables in `tbl_regression` objects
+#' Adds the global p-value for categorical variables
 #'
-#' This function uses [car::Anova] from the `car` package with
-#' `type = "III"` to calculate global p-values.
+#' This function uses [car::Anova] with argument
+#' `type = "III"` to calculate global p-values for categorical variables.
 #' If a needed class of model is not supported by [car::Anova],
-#' please put in an
-#' issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
+#' please create an
+#' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
 #' @param x object with class `tbl_regression` from the
-#' \code{\link{tbl_regression}} function
+#' [tbl_regression] function
 #' @param terms Character vector of terms for which to add global p-values.  Default
 #' is `NULL` which will add global p-values for all categorical variables
 #' @param keep logical argument whether to keep the individual p-values for the
 #' levels of the categorical variable. Default is `FALSE`
 #' @param ... arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @examples
 #' tbl_lm_global_ex1 <-
-#'   lm(marker ~ stage + grade, trial) %>%
+#'   lm(marker ~ age + grade, trial) %>%
 #'   tbl_regression() %>%
 #'   add_global()
 #' @export
@@ -113,19 +113,19 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
   return(x)
 }
 
-#' Adds the global p-value for a categorical variables in `tbl_uvregression` objects
+#' Adds the global p-value for categorical variables
 #'
-#' This function uses [car::Anova] from the `car` package with
-#' `type = "III"` to calculate global p-values.
+#' This function uses [car::Anova] with argument
+#' `type = "III"` to calculate global p-values for categorical variables.
 #' If a needed class of model is not supported by [car::Anova],
-#' please put in an
-#' issue at https://github.com/ddsjoberg/gtsummary/issues to request support.
+#' please create an
+#' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
 #' @param x object with class `tbl_uvregression` from the
-#' \code{\link{tbl_uvregression}} function
+#' [tbl_uvregression] function
 #' @param ... arguments to be passed to [car::Anova].
 #' @author Daniel D. Sjoberg
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @examples
 #' tbl_uv_global_ex2 <-
 #'  trial %>%

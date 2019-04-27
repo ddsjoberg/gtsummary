@@ -1,4 +1,4 @@
-#' The biostatR logo, using ASCII or Unicode characters
+#' The gtsummary logo, using ASCII or Unicode characters
 #'
 #' Use [crayon::strip_style()] to get rid of the colors.
 #'
