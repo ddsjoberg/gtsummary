@@ -46,10 +46,6 @@ test_that("expect error with no global p value in tbl_uvregression", {
 
   expect_error(
     add_q(uni_reg),
-    glue(
-      "You need global p-values first. Use the function add_global() after",
-      "tbl_uvregression() and before add_q()"
-    ),
-    fixed = TRUE
+    "You need global p-values first*",
   )
 })

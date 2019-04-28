@@ -69,7 +69,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
                              exponentiate = FALSE, label = NULL,
                              hide_n = FALSE,
                              show_yesno = NULL, conf.level = 0.95,
-                             coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
+                             estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
                              pvalue_fun = style_pvalue) {
   # bare to string -------------------------------------------------------------
   # updated method and y inputs to be bare, and converting them to strings
@@ -199,7 +199,7 @@ gt_tbl_uvregression <- quote(list(
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')" %>%
+    "fmt_missing(columns = vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
     glue(),
 
   # column headers
@@ -207,25 +207,25 @@ gt_tbl_uvregression <- quote(list(
     "cols_label(",
     "label = md('**Characteristic**'), ",
     "N = md('**N**'), ",
-    "coef = md('**{coef_header(model_obj_list[[1]], exponentiate)}**'), ",
-    "ll = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
-    "pvalue = md('**p-value**')",
+    "estimate = md('**{estimate_header(model_obj_list[[1]], exponentiate)}**'), ",
+    "conf.low = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
+    "p.value = md('**p-value**')",
     ")"
   ),
 
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)" %>%
+    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
     glue(),
 
   # ceof and confidence interval formatting
-  fmt_coef =
-    "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)" %>%
+  fmt_estimate =
+    "fmt(columns = vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
     glue(),
 
-  # combining ll and ul to print confidence interval
+  # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
-    "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')" %>%
+    "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
     glue::as_glue(),
 
   # indenting levels and missing rows
