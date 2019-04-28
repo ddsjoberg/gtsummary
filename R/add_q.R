@@ -46,7 +46,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   x$meta_data <-
     x$meta_data %>%
     mutate(
-      qvalue = stats::p.adjust(.data$pvalue, method = method)
+      q.value = stats::p.adjust(.data$p.value, method = method)
     )
 
   # adding q value to summary table
@@ -54,7 +54,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
     x$table_body %>%
     left_join(
       x$meta_data %>%
-        select(c("variable", "qvalue")) %>%
+        select(c("variable", "q.value")) %>%
         mutate(row_type = "label"),
       by = c("variable", "row_type")
     )
@@ -74,16 +74,16 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt_qvalue"]] <-
-    "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)"
+    "fmt(columns = vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)"
   # column headers
   x[["gt_calls"]][["cols_label_qvalue"]] <-
-    "cols_label(qvalue = md('**q-value**'))"
+    "cols_label(q.value = md('**q-value**'))"
   # column headers abbreviations footnote
   x[["gt_calls"]][["footnote_q_method"]] = glue(
     "tab_footnote(",
     "  footnote = '{footnote_text}',",
     "  locations = cells_column_labels(",
-    "    columns = vars(qvalue))",
+    "    columns = vars(q.value))",
     ")"
   )
 
@@ -124,9 +124,9 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
 
   # This adjusts p-values for multiple testing but only when the global approach is used.
   # Default method is fdr.
-  if (!("pvalue_global" %in% colnames(x$meta_data))) {
+  if (!("p.value_global" %in% colnames(x$meta_data))) {
     stop(glue(
-      "You need global p-values first. Use the function add_global() after",
+      "You need global p-values first. Use the function add_global() after ",
       "tbl_uvregression() and before add_q()"
     ))
   }
@@ -135,7 +135,7 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   x$meta_data <-
     x$meta_data %>%
     mutate(
-      qvalue_global = stats::p.adjust(.data$pvalue_global, method = method)
+      q.value_global = stats::p.adjust(.data$p.value_global, method = method)
     )
 
   # adding q value to display table
@@ -143,8 +143,8 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     x$table_body %>%
     left_join(
       x$meta_data %>%
-        select(c("variable", "qvalue_global")) %>%
-        set_names(c("variable", "qvalue")) %>%
+        select(c("variable", "q.value_global")) %>%
+        set_names(c("variable", "q.value")) %>%
         mutate(row_type = "label"),
       by = c("variable", "row_type")
     )
@@ -163,18 +163,18 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt_qvalue"]] <-
-    "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)" %>%
+    "fmt(columns = vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)" %>%
     glue()
   # column headers
   x[["gt_calls"]][["cols_label_qvalue"]] <-
-    "cols_label(qvalue = md('**q-value**'))"%>%
+    "cols_label(q.value = md('**q-value**'))"%>%
     glue()
   # column headers abbreviations footnote
   x[["gt_calls"]][["footnote_q_method"]] = glue(
     "tab_footnote(",
     "footnote = '{footnote_text}',",
     "locations = cells_column_labels(",
-    "columns = vars(qvalue))",
+    "columns = vars(q.value))",
     ")"
   )
 

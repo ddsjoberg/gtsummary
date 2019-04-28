@@ -108,7 +108,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   else header_estimate <- deparse(substitute(md('**Time**')))
 
   # returning results ---------------------------------------------------------
-  # first assigning a function to formating estimates and upper and lower
+  # first assigning a function to formating estimates and conf.high and conf.low
   if(is.null(estimate_fun)) {
     if (!is.null(times)) estimate_fun <- partial(style_percent, symbol = TRUE)
     else if (!is.null(probs)) estimate_fun <- partial(style_sigfig, digits = 3)
@@ -159,18 +159,18 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     mutate(
       label = glue(label),
       ci = ifelse(
-        is.na(.data$lower) & is.na(.data$upper),
+        is.na(.data$conf.low) & is.na(.data$conf.high),
         NA_character_,
-        glue("{coalesce(estimate_fun(lower), missing)}, ",
-             "{coalesce(estimate_fun(upper), missing)}")
+        glue("{coalesce(estimate_fun(conf.low), missing)}, ",
+             "{coalesce(estimate_fun(conf.high), missing)}")
       )
     ) %>%
-    select(c("label", "estimate", "lower", "upper", "ci"), everything())
+    select(c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
   table_body <- table_long
 
   cols_hide_list <-
     c("prob", "time", "strata", "n.risk", "n.event", "n",
-      "n.event.tot", "variable", "level", "lower", "upper") %>%
+      "n.event.tot", "variable", "level", "conf.low", "conf.high") %>%
     intersect(names(table_body)) %>%
     paste(collapse = ", ")
 
@@ -199,7 +199,9 @@ surv_time <- function(x, times, failure) {
     {.[names(.) %in% c("strata", "time", "surv",
                        "lower", "upper", "n.risk", "n.event")]} %>%
     as_tibble() %>%
-    rename(estimate = .data$surv)
+    rename(estimate = .data$surv,
+           conf.low = .data$lower,
+           conf.high = .data$upper)
 
   # converting strata to character
   if ("strata" %in% names(table_body)) {
@@ -212,10 +214,10 @@ surv_time <- function(x, times, failure) {
   if (failure == TRUE) {
     table_body <-
       table_body %>%
-      mutate_at(vars(.data$estimate, .data$lower, .data$upper), ~ 1 - .) %>%
+      mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high), ~ 1 - .) %>%
       rename(
-        lower = .data$upper,
-        upper = .data$lower
+        conf.low = .data$conf.high,
+        conf.high = .data$conf.low
       )
   }
 
@@ -268,7 +270,9 @@ surv_quantile <- function(x, probs) {
   }
 
   table_body %>%
-    mutate(prob = as.numeric(.data$prob) / 100)
+    mutate(prob = as.numeric(.data$prob) / 100) %>%
+    rename(conf.low = .data$lower,
+           conf.high = .data$upper)
 }
 
 
@@ -290,7 +294,7 @@ tbl_survival_gt_calls <- quote(list(
   fmt_missing =
     glue("fmt_missing(columns = vars(estimate, ci), rows = NULL, missing_text = '---')"),
   # cols_merge_ci =
-  #   "cols_merge(col_1 = vars(lower), col_2 = vars(upper), pattern = '{1}, {2}')" %>%
+  #   "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
   #   as_glue(),
   # adding CI footnote
   footnote_abbreviation =
