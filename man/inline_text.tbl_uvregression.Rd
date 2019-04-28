@@ -5,8 +5,8 @@
 \title{Report statistics from regression summary tables inline}
 \usage{
 \method{inline_text}{tbl_uvregression}(x, variable, level = NULL,
-  pattern = "{coef} ({conf.level*100}\% CI {ll}, {ul}; {pvalue})",
-  coef_fun = x$inputs$coef_fun, pvalue_fun = function(x)
+  pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
+  estimate_fun = x$inputs$estimate_fun, pvalue_fun = function(x)
   style_pvalue(x, prepend_p = TRUE), ...)
 }
 \arguments{
@@ -18,12 +18,13 @@
 Default is \code{NULL}, returning the top row in the table for the variable.}
 
 \item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
-Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
+Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.  All columns from
 \code{x$table_body} are available to print as well as the confidence level (conf.level).
 Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
 
-\item{coef_fun}{function to style model coefficients.
-Columns 'coef', 'll', and 'ul' are formatted. Default is \code{x$inputs$coef_fun}}
+\item{estimate_fun}{function to style model coefficient estimates.
+Columns 'estimate', 'conf.low', and 'conf.high' are formatted.
+Default is \code{x$inputs$estimate_fun}}
 
 \item{pvalue_fun}{function to style p-values and/or q-values.
 Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
@@ -41,11 +42,11 @@ inline in an R markdown document. Detailed examples in the
 The following items are available to print.  Use \code{print(x$table_body)} to
 print the table the estimates are extracted from.
 \itemize{
-\item \code{{coef}} coeficient estiamte formatted with 'coef_fun'
-\item \code{{ll}} lower limit of confidence interval formmated with 'coef_fun'
-\item \code{{ul}} upper limit of confidence interval formmated with 'coef_fun'
+\item \code{{estimate}} coeficient estiamte formatted with 'estimate_fun'
+\item \code{{conf.low}} lower limit of confidence interval formmated with 'estimate_fun'
+\item \code{{conf.high}} upper limit of confidence interval formmated with 'estimate_fun'
 \item \code{{ci}} confidence interval formmated with x$estimate_fun
-\item \code{{pvalue}} p-value formatted with 'pvalue_fun'
+\item \code{{p.value}} p-value formatted with 'pvalue_fun'
 \item \code{{N}} number of observations in model
 \item \code{{label}} variable/variable level label
 }

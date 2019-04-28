@@ -343,17 +343,12 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
 
   # keeping necessary vars and renaming
   result %>%
-    rename(
-      coef = .data$estimate,
-      ll = .data$conf.low,
-      ul = .data$conf.high,
-      pvalue = .data$p.value
-    ) %>%
     mutate(
       N = nrow(model_frame),
       var_type = var_type
     ) %>%
-    select(c("variable", "var_type", "row_ref", "row_type", "label", "N", "coef", "ll", "ul", "pvalue"))
+    select(c("variable", "var_type", "row_ref", "row_type", "label", "N",
+             "estimate", "conf.low", "conf.high", "p.value"))
 }
 
 
