@@ -84,7 +84,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
     tibble::rownames_to_column(var = "variable") %>%
     filter(!!parse_expr("variable %in% terms")) %>%
     select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
-    set_names(c("variable", "pvalue_global")) %>%
+    set_names(c("variable", "p.value_global")) %>%
     mutate(row_type = "label")
 
   # merging in global pvalue
@@ -95,16 +95,16 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
       by = c("row_type", "variable")
     ) %>%
     mutate(
-      pvalue = coalesce(.data$pvalue, .data$pvalue_global)
+      p.value = coalesce(.data$p.value, .data$p.value_global)
     ) %>%
-    select(-c("pvalue_global"))
+    select(-c("p.value_global"))
 
   # if keep == FALSE, then deleting variable-level p-values
   if (keep == FALSE) {
     x$table_body <-
       x$table_body %>%
       mutate(
-        pvalue = if_else(.data$variable %in% terms & .data$row_type == "level", NA_real_, .data$pvalue)
+        p.value = if_else(.data$variable %in% terms & .data$row_type == "level", NA_real_, .data$p.value)
       )
   }
 
@@ -157,9 +157,9 @@ add_global.tbl_uvregression <- function(x, ...) {
         tibble::rownames_to_column(var = "variable") %>%
         filter(variable == .y) %>%
         select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
-        set_names(c("variable", "pvalue_global"))
+        set_names(c("variable", "p.value_global"))
     ) %>%
-    select(c("variable", "pvalue_global"))
+    select(c("variable", "p.value_global"))
 
   # adding global p-value to meta_data object
   x$meta_data <-
@@ -172,10 +172,10 @@ add_global.tbl_uvregression <- function(x, ...) {
   # merging in global pvalue
   x$table_body <-
     x$table_body %>%
-    select(-c("pvalue")) %>%
+    select(-c("p.value")) %>%
     left_join(
       global_p %>%
-        set_names(c("variable", "pvalue")) %>%
+        set_names(c("variable", "p.value")) %>%
         mutate(row_type = "label"),
       by = c("row_type", "variable")
     )

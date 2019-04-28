@@ -45,7 +45,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
   }
 
   # storing column names and gt_call name
-  col_name <- ifelse(q == FALSE, "pvalue", "qvalue")
+  col_name <- ifelse(q == FALSE, "p.value", "q.value")
   gt_call_name <- glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bold
@@ -87,8 +87,8 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_bold_pvalue"]] <- glue(
     "tab_style(style = cells_styles(text_weight = 'bold'), ",
-    "locations = cells_data(columns = vars(pvalue),",
-    "rows = pvalue <= x$pvalue_bold_t))"
+    "locations = cells_data(columns = vars(p.value),",
+    "rows = p.value <= x$pvalue_bold_t))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
@@ -130,7 +130,7 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
   }
 
   # storing column names and gt_call name
-  col_name <- ifelse(q == FALSE, "pvalue", "qvalue")
+  col_name <- ifelse(q == FALSE, "p.value", "q.value")
   gt_call_name <- glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bold

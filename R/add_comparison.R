@@ -52,7 +52,7 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
         group = group
       ),
       # calculating pvalue
-      pvalue = calculate_pvalue(
+      p.value = calculate_pvalue(
         data = x$inputs$data,
         variable = .data$variable,
         by = x$inputs$by,
@@ -65,7 +65,7 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
   # creating pvalue column for table_body merge
   pvalue_column <-
     meta_data %>%
-    select(c("variable", "pvalue")) %>%
+    select(c("variable", "p.value")) %>%
     mutate(row_type = "label")
 
 
@@ -80,11 +80,11 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
   x$pvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt_pvalue"]] <-
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$pvalue_fun)" %>%
+    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$pvalue_fun)" %>%
     glue()
   # column headers
   x[["gt_calls"]][["cols_label_pvalue"]] <-
-    "cols_label(pvalue = md('**p-value**'))" %>%
+    "cols_label(p.value = md('**p-value**'))" %>%
     glue()
 
   x$meta_data <- meta_data
@@ -95,7 +95,7 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
     'tab_footnote(',
     'footnote = "{footnote_add_comparison(meta_data)}",',
     'locations = cells_column_labels(',
-    'columns = vars(pvalue))',
+    'columns = vars(p.value))',
     ')'
   )
 
