@@ -46,9 +46,10 @@ The vignettes/tutorials for the primary {gtsummary} functions have detailed exam
 ```{r t1, include = TRUE}
 library(gtsummary)
 t1 <-
-  trial %>%
-  dplyr::select(trt, age, grade, response) %>%
-  tbl_summary(by = "trt") %>% 
+  tbl_summary(
+    data = trial[c("trt", "age", "grade", "response")],
+    by = "trt"
+  ) %>%
   add_comparison() 
 ```
 
@@ -66,8 +67,8 @@ t2 <-
 
 ![](man/figures/README-tbl_regression.png){ width=47% }
 
+Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
+
 Thank you to all contributors!  
 <!-- UPDATE THIS LIST! usethis::use_tidy_thanks() -->
 [&#x0040;ddsjoberg](https://github.com/ddsjoberg), [&#x0040;karissawhiting](https://github.com/karissawhiting), and [&#x0040;michaelcurry1123](https://github.com/michaelcurry1123)
-
-Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
