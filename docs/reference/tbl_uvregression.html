@@ -137,7 +137,7 @@ for detailed examples.</p>
     <pre class="usage"><span class='fu'>tbl_uvregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>, <span class='no'>style_ratio</span>, <span class='no'>style_sigfig</span>),
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>, <span class='no'>style_ratio</span>, <span class='no'>style_sigfig</span>),
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -193,8 +193,8 @@ the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")
       <td><p>confidence level passed directly to <code>tidy</code> function. Default is 0.95.</p></td>
     </tr>
     <tr>
-      <th>coef_fun</th>
-      <td><p>function to round and format beta coefficients.  Default
+      <th>estimate_fun</th>
+      <td><p>function to round and format beta coefficient estimates.  Default
 is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are printed, and
 <a href='style_ratio.html'>style_ratio</a> when the coefficients have been exponentiated.</p></td>
     </tr>
