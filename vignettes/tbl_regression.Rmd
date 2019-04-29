@@ -135,7 +135,7 @@ m1 %>%
   tab_style_italicize_levels()
 ```
 
-##  Report Results Inline
+##  Report Results Inline {#inline_text}
 
 Reproducible reports are an import part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
 
@@ -205,7 +205,7 @@ tbl_regression(m1) %>%
   as_gt(omit = "tab_style_text_indent")
 ```
 
-## tbl_uvregression
+## Univariate Regression {#tbl_uvregression}
 
 The `tbl_uvregression()` produces a table of univariate regression results.  The function is a wrapper for `tbl_regression()`, and as a result, accepts nearly identical function arguments.  The function's results can be modified in similar ways to `tbl_regression()` and the results reported inline similarly to `tbl_regression()`.
 
