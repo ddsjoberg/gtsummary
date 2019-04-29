@@ -4,8 +4,7 @@
 \name{gtsummary-package}
 \alias{gtsummary}
 \alias{gtsummary-package}
-\title{gtsummary: The goal of gtsummary is to make reporting of tabular
-    analytic results easy, beautiful, and reproducible}
+\title{gtsummary: Easily Create Presentation-ready Data Summary and Analytic Result Tables}
 \description{
 Written with the goal to make reporting of tabular
     analytic results simple, beautiful, and reproducible.
