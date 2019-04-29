@@ -32,7 +32,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 Functions takes an object with class \code{tbl_summary}, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text}{tbl_summary vignette}
 }
 \examples{
 t1 <- tbl_summary(trial)
