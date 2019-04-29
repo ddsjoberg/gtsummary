@@ -130,7 +130,7 @@ tbl_summary vignette" />
     <p>Functions takes an object with class <code>tbl_summary</code>, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
-<a href='https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html'>tbl_summary vignette</a></p>
+<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>tbl_summary vignette</a></p>
     
     </div>
 
@@ -190,7 +190,7 @@ and return a string that is the rounded/formatted p-value (e.g.
     <pre class="examples"><div class='input'><span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>)
 <span class='no'>t2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_comparison.html'>add_comparison</a></span>()
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; [1] "46 (37, 57)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"I"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"Drug"</span>)</div><div class='output co'>#&gt; [1] "38 (36%)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"pvalue"</span>)</div><div class='output co'>#&gt; [1] "p=0.3"</div></pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; [1] "46 (37, 57)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"I"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"Drug"</span>)</div><div class='output co'>#&gt; [1] "38 (36%)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"p.value"</span>)</div><div class='output co'>#&gt; [1] "p=0.3"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
