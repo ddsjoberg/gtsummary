@@ -15,7 +15,7 @@ inline_text <- function(x, ...) {
 #' Functions takes an object with class `tbl_summary`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document.  Detailed examples in the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text}{tbl_summary vignette}
 #'
 #' @param x object created from  [tbl_summary]
 #' @param variable variable name of statistic to present
@@ -119,7 +119,7 @@ inline_text.tbl_summary <-
 #' Functions takes an object with class `tbl_regression`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document.  Detailed examples in the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
 #'
 #' @param x object created from  [tbl_regression]
 #' @param variable variable name of statistic to present
@@ -229,7 +229,7 @@ inline_text.tbl_regression <-
 #' Functions takes an object with class `tbl_uvregression`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document. Detailed examples in the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
 #'
 #' @inherit inline_text.tbl_regression
 #' @family tbl_uvregression tools
