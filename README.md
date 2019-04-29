@@ -11,7 +11,7 @@ status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)
 
 ## gtsummary
 
-The goal of gtsummary is to make reporting of tabular analytic results
+The goal of {gtsummary} is to make reporting of tabular analytic results
 simple, beautiful, and reproducible. The package’s focus is on quickly
 summarizing a data set, and formatting the results of regression models
 (with help from the {broom} package).
@@ -43,9 +43,10 @@ detailed examples and can be found at
 library(gtsummary)
 #> Loading required package: gt
 t1 <-
-  trial %>%
-  dplyr::select(trt, age, grade, response) %>%
-  tbl_summary(by = "trt") %>% 
+  tbl_summary(
+    data = trial[c("trt", "age", "grade", "response")],
+    by = "trt"
+  ) %>%
   add_comparison() 
 ```
 
@@ -63,12 +64,12 @@ t2 <-
 
 ![](man/figures/README-tbl_regression.png)
 
+Please note that the {gtsummary} project is released with a [Contributor
+Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
+project, you agree to abide by its terms.
+
 Thank you to all contributors\!  
 <!-- UPDATE THIS LIST! usethis::use_tidy_thanks() -->
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@karissawhiting](https://github.com/karissawhiting), and
 [@michaelcurry1123](https://github.com/michaelcurry1123)
-
-Please note that the {gtsummary} project is released with a [Contributor
-Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms.
