@@ -124,6 +124,23 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   # the object func_inputs is a list of every object passed to the function
   tbl_summary_inputs <- as.list(environment())
 
+  # removing variables with unsupported variable types from data
+  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "double")
+  var_to_remove <-
+    map_lgl(data, ~class(.x) %in% classes_expected %>% any()) %>%
+    discard(. == TRUE) %>%
+    names()
+  data <- data %>% dplyr::select(-var_to_remove)
+  if(length(var_to_remove) > 0) {
+    var_to_remove_quoted <- paste0("'", var_to_remove, "'")
+    classes_expected_quoted <- paste0("'", classes_expected, "'")
+    message(glue(
+      "Column(s) {glue_collapse(var_to_remove_quoted, sep = ', ', last = ', and ')} ",
+      "omitted from output. ",
+      "Expecting class {glue_collapse(classes_expected_quoted, sep = ', ', last = ', or ')}."
+    ))
+  }
+
   # checking function inputs
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,
