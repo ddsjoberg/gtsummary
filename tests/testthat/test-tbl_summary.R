@@ -38,3 +38,10 @@ test_that("tbl_summary throws errors/messages with bad 'sort = ' specifications"
     "*"
   )
 })
+
+test_that("tbl_summary omits date var", {
+  expect_message(
+    tbl_summary(sp500),
+    "Column(s)*"
+  )
+})
