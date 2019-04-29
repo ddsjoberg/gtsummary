@@ -593,7 +593,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
         tibble(
           row_type = c("label", "missing"),
           label = c(var_label, missing_text),
-          stat_overall = c(NA_character_, as.character(nrow(data)))
+          stat_0 = c(NA_character_, as.character(nrow(data)))
         )
       )
     }
