@@ -15,10 +15,25 @@ status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)
 
 ## gtsummary
 
-The goal of {gtsummary} is to make reporting of tabular analytic results
-simple, beautiful, and reproducible. The package’s focus is on quickly
-summarizing a data set, and formatting the results of regression models
-(with help from the {broom} package).
+The {gtsummary} package creates presentation-ready tables summarizing
+data sets, regression models, and more. The code to create the tables is
+concise, and also highly customizable. The resulting tables are
+georgeous\! Data frames can be summarized any function that summarizes
+data, e.g. mean(), sd(), median(), or any user-written function.
+Regression models are summarized including the reference row for
+categorical independent variables. Common regression models, such as,
+logistic regression and Cox proportional hazards regression, are
+automatically identified and the tables are pre-filled with the
+appropriate column headers (i.e. Odds Ratio, and Hazard Ratio).
+
+{gtsummary} uses the {gt} package to create tables enabling each table
+to be customized to user preferences. The package uses {broom} to
+perform initial tidying of the regression models, which means many types
+of model are supported out of the box. If you label your data (which I
+recommend\!), the labels will be used in the table output. With
+{gtsummary} and labelled data, you get a perfectly formatted,
+ready-to-share table with a single line of code\! Check out the examples
+below.
 
 ## Installation
 
@@ -37,8 +52,8 @@ remotes::install_github("ddsjoberg/gtsummary", ref = "dev")
 
 ## Examples
 
-The vignettes/tutorials for the primary {gtsummary} functions have
-detailed examples and can be found at
+The vignettes/tutorials for {gtsummary} functions have detailed examples
+and can be found at
 [danieldsjoberg.com/gtsummary](http://www.danieldsjoberg.com/gtsummary).
 
 ### Summary Table
@@ -70,9 +85,8 @@ t2 <-
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms.
-
-Thank you to all contributors\!  
+project, you agree to abide by its terms. A big thank you to all
+contributors\!  
 <!-- UPDATE THIS LIST! usethis::use_tidy_thanks() -->
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@karissawhiting](https://github.com/karissawhiting), and
