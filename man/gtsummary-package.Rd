@@ -4,14 +4,19 @@
 \name{gtsummary-package}
 \alias{gtsummary}
 \alias{gtsummary-package}
-\title{gtsummary: Easily Create Presentation-ready Data Summary and Analytic Result Tables}
+\title{gtsummary: Presentation-Ready Data Summary and Analytic Result
+    Tables}
 \description{
-Written with the goal to make reporting of tabular
-    analytic results simple, beautiful, and reproducible.
-    Publication-ready tables are created with minimal code, and can be
-    exported to Word, HTML, and PDF documents with the use of Rmarkdown.
-    The gtsummary functions are flexible, allowing you to easily customize
-    the aesthetics of tables to suit your needs.
+The {gtsummary} package creates presentation-ready
+    tables summarizing data sets, regression models, and more. The code to
+    create the tables is concise, and also highly customizable. Data
+    frames can be summarized any function that summarizes data, e.g.
+    mean(), sd(), median(), or any user-written function. Regression
+    models are summarized including the reference row for categorical
+    independent variables.  Common regression models, such as, logistic
+    regression and Cox proportional hazards regression, are automatically
+    identified and the tables are pre-filled with the appropriate column
+    headers.
 }
 \author{
 \strong{Maintainer}: Daniel D. Sjoberg \email{danieldsjoberg@gmail.com}
