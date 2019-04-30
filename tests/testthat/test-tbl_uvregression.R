@@ -52,3 +52,19 @@ test_that("glmer: no errors/warnings with standard use", {
       ), NA
   )
 })
+
+test_that("tbl_regression creates errors when non-function in input", {
+  expect_error(
+    tbl_uvregression(method = coxph,
+                     y = Surv(time, status),
+                     pvalue_fun = mtcars),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(method = coxph,
+                     y = Surv(time, status),
+                     estimate_fun = mtcars),
+    "*"
+  )
+})
+
