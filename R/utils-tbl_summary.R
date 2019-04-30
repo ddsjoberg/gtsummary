@@ -32,7 +32,7 @@ assign_class <- function(data, variable) {
   map2_chr(
     variable, classes_return,
     ~ ifelse(data[[.x]] %>% is.na() %>% all(),
-      NA_character_, .y
+             NA_character_, .y
     )
   )
 }
@@ -316,7 +316,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   min_exp <-
     expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
     mutate(exp = .data$Var1 * .data$Var2 /
-      sum(table(data[[var]], data[[by_var]]))) %>%
+             sum(table(data[[var]], data[[by_var]]))) %>%
     pull(exp) %>%
     min()
 
@@ -1156,16 +1156,12 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
-    stop(glue(
-      "'data' input must be a data frame."
-    ))
+    stop("'data' input must be a data frame.")
   }
 
   # cannot be empty data frame
   if (nrow(data) == 0) {
-    stop(glue(
-      "Expecting 'data' to have at least 1 row."
-    ))
+    stop("Expecting 'data' to have at least 1 row.")
   }
 
   # cannot include variables named ..continuous.. or ..categorical..
@@ -1177,9 +1173,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   # by is a variable in data
   if (!is.null(by)) {
     if (!(by %in% names(data))) {
-      stop(glue(
-        "'{by}' not a column in 'data'."
-      ))
+      stop(glue("'{by}' not a column in 'data'."))
     }
 
     # by levels cannot be missing
@@ -1197,19 +1191,15 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   if (!is.null(type)) {
     # checking that all inputs are named
     if ((names(type) %>% purrr::discard(. == "") %>% length()) != length(type)) {
-      stop(glue(
-        "Each element in 'type' must be named. ",
-        "For example, 'type = list(age = \"continuous\", female = \"dichotomous\")'"
-      ))
+      stop(glue("Each element in 'type' must be named. ",
+                "For example, 'type = list(age = \"continuous\", female = \"dichotomous\")'"))
     }
 
     # checking that all names in list are variable names from data.
     summary_type_not_in_data <- setdiff(names(type), names(data))
     if (length(summary_type_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'type' are not found in 'data' and ",
-        "were ignored: {paste0(summary_type_not_in_data, collapse = ', ')}"
-      ))
+      message(glue("The following names from 'type' are not found in 'data' and ",
+                   "were ignored: {paste0(summary_type_not_in_data, collapse = ', ')}"))
     }
 
     # checking all inputs are continuous, categorial, or dichotomous
@@ -1253,19 +1243,15 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   if (!is.null(label)) {
     # checking that all inputs are named
     if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
-      stop(glue(
-        "Each element in 'label' must be named. ",
-        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
-      ))
+      stop(glue("Each element in 'label' must be named. ",
+                "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"))
     }
 
     # checking that all names in list are variable names from data.
     var_label_not_in_data <- setdiff(names(label), names(data))
     if (length(var_label_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'label' are not found in 'data' and ",
-        "were ignored: {paste0(var_label_not_in_data, collapse = ', ')}"
-      ))
+      message(glue("The following names from 'label' are not found in 'data' and ",
+                   "were ignored: {paste0(var_label_not_in_data, collapse = ', ')}"))
     }
   }
 
@@ -1273,10 +1259,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   if (!is.null(statistic)) {
     # checking that all inputs are named
     if ((names(statistic) %>% purrr::discard(. == "") %>% length()) != length(statistic)) {
-      stop(glue(
-        "Each element in 'statistic' must be named. ",
-        "For example, 'statistic = list(..continuous.. = \"{median} ({p25}, {p75})\", ..categorical.. = \"{n} ({p}%)\")'"
-      ))
+      stop(glue("Each element in 'statistic' must be named. ",
+                "For example, 'statistic = list(..continuous.. = \"{median} ({p25}, {p75})\", ..categorical.. = \"{n} ({p}%)\")'"))
     }
 
     # checking that all names in list are continuous or categorical
@@ -1305,10 +1289,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     # checking that all names in list are variable names from data.
     digits_not_in_data <- setdiff(names(digits), c(names(data), "..continuous.."))
     if (length(digits_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'digits' are not found in 'data' and ",
-        "were ignored: {paste0(digits_not_in_data, collapse = ', ')}"
-      ))
+      message(glue("The following names from 'digits' are not found in 'data' and ",
+                   "were ignored: {paste0(digits_not_in_data, collapse = ', ')}"))
     }
 
     # specified digits must be a non-negative integer
@@ -1334,19 +1316,15 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
 
   # group ----------------------------------------------------------------------
   if (length(group) > 1) {
-    stop(
-      "'group' must be `NULL` or length 1."
-    )
+    stop("'group' must be `NULL` or length 1.")
   }
 
   # sort -----------------------------------------------------------------------
   if (!is.null(sort)) {
     # checking that all inputs are named
     if ((names(sort) %>% purrr::discard(. == "") %>% length()) != length(sort)) {
-      stop(glue(
-        "Each element in 'sort' must be named. ",
-        "For example, 'sort = list(..categorical.. = \"frequency\")'"
-      ))
+      stop(glue("Each element in 'sort' must be named. ",
+                "For example, 'sort = list(..categorical.. = \"frequency\")'"))
     }
 
     # checking that all names in list are variable names from data.
