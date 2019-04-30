@@ -1248,6 +1248,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
           )}
       )
   }
+
   # label ----------------------------------------------------------------------
   if (!is.null(label)) {
     # checking that all inputs are named
