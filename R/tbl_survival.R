@@ -70,7 +70,7 @@ tbl_survival <- function(x, ...) {
 #' \itemize{
 #'   \item `{level}` level of the stratification variable
 #'   \item `{n}` number of observations, or number within stratum
-#'   \item `{n.event.tot}` total number of events, or total within stratum
+#'   \item `{n.event.tot}` total number of events (total across stratum)
 #'   \item `{strata}` raw stratum specification from \code{survfit} object
 #' }
 #'
@@ -127,9 +127,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
         tibble(
           strata = x$strata %>% names(),
           n = x$n,
-          n.event.tot = x %>%
-            summary(times = max(x$time)) %>%
-            pluck("n.event")
+          n.event.tot = x$n.event %>% sum()
         ),
         by = "strata"
       ) %>%
