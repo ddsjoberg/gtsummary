@@ -17,23 +17,23 @@ status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)
 
 The {gtsummary} package creates presentation-ready tables summarizing
 data sets, regression models, and more. The code to create the tables is
-concise, and also highly customizable. The resulting tables are
-georgeous\! Data frames can be summarized any function that summarizes
-data, e.g. mean(), sd(), median(), or any user-written function.
-Regression models are summarized including the reference row for
-categorical independent variables. Common regression models, such as,
-logistic regression and Cox proportional hazards regression, are
-automatically identified and the tables are pre-filled with the
-appropriate column headers (i.e. Odds Ratio, and Hazard Ratio).
+concise and highly customizable. The resulting tables are georgeous\!
+Data frames can be summarized with any function, e.g. mean(), median(),
+or a user-written function. Regression models are summarized and include
+the reference row for categorical variables in the model. Common
+regression models, such as, logistic regression and Cox proportional
+hazards regression, are automatically identified and the tables are
+pre-filled with the appropriate column headers (i.e. Odds Ratio, and
+Hazard Ratio).
 
-{gtsummary} uses the {gt} package to create tables enabling each table
-to be customized to user preferences. The package uses {broom} to
-perform initial tidying of the regression models, which means many types
-of model are supported out of the box. If you label your data (which I
-recommend\!), the labels will be used in the table output. With
-{gtsummary} and labelled data, you get a perfectly formatted,
-ready-to-share table with a single line of code\! Check out the examples
-below.
+{gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
+each table to be customized to user preferences. The package also uses
+[{broom}](https://broom.tidyverse.org/) to perform initial tidying of
+the regression models, which means many types of model are supported out
+of the box. If you label your data (which I recommend\!), the labels
+will be used in the table output. With {gtsummary} and labelled data,
+you get a perfectly formatted, ready-to-share tables in a single line of
+code\! Check out the examples below.
 
 ## Installation
 
