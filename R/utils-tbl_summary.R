@@ -1149,6 +1149,7 @@ calculate_single_stat <- function(x, stat_name) {
 # function that checks the inputs to \code{\link{tbl_summary}}
 # this should include EVERY input of \code{\link{tbl_summary}} in the same order
 # copy and paste them from \code{\link{tbl_summary}}
+
 tbl_summary_input_checks <- function(data, by, label, type, value,
                                      statistic, digits, missing, missing_text,
                                      group, sort) {
@@ -1185,10 +1186,23 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     if (sum(is.na(data[[by]])) > 0) {
       stop("'by' variable cannot have missing values.")
     }
+
+    # by must be charactst of length 1
+    if(!is.character(by) | length(by) > 1) {
+      stop("'by' must be a character vector of length 1.")
+    }
   }
 
   # type -----------------------------------------------------------------------
   if (!is.null(type)) {
+    # checking that all inputs are named
+    if ((names(type) %>% purrr::discard(. == "") %>% length()) != length(type)) {
+      stop(glue(
+        "Each element in 'type' must be named. ",
+        "For example, 'type = list(age = \"continuous\", female = \"dichotomous\")'"
+      ))
+    }
+
     # checking that all names in list are variable names from data.
     summary_type_not_in_data <- setdiff(names(type), names(data))
     if (length(summary_type_not_in_data) > 0) {
@@ -1214,6 +1228,14 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
 
   # value ----------------------------------------------------------------------
   if (!is.null(value)) {
+    # checking that all inputs are named
+    if ((names(value) %>% purrr::discard(. == "") %>% length()) != length(value)) {
+      stop(glue(
+        "Each element in 'value' must be named. ",
+        "For example, 'value = list(varname = \"level to show\")'"
+      ))
+    }
+
     value %>%
       imap(
         ~data[[.y]] %>%
@@ -1228,6 +1250,14 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   }
   # label ----------------------------------------------------------------------
   if (!is.null(label)) {
+    # checking that all inputs are named
+    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+      stop(glue(
+        "Each element in 'label' must be named. ",
+        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+      ))
+    }
+
     # checking that all names in list are variable names from data.
     var_label_not_in_data <- setdiff(names(label), names(data))
     if (length(var_label_not_in_data) > 0) {
@@ -1240,6 +1270,14 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
 
   # statistic ------------------------------------------------------------------
   if (!is.null(statistic)) {
+    # checking that all inputs are named
+    if ((names(statistic) %>% purrr::discard(. == "") %>% length()) != length(statistic)) {
+      stop(glue(
+        "Each element in 'statistic' must be named. ",
+        "For example, 'statistic = list(..continuous.. = \"{median} ({p25}, {p75})\", ..categorical.. = \"{n} ({p}%)\")'"
+      ))
+    }
+
     # checking that all names in list are continuous or categorical
     stat_display_names_not_valid <-
       names(statistic) %>%
@@ -1255,6 +1293,14 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
 
   # digits ---------------------------------------------------------------------
   if (!is.null(digits)) {
+    # checking that all inputs are named
+    if ((names(digits) %>% purrr::discard(. == "") %>% length()) != length(digits)) {
+      stop(glue(
+        "Each element in 'digits' must be named. ",
+        "For example, 'digits = list(age = 1)'"
+      ))
+    }
+
     # checking that all names in list are variable names from data.
     digits_not_in_data <- setdiff(names(digits), c(names(data), "..continuous.."))
     if (length(digits_not_in_data) > 0) {
@@ -1294,6 +1340,14 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
 
   # sort -----------------------------------------------------------------------
   if (!is.null(sort)) {
+    # checking that all inputs are named
+    if ((names(sort) %>% purrr::discard(. == "") %>% length()) != length(sort)) {
+      stop(glue(
+        "Each element in 'sort' must be named. ",
+        "For example, 'sort = list(..categorical.. = \"frequency\")'"
+      ))
+    }
+
     # checking that all names in list are variable names from data.
     var_sort_not_in_data <- setdiff(names(sort), c(names(data), "..categorical.."))
     if (length(var_sort_not_in_data) > 0) {
