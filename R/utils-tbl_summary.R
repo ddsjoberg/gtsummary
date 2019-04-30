@@ -23,9 +23,7 @@ assign_class <- function(data, variable) {
   # checking all columns returned a class
   class_error <- map_lgl(classes_return, ~ identical(.x, character(0)))
   if (any(class_error)) {
-    stop(glue(
-      "Class of variable '{paste(variable[class_error], collapse = ', ')}' not supported"
-    ))
+    stop(glue("Class of variable '{paste(variable[class_error], collapse = ', ')}' not supported"))
   }
 
   # if column is all missing, return class NA
@@ -1160,7 +1158,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   }
 
   # cannot be empty data frame
-  if (nrow(data) == 0) {
+  if (nrow(data) == 0L) {
     stop("Expecting 'data' to have at least 1 row.")
   }
 
