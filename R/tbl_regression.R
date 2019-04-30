@@ -107,16 +107,15 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   # rows for reference groups, and headers for
   # categorical variables
   table_body <- parse_fit(x, tidy_model, label, show_yesno)
-  # mod_list <- parse_terms(x, tidy_model, show_yesno)
 
   # including and excluding variables/intercept indicated
   # Note, include = names(stats::model.frame(mod_nlme))
   # has an error for nlme because it is "reStruct"
   if (!is.null(include)) {
     include_err <- include %>% setdiff(table_body$variable %>% unique())
-    if(length(include_err) > 0) stop(
-      "'include' must be '{paste(names(table_body$variable %>% unique()), collapse = ', ')}'"
-    )
+    if(length(include_err) > 0) stop(glue(
+      "'include' must be be a subset of '{paste(table_body$variable %>% unique(), collapse = ', ')}'"
+    ))
   }
   if (is.null(include)) include <-  table_body$variable %>% unique()
   if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
