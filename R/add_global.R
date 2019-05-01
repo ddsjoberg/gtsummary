@@ -16,8 +16,7 @@
 add_global <- function(x, ...) {
   # must have car package installed to use this function
   if (!requireNamespace("car", quietly = TRUE)) {
-    stop("The 'car' package is required for 'add_global'. Install with install.packages('car')",
-         call. = FALSE)
+    stop("The 'car' package is required for 'add_global'. Install with install.packages('car')", call. = FALSE)
   }
   UseMethod("add_global")
 }
@@ -128,9 +127,9 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' @family tbl_uvregression tools
 #' @examples
 #' tbl_uv_global_ex2 <-
-#'  trial %>%
-#'  dplyr::select(response, trt, age, grade) %>%
-#'  tbl_uvregression(
+#'   trial %>%
+#'   dplyr::select(response, trt, age, grade) %>%
+#'   tbl_uvregression(
 #'     method = glm,
 #'     y = response,
 #'     method.args = list(family = binomial),
@@ -144,8 +143,11 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 add_global.tbl_uvregression <- function(x, ...) {
 
   # converting the passed ... to a list, OR if nothing passed to NULL
-  if(length(list(...)) == 0) passed_dots <- NULL
-  else passed_dots <- list(...)
+  if (length(list(...)) == 0) {
+    passed_dots <- NULL
+  } else {
+    passed_dots <- list(...)
+  }
 
   # calculating global pvalues
   global_p <-
