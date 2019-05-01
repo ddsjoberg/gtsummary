@@ -128,8 +128,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-summary-functions" class="hasAnchor"><a href="#section-summary-functions" class="anchor"></a>Summary Functions</h2>
-          <p class="section-desc"><p>Functions for creating and modifying summary tables</p></p>
+          <h2 id="section--data-summary-functions" class="hasAnchor"><a href="#section--data-summary-functions" class="anchor"></a> Data Summary Functions</h2>
+          <p class="section-desc"><p>Functions for creating and modifying data summary tables</p></p>
         </th>
       </tr>
       <tr>
@@ -322,11 +322,23 @@ multiple comparisons</p></td>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-printing-misc-functions" class="hasAnchor"><a href="#section-printing-misc-functions" class="anchor"></a>Printing/Misc. Functions</h2>
+          <h2 id="section-misc-functions" class="hasAnchor"><a href="#section-misc-functions" class="anchor"></a>Misc. Functions</h2>
           <p class="section-desc"><p>R console and Rmarkdown print defaults</p></p>
         </th>
       </tr>
       <tr>
+        
+        <td>
+          <p><code><a href="as_gt.html">as_gt()</a></code> </p>
+        </td>
+        <td><p>Convert to gt_tbl object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gtsummary_logo.html">gtsummary_logo()</a></code> </p>
+        </td>
+        <td><p>The gtsummary logo, using ASCII or Unicode characters</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="print_gtsummary.html">print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_merge&gt;</i>)</a></code> </p>
@@ -339,46 +351,6 @@ multiple comparisons</p></td>
         </td>
         <td><p>A custom printing function</p></td>
       </tr><tr>
-        
-        <td>
-          <p><code><a href="as_gt.html">as_gt()</a></code> </p>
-        </td>
-        <td><p>Convert to gt_tbl object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gtsummary_logo.html">gtsummary_logo()</a></code> </p>
-        </td>
-        <td><p>The gtsummary logo, using ASCII or Unicode characters</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-imports" class="hasAnchor"><a href="#section-imports" class="anchor"></a>Imports</h2>
-          <p class="section-desc"><p>Functions imported from other packages</p></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="pipe.html">%>%</a></code> </p>
-        </td>
-        <td><p>magrittr forward-pipe operator</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="knit_print.html">knit_print</a></code> </p>
-        </td>
-        <td><p>A custom printing function</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-s-generic-functions" class="hasAnchor"><a href="#section-s-generic-functions" class="anchor"></a>S3 Generic Functions</h2>
-          <p class="section-desc"><p>Class-based method functions</p></p>
-        </th>
-      </tr>
-      <tr>
         
         <td>
           <p><code><a href="add_global.html">add_global()</a></code> </p>
@@ -430,6 +402,26 @@ multiple comparisons</p></td>
         </td>
         <td><p>Results from a simulated trial of Placebo vs Drug</p></td>
       </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-imports" class="hasAnchor"><a href="#section-imports" class="anchor"></a>Imports</h2>
+          <p class="section-desc"><p>Functions imported from other packages</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="pipe.html">%>%</a></code> </p>
+        </td>
+        <td><p>magrittr forward-pipe operator</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="knit_print.html">knit_print</a></code> </p>
+        </td>
+        <td><p>A custom printing function</p></td>
+      </tr>
     </tbody>
     </table>
   </div>
@@ -437,13 +429,12 @@ multiple comparisons</p></td>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-summary-functions">Summary Functions</a></li>
+      <li><a href="#section--data-summary-functions"> Data Summary Functions</a></li>
       <li><a href="#section-regression-model-functions">Regression Model Functions</a></li>
       <li><a href="#section-general-formatting-functions">General Formatting Functions</a></li>
-      <li><a href="#section-printing-misc-functions">Printing/Misc. Functions</a></li>
-      <li><a href="#section-imports">Imports</a></li>
-      <li><a href="#section-s-generic-functions">S3 Generic Functions</a></li>
+      <li><a href="#section-misc-functions">Misc. Functions</a></li>
       <li><a href="#section-example-datasets">Example Datasets</a></li>
+      <li><a href="#section-imports">Imports</a></li>
     </ul>
   </div>
 </div>

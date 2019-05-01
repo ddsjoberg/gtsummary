@@ -69,7 +69,9 @@ t1 <-
   add_comparison() 
 ```
 
-![](man/figures/README-tbl_summary.png)
+<!-- ![](man/figures/README-tbl_summary.png){ width=65% } -->
+
+<img src="man/figures/README-tbl_summary.png" width="60%">
 
 ### Regression Models
 
@@ -81,7 +83,9 @@ t2 <-
                  exponentiate = TRUE)
 ```
 
-![](man/figures/README-tbl_regression.png)
+<!-- ![](man/figures/README-tbl_regression.png){ width=47% } -->
+
+<img src="man/figures/README-tbl_regression.png" width="44%">
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
