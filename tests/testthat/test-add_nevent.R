@@ -79,3 +79,18 @@ test_that("add_nevent after tbl_uvregression creates output without error/warnin
     NA
   )
 })
+
+test_that("add_nevent error with bad inputs", {
+  expect_error(
+    lm(hp ~ mpg, mtcars) %>%
+      tbl_regression() %>%
+      add_nevent(),
+    "*"
+  )
+  expect_error(
+    lme4::lmer(hp ~ mpg + (1 | cyl), mtcars) %>%
+      tbl_regression() %>%
+      add_nevent(),
+    "*"
+  )
+})
