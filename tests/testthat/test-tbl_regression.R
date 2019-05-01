@@ -53,3 +53,25 @@ test_that("lm with interactions: no errors/warnings with standard use", {
   expect_error(tbl_regression(mod_lm_interaction), NA)
   expect_warning(tbl_regression(mod_lm_interaction), NA)
 })
+
+test_that("tbl_regression creates errors when non-function in input", {
+  expect_error(
+    tbl_regression(mod_lm_interaction,  pvalue_fun = mtcars),
+    "*"
+  )
+  expect_error(
+    tbl_regression(mod_lm_interaction,  estimate_fun = mtcars),
+    "*"
+  )
+})
+
+test_that("tbl_regression creates errors when inputs are wrong", {
+  expect_error(
+    tbl_regression(mod_lm_interaction, label = "Age"),
+    "*"
+  )
+  expect_error(
+    tbl_regression(mod_lm_interaction, include = "INCLUDE ME!"),
+    "*"
+  )
+})

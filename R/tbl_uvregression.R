@@ -77,6 +77,22 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   method <- deparse(substitute(method)) %>% as.character()
   y <- deparse(substitute(y)) %>% as.character()
 
+  # checking estimate_fun and pvalue_fun are functions
+  if(!is.function(estimate_fun) | !is.function(pvalue_fun)) {
+    stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
+  }
+
+  # label ----------------------------------------------------------------------
+  if (!is.null(label)) {
+    # checking that all inputs are named
+    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+      stop(glue(
+        "Each element in 'label' must be named. ",
+        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+      ))
+    }
+  }
+
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
