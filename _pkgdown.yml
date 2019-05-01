@@ -24,9 +24,9 @@ navbar:
     href: https://github.com/ddsjoberg/gtsummary
 
 reference:
-  - title: "Summary Functions"
+  - title: " Data Summary Functions"
     desc: >
-      Functions for creating and modifying summary tables
+      Functions for creating and modifying data summary tables
     contents:
       - tbl_summary
       - add_comparison
@@ -70,26 +70,14 @@ reference:
       - tab_style_italicize_labels
       - tab_style_italicize_levels
 
-  - title: "Printing/Misc. Functions"
+  - title: "Misc. Functions"
     desc: >
       R console and Rmarkdown print defaults
     contents:
+      - as_gt
+      - gtsummary_logo
       - starts_with("print")
       - starts_with("knit_print")
-      - starts_with("as_gt")
-      - gtsummary_logo
-
-  - title: "Imports"
-    desc: >
-      Functions imported from other packages
-    contents:
-      - starts_with("%")
-      - knit_print
-
-  - title: "S3 Generic Functions"
-    desc: >
-      Class-based method functions
-    contents:
       - add_global
       - add_nevent
       - add_q
@@ -102,3 +90,10 @@ reference:
       Simulated data to illustrate package use
     contents:
       - trial
+
+  - title: "Imports"
+    desc: >
+      Functions imported from other packages
+    contents:
+      - starts_with("%")
+      - knit_print

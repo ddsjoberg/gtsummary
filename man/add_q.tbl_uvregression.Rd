@@ -12,7 +12,7 @@ multiple comparisons}
 \item{x}{\code{tbl_uvregression} object}
 
 \item{method}{character argument.  Methods from
-\code{stats::}\code{\link[stats]{p.adjust}} are accepted.  Default is \code{method = 'fdr'}.}
+\link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = 'fdr'}.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.

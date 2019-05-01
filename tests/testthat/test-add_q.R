@@ -49,3 +49,11 @@ test_that("expect error with no global p value in tbl_uvregression", {
     "You need global p-values first*",
   )
 })
+
+test_that("add_q creates errors when non-function in input", {
+  expect_error(
+    add_q(uni_reg, pvalue_fun = mtcars),
+    "*"
+  )
+})
+
