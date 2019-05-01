@@ -38,6 +38,22 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
     stop("Cannot add comparison when no 'by' variable in original tbl_summary() call")
   }
 
+  # test -----------------------------------------------------------------------
+  if (!is.null(test)) {
+    # checking that all inputs are named
+    if ((names(test) %>% purrr::discard(. == "") %>% length()) != length(test)) {
+      stop(glue(
+        "Each element in 'test' must be named. ",
+        "For example, 'test = list(age = \"t.test\", ptstage = \"fisher.test\")'"
+      ))
+    }
+  }
+
+  # checking pvalue_fun are functions
+  if(!is.function(pvalue_fun)) {
+    stop("Input 'pvalue_fun' must be a function.")
+  }
+
   # getting the test name and pvalue
   meta_data <-
     x$meta_data %>%

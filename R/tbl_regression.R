@@ -77,6 +77,22 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
                            conf.level = 0.95, intercept = FALSE,
                            estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
                            pvalue_fun = style_pvalue) {
+  # checking estimate_fun and pvalue_fun are functions
+  if(!is.function(estimate_fun) | !is.function(pvalue_fun)) {
+    stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
+  }
+
+  # label ----------------------------------------------------------------------
+  if (!is.null(label)) {
+    # checking that all inputs are named
+    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+      stop(glue(
+        "Each element in 'label' must be named. ",
+        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+      ))
+    }
+  }
+
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())
@@ -91,16 +107,15 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   # rows for reference groups, and headers for
   # categorical variables
   table_body <- parse_fit(x, tidy_model, label, show_yesno)
-  # mod_list <- parse_terms(x, tidy_model, show_yesno)
 
   # including and excluding variables/intercept indicated
   # Note, include = names(stats::model.frame(mod_nlme))
   # has an error for nlme because it is "reStruct"
   if (!is.null(include)) {
     include_err <- include %>% setdiff(table_body$variable %>% unique())
-    if(length(include_err) > 0) stop(
-      "'include' must be '{paste(names(table_body$variable %>% unique()), collapse = ', ')}'"
-    )
+    if(length(include_err) > 0) stop(glue(
+      "'include' must be be a subset of '{paste(table_body$variable %>% unique(), collapse = ', ')}'"
+    ))
   }
   if (is.null(include)) include <-  table_body$variable %>% unique()
   if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")

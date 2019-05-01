@@ -42,6 +42,11 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
     ))
   }
 
+  # checking pvalue_fun are functions
+  if(!is.function(pvalue_fun)) {
+    stop("Input 'pvalue_fun' must be a function.")
+  }
+
   # adding exact and printable q value to meta_data
   x$meta_data <-
     x$meta_data %>%
@@ -100,7 +105,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #'
 #' @param x `tbl_uvregression` object
 #' @param method character argument.  Methods from
-#' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
+#' [stats::p.adjust] are accepted.  Default is `method = 'fdr'`.
 #' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
@@ -129,6 +134,11 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
       "You need global p-values first. Use the function add_global() after ",
       "tbl_uvregression() and before add_q()"
     ))
+  }
+
+  # checking pvalue_fun are functions
+  if(!is.function(pvalue_fun)) {
+    stop("Input 'pvalue_fun' must be a function.")
   }
 
   # adding exact and printable q value to meta_data
