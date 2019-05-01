@@ -26,9 +26,9 @@ please create an
 
 \examples{
 tbl_uv_global_ex2 <-
- trial \%>\%
- dplyr::select(response, trt, age, grade) \%>\%
- tbl_uvregression(
+  trial \%>\%
+  dplyr::select(response, trt, age, grade) \%>\%
+  tbl_uvregression(
     method = glm,
     y = response,
     method.args = list(family = binomial),
