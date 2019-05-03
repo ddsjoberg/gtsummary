@@ -7,7 +7,7 @@
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,
   missing = c("ifany", "always", "no"), missing_text = "Unknown",
-  sort = NULL)
+  sort = NULL, row_percent = FALSE)
 }
 \arguments{
 \item{data}{a data frame}
@@ -46,7 +46,7 @@ statistic being calculated is \code{"{mean} ({sd})"} and you want the mean round
 to 1 decimal place, and the SD to 2 use \code{digits = list(age = c(1, 2))}.}
 
 \item{group}{Character vector of an ID or grouping variable.  Summary statistics
-will not be printed for this column. The column may be used in \code{\link{add_comparison}} to
+will not be printed for this column. The column may be used in \link{add_comparison} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
 \item{missing}{whether to include \code{NA} values in the table. \code{missing} controls
@@ -60,9 +60,10 @@ Default is \code{"Unknown"}.}
 \item{sort}{named list indicating the type of sorting to perform. Default is NULL.
 Options are 'frequency' where results are sorted in
 descending order of frequency and 'alphanumeric'}
-}
-\value{
-List of summary statistics to be converted to a \code{gt} object
+
+\item{row_percent}{Logical value indicating whether to calculate
+percentages within column to across rows.  Default is within columns,
+\code{row_percent = FALSE}}
 }
 \description{
 The \code{tbl_summary} function calculates descriptive statistics by groups for
