@@ -62,8 +62,8 @@ Options are 'frequency' where results are sorted in
 descending order of frequency and 'alphanumeric'}
 
 \item{row_percent}{Logical value indicating whether to calculate
-percentages within column to across rows.  Default is within columns,
-\code{row_percent = FALSE}}
+percentages within column to across rows.  Default is to calculate
+percentages within columns: \code{row_percent = FALSE}}
 }
 \description{
 The \code{tbl_summary} function calculates descriptive statistics by groups for

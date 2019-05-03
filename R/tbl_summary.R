@@ -46,8 +46,8 @@
 #' Options are 'frequency' where results are sorted in
 #' descending order of frequency and 'alphanumeric'
 #' @param row_percent Logical value indicating whether to calculate
-#' percentages within column to across rows.  Default is within columns,
-#' `row_percent = FALSE`
+#' percentages within column to across rows.  Default is to calculate
+#' percentages within columns: `row_percent = FALSE`
 #'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
