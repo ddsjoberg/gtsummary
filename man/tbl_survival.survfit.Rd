@@ -65,7 +65,8 @@ depending on the stratum.  Other quantities available to print are:
 \itemize{
 \item \code{{level}} level of the stratification variable
 \item \code{{n}} number of observations, or number within stratum
-\item \code{{n.event.tot}} total number of events (total across stratum)
+\item \code{{n.event.tot}} total number of events (total across stratum, if applicable)
+\item \code{{n.event.strata}} total number of events within stratum, if applicable
 \item \code{{strata}} raw stratum specification from \code{survfit} object
 }
 }
