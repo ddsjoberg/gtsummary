@@ -34,7 +34,7 @@
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list(age = c(1, 2))`.
 #' @param group Character vector of an ID or grouping variable.  Summary statistics
-#' will not be printed for this column. The column may be used in \code{\link{add_comparison}} to
+#' will not be printed for this column. The column may be used in [add_comparison] to
 #' calculate p-values with correlated data. Default is `NULL`
 #' @param missing whether to include `NA` values in the table. `missing` controls
 #' if the table includes counts of `NA` values: the allowed values correspond to
@@ -45,7 +45,9 @@
 #' @param sort named list indicating the type of sorting to perform. Default is NULL.
 #' Options are 'frequency' where results are sorted in
 #' descending order of frequency and 'alphanumeric'
-#' @return List of summary statistics to be converted to a `gt` object
+#' @param row_percent Logical value indicating whether to calculate
+#' percentages within column to across rows.  Default is within columns,
+#' `row_percent = FALSE`
 #'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
@@ -115,7 +117,8 @@
 tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL,
                         statistic = NULL, digits = NULL, group = NULL,
                         missing = c("ifany", "always", "no"),
-                        missing_text = "Unknown", sort = NULL) {
+                        missing_text = "Unknown", sort = NULL,
+                        row_percent = FALSE) {
   missing <- match.arg(missing)
   # ungrouping data
   data <- data %>% ungroup()
@@ -189,7 +192,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
           variable = ..1, by = get("by"), summary_type = ..2,
           dichotomous_value = ..3, var_label = ..4, stat_display = ..5,
           digits = ..6, class = ..7, missing = missing,
-          missing_text = missing_text, sort = ..8
+          missing_text = missing_text, sort = ..8,
+          row_percent = row_percent
         )
       )
     ) %>%
