@@ -32,7 +32,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{group}{Character vector of an ID or grouping variable.  Summary statistics
-will not be printed for this column. The column may be used in \code{\link{add_comparison}} to
+will not be printed for this column. The column may be used in \link{add_comparison} to
 calculate p-values with correlated data. Default is \code{NULL}}
 }
 \description{

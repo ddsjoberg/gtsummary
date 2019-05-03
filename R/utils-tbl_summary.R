@@ -576,12 +576,15 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 #' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
+#' @param row_percent Logical value indicating whether to calculate
+#' percentages within column to across rows
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 calculate_summary_stat <- function(data, variable, by, summary_type,
                                    dichotomous_value, var_label, stat_display,
-                                   digits, class, missing, missing_text, sort) {
+                                   digits, class, missing, missing_text, sort,
+                                   row_percent) {
 
   # if class is NA, then do not calculate summary statistics
   if (is.na(class)) {
@@ -630,8 +633,8 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
   if (summary_type %in% c("categorical", "dichotomous")) {
     return(
       summarize_categorical(
-        data, variable, by, var_label,
-        stat_display, dichotomous_value, missing, missing_text, sort
+        data, variable, by, var_label, stat_display, dichotomous_value,
+        missing, missing_text, sort, row_percent
       )
     )
   }
@@ -781,13 +784,15 @@ df_by <- function(data, by) {
 #' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
+#' @param row_percent Logical value indicating whether to calculate
+#' percentages within column to across rows
 #' @return formatted summary statistics in a tibble.
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 summarize_categorical <- function(data, variable, by, var_label,
                                   stat_display, dichotomous_value, missing,
-                                  missing_text, sort) {
+                                  missing_text, sort, row_percent) {
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -820,6 +825,13 @@ summarize_categorical <- function(data, variable, by, var_label,
       select(c(variable, "by_col"))
   }
 
+  # row or column percents
+  # for column percent, group by 'by_col'
+  # for row percents, group by 'variable'
+  row_percent <- TRUE
+  percent_group_by_var <-
+    ifelse(row_percent == TRUE, "variable", "by_col")
+
   # nesting data and changing by variable
   tab <-
     data %>%
@@ -830,13 +842,14 @@ summarize_categorical <- function(data, variable, by, var_label,
     complete(!!sym("by_col"), !!sym("variable"), fill = list(n = 0)) %>%
     group_by(!!sym("variable")) %>%
     mutate(var_level_freq = sum(.data$n)) %>%
-    group_by(!!sym("by_col")) %>%
+    group_by(!!sym(percent_group_by_var)) %>%
     mutate(
       N = sum(.data$n),
       p = style_percent(.data$n / .data$N),
       stat = as.character(glue(stat_display))
     ) %>%
     select(c("by_col", "var_level_freq", "variable", "stat")) %>%
+    group_by(!!sym("by_col")) %>%
     spread(!!sym("by_col"), !!sym("stat")) %>%
     mutate(
       row_type = "level",
@@ -910,11 +923,13 @@ summarize_categorical <- function(data, variable, by, var_label,
 
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
-#   stat_display = "{n}/{N} ({p}%)", dichotomous_value = 50, missing = "ifany"
+#   stat_display = "{n}/{N} ({p}%)", dichotomous_value = 50, missing = "ifany",
+#   row_percent = FALSE
 # )
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
-#   stat_display = "{n}/{N} ({p}%)", dichotomous_value = NULL
+#   stat_display = "{n}/{N} ({p}%)", dichotomous_value = NULL, missing = "ifany",
+#   row_percent = FALSE
 # )
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = NULL, var_label = "WTF",
@@ -928,7 +943,8 @@ summarize_categorical <- function(data, variable, by, var_label,
 #
 # summarize_categorical(
 #   data = mtcars, variable = "cyl", by = "am", var_label = "WTF",
-#   stat_display = "{n} ({p}%)", dichotomous_value = NULL
+#   stat_display = "{n} ({p}%)", dichotomous_value = NULL, missing = "ifany",
+#   row_percent = FALSE
 # )
 
 
