@@ -142,7 +142,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
           )} %>%
           dplyr::group_by(.data$strata) %>%
           dplyr::summarise(
-            n.event.strata = sum(n.event.strata)
+            n.event.strata = sum(.data$n.event.strata)
           ),
         by = "strata"
       ) %>%
