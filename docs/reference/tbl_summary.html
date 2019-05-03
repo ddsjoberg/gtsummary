@@ -137,7 +137,7 @@ for detailed examples.</p>
     <pre class="usage"><span class='fu'>tbl_summary</span>(<span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>), <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>,
-  <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>row_percent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,7 +194,7 @@ to 1 decimal place, and the SD to 2 use <code>digits = list(age = c(1, 2))</code
     <tr>
       <th>group</th>
       <td><p>Character vector of an ID or grouping variable.  Summary statistics
-will not be printed for this column. The column may be used in <code><a href='add_comparison.html'>add_comparison</a></code> to
+will not be printed for this column. The column may be used in <a href='add_comparison.html'>add_comparison</a> to
 calculate p-values with correlated data. Default is <code>NULL</code></p></td>
     </tr>
     <tr>
@@ -215,11 +215,13 @@ Default is <code>"Unknown"</code>.</p></td>
 Options are 'frequency' where results are sorted in
 descending order of frequency and 'alphanumeric'</p></td>
     </tr>
+    <tr>
+      <th>row_percent</th>
+      <td><p>Logical value indicating whether to calculate
+percentages within column to across rows.  Default is to calculate
+percentages within columns: <code>row_percent = FALSE</code></p></td>
+    </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>List of summary statistics to be converted to a <code>gt</code> object</p>
     
     <h2 class="hasAnchor" id="statistic-argument"><a class="anchor" href="#statistic-argument"></a>statistic argument</h2>
 
@@ -298,8 +300,6 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#statistic-argument">statistic argument</a></li>
 
       <li><a href="#type-argument">type argument</a></li>
