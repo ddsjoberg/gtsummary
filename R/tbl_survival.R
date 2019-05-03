@@ -70,7 +70,8 @@ tbl_survival <- function(x, ...) {
 #' \itemize{
 #'   \item `{level}` level of the stratification variable
 #'   \item `{n}` number of observations, or number within stratum
-#'   \item `{n.event.tot}` total number of events (total across stratum)
+#'   \item `{n.event.tot}` total number of events (total across stratum, if applicable)
+#'   \item `{n.event.strata}` total number of events within stratum, if applicable
 #'   \item `{strata}` raw stratum specification from \code{survfit} object
 #' }
 #'
@@ -121,6 +122,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   # adding additional information to the results table -------------------------
   # if the results are stratified
   if (!is.null(x$strata)) {
+
     table_long <-
       table_long %>%
       left_join(
@@ -129,6 +131,19 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
           n = x$n,
           n.event.tot = x$n.event %>% sum()
         ),
+        by = "strata"
+      ) %>%
+      # merging in number of events within stratum
+      left_join(
+        summary(x) %>%
+          {tibble::tibble(
+            strata = .[["strata"]] %>% as.character(),
+            n.event.strata = .[["n.event"]]
+          )} %>%
+          dplyr::group_by(.data$strata) %>%
+          dplyr::summarise(
+            n.event.strata = sum(.data$n.event.strata)
+          ),
         by = "strata"
       ) %>%
       # parsing the stratum, and creating
@@ -167,8 +182,8 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   table_body <- table_long
 
   cols_hide_list <-
-    c("prob", "time", "strata", "n.risk", "n.event", "n",
-      "n.event.tot", "variable", "level", "conf.low", "conf.high") %>%
+    c("prob", "time", "strata", "n.risk", "n.event", "n", "n.event.tot",
+      "n.event.strata", "variable", "level", "conf.low", "conf.high") %>%
     intersect(names(table_body)) %>%
     paste(collapse = ", ")
 

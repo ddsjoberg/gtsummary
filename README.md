@@ -24,17 +24,17 @@ include the reference row for categorical variables in the model. Common
 regression models, such as logistic regression and Cox proportional
 hazards regression, are automatically identified and the tables are
 pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard
-Ratio).
+Ratio). The package uses [{broom}](https://broom.tidyverse.org/) to
+perform initial tidying of the regression models, which means there is
+broad support for many types of regression models.
 
 {gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
-each table to be tailored to your preferences. The package also uses
-[{broom}](https://broom.tidyverse.org/) to perform initial tidying of
-the regression models, which means many types of model are supported out
-of the box. If you label your data (which I recommend\!), the labels
-will be used in the table output. With {gtsummary} and labelled data,
-you get a beautifully formatted, ready-to-share table in a single line
-of code\! Check out the examples below, and review the vignettes for a
-detailed exploration of the output options.
+each table to be tailored to your preferences. If you label your data
+(which I recommend\!), the labels will be used in the table output. With
+{gtsummary} and labelled data, you get a beautifully formatted,
+ready-to-share table in a single line of code\! Check out the examples
+below, and review the vignettes for a detailed exploration of the output
+options.
 
 ## Installation
 
