@@ -68,7 +68,6 @@ test_that("inline_text.tbl_summary: with by -  expect errors", {
     inline_text(test_inline2, variable = "st55age", level = "T1", column = "Placebo"),
     "Is the variable name spelled correctly.*"
   )
-
 })
 
 
@@ -108,7 +107,6 @@ test_that("inline_text.regression -  expect errors", {
     inline_text(test_inline3, variable = "st55age"),
     "Is the variable name spelled correctly.*"
   )
-
 })
 
 # inline_text.tbl_survival tests  --------------
@@ -156,11 +154,11 @@ test_that("inline_text.tbl_survival - with strata", {
     "Must specify a positive 'time'."
   )
   expect_error(
-    inline_text(test_inline_surv_strata, strata =  NULL, time = 24),
+    inline_text(test_inline_surv_strata, strata = NULL, time = 24),
     "Must specify one of the following strata:*"
   )
   expect_error(
-    inline_text(test_inline_surv_strata, strata =  "Drururuug", time = 24),
+    inline_text(test_inline_surv_strata, strata = "Drururuug", time = 24),
     "Is the strata name spelled correctly*"
   )
 })

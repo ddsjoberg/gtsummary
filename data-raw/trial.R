@@ -16,9 +16,9 @@ trial <-
     response = runif(n) < response_prob,
     ttdeath_true =
       exp(1 + 0.2 * response +
-            -0.1 * as.numeric(stage) +
-            -0.1 * as.numeric(grade) +
-            rnorm(n, sd = 0.5)) * 12,
+        -0.1 * as.numeric(stage) +
+        -0.1 * as.numeric(grade) +
+        rnorm(n, sd = 0.5)) * 12,
     death = ifelse(ttdeath_true <= 24, 1L, 0L),
     ttdeath = pmin(ttdeath_true, 24) %>% round(digits = 2)
   ) %>%

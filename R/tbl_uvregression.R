@@ -16,18 +16,18 @@
 #'
 #' This list is not exhaustive, and care should be taken for each number reported.
 #'
-#' @param data Data frame to be used in univariate regression modeling.  Data
+#' @param data data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
-#' @param method Regression method (e.g. \code{\link[stats]{lm}},
+#' @param method regression method (e.g. \code{\link[stats]{lm}},
 #' \code{\link[stats]{glm}}, \code{\link[survival]{coxph}}, and more).
 #' @param y model outcome as a string (e.g. `y = recurrence` or `y = Surv(time, recur)`)
-#' @param formula String that becomes the model formula.
+#' @param formula string that becomes the model formula.
 #' Uses \code{\link[glue]{glue}} syntax. Default is `"{y} ~ {x}"`, where `{y}`
 #' is the dependent variable, and `{x}` represents a single covariate. For a
 #' random intercept, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
-#' @param method.args List of additional arguments passed on to the regression
-#' function defined by method.
-#' @param hide_n Hide N column. Default is `FALSE`
+#' @param method.args list of additional arguments passed on to the regression
+#' function defined by `method`.
+#' @param hide_n hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
@@ -35,14 +35,14 @@
 #' @export
 #' @examples
 #' tbl_uv_ex1 <-
-#'  tbl_uvregression(
-#'    trial %>% dplyr::select(response, age, grade),
-#'    method = glm,
-#'    y = response,
-#'    method.args = list(family = binomial),
-#'    exponentiate = TRUE
-#'  )
-#'
+#'   tbl_uvregression(
+#'     trial %>% dplyr::select(response, age, grade),
+#'     method = glm,
+#'     y = response,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE
+#'   )
+#' 
 #' # rounding pvalues to 2 decimal places
 #' library(survival)
 #' tbl_uv_ex2 <-
@@ -54,7 +54,6 @@
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -78,7 +77,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   y <- deparse(substitute(y)) %>% as.character()
 
   # checking estimate_fun and pvalue_fun are functions
-  if(!is.function(estimate_fun) | !is.function(pvalue_fun)) {
+  if (!is.function(estimate_fun) | !is.function(pvalue_fun)) {
     stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
   }
 
@@ -106,7 +105,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   tbl_uvregression_inputs <- as.list(environment())
 
   # checking that '{x}' appears on RHS of formula
-  if(word(formula, start = 2L, sep = fixed("~")) %>%
+  if (word(formula, start = 2L, sep = fixed("~")) %>%
     str_detect(pattern = fixed("{x}")) == FALSE) {
     stop("'{x}' must appear on RHS of '~' in formula argument")
   }
@@ -126,15 +125,15 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
       x_vars,
       function(x)
         do.call(
-        what = method,
-        args = c(
-          list(
-            formula = glue(formula) %>% stats::as.formula(),
-            data = data
-          ),
-          method.args
+          what = method,
+          args = c(
+            list(
+              formula = glue(formula) %>% stats::as.formula(),
+              data = data
+            ),
+            method.args
+          )
         )
-      )
     )
   names(model_obj_list) <- x_vars
 
@@ -178,7 +177,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   )
 
   # hiding N column if requested
-  if(hide_n ==TRUE) {
+  if (hide_n == TRUE) {
     results$gt_calls[["cols_hide_n"]] <-
       glue("cols_hide(columns = vars(N))")
   }
@@ -206,17 +205,17 @@ gt_tbl_uvregression <- quote(list(
   # here i do a setdiff of the variables i want to print by default
   cols_hide =
     "cols_hide(columns = vars(variable, row_ref, row_type, var_type))" %>%
-    glue(),
+      glue(),
 
   # NAs do not show in table
   fmt_missing =
     "fmt_missing(columns = everything(), missing_text = '')" %>%
-    glue(),
+      glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref =
     "fmt_missing(columns = vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
-    glue(),
+      glue(),
 
   # column headers
   cols_label = glue(
@@ -232,17 +231,17 @@ gt_tbl_uvregression <- quote(list(
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
     "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
-    glue(),
+      glue(),
 
   # ceof and confidence interval formatting
   fmt_estimate =
     "fmt(columns = vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
-    glue(),
+      glue(),
 
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
     "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
-    glue::as_glue(),
+      glue::as_glue(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
@@ -258,7 +257,7 @@ gt_tbl_uvregression <- quote(list(
   # extracting from the first variable regression model
   footnote_abbreviation =
     tbl_regression_list %>%
-    pluck(1, "gt_calls", "footnote_abbreviation")
+      pluck(1, "gt_calls", "footnote_abbreviation")
 ))
 
 # helper function to remove one value of "x" from a vector

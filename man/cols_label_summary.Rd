@@ -10,20 +10,21 @@ cols_label_summary(x, stat_overall = NULL, stat_by = NULL)
 \item{x}{\code{tbl_summary} object}
 
 \item{stat_overall}{string vector including text to appear above the overall summary
-statistics. \code{N}, the total number of observations, is available for use in the
+statistics. \code{{N}}, the total number of observations, is available for use in the
 description. e.g. \code{stat_overall = md("**All Patients**, N = {N}")}}
 
 \item{stat_by}{string vector of text to include above the summary statistics
 stratified by a variable.  The following fields are available for use in the
-headers: \code{n}, \code{N}, \code{p}, and \code{level}.  \code{n} is the number of observations in
-each by group. \code{N} is the total number of observations. \code{p} is the percent
-in a by group. \code{level} is the by variable level.
+headers: \code{{n}}, \code{{N}}, \code{{p}}, and \code{{level}}.  \code{{n}} is the number of observations in
+each by group. \code{{N}} is the total number of observations. \code{{p}} is the percent
+in a by group. \code{{level}} is the by variable level.
 Syntax follows the \link[glue:glue]{glue::glue} function,
 e.g. \code{stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")}.
-Must specify \code{by} along with \code{stat_by}.}
+The \code{by} argument from the parent \code{tbl_summary()} cannot be \code{NULL}.}
 }
 \description{
-Column labels can be modified using data from the data frame
+Column labels can be modified to include calculated statistics,
+e.g. the N and percent within each group
 }
 \section{Example Output}{
 
@@ -48,7 +49,7 @@ tbl_col_ex2 <-
   tbl_summary(by = "trt") \%>\%
   cols_label_summary(
     stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
-   )
+  )
 }
 \seealso{
 \link[gt:md]{gt::md}, \link[gt:html]{gt::html}

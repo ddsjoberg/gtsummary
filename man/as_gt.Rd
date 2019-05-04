@@ -16,10 +16,23 @@ as_gt(x, omit = NULL)
 Function converts object to a gt_tbl object.  This function is used in the
 background when the results are printed or knit.  A user can use this function
 if they wish to add customized formatting available via the
-\href{https://gt.rstudio.com/index.html}{gt package}
+\href{https://gt.rstudio.com/index.html}{gt package}.  Review the
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+or
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
+for detailed examples in the 'Advanced Customization' section.
 }
+\section{Example Output}{
+
+
+\if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_gt <- trial \%>\% tbl_summary(by = "trt") \%>\% as_gt()
+as_gt_ex <-
+  trial \%>\%
+  tbl_summary(by = "trt") \%>\%
+  as_gt()
 }
 \seealso{
 \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}

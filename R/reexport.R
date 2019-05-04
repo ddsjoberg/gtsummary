@@ -1,6 +1,5 @@
 #' magrittr forward-pipe operator
 #'
-#' \code{magrittr::\link[magrittr]{pipe}}
 #' \code{magrittr::\%>\%}
 #'
 #' @name %>%
@@ -17,4 +16,3 @@ NULL
 #' @export
 #' @importFrom knitr knit_print
 NULL
-

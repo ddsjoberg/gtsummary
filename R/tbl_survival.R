@@ -10,7 +10,7 @@ tbl_survival <- function(x, ...) {
 
 #' Creates table of survival probabilities
 #'
-#' Function takes a `survfit` object as an argument, and provides a tabulated and
+#' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'
 #' @param x a survfit object with a single stratifying variable
@@ -25,15 +25,15 @@ tbl_survival <- function(x, ...) {
 #' It is a string defining the label shown.  The input uses
 #' [glue::glue] notation to convert the string into a label.
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
-#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, and `'{strata}'`. See
+#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and `'{strata}'`. See
 #' below for details.
-#' @param header_label string to be displayed as column header of the time column.
+#' @param header_label string to be displayed as column header.
 #' Default is \code{md('**Time**')} when `time` is specified, and
 #' \code{md('**Quantile**')} when `probs` is specified.
 #' @param header_estimate string to be displayed as column header of the Kaplan-Meier
 #' estimate.  Default is \code{md('**Probability**')} when `time` is specified, and
 #' \code{md('**Time**')} when `probs` is specified.
-#' @param failure Calculate failure probabilities rather than survival.
+#' @param failure calculate failure probabilities rather than survival.
 #' Default is `FALSE`.  Does NOT apply to survival quantile requests
 #' @param missing character string indicating what to replace missing confidence
 #' limits with in output.  Default is `missing = "-"`
@@ -51,21 +51,22 @@ tbl_survival <- function(x, ...) {
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 #' tbl_strata_ex1 <-
 #'   tbl_survival(fit1,
-#'                times = c(12, 24),
-#'                label = "{time} Months")
-#'
+#'     times = c(12, 24),
+#'     label = "{time} Months"
+#'   )
+#' 
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' tbl_nostrata_ex2 <-
 #'   tbl_survival(fit2,
-#'                probs = c(0.1, 0.2),
-#'                header_estimate = md("**Months**"))
-#'
+#'     probs = c(0.1, 0.2),
+#'     header_estimate = md("**Months**")
+#'   )
 #' @section level_label argument:
 #' The `level_label` is used to modify the stratum labels. The default is
 #' \code{level_label = "{level}, N = {n}"}. The quantities in the curly
 #' brackets evaluate to stratum-specific values.  For example, in the trial
 #' data set, there is a column called `trt` with levels 'Drug' and 'Placebo'.
-#' In this example, {level} would evaluate to either 'Drug' or 'Placebo'
+#' In this example, `{level}` would evaluate to either 'Drug' or 'Placebo'
 #' depending on the stratum.  Other quantities available to print are:
 #' \itemize{
 #'   \item `{level}` level of the stratification variable
@@ -95,34 +96,43 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  estimate_fun = NULL,
                                  ...) {
   # input checks ---------------------------------------------------------------
-  if(c(is.null(times), is.null(probs)) %>% sum() != 1) {
+  if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of 'times' and 'probs' must be specified.")
   }
 
   # converting headers to un-evaluated string ----------------------------------
-  if(!is.null(header_label)) header_label <- deparse(substitute(header_label))
-  else if(is.null(probs)) header_label <- deparse(substitute(md('**Time**')))
-  else header_label <- deparse(substitute(md('**Quantile**')))
+  if (!is.null(header_label)) {
+    header_label <- deparse(substitute(header_label))
+  } else if (is.null(probs)) {
+    header_label <- deparse(substitute(md("**Time**")))
+  } else {
+    header_label <- deparse(substitute(md("**Quantile**")))
+  }
 
-  if(!is.null(header_estimate)) header_estimate <- deparse(substitute(header_estimate))
-  else if(is.null(probs)) header_estimate <- deparse(substitute(md('**Probability**')))
-  else header_estimate <- deparse(substitute(md('**Time**')))
+  if (!is.null(header_estimate)) {
+    header_estimate <- deparse(substitute(header_estimate))
+  } else if (is.null(probs)) {
+    header_estimate <- deparse(substitute(md("**Probability**")))
+  } else {
+    header_estimate <- deparse(substitute(md("**Time**")))
+  }
 
   # returning results ---------------------------------------------------------
   # first assigning a function to formating estimates and conf.high and conf.low
-  if(is.null(estimate_fun)) {
-    if (!is.null(times)) estimate_fun <- partial(style_percent, symbol = TRUE)
-    else if (!is.null(probs)) estimate_fun <- partial(style_sigfig, digits = 3)
+  if (is.null(estimate_fun)) {
+    if (!is.null(times)) {
+      estimate_fun <- partial(style_percent, symbol = TRUE)
+    } else if (!is.null(probs)) estimate_fun <- partial(style_sigfig, digits = 3)
   }
 
   # putting results into tibble -------------------------------------------------
-  if (!is.null(probs)) table_long <- surv_quantile(x, probs)
-  else if (!is.null(times)) table_long <- surv_time(x, times, failure)
+  if (!is.null(probs)) {
+    table_long <- surv_quantile(x, probs)
+  } else if (!is.null(times)) table_long <- surv_time(x, times, failure)
 
   # adding additional information to the results table -------------------------
   # if the results are stratified
   if (!is.null(x$strata)) {
-
     table_long <-
       table_long %>%
       left_join(
@@ -136,10 +146,12 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       # merging in number of events within stratum
       left_join(
         summary(x) %>%
-          {tibble::tibble(
-            strata = .[["strata"]] %>% as.character(),
-            n.event.strata = .[["n.event"]]
-          )} %>%
+          {
+            tibble::tibble(
+              strata = .[["strata"]] %>% as.character(),
+              n.event.strata = .[["n.event"]]
+            )
+          } %>%
           dplyr::group_by(.data$strata) %>%
           dplyr::summarise(
             n.event.strata = sum(.data$n.event.strata)
@@ -174,20 +186,24 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       ci = ifelse(
         is.na(.data$conf.low) & is.na(.data$conf.high),
         NA_character_,
-        glue("{coalesce(estimate_fun(conf.low), missing)}, ",
-             "{coalesce(estimate_fun(conf.high), missing)}")
+        glue(
+          "{coalesce(estimate_fun(conf.low), missing)}, ",
+          "{coalesce(estimate_fun(conf.high), missing)}"
+        )
       )
     ) %>%
     select(c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
   table_body <- table_long
 
   cols_hide_list <-
-    c("prob", "time", "strata", "n.risk", "n.event", "n", "n.event.tot",
-      "n.event.strata", "variable", "level", "conf.low", "conf.high") %>%
+    c(
+      "prob", "time", "strata", "n.risk", "n.event", "n", "n.event.tot",
+      "n.event.strata", "variable", "level", "conf.low", "conf.high"
+    ) %>%
     intersect(names(table_body)) %>%
     paste(collapse = ", ")
 
-  result = list()
+  result <- list()
   result[["table_body"]] <- table_body
   result[["table_long"]] <- table_long
   result[["survfit"]] <- x
@@ -209,12 +225,18 @@ surv_time <- function(x, times, failure) {
   # converting output into tibble
   table_body <-
     survfit_summary %>%
-    {.[names(.) %in% c("strata", "time", "surv",
-                       "lower", "upper", "n.risk", "n.event")]} %>%
+    {
+      .[names(.) %in% c(
+        "strata", "time", "surv",
+        "lower", "upper", "n.risk", "n.event"
+      )]
+    } %>%
     as_tibble() %>%
-    rename(estimate = .data$surv,
-           conf.low = .data$lower,
-           conf.high = .data$upper)
+    rename(
+      estimate = .data$surv,
+      conf.low = .data$lower,
+      conf.high = .data$upper
+    )
 
   # converting strata to character
   if ("strata" %in% names(table_body)) {
@@ -247,11 +269,13 @@ surv_quantile <- function(x, probs) {
     survfit_quantile <- x %>%
       stats::quantile(probs = probs) %>%
       purrr::imap(
-        ~t(.x) %>%
-          {dplyr::bind_cols(
-            tibble::tibble(prob = row.names(.)),
-            tibble::as_tibble(.)
-          )} %>%
+        ~ t(.x) %>%
+          {
+            dplyr::bind_cols(
+              tibble::tibble(prob = row.names(.)),
+              tibble::as_tibble(.)
+            )
+          } %>%
           tidyr::gather("strata", !!.y, -prob)
       )
 
@@ -268,7 +292,7 @@ surv_quantile <- function(x, probs) {
       x %>%
       stats::quantile(probs = probs) %>%
       purrr::imap(
-        ~tibble::tibble(
+        ~ tibble::tibble(
           prob = names(.x),
           !!.y := .x
         )
@@ -284,8 +308,10 @@ surv_quantile <- function(x, probs) {
 
   table_body %>%
     mutate(prob = as.numeric(.data$prob) / 100) %>%
-    rename(conf.low = .data$lower,
-           conf.high = .data$upper)
+    rename(
+      conf.low = .data$lower,
+      conf.high = .data$upper
+    )
 }
 
 
@@ -293,8 +319,10 @@ tbl_survival_gt_calls <- quote(list(
   # first call to gt
   gt = glue("gt(data = x$table_body)"),
   # centering columns except time
-  cols_align = glue("cols_align(align = 'center') %>%" ,
-                    "cols_align(align = 'left', columns = vars(label))"),
+  cols_align = glue(
+    "cols_align(align = 'center') %>%",
+    "cols_align(align = 'left', columns = vars(label))"
+  ),
   # hiding columns not for printing
   cols_hide = glue("cols_hide(columns = vars({cols_hide_list}))"),
   # labelling columns
@@ -311,6 +339,8 @@ tbl_survival_gt_calls <- quote(list(
   #   as_glue(),
   # adding CI footnote
   footnote_abbreviation =
-    glue("tab_footnote(footnote = 'CI = Confidence Interval',",
-         "locations = cells_column_labels(columns = vars(ci)))")
+    glue(
+      "tab_footnote(footnote = 'CI = Confidence Interval',",
+      "locations = cells_column_labels(columns = vars(ci)))"
+    )
 ))

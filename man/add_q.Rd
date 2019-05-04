@@ -17,6 +17,7 @@ Add a column of q values to account for
 multiple comparisons
 }
 \seealso{
+\code{\link{add_q.tbl_summary}}, \code{\link{add_q.tbl_uvregression}},
 \code{\link{tbl_summary}}, \code{\link{tbl_uvregression}}
 }
 \author{

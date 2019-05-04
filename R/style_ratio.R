@@ -1,6 +1,6 @@
 #' Implement significant figure-like rounding for ratios
 #'
-#' When reporting ratios, such as relative risk, or an odds ratio, we'll often
+#' When reporting ratios, such as relative risk or an odds ratio, we'll often
 #' want the rounding to be similar on each side of the number 1.  For example,
 #' if we report an odds ratio of 0.95 with a confidence interval of 0.70 to 1.24,
 #' we would want to round to two decimal places for all values. In other words,
@@ -15,15 +15,15 @@
 #' @seealso \code{\link{style_sigfig}}
 #' @author Daniel D. Sjoberg
 #' @examples
-#' c(0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
-#'   -0.9, -1.1234, -12.345, -101.234) %>%
+#' c(
+#'   0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
+#'   -0.9, -1.1234, -12.345, -101.234
+#' ) %>%
 #'   style_ratio()
-
 style_ratio <- function(x, digits = 2) {
   ifelse(
     abs(x) < 1,
     style_sigfig(x, digits = digits),
-    style_sigfig(x, digits = digits +  1)
+    style_sigfig(x, digits = digits + 1)
   )
 }
-

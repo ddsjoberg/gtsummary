@@ -12,14 +12,14 @@ t0 <-
     exponentiate = TRUE,
     label = list(trt = "Treatment", grade = "Grade", age = "Age")
   )
-#MVA logistic regression
+# MVA logistic regression
 t1 <-
   glm(response ~ trt + grade + age, trial, family = binomial) %>%
   tbl_regression(
     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
     exponentiate = TRUE
   )
-#MVA cox regression
+# MVA cox regression
 t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
   tbl_regression(
