@@ -27,10 +27,10 @@ would resolve to "6 Months" or "12 Months" depending on specified \code{times}.}
 It is a string defining the label shown.  The input uses
 \link[glue:glue]{glue::glue} notation to convert the string into a label.
 The default is \code{"{level}, N = {n}"}.  Other information available to
-call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, and \code{'{strata}'}. See
+call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, \code{'{n.event.strata}'}, and \code{'{strata}'}. See
 below for details.}
 
-\item{header_label}{string to be displayed as column header of the time column.
+\item{header_label}{string to be displayed as column header.
 Default is \code{md('**Time**')} when \code{time} is specified, and
 \code{md('**Quantile**')} when \code{probs} is specified.}
 
@@ -38,7 +38,7 @@ Default is \code{md('**Time**')} when \code{time} is specified, and
 estimate.  Default is \code{md('**Probability**')} when \code{time} is specified, and
 \code{md('**Time**')} when \code{probs} is specified.}
 
-\item{failure}{Calculate failure probabilities rather than survival.
+\item{failure}{calculate failure probabilities rather than survival.
 Default is \code{FALSE}.  Does NOT apply to survival quantile requests}
 
 \item{missing}{character string indicating what to replace missing confidence
@@ -51,7 +51,7 @@ The default is \code{style_percent(x, symbol = TRUE)} for survival probabilities
 \item{...}{not used}
 }
 \description{
-Function takes a \code{survfit} object as an argument, and provides a tabulated and
+Function takes a \code{survfit} object as an argument, and provides a
 formatted summary of the results
 }
 \section{level_label argument}{
@@ -60,7 +60,7 @@ The \code{level_label} is used to modify the stratum labels. The default is
 \code{level_label = "{level}, N = {n}"}. The quantities in the curly
 brackets evaluate to stratum-specific values.  For example, in the trial
 data set, there is a column called \code{trt} with levels 'Drug' and 'Placebo'.
-In this example, {level} would evaluate to either 'Drug' or 'Placebo'
+In this example, \code{{level}} would evaluate to either 'Drug' or 'Placebo'
 depending on the stratum.  Other quantities available to print are:
 \itemize{
 \item \code{{level}} level of the stratification variable

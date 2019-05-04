@@ -1,8 +1,7 @@
 #' Adds p-values to the output comparing values across groups
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
-#' @param test user defined list of statistical tests provided as a named
-#' character vector with variables as names and test functions as values.,
+#' @param test named list of statistical tests to perform,
 #' e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
 #' `..continuous..` and `..categorical..` to specify a test for all variables
 #' of that type (`..categorical..` is applied to both categorical and
@@ -10,7 +9,7 @@
 #' Options include "t.test" for a t-test,
 #' "wilcox.test" for a Wilcoxon rank-sum test,
 #' "kruskal.test" for a Kruskal-Wallis rank-sum test,
-#' "chisq.test" for a Chi-squared test,
+#' "chisq.test" for a Chi-squared test of independence,
 #' "fisher.test" for a Fisher's exact test,
 #' and "lme4" for a random intercept model to account for clustered data.
 #' For "lme4" to be used "group" must also be specified in the [tbl_summary] call.
@@ -29,6 +28,7 @@
 #' @section Example Output:
 #' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
 #'
+
 add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
                            group = x$inputs$group) {
   # checking that input is class tbl_summary

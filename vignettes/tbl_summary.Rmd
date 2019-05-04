@@ -19,7 +19,7 @@ library(gtsummary)
 
 ## Introduction
 
-This vignette will walk a reader through the `tbl_summary()` function, and the various functions available to modify and make additions to an existing summary table object.
+This vignette will walk a reader through the `tbl_summary()` function, and the various functions available to modify and make additions to an existing table summary object.
 
 To start, a quick note on the `magrittr` package's pipe function, `%>%`.  By default the pipe operator puts whatever is on the left hand side of `%>%` into the first argument of the function on the right hand side.  The pipe function can be used to make the code relating to `tbl_summary()` easier to use, but it is *not* required.  Here are a few examples of how `%>%` translates into typical R notation.
 
@@ -57,7 +57,7 @@ library(gtsummary)
 head(trial) %>% gt()
 ```
 
-The default output from `tbl_summary()` is meant to be publication ready.  Let's start by creating a summary statistics table from the `trial` data set built into the {gtsummary} package.  The `tbl_summary()` can take, minimally, a data set as the only input, and return descriptive statistics for each column in the data frame.
+The default output from `tbl_summary()` is meant to be publication ready.  Let's start by creating a table of summary statistics from the `trial` data set.  The `tbl_summary()` can take, minimally, a data set as the only input, and return descriptive statistics for each column in the data frame.
 
 For brevity, keeping a subset of the variables in the trial data set.
 
@@ -69,7 +69,7 @@ trial2 =
 tbl_summary(trial2)
 ```
 
-This is a great table, but for trial data the summary statistics should be split by randomization group.  While reporting p-values for baseline characteristics in a randomized trial isn't recommended, we'll do it here as an illustration.  To compare two or more groups, include `add_comparison()` to the function call.
+This is a great table, but for trial data the summary statistics should be split by randomization group.  While reporting p-values for baseline characteristics in a randomized trial isn't recommended, we'll do it here as an illustration of the feature.  To compare two or more groups, include `add_comparison()` with the function call.
 
 ```{r}
 tbl_summary(trial2, by = "trt") %>% add_comparison()
@@ -88,10 +88,13 @@ There are four primary was to customize the output of the summary table.
 
 The `tbl_summary()` function includes many input options for modifying the appearance.
 
-    label       modify the variable labels printed in the table  
+    label       specify the variable labels printed in table  
+    type        specify the variable type (e.g. continuous, categorical, etc.)
     statistic   change the summary statistics presented  
     digits      number of digits the summary statistics will be rounded to  
-    missing     whether to display a row with the number of missing observations  
+    missing     whether to display a row with the number of missing observations 
+    sort        change the sorting of categorical levels by frequency
+    row_percent print row percentages, rather than column for categorical variables
 
 ### Functions to add information
 
@@ -173,7 +176,7 @@ Each of the modification functions have additional options outlined in their res
 
 Reproducible reports are an import part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
 
-Let's first create a basic summary table.
+First create a basic summary table.
 
 ```{r}
 tab1 = tbl_summary(trial2, by = "trt")
@@ -195,9 +198,11 @@ If you display a statistic from a categorical variable, include the `level` argu
 > `` `r
 inline_text(tab1, variable = "stage", level = "T1", column = "Drug")` `` resolves to "`r inline_text(tab1, variable = "stage", level = "T1", column = "Drug")`"
 
+For more detail about inline code, review to the  [Rstudio documentation page](https://rmarkdown.rstudio.com/lesson-4.html).
+
 ## Advanced Customization
 
-When you print the output from the `tbl_summary()` function into the R console or into an R markdown, there are default printing functions that are called in the background: `print.tbl_summary()` and `knit_print.tbl_summary()`.  The true output from `tbl_summary()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the {gt} package.
+When you print output from the `tbl_summary()` function into the R console or into an R markdown, there are default printing functions that are called in the background: `print.tbl_summary()` and `knit_print.tbl_summary()`.  The true output from `tbl_summary()` is a named list, but when you print the object, a formatted version of `.$table_body` is displayed.  All formatting and modifications are made using the {gt} package.
 
 ```{r}
 tbl_summary(trial2) %>% names()
@@ -220,9 +225,9 @@ tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% head(n = 3)
 
 The {gt} functions are called in the order they appear, always beginning with the `gt()` function.
 
-If the user does not want a specific {gt} function to run, any {gt} call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_summary()` call creates many named {gt} function calls: *`r tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any of these can be omitted.  In the example example, the default footnote will be omitted from the output.
+If the user does not want a specific {gt} function to run (i.e. would like to change default printing), any {gt} call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_summary()` call creates many named {gt} function calls: *`r tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any of these can be omitted.  In the example below, the default footnote will be omitted from the output.
 
-After the `as_gt()` function is run, additional formatting may be added to the table using the standard formatting functions from the {gt} package. In the example below, a spanning header for the `by = ` variable is included.
+After the `as_gt()` function is run, additional formatting may be added to the table using {gt} formatting functions. In the example below, a spanning header for the `by = ` variable is included with the {gt} function `tab_spanner()`.
 
 ```{r remedy001}
 tbl_summary(trial2, by = "trt") %>%

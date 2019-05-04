@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an object created using \code{tbl_summary} function}
 
-\item{t}{Determines the threshold below which p-values will be bold. Default is 0.05.}
+\item{t}{threshold below which p-values will be bold. Default is 0.05.}
 
 \item{q}{logical argument. When TRUE will bold the q-value column rather than the p-values}
 

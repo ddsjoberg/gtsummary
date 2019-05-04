@@ -1,43 +1,43 @@
 #' Create a table of summary statistics
 #'
-#' The `tbl_summary` function calculates descriptive statistics by groups for
+#' The `tbl_summary` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.  Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' for detailed examples.
 #'
 #' @param data a data frame
-#' @param by a character name of a categorical variable in data, `by = "group"`.
-#' Summary statistics will be calculated separately for each level of the by variable.
+#' @param by a character vector specifying a column in data.
+#' Summary statistics will be calculated separately for each level of the `by` variable.
 #' If `NULL`, summary statistics
 #' are calculated using all observations.
-#' @param label A list of variable labels,
+#' @param label named list of variable labels,
 #' e.g. `list(age = "Age, yrs", ptstage = "Path T Stage")`.  If `NULL`, the function
 #' will take the label attribute (`attr(data$age, "label")`).  If
-#' the label doesn't exist, the variable name will be used.
-#' @param type A list that includes specified summary types.  Accepted values
+#' attribute label is `NULL`, the variable name will be used.
+#' @param type named list that includes specified summary types.  Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
 #' e.g. `type = list(age = "continuous", female = "dichotomous")`.
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type.  See below for details.
-#' @param value A list that specifies the value to display for dichotomous
-#' values only.  See below for details.
-#' @param statistic A named list of the type of statistics to return for each variable
+#' @param value named list that specifies the value to display for dichotomous
+#' variables.  See below for details.
+#' @param statistic named list of the type of statistics to return for each variable
 #' or variable class.  The default is
 #' `list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")`.
 #' See below for details.
-#' @param digits A named list of integers indicating the number of decimal
+#' @param digits named list of integers indicating the number of decimal
 #' places to round continuous summary statistics. Names of the list can be any
-#' continuous variable in 'data', or `"..continuous"` to apply to all
+#' continuous variable in 'data', or `"..continuous"` to apply rounding to all
 #' variables.  If not specified, `tbl_summary` does its best to guess an
 #' appropriate level to round statistics.  To round statistics to different
 #' levels, supply a vector rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list(age = c(1, 2))`.
-#' @param group Character vector of an ID or grouping variable.  Summary statistics
+#' @param group character vector of an ID or grouping variable.  Summary statistics
 #' will not be printed for this column. The column may be used in [add_comparison] to
 #' calculate p-values with correlated data. Default is `NULL`
-#' @param missing whether to include `NA` values in the table. `missing` controls
-#' if the table includes counts of `NA` values: the allowed values correspond to
+#' @param missing indicates whether to include counts of `NA` values in the table.
+#' allowed values are
 #' never (`"no"`), only if the count is positive (`"ifany"`) and even for
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @param missing_text String to display for count of missing observations.
@@ -45,7 +45,7 @@
 #' @param sort named list indicating the type of sorting to perform. Default is NULL.
 #' Options are 'frequency' where results are sorted in
 #' descending order of frequency and 'alphanumeric'
-#' @param row_percent Logical value indicating whether to calculate
+#' @param row_percent logical value indicating whether to calculate
 #' percentages within column to across rows.  Default is to calculate
 #' percentages within columns: `row_percent = FALSE`
 #'
@@ -62,7 +62,6 @@
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
 #'   \item `{p}` percent formatted by [style_percent]
-#'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
 #' }
 #' For continuous variables the following statistics are available to display.
 #' \itemize{
@@ -72,6 +71,7 @@
 #'   \item `{var}` variance
 #'   \item `{min}` minimum
 #'   \item `{max}` maximum
+#'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
 #'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }
 #'

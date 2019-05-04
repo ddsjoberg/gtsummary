@@ -25,7 +25,8 @@ number of non-missing (or missing) observations
 
 \examples{
 tbl_n_ex <-
-  trial \%>\%
+  trial  \%>\%
+  dplyr::select(trt, age, grade, response) \%>\%
   tbl_summary(by = "trt") \%>\%
   add_n()
 }

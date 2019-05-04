@@ -20,21 +20,21 @@ data sets, regression models, and more. The code to create the tables is
 concise and highly customizable. The resulting tables are georgeous\!
 Data frames can be summarized with any function, e.g. mean(), median(),
 even user-written functions. Regression models are summarized and
-include the reference row for categorical variables in the model. Common
-regression models, such as logistic regression and Cox proportional
-hazards regression, are automatically identified and the tables are
-pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard
-Ratio). The package uses [{broom}](https://broom.tidyverse.org/) to
-perform initial tidying of the regression models, which means there is
-broad support for many types of regression models.
+include the reference rows for categorical variables. Common regression
+models, such as logistic regression and Cox proportional hazards
+regression, are automatically identified and the tables are pre-filled
+with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The
+package uses [{broom}](https://broom.tidyverse.org/) to perform initial
+tidying of the regression models, which means there is broad support for
+many types of regression models.
 
 {gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
 each table to be tailored to your preferences. If you label your data
 (which I recommend\!), the labels will be used in the table output. With
-{gtsummary} and labelled data, you get a beautifully formatted,
-ready-to-share table in a single line of code\! Check out the examples
-below, and review the vignettes for a detailed exploration of the output
-options.
+{gtsummary} and [labelled](http://larmarange.github.io/labelled/) data,
+you get a beautifully formatted, ready-to-share table in a single line
+of code\! Check out the examples below, and review the vignettes for a
+detailed exploration of the output options.
 
 ## Installation
 
@@ -53,9 +53,7 @@ remotes::install_github("ddsjoberg/gtsummary", ref = "dev")
 
 ## Examples
 
-The vignettes/tutorials for {gtsummary} functions have detailed examples
-and can be found at
-[danieldsjoberg.com/gtsummary](http://www.danieldsjoberg.com/gtsummary).
+The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ### Summary Table
 
@@ -70,8 +68,6 @@ t1 <-
   add_comparison() 
 ```
 
-<!-- ![](man/figures/README-tbl_summary.png){ width=65% } -->
-
 <img src="man/figures/README-tbl_summary.png" width="60%">
 
 ### Regression Models
@@ -83,8 +79,6 @@ t2 <-
   tbl_regression(mod1,
                  exponentiate = TRUE)
 ```
-
-<!-- ![](man/figures/README-tbl_regression.png){ width=47% } -->
 
 <img src="man/figures/README-tbl_regression.png" width="44%">
 

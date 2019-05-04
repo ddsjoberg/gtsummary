@@ -11,7 +11,7 @@ add_stat_label(x)
 }
 \description{
 Rather than simply printing the summary statistics, with the use of \code{add_stat_label()},
-a column labeling the summary statistics is added
+a column labelling the summary statistics is added
 }
 \section{Example Output}{
 

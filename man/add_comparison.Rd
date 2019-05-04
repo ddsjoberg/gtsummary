@@ -10,8 +10,7 @@ add_comparison(x, test = NULL, pvalue_fun = style_pvalue,
 \arguments{
 \item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{test}{user defined list of statistical tests provided as a named
-character vector with variables as names and test functions as values.,
+\item{test}{named list of statistical tests to perform,
 e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
 \code{..continuous..} and \code{..categorical..} to specify a test for all variables
 of that type (\code{..categorical..} is applied to both categorical and
@@ -19,7 +18,7 @@ dichotomous variables).
 Options include "t.test" for a t-test,
 "wilcox.test" for a Wilcoxon rank-sum test,
 "kruskal.test" for a Kruskal-Wallis rank-sum test,
-"chisq.test" for a Chi-squared test,
+"chisq.test" for a Chi-squared test of independence,
 "fisher.test" for a Fisher's exact test,
 and "lme4" for a random intercept model to account for clustered data.
 For "lme4" to be used "group" must also be specified in the \link{tbl_summary} call.}
@@ -31,7 +30,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{Character vector of an ID or grouping variable.  Summary statistics
+\item{group}{character vector of an ID or grouping variable.  Summary statistics
 will not be printed for this column. The column may be used in \link{add_comparison} to
 calculate p-values with correlated data. Default is \code{NULL}}
 }
