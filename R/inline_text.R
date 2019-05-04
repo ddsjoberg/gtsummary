@@ -31,12 +31,10 @@ inline_text <- function(x, ...) {
 #' @examples
 #' t1 <- tbl_summary(trial)
 #' t2 <- tbl_summary(trial, by = "trt") %>% add_comparison()
-#'
+#' 
 #' inline_text(t1, variable = "age")
 #' inline_text(t2, variable = "grade", level = "I", column = "Drug")
 #' inline_text(t2, variable = "grade", column = "p.value")
-
-
 inline_text.tbl_summary <-
   function(x, variable, level = NULL,
              column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
@@ -79,7 +77,7 @@ inline_text.tbl_summary <-
     if (nrow(result) == 0) {
       stop(glue(
         "Is the variable name spelled correctly? variable must be one of: ",
-          "{pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
+        "{pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
       ))
     }
 
@@ -155,10 +153,9 @@ inline_text.tbl_summary <-
 #' inline_text_ex1 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#'
+#' 
 #' inline_text(inline_text_ex1, variable = "age")
 #' inline_text(inline_text_ex1, variable = "grade", level = "III")
-
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
              pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
@@ -244,10 +241,9 @@ inline_text.tbl_regression <-
 #'     y = response,
 #'     exponentiate = TRUE
 #'   )
-#'
+#' 
 #' inline_text(inline_text_ex1, variable = "age")
 #' inline_text(inline_text_ex1, variable = "grade", level = "III")
-
 inline_text.tbl_uvregression <- inline_text.tbl_regression
 
 
@@ -296,41 +292,40 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' surv_table <-
 #'   survfit(Surv(ttdeath, death) ~ trt, trial) %>%
 #'   tbl_survival(times = c(12, 24))
-#'
+#' 
 #' inline_text(surv_table,
-#'             strata = "Drug",
-#'             time = 12)
-
-
+#'   strata = "Drug",
+#'   time = 12
+#' )
 inline_text.tbl_survival <-
   function(x, strata = NULL,
-           time = NULL, prob = NULL,
-           pattern = "{estimate} ({conf.level*100}% CI {ci})",
-           estimate_fun = x$estimate_fun,
-           ...) {
+             time = NULL, prob = NULL,
+             pattern = "{estimate} ({conf.level*100}% CI {ci})",
+             estimate_fun = x$estimate_fun,
+             ...) {
 
     # input checks ---------------------------------------------------------------
-    if(c(is.null(time), is.null(prob)) %>% sum() != 1) {
+    if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
       stop("One and only one of 'time' and 'prob' must be specified.")
     }
-    if(!is.null(time)) {
-      if(time < 0) stop("Must specify a positive 'time'.")
+    if (!is.null(time)) {
+      if (time < 0) stop("Must specify a positive 'time'.")
     }
-    if(!is.null(prob)) {
-      if(prob < 0 | prob > 1) stop("Must specify a 'prob' between 0 and 1.")
+    if (!is.null(prob)) {
+      if (prob < 0 | prob > 1) stop("Must specify a 'prob' between 0 and 1.")
     }
 
     # creating a var that is either time or prob (the fixed variable)
-    fixed_val = time %||% prob
+    fixed_val <- time %||% prob
 
-    if(length(fixed_val) != 1) stop("'time' or 'prob' must be length 1")
+    if (length(fixed_val) != 1) stop("'time' or 'prob' must be length 1")
 
-    if(!is.null(time)) {
+    if (!is.null(time)) {
       result <-
         x$table_long %>%
         mutate(fixed_var = time)
     }
-    if(!is.null(prob)) {
+    if (!is.null(prob)) {
       result <-
         x$table_long %>%
         mutate(fixed_var = prob)
@@ -340,11 +335,12 @@ inline_text.tbl_survival <-
 
     # select strata ------------------------------------------------------------
     # if multiple strata exist in tbl_survival, grab rows matching specified strata
-    if("strata" %in% names(x$table_long)) {
-
-      if(is.null(strata)) {
-        stop(glue("Must specify one of the following strata: ",
-                  "{pluck(x, 'table_long', 'level') %>% unique() %>% paste(collapse = ', ')}"))
+    if ("strata" %in% names(x$table_long)) {
+      if (is.null(strata)) {
+        stop(glue(
+          "Must specify one of the following strata: ",
+          "{pluck(x, 'table_long', 'level') %>% unique() %>% paste(collapse = ', ')}"
+        ))
       }
 
       result <-
@@ -356,13 +352,11 @@ inline_text.tbl_survival <-
           "Is the strata name spelled correctly? strata must be one of: ",
           "{pluck(x, 'table_long', 'level') %>% unique() %>% paste(collapse = ', ')}"
         ))
-
       }
     } else {
-      if(!is.null(strata)) {
+      if (!is.null(strata)) {
         warning(glue("Ignoring strata = '{strata}'. No strata in tbl_survival. "))
       }
-
     }
 
     # select time --------------------------------------------------------------
@@ -370,8 +364,10 @@ inline_text.tbl_survival <-
     # return result for closest time and give warning
     display_fixed <- result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
     if (!fixed_val %in% result$fixed_var) {
-      message(glue("Specified 'time' or 'prob' not in 'x': '{fixed_val}'. ",
-                   "Displaying nearest estimate: {display_fixed}"))
+      message(glue(
+        "Specified 'time' or 'prob' not in 'x': '{fixed_val}'. ",
+        "Displaying nearest estimate: {display_fixed}"
+      ))
     }
 
     result <-
@@ -381,8 +377,10 @@ inline_text.tbl_survival <-
     # formatting result and returning ------------------------------------------
     result <-
       result %>%
-      mutate_at(vars(c("estimate", "conf.low", "conf.high")),
-                estimate_fun) %>%
+      mutate_at(
+        vars(c("estimate", "conf.low", "conf.high")),
+        estimate_fun
+      ) %>%
       mutate(
         conf.level = x$survfit$conf.int,
         stat = glue(pattern)
@@ -391,5 +389,3 @@ inline_text.tbl_survival <-
 
     result
   }
-
-

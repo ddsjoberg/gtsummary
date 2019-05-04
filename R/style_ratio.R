@@ -15,15 +15,15 @@
 #' @seealso \code{\link{style_sigfig}}
 #' @author Daniel D. Sjoberg
 #' @examples
-#' c(0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
-#'   -0.9, -1.1234, -12.345, -101.234) %>%
+#' c(
+#'   0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
+#'   -0.9, -1.1234, -12.345, -101.234
+#' ) %>%
 #'   style_ratio()
-
 style_ratio <- function(x, digits = 2) {
   ifelse(
     abs(x) < 1,
     style_sigfig(x, digits = digits),
-    style_sigfig(x, digits = digits +  1)
+    style_sigfig(x, digits = digits + 1)
   )
 }
-

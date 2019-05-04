@@ -118,7 +118,6 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #'     exponentiate = TRUE
 #'   ) %>%
 #'   tab_style_bold_p(t = 0.25)
-#'
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uvglm_bold_p_ex.png}{options: width=50\%}}
 

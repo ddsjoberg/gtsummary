@@ -137,9 +137,10 @@ tbl_summary_ex1 <-
 tbl_summary_ex2 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
-  tbl_summary(by = "trt",
-              label = list(age = "Patient Age"))
-
+  tbl_summary(
+    by = "trt",
+    label = list(age = "Patient Age")
+  )
 }
 \seealso{
 Other tbl_summary tools: \code{\link{add_comparison}},

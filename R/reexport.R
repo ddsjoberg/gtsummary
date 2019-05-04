@@ -16,4 +16,3 @@ NULL
 #' @export
 #' @importFrom knitr knit_print
 NULL
-

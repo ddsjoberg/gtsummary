@@ -49,7 +49,7 @@ tbl_col_ex2 <-
   tbl_summary(by = "trt") \%>\%
   cols_label_summary(
     stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
-   )
+  )
 }
 \seealso{
 \link[gt:md]{gt::md}, \link[gt:html]{gt::html}

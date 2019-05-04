@@ -98,13 +98,14 @@
 #'   trial %>%
 #'   dplyr::select(age, grade, response) %>%
 #'   tbl_summary()
-#'
+#' 
 #' tbl_summary_ex2 <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
-#'   tbl_summary(by = "trt",
-#'               label = list(age = "Patient Age"))
-#'
+#'   tbl_summary(
+#'     by = "trt",
+#'     label = list(age = "Patient Age")
+#'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -130,11 +131,11 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   # removing variables with unsupported variable types from data
   classes_expected <- c("character", "factor", "numeric", "logical", "integer", "double")
   var_to_remove <-
-    map_lgl(data, ~class(.x) %in% classes_expected %>% any()) %>%
+    map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
     discard(. == TRUE) %>%
     names()
   data <- data %>% dplyr::select(-var_to_remove)
-  if(length(var_to_remove) > 0) {
+  if (length(var_to_remove) > 0) {
     var_to_remove_quoted <- paste0("'", var_to_remove, "'")
     classes_expected_quoted <- paste0("'", classes_expected, "'")
     message(glue(
