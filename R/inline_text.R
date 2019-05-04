@@ -139,10 +139,10 @@ inline_text.tbl_summary <-
 #' The following items are available to print.  Use `print(x$table_body)` to
 #' print the table the estimates are extracted from.
 #' \itemize{
-#'   \item `{estimate}` coeficient estiamte formatted with 'estimate_fun'
-#'   \item `{conf.low}` lower limit of confidence interval formmated with 'estimate_fun'
-#'   \item `{conf.high}` upper limit of confidence interval formmated with 'estimate_fun'
-#'   \item `{ci}` confidence interval formmated with x$estimate_fun
+#'   \item `{estimate}` coefficient estimate formatted with 'estimate_fun'
+#'   \item `{conf.low}` lower limit of confidence interval formatted with 'estimate_fun'
+#'   \item `{conf.high}` upper limit of confidence interval formatted with 'estimate_fun'
+#'   \item `{ci}` confidence interval formatted with x$estimate_fun
 #'   \item `{p.value}` p-value formatted with 'pvalue_fun'
 #'   \item `{N}` number of observations in model
 #'   \item `{label}` variable/variable level label
@@ -277,9 +277,9 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' \itemize{
 #'   \item `{label}` time or prob label
 #'   \item `{estimate}` survival or survival time estimate formatted with 'estimate_fun'
-#'   \item `{conf.low}` lower limit of confidence interval formated with 'estimate_fun'
-#'   \item `{conf.high}` upper limit of confidence interval formated with 'estimate_fun'
-#'   \item `{ci}` confidence interval formmated with x$estimate_fun (pre-formatted)
+#'   \item `{conf.low}` lower limit of confidence interval formatted with 'estimate_fun'
+#'   \item `{conf.high}` upper limit of confidence interval formatted with 'estimate_fun'
+#'   \item `{ci}` confidence interval formatted with x$estimate_fun (pre-formatted)
 #'   \item `{time}/{prob}` time or survival quantile (numeric)
 #'   \item `{n.risk}` number at risk at 'time' (within stratum if applicable)
 #'   \item `{n.event}` number of observed events at 'time' (within stratum if applicable)

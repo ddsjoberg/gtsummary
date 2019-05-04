@@ -41,9 +41,9 @@ print the table the estimates are extracted from.
 \itemize{
 \item \code{{label}} time or prob label
 \item \code{{estimate}} survival or survival time estimate formatted with 'estimate_fun'
-\item \code{{conf.low}} lower limit of confidence interval formated with 'estimate_fun'
-\item \code{{conf.high}} upper limit of confidence interval formated with 'estimate_fun'
-\item \code{{ci}} confidence interval formmated with x$estimate_fun (pre-formatted)
+\item \code{{conf.low}} lower limit of confidence interval formatted with 'estimate_fun'
+\item \code{{conf.high}} upper limit of confidence interval formatted with 'estimate_fun'
+\item \code{{ci}} confidence interval formatted with x$estimate_fun (pre-formatted)
 \item \code{{time}/{prob}} time or survival quantile (numeric)
 \item \code{{n.risk}} number at risk at 'time' (within stratum if applicable)
 \item \code{{n.event}} number of observed events at 'time' (within stratum if applicable)

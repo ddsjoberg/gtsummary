@@ -17,7 +17,7 @@ status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)
 
 The {gtsummary} package creates presentation-ready tables summarizing
 data sets, regression models, and more. The code to create the tables is
-concise and highly customizable. The resulting tables are georgeous\!
+concise and highly customizable. The resulting tables are gorgeous\!
 Data frames can be summarized with any function, e.g. mean(), median(),
 even user-written functions. Regression models are summarized and
 include the reference rows for categorical variables. Common regression

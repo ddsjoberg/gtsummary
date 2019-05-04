@@ -7,7 +7,7 @@
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' or
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
-#' for detailed examples in the 'Advacned Customization' section.
+#' for detailed examples in the 'Advanced Customization' section.
 #'
 #' @param x object created by a function from the gtsummary package
 #' (e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})
