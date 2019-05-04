@@ -24,7 +24,6 @@
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison()
-#'
 #' @section Example Output:
 #' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
 #'
@@ -50,7 +49,7 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
   }
 
   # checking pvalue_fun are functions
-  if(!is.function(pvalue_fun)) {
+  if (!is.function(pvalue_fun)) {
     stop("Input 'pvalue_fun' must be a function.")
   }
 
@@ -108,11 +107,11 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
 
   # adding footnote listing statistics presented in table
   x[["gt_calls"]][["footnote_add_comparison"]] <- glue(
-    'tab_footnote(',
+    "tab_footnote(",
     'footnote = "{footnote_add_comparison(meta_data)}",',
-    'locations = cells_column_labels(',
-    'columns = vars(p.value))',
-    ')'
+    "locations = cells_column_labels(",
+    "columns = vars(p.value))",
+    ")"
   )
 
   x

@@ -35,7 +35,6 @@ tbl_uvglm_bold_p_ex <-
     exponentiate = TRUE
   ) \%>\%
   tab_style_bold_p(t = 0.25)
-
 }
 \author{
 Daniel D. Sjoberg

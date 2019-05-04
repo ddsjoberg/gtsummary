@@ -9,7 +9,6 @@
 #' @export
 #' @examples
 #' gtsummary_logo()
-
 gtsummary_logo <- function(unicode = l10n_info()$`UTF-8`) {
   # get the letters at https://www.messletters.com/en/big-text/
   # font is smslant
@@ -20,13 +19,16 @@ gtsummary_logo <- function(unicode = l10n_info()$`UTF-8`) {
       " 9 / _ `/ __/(_-</ // /  ' \\/  ' \\/ _ `/ __/ // /",
       "   \\_, /\\__//___/\\_,_/_/_/_/_/_/_/\\_,_/_/  \\_, / ",
       "  /___/  5        6       7     8        9/___/  ",
-      "                                                 ")
+      "                                                 "
+    )
 
   hexa <- c("*", ".", "o", "*", ".", "*", ".", "o", ".", "*")
   if (unicode) hexa <- c("*" = "\u2b22", "o" = "\u2b21", "." = ".")[hexa]
 
-  cols <- c("red", "yellow", "green", "magenta", "cyan",
-            "yellow", "green", "white", "magenta", "cyan")
+  cols <- c(
+    "red", "yellow", "green", "magenta", "cyan",
+    "yellow", "green", "white", "magenta", "cyan"
+  )
 
   col_hexa <- purrr::map2(hexa, cols, ~ crayon::make_style(.y)(.x))
 
@@ -44,4 +46,3 @@ print.gtsummary_logo <- function(x, ...) {
   cat(x, ..., sep = "\n")
   invisible(x)
 }
-

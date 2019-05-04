@@ -86,13 +86,13 @@ This list is not exhaustive, and care should be taken for each number reported.
 
 \examples{
 tbl_uv_ex1 <-
- tbl_uvregression(
-   trial \%>\% dplyr::select(response, age, grade),
-   method = glm,
-   y = response,
-   method.args = list(family = binomial),
-   exponentiate = TRUE
- )
+  tbl_uvregression(
+    trial \%>\% dplyr::select(response, age, grade),
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  )
 
 # rounding pvalues to 2 decimal places
 library(survival)
@@ -105,7 +105,6 @@ tbl_uv_ex2 <-
     exponentiate = TRUE,
     pvalue_fun = function(x) style_pvalue(x, digits = 2)
   )
-
 }
 \seealso{
 Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},

@@ -48,7 +48,6 @@ add_comp_ex1 <-
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(by = "trt") \%>\%
   add_comparison()
-
 }
 \seealso{
 Other tbl_summary tools: \code{\link{add_n}},

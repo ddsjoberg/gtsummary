@@ -61,8 +61,9 @@ surv_table <-
   tbl_survival(times = c(12, 24))
 
 inline_text(surv_table,
-            strata = "Drug",
-            time = 12)
+  strata = "Drug",
+  time = 12
+)
 }
 \seealso{
 Other tbl_survival tools: \code{\link{tbl_survival.survfit}}

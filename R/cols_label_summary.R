@@ -30,7 +30,7 @@
 #'   tbl_summary(by = "trt") %>%
 #'   cols_label_summary(
 #'     stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
-#'    )
+#'   )
 #' @export
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -91,7 +91,7 @@ col_label_by <- function(df_by, stat_by) {
 }
 
 col_label_overall <- function(stat_overall, N) {
-  glue(stat_overall) %>%
-  {glue("cols_label(stat_0 = {.})")}
+  glue(stat_overall) %>% {
+    glue("cols_label(stat_0 = {.})")
+  }
 }
-

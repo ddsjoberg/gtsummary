@@ -93,7 +93,6 @@ library(lme4)
 tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
-
 }
 \seealso{
 Other tbl_regression tools: \code{\link{add_global.tbl_regression}},

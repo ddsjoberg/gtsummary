@@ -44,7 +44,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   }
 
   # checking pvalue_fun are functions
-  if(!is.function(pvalue_fun)) {
+  if (!is.function(pvalue_fun)) {
     stop("Input 'pvalue_fun' must be a function.")
   }
 
@@ -74,7 +74,9 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   # footnote text
   footnote_text <-
     method %>%
-    {filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))} %>%
+    {
+      filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))
+    } %>%
     pull("method_label")
 
   x$qvalue_fun <- pvalue_fun
@@ -85,7 +87,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   x[["gt_calls"]][["cols_label_qvalue"]] <-
     "cols_label(q.value = md('**q-value**'))"
   # column headers abbreviations footnote
-  x[["gt_calls"]][["footnote_q_method"]] = glue(
+  x[["gt_calls"]][["footnote_q_method"]] <- glue(
     "tab_footnote(",
     "  footnote = '{footnote_text}',",
     "  locations = cells_column_labels(",
@@ -138,7 +140,7 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   }
 
   # checking pvalue_fun are functions
-  if(!is.function(pvalue_fun)) {
+  if (!is.function(pvalue_fun)) {
     stop("Input 'pvalue_fun' must be a function.")
   }
 
@@ -168,7 +170,9 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   # footnote text
   footnote_text <-
     method %>%
-    {filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))} %>%
+    {
+      filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))
+    } %>%
     pull("method_label")
 
   x$qvalue_fun <- pvalue_fun
@@ -178,10 +182,10 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     glue()
   # column headers
   x[["gt_calls"]][["cols_label_qvalue"]] <-
-    "cols_label(q.value = md('**q-value**'))"%>%
+    "cols_label(q.value = md('**q-value**'))" %>%
     glue()
   # column headers abbreviations footnote
-  x[["gt_calls"]][["footnote_q_method"]] = glue(
+  x[["gt_calls"]][["footnote_q_method"]] <- glue(
     "tab_footnote(",
     "footnote = '{footnote_text}',",
     "locations = cells_column_labels(",

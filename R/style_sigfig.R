@@ -39,10 +39,11 @@ style_sigfig <- function(x, digits = 2) {
     parse(text = .) %>%
     eval() %>%
     # converting "-0.000" type values to "0.000"
-    {ifelse(
-      as.numeric(.) == 0 & str_starts(., pattern = "-"),
-      str_remove(., pattern = "-"),
-      .
-    )}
+    {
+      ifelse(
+        as.numeric(.) == 0 & str_starts(., pattern = "-"),
+        str_remove(., pattern = "-"),
+        .
+      )
+    }
 }
-

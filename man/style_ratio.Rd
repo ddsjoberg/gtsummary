@@ -22,8 +22,10 @@ we would want to round to two decimal places for all values. In other words,
 larger. \code{style_ratio()} performs significant figure-like rounding in this manner.
 }
 \examples{
-c(0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
-  -0.9, -1.1234, -12.345, -101.234) \%>\%
+c(
+  0.123, 0.9, 1.1234, 12.345, 101.234, -0.123,
+  -0.9, -1.1234, -12.345, -101.234
+) \%>\%
   style_ratio()
 }
 \seealso{

@@ -47,8 +47,8 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 
 add_nevent.tbl_regression <- function(x, ...) {
   # if model is a cox model, adding number of events as well
-  if(class(x$model_obj)[1] == "coxph"){
-    x$nevent = x$model_obj %>%
+  if (class(x$model_obj)[1] == "coxph") {
+    x$nevent <- x$model_obj %>%
       survival::coxph.detail() %>%
       pluck("nevent") %>%
       sum()
@@ -58,23 +58,23 @@ add_nevent.tbl_regression <- function(x, ...) {
       mutate(nevent = x$nevent)
   }
   # generalized linear models, and GEE GLMs
-  else if(
+  else if (
     # GLM or GEE
     (class(x$model_obj)[1] %in% c("glm", "geeglm")) |
-    # lme4 GLM
-    (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj),"package") %||% "NULL" == "lme4")) {
-    #checking family (must be binomial)
-    if(class(x$model_obj)[1] %in% c("glm", "geeglm")) {
-      if(x$model_obj$family$family != "binomial") {
+      # lme4 GLM
+      (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
+    # checking family (must be binomial)
+    if (class(x$model_obj)[1] %in% c("glm", "geeglm")) {
+      if (x$model_obj$family$family != "binomial") {
         stop("Model type not supported")
       }
-      formula = x$model_obj$formula
+      formula <- x$model_obj$formula
     }
-    else if(class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj),"package") %||% "NULL" == "lme4") {
-      if(x$model_obj@resp$family$family != "binomial") {
+    else if (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
+      if (x$model_obj@resp$family$family != "binomial") {
         stop("Model type not supported")
       }
-      formula = x$model_obj@frame %>% attr("formula")
+      formula <- x$model_obj@frame %>% attr("formula")
     }
 
     # grabbing name of outcome variable
@@ -84,11 +84,13 @@ add_nevent.tbl_regression <- function(x, ...) {
       pluck(1)
 
     # calculating N event
-    x$nevent = x$model_obj %>%
+    x$nevent <- x$model_obj %>%
       stats::model.frame() %>%
       pluck(outcome_var) %>%
       as.numeric() %>%
-      {. == max(.)} %>%
+      {
+        . == max(.)
+      } %>%
       sum()
 
     # adding N event to output table
@@ -96,7 +98,7 @@ add_nevent.tbl_regression <- function(x, ...) {
       x$table_body %>%
       mutate(nevent = x$nevent)
   }
-  else{
+  else {
     stop("Model type not supported")
     return(x)
   }
@@ -164,8 +166,10 @@ add_nevent.tbl_uvregression <- function(x, ...) {
     )
 
   x$gt_calls[["cols_nevent"]] <-
-    list("cols_move(columns = vars(nevent), after = vars(N))",
-         "cols_label(nevent = md('**Event N**'))") %>%
+    list(
+      "cols_move(columns = vars(nevent), after = vars(N))",
+      "cols_label(nevent = md('**Event N**'))"
+    ) %>%
     glue_collapse(sep = " %>% ")
   x
 }

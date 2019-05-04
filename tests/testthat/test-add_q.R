@@ -56,4 +56,3 @@ test_that("add_q creates errors when non-function in input", {
     "*"
   )
 })
-
