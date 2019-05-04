@@ -4,7 +4,7 @@
 \alias{tbl_regression}
 \title{Display regression model results in table}
 \usage{
-tbl_regression(x, exponentiate = FALSE, label = NULL, include = NULL,
+tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
   exclude = NULL, show_yesno = NULL, conf.level = 0.95,
   intercept = FALSE, estimate_fun = ifelse(exponentiate == TRUE,
   style_ratio, style_sigfig), pvalue_fun = style_pvalue)
@@ -12,10 +12,10 @@ tbl_regression(x, exponentiate = FALSE, label = NULL, include = NULL,
 \arguments{
 \item{x}{regression model object}
 
-\item{exponentiate}{logical argument passed directly to
-\code{tidy} function. Default is \code{FALSE}}
-
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
+
+\item{exponentiate}{logical indicating whether or not to exponentiate the
+coefficient estimates. Default is \code{FALSE}.}
 
 \item{include}{names of variables to include in output.}
 
@@ -25,7 +25,8 @@ tbl_regression(x, exponentiate = FALSE, label = NULL, include = NULL,
 when the 'No' category is the reference group.  To print both levels in the output table, include
 the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
 
-\item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
+\item{conf.level}{must be strictly greater than 0 and less than 1.
+Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
 \item{intercept}{logical argument indicates whether to include the intercept
 in the output.  Default is \code{FALSE}}
@@ -44,8 +45,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \description{
 This function uses \href{https://broom.tidyverse.org/reference/brms_tidiers.html}{broom::tidy} and
 \href{https://github.com/bbolker/broom.mixed}{broom.mixed::tidy}
-to perform the initial model formatting. Subsequently, the results are formatted
-for display. Review the
+to perform the initial model formatting. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 for detailed examples.
 }

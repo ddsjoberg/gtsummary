@@ -51,7 +51,9 @@ evalute_examples_code <- function(code) {
 # this will be replaced once new gtsave() png option available.
 save_html_then_png <- function(x, obj_name) {
 
-  x %>% as_gt() %>%
+  if("gt_tbl" %in% class(x)) x %>%
+    gtsave(glue::glue("{here()}/man/figures/","{obj_name}", ".html"))
+  else x %>% as_gt() %>%
     gtsave(glue::glue("{here()}/man/figures/","{obj_name}", ".html"))
 
   webshot::webshot(

@@ -12,45 +12,45 @@ tbl_summary(data, by = NULL, label = NULL, type = NULL,
 \arguments{
 \item{data}{a data frame}
 
-\item{by}{a character name of a categorical variable in data, \code{by = "group"}.
-Summary statistics will be calculated separately for each level of the by variable.
+\item{by}{a character vector specifying a column in data.
+Summary statistics will be calculated separately for each level of the \code{by} variable.
 If \code{NULL}, summary statistics
 are calculated using all observations.}
 
-\item{label}{A list of variable labels,
+\item{label}{named list of variable labels,
 e.g. \code{list(age = "Age, yrs", ptstage = "Path T Stage")}.  If \code{NULL}, the function
 will take the label attribute (\code{attr(data$age, "label")}).  If
-the label doesn't exist, the variable name will be used.}
+attribute label is \code{NULL}, the variable name will be used.}
 
-\item{type}{A list that includes specified summary types.  Accepted values
+\item{type}{named list that includes specified summary types.  Accepted values
 are \code{c("continuous", "categorical", "dichotomous")},
 e.g. \code{type = list(age = "continuous", female = "dichotomous")}.
 If type not specified for a variable, the function
 will default to an appropriate summary type.  See below for details.}
 
-\item{value}{A list that specifies the value to display for dichotomous
-values only.  See below for details.}
+\item{value}{named list that specifies the value to display for dichotomous
+variables.  See below for details.}
 
-\item{statistic}{A named list of the type of statistics to return for each variable
+\item{statistic}{named list of the type of statistics to return for each variable
 or variable class.  The default is
 \code{list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}\%)")}.
 See below for details.}
 
-\item{digits}{A named list of integers indicating the number of decimal
+\item{digits}{named list of integers indicating the number of decimal
 places to round continuous summary statistics. Names of the list can be any
-continuous variable in 'data', or \code{"..continuous"} to apply to all
+continuous variable in 'data', or \code{"..continuous"} to apply rounding to all
 variables.  If not specified, \code{tbl_summary} does its best to guess an
 appropriate level to round statistics.  To round statistics to different
 levels, supply a vector rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
 to 1 decimal place, and the SD to 2 use \code{digits = list(age = c(1, 2))}.}
 
-\item{group}{Character vector of an ID or grouping variable.  Summary statistics
+\item{group}{character vector of an ID or grouping variable.  Summary statistics
 will not be printed for this column. The column may be used in \link{add_comparison} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
-\item{missing}{whether to include \code{NA} values in the table. \code{missing} controls
-if the table includes counts of \code{NA} values: the allowed values correspond to
+\item{missing}{indicates whether to include counts of \code{NA} values in the table.
+allowed values are
 never (\code{"no"}), only if the count is positive (\code{"ifany"}) and even for
 zero counts (\code{"always"}). Default is \code{"ifany"}.}
 
@@ -61,12 +61,12 @@ Default is \code{"Unknown"}.}
 Options are 'frequency' where results are sorted in
 descending order of frequency and 'alphanumeric'}
 
-\item{row_percent}{Logical value indicating whether to calculate
+\item{row_percent}{logical value indicating whether to calculate
 percentages within column to across rows.  Default is to calculate
 percentages within columns: \code{row_percent = FALSE}}
 }
 \description{
-The \code{tbl_summary} function calculates descriptive statistics by groups for
+The \code{tbl_summary} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.  Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 for detailed examples.
@@ -85,7 +85,6 @@ For categorical variables the following statistics are available to display.
 \item \code{{n}} frequency
 \item \code{{N}} denominator, or cohort size
 \item \code{{p}} percent formatted by \link{style_percent}
-\item \code{{p##}} any integer percentile, where \code{##} is an integer from 0 to 100
 }
 For continuous variables the following statistics are available to display.
 \itemize{
@@ -95,6 +94,7 @@ For continuous variables the following statistics are available to display.
 \item \code{{var}} variance
 \item \code{{min}} minimum
 \item \code{{max}} maximum
+\item \code{{p##}} any integer percentile, where \code{##} is an integer from 0 to 100
 \item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
 

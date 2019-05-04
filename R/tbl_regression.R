@@ -2,8 +2,7 @@
 #'
 #' This function uses [broom::tidy](https://broom.tidyverse.org/reference/brms_tidiers.html) and
 #' [broom.mixed::tidy](https://github.com/bbolker/broom.mixed)
-#' to perform the initial model formatting. Subsequently, the results are formatted
-#' for display. Review the
+#' to perform the initial model formatting. Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
@@ -19,12 +18,13 @@
 #' This list is not exhaustive, and care should be taken for each number reported.
 #'
 #' @param x regression model object
-#' @param exponentiate logical argument passed directly to
-#' `tidy` function. Default is `FALSE`
+#' @param exponentiate logical indicating whether or not to exponentiate the
+#' coefficient estimates. Default is `FALSE`.
 #' @param label list of labels to write in the output. `list(age60 = "Age > 60")`
 #' @param include names of variables to include in output.
 #' @param exclude names of variables to exclude from output.
-#' @param conf.level confidence level passed directly to `tidy` function. Default is 0.95.
+#' @param conf.level must be strictly greater than 0 and less than 1.
+#' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept logical argument indicates whether to include the intercept
 #' in the output.  Default is `FALSE`
 #' @param show_yesno By default yes/no categorical variables are printed on a single row,
@@ -70,7 +70,8 @@
 #'
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 #'
-tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
+tbl_regression <- function(x, label = NULL,
+                           exponentiate = FALSE,
                            include = NULL,
                            exclude = NULL,
                            show_yesno = NULL,

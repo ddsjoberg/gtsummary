@@ -1,18 +1,19 @@
 #' Relabel columns in summary table
 #'
-#' Column labels can be modified using data from the data frame
+#' Column labels can be modified to include calculated statistics,
+#' e.g. the N and percent within each group
 #'
 #' @param x `tbl_summary` object
 #' @param stat_by string vector of text to include above the summary statistics
 #' stratified by a variable.  The following fields are available for use in the
-#' headers: `n`, `N`, `p`, and `level`.  `n` is the number of observations in
-#' each by group. `N` is the total number of observations. `p` is the percent
-#' in a by group. `level` is the by variable level.
+#' headers: `{n}`, `{N}`, `{p}`, and `{level}`.  `{n}` is the number of observations in
+#' each by group. `{N}` is the total number of observations. `{p}` is the percent
+#' in a by group. `{level}` is the by variable level.
 #' Syntax follows the [glue::glue] function,
 #' e.g. `stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")`.
-#' Must specify `by` along with `stat_by`.
+#' The `by` argument from the parent `tbl_summary()` cannot be `NULL`.
 #' @param stat_overall string vector including text to appear above the overall summary
-#' statistics. `N`, the total number of observations, is available for use in the
+#' statistics. `{N}`, the total number of observations, is available for use in the
 #' description. e.g. `stat_overall = md("**All Patients**, N = {N}")`
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg

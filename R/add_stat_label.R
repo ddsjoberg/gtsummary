@@ -1,7 +1,7 @@
 #' Add statistic labels column
 #'
 #' Rather than simply printing the summary statistics, with the use of `add_stat_label()`,
-#' a column labeling the summary statistics is added
+#' a column labelling the summary statistics is added
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @family tbl_summary tools

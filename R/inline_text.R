@@ -12,7 +12,7 @@ inline_text <- function(x, ...) {
 
 #' Report statistics from summary tables inline
 #'
-#' Functions takes an object with class `tbl_summary`, and the
+#' Takes an object with class `tbl_summary`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document.  Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text}{tbl_summary vignette}
@@ -116,7 +116,7 @@ inline_text.tbl_summary <-
 
 #' Report statistics from regression summary tables inline
 #'
-#' Functions takes an object with class `tbl_regression`, and the
+#' Takes an object with class `tbl_regression`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document.  Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
@@ -226,7 +226,7 @@ inline_text.tbl_regression <-
 
 #' Report statistics from regression summary tables inline
 #'
-#' Functions takes an object with class `tbl_uvregression`, and the
+#' Takes an object with class `tbl_uvregression`, and the
 #' location of the statistic to report and returns the statistic for reporting
 #' inline in an R markdown document. Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
@@ -253,15 +253,15 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 
 #' Report statistics from survival summary tables inline
 #'
-#' Functions takes an object with class `tbl_survival`, and the
-#' location of the statistic to report and return the statistic for reporting
-#' inline in an R markdown document.
+#' Functions takes an object with class `tbl_survival`, the
+#' location of the statistic to report, and returns the statistic for reporting
+#' inline in an R markdown document
 #'
 #' @param x object created from  [tbl_survival]
 #' @param strata if `tbl_survival` estimates are stratified, level of the stratum
-#' report. Default is `NULL` when `tbl_survival` have no specified strata.
-#' @param time time for which to return survival probability.
-#' @param prob probability for which to return survival time.
+#' to report. Default is `NULL` when `tbl_survival` have no specified strata.
+#' @param time time for which to return survival probability
+#' @param prob probability for which to return survival time
 #' @param pattern statistics to return.  Uses [glue::glue] formatting.
 #' Default is \code{'{estimate} ({conf.level*100}\% {ci})'}.  All columns from
 #' `x$table_long` are available to print as well as the confidence level (conf.level).
@@ -277,10 +277,10 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' \itemize{
 #'   \item `{label}` time or prob label
 #'   \item `{estimate}` survival or survival time estimate formatted with 'estimate_fun'
-#'   \item `{conf.low}` lower limit of confidence interval formmated with 'estimate_fun'
-#'   \item `{conf.high}` upper limit of confidence interval formmated with 'estimate_fun'
+#'   \item `{conf.low}` lower limit of confidence interval formated with 'estimate_fun'
+#'   \item `{conf.high}` upper limit of confidence interval formated with 'estimate_fun'
 #'   \item `{ci}` confidence interval formmated with x$estimate_fun (pre-formatted)
-#'   \item `{time}/{prob}` time of survival quantile (numeric)
+#'   \item `{time}/{prob}` time or survival quantile (numeric)
 #'   \item `{n.risk}` number at risk at 'time' (within stratum if applicable)
 #'   \item `{n.event}` number of observed events at 'time' (within stratum if applicable)
 #'   \item `{n}` number of observations (within stratum if applicable)
@@ -293,10 +293,13 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @export
 #' @examples
 #' library(survival)
-#' survfit(Surv(ttdeath, death) ~ trt, trial) %>%
-#'   tbl_survival(times = c(12, 24)) %>%
-#'   inline_text(strata = "Drug",
-#'               time = 12)
+#' surv_table <-
+#'   survfit(Surv(ttdeath, death) ~ trt, trial) %>%
+#'   tbl_survival(times = c(12, 24))
+#'
+#' inline_text(surv_table,
+#'             strata = "Drug",
+#'             time = 12)
 
 
 inline_text.tbl_survival <-

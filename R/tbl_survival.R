@@ -10,7 +10,7 @@ tbl_survival <- function(x, ...) {
 
 #' Creates table of survival probabilities
 #'
-#' Function takes a `survfit` object as an argument, and provides a tabulated and
+#' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'
 #' @param x a survfit object with a single stratifying variable
@@ -25,15 +25,15 @@ tbl_survival <- function(x, ...) {
 #' It is a string defining the label shown.  The input uses
 #' [glue::glue] notation to convert the string into a label.
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
-#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, and `'{strata}'`. See
+#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and `'{strata}'`. See
 #' below for details.
-#' @param header_label string to be displayed as column header of the time column.
+#' @param header_label string to be displayed as column header.
 #' Default is \code{md('**Time**')} when `time` is specified, and
 #' \code{md('**Quantile**')} when `probs` is specified.
 #' @param header_estimate string to be displayed as column header of the Kaplan-Meier
 #' estimate.  Default is \code{md('**Probability**')} when `time` is specified, and
 #' \code{md('**Time**')} when `probs` is specified.
-#' @param failure Calculate failure probabilities rather than survival.
+#' @param failure calculate failure probabilities rather than survival.
 #' Default is `FALSE`.  Does NOT apply to survival quantile requests
 #' @param missing character string indicating what to replace missing confidence
 #' limits with in output.  Default is `missing = "-"`
@@ -65,7 +65,7 @@ tbl_survival <- function(x, ...) {
 #' \code{level_label = "{level}, N = {n}"}. The quantities in the curly
 #' brackets evaluate to stratum-specific values.  For example, in the trial
 #' data set, there is a column called `trt` with levels 'Drug' and 'Placebo'.
-#' In this example, {level} would evaluate to either 'Drug' or 'Placebo'
+#' In this example, `{level}` would evaluate to either 'Drug' or 'Placebo'
 #' depending on the stratum.  Other quantities available to print are:
 #' \itemize{
 #'   \item `{level}` level of the stratification variable

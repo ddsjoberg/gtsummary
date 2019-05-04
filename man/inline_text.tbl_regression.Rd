@@ -32,7 +32,7 @@ Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
 \item{...}{not used}
 }
 \description{
-Functions takes an object with class \code{tbl_regression}, and the
+Takes an object with class \code{tbl_regression}, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}

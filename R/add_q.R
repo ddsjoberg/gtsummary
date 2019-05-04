@@ -4,7 +4,8 @@
 #' @param x `tbl_summary` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
 #' @author Esther Drill, Daniel D. Sjoberg
-#' @seealso \code{\link{tbl_summary}}, \code{\link{tbl_uvregression}}
+#' @seealso \code{\link{add_q.tbl_summary}}, \code{\link{add_q.tbl_uvregression}},
+#' \code{\link{tbl_summary}}, \code{\link{tbl_uvregression}}
 #' @export
 add_q <- function(x, ...) UseMethod("add_q")
 
