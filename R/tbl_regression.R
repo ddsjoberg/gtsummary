@@ -2,8 +2,7 @@
 #'
 #' This function uses [broom::tidy](https://broom.tidyverse.org/reference/brms_tidiers.html) and
 #' [broom.mixed::tidy](https://github.com/bbolker/broom.mixed)
-#' to perform the initial model formatting. Subsequently, the results are formatted
-#' for display. Review the
+#' to perform the initial model formatting. Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
@@ -19,12 +18,13 @@
 #' This list is not exhaustive, and care should be taken for each number reported.
 #'
 #' @param x regression model object
-#' @param exponentiate logical argument passed directly to
-#' `tidy` function. Default is `FALSE`
+#' @param exponentiate logical indicating whether or not to exponentiate the
+#' coefficient estimates. Default is `FALSE`.
 #' @param label list of labels to write in the output. `list(age60 = "Age > 60")`
 #' @param include names of variables to include in output.
 #' @param exclude names of variables to exclude from output.
-#' @param conf.level confidence level passed directly to `tidy` function. Default is 0.95.
+#' @param conf.level must be strictly greater than 0 and less than 1.
+#' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept logical argument indicates whether to include the intercept
 #' in the output.  Default is `FALSE`
 #' @param show_yesno By default yes/no categorical variables are printed on a single row,
@@ -47,16 +47,15 @@
 #' tbl_regression_ex1 <-
 #'   coxph(Surv(ttdeath, death) ~ age + marker, trial) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#'
+#' 
 #' tbl_regression_ex2 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#'
+#' 
 #' library(lme4)
 #' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -70,7 +69,8 @@
 #'
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 #'
-tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
+tbl_regression <- function(x, label = NULL,
+                           exponentiate = FALSE,
                            include = NULL,
                            exclude = NULL,
                            show_yesno = NULL,
@@ -78,7 +78,7 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
                            estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
                            pvalue_fun = style_pvalue) {
   # checking estimate_fun and pvalue_fun are functions
-  if(!is.function(estimate_fun) | !is.function(pvalue_fun)) {
+  if (!is.function(estimate_fun) | !is.function(pvalue_fun)) {
     stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
   }
 
@@ -113,11 +113,13 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   # has an error for nlme because it is "reStruct"
   if (!is.null(include)) {
     include_err <- include %>% setdiff(table_body$variable %>% unique())
-    if(length(include_err) > 0) stop(glue(
-      "'include' must be be a subset of '{paste(table_body$variable %>% unique(), collapse = ', ')}'"
-    ))
+    if (length(include_err) > 0) {
+      stop(glue(
+        "'include' must be be a subset of '{paste(table_body$variable %>% unique(), collapse = ', ')}'"
+      ))
+    }
   }
-  if (is.null(include)) include <-  table_body$variable %>% unique()
+  if (is.null(include)) include <- table_body$variable %>% unique()
   if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
   include <- include %>% setdiff(exclude)
 
@@ -181,7 +183,7 @@ gt_tbl_regression <- quote(list(
   # Show "---" for reference groups
   fmt_missing_ref =
     "fmt_missing(columns = vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
-    glue(),
+      glue(),
 
   # column headers
   cols_label = glue(
@@ -205,17 +207,17 @@ gt_tbl_regression <- quote(list(
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
     "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
-    glue(),
+      glue(),
 
   # ceof and confidence interval formatting
   fmt_estimate =
     "fmt(columns = vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
-    glue(),
+      glue(),
 
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
     "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
-    glue::as_glue(),
+      glue::as_glue(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
@@ -232,12 +234,15 @@ gt_tbl_regression <- quote(list(
 estimate_header <- function(x, exponentiate) {
   if (
     (class(x)[1] %in% c("glm", "geeglm")) | # generalized linear models, and GEE GLMs
-    (class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
+      (class(x)[1] == "glmerMod" & attr(class(x), "package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
   ) {
-    if(class(x)[1] %in% c("glm", "geeglm")) family = x$family
-    else if(class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4")
-      family = x@resp$family
-    else stop("Error occured in 'estimate_header' function")
+    if (class(x)[1] %in% c("glm", "geeglm")) {
+      family <- x$family
+    } else if (class(x)[1] == "glmerMod" & attr(class(x), "package") %||% "NULL" == "lme4") {
+      family <- x@resp$family
+    } else {
+      stop("Error occured in 'estimate_header' function")
+    }
 
     # logistic regression
     if (exponentiate == TRUE & family$family == "binomial" & family$link == "logit") {
@@ -260,8 +265,11 @@ estimate_header <- function(x, exponentiate) {
     }
 
     # Other models
-    else if (exponentiate == TRUE) header <- "exp(Coefficient)"
-    else header <- "Coefficient"
+    else if (exponentiate == TRUE) {
+      header <- "exp(Coefficient)"
+    } else {
+      header <- "Coefficient"
+    }
   }
   # Cox PH Regression
   else if (class(x)[1] == "coxph" & exponentiate == TRUE) {
@@ -274,8 +282,11 @@ estimate_header <- function(x, exponentiate) {
   }
 
   # Other models
-  else if (exponentiate == TRUE) header <- "exp(Coefficient)"
-  else header <- "Coefficient"
+  else if (exponentiate == TRUE) {
+    header <- "exp(Coefficient)"
+  } else {
+    header <- "Coefficient"
+  }
 
   header
 }

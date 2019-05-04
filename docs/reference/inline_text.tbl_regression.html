@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Report statistics from regression summary tables inline — inline_text.tbl_regression" />
 
-<meta property="og:description" content="Functions takes an object with class tbl_regression, and the
+<meta property="og:description" content="Takes an object with class tbl_regression, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
 tbl_regression vignette" />
@@ -66,7 +66,7 @@ tbl_regression vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@ tbl_regression vignette" />
 
     <div class="ref-description">
     
-    <p>Functions takes an object with class <code>tbl_regression</code>, and the
+    <p>Takes an object with class <code>tbl_regression</code>, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
 <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text'>tbl_regression vignette</a></p>
@@ -185,10 +185,10 @@ Default is <code>function(x) style_pvalue(x, prepend_p = TRUE)</code></p></td>
     
     <p>The following items are available to print.  Use <code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print(x$table_body)</a></code> to
 print the table the estimates are extracted from.</p><ul>
-<li><p><code>{estimate}</code> coeficient estiamte formatted with 'estimate_fun'</p></li>
-<li><p><code>{conf.low}</code> lower limit of confidence interval formmated with 'estimate_fun'</p></li>
-<li><p><code>{conf.high}</code> upper limit of confidence interval formmated with 'estimate_fun'</p></li>
-<li><p><code>{ci}</code> confidence interval formmated with x$estimate_fun</p></li>
+<li><p><code>{estimate}</code> coefficient estimate formatted with 'estimate_fun'</p></li>
+<li><p><code>{conf.low}</code> lower limit of confidence interval formatted with 'estimate_fun'</p></li>
+<li><p><code>{conf.high}</code> upper limit of confidence interval formatted with 'estimate_fun'</p></li>
+<li><p><code>{ci}</code> confidence interval formatted with x$estimate_fun</p></li>
 <li><p><code>{p.value}</code> p-value formatted with 'pvalue_fun'</p></li>
 <li><p><code>{N}</code> number of observations in model</p></li>
 <li><p><code>{label}</code> variable/variable level label</p></li>

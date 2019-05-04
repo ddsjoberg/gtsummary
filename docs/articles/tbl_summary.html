@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -98,7 +98,7 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>This vignette will walk a reader through the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> function, and the various functions available to modify and make additions to an existing summary table object.</p>
+<p>This vignette will walk a reader through the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> function, and the various functions available to modify and make additions to an existing table summary object.</p>
 <p>To start, a quick note on the <code>magrittr</code> package’s pipe function, <code>%&gt;%</code>. By default the pipe operator puts whatever is on the left hand side of <code>%&gt;%</code> into the first argument of the function on the right hand side. The pipe function can be used to make the code relating to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> easier to use, but it is <em>not</em> required. Here are a few examples of how <code>%&gt;%</code> translates into typical R notation.</p>
 <pre><code>x %&gt;% f() is equivalent to f(x)
 x %&gt;% f(y) is equivalent to f(x, y)
@@ -132,7 +132,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#qdkrocekud .gt_table {
+#vobhbkqjcs .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -151,13 +151,13 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* table.border.top.color */
 }
 
-#qdkrocekud .gt_heading {
+#vobhbkqjcs .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#qdkrocekud .gt_title {
+#vobhbkqjcs .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -168,7 +168,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   border-bottom-width: 0;
 }
 
-#qdkrocekud .gt_subtitle {
+#vobhbkqjcs .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -179,7 +179,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   border-top-width: 0;
 }
 
-#qdkrocekud .gt_bottom_border {
+#vobhbkqjcs .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -188,7 +188,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* heading.border.bottom.color */
 }
 
-#qdkrocekud .gt_column_spanner {
+#vobhbkqjcs .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -196,7 +196,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   padding-bottom: 4px;
 }
 
-#qdkrocekud .gt_col_heading {
+#vobhbkqjcs .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -209,11 +209,11 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   margin: 10px;
 }
 
-#qdkrocekud .gt_sep_right {
+#vobhbkqjcs .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#qdkrocekud .gt_group_heading {
+#vobhbkqjcs .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -237,7 +237,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   vertical-align: middle;
 }
 
-#qdkrocekud .gt_empty_group_heading {
+#vobhbkqjcs .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -261,33 +261,33 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   vertical-align: middle;
 }
 
-#qdkrocekud .gt_striped {
+#vobhbkqjcs .gt_striped {
   background-color: #f2f2f2;
 }
 
-#qdkrocekud .gt_from_md > :first-child {
+#vobhbkqjcs .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qdkrocekud .gt_from_md > :last-child {
+#vobhbkqjcs .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qdkrocekud .gt_row {
+#vobhbkqjcs .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#qdkrocekud .gt_stub {
+#vobhbkqjcs .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#qdkrocekud .gt_summary_row {
+#vobhbkqjcs .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -297,7 +297,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* summary_row.text_transform */
 }
 
-#qdkrocekud .gt_grand_summary_row {
+#vobhbkqjcs .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -307,19 +307,19 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#qdkrocekud .gt_first_summary_row {
+#vobhbkqjcs .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#qdkrocekud .gt_first_grand_summary_row {
+#vobhbkqjcs .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#qdkrocekud .gt_table_body {
+#vobhbkqjcs .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -334,55 +334,55 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* table_body.border.bottom.color */
 }
 
-#qdkrocekud .gt_footnote {
+#vobhbkqjcs .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#qdkrocekud .gt_sourcenote {
+#vobhbkqjcs .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#qdkrocekud .gt_center {
+#vobhbkqjcs .gt_center {
   text-align: center;
 }
 
-#qdkrocekud .gt_left {
+#vobhbkqjcs .gt_left {
   text-align: left;
 }
 
-#qdkrocekud .gt_right {
+#vobhbkqjcs .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qdkrocekud .gt_font_normal {
+#vobhbkqjcs .gt_font_normal {
   font-weight: normal;
 }
 
-#qdkrocekud .gt_font_bold {
+#vobhbkqjcs .gt_font_bold {
   font-weight: bold;
 }
 
-#qdkrocekud .gt_font_italic {
+#vobhbkqjcs .gt_font_italic {
   font-style: italic;
 }
 
-#qdkrocekud .gt_super {
+#vobhbkqjcs .gt_super {
   font-size: 65%;
 }
 
-#qdkrocekud .gt_footnote_glyph {
+#vobhbkqjcs .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="qdkrocekud" style="overflow-x:auto;">
+<div id="vobhbkqjcs" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -460,7 +460,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
 </table>
 <!--gt table end-->
 </div>
-<p>The default output from <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is meant to be publication ready. Let’s start by creating a summary statistics table from the <code>trial</code> data set built into the {gtsummary} package. The <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> can take, minimally, a data set as the only input, and return descriptive statistics for each column in the data frame.</p>
+<p>The default output from <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is meant to be publication ready. Let’s start by creating a table of summary statistics from the <code>trial</code> data set. The <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> can take, minimally, a data set as the only input, and return descriptive statistics for each column in the data frame.</p>
 <p>For brevity, keeping a subset of the variables in the trial data set.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">trial2 =</a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="st">  </span>trial <span class="op">%&gt;%</span></a>
@@ -471,7 +471,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#pirydlfjvx .gt_table {
+#fklbdgkrzc .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -490,13 +490,13 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* table.border.top.color */
 }
 
-#pirydlfjvx .gt_heading {
+#fklbdgkrzc .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#pirydlfjvx .gt_title {
+#fklbdgkrzc .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -507,7 +507,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   border-bottom-width: 0;
 }
 
-#pirydlfjvx .gt_subtitle {
+#fklbdgkrzc .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -518,7 +518,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   border-top-width: 0;
 }
 
-#pirydlfjvx .gt_bottom_border {
+#fklbdgkrzc .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -527,7 +527,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* heading.border.bottom.color */
 }
 
-#pirydlfjvx .gt_column_spanner {
+#fklbdgkrzc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -535,7 +535,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   padding-bottom: 4px;
 }
 
-#pirydlfjvx .gt_col_heading {
+#fklbdgkrzc .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -548,11 +548,11 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   margin: 10px;
 }
 
-#pirydlfjvx .gt_sep_right {
+#fklbdgkrzc .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#pirydlfjvx .gt_group_heading {
+#fklbdgkrzc .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -576,7 +576,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   vertical-align: middle;
 }
 
-#pirydlfjvx .gt_empty_group_heading {
+#fklbdgkrzc .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -600,33 +600,33 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   vertical-align: middle;
 }
 
-#pirydlfjvx .gt_striped {
+#fklbdgkrzc .gt_striped {
   background-color: #f2f2f2;
 }
 
-#pirydlfjvx .gt_from_md > :first-child {
+#fklbdgkrzc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pirydlfjvx .gt_from_md > :last-child {
+#fklbdgkrzc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pirydlfjvx .gt_row {
+#fklbdgkrzc .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#pirydlfjvx .gt_stub {
+#fklbdgkrzc .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#pirydlfjvx .gt_summary_row {
+#fklbdgkrzc .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -636,7 +636,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* summary_row.text_transform */
 }
 
-#pirydlfjvx .gt_grand_summary_row {
+#fklbdgkrzc .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -646,19 +646,19 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#pirydlfjvx .gt_first_summary_row {
+#fklbdgkrzc .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#pirydlfjvx .gt_first_grand_summary_row {
+#fklbdgkrzc .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#pirydlfjvx .gt_table_body {
+#fklbdgkrzc .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -673,55 +673,55 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* table_body.border.bottom.color */
 }
 
-#pirydlfjvx .gt_footnote {
+#fklbdgkrzc .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#pirydlfjvx .gt_sourcenote {
+#fklbdgkrzc .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#pirydlfjvx .gt_center {
+#fklbdgkrzc .gt_center {
   text-align: center;
 }
 
-#pirydlfjvx .gt_left {
+#fklbdgkrzc .gt_left {
   text-align: left;
 }
 
-#pirydlfjvx .gt_right {
+#fklbdgkrzc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pirydlfjvx .gt_font_normal {
+#fklbdgkrzc .gt_font_normal {
   font-weight: normal;
 }
 
-#pirydlfjvx .gt_font_bold {
+#fklbdgkrzc .gt_font_bold {
   font-weight: bold;
 }
 
-#pirydlfjvx .gt_font_italic {
+#fklbdgkrzc .gt_font_italic {
   font-style: italic;
 }
 
-#pirydlfjvx .gt_super {
+#fklbdgkrzc .gt_super {
   font-size: 65%;
 }
 
-#pirydlfjvx .gt_footnote_glyph {
+#fklbdgkrzc .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="pirydlfjvx" style="overflow-x:auto;">
+<div id="fklbdgkrzc" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -779,13 +779,13 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
 </table>
 <!--gt table end-->
 </div>
-<p>This is a great table, but for trial data the summary statistics should be split by randomization group. While reporting p-values for baseline characteristics in a randomized trial isn’t recommended, we’ll do it here as an illustration. To compare two or more groups, include <code><a href="../reference/add_comparison.html">add_comparison()</a></code> to the function call.</p>
+<p>This is a great table, but for trial data the summary statistics should be split by randomization group. While reporting p-values for baseline characteristics in a randomized trial isn’t recommended, we’ll do it here as an illustration of the feature. To compare two or more groups, include <code><a href="../reference/add_comparison.html">add_comparison()</a></code> with the function call.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial2, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/add_comparison.html">add_comparison</a></span>()</a></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#pcwcvceiry .gt_table {
+#edcatnzaju .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -804,13 +804,13 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* table.border.top.color */
 }
 
-#pcwcvceiry .gt_heading {
+#edcatnzaju .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#pcwcvceiry .gt_title {
+#edcatnzaju .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -821,7 +821,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   border-bottom-width: 0;
 }
 
-#pcwcvceiry .gt_subtitle {
+#edcatnzaju .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -832,7 +832,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   border-top-width: 0;
 }
 
-#pcwcvceiry .gt_bottom_border {
+#edcatnzaju .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -841,7 +841,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* heading.border.bottom.color */
 }
 
-#pcwcvceiry .gt_column_spanner {
+#edcatnzaju .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -849,7 +849,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   padding-bottom: 4px;
 }
 
-#pcwcvceiry .gt_col_heading {
+#edcatnzaju .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -862,11 +862,11 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   margin: 10px;
 }
 
-#pcwcvceiry .gt_sep_right {
+#edcatnzaju .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#pcwcvceiry .gt_group_heading {
+#edcatnzaju .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -890,7 +890,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   vertical-align: middle;
 }
 
-#pcwcvceiry .gt_empty_group_heading {
+#edcatnzaju .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -914,33 +914,33 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   vertical-align: middle;
 }
 
-#pcwcvceiry .gt_striped {
+#edcatnzaju .gt_striped {
   background-color: #f2f2f2;
 }
 
-#pcwcvceiry .gt_from_md > :first-child {
+#edcatnzaju .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pcwcvceiry .gt_from_md > :last-child {
+#edcatnzaju .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pcwcvceiry .gt_row {
+#edcatnzaju .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#pcwcvceiry .gt_stub {
+#edcatnzaju .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#pcwcvceiry .gt_summary_row {
+#edcatnzaju .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -950,7 +950,7 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* summary_row.text_transform */
 }
 
-#pcwcvceiry .gt_grand_summary_row {
+#edcatnzaju .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -960,19 +960,19 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#pcwcvceiry .gt_first_summary_row {
+#edcatnzaju .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#pcwcvceiry .gt_first_grand_summary_row {
+#edcatnzaju .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#pcwcvceiry .gt_table_body {
+#edcatnzaju .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -987,55 +987,55 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
   /* table_body.border.bottom.color */
 }
 
-#pcwcvceiry .gt_footnote {
+#edcatnzaju .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#pcwcvceiry .gt_sourcenote {
+#edcatnzaju .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#pcwcvceiry .gt_center {
+#edcatnzaju .gt_center {
   text-align: center;
 }
 
-#pcwcvceiry .gt_left {
+#edcatnzaju .gt_left {
   text-align: left;
 }
 
-#pcwcvceiry .gt_right {
+#edcatnzaju .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pcwcvceiry .gt_font_normal {
+#edcatnzaju .gt_font_normal {
   font-weight: normal;
 }
 
-#pcwcvceiry .gt_font_bold {
+#edcatnzaju .gt_font_bold {
   font-weight: bold;
 }
 
-#pcwcvceiry .gt_font_italic {
+#edcatnzaju .gt_font_italic {
   font-style: italic;
 }
 
-#pcwcvceiry .gt_super {
+#edcatnzaju .gt_super {
   font-size: 65%;
 }
 
-#pcwcvceiry .gt_footnote_glyph {
+#edcatnzaju .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="pcwcvceiry" style="overflow-x:auto;">
+<div id="edcatnzaju" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -1116,10 +1116,13 @@ ttdeath  Years from Randomization to Death/Censor</code></pre>
 <h3 class="hasAnchor">
 <a href="#modifying-function-arguments" class="anchor"></a>Modifying function arguments</h3>
 <p>The <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> function includes many input options for modifying the appearance.</p>
-<pre><code>label       modify the variable labels printed in the table  
+<pre><code>label       specify the variable labels printed in table  
+type        specify the variable type (e.g. continuous, categorical, etc.)
 statistic   change the summary statistics presented  
 digits      number of digits the summary statistics will be rounded to  
-missing     whether to display a row with the number of missing observations  </code></pre>
+missing     whether to display a row with the number of missing observations 
+sort        change the sorting of categorical levels by frequency
+row_percent print row percentages, rather than column for categorical variables</code></pre>
 </div>
 <div id="functions-to-add-information" class="section level3">
 <h3 class="hasAnchor">
@@ -1199,7 +1202,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#lhonwipver .gt_table {
+#rhazfrizzt .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1218,13 +1221,13 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* table.border.top.color */
 }
 
-#lhonwipver .gt_heading {
+#rhazfrizzt .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#lhonwipver .gt_title {
+#rhazfrizzt .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1235,7 +1238,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   border-bottom-width: 0;
 }
 
-#lhonwipver .gt_subtitle {
+#rhazfrizzt .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1246,7 +1249,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   border-top-width: 0;
 }
 
-#lhonwipver .gt_bottom_border {
+#rhazfrizzt .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1255,7 +1258,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* heading.border.bottom.color */
 }
 
-#lhonwipver .gt_column_spanner {
+#rhazfrizzt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1263,7 +1266,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   padding-bottom: 4px;
 }
 
-#lhonwipver .gt_col_heading {
+#rhazfrizzt .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -1276,11 +1279,11 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   margin: 10px;
 }
 
-#lhonwipver .gt_sep_right {
+#rhazfrizzt .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#lhonwipver .gt_group_heading {
+#rhazfrizzt .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1304,7 +1307,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#lhonwipver .gt_empty_group_heading {
+#rhazfrizzt .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1328,33 +1331,33 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#lhonwipver .gt_striped {
+#rhazfrizzt .gt_striped {
   background-color: #f2f2f2;
 }
 
-#lhonwipver .gt_from_md > :first-child {
+#rhazfrizzt .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lhonwipver .gt_from_md > :last-child {
+#rhazfrizzt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lhonwipver .gt_row {
+#rhazfrizzt .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#lhonwipver .gt_stub {
+#rhazfrizzt .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#lhonwipver .gt_summary_row {
+#rhazfrizzt .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -1364,7 +1367,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* summary_row.text_transform */
 }
 
-#lhonwipver .gt_grand_summary_row {
+#rhazfrizzt .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -1374,19 +1377,19 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#lhonwipver .gt_first_summary_row {
+#rhazfrizzt .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#lhonwipver .gt_first_grand_summary_row {
+#rhazfrizzt .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#lhonwipver .gt_table_body {
+#rhazfrizzt .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -1401,55 +1404,55 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* table_body.border.bottom.color */
 }
 
-#lhonwipver .gt_footnote {
+#rhazfrizzt .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#lhonwipver .gt_sourcenote {
+#rhazfrizzt .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#lhonwipver .gt_center {
+#rhazfrizzt .gt_center {
   text-align: center;
 }
 
-#lhonwipver .gt_left {
+#rhazfrizzt .gt_left {
   text-align: left;
 }
 
-#lhonwipver .gt_right {
+#rhazfrizzt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lhonwipver .gt_font_normal {
+#rhazfrizzt .gt_font_normal {
   font-weight: normal;
 }
 
-#lhonwipver .gt_font_bold {
+#rhazfrizzt .gt_font_bold {
   font-weight: bold;
 }
 
-#lhonwipver .gt_font_italic {
+#rhazfrizzt .gt_font_italic {
   font-style: italic;
 }
 
-#lhonwipver .gt_super {
+#rhazfrizzt .gt_super {
   font-size: 65%;
 }
 
-#lhonwipver .gt_footnote_glyph {
+#rhazfrizzt .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="lhonwipver" style="overflow-x:auto;">
+<div id="rhazfrizzt" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -1528,14 +1531,14 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
 <h2 class="hasAnchor">
 <a href="#inline_text" class="anchor"></a>Report Results Inline</h2>
 <p>Reproducible reports are an import part of good practices. We often need to report the results from a table in the text of an R markdown report. Inline reporting has been made simple with <code><a href="../reference/inline_text.html">inline_text()</a></code>.</p>
-<p>Let’s first create a basic summary table.</p>
+<p>First create a basic summary table.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">tab1 =<span class="st"> </span><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial2, <span class="dt">by =</span> <span class="st">"trt"</span>)</a>
 <a class="sourceLine" id="cb12-2" title="2">tab1</a></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#bzxkwzglbp .gt_table {
+#tyvhzjemmf .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1554,13 +1557,13 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* table.border.top.color */
 }
 
-#bzxkwzglbp .gt_heading {
+#tyvhzjemmf .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#bzxkwzglbp .gt_title {
+#tyvhzjemmf .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1571,7 +1574,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   border-bottom-width: 0;
 }
 
-#bzxkwzglbp .gt_subtitle {
+#tyvhzjemmf .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1582,7 +1585,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   border-top-width: 0;
 }
 
-#bzxkwzglbp .gt_bottom_border {
+#tyvhzjemmf .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1591,7 +1594,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* heading.border.bottom.color */
 }
 
-#bzxkwzglbp .gt_column_spanner {
+#tyvhzjemmf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1599,7 +1602,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   padding-bottom: 4px;
 }
 
-#bzxkwzglbp .gt_col_heading {
+#tyvhzjemmf .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -1612,11 +1615,11 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   margin: 10px;
 }
 
-#bzxkwzglbp .gt_sep_right {
+#tyvhzjemmf .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#bzxkwzglbp .gt_group_heading {
+#tyvhzjemmf .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1640,7 +1643,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#bzxkwzglbp .gt_empty_group_heading {
+#tyvhzjemmf .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1664,33 +1667,33 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#bzxkwzglbp .gt_striped {
+#tyvhzjemmf .gt_striped {
   background-color: #f2f2f2;
 }
 
-#bzxkwzglbp .gt_from_md > :first-child {
+#tyvhzjemmf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bzxkwzglbp .gt_from_md > :last-child {
+#tyvhzjemmf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bzxkwzglbp .gt_row {
+#tyvhzjemmf .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#bzxkwzglbp .gt_stub {
+#tyvhzjemmf .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#bzxkwzglbp .gt_summary_row {
+#tyvhzjemmf .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -1700,7 +1703,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* summary_row.text_transform */
 }
 
-#bzxkwzglbp .gt_grand_summary_row {
+#tyvhzjemmf .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -1710,19 +1713,19 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#bzxkwzglbp .gt_first_summary_row {
+#tyvhzjemmf .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#bzxkwzglbp .gt_first_grand_summary_row {
+#tyvhzjemmf .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#bzxkwzglbp .gt_table_body {
+#tyvhzjemmf .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -1737,55 +1740,55 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* table_body.border.bottom.color */
 }
 
-#bzxkwzglbp .gt_footnote {
+#tyvhzjemmf .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#bzxkwzglbp .gt_sourcenote {
+#tyvhzjemmf .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#bzxkwzglbp .gt_center {
+#tyvhzjemmf .gt_center {
   text-align: center;
 }
 
-#bzxkwzglbp .gt_left {
+#tyvhzjemmf .gt_left {
   text-align: left;
 }
 
-#bzxkwzglbp .gt_right {
+#tyvhzjemmf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bzxkwzglbp .gt_font_normal {
+#tyvhzjemmf .gt_font_normal {
   font-weight: normal;
 }
 
-#bzxkwzglbp .gt_font_bold {
+#tyvhzjemmf .gt_font_bold {
   font-weight: bold;
 }
 
-#bzxkwzglbp .gt_font_italic {
+#tyvhzjemmf .gt_font_italic {
   font-style: italic;
 }
 
-#bzxkwzglbp .gt_super {
+#tyvhzjemmf .gt_super {
   font-size: 65%;
 }
 
-#bzxkwzglbp .gt_footnote_glyph {
+#tyvhzjemmf .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="bzxkwzglbp" style="overflow-x:auto;">
+<div id="tyvhzjemmf" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -1853,11 +1856,12 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
 <blockquote>
 <p><code>`r inline_text(tab1, variable = "stage", level = "T1", column = "Drug")`</code> resolves to “25 (49%)”</p>
 </blockquote>
+<p>For more detail about inline code, review to the <a href="https://rmarkdown.rstudio.com/lesson-4.html">Rstudio documentation page</a>.</p>
 </div>
 <div id="advanced-customization" class="section level2">
 <h2 class="hasAnchor">
 <a href="#advanced-customization" class="anchor"></a>Advanced Customization</h2>
-<p>When you print the output from the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> function into the R console or into an R markdown, there are default printing functions that are called in the background: <code><a href="../reference/print_gtsummary.html">print.tbl_summary()</a></code> and <code><a href="../reference/print_gtsummary.html">knit_print.tbl_summary()</a></code>. The true output from <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is a named list, but when you print the object, a formatted version of <code>.$table_body</code> is displayed. All formatting and modifications are made using the {gt} package.</p>
+<p>When you print output from the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> function into the R console or into an R markdown, there are default printing functions that are called in the background: <code><a href="../reference/print_gtsummary.html">print.tbl_summary()</a></code> and <code><a href="../reference/print_gtsummary.html">knit_print.tbl_summary()</a></code>. The true output from <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is a named list, but when you print the object, a formatted version of <code>.$table_body</code> is displayed. All formatting and modifications are made using the {gt} package.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>()</a>
 <a class="sourceLine" id="cb13-2" title="2"><span class="co">#&gt; [1] "gt_calls"   "table_body" "meta_data"  "inputs"     "call_list"</span></a></code></pre></div>
 <p>These are the additional data stored in the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> output list.</p>
@@ -1878,8 +1882,8 @@ gt_calls    named list of {gt} function calls  </code></pre>
 <a class="sourceLine" id="cb15-8" title="8"><span class="co">#&gt; $cols_align</span></a>
 <a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt; cols_align(align = 'center') %&gt;% cols_align(align = 'left', columns = vars(label))</span></a></code></pre></div>
 <p>The {gt} functions are called in the order they appear, always beginning with the <code>gt()</code> function.</p>
-<p>If the user does not want a specific {gt} function to run, any {gt} call can be omitted in the <code><a href="../reference/as_gt.html">as_gt()</a></code> function by specifying the <code>omit</code> argument. For example, the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> call creates many named {gt} function calls: <em>gt, cols_label_label, cols_align, cols_hide, fmt_missing, tab_style_text_indent, footnote_stat_label, cols_label_overall</em>. Any of these can be omitted. In the example example, the default footnote will be omitted from the output.</p>
-<p>After the <code><a href="../reference/as_gt.html">as_gt()</a></code> function is run, additional formatting may be added to the table using the standard formatting functions from the {gt} package. In the example below, a spanning header for the <code>by =</code> variable is included.</p>
+<p>If the user does not want a specific {gt} function to run (i.e. would like to change default printing), any {gt} call can be omitted in the <code><a href="../reference/as_gt.html">as_gt()</a></code> function by specifying the <code>omit</code> argument. For example, the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> call creates many named {gt} function calls: <em>gt, cols_label_label, cols_align, cols_hide, fmt_missing, tab_style_text_indent, footnote_stat_label, cols_label_overall</em>. Any of these can be omitted. In the example below, the default footnote will be omitted from the output.</p>
+<p>After the <code><a href="../reference/as_gt.html">as_gt()</a></code> function is run, additional formatting may be added to the table using {gt} formatting functions. In the example below, a spanning header for the <code>by =</code> variable is included with the {gt} function <code>tab_spanner()</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial2, <span class="dt">by =</span> <span class="st">"trt"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb16-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/as_gt.html">as_gt</a></span>(<span class="dt">omit =</span> <span class="st">"footnote_stat_label"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb16-3" title="3"><span class="st">  </span><span class="kw">tab_spanner</span>(<span class="dt">label =</span> <span class="st">"Randomization Group"</span>,</a>
@@ -1888,7 +1892,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#fovqrhxnqh .gt_table {
+#bjrmwzrdhi .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1907,13 +1911,13 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* table.border.top.color */
 }
 
-#fovqrhxnqh .gt_heading {
+#bjrmwzrdhi .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#fovqrhxnqh .gt_title {
+#bjrmwzrdhi .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1924,7 +1928,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   border-bottom-width: 0;
 }
 
-#fovqrhxnqh .gt_subtitle {
+#bjrmwzrdhi .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1935,7 +1939,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   border-top-width: 0;
 }
 
-#fovqrhxnqh .gt_bottom_border {
+#bjrmwzrdhi .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1944,7 +1948,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* heading.border.bottom.color */
 }
 
-#fovqrhxnqh .gt_column_spanner {
+#bjrmwzrdhi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1952,7 +1956,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   padding-bottom: 4px;
 }
 
-#fovqrhxnqh .gt_col_heading {
+#bjrmwzrdhi .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -1965,11 +1969,11 @@ gt_calls    named list of {gt} function calls  </code></pre>
   margin: 10px;
 }
 
-#fovqrhxnqh .gt_sep_right {
+#bjrmwzrdhi .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#fovqrhxnqh .gt_group_heading {
+#bjrmwzrdhi .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1993,7 +1997,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   vertical-align: middle;
 }
 
-#fovqrhxnqh .gt_empty_group_heading {
+#bjrmwzrdhi .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -2017,33 +2021,33 @@ gt_calls    named list of {gt} function calls  </code></pre>
   vertical-align: middle;
 }
 
-#fovqrhxnqh .gt_striped {
+#bjrmwzrdhi .gt_striped {
   background-color: #f2f2f2;
 }
 
-#fovqrhxnqh .gt_from_md > :first-child {
+#bjrmwzrdhi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fovqrhxnqh .gt_from_md > :last-child {
+#bjrmwzrdhi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fovqrhxnqh .gt_row {
+#bjrmwzrdhi .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#fovqrhxnqh .gt_stub {
+#bjrmwzrdhi .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#fovqrhxnqh .gt_summary_row {
+#bjrmwzrdhi .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -2053,7 +2057,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* summary_row.text_transform */
 }
 
-#fovqrhxnqh .gt_grand_summary_row {
+#bjrmwzrdhi .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -2063,19 +2067,19 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#fovqrhxnqh .gt_first_summary_row {
+#bjrmwzrdhi .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#fovqrhxnqh .gt_first_grand_summary_row {
+#bjrmwzrdhi .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#fovqrhxnqh .gt_table_body {
+#bjrmwzrdhi .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -2090,55 +2094,55 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* table_body.border.bottom.color */
 }
 
-#fovqrhxnqh .gt_footnote {
+#bjrmwzrdhi .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#fovqrhxnqh .gt_sourcenote {
+#bjrmwzrdhi .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#fovqrhxnqh .gt_center {
+#bjrmwzrdhi .gt_center {
   text-align: center;
 }
 
-#fovqrhxnqh .gt_left {
+#bjrmwzrdhi .gt_left {
   text-align: left;
 }
 
-#fovqrhxnqh .gt_right {
+#bjrmwzrdhi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fovqrhxnqh .gt_font_normal {
+#bjrmwzrdhi .gt_font_normal {
   font-weight: normal;
 }
 
-#fovqrhxnqh .gt_font_bold {
+#bjrmwzrdhi .gt_font_bold {
   font-weight: bold;
 }
 
-#fovqrhxnqh .gt_font_italic {
+#bjrmwzrdhi .gt_font_italic {
   font-style: italic;
 }
 
-#fovqrhxnqh .gt_super {
+#bjrmwzrdhi .gt_super {
   font-size: 65%;
 }
 
-#fovqrhxnqh .gt_footnote_glyph {
+#bjrmwzrdhi .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="fovqrhxnqh" style="overflow-x:auto;">
+<div id="bjrmwzrdhi" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>

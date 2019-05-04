@@ -11,34 +11,35 @@ tbl_uvregression(data, method, y, method.args = NULL,
   pvalue_fun = style_pvalue)
 }
 \arguments{
-\item{data}{Data frame to be used in univariate regression modeling.  Data
+\item{data}{data frame to be used in univariate regression modeling.  Data
 frame includes the outcome variable(s) and the independent variables.}
 
-\item{method}{Regression method (e.g. \code{\link[stats]{lm}},
+\item{method}{regression method (e.g. \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[survival]{coxph}}, and more).}
 
 \item{y}{model outcome as a string (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
 
-\item{method.args}{List of additional arguments passed on to the regression
-function defined by method.}
+\item{method.args}{list of additional arguments passed on to the regression
+function defined by \code{method}.}
 
-\item{formula}{String that becomes the model formula.
+\item{formula}{string that becomes the model formula.
 Uses \code{\link[glue]{glue}} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
 is the dependent variable, and \code{{x}} represents a single covariate. For a
 random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
-\item{exponentiate}{logical argument passed directly to
-\code{tidy} function. Default is \code{FALSE}}
+\item{exponentiate}{logical indicating whether or not to exponentiate the
+coefficient estimates. Default is \code{FALSE}.}
 
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
-\item{hide_n}{Hide N column. Default is \code{FALSE}}
+\item{hide_n}{hide N column. Default is \code{FALSE}}
 
 \item{show_yesno}{By default yes/no categorical variables are printed on a single row,
 when the 'No' category is the reference group.  To print both levels in the output table, include
 the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
 
-\item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
+\item{conf.level}{must be strictly greater than 0 and less than 1.
+Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
 \item{estimate_fun}{function to round and format beta coefficient estimates.  Default
 is \link{style_sigfig} when the coefficients are printed, and
@@ -85,13 +86,13 @@ This list is not exhaustive, and care should be taken for each number reported.
 
 \examples{
 tbl_uv_ex1 <-
- tbl_uvregression(
-   trial \%>\% dplyr::select(response, age, grade),
-   method = glm,
-   y = response,
-   method.args = list(family = binomial),
-   exponentiate = TRUE
- )
+  tbl_uvregression(
+    trial \%>\% dplyr::select(response, age, grade),
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  )
 
 # rounding pvalues to 2 decimal places
 library(survival)
@@ -104,7 +105,6 @@ tbl_uv_ex2 <-
     exponentiate = TRUE,
     pvalue_fun = function(x) style_pvalue(x, digits = 2)
   )
-
 }
 \seealso{
 Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},

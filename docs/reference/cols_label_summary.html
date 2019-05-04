@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Relabel columns in summary table — cols_label_summary" />
 
-<meta property="og:description" content="Column labels can be modified using data from the data frame" />
+<meta property="og:description" content="Column labels can be modified to include calculated statistics,
+e.g. the N and percent within each group" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +64,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -124,7 +125,8 @@
 
     <div class="ref-description">
     
-    <p>Column labels can be modified using data from the data frame</p>
+    <p>Column labels can be modified to include calculated statistics,
+e.g. the N and percent within each group</p>
     
     </div>
 
@@ -140,19 +142,19 @@
     <tr>
       <th>stat_overall</th>
       <td><p>string vector including text to appear above the overall summary
-statistics. <code>N</code>, the total number of observations, is available for use in the
+statistics. <code>{N}</code>, the total number of observations, is available for use in the
 description. e.g. <code>stat_overall = md("**All Patients**, N = {N}")</code></p></td>
     </tr>
     <tr>
       <th>stat_by</th>
       <td><p>string vector of text to include above the summary statistics
 stratified by a variable.  The following fields are available for use in the
-headers: <code>n</code>, <code>N</code>, <code>p</code>, and <code>level</code>.  <code>n</code> is the number of observations in
-each by group. <code>N</code> is the total number of observations. <code>p</code> is the percent
-in a by group. <code>level</code> is the by variable level.
+headers: <code>{n}</code>, <code>{N}</code>, <code>{p}</code>, and <code>{level}</code>.  <code>{n}</code> is the number of observations in
+each by group. <code>{N}</code> is the total number of observations. <code>{p}</code> is the percent
+in a by group. <code>{level}</code> is the by variable level.
 Syntax follows the <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> function,
 e.g. <code>stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")</code>.
-Must specify <code>by</code> along with <code>stat_by</code>.</p></td>
+The <code>by</code> argument from the parent <code><a href='tbl_summary.html'>tbl_summary()</a></code> cannot be <code>NULL</code>.</p></td>
     </tr>
     </table>
     
@@ -188,7 +190,7 @@ Must specify <code>by</code> along with <code>stat_by</code>.</p></td>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>cols_label_summary</span>(
     <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</span>)
-   )</div></pre>
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
