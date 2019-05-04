@@ -145,12 +145,12 @@ for detailed examples.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>Data frame to be used in univariate regression modeling.  Data
+      <td><p>data frame to be used in univariate regression modeling.  Data
 frame includes the outcome variable(s) and the independent variables.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Regression method (e.g. <code><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></code>,
+      <td><p>regression method (e.g. <code><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></code>,
 <code><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></code>, <code><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></code>, and more).</p></td>
     </tr>
     <tr>
@@ -159,20 +159,20 @@ frame includes the outcome variable(s) and the independent variables.</p></td>
     </tr>
     <tr>
       <th>method.args</th>
-      <td><p>List of additional arguments passed on to the regression
-function defined by method.</p></td>
+      <td><p>list of additional arguments passed on to the regression
+function defined by <code>method</code>.</p></td>
     </tr>
     <tr>
       <th>formula</th>
-      <td><p>String that becomes the model formula.
+      <td><p>string that becomes the model formula.
 Uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> syntax. Default is <code>"{y} ~ {x}"</code>, where <code>{y}</code>
 is the dependent variable, and <code>{x}</code> represents a single covariate. For a
 random intercept, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</code>.</p></td>
     </tr>
     <tr>
       <th>exponentiate</th>
-      <td><p>logical argument passed directly to
-<code>tidy</code> function. Default is <code>FALSE</code></p></td>
+      <td><p>logical indicating whether or not to exponentiate the
+coefficient estimates. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>label</th>
@@ -180,7 +180,7 @@ random intercept, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</c
     </tr>
     <tr>
       <th>hide_n</th>
-      <td><p>Hide N column. Default is <code>FALSE</code></p></td>
+      <td><p>hide N column. Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>show_yesno</th>
@@ -190,7 +190,8 @@ the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")
     </tr>
     <tr>
       <th>conf.level</th>
-      <td><p>confidence level passed directly to <code>tidy</code> function. Default is 0.95.</p></td>
+      <td><p>must be strictly greater than 0 and less than 1.
+Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></td>
     </tr>
     <tr>
       <th>estimate_fun</th>
@@ -242,13 +243,13 @@ units in your model.  Here are some common exceptions.</p><ol>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_uv_ex1</span> <span class='kw'>&lt;-</span>
- <span class='fu'>tbl_uvregression</span>(
-   <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>),
-   <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
-   <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
-   <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
-   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
- )
+  <span class='fu'>tbl_uvregression</span>(
+    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>),
+    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
+    <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
+    <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
+    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  )
 
 <span class='co'># rounding pvalues to 2 decimal places</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)

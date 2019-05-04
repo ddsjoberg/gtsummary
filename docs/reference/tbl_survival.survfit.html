@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Creates table of survival probabilities — tbl_survival.survfit" />
 
-<meta property="og:description" content="Function takes a survfit object as an argument, and provides a tabulated and
+<meta property="og:description" content="Function takes a survfit object as an argument, and provides a
 formatted summary of the results" />
 <meta name="twitter:card" content="summary" />
 
@@ -125,7 +125,7 @@ formatted summary of the results" />
 
     <div class="ref-description">
     
-    <p>Function takes a <code>survfit</code> object as an argument, and provides a tabulated and
+    <p>Function takes a <code>survfit</code> object as an argument, and provides a
 formatted summary of the results</p>
     
     </div>
@@ -166,12 +166,12 @@ would resolve to "6 Months" or "12 Months" depending on specified <code>times</c
 It is a string defining the label shown.  The input uses
 <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> notation to convert the string into a label.
 The default is <code>"{level}, N = {n}"</code>.  Other information available to
-call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, and <code>'{strata}'</code>. See
+call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, <code>'{n.event.strata}'</code>, and <code>'{strata}'</code>. See
 below for details.</p></td>
     </tr>
     <tr>
       <th>header_label</th>
-      <td><p>string to be displayed as column header of the time column.
+      <td><p>string to be displayed as column header.
 Default is <code>md('**Time**')</code> when <code>time</code> is specified, and
 <code>md('**Quantile**')</code> when <code>probs</code> is specified.</p></td>
     </tr>
@@ -183,7 +183,7 @@ estimate.  Default is <code>md('**Probability**')</code> when <code>time</code> 
     </tr>
     <tr>
       <th>failure</th>
-      <td><p>Calculate failure probabilities rather than survival.
+      <td><p>calculate failure probabilities rather than survival.
 Default is <code>FALSE</code>.  Does NOT apply to survival quantile requests</p></td>
     </tr>
     <tr>
@@ -210,7 +210,7 @@ The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE
 <code>level_label = "{level}, N = {n}"</code>. The quantities in the curly
 brackets evaluate to stratum-specific values.  For example, in the trial
 data set, there is a column called <code>trt</code> with levels 'Drug' and 'Placebo'.
-In this example, level would evaluate to either 'Drug' or 'Placebo'
+In this example, <code>{level}</code> would evaluate to either 'Drug' or 'Placebo'
 depending on the stratum.  Other quantities available to print are:</p><ul>
 <li><p><code>{level}</code> level of the stratification variable</p></li>
 <li><p><code>{n}</code> number of observations, or number within stratum</p></li>
@@ -238,14 +238,16 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
 <span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
 <span class='no'>tbl_strata_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit1</span>,
-               <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-               <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>)
+    <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
+  )
 
 <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
 <span class='no'>tbl_nostrata_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit2</span>,
-               <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
-               <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Months**"</span>))</div></pre>
+    <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
+    <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Months**"</span>)
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

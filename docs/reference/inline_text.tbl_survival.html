@@ -32,9 +32,9 @@
 
 <meta property="og:title" content="Report statistics from survival summary tables inline — inline_text.tbl_survival" />
 
-<meta property="og:description" content="Functions takes an object with class tbl_survival, and the
-location of the statistic to report and return the statistic for reporting
-inline in an R markdown document." />
+<meta property="og:description" content="Functions takes an object with class tbl_survival, the
+location of the statistic to report, and returns the statistic for reporting
+inline in an R markdown document" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -126,9 +126,9 @@ inline in an R markdown document." />
 
     <div class="ref-description">
     
-    <p>Functions takes an object with class <code>tbl_survival</code>, and the
-location of the statistic to report and return the statistic for reporting
-inline in an R markdown document.</p>
+    <p>Functions takes an object with class <code>tbl_survival</code>, the
+location of the statistic to report, and returns the statistic for reporting
+inline in an R markdown document</p>
     
     </div>
 
@@ -147,15 +147,15 @@ inline in an R markdown document.</p>
     <tr>
       <th>strata</th>
       <td><p>if <code>tbl_survival</code> estimates are stratified, level of the stratum
-report. Default is <code>NULL</code> when <code>tbl_survival</code> have no specified strata.</p></td>
+to report. Default is <code>NULL</code> when <code>tbl_survival</code> have no specified strata.</p></td>
     </tr>
     <tr>
       <th>time</th>
-      <td><p>time for which to return survival probability.</p></td>
+      <td><p>time for which to return survival probability</p></td>
     </tr>
     <tr>
       <th>prob</th>
-      <td><p>probability for which to return survival time.</p></td>
+      <td><p>probability for which to return survival time</p></td>
     </tr>
     <tr>
       <th>pattern</th>
@@ -183,10 +183,10 @@ pre-styled in 'x'. Default is x$estimate_fun</p></td>
 print the table the estimates are extracted from.</p><ul>
 <li><p><code>{label}</code> time or prob label</p></li>
 <li><p><code>{estimate}</code> survival or survival time estimate formatted with 'estimate_fun'</p></li>
-<li><p><code>{conf.low}</code> lower limit of confidence interval formmated with 'estimate_fun'</p></li>
-<li><p><code>{conf.high}</code> upper limit of confidence interval formmated with 'estimate_fun'</p></li>
-<li><p><code>{ci}</code> confidence interval formmated with x$estimate_fun (pre-formatted)</p></li>
-<li><p><code>{time}/{prob}</code> time of survival quantile (numeric)</p></li>
+<li><p><code>{conf.low}</code> lower limit of confidence interval formatted with 'estimate_fun'</p></li>
+<li><p><code>{conf.high}</code> upper limit of confidence interval formatted with 'estimate_fun'</p></li>
+<li><p><code>{ci}</code> confidence interval formatted with x$estimate_fun (pre-formatted)</p></li>
+<li><p><code>{time}/{prob}</code> time or survival quantile (numeric)</p></li>
 <li><p><code>{n.risk}</code> number at risk at 'time' (within stratum if applicable)</p></li>
 <li><p><code>{n.event}</code> number of observed events at 'time' (within stratum if applicable)</p></li>
 <li><p><code>{n}</code> number of observations (within stratum if applicable)</p></li>
@@ -202,10 +202,14 @@ print the table the estimates are extracted from.</p><ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='kw'>strata</span> <span class='kw'>=</span> <span class='st'>"Drug"</span>,
-              <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>12</span>)</div><div class='output co'>#&gt; 87% (95% CI 81%, 94%)</div></pre>
+<span class='no'>surv_table</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
+
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>surv_table</span>,
+  <span class='kw'>strata</span> <span class='kw'>=</span> <span class='st'>"Drug"</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>12</span>
+)</div><div class='output co'>#&gt; 87% (95% CI 81%, 94%)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
