@@ -20,7 +20,7 @@ if they wish to add customized formatting available via the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 or
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
-for detailed examples in the 'Advacned Customization' section.
+for detailed examples in the 'Advanced Customization' section.
 }
 \section{Example Output}{
 

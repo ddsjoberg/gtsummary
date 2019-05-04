@@ -42,10 +42,10 @@ inline in an R markdown document. Detailed examples in the
 The following items are available to print.  Use \code{print(x$table_body)} to
 print the table the estimates are extracted from.
 \itemize{
-\item \code{{estimate}} coeficient estiamte formatted with 'estimate_fun'
-\item \code{{conf.low}} lower limit of confidence interval formmated with 'estimate_fun'
-\item \code{{conf.high}} upper limit of confidence interval formmated with 'estimate_fun'
-\item \code{{ci}} confidence interval formmated with x$estimate_fun
+\item \code{{estimate}} coefficient estimate formatted with 'estimate_fun'
+\item \code{{conf.low}} lower limit of confidence interval formatted with 'estimate_fun'
+\item \code{{conf.high}} upper limit of confidence interval formatted with 'estimate_fun'
+\item \code{{ci}} confidence interval formatted with x$estimate_fun
 \item \code{{p.value}} p-value formatted with 'pvalue_fun'
 \item \code{{N}} number of observations in model
 \item \code{{label}} variable/variable level label
