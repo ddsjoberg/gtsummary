@@ -77,23 +77,11 @@ reference:
       - as_gt
       - gtsummary_logo
       - starts_with("print")
-      - starts_with("knit_print")
-      - add_global
-      - add_nevent
-      - add_q
-      - inline_text
-      - tbl_survival
-      - tab_style_bold_p
+      - starts_with("knit_print.")
+      - starts_with("%")
 
   - title: "Example Datasets"
     desc: >
       Simulated data to illustrate package use
     contents:
       - trial
-
-  - title: "Imports"
-    desc: >
-      Functions imported from other packages
-    contents:
-      - starts_with("%")
-      - knit_print

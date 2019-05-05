@@ -26,3 +26,4 @@ Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 \author{
 Daniel D. Sjoberg
 }
+\keyword{internal}
