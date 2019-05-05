@@ -17,6 +17,14 @@ The {gtsummary} package creates presentation-ready
     regression, are automatically identified and the tables are pre-filled
     with appropriate column headers.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{http://www.danieldsjoberg.com/gtsummary/}
+  \item Report bugs at \url{https://github.com/ddsjoberg/gtsummary/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Daniel D. Sjoberg \email{danield.sjoberg@gmail.com}
 
