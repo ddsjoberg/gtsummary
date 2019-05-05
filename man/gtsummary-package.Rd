@@ -9,17 +9,16 @@
 \description{
 The {gtsummary} package creates presentation-ready
     tables summarizing data sets, regression models, and more. The code to
-    create the tables is concise, and also highly customizable. Data
-    frames can be summarized any function that summarizes data, e.g.
-    mean(), sd(), median(), or any user-written function. Regression
-    models are summarized including the reference row for categorical
-    independent variables.  Common regression models, such as, logistic
-    regression and Cox proportional hazards regression, are automatically
-    identified and the tables are pre-filled with the appropriate column
-    headers.
+    create the tables is concise and highly customizable. Data frames can
+    be summarized with any function, e.g. mean(), median(), even
+    user-written functions.  Regression models are summarized and include
+    the reference rows for categorical variables. Common regression
+    models, such as logistic regression and Cox proportional hazards
+    regression, are automatically identified and the tables are pre-filled
+    with appropriate column headers.
 }
 \author{
-\strong{Maintainer}: Daniel D. Sjoberg \email{danieldsjoberg@gmail.com}
+\strong{Maintainer}: Daniel D. Sjoberg \email{danield.sjoberg@gmail.com}
 
 Authors:
 \itemize{
