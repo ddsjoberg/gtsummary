@@ -31,10 +31,10 @@ many types of regression models.
 {gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
 each table to be tailored to your preferences. If you label your data
 (which I recommend\!), the labels will be used in the table output. With
-{gtsummary} and [labelled](http://larmarange.github.io/labelled/) data,
-you get a beautifully formatted, ready-to-share table in a single line
-of code\! Check out the examples below, and review the vignettes for a
-detailed exploration of the output options.
+{gtsummary} and [{labelled}](http://larmarange.github.io/labelled/)
+data, you get a beautifully formatted, ready-to-share table in a single
+line of code\! Check out the examples below, and review the vignettes
+for a detailed exploration of the output options.
 
 ## Installation
 
