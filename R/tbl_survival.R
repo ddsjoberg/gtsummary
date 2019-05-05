@@ -4,6 +4,7 @@
 #' @param ... further arguments passed to other methods
 #' @seealso [tbl_survival.survfit]
 #' @export
+#' @keywords internal
 tbl_survival <- function(x, ...) {
   UseMethod("tbl_survival")
 }
@@ -54,7 +55,7 @@ tbl_survival <- function(x, ...) {
 #'     times = c(12, 24),
 #'     label = "{time} Months"
 #'   )
-#' 
+#'
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' tbl_nostrata_ex2 <-
 #'   tbl_survival(fit2,

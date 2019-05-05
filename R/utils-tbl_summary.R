@@ -829,7 +829,6 @@ summarize_categorical <- function(data, variable, by, var_label,
   # row or column percents
   # for column percent, group by 'by_col'
   # for row percents, group by 'variable'
-  row_percent <- TRUE
   percent_group_by_var <-
     ifelse(row_percent == TRUE, "variable", "by_col")
 
