@@ -7,6 +7,7 @@
 #' @seealso \code{\link{add_q.tbl_summary}}, \code{\link{add_q.tbl_uvregression}},
 #' \code{\link{tbl_summary}}, \code{\link{tbl_uvregression}}
 #' @export
+#' @keywords internal
 add_q <- function(x, ...) UseMethod("add_q")
 
 #' Add a column of q values to account for

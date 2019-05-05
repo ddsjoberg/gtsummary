@@ -6,6 +6,7 @@
 #' @seealso [inline_text.tbl_summary], [inline_text.tbl_regression],
 #' [inline_text.tbl_uvregression], [inline_text.tbl_survival]
 #' @export
+#' @keywords internal
 inline_text <- function(x, ...) {
   UseMethod("inline_text")
 }
@@ -31,7 +32,7 @@ inline_text <- function(x, ...) {
 #' @examples
 #' t1 <- tbl_summary(trial)
 #' t2 <- tbl_summary(trial, by = "trt") %>% add_comparison()
-#' 
+#'
 #' inline_text(t1, variable = "age")
 #' inline_text(t2, variable = "grade", level = "I", column = "Drug")
 #' inline_text(t2, variable = "grade", column = "p.value")
@@ -153,7 +154,7 @@ inline_text.tbl_summary <-
 #' inline_text_ex1 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#' 
+#'
 #' inline_text(inline_text_ex1, variable = "age")
 #' inline_text(inline_text_ex1, variable = "grade", level = "III")
 inline_text.tbl_regression <-
@@ -241,7 +242,7 @@ inline_text.tbl_regression <-
 #'     y = response,
 #'     exponentiate = TRUE
 #'   )
-#' 
+#'
 #' inline_text(inline_text_ex1, variable = "age")
 #' inline_text(inline_text_ex1, variable = "grade", level = "III")
 inline_text.tbl_uvregression <- inline_text.tbl_regression
@@ -292,7 +293,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' surv_table <-
 #'   survfit(Surv(ttdeath, death) ~ trt, trial) %>%
 #'   tbl_survival(times = c(12, 24))
-#' 
+#'
 #' inline_text(surv_table,
 #'   strata = "Drug",
 #'   time = 12
