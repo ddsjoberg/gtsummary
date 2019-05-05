@@ -22,3 +22,4 @@ Bold p-values in tables created by gtsummary
 \author{
 Daniel D. Sjoberg
 }
+\keyword{internal}
