@@ -3,14 +3,14 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build
 status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.org/ddsjoberg/gtsummary)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage
 status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/gtsummary?branch=master)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
 ## gtsummary
@@ -31,10 +31,10 @@ many types of regression models.
 {gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
 each table to be tailored to your preferences. If you label your data
 (which I recommend\!), the labels will be used in the table output. With
-{gtsummary} and [labelled](http://larmarange.github.io/labelled/) data,
-you get a beautifully formatted, ready-to-share table in a single line
-of code\! Check out the examples below, and review the vignettes for a
-detailed exploration of the output options.
+{gtsummary} and [{labelled}](http://larmarange.github.io/labelled/)
+data, you get a beautifully formatted, ready-to-share table in a single
+line of code\! Check out the examples below, and review the vignettes
+for a detailed exploration of the output options.
 
 ## Installation
 
