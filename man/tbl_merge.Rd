@@ -15,6 +15,11 @@ tbl_merge(tbls, tab_spanner = paste0(c("Model "), 1:length(tbls)))
 The \code{tbl_merge} function merges two or more \code{tbl_regression} or
 \code{tbl_uvregression} objects and adds appropriate spanning headers.
 }
+\section{Example Output}{
+
+\if{html}{\figure{tbl_merge_ex.png}{options: width=50\%}}
+}
+
 \examples{
 library(survival)
 t1 <-
@@ -29,12 +34,28 @@ t2 <-
     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
     exponentiate = TRUE
   )
-t3 <-
+tbl_merge_ex <-
   tbl_merge(
     tbls = list(t1, t2),
     tab_spanner = c("Tumor Response", "Time to Death")
   )
 }
+\seealso{
+Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
+  \code{\link{add_nevent.tbl_regression}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{inline_text.tbl_regression}},
+  \code{\link{tbl_regression}}
+
+Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{add_nevent.tbl_uvregression}},
+  \code{\link{add_q.tbl_uvregression}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{tbl_uvregression}}
+}
 \author{
 Daniel D. Sjoberg
 }
+\concept{tbl_regression tools}
+\concept{tbl_uvregression tools}

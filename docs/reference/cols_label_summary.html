@@ -11,7 +11,7 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Relabel columns in summary table — cols_label_summary" />
 
-<meta property="og:description" content="Column labels can be modified using data from the data frame" />
+<meta property="og:description" content="Column labels can be modified to include calculated statistics,
+e.g. the N and percent within each group" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +64,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -124,7 +125,8 @@
 
     <div class="ref-description">
     
-    <p>Column labels can be modified using data from the data frame</p>
+    <p>Column labels can be modified to include calculated statistics,
+e.g. the N and percent within each group</p>
     
     </div>
 
@@ -140,50 +142,63 @@
     <tr>
       <th>stat_overall</th>
       <td><p>string vector including text to appear above the overall summary
-statistics. <code>N</code>, the total number of observations, is available for use in the
+statistics. <code>{N}</code>, the total number of observations, is available for use in the
 description. e.g. <code>stat_overall = md("**All Patients**, N = {N}")</code></p></td>
     </tr>
     <tr>
       <th>stat_by</th>
       <td><p>string vector of text to include above the summary statistics
 stratified by a variable.  The following fields are available for use in the
-headers: <code>n</code>, <code>N</code>, <code>p</code>, and <code>level</code>.  <code>n</code> is the number of observations in
-each by group. <code>N</code> is the total number of observations. <code>p</code> is the percent
-in a by group. <code>level</code> is the by variable level.
-Syntax follows the <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a></code> function,
+headers: <code>{n}</code>, <code>{N}</code>, <code>{p}</code>, and <code>{level}</code>.  <code>{n}</code> is the number of observations in
+each by group. <code>{N}</code> is the total number of observations. <code>{p}</code> is the percent
+in a by group. <code>{level}</code> is the by variable level.
+Syntax follows the <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> function,
 e.g. <code>stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")</code>.
-Must specify <code>by</code> along with <code>stat_by</code>.</p></td>
+The <code>by</code> argument from the parent <code><a href='tbl_summary.html'>tbl_summary()</a></code> cannot be <code>NULL</code>.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p>Example 1</p>
+<p><img src='figures/tbl_col_ex1.png' width=31% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_col_ex2.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>html</a></p>
-<p>Other tbl_summary: <code><a href='add_comparison.html'>add_comparison</a></code>,
+    <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>gt::md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>gt::html</a></p>
+<p>Other tbl_summary tools: <code><a href='add_comparison.html'>add_comparison</a></code>,
   <code><a href='add_n.html'>add_n</a></code>, <code><a href='add_overall.html'>add_overall</a></code>,
   <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_col1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_col_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'>cols_label_summary</span>(<span class='kw'>stat_overall</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**All Patients**, N = {N}"</span>))
-<span class='no'>tbl_col2</span> <span class='kw'>&lt;-</span>
+<span class='no'>tbl_col_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>cols_label_summary</span>(<span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</span>))</div></pre>
+  <span class='fu'>cols_label_summary</span>(
+    <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</span>)
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#example-output">Example Output</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>

@@ -2,7 +2,7 @@
 % Please edit documentation in R/style_percent.R
 \name{style_percent}
 \alias{style_percent}
-\title{Formats percentages to be displayed in tables or text of report.}
+\title{Style percentages to be displayed in tables or text}
 \usage{
 style_percent(x, symbol = FALSE)
 }
@@ -15,7 +15,7 @@ style_percent(x, symbol = FALSE)
 Formatted percentages
 }
 \description{
-Formats percentages to be displayed in tables or text of report.
+Style percentages to be displayed in tables or text
 }
 \examples{
 percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)

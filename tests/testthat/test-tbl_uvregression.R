@@ -52,3 +52,50 @@ test_that("glmer: no errors/warnings with standard use", {
       ), NA
   )
 })
+
+test_that("tbl_regression creates errors with bad inputs", {
+  expect_error(
+    tbl_uvregression(
+      data = mtcars,
+      method = coxph,
+      y = Surv(time, status),
+      pvalue_fun = mtcars
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = lung,
+      method = coxph,
+      y = Surv(time, status),
+      estimate_fun = mtcars
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = lung,
+      method = coxph,
+      y = Surv(time, status),
+      label = "Labels! YAY"
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = list(lung),
+      method = coxph,
+      y = Surv(time, status)
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = lung,
+      method = coxph,
+      y = Surv(time, status),
+      formula = "y ~ x"
+    ),
+    "*"
+  )
+})

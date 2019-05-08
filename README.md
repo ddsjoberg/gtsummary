@@ -1,17 +1,44 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![lifecycle](man/figures/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![Travis build status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.org/ddsjoberg/gtsummary) [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary) [![Coverage status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/gtsummary?branch=master)
 
-gtsummary
----------
+<!-- badges: start -->
 
-A collection of functions commonly used in the work of the biostatisticians. The goal of gtsummary is to make reporting of tabular analytic results simple, beautiful, and reproducible.
-<!-- Update the list of contributors from the git shell `git shortlog -s -n` -->
+[![Travis build
+status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.org/ddsjoberg/gtsummary)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
+[![Coverage
+status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/gtsummary?branch=master)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+<!-- badges: end -->
 
-Installation
-------------
+## gtsummary
 
-You can install the production version of gtsummary with:
+The {gtsummary} package creates presentation-ready tables summarizing
+data sets, regression models, and more. The code to create the tables is
+concise and highly customizable. The resulting tables are gorgeous\!
+Data frames can be summarized with any function, e.g. mean(), median(),
+even user-written functions. Regression models are summarized and
+include the reference rows for categorical variables. Common regression
+models, such as logistic regression and Cox proportional hazards
+regression, are automatically identified and the tables are pre-filled
+with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The
+package uses [{broom}](https://broom.tidyverse.org/) to perform initial
+tidying of the regression models, which means there is broad support for
+many types of regression models.
+
+{gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
+each table to be tailored to your preferences. If you label your data
+(which I recommend\!), the labels will be used in the table output. With
+{gtsummary} and [{labelled}](http://larmarange.github.io/labelled/)
+data, you get a beautifully formatted, ready-to-share table in a single
+line of code\! Check out the examples below, and review the vignettes
+for a detailed exploration of the output options.
+
+## Installation
+
+You can install the production version of {gtsummary} with:
 
 ``` r
 install.packages("remotes")
@@ -24,10 +51,9 @@ and the development version with:
 remotes::install_github("ddsjoberg/gtsummary", ref = "dev")
 ```
 
-Examples
---------
+## Examples
 
-The vignettes/tutorials for the primary gtsummary functions have detailed examples and can be found at [danieldsjoberg.com/gtsummary](http://www.danieldsjoberg.com/gtsummary). Each vignette is an Rmarkdown file (\*.Rmd) and a copy of the files can be found here: <https://github.com/ddsjoberg/gtsummary/tree/master/vignettes>.
+The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ### Summary Table
 
@@ -35,21 +61,32 @@ The vignettes/tutorials for the primary gtsummary functions have detailed exampl
 library(gtsummary)
 #> Loading required package: gt
 t1 <-
-  tbl_summary(trial, by = "trt") %>% 
+  tbl_summary(
+    data = trial[c("trt", "age", "grade", "response")],
+    by = "trt"
+  ) %>%
   add_comparison() 
 ```
 
-![](man/figures/README-tbl_summary.png)
+<img src="man/figures/README-tbl_summary.png" width="60%">
 
 ### Regression Models
 
 ``` r
-mod1 = glm(am ~ mpg + factor(cyl), mtcars, family = binomial(link = "logit"))
+mod1 <- 
+  glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
 t2 <-
-  tbl_regression(
-    mod1, exponentiate = TRUE, 
-    label = list(`factor(cyl)` = "No. of Cylinders", mpg = "Miles per Gallon")
-  )
+  tbl_regression(mod1,
+                 exponentiate = TRUE)
 ```
 
-![](man/figures/README-tbl_regression.png)
+<img src="man/figures/README-tbl_regression.png" width="44%">
+
+Please note that the {gtsummary} project is released with a [Contributor
+Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
+project, you agree to abide by its terms. A big thank you to all
+contributors\!  
+[@ddsjoberg](https://github.com/ddsjoberg),
+[@karissawhiting](https://github.com/karissawhiting),
+[@margarethannum](https://github.com/margarethannum), and
+[@michaelcurry1123](https://github.com/michaelcurry1123)

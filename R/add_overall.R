@@ -1,16 +1,22 @@
-#' Adds a column with overall summary statistics to an existing `tbl_summary` object where descriptive
-#' statistics are split by a variable
+#' Add column with overall summary statistics
 #'
-#' The function assumes the DEFAULT headers are in use. Only modify header rows
-#' after Overall column has been added.
+#' This function adds a column with overall summary statistics to tables
+#' created by `tbl_summary`.
 #'
-#' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
+#' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param last logical indicator to include overall  column last. Default is `FALSE`
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_overall <- trial %>% tbl_summary(by = "trt") %>% add_overall()
+#' tbl_overall_ex <-
+#'   trial %>%
+#'   dplyr::select(age, response, grade, trt) %>%
+#'   tbl_summary(by = "trt") %>%
+#'   add_overall()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
+#'
 add_overall <- function(x, last = FALSE) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
@@ -62,7 +68,7 @@ add_overall <- function(x, last = FALSE) {
   x$call_list <- c(x$call_list, list(add_overall = match.call()))
 
   # adding header
-  x <- cols_label_summary(x, stat_overall = "**Overall**, N = {N}")
+  x <- cols_label_summary(x, stat_overall = md("**Overall**, N = {N}"))
 
   x
 }

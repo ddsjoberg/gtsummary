@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds a column with N (or N missing) for each variable — add_n • gtsummary</title>
+<title>Add column with N — add_n • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -30,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Adds a column with N (or N missing) for each variable — add_n" />
+<meta property="og:title" content="Add column with N — add_n" />
 
-<meta property="og:description" content="The function assumes the DEFAULT header are in use. Only modify header rows
-after all columns has been added." />
+<meta property="og:description" content="For each variable in the table, the add_n function adds a column with the
+number of non-missing (or missing) observations" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -64,7 +64,7 @@ after all columns has been added." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -118,15 +118,15 @@ after all columns has been added." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds a column with N (or N missing) for each variable</h1>
+    <h1>Add column with N</h1>
     
     <div class="hidden name"><code>add_n.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The function assumes the DEFAULT header are in use. Only modify header rows
-after all columns has been added.</p>
+    <p>For each variable in the table, the <code>add_n</code> function adds a column with the
+number of non-missing (or missing) observations</p>
     
     </div>
 
@@ -137,7 +137,7 @@ after all columns has been added.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object with class <code>tbl_summary</code> from the <code><a href='tbl_summary.html'>tbl_summary</a></code> function</p></td>
+      <td><p>object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function</p></td>
     </tr>
     <tr>
       <th>missing</th>
@@ -150,27 +150,37 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p><img src='figures/tbl_n_ex.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_summary: <code><a href='add_comparison.html'>add_comparison</a></code>,
+    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_comparison.html'>add_comparison</a></code>,
   <code><a href='add_overall.html'>add_overall</a></code>,
   <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_n</span> <span class='kw'>&lt;-</span> <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span> <span class='fu'>add_n</span>()</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tbl_n_ex</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>add_n</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#example-output">Example Output</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>

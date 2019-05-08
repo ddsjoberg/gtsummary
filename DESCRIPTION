@@ -1,12 +1,12 @@
 Package: gtsummary
-Title: The goal of gtsummary is to make reporting of tabular
-    analytic results easy, beautiful, and reproducible
-Version: 0.0.0.9000
+Title: Presentation-Ready Data Summary and Analytic Result
+    Tables
+Version: 1.0.0.9000
 Authors@R: 
     c(person(given = "Daniel D.",
              family = "Sjoberg",
              role = c("aut", "cre"),
-             email = "danieldsjoberg@gmail.com"),
+             email = "danield.sjoberg@gmail.com"),
       person(given = "Emily C.",
              family = "Zabor",
              role = "aut"),
@@ -16,12 +16,15 @@ Authors@R:
       person(given = "Karissa",
              family = "Whiting",
              role = "aut"))
-Description: Written with the goal to make reporting of tabular
-    analytic results simple, beautiful, and reproducible.
-    Publication-ready tables are created with minimal code, and can be
-    exported to Word, HTML, and PDF documents with the use of Rmarkdown.
-    The gtsummary functions are flexible, allowing you to easily customize
-    the aesthetics of tables to suit your needs.
+Description: The {gtsummary} package creates presentation-ready
+    tables summarizing data sets, regression models, and more. The code to
+    create the tables is concise and highly customizable. Data frames can
+    be summarized with any function, e.g. mean(), median(), even
+    user-written functions.  Regression models are summarized and include
+    the reference rows for categorical variables. Common regression
+    models, such as logistic regression and Cox proportional hazards
+    regression, are automatically identified and the tables are pre-filled
+    with appropriate column headers.
 License: MIT + file LICENSE
 Depends: 
     gt (>= 0.1.0),
@@ -29,7 +32,7 @@ Depends:
 Imports: 
     broom (>= 0.5.1),
     broom.mixed (>= 0.2.3),
-    car (>= 3.0.2),
+    crayon (>= 1.3.4),
     dplyr (>= 0.7.8),
     glue (>= 1.3.0),
     knitr (>= 1.21),
@@ -37,11 +40,13 @@ Imports:
     purrr (>= 0.3.0),
     rlang (>= 0.3.1),
     stringr (>= 1.3.1),
+    survival,
     tibble (>= 2.0.1),
-    tidyr (>= 0.8.2),
-    survival
+    tidyr (>= 0.8.2)
 Suggests: 
+    car (>= 3.0.2),
     covr (>= 3.2.1),
+    geepack (>= 1.2.1),
     ggplot2 (>= 3.1.0),
     lme4 (>= 1.1.18.1),
     rmarkdown (>= 1.11),
@@ -56,3 +61,5 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
+URL: http://www.danieldsjoberg.com/gtsummary/
+BugReports: https://github.com/ddsjoberg/gtsummary/issues

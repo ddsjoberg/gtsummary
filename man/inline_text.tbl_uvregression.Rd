@@ -5,8 +5,8 @@
 \title{Report statistics from regression summary tables inline}
 \usage{
 \method{inline_text}{tbl_uvregression}(x, variable, level = NULL,
-  pattern = "{coef} ({conf.level*100}\% CI {ll}, {ul}; {pvalue})",
-  coef_fun = x$inputs$coef_fun, pvalue_fun = function(x)
+  pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
+  estimate_fun = x$inputs$estimate_fun, pvalue_fun = function(x)
   style_pvalue(x, prepend_p = TRUE), ...)
 }
 \arguments{
@@ -17,12 +17,14 @@
 \item{level}{level of the variable to display for categorical variables.
 Default is \code{NULL}, returning the top row in the table for the variable.}
 
-\item{pattern}{statistics to return.  Uses \link[glue]{glue} formatting.
-Default is \code{"{coef} ({conf.level }\% CI  {ll}, {ul}; {pvalue})"}.  All columns from
-\code{.$table_body} are available to print as well as the confidence level (conf.level)}
+\item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
+Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.  All columns from
+\code{x$table_body} are available to print as well as the confidence level (conf.level).
+Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
 
-\item{coef_fun}{function to style model coefficients.
-Columns 'coef', 'll', and 'ul' are formatted. Default is \code{x$inputs$coef_fun}}
+\item{estimate_fun}{function to style model coefficient estimates.
+Columns 'estimate', 'conf.low', and 'conf.high' are formatted.
+Default is \code{x$inputs$estimate_fun}}
 
 \item{pvalue_fun}{function to style p-values and/or q-values.
 Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
@@ -30,16 +32,45 @@ Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
 \item{...}{not used}
 }
 \description{
-Functions takes an object with class \code{tbl_uvregression}, and the
+Takes an object with class \code{tbl_uvregression}, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document. Detailed examples in the
-\href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html}{\code{tbl_regression} vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
+}
+\section{pattern argument}{
+
+The following items are available to print.  Use \code{print(x$table_body)} to
+print the table the estimates are extracted from.
+\itemize{
+\item \code{{estimate}} coefficient estimate formatted with 'estimate_fun'
+\item \code{{conf.low}} lower limit of confidence interval formatted with 'estimate_fun'
+\item \code{{conf.high}} upper limit of confidence interval formatted with 'estimate_fun'
+\item \code{{ci}} confidence interval formatted with x$estimate_fun
+\item \code{{p.value}} p-value formatted with 'pvalue_fun'
+\item \code{{N}} number of observations in model
+\item \code{{label}} variable/variable level label
+}
+}
+
+\examples{
+inline_text_ex1 <-
+  trial \%>\%
+  dplyr::select(response, age, grade) \%>\%
+  tbl_uvregression(
+    method = glm,
+    method.args = list(family = binomial),
+    y = response,
+    exponentiate = TRUE
+  )
+
+inline_text(inline_text_ex1, variable = "age")
+inline_text(inline_text_ex1, variable = "grade", level = "III")
 }
 \seealso{
-Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_uvregression}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
-\concept{tbl_uvregression}
+\concept{tbl_uvregression tools}

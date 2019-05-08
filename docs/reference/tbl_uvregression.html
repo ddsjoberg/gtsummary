@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates table of univariate regression results — tbl_uvregression • gtsummary</title>
+<title>Display univariate regression model results in table — tbl_uvregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -30,11 +30,11 @@
 
 
 
-<meta property="og:title" content="Creates table of univariate regression results — tbl_uvregression" />
+<meta property="og:title" content="Display univariate regression model results in table — tbl_uvregression" />
 
 <meta property="og:description" content="The tbl_uvregression function arguments are similar to the tbl_regression
-arguments. Review the tbl_uvregression
-vignette
+arguments. Review the
+tbl_uvregression vignette
 for detailed examples." />
 <meta name="twitter:card" content="summary" />
 
@@ -66,7 +66,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -120,24 +120,24 @@ for detailed examples." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Creates table of univariate regression results</h1>
+    <h1>Display univariate regression model results in table</h1>
     
     <div class="hidden name"><code>tbl_uvregression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The <code>tbl_uvregression</code> function arguments are similar to the <code><a href='tbl_regression.html'>tbl_regression</a></code>
-arguments. Review the <code>tbl_uvregression</code>
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression'>vignette</a>
+    <p>The <code>tbl_uvregression</code> function arguments are similar to the <a href='tbl_regression.html'>tbl_regression</a>
+arguments. Review the
+<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression'>tbl_uvregression vignette</a>
 for detailed examples.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>tbl_uvregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>, <span class='no'>style_ratio</span>, <span class='no'>style_sigfig</span>),
+  <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>, <span class='no'>style_ratio</span>, <span class='no'>style_sigfig</span>),
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -145,12 +145,12 @@ for detailed examples.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>Data frame to be used in univariate regression modeling.  Data
+      <td><p>data frame to be used in univariate regression modeling.  Data
 frame includes the outcome variable(s) and the independent variables.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Regression method (e.g. <code><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></code>,
+      <td><p>regression method (e.g. <code><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></code>,
 <code><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></code>, <code><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></code>, and more).</p></td>
     </tr>
     <tr>
@@ -159,41 +159,45 @@ frame includes the outcome variable(s) and the independent variables.</p></td>
     </tr>
     <tr>
       <th>method.args</th>
-      <td><p>List of additional arguments passed on to the regression
-function defined by method.</p></td>
+      <td><p>list of additional arguments passed on to the regression
+function defined by <code>method</code>.</p></td>
     </tr>
     <tr>
       <th>formula</th>
-      <td><p>String that becomes the model formula.
+      <td><p>string that becomes the model formula.
 Uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> syntax. Default is <code>"{y} ~ {x}"</code>, where <code>{y}</code>
 is the dependent variable, and <code>{x}</code> represents a single covariate. For a
 random intercept, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</code>.</p></td>
     </tr>
     <tr>
       <th>exponentiate</th>
-      <td><p>logical argument passed directly to
-<code>tidy</code> function. Default is <code>FALSE</code></p></td>
+      <td><p>logical indicating whether or not to exponentiate the
+coefficient estimates. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>label</th>
       <td><p>list of labels to write in the output. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code></p></td>
     </tr>
     <tr>
+      <th>hide_n</th>
+      <td><p>hide N column. Default is <code>FALSE</code></p></td>
+    </tr>
+    <tr>
       <th>show_yesno</th>
-      <td><p>Vector of names of categorical and factor variables that
-are <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("No", "Yes")</a></code>, <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("no", "yes")</a></code>, or <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("NO", "YES")</a></code> default to dichotomous printing
-(i.e. only Yes shown). To force both levels to be shown include the column
-name in <code>show_yesno</code>, e.g. <code>show_yesno = c("highgrade", "female")</code></p></td>
+      <td><p>By default yes/no categorical variables are printed on a single row,
+when the 'No' category is the reference group.  To print both levels in the output table, include
+the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
-      <td><p>confidence level passed directly to <code>tidy</code> function. Default is 0.95.</p></td>
+      <td><p>must be strictly greater than 0 and less than 1.
+Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></td>
     </tr>
     <tr>
-      <th>coef_fun</th>
-      <td><p>function to round and format beta coefficients.  Default
-is <code><a href='style_sigfig.html'>style_sigfig</a></code> when the coefficients are printed, and
-<code><a href='style_ratio.html'>style_ratio</a></code> when the coefficients have been exponentiated.</p></td>
+      <th>estimate_fun</th>
+      <td><p>function to round and format beta coefficient estimates.  Default
+is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are printed, and
+<a href='style_ratio.html'>style_ratio</a> when the coefficients have been exponentiated.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
@@ -206,42 +210,68 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    
+    <p>The N reported in the <code>tbl_uvregression()</code> output is the number of observations
+in the data frame <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame(x)</a></code>. Depending on the model input, this N
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.</p><ol>
+<li><p>Survival regression models including time dependent covariates.</p></li>
+<li><p>Random- or mixed-effects regression models with clustered data.</p></li>
+<li><p>GEE regression models with clustered data.</p></li>
+</ol>
+    <p>This list is not exhaustive, and care should be taken for each number reported.</p>
+    
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p>Example 1</p>
+<p><img src='figures/tbl_uv_ex1.png' width=50% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_uv_ex2.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_uvregression: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
+    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
+  <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
   <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code></p></div>
+  <code><a href='tbl_merge.html'>tbl_merge</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_uv</span> <span class='kw'>&lt;-</span>
- <span class='fu'>tbl_uvregression</span>(
-   <span class='no'>trial</span>,
-   <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
-   <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
-   <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
-   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
- )
-
-<span class='co'># rounding pvalues to 2 decimal places, and adding global p-values</span>
-<span class='no'>tbl_uv2</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='no'>tbl_uv_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
-    <span class='no'>trial</span>,
+    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>),
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
     <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
+    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  )
+
+<span class='co'># rounding pvalues to 2 decimal places</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
+<span class='no'>tbl_uv_ex2</span> <span class='kw'>&lt;-</span>
+  <span class='fu'>tbl_uvregression</span>(
+    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>),
+    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
+    <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
     <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-  ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global.html'>add_global</a></span>()</div></pre>
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#example-output">Example Output</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>

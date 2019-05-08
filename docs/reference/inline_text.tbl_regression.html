@@ -11,7 +11,7 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Report statistics from regression summary tables inline — inline_text.tbl_regression" />
 
-<meta property="og:description" content="Functions takes an object with class tbl_regression, and the
+<meta property="og:description" content="Takes an object with class tbl_regression, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
 tbl_regression vignette" />
@@ -66,7 +66,7 @@ tbl_regression vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -127,17 +127,17 @@ tbl_regression vignette" />
 
     <div class="ref-description">
     
-    <p>Functions takes an object with class <code>tbl_regression</code>, and the
+    <p>Takes an object with class <code>tbl_regression</code>, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
-<a href='https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_regression.html'><code>tbl_regression</code> vignette</a></p>
+<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text'>tbl_regression vignette</a></p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
 <span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='no'>variable</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{coef} ({conf.level*100}% CI {ll}, {ul}; {pvalue})"</span>,
-  <span class='kw'>coef_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>coef_fun</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>)
+  <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>estimate_fun</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>)
   <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -158,14 +158,16 @@ Default is <code>NULL</code>, returning the top row in the table for the variabl
     </tr>
     <tr>
       <th>pattern</th>
-      <td><p>statistics to return.  Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a> formatting.
-Default is <code>"{coef} ({conf.level }% CI  {ll}, {ul}; {pvalue})"</code>.  All columns from
-<code>.$table_body</code> are available to print as well as the confidence level (conf.level)</p></td>
+      <td><p>statistics to return.  Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting.
+Default is <code>"{estimate} ({conf.level }% CI  {conf.low}, {conf.high}; {p.value})"</code>.  All columns from
+<code>x$table_body</code> are available to print as well as the confidence level (conf.level).
+Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting. See below for details.</p></td>
     </tr>
     <tr>
-      <th>coef_fun</th>
-      <td><p>function to style model coefficients.
-Columns 'coef', 'll', and 'ul' are formatted. Default is <code>x$inputs$coef_fun</code></p></td>
+      <th>estimate_fun</th>
+      <td><p>function to style model coefficient estimates.
+Columns 'estimate', 'conf.low', and 'conf.high' are formatted.
+Default is <code>x$inputs$estimate_fun</code></p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
@@ -178,22 +180,46 @@ Default is <code>function(x) style_pvalue(x, prepend_p = TRUE)</code></p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="pattern-argument"><a class="anchor" href="#pattern-argument"></a>pattern argument</h2>
+
+    
+    <p>The following items are available to print.  Use <code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print(x$table_body)</a></code> to
+print the table the estimates are extracted from.</p><ul>
+<li><p><code>{estimate}</code> coefficient estimate formatted with 'estimate_fun'</p></li>
+<li><p><code>{conf.low}</code> lower limit of confidence interval formatted with 'estimate_fun'</p></li>
+<li><p><code>{conf.high}</code> upper limit of confidence interval formatted with 'estimate_fun'</p></li>
+<li><p><code>{ci}</code> confidence interval formatted with x$estimate_fun</p></li>
+<li><p><code>{p.value}</code> p-value formatted with 'pvalue_fun'</p></li>
+<li><p><code>{N}</code> number of observations in model</p></li>
+<li><p><code>{label}</code> variable/variable level label</p></li>
+</ul>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_regression: <code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
+    <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
+  <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code>,
-  <code><a href='tbl_regression.html'>tbl_regression</a></code></p></div>
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>inline_text_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/family'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; 1.00 (95% CI 0.98, 1.02; p=0.8)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"III"</span>)</div><div class='output co'>#&gt; 0.81 (95% CI 0.40, 1.65; p=0.6)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#pattern-argument">pattern argument</a></li>
+
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>Daniel D. Sjoberg</p>
