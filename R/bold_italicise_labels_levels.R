@@ -3,17 +3,20 @@
 #' @name bold_italicize_labels_levels
 #' @param x an object created using gtsummary functions
 #' @author Daniel D. Sjoberg
-#' @family tbl_summary
-#' @family tbl_regression
-#' @family tbl_uvregression
+#' @family tbl_summary tools
+#' @family tbl_regression tools
+#' @family tbl_uvregression tools
 #' @examples
-#' tbl_bold_ital <-
+#' tbl_bold_ital_ex <-
 #'   trial %>%
+#'   dplyr::select(trt, age, grade) %>%
 #'   tbl_summary() %>%
 #'   tab_style_bold_labels() %>%
 #'   tab_style_bold_levels() %>%
 #'   tab_style_italicize_labels() %>%
 #'   tab_style_italicize_levels()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_bold_ital_ex.png}{options: width=50\%}}
 #'
 NULL
 

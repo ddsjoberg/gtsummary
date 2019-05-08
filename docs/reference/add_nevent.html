@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a regression model object to a parsed list matching model terms to variable names — parse_terms • gtsummary</title>
+<title>Add number of events to a regression table — add_nevent • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -30,10 +30,14 @@
 
 
 
-<meta property="og:title" content="Convert a regression model object to a parsed list matching model terms to variable names — parse_terms" />
+<meta property="og:title" content="Add number of events to a regression table — add_nevent" />
 
-<meta property="og:description" content="With the parse_terms() function, each term in the tidied model is parsed and
-matched with a variable name." />
+<meta property="og:description" content="This function adds a column of the number of events to tables created with
+tbl_regression or tbl_uvregression.  Supported
+model types include GLMs with binomial distribution family (e.g.
+stats::glm, lme4::glmer, and
+geepack::geeglm) and Cox
+Proportion Hazards regression models (survival::coxph)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -64,7 +68,7 @@ matched with a variable name." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -118,42 +122,41 @@ matched with a variable name." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a regression model object to a parsed list matching model terms to variable names</h1>
+    <h1>Add number of events to a regression table</h1>
     
-    <div class="hidden name"><code>parse_terms.Rd</code></div>
+    <div class="hidden name"><code>add_nevent.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>With the <code>parse_terms()</code> function, each term in the tidied model is parsed and
-matched with a variable name.</p>
+    <p>This function adds a column of the number of events to tables created with
+<a href='tbl_regression.html'>tbl_regression</a> or <a href='tbl_uvregression.html'>tbl_uvregression</a>.  Supported
+model types include GLMs with binomial distribution family (e.g.
+<a href='https://www.rdocumentation.org/packages/stats/topics/glm'>stats::glm</a>, <a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>lme4::glmer</a>, and
+<a href='https://www.rdocumentation.org/packages/geepack/topics/geeglm'>geepack::geeglm</a>) and Cox
+Proportion Hazards regression models (<a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>survival::coxph</a>).</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>parse_terms</span>(<span class='no'>x</span>, <span class='no'>tidy_model</span>, <span class='no'>show_yesno</span>)</pre>
+    <pre class="usage"><span class='fu'>add_nevent</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>regression model object</p></td>
+      <td><p><code>tbl_regerssion</code> or <code>tbl_uvregression</code> object</p></td>
     </tr>
     <tr>
-      <th>tidy_model</th>
-      <td><p>tidied model output from tidy_wrap function</p></td>
-    </tr>
-    <tr>
-      <th>show_yesno</th>
-      <td><p>categorical and factor variables that are <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("No", "Yes")</a></code> or
-<code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("no", "yes")</a></code> default to dichotomous printing. To force both levels to be shown</p></td>
+      <th>...</th>
+      <td><p>further arguments passed to or from other methods.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>list with one entry for each variable, each element are the terms from
-the regression model.For categorical variables, the reference level has been added.</p>
+    <div class='dont-index'><p><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>, <a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>,
+<a href='tbl_regression.html'>tbl_regression</a>, <a href='tbl_uvregression.html'>tbl_uvregression</a></p></div>
     
 
   </div>
@@ -162,9 +165,11 @@ the regression model.For categorical variables, the reference level has been add
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
+    <h2>Author</h2>
+    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 

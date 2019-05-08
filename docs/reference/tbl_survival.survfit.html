@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints — tbl_survival.survfit • gtsummary</title>
+<title>Creates table of survival probabilities — tbl_survival.survfit • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -30,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints — tbl_survival.survfit" />
+<meta property="og:title" content="Creates table of survival probabilities — tbl_survival.survfit" />
 
-<meta property="og:description" content="Function accepts a survfit object, and provides a tablulated and formmated
-summary of the results" />
+<meta property="og:description" content="Function takes a survfit object as an argument, and provides a
+formatted summary of the results" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -64,7 +64,7 @@ summary of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -118,55 +118,84 @@ summary of the results" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tabulate Kaplan-Meier survival probabilites for time-to-event endpoints</h1>
+    <h1>Creates table of survival probabilities</h1>
     
     <div class="hidden name"><code>tbl_survival.survfit.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Function accepts a <code>survfit</code> object, and provides a tablulated and formmated
-summary of the results</p>
+    <p>Function takes a <code>survfit</code> object as an argument, and provides a
+formatted summary of the results</p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for survfit</span>
-<span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>x</span>, <span class='no'>times</span>, <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time}"</span>,
-  <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='st'>"Survival Probability"</span>,
-  <span class='no'>...</span>)</pre>
+<span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>x</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NULL'>is.null</a></span>(<span class='no'>probs</span>), <span class='st'>"{time}"</span>, <span class='st'>"{prob*100}%"</span>),
+  <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>, <span class='kw'>header_label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>failure</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"-"</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>survfit</code> object. While <code>survfit()</code> allows stratifcation by multiple
-variables, including more than one variable will result in display problems.</p></td>
+      <td><p>a survfit object with a single stratifying variable</p></td>
     </tr>
     <tr>
       <th>times</th>
       <td><p>numeric vector of survival times</p></td>
     </tr>
     <tr>
-      <th>time_label</th>
-      <td><p>string defining the label shown for the time column.
-Default is "time".  The input uses <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> notation to
-convert the string into a label.  A common label may be "time Months", which
-would resolve to "6 Months" or "12 Months" depending on the times requested.</p></td>
+      <th>probs</th>
+      <td><p>numeric vector of probabilities with values in (0,1)
+specifying the survival quantiles to return</p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>string defining the label shown for the time or prob column.
+Default is <code>"{time}"</code> or <code>"{prob*100}%"</code>.  The input uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> notation to
+convert the string into a label.  A common label may be <code>"{time} Months"</code>, which
+would resolve to "6 Months" or "12 Months" depending on specified <code>times</code>.</p></td>
     </tr>
     <tr>
       <th>level_label</th>
-      <td><p>used when the input 'x' results are stratified by a variable.
+      <td><p>used when survival results are stratified.
 It is a string defining the label shown.  The input uses
-<code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue</a></code> notation to convert the string into a label.
-The default is "level, N = n", which will print the level of the stratifying
-variable.  Other information available to call are n', 'variable',
-and 'strata'.</p></td>
+<a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> notation to convert the string into a label.
+The default is <code>"{level}, N = {n}"</code>.  Other information available to
+call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, <code>'{n.event.strata}'</code>, and <code>'{strata}'</code>. See
+below for details.</p></td>
     </tr>
     <tr>
-      <th>header</th>
+      <th>header_label</th>
+      <td><p>string to be displayed as column header.
+Default is <code>md('**Time**')</code> when <code>time</code> is specified, and
+<code>md('**Quantile**')</code> when <code>probs</code> is specified.</p></td>
+    </tr>
+    <tr>
+      <th>header_estimate</th>
       <td><p>string to be displayed as column header of the Kaplan-Meier
-estimate.  Default is 'Survival Probability'</p></td>
+estimate.  Default is <code>md('**Probability**')</code> when <code>time</code> is specified, and
+<code>md('**Time**')</code> when <code>probs</code> is specified.</p></td>
+    </tr>
+    <tr>
+      <th>failure</th>
+      <td><p>calculate failure probabilities rather than survival.
+Default is <code>FALSE</code>.  Does NOT apply to survival quantile requests</p></td>
+    </tr>
+    <tr>
+      <th>missing</th>
+      <td><p>character string indicating what to replace missing confidence
+limits with in output.  Default is <code>missing = "-"</code></p></td>
+    </tr>
+    <tr>
+      <th>estimate_fun</th>
+      <td><p>function used to format the estimate and confidence limits.
+The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE)</a></code> for survival probabilities, and
+<code><a href='style_sigfig.html'>style_sigfig(x, digits = 3)</a></code> for time estimates.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -174,299 +203,61 @@ estimate.  Default is 'Survival Probability'</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="level-label-argument"><a class="anchor" href="#level-label-argument"></a>level_label argument</h2>
+
+    
+    <p>The <code>level_label</code> is used to modify the stratum labels. The default is
+<code>level_label = "{level}, N = {n}"</code>. The quantities in the curly
+brackets evaluate to stratum-specific values.  For example, in the trial
+data set, there is a column called <code>trt</code> with levels 'Drug' and 'Placebo'.
+In this example, <code>{level}</code> would evaluate to either 'Drug' or 'Placebo'
+depending on the stratum.  Other quantities available to print are:</p><ul>
+<li><p><code>{level}</code> level of the stratification variable</p></li>
+<li><p><code>{n}</code> number of observations, or number within stratum</p></li>
+<li><p><code>{n.event.tot}</code> total number of events (total across stratum, if applicable)</p></li>
+<li><p><code>{n.event.strata}</code> total number of events within stratum, if applicable</p></li>
+<li><p><code>{strata}</code> raw stratum specification from <code>survfit</code> object</p></li>
+</ul>
+    
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p>Example 1</p>
+<p><img src='figures/tbl_strata_ex1.png' width=40% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_nostrata_ex2.png' width=40% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_survival: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code>,
-  <code><a href='tbl_survival.html'>tbl_survival</a></code></p></div>
+    <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>gt::md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>gt::html</a></p>
+<p>Other tbl_survival tools: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
-    <span class='kw'>times</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>,
-    <span class='kw'>time_label</span> <span class='kw'>=</span> <span class='st'>"{time} Years"</span>
-  )</div><div class='output co'>#&gt; &lt;style&gt;html {
-#&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_table {
-#&gt;   display: table;
-#&gt;   border-collapse: collapse;
-#&gt;   margin-left: auto;
-#&gt;   margin-right: auto;
-#&gt;   color: #000000;
-#&gt;   font-size: 16px;
-#&gt;   background-color: #FFFFFF;
-#&gt;   /* table.background.color */
-#&gt;   width: auto;
-#&gt;   /* table.width */
-#&gt;   border-top-style: solid;
-#&gt;   /* table.border.top.style */
-#&gt;   border-top-width: 2px;
-#&gt;   /* table.border.top.width */
-#&gt;   border-top-color: #A8A8A8;
-#&gt;   /* table.border.top.color */
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_heading {
-#&gt;   background-color: #FFFFFF;
-#&gt;   /* heading.background.color */
-#&gt;   border-bottom-color: #FFFFFF;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_title {
-#&gt;   color: #000000;
-#&gt;   font-size: 125%;
-#&gt;   /* heading.title.font.size */
-#&gt;   padding-top: 4px;
-#&gt;   /* heading.top.padding */
-#&gt;   padding-bottom: 1px;
-#&gt;   border-bottom-color: #FFFFFF;
-#&gt;   border-bottom-width: 0;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_subtitle {
-#&gt;   color: #000000;
-#&gt;   font-size: 85%;
-#&gt;   /* heading.subtitle.font.size */
-#&gt;   padding-top: 1px;
-#&gt;   padding-bottom: 4px;
-#&gt;   /* heading.bottom.padding */
-#&gt;   border-top-color: #FFFFFF;
-#&gt;   border-top-width: 0;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_bottom_border {
-#&gt;   border-bottom-style: solid;
-#&gt;   /* heading.border.bottom.style */
-#&gt;   border-bottom-width: 2px;
-#&gt;   /* heading.border.bottom.width */
-#&gt;   border-bottom-color: #A8A8A8;
-#&gt;   /* heading.border.bottom.color */
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_column_spanner {
-#&gt;   border-bottom-style: solid;
-#&gt;   border-bottom-width: 2px;
-#&gt;   border-bottom-color: #A8A8A8;
-#&gt;   padding-top: 4px;
-#&gt;   padding-bottom: 4px;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_col_heading {
-#&gt;   color: #000000;
-#&gt;   background-color: #FFFFFF;
-#&gt;   /* column_labels.background.color */
-#&gt;   font-size: 16px;
-#&gt;   /* column_labels.font.size */
-#&gt;   font-weight: initial;
-#&gt;   /* column_labels.font.weight */
-#&gt;   vertical-align: middle;
-#&gt;   padding: 10px;
-#&gt;   margin: 10px;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_sep_right {
-#&gt;   border-right: 5px solid #FFFFFF;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_group_heading {
-#&gt;   padding: 8px;
-#&gt;   color: #000000;
-#&gt;   background-color: #FFFFFF;
-#&gt;   /* stub_group.background.color */
-#&gt;   font-size: 16px;
-#&gt;   /* stub_group.font.size */
-#&gt;   font-weight: initial;
-#&gt;   /* stub_group.font.weight */
-#&gt;   border-top-style: solid;
-#&gt;   /* stub_group.border.top.style */
-#&gt;   border-top-width: 2px;
-#&gt;   /* stub_group.border.top.width */
-#&gt;   border-top-color: #A8A8A8;
-#&gt;   /* stub_group.border.top.color */
-#&gt;   border-bottom-style: solid;
-#&gt;   /* stub_group.border.bottom.style */
-#&gt;   border-bottom-width: 2px;
-#&gt;   /* stub_group.border.bottom.width */
-#&gt;   border-bottom-color: #A8A8A8;
-#&gt;   /* stub_group.border.bottom.color */
-#&gt;   vertical-align: middle;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_empty_group_heading {
-#&gt;   padding: 0.5px;
-#&gt;   color: #000000;
-#&gt;   background-color: #FFFFFF;
-#&gt;   /* stub_group.background.color */
-#&gt;   font-size: 16px;
-#&gt;   /* stub_group.font.size */
-#&gt;   font-weight: initial;
-#&gt;   /* stub_group.font.weight */
-#&gt;   border-top-style: solid;
-#&gt;   /* stub_group.border.top.style */
-#&gt;   border-top-width: 2px;
-#&gt;   /* stub_group.border.top.width */
-#&gt;   border-top-color: #A8A8A8;
-#&gt;   /* stub_group.border.top.color */
-#&gt;   border-bottom-style: solid;
-#&gt;   /* stub_group.border.bottom.style */
-#&gt;   border-bottom-width: 2px;
-#&gt;   /* stub_group.border.bottom.width */
-#&gt;   border-bottom-color: #A8A8A8;
-#&gt;   /* stub_group.border.bottom.color */
-#&gt;   vertical-align: middle;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_striped {
-#&gt;   background-color: #f2f2f2;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_row {
-#&gt;   padding: 10px;
-#&gt;   /* row.padding */
-#&gt;   margin: 10px;
-#&gt;   vertical-align: middle;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_stub {
-#&gt;   border-right-style: solid;
-#&gt;   border-right-width: 2px;
-#&gt;   border-right-color: #A8A8A8;
-#&gt;   padding-left: 12px;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_stub.gt_row {
-#&gt;   background-color: #FFFFFF;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_summary_row {
-#&gt;   background-color: #FFFFFF;
-#&gt;   /* summary_row.background.color */
-#&gt;   padding: 6px;
-#&gt;   /* summary_row.padding */
-#&gt;   text-transform: inherit;
-#&gt;   /* summary_row.text_transform */
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_first_summary_row {
-#&gt;   border-top-style: solid;
-#&gt;   border-top-width: 2px;
-#&gt;   border-top-color: #A8A8A8;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_table_body {
-#&gt;   border-top-style: solid;
-#&gt;   /* field.border.top.style */
-#&gt;   border-top-width: 2px;
-#&gt;   /* field.border.top.width */
-#&gt;   border-top-color: #A8A8A8;
-#&gt;   /* field.border.top.color */
-#&gt;   border-bottom-style: solid;
-#&gt;   /* field.border.bottom.style */
-#&gt;   border-bottom-width: 2px;
-#&gt;   /* field.border.bottom.width */
-#&gt;   border-bottom-color: #A8A8A8;
-#&gt;   /* field.border.bottom.color */
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_footnote {
-#&gt;   font-size: 90%;
-#&gt;   /* footnote.font.size */
-#&gt;   padding: 4px;
-#&gt;   /* footnote.padding */
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_sourcenote {
-#&gt;   font-size: 90%;
-#&gt;   /* sourcenote.font.size */
-#&gt;   padding: 4px;
-#&gt;   /* sourcenote.padding */
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_center {
-#&gt;   text-align: center;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_left {
-#&gt;   text-align: left;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_right {
-#&gt;   text-align: right;
-#&gt;   font-variant-numeric: tabular-nums;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_font_normal {
-#&gt;   font-weight: normal;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_font_bold {
-#&gt;   font-weight: bold;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_font_italic {
-#&gt;   font-style: italic;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_super {
-#&gt;   font-size: 65%;
-#&gt; }
-#&gt; 
-#&gt; #cvpeammhtu .gt_footnote_glyph {
-#&gt;   font-style: italic;
-#&gt;   font-size: 65%;
-#&gt; }
-#&gt; &lt;/style&gt;
-#&gt; &lt;div id="cvpeammhtu" style="overflow-x:auto;"&gt;&lt;!--gt table start--&gt;
-#&gt; &lt;table class='gt_table'&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;th class='gt_col_heading gt_left' rowspan='1' colspan='1'&gt;&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;Survival Probability&lt;/th&gt;
-#&gt; &lt;th class='gt_col_heading gt_center' rowspan='1' colspan='1'&gt;95% CI&lt;sup class='gt_footnote_glyph'&gt;1&lt;/sup&gt;&lt;/th&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tbody class='gt_table_body'&gt;
-#&gt; &lt;tr class='gt_group_heading_row'&gt;
-#&gt; &lt;td colspan='3' class='gt_group_heading'&gt;Drug, N = 107&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;1 Years&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;87%&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;81%, 94%&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;2 Years&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;54%&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;46%, 65%&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr class='gt_group_heading_row'&gt;
-#&gt; &lt;td colspan='3' class='gt_group_heading'&gt;Placebo, N = 93&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left'&gt;1 Years&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;83%&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center'&gt;75%, 91%&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td class='gt_row gt_left gt_striped'&gt;2 Years&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;38%&lt;/td&gt;
-#&gt; &lt;td class='gt_row gt_center gt_striped'&gt;29%, 49%&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;/tbody&gt;
-#&gt; &lt;tfoot&gt;
-#&gt; &lt;tr&gt;
-#&gt; &lt;td colspan='3' class='gt_footnote'&gt;&lt;sup class='gt_footnote_glyph'&gt;&lt;em&gt;1&lt;/em&gt;&lt;/sup&gt; CI = Confidence Interval&lt;/td&gt;
-#&gt; &lt;/tr&gt;
-#&gt; &lt;/tfoot&gt;&lt;/table&gt;
-#&gt; &lt;!--gt table end--&gt;
-#&gt; &lt;/div&gt;</div></pre>
+<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
+<span class='no'>tbl_strata_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit1</span>,
+    <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
+  )
+
+<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/survfit'>survfit</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
+<span class='no'>tbl_nostrata_ex2</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit2</span>,
+    <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
+    <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Months**"</span>)
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#level-label-argument">level_label argument</a></li>
+
+      <li><a href="#example-output">Example Output</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
@@ -479,7 +270,7 @@ estimate.  Default is 'Survival Probability'</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum.</p>
+  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
 </div>
 
 <div class="pkgdown">

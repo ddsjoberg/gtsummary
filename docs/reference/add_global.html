@@ -11,7 +11,7 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -32,8 +32,10 @@
 
 <meta property="og:title" content="Adds the global p-value for a categorical variables — add_global" />
 
-<meta property="og:description" content="This function uses Anova from the car package with type = &quot;III&quot; to calculate global p-values.
-If a needed class of model is not supported by car::Anova, please put in an
+<meta property="og:description" content="This function uses car::Anova with argument
+type = &quot;III&quot; to calculate global p-values for categorical variables.
+If a needed class of model is not supported by
+car::Anova, please create an
 issue to request support.
 Output from tbl_regression and tbl_uvregression objects supported." />
 <meta name="twitter:card" content="summary" />
@@ -66,7 +68,7 @@ Output from tbl_regression and tbl_uvregression objects supported." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -127,8 +129,10 @@ Output from tbl_regression and tbl_uvregression objects supported." />
 
     <div class="ref-description">
     
-    <p>This function uses <code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code> from the <code>car</code> package with <code>type = "III"</code> to calculate global p-values.
-If a needed class of model is not supported by <code>car::</code><code><a href='https://www.rdocumentation.org/packages/car/topics/Anova'>Anova</a></code>, please put in an
+    <p>This function uses <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a> with argument
+<code>type = "III"</code> to calculate global p-values for categorical variables.
+If a needed class of model is not supported by
+<a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a>, please create an
 <a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.
 Output from <code>tbl_regression</code> and <code>tbl_uvregression</code> objects supported.</p>
     
@@ -151,7 +155,8 @@ Output from <code>tbl_regression</code> and <code>tbl_uvregression</code> object
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>, <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code></p></div>
+    <div class='dont-index'><p><code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
+<code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code></p></div>
     
 
   </div>
