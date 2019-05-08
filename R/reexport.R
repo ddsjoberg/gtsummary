@@ -1,6 +1,5 @@
 #' magrittr forward-pipe operator
 #'
-#' \code{magrittr::\link[magrittr]{pipe}}
 #' \code{magrittr::\%>\%}
 #'
 #' @name %>%
@@ -16,13 +15,4 @@ NULL
 #' @name knit_print
 #' @export
 #' @importFrom knitr knit_print
-NULL
-
-#' Create a Survival Object
-#'
-#' \code{survival::\link[survival]{Surv}}
-#'
-#' @name Surv
-#' @export
-#' @importFrom survival Surv
 NULL

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_q.R
 \name{add_q.tbl_uvregression}
 \alias{add_q.tbl_uvregression}
-\title{Add a column of q values to \code{tbl_uvregression} object to account for
+\title{Add a column of q values to account for
 multiple comparisons}
 \usage{
 \method{add_q}{tbl_uvregression}(x, method = "fdr",
@@ -12,7 +12,7 @@ multiple comparisons}
 \item{x}{\code{tbl_uvregression} object}
 
 \item{method}{character argument.  Methods from
-\code{stats::}\code{\link[stats]{p.adjust}} are accepted.  Default is \code{method = 'fdr'}.}
+\link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = 'fdr'}.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
@@ -25,12 +25,17 @@ and return a string that is the rounded/formatted p-value (e.g.
 }
 \description{
 The adjustments to the p-values is performed with
-\code{stats::}\code{\link[stats]{p.adjust}}.  The default method for correction
-is false discovery rate (\code{"fdr"})
+\link[stats:p.adjust]{stats::p.adjust}.
 }
+\section{Example Output}{
+
+\if{html}{\figure{tbl_uvr_q_ex.png}{options: width=50\%}}
+}
+
 \examples{
-tbl_q <-
+tbl_uvr_q_ex <-
   trial \%>\%
+  dplyr::select(age, marker, grade, response) \%>\%
   tbl_uvregression(
     method = lm,
     y = age
@@ -39,13 +44,13 @@ tbl_q <-
   add_q()
 }
 \seealso{
-Other tbl_uvregression: \code{\link{add_global.tbl_uvregression}},
+Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
+  \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_uvregression}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
 \author{
 Esther Drill, Daniel D. Sjoberg
 }
-\concept{tbl_uvregression}
+\concept{tbl_uvregression tools}

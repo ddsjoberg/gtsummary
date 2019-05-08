@@ -8,21 +8,20 @@ add_comparison(x, test = NULL, pvalue_fun = style_pvalue,
   group = x$inputs$group)
 }
 \arguments{
-\item{x}{object with class \code{tbl_summary} from the \code{\link{tbl_summary}} function}
+\item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{test}{user defined list of statistical tests provided as a named
-character vector with variables as names and test functions as values.,
+\item{test}{named list of statistical tests to perform,
 e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
-\code{..continuous..} and \code{..categorical..} to perform a test to all variables
-of that type (categorical requests are applied to both categorical and
+\code{..continuous..} and \code{..categorical..} to specify a test for all variables
+of that type (\code{..categorical..} is applied to both categorical and
 dichotomous variables).
-Options include "t.test" for a T-test,
-"wilcox.test" for a Wilcoxon rank sum test,
-"kruskal.test" for a Kruskal-Wallis rank sum test,
-"chisq.test" for a Chi-squared test,
+Options include "t.test" for a t-test,
+"wilcox.test" for a Wilcoxon rank-sum test,
+"kruskal.test" for a Kruskal-Wallis rank-sum test,
+"chisq.test" for a Chi-squared test of independence,
 "fisher.test" for a Fisher's exact test,
-and "re" for a random intercept model to account for clustered data.
-For "re" to be used "group" must also be specified in the function call.}
+and "lme4" for a random intercept model to account for clustered data.
+For "lme4" to be used "group" must also be specified in the \link{tbl_summary} call.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
@@ -31,28 +30,36 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{Character vector of an ID or grouping variable.  Summary statistics
-will not be printed for this column. The column may be used in \code{\link{add_comparison}} to
+\item{group}{character vector of an ID or grouping variable.  Summary statistics
+will not be printed for this column. The column may be used in \link{add_comparison} to
 calculate p-values with correlated data. Default is \code{NULL}}
 }
 \description{
 Adds p-values to the output comparing values across groups
 }
+\section{Example Output}{
+
+\if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
+}
+
 \examples{
-comp <- trial \%>\% tbl_summary(by = "trt") \%>\% add_comparison()
+add_comp_ex1 <-
+  trial \%>\%
+  dplyr::select(age, grade, response, trt) \%>\%
+  tbl_summary(by = "trt") \%>\%
+  add_comparison()
 }
 \seealso{
-Other tbl_summary: \code{\link{add_n}},
+Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{
-Daniel D. Sjoberg
+Emily C. Zabor, Daniel D. Sjoberg
 }
-\concept{tbl_summary}
+\concept{tbl_summary tools}

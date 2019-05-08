@@ -4,32 +4,36 @@
 #' @param x `tbl_summary` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
 #' @author Esther Drill, Daniel D. Sjoberg
-#' @seealso \code{\link{tbl_summary}}, \code{\link{tbl_regression}},
-#' \code{\link{tbl_uvregression}}
+#' @seealso \code{\link{add_q.tbl_summary}}, \code{\link{add_q.tbl_uvregression}},
+#' \code{\link{tbl_summary}}, \code{\link{tbl_uvregression}}
 #' @export
+#' @keywords internal
 add_q <- function(x, ...) UseMethod("add_q")
 
-#' Add a column of q values to `tbl_summary` object to account for
-#' multiple comparisons in Rmarkdown
+#' Add a column of q values to account for
+#' multiple comparisons
 #'
 #' The adjustments to the p-values is performed with
-#' `stats::`\code{\link[stats]{p.adjust}}.  The default method for correction
-#' is false discovery rate (`method = "fdr"`)
+#' [stats::p.adjust].
 #'
 #' @param x `tbl_summary` object
 #' @param method character argument.  Methods from
-#' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
+#' [stats::p.adjust] are accepted.  Default is `method = 'fdr'`.
 #' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @export
 #' @examples
-#' tbl_q <-
+#' tbl_sum_q_ex <-
 #'   trial %>%
+#'   dplyr::select(trt, age, grade, response) %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
 #'   add_q()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_sum_q_ex.png}{options: width=50\%}}
+
 add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...) {
 
   # This adjusts p-values for multiple testing. Default method is fdr.
@@ -40,11 +44,16 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
     ))
   }
 
+  # checking pvalue_fun are functions
+  if (!is.function(pvalue_fun)) {
+    stop("Input 'pvalue_fun' must be a function.")
+  }
+
   # adding exact and printable q value to meta_data
   x$meta_data <-
     x$meta_data %>%
     mutate(
-      qvalue = stats::p.adjust(.data$pvalue, method = method)
+      q.value = stats::p.adjust(.data$p.value, method = method)
     )
 
   # adding q value to summary table
@@ -52,7 +61,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
     x$table_body %>%
     left_join(
       x$meta_data %>%
-        select(c("variable", "qvalue")) %>%
+        select(c("variable", "q.value")) %>%
         mutate(row_type = "label"),
       by = c("variable", "row_type")
     )
@@ -66,22 +75,24 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   # footnote text
   footnote_text <-
     method %>%
-    {filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))} %>%
+    {
+      filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))
+    } %>%
     pull("method_label")
 
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt_qvalue"]] <-
-    "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)"
+    "fmt(columns = vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)"
   # column headers
   x[["gt_calls"]][["cols_label_qvalue"]] <-
-    "cols_label(qvalue = md('**q-value**'))"
+    "cols_label(q.value = md('**q-value**'))"
   # column headers abbreviations footnote
-  x[["gt_calls"]][["footnote_q_method"]] = glue(
+  x[["gt_calls"]][["footnote_q_method"]] <- glue(
     "tab_footnote(",
     "  footnote = '{footnote_text}',",
     "  locations = cells_column_labels(",
-    "    columns = vars(qvalue))",
+    "    columns = vars(q.value))",
     ")"
   )
 
@@ -90,47 +101,55 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 }
 
 
-#' Add a column of q values to `tbl_uvregression` object to account for
+#' Add a column of q values to account for
 #' multiple comparisons
 #'
 #' The adjustments to the p-values is performed with
-#' `stats::`\code{\link[stats]{p.adjust}}.  The default method for correction
-#' is false discovery rate (`"fdr"`)
+#' [stats::p.adjust].
 #'
 #' @param x `tbl_uvregression` object
 #' @param method character argument.  Methods from
-#' `stats::`\code{\link[stats]{p.adjust}} are accepted.  Default is `method = 'fdr'`.
+#' [stats::p.adjust] are accepted.  Default is `method = 'fdr'`.
 #' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @export
 #' @examples
-#' tbl_q <-
+#' tbl_uvr_q_ex <-
 #'   trial %>%
+#'   dplyr::select(age, marker, grade, response) %>%
 #'   tbl_uvregression(
 #'     method = lm,
 #'     y = age
 #'   ) %>%
 #'   add_global() %>%
 #'   add_q()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_uvr_q_ex.png}{options: width=50\%}}
+
 add_q.tbl_uvregression <- function(x, method = "fdr",
                                    pvalue_fun = x$inputs$pvalue_fun, ...) {
 
   # This adjusts p-values for multiple testing but only when the global approach is used.
   # Default method is fdr.
-  if (!("pvalue_global" %in% colnames(x$meta_data))) {
+  if (!("p.value_global" %in% colnames(x$meta_data))) {
     stop(glue(
-      "You need global p-values first. Use the function add_global() after",
+      "You need global p-values first. Use the function add_global() after ",
       "tbl_uvregression() and before add_q()"
     ))
+  }
+
+  # checking pvalue_fun are functions
+  if (!is.function(pvalue_fun)) {
+    stop("Input 'pvalue_fun' must be a function.")
   }
 
   # adding exact and printable q value to meta_data
   x$meta_data <-
     x$meta_data %>%
     mutate(
-      qvalue_global = stats::p.adjust(.data$pvalue_global, method = method)
+      q.value_global = stats::p.adjust(.data$p.value_global, method = method)
     )
 
   # adding q value to display table
@@ -138,8 +157,8 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     x$table_body %>%
     left_join(
       x$meta_data %>%
-        select(c("variable", "qvalue_global")) %>%
-        set_names(c("variable", "qvalue")) %>%
+        select(c("variable", "q.value_global")) %>%
+        set_names(c("variable", "q.value")) %>%
         mutate(row_type = "label"),
       by = c("variable", "row_type")
     )
@@ -152,24 +171,26 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   # footnote text
   footnote_text <-
     method %>%
-    {filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))} %>%
+    {
+      filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))
+    } %>%
     pull("method_label")
 
   x$qvalue_fun <- pvalue_fun
   # adding p-value formatting
   x[["gt_calls"]][["fmt_qvalue"]] <-
-    "fmt(columns = vars(qvalue), rows = !is.na(qvalue), fns = x$qvalue_fun)" %>%
+    "fmt(columns = vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)" %>%
     glue()
   # column headers
   x[["gt_calls"]][["cols_label_qvalue"]] <-
-    "cols_label(qvalue = md('**q-value**'))"%>%
+    "cols_label(q.value = md('**q-value**'))" %>%
     glue()
   # column headers abbreviations footnote
-  x[["gt_calls"]][["footnote_q_method"]] = glue(
+  x[["gt_calls"]][["footnote_q_method"]] <- glue(
     "tab_footnote(",
     "footnote = '{footnote_text}',",
     "locations = cells_column_labels(",
-    "columns = vars(qvalue))",
+    "columns = vars(q.value))",
     ")"
   )
 

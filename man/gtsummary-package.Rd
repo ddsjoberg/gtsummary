@@ -4,18 +4,29 @@
 \name{gtsummary-package}
 \alias{gtsummary}
 \alias{gtsummary-package}
-\title{gtsummary: The goal of gtsummary is to make reporting of tabular
-    analytic results easy, beautiful, and reproducible}
+\title{gtsummary: Presentation-Ready Data Summary and Analytic Result
+    Tables}
 \description{
-Written with the goal to make reporting of tabular
-    analytic results simple, beautiful, and reproducible.
-    Publication-ready tables are created with minimal code, and can be
-    exported to Word, HTML, and PDF documents with the use of Rmarkdown.
-    The gtsummary functions are flexible, allowing you to easily customize
-    the aesthetics of tables to suit your needs.
+The {gtsummary} package creates presentation-ready
+    tables summarizing data sets, regression models, and more. The code to
+    create the tables is concise and highly customizable. Data frames can
+    be summarized with any function, e.g. mean(), median(), even
+    user-written functions.  Regression models are summarized and include
+    the reference rows for categorical variables. Common regression
+    models, such as logistic regression and Cox proportional hazards
+    regression, are automatically identified and the tables are pre-filled
+    with appropriate column headers.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{http://www.danieldsjoberg.com/gtsummary/}
+  \item Report bugs at \url{https://github.com/ddsjoberg/gtsummary/issues}
+}
+
 }
 \author{
-\strong{Maintainer}: Daniel D. Sjoberg \email{danieldsjoberg@gmail.com}
+\strong{Maintainer}: Daniel D. Sjoberg \email{danield.sjoberg@gmail.com}
 
 Authors:
 \itemize{

@@ -2,92 +2,19 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival}
 \alias{tbl_survival}
-\title{Tabulate Kaplan-Meier survival probabilities for time-to-event endpoints}
+\title{Creates table of univariate statistics for time-to-event endpoints}
 \usage{
-tbl_survival(data, formula, times, time_label = "{time}",
-  level_label = "{level}, N = {n}", header_time = md("**Time**"),
-  header_prob = md("**Probability**"), ...)
+tbl_survival(x, ...)
 }
 \arguments{
-\item{data}{a data frame in which to interpret the variables named in the formula}
+\item{x}{a survfit or cuminc object}
 
-\item{formula}{a formula object, which must have a Surv object as the response on the
-left of the ~ operator.  A single stratification variable maybe included
-right of the ~ operator. For an unstratified survival estimate the
-right hand side should be \code{~ 1}.}
-
-\item{times}{numeric vector of survival times}
-
-\item{time_label}{string defining the label shown for the time column.
-Default is \code{"{time}"}.  The input uses \code{\link[glue]{glue}} notation to
-convert the string into a label.  A common label may be \code{"{time} Months"}, which
-would resolve to "6 Months" or "12 Months" depending on the times requested.}
-
-\item{level_label}{used when survival results are stratified.
-It is a string defining the label shown.  The input uses
-\code{\link[glue]{glue}} notation to convert the string into a label.
-The default is \code{"{level}, N = {n}"}.  Other information available to call are \code{'{n}'}, \code{'{variable}'},
-and \code{'{strata}'}.}
-
-\item{header_time}{string to be displayed as column header of the time column.
-Default is \code{md('**Time**')}}
-
-\item{header_prob}{string to be displayed as column header of the Kaplan-Meier
-estimate.  Default is \code{md('**Probability**')}}
-
-\item{...}{Arguments passed on to \code{survival::survfit.formula}
-\describe{
-  \item{weights}{
-    The weights must be nonnegative and it is strongly recommended that  
-    they be strictly positive, since zero weights are ambiguous, compared 
-    to use of the \code{subset} argument.
-  }
-  \item{subset}{
-    expression saying that only a subset of the rows of the data 
-    should be used in the fit. 
-  }
-  \item{na.action}{
-    a missing-data filter function, applied to the model frame, after any 
-    \code{subset} argument has been used. 
-    Default is \code{options()$na.action}. 
-  }
-  \item{etype}{
-    a variable giving the type of event.  This has been superseded by
-    multi-state Surv objects; see example below.
-  }
-  \item{id}{
-    identifies individual subjects, when a given person can have multiple
-    lines of data.
-  }
-  \item{istate}{for multi-state models, identifies the initial state of
-    each subject}
-  \item{timefix}{process times through the \code{aeqSurv} function to
-  eliminate potential roundoff issues.}
-}}
+\item{...}{further arguments passed to other methods}
 }
 \description{
-Function calculates a \code{survfit} object, and provides a tabulated and
-formatted summary of the results
-}
-\examples{
-tbl_strata <-
-  tbl_survival(
-    trial,
-    Surv(ttdeath, death) ~ trt,
-    times = c(12, 24),
-    time_label = "{time} Months"
-  )
-tbl_nostrata <-
-  tbl_survival(
-    trial,
-    Surv(ttdeath, death) ~ 1,
-    times = c(12, 24),
-    time_label = "{time} Months"
-  )
+Creates table of univariate statistics for time-to-event endpoints
 }
 \seealso{
-\link[gt]{md}, \link[gt]{html}
+\link{tbl_survival.survfit}
 }
-\author{
-Daniel D. Sjoberg
-}
+\keyword{internal}

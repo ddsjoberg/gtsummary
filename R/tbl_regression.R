@@ -1,25 +1,38 @@
-#' Turn a regression model object into a markdown-ready tibble.
+#' Display regression model results in table
 #'
-#' This function uses \code{broom::tidy} from the `broom` or `broom.mixed` packages
-#' to perform the initial model formatting. Review the `tbl_regression`
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
+#' This function uses [broom::tidy](https://broom.tidyverse.org/reference/brms_tidiers.html) and
+#' [broom.mixed::tidy](https://github.com/bbolker/broom.mixed)
+#' to perform the initial model formatting. Review the
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
+#' @section Note:
+#' The N reported in the `tbl_regression()` output is the number of observations
+#' in the data frame `model.frame(x)`. Depending on the model input, this N
+#' may represent different quantities. In most cases, it is the number of people or
+#' units in your model.  Here are some common exceptions.
+#' 1. Survival regression models including time dependent covariates.
+#' 2. Random- or mixed-effects regression models with clustered data.
+#' 3. GEE regression models with clustered data.
+#'
+#' This list is not exhaustive, and care should be taken for each number reported.
+#'
 #' @param x regression model object
-#' @param exponentiate logical argument passed directly to
-#' `tidy` function. Default is `FALSE`
+#' @param exponentiate logical indicating whether or not to exponentiate the
+#' coefficient estimates. Default is `FALSE`.
 #' @param label list of labels to write in the output. `list(age60 = "Age > 60")`
-#' @param include names of variables to include in output.  Default is all variables.
-#' @param conf.level confidence level passed directly to `tidy` function. Default is 0.95.
+#' @param include names of variables to include in output.
+#' @param exclude names of variables to exclude from output.
+#' @param conf.level must be strictly greater than 0 and less than 1.
+#' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept logical argument indicates whether to include the intercept
 #' in the output.  Default is `FALSE`
-#' @param show_yesno Vector of names of categorical and factor variables that
-#' are `c("No", "Yes")`, `c("no", "yes")`, or `c("NO", "YES")` default to dichotomous printing
-#' (i.e. only Yes shown). To force both levels to be shown include the column
-#' name in `show_yesno`, e.g. `show_yesno = c("highgrade", "female")`
-#' @param coef_fun function to round and format beta coefficients.  Default
-#' is \code{\link{style_sigfig}} when the coefficients are printed, and
-#' \code{\link{style_ratio}} when the coefficients have been exponentiated.
+#' @param show_yesno By default yes/no categorical variables are printed on a single row,
+#' when the 'No' category is the reference group.  To print both levels in the output table, include
+#' the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``
+#' @param estimate_fun function to round and format beta coefficient estimates.  Default
+#' is [style_sigfig] when the coefficients are printed, and
+#' [style_ratio] when the coefficients have been exponentiated.
 #' @param pvalue_fun function to round and format p-values.
 #' Default is \code{\link{style_pvalue}}.
 #' The function must have a numeric vector input (the numeric, exact p-value),
@@ -27,27 +40,59 @@
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 #'  \code{purrr::partial(style_pvalue, digits = 2)}).
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @export
 #' @examples
-#' mod1 <-
-#'   lm(hp ~ mpg + factor(cyl), mtcars) %>%
-#'   tbl_regression()
-#'
-#' mod2 <-
-#'   glm(response ~ age + grade + stage, trial, family = binomial(link = "logit")) %>%
+#' library(survival)
+#' tbl_regression_ex1 <-
+#'   coxph(Surv(ttdeath, death) ~ age + marker, trial) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#'
+#' 
+#' tbl_regression_ex2 <-
+#'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
+#'   tbl_regression(exponentiate = TRUE)
+#' 
 #' library(lme4)
-#' mod_glmer <-
+#' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
-tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
-                           include = names(stats::model.frame(x)),
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{tbl_regression_ex1.png}{options: width=64\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{tbl_regression_ex2.png}{options: width=50\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
+#'
+tbl_regression <- function(x, label = NULL,
+                           exponentiate = FALSE,
+                           include = NULL,
+                           exclude = NULL,
                            show_yesno = NULL,
                            conf.level = 0.95, intercept = FALSE,
-                           coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
+                           estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
                            pvalue_fun = style_pvalue) {
+  # checking estimate_fun and pvalue_fun are functions
+  if (!is.function(estimate_fun) | !is.function(pvalue_fun)) {
+    stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
+  }
+
+  # label ----------------------------------------------------------------------
+  if (!is.null(label)) {
+    # checking that all inputs are named
+    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+      stop(glue(
+        "Each element in 'label' must be named. ",
+        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+      ))
+    }
+  }
+
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())
@@ -55,64 +100,47 @@ tbl_regression <- function(x, exponentiate = FALSE, label = NULL,
   # using broom and broom.mixed to tidy up regression results, and
   # then reversing order of data frame
   tidy_model <-
-    tidy_wrap(x, exponentiate, conf.level) %>%
-    map_df(rev) # reverses order of data frame
+    tidy_wrap(x, exponentiate, conf.level)
 
   # parsing the terms from model and variable names
-  # outputing a named list--one entry per variable
-  mod_list <- parse_terms(x, tidy_model, show_yesno)
+  # outputing a tibble of the parsed model with
+  # rows for reference groups, and headers for
+  # categorical variables
+  table_body <- parse_fit(x, tidy_model, label, show_yesno)
 
-  # keeping intercept if requested
+  # including and excluding variables/intercept indicated
   # Note, include = names(stats::model.frame(mod_nlme))
   # has an error for nlme because it is "reStruct"
-  if (intercept == TRUE) include <- c(include, "(Intercept)")
+  if (!is.null(include)) {
+    include_err <- include %>% setdiff(table_body$variable %>% unique())
+    if (length(include_err) > 0) {
+      stop(glue(
+        "'include' must be be a subset of '{paste(table_body$variable %>% unique(), collapse = ', ')}'"
+      ))
+    }
+  }
+  if (is.null(include)) include <- table_body$variable %>% unique()
+  if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
+  include <- include %>% setdiff(exclude)
 
   # keeping variables indicated in `include`
-  if ((names(mod_list) %in% include) %>% any() == FALSE) {
-    stop(glue(
-      "'include' must be in '{paste(names(mod_list), collapse = ', ')}'"
-    ))
-  }
-  mod_list <- mod_list[names(mod_list) %in% include]
+  table_body <-
+    table_body %>%
+    filter(.data$variable %in% include)
 
   # model N
   n <- stats::model.frame(x) %>% nrow()
 
-  # putting all results into tibble
-  table_body <-
-    tibble(variable = names(mod_list)) %>%
-    mutate(
-      estimates = mod_list,
-      var_type = map_chr(.data$estimates, ~ ifelse(nrow(.x) > 1, "categorical", "continuous")),
-      var_label = map_chr(
-        .data$variable, ~ label[[.x]] %||% attr(stats::model.frame(x)[[.x]], "label") %||% .x
-      ),
-      estimates = pmap(
-        list(.data$var_type, .data$estimates, .data$var_label, .data$variable),
-        ~ add_label(..1, ..2, ..3, ..4)
-      ),
-      N = n
-    ) %>%
-    unnest(!!sym("estimates")) %>%
-    select(c(
-      "variable", "var_type", "row_type", "label", "N",
-      "estimate", "conf.low", "conf.high", "p.value"
-    )) %>%
-    set_names(c(
-      "variable", "var_type", "row_type", "label", "N",
-      "coef", "ll", "ul", "pvalue"
-    ))
-
   # footnote abbreviation details
   footnote_abbr <-
-    coef_header(x, exponentiate) %>%
+    estimate_header(x, exponentiate) %>%
     attr("footnote") %>%
     c("CI = Confidence Interval") %>%
     paste(collapse = ", ")
   footnote_location <- ifelse(
-    is.null(attr(coef_header(x, exponentiate), "footnote")),
-    "vars(ll)",
-    "vars(coef, ll)"
+    is.null(attr(estimate_header(x, exponentiate), "footnote")),
+    "vars(conf.low)",
+    "vars(estimate, conf.low)"
   )
 
   results <- list(
@@ -144,7 +172,8 @@ gt_tbl_regression <- quote(list(
   ),
 
   # do not print columns variable or row_type columns
-  cols_hide = "cols_hide(columns = vars(variable, row_type, var_type, N))" %>%
+  # here i do a setdiff of the variables i want to print by default
+  cols_hide = "cols_hide(columns = vars(variable, row_ref, row_type, var_type, N))" %>%
     glue(),
 
   # NAs do not show in table
@@ -153,16 +182,16 @@ gt_tbl_regression <- quote(list(
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "fmt_missing(columns = vars(coef, ll, ul), rows = row_type == 'level', missing_text = '---')" %>%
-    glue(),
+    "fmt_missing(columns = vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
+      glue(),
 
   # column headers
   cols_label = glue(
     "cols_label(",
     "label = md('**N = {n}**'), ",
-    "coef = md('**{coef_header(x, exponentiate)}**'), ",
-    "ll = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
-    "pvalue = md('**p-value**')",
+    "estimate = md('**{estimate_header(x, exponentiate)}**'), ",
+    "conf.low = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
+    "p.value = md('**p-value**')",
     ")"
   ),
 
@@ -177,18 +206,18 @@ gt_tbl_regression <- quote(list(
 
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
-    "fmt(columns = vars(pvalue), rows = !is.na(pvalue), fns = x$inputs$pvalue_fun)" %>%
-    glue(),
+    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
+      glue(),
 
   # ceof and confidence interval formatting
-  fmt_coef =
-    "fmt(columns = vars(coef, ll, ul), rows = !is.na(coef), fns = x$inputs$coef_fun)" %>%
-    glue(),
+  fmt_estimate =
+    "fmt(columns = vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
+      glue(),
 
-  # combining ll and ul to print confidence interval
+  # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
-    "cols_merge(col_1 = vars(ll), col_2 = vars(ul), pattern = '{1}, {2}')" %>%
-    glue::as_glue(),
+    "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
+      glue::as_glue(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
@@ -202,15 +231,18 @@ gt_tbl_regression <- quote(list(
 ))
 
 # identifies headers for common models (logistic, poisson, and cox regression)
-coef_header <- function(x, exponentiate) {
+estimate_header <- function(x, exponentiate) {
   if (
-    (class(x)[1] == "glm") | # generalized linear models
-    (class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
+    (class(x)[1] %in% c("glm", "geeglm")) | # generalized linear models, and GEE GLMs
+      (class(x)[1] == "glmerMod" & attr(class(x), "package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
   ) {
-    if(class(x)[1] == "glm") family = x$family
-    else if(class(x)[1] == "glmerMod" & attr(class(x),"package") %||% "NULL" == "lme4")
-      family = x@resp$family
-    else stop("Error occured in 'coef_header' function")
+    if (class(x)[1] %in% c("glm", "geeglm")) {
+      family <- x$family
+    } else if (class(x)[1] == "glmerMod" & attr(class(x), "package") %||% "NULL" == "lme4") {
+      family <- x@resp$family
+    } else {
+      stop("Error occured in 'estimate_header' function")
+    }
 
     # logistic regression
     if (exponentiate == TRUE & family$family == "binomial" & family$link == "logit") {
@@ -231,6 +263,13 @@ coef_header <- function(x, exponentiate) {
       header <- "log(IRR)"
       attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
     }
+
+    # Other models
+    else if (exponentiate == TRUE) {
+      header <- "exp(Coefficient)"
+    } else {
+      header <- "Coefficient"
+    }
   }
   # Cox PH Regression
   else if (class(x)[1] == "coxph" & exponentiate == TRUE) {
@@ -243,8 +282,11 @@ coef_header <- function(x, exponentiate) {
   }
 
   # Other models
-  else if (exponentiate == TRUE) header <- "exp(Coefficient)"
-  else  header <- "Coefficient"
+  else if (exponentiate == TRUE) {
+    header <- "exp(Coefficient)"
+  } else {
+    header <- "Coefficient"
+  }
 
   header
 }

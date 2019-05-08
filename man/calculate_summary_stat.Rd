@@ -5,7 +5,8 @@
 \title{This function takes in the meta data table, and calls the appropriate summarize function.}
 \usage{
 calculate_summary_stat(data, variable, by, summary_type, dichotomous_value,
-  var_label, stat_display, digits, class, missing)
+  var_label, stat_display, digits, class, missing, missing_text, sort,
+  row_percent)
 }
 \arguments{
 \item{data}{Data frame}
@@ -34,6 +35,14 @@ summary statistics will be calculated.}
 if the table includes counts of NA values: the allowed values correspond to
 never ("no"), only if the count is positive ("ifany") and even for
 zero counts ("always"). Default is "ifany".}
+
+\item{missing_text}{String to display for count of missing observations.}
+
+\item{sort}{string indicating whether to sort categorical
+variables by 'alphanumeric' or 'frequency'}
+
+\item{row_percent}{Logical value indicating whether to calculate
+percentages within column to across rows}
 }
 \description{
 This function takes in the meta data table, and calls the appropriate summarize function.

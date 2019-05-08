@@ -1,6 +1,6 @@
 #' Bold significant p-values
 #'
-#' Bold p-values in tables create by gtsummary
+#' Bold p-values in tables created by gtsummary
 #'
 #' @param x an object created using gtsummary functions
 #' @param ... further arguments passed to other methods.
@@ -9,7 +9,7 @@
 #' \code{\link{tab_style_bold_p.tbl_regression}},
 #' \code{\link{tab_style_bold_p.tbl_uvregression}}
 #' @export
-
+#' @keywords internal
 tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 
 
@@ -18,17 +18,20 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #' Bold p-values in tables created by \code{\link{tbl_summary}}
 #'
 #' @param x an object created using `tbl_summary` function
-#' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
+#' @param t threshold below which p-values will be bold. Default is 0.05.
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @family tbl_summary
 #' @author Daniel D. Sjoberg
 #' @examples
-#' tbl_bold_p <-
+#' tbl_sum_bold_p_ex <-
 #'   trial %>%
+#'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
 #'   tab_style_bold_p()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_sum_bold_p_ex.png}{options: width=50\%}}
 #' @export
 tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
@@ -42,7 +45,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
   }
 
   # storing column names and gt_call name
-  col_name <- ifelse(q == FALSE, "pvalue", "qvalue")
+  col_name <- ifelse(q == FALSE, "p.value", "q.value")
   gt_call_name <- glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bold
@@ -69,11 +72,14 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression
 #' @examples
-#' tbl_lm_bold_p <-
-#'   lm(age ~ marker + trt + stage, trial) %>%
-#'   tbl_regression() %>%
-#'   tab_style_bold_p(t = 0.3)
+#' tbl_lm_bold_p_ex <-
+#'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
+#'   tbl_regression(exponentiate = TRUE) %>%
+#'   tab_style_bold_p()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
 #' @export
+#'
 tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
   # returning threshold for bold
@@ -81,8 +87,8 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_bold_pvalue"]] <- glue(
     "tab_style(style = cells_styles(text_weight = 'bold'), ",
-    "locations = cells_data(columns = vars(pvalue),",
-    "rows = pvalue <= x$pvalue_bold_t))"
+    "locations = cells_data(columns = vars(p.value),",
+    "rows = p.value <= x$pvalue_bold_t))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
@@ -101,6 +107,20 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression
 #' @export
+#' @examples
+#' tbl_uvglm_bold_p_ex <-
+#'   trial %>%
+#'   dplyr::select(age, marker, response, grade) %>%
+#'   tbl_uvregression(
+#'     method = glm,
+#'     y = response,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE
+#'   ) %>%
+#'   tab_style_bold_p(t = 0.25)
+#' @section Example Output:
+#' \if{html}{\figure{tbl_uvglm_bold_p_ex.png}{options: width=50\%}}
+
 tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_q has been previously run if bold q-values
@@ -109,7 +129,7 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
   }
 
   # storing column names and gt_call name
-  col_name <- ifelse(q == FALSE, "pvalue", "qvalue")
+  col_name <- ifelse(q == FALSE, "p.value", "q.value")
   gt_call_name <- glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bold

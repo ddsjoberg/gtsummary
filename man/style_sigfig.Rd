@@ -2,7 +2,7 @@
 % Please edit documentation in R/style_sigfig.R
 \name{style_sigfig}
 \alias{style_sigfig}
-\title{Implement significant figure-like formatting}
+\title{Implement significant figure-like rounding}
 \usage{
 style_sigfig(x, digits = 2)
 }
@@ -25,7 +25,7 @@ when \code{abs(x) < 1}, 1 decimal place when \code{abs(x) >= 1 & abs(x) < 10},
 and to the nearest integer when \code{abs(x) >= 10}.
 }
 \examples{
-c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345) \%>\%
+c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345, NA, -0.001) \%>\%
   style_sigfig()
 }
 \author{

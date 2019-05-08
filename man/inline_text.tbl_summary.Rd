@@ -16,7 +16,7 @@
 \item{level}{level of the variable to display for categorical variables.
 Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
-\item{column}{name column name to return from \code{x$table_body}.
+\item{column}{column name to return from \code{x$table_body}.
 Can also pass the level of a by variable.}
 
 \item{pvalue_fun}{function to round and format p-values.
@@ -29,22 +29,29 @@ and return a string that is the rounded/formatted p-value (e.g.
 \item{...}{not used}
 }
 \description{
-Functions takes an object with class \code{tbl_summary}, and the
+Takes an object with class \code{tbl_summary}, and the
 location of the statistic to report and returns the statistic for reporting
 inline in an R markdown document.  Detailed examples in the
-\href{https://github.com/pages/ddsjoberg/gtsummary/articles/tbl_summary.html}{\code{tbl_summary} vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text}{tbl_summary vignette}
+}
+\examples{
+t1 <- tbl_summary(trial)
+t2 <- tbl_summary(trial, by = "trt") \%>\% add_comparison()
+
+inline_text(t1, variable = "age")
+inline_text(t2, variable = "grade", level = "I", column = "Drug")
+inline_text(t2, variable = "grade", column = "p.value")
 }
 \seealso{
-Other tbl_summary: \code{\link{add_comparison}},
+Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{add_n}}, \code{\link{add_overall}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_summary}
+\concept{tbl_summary tools}

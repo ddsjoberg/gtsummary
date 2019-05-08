@@ -1,17 +1,24 @@
-#' Adds a column with N (or N missing) for each variable
+#' Add column with N
 #'
-#' The function assumes the DEFAULT header are in use. Only modify header rows
-#' after all columns has been added.
+#' For each variable in the table, the `add_n` function adds a column with the
+#' number of non-missing (or missing) observations
 #'
-#' @param x object with class `tbl_summary` from the \code{\link{tbl_summary}} function
+#' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param missing logical argument indicating whether to print N (`missing = FALSE`),
 #' or N missing (`missing = TRUE`).  Default is `FALSE`
 #' @param last logical indicator to include overall  column last. Default is `FALSE`
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' tbl_n <- trial %>% tbl_summary(by = "trt") %>% add_n()
+#' tbl_n_ex <-
+#'   trial %>%
+#'   dplyr::select(trt, age, grade, response) %>%
+#'   tbl_summary(by = "trt") %>%
+#'   add_n()
+#' @section Example Output:
+#' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
+
 add_n <- function(x, missing = FALSE, last = FALSE) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")

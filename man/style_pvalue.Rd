@@ -2,7 +2,7 @@
 % Please edit documentation in R/style_pvalue.R
 \name{style_pvalue}
 \alias{style_pvalue}
-\title{Formats p-values to be displayed in tables or text of report.}
+\title{Style p-values to be displayed in tables or text}
 \usage{
 style_pvalue(x, digits = 1, prepend_p = FALSE)
 }
@@ -18,7 +18,7 @@ Default is 1.}
 Formatted p-values
 }
 \description{
-Formats p-values to be displayed in tables or text of report.
+Style p-values to be displayed in tables or text
 }
 \examples{
 pvals <- c(

@@ -4,6 +4,5 @@
 \alias{\%>\%}
 \title{magrittr forward-pipe operator}
 \description{
-\code{magrittr::\link[magrittr]{pipe}}
 \code{magrittr::\%>\%}
 }

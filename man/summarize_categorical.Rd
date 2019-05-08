@@ -5,7 +5,7 @@
 \title{Calculates and formats N's and percentages for categorical and dichotomous data}
 \usage{
 summarize_categorical(data, variable, by, var_label, stat_display,
-  dichotomous_value, missing)
+  dichotomous_value, missing, missing_text, sort, row_percent)
 }
 \arguments{
 \item{data}{Data frame}
@@ -27,6 +27,14 @@ of the variable that will be displayed.}
 if the table includes counts of \code{NA} values: the allowed values correspond to
 never (\code{"no"}), only if the count is positive (\code{"ifany"}) and even for
 zero counts (\code{"always"}). Default is \code{"ifany"}.}
+
+\item{missing_text}{String to display for count of missing observations.}
+
+\item{sort}{string indicating whether to sort categorical
+variables by 'alphanumeric' or 'frequency'}
+
+\item{row_percent}{Logical value indicating whether to calculate
+percentages within column to across rows}
 }
 \value{
 formatted summary statistics in a tibble.

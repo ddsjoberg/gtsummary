@@ -2,37 +2,38 @@
 % Please edit documentation in R/tbl_regression.R
 \name{tbl_regression}
 \alias{tbl_regression}
-\title{Turn a regression model object into a markdown-ready tibble.}
+\title{Display regression model results in table}
 \usage{
-tbl_regression(x, exponentiate = FALSE, label = NULL,
-  include = names(stats::model.frame(x)), show_yesno = NULL,
-  conf.level = 0.95, intercept = FALSE,
-  coef_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-  pvalue_fun = style_pvalue)
+tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
+  exclude = NULL, show_yesno = NULL, conf.level = 0.95,
+  intercept = FALSE, estimate_fun = ifelse(exponentiate == TRUE,
+  style_ratio, style_sigfig), pvalue_fun = style_pvalue)
 }
 \arguments{
 \item{x}{regression model object}
 
-\item{exponentiate}{logical argument passed directly to
-\code{tidy} function. Default is \code{FALSE}}
-
 \item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
 
-\item{include}{names of variables to include in output.  Default is all variables.}
+\item{exponentiate}{logical indicating whether or not to exponentiate the
+coefficient estimates. Default is \code{FALSE}.}
 
-\item{show_yesno}{Vector of names of categorical and factor variables that
-are \code{c("No", "Yes")}, \code{c("no", "yes")}, or \code{c("NO", "YES")} default to dichotomous printing
-(i.e. only Yes shown). To force both levels to be shown include the column
-name in \code{show_yesno}, e.g. \code{show_yesno = c("highgrade", "female")}}
+\item{include}{names of variables to include in output.}
 
-\item{conf.level}{confidence level passed directly to \code{tidy} function. Default is 0.95.}
+\item{exclude}{names of variables to exclude from output.}
+
+\item{show_yesno}{By default yes/no categorical variables are printed on a single row,
+when the 'No' category is the reference group.  To print both levels in the output table, include
+the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
+
+\item{conf.level}{must be strictly greater than 0 and less than 1.
+Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
 \item{intercept}{logical argument indicates whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{coef_fun}{function to round and format beta coefficients.  Default
-is \code{\link{style_sigfig}} when the coefficients are printed, and
-\code{\link{style_ratio}} when the coefficients have been exponentiated.}
+\item{estimate_fun}{function to round and format beta coefficient estimates.  Default
+is \link{style_sigfig} when the coefficients are printed, and
+\link{style_ratio} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
@@ -42,32 +43,65 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 }
 \description{
-This function uses \code{broom::tidy} from the \code{broom} or \code{broom.mixed} packages
-to perform the initial model formatting. Review the \code{tbl_regression}
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
+This function uses \href{https://broom.tidyverse.org/reference/brms_tidiers.html}{broom::tidy} and
+\href{https://github.com/bbolker/broom.mixed}{broom.mixed::tidy}
+to perform the initial model formatting. Review the
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 for detailed examples.
 }
-\examples{
-mod1 <-
-  lm(hp ~ mpg + factor(cyl), mtcars) \%>\%
-  tbl_regression()
+\section{Note}{
 
-mod2 <-
-  glm(response ~ age + grade + stage, trial, family = binomial(link = "logit")) \%>\%
+The N reported in the \code{tbl_regression()} output is the number of observations
+in the data frame \code{model.frame(x)}. Depending on the model input, this N
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.
+\enumerate{
+\item Survival regression models including time dependent covariates.
+\item Random- or mixed-effects regression models with clustered data.
+\item GEE regression models with clustered data.
+}
+
+This list is not exhaustive, and care should be taken for each number reported.
+}
+
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_regression_ex1.png}{options: width=64\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_regression_ex2.png}{options: width=50\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
+}
+
+\examples{
+library(survival)
+tbl_regression_ex1 <-
+  coxph(Surv(ttdeath, death) ~ age + marker, trial) \%>\%
+  tbl_regression(exponentiate = TRUE)
+
+tbl_regression_ex2 <-
+  glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE)
 
 library(lme4)
-mod_glmer <-
+tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
 }
 \seealso{
-Other tbl_regression: \code{\link{add_global.tbl_regression}},
+Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
+  \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}}
+  \code{\link{tbl_merge}}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{tbl_regression}
+\concept{tbl_regression tools}
