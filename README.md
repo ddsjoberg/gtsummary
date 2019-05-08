@@ -86,7 +86,7 @@ Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms. A big thank you to all
 contributors\!  
-<!-- UPDATE THIS LIST! usethis::use_tidy_thanks() -->
 [@ddsjoberg](https://github.com/ddsjoberg),
-[@karissawhiting](https://github.com/karissawhiting), and
+[@karissawhiting](https://github.com/karissawhiting),
+[@margarethannum](https://github.com/margarethannum), and
 [@michaelcurry1123](https://github.com/michaelcurry1123)
