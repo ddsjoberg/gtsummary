@@ -72,5 +72,4 @@ t2 <-
 <img src="man/figures/README-tbl_regression.png" width="44%">
 
 Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!  
-<!-- UPDATE THIS LIST! usethis::use_tidy_thanks() -->
-[&#x0040;ddsjoberg](https://github.com/ddsjoberg), [&#x0040;karissawhiting](https://github.com/karissawhiting), and [&#x0040;michaelcurry1123](https://github.com/michaelcurry1123)
+`r usethis::use_tidy_thanks(from = "1970-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
