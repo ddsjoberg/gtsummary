@@ -70,6 +70,7 @@ tbl_survival <- function(x, ...) {
 #' depending on the stratum.  Other quantities available to print are:
 #' \itemize{
 #'   \item `{level}` level of the stratification variable
+#'   \item `{level_label}` label of level for the stratification variable
 #'   \item `{n}` number of observations, or number within stratum
 #'   \item `{n.event.tot}` total number of events (total across stratum, if applicable)
 #'   \item `{n.event.strata}` total number of events within stratum, if applicable
@@ -162,7 +163,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       mutate(
         variable = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(pluck(1)),
         level = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(pluck(2)),
-        groupname = glue(level_label)
+        level_label = glue(level_label)
       )
   }
   # if the results are NOT stratified
@@ -317,7 +318,7 @@ surv_quantile <- function(x, probs) {
 
 tbl_survival_gt_calls <- quote(list(
   # first call to gt
-  gt = glue("gt(data = x$table_body)"),
+  gt = glue("gt(data = x$table_body, groupname_col = 'level_label')"),
   # centering columns except time
   cols_align = glue(
     "cols_align(align = 'center') %>%",
