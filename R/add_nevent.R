@@ -13,7 +13,6 @@
 #' @author Daniel D. Sjoberg
 #' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],
 #' [tbl_regression], [tbl_uvregression]
-#' @keywords internal
 
 add_nevent <- function(x, ...) UseMethod("add_nevent")
 

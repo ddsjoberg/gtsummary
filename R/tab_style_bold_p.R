@@ -9,7 +9,6 @@
 #' \code{\link{tab_style_bold_p.tbl_regression}},
 #' \code{\link{tab_style_bold_p.tbl_uvregression}}
 #' @export
-#' @keywords internal
 tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 
 

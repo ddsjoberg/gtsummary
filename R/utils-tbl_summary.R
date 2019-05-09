@@ -167,10 +167,13 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @examples
-#' # assign_summary_type(data = mtcars,
-#' #                     variable =  names(mtcars),
-#' #                     class = apply(mtcars, 2, class),
-#' #                     summary_type = NULL, value = NULL)
+#' gtsummary:::assign_summary_type(
+#'   data = mtcars,
+#'   variable =  names(mtcars),
+#'   class = apply(mtcars, 2, class),
+#'   summary_type = NULL, value = NULL
+#' )
+
 assign_summary_type <- function(data, variable, class, summary_type, value) {
   map2_chr(
     variable, class,
@@ -351,7 +354,8 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @examples
-#' # assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
+#' gtsummary:::assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
+
 assign_var_label <- function(data, variable, var_label) {
   map_chr(
     variable,

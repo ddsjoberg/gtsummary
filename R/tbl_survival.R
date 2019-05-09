@@ -4,7 +4,6 @@
 #' @param ... further arguments passed to other methods
 #' @seealso [tbl_survival.survfit]
 #' @export
-#' @keywords internal
 tbl_survival <- function(x, ...) {
   UseMethod("tbl_survival")
 }
