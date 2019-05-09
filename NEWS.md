@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 0.1.0.9000 (development version)
 
 * `tbl_survival()`: bug fix when upper bound of CI was not able to be estimated (#134)
 
