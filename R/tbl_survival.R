@@ -184,13 +184,15 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     table_long %>%
     mutate(
       label = glue(label),
-      ci = ifelse(
-        is.na(.data$conf.low) & is.na(.data$conf.high),
-        NA_character_,
-        glue(
-          "{coalesce(estimate_fun(conf.low), missing)}, ",
-          "{coalesce(estimate_fun(conf.high), missing)}"
-        )
+      ci = case_when(
+        !is.na(.data$conf.low) & !is.na(.data$conf.high) ~
+          glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}"),
+        is.na(.data$conf.low) & !is.na(.data$conf.high) ~
+          glue("{missing}, {estimate_fun(conf.high)}"),
+        !is.na(.data$conf.low) & is.na(.data$conf.high) ~
+          glue("{estimate_fun(conf.low)}, {missing}"),
+        is.na(.data$conf.low) & is.na(.data$conf.high) ~
+          NA_character_
       )
     ) %>%
     select(c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
