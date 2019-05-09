@@ -26,4 +26,3 @@ Proportion Hazards regression models (\link[survival:coxph]{survival::coxph}).
 \author{
 Daniel D. Sjoberg
 }
-\keyword{internal}
