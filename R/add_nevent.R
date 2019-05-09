@@ -103,6 +103,8 @@ add_nevent.tbl_regression <- function(x, ...) {
     return(x)
   }
 
+  x$call_list <- c(x$call_list, list(add_nevent = match.call()))
+
   x$gt_calls[["cols_hide_nevent"]] <-
     glue("cols_hide(columns = vars(nevent))")
   x

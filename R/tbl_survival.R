@@ -211,6 +211,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   result[["table_long"]] <- table_long
   result[["survfit"]] <- x
   result[["estimate_fun"]] <- estimate_fun
+  result[["call_list"]] <- list(tbl_survival = match.call())
   result[["gt_calls"]] <- eval(tbl_survival_gt_calls)
 
   class(result) <- "tbl_survival"

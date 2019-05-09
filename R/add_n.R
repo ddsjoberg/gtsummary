@@ -63,8 +63,8 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
   # replacing old table_body with new
   x$table_body <- table_body
 
-  # adding indicator to output that add_overall was run on this data
-  x$call_list <- c(x$call_list, list(add_overall = match.call()))
+  # adding indicator to output that add_n was run on this data
+  x$call_list <- c(x$call_list, list(add_n = match.call()))
 
   # returning tbl_summary object
   return(x)

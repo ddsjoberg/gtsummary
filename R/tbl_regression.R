@@ -47,11 +47,11 @@
 #' tbl_regression_ex1 <-
 #'   coxph(Surv(ttdeath, death) ~ age + marker, trial) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#' 
+#'
 #' tbl_regression_ex2 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#' 
+#'
 #' library(lme4)
 #' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
@@ -148,7 +148,7 @@ tbl_regression <- function(x, label = NULL,
     n = n,
     model_obj = x,
     inputs = func_inputs,
-    call_list = list(tbl_summary = match.call()),
+    call_list = list(tbl_regression = match.call()),
     gt_calls = eval(gt_tbl_regression)
   )
 
