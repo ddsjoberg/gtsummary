@@ -72,6 +72,9 @@ cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL) {
       col_label_overall(stat_overall_str, x$inputs$data %>% nrow())
   }
 
+  # keeping track of all functions previously run
+  x$call_list <- c(x$call_list, list(cols_label_summary = match.call()))
+
   x
 }
 
