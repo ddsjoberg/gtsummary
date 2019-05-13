@@ -142,11 +142,13 @@ formatted summary of the results</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a survfit object with a single stratifying variable</p></td>
+      <td><p>a survfit object with a no stratification
+(e.g. <code>survfit(Surv(ttdeath, death) ~ 1, trial)</code>), or a single stratifying
+variable (e.g. <code>survfit(Surv(ttdeath, death) ~ trt, trial)</code>)</p></td>
     </tr>
     <tr>
       <th>times</th>
-      <td><p>numeric vector of survival times</p></td>
+      <td><p>numeric vector of times for which to return survival probabilities.</p></td>
     </tr>
     <tr>
       <th>probs</th>
@@ -166,8 +168,8 @@ would resolve to "6 Months" or "12 Months" depending on specified <code>times</c
 It is a string defining the label shown.  The input uses
 <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> notation to convert the string into a label.
 The default is <code>"{level}, N = {n}"</code>.  Other information available to
-call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, <code>'{n.event.strata}'</code>, and <code>'{strata}'</code>. See
-below for details.</p></td>
+call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, <code>'{n.event.strata}'</code>, and
+<code>'{strata}'</code>. See below for details.</p></td>
     </tr>
     <tr>
       <th>header_label</th>
@@ -183,7 +185,7 @@ estimate.  Default is <code>md('**Probability**')</code> when <code>time</code> 
     </tr>
     <tr>
       <th>failure</th>
-      <td><p>calculate failure probabilities rather than survival.
+      <td><p>calculate failure probabilities rather than survival probabilities.
 Default is <code>FALSE</code>.  Does NOT apply to survival quantile requests</p></td>
     </tr>
     <tr>

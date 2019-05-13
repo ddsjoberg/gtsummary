@@ -15,10 +15,14 @@
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument
 \code{type = "III"} to calculate global p-values for categorical variables.
-If a needed class of model is not supported by \link[car:Anova]{car::Anova},
-please create an
+}
+\section{Note}{
+
+If a needed class of model is not supported by
+\link[car:Anova]{car::Anova}, please create an
 \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
 }
+
 \section{Example Output}{
 
 \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
