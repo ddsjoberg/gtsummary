@@ -29,8 +29,8 @@ would resolve to "6 Months" or "12 Months" depending on specified \code{times}.}
 It is a string defining the label shown.  The input uses
 \link[glue:glue]{glue::glue} notation to convert the string into a label.
 The default is \code{"{level}, N = {n}"}.  Other information available to
-call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, \code{'{n.event.strata}'}, and \code{'{strata}'}. See
-below for details.}
+call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, \code{'{n.event.strata}'}, and
+\code{'{strata}'}. See below for details.}
 
 \item{header_label}{string to be displayed as column header.
 Default is \code{md('**Time**')} when \code{time} is specified, and

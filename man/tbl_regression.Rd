@@ -22,9 +22,10 @@ coefficient estimates. Default is \code{FALSE}.}
 
 \item{exclude}{names of variables to exclude from output.}
 
-\item{show_yesno}{By default yes/no categorical variables are printed on a single row,
-when the 'No' category is the reference group.  To print both levels in the output table, include
-the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
+\item{show_yesno}{By default yes/no categorical variables are printed on a
+single row, when the 'No' category is the reference group.  To print both
+levels in the output table, include the variable name in the show_yesno
+vector, e.g. `show_yesno = c("var1", "var2")``}
 
 \item{conf.level}{must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
@@ -32,8 +33,8 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{intercept}{logical argument indicating whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.  Default
-is \link{style_sigfig} when the coefficients are not transformed, and
+\item{estimate_fun}{function to round and format beta coefficient estimates.
+Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.
@@ -55,7 +56,8 @@ for detailed examples.
 The N reported in the \code{tbl_regression()} output is the number of observations
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
 may represent different quantities. In most cases, it is the total number of
-observations in your model.  Here are some common exceptions.
+observations in your model; however, the precise definition of an observation,
+or unit of anlaysis, may differ across models. Here are some common examples.
 \enumerate{
 \item Survival regression models including time dependent covariates.
 \item Random- or mixed-effects regression models with clustered data.
