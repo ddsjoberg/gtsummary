@@ -12,7 +12,8 @@ tab_style_bold_p(x, ...)
 \item{...}{further arguments passed to other methods.}
 }
 \description{
-Bold p-values in tables created by gtsummary
+Bold p-values below a chosen threshold (e.g. <.05)
+in tables created by \code{tbl_summary}.
 }
 \seealso{
 \code{\link{tab_style_bold_p.tbl_summary}},

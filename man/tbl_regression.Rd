@@ -12,7 +12,8 @@ tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
 \arguments{
 \item{x}{regression model object}
 
-\item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
+\item{label}{list of variable labels to override default labels in the table
+output, e.g. \code{list(age60 = "Age > 60")}.}
 
 \item{exponentiate}{logical indicating whether or not to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
@@ -28,11 +29,11 @@ the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")
 \item{conf.level}{must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{intercept}{logical argument indicates whether to include the intercept
+\item{intercept}{logical argument indicating whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
 \item{estimate_fun}{function to round and format beta coefficient estimates.  Default
-is \link{style_sigfig} when the coefficients are printed, and
+is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.
@@ -53,8 +54,8 @@ for detailed examples.
 
 The N reported in the \code{tbl_regression()} output is the number of observations
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
-may represent different quantities. In most cases, it is the number of people or
-units in your model.  Here are some common exceptions.
+may represent different quantities. In most cases, it is the total number of
+observations in your model.  Here are some common exceptions.
 \enumerate{
 \item Survival regression models including time dependent covariates.
 \item Random- or mixed-effects regression models with clustered data.
