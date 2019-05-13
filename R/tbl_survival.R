@@ -27,8 +27,8 @@ tbl_survival <- function(x, ...) {
 #' It is a string defining the label shown.  The input uses
 #' [glue::glue] notation to convert the string into a label.
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
-#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and `'{strata}'`. See
-#' below for details.
+#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and
+#' `'{strata}'`. See below for details.
 #' @param header_label string to be displayed as column header.
 #' Default is \code{md('**Time**')} when `time` is specified, and
 #' \code{md('**Quantile**')} when `probs` is specified.

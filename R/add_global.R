@@ -39,7 +39,8 @@ add_global <- function(x, ...) {
 #' @param terms Character vector of terms for which to add global p-values.  Default
 #' is `NULL` which will add global p-values for all categorical variables
 #' @param keep logical argument indicating whether to also retain the individual
-#' p-values in the table output for each level of the categorical variable. Default is `FALSE`
+#' p-values in the table output for each level of the categorical variable.
+#' Default is `FALSE`
 #' @param ... arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools

@@ -10,7 +10,8 @@
 #' The N reported in the `tbl_regression()` output is the number of observations
 #' in the data frame `model.frame(x)`. Depending on the model input, this N
 #' may represent different quantities. In most cases, it is the total number of
-#' observations in your model.  Here are some common exceptions.
+#' observations in your model; however, the precise definition of an observation,
+#' or unit of anlaysis, may differ among models. Here are some common examples.
 #' 1. Survival regression models including time dependent covariates.
 #' 2. Random- or mixed-effects regression models with clustered data.
 #' 3. GEE regression models with clustered data.
@@ -28,11 +29,12 @@
 #' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept logical argument indicating whether to include the intercept
 #' in the output.  Default is `FALSE`
-#' @param show_yesno By default yes/no categorical variables are printed on a single row,
-#' when the 'No' category is the reference group.  To print both levels in the output table, include
-#' the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``
-#' @param estimate_fun function to round and format beta coefficient estimates.  Default
-#' is [style_sigfig] when the coefficients are not transformed, and
+#' @param show_yesno By default yes/no categorical variables are printed on a
+#' single row, when the 'No' category is the reference group.  To print both
+#' levels in the output table, include the variable name in the show_yesno
+#' vector, e.g. `show_yesno = c("var1", "var2")``
+#' @param estimate_fun function to round and format beta coefficient estimates.
+#' Default is [style_sigfig] when the coefficients are not transformed, and
 #' [style_ratio] when the coefficients have been exponentiated.
 #' @param pvalue_fun function to round and format p-values.
 #' Default is \code{\link{style_pvalue}}.
