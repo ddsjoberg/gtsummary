@@ -98,7 +98,7 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>This vignette will walk a reader through the <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function, and the various functions available to modify and make additions to an existing formatted regression table. <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> uses [broom::tidy] to perform the initial model formatting, and can accommodate many different model types (e.g. <code><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm()</a></code>, <code><a href="https://www.rdocumentation.org/packages/survival/topics/coxph">survival::coxph()</a></code>, <code><a href="https://www.rdocumentation.org/packages/survival/topics/survreg">survival::survreg()</a></code> and more). If your class of model is not supported , please request support <a href="https://github.com/ddsjoberg/gtsummary/issues">request support</a>. In some cases, it is simple to support a new class of model.</p>
+<p>This vignette will walk a reader through the <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function, and the various functions available to modify and make additions to an existing formatted regression table. <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> uses [broom::tidy] to perform the initial model formatting, and can accommodate many different model types (e.g. <code><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm()</a></code>, <code><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm()</a></code>, <code><a href="https://www.rdocumentation.org/packages/survival/topics/coxph">survival::coxph()</a></code>, <code><a href="https://www.rdocumentation.org/packages/survival/topics/survreg">survival::survreg()</a></code> and more). If your class of model is not supported , please <a href="https://github.com/ddsjoberg/gtsummary/issues">request support</a>. In some cases, it is simple to support a new class of model.</p>
 <p>To start, a quick note on the magrittr package’s pipe function, <code>%&gt;%</code>. By default the pipe operator puts whatever is on the left hand side of <code>%&gt;%</code> into the first argument of the function on the right hand side. The pipe function can be used to make the code relating to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> easier to use, but it is <em>not</em> required. Here are a few examples of how <code>%&gt;%</code> translates into typical R notation.</p>
 <pre><code>x %&gt;% f() is equivalent to f(x)
 x %&gt;% f(y) is equivalent to f(x, y)
@@ -125,7 +125,7 @@ response Tumor Response</code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#qstzvrtlvs .gt_table {
+#ocdgnexmrb .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -144,13 +144,13 @@ response Tumor Response</code></pre>
   /* table.border.top.color */
 }
 
-#qstzvrtlvs .gt_heading {
+#ocdgnexmrb .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#qstzvrtlvs .gt_title {
+#ocdgnexmrb .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -161,7 +161,7 @@ response Tumor Response</code></pre>
   border-bottom-width: 0;
 }
 
-#qstzvrtlvs .gt_subtitle {
+#ocdgnexmrb .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -172,7 +172,7 @@ response Tumor Response</code></pre>
   border-top-width: 0;
 }
 
-#qstzvrtlvs .gt_bottom_border {
+#ocdgnexmrb .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -181,7 +181,7 @@ response Tumor Response</code></pre>
   /* heading.border.bottom.color */
 }
 
-#qstzvrtlvs .gt_column_spanner {
+#ocdgnexmrb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -189,7 +189,7 @@ response Tumor Response</code></pre>
   padding-bottom: 4px;
 }
 
-#qstzvrtlvs .gt_col_heading {
+#ocdgnexmrb .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -202,11 +202,11 @@ response Tumor Response</code></pre>
   margin: 10px;
 }
 
-#qstzvrtlvs .gt_sep_right {
+#ocdgnexmrb .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#qstzvrtlvs .gt_group_heading {
+#ocdgnexmrb .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -230,7 +230,7 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#qstzvrtlvs .gt_empty_group_heading {
+#ocdgnexmrb .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -254,33 +254,33 @@ response Tumor Response</code></pre>
   vertical-align: middle;
 }
 
-#qstzvrtlvs .gt_striped {
+#ocdgnexmrb .gt_striped {
   background-color: #f2f2f2;
 }
 
-#qstzvrtlvs .gt_from_md > :first-child {
+#ocdgnexmrb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qstzvrtlvs .gt_from_md > :last-child {
+#ocdgnexmrb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qstzvrtlvs .gt_row {
+#ocdgnexmrb .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#qstzvrtlvs .gt_stub {
+#ocdgnexmrb .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#qstzvrtlvs .gt_summary_row {
+#ocdgnexmrb .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -290,7 +290,7 @@ response Tumor Response</code></pre>
   /* summary_row.text_transform */
 }
 
-#qstzvrtlvs .gt_grand_summary_row {
+#ocdgnexmrb .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -300,19 +300,19 @@ response Tumor Response</code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#qstzvrtlvs .gt_first_summary_row {
+#ocdgnexmrb .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#qstzvrtlvs .gt_first_grand_summary_row {
+#ocdgnexmrb .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#qstzvrtlvs .gt_table_body {
+#ocdgnexmrb .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -327,55 +327,55 @@ response Tumor Response</code></pre>
   /* table_body.border.bottom.color */
 }
 
-#qstzvrtlvs .gt_footnote {
+#ocdgnexmrb .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#qstzvrtlvs .gt_sourcenote {
+#ocdgnexmrb .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#qstzvrtlvs .gt_center {
+#ocdgnexmrb .gt_center {
   text-align: center;
 }
 
-#qstzvrtlvs .gt_left {
+#ocdgnexmrb .gt_left {
   text-align: left;
 }
 
-#qstzvrtlvs .gt_right {
+#ocdgnexmrb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qstzvrtlvs .gt_font_normal {
+#ocdgnexmrb .gt_font_normal {
   font-weight: normal;
 }
 
-#qstzvrtlvs .gt_font_bold {
+#ocdgnexmrb .gt_font_bold {
   font-weight: bold;
 }
 
-#qstzvrtlvs .gt_font_italic {
+#ocdgnexmrb .gt_font_italic {
   font-style: italic;
 }
 
-#qstzvrtlvs .gt_super {
+#ocdgnexmrb .gt_super {
   font-size: 65%;
 }
 
-#qstzvrtlvs .gt_footnote_glyph {
+#ocdgnexmrb .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="qstzvrtlvs" style="overflow-x:auto;">
+<div id="ocdgnexmrb" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -462,7 +462,7 @@ response Tumor Response</code></pre>
 <div id="customize-output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#customize-output" class="anchor"></a>Customize Output</h2>
-<p>There are four primary was to customize the output of the regression model table.</p>
+<p>There are four primary ways to customize the output of the regression model table.</p>
 <ol style="list-style-type: decimal">
 <li>Modify <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function input arguments</li>
 <li>Add additional data/information to a summary table with <code>add_*()</code> functions</li>
@@ -532,7 +532,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#voiupgiopz .gt_table {
+#eyreelqemx .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -551,13 +551,13 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* table.border.top.color */
 }
 
-#voiupgiopz .gt_heading {
+#eyreelqemx .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#voiupgiopz .gt_title {
+#eyreelqemx .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -568,7 +568,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   border-bottom-width: 0;
 }
 
-#voiupgiopz .gt_subtitle {
+#eyreelqemx .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -579,7 +579,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   border-top-width: 0;
 }
 
-#voiupgiopz .gt_bottom_border {
+#eyreelqemx .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -588,7 +588,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* heading.border.bottom.color */
 }
 
-#voiupgiopz .gt_column_spanner {
+#eyreelqemx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -596,7 +596,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   padding-bottom: 4px;
 }
 
-#voiupgiopz .gt_col_heading {
+#eyreelqemx .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -609,11 +609,11 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   margin: 10px;
 }
 
-#voiupgiopz .gt_sep_right {
+#eyreelqemx .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#voiupgiopz .gt_group_heading {
+#eyreelqemx .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -637,7 +637,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#voiupgiopz .gt_empty_group_heading {
+#eyreelqemx .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -661,33 +661,33 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#voiupgiopz .gt_striped {
+#eyreelqemx .gt_striped {
   background-color: #f2f2f2;
 }
 
-#voiupgiopz .gt_from_md > :first-child {
+#eyreelqemx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#voiupgiopz .gt_from_md > :last-child {
+#eyreelqemx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#voiupgiopz .gt_row {
+#eyreelqemx .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#voiupgiopz .gt_stub {
+#eyreelqemx .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#voiupgiopz .gt_summary_row {
+#eyreelqemx .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -697,7 +697,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* summary_row.text_transform */
 }
 
-#voiupgiopz .gt_grand_summary_row {
+#eyreelqemx .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -707,19 +707,19 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#voiupgiopz .gt_first_summary_row {
+#eyreelqemx .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#voiupgiopz .gt_first_grand_summary_row {
+#eyreelqemx .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#voiupgiopz .gt_table_body {
+#eyreelqemx .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -734,55 +734,55 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* table_body.border.bottom.color */
 }
 
-#voiupgiopz .gt_footnote {
+#eyreelqemx .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#voiupgiopz .gt_sourcenote {
+#eyreelqemx .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#voiupgiopz .gt_center {
+#eyreelqemx .gt_center {
   text-align: center;
 }
 
-#voiupgiopz .gt_left {
+#eyreelqemx .gt_left {
   text-align: left;
 }
 
-#voiupgiopz .gt_right {
+#eyreelqemx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#voiupgiopz .gt_font_normal {
+#eyreelqemx .gt_font_normal {
   font-weight: normal;
 }
 
-#voiupgiopz .gt_font_bold {
+#eyreelqemx .gt_font_bold {
   font-weight: bold;
 }
 
-#voiupgiopz .gt_font_italic {
+#eyreelqemx .gt_font_italic {
   font-style: italic;
 }
 
-#voiupgiopz .gt_super {
+#eyreelqemx .gt_super {
   font-size: 65%;
 }
 
-#voiupgiopz .gt_footnote_glyph {
+#eyreelqemx .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="voiupgiopz" style="overflow-x:auto;">
+<div id="eyreelqemx" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -869,7 +869,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
 <div id="inline_text" class="section level2">
 <h2 class="hasAnchor">
 <a href="#inline_text" class="anchor"></a>Report Results Inline</h2>
-<p>Reproducible reports are an import part of good practices. We often need to report the results from a table in the text of an R markdown report. Inline reporting has been made simple with <code><a href="../reference/inline_text.html">inline_text()</a></code>.</p>
+<p>Reproducible reports are an important part of good practices. We often need to report the results from a table in the text of an R markdown report. Inline reporting has been made simple with <code><a href="../reference/inline_text.html">inline_text()</a></code>.</p>
 <p>Let’s first create a regression model table.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">tbl_m1 =<span class="st"> </span><span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(m1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb9-2" title="2">tbl_m1</a></code></pre></div>
@@ -877,7 +877,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#rwybpfidww .gt_table {
+#vljiebcnoz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -896,13 +896,13 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* table.border.top.color */
 }
 
-#rwybpfidww .gt_heading {
+#vljiebcnoz .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#rwybpfidww .gt_title {
+#vljiebcnoz .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -913,7 +913,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   border-bottom-width: 0;
 }
 
-#rwybpfidww .gt_subtitle {
+#vljiebcnoz .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -924,7 +924,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   border-top-width: 0;
 }
 
-#rwybpfidww .gt_bottom_border {
+#vljiebcnoz .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -933,7 +933,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* heading.border.bottom.color */
 }
 
-#rwybpfidww .gt_column_spanner {
+#vljiebcnoz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -941,7 +941,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   padding-bottom: 4px;
 }
 
-#rwybpfidww .gt_col_heading {
+#vljiebcnoz .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -954,11 +954,11 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   margin: 10px;
 }
 
-#rwybpfidww .gt_sep_right {
+#vljiebcnoz .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#rwybpfidww .gt_group_heading {
+#vljiebcnoz .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -982,7 +982,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#rwybpfidww .gt_empty_group_heading {
+#vljiebcnoz .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1006,33 +1006,33 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#rwybpfidww .gt_striped {
+#vljiebcnoz .gt_striped {
   background-color: #f2f2f2;
 }
 
-#rwybpfidww .gt_from_md > :first-child {
+#vljiebcnoz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rwybpfidww .gt_from_md > :last-child {
+#vljiebcnoz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rwybpfidww .gt_row {
+#vljiebcnoz .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#rwybpfidww .gt_stub {
+#vljiebcnoz .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#rwybpfidww .gt_summary_row {
+#vljiebcnoz .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -1042,7 +1042,7 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* summary_row.text_transform */
 }
 
-#rwybpfidww .gt_grand_summary_row {
+#vljiebcnoz .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -1052,19 +1052,19 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#rwybpfidww .gt_first_summary_row {
+#vljiebcnoz .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#rwybpfidww .gt_first_grand_summary_row {
+#vljiebcnoz .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#rwybpfidww .gt_table_body {
+#vljiebcnoz .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -1079,55 +1079,55 @@ tab_style_bold_p()            bold significant p-values  </code></pre>
   /* table_body.border.bottom.color */
 }
 
-#rwybpfidww .gt_footnote {
+#vljiebcnoz .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#rwybpfidww .gt_sourcenote {
+#vljiebcnoz .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#rwybpfidww .gt_center {
+#vljiebcnoz .gt_center {
   text-align: center;
 }
 
-#rwybpfidww .gt_left {
+#vljiebcnoz .gt_left {
   text-align: left;
 }
 
-#rwybpfidww .gt_right {
+#vljiebcnoz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rwybpfidww .gt_font_normal {
+#vljiebcnoz .gt_font_normal {
   font-weight: normal;
 }
 
-#rwybpfidww .gt_font_bold {
+#vljiebcnoz .gt_font_bold {
   font-weight: bold;
 }
 
-#rwybpfidww .gt_font_italic {
+#vljiebcnoz .gt_font_italic {
   font-style: italic;
 }
 
-#rwybpfidww .gt_super {
+#vljiebcnoz .gt_super {
   font-size: 65%;
 }
 
-#rwybpfidww .gt_footnote_glyph {
+#vljiebcnoz .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="rwybpfidww" style="overflow-x:auto;">
+<div id="vljiebcnoz" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -1265,7 +1265,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#jjdfrkifaq .gt_table {
+#jxdfbwegyb .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1284,13 +1284,13 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* table.border.top.color */
 }
 
-#jjdfrkifaq .gt_heading {
+#jxdfbwegyb .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#jjdfrkifaq .gt_title {
+#jxdfbwegyb .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1301,7 +1301,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   border-bottom-width: 0;
 }
 
-#jjdfrkifaq .gt_subtitle {
+#jxdfbwegyb .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1312,7 +1312,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   border-top-width: 0;
 }
 
-#jjdfrkifaq .gt_bottom_border {
+#jxdfbwegyb .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1321,7 +1321,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* heading.border.bottom.color */
 }
 
-#jjdfrkifaq .gt_column_spanner {
+#jxdfbwegyb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1329,7 +1329,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   padding-bottom: 4px;
 }
 
-#jjdfrkifaq .gt_col_heading {
+#jxdfbwegyb .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -1342,11 +1342,11 @@ gt_calls    named list of {gt} function calls  </code></pre>
   margin: 10px;
 }
 
-#jjdfrkifaq .gt_sep_right {
+#jxdfbwegyb .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#jjdfrkifaq .gt_group_heading {
+#jxdfbwegyb .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1370,7 +1370,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   vertical-align: middle;
 }
 
-#jjdfrkifaq .gt_empty_group_heading {
+#jxdfbwegyb .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1394,33 +1394,33 @@ gt_calls    named list of {gt} function calls  </code></pre>
   vertical-align: middle;
 }
 
-#jjdfrkifaq .gt_striped {
+#jxdfbwegyb .gt_striped {
   background-color: #f2f2f2;
 }
 
-#jjdfrkifaq .gt_from_md > :first-child {
+#jxdfbwegyb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jjdfrkifaq .gt_from_md > :last-child {
+#jxdfbwegyb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jjdfrkifaq .gt_row {
+#jxdfbwegyb .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#jjdfrkifaq .gt_stub {
+#jxdfbwegyb .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#jjdfrkifaq .gt_summary_row {
+#jxdfbwegyb .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -1430,7 +1430,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* summary_row.text_transform */
 }
 
-#jjdfrkifaq .gt_grand_summary_row {
+#jxdfbwegyb .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -1440,19 +1440,19 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#jjdfrkifaq .gt_first_summary_row {
+#jxdfbwegyb .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#jjdfrkifaq .gt_first_grand_summary_row {
+#jxdfbwegyb .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#jjdfrkifaq .gt_table_body {
+#jxdfbwegyb .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -1467,55 +1467,55 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* table_body.border.bottom.color */
 }
 
-#jjdfrkifaq .gt_footnote {
+#jxdfbwegyb .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#jjdfrkifaq .gt_sourcenote {
+#jxdfbwegyb .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#jjdfrkifaq .gt_center {
+#jxdfbwegyb .gt_center {
   text-align: center;
 }
 
-#jjdfrkifaq .gt_left {
+#jxdfbwegyb .gt_left {
   text-align: left;
 }
 
-#jjdfrkifaq .gt_right {
+#jxdfbwegyb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jjdfrkifaq .gt_font_normal {
+#jxdfbwegyb .gt_font_normal {
   font-weight: normal;
 }
 
-#jjdfrkifaq .gt_font_bold {
+#jxdfbwegyb .gt_font_bold {
   font-weight: bold;
 }
 
-#jjdfrkifaq .gt_font_italic {
+#jxdfbwegyb .gt_font_italic {
   font-style: italic;
 }
 
-#jjdfrkifaq .gt_super {
+#jxdfbwegyb .gt_super {
   font-size: 65%;
 }
 
-#jjdfrkifaq .gt_footnote_glyph {
+#jxdfbwegyb .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="jjdfrkifaq" style="overflow-x:auto;">
+<div id="jxdfbwegyb" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
@@ -1622,7 +1622,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#iyvivgcpqg .gt_table {
+#wtvoqjbnhl .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1641,13 +1641,13 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* table.border.top.color */
 }
 
-#iyvivgcpqg .gt_heading {
+#wtvoqjbnhl .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#iyvivgcpqg .gt_title {
+#wtvoqjbnhl .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1658,7 +1658,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   border-bottom-width: 0;
 }
 
-#iyvivgcpqg .gt_subtitle {
+#wtvoqjbnhl .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1669,7 +1669,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   border-top-width: 0;
 }
 
-#iyvivgcpqg .gt_bottom_border {
+#wtvoqjbnhl .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1678,7 +1678,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* heading.border.bottom.color */
 }
 
-#iyvivgcpqg .gt_column_spanner {
+#wtvoqjbnhl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1686,7 +1686,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   padding-bottom: 4px;
 }
 
-#iyvivgcpqg .gt_col_heading {
+#wtvoqjbnhl .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
   /* column_labels.background.color */
@@ -1699,11 +1699,11 @@ gt_calls    named list of {gt} function calls  </code></pre>
   margin: 10px;
 }
 
-#iyvivgcpqg .gt_sep_right {
+#wtvoqjbnhl .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#iyvivgcpqg .gt_group_heading {
+#wtvoqjbnhl .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1727,7 +1727,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   vertical-align: middle;
 }
 
-#iyvivgcpqg .gt_empty_group_heading {
+#wtvoqjbnhl .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
@@ -1751,33 +1751,33 @@ gt_calls    named list of {gt} function calls  </code></pre>
   vertical-align: middle;
 }
 
-#iyvivgcpqg .gt_striped {
+#wtvoqjbnhl .gt_striped {
   background-color: #f2f2f2;
 }
 
-#iyvivgcpqg .gt_from_md > :first-child {
+#wtvoqjbnhl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iyvivgcpqg .gt_from_md > :last-child {
+#wtvoqjbnhl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iyvivgcpqg .gt_row {
+#wtvoqjbnhl .gt_row {
   padding: 8px;
   /* row.padding */
   margin: 10px;
   vertical-align: middle;
 }
 
-#iyvivgcpqg .gt_stub {
+#wtvoqjbnhl .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
   padding-left: 12px;
 }
 
-#iyvivgcpqg .gt_summary_row {
+#wtvoqjbnhl .gt_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* summary_row.background.color */
@@ -1787,7 +1787,7 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* summary_row.text_transform */
 }
 
-#iyvivgcpqg .gt_grand_summary_row {
+#wtvoqjbnhl .gt_grand_summary_row {
   color: #000000;
   background-color: #FFFFFF;
   /* grand_summary_row.background.color */
@@ -1797,19 +1797,19 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* grand_summary_row.text_transform */
 }
 
-#iyvivgcpqg .gt_first_summary_row {
+#wtvoqjbnhl .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#iyvivgcpqg .gt_first_grand_summary_row {
+#wtvoqjbnhl .gt_first_grand_summary_row {
   border-top-style: double;
   border-top-width: 6px;
   border-top-color: #A8A8A8;
 }
 
-#iyvivgcpqg .gt_table_body {
+#wtvoqjbnhl .gt_table_body {
   border-top-style: solid;
   /* table_body.border.top.style */
   border-top-width: 2px;
@@ -1824,55 +1824,55 @@ gt_calls    named list of {gt} function calls  </code></pre>
   /* table_body.border.bottom.color */
 }
 
-#iyvivgcpqg .gt_footnote {
+#wtvoqjbnhl .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#iyvivgcpqg .gt_sourcenote {
+#wtvoqjbnhl .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#iyvivgcpqg .gt_center {
+#wtvoqjbnhl .gt_center {
   text-align: center;
 }
 
-#iyvivgcpqg .gt_left {
+#wtvoqjbnhl .gt_left {
   text-align: left;
 }
 
-#iyvivgcpqg .gt_right {
+#wtvoqjbnhl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iyvivgcpqg .gt_font_normal {
+#wtvoqjbnhl .gt_font_normal {
   font-weight: normal;
 }
 
-#iyvivgcpqg .gt_font_bold {
+#wtvoqjbnhl .gt_font_bold {
   font-weight: bold;
 }
 
-#iyvivgcpqg .gt_font_italic {
+#wtvoqjbnhl .gt_font_italic {
   font-style: italic;
 }
 
-#iyvivgcpqg .gt_super {
+#wtvoqjbnhl .gt_super {
   font-size: 65%;
 }
 
-#iyvivgcpqg .gt_footnote_glyph {
+#wtvoqjbnhl .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="iyvivgcpqg" style="overflow-x:auto;">
+<div id="wtvoqjbnhl" style="overflow-x:auto;">
 <!--gt table start-->
 <table class="table gt_table">
 <tr>
