@@ -14,7 +14,8 @@
 is \code{NULL} which will add global p-values for all categorical variables}
 
 \item{keep}{logical argument indicating whether to also retain the individual
-p-values in the table output for each level of the categorical variable. Default is \code{FALSE}}
+p-values in the table output for each level of the categorical variable.
+Default is \code{FALSE}}
 
 \item{...}{arguments to be passed to \link[car:Anova]{car::Anova}}
 }
