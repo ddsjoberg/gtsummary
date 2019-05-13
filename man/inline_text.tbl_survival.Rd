@@ -30,9 +30,7 @@ pre-styled in 'x'. Default is x$estimate_fun}
 \item{...}{not used}
 }
 \description{
-Functions takes an object with class \code{tbl_survival}, the
-location of the statistic to report, and returns the statistic for reporting
-inline in an R markdown document
+for inline reporting in an R markdown document.
 }
 \section{pattern argument}{
 

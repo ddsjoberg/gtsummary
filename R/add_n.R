@@ -1,12 +1,13 @@
 #' Add column with N
 #'
-#' For each variable in the table, the `add_n` function adds a column with the
-#' number of non-missing (or missing) observations
+#' For each variable in a `tbl_summary` table, the `add_n` function adds a column with the
+#' total number of non-missing (or missing) observations
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param missing logical argument indicating whether to print N (`missing = FALSE`),
 #' or N missing (`missing = TRUE`).  Default is `FALSE`
-#' @param last logical indicator to include overall  column last. Default is `FALSE`
+#' @param last logical indicator to include N column last in table.
+#' Default is `FALSE`, which will display N column first.
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
