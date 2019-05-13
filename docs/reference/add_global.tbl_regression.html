@@ -33,10 +33,7 @@
 <meta property="og:title" content="Adds the global p-value for categorical variables — add_global.tbl_regression" />
 
 <meta property="og:description" content="This function uses car::Anova with argument
-type = &quot;III&quot; to calculate global p-values for categorical variables.
-If a needed class of model is not supported by car::Anova,
-please create an
-issue to request support." />
+type = &quot;III&quot; to calculate global p-values for categorical variables." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -129,10 +126,7 @@ issue to request support." />
     <div class="ref-description">
     
     <p>This function uses <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a> with argument
-<code>type = "III"</code> to calculate global p-values for categorical variables.
-If a needed class of model is not supported by <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a>,
-please create an
-<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.</p>
+<code>type = "III"</code> to calculate global p-values for categorical variables.</p>
     
     </div>
 
@@ -154,14 +148,22 @@ is <code>NULL</code> which will add global p-values for all categorical variable
     </tr>
     <tr>
       <th>keep</th>
-      <td><p>logical argument whether to keep the individual p-values for the
-levels of the categorical variable. Default is <code>FALSE</code></p></td>
+      <td><p>logical argument indicating whether to also retain the individual
+p-values in the table output for each level of the categorical variable.
+Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>arguments to be passed to <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a></p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    
+    <p>If a needed class of model is not supported by
+<a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a>, please create an
+<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.</p>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
@@ -187,6 +189,8 @@ levels of the categorical variable. Default is <code>FALSE</code></p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#note">Note</a></li>
+
       <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>

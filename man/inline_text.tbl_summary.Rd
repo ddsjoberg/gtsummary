@@ -29,9 +29,8 @@ and return a string that is the rounded/formatted p-value (e.g.
 \item{...}{not used}
 }
 \description{
-Takes an object with class \code{tbl_summary}, and the
-location of the statistic to report and returns the statistic for reporting
-inline in an R markdown document.  Detailed examples in the
+Extracts and returns statistics from a \code{tbl_summary} object for
+inline reporting in an R markdown document. Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text}{tbl_summary vignette}
 }
 \examples{
