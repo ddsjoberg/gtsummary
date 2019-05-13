@@ -1,5 +1,6 @@
 #' Report statistics from gtsummary tables inline
 #'
+#'
 #' @param x object created from a gtsummary function
 #' @param ... further arguments passed to or from other methods.
 #' @author Daniel D. Sjoberg
@@ -12,9 +13,8 @@ inline_text <- function(x, ...) {
 
 #' Report statistics from summary tables inline
 #'
-#' Takes an object with class `tbl_summary`, and the
-#' location of the statistic to report and returns the statistic for reporting
-#' inline in an R markdown document.  Detailed examples in the
+#' Extracts and returns statistics from a `tbl_summary` object for
+#' inline reporting in an R markdown document. Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text}{tbl_summary vignette}
 #'
 #' @param x object created from  [tbl_summary]
@@ -223,9 +223,9 @@ inline_text.tbl_regression <-
 
 #' Report statistics from regression summary tables inline
 #'
-#' Takes an object with class `tbl_uvregression`, and the
-#' location of the statistic to report and returns the statistic for reporting
-#' inline in an R markdown document. Detailed examples in the
+#' Extracts and returns statistics from a table created by the `tbl_uvregression`
+#' function for inline reporting in an R markdown document.
+#' Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
 #'
 #' @inherit inline_text.tbl_regression
@@ -249,9 +249,9 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 
 #' Report statistics from survival summary tables inline
 #'
-#' Functions takes an object with class `tbl_survival`, the
-#' location of the statistic to report, and returns the statistic for reporting
-#' inline in an R markdown document
+# 'Extracts and returns statistics from a table created by the `tbl_survival`
+#' for inline reporting in an R markdown document.
+
 #'
 #' @param x object created from  [tbl_survival]
 #' @param strata if `tbl_survival` estimates are stratified, level of the stratum

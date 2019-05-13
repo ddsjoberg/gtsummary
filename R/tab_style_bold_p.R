@@ -1,6 +1,7 @@
 #' Bold significant p-values
 #'
-#' Bold p-values in tables created by gtsummary
+#' Bold p-values below a chosen threshold (e.g. <.05)
+#' in tables created by `tbl_summary`.
 #'
 #' @param x an object created using gtsummary functions
 #' @param ... further arguments passed to other methods.
@@ -63,7 +64,8 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
 #' Bold significant p-values
 #'
-#' Bold p-values in tables created by \code{\link{tbl_regression}}
+#' Bold p-values below a chosen threshold (e.g. <.05) in tables
+#' created by \code{\link{tbl_regression}}.
 #'
 #' @param x an object created using `tbl_regression` function
 #' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
@@ -97,7 +99,7 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
 #' Bold significant p-values
 #'
-#' Bold p-values in tables created by \code{\link{tbl_uvregression}}
+#' Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_uvregression}}
 #'
 #' @param x an object created using `tbl_uvregression` function
 #' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
