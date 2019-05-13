@@ -17,7 +17,7 @@
 \item{...}{not used}
 }
 \description{
-Bold p-values in tables created by \code{\link{tbl_uvregression}}
+Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_uvregression}}
 }
 \section{Example Output}{
 
