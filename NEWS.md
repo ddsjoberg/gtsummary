@@ -33,4 +33,4 @@ First release since major refactoring.  The {gt} package is now used as the back
 
 # gtsummary 0.1.0 
 
-First version of package has been archived [archived](https://github.com/ddsjoberg/gtsummary-v0.1).
+First version of package available [here](https://github.com/ddsjoberg/gtsummary-v0.1).
