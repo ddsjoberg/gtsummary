@@ -8,7 +8,7 @@
 
 * `tbl_survival()`: the `groupname` column name has been changed to `label_level` (#133)
 
-# gtsummary 1.0.0 (2019-05-04)
+# gtsummary 1.0.0 
 
 First release since major refactoring.  The {gt} package is now used as the backend to create all tables.  Many function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
 
