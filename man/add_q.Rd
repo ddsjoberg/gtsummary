@@ -23,4 +23,3 @@ multiple comparisons
 \author{
 Esther Drill, Daniel D. Sjoberg
 }
-\keyword{internal}

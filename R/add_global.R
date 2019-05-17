@@ -13,7 +13,6 @@
 #' \code{\link{add_global.tbl_uvregression}}
 #' @author Daniel D. Sjoberg
 #' @export
-#' @keywords internal
 add_global <- function(x, ...) {
   # must have car package installed to use this function
   if (!requireNamespace("car", quietly = TRUE)) {

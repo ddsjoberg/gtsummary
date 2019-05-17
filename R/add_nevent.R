@@ -13,7 +13,6 @@
 #' @author Daniel D. Sjoberg
 #' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],
 #' [tbl_regression], [tbl_uvregression]
-#' @keywords internal
 
 add_nevent <- function(x, ...) UseMethod("add_nevent")
 
@@ -103,6 +102,8 @@ add_nevent.tbl_regression <- function(x, ...) {
     stop("Model type not supported")
     return(x)
   }
+
+  x$call_list <- c(x$call_list, list(add_nevent = match.call()))
 
   x$gt_calls[["cols_hide_nevent"]] <-
     glue("cols_hide(columns = vars(nevent))")

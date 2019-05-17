@@ -6,7 +6,6 @@
 #' @seealso [inline_text.tbl_summary], [inline_text.tbl_regression],
 #' [inline_text.tbl_uvregression], [inline_text.tbl_survival]
 #' @export
-#' @keywords internal
 inline_text <- function(x, ...) {
   UseMethod("inline_text")
 }
