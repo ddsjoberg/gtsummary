@@ -144,6 +144,7 @@ tbl_merge <- function(tbls,
     estimate_funs = map(tbl_inputs(tbls), pluck("estimate_fun")),
     pvalue_funs = map(tbl_inputs(tbls), pluck("pvalue_fun")),
     qvalue_funs = map(tbls, pluck("qvalue_fun")),
+    call_list = list(tbl_merge = match.call()),
     gt_calls = eval(gt_tbl_merge)
   )
 

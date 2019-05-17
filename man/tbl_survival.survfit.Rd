@@ -64,6 +64,7 @@ In this example, \code{{level}} would evaluate to either 'Drug' or 'Placebo'
 depending on the stratum.  Other quantities available to print are:
 \itemize{
 \item \code{{level}} level of the stratification variable
+\item \code{{level_label}} label of level for the stratification variable
 \item \code{{n}} number of observations, or number within stratum
 \item \code{{n.event.tot}} total number of events (total across stratum, if applicable)
 \item \code{{n.event.strata}} total number of events within stratum, if applicable

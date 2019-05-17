@@ -17,4 +17,3 @@ Creates table of univariate statistics for time-to-event endpoints
 \seealso{
 \link{tbl_survival.survfit}
 }
-\keyword{internal}
