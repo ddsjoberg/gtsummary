@@ -34,7 +34,7 @@ Here's how this translates into the use of `tbl_summary()`.
     mtcars %>% tbl_summary(by = "am") is equivalent to tbl_summary(mtcars, by = "am")
     tbl_summary(mtcars, by = "am") %>% add_comparison() is equivalent to
         tbl = tbl_summary(mtcars, by = "am")
-        add_comparison(tbl_summary)
+        add_comparison(tbl)
     
 ## Basic Usage
 
@@ -77,7 +77,7 @@ tbl_summary(trial2, by = "trt") %>% add_comparison()
 
 ## Customize Output
 
-There are four primary was to customize the output of the summary table.
+There are four primary ways to customize the output of the summary table.
 
 1. Modify `tbl_summary()` function input arguments
 1. Add additional data/information to a summary table with `add_*()` functions

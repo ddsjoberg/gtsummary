@@ -14,11 +14,15 @@ add_global(x, ...)
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument
 \code{type = "III"} to calculate global p-values for categorical variables.
+Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
+}
+\section{Note}{
+
 If a needed class of model is not supported by
 \link[car:Anova]{car::Anova}, please create an
 \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
-Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
+
 \seealso{
 \code{\link{add_global.tbl_regression}},
 \code{\link{add_global.tbl_uvregression}}
