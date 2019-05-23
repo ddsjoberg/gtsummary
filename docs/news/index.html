@@ -120,7 +120,8 @@
 
     <div id="gtsummary-1009000-development-version" class="section level1">
 <h1 class="page-header">
-<a href="#gtsummary-1009000-development-version" class="anchor"></a>gtsummary 1.0.0.9000 (development version)</h1>
+<a href="#gtsummary-1009000-development-version" class="anchor"></a>gtsummary 1.0.0.9000 (development version)<small> Unreleased </small>
+</h1>
 <ul>
 <li><p>Added returned <code>call_list</code> to some functions without it previously (#137)</p></li>
 <li><p>Corrected name of call list in returned <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> results (#128)</p></li>
@@ -128,12 +129,34 @@
 <li><p><code><a href="../reference/tbl_survival.html">tbl_survival()</a></code>: the <code>groupname</code> column name has been changed to <code>label_level</code> (#133)</p></li>
 </ul>
 </div>
-    <div id="gtsummary-100-2019-05-04" class="section level1">
+    <div id="gtsummary-100" class="section level1">
 <h1 class="page-header">
-<a href="#gtsummary-100-2019-05-04" class="anchor"></a>gtsummary 1.0.0 (2019-05-04)</h1>
-<ul>
-<li>First public release</li>
-</ul>
+<a href="#gtsummary-100" class="anchor"></a>gtsummary 1.0.0<small> Unreleased </small>
+</h1>
+<p>First release since major refactoring. The {gt} package is now used as the backend to create all tables. Many function names have been modified to be more in line with other {gt} function calls, and additional functions have been added. The API for some functions has also been updated. Review documentation and vignettes for details.</p>
+<div id="updated-function-names" class="section level3">
+<h3 class="hasAnchor">
+<a href="#updated-function-names" class="anchor"></a>Updated Function Names</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">    <span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>()       &lt;-<span class="st">  </span><span class="kw">fmt_table1</span>()  </a>
+<a class="sourceLine" id="cb1-2" title="2">    <span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>()    &lt;-<span class="st">  </span><span class="kw">fmt_regression</span>()  </a>
+<a class="sourceLine" id="cb1-3" title="3">    <span class="kw"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span>()  &lt;-<span class="st">  </span><span class="kw">fmt_uni_regression</span>()  </a>
+<a class="sourceLine" id="cb1-4" title="4">    <span class="kw"><a href="../reference/style_pvalue.html">style_pvalue</a></span>()      &lt;-<span class="st">  </span><span class="kw">fmt_pvalue</span>()  </a>
+<a class="sourceLine" id="cb1-5" title="5">    style_percent       &lt;-<span class="st">  </span><span class="kw">fmt_percent</span>()  </a>
+<a class="sourceLine" id="cb1-6" title="6">    style_ratio         &lt;-<span class="st">  </span><span class="kw">fmt_beta</span>()  </a></code></pre></div>
+</div>
+<div id="new-functions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-functions" class="anchor"></a>New Functions</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">    <span class="kw"><a href="../reference/tbl_survival.html">tbl_survival</a></span>()          <span class="kw"><a href="../reference/as_gt.html">as_gt</a></span>()  </a>
+<a class="sourceLine" id="cb2-2" title="2">    <span class="kw"><a href="../reference/tbl_merge.html">tbl_merge</a></span>()             <span class="kw"><a href="../reference/style_sigfig.html">style_sigfig</a></span>()  </a>
+<a class="sourceLine" id="cb2-3" title="3">    <span class="kw"><a href="../reference/add_nevent.html">add_nevent</a></span>()            <span class="kw"><a href="../reference/gtsummary_logo.html">gtsummary_logo</a></span>()</a></code></pre></div>
+</div>
+</div>
+    <div id="gtsummary-010" class="section level1">
+<h1 class="page-header">
+<a href="#gtsummary-010" class="anchor"></a>gtsummary 0.1.0<small> 2019-05-10 </small>
+</h1>
+<p>First version of package available <a href="https://github.com/ddsjoberg/gtsummary-v0.1">here</a>.</p>
 </div>
   </div>
 
@@ -142,7 +165,8 @@
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
         <li><a href="#gtsummary-1009000-development-version">1.0.0.9000</a></li>
-        <li><a href="#gtsummary-100-2019-05-04">1.0.0</a></li>
+        <li><a href="#gtsummary-100">1.0.0</a></li>
+        <li><a href="#gtsummary-010">0.1.0</a></li>
       </ul>
     </div>
   </div>
