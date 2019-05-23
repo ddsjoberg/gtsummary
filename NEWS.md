@@ -1,5 +1,7 @@
 # gtsummary 1.0.0.9000 (development version)
 
+* Allow unobserved values to serve as the level for dichotomous variables (#149)
+
 * Bug fix in `add_nevent()` when formula was passed to `glm()` as a string (#148)
 
 * Added returned `call_list` to some functions without it previously (#137)
