@@ -176,7 +176,8 @@ coefficient estimates. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>list of labels to write in the output. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code></p></td>
+      <td><p>list of variable labels to override default labels in the table
+output, e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code>.</p></td>
     </tr>
     <tr>
       <th>hide_n</th>
@@ -184,9 +185,10 @@ coefficient estimates. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>show_yesno</th>
-      <td><p>By default yes/no categorical variables are printed on a single row,
-when the 'No' category is the reference group.  To print both levels in the output table, include
-the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
+      <td><p>By default yes/no categorical variables are printed on a
+single row, when the 'No' category is the reference group.  To print both
+levels in the output table, include the variable name in the show_yesno
+vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
@@ -195,8 +197,8 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></td
     </tr>
     <tr>
       <th>estimate_fun</th>
-      <td><p>function to round and format beta coefficient estimates.  Default
-is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are printed, and
+      <td><p>function to round and format beta coefficient estimates.
+Default is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are not transformed, and
 <a href='style_ratio.html'>style_ratio</a> when the coefficients have been exponentiated.</p></td>
     </tr>
     <tr>

@@ -7,51 +7,52 @@
 #'
 #' @param data a data frame
 #' @param by a character vector specifying a column in data.
-#' Summary statistics will be calculated separately for each level of the `by` variable.
-#' If `NULL`, summary statistics
+#' Summary statistics will be calculated separately for each level of the `by`
+#' variable. If `NULL`, summary statistics
 #' are calculated using all observations.
 #' @param label named list of variable labels,
-#' e.g. `list(age = "Age, yrs", ptstage = "Path T Stage")`.  If `NULL`, the function
-#' will take the label attribute (`attr(data$age, "label")`).  If
+#' e.g. `list(age = "Age, yrs", ptstage = "Path T Stage")`.  If `NULL`, the
+#' function will take the label attribute (`attr(data$age, "label")`).  If
 #' attribute label is `NULL`, the variable name will be used.
-#' @param type named list that includes specified summary types.  Accepted values
+#' @param type named list that specifies data types of variables. Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
 #' e.g. `type = list(age = "continuous", female = "dichotomous")`.
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type.  See below for details.
 #' @param value named list that specifies the value to display for dichotomous
 #' variables.  See below for details.
-#' @param statistic named list of the type of statistics to return for each variable
-#' or variable class.  The default is
+#' @param statistic named list of the types of summary statistics to display
+#' for each variable or variable class.  The default is
 #' `list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")`.
 #' See below for details.
 #' @param digits named list of integers indicating the number of decimal
 #' places to round continuous summary statistics. Names of the list can be any
 #' continuous variable in 'data', or `"..continuous"` to apply rounding to all
-#' variables.  If not specified, `tbl_summary` does its best to guess an
-#' appropriate level to round statistics.  To round statistics to different
-#' levels, supply a vector rather than an integer.  For example, if the
+#' continuous variables.  If not specified, `tbl_summary` guesses an
+#' appropriate number of decimals to round statistics. When multiple statistics
+#' are displayed for a single variable (e.g. `{mean} ({sd})`), supply a vector
+#' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list(age = c(1, 2))`.
-#' @param group character vector of an ID or grouping variable.  Summary statistics
-#' will not be printed for this column. The column may be used in [add_comparison] to
+#' @param group character vector of an ID or grouping variable for which summary
+#' statistics should not be printed. The column may be used in [add_comparison] to
 #' calculate p-values with correlated data. Default is `NULL`
 #' @param missing indicates whether to include counts of `NA` values in the table.
-#' allowed values are
-#' never (`"no"`), only if the count is positive (`"ifany"`) and even for
-#' zero counts (`"always"`). Default is `"ifany"`.
-#' @param missing_text String to display for count of missing observations.
+#' Allowed values are `"no"` (never display NA values),
+#' `"ifany"` (only display NA if the count is positive), and `"always"`
+#' (display NA’s even for zero counts). Default is `"ifany"`.
+#' @param missing_text String to display label for count of missing observations.
 #' Default is `"Unknown"`.
 #' @param sort named list indicating the type of sorting to perform. Default is NULL.
 #' Options are 'frequency' where results are sorted in
 #' descending order of frequency and 'alphanumeric'
 #' @param row_percent logical value indicating whether to calculate
-#' percentages within column to across rows.  Default is to calculate
+#' percentages within column or across rows.  Default is to calculate
 #' percentages within columns: `row_percent = FALSE`
 #'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
-#' input is a named list where the names correspond the column names from the
+#' input is a named list where the names correspond to the column names from the
 #' input 'data' and the elements specify the statistic to report. For example,
 #' `statistic = list(age = "{mean} ({sd})")` would report the mean and
 #' standard deviation for age. A statistic name that appears between curly brackets
@@ -98,7 +99,7 @@
 #'   trial %>%
 #'   dplyr::select(age, grade, response) %>%
 #'   tbl_summary()
-#' 
+#'
 #' tbl_summary_ex2 <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
