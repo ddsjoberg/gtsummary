@@ -21,7 +21,7 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #' @param t threshold below which p-values will be bold. Default is 0.05.
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_sum_bold_p_ex <-
@@ -71,7 +71,7 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
 #' @param ... not used
 #' @author Daniel D. Sjoberg
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @examples
 #' tbl_lm_bold_p_ex <-
 #'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
@@ -106,7 +106,7 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @author Daniel D. Sjoberg
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @export
 #' @examples
 #' tbl_uvglm_bold_p_ex <-
