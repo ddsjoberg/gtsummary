@@ -68,7 +68,7 @@ add_nevent.tbl_regression <- function(x, ...) {
       if (x$model_obj$family$family != "binomial") {
         stop("Model type not supported")
       }
-      formula <- x$model_obj$formula
+      formula <- x$model_obj$formula %>% as.formula()
     }
     else if (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
       if (x$model_obj@resp$family$family != "binomial") {
