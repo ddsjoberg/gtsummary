@@ -45,6 +45,7 @@ Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
+  \code{\link{sort_p.tbl_regression}},
   \code{\link{tbl_regression}}
 
 Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
@@ -52,6 +53,7 @@ Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{sort_p.tbl_uvregression}},
   \code{\link{tbl_uvregression}}
 }
 \author{
