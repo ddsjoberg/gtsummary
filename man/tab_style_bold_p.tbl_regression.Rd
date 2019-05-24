@@ -27,6 +27,9 @@ tbl_lm_bold_p_ex <-
   tbl_regression(exponentiate = TRUE) \%>\%
   tab_style_bold_p()
 }
+\seealso{
+Other tbl_regression: \code{\link{sort_by_p.tbl_regression}}
+}
 \author{
 Daniel D. Sjoberg
 }
