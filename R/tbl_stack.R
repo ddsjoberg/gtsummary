@@ -32,7 +32,7 @@ tbl_stack <- function(tbls) {
   if (tbls_length < 1) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
 
   # stacking tables ------------------------------------------------------------
-  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c("table_body", "inputs", "gt_calls"))]
+  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c("inputs", "gt_calls", "estimate_funs", "pvalue_funs", "qvalue_funs"))]
 
   results$table_body <-
     map_dfr(
@@ -40,10 +40,12 @@ tbl_stack <- function(tbls) {
       ~ pluck(.x, "table_body")
     )
 
+
+
   # returning results ----------------------------------------------------------
   results$call_list <- list(tbl_stack = match.call())
   results$tbl_regression_list = tbls
 
   class(results) <- "tbl_stack"
-  return(tbls[[1]])
+  return(results)
 }
