@@ -45,11 +45,8 @@ Other tbl_uvregression tools: \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},
-<<<<<<< HEAD
   \code{\link{sort_p.tbl_uvregression}},
-=======
   \code{\link{tab_style_bold_p.tbl_uvregression}},
->>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
 \author{
