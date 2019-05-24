@@ -13,18 +13,23 @@
 \item{terms}{Character vector of terms for which to add global p-values.  Default
 is \code{NULL} which will add global p-values for all categorical variables}
 
-\item{keep}{logical argument whether to keep the individual p-values for the
-levels of the categorical variable. Default is \code{FALSE}}
+\item{keep}{logical argument indicating whether to also retain the individual
+p-values in the table output for each level of the categorical variable.
+Default is \code{FALSE}}
 
 \item{...}{arguments to be passed to \link[car:Anova]{car::Anova}}
 }
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument
 \code{type = "III"} to calculate global p-values for categorical variables.
-If a needed class of model is not supported by \link[car:Anova]{car::Anova},
-please create an
+}
+\section{Note}{
+
+If a needed class of model is not supported by
+\link[car:Anova]{car::Anova}, please create an
 \href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
 }
+
 \section{Example Output}{
 
 \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
@@ -40,7 +45,11 @@ tbl_lm_global_ex1 <-
 Other tbl_regression tools: \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_regression}},
+=======
+  \code{\link{tab_style_bold_p.tbl_regression}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
 }
 \author{

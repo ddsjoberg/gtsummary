@@ -10,8 +10,8 @@ add_stat_label(x)
 \item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 }
 \description{
-Rather than simply printing the summary statistics, with the use of \code{add_stat_label()},
-a column labelling the summary statistics is added
+Adds a column with labels describing the summary statistics presented for
+each variable in the table.
 }
 \section{Example Output}{
 
@@ -32,7 +32,11 @@ Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_summary}},
+=======
+  \code{\link{tab_style_bold_p.tbl_summary}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_summary}}
 }
 \author{

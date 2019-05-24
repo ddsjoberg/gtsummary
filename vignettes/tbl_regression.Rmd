@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table. `tbl_regression()` uses [broom::tidy] to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and more). If your class of model is not supported , please request support [request support](https://github.com/ddsjoberg/gtsummary/issues).  In some cases, it is simple to support a new class of model.
+This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table. `tbl_regression()` uses [broom::tidy] to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and more). If your class of model is not supported , please [request support](https://github.com/ddsjoberg/gtsummary/issues).  In some cases, it is simple to support a new class of model.
 
 To start, a quick note on the magrittr package's pipe function, `%>%`.  By default the pipe operator puts whatever is on the left hand side of `%>%` into the first argument of the function on the right hand side.  The pipe function can be used to make the code relating to `tbl_regression()` easier to use, but it is *not* required.  Here are a few examples of how `%>%` translates into typical R notation.
 
@@ -55,7 +55,7 @@ Because the variables in the data set were [labelled](http://larmarange.github.i
 
 ## Customize Output
 
-There are four primary was to customize the output of the regression model table.
+There are four primary ways to customize the output of the regression model table.
 
 1. Modify `tbl_regression()` function input arguments
 1. Add additional data/information to a summary table with `add_*()` functions
@@ -129,7 +129,7 @@ m1 %>%
 
 ##  Report Results Inline {#inline_text}
 
-Reproducible reports are an import part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
+Reproducible reports are an important part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
 
 Let's first create a regression model table.
 

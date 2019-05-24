@@ -13,16 +13,16 @@ tbl_summary(data, by = NULL, label = NULL, type = NULL,
 \item{data}{a data frame}
 
 \item{by}{a character vector specifying a column in data.
-Summary statistics will be calculated separately for each level of the \code{by} variable.
-If \code{NULL}, summary statistics
+Summary statistics will be calculated separately for each level of the \code{by}
+variable. If \code{NULL}, summary statistics
 are calculated using all observations.}
 
 \item{label}{named list of variable labels,
-e.g. \code{list(age = "Age, yrs", ptstage = "Path T Stage")}.  If \code{NULL}, the function
-will take the label attribute (\code{attr(data$age, "label")}).  If
+e.g. \code{list(age = "Age, yrs", ptstage = "Path T Stage")}.  If \code{NULL}, the
+function will take the label attribute (\code{attr(data$age, "label")}).  If
 attribute label is \code{NULL}, the variable name will be used.}
 
-\item{type}{named list that includes specified summary types.  Accepted values
+\item{type}{named list that specifies data types of variables. Accepted values
 are \code{c("continuous", "categorical", "dichotomous")},
 e.g. \code{type = list(age = "continuous", female = "dichotomous")}.
 If type not specified for a variable, the function
@@ -31,30 +31,31 @@ will default to an appropriate summary type.  See below for details.}
 \item{value}{named list that specifies the value to display for dichotomous
 variables.  See below for details.}
 
-\item{statistic}{named list of the type of statistics to return for each variable
-or variable class.  The default is
+\item{statistic}{named list of the types of summary statistics to display
+for each variable or variable class.  The default is
 \code{list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}\%)")}.
 See below for details.}
 
 \item{digits}{named list of integers indicating the number of decimal
 places to round continuous summary statistics. Names of the list can be any
 continuous variable in 'data', or \code{"..continuous"} to apply rounding to all
-variables.  If not specified, \code{tbl_summary} does its best to guess an
-appropriate level to round statistics.  To round statistics to different
-levels, supply a vector rather than an integer.  For example, if the
+continuous variables.  If not specified, \code{tbl_summary} guesses an
+appropriate number of decimals to round statistics. When multiple statistics
+are displayed for a single variable (e.g. \code{{mean} ({sd})}), supply a vector
+rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
 to 1 decimal place, and the SD to 2 use \code{digits = list(age = c(1, 2))}.}
 
-\item{group}{character vector of an ID or grouping variable.  Summary statistics
-will not be printed for this column. The column may be used in \link{add_comparison} to
+\item{group}{character vector of an ID or grouping variable for which summary
+statistics should not be printed. The column may be used in \link{add_comparison} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
 \item{missing}{indicates whether to include counts of \code{NA} values in the table.
-allowed values are
-never (\code{"no"}), only if the count is positive (\code{"ifany"}) and even for
-zero counts (\code{"always"}). Default is \code{"ifany"}.}
+Allowed values are \code{"no"} (never display NA values),
+\code{"ifany"} (only display NA if the count is positive), and \code{"always"}
+(display NA’s even for zero counts). Default is \code{"ifany"}.}
 
-\item{missing_text}{String to display for count of missing observations.
+\item{missing_text}{String to display label for count of missing observations.
 Default is \code{"Unknown"}.}
 
 \item{sort}{named list indicating the type of sorting to perform. Default is NULL.
@@ -62,7 +63,7 @@ Options are 'frequency' where results are sorted in
 descending order of frequency and 'alphanumeric'}
 
 \item{row_percent}{logical value indicating whether to calculate
-percentages within column to across rows.  Default is to calculate
+percentages within column or across rows.  Default is to calculate
 percentages within columns: \code{row_percent = FALSE}}
 }
 \description{
@@ -74,7 +75,7 @@ for detailed examples.
 \section{statistic argument}{
 
 The statistic argument specifies the statistics presented in the table. The
-input is a named list where the names correspond the column names from the
+input is a named list where the names correspond to the column names from the
 input 'data' and the elements specify the statistic to report. For example,
 \code{statistic = list(age = "{mean} ({sd})")} would report the mean and
 standard deviation for age. A statistic name that appears between curly brackets
@@ -150,7 +151,11 @@ Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_summary}}
+=======
+  \code{\link{tab_style_bold_p.tbl_summary}}
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
 }
 \author{
 Daniel D. Sjoberg

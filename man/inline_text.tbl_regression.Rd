@@ -64,7 +64,11 @@ inline_text(inline_text_ex1, variable = "grade", level = "III")
 Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_regression}},
+=======
+  \code{\link{tab_style_bold_p.tbl_regression}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
 }
 \author{

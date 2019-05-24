@@ -41,7 +41,11 @@ tbl_reg_nevent_ex <-
 Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_regression}},
+=======
+  \code{\link{tab_style_bold_p.tbl_regression}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
 }
 \author{

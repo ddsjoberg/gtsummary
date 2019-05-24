@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_comparison.R
 \name{add_comparison}
 \alias{add_comparison}
-\title{Adds p-values to the output comparing values across groups}
+\title{Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.}
 \usage{
 add_comparison(x, test = NULL, pvalue_fun = style_pvalue,
   group = x$inputs$group)
@@ -30,12 +30,12 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{character vector of an ID or grouping variable.  Summary statistics
-will not be printed for this column. The column may be used in \link{add_comparison} to
+\item{group}{character vector of an ID or grouping variable for which summary
+statistics should not be printed. The column may be used in \link{add_comparison} to
 calculate p-values with correlated data. Default is \code{NULL}}
 }
 \description{
-Adds p-values to the output comparing values across groups
+Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.
 }
 \section{Example Output}{
 
@@ -57,7 +57,11 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_summary}},
+=======
+  \code{\link{tab_style_bold_p.tbl_summary}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_summary}}
 }
 \author{
