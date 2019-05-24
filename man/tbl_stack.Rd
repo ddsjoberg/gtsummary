@@ -64,3 +64,18 @@ tbl_stack_ex2 <-
   tab_footnote(footnote = "Adjusted for cancer grade, state, and marker level.",
                locations = cells_data(columns = "label", rows = 4))
 }
+\seealso{
+\link{tbl_merge}
+
+Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
+  \code{\link{add_nevent.tbl_regression}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{inline_text.tbl_regression}},
+  \code{\link{sort_p.tbl_regression}},
+  \code{\link{tab_style_bold_p.tbl_regression}},
+  \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
+}
+\author{
+Daniel D. Sjoberg
+}
+\concept{tbl_regression tools}

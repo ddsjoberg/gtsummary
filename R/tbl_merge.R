@@ -6,6 +6,7 @@
 #' @param tab_spanner Spanning headers. Character vector with same length as `tbls`
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
+#' @seealso [tbl_stack]
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples

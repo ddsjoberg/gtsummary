@@ -6,6 +6,9 @@
 #' If combining `tbl_stack()` and `tbl_merge()`, merge first then stack.
 #'
 #' @param tbls list of gtsummary regression objects
+#' @family tbl_regression tools
+#' @seealso [tbl_merge]
+#' @author Daniel D. Sjoberg
 #' @export
 #' @examples
 #' # Example 1 - stacking two tbl_regression objects
