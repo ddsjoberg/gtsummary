@@ -55,6 +55,11 @@
 
 tbl_stack <- function(tbls) {
   # input checks ---------------------------------------------------------------
+  # class of tbls
+  if (!"list" %in% class(tbls)) {
+    stop("Expecting 'tbls' to be a list, e.g. tbls = list(tbl1, tbl2)")
+  }
+
   # checking all inputs are class tbl_regression or tbl_merge
   if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_merge") %>% any()) {
     stop("All objects in 'tbls' must be class 'tbl_regression' or 'tbl_uvregression'")
@@ -62,7 +67,7 @@ tbl_stack <- function(tbls) {
 
   # at least two objects must be passed
   tbls_length <- length(tbls)
-  if (tbls_length < 1) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
+  if (tbls_length < 2L) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
 
   # stacking tables ------------------------------------------------------------
   results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c("inputs", "gt_calls", "estimate_funs", "pvalue_funs", "qvalue_funs"))]

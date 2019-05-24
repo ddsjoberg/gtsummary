@@ -25,17 +25,34 @@ t4 <-
 row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 row2 <- tbl_merge(list(t2, t4))
 
-test_that("Stacking tbl_merge objects", {
-  expect_error(
-    tbl_stack(list(row1, row2)),
-    NA
-  )
-})
-
-
 test_that("Stacking tbl_regression objects", {
   expect_error(
     tbl_stack(list(t1, t2)),
+    NA
+  )
+
+  # must pass items as list
+  expect_error(
+    tbl_stack(t1, t2),
+    "*"
+  )
+
+  # must pass more than 1 item
+  expect_error(
+    tbl_stack(list(t1)),
+    "*"
+  )
+
+  # must pass acceptable objects
+  expect_error(
+    tbl_stack(list(mtcars)),
+    "*"
+  )
+})
+
+test_that("Stacking tbl_merge objects", {
+  expect_error(
+    tbl_stack(list(row1, row2)),
     NA
   )
 })
