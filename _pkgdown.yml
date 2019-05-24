@@ -35,10 +35,7 @@ reference:
       - add_stat_label
       - add_q.tbl_summary
       - cols_label_summary
-      - tab_style_bold_p.tbl_summary
-      - inline_text.tbl_summary
       - tbl_survival.survfit
-      - inline_text.tbl_survival
 
   - title: "Regression Model Functions"
     desc: >
@@ -47,17 +44,22 @@ reference:
       - tbl_regression
       - add_global.tbl_regression
       - add_nevent.tbl_regression
-      - tab_style_bold_p.tbl_regression
-      - inline_text.tbl_regression
       - tbl_uvregression
       - add_global.tbl_uvregression
       - add_nevent.tbl_uvregression
       - add_q.tbl_uvregression
-      - tab_style_bold_p.tbl_uvregression
-      - inline_text.tbl_uvregression
       - tbl_merge
 
-  - title: "General Formatting Functions"
+  - title: "Inline Reporting"
+    desc: >
+      Functions for reporting results in tables inline in Rmarkdown
+    contents:
+      - inline_text.tbl_summary
+      - inline_text.tbl_survival
+      - inline_text.tbl_regression
+      - inline_text.tbl_uvregression
+
+  - title: "General Formatting/Styling Functions"
     desc: >
       Functions for formatting
     contents:
@@ -70,6 +72,12 @@ reference:
       - tab_style_bold_levels
       - tab_style_italicize_labels
       - tab_style_italicize_levels
+      - tab_style_bold_p.tbl_summary
+      - sort_p.tbl_summary
+      - tab_style_bold_p.tbl_regression
+      - sort_p.tbl_regression
+      - tab_style_bold_p.tbl_uvregression
+      - sort_p.tbl_uvregression
 
   - title: "Misc. Functions"
     desc: >
@@ -95,4 +103,5 @@ reference:
       - add_q
       - inline_text
       - tab_style_bold_p
+      - sort_p
       - tbl_survival
