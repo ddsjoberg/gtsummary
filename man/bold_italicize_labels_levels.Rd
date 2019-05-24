@@ -55,12 +55,14 @@ Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{add_stat_label}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{sort_p.tbl_summary}},
   \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 
 Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{inline_text.tbl_regression}},
+  \code{\link{sort_p.tbl_regression}},
   \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
 
@@ -68,6 +70,7 @@ Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{sort_p.tbl_uvregression}},
   \code{\link{tab_style_bold_p.tbl_uvregression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
