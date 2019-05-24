@@ -31,6 +31,9 @@ tbl_sum_bold_p_ex <-
   add_comparison() \%>\%
   tab_style_bold_p()
 }
+\seealso{
+Other tbl_summary: \code{\link{sort_by_p.tbl_summary}}
+}
 \author{
 Daniel D. Sjoberg
 }

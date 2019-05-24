@@ -88,10 +88,10 @@ sort_by_p.tbl_regression <- function(x, ...) {
 
 
   table_body <- x$table_body %>%
-    group_by(variable) %>%
-    mutate(sort_col = min(p.value, na.rm = TRUE)) %>%
-    arrange(sort_col) %>%
-    select(-sort_col) %>%
+    group_by(.data$variable) %>%
+    mutate(sort_col = min(.data$p.value, na.rm = TRUE)) %>%
+    arrange(.data$sort_col) %>%
+    select(-.data$sort_col) %>%
     ungroup()
 
   # replacing old table_body with new
@@ -127,7 +127,9 @@ sort_by_p.tbl_regression <- function(x, ...) {
 #'   sort_by_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uvglm_sort_p_ex.png}{options: width=50\%}}
+#' @export
 #'
+
 sort_by_p.tbl_uvregression <- function(x, q = FALSE, ...) {
 
   # checking that add_q has been previously run if sort by q-values
