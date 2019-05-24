@@ -36,9 +36,6 @@ tbl_uvglm_bold_p_ex <-
   ) \%>\%
   tab_style_bold_p(t = 0.25)
 }
-\seealso{
-Other tbl_uvregression: \code{\link{sort_by_p.tbl_uvregression}}
-}
 \author{
 Daniel D. Sjoberg
 }

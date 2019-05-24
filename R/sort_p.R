@@ -6,12 +6,12 @@
 #' @param x an object created using gtsummary functions
 #' @param ... further arguments passed to other methods.
 #' @author Karissa Whiting
-#' @seealso \code{\link{sort_by_p.tbl_summary}},
-#' \code{\link{sort_by_p.tbl_regression}},
-#' \code{\link{sort_by_p.tbl_uvregression}}
+#' @seealso \code{\link{sort_p.tbl_summary}},
+#' \code{\link{sort_p.tbl_regression}},
+#' \code{\link{sort_p.tbl_uvregression}}
 #' @export
 #' @keywords internal
-sort_by_p <- function(x, ...) UseMethod("sort_by_p")
+sort_p <- function(x, ...) UseMethod("sort_p")
 
 #' Sort variables in table by ascending p-values
 #'
@@ -20,7 +20,7 @@ sort_by_p <- function(x, ...) UseMethod("sort_by_p")
 #' @param x an object created using `tbl_summary` function
 #' @param q logical argument. When TRUE will sort by the q-value column rather than the p-values
 #' @param ... not used
-#' @family tbl_summary
+#' @family tbl_summary tools
 #' @author Karissa Whiting
 #' @examples
 #' tbl_sum_sort_p_ex <-
@@ -28,11 +28,11 @@ sort_by_p <- function(x, ...) UseMethod("sort_by_p")
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_comparison() %>%
-#'   sort_by_p()
+#'   sort_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_sort_p_ex.png}{options: width=50\%}}
 #' @export
-sort_by_p.tbl_summary <- function(x, q = FALSE, ...) {
+sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 
   # checking that add_comparison has been previously run
   if (is.null(x$call_list$add_comparison)) {
@@ -59,7 +59,7 @@ sort_by_p.tbl_summary <- function(x, q = FALSE, ...) {
   x$table_body <- table_body
 
   # adding indicator to output that add_overall was run on this data
-  x$call_list <- c(x$call_list, list(sort_by_p = match.call()))
+  x$call_list <- c(x$call_list, list(sort_p = match.call()))
 
   # returning tbl_summary object
   return(x)
@@ -72,19 +72,19 @@ sort_by_p.tbl_summary <- function(x, q = FALSE, ...) {
 #'
 #' @param x an object created using `tbl_regression` function
 #' @param ... not used
-#' @family tbl_regression
+#' @family tbl_regression tools
 #' @author Karissa Whiting
 #' @examples
 #' tbl_lm_sort_p_ex <-
 #'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
-#'   sort_by_p()
+#'   sort_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_sort_p_ex.png}{options: width=50\%}}
 #' @export
 #'
 
-sort_by_p.tbl_regression <- function(x, ...) {
+sort_p.tbl_regression <- function(x, ...) {
 
 
   table_body <- x$table_body %>%
@@ -98,7 +98,7 @@ sort_by_p.tbl_regression <- function(x, ...) {
   x$table_body <- table_body
 
   # adding indicator to output that add_overall was run on this data
-  x$call_list <- c(x$call_list, list(sort_by_p = match.call()))
+  x$call_list <- c(x$call_list, list(sort_p = match.call()))
 
   # returning tbl_summary object
   return(x)
@@ -112,7 +112,7 @@ sort_by_p.tbl_regression <- function(x, ...) {
 #' @param x an object created using `tbl_uvregression` function
 #' @param q logical argument. When TRUE will sort by the q-value column rather than the p-values
 #' @param ... not used
-#' @family tbl_uvregression
+#' @family tbl_uvregression tools
 #' @author Karissa Whiting
 #' @examples
 #' tbl_uvglm_sort_p_ex <-
@@ -124,13 +124,13 @@ sort_by_p.tbl_regression <- function(x, ...) {
 #'     method.args = list(family = binomial),
 #'     exponentiate = TRUE
 #'   ) %>%
-#'   sort_by_p()
+#'   sort_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uvglm_sort_p_ex.png}{options: width=50\%}}
 #' @export
 #'
 
-sort_by_p.tbl_uvregression <- function(x, q = FALSE, ...) {
+sort_p.tbl_uvregression <- function(x, q = FALSE, ...) {
 
   # checking that add_q has been previously run if sort by q-values
   if (q == TRUE & is.null(x$call_list$add_q)) {
@@ -153,7 +153,7 @@ sort_by_p.tbl_uvregression <- function(x, q = FALSE, ...) {
   x$table_body <- table_body
 
   # adding indicator to output that add_overall was run on this data
-  x$call_list <- c(x$call_list, list(sort_by_p = match.call()))
+  x$call_list <- c(x$call_list, list(sort_p = match.call()))
 
   # returning tbl_uvregression object
   return(x)
