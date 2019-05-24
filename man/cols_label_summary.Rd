@@ -60,7 +60,11 @@ Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_summary}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_summary}},
+=======
+  \code{\link{tab_style_bold_p.tbl_summary}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_summary}}
 }
 \author{

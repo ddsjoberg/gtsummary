@@ -12,11 +12,12 @@ add_n(x, missing = FALSE, last = FALSE)
 \item{missing}{logical argument indicating whether to print N (\code{missing = FALSE}),
 or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 
-\item{last}{logical indicator to include overall  column last. Default is \code{FALSE}}
+\item{last}{logical indicator to include N column last in table.
+Default is \code{FALSE}, which will display N column first.}
 }
 \description{
-For each variable in the table, the \code{add_n} function adds a column with the
-number of non-missing (or missing) observations
+For each variable in a \code{tbl_summary} table, the \code{add_n} function adds a column with the
+total number of non-missing (or missing) observations
 }
 \section{Example Output}{
 
@@ -38,7 +39,11 @@ Other tbl_summary tools: \code{\link{add_comparison}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_summary}},
+=======
+  \code{\link{tab_style_bold_p.tbl_summary}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_summary}}
 }
 \author{

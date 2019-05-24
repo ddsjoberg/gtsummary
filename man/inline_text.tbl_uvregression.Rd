@@ -32,9 +32,9 @@ Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
 \item{...}{not used}
 }
 \description{
-Takes an object with class \code{tbl_uvregression}, and the
-location of the statistic to report and returns the statistic for reporting
-inline in an R markdown document. Detailed examples in the
+Extracts and returns statistics from a table created by the \code{tbl_uvregression}
+function for inline reporting in an R markdown document.
+Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
 }
 \section{pattern argument}{
@@ -71,7 +71,11 @@ Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_uvregression}},
+=======
+  \code{\link{tab_style_bold_p.tbl_uvregression}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
 \concept{tbl_uvregression tools}

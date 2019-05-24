@@ -12,7 +12,7 @@
 \item{...}{not used}
 }
 \description{
-This function adds a column of the number of events to tables created with
+Adds a column of the number of events to tables created with
 \link{tbl_regression} or \link{tbl_uvregression}.  Supported
 model types include GLMs with binomial distribution family (e.g.
 \link[stats:glm]{stats::glm}, \link[lme4:glmer]{lme4::glmer}, and
@@ -47,7 +47,11 @@ Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_uvregression}},
+=======
+  \code{\link{tab_style_bold_p.tbl_uvregression}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
 \author{

@@ -12,7 +12,8 @@ tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
 \arguments{
 \item{x}{regression model object}
 
-\item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
+\item{label}{list of variable labels to override default labels in the table
+output, e.g. \code{list(age60 = "Age > 60")}.}
 
 \item{exponentiate}{logical indicating whether or not to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
@@ -21,18 +22,19 @@ coefficient estimates. Default is \code{FALSE}.}
 
 \item{exclude}{names of variables to exclude from output.}
 
-\item{show_yesno}{By default yes/no categorical variables are printed on a single row,
-when the 'No' category is the reference group.  To print both levels in the output table, include
-the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
+\item{show_yesno}{By default yes/no categorical variables are printed on a
+single row, when the 'No' category is the reference group.  To print both
+levels in the output table, include the variable name in the show_yesno
+vector, e.g. `show_yesno = c("var1", "var2")``}
 
 \item{conf.level}{must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{intercept}{logical argument indicates whether to include the intercept
+\item{intercept}{logical argument indicating whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.  Default
-is \link{style_sigfig} when the coefficients are printed, and
+\item{estimate_fun}{function to round and format beta coefficient estimates.
+Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.
@@ -53,8 +55,9 @@ for detailed examples.
 
 The N reported in the \code{tbl_regression()} output is the number of observations
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
-may represent different quantities. In most cases, it is the number of people or
-units in your model.  Here are some common exceptions.
+may represent different quantities. In most cases, it is the total number of
+observations in your model; however, the precise definition of an observation,
+or unit of anlaysis, may differ across models. Here are some common examples.
 \enumerate{
 \item Survival regression models including time dependent covariates.
 \item Random- or mixed-effects regression models with clustered data.
@@ -99,7 +102,11 @@ Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
+<<<<<<< HEAD
   \code{\link{sort_p.tbl_regression}},
+=======
+  \code{\link{tab_style_bold_p.tbl_regression}},
+>>>>>>> 5a806b819ab20b03a4cdbf08862b95918f0be274
   \code{\link{tbl_merge}}
 }
 \author{
