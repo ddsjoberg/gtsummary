@@ -51,3 +51,11 @@ print.tbl_merge <- print.tbl_summary
 #' @rdname print_gtsummary
 #' @export
 knit_print.tbl_merge <- knit_print.tbl_summary
+
+#' @rdname print_gtsummary
+#' @export
+print.tbl_stack <- print.tbl_summary
+
+#' @rdname print_gtsummary
+#' @export
+knit_print.tbl_stack <- knit_print.tbl_summary
