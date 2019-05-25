@@ -11,16 +11,16 @@
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
-#' @seealso \code{\link{add_global.tbl_regression}},
-#' \code{\link{add_global.tbl_uvregression}}
+#' @seealso \code{\link{add_global_p.tbl_regression}},
+#' \code{\link{add_global_p.tbl_uvregression}}
 #' @author Daniel D. Sjoberg
 #' @export
-add_global <- function(x, ...) {
+add_global_p <- function(x, ...) {
   # must have car package installed to use this function
   if (!requireNamespace("car", quietly = TRUE)) {
-    stop("The 'car' package is required for 'add_global'. Install with install.packages('car')", call. = FALSE)
+    stop("The 'car' package is required for 'add_global_p'. Install with install.packages('car')", call. = FALSE)
   }
-  UseMethod("add_global")
+  UseMethod("add_global_p")
 }
 
 #' Adds the global p-value for categorical variables
@@ -48,13 +48,13 @@ add_global <- function(x, ...) {
 #' tbl_lm_global_ex1 <-
 #'   lm(marker ~ age + grade, trial) %>%
 #'   tbl_regression() %>%
-#'   add_global()
+#'   add_global_p()
 #' @export
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
 #'
 
-add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
+add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
   # fetching categorical variables from model
   model_terms <- x %>%
@@ -113,7 +113,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
       )
   }
 
-  x$call_list <- c(x$call_list, list(add_global = match.call()))
+  x$call_list <- c(x$call_list, list(add_global_p = match.call()))
 
   return(x)
 }
@@ -143,12 +143,12 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'     method.args = list(family = binomial),
 #'     exponentiate = TRUE
 #'   ) %>%
-#'   add_global()
+#'   add_global_p()
 #' @export
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'
-add_global.tbl_uvregression <- function(x, ...) {
+add_global_p.tbl_uvregression <- function(x, ...) {
 
   # converting the passed ... to a list, OR if nothing passed to NULL
   if (length(list(...)) == 0) {
@@ -190,7 +190,7 @@ add_global.tbl_uvregression <- function(x, ...) {
       by = c("row_type", "variable")
     )
 
-  x$call_list <- c(x$call_list, list(add_global = match.call()))
+  x$call_list <- c(x$call_list, list(add_global_p = match.call()))
 
   return(x)
 }

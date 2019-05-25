@@ -47,7 +47,7 @@ statistic being calculated is \code{"{mean} ({sd})"} and you want the mean round
 to 1 decimal place, and the SD to 2 use \code{digits = list(age = c(1, 2))}.}
 
 \item{group}{character vector of an ID or grouping variable for which summary
-statistics should not be printed. The column may be used in \link{add_comparison} to
+statistics should not be printed. The column may be used in \link{add_p} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
 \item{missing}{indicates whether to include counts of \code{NA} values in the table.
@@ -144,13 +144,14 @@ tbl_summary_ex2 <-
   )
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_comparison}},
-  \code{\link{add_n}}, \code{\link{add_overall}},
+Other tbl_summary tools: \code{\link{add_n}},
+  \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{sort_p.tbl_summary}},
   \code{\link{tab_style_bold_p.tbl_summary}}
 }
 \author{
