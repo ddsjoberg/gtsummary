@@ -1,5 +1,9 @@
 # gtsummary 1.0.0.9000 (development version)
 
+*  Changed `add_comparison()` and `add_global()` to `add_p()` and `add_global_p()` (#143)
+
+* Added `sort_p()` function (#105)
+
 * Allow unobserved values to serve as the level for dichotomous variables (#149)
 
 * Bug fix in `add_nevent()` when formula was passed to `glm()` as a string (#148)
