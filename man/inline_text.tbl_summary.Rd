@@ -35,19 +35,20 @@ inline reporting in an R markdown document. Detailed examples in the
 }
 \examples{
 t1 <- tbl_summary(trial)
-t2 <- tbl_summary(trial, by = "trt") \%>\% add_comparison()
+t2 <- tbl_summary(trial, by = "trt") \%>\% add_p()
 
 inline_text(t1, variable = "age")
 inline_text(t2, variable = "grade", level = "I", column = "Drug")
 inline_text(t2, variable = "grade", column = "p.value")
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_comparison}},
-  \code{\link{add_n}}, \code{\link{add_overall}},
+Other tbl_summary tools: \code{\link{add_n}},
+  \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
+  \code{\link{sort_p.tbl_summary}},
   \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }

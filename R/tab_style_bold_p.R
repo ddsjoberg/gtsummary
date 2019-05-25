@@ -28,16 +28,16 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt") %>%
-#'   add_comparison() %>%
+#'   add_p() %>%
 #'   tab_style_bold_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_bold_p_ex.png}{options: width=50\%}}
 #' @export
 tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
-  # checking that add_comparison has been previously run
-  if (is.null(x$call_list$add_comparison)) {
-    stop("Before p-values are bolded, run add_comparison() to calculate the p-values")
+  # checking that add_p has been previously run
+  if (is.null(x$call_list$add_p)) {
+    stop("Before p-values are bolded, run add_p() to calculate the p-values")
   }
   # checking that add_q has been previously run if bold q-values
   if (q == TRUE & is.null(x$call_list$add_q)) {
