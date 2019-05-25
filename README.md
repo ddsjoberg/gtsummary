@@ -65,7 +65,7 @@ t1 <-
     data = trial[c("trt", "age", "grade", "response")],
     by = "trt"
   ) %>%
-  add_comparison() 
+  add_p() 
 ```
 
 <img src="man/figures/README-tbl_summary.png" width="60%">
@@ -88,5 +88,6 @@ project, you agree to abide by its terms. A big thank you to all
 contributors\!  
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@karissawhiting](https://github.com/karissawhiting),
-[@margarethannum](https://github.com/margarethannum), and
-[@michaelcurry1123](https://github.com/michaelcurry1123)
+[@margarethannum](https://github.com/margarethannum),
+[@michaelcurry1123](https://github.com/michaelcurry1123), and
+[@sammo3182](https://github.com/sammo3182)
