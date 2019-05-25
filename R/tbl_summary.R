@@ -35,7 +35,7 @@
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list(age = c(1, 2))`.
 #' @param group character vector of an ID or grouping variable for which summary
-#' statistics should not be printed. The column may be used in [add_comparison] to
+#' statistics should not be printed. The column may be used in [add_p] to
 #' calculate p-values with correlated data. Default is `NULL`
 #' @param missing indicates whether to include counts of `NA` values in the table.
 #' Allowed values are `"no"` (never display NA values),
