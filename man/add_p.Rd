@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_p.R
 \name{add_p}
 \alias{add_p}
-\title{Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.}
+\title{Adds p-values to summary tables}
 \usage{
 add_p(x, test = NULL, pvalue_fun = style_pvalue,
   group = x$inputs$group)

@@ -1,3 +1,5 @@
+#' Adds p-values to summary tables
+#'
 #' Adds p-values to tables created by `tbl_summary` by comparing values across groups.
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function

@@ -11,6 +11,8 @@ add_comparison(...)
 add_global(...)
 }
 \description{
-Deprecated functions
+Some functions have been deprecated and are no longer being actively
+supported. Please use these functions instead:
+\link{add_p}, \link{add_global_p}.
 }
 \keyword{internal}

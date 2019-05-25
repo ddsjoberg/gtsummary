@@ -1,5 +1,9 @@
 #' Deprecated functions
 #'
+#' Some functions have been deprecated and are no longer being actively
+#' supported. Please use these functions instead:
+#' [add_p], [add_global_p].
+#'
 #' @name deprecated
 #' @keywords internal
 NULL
