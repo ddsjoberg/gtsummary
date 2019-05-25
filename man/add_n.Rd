@@ -32,9 +32,8 @@ tbl_n_ex <-
   add_n()
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_comparison}},
-  \code{\link{add_overall}},
-  \code{\link{add_q.tbl_summary}},
+Other tbl_summary tools: \code{\link{add_overall}},
+  \code{\link{add_p}}, \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},

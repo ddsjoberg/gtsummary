@@ -1,9 +1,9 @@
 context("test-add_q")
 
-test_that("no errors/warnings with standard use after tbl_summary() and add_comparison()", {
+test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
   table1 <- trial %>%
     tbl_summary(by = "trt") %>%
-    add_comparison()
+    add_p()
 
   expect_error(add_q(table1), NA)
   expect_warning(add_q(table1), NA)
@@ -16,7 +16,7 @@ test_that("expect error if no p value in table 1", {
   expect_error(
     add_q(table1),
     glue(
-      "There are no p-values yet. You need to use the function add_comparison(), ",
+      "There are no p-values yet. You need to use the function add_p(), ",
       "after tbl_summary() and before add_q()"
     ),
     fixed = TRUE
@@ -24,13 +24,13 @@ test_that("expect error if no p value in table 1", {
 })
 
 
-test_that("no errors/warnings with standard use after tbl_uvregression() and add_global()", {
+test_that("no errors/warnings with standard use after tbl_uvregression() and add_global_p()", {
   uni_reg <- trial %>%
     tbl_uvregression(
       method = lm,
       y = age
     ) %>%
-    add_global()
+    add_global_p()
 
   expect_error(add_q(uni_reg), NA)
   expect_warning(add_q(uni_reg), NA)

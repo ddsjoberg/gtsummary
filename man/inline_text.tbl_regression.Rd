@@ -61,7 +61,7 @@ inline_text(inline_text_ex1, variable = "age")
 inline_text(inline_text_ex1, variable = "grade", level = "III")
 }
 \seealso{
-Other tbl_regression tools: \code{\link{add_global.tbl_regression}},
+Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{sort_p.tbl_regression}},

@@ -28,12 +28,12 @@ tbl_sum_bold_p_ex <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(by = "trt") \%>\%
-  add_comparison() \%>\%
+  add_p() \%>\%
   tab_style_bold_p()
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_comparison}},
-  \code{\link{add_n}}, \code{\link{add_overall}},
+Other tbl_summary tools: \code{\link{add_n}},
+  \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
