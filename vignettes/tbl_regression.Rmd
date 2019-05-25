@@ -79,8 +79,8 @@ The `tbl_regression()` function includes many input options for modifying the ap
 
 The {gtsummary} package has built-in functions for adding to results from `tbl_regression()`.  The following functions add columns and/or information to the regression table.
 
-    add_global()  adds the global p-value for a categorical variables   
-    add_nevent()  adds the number of observed events to the results object    
+    add_global_p()  adds the global p-value for a categorical variables   
+    add_nevent()    adds the number of observed events to the results object    
 
 ### {gtsummary} functions to format table
 
@@ -121,7 +121,7 @@ m1 %>%
   tbl_regression(exponentiate = TRUE, 
                  pvalue_fun = function(x) style_pvalue(x, digits = 2),
                  estimate_fun = function(x) style_ratio(x, digits = 3))  %>% 
-  add_global() %>%
+  add_global_p() %>%
   tab_style_bold_p(t = 0.10) %>%
   tab_style_bold_labels() %>% 
   tab_style_italicize_levels()
@@ -210,7 +210,7 @@ trial %>%
                    exponentiate = TRUE,
                    pvalue_fun = function(x) style_pvalue(x, digits = 2)) %>%
   # overrides the default that shows p-values for each level
-  add_global() %>%
+  add_global_p() %>%
   # adjusts global p-values for multiple testing (default method: FDR)
   add_q() %>%
   # bold p-values under a given threshold (default 0.05)
