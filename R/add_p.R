@@ -23,12 +23,12 @@
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt") %>%
-#'   add_comparison()
+#'   add_p()
 #' @section Example Output:
 #' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
 #'
 
-add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
+add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
                            group = x$inputs$group) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
@@ -103,12 +103,12 @@ add_comparison <- function(x, test = NULL, pvalue_fun = style_pvalue,
     glue()
 
   x$meta_data <- meta_data
-  x$call_list <- c(x$call_list, list(add_comparison = match.call()))
+  x$call_list <- c(x$call_list, list(add_p = match.call()))
 
   # adding footnote listing statistics presented in table
-  x[["gt_calls"]][["footnote_add_comparison"]] <- glue(
+  x[["gt_calls"]][["footnote_add_p"]] <- glue(
     "tab_footnote(",
-    'footnote = "{footnote_add_comparison(meta_data)}",',
+    'footnote = "{footnote_add_p(meta_data)}",',
     "locations = cells_column_labels(",
     "columns = vars(p.value))",
     ")"
@@ -129,7 +129,7 @@ stat_test_names <- tibble::tribble(
 )
 
 # function to create text for footnote
-footnote_add_comparison <- function(meta_data) {
+footnote_add_p <- function(meta_data) {
   meta_data %>%
     select("stat_test") %>%
     distinct() %>%
