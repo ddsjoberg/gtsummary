@@ -167,6 +167,23 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   # removing variables user requested to show both levels
   yesno_variables <- yesno_variables %>% setdiff(show_yesno)
 
+  # more  var labels -----------------------------------------------------------
+  # labels can be passed via 'label', extracted from model.frame(),
+  # the code below as seeks to grab the labels directly from the dataset in the
+  # parent frame
+  labels_parent_frame = tryCatch({
+    fit %>%
+      purrr::chuck("call") %>%
+      as.list() %>%
+      purrr::chuck("data") %>%
+      {eval(., parent.frame())} %>%
+      purrr::imap(~attr(.x, "label"))
+  }, warning = function(w) {
+    NULL
+  }, error = function(e) {
+    NULL
+  })
+
   # tidy_long ------------------------------------------------------------------
   # this is one line per term, AND interaction terms have one row per variable in the interaction
   tidy_long <-
@@ -200,7 +217,8 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
       # variable labels
       variable_lbl = map_chr(
         .data$variable,
-        ~ label[[.x]] %||% attr(model_frame[[.x]], "label") %||% .x
+        ~ label[[.x]] %||% attr(model_frame[[.x]], "label") %||%
+          labels_parent_frame[[.x]] %||% .x
       ),
       variable_lbl = ifelse(is.na(.data$variable_lbl) & .data$term == "(Intercept)",
         "(Intercept)",
