@@ -86,7 +86,7 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   for (v in (names(model_frame) %>% rev())) {
 
     # checking character and factor levels
-    if (class(model_frame[[v]]) %in% c("character", "factor")) {
+    if (any(class(model_frame[[v]]) %in% c("character", "factor"))) {
       term_match <-
         term_match %>%
         mutate(
@@ -124,7 +124,7 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
     map_lgl(
       names(model_frame),
       function(x) {
-        if (class(model_frame[[x]]) %in% c("factor", "character")) {
+        if (any(class(model_frame[[x]]) %in% c("factor", "character"))) {
           unique(model_frame[[x]]) %>%
             as.character() %>%
             stringr::fixed() %>%
@@ -168,15 +168,10 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   yesno_variables <- yesno_variables %>% setdiff(show_yesno)
 
   # more  var labels -----------------------------------------------------------
-  # labels can be passed via 'label', extracted from model.frame(),
-  # the code below as seeks to grab the labels directly from the dataset in the
-  # parent frame
+  # model.frame() strips variable labels from cox models.  this attempts
+  # to grab the labels in another way
   labels_parent_frame = tryCatch({
-    fit %>%
-      purrr::chuck("call") %>%
-      as.list() %>%
-      purrr::chuck("data") %>%
-      {eval(., parent.frame())} %>%
+    stats::model.frame.default(fit) %>%
       purrr::imap(~attr(.x, "label"))
   }, warning = function(w) {
     NULL
@@ -224,11 +219,19 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
         "(Intercept)",
         .data$variable_lbl
       ),
+
+      ################
+    )
+  tidy_long <-
+    tidy_long %>%
+    mutate(
+      ###############
+
       # indicating whether each variable is categorical or continuous
       variable_type = map_chr(
         .data$variable,
         ~ case_when(
-          class(model_frame[[.x]]) %in% c("character", "factor") ~ "categorical",
+          any(class(model_frame[[.x]]) %in% c("character", "factor")) ~ "categorical" ,
           TRUE ~ "continuous"
         )
       ),
