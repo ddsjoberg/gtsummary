@@ -219,14 +219,6 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
         "(Intercept)",
         .data$variable_lbl
       ),
-
-      ################
-    )
-  tidy_long <-
-    tidy_long %>%
-    mutate(
-      ###############
-
       # indicating whether each variable is categorical or continuous
       variable_type = map_chr(
         .data$variable,
