@@ -15,6 +15,11 @@ mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial
 
 mod_lm_interaction <- lm(age ~ trt * grade * response, data = trial)
 
+lung2 = lung
+Hmisc::label(lung2$sex) <- "Gender"
+Hmisc::label(lung2$age) <- "AGE"
+cox_hmisclbl <- coxph(Surv(time,status)~age+sex,data = lung2)
+
 
 test_that("glm: logistic and poisson regression", {
   expect_error(tbl_regression(mod_logistic), NA)
@@ -74,4 +79,10 @@ test_that("tbl_regression creates errors when inputs are wrong", {
     tbl_regression(mod_lm_interaction, include = "INCLUDE ME!"),
     "*"
   )
+})
+
+
+test_that("No errors/warnings when data is labelled using Hmisc", {
+  expect_error(tbl_regression(cox_hmisclbl), NA)
+  expect_warning(tbl_regression(cox_hmisclbl), NA)
 })
