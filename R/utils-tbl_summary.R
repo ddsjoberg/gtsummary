@@ -842,11 +842,20 @@ summarize_categorical <- function(data, variable, by, var_label,
     count(!!sym("variable")) %>%
     ungroup()
 
-  # if there is a dichotomous valu supplied, merging it in to ensure it gets counted (when unobserved)
+  # if there is a dichotomous value supplied, merging it in to ensure it gets counted (when unobserved)
   if (!is.null(dichotomous_value)) {
+    # making factors character here
+    if(is.factor(tab0$variable)) {
+      tab0 <-
+        tab0 %>%
+        mutate(variable = as.character(variable)) %>%
+        full_join(tibble(variable = as.character(dichotomous_value)), by = "variable")
+    }
+    else {
     tab0 <-
       tab0 %>%
       full_join(tibble(variable = dichotomous_value), by = "variable")
+    }
   }
 
   tab <-
