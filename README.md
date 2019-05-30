@@ -32,7 +32,7 @@ many types of regression models.
 each table to be tailored to your preferences. If you label your data
 (which I recommend\!), the labels will be used in the table output. With
 {gtsummary} and [{labelled}](http://larmarange.github.io/labelled/)
-data, you get a beautifully formatted, ready-to-share table in a single
+data, you get beautifully formatted, ready-to-share tables in a single
 line of code\! Check out the examples below, and review the vignettes
 for a detailed exploration of the output options.
 
@@ -81,6 +81,16 @@ t2 <-
 ```
 
 <img src="man/figures/README-tbl_regression.png" width="44%">
+
+### Other Tables
+
+Side-by-side regression model results from `tbl_merge()`
+
+<img src="man/figures/tbl_merge_ex.png" width="60%">
+
+Survival Estimates from `tbl_survival()`
+
+<img src="man/figures/tbl_strata_ex1.png" width="30%">
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this

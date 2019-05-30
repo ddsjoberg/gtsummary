@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bold or Italicize labels or levels in gtsummary tables — bold_italicize_labels_levels • gtsummary</title>
+<title>Adds the global p-value for a categorical variables — add_global_p • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="Bold or Italicize labels or levels in gtsummary tables — bold_italicize_labels_levels" />
+<meta property="og:title" content="Adds the global p-value for a categorical variables — add_global_p" />
 
-<meta property="og:description" content="Bold or Italicize labels or levels in gtsummary tables" />
+<meta property="og:description" content="This function uses car::Anova with argument
+type = &quot;III&quot; to calculate global p-values for categorical variables.
+Output from tbl_regression and tbl_uvregression objects supported." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,97 +119,57 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bold or Italicize labels or levels in gtsummary tables</h1>
+    <h1>Adds the global p-value for a categorical variables</h1>
     
-    <div class="hidden name"><code>bold_italicize_labels_levels.Rd</code></div>
+    <div class="hidden name"><code>add_global_p.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Bold or Italicize labels or levels in gtsummary tables</p>
+    <p>This function uses <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a> with argument
+<code>type = "III"</code> to calculate global p-values for categorical variables.
+Output from <code>tbl_regression</code> and <code>tbl_uvregression</code> objects supported.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tab_style_bold_labels</span>(<span class='no'>x</span>)
-
-<span class='fu'>tab_style_bold_levels</span>(<span class='no'>x</span>)
-
-<span class='fu'>tab_style_italicize_labels</span>(<span class='no'>x</span>)
-
-<span class='fu'>tab_style_italicize_levels</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>add_global_p</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>an object created using gtsummary functions</p></td>
+      <td><p><code>tbl_regression</code> or <code>tbl_uvregression</code> object</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>further arguments passed to or from other methods.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
-
-    <ul>
-<li><p><code>tab_style_bold_labels</code>: Bold labels in gtsummary tables</p></li>
-<li><p><code>tab_style_bold_levels</code>: Bold levels in gtsummary tables</p></li>
-<li><p><code>tab_style_italicize_labels</code>: Italicize labels in gtsummary tables</p></li>
-<li><p><code>tab_style_italicize_levels</code>: Italicize levels in gtsummary tables</p></li>
-</ul>
-    
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     
-    <p><img src='figures/tbl_bold_ital_ex.png' width=50% /></p>
+    <p>If a needed class of model is not supported by
+<a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a>, please create an
+<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
-  <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
-  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
-  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
-  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
-  <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
-  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
-  <code><a href='tbl_summary.html'>tbl_summary</a></code></p>
-<p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
-  <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
-  <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
-  <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code></p>
-<p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
-  <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
-  <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
-  <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
-  <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
+    <div class='dont-index'><p><code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
+<code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code></p></div>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_bold_ital_ex</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>tab_style_bold_labels</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>tab_style_bold_levels</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>tab_style_italicize_labels</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>tab_style_italicize_levels</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#functions">Functions</a></li>
-
-      <li><a href="#example-output">Example Output</a></li>
+      <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
     <h2>Author</h2>
     <p>Daniel D. Sjoberg</p>
