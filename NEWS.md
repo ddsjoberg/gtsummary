@@ -1,5 +1,7 @@
 # gtsummary 1.0.0.9000 (development version)
 
+* Added `tbl_stack()` function (#152)
+
 * Bug fix for dichotomous yes/no variables in `tbl_summary` (#158)
 
 * Changed `add_comparison()` and `add_global()` to `add_p()` and `add_global_p()` (#143)
