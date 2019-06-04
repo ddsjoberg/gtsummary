@@ -40,9 +40,9 @@ tbl_merge_ex <-
   )
 }
 \seealso{
+\link{tbl_stack}
 
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
-
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_regression}},
