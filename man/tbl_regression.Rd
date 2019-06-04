@@ -104,7 +104,7 @@ Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{inline_text.tbl_regression}},
   \code{\link{sort_p.tbl_regression}},
   \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_merge}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_stack}}
 }
 \author{
 Daniel D. Sjoberg
