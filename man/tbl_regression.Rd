@@ -57,7 +57,7 @@ The N reported in the \code{tbl_regression()} output is the number of observatio
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
 may represent different quantities. In most cases, it is the total number of
 observations in your model; however, the precise definition of an observation,
-or unit of anlaysis, may differ across models. Here are some common examples.
+or unit of analysis, may differ across models. Here are some common examples.
 \enumerate{
 \item Survival regression models including time dependent covariates.
 \item Random- or mixed-effects regression models with clustered data.
