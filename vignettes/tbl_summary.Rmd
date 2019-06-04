@@ -32,9 +32,9 @@ Here's how this translates into the use of `tbl_summary()`.
 
     mtcars %>% tbl_summary() is equivalent to tbl_summary(mtcars)
     mtcars %>% tbl_summary(by = "am") is equivalent to tbl_summary(mtcars, by = "am")
-    tbl_summary(mtcars, by = "am") %>% add_comparison() is equivalent to
+    tbl_summary(mtcars, by = "am") %>% add_p() is equivalent to
         tbl = tbl_summary(mtcars, by = "am")
-        add_comparison(tbl)
+        add_p(tbl)
     
 ## Basic Usage
 
@@ -69,10 +69,10 @@ trial2 =
 tbl_summary(trial2)
 ```
 
-This is a great table, but for trial data the summary statistics should be split by randomization group.  While reporting p-values for baseline characteristics in a randomized trial isn't recommended, we'll do it here as an illustration of the feature.  To compare two or more groups, include `add_comparison()` with the function call.
+This is a great table, but for trial data the summary statistics should be split by randomization group.  While reporting p-values for baseline characteristics in a randomized trial isn't recommended, we'll do it here as an illustration of the feature.  To compare two or more groups, include `add_p()` with the function call.
 
 ```{r}
-tbl_summary(trial2, by = "trt") %>% add_comparison()
+tbl_summary(trial2, by = "trt") %>% add_p()
 ```
 
 ## Customize Output
@@ -100,7 +100,7 @@ The `tbl_summary()` function includes many input options for modifying the appea
 
 The {gtsummary} package has built-in functions for adding to results from `tbl_summary()`.  The following functions add columns and/or information to the summary table.
 
-    add_comparison()  add p-values to the output comparing values across groups   
+    add_p()           add p-values to the output comparing values across groups   
     add_overall()     add a column with overall summary statistics   
     add_n()           add a column with N (or N missing) for each variable   
     add_stat_label()  add a column showing a label for the summary statistics shown in each row   
@@ -157,7 +157,7 @@ trial2 %>%
                                ..categorical.. = "{n} / {N} ({p}%)"),
               digits = list(marker = c(1, 2))) %>%
   # add p-values, report t-test, round large pvalues to two decimal place
-  add_comparison(test = list(marker = "t.test"),
+  add_p(test = list(marker = "t.test"),
                  pvalue_fun = function(x) style_pvalue(x, digits = 2)) %>%
   # add statistic labels
   add_stat_label() %>%

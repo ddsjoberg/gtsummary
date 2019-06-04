@@ -32,7 +32,7 @@ many types of regression models.
 each table to be tailored to your preferences. If you label your data
 (which I recommend\!), the labels will be used in the table output. With
 {gtsummary} and [{labelled}](http://larmarange.github.io/labelled/)
-data, you get a beautifully formatted, ready-to-share table in a single
+data, you get beautifully formatted, ready-to-share tables in a single
 line of code\! Check out the examples below, and review the vignettes
 for a detailed exploration of the output options.
 
@@ -65,7 +65,7 @@ t1 <-
     data = trial[c("trt", "age", "grade", "response")],
     by = "trt"
   ) %>%
-  add_comparison() 
+  add_p() 
 ```
 
 <img src="man/figures/README-tbl_summary.png" width="60%">
@@ -82,11 +82,22 @@ t2 <-
 
 <img src="man/figures/README-tbl_regression.png" width="44%">
 
+### Other Tables
+
+Side-by-side regression model results from `tbl_merge()`
+
+<img src="man/figures/tbl_merge_ex.png" width="60%">
+
+Survival Estimates from `tbl_survival()`
+
+<img src="man/figures/tbl_strata_ex1.png" width="30%">
+
 Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms. A big thank you to all
 contributors\!  
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@karissawhiting](https://github.com/karissawhiting),
-[@margarethannum](https://github.com/margarethannum), and
-[@michaelcurry1123](https://github.com/michaelcurry1123)
+[@margarethannum](https://github.com/margarethannum),
+[@michaelcurry1123](https://github.com/michaelcurry1123), and
+[@sammo3182](https://github.com/sammo3182)

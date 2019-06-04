@@ -38,12 +38,12 @@ tbl_sum_q_ex <-
   trial \%>\%
   dplyr::select(trt, age, grade, response) \%>\%
   tbl_summary(by = "trt") \%>\%
-  add_comparison() \%>\%
+  add_p() \%>\%
   add_q()
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_comparison}},
-  \code{\link{add_n}}, \code{\link{add_overall}},
+Other tbl_summary tools: \code{\link{add_n}},
+  \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
