@@ -22,7 +22,7 @@
 
 # gtsummary 1.0.0 
 
-First release since major refactoring.  The {gt} package is now used as the backend to create all tables.  Many function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
+First release since major refactoring.  The {gt} package is now used as the backend to create all tables.  Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
 
 ### Updated Function Names
 
