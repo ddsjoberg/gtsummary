@@ -1,6 +1,6 @@
-# gtsummary 1.1.0
-
 # gtsummary (development version)
+
+# gtsummary 1.1.0
 
 * Added `tbl_stack()` function (#152)
 
