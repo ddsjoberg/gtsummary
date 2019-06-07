@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -118,11 +118,28 @@
       
     </div>
 
+    <div id="gtsummary-110" class="section level1">
+<h1 class="page-header">
+<a href="#gtsummary-110" class="anchor"></a>gtsummary 1.1.0<small> Unreleased </small>
+</h1>
+<ul>
+<li><p>Added <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> function (#152)</p></li>
+<li><p>Bug fix for dichotomous yes/no variables in <code>tbl_summary</code> (#158)</p></li>
+<li><p>Changed <code><a href="../reference/deprecated.html">add_comparison()</a></code> and <code><a href="../reference/deprecated.html">add_global()</a></code> to <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_global_p.html">add_global_p()</a></code> (#143)</p></li>
+<li><p>Added <code><a href="../reference/sort_p.html">sort_p()</a></code> function (#105)</p></li>
+<li><p>Allow unobserved values to serve as the level for dichotomous variables (#149)</p></li>
+<li><p>Bug fix in <code><a href="../reference/add_nevent.html">add_nevent()</a></code> when formula was passed to <code><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm()</a></code> as a string (#148)</p></li>
+<li><p>Added returned <code>call_list</code> to some functions without it previously (#137)</p></li>
+<li><p>Corrected name of call list in returned <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> results (#128)</p></li>
+<li><p><code><a href="../reference/tbl_survival.html">tbl_survival()</a></code>: bug fix when upper bound of CI was not able to be estimated (#134)</p></li>
+<li><p><code><a href="../reference/tbl_survival.html">tbl_survival()</a></code>: the <code>groupname</code> column name has been changed to <code>label_level</code> (#133)</p></li>
+</ul>
+</div>
     <div id="gtsummary-100" class="section level1">
 <h1 class="page-header">
 <a href="#gtsummary-100" class="anchor"></a>gtsummary 1.0.0<small> Unreleased </small>
 </h1>
-<p>First release since major refactoring. The {gt} package is now used as the backend to create all tables. Many function names have been modified to be more in line with other {gt} function calls, and additional functions have been added. The API for some functions has also been updated. Review documentation and vignettes for details.</p>
+<p>First release since major refactoring. The {gt} package is now used as the backend to create all tables. Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added. The API for some functions has also been updated. Review documentation and vignettes for details.</p>
 <div id="updated-function-names" class="section level3">
 <h3 class="hasAnchor">
 <a href="#updated-function-names" class="anchor"></a>Updated Function Names</h3>
@@ -153,6 +170,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#gtsummary-110">1.1.0</a></li>
         <li><a href="#gtsummary-100">1.0.0</a></li>
         <li><a href="#gtsummary-010">0.1.0</a></li>
       </ul>
