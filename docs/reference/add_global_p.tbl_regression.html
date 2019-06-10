@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds the global p-value for categorical variables — add_global.tbl_uvregression • gtsummary</title>
+<title>Adds the global p-value for categorical variables — add_global_p.tbl_regression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,10 @@
 
 
 
-<meta property="og:title" content="Adds the global p-value for categorical variables — add_global.tbl_uvregression" />
+<meta property="og:title" content="Adds the global p-value for categorical variables — add_global_p.tbl_regression" />
 
 <meta property="og:description" content="This function uses car::Anova with argument
-type = &quot;III&quot; to calculate global p-values for categorical variables.
-If a needed class of model is not supported by car::Anova,
-please create an
-issue to request support." />
+type = &quot;III&quot; to calculate global p-values for categorical variables." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,67 +120,80 @@ issue to request support." />
     <div class="page-header">
     <h1>Adds the global p-value for categorical variables</h1>
     
-    <div class="hidden name"><code>add_global.tbl_uvregression.Rd</code></div>
+    <div class="hidden name"><code>add_global_p.tbl_regression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
     <p>This function uses <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a> with argument
-<code>type = "III"</code> to calculate global p-values for categorical variables.
-If a needed class of model is not supported by <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a>,
-please create an
-<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.</p>
+<code>type = "III"</code> to calculate global p-values for categorical variables.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
-<span class='fu'><a href='add_global.html'>add_global</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
+<span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(<span class='no'>x</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object with class <code>tbl_uvregression</code> from the
-<a href='tbl_uvregression.html'>tbl_uvregression</a> function</p></td>
+      <td><p>object with class <code>tbl_regression</code> from the
+<a href='tbl_regression.html'>tbl_regression</a> function</p></td>
+    </tr>
+    <tr>
+      <th>terms</th>
+      <td><p>Character vector of terms for which to add global p-values.  Default
+is <code>NULL</code> which will add global p-values for all categorical variables</p></td>
+    </tr>
+    <tr>
+      <th>keep</th>
+      <td><p>logical argument indicating whether to also retain the individual
+p-values in the table output for each level of the categorical variable.
+Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>arguments to be passed to <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a>.</p></td>
+      <td><p>arguments to be passed to <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a></p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    
+    <p>If a needed class of model is not supported by
+<a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a>, please create an
+<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.</p>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
-    <p><img src='figures/tbl_uv_global_ex2.png' width=50% /></p>
+    <p><img src='figures/tbl_lm_global_ex1.png' width=50% /></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
-  <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
+    <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
+  <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
+  <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
+  <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code>,
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_uv_global_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
-    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
-    <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
-    <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
-    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-  ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global.html'>add_global</a></span>()</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tbl_lm_global_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>marker</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#note">Note</a></li>
+
       <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>

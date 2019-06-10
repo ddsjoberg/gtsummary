@@ -150,7 +150,8 @@ for detailed examples.</p>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>list of labels to write in the output. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code></p></td>
+      <td><p>list of variable labels to override default labels in the table
+output, e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code>.</p></td>
     </tr>
     <tr>
       <th>exponentiate</th>
@@ -167,9 +168,10 @@ coefficient estimates. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>show_yesno</th>
-      <td><p>By default yes/no categorical variables are printed on a single row,
-when the 'No' category is the reference group.  To print both levels in the output table, include
-the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
+      <td><p>By default yes/no categorical variables are printed on a
+single row, when the 'No' category is the reference group.  To print both
+levels in the output table, include the variable name in the show_yesno
+vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
@@ -178,13 +180,13 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></td
     </tr>
     <tr>
       <th>intercept</th>
-      <td><p>logical argument indicates whether to include the intercept
+      <td><p>logical argument indicating whether to include the intercept
 in the output.  Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>estimate_fun</th>
-      <td><p>function to round and format beta coefficient estimates.  Default
-is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are printed, and
+      <td><p>function to round and format beta coefficient estimates.
+Default is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are not transformed, and
 <a href='style_ratio.html'>style_ratio</a> when the coefficients have been exponentiated.</p></td>
     </tr>
     <tr>
@@ -203,8 +205,9 @@ and return a string that is the rounded/formatted p-value (e.g.
     
     <p>The N reported in the <code>tbl_regression()</code> output is the number of observations
 in the data frame <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame(x)</a></code>. Depending on the model input, this N
-may represent different quantities. In most cases, it is the number of people or
-units in your model.  Here are some common exceptions.</p><ol>
+may represent different quantities. In most cases, it is the total number of
+observations in your model; however, the precise definition of an observation,
+or unit of anlaysis, may differ across models. Here are some common examples.</p><ol>
 <li><p>Survival regression models including time dependent covariates.</p></li>
 <li><p>Random- or mixed-effects regression models with clustered data.</p></li>
 <li><p>GEE regression models with clustered data.</p></li>
@@ -223,10 +226,12 @@ units in your model.  Here are some common exceptions.</p><ol>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
+    <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
   <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
+  <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
+  <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code></p></div>
     
 

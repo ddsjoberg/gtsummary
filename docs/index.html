@@ -103,7 +103,7 @@
 <h2 class="hasAnchor">
 <a href="#gtsummary" class="anchor"></a>gtsummary</h2>
 <p>The {gtsummary} package creates presentation-ready tables summarizing data sets, regression models, and more. The code to create the tables is concise and highly customizable. The resulting tables are gorgeous! Data frames can be summarized with any function, e.g. mean(), median(), even user-written functions. Regression models are summarized and include the reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The package uses <a href="https://broom.tidyverse.org/">{broom}</a> to perform initial tidying of the regression models, which means there is broad support for many types of regression models.</p>
-<p>{gtsummary} uses the <a href="https://gt.rstudio.com/">{gt}</a> package enabling each table to be tailored to your preferences. If you label your data (which I recommend!), the labels will be used in the table output. With {gtsummary} and <a href="http://larmarange.github.io/labelled/">{labelled}</a> data, you get a beautifully formatted, ready-to-share table in a single line of code! Check out the examples below, and review the vignettes for a detailed exploration of the output options.</p>
+<p>{gtsummary} uses the <a href="https://gt.rstudio.com/">{gt}</a> package enabling each table to be tailored to your preferences. If you label your data (which I recommend!), the labels will be used in the table output. With {gtsummary} and <a href="http://larmarange.github.io/labelled/">{labelled}</a> data, you get beautifully formatted, ready-to-share tables in a single line of code! Check out the examples below, and review the vignettes for a detailed exploration of the output options.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -128,7 +128,7 @@
 <a class="sourceLine" id="cb3-5" title="5">    <span class="dt">data =</span> trial[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"trt"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"response"</span>)],</a>
 <a class="sourceLine" id="cb3-6" title="6">    <span class="dt">by =</span> <span class="st">"trt"</span></a>
 <a class="sourceLine" id="cb3-7" title="7">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="st">  </span><span class="kw"><a href="reference/add_comparison.html">add_comparison</a></span>() </a></code></pre></div>
+<a class="sourceLine" id="cb3-8" title="8"><span class="st">  </span><span class="kw"><a href="reference/add_p.html">add_p</a></span>() </a></code></pre></div>
 <p><img src="reference/figures/README-tbl_summary.png" width="60%"></p>
 </div>
 <div id="regression-models" class="section level3">
@@ -140,7 +140,15 @@
 <a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(mod1,</a>
 <a class="sourceLine" id="cb4-5" title="5">                 <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-tbl_regression.png" width="44%"></p>
-<p>Please note that the {gtsummary} project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, and <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a></p>
+</div>
+<div id="other-tables" class="section level3">
+<h3 class="hasAnchor">
+<a href="#other-tables" class="anchor"></a>Other Tables</h3>
+<p>Side-by-side regression model results from <code><a href="reference/tbl_merge.html">tbl_merge()</a></code></p>
+<p><img src="reference/figures/tbl_merge_ex.png" width="60%"></p>
+<p>Survival Estimates from <code><a href="reference/tbl_survival.html">tbl_survival()</a></code></p>
+<p><img src="reference/figures/tbl_strata_ex1.png" width="30%"></p>
+<p>Please note that the {gtsummary} project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, and <a href="https://github.com/sammo3182">@sammo3182</a></p>
 </div>
 </div>
   </div>
@@ -149,6 +157,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=gtsummary">https://​cloud.r-project.org/​package=gtsummary</a>
+</li>
 <li>Report a bug at <br><a href="https://github.com/ddsjoberg/gtsummary/issues">https://​github.com/​ddsjoberg/​gtsummary/​issues</a>
 </li>
 </ul>

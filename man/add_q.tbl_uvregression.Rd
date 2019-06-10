@@ -11,8 +11,8 @@ multiple comparisons}
 \arguments{
 \item{x}{\code{tbl_uvregression} object}
 
-\item{method}{character argument.  Methods from
-\link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = 'fdr'}.}
+\item{method}{character argument indicating method to be used for p-value adjustment.
+Methods from \link[stats:p.adjust]{stats::p.adjust} are accepted. Default is \code{method = 'fdr'}.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
@@ -40,14 +40,16 @@ tbl_uvr_q_ex <-
     method = lm,
     y = age
   ) \%>\%
-  add_global() \%>\%
+  add_global_p() \%>\%
   add_q()
 }
 \seealso{
-Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
+Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{sort_p.tbl_uvregression}},
+  \code{\link{tab_style_bold_p.tbl_uvregression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
 \author{

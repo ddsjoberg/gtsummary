@@ -176,7 +176,8 @@ coefficient estimates. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>list of labels to write in the output. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code></p></td>
+      <td><p>list of variable labels to override default labels in the table
+output, e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code>.</p></td>
     </tr>
     <tr>
       <th>hide_n</th>
@@ -184,9 +185,10 @@ coefficient estimates. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>show_yesno</th>
-      <td><p>By default yes/no categorical variables are printed on a single row,
-when the 'No' category is the reference group.  To print both levels in the output table, include
-the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
+      <td><p>By default yes/no categorical variables are printed on a
+single row, when the 'No' category is the reference group.  To print both
+levels in the output table, include the variable name in the show_yesno
+vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
@@ -195,8 +197,8 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></td
     </tr>
     <tr>
       <th>estimate_fun</th>
-      <td><p>function to round and format beta coefficient estimates.  Default
-is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are printed, and
+      <td><p>function to round and format beta coefficient estimates.
+Default is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are not transformed, and
 <a href='style_ratio.html'>style_ratio</a> when the coefficients have been exponentiated.</p></td>
     </tr>
     <tr>
@@ -233,11 +235,13 @@ units in your model.  Here are some common exceptions.</p><ol>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
+    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
   <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
   <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
+  <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
+  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code></p></div>
     
 

@@ -18,7 +18,7 @@ test_that("input check", {
     "'type' values must be 'continuous', 'categorical', or 'dichotomous'.*"
   )
   expect_error(
-    tbl_summary(trial, value = list(stage = "t555555")),
-    "'t555555' not a level of the variable 'stage'"
+    tbl_summary(trial, value = list(response = "this is the wrong class")),
+    "Column*"
   )
 })

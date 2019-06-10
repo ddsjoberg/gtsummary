@@ -5,7 +5,7 @@ context("test-inline_text")
 
 test_inline1 <- trial %>% tbl_summary()
 test_inline2 <- trial %>% tbl_summary(by = "trt")
-test_inline2b <- trial %>% tbl_summary(by = "trt") %>% add_comparison()
+test_inline2b <- trial %>% tbl_summary(by = "trt") %>% add_p()
 
 test_that("inline_text.tbl_summary: no by", {
   expect_error(
