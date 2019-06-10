@@ -66,7 +66,7 @@ stats::p.adjust." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -146,8 +146,8 @@ multiple comparisons</h1>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>character argument.  Methods from
-<a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a> are accepted.  Default is <code>method = 'fdr'</code>.</p></td>
+      <td><p>character argument indicating method to be used for p-value adjustment.
+Methods from <a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a> are accepted. Default is <code>method = 'fdr'</code>.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
@@ -171,10 +171,12 @@ and return a string that is the rounded/formatted p-value (e.g.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code>,
+    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
   <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
+  <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
+  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
     
 
@@ -186,7 +188,7 @@ and return a string that is the rounded/formatted p-value (e.g.
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>lm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>age</span>
   ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global.html'>add_global</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_q.html'>add_q</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

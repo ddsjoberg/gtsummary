@@ -1,21 +1,21 @@
 context("test-tab_style_bold_p")
 
 #### new comment
-test_that("no errors/warnings with standard use in tbl_summary() and add_comparison()", {
+test_that("no errors/warnings with standard use in tbl_summary() and add_p()", {
   tbl_summary_comp <- tbl_summary(mtcars, by = "am") %>%
-    add_comparison()
+    add_p()
 
   expect_error(tab_style_bold_p(tbl_summary_comp), NA)
   expect_warning(tab_style_bold_p(tbl_summary_comp), NA)
 })
 
 
-test_that("expect error with use in tbl_summary() but NO add_comparison()", {
+test_that("expect error with use in tbl_summary() but NO add_p()", {
   table1_without_comp <-
     tbl_summary(mtcars, by = "am")
 
   expect_error(tab_style_bold_p(table1_without_comp),
-    "Before p-values are bolded, run add_comparison() to calculate the p-values",
+    "Before p-values are bolded, run add_p() to calculate the p-values",
     fixed = TRUE
   )
 })
@@ -25,7 +25,7 @@ test_that("expect error with use in tbl_summary() but NO add_comparison()", {
 test_that("no errors/warnings with q=TRUE and add_q() used in tbl_summary", {
   table1_comp_with_q <-
     tbl_summary(mtcars, by = "am") %>%
-    add_comparison() %>%
+    add_p() %>%
     add_q()
 
   expect_error(tab_style_bold_p(table1_comp_with_q, q = TRUE), NA)
@@ -36,7 +36,7 @@ test_that("no errors/warnings with q=TRUE and add_q() used in tbl_summary", {
 test_that("expect error with q=TRUE and add_q() NOT USED in tbl_summary", {
   table1_comp_without_q <-
     tbl_summary(mtcars, by = "am") %>%
-    add_comparison()
+    add_p()
 
   expect_error(tab_style_bold_p(table1_comp_without_q, q = TRUE),
     "Before q-values are bolded, run add_q() to calculate the q-values",
@@ -66,13 +66,13 @@ test_that("no errors/warnings with standard use in tbl_uvregression()", {
 })
 
 
-test_that("no errors/warnings with use in tbl_uvregression() with add_global()", {
+test_that("no errors/warnings with use in tbl_uvregression() with add_global_p()", {
   fmt_uni_reg_global_p <- trial %>%
     tbl_uvregression(
       method = lm,
       y = age
     ) %>%
-    add_global()
+    add_global_p()
 
   expect_error(tab_style_bold_p(fmt_uni_reg_global_p, p = 0.3), NA)
   expect_warning(tab_style_bold_p(fmt_uni_reg_global_p, p = 0.3), NA)

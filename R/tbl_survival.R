@@ -4,7 +4,6 @@
 #' @param ... further arguments passed to other methods
 #' @seealso [tbl_survival.survfit]
 #' @export
-#' @keywords internal
 tbl_survival <- function(x, ...) {
   UseMethod("tbl_survival")
 }
@@ -14,8 +13,10 @@ tbl_survival <- function(x, ...) {
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'
-#' @param x a survfit object with a single stratifying variable
-#' @param times numeric vector of survival times
+#' @param x a survfit object with a no stratification
+#' (e.g. `survfit(Surv(ttdeath, death) ~ 1, trial)`), or a single stratifying
+#' variable (e.g. `survfit(Surv(ttdeath, death) ~ trt, trial)`)
+#' @param times numeric vector of times for which to return survival probabilities.
 #' @param probs numeric vector of probabilities with values in (0,1)
 #' specifying the survival quantiles to return
 #' @param label string defining the label shown for the time or prob column.
@@ -26,15 +27,15 @@ tbl_survival <- function(x, ...) {
 #' It is a string defining the label shown.  The input uses
 #' [glue::glue] notation to convert the string into a label.
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
-#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and `'{strata}'`. See
-#' below for details.
+#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and
+#' `'{strata}'`. See below for details.
 #' @param header_label string to be displayed as column header.
 #' Default is \code{md('**Time**')} when `time` is specified, and
 #' \code{md('**Quantile**')} when `probs` is specified.
 #' @param header_estimate string to be displayed as column header of the Kaplan-Meier
 #' estimate.  Default is \code{md('**Probability**')} when `time` is specified, and
 #' \code{md('**Time**')} when `probs` is specified.
-#' @param failure calculate failure probabilities rather than survival.
+#' @param failure calculate failure probabilities rather than survival probabilities.
 #' Default is `FALSE`.  Does NOT apply to survival quantile requests
 #' @param missing character string indicating what to replace missing confidence
 #' limits with in output.  Default is `missing = "-"`
@@ -71,6 +72,7 @@ tbl_survival <- function(x, ...) {
 #' depending on the stratum.  Other quantities available to print are:
 #' \itemize{
 #'   \item `{level}` level of the stratification variable
+#'   \item `{level_label}` label of level for the stratification variable
 #'   \item `{n}` number of observations, or number within stratum
 #'   \item `{n.event.tot}` total number of events (total across stratum, if applicable)
 #'   \item `{n.event.strata}` total number of events within stratum, if applicable
@@ -163,7 +165,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       mutate(
         variable = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(pluck(1)),
         level = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(pluck(2)),
-        groupname = glue(level_label)
+        level_label = glue(level_label)
       )
   }
   # if the results are NOT stratified
@@ -184,13 +186,15 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     table_long %>%
     mutate(
       label = glue(label),
-      ci = ifelse(
-        is.na(.data$conf.low) & is.na(.data$conf.high),
-        NA_character_,
-        glue(
-          "{coalesce(estimate_fun(conf.low), missing)}, ",
-          "{coalesce(estimate_fun(conf.high), missing)}"
-        )
+      ci = case_when(
+        !is.na(.data$conf.low) & !is.na(.data$conf.high) ~
+          glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}"),
+        is.na(.data$conf.low) & !is.na(.data$conf.high) ~
+          glue("{missing}, {estimate_fun(conf.high)}"),
+        !is.na(.data$conf.low) & is.na(.data$conf.high) ~
+          glue("{estimate_fun(conf.low)}, {missing}"),
+        is.na(.data$conf.low) & is.na(.data$conf.high) ~
+          NA_character_
       )
     ) %>%
     select(c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
@@ -209,6 +213,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   result[["table_long"]] <- table_long
   result[["survfit"]] <- x
   result[["estimate_fun"]] <- estimate_fun
+  result[["call_list"]] <- list(tbl_survival = match.call())
   result[["gt_calls"]] <- eval(tbl_survival_gt_calls)
 
   class(result) <- "tbl_survival"
@@ -318,7 +323,7 @@ surv_quantile <- function(x, probs) {
 
 tbl_survival_gt_calls <- quote(list(
   # first call to gt
-  gt = glue("gt(data = x$table_body)"),
+  gt = glue("gt(data = x$table_body, groupname_col = 'level_label')"),
   # centering columns except time
   cols_align = glue(
     "cols_align(align = 'center') %>%",

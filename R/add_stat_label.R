@@ -1,7 +1,7 @@
 #' Add statistic labels column
 #'
-#' Rather than simply printing the summary statistics, with the use of `add_stat_label()`,
-#' a column labelling the summary statistics is added
+#' Adds a column with labels describing the summary statistics presented for
+#' each variable in the table.
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @family tbl_summary tools
@@ -42,6 +42,9 @@ add_stat_label <- function(x) {
         TRUE ~ .data$stat_label
       )
     )
+
+  # keeping track of all functions previously run
+  x$call_list <- c(x$call_list, list(add_stat_label = match.call()))
 
   # column headers
   x[["gt_calls"]][["cols_label:stat_label"]] <-

@@ -11,9 +11,11 @@
   estimate_fun = NULL, ...)
 }
 \arguments{
-\item{x}{a survfit object with a single stratifying variable}
+\item{x}{a survfit object with a no stratification
+(e.g. \code{survfit(Surv(ttdeath, death) ~ 1, trial)}), or a single stratifying
+variable (e.g. \code{survfit(Surv(ttdeath, death) ~ trt, trial)})}
 
-\item{times}{numeric vector of survival times}
+\item{times}{numeric vector of times for which to return survival probabilities.}
 
 \item{probs}{numeric vector of probabilities with values in (0,1)
 specifying the survival quantiles to return}
@@ -27,8 +29,8 @@ would resolve to "6 Months" or "12 Months" depending on specified \code{times}.}
 It is a string defining the label shown.  The input uses
 \link[glue:glue]{glue::glue} notation to convert the string into a label.
 The default is \code{"{level}, N = {n}"}.  Other information available to
-call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, \code{'{n.event.strata}'}, and \code{'{strata}'}. See
-below for details.}
+call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, \code{'{n.event.strata}'}, and
+\code{'{strata}'}. See below for details.}
 
 \item{header_label}{string to be displayed as column header.
 Default is \code{md('**Time**')} when \code{time} is specified, and
@@ -38,7 +40,7 @@ Default is \code{md('**Time**')} when \code{time} is specified, and
 estimate.  Default is \code{md('**Probability**')} when \code{time} is specified, and
 \code{md('**Time**')} when \code{probs} is specified.}
 
-\item{failure}{calculate failure probabilities rather than survival.
+\item{failure}{calculate failure probabilities rather than survival probabilities.
 Default is \code{FALSE}.  Does NOT apply to survival quantile requests}
 
 \item{missing}{character string indicating what to replace missing confidence
@@ -64,6 +66,7 @@ In this example, \code{{level}} would evaluate to either 'Drug' or 'Placebo'
 depending on the stratum.  Other quantities available to print are:
 \itemize{
 \item \code{{level}} level of the stratification variable
+\item \code{{level_label}} label of level for the stratification variable
 \item \code{{n}} number of observations, or number within stratum
 \item \code{{n.event.tot}} total number of events (total across stratum, if applicable)
 \item \code{{n.event.strata}} total number of events within stratum, if applicable

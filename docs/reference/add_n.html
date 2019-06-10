@@ -32,8 +32,8 @@
 
 <meta property="og:title" content="Add column with N — add_n" />
 
-<meta property="og:description" content="For each variable in the table, the add_n function adds a column with the
-number of non-missing (or missing) observations" />
+<meta property="og:description" content="For each variable in a tbl_summary table, the add_n function adds a column with the
+total number of non-missing (or missing) observations" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -64,7 +64,7 @@ number of non-missing (or missing) observations" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -125,8 +125,8 @@ number of non-missing (or missing) observations" />
 
     <div class="ref-description">
     
-    <p>For each variable in the table, the <code>add_n</code> function adds a column with the
-number of non-missing (or missing) observations</p>
+    <p>For each variable in a <code>tbl_summary</code> table, the <code>add_n</code> function adds a column with the
+total number of non-missing (or missing) observations</p>
     
     </div>
 
@@ -146,7 +146,8 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
     </tr>
     <tr>
       <th>last</th>
-      <td><p>logical indicator to include overall  column last. Default is <code>FALSE</code></p></td>
+      <td><p>logical indicator to include N column last in table.
+Default is <code>FALSE</code>, which will display N column first.</p></td>
     </tr>
     </table>
     
@@ -157,13 +158,14 @@ or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_comparison.html'>add_comparison</a></code>,
-  <code><a href='add_overall.html'>add_overall</a></code>,
-  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
+    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_overall.html'>add_overall</a></code>,
+  <code><a href='add_p.html'>add_p</a></code>, <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
+  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
     
 

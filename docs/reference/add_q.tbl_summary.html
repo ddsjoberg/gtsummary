@@ -66,7 +66,7 @@ stats::p.adjust." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -146,7 +146,8 @@ multiple comparisons</h1>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>character argument.  Methods from
+      <td><p>character argument indicating method to be used for p-value
+adjustment. Methods from
 <a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a> are accepted.  Default is <code>method = 'fdr'</code>.</p></td>
     </tr>
     <tr>
@@ -171,12 +172,14 @@ and return a string that is the rounded/formatted p-value (e.g.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_comparison.html'>add_comparison</a></code>,
-  <code><a href='add_n.html'>add_n</a></code>, <code><a href='add_overall.html'>add_overall</a></code>,
+    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
+  <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
+  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
     
 
@@ -185,7 +188,7 @@ and return a string that is the rounded/formatted p-value (e.g.
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_comparison.html'>add_comparison</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_q.html'>add_q</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

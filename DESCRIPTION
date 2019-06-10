@@ -1,7 +1,7 @@
 Package: gtsummary
 Title: Presentation-Ready Data Summary and Analytic Result
     Tables
-Version: 1.0.0.9000
+Version: 1.1.0
 Authors@R: 
     c(person(given = "Daniel D.",
              family = "Sjoberg",
@@ -16,16 +16,18 @@ Authors@R:
       person(given = "Karissa",
              family = "Whiting",
              role = "aut"))
-Description: The {gtsummary} package creates presentation-ready
-    tables summarizing data sets, regression models, and more. The code to
-    create the tables is concise and highly customizable. Data frames can
-    be summarized with any function, e.g. mean(), median(), even
-    user-written functions.  Regression models are summarized and include
-    the reference rows for categorical variables. Common regression
-    models, such as logistic regression and Cox proportional hazards
-    regression, are automatically identified and the tables are pre-filled
-    with appropriate column headers.
+Description: Creates presentation-ready tables summarizing data
+    sets, regression models, and more. The code to create the tables is
+    concise and highly customizable. Data frames can be summarized with
+    any function, e.g. mean(), median(), even user-written functions.
+    Regression models are summarized and include the reference rows for
+    categorical variables. Common regression models, such as logistic
+    regression and Cox proportional hazards regression, are automatically
+    identified and the tables are pre-filled with appropriate column
+    headers.
 License: MIT + file LICENSE
+URL: http://www.danieldsjoberg.com/gtsummary/
+BugReports: https://github.com/ddsjoberg/gtsummary/issues
 Depends: 
     gt (>= 0.1.0),
     R (>= 3.4)
@@ -48,6 +50,7 @@ Suggests:
     covr (>= 3.2.1),
     geepack (>= 1.2.1),
     ggplot2 (>= 3.1.0),
+    Hmisc (>= 4.2.0),
     lme4 (>= 1.1.18.1),
     rmarkdown (>= 1.11),
     spelling (>= 2.0),
@@ -61,5 +64,3 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
-URL: http://www.danieldsjoberg.com/gtsummary/
-BugReports: https://github.com/ddsjoberg/gtsummary/issues

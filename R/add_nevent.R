@@ -1,6 +1,6 @@
 #' Add number of events to a regression table
 #'
-#' This function adds a column of the number of events to tables created with
+#' Adds a column of the number of events to tables created with
 #' [tbl_regression] or [tbl_uvregression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
 #' [stats::glm], [lme4::glmer], and
@@ -13,7 +13,6 @@
 #' @author Daniel D. Sjoberg
 #' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],
 #' [tbl_regression], [tbl_uvregression]
-#' @keywords internal
 
 add_nevent <- function(x, ...) UseMethod("add_nevent")
 
@@ -69,7 +68,7 @@ add_nevent.tbl_regression <- function(x, ...) {
       if (x$model_obj$family$family != "binomial") {
         stop("Model type not supported")
       }
-      formula <- x$model_obj$formula
+      formula <- x$model_obj$formula %>% stats::as.formula()
     }
     else if (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
       if (x$model_obj@resp$family$family != "binomial") {
@@ -104,6 +103,8 @@ add_nevent.tbl_regression <- function(x, ...) {
     return(x)
   }
 
+  x$call_list <- c(x$call_list, list(add_nevent = match.call()))
+
   x$gt_calls[["cols_hide_nevent"]] <-
     glue("cols_hide(columns = vars(nevent))")
   x
@@ -111,7 +112,7 @@ add_nevent.tbl_regression <- function(x, ...) {
 
 #' Add number of events to a regression table
 #'
-#' This function adds a column of the number of events to tables created with
+#' Adds a column of the number of events to tables created with
 #' [tbl_regression] or [tbl_uvregression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
 #' [stats::glm], [lme4::glmer], and

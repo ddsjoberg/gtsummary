@@ -26,10 +26,12 @@ call of \code{tbl_summary}, \code{assign_summary_type} assigns a type based on c
 number of unique levels.
 }
 \examples{
-# assign_summary_type(data = mtcars,
-#                     variable =  names(mtcars),
-#                     class = apply(mtcars, 2, class),
-#                     summary_type = NULL, value = NULL)
+gtsummary:::assign_summary_type(
+  data = mtcars,
+  variable =  names(mtcars),
+  class = apply(mtcars, 2, class),
+  summary_type = NULL, value = NULL
+)
 }
 \author{
 Daniel D. Sjoberg

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds the global p-value for a categorical variables — add_global • gtsummary</title>
+<title>Sort variables in table by ascending p-values — sort_p • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,14 +30,9 @@
 
 
 
-<meta property="og:title" content="Adds the global p-value for a categorical variables — add_global" />
+<meta property="og:title" content="Sort variables in table by ascending p-values — sort_p" />
 
-<meta property="og:description" content="This function uses car::Anova with argument
-type = &quot;III&quot; to calculate global p-values for categorical variables.
-If a needed class of model is not supported by
-car::Anova, please create an
-issue to request support.
-Output from tbl_regression and tbl_uvregression objects supported." />
+<meta property="og:description" content="Sort tables created by gtsummary by p-values" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -68,7 +63,7 @@ Output from tbl_regression and tbl_uvregression objects supported." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -122,41 +117,37 @@ Output from tbl_regression and tbl_uvregression objects supported." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds the global p-value for a categorical variables</h1>
+    <h1>Sort variables in table by ascending p-values</h1>
     
-    <div class="hidden name"><code>add_global.Rd</code></div>
+    <div class="hidden name"><code>sort_p.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function uses <a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a> with argument
-<code>type = "III"</code> to calculate global p-values for categorical variables.
-If a needed class of model is not supported by
-<a href='https://www.rdocumentation.org/packages/car/topics/Anova'>car::Anova</a>, please create an
-<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.
-Output from <code>tbl_regression</code> and <code>tbl_uvregression</code> objects supported.</p>
+    <p>Sort tables created by gtsummary by p-values</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_global</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>sort_p</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_regression</code> or <code>tbl_uvregression</code> object</p></td>
+      <td><p>an object created using gtsummary functions</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to or from other methods.</p></td>
+      <td><p>further arguments passed to other methods.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='add_global.tbl_regression.html'>add_global.tbl_regression</a></code>,
-<code><a href='add_global.tbl_uvregression.html'>add_global.tbl_uvregression</a></code></p></div>
+    <div class='dont-index'><p><code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
+<code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
+<code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code></p></div>
     
 
   </div>
@@ -169,7 +160,7 @@ Output from <code>tbl_regression</code> and <code>tbl_uvregression</code> object
           </ul>
 
     <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
+    <p>Karissa Whiting</p>
   </div>
 </div>
 

@@ -70,27 +70,25 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 
   # if class is logical, then value will be TRUE
   if (class == "logical") {
-    if (setequal(var_vector, c(TRUE, FALSE))) {
-      return(TRUE)
-    }
+    return(TRUE)
   }
 
   # if column provided is a factor with "Yes" and "No" (or "yes" and "no") then
   # the value is "Yes" (or "yes")
   if (class %in% c("factor", "character")) {
-    if (setequal(var_vector, c("Yes", "No"))) {
+    if (setdiff(var_vector, c("Yes", "No")) %>% length() == 0) {
       return("Yes")
     }
-    if (setequal(var_vector, c("yes", "no"))) {
+    if (setdiff(var_vector, c("yes", "no")) %>% length() == 0) {
       return("yes")
     }
-    if (setequal(var_vector, c("YES", "NO"))) {
+    if (setdiff(var_vector, c("YES", "NO")) %>% length() == 0) {
       return("YES")
     }
   }
 
   # if column provided is all zeros and ones (or exclusively either one), the the value is one
-  if (setequal(var_vector, c(0, 1))) {
+  if (setdiff(var_vector, c(0, 1)) %>% length() == 0) {
     return(1)
   }
 
@@ -167,10 +165,13 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @examples
-#' # assign_summary_type(data = mtcars,
-#' #                     variable =  names(mtcars),
-#' #                     class = apply(mtcars, 2, class),
-#' #                     summary_type = NULL, value = NULL)
+#' gtsummary:::assign_summary_type(
+#'   data = mtcars,
+#'   variable =  names(mtcars),
+#'   class = apply(mtcars, 2, class),
+#'   summary_type = NULL, value = NULL
+#' )
+
 assign_summary_type <- function(data, variable, class, summary_type, value) {
   map2_chr(
     variable, class,
@@ -351,7 +352,8 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @examples
-#' # assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
+#' gtsummary:::assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
+
 assign_var_label <- function(data, variable, var_label) {
   map_chr(
     variable,
@@ -833,13 +835,33 @@ summarize_categorical <- function(data, variable, by, var_label,
     ifelse(row_percent == TRUE, "variable", "by_col")
 
   # nesting data and changing by variable
-  tab <-
+  tab0 <-
     data %>%
     stats::na.omit() %>%
     group_by(!!sym("by_col")) %>%
     count(!!sym("variable")) %>%
-    ungroup() %>%
+    ungroup()
+
+  # if there is a dichotomous value supplied, merging it in to ensure it gets counted (when unobserved)
+  if (!is.null(dichotomous_value)) {
+    # making factors character here
+    if(is.factor(tab0$variable)) {
+      tab0 <-
+        tab0 %>%
+        mutate(variable = as.character(variable)) %>%
+        full_join(tibble(variable = as.character(dichotomous_value)), by = "variable")
+    }
+    else {
+    tab0 <-
+      tab0 %>%
+      full_join(tibble(variable = dichotomous_value), by = "variable")
+    }
+  }
+
+  tab <-
+    tab0 %>%
     complete(!!sym("by_col"), !!sym("variable"), fill = list(n = 0)) %>%
+    stats::na.omit() %>% # this is needed when the dichot value is unobserved in dataset
     group_by(!!sym("variable")) %>%
     mutate(var_level_freq = sum(.data$n)) %>%
     group_by(!!sym(percent_group_by_var)) %>%
@@ -1243,18 +1265,23 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
       ))
     }
 
+    # checking class of values passed values
     value %>%
       imap(
-        ~ data[[.y]] %>%
-          stats::na.omit() %>%
-          intersect(.x) %>%
-          {
-            ifelse(
-              length(.) > 0,
-              NA,
-              stop(glue("'{.x}' not a level of the variable '{.y}'"))
-            )
+        function(.x, .y) {
+          if ("character" %in% class(data[[.y]])) {
+            if (is.numeric(.x))
+              stop(glue(
+                "Column '{.y}' is class character, and value passed is numeric"
+              ))
           }
+          else if (is.numeric(data[[.y]])) {
+            if ("character" %in% class(.x))
+            stop(glue(
+              "Column '{.y}' is numeric, and value passed is character"
+            ))
+          }
+        }
       )
   }
 

@@ -29,37 +29,40 @@ reference:
       Functions for creating and modifying data summary tables
     contents:
       - tbl_summary
-      - add_comparison
+      - add_p
       - add_overall
       - add_n
       - add_stat_label
       - add_q.tbl_summary
       - cols_label_summary
-      - tab_style_bold_p.tbl_summary
-      - inline_text.tbl_summary
       - tbl_survival.survfit
-      - inline_text.tbl_survival
 
   - title: "Regression Model Functions"
     desc: >
       Functions for formatting regression model results
     contents:
       - tbl_regression
-      - add_global.tbl_regression
+      - add_global_p.tbl_regression
       - add_nevent.tbl_regression
-      - tab_style_bold_p.tbl_regression
-      - inline_text.tbl_regression
       - tbl_uvregression
-      - add_global.tbl_uvregression
+      - add_global_p.tbl_uvregression
       - add_nevent.tbl_uvregression
       - add_q.tbl_uvregression
-      - tab_style_bold_p.tbl_uvregression
-      - inline_text.tbl_uvregression
       - tbl_merge
+      - tbl_stack
 
-  - title: "General Formatting Functions"
+  - title: "Inline Reporting"
     desc: >
-      Functions for formatting
+      Functions for reporting table results inline in Rmarkdown
+    contents:
+      - inline_text.tbl_summary
+      - inline_text.tbl_survival
+      - inline_text.tbl_regression
+      - inline_text.tbl_uvregression
+
+  - title: "General Formatting/Styling Functions"
+    desc: >
+      Functions for modifying table ascetics
     contents:
       - as_gt
       - style_percent
@@ -70,6 +73,12 @@ reference:
       - tab_style_bold_levels
       - tab_style_italicize_labels
       - tab_style_italicize_levels
+      - tab_style_bold_p.tbl_summary
+      - sort_p.tbl_summary
+      - tab_style_bold_p.tbl_regression
+      - sort_p.tbl_regression
+      - tab_style_bold_p.tbl_uvregression
+      - sort_p.tbl_uvregression
 
   - title: "Misc. Functions"
     desc: >
@@ -85,3 +94,15 @@ reference:
       Simulated data to illustrate package use
     contents:
       - trial
+
+  - title: "S3 Generics"
+    desc: >
+      S3 generic functions
+    contents:
+      - add_global_p
+      - add_nevent
+      - add_q
+      - inline_text
+      - tab_style_bold_p
+      - sort_p
+      - tbl_survival

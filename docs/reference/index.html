@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -141,9 +141,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="add_comparison.html">add_comparison()</a></code> </p>
+          <p><code><a href="add_p.html">add_p()</a></code> </p>
         </td>
-        <td><p>Adds p-values to the output comparing values across groups</p></td>
+        <td><p>Adds p-values to summary tables</p></td>
       </tr><tr>
         
         <td>
@@ -178,27 +178,9 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_summary.html">tab_style_bold_p(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold significant p-values</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="inline_text.tbl_summary.html">inline_text(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Report statistics from summary tables inline</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="tbl_survival.survfit.html">tbl_survival(<i>&lt;survfit&gt;</i>)</a></code> </p>
         </td>
         <td><p>Creates table of survival probabilities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="inline_text.tbl_survival.html">inline_text(<i>&lt;tbl_survival&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Report statistics from survival summary tables inline</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -216,7 +198,7 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="add_global.tbl_regression.html">add_global(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
+          <p><code><a href="add_global_p.tbl_regression.html">add_global_p(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Adds the global p-value for categorical variables</p></td>
       </tr><tr>
@@ -228,25 +210,13 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_regression.html">tab_style_bold_p(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Bold significant p-values</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="inline_text.tbl_regression.html">inline_text(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Report statistics from regression summary tables inline</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="tbl_uvregression.html">tbl_uvregression()</a></code> </p>
         </td>
         <td><p>Display univariate regression model results in table</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="add_global.tbl_uvregression.html">add_global(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
+          <p><code><a href="add_global_p.tbl_uvregression.html">add_global_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Adds the global p-value for categorical variables</p></td>
       </tr><tr>
@@ -265,27 +235,53 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_uvregression.html">tab_style_bold_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
+          <p><code><a href="tbl_merge.html">tbl_merge()</a></code> </p>
         </td>
-        <td><p>Bold significant p-values</p></td>
+        <td><p>Merge two or more gtsummary regression objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tbl_stack.html">tbl_stack()</a></code> </p>
+        </td>
+        <td><p>Stacks two or more gtsummary regression objects</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-inline-reporting" class="hasAnchor"><a href="#section-inline-reporting" class="anchor"></a>Inline Reporting</h2>
+          <p class="section-desc"><p>Functions for reporting table results inline in Rmarkdown</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="inline_text.tbl_summary.html">inline_text(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Report statistics from summary tables inline</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="inline_text.tbl_survival.html">inline_text(<i>&lt;tbl_survival&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Report statistics from survival summary tables inline</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="inline_text.tbl_regression.html">inline_text(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Report statistics from regression summary tables inline</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="inline_text.tbl_uvregression.html">inline_text(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Report statistics from regression summary tables inline</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tbl_merge.html">tbl_merge()</a></code> </p>
-        </td>
-        <td><p>Merge two or more gtsummary regression objects</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-general-formatting-functions" class="hasAnchor"><a href="#section-general-formatting-functions" class="anchor"></a>General Formatting Functions</h2>
-          <p class="section-desc"><p>Functions for formatting</p></p>
+          <h2 id="section-general-formatting-styling-functions" class="hasAnchor"><a href="#section-general-formatting-styling-functions" class="anchor"></a>General Formatting/Styling Functions</h2>
+          <p class="section-desc"><p>Functions for modifying table ascetics</p></p>
         </th>
       </tr>
       <tr>
@@ -324,6 +320,42 @@ multiple comparisons</p></td>
           <p><code><a href="bold_italicize_labels_levels.html">tab_style_bold_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_bold_levels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_italicize_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_italicize_levels()</a></code> </p>
         </td>
         <td><p>Bold or Italicize labels or levels in gtsummary tables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tab_style_bold_p.tbl_summary.html">tab_style_bold_p(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Bold significant p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sort_p.tbl_summary.html">sort_p(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Sort variables in table by ascending p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tab_style_bold_p.tbl_regression.html">tab_style_bold_p(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Bold significant p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sort_p.tbl_regression.html">sort_p(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Sort variables in table by ascending p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tab_style_bold_p.tbl_uvregression.html">tab_style_bold_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Bold significant p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sort_p.tbl_uvregression.html">sort_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Sort variables in table by ascending p-values</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -341,7 +373,7 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="print_gtsummary.html">print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_merge&gt;</i>)</a></code> </p>
+          <p><code><a href="print_gtsummary.html">print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_stack&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_stack&gt;</i>)</a></code> </p>
         </td>
         <td><p>print and knit_print methods for gtsummary objects</p></td>
       </tr><tr>
@@ -371,6 +403,57 @@ multiple comparisons</p></td>
         </td>
         <td><p>Results from a simulated trial of Placebo vs Drug</p></td>
       </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-s-generics" class="hasAnchor"><a href="#section-s-generics" class="anchor"></a>S3 Generics</h2>
+          <p class="section-desc"><p>S3 generic functions</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="add_global_p.html">add_global_p()</a></code> </p>
+        </td>
+        <td><p>Adds the global p-value for a categorical variables</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_nevent.html">add_nevent()</a></code> </p>
+        </td>
+        <td><p>Add number of events to a regression table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_q.html">add_q()</a></code> </p>
+        </td>
+        <td><p>Add a column of q values to account for
+multiple comparisons</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="inline_text.html">inline_text()</a></code> </p>
+        </td>
+        <td><p>Report statistics from gtsummary tables inline</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tab_style_bold_p.html">tab_style_bold_p()</a></code> </p>
+        </td>
+        <td><p>Bold significant p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sort_p.html">sort_p()</a></code> </p>
+        </td>
+        <td><p>Sort variables in table by ascending p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="tbl_survival.html">tbl_survival()</a></code> </p>
+        </td>
+        <td><p>Creates table of univariate statistics for time-to-event endpoints</p></td>
+      </tr>
     </tbody>
     </table>
   </div>
@@ -380,9 +463,11 @@ multiple comparisons</p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#section-data-summary-functions">Data Summary Functions</a></li>
       <li><a href="#section-regression-model-functions">Regression Model Functions</a></li>
-      <li><a href="#section-general-formatting-functions">General Formatting Functions</a></li>
+      <li><a href="#section-inline-reporting">Inline Reporting</a></li>
+      <li><a href="#section-general-formatting-styling-functions">General Formatting/Styling Functions</a></li>
       <li><a href="#section-misc-functions">Misc. Functions</a></li>
       <li><a href="#section-example-datasets">Example Datasets</a></li>
+      <li><a href="#section-s-generics">S3 Generics</a></li>
     </ul>
   </div>
 </div>

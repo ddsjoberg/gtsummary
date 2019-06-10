@@ -30,19 +30,21 @@ random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 \item{exponentiate}{logical indicating whether or not to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{label}{list of labels to write in the output. \code{list(age60 = "Age > 60")}}
+\item{label}{list of variable labels to override default labels in the table
+output, e.g. \code{list(age60 = "Age > 60")}.}
 
 \item{hide_n}{hide N column. Default is \code{FALSE}}
 
-\item{show_yesno}{By default yes/no categorical variables are printed on a single row,
-when the 'No' category is the reference group.  To print both levels in the output table, include
-the variable name in the show_yesno vector, e.g. `show_yesno = c("var1", "var2")``}
+\item{show_yesno}{By default yes/no categorical variables are printed on a
+single row, when the 'No' category is the reference group.  To print both
+levels in the output table, include the variable name in the show_yesno
+vector, e.g. `show_yesno = c("var1", "var2")``}
 
 \item{conf.level}{must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.  Default
-is \link{style_sigfig} when the coefficients are printed, and
+\item{estimate_fun}{function to round and format beta coefficient estimates.
+Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{function to round and format p-values.
@@ -107,11 +109,13 @@ tbl_uv_ex2 <-
   )
 }
 \seealso{
-Other tbl_uvregression tools: \code{\link{add_global.tbl_uvregression}},
+Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{sort_p.tbl_uvregression}},
+  \code{\link{tab_style_bold_p.tbl_uvregression}},
   \code{\link{tbl_merge}}
 }
 \author{
