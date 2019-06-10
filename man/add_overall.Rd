@@ -9,10 +9,11 @@ add_overall(x, last = FALSE)
 \arguments{
 \item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{last}{logical indicator to include overall  column last. Default is \code{FALSE}}
+\item{last}{logical indicator to display overall column last in table.
+Default is \code{FALSE}, which will display overall column first.}
 }
 \description{
-This function adds a column with overall summary statistics to tables
+Adds a column with overall summary statistics to tables
 created by \code{tbl_summary}.
 }
 \section{Example Output}{
@@ -28,12 +29,14 @@ tbl_overall_ex <-
   add_overall()
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_comparison}},
-  \code{\link{add_n}}, \code{\link{add_q.tbl_summary}},
+Other tbl_summary tools: \code{\link{add_n}},
+  \code{\link{add_p}}, \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{sort_p.tbl_summary}},
+  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

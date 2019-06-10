@@ -1,10 +1,11 @@
 #' Add column with overall summary statistics
 #'
-#' This function adds a column with overall summary statistics to tables
+#' Adds a column with overall summary statistics to tables
 #' created by `tbl_summary`.
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
-#' @param last logical indicator to include overall  column last. Default is `FALSE`
+#' @param last logical indicator to display overall column last in table.
+#' Default is `FALSE`, which will display overall column first.
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export

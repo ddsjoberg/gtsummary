@@ -2,39 +2,45 @@
 #'
 #' This function uses [car::Anova] with argument
 #' `type = "III"` to calculate global p-values for categorical variables.
+#' Output from `tbl_regression` and `tbl_uvregression` objects supported.
+#'
+#' @section Note:
 #' If a needed class of model is not supported by
 #' [car::Anova], please create an
 #' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
-#' Output from `tbl_regression` and `tbl_uvregression` objects supported.
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object
 #' @param ... further arguments passed to or from other methods.
-#' @seealso \code{\link{add_global.tbl_regression}},
-#' \code{\link{add_global.tbl_uvregression}}
+#' @seealso \code{\link{add_global_p.tbl_regression}},
+#' \code{\link{add_global_p.tbl_uvregression}}
 #' @author Daniel D. Sjoberg
 #' @export
-add_global <- function(x, ...) {
+add_global_p <- function(x, ...) {
   # must have car package installed to use this function
   if (!requireNamespace("car", quietly = TRUE)) {
-    stop("The 'car' package is required for 'add_global'. Install with install.packages('car')", call. = FALSE)
+    stop("The 'car' package is required for 'add_global_p'. Install with install.packages('car')", call. = FALSE)
   }
-  UseMethod("add_global")
+  UseMethod("add_global_p")
 }
 
 #' Adds the global p-value for categorical variables
 #'
 #' This function uses [car::Anova] with argument
 #' `type = "III"` to calculate global p-values for categorical variables.
-#' If a needed class of model is not supported by [car::Anova],
-#' please create an
+#'
+#' @section Note:
+#' If a needed class of model is not supported by
+#' [car::Anova], please create an
 #' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
+#'
 #'
 #' @param x object with class `tbl_regression` from the
 #' [tbl_regression] function
 #' @param terms Character vector of terms for which to add global p-values.  Default
 #' is `NULL` which will add global p-values for all categorical variables
-#' @param keep logical argument whether to keep the individual p-values for the
-#' levels of the categorical variable. Default is `FALSE`
+#' @param keep logical argument indicating whether to also retain the individual
+#' p-values in the table output for each level of the categorical variable.
+#' Default is `FALSE`
 #' @param ... arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
@@ -42,13 +48,13 @@ add_global <- function(x, ...) {
 #' tbl_lm_global_ex1 <-
 #'   lm(marker ~ age + grade, trial) %>%
 #'   tbl_regression() %>%
-#'   add_global()
+#'   add_global_p()
 #' @export
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
 #'
 
-add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
+add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
   # fetching categorical variables from model
   model_terms <- x %>%
@@ -107,7 +113,7 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
       )
   }
 
-  x$call_list <- c(x$call_list, list(add_global = match.call()))
+  x$call_list <- c(x$call_list, list(add_global_p = match.call()))
 
   return(x)
 }
@@ -116,8 +122,10 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'
 #' This function uses [car::Anova] with argument
 #' `type = "III"` to calculate global p-values for categorical variables.
-#' If a needed class of model is not supported by [car::Anova],
-#' please create an
+#
+#' @section Note:
+#' If a needed class of model is not supported by
+#' [car::Anova], please create an
 #' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
 #' @param x object with class `tbl_uvregression` from the
@@ -135,12 +143,12 @@ add_global.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'     method.args = list(family = binomial),
 #'     exponentiate = TRUE
 #'   ) %>%
-#'   add_global()
+#'   add_global_p()
 #' @export
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'
-add_global.tbl_uvregression <- function(x, ...) {
+add_global_p.tbl_uvregression <- function(x, ...) {
 
   # converting the passed ... to a list, OR if nothing passed to NULL
   if (length(list(...)) == 0) {
@@ -182,7 +190,7 @@ add_global.tbl_uvregression <- function(x, ...) {
       by = c("row_type", "variable")
     )
 
-  x$call_list <- c(x$call_list, list(add_global = match.call()))
+  x$call_list <- c(x$call_list, list(add_global_p = match.call()))
 
   return(x)
 }

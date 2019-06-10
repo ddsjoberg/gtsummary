@@ -12,6 +12,8 @@
 \alias{knit_print.tbl_survival}
 \alias{print.tbl_merge}
 \alias{knit_print.tbl_merge}
+\alias{print.tbl_stack}
+\alias{knit_print.tbl_stack}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
 \method{print}{tbl_summary}(x, ...)
@@ -33,6 +35,10 @@
 \method{print}{tbl_merge}(x, ...)
 
 \method{knit_print}{tbl_merge}(x, ...)
+
+\method{print}{tbl_stack}(x, ...)
+
+\method{knit_print}{tbl_stack}(x, ...)
 }
 \arguments{
 \item{x}{an object created using gtsummary functions}

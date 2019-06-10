@@ -13,8 +13,10 @@ tbl_survival <- function(x, ...) {
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'
-#' @param x a survfit object with a single stratifying variable
-#' @param times numeric vector of survival times
+#' @param x a survfit object with a no stratification
+#' (e.g. `survfit(Surv(ttdeath, death) ~ 1, trial)`), or a single stratifying
+#' variable (e.g. `survfit(Surv(ttdeath, death) ~ trt, trial)`)
+#' @param times numeric vector of times for which to return survival probabilities.
 #' @param probs numeric vector of probabilities with values in (0,1)
 #' specifying the survival quantiles to return
 #' @param label string defining the label shown for the time or prob column.
@@ -25,15 +27,15 @@ tbl_survival <- function(x, ...) {
 #' It is a string defining the label shown.  The input uses
 #' [glue::glue] notation to convert the string into a label.
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
-#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and `'{strata}'`. See
-#' below for details.
+#' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and
+#' `'{strata}'`. See below for details.
 #' @param header_label string to be displayed as column header.
 #' Default is \code{md('**Time**')} when `time` is specified, and
 #' \code{md('**Quantile**')} when `probs` is specified.
 #' @param header_estimate string to be displayed as column header of the Kaplan-Meier
 #' estimate.  Default is \code{md('**Probability**')} when `time` is specified, and
 #' \code{md('**Time**')} when `probs` is specified.
-#' @param failure calculate failure probabilities rather than survival.
+#' @param failure calculate failure probabilities rather than survival probabilities.
 #' Default is `FALSE`.  Does NOT apply to survival quantile requests
 #' @param missing character string indicating what to replace missing confidence
 #' limits with in output.  Default is `missing = "-"`

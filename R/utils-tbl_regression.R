@@ -86,7 +86,7 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   for (v in (names(model_frame) %>% rev())) {
 
     # checking character and factor levels
-    if (class(model_frame[[v]]) %in% c("character", "factor")) {
+    if (any(class(model_frame[[v]]) %in% c("character", "factor"))) {
       term_match <-
         term_match %>%
         mutate(
@@ -124,7 +124,7 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
     map_lgl(
       names(model_frame),
       function(x) {
-        if (class(model_frame[[x]]) %in% c("factor", "character")) {
+        if (any(class(model_frame[[x]]) %in% c("factor", "character"))) {
           unique(model_frame[[x]]) %>%
             as.character() %>%
             stringr::fixed() %>%
@@ -167,6 +167,18 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   # removing variables user requested to show both levels
   yesno_variables <- yesno_variables %>% setdiff(show_yesno)
 
+  # more  var labels -----------------------------------------------------------
+  # model.frame() strips variable labels from cox models.  this attempts
+  # to grab the labels in another way
+  labels_parent_frame = tryCatch({
+    stats::model.frame.default(fit) %>%
+      purrr::imap(~attr(.x, "label"))
+  }, warning = function(w) {
+    NULL
+  }, error = function(e) {
+    NULL
+  })
+
   # tidy_long ------------------------------------------------------------------
   # this is one line per term, AND interaction terms have one row per variable in the interaction
   tidy_long <-
@@ -200,7 +212,8 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
       # variable labels
       variable_lbl = map_chr(
         .data$variable,
-        ~ label[[.x]] %||% attr(model_frame[[.x]], "label") %||% .x
+        ~ label[[.x]] %||% attr(model_frame[[.x]], "label") %||%
+          labels_parent_frame[[.x]] %||% .x
       ),
       variable_lbl = ifelse(is.na(.data$variable_lbl) & .data$term == "(Intercept)",
         "(Intercept)",
@@ -210,7 +223,7 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
       variable_type = map_chr(
         .data$variable,
         ~ case_when(
-          class(model_frame[[.x]]) %in% c("character", "factor") ~ "categorical",
+          any(class(model_frame[[.x]]) %in% c("character", "factor")) ~ "categorical" ,
           TRUE ~ "continuous"
         )
       ),

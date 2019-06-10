@@ -42,7 +42,7 @@
 #'     method.args = list(family = binomial),
 #'     exponentiate = TRUE
 #'   )
-#' 
+#'
 #' # rounding pvalues to 2 decimal places
 #' library(survival)
 #' tbl_uv_ex2 <-
@@ -160,7 +160,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
       N = if_else(.data$row_type == "label", .data$N, NA_integer_)
     )
 
-  # creating a meta_data table (this will be used in subsequent functions, eg add_global)
+  # creating a meta_data table (this will be used in subsequent functions, eg add_global_p)
   meta_data <-
     table_body %>%
     filter(!!parse_expr('row_type == "label"')) %>%

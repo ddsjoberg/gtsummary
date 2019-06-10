@@ -11,7 +11,8 @@ multiple comparisons}
 \arguments{
 \item{x}{\code{tbl_summary} object}
 
-\item{method}{character argument.  Methods from
+\item{method}{character argument indicating method to be used for p-value
+adjustment. Methods from
 \link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = 'fdr'}.}
 
 \item{pvalue_fun}{function to round and format p-values.
@@ -37,16 +38,18 @@ tbl_sum_q_ex <-
   trial \%>\%
   dplyr::select(trt, age, grade, response) \%>\%
   tbl_summary(by = "trt") \%>\%
-  add_comparison() \%>\%
+  add_p() \%>\%
   add_q()
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_comparison}},
-  \code{\link{add_n}}, \code{\link{add_overall}},
+Other tbl_summary tools: \code{\link{add_n}},
+  \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{cols_label_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{sort_p.tbl_summary}},
+  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

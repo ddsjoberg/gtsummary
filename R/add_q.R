@@ -16,7 +16,8 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' [stats::p.adjust].
 #'
 #' @param x `tbl_summary` object
-#' @param method character argument.  Methods from
+#' @param method character argument indicating method to be used for p-value
+#' adjustment. Methods from
 #' [stats::p.adjust] are accepted.  Default is `method = 'fdr'`.
 #' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
@@ -28,7 +29,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #'   trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
 #'   tbl_summary(by = "trt") %>%
-#'   add_comparison() %>%
+#'   add_p() %>%
 #'   add_q()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_q_ex.png}{options: width=50\%}}
@@ -36,9 +37,9 @@ add_q <- function(x, ...) UseMethod("add_q")
 add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...) {
 
   # This adjusts p-values for multiple testing. Default method is fdr.
-  if (!("add_comparison" %in% names(x$call_list))) {
+  if (!("add_p" %in% names(x$call_list))) {
     stop(glue(
-      "There are no p-values yet. You need to use the function add_comparison(), ",
+      "There are no p-values yet. You need to use the function add_p(), ",
       "after tbl_summary() and before add_q()"
     ))
   }
@@ -107,8 +108,8 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' [stats::p.adjust].
 #'
 #' @param x `tbl_uvregression` object
-#' @param method character argument.  Methods from
-#' [stats::p.adjust] are accepted.  Default is `method = 'fdr'`.
+#' @param method character argument indicating method to be used for p-value adjustment.
+#' Methods from [stats::p.adjust] are accepted. Default is `method = 'fdr'`.
 #' @inheritParams tbl_regression
 #' @param ...	further arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
@@ -122,7 +123,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #'     method = lm,
 #'     y = age
 #'   ) %>%
-#'   add_global() %>%
+#'   add_global_p() %>%
 #'   add_q()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uvr_q_ex.png}{options: width=50\%}}
@@ -134,7 +135,7 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   # Default method is fdr.
   if (!("p.value_global" %in% colnames(x$meta_data))) {
     stop(glue(
-      "You need global p-values first. Use the function add_global() after ",
+      "You need global p-values first. Use the function add_global_p() after ",
       "tbl_uvregression() and before add_q()"
     ))
   }
