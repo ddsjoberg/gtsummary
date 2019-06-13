@@ -11,7 +11,6 @@ knitr::knit_print
 dplyr::vars
 
 #' @importFrom tidyselect starts_with
-#' @aliases select_helpers
 #' @export
 tidyselect::starts_with
 
