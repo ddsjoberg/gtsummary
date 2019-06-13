@@ -5,8 +5,9 @@
 #'
 #' @param .data data with variables to select from
 #' @param x list of tidyselect formulas
+#' @param .meta_data meta data from tbl_summary. Default is NULL
 
-tidyselect_to_list <- function(.data, x) {
+tidyselect_to_list <- function(.data, x, .meta_data = NULL) {
   # if x is a named list, print depcrecation note and return the input as is
   if (!is.null(names(x))) {
     signal_soft_deprecated(glue(
@@ -22,6 +23,9 @@ tidyselect_to_list <- function(.data, x) {
 
   # registering names of columns in data
   tidyselect::scoped_vars(vars = names(.data))
+  scoped_data(.data)
+  if (!is.null(.meta_data))   scoped_meta_data(.meta_data)
+
 
   # number of formulas to work through
   n <- length(x)

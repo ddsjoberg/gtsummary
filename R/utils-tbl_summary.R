@@ -1227,6 +1227,12 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     # the value si used to dertermine if variable is dichotomous, so functions
     # all_continuous, all_categorical, adn all_dichotomous cannot be used ADD CHECK
 
+    # checking input type: must be a list of formulas, or one formula
+
+
+    # all sepcifed types are continuous, categorical, or dichotomous
+
+
     # # checking that all inputs are named
     # if ((names(type) %>% purrr::discard(. == "") %>% length()) != length(type)) {
     #   stop(glue(

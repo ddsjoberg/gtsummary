@@ -1,7 +1,10 @@
 #' Select helper functions
 #'
 #' Set of functions to supplement the {tidyselect} set of functions for selecting
-#' columns of data frames.
+#' columns of data frames. `all_continuous()`, `all_categorical()`, and
+#' `all_dichotomous()` may only be used with `tbl_summary()`, where each variable
+#' has been classified into one of these three groups. All other helpers
+#' are available throughout the package.
 #' @name select_helpers
 #' @rdname select_helpers
 #' @param dichotomous logical indicating whether to include dichotomous variables.
@@ -80,12 +83,12 @@ meta_data_env <- rlang::new_environment()
 
 # registering data information
 scoped_data <- function(.data) {
-  data_env$numeric <- purrr::map_lgl(.data, is.numeric)
-  data_env$character <- purrr::map_lgl(.data, is.character)
-  data_env$integer <- purrr::map_lgl(.data, is.integer)
-  data_env$double <- purrr::map_lgl(.data, is.double)
-  data_env$logical <- purrr::map_lgl(.data, is.logical)
-  data_env$factor <- purrr::map_lgl(.data, is.factor)
+  data_env$numeric <- map_lgl(.data, is.numeric)
+  data_env$character <- map_lgl(.data, is.character)
+  data_env$integer <- map_lgl(.data, is.integer)
+  data_env$double <- map_lgl(.data, is.double)
+  data_env$logical <- map_lgl(.data, is.logical)
+  data_env$factor <- map_lgl(.data, is.factor)
 }
 
 # registering meta data information
