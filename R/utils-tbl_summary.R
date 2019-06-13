@@ -11,7 +11,7 @@
 #' @author Daniel D. Sjoberg
 
 assign_class <- function(data, variable) {
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "double")
+  classes_expected <- c("character", "factor", "numeric", "logical", "integer")
 
   # extracing the base R class
   classes_return <-
@@ -1224,138 +1224,141 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
 
   # type -----------------------------------------------------------------------
   if (!is.null(type)) {
-    # checking that all inputs are named
-    if ((names(type) %>% purrr::discard(. == "") %>% length()) != length(type)) {
-      stop(glue(
-        "Each element in 'type' must be named. ",
-        "For example, 'type = list(age = \"continuous\", female = \"dichotomous\")'"
-      ))
-    }
+    # the value si used to dertermine if variable is dichotomous, so functions
+    # all_continuous, all_categorical, adn all_dichotomous cannot be used ADD CHECK
 
-    # checking that all names in list are variable names from data.
-    summary_type_not_in_data <- setdiff(names(type), names(data))
-    if (length(summary_type_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'type' are not found in 'data' and ",
-        "were ignored: {paste0(summary_type_not_in_data, collapse = ', ')}"
-      ))
-    }
-
-    # checking all inputs are continuous, categorial, or dichotomous
-    summary_type_value_not_valid <-
-      setdiff(
-        type %>% unlist() %>% unique(),
-        c("categorical", "dichotomous", "continuous")
-      )
-    if (length(summary_type_value_not_valid) > 0) {
-      stop(glue(
-        "'type' values must be 'continuous', 'categorical', or 'dichotomous'. ",
-        "'{paste0(summary_type_value_not_valid, collapse = ', ')}' not valid."
-      ))
-    }
+    # # checking that all inputs are named
+    # if ((names(type) %>% purrr::discard(. == "") %>% length()) != length(type)) {
+    #   stop(glue(
+    #     "Each element in 'type' must be named. ",
+    #     "For example, 'type = list(age = \"continuous\", female = \"dichotomous\")'"
+    #   ))
+    # }
+    #
+    # # checking that all names in list are variable names from data.
+    # summary_type_not_in_data <- setdiff(names(type), names(data))
+    # if (length(summary_type_not_in_data) > 0) {
+    #   message(glue(
+    #     "The following names from 'type' are not found in 'data' and ",
+    #     "were ignored: {paste0(summary_type_not_in_data, collapse = ', ')}"
+    #   ))
+    # }
+    #
+    # # checking all inputs are continuous, categorial, or dichotomous
+    # summary_type_value_not_valid <-
+    #   setdiff(
+    #     type %>% unlist() %>% unique(),
+    #     c("categorical", "dichotomous", "continuous")
+    #   )
+    # if (length(summary_type_value_not_valid) > 0) {
+    #   stop(glue(
+    #     "'type' values must be 'continuous', 'categorical', or 'dichotomous'. ",
+    #     "'{paste0(summary_type_value_not_valid, collapse = ', ')}' not valid."
+    #   ))
+    # }
   }
 
   # value ----------------------------------------------------------------------
   if (!is.null(value)) {
-    # checking that all inputs are named
-    if ((names(value) %>% purrr::discard(. == "") %>% length()) != length(value)) {
-      stop(glue(
-        "Each element in 'value' must be named. ",
-        "For example, 'value = list(varname = \"level to show\")'"
-      ))
-    }
-
-    # checking class of values passed values
-    value %>%
-      imap(
-        function(.x, .y) {
-          if ("character" %in% class(data[[.y]])) {
-            if (is.numeric(.x))
-              stop(glue(
-                "Column '{.y}' is class character, and value passed is numeric"
-              ))
-          }
-          else if (is.numeric(data[[.y]])) {
-            if ("character" %in% class(.x))
-            stop(glue(
-              "Column '{.y}' is numeric, and value passed is character"
-            ))
-          }
-        }
-      )
+    # # checking that all inputs are named
+    # if ((names(value) %>% purrr::discard(. == "") %>% length()) != length(value)) {
+    #   stop(glue(
+    #     "Each element in 'value' must be named. ",
+    #     "For example, 'value = list(varname = \"level to show\")'"
+    #   ))
+    # }
+    #
+    # # checking class of values passed values
+    # value %>%
+    #   imap(
+    #     function(.x, .y) {
+    #       if ("character" %in% class(data[[.y]])) {
+    #         if (is.numeric(.x))
+    #           stop(glue(
+    #             "Column '{.y}' is class character, and value passed is numeric"
+    #           ))
+    #       }
+    #       else if (is.numeric(data[[.y]])) {
+    #         if ("character" %in% class(.x))
+    #         stop(glue(
+    #           "Column '{.y}' is numeric, and value passed is character"
+    #         ))
+    #       }
+    #     }
+    #   )
   }
 
   # label ----------------------------------------------------------------------
   if (!is.null(label)) {
-    # checking that all inputs are named
-    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
-      stop(glue(
-        "Each element in 'label' must be named. ",
-        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
-      ))
-    }
-
-    # checking that all names in list are variable names from data.
-    var_label_not_in_data <- setdiff(names(label), names(data))
-    if (length(var_label_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'label' are not found in 'data' and ",
-        "were ignored: {paste0(var_label_not_in_data, collapse = ', ')}"
-      ))
-    }
+    # # checking that all inputs are named
+    # if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+    #   stop(glue(
+    #     "Each element in 'label' must be named. ",
+    #     "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+    #   ))
+    # }
+    #
+    # # checking that all names in list are variable names from data.
+    # var_label_not_in_data <- setdiff(names(label), names(data))
+    # if (length(var_label_not_in_data) > 0) {
+    #   message(glue(
+    #     "The following names from 'label' are not found in 'data' and ",
+    #     "were ignored: {paste0(var_label_not_in_data, collapse = ', ')}"
+    #   ))
+    # }
   }
 
   # statistic ------------------------------------------------------------------
   if (!is.null(statistic)) {
-    # checking that all inputs are named
-    if ((names(statistic) %>% purrr::discard(. == "") %>% length()) != length(statistic)) {
-      stop(glue(
-        "Each element in 'statistic' must be named. ",
-        "For example, 'statistic = list(..continuous.. = \"{median} ({p25}, {p75})\", ..categorical.. = \"{n} ({p}%)\")'"
-      ))
-    }
-
-    # checking that all names in list are continuous or categorical
-    stat_display_names_not_valid <-
-      names(statistic) %>%
-      setdiff(c(names(data) %>% setdiff(c(by, group)), "..continuous..", "..categorical.."))
-    if (length(stat_display_names_not_valid) > 0) {
-      message(glue(
-        "Expecting list names '..continuous..',  '..categorical..', or a column name from 'data'. ",
-        "The following names from 'statistic' are not valid and ",
-        "were ignored: {paste0(stat_display_names_not_valid, collapse = ', ')}"
-      ))
-    }
+    # # checking that all inputs are named
+    # if ((names(statistic) %>% purrr::discard(. == "") %>% length()) != length(statistic)) {
+    #   stop(glue(
+    #     "Each element in 'statistic' must be named. ",
+    #     "For example, 'statistic = list(..continuous.. = \"{median} ({p25}, {p75})\", ..categorical.. = \"{n} ({p}%)\")'"
+    #   ))
+    # }
+    #
+    # # checking that all names in list are continuous or categorical
+    # stat_display_names_not_valid <-
+    #   names(statistic) %>%
+    #   setdiff(c(names(data) %>% setdiff(c(by, group)), "..continuous..", "..categorical.."))
+    # if (length(stat_display_names_not_valid) > 0) {
+    #   message(glue(
+    #     "Expecting list names '..continuous..',  '..categorical..', or a column name from 'data'. ",
+    #     "The following names from 'statistic' are not valid and ",
+    #     "were ignored: {paste0(stat_display_names_not_valid, collapse = ', ')}"
+    #   ))
+    # }
   }
 
   # digits ---------------------------------------------------------------------
   if (!is.null(digits)) {
-    # checking that all inputs are named
-    if ((names(digits) %>% purrr::discard(. == "") %>% length()) != length(digits)) {
-      stop(glue(
-        "Each element in 'digits' must be named. ",
-        "For example, 'digits = list(age = 1)'"
-      ))
-    }
-
-    # checking that all names in list are variable names from data.
-    digits_not_in_data <- setdiff(names(digits), c(names(data), "..continuous.."))
-    if (length(digits_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'digits' are not found in 'data' and ",
-        "were ignored: {paste0(digits_not_in_data, collapse = ', ')}"
-      ))
-    }
-
-    # specified digits must be a non-negative integer
-    digits_value_not_valid <-
-      setdiff(digits %>% unlist() %>% unique(), 0:100)
-    if (length(digits_value_not_valid) > 0) {
-      stop(glue(
-        "'digits' values must be non-negative integers. ",
-        "'{paste0(digits_value_not_valid, collapse = ', ')}' not valid input."
-      ))
-    }
+    # # checking that all inputs are named
+    # if ((names(digits) %>% purrr::discard(. == "") %>% length()) != length(digits)) {
+    #   stop(glue(
+    #     "Each element in 'digits' must be named. ",
+    #     "For example, 'digits = list(age = 1)'"
+    #   ))
+    # }
+    #
+    # # checking that all names in list are variable names from data.
+    # digits_not_in_data <- setdiff(names(digits), c(names(data), "..continuous.."))
+    # if (length(digits_not_in_data) > 0) {
+    #   message(glue(
+    #     "The following names from 'digits' are not found in 'data' and ",
+    #     "were ignored: {paste0(digits_not_in_data, collapse = ', ')}"
+    #   ))
+    # }
+    #
+    # # specified digits must be a non-negative integer
+    # digits_value_not_valid <-
+    #   setdiff(digits %>% unlist() %>% unique(), 0:100)
+    # if (length(digits_value_not_valid) > 0) {
+    #   stop(glue(
+    #     "'digits' values must be non-negative integers. ",
+    #     "'{paste0(digits_value_not_valid, collapse = ', ')}' not valid input."
+    #   ))
+    # }
   }
 
   # missing_text ---------------------------------------------------------------

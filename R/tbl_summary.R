@@ -10,30 +10,28 @@
 #' Summary statistics will be calculated separately for each level of the `by`
 #' variable. If `NULL`, summary statistics
 #' are calculated using all observations.
-#' @param label named list of variable labels,
-#' e.g. `list(age = "Age, yrs", ptstage = "Path T Stage")`.  If `NULL`, the
+#' @param label list of formulas specifying variables labels,
+#' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`.  If `NULL`, the
 #' function will take the label attribute (`attr(data$age, "label")`).  If
 #' attribute label is `NULL`, the variable name will be used.
-#' @param type named list that specifies data types of variables. Accepted values
+#' @param type list of formulas specifying variable types. Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
-#' e.g. `type = list(age = "continuous", female = "dichotomous")`.
+#' e.g. `type = list(contains(age) ~ "continuous", "female" ~ "dichotomous")`.
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type.  See below for details.
-#' @param value named list that specifies the value to display for dichotomous
+#' @param value list of formulas specifying the value to display for dichotomous
 #' variables.  See below for details.
-#' @param statistic named list of the types of summary statistics to display
-#' for each variable or variable class.  The default is
-#' `list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")`.
+#' @param statistic list of formulas specifying types of summary statistics to display
+#' for each variable.  The default is
+#' `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
 #' See below for details.
-#' @param digits named list of integers indicating the number of decimal
-#' places to round continuous summary statistics. Names of the list can be any
-#' continuous variable in 'data', or `"..continuous"` to apply rounding to all
-#' continuous variables.  If not specified, `tbl_summary` guesses an
+#' @param digits list of formulas specifying the number of decimal
+#' places to round continuous summary statistics. If not specified, `tbl_summary` guesses an
 #' appropriate number of decimals to round statistics. When multiple statistics
-#' are displayed for a single variable (e.g. `{mean} ({sd})`), supply a vector
+#' are displayed for a single variable, supply a vector
 #' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
-#' to 1 decimal place, and the SD to 2 use `digits = list(age = c(1, 2))`.
+#' to 1 decimal place, and the SD to 2 use `digits = list("age" ~ c(1, 2))`.
 #' @param group character vector of an ID or grouping variable for which summary
 #' statistics should not be printed. The column may be used in [add_p] to
 #' calculate p-values with correlated data. Default is `NULL`
@@ -52,10 +50,11 @@
 #'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
-#' input is a named list where the names correspond to the column names from the
-#' input 'data' and the elements specify the statistic to report. For example,
-#' `statistic = list(age = "{mean} ({sd})")` would report the mean and
-#' standard deviation for age. A statistic name that appears between curly brackets
+#' input is a list of formulas that specify the statistics to report. For example,
+#' `statistic = list("age" ~ "{mean} ({sd})")` would report the mean and
+#' standard deviation for age; `statistic = list(all_continuous() ~ "{mean} ({sd})")`
+#' would report the mean and standard deviation for all continuous variables.
+#'  A statistic name that appears between curly brackets
 #' will be replaced with the numeric statistic (see [glue::glue]).
 #'
 #' For categorical variables the following statistics are available to display.
@@ -76,11 +75,6 @@
 #'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }
 #'
-#' If all continuous or categorical variables will be summarized with the same
-#' statistics, the `..continuous..` and `..categorical..` shortcuts can be used
-#' in place of the individual column names.  Dichotomous variables are summarized
-#' as categorical variables.
-#'
 #' @section type argument:
 #' tbl_summary displays summary statistics for three types of data:
 #' continuous, categorical, and dichotomous. If the type is not specified,
@@ -90,7 +84,7 @@
 #' Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
 #' and the TRUE, 1, and yes rows
 #' will be displayed.  Otherwise, the value to display must be specified in
-#' the `value` argument, e.g. `value = list(varname = "level to show")`
+#' the `value` argument, e.g. `value = list("varname" ~ "level to show")`
 #' @export
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
@@ -105,7 +99,7 @@
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(
 #'     by = "trt",
-#'     label = list(age = "Patient Age")
+#'     label = list("age" ~ "Patient Age")
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -130,7 +124,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   tbl_summary_inputs <- as.list(environment())
 
   # removing variables with unsupported variable types from data
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "double")
+  classes_expected <- c("character", "factor", "numeric", "logical", "integer")
   var_to_remove <-
     map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
     discard(. == TRUE) %>%
@@ -152,22 +146,32 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
     digits, missing, missing_text, group, sort
   )
 
+  # converting tidyselect formula lists to named lists
+  type <- tidyselect_to_list(data, type)
+  value <- tidyselect_to_list(data, value)
+
   # creating a table with meta data about each variable
-  meta_data <- tibble(variable = names(data))
+  meta_data <- tibble(
+    variable = names(data),
+    # assigning class, if entire var is NA, then assigning class NA
+    class = assign_class(data, .data$variable),
+    summary_type = assign_summary_type(
+      data, .data$variable, .data$class, type, value
+    )
+  )
   # excluding by variable
   if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
   # excluding id variable
   if (!is.null(group)) meta_data <- meta_data %>% filter(!!parse_expr("!variable %in% group"))
 
+  label <- tidyselect_to_list(data, label)
+  statistic <- tidyselect_to_list(data, statistic)
+  digits <- tidyselect_to_list(data, digits)
+
   # assigning variable characteristics
   meta_data <-
     meta_data %>%
     mutate(
-      # assigning class, if entire var is NA, then assigning class NA
-      class = assign_class(data, .data$variable),
-      summary_type = assign_summary_type(
-        data, .data$variable, .data$class, type, value
-      ),
       dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
