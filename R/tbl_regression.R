@@ -21,8 +21,8 @@
 #' @param x regression model object
 #' @param exponentiate logical indicating whether or not to exponentiate the
 #' coefficient estimates. Default is `FALSE`.
-#' @param label list of variable labels to override default labels in the table
-#' output, e.g. `list(age60 = "Age > 60")`.
+#' @param label list of formulas specifying variables labels,
+#' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`
 #' @param include names of variables to include in output.
 #' @param exclude names of variables to exclude from output.
 #' @param conf.level must be strictly greater than 0 and less than 1.
@@ -86,14 +86,17 @@ tbl_regression <- function(x, label = NULL,
   }
 
   # label ----------------------------------------------------------------------
+  # converting tidyselect formula lists to named lists
+  label <- tidyselect_to_list(data, label)
+
   if (!is.null(label)) {
-    # checking that all inputs are named
-    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
-      stop(glue(
-        "Each element in 'label' must be named. ",
-        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
-      ))
-    }
+    # # checking that all inputs are named
+    # if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+    #   stop(glue(
+    #     "Each element in 'label' must be named. ",
+    #     "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+    #   ))
+    # }
   }
 
   # will return call, and all object passed to in tbl_regression call

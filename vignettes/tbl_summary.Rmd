@@ -150,14 +150,14 @@ trial2 %>%
   # build base summary table
   tbl_summary(by = "trt",
               # change variable labels
-              label = list(marker = "Marker, ng/mL",
-                           stage = "Clinical T Stage"),
+              label = list("marker" ~ "Marker, ng/mL",
+                           "stage" ~ "Clinical T Stage"),
               # change statistics printed in table
-              statistic = list(..continuous.. = "{mean} ({sd})",
-                               ..categorical.. = "{n} / {N} ({p}%)"),
-              digits = list(marker = c(1, 2))) %>%
+              statistic = list(all_continuous() ~ "{mean} ({sd})",
+                               all_categorical() ~ "{n} / {N} ({p}%)"),
+              digits = list("marker" ~ c(1, 2))) %>%
   # add p-values, report t-test, round large pvalues to two decimal place
-  add_p(test = list(marker = "t.test"),
+  add_p(test = list(vars(marker) ~ "t.test"),
                  pvalue_fun = function(x) style_pvalue(x, digits = 2)) %>%
   # add statistic labels
   add_stat_label() %>%

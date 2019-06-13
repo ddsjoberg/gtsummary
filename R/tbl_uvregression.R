@@ -82,14 +82,17 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   }
 
   # label ----------------------------------------------------------------------
+  # converting tidyselect formula lists to named lists
+  label <- tidyselect_to_list(data, label)
+
   if (!is.null(label)) {
-    # checking that all inputs are named
-    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
-      stop(glue(
-        "Each element in 'label' must be named. ",
-        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
-      ))
-    }
+    # # checking that all inputs are named
+    # if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+    #   stop(glue(
+    #     "Each element in 'label' must be named. ",
+    #     "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+    #   ))
+    # }
   }
 
   # data -----------------------------------------------------------------------

@@ -164,6 +164,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   # excluding id variable
   if (!is.null(group)) meta_data <- meta_data %>% filter(!!parse_expr("!variable %in% group"))
 
+  # converting tidyselect formula lists to named lists
   label <- tidyselect_to_list(data, label)
   statistic <- tidyselect_to_list(data, statistic)
   digits <- tidyselect_to_list(data, digits)

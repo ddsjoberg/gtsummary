@@ -10,11 +10,8 @@ add_p(x, test = NULL, pvalue_fun = style_pvalue,
 \arguments{
 \item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{test}{named list of statistical tests to perform,
-e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
-\code{..continuous..} and \code{..categorical..} to specify a test for all variables
-of that type (\code{..categorical..} is applied to both categorical and
-dichotomous variables).
+\item{test}{list of formulas specifying statistical tests to perform,
+e.g. \code{list(vars(age) = "t.test", vars(ptstage) = "fisher.test")}.
 Options include "t.test" for a t-test,
 "wilcox.test" for a Wilcoxon rank-sum test,
 "kruskal.test" for a Kruskal-Wallis rank-sum test,

@@ -30,8 +30,8 @@ random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 \item{exponentiate}{logical indicating whether or not to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{label}{list of variable labels to override default labels in the table
-output, e.g. \code{list(age60 = "Age > 60")}.}
+\item{label}{list of formulas specifying variables labels,
+e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
 \item{hide_n}{hide N column. Default is \code{FALSE}}
 
