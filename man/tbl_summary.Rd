@@ -56,9 +56,10 @@ Allowed values are \code{"no"} (never display NA values),
 \item{missing_text}{String to display label for count of missing observations.
 Default is \code{"Unknown"}.}
 
-\item{sort}{named list indicating the type of sorting to perform. Default is NULL.
+\item{sort}{list of formulas specifying the type of sorting to perform. Default is NULL.
 Options are 'frequency' where results are sorted in
-descending order of frequency and 'alphanumeric'}
+descending order of frequency and 'alphanumeric',
+e.g. \code{sort = list(everything() ~ "frequency")}}
 
 \item{row_percent}{logical value indicating whether to calculate
 percentages within column or across rows.  Default is to calculate

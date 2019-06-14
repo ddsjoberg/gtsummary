@@ -41,9 +41,10 @@
 #' (display NA’s even for zero counts). Default is `"ifany"`.
 #' @param missing_text String to display label for count of missing observations.
 #' Default is `"Unknown"`.
-#' @param sort named list indicating the type of sorting to perform. Default is NULL.
+#' @param sort list of formulas specifying the type of sorting to perform. Default is NULL.
 #' Options are 'frequency' where results are sorted in
-#' descending order of frequency and 'alphanumeric'
+#' descending order of frequency and 'alphanumeric',
+#' e.g. `sort = list(everything() ~ "frequency")`
 #' @param row_percent logical value indicating whether to calculate
 #' percentages within column or across rows.  Default is to calculate
 #' percentages within columns: `row_percent = FALSE`
@@ -168,6 +169,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   label <- tidyselect_to_list(data, label, .meta_data = meta_data)
   statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data)
   digits <- tidyselect_to_list(data, digits, .meta_data = meta_data)
+  sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
 
   # assigning variable characteristics
   meta_data <-

@@ -86,18 +86,42 @@ tbl_regression <- function(x, label = NULL,
   }
 
   # label ----------------------------------------------------------------------
+  if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(label) %in% c("list", "formula")) {
+      stop(glue(
+        "'label' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the label specification: ",
+        "list(vars(stage) ~ \"T Stage\")"
+      ))
+    }
+    if ("list" %in% class(label)) {
+      if (some(label, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'label' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the label specification: ",
+          "list(vars(stage) ~ \"T Stage\")"
+        ))
+      }
+    }
+
+    # all sepcifed labels must be a string of length 1
+    if ("formula" %in% class(label)) label <- list(label)
+    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'label'  argument must be a string."
+      ))
+    }
+  }
+
   # converting tidyselect formula lists to named lists
   label <- tidyselect_to_list(stats::model.frame(x), label)
 
-  if (!is.null(label)) {
-    # # checking that all inputs are named
-    # if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
-    #   stop(glue(
-    #     "Each element in 'label' must be named. ",
-    #     "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
-    #   ))
-    # }
-  }
+
+
 
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function

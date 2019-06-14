@@ -7,7 +7,6 @@
 \alias{knit_print}
 \alias{vars}
 \alias{starts_with}
-\alias{select_helpers}
 \alias{ends_with}
 \alias{contains}
 \alias{matches}

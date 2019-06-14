@@ -42,8 +42,8 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL) {
     # checking input is a formula
     if (!rlang::is_formula(x[[i]])) stop("Input must be a formula")
 
-    lhs[[i]] <- rlang::f_lhs(x[[i]]) %>% eval(envir = rlang::current_env())
-    rhs[[i]] <- rlang::f_rhs(x[[i]])  %>% eval(envir = rlang::current_env())
+    lhs[[i]] <- rlang::f_lhs(x[[i]]) %>% eval()
+    rhs[[i]] <- rlang::f_rhs(x[[i]])  %>% eval()
   }
 
 
