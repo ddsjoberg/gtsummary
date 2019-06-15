@@ -83,6 +83,24 @@ test_that("tbl_regression creates errors with bad inputs", {
   )
   expect_error(
     tbl_uvregression(
+      data = lung,
+      method = coxph,
+      y = Surv(time, status),
+      label = list("Age")
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = lung,
+      method = coxph,
+      y = Surv(time, status),
+      label = list("age" ~ c("Age", "Two"))
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
       data = list(lung),
       method = coxph,
       y = Surv(time, status)

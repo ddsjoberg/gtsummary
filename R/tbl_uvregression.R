@@ -107,7 +107,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     if ("formula" %in% class(label)) label <- list(label)
     if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
-        "The RHS of the formula in the 'label'  argument must be a string."
+        "The RHS of the formula in the 'label' argument must be a string."
       ))
     }
   }
