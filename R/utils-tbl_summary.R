@@ -1329,7 +1329,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     if ("formula" %in% class(label)) label <- list(label)
     if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
-        "The RHS of the formula in the 'label'  argument must be a string."
+        "The RHS of the formula in the 'label' argument must be a string."
       ))
     }
   }
@@ -1361,7 +1361,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     if ("formula" %in% class(statistic)) statistic <- list(statistic)
     if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
-        "The RHS of the formula in the 'statistic'  argument must be a string."
+        "The RHS of the formula in the 'statistic' argument must be a string."
       ))
     }
   }
