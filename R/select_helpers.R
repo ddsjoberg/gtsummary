@@ -57,10 +57,11 @@ all_continuous <- function() {
 all_categorical <- function(dichotomous = TRUE) {
   # return variable names if dochotomous included
   if (dichotomous) {
-    meta_data_env$summary_type %>%
-      keep(meta_data_env$summary_type %in% c("categorical", "dichotomous")) %>%
-      names() %>%
-      return()
+    x <-
+      keep(meta_data_env$summary_type, ~ . %in% c("categorical", "dichotomous")) %>%
+      names()
+
+    return(x)
   }
 
   # return variable names if dochotomous NOT included
