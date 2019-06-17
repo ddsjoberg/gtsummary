@@ -4,7 +4,7 @@
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param test list of formulas specifying statistical tests to perform,
-#' e.g. \code{list(vars(age) = "t.test", vars(ptstage) = "fisher.test")}.
+#' e.g. \code{list(all_continuous() = "t.test", all_categorical() = "fisher.test")}.
 #' Options include "t.test" for a t-test,
 #' "wilcox.test" for a Wilcoxon rank-sum test,
 #' "kruskal.test" for a Kruskal-Wallis rank-sum test,
