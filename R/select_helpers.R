@@ -60,7 +60,6 @@ all_categorical <- function(dichotomous = TRUE) {
     x <-
       keep(meta_data_env$summary_type, ~ . %in% c("categorical", "dichotomous")) %>%
       names()
-
     return(x)
   }
 
