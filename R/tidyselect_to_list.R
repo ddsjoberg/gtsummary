@@ -10,7 +10,7 @@
 tidyselect_to_list <- function(.data, x, .meta_data = NULL) {
   # if x is a named list, print depcrecation note and return the input as is
   if (!is.null(names(x))) {
-    signal_soft_deprecated(glue(
+    warn_deprecated(glue(
       "Passing named lists is deprecated, e.g. 'list(marker = \"continuous\", age = \"continuous\")'. ",
       "Please review function help file and utilize the tidyselect functions as formulas, ",
       "e.g. 'list(vars(marker, age) ~ \"continuous\")'"
