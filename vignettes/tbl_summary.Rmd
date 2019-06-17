@@ -172,6 +172,44 @@ trial2 %>%
 
 Each of the modification functions have additional options outlined in their respective help files.
 
+## Select Helpers {#select_helpers}
+
+The {gtsummary} package includes a set of functions meant to help the user specify function arguments for groups of variables.  For example, if all continuous variables will be summarized in `tbl_summary()` as minimum and maximum, the `all_continuous()` function can be used: `statistic = all_continuous() ~ "{min} - {max}"`
+
+The set of select helper function includes the functions in the {tidyselect} package (used throughout the tidyverse), and functions specific to {gtsummary}. There are four types of select helpers.  
+
+1. Functions in the {tidyselect} package used throughout the tidyverse, including `vars()` from the {dplyr} package.  
+
+1. Functions to select groups of variables based on their attributes like class or type.  
+
+1. Functions to select groups of variables based on their display type in `tbl_summary()`  
+
+1. List variables in a vector, e.g. `"age"` or `c("age", "stage")`
+
+| {tidyselect}                                                                                                                 | attribute                                                                                            | summary type                                                 | character vector             |
+|------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|------------------------------|
+| `starts_with()`, `ends_with()`, `contains()`, `matches()`, `one_of()`, `everything()`, `num_range()`, `last_col()`, `vars()` | `all_numeric()`, `all_integer()`, `all_logical()`, `all_factor()`, `all_character()`, `all_double()` | `all_continuous()`, `all_categorical()`, `all_dichotomous()` | `"age"` or `c("age", "stage")` |
+
+The select helpers are primarily used in `tbl_summary()` and its related functions, e.g. `add_p()`.  We'll review a few examples illustrating their use.
+
+### Examples
+
+In the example below, we report the mean and standard deviation for continuous variables, and percent for all categorical.  We'll report t-tests rather than Wilcoxon rank-sum test for continuous variables, and report Fisher's exact test for response.
+
+Note that dichotomous variables are, by default, included with `all_categorical()`.  Use `all_categorical(dichotomous = FALSE)` to exclude dichotomous variables.
+
+```{r}
+library(gtsummary)
+
+trial %>%
+  dplyr::select(trt, response, age, marker, grade) %>%
+  tbl_summary(
+    by = "trt",
+    statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{p}%")
+  ) %>%
+  add_p(test = list(all_continuous() ~ "t.test", vars(response) ~ "fisher.test"))
+```
+
 ## Report Results Inline {#inline_text}
 
 Reproducible reports are an import part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
