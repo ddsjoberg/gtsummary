@@ -43,7 +43,7 @@
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 #'  \code{purrr::partial(style_pvalue, digits = 2)}).
 #' @author Daniel D. Sjoberg
-#' @seealso tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
+#' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
 #' @export
 #' @examples

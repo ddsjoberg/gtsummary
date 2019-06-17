@@ -51,7 +51,7 @@ calculate p-values with correlated data. Default is \code{NULL}}
 \item{missing}{indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),
 \code{"ifany"} (only display NA if the count is positive), and \code{"always"}
-(display NA’s even for zero counts). Default is \code{"ifany"}.}
+(includes NA count row for all variables). Default is \code{"ifany"}.}
 
 \item{missing_text}{String to display label for count of missing observations.
 Default is \code{"Unknown"}.}
@@ -71,6 +71,24 @@ continuous, categorical, and dichotomous variables.  Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 for detailed examples.
 }
+\section{select helpers}{
+
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+from the \{tidyselect\} package and \{gtsummary\} package are available to
+modify default behavior for groups of variables.
+For example, by default continuous variables are reported with the median
+and IQR.  To change all continuous variables to mean and standard deviation use
+\code{statistic = list(all_continuous() ~ "{mean} ({sd})")}.
+
+All columns with class logical are displayed as dichotomous variables showing
+the proportion of events that are \code{TRUE} on a single row. To show both rows
+(i.e. a row for \code{TRUE} and a row for \code{FALSE}) use
+\code{type = list(all_logical() ~ "categorical")}.
+
+The select helpers are available for use in any argument that accepts
+a list of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
+}
+
 \section{statistic argument}{
 
 The statistic argument specifies the statistics presented in the table. The
@@ -135,11 +153,13 @@ tbl_summary_ex2 <-
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(
     by = "trt",
-    label = list("age" ~ "Patient Age")
+    label = list("age" ~ "Patient Age"),
+    statistic = list(all_continuous() ~ "{mean} ({sd})"),
+    digits = list(vars(age) ~ c(0, 1))
   )
 }
 \seealso{
-tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette}
+See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 
 Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}}, \code{\link{add_p}},

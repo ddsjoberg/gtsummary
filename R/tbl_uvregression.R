@@ -31,7 +31,7 @@
 #' @inheritParams tbl_regression
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
-#' @seealso tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}
+#' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 #' @family tbl_uvregression tools
 #' @export
 #' @examples
@@ -51,7 +51,7 @@
 #'     trial %>% dplyr::select(ttdeath, death, age, grade, response),
 #'     method = coxph,
 #'     y = Surv(ttdeath, death),
-#'     label = list(grade = "Grade"),
+#'     label = list("grade" ~ "Grade"),
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )

@@ -38,7 +38,7 @@
 #' @param missing indicates whether to include counts of `NA` values in the table.
 #' Allowed values are `"no"` (never display NA values),
 #' `"ifany"` (only display NA if the count is positive), and `"always"`
-#' (display NA’s even for zero counts). Default is `"ifany"`.
+#' (includes NA count row for all variables). Default is `"ifany"`.
 #' @param missing_text String to display label for count of missing observations.
 #' Default is `"Unknown"`.
 #' @param sort list of formulas specifying the type of sorting to perform. Default is NULL.
@@ -48,6 +48,22 @@
 #' @param row_percent logical value indicating whether to calculate
 #' percentages within column or across rows.  Default is to calculate
 #' percentages within columns: `row_percent = FALSE`
+#'
+#' @section select helpers:
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+#' from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
+#' modify default behavior for groups of variables.
+#' For example, by default continuous variables are reported with the median
+#' and IQR.  To change all continuous variables to mean and standard deviation use
+#' `statistic = list(all_continuous() ~ "{mean} ({sd})")`.
+#'
+#' All columns with class logical are displayed as dichotomous variables showing
+#' the proportion of events that are `TRUE` on a single row. To show both rows
+#' (i.e. a row for `TRUE` and a row for `FALSE`) use
+#' `type = list(all_logical() ~ "categorical")`.
+#'
+#' The select helpers are available for use in any argument that accepts
+#' a list of formulas (e.g. `statistic`, `type`, `digits`, `value`, `sort`, etc.)
 #'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
@@ -88,7 +104,7 @@
 #' the `value` argument, e.g. `value = list("varname" ~ "level to show")`
 #' @export
 #' @family tbl_summary tools
-#' @seealso tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette}
+#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_summary_ex1 <-
@@ -101,7 +117,9 @@
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(
 #'     by = "trt",
-#'     label = list("age" ~ "Patient Age")
+#'     label = list("age" ~ "Patient Age"),
+#'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
+#'     digits = list(vars(age) ~ c(0, 1))
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}

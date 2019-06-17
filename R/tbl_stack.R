@@ -7,6 +7,7 @@
 #'
 #' @param tbls list of gtsummary regression objects
 #' @family tbl_regression tools
+#' @family tbl_uvregression tools
 #' @seealso [tbl_merge]
 #' @author Daniel D. Sjoberg
 #' @export
@@ -15,13 +16,13 @@
 #' t1 <-
 #'   glm(response ~ trt, trial, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE,
-#'                  label = list(trt = "Treatment (unadjusted)"))
+#'                  label = list("trt" ~ "Treatment (unadjusted)"))
 #'
 #' t2 <-
 #'   glm(response ~ trt + grade + stage + marker, trial, family = binomial) %>%
 #'   tbl_regression(include = "trt",
 #'                  exponentiate = TRUE,
-#'                  label = list(trt = "Treatment (adjusted)"))
+#'                  label = list("trt" ~ "Treatment (adjusted)"))
 #'
 #' tbl_stack_ex1 <- tbl_stack(list(t1, t2))
 #'
@@ -30,13 +31,13 @@
 #' t3 <-
 #'   coxph(Surv(ttdeath, death) ~ trt, trial) %>%
 #'   tbl_regression(exponentiate = TRUE,
-#'                  label = list(trt = "Treatment (unadjusted)"))
+#'                  label = list("trt" ~ "Treatment (unadjusted)"))
 #'
 #' t4 <-
 #'   coxph(Surv(ttdeath, death) ~ trt + grade + stage + marker, trial) %>%
 #'   tbl_regression(include = "trt",
 #'                  exponentiate = TRUE,
-#'                  label = list(trt = "Treatment (adjusted)"))
+#'                  label = list("trt" ~ "Treatment (adjusted)"))
 #'
 #'
 #' # first merging, then stacking
