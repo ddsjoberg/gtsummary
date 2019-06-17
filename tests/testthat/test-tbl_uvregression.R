@@ -38,7 +38,9 @@ test_that("glmer: no errors/warnings with standard use", {
         method = glmer,
         y = am,
         formula = "{y} ~ {x} + (1 | gear)",
-        method.args = list(family = binomial)
+        method.args = list(family = binomial),
+        label = "cyl" ~ "No. Cylinders",
+        hide_n = TRUE
       ), NA
   )
   expect_warning(
