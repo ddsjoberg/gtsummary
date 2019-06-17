@@ -1504,11 +1504,11 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       "{max}", "maximum",
       "{median}", "median",
       "{mean}", "mean",
-      "{sd}", "SD",
+      "{sd}", "standard deviation",
       "{var}", "variance",
       "{n}", "n",
       "{N}", "N",
-      "{p}%", "%",
+      "{p}%", "percent",
       "{p}", "%"
     ) %>%
     # adding in quartiles
