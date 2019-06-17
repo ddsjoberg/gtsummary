@@ -88,6 +88,7 @@
 #' the `value` argument, e.g. `value = list("varname" ~ "level to show")`
 #' @export
 #' @family tbl_summary tools
+#' @seealso tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette}
 #' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_summary_ex1 <-

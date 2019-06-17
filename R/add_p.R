@@ -15,6 +15,7 @@
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
+#' @seealso tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette}
 #' @export
 #' @author Emily C. Zabor, Daniel D. Sjoberg
 #' @examples

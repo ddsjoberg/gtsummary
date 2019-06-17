@@ -98,6 +98,8 @@ tbl_regression_ex3 <-
   tbl_regression(exponentiate = TRUE)
 }
 \seealso{
+tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette}
+
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},

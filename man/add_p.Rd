@@ -47,6 +47,8 @@ add_comp_ex1 <-
   add_p()
 }
 \seealso{
+tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette}
+
 Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}},
   \code{\link{add_q.tbl_summary}},
