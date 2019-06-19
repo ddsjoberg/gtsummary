@@ -199,15 +199,15 @@ In the example below, we report the mean and standard deviation for continuous v
 Note that dichotomous variables are, by default, included with `all_categorical()`.  Use `all_categorical(dichotomous = FALSE)` to exclude dichotomous variables.
 
 ```{r}
-library(gtsummary)
-
 trial %>%
-  dplyr::select(trt, response, age, marker, grade) %>%
+  dplyr::select(trt, response, age, stage, marker, grade) %>%
   tbl_summary(
     by = "trt",
-    statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{p}%")
+    type = list(c("response", "grade") ~ "categorical"), # select by variables in a vector
+    statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{p}%") # select by summary type/attribute
   ) %>%
-  add_p(test = list(all_continuous() ~ "t.test", vars(response) ~ "fisher.test"))
+  add_p(test = list(contains("response") ~ "fisher.test", # select using functions in tidyselect
+                    all_continuous() ~ "t.test"))
 ```
 
 ## Report Results Inline {#inline_text}
