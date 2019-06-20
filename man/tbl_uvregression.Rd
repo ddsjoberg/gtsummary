@@ -30,8 +30,8 @@ random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 \item{exponentiate}{logical indicating whether or not to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{label}{list of variable labels to override default labels in the table
-output, e.g. \code{list(age60 = "Age > 60")}.}
+\item{label}{list of formulas specifying variables labels,
+e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
 \item{hide_n}{hide N column. Default is \code{FALSE}}
 
@@ -103,12 +103,14 @@ tbl_uv_ex2 <-
     trial \%>\% dplyr::select(ttdeath, death, age, grade, response),
     method = coxph,
     y = Surv(ttdeath, death),
-    label = list(grade = "Grade"),
+    label = list("grade" ~ "Grade"),
     exponentiate = TRUE,
     pvalue_fun = function(x) style_pvalue(x, digits = 2)
   )
 }
 \seealso{
+See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
+
 Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
@@ -116,7 +118,7 @@ Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{inline_text.tbl_uvregression}},
   \code{\link{sort_p.tbl_uvregression}},
   \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_stack}}
 }
 \author{
 Daniel D. Sjoberg

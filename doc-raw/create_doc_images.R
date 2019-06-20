@@ -1,8 +1,8 @@
+library(gtsummary)
 library(glue)
 library(here)
 library(stringr)
 library(purrr)
-library(gt)
 library(webshot)
 
 # Create Doc .pngs  -------------------------------------------------------------
@@ -13,6 +13,7 @@ update_table_png <- function(input_file_path) {
   file_text <- readLines(input_file_path)
 
   if (any(str_detect(file_text, "examples\\{"))) {
+    print(glue("Working on {input_file_path}"))
 
     # find, extract and clean example code from doc text
     where_is_example <- which(str_detect(file_text, "examples\\{"))
@@ -72,7 +73,7 @@ save_html_then_png <- function(x, obj_name) {
 
 all_files <- list.files(here("man"), full.names = TRUE) %>%
   purrr::discard(!stringr::str_ends(., pattern = ".Rd"))
-map(all_files, ~ update_table_png(.x))
+walk(all_files, ~ update_table_png(.x))
 
 # Or Run on individual files as needed::
-# update_table_png(here("man", "add_global.tbl_regression.Rd"))
+# update_table_png(here("man", "tbl_summary.Rd"))

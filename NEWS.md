@@ -2,6 +2,8 @@
 
 # gtsummary 1.1.0
 
+* Added {tidyselect} and {gtsummary} variable select functions (#146)
+
 * Added `tbl_stack()` function (#152)
 
 * Bug fix for dichotomous yes/no variables in `tbl_summary` (#158)

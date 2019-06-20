@@ -17,34 +17,32 @@ Summary statistics will be calculated separately for each level of the \code{by}
 variable. If \code{NULL}, summary statistics
 are calculated using all observations.}
 
-\item{label}{named list of variable labels,
-e.g. \code{list(age = "Age, yrs", ptstage = "Path T Stage")}.  If \code{NULL}, the
+\item{label}{list of formulas specifying variables labels,
+e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}.  If \code{NULL}, the
 function will take the label attribute (\code{attr(data$age, "label")}).  If
 attribute label is \code{NULL}, the variable name will be used.}
 
-\item{type}{named list that specifies data types of variables. Accepted values
+\item{type}{list of formulas specifying variable types. Accepted values
 are \code{c("continuous", "categorical", "dichotomous")},
-e.g. \code{type = list(age = "continuous", female = "dichotomous")}.
+e.g. \code{type = list(contains(age) ~ "continuous", "female" ~ "dichotomous")}.
 If type not specified for a variable, the function
 will default to an appropriate summary type.  See below for details.}
 
-\item{value}{named list that specifies the value to display for dichotomous
+\item{value}{list of formulas specifying the value to display for dichotomous
 variables.  See below for details.}
 
-\item{statistic}{named list of the types of summary statistics to display
-for each variable or variable class.  The default is
-\code{list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}\%)")}.
+\item{statistic}{list of formulas specifying types of summary statistics to display
+for each variable.  The default is
+\code{list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}\%)")}.
 See below for details.}
 
-\item{digits}{named list of integers indicating the number of decimal
-places to round continuous summary statistics. Names of the list can be any
-continuous variable in 'data', or \code{"..continuous"} to apply rounding to all
-continuous variables.  If not specified, \code{tbl_summary} guesses an
+\item{digits}{list of formulas specifying the number of decimal
+places to round continuous summary statistics. If not specified, \code{tbl_summary} guesses an
 appropriate number of decimals to round statistics. When multiple statistics
-are displayed for a single variable (e.g. \code{{mean} ({sd})}), supply a vector
+are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
-to 1 decimal place, and the SD to 2 use \code{digits = list(age = c(1, 2))}.}
+to 1 decimal place, and the SD to 2 use \code{digits = list("age" ~ c(1, 2))}.}
 
 \item{group}{character vector of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in \link{add_p} to
@@ -53,14 +51,15 @@ calculate p-values with correlated data. Default is \code{NULL}}
 \item{missing}{indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),
 \code{"ifany"} (only display NA if the count is positive), and \code{"always"}
-(display NA’s even for zero counts). Default is \code{"ifany"}.}
+(includes NA count row for all variables). Default is \code{"ifany"}.}
 
 \item{missing_text}{String to display label for count of missing observations.
 Default is \code{"Unknown"}.}
 
-\item{sort}{named list indicating the type of sorting to perform. Default is NULL.
+\item{sort}{list of formulas specifying the type of sorting to perform. Default is NULL.
 Options are 'frequency' where results are sorted in
-descending order of frequency and 'alphanumeric'}
+descending order of frequency and 'alphanumeric',
+e.g. \code{sort = list(everything() ~ "frequency")}}
 
 \item{row_percent}{logical value indicating whether to calculate
 percentages within column or across rows.  Default is to calculate
@@ -72,13 +71,32 @@ continuous, categorical, and dichotomous variables.  Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 for detailed examples.
 }
+\section{select helpers}{
+
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+from the \{tidyselect\} package and \{gtsummary\} package are available to
+modify default behavior for groups of variables.
+For example, by default continuous variables are reported with the median
+and IQR.  To change all continuous variables to mean and standard deviation use
+\code{statistic = list(all_continuous() ~ "{mean} ({sd})")}.
+
+All columns with class logical are displayed as dichotomous variables showing
+the proportion of events that are \code{TRUE} on a single row. To show both rows
+(i.e. a row for \code{TRUE} and a row for \code{FALSE}) use
+\code{type = list(all_logical() ~ "categorical")}.
+
+The select helpers are available for use in any argument that accepts
+a list of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
+}
+
 \section{statistic argument}{
 
 The statistic argument specifies the statistics presented in the table. The
-input is a named list where the names correspond to the column names from the
-input 'data' and the elements specify the statistic to report. For example,
-\code{statistic = list(age = "{mean} ({sd})")} would report the mean and
-standard deviation for age. A statistic name that appears between curly brackets
+input is a list of formulas that specify the statistics to report. For example,
+\code{statistic = list("age" ~ "{mean} ({sd})")} would report the mean and
+standard deviation for age; \code{statistic = list(all_continuous() ~ "{mean} ({sd})")}
+would report the mean and standard deviation for all continuous variables.
+A statistic name that appears between curly brackets
 will be replaced with the numeric statistic (see \link[glue:glue]{glue::glue}).
 
 For categorical variables the following statistics are available to display.
@@ -98,11 +116,6 @@ For continuous variables the following statistics are available to display.
 \item \code{{p##}} any integer percentile, where \code{##} is an integer from 0 to 100
 \item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
-
-If all continuous or categorical variables will be summarized with the same
-statistics, the \code{..continuous..} and \code{..categorical..} shortcuts can be used
-in place of the individual column names.  Dichotomous variables are summarized
-as categorical variables.
 }
 
 \section{type argument}{
@@ -115,7 +128,7 @@ output table, rather than one row per level of the variable.
 Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
 and the TRUE, 1, and yes rows
 will be displayed.  Otherwise, the value to display must be specified in
-the \code{value} argument, e.g. \code{value = list(varname = "level to show")}
+the \code{value} argument, e.g. \code{value = list("varname" ~ "level to show")}
 }
 
 \section{Example Output}{
@@ -140,10 +153,14 @@ tbl_summary_ex2 <-
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(
     by = "trt",
-    label = list(age = "Patient Age")
+    label = list("age" ~ "Patient Age"),
+    statistic = list(all_continuous() ~ "{mean} ({sd})"),
+    digits = list(vars(age) ~ c(0, 1))
   )
 }
 \seealso{
+See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+
 Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_q.tbl_summary}},

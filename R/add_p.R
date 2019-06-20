@@ -3,11 +3,8 @@
 #' Adds p-values to tables created by `tbl_summary` by comparing values across groups.
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
-#' @param test named list of statistical tests to perform,
-#' e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
-#' `..continuous..` and `..categorical..` to specify a test for all variables
-#' of that type (`..categorical..` is applied to both categorical and
-#' dichotomous variables).
+#' @param test list of formulas specifying statistical tests to perform,
+#' e.g. \code{list(all_continuous() = "t.test", all_categorical() = "fisher.test")}.
 #' Options include "t.test" for a t-test,
 #' "wilcox.test" for a Wilcoxon rank-sum test,
 #' "kruskal.test" for a Kruskal-Wallis rank-sum test,
@@ -18,6 +15,7 @@
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
+#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @export
 #' @author Emily C. Zabor, Daniel D. Sjoberg
 #' @examples
@@ -40,6 +38,9 @@ add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
   }
 
   # test -----------------------------------------------------------------------
+  #parsing into a named list
+  test <- tidyselect_to_list(x$inputs$data, test, .meta_data = x$meta_data)
+
   if (!is.null(test)) {
     # checking that all inputs are named
     if ((names(test) %>% purrr::discard(. == "") %>% length()) != length(test)) {
