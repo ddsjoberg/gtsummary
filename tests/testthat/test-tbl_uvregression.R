@@ -38,7 +38,9 @@ test_that("glmer: no errors/warnings with standard use", {
         method = glmer,
         y = am,
         formula = "{y} ~ {x} + (1 | gear)",
-        method.args = list(family = binomial)
+        method.args = list(family = binomial),
+        label = "cyl" ~ "No. Cylinders",
+        hide_n = TRUE
       ), NA
   )
   expect_warning(
@@ -78,6 +80,24 @@ test_that("tbl_regression creates errors with bad inputs", {
       method = coxph,
       y = Surv(time, status),
       label = "Labels! YAY"
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = lung,
+      method = coxph,
+      y = Surv(time, status),
+      label = list("Age")
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = lung,
+      method = coxph,
+      y = Surv(time, status),
+      label = list("age" ~ c("Age", "Two"))
     ),
     "*"
   )

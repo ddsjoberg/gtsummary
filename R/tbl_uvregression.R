@@ -31,6 +31,7 @@
 #' @inheritParams tbl_regression
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
+#' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 #' @family tbl_uvregression tools
 #' @export
 #' @examples
@@ -50,7 +51,7 @@
 #'     trial %>% dplyr::select(ttdeath, death, age, grade, response),
 #'     method = coxph,
 #'     y = Surv(ttdeath, death),
-#'     label = list(grade = "Grade"),
+#'     label = list("grade" ~ "Grade"),
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )
@@ -81,17 +82,36 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
   }
 
-  # label ----------------------------------------------------------------------
-  if (!is.null(label)) {
-    # checking that all inputs are named
-    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+  if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(label) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'label' must be named. ",
-        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+        "'label' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the label specification: ",
+        "list(vars(stage) ~ \"T Stage\")"
+      ))
+    }
+    if ("list" %in% class(label)) {
+      if (some(label, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'label' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the label specification: ",
+          "list(vars(stage) ~ \"T Stage\")"
+        ))
+      }
+    }
+
+    # all sepcifed labels must be a string of length 1
+    if ("formula" %in% class(label)) label <- list(label)
+    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'label' argument must be a string."
       ))
     }
   }
-
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {

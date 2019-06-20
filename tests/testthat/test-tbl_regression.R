@@ -76,6 +76,14 @@ test_that("tbl_regression creates errors when inputs are wrong", {
     "*"
   )
   expect_error(
+    tbl_regression(mod_lm_interaction, label = list("Age")),
+    "*"
+  )
+  expect_error(
+    tbl_regression(mod_lm_interaction, label = list("age" ~ c("Age", "Two"))),
+    "*"
+  )
+  expect_error(
     tbl_regression(mod_lm_interaction, include = "INCLUDE ME!"),
     "*"
   )
