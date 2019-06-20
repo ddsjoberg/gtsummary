@@ -6,6 +6,7 @@
 #' @param .data data with variables to select from
 #' @param x list of tidyselect formulas
 #' @param .meta_data meta data from tbl_summary. Default is NULL
+#' @keywords internal
 
 tidyselect_to_list <- function(.data, x, .meta_data = NULL) {
   # if x is a named list, print depcrecation note and return the input as is

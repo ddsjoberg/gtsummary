@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a column of q values to account for
-multiple comparisons — add_q.tbl_uvregression • gtsummary</title>
+<title>Select helper functions — select_helpers • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,11 +30,13 @@ multiple comparisons — add_q.tbl_uvregression • gtsummary</title>
 
 
 
-<meta property="og:title" content="Add a column of q values to account for
-multiple comparisons — add_q.tbl_uvregression" />
+<meta property="og:title" content="Select helper functions — select_helpers" />
 
-<meta property="og:description" content="The adjustments to the p-values is performed with
-stats::p.adjust." />
+<meta property="og:description" content="Set of functions to supplement the tidyselect set of functions for selecting
+columns of data frames. all_continuous(), all_categorical(), and
+all_dichotomous() may only be used with tbl_summary(), where each variable
+has been classified into one of these three groups. All other helpers
+are available throughout the package." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,92 +121,57 @@ stats::p.adjust." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a column of q values to account for
-multiple comparisons</h1>
+    <h1>Select helper functions</h1>
     
-    <div class="hidden name"><code>add_q.tbl_uvregression.Rd</code></div>
+    <div class="hidden name"><code>select_helpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The adjustments to the p-values is performed with
-<a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a>.</p>
+    <p>Set of functions to supplement the tidyselect set of functions for selecting
+columns of data frames. <code>all_continuous()</code>, <code>all_categorical()</code>, and
+<code>all_dichotomous()</code> may only be used with <code><a href='tbl_summary.html'>tbl_summary()</a></code>, where each variable
+has been classified into one of these three groups. All other helpers
+are available throughout the package.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
-<span class='fu'><a href='add_q.html'>add_q</a></span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"fdr"</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>pvalue_fun</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>all_numeric</span>()
+
+<span class='fu'>all_character</span>()
+
+<span class='fu'>all_integer</span>()
+
+<span class='fu'>all_double</span>()
+
+<span class='fu'>all_logical</span>()
+
+<span class='fu'>all_factor</span>()
+
+<span class='fu'>all_continuous</span>()
+
+<span class='fu'>all_categorical</span>(<span class='kw'>dichotomous</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>all_dichotomous</span>()</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p><code>tbl_uvregression</code> object</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>character argument indicating method to be used for p-value adjustment.
-Methods from <a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a> are accepted. Default is <code>method = 'fdr'</code>.</p></td>
-    </tr>
-    <tr>
-      <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.
-Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>further arguments passed to or from other methods</p></td>
+      <th>dichotomous</th>
+      <td><p>logical indicating whether to include dichotomous variables.
+Default is <code>TRUE</code></p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
-    
-    <p><img src='figures/tbl_uvr_q_ex.png' width=50% /></p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
-  <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
-  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
-  <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code>,
-  <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_uvr_q_ex</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>marker</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
-    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>lm</span>,
-    <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>age</span>
-  ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_q.html'>add_q</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#example-output">Example Output</a></li>
+                </ul>
 
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Esther Drill, Daniel D. Sjoberg</p>
   </div>
 </div>
 
