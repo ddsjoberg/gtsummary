@@ -12,8 +12,8 @@ tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
 \arguments{
 \item{x}{regression model object}
 
-\item{label}{list of variable labels to override default labels in the table
-output, e.g. \code{list(age60 = "Age > 60")}.}
+\item{label}{list of formulas specifying variables labels,
+e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
 \item{exponentiate}{logical indicating whether or not to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
@@ -98,6 +98,8 @@ tbl_regression_ex3 <-
   tbl_regression(exponentiate = TRUE)
 }
 \seealso{
+See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
+
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},

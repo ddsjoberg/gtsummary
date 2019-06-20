@@ -11,7 +11,7 @@
 #' @author Daniel D. Sjoberg
 
 assign_class <- function(data, variable) {
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "double")
+  classes_expected <- c("character", "factor", "numeric", "logical", "integer")
 
   # extracing the base R class
   classes_return <-
@@ -1223,139 +1223,181 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   }
 
   # type -----------------------------------------------------------------------
-  if (!is.null(type)) {
-    # checking that all inputs are named
-    if ((names(type) %>% purrr::discard(. == "") %>% length()) != length(type)) {
+  if (!is.null(type) & is.null(names(type))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(type) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'type' must be named. ",
-        "For example, 'type = list(age = \"continuous\", female = \"dichotomous\")'"
+        "'type' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the type specification: ",
+        "list(vars(age, marker) ~ \"continuous\")"
+      ))
+    }
+    if ("list" %in% class(type)) {
+      if (some(type, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'type' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the type specification: ",
+          "list(vars(age, marker) ~ \"continuous\")"
+        ))
+      }
+    }
+
+    # all sepcifed types are continuous, categorical, or dichotomous
+    if ("formula" %in% class(type)) type <- list(type)
+    if (!every(type, ~ eval(rlang::f_rhs(.x)) %in% c("continuous", "categorical", "dichotomous")) |
+        !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'type'  argument must of one and only one of ",
+        "\"continuous\", \"categorical\", or \"dichotomous\""
       ))
     }
 
-    # checking that all names in list are variable names from data.
-    summary_type_not_in_data <- setdiff(names(type), names(data))
-    if (length(summary_type_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'type' are not found in 'data' and ",
-        "were ignored: {paste0(summary_type_not_in_data, collapse = ', ')}"
-      ))
-    }
-
-    # checking all inputs are continuous, categorial, or dichotomous
-    summary_type_value_not_valid <-
-      setdiff(
-        type %>% unlist() %>% unique(),
-        c("categorical", "dichotomous", "continuous")
-      )
-    if (length(summary_type_value_not_valid) > 0) {
+    # functions all_continuous, all_categorical, and all_dichotomous cannot be used for type
+    if (some(type,
+             ~deparse(.x) %>% # converts a formula to a string
+             stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
+             any())) {
       stop(glue(
-        "'type' values must be 'continuous', 'categorical', or 'dichotomous'. ",
-        "'{paste0(summary_type_value_not_valid, collapse = ', ')}' not valid."
+        "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
+        "cannot be used in the 'type' argument."
       ))
     }
   }
 
   # value ----------------------------------------------------------------------
-  if (!is.null(value)) {
-    # checking that all inputs are named
-    if ((names(value) %>% purrr::discard(. == "") %>% length()) != length(value)) {
+  if (!is.null(value) & is.null(names(value))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(value) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'value' must be named. ",
-        "For example, 'value = list(varname = \"level to show\")'"
+        "'value' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the value specification: ",
+        "list(vars(stage) ~ \"T1\")"
       ))
     }
+    if ("list" %in% class(value)) {
+      if (some(value, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'value' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the value specification: ",
+          "list(vars(stage) ~ \"T1\")"
+        ))
+      }
+    }
 
-    # checking class of values passed values
-    value %>%
-      imap(
-        function(.x, .y) {
-          if ("character" %in% class(data[[.y]])) {
-            if (is.numeric(.x))
-              stop(glue(
-                "Column '{.y}' is class character, and value passed is numeric"
-              ))
-          }
-          else if (is.numeric(data[[.y]])) {
-            if ("character" %in% class(.x))
-            stop(glue(
-              "Column '{.y}' is numeric, and value passed is character"
-            ))
-          }
-        }
-      )
+    # functions all_continuous, all_categorical, and all_dichotomous cannot be used for value
+    if (some(value,
+             ~deparse(.x) %>% # converts a formula to a string
+             stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
+             any())) {
+      stop(glue(
+        "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
+        "cannot be used in the 'value' argument."
+      ))
+    }
   }
 
   # label ----------------------------------------------------------------------
-  if (!is.null(label)) {
-    # checking that all inputs are named
-    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+  if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(label) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'label' must be named. ",
-        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+        "'label' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the label specification: ",
+        "list(vars(stage) ~ \"T Stage\")"
       ))
     }
+    if ("list" %in% class(label)) {
+      if (some(label, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'label' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the label specification: ",
+          "list(vars(stage) ~ \"T Stage\")"
+        ))
+      }
+    }
 
-    # checking that all names in list are variable names from data.
-    var_label_not_in_data <- setdiff(names(label), names(data))
-    if (length(var_label_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'label' are not found in 'data' and ",
-        "were ignored: {paste0(var_label_not_in_data, collapse = ', ')}"
+    # all sepcifed labels must be a string of length 1
+    if ("formula" %in% class(label)) label <- list(label)
+    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'label' argument must be a string."
       ))
     }
   }
 
   # statistic ------------------------------------------------------------------
-  if (!is.null(statistic)) {
-    # checking that all inputs are named
-    if ((names(statistic) %>% purrr::discard(. == "") %>% length()) != length(statistic)) {
+  if (!is.null(statistic) & is.null(names(statistic))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(statistic) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'statistic' must be named. ",
-        "For example, 'statistic = list(..continuous.. = \"{median} ({p25}, {p75})\", ..categorical.. = \"{n} ({p}%)\")'"
+        "'statistic' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the statistic specification: ",
+        "list(all_categorical() ~ \"{n} / {N}\")"
       ))
     }
+    if ("list" %in% class(statistic)) {
+      if (some(statistic, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'statistic' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the statistic specification: ",
+          "list(all_categorical() ~ \"{n} / {N}\")"
+        ))
+      }
+    }
 
-    # checking that all names in list are continuous or categorical
-    stat_display_names_not_valid <-
-      names(statistic) %>%
-      setdiff(c(names(data) %>% setdiff(c(by, group)), "..continuous..", "..categorical.."))
-    if (length(stat_display_names_not_valid) > 0) {
-      message(glue(
-        "Expecting list names '..continuous..',  '..categorical..', or a column name from 'data'. ",
-        "The following names from 'statistic' are not valid and ",
-        "were ignored: {paste0(stat_display_names_not_valid, collapse = ', ')}"
+    # all sepcifed statistics must be a string of length 1
+    if ("formula" %in% class(statistic)) statistic <- list(statistic)
+    if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'statistic' argument must be a string."
       ))
     }
   }
 
   # digits ---------------------------------------------------------------------
-  if (!is.null(digits)) {
-    # checking that all inputs are named
-    if ((names(digits) %>% purrr::discard(. == "") %>% length()) != length(digits)) {
+  if (!is.null(digits) & is.null(names(digits))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(digits) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'digits' must be named. ",
-        "For example, 'digits = list(age = 1)'"
+        "'digits' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the digits specification: ",
+        "list(vars(age, marker) ~ 1)"
       ))
+    }
+    if ("list" %in% class(digits)) {
+      if (some(digits, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'digits' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the digits specification: ",
+          "list(vars(age, marker) ~ 1)"
+        ))
+      }
     }
 
-    # checking that all names in list are variable names from data.
-    digits_not_in_data <- setdiff(names(digits), c(names(data), "..continuous.."))
-    if (length(digits_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'digits' are not found in 'data' and ",
-        "were ignored: {paste0(digits_not_in_data, collapse = ', ')}"
-      ))
-    }
-
-    # specified digits must be a non-negative integer
-    digits_value_not_valid <-
-      setdiff(digits %>% unlist() %>% unique(), 0:100)
-    if (length(digits_value_not_valid) > 0) {
-      stop(glue(
-        "'digits' values must be non-negative integers. ",
-        "'{paste0(digits_value_not_valid, collapse = ', ')}' not valid input."
-      ))
-    }
+    # # specified digits must be a non-negative integer
+    # digits_value_not_valid <-
+    #   setdiff(digits %>% unlist() %>% unique(), 0:100)
+    # if (length(digits_value_not_valid) > 0) {
+    #   stop(glue(
+    #     "'digits' values must be non-negative integers. ",
+    #     "'{paste0(digits_value_not_valid, collapse = ', ')}' not valid input."
+    #   ))
+    # }
   }
 
   # missing_text ---------------------------------------------------------------
@@ -1374,31 +1416,36 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   }
 
   # sort -----------------------------------------------------------------------
-  if (!is.null(sort)) {
-    # checking that all inputs are named
-    if ((names(sort) %>% purrr::discard(. == "") %>% length()) != length(sort)) {
+  if (!is.null(sort) & is.null(names(sort))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(sort) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'sort' must be named. ",
-        "For example, 'sort = list(..categorical.. = \"frequency\")'"
+        "'sort' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the sort specification: ",
+        "list(vars(age, marker) ~ 1)"
       ))
     }
+    if ("list" %in% class(sort)) {
+      if (some(sort, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'sort' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the sort specification: ",
+          "list(vars(stage, marker) ~ \"frequency\")"
+        ))
+      }
+    }
 
-    # checking that all names in list are variable names from data.
-    var_sort_not_in_data <- setdiff(names(sort), c(names(data), "..categorical.."))
-    if (length(var_sort_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'sort' are not valid ",
-        "were ignored: {paste0(var_sort_not_in_data, collapse = ', ')}"
+    # all sepcifed types are frequency or alphanumeric
+    if ("formula" %in% class(sort)) sort <- list(sort)
+    if (!every(sort, ~ eval(rlang::f_rhs(.x)) %in% c("frequency", "alphanumeric")) |
+        !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'sort' argument must of one and only one of ",
+        "\"frequency\" or \"alphanumeric\""
       ))
-    }
-
-    # checking that all the values are length 1
-    if (map_lgl(sort, ~ length(.x) != 1) %>% any()) {
-      stop("The length of all elements in 'sort' must be 1.")
-    }
-    # checking that all values are "alphanumeric" OR "frequency"
-    if (unlist(sort) %>% setdiff(c("alphanumeric", "frequency")) %>% length() > 0) {
-      stop("Elements of 'sort' must be one of 'frequency' or 'alphanumeric'")
     }
   }
 }
