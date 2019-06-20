@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+# gtsummary 1.1.0
+
 * Added `tbl_stack()` function (#152)
 
 * Bug fix for dichotomous yes/no variables in `tbl_summary` (#158)
@@ -22,7 +24,7 @@
 
 # gtsummary 1.0.0 
 
-First release since major refactoring.  The {gt} package is now used as the backend to create all tables.  Many function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
+First release since major refactoring.  The {gt} package is now used as the backend to create all tables.  Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
 
 ### Updated Function Names
 
