@@ -401,7 +401,7 @@ calculate_pvalue <- function(data, variable, by, test, type, group) {
   )
 }
 
-calculate_pvalue_one <- function(data, variable, by, test, type, group) {
+calculate_pvalue_one <- function(data, variable, by, test, type, group, include, exclude) {
 
   # if there is no by variable, and thus test is NA, return NA
   if (is.na(test)) return(NA)
