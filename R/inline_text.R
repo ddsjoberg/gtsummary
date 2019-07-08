@@ -87,7 +87,9 @@ inline_text.tbl_summary <-
     }
     else {
       # if the length of this is 0, there are no levels to select.  Should we print an error here?
-      levels_obs <- result %>% filter(!!parse_expr('row_type != "label"')) %>% pull("label")
+      levels_obs <- result %>%
+        filter(!!parse_expr('row_type != "label"')) %>%
+        pull("label")
       result <-
         result %>%
         filter(!!parse_expr(glue("label ==  '{level}'")))
@@ -192,7 +194,9 @@ inline_text.tbl_regression <-
     }
     else {
       # if the length of this is 0, there are no levels to select.  Should we print an error here?
-      levels_obs <- result %>% filter(!!parse_expr('row_type != "label"')) %>% pull("label")
+      levels_obs <- result %>%
+        filter(!!parse_expr('row_type != "label"')) %>%
+        pull("label")
       result <-
         result %>%
         filter(!!parse_expr(glue("label ==  '{level}'")))

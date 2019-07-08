@@ -48,7 +48,8 @@ test_that("expect error if no p value in table 1", {
 })
 
 test_that("expect error if q = TRUE and no q values in table 1", {
-  table1 <- trial %>% tbl_summary(by = "trt") %>%
+  table1 <- trial %>%
+    tbl_summary(by = "trt") %>%
     add_p()
 
   expect_error(
@@ -59,4 +60,3 @@ test_that("expect error if q = TRUE and no q values in table 1", {
     fixed = TRUE
   )
 })
-
