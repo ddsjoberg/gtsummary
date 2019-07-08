@@ -13,7 +13,8 @@ tbl_stack(tbls)
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
 or more \code{tbl_regression} or \code{tbl_merge} objects.
 {gt} attributes from the first regression object are utilized for output table.
-If combining \code{tbl_stack()} and \code{tbl_merge()}, merge first then stack.
+If combining \code{tbl_stack()} and \code{tbl_merge()}, merge first then stack, or stack
+first and then merge.
 }
 \section{Example Output}{
 
