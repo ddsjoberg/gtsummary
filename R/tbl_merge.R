@@ -14,13 +14,13 @@
 #' t1 <-
 #'   glm(response ~ trt + grade + age, trial, family = binomial) %>%
 #'   tbl_regression(
-#'     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
+#'     label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
 #'     exponentiate = TRUE
 #'   )
 #' t2 <-
 #'   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
 #'   tbl_regression(
-#'     label = list(trt = "Treatment", grade = "Grade", age = "Age"),
+#'     label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
 #'     exponentiate = TRUE
 #'   )
 #' tbl_merge_ex <-
