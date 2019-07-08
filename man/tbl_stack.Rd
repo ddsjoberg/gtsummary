@@ -31,13 +31,13 @@ If combining \code{tbl_stack()} and \code{tbl_merge()}, merge first then stack.
 t1 <-
   glm(response ~ trt, trial, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE,
-                 label = list(trt = "Treatment (unadjusted)"))
+                 label = list("trt" ~ "Treatment (unadjusted)"))
 
 t2 <-
   glm(response ~ trt + grade + stage + marker, trial, family = binomial) \%>\%
   tbl_regression(include = "trt",
                  exponentiate = TRUE,
-                 label = list(trt = "Treatment (adjusted)"))
+                 label = list("trt" ~ "Treatment (adjusted)"))
 
 tbl_stack_ex1 <- tbl_stack(list(t1, t2))
 
@@ -46,13 +46,13 @@ library(survival)
 t3 <-
   coxph(Surv(ttdeath, death) ~ trt, trial) \%>\%
   tbl_regression(exponentiate = TRUE,
-                 label = list(trt = "Treatment (unadjusted)"))
+                 label = list("trt" ~ "Treatment (unadjusted)"))
 
 t4 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + stage + marker, trial) \%>\%
   tbl_regression(include = "trt",
                  exponentiate = TRUE,
-                 label = list(trt = "Treatment (adjusted)"))
+                 label = list("trt" ~ "Treatment (adjusted)"))
 
 
 # first merging, then stacking
@@ -74,8 +74,18 @@ Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{sort_p.tbl_regression}},
   \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
+
+Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
+  \code{\link{add_nevent.tbl_uvregression}},
+  \code{\link{add_q.tbl_uvregression}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{sort_p.tbl_uvregression}},
+  \code{\link{tab_style_bold_p.tbl_uvregression}},
+  \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
+\concept{tbl_uvregression tools}

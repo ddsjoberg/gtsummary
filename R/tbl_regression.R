@@ -11,7 +11,7 @@
 #' in the data frame `model.frame(x)`. Depending on the model input, this N
 #' may represent different quantities. In most cases, it is the total number of
 #' observations in your model; however, the precise definition of an observation,
-#' or unit of anlaysis, may differ across models. Here are some common examples.
+#' or unit of analysis, may differ across models. Here are some common examples.
 #' 1. Survival regression models including time dependent covariates.
 #' 2. Random- or mixed-effects regression models with clustered data.
 #' 3. GEE regression models with clustered data.
@@ -21,8 +21,8 @@
 #' @param x regression model object
 #' @param exponentiate logical indicating whether or not to exponentiate the
 #' coefficient estimates. Default is `FALSE`.
-#' @param label list of variable labels to override default labels in the table
-#' output, e.g. `list(age60 = "Age > 60")`.
+#' @param label list of formulas specifying variables labels,
+#' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`
 #' @param include names of variables to include in output.
 #' @param exclude names of variables to exclude from output.
 #' @param conf.level must be strictly greater than 0 and less than 1.
@@ -43,6 +43,7 @@
 #' \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 #'  \code{purrr::partial(style_pvalue, digits = 2)}).
 #' @author Daniel D. Sjoberg
+#' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
 #' @export
 #' @examples
@@ -86,15 +87,42 @@ tbl_regression <- function(x, label = NULL,
   }
 
   # label ----------------------------------------------------------------------
-  if (!is.null(label)) {
-    # checking that all inputs are named
-    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+  if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(label) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'label' must be named. ",
-        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+        "'label' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the label specification: ",
+        "list(vars(stage) ~ \"T Stage\")"
+      ))
+    }
+    if ("list" %in% class(label)) {
+      if (some(label, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'label' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the label specification: ",
+          "list(vars(stage) ~ \"T Stage\")"
+        ))
+      }
+    }
+
+    # all sepcifed labels must be a string of length 1
+    if ("formula" %in% class(label)) label <- list(label)
+    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'label' argument must be a string."
       ))
     }
   }
+
+  # converting tidyselect formula lists to named lists
+  label <- tidyselect_to_list(stats::model.frame(x), label)
+
+
+
 
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function

@@ -47,7 +47,8 @@ Other tbl_uvregression tools: \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{inline_text.tbl_uvregression}},
   \code{\link{sort_p.tbl_uvregression}},
   \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
+  \code{\link{tbl_uvregression}}
 }
 \author{
 Daniel D. Sjoberg
