@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix with incorrect column order in `tbl_summary()` with 10+ levels of by variable (#166)
+
 # gtsummary 1.1.0
 
 * Added {tidyselect} and {gtsummary} variable select functions (#146)
