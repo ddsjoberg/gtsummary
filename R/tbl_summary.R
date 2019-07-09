@@ -231,7 +231,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   # returning all results in a list
   results <- list(
     gt_calls = eval(gt_tbl_summary),
-    table_body = table_body %>% select(-c("summary_type")),
+    table_body = table_body %>% select(-.data$summary_type),
     meta_data = meta_data,
     inputs = tbl_summary_inputs,
     call_list = list(tbl_summary = match.call())
@@ -240,6 +240,12 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   if (!is.null(by)) {
     results[["by"]] <- by
     results[["df_by"]] <- df_by(data, by)
+
+    # if there are 10 or more by levels, they are sorted incorrectly...fixing order
+    stat_var_sort <- results[["df_by"]]$by_col
+    results[["table_body"]] <-
+      results[["table_body"]] %>%
+      select(-stat_var_sort, stat_var_sort)
   }
 
   # assigning a class of tbl_summary (for special printing in Rmarkdown)
