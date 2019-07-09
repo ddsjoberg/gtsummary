@@ -82,7 +82,7 @@ signal_soft_deprecated <- function(msg, id = msg, env = rlang::caller_env(2)) {
   }
 
   if (rlang::is_true(rlang::peek_option("lifecycle_verbose_soft_deprecation")) ||
-      env_inherits_global(env)) {
+    env_inherits_global(env)) {
     warn_deprecated(msg, id)
     return(invisible(NULL))
   }
@@ -91,8 +91,8 @@ signal_soft_deprecated <- function(msg, id = msg, env = rlang::caller_env(2)) {
   # testthat clones the namespace
   tested_package <- Sys.getenv("TESTTHAT_PKG")
   if (nzchar(tested_package) &&
-      identical(Sys.getenv("NOT_CRAN"), "true") &&
-      rlang::env_name(topenv(env)) == rlang::env_name(rlang::ns_env(tested_package))) {
+    identical(Sys.getenv("NOT_CRAN"), "true") &&
+    rlang::env_name(topenv(env)) == rlang::env_name(rlang::ns_env(tested_package))) {
     warn_deprecated(msg, id)
     return(invisible(NULL))
   }
@@ -111,11 +111,11 @@ warn_deprecated <- function(msg, id = msg) {
   }
 
   if (!rlang::is_true(rlang::peek_option("lifecycle_repeat_warnings")) &&
-      rlang::env_has(deprecation_env, id)) {
+    rlang::env_has(deprecation_env, id)) {
     return(invisible(NULL))
   }
 
-  rlang::env_poke(deprecation_env, id, TRUE);
+  rlang::env_poke(deprecation_env, id, TRUE)
 
   has_colour <- function() rlang::is_installed("crayon") && crayon::has_color()
   silver <- function(x) if (has_colour()) crayon::silver(x) else x
@@ -140,8 +140,9 @@ stop_defunct <- function(msg) {
 }
 
 scoped_lifecycle_silence <- function(frame = rlang::caller_env()) {
-  rlang::scoped_options(.frame = frame,
-                        lifecycle_disable_warnings = TRUE
+  rlang::scoped_options(
+    .frame = frame,
+    lifecycle_disable_warnings = TRUE
   )
 }
 with_lifecycle_silence <- function(expr) {
@@ -150,10 +151,11 @@ with_lifecycle_silence <- function(expr) {
 }
 
 scoped_lifecycle_warnings <- function(frame = rlang::caller_env()) {
-  rlang::scoped_options(.frame = frame,
-                        lifecycle_disable_warnings = FALSE,
-                        lifecycle_verbose_soft_deprecation = TRUE,
-                        lifecycle_repeat_warnings = TRUE
+  rlang::scoped_options(
+    .frame = frame,
+    lifecycle_disable_warnings = FALSE,
+    lifecycle_verbose_soft_deprecation = TRUE,
+    lifecycle_repeat_warnings = TRUE
   )
 }
 with_lifecycle_warnings <- function(expr) {
@@ -163,8 +165,9 @@ with_lifecycle_warnings <- function(expr) {
 
 scoped_lifecycle_errors <- function(frame = rlang::caller_env()) {
   scoped_lifecycle_warnings(frame = frame)
-  rlang::scoped_options(.frame = frame,
-                        lifecycle_warnings_as_errors = TRUE
+  rlang::scoped_options(
+    .frame = frame,
+    lifecycle_warnings_as_errors = TRUE
   )
 }
 with_lifecycle_errors <- function(expr) {
@@ -215,31 +218,28 @@ lifecycle_img <- function(stage, url) {
 
   switch(stage,
 
-         experimental = ,
-         maturing = ,
-         stable = ,
-         questioning = ,
-         retired = ,
-         archived =
-           sprintf(
-             "\\out{<a href='%s'><img src='%s' alt='%s lifecycle'></a>}",
-             url,
-             file.path("figures", file),
-             stage_alt
-           )
-         ,
+    experimental = ,
+    maturing = ,
+    stable = ,
+    questioning = ,
+    retired = ,
+    archived =
+      sprintf(
+        "\\out{<a href='%s'><img src='%s' alt='%s lifecycle'></a>}",
+        url,
+        file.path("figures", file),
+        stage_alt
+      ),
+    `soft-deprecated` = ,
+    deprecated = ,
+    defunct =
+      sprintf(
+        "\\figure{%s}{options: alt='%s lifecycle'}",
+        file,
+        stage_alt
+      ),
 
-         `soft-deprecated` = ,
-         deprecated = ,
-         defunct =
-           sprintf(
-             "\\figure{%s}{options: alt='%s lifecycle'}",
-             file,
-             stage_alt
-           ),
-
-         rlang::abort(sprintf("Unknown lifecycle stage `%s`", stage))
-
+    rlang::abort(sprintf("Unknown lifecycle stage `%s`", stage))
   )
 }
 upcase1 <- function(x) {
