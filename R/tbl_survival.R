@@ -148,13 +148,12 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       ) %>%
       # merging in number of events within stratum
       left_join(
-        summary(x) %>%
-          {
-            tibble::tibble(
-              strata = .[["strata"]] %>% as.character(),
-              n.event.strata = .[["n.event"]]
-            )
-          } %>%
+        summary(x) %>% {
+          tibble::tibble(
+            strata = .[["strata"]] %>% as.character(),
+            n.event.strata = .[["n.event"]]
+          )
+        } %>%
           dplyr::group_by(.data$strata) %>%
           dplyr::summarise(
             n.event.strata = sum(.data$n.event.strata)
@@ -188,13 +187,13 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       label = glue(label),
       ci = case_when(
         !is.na(.data$conf.low) & !is.na(.data$conf.high) ~
-          glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}"),
+        glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}"),
         is.na(.data$conf.low) & !is.na(.data$conf.high) ~
-          glue("{missing}, {estimate_fun(conf.high)}"),
+        glue("{missing}, {estimate_fun(conf.high)}"),
         !is.na(.data$conf.low) & is.na(.data$conf.high) ~
-          glue("{estimate_fun(conf.low)}, {missing}"),
+        glue("{estimate_fun(conf.low)}, {missing}"),
         is.na(.data$conf.low) & is.na(.data$conf.high) ~
-          NA_character_
+        NA_character_
       )
     ) %>%
     select(c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
