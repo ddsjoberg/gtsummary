@@ -1,6 +1,9 @@
 context("test-tab_style")
 
-tbl <- trial %>% tbl_summary(by = "trt") %>% add_p() %>% add_q()
+tbl <- trial %>%
+  tbl_summary(by = "trt") %>%
+  add_p() %>%
+  add_q()
 
 test_that("tab_style: bold and italicize", {
   expect_error(

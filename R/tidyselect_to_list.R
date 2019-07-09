@@ -19,19 +19,21 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL) {
   }
 
   # if a single formula is passed, putting it in a list
-  if (class(x) == "formula") x = list(x)
+  if (class(x) == "formula") x <- list(x)
 
   # registering names of columns in data
   tidyselect::scoped_vars(vars = names(.data))
   scoped_data(.data)
-  if (!is.null(.meta_data))   scoped_meta_data(.meta_data)
+  if (!is.null(.meta_data)) scoped_meta_data(.meta_data)
 
 
   # number of formulas to work through
   n <- length(x)
 
   # if NULL provided, return NULL
-  if (n == 0) return(NULL)
+  if (n == 0) {
+    return(NULL)
+  }
 
   # initializing empty results
   lhs <- vector("list", n)
@@ -43,19 +45,21 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL) {
     if (!rlang::is_formula(x[[i]])) stop("Input must be a formula")
 
     lhs[[i]] <- rlang::f_lhs(x[[i]]) %>% eval()
-    rhs[[i]] <- rlang::f_rhs(x[[i]])  %>% eval()
+    rhs[[i]] <- rlang::f_rhs(x[[i]]) %>% eval()
   }
 
 
 
   # if tidyselect function returned numeric position, grab character name
-  lhs <- map_if(lhs, is.numeric, ~names(.data)[.x])
+  lhs <- map_if(lhs, is.numeric, ~ names(.data)[.x])
   # TODO: fix this garbage code for dplyr::vars()
   # if tidyselect function returned quosure, convert to character
   # > dplyr::vars(grade) %>% as.character()
   # [1] "~grade"
-  lhs <- map_if(lhs, ~class(.x) == "quosures",
-                       ~as.character(.x) %>% stringr::str_remove(stringr::fixed("~")))
+  lhs <- map_if(
+    lhs, ~ class(.x) == "quosures",
+    ~ as.character(.x) %>% stringr::str_remove(stringr::fixed("~"))
+  )
 
   # converting rhs and lhs into a named list
   result <-
@@ -72,5 +76,3 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL) {
 
   result
 }
-
-

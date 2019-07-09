@@ -28,7 +28,7 @@ number of unique levels.
 \examples{
 gtsummary:::assign_summary_type(
   data = mtcars,
-  variable =  names(mtcars),
+  variable = names(mtcars),
   class = apply(mtcars, 2, class),
   summary_type = NULL, value = NULL
 )
