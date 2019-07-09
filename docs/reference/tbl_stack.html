@@ -66,7 +66,7 @@ If combining tbl_stack() and tbl_merge(), merge first then stack." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0.9000</span>
       </span>
     </div>
 
@@ -162,7 +162,15 @@ If combining <code>tbl_stack()</code> and <code><a href='tbl_merge.html'>tbl_mer
   <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
   <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
   <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code></p></div>
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code></p>
+<p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
+  <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
+  <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
+  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
+  <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
+  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -170,13 +178,13 @@ If combining <code>tbl_stack()</code> and <code><a href='tbl_merge.html'>tbl_mer
 <span class='no'>t1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                 <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment (unadjusted)"</span>))
+                 <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"trt"</span> ~ <span class='st'>"Treatment (unadjusted)"</span>))
 
 <span class='no'>t2</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>stage</span> + <span class='no'>marker</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>include</span> <span class='kw'>=</span> <span class='st'>"trt"</span>,
                  <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                 <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment (adjusted)"</span>))
+                 <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"trt"</span> ~ <span class='st'>"Treatment (adjusted)"</span>))
 
 <span class='no'>tbl_stack_ex1</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_stack</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>))
 
@@ -185,13 +193,13 @@ If combining <code>tbl_stack()</code> and <code><a href='tbl_merge.html'>tbl_mer
 <span class='no'>t3</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                 <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment (unadjusted)"</span>))
+                 <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"trt"</span> ~ <span class='st'>"Treatment (unadjusted)"</span>))
 
 <span class='no'>t4</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>stage</span> + <span class='no'>marker</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>include</span> <span class='kw'>=</span> <span class='st'>"trt"</span>,
                  <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                 <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trt</span> <span class='kw'>=</span> <span class='st'>"Treatment (adjusted)"</span>))
+                 <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"trt"</span> ~ <span class='st'>"Treatment (adjusted)"</span>))
 
 
 <span class='co'># first merging, then stacking</span>

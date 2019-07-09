@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>This function takes in the meta data table, and calls the appropriate summarize function. — calculate_summary_stat • gtsummary</title>
+<title>Select helper functions — select_helpers • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,13 @@
 
 
 
-<meta property="og:title" content="This function takes in the meta data table, and calls the appropriate summarize function. — calculate_summary_stat" />
+<meta property="og:title" content="Select helper functions — select_helpers" />
 
-<meta property="og:description" content="This function takes in the meta data table, and calls the appropriate summarize function." />
+<meta property="og:description" content="Set of functions to supplement the tidyselect set of functions for selecting
+columns of data frames. all_continuous(), all_categorical(), and
+all_dichotomous() may only be used with tbl_summary(), where each variable
+has been classified into one of these three groups. All other helpers
+are available throughout the package." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,84 +121,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>This function takes in the meta data table, and calls the appropriate summarize function.</h1>
+    <h1>Select helper functions</h1>
     
-    <div class="hidden name"><code>calculate_summary_stat.Rd</code></div>
+    <div class="hidden name"><code>select_helpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function takes in the meta data table, and calls the appropriate summarize function.</p>
+    <p>Set of functions to supplement the tidyselect set of functions for selecting
+columns of data frames. <code>all_continuous()</code>, <code>all_categorical()</code>, and
+<code>all_dichotomous()</code> may only be used with <code><a href='tbl_summary.html'>tbl_summary()</a></code>, where each variable
+has been classified into one of these three groups. All other helpers
+are available throughout the package.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>calculate_summary_stat</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>summary_type</span>, <span class='no'>dichotomous_value</span>,
-  <span class='no'>var_label</span>, <span class='no'>stat_display</span>, <span class='no'>digits</span>, <span class='no'>class</span>, <span class='no'>missing</span>, <span class='no'>missing_text</span>, <span class='no'>sort</span>,
-  <span class='no'>row_percent</span>)</pre>
+    <pre class="usage"><span class='fu'>all_numeric</span>()
+
+<span class='fu'>all_character</span>()
+
+<span class='fu'>all_integer</span>()
+
+<span class='fu'>all_double</span>()
+
+<span class='fu'>all_logical</span>()
+
+<span class='fu'>all_factor</span>()
+
+<span class='fu'>all_continuous</span>()
+
+<span class='fu'>all_categorical</span>(<span class='kw'>dichotomous</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>all_dichotomous</span>()</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>Data frame</p></td>
-    </tr>
-    <tr>
-      <th>variable</th>
-      <td><p>Character variable name in <code>data</code> that will be tabulated</p></td>
-    </tr>
-    <tr>
-      <th>by</th>
-      <td><p>Character variable name in<code>data</code> that Summary statistics for
-<code>variable</code> are stratified</p></td>
-    </tr>
-    <tr>
-      <th>summary_type</th>
-      <td><p>A list that includes specified summary types.</p></td>
-    </tr>
-    <tr>
-      <th>dichotomous_value</th>
-      <td><p>If the output is dichotomous, then this is the value</p></td>
-    </tr>
-    <tr>
-      <th>var_label</th>
-      <td><p>String label</p></td>
-    </tr>
-    <tr>
-      <th>stat_display</th>
-      <td><p>String that specifies the format of the displayed statistics.
-The syntax follows <code><a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue()</a></code> inputs with n, N, and p as input options.
-of the variable that will be displayed.</p></td>
-    </tr>
-    <tr>
-      <th>digits</th>
-      <td><p>integer indicating the number of decimal places to be used.</p></td>
-    </tr>
-    <tr>
-      <th>class</th>
-      <td><p>variable class.  If class is NA, then all values are NA, and no
-summary statistics will be calculated.</p></td>
-    </tr>
-    <tr>
-      <th>missing</th>
-      <td><p>whether to include NA values in the table. <code>missing</code> controls
-if the table includes counts of NA values: the allowed values correspond to
-never ("no"), only if the count is positive ("ifany") and even for
-zero counts ("always"). Default is "ifany".</p></td>
-    </tr>
-    <tr>
-      <th>missing_text</th>
-      <td><p>String to display for count of missing observations.</p></td>
-    </tr>
-    <tr>
-      <th>sort</th>
-      <td><p>string indicating whether to sort categorical
-variables by 'alphanumeric' or 'frequency'</p></td>
-    </tr>
-    <tr>
-      <th>row_percent</th>
-      <td><p>Logical value indicating whether to calculate
-percentages within column to across rows</p></td>
+      <th>dichotomous</th>
+      <td><p>logical indicating whether to include dichotomous variables.
+Default is <code>TRUE</code></p></td>
     </tr>
     </table>
     
@@ -206,8 +172,6 @@ percentages within column to across rows</p></td>
       <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 

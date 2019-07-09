@@ -66,7 +66,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0.9000</span>
       </span>
     </div>
 
@@ -176,8 +176,8 @@ coefficient estimates. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>list of variable labels to override default labels in the table
-output, e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age60 = "Age &gt; 60")</a></code>.</p></td>
+      <td><p>list of formulas specifying variables labels,
+e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")</a></code></p></td>
     </tr>
     <tr>
       <th>hide_n</th>
@@ -235,14 +235,15 @@ units in your model.  Here are some common exceptions.</p><ol>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
+    <div class='dont-index'><p>See tbl_regression <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression'>vignette</a>  for detailed examples</p>
+<p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
   <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
   <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
   <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
   <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code></p></div>
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -262,7 +263,7 @@ units in your model.  Here are some common exceptions.</p><ol>
     <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>),
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>),
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"grade"</span> ~ <span class='st'>"Grade"</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
     <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
   )</div></pre>
