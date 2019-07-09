@@ -1,6 +1,7 @@
-# gtsummary 1.1.1
 
 # gtsummary (development version)
+
+# gtsummary 1.1.1
 
 * modify `tbl_merge()` to accommodate `tbl_stack()` object (#167)
 
