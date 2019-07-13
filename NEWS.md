@@ -1,6 +1,8 @@
 
 # gtsummary (development version)
 
+* Updates after {gt} package renamed `cells_style()` to `cell_text()` (#78)
+
 # gtsummary 1.1.1
 
 * modify `tbl_merge()` to accommodate `tbl_stack()` object (#167)
