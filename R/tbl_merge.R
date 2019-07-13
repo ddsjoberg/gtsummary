@@ -268,7 +268,7 @@ gt_tbl_merge <- quote(list(
   # indenting levels and missing rows
   tab_style_text_indent = glue(
     "tab_style(",
-    "style = cells_styles(text_indent = px(10), text_align = 'left'),",
+    "style = cell_text(indent = px(10), align = 'left'),",
     "locations = cells_data(",
     "columns = vars(label),",
     "rows = row_type != 'label'",
