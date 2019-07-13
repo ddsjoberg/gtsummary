@@ -13,7 +13,7 @@ status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-## gtsummary
+## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
 
 The {gtsummary} package creates presentation-ready tables summarizing
 data sets, regression models, and more. The code to create the tables is
@@ -96,7 +96,10 @@ Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms. A big thank you to all
 contributors\!  
+[@ahinton-mmc](https://github.com/ahinton-mmc),
 [@ddsjoberg](https://github.com/ddsjoberg),
+[@emilyvertosick](https://github.com/emilyvertosick),
+[@jflynn264](https://github.com/jflynn264),
 [@karissawhiting](https://github.com/karissawhiting),
 [@margarethannum](https://github.com/margarethannum),
 [@michaelcurry1123](https://github.com/michaelcurry1123), and
