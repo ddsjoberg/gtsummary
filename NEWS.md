@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* `tbl_stack()` fix for `tbl_uvregression` objects (#175)
+
 * Option to exclude some variables from testing when using `add_p()` (#164)
 
 * Updates after {gt} package renamed `cells_style()` to `cell_text()` (#78)
