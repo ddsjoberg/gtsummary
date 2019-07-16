@@ -4,7 +4,8 @@
 \alias{calculate_pvalue}
 \title{This function takes in the meta-data and calculates an appropriate p-value}
 \usage{
-calculate_pvalue(data, variable, by, test, type, group)
+calculate_pvalue(data, variable, by, test, type, group, include = NULL,
+  exclude = NULL)
 }
 \arguments{
 \item{data}{input data set}
