@@ -76,8 +76,8 @@ tbl_stack <- function(tbls) {
   }
 
   # checking all inputs are class tbl_regression or tbl_merge
-  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_merge") %>% any()) {
-    stop("All objects in 'tbls' must be class 'tbl_regression' or 'tbl_uvregression'")
+  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression", "tbl_merge") %>% any()) {
+    stop("All objects in 'tbls' must be class 'tbl_regression', 'tbl_uvregression', or 'tbl_merge'")
   }
 
   # at least two objects must be passed
