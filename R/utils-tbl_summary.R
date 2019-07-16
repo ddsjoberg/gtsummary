@@ -400,14 +400,20 @@ assign_var_label <- function(data, variable, var_label) {
 #' @keywords internal
 #' @author Emily C. Zabor
 
-calculate_pvalue <- function(data, variable, by, test, type, group) {
+calculate_pvalue <- function(data, variable, by, test, type, group, include=NULL, exclude=NULL) {
   pmap_dbl(
     list(variable, by, test, type),
-    ~ calculate_pvalue_one(data, ..1, ..2, ..3, ..4, group)
+    ~ calculate_pvalue_one(data, ..1, ..2, ..3, ..4, group,
+                           include=include, exclude=exclude)
   )
 }
 
-calculate_pvalue_one <- function(data, variable, by, test, type, group) {
+calculate_pvalue_one <- function(data, variable, by, test, type, group,
+                                 include=NULL, exclude=NULL) {
+
+  #omitting variables not in include
+
+  if(!(variable %in% include)) return(NA)
 
   # if there is no by variable, and thus test is NA, return NA
   if (is.na(test)) {
