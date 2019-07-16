@@ -1,4 +1,13 @@
+
 # gtsummary (development version)
+
+* Updates after {gt} package renamed `cells_style()` to `cell_text()` (#78)
+
+# gtsummary 1.1.1
+
+* modify `tbl_merge()` to accommodate `tbl_stack()` object (#167)
+
+* Bug fix with incorrect column order in `tbl_summary()` with 10+ levels of by variable (#166)
 
 # gtsummary 1.1.0
 

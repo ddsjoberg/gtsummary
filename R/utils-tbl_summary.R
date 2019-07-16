@@ -167,11 +167,10 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #' @examples
 #' gtsummary:::assign_summary_type(
 #'   data = mtcars,
-#'   variable =  names(mtcars),
+#'   variable = names(mtcars),
 #'   class = apply(mtcars, 2, class),
 #'   summary_type = NULL, value = NULL
 #' )
-
 assign_summary_type <- function(data, variable, class, summary_type, value) {
   map2_chr(
     variable, class,
@@ -280,10 +279,14 @@ assign_test <- function(data, var, var_summary_type, by_var, test, group) {
 
 assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # if the 'by' variable is null, no tests will be performed
-  if (is.null(by_var)) return(NA_character_)
+  if (is.null(by_var)) {
+    return(NA_character_)
+  }
 
   # if user specifed test to be performed, do that test.
-  if (!is.null(test[[var]])) return(test[[var]])
+  if (!is.null(test[[var]])) {
+    return(test[[var]])
+  }
 
   # if user specifed test to be performed for ..continuous.. or
   # ..categorical.., do that test for that class of variable
@@ -296,7 +299,9 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   }
 
   # if group variable supplied, fit a random effects model
-  if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("lme4")
+  if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
+    return("lme4")
+  }
 
   # unless by_var has >2 levels, then return NA with a message
   if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
@@ -321,7 +326,9 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
     min()
 
   # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
-  if (min_exp >= 5) return("chisq.test")
+  if (min_exp >= 5) {
+    return("chisq.test")
+  }
   return("fisher.test")
 }
 
@@ -353,7 +360,6 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 #' @author Daniel D. Sjoberg
 #' @examples
 #' gtsummary:::assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
-
 assign_var_label <- function(data, variable, var_label) {
   map_chr(
     variable,
@@ -410,13 +416,17 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group,
   if(!(variable %in% include)) return(NA)
 
   # if there is no by variable, and thus test is NA, return NA
-  if (is.na(test)) return(NA)
+  if (is.na(test)) {
+    return(NA)
+  }
 
   # convert by variables to factor (some functions don't allow strings)
   data[[by]] <- data[[by]] %>% factor()
 
   # omitting missing values before calculating pvalues
-  data <- data %>% select(c(group, variable, by)) %>% stats::na.omit()
+  data <- data %>%
+    select(c(group, variable, by)) %>%
+    stats::na.omit()
 
   # Wilcoxon and Kruskal-Wallis tests
   if (test %in% c("wilcox.test", "kruskal.test")) {
@@ -703,20 +713,30 @@ continuous_digits_guess_one <- function(data,
                                         class,
                                         digits = NULL) {
   # if class is NA (meaning all values are NA), returning NA
-  if (is.na(class)) return(NA)
+  if (is.na(class)) {
+    return(NA)
+  }
 
   # if the variable is not continuous type, return NA
-  if (summary_type != "continuous") return(NA)
+  if (summary_type != "continuous") {
+    return(NA)
+  }
 
   # if the number of digits is specified for a variable, return specified number
-  if (!is.null(digits[[variable]])) return(digits[[variable]])
+  if (!is.null(digits[[variable]])) {
+    return(digits[[variable]])
+  }
 
   # if the number of digits is specified for a all continuous variables,
   # return specified number
-  if (!is.null(digits[["..continuous.."]])) return(digits[["..continuous.."]])
+  if (!is.null(digits[["..continuous.."]])) {
+    return(digits[["..continuous.."]])
+  }
 
   # if class is integer, then round everythng to nearest integer
-  if (class == "integer") return(0)
+  if (class == "integer") {
+    return(0)
+  }
 
   # calculate the spread of the variable
   var_spread <- stats::quantile(data[[variable]], probs = c(0.95), na.rm = TRUE) -
@@ -851,16 +871,16 @@ summarize_categorical <- function(data, variable, by, var_label,
   # if there is a dichotomous value supplied, merging it in to ensure it gets counted (when unobserved)
   if (!is.null(dichotomous_value)) {
     # making factors character here
-    if(is.factor(tab0$variable)) {
+    if (is.factor(tab0$variable)) {
       tab0 <-
         tab0 %>%
         mutate(variable = as.character(variable)) %>%
         full_join(tibble(variable = as.character(dichotomous_value)), by = "variable")
     }
     else {
-    tab0 <-
-      tab0 %>%
-      full_join(tibble(variable = dichotomous_value), by = "variable")
+      tab0 <-
+        tab0 %>%
+        full_join(tibble(variable = dichotomous_value), by = "variable")
     }
   }
 
@@ -907,7 +927,9 @@ summarize_categorical <- function(data, variable, by, var_label,
     group_by(!!sym("by_col")) %>%
     nest() %>%
     mutate(
-      missing_count = map_chr(data, ~ .x[[1]] %>% is.na() %>% sum())
+      missing_count = map_chr(data, ~ .x[[1]] %>%
+        is.na() %>%
+        sum())
     ) %>%
     select(c("by_col", "missing_count")) %>%
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
@@ -1058,7 +1080,10 @@ summarize_continuous <- function(data, variable, by, digits,
       # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
       df_result = map2(
         .data$stat_name_list, .data$stat_result_list_fmt,
-        ~ .y %>% t() %>% as_tibble(.name_repair = "minimal") %>% set_names(.x)
+        ~ .y %>%
+          t() %>%
+          as_tibble(.name_repair = "minimal") %>%
+          set_names(.x)
       ),
       # rounding statistics and concatenating results
       stat = map_chr(
@@ -1085,7 +1110,9 @@ summarize_continuous <- function(data, variable, by, digits,
       missing_count =
         map_chr(
           data,
-          ~ .x[[1]] %>% is.na() %>% sum()
+          ~ .x[[1]] %>%
+            is.na() %>%
+            sum()
         )
     ) %>%
     select(c("by_col", "missing_count")) %>%
@@ -1127,14 +1154,22 @@ assign_sort <- function(variable, summary_type, sort) {
     variable, summary_type,
     function(variable, summary_type) {
       # only assigning sort type for caegorical data
-      if (summary_type == "dichotomous") return("alphanumeric")
-      if (summary_type != "categorical") return(NA_character_)
+      if (summary_type == "dichotomous") {
+        return("alphanumeric")
+      }
+      if (summary_type != "categorical") {
+        return(NA_character_)
+      }
 
       # if variable was specified, then use that
-      if (!is.null(sort[[variable]])) return(sort[[variable]])
+      if (!is.null(sort[[variable]])) {
+        return(sort[[variable]])
+      }
 
       # if the sort list has ..categorical.. name, then use that for all categorical variables
-      if (!is.null(sort[["..categorical.."]])) return(sort[["..categorical.."]])
+      if (!is.null(sort[["..categorical.."]])) {
+        return(sort[["..categorical.."]])
+      }
 
       # otherwise, return "alphanumeric"
       return("alphanumeric")
@@ -1254,7 +1289,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     # all sepcifed types are continuous, categorical, or dichotomous
     if ("formula" %in% class(type)) type <- list(type)
     if (!every(type, ~ eval(rlang::f_rhs(.x)) %in% c("continuous", "categorical", "dichotomous")) |
-        !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
         "The RHS of the formula in the 'type'  argument must of one and only one of ",
         "\"continuous\", \"categorical\", or \"dichotomous\""
@@ -1262,10 +1297,12 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     }
 
     # functions all_continuous, all_categorical, and all_dichotomous cannot be used for type
-    if (some(type,
-             ~deparse(.x) %>% # converts a formula to a string
-             stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
-             any())) {
+    if (some(
+      type,
+      ~ deparse(.x) %>% # converts a formula to a string
+        stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
+        any()
+    )) {
       stop(glue(
         "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
         "cannot be used in the 'type' argument."
@@ -1297,10 +1334,12 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     }
 
     # functions all_continuous, all_categorical, and all_dichotomous cannot be used for value
-    if (some(value,
-             ~deparse(.x) %>% # converts a formula to a string
-             stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
-             any())) {
+    if (some(
+      value,
+      ~ deparse(.x) %>% # converts a formula to a string
+        stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
+        any()
+    )) {
       stop(glue(
         "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
         "cannot be used in the 'value' argument."
@@ -1447,7 +1486,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     # all sepcifed types are frequency or alphanumeric
     if ("formula" %in% class(sort)) sort <- list(sort)
     if (!every(sort, ~ eval(rlang::f_rhs(.x)) %in% c("frequency", "alphanumeric")) |
-        !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
         "The RHS of the formula in the 'sort' argument must of one and only one of ",
         "\"frequency\" or \"alphanumeric\""

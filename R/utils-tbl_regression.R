@@ -154,7 +154,9 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   for (v in term_match$variable) {
     for (yn in yesno_levels) {
       if ("character" %in% class(model_frame[[v]]) &
-        model_frame[[v]] %>% stats::na.omit() %>% setequal(yn)) {
+        model_frame[[v]] %>%
+          stats::na.omit() %>%
+          setequal(yn)) {
         yesno_variables <- c(yesno_variables, v)
       }
       # for factors the ORDER must be no THEN yes (making no the reference group)
@@ -170,9 +172,9 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   # more  var labels -----------------------------------------------------------
   # model.frame() strips variable labels from cox models.  this attempts
   # to grab the labels in another way
-  labels_parent_frame = tryCatch({
+  labels_parent_frame <- tryCatch({
     stats::model.frame.default(fit) %>%
-      purrr::imap(~attr(.x, "label"))
+      purrr::imap(~ attr(.x, "label"))
   }, warning = function(w) {
     NULL
   }, error = function(e) {
@@ -223,7 +225,7 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
       variable_type = map_chr(
         .data$variable,
         ~ case_when(
-          any(class(model_frame[[.x]]) %in% c("character", "factor")) ~ "categorical" ,
+          any(class(model_frame[[.x]]) %in% c("character", "factor")) ~ "categorical",
           TRUE ~ "continuous"
         )
       ),
@@ -233,7 +235,9 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
       level = pmap_chr(
         list(.data$term_split, .data$variable, .data$variable_lbl, .data$variable_type),
         function(term_split, variable, variable_lbl, variable_type) {
-          if (variable_type == "continuous") return(variable_lbl)
+          if (variable_type == "continuous") {
+            return(variable_lbl)
+          }
           stringr::str_remove(term_split, pattern = stringr::fixed(variable))
         }
       )
@@ -271,9 +275,15 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
       single_row = pmap_lgl(
         list(.data$var_type, .data$group, .data$group_lbl, .data$data),
         function(var_type, group, group_lbl, data) {
-          if (var_type == "continuous") return(TRUE)
-          if (var_type == "categorical" & group %in% yesno_variables) return(TRUE)
-          if (var_type == "categorical") return(FALSE)
+          if (var_type == "continuous") {
+            return(TRUE)
+          }
+          if (var_type == "categorical" & group %in% yesno_variables) {
+            return(TRUE)
+          }
+          if (var_type == "categorical") {
+            return(FALSE)
+          }
           # display on single line of it a numeric-numeric interaction
           if (var_type == "interaction") {
             if (nrow(data) > 1) {
@@ -292,19 +302,19 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   # adding in refernce rows, and header rows for categorical and interaction variables
   result <-
     tidy_group %>%
-      mutate(
-        table = pmap(
-          list(.data$group, .data$group_lbl, .data$single_row, .data$var_type, .data$data),
-          ~ parse_final_touches(
-            group = ..1,
-            group_lbl = ..2,
-            single_row = ..3,
-            var_type = ..4,
-            data = ..5,
-            model_frame = model_frame
-          )
+    mutate(
+      table = pmap(
+        list(.data$group, .data$group_lbl, .data$single_row, .data$var_type, .data$data),
+        ~ parse_final_touches(
+          group = ..1,
+          group_lbl = ..2,
+          single_row = ..3,
+          var_type = ..4,
+          data = ..5,
+          model_frame = model_frame
         )
       )
+    )
 
   # returning final formatted tibble of results
   map_dfr(result$table, ~.x)

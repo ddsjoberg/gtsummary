@@ -17,3 +17,4 @@ tidyselect_to_list(.data, x, .meta_data = NULL)
 Functions takes a list of tidyselect formulas, e.g. \code{list(starts_with("age") ~ "continuous")},
 and returns a named list, e.g. \code{list(age = "continuous")}.
 }
+\keyword{internal}

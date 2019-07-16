@@ -43,10 +43,10 @@ sort_p.tbl_summary <- function(x, q = FALSE, ...) {
     stop("Before you sort by q-values, run add_q() to calculate the q-values")
   }
 
-  sort_var <-  "p.value"
+  sort_var <- "p.value"
   if (q == TRUE) sort_var <- "q.value"
 
-  table_body <-  x$table_body %>%
+  table_body <- x$table_body %>%
     group_by(.data$variable) %>%
     mutate(sort_col = min(.data[[sort_var]], na.rm = TRUE))
 
@@ -63,7 +63,6 @@ sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 
   # returning tbl_summary object
   return(x)
-
 }
 
 #' Sort variables in table by ascending p-values
@@ -85,8 +84,6 @@ sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 #'
 
 sort_p.tbl_regression <- function(x, ...) {
-
-
   table_body <- x$table_body %>%
     group_by(.data$variable) %>%
     mutate(sort_col = min(.data$p.value, na.rm = TRUE)) %>%
@@ -102,7 +99,6 @@ sort_p.tbl_regression <- function(x, ...) {
 
   # returning tbl_summary object
   return(x)
-
 }
 
 #' Sort variables in table by ascending p-values
@@ -137,10 +133,10 @@ sort_p.tbl_uvregression <- function(x, q = FALSE, ...) {
     stop("Before you sort by q-values, run add_q() to calculate the q-values")
   }
 
-  sort_var <-  "p.value"
+  sort_var <- "p.value"
   if (q == TRUE) sort_var <- "q.value"
 
-  table_body <-  x$table_body %>%
+  table_body <- x$table_body %>%
     group_by(.data$variable) %>%
     mutate(sort_col = min(.data[[sort_var]], na.rm = TRUE))
 
@@ -157,5 +153,4 @@ sort_p.tbl_uvregression <- function(x, q = FALSE, ...) {
 
   # returning tbl_uvregression object
   return(x)
-
 }
