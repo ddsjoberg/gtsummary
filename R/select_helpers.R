@@ -95,4 +95,3 @@ scoped_data <- function(.data) {
 scoped_meta_data <- function(.meta_data) {
   meta_data_env$summary_type <- .meta_data$summary_type %>% set_names(.meta_data$variable)
 }
-

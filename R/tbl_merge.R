@@ -1,6 +1,6 @@
 #' Merge two or more gtsummary regression objects
 #'
-#' Merges two or more `tbl_regression` or `tbl_uvregression` objects and adds appropriate spanning headers.
+#' Merges two or more `tbl_regression`, `tbl_uvregression`, or `tbl_stack` objects and adds appropriate spanning headers.
 #'
 #' @param tbls list of gtsummary regression objects
 #' @param tab_spanner Spanning headers. Character vector with same length as `tbls`
@@ -34,8 +34,8 @@
 tbl_merge <- function(tbls,
                       tab_spanner = paste0(c("Model "), 1:length(tbls))) {
   # input checks ---------------------------------------------------------------
-  # checking all inputs are class tbl_regression or tbl_uvregression
-  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression") %>% any()) {
+  # checking all inputs are class tbl_regression, tbl_uvregression, or tbl_stack
+  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack") %>% any()) {
     stop("All objects in 'tbls' must be class 'tbl_regression' or 'tbl_uvregression'")
   }
 
@@ -79,8 +79,12 @@ tbl_merge <- function(tbls,
         table = map2(
           .data$table, .data$data,
           function(table, data) {
-            if (is.null(table)) return(data)
-            if (is.null(data)) return(table)
+            if (is.null(table)) {
+              return(data)
+            }
+            if (is.null(data)) {
+              return(table)
+            }
             full_join(table, data, by = c("row_type", "label"))
           }
         )
@@ -194,7 +198,9 @@ gt_tbl_merge <- quote(list(
           ) %>%
           select(c("variable", "row_ref"))
 
-        if (nrow(cat_var) == 0) return(NULL)
+        if (nrow(cat_var) == 0) {
+          return(NULL)
+        }
         map(
           cat_var$variable,
           ~ glue(
@@ -262,7 +268,7 @@ gt_tbl_merge <- quote(list(
   # indenting levels and missing rows
   tab_style_text_indent = glue(
     "tab_style(",
-    "style = cells_styles(text_indent = px(10), text_align = 'left'),",
+    "style = cell_text(indent = px(10), align = 'left'),",
     "locations = cells_data(",
     "columns = vars(label),",
     "rows = row_type != 'label'",
@@ -282,7 +288,9 @@ gt_tbl_merge <- quote(list(
       map(pluck("qvalue_fun")) %>%
       imap(
         function(x, y) {
-          if (is.null(x)) return(NULL)
+          if (is.null(x)) {
+            return(NULL)
+          }
           glue("fmt(columns = vars(q.value_{y}), rows = !is.na(q.value_{y}), fns = x$qvalue_funs[[{y}]])")
         }
       ) %>%
@@ -295,7 +303,9 @@ gt_tbl_merge <- quote(list(
       map(pluck("qvalue_fun")) %>%
       imap(
         function(x, y) {
-          if (is.null(x)) return(NULL)
+          if (is.null(x)) {
+            return(NULL)
+          }
           glue("cols_label(q.value_{y} = md('**q-value**'))")
         }
       ) %>%
@@ -308,7 +318,9 @@ gt_tbl_merge <- quote(list(
       map(pluck("qvalue_method")) %>%
       imap_dfr(
         function(x, y) {
-          if (is.null(x)) return(tibble(i = y, method = NA_character_, var = paste0("q.value_", i)))
+          if (is.null(x)) {
+            return(tibble(i = y, method = NA_character_, var = paste0("q.value_", i)))
+          }
           return(tibble(i = y, method = x, var = paste0("q.value_", i)))
         }
       ) %>%
@@ -341,7 +353,7 @@ tbl_inputs <- function(tbl) {
   map(
     tbl,
     function(tbl) {
-      if (class(tbl) == "tbl_regression") {
+      if (class(tbl) %in% c("tbl_regression", "tbl_stack")) {
         return(pluck(tbl, "inputs"))
       }
       if (class(tbl) == "tbl_uvregression") {
@@ -353,6 +365,8 @@ tbl_inputs <- function(tbl) {
 
 # this function is glue_collapse, but returns NULL is passed nothing
 glue_collapse_null <- function(x, sep = " %>% ") {
-  if (length(x) == 0) return(NULL)
+  if (length(x) == 0) {
+    return(NULL)
+  }
   glue_collapse(x, sep)
 }

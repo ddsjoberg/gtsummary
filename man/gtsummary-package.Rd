@@ -7,6 +7,8 @@
 \title{gtsummary: Presentation-Ready Data Summary and Analytic Result
     Tables}
 \description{
+\if{html}{\figure{logo.png}{options: align='right'}}
+
 Creates presentation-ready tables summarizing data
     sets, regression models, and more. The code to create the tables is
     concise and highly customizable. Data frames can be summarized with

@@ -29,7 +29,8 @@
 #'
 
 add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
-                           group = x$inputs$group, include=NULL, exclude=NULL) {
+                  group = x$inputs$group, include=NULL, exclude=NULL) {
+
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
@@ -38,7 +39,7 @@ add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
   }
 
   # test -----------------------------------------------------------------------
-  #parsing into a named list
+  # parsing into a named list
   test <- tidyselect_to_list(x$inputs$data, test, .meta_data = x$meta_data)
 
   if (!is.null(test)) {

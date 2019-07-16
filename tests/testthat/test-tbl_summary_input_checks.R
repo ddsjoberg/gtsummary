@@ -1,7 +1,6 @@
 context("test-tbl_summary_input_checks")
 
 test_that("input check", {
-
   expect_error(
     tbl_summary(trial, type = list("age" ~ "cont555inuous")),
     "*"
@@ -46,5 +45,4 @@ test_that("input check", {
     tbl_summary(trial, sort = TRUE),
     "*"
   )
-
 })

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Deprecated functions — deprecated • gtsummary</title>
+<title>Select helper functions — select_helpers • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,13 @@
 
 
 
-<meta property="og:title" content="Deprecated functions — deprecated" />
+<meta property="og:title" content="Select helper functions — select_helpers" />
 
-<meta property="og:description" content="Some functions have been deprecated and are no longer being actively
-supported. Please use these functions instead:
-add_p, add_global_p." />
+<meta property="og:description" content="Set of functions to supplement the tidyselect set of functions for selecting
+columns of data frames. all_continuous(), all_categorical(), and
+all_dichotomous() may only be used with tbl_summary(), where each variable
+has been classified into one of these three groups. All other helpers
+are available throughout the package." />
 
 <meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -121,28 +123,55 @@ add_p, add_global_p." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Deprecated functions</h1>
+    <h1>Select helper functions</h1>
     
-    <div class="hidden name"><code>deprecated.Rd</code></div>
+    <div class="hidden name"><code>select_helpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Some functions have been deprecated and are no longer being actively
-supported. Please use these functions instead:
-<a href='add_p.html'>add_p</a>, <a href='add_global_p.html'>add_global_p</a>.</p>
+    <p>Set of functions to supplement the tidyselect set of functions for selecting
+columns of data frames. <code>all_continuous()</code>, <code>all_categorical()</code>, and
+<code>all_dichotomous()</code> may only be used with <code><a href='tbl_summary.html'>tbl_summary()</a></code>, where each variable
+has been classified into one of these three groups. All other helpers
+are available throughout the package.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_comparison</span>(<span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>all_numeric</span>()
 
-<span class='fu'>add_global</span>(<span class='no'>...</span>)</pre>
-        
+<span class='fu'>all_character</span>()
+
+<span class='fu'>all_integer</span>()
+
+<span class='fu'>all_double</span>()
+
+<span class='fu'>all_logical</span>()
+
+<span class='fu'>all_factor</span>()
+
+<span class='fu'>all_continuous</span>()
+
+<span class='fu'>all_categorical</span>(<span class='kw'>dichotomous</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>all_dichotomous</span>()</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dichotomous</th>
+      <td><p>logical indicating whether to include dichotomous variables.
+Default is <code>TRUE</code></p></td>
+    </tr>
+    </table>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

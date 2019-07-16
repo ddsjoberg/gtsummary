@@ -13,7 +13,8 @@ tbl_stack(tbls)
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
 or more \code{tbl_regression} or \code{tbl_merge} objects.
 {gt} attributes from the first regression object are utilized for output table.
-If combining \code{tbl_stack()} and \code{tbl_merge()}, merge first then stack.
+If combining \code{tbl_stack()} and \code{tbl_merge()}, merge first then stack, or stack
+first and then merge.
 }
 \section{Example Output}{
 
@@ -30,14 +31,18 @@ If combining \code{tbl_stack()} and \code{tbl_merge()}, merge first then stack.
 # Example 1 - stacking two tbl_regression objects
 t1 <-
   glm(response ~ trt, trial, family = binomial) \%>\%
-  tbl_regression(exponentiate = TRUE,
-                 label = list("trt" ~ "Treatment (unadjusted)"))
+  tbl_regression(
+    exponentiate = TRUE,
+    label = list("trt" ~ "Treatment (unadjusted)")
+  )
 
 t2 <-
   glm(response ~ trt + grade + stage + marker, trial, family = binomial) \%>\%
-  tbl_regression(include = "trt",
-                 exponentiate = TRUE,
-                 label = list("trt" ~ "Treatment (adjusted)"))
+  tbl_regression(
+    include = "trt",
+    exponentiate = TRUE,
+    label = list("trt" ~ "Treatment (adjusted)")
+  )
 
 tbl_stack_ex1 <- tbl_stack(list(t1, t2))
 
@@ -45,14 +50,18 @@ tbl_stack_ex1 <- tbl_stack(list(t1, t2))
 library(survival)
 t3 <-
   coxph(Surv(ttdeath, death) ~ trt, trial) \%>\%
-  tbl_regression(exponentiate = TRUE,
-                 label = list("trt" ~ "Treatment (unadjusted)"))
+  tbl_regression(
+    exponentiate = TRUE,
+    label = list("trt" ~ "Treatment (unadjusted)")
+  )
 
 t4 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + stage + marker, trial) \%>\%
-  tbl_regression(include = "trt",
-                 exponentiate = TRUE,
-                 label = list("trt" ~ "Treatment (adjusted)"))
+  tbl_regression(
+    include = "trt",
+    exponentiate = TRUE,
+    label = list("trt" ~ "Treatment (adjusted)")
+  )
 
 
 # first merging, then stacking
@@ -61,8 +70,10 @@ row2 <- tbl_merge(list(t2, t4))
 tbl_stack_ex2 <-
   tbl_stack(list(row1, row2)) \%>\%
   as_gt() \%>\%
-  tab_footnote(footnote = "Adjusted for cancer grade, state, and marker level.",
-               locations = cells_data(columns = "label", rows = 4))
+  tab_footnote(
+    footnote = "Adjusted for cancer grade, state, and marker level.",
+    locations = cells_data(columns = "label", rows = 4)
+  )
 }
 \seealso{
 \link{tbl_merge}
