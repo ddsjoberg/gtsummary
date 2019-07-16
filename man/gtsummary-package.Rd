@@ -37,5 +37,11 @@ Authors:
   \item Karissa Whiting
 }
 
+Other contributors:
+\itemize{
+  \item Michael Curry [contributor]
+  \item Jessica Flynn [contributor]
+}
+
 }
 \keyword{internal}
