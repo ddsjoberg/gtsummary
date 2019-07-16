@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
       </span>
     </div>
 
@@ -131,7 +131,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>,
-  <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>group</span>)</pre>
+  <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>group</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,13 +159,21 @@ Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://www.rdocumentation.org/packages/purrr/topics/partial'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
     </tr>
     <tr>
       <th>group</th>
       <td><p>character vector of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in add_p to
 calculate p-values with correlated data. Default is <code>NULL</code></p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>names of variables to include in output.</p></td>
+    </tr>
+    <tr>
+      <th>exclude</th>
+      <td><p>names of variables to exclude from output.</p></td>
     </tr>
     </table>
     
@@ -192,7 +200,7 @@ calculate p-values with correlated data. Default is <code>NULL</code></p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>add_comp_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>add_p</span>()</div></pre>
   </div>
