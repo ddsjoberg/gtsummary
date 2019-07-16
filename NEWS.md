@@ -1,6 +1,8 @@
 
 # gtsummary (development version)
 
+* Option to exclude some variables from testing when using `add_p()` (#164)
+
 * Updates after {gt} package renamed `cells_style()` to `cell_text()` (#78)
 
 # gtsummary 1.1.1
