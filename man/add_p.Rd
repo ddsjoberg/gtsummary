@@ -5,7 +5,7 @@
 \title{Adds p-values to summary tables}
 \usage{
 add_p(x, test = NULL, pvalue_fun = style_pvalue,
-  group = x$inputs$group)
+  group = x$inputs$group, include = NULL, exclude = NULL)
 }
 \arguments{
 \item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
@@ -30,6 +30,10 @@ and return a string that is the rounded/formatted p-value (e.g.
 \item{group}{character vector of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in \link{add_p} to
 calculate p-values with correlated data. Default is \code{NULL}}
+
+\item{include}{names of variables to include in output.}
+
+\item{exclude}{names of variables to exclude from output.}
 }
 \description{
 Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.

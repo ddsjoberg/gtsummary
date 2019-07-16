@@ -29,7 +29,7 @@
 #'
 
 add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
-                           group = x$inputs$group) {
+                           group = x$inputs$group, include=NULL, exclude=NULL) {
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
@@ -56,6 +56,11 @@ add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
     stop("Input 'pvalue_fun' must be a function.")
   }
 
+  #Getting p-values only for included variables
+  if (is.null(include)) include <- x$table_body$variable %>% unique()
+  include <- include %>% setdiff(exclude)
+
+
   # getting the test name and pvalue
   meta_data <-
     x$meta_data %>%
@@ -76,7 +81,9 @@ add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
         by = x$inputs$by,
         test = .data$stat_test,
         type = .data$summary_type,
-        group = group
+        group = group,
+        include = include,
+        exclude = exclude
       )
     )
 
