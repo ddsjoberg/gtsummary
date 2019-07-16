@@ -1,4 +1,3 @@
-
 # gtsummary (development version)
 
 * Option to exclude some variables from testing when using `add_p()` (#164)
