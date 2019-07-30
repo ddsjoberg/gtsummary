@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(gtsummary)
 ```
 
 ## Introduction
@@ -50,6 +49,7 @@ We'll be using the `trial` data set throughout this example.  This set contains 
     ttdeath  Years from Randomization to Death/Censor
 
 ```{r, message=FALSE}
+# remotes::install_github("rstudio/gt")
 library(dplyr)
 library(gt)
 library(gtsummary)

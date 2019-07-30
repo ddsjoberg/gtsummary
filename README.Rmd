@@ -28,10 +28,11 @@ The {gtsummary} package creates presentation-ready tables summarizing data sets,
 
 ## Installation
 
-You can install the production version of {gtsummary} with:
+You can install the production version of {gtsummary} with the following code.  It is recommended to install the {gt} package with {gtsummary}.  The {gt} package enhances the output tables.  If {gt} is not installed, `knitr::kable()` will be used instead.
 
 ``` r
 install.packages("remotes")
+remotes::install_github("rstudio/gt")
 remotes::install_github("ddsjoberg/gtsummary")
 ```
 
@@ -64,9 +65,8 @@ t1 <-
 ```{r regress, include = TRUE}
 mod1 <- 
   glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
-t2 <-
-  tbl_regression(mod1,
-                 exponentiate = TRUE)
+
+t2 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
 <img src="man/figures/README-tbl_regression.png" width="44%">

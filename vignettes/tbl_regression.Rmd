@@ -11,13 +11,11 @@ vignette: >
 
 
 ```{r setup, include = FALSE}
-library(gt)
-library(gtsummary)
-library(dplyr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(gtsummary)
 ```
 
 ## Introduction
@@ -45,6 +43,11 @@ We will use the `trial` data set throughout this example.  This set contains dat
 The default output from `tbl_regression()` is meant to be publication ready.  Let's start by creating a regression model table from the `trial` data set included in the {gtsummary} package.  We will predict tumor response using age, stage, and grade using a logistic regression model.  
 
 ```{r, message=FALSE}
+# remotes::install_github("rstudio/gt")
+library(gt)
+library(gtsummary)
+library(dplyr)
+
 # build logistic regression model
 m1 = glm(response ~ age + stage + grade, trial, family = binomial(link = "logit"))
 

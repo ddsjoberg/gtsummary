@@ -25,7 +25,8 @@ print.tbl_summary <- function(x, ...) {
       "For improved formatting install the gt package.\n",
       "'remotes::install_github(\"rstudio/gt\")'\n\n",
       "If you prefer to always use knitr::kable(), add the option\n",
-      "'option(gtsummary.print_engine = \"kable\")' to your script."
+      "'option(gtsummary.print_engine = \"kable\")' to your script\n",
+      "or in a user- or project-level startup file, '.Rprofile'."
     ))
   }
 
@@ -33,7 +34,7 @@ print.tbl_summary <- function(x, ...) {
   if (print_engine == "gt") return(as_gt(x) %>% print())
   else if (print_engine == "kable") return(as_kable(x) %>% print())
   else stop(glue("'{print_engine}' is not a valid print engine. ",
-                 "Please select 'gt' or 'kable'"))
+                 "Please select 'gt' or 'kable' in 'option(gtsummary.print_engine = \"gt\")'"))
 }
 
 #' @rdname print_gtsummary
@@ -54,7 +55,8 @@ knit_print.tbl_summary <- function(x, ...) {
       "For improved formatting install the gt package.\n",
       "'remotes::install_github(\"rstudio/gt\")'\n\n",
       "If you prefer to always use knitr::kable(), add the option\n",
-      "'option(gtsummary.print_engine = \"kable\")' to your script."
+      "'option(gtsummary.print_engine = \"kable\")' to your script\n",
+      "or in a user- or project-level startup file, '.Rprofile'."
     ))
   }
 
@@ -67,7 +69,7 @@ knit_print.tbl_summary <- function(x, ...) {
   if (print_engine == "gt") return(as_gt(x) %>% knitr::knit_print())
   else if (print_engine == "kable") return(as_kable(x) %>% knitr::knit_print())
   else stop(glue("'{print_engine}' is not a valid print engine. ",
-                 "Please select 'gt' or 'kable'"))
+                 "Please select 'gt' or 'kable' in 'option(gtsummary.print_engine = \"gt\")'"))
 }
 
 #' @rdname print_gtsummary
