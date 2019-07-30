@@ -102,8 +102,6 @@ tbl_nostrata_ex2 <-
   )
 }
 \seealso{
-\link[gt:md]{gt::md}, \link[gt:html]{gt::html}
-
 Other tbl_survival tools: \code{\link{inline_text.tbl_survival}}
 }
 \author{

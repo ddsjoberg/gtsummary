@@ -18,7 +18,8 @@ Description: Creates presentation-ready tables summarizing data
     categorical variables. Common regression models, such as logistic
     regression and Cox proportional hazards regression, are automatically
     identified and the tables are pre-filled with appropriate column
-    headers.
+    headers. The package is enhanced when the {gt} package is installed.
+    Use this code to install: 'remotes::install_github("rstudio/gt")'.
 License: MIT + file LICENSE
 URL: http://www.danieldsjoberg.com/gtsummary/
 BugReports: https://github.com/ddsjoberg/gtsummary/issues
@@ -46,6 +47,7 @@ Suggests:
     ggplot2 (>= 3.1.0),
     Hmisc (>= 4.2.0),
     lme4 (>= 1.1.18.1),
+    remotes,
     rmarkdown (>= 1.11),
     spelling (>= 2.0),
     testthat (>= 2.1.0)

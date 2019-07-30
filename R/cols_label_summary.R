@@ -19,7 +19,6 @@
 #' @param ... specify column label of any other column in `.$table_body`.`
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
-#' @seealso [gt::md]
 #' @examples
 #' tbl_col_ex1 <-
 #'   trial %>%

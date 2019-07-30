@@ -2,7 +2,7 @@
 #'
 #' Function converts object to a knitr_kable object.  This function is used in the
 #' background when the results are printed or knit.  A user can use this function
-#' if they wish to add customized formatting available via `knitr::kable()`
+#' if they wish to add customized formatting available via [knitr::kable]
 #'
 #' @param x object created by a function from the gtsummary package
 #' (e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})
@@ -37,6 +37,15 @@ as_kable <- function(x, omit = NULL) {
     TRUE ~ list(character())
   ) %>%
     unlist()
+
+  # tbl_merge not refactored for nive output yet.
+  if (class(x) == "tbl_merge" || (class(x) == "tbl_stack" & class(x$tbl_regression_list[[1]]) == "tbl_merge")) {
+    message(glue(
+      "tbl_merge objects are not yet supported for 'knitr::kable()' output.\n",
+      "For improved formatting install the gt package.\n",
+      "'remotes::install_github(\"rstudio/gt\")'",
+    ))
+  }
 
   # saving vector of column labels
   col_labels <-

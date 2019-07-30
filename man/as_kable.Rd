@@ -15,7 +15,7 @@ as_kable(x, omit = NULL)
 \description{
 Function converts object to a knitr_kable object.  This function is used in the
 background when the results are printed or knit.  A user can use this function
-if they wish to add customized formatting available via \code{knitr::kable()}
+if they wish to add customized formatting available via \link[knitr:kable]{knitr::kable}
 }
 \examples{
 trial \%>\%

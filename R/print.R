@@ -14,7 +14,7 @@ print.tbl_summary <- function(x, ...) {
   print_engine <-
     getOption("gtsummary.print_engine") %||%
     ifelse(
-      "gt" %in% utils::installed.packages(),
+      requireNamespace("gt", quietly = TRUE),
       "gt", "kable"
     )
 
@@ -44,7 +44,7 @@ knit_print.tbl_summary <- function(x, ...) {
   print_engine <-
     getOption("gtsummary.print_engine") %||%
     ifelse(
-      "gt" %in% utils::installed.packages(),
+      requireNamespace("gt", quietly = TRUE),
       "gt", "kable"
     )
 
