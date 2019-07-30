@@ -16,10 +16,12 @@
 #' @seealso \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
 #' @author Daniel D. Sjoberg
 #' @examples
+#' \donttest{
 #' as_gt_ex <-
 #'   trial %>%
 #'   tbl_summary(by = "trt") %>%
 #'   as_gt()
+#' }
 #' @section Example Output:
 #'
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}

@@ -9,7 +9,8 @@ r:
 sudo: false
 cache: packages
 
-r_github_packages: rstudio/gt
+r_github_packages:
+  - rstudio/gt
 
 after_success:
   - Rscript -e 'covr::codecov()'
