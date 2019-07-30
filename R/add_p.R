@@ -104,26 +104,34 @@ add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
 
   x$table_body <- table_body
   x$pvalue_fun <- pvalue_fun
-  # adding p-value formatting
-  x[["gt_calls"]][["fmt_pvalue"]] <-
-    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$pvalue_fun)" %>%
-    glue()
-  # column headers
-  x[["gt_calls"]][["cols_label_pvalue"]] <-
-    "cols_label(p.value = md('**p-value**'))" %>%
-    glue()
-
   x$meta_data <- meta_data
+
   x$call_list <- c(x$call_list, list(add_p = match.call()))
+
+  # updating header
+  x <- cols_label_summary(x, p.value = "**p-value**")
+
+  # gt formatting --------------------------------------------------------------
+  # adding p-value formatting, gt
+  x[["gt_calls"]][["fmt_pvalue"]] <-
+    "gt::fmt(columns = gt::vars(p.value), rows = !is.na(p.value), fns = x$pvalue_fun)" %>%
+    glue()
 
   # adding footnote listing statistics presented in table
   x[["gt_calls"]][["footnote_add_p"]] <- glue(
-    "tab_footnote(",
+    "gt::tab_footnote(",
     'footnote = "{footnote_add_p(meta_data)}",',
-    "locations = cells_column_labels(",
-    "columns = vars(p.value))",
+    "locations = gt::cells_column_labels(",
+    "columns = gt::vars(p.value))",
     ")"
   )
+
+  # kable formatting -----------------------------------------------------------
+  # adding p-value formatting, kable
+  x[["kable_calls"]][["fmt_pvalue"]] <-
+    "mutate(p.value = x$pvalue_fun(p.value))"
+
+
 
   x
 }

@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(gtsummary)
 ```
 
 ## Introduction
@@ -36,6 +35,20 @@ Here's how this translates into the use of `tbl_summary()`.
         tbl = tbl_summary(mtcars, by = "am")
         add_p(tbl)
     
+## Setup
+
+Before going through the tutorial, install {gt} and {gtsummary}, and load packages.
+
+```{r, message=FALSE}
+remotes::install_github("rstudio/gt", quiet = TRUE)
+# remotes::install_github("ddsjoberg/gtsummary")
+
+library(dplyr)
+library(gtsummary)
+```
+
+Examples utilize the {gt} package to generate tables.  The  `knitr::kable()` function will be used to generate tables ff the {gt} package is not available, or if the user requests with `options(gtsummary.print_engine = "kable")`. 
+
 ## Basic Usage
 
 We'll be using the `trial` data set throughout this example.  This set contains data from `r nrow(trial)` patients randomized to a new drug therapy or placebo.  The outcome is a binary tumor response.  Each variable in the data frame has been assigned an attribute label (e.g. `attr(trial$trt, "label") = "Treatment Randomization")`. These labels are displayed in the output table by default.  A data frame without labels will print variable names.
@@ -50,11 +63,8 @@ We'll be using the `trial` data set throughout this example.  This set contains 
     ttdeath  Years from Randomization to Death/Censor
 
 ```{r, message=FALSE}
-library(dplyr)
-library(gtsummary)
-
 # printing trial data
-head(trial) %>% gt()
+head(trial) %>% gt::gt()
 ```
 
 The default output from `tbl_summary()` is meant to be publication ready.  Let's start by creating a table of summary statistics from the `trial` data set.  The `tbl_summary()` can take, minimally, a data set as the only input, and return descriptive statistics for each column in the data frame.
@@ -167,7 +177,7 @@ trial2 %>%
   # bold p-values under a given threshold (default is 0.05)
   tab_style_bold_p(t = 0.2) %>%
   # include percent in headers
-  cols_label_summary(stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"))
+  cols_label_summary(stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
 ```
 
 Each of the modification functions have additional options outlined in their respective help files.
@@ -270,6 +280,6 @@ After the `as_gt()` function is run, additional formatting may be added to the t
 ```{r remedy001}
 tbl_summary(trial2, by = "trt") %>%
   as_gt(omit = "footnote_stat_label") %>%
-  tab_spanner(label = "Randomization Group",
-              columns = starts_with("stat_"))
+  gt::tab_spanner(label = "Randomization Group",
+              columns = gt::starts_with("stat_"))
 ```

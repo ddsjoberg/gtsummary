@@ -1614,3 +1614,16 @@ footnote_stat_label <- function(meta_data) {
     paste(collapse = "; ") %>%
     paste0("Statistics presented: ", .)
 }
+
+
+# gt table_header to gt code
+table_header_to_gt <- function(table_header) {
+  table_header %>%
+  mutate(col_label_code = glue("{column} = gt::md(\"{label}\")")) %>%
+  pull("col_label_code") %>%
+  paste(collapse = ", ") %>%
+  {
+    glue("gt::cols_label({.})")
+  }
+}
+

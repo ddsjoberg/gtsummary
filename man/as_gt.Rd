@@ -29,10 +29,12 @@ for detailed examples in the 'Advanced Customization' section.
 }
 
 \examples{
+\donttest{
 as_gt_ex <-
   trial \%>\%
   tbl_summary(by = "trt") \%>\%
   as_gt()
+}
 }
 \seealso{
 \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}

@@ -228,10 +228,18 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
     select(c("variable", "summary_type", "stat_table")) %>%
     unnest(!!sym("stat_table"))
 
+  # table of column headers
+  table_header <- tibble(
+    column = "label",
+    label = "**Characteristic**"
+  )
+
   # returning all results in a list
   results <- list(
     gt_calls = eval(gt_tbl_summary),
+    kable_calls = eval(kable_tbl_summary),
     table_body = table_body %>% select(-.data$summary_type),
+    table_header = table_header,
     meta_data = meta_data,
     inputs = tbl_summary_inputs,
     call_list = list(tbl_summary = match.call())
@@ -253,9 +261,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 
   # adding headers
   if (is.null(by)) {
-    results <- cols_label_summary(results, stat_overall = md("**N = {N}**"))
+    results <- cols_label_summary(results, stat_overall = "**N = {N}**")
   } else {
-    results <- cols_label_summary(results, stat_by = md("**{level}**, N = {n}"))
+    results <- cols_label_summary(results, stat_by = "**{level}**, N = {n}")
   }
 
   return(results)
@@ -265,39 +273,44 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 # quoting returns an expression to be evaluated later
 gt_tbl_summary <- quote(list(
   # first call to the gt function
-  gt = glue("gt(data = x$table_body)"),
-
-  # column headers
-  cols_label_label = glue("cols_label(label = md('**Characteristic**'))"),
+  gt = glue("gt::gt(data = x$table_body)"),
 
   # label column indented and left just
   cols_align = glue(
-    "cols_align(align = 'center') %>% ",
-    "cols_align(align = 'left', columns = vars(label))"
+    "gt::cols_align(align = 'center') %>% ",
+    "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
 
   # do not print columns variable or row_type columns
-  cols_hide = glue("cols_hide(columns = vars(variable, row_type))"),
+  cols_hide = glue("gt::cols_hide(columns = gt::vars(variable, row_type))"),
 
   # NAs do not show in table
-  fmt_missing = glue("fmt_missing(columns = everything(), missing_text = '')"),
+  fmt_missing = glue("gt::fmt_missing(columns = gt::everything(), missing_text = '')"),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
-    "tab_style(",
-    "style = cell_text(indent = px(10), align = 'left'),",
-    "locations = cells_data(",
-    "columns = vars(label),",
+    "gt::tab_style(",
+    "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
+    "locations = gt::cells_data(",
+    "columns = gt::vars(label),",
     "rows = row_type != 'label'",
     "))"
   ),
 
   # adding footnote listing statistics presented in table
   footnote_stat_label = glue(
-    "tab_footnote(",
+    "gt::tab_footnote(",
     "footnote = '{footnote_stat_label(meta_data)}',",
-    "locations = cells_column_labels(",
-    "columns = vars(label))",
+    "locations = gt::cells_column_labels(",
+    "columns = gt::vars(label))",
     ")"
   )
 ))
+
+# kable function calls ---------------------------------------------------------
+kable_tbl_summary <- quote(list(
+  # first call
+  kable = glue("x$table_body")
+))
+
+

@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`. (#180)
+
 * `tbl_stack()` fix for `tbl_uvregression` objects (#175)
 
 * Option to exclude some variables from testing when using `add_p()` (#164)
@@ -8,7 +10,7 @@
 
 # gtsummary 1.1.1
 
-* modify `tbl_merge()` to accommodate `tbl_stack()` object (#167)
+* Modified `tbl_merge()` to accommodate `tbl_stack()` object (#167)
 
 * Bug fix with incorrect column order in `tbl_summary()` with 10+ levels of by variable (#166)
 

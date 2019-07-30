@@ -32,9 +32,16 @@ tab_style_bold_labels <- function(x) {
   # bold labels ----------------------------------------------------------------
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_bold_labels"]] <- glue(
-    "tab_style(style = cell_text(weight = 'bold'), ",
-    "locations = cells_data(columns = vars(label),",
+    "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
+    "locations = gt::cells_data(columns = gt::vars(label),",
     "rows = row_type == 'label'))"
+  )
+
+  x[["kable_calls"]][["tab_style_bold_labels"]] <- glue(
+    "dplyr::mutate(label = dplyr::case_when(",
+    "row_type == 'label' ~ paste0('__', label, '__'), ",
+    "TRUE ~ label",
+    "))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_bold_labels = match.call()))
@@ -53,9 +60,16 @@ tab_style_bold_levels <- function(x) {
   # bold levels ----------------------------------------------------------------
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_bold_levels"]] <- glue(
-    "tab_style(style = cell_text(weight = 'bold'), ",
-    "locations = cells_data(columns = vars(label),",
+    "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
+    "locations = gt::cells_data(columns = gt::vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
+  )
+
+  x[["kable_calls"]][["tab_style_bold_levels"]] <- glue(
+    "dplyr::mutate(label = dplyr::case_when(",
+    "row_type %in% c('level', 'missing') ~ paste0('__', label, '__'), ",
+    "TRUE ~ label",
+    "))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_bold_levels = match.call()))
@@ -75,9 +89,16 @@ tab_style_italicize_labels <- function(x) {
   # italicize labels ----------------------------------------------------------------
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_italicize_labels"]] <- glue(
-    "tab_style(style = cell_text(style = 'italic'), ",
-    "locations = cells_data(columns = vars(label),",
+    "gt::tab_style(style = gt::cell_text(style = 'italic'), ",
+    "locations = gt::cells_data(columns = gt::vars(label),",
     "rows = row_type == 'label'))"
+  )
+
+  x[["kable_calls"]][["tab_style_italicize_labels"]] <- glue(
+    "dplyr::mutate(label = dplyr::case_when(",
+    "row_type == 'label' ~ paste0('_', label, '_'), ",
+    "TRUE ~ label",
+    "))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_italicize_labels = match.call()))
@@ -97,9 +118,16 @@ tab_style_italicize_levels <- function(x) {
   # italicize levels -----------------------------------------------------------
   # adding p-value formatting
   x[["gt_calls"]][["tab_style_italicize_levels"]] <- glue(
-    "tab_style(style = cell_text(style = 'italic'), ",
-    "locations = cells_data(columns = vars(label),",
+    "gt::tab_style(style = gt::cell_text(style = 'italic'), ",
+    "locations = gt::cells_data(columns = gt::vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
+  )
+
+  x[["kable_calls"]][["tab_style_italicize_levels"]] <- glue(
+    "dplyr::mutate(label = dplyr::case_when(",
+    "row_type %in% c('level', 'missing') ~ paste0('_', label, '_'), ",
+    "TRUE ~ label",
+    "))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_italicize_levels = match.call()))

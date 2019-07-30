@@ -68,12 +68,7 @@ t4 <-
 row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 row2 <- tbl_merge(list(t2, t4))
 tbl_stack_ex2 <-
-  tbl_stack(list(row1, row2)) \%>\%
-  as_gt() \%>\%
-  tab_footnote(
-    footnote = "Adjusted for cancer grade, state, and marker level.",
-    locations = cells_data(columns = "label", rows = 4)
-  )
+  tbl_stack(list(row1, row2))
 }
 \seealso{
 \link{tbl_merge}

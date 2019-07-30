@@ -11,12 +11,11 @@ vignette: >
 
 
 ```{r setup, include = FALSE}
-library(gtsummary)
-library(dplyr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(gtsummary)
 ```
 
 ## Introduction
@@ -29,6 +28,20 @@ To start, a quick note on the magrittr package's pipe function, `%>%`.  By defau
     x %>% f(y) is equivalent to f(x, y)
     y %>% f(x, .) is equivalent to f(x, y)
     z %>% f(x, y, arg = .) is equivalent to f(x, y, arg = z)
+
+## Setup
+
+Before going through the tutorial, install {gt} and {gtsummary}, and load packages.
+
+```{r, message=FALSE}
+remotes::install_github("rstudio/gt")
+# remotes::install_github("ddsjoberg/gtsummary")
+
+library(gtsummary)
+library(dplyr)
+```
+
+Examples utilize the {gt} package to generate tables.  The  `knitr::kable()` function will be used to generate tables ff the {gt} package is not available, or if the user requests with `options(gtsummary.print_engine = "kable")`. 
 
 ## Basic Usage
 

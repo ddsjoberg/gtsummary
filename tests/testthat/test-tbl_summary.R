@@ -35,12 +35,12 @@ test_that("tbl_summary throws errors/messages with bad 'sort = ' specifications"
   )
 })
 
-test_that("tbl_summary omits date var", {
-  expect_message(
-    tbl_summary(sp500),
-    "Column(s)*"
-  )
-})
+# test_that("tbl_summary omits date var", {
+#   expect_message(
+#     tbl_summary(sp500),
+#     "Column(s)*"
+#   )
+# })
 
 test_that("tbl_summary returns errors with bad inputs", {
   expect_error(

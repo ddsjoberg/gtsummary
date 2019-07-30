@@ -104,13 +104,13 @@ tbl_merge <- function(tbls,
     imap_chr(
       tbl_inputs(tbls),
       ~ glue(
-        "estimate_{.y} = md('**{estimate_header(.x$x, .x$exponentiate)}**'), ",
-        "conf.low_{.y} = md('**{.x$conf.level*100}% CI**'), ",
-        "p.value_{.y} = md('**p-value**')"
+        "estimate_{.y} = gt::md('**{estimate_header(.x$x, .x$exponentiate)}**'), ",
+        "conf.low_{.y} = gt::md('**{.x$conf.level*100}% CI**'), ",
+        "p.value_{.y} = gt::md('**p-value**')"
       )
     ) %>%
     glue_collapse(sep = ", ") %>%
-    glue(", label = md('**Characteristic**')")
+    glue(", label = gt::md('**Characteristic**')")
 
   # creating list of footnote information
   footnote_abbreviation <- list()
@@ -142,14 +142,21 @@ tbl_merge <- function(tbls,
     c(paste0("conf.low_", 1:tbls_length)) %>%
     glue_collapse(sep = ", ")
 
+  # kable calls ----------------------------------------------------------------
+  #TODO: these need to be refactored
+  kable_calls <- list(kable = glue("x$table_body"))
+  table_header <- tibble(column = names(table_body), label = .data$column)
+
   # returning results
   results <- list(
     table_body = table_body,
+    table_header = table_header,
     estimate_funs = map(tbl_inputs(tbls), pluck("estimate_fun")),
     pvalue_funs = map(tbl_inputs(tbls), pluck("pvalue_fun")),
     qvalue_funs = map(tbls, pluck("qvalue_fun")),
     call_list = list(tbl_merge = match.call()),
-    gt_calls = eval(gt_tbl_merge)
+    gt_calls = eval(gt_tbl_merge),
+    kable_calls = kable_calls
   )
 
   class(results) <- "tbl_merge"
@@ -160,26 +167,26 @@ tbl_merge <- function(tbls,
 # quoting returns an expression to be evaluated later
 gt_tbl_merge <- quote(list(
   # first call to the gt function
-  gt = "gt(data = x$table_body)" %>%
+  gt = "gt::gt(data = x$table_body)" %>%
     glue(),
 
   # label column indented and left just
   gt_calls = glue(
-    "cols_align(align = 'center') %>% ",
-    "cols_align(align = 'left', columns = vars(label))"
+    "gt::cols_align(align = 'center') %>% ",
+    "gt::cols_align(align = 'left', columns = vars(label))"
   ),
 
   # do not print columns variable or row_type columns
   cols_hide = c(
-    "cols_hide(columns = vars(variable, row_type, var_type))",
-    "cols_hide(columns = starts_with('row_ref_'))",
-    "cols_hide(columns = starts_with('N_'))",
-    "cols_hide(columns = starts_with('nevent_'))"
+    "gt::cols_hide(columns = gt::vars(variable, row_type, var_type))",
+    "gt::cols_hide(columns = gt::starts_with('row_ref_'))",
+    "gt::cols_hide(columns = gt::starts_with('N_'))",
+    "gt::cols_hide(columns = gt::starts_with('nevent_'))"
   ) %>%
     glue_collapse(sep = " %>% "),
 
   # NAs do not show in table
-  fmt_missing = "fmt_missing(columns = everything(), missing_text = '')" %>%
+  fmt_missing = "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
     glue(),
 
   # Show "---" for reference groups
@@ -204,8 +211,8 @@ gt_tbl_merge <- quote(list(
         map(
           cat_var$variable,
           ~ glue(
-            "fmt_missing(",
-            "columns = vars({paste(c('estimate', 'conf.low', 'conf.high'), y, sep = '_', collapse = ', ')}), ",
+            "gt::fmt_missing(",
+            "columns = gt::vars({paste(c('estimate', 'conf.low', 'conf.high'), y, sep = '_', collapse = ', ')}), ",
             "rows = (variable == '{.x}' & row_type == 'level' & row_ref_{y} == TRUE), ",
             "missing_text = '---')"
           )
@@ -216,19 +223,15 @@ gt_tbl_merge <- quote(list(
       compact() %>%
       glue_collapse_null(),
 
-  # glue("estimate_{1:tbls_length}, conf.low_{1:tbls_length}, conf.high_{1:tbls_length}") %>%
-  # glue_collapse(sep = ", ") %>%
-  #  {glue("fmt_missing(columns = vars({.}), rows = row_type == 'level', missing_text = '---')")},
-
   # column headers
-  cols_label = glue("cols_label({cols_label_base_vars})"),
+  cols_label = glue("gt::cols_label({cols_label_base_vars})"),
 
   # column headers abbreviations footnote
   footnote_abbreviation = glue(
-    "tab_footnote(",
+    "gt::tab_footnote(",
     "footnote = '{footnote_abbreviation$footnote}',",
-    "locations = cells_column_labels(",
-    "columns = vars({footnote_abbreviation$columns}))",
+    "locations = gt::cells_column_labels(",
+    "columns = gt::vars({footnote_abbreviation$columns}))",
     ")"
   ),
 
@@ -236,7 +239,7 @@ gt_tbl_merge <- quote(list(
   fmt_pvalue =
     map(
       1:tbls_length,
-      ~ glue("fmt(columns = vars(p.value_{.x}), rows = !is.na(p.value_{.x}), fns = x$pvalue_funs[[{.x}]])")
+      ~ glue("gt::fmt(columns = gt::vars(p.value_{.x}), rows = !is.na(p.value_{.x}), fns = x$pvalue_funs[[{.x}]])")
     ) %>%
       glue_collapse(" %>% "),
 
@@ -245,7 +248,7 @@ gt_tbl_merge <- quote(list(
     map(
       1:tbls_length,
       ~ paste0(c("estimate_", "conf.low_", "conf.high_"), .x, collapse = ", ") %>% {
-        glue("fmt(columns = vars({.}), rows = !is.na(estimate_{.x}), fns = x$estimate_funs[[{.x}]])")
+        glue("gt::fmt(columns = gt::vars({.}), rows = !is.na(estimate_{.x}), fns = x$estimate_funs[[{.x}]])")
       }
     ) %>%
       glue_collapse(" %>% "),
@@ -258,8 +261,8 @@ gt_tbl_merge <- quote(list(
     map(
       1:tbls_length,
       ~ paste0(
-        "cols_merge(",
-        glue("col_1 = vars(conf.low_{.x}), col_2 = vars(conf.high_{.x}), "),
+        "gt::cols_merge(",
+        glue("col_1 = gt::vars(conf.low_{.x}), col_2 = gt::vars(conf.high_{.x}), "),
         "pattern = '{1}, {2}')"
       )
     ) %>%
@@ -267,10 +270,10 @@ gt_tbl_merge <- quote(list(
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
-    "tab_style(",
-    "style = cell_text(indent = px(10), align = 'left'),",
-    "locations = cells_data(",
-    "columns = vars(label),",
+    "gt::tab_style(",
+    "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
+    "locations = gt::cells_data(",
+    "columns = gt::vars(label),",
     "rows = row_type != 'label'",
     "))"
   ),
@@ -278,7 +281,7 @@ gt_tbl_merge <- quote(list(
   # table spanner
   tab_spanner =
     glue(
-      "tab_spanner(label = '{tab_spanner}', columns = ends_with('_{1:tbls_length}'))"
+      "gt::tab_spanner(label = '{tab_spanner}', columns = gt::ends_with('_{1:tbls_length}'))"
     ) %>%
       glue_collapse(sep = " %>% "),
 
@@ -291,7 +294,7 @@ gt_tbl_merge <- quote(list(
           if (is.null(x)) {
             return(NULL)
           }
-          glue("fmt(columns = vars(q.value_{y}), rows = !is.na(q.value_{y}), fns = x$qvalue_funs[[{y}]])")
+          glue("gt::fmt(columns = gt::vars(q.value_{y}), rows = !is.na(q.value_{y}), fns = x$qvalue_funs[[{y}]])")
         }
       ) %>%
       compact() %>%
@@ -306,7 +309,7 @@ gt_tbl_merge <- quote(list(
           if (is.null(x)) {
             return(NULL)
           }
-          glue("cols_label(q.value_{y} = md('**q-value**'))")
+          glue("gt::cols_label(q.value_{y} = gt::md('**q-value**'))")
         }
       ) %>%
       compact() %>%
@@ -334,10 +337,10 @@ gt_tbl_merge <- quote(list(
           ~ .x$var %>% paste(collapse = ", ")
         ),
         gt_call = glue(
-          "tab_footnote(",
+          "gt::tab_footnote(",
           "footnote = '{method_label}', ",
-          "locations = cells_column_labels(",
-          "columns = vars({var_list}))",
+          "locations = gt::cells_column_labels(",
+          "columns = gt::vars({var_list}))",
           ")"
         )
       ) %>%

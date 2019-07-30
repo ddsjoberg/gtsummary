@@ -165,13 +165,24 @@ add_nevent.tbl_uvregression <- function(x, ...) {
     left_join(
       table_nevent,
       by = c("variable", "var_type", "row_type", "label")
+    ) %>%
+    select(.data$variable, .data$var_type, .data$row_type,
+           .data$label, .data$N, .data$nevent, everything())
+
+  # column label
+  x$table_header <-
+    x$table_header %>%
+    bind_rows(
+      tibble(column = "nevent", label = "**Event N**")
     )
 
   x$gt_calls[["cols_nevent"]] <-
-    list(
-      "cols_move(columns = vars(nevent), after = vars(N))",
-      "cols_label(nevent = md('**Event N**'))"
-    ) %>%
-    glue_collapse(sep = " %>% ")
+    "gt::cols_move(columns = gt::vars(nevent), after = gt::vars(N))" %>%
+    glue::as_glue()
+
+  x$gt_calls[["cols_label"]] = glue(
+    "{table_header_to_gt(x$table_header)}"
+  )
+
   x
 }
