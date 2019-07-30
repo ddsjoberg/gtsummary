@@ -121,9 +121,6 @@ tbl_regression <- function(x, label = NULL,
   # converting tidyselect formula lists to named lists
   label <- tidyselect_to_list(stats::model.frame(x), label)
 
-
-
-
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())
@@ -154,13 +151,23 @@ tbl_regression <- function(x, label = NULL,
   if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
   include <- include %>% setdiff(exclude)
 
-  # keeping variables indicated in `include`
+    # keeping variables indicated in `include`
   table_body <-
     table_body %>%
     filter(.data$variable %in% include)
 
   # model N
   n <- stats::model.frame(x) %>% nrow()
+
+  table_header <-
+    tribble(
+      ~column, ~label,
+      "label", glue("**N = {n}**"),
+      "estimate", glue("**{estimate_header(x, exponentiate)}**"),
+      "conf.low", glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
+      "p.value", "**p-value**"
+    )
+
 
   # footnote abbreviation details
   footnote_abbr <-
@@ -176,11 +183,13 @@ tbl_regression <- function(x, label = NULL,
 
   results <- list(
     table_body = table_body,
+    table_header = table_header,
     n = n,
     model_obj = x,
     inputs = func_inputs,
     call_list = list(tbl_regression = match.call()),
-    gt_calls = eval(gt_tbl_regression)
+    gt_calls = eval(gt_tbl_regression),
+    kable_calls = eval(kable_tbl_regression)
   )
 
   # assigning a class of tbl_regression (for special printing in Rmarkdown)
@@ -193,73 +202,98 @@ tbl_regression <- function(x, label = NULL,
 # quoting returns an expression to be evaluated later
 gt_tbl_regression <- quote(list(
   # first call to the gt function
-  gt = "gt(data = x$table_body)" %>%
+  gt = "gt::gt(data = x$table_body)" %>%
     glue(),
 
   # label column indented and left just
   gt_calls = glue(
-    "cols_align(align = 'center') %>% ",
-    "cols_align(align = 'left', columns = vars(label))"
+    "gt::cols_align(align = 'center') %>% ",
+    "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
 
   # do not print columns variable or row_type columns
   # here i do a setdiff of the variables i want to print by default
-  cols_hide = "cols_hide(columns = vars(variable, row_ref, row_type, var_type, N))" %>%
+  cols_hide = "gt::cols_hide(columns = gt::vars(variable, row_ref, row_type, var_type, N))" %>%
     glue(),
 
   # NAs do not show in table
-  fmt_missing = "fmt_missing(columns = everything(), missing_text = '')" %>%
+  fmt_missing = "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
     glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "fmt_missing(columns = vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
-      glue(),
+    "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
+    glue(),
 
   # column headers
   cols_label = glue(
-    "cols_label(",
-    "label = md('**N = {n}**'), ",
-    "estimate = md('**{estimate_header(x, exponentiate)}**'), ",
-    "conf.low = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
-    "p.value = md('**p-value**')",
-    ")"
+    "{table_header_to_gt(table_header)}"
   ),
 
   # column headers abbreviations footnote
   footnote_abbreviation = glue(
-    "tab_footnote(",
+    "gt::tab_footnote(",
     "footnote = '{footnote_abbr}',",
-    "locations = cells_column_labels(",
+    "locations = gt::cells_column_labels(",
     "columns = {footnote_location})",
     ")"
   ),
 
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
-    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
-      glue(),
+    "gt::fmt(columns = gt::vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
+    glue(),
 
   # ceof and confidence interval formatting
   fmt_estimate =
-    "fmt(columns = vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
-      glue(),
+    "gt::fmt(columns = gt::vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
+    glue(),
 
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
-    "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
-      glue::as_glue(),
+    "gt::cols_merge(col_1 = gt::vars(conf.low), col_2 = gt::vars(conf.high), pattern = '{1}, {2}')" %>%
+    glue::as_glue(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
-    "tab_style(",
-    "style = cell_text(indent = px(10), align = 'left'),",
-    "locations = cells_data(",
-    "columns = vars(label),",
+    "gt::tab_style(",
+    "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
+    "locations = gt::cells_data(",
+    "columns = gt::vars(label),",
     "rows = row_type != 'label'",
     "))"
   )
 ))
+
+
+# kable function calls ------------------------------------------------------------
+# quoting returns an expression to be evaluated later
+kable_tbl_regression <- quote(list(
+  # first call to the gt function
+  kable = glue("x$table_body"),
+
+  # ceof and confidence interval formatting
+  fmt_estimate = glue(
+    "dplyr::mutate_at(dplyr::vars(estimate, conf.low, conf.high), ",
+    "~x$inputs$estimate_fun(.))"
+  ),
+
+  # combining conf.low and conf.high to print confidence interval
+  cols_merge_ci =
+    "dplyr::mutate(conf.low = ifelse(is.na(estimate), NA, glue::glue('{conf.low}, {conf.high}') %>% as.character()))" %>% glue::as_glue(),
+
+  # Show "---" for reference groups
+  fmt_missing_ref = glue(
+    "dplyr::mutate_at(dplyr::vars(estimate, conf.low), ",
+    "~ dplyr::case_when(row_ref == TRUE ~ '---', TRUE ~ .))"
+  ),
+
+  # adding p-value formatting (evaluate the expression with eval() function)
+  fmt_pvalue =
+    "dplyr::mutate(p.value = x$inputs$pvalue_fun(p.value))" %>% glue()
+))
+
+
 
 # identifies headers for common models (logistic, poisson, and cox regression)
 estimate_header <- function(x, exponentiate) {

@@ -53,12 +53,7 @@
 #' row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 #' row2 <- tbl_merge(list(t2, t4))
 #' tbl_stack_ex2 <-
-#'   tbl_stack(list(row1, row2)) %>%
-#'   as_gt() %>%
-#'   tab_footnote(
-#'     footnote = "Adjusted for cancer grade, state, and marker level.",
-#'     locations = cells_data(columns = "label", rows = 4)
-#'   )
+#'   tbl_stack(list(row1, row2))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -90,7 +85,8 @@ tbl_stack <- function(tbls) {
   }
 
   # stacking tables ------------------------------------------------------------
-  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c("inputs", "gt_calls", "estimate_funs", "pvalue_funs", "qvalue_funs"))]
+  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c("inputs", "gt_calls", "kable_calls", "estimate_funs",
+                                                        "pvalue_funs", "qvalue_funs", "table_header"))]
 
   results$table_body <-
     map_dfr(

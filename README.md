@@ -42,6 +42,7 @@ You can install the production version of {gtsummary} with:
 
 ``` r
 install.packages("remotes")
+remotes::install_github("rstudio/gt")
 remotes::install_github("ddsjoberg/gtsummary")
 ```
 
@@ -59,7 +60,6 @@ The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ``` r
 library(gtsummary)
-#> Loading required package: gt
 t1 <-
   tbl_summary(
     data = trial[c("trt", "age", "grade", "response")],
@@ -75,9 +75,8 @@ t1 <-
 ``` r
 mod1 <- 
   glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
-t2 <-
-  tbl_regression(mod1,
-                 exponentiate = TRUE)
+
+t2 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
 <img src="man/figures/README-tbl_regression.png" width="44%">

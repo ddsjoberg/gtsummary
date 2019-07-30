@@ -63,7 +63,7 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
-#'
+
 tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
@@ -182,6 +182,17 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
       N = if_else(.data$row_type == "label", .data$N, NA_integer_)
     )
 
+  # column labels
+  table_header <-
+    tribble(
+      ~column, ~label,
+      "label", "**Characteristic**",
+      "N", "**N**",
+      "estimate", glue("**{estimate_header(model_obj_list[[1]], exponentiate)}**"),
+      "conf.low", glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
+      "p.value", "**p-value**"
+    )
+
   # creating a meta_data table (this will be used in subsequent functions, eg add_global_p)
   meta_data <-
     table_body %>%
@@ -194,8 +205,10 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     tbl_regression_list = tbl_regression_list,
     meta_data = meta_data,
     table_body = table_body,
+    table_header = table_header,
     call_list = list(tbl_uvregression = match.call()),
-    gt_calls = eval(gt_tbl_uvregression)
+    gt_calls = eval(gt_tbl_uvregression),
+    kable_calls = eval(kable_tbl_uvregression)
   )
 
   # hiding N column if requested
@@ -214,63 +227,57 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
 # quoting returns an expression to be evaluated later
 gt_tbl_uvregression <- quote(list(
   # first call to the gt function
-  gt = "gt(data = x$table_body)" %>%
+  gt = "gt::gt(data = x$table_body)" %>%
     glue(),
 
   # label column indented and left just
   cols_align = glue(
-    "cols_align(align = 'center') %>% ",
-    "cols_align(align = 'left', columns = vars(label))"
+    "gt::cols_align(align = 'center') %>% ",
+    "gt::cols_align(align = 'left', columns = vars(label))"
   ),
 
   # do not print columns variable or row_type columns
   # here i do a setdiff of the variables i want to print by default
   cols_hide =
-    "cols_hide(columns = vars(variable, row_ref, row_type, var_type))" %>%
+    "gt::cols_hide(columns = gt::vars(variable, row_ref, row_type, var_type))" %>%
       glue(),
 
   # NAs do not show in table
   fmt_missing =
-    "fmt_missing(columns = everything(), missing_text = '')" %>%
+    "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
       glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "fmt_missing(columns = vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
+    "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
       glue(),
 
   # column headers
   cols_label = glue(
-    "cols_label(",
-    "label = md('**Characteristic**'), ",
-    "N = md('**N**'), ",
-    "estimate = md('**{estimate_header(model_obj_list[[1]], exponentiate)}**'), ",
-    "conf.low = md('**{style_percent(conf.level, symbol = TRUE)} CI**'), ",
-    "p.value = md('**p-value**')",
-    ")"
+    "{table_header_to_gt(table_header)}"
   ),
 
   # adding p-value formatting (evaluate the expression with eval() function)
   fmt_pvalue =
-    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
+    "gt::fmt(columns = gt::vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
       glue(),
 
   # ceof and confidence interval formatting
   fmt_estimate =
-    "fmt(columns = vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
+    "gt::fmt(columns = gt::vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
       glue(),
 
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
-    "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
+    "gt::cols_merge(col_1 = gt::vars(conf.low), col_2 = gt::vars(conf.high), pattern = '{1}, {2}')" %>%
       glue::as_glue(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
-    "tab_style(",
-    "style = cell_text(indent = px(10), align = 'left'),",
-    "locations = cells_data(",
-    "columns = vars(label),",
+    "gt::tab_style(",
+    "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
+    "locations = gt::cells_data(",
+    "columns = gt::vars(label),",
     "rows = row_type != 'label'",
     "))"
   ),
@@ -281,6 +288,34 @@ gt_tbl_uvregression <- quote(list(
     tbl_regression_list %>%
       pluck(1, "gt_calls", "footnote_abbreviation")
 ))
+
+# kable function calls ------------------------------------------------------------
+# quoting returns an expression to be evaluated later
+kable_tbl_uvregression <- quote(list(
+  # first call to the gt function
+  kable = glue("x$table_body"),
+
+  # ceof and confidence interval formatting
+  fmt_estimate = glue(
+    "dplyr::mutate_at(dplyr::vars(estimate, conf.low, conf.high), ",
+    "~x$inputs$estimate_fun(.))"
+  ),
+
+  # combining conf.low and conf.high to print confidence interval
+  cols_merge_ci =
+    "dplyr::mutate(conf.low = ifelse(is.na(estimate), NA, glue::glue('{conf.low}, {conf.high}') %>% as.character()))" %>% glue::as_glue(),
+
+  # Show "---" for reference groups
+  fmt_missing_ref = glue(
+    "dplyr::mutate_at(dplyr::vars(estimate, conf.low), ",
+    "~ dplyr::case_when(row_ref == TRUE ~ '---', TRUE ~ .))"
+  ),
+
+  # adding p-value formatting (evaluate the expression with eval() function)
+  fmt_pvalue =
+    "dplyr::mutate(p.value = x$inputs$pvalue_fun(p.value))" %>% glue()
+))
+
 
 # helper function to remove one value of "x" from a vector
 remove_one_x <- function(v) {

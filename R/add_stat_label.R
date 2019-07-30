@@ -43,12 +43,11 @@ add_stat_label <- function(x) {
       )
     )
 
+  # updating header
+  x <- cols_label_summary(x, stat_label = "**Statistic**")
+
   # keeping track of all functions previously run
   x$call_list <- c(x$call_list, list(add_stat_label = match.call()))
-
-  # column headers
-  x[["gt_calls"]][["cols_label:stat_label"]] <-
-    glue("cols_label(stat_label = md('**Statistic**'))")
 
   # removing previous footnote about which statistics are presented
   x[["gt_calls"]][["footnote_stat_label"]] <- NULL

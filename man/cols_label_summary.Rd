@@ -4,14 +4,14 @@
 \alias{cols_label_summary}
 \title{Relabel columns in summary table}
 \usage{
-cols_label_summary(x, stat_overall = NULL, stat_by = NULL)
+cols_label_summary(x, stat_overall = NULL, stat_by = NULL, ...)
 }
 \arguments{
 \item{x}{\code{tbl_summary} object}
 
 \item{stat_overall}{string vector including text to appear above the overall summary
 statistics. \code{{N}}, the total number of observations, is available for use in the
-description. e.g. \code{stat_overall = md("**All Patients**, N = {N}")}}
+description. e.g. \code{stat_overall = "**All Patients**, N = {N}"}}
 
 \item{stat_by}{string vector of text to include above the summary statistics
 stratified by a variable.  The following fields are available for use in the
@@ -19,12 +19,15 @@ headers: \code{{n}}, \code{{N}}, \code{{p}}, and \code{{level}}.  \code{{n}} is 
 each by group. \code{{N}} is the total number of observations. \code{{p}} is the percent
 in a by group. \code{{level}} is the by variable level.
 Syntax follows the \link[glue:glue]{glue::glue} function,
-e.g. \code{stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")}.
+e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"}.
 The \code{by} argument from the parent \code{tbl_summary()} cannot be \code{NULL}.}
+
+\item{...}{specify column label of any other column in \code{.$table_body}.`}
 }
 \description{
 Column labels can be modified to include calculated statistics,
-e.g. the N and percent within each group
+e.g. the N and percent within each group.  For {gt} output, all column labels
+are wrapped in \code{gt::md()} allowing for the use of standard markdown syntax.
 }
 \section{Example Output}{
 
@@ -42,18 +45,16 @@ tbl_col_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, response) \%>\%
   tbl_summary() \%>\%
-  cols_label_summary(stat_overall = md("**All Patients**, N = {N}"))
+  cols_label_summary(stat_overall = "**All Patients**, N = {N}")
 tbl_col_ex2 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(by = "trt") \%>\%
   cols_label_summary(
-    stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
+    stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"
   )
 }
 \seealso{
-\link[gt:md]{gt::md}, \link[gt:html]{gt::html}
-
 Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_q.tbl_summary}},

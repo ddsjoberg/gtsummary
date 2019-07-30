@@ -16,10 +16,12 @@
 #' @seealso \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
 #' @author Daniel D. Sjoberg
 #' @examples
+#' \donttest{
 #' as_gt_ex <-
 #'   trial %>%
 #'   tbl_summary(by = "trt") %>%
 #'   as_gt()
+#' }
 #' @section Example Output:
 #'
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
@@ -32,7 +34,7 @@ as_gt <- function(x, omit = NULL) {
   x$gt_calls[names(x$gt_calls) %>% setdiff(omit)] %>%
     # removing NULL elements
     compact() %>%
-    glue::glue_collapse(sep = " %>% ") %>%
+    glue_collapse(sep = " %>% ") %>%
     # converting strings into expressions to run
     parse(text = .) %>%
     eval()
