@@ -32,7 +32,7 @@ as_gt <- function(x, omit = NULL) {
   x$gt_calls[names(x$gt_calls) %>% setdiff(omit)] %>%
     # removing NULL elements
     compact() %>%
-    glue::glue_collapse(sep = " %>% ") %>%
+    glue_collapse(sep = " %>% ") %>%
     # converting strings into expressions to run
     parse(text = .) %>%
     eval()

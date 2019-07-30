@@ -66,6 +66,9 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
       by = c("variable", "row_type")
     )
 
+  # updating header
+  x <- cols_label_summary(x, q.value = "**q-value**")
+
   # keep track of what functions have been called
   x$call_list <- c(x$call_list, list(add_q = match.call()))
 
@@ -81,20 +84,28 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
     pull("method_label")
 
   x$qvalue_fun <- pvalue_fun
+
+  # gt calls -------------------------------------------------------------------
   # adding p-value formatting
   x[["gt_calls"]][["fmt_qvalue"]] <-
-    "fmt(columns = vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)"
-  # column headers
-  x[["gt_calls"]][["cols_label_qvalue"]] <-
-    "cols_label(q.value = md('**q-value**'))"
+    "gt::fmt(columns = gt::vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)"
+  # updating function calls
+  x[["gt_calls"]][["cols_label"]] <-
+    table_header_to_gt(x$table_header)
   # column headers abbreviations footnote
   x[["gt_calls"]][["footnote_q_method"]] <- glue(
-    "tab_footnote(",
+    "gt::tab_footnote(",
     "  footnote = '{footnote_text}',",
-    "  locations = cells_column_labels(",
-    "    columns = vars(q.value))",
+    "  locations = gt::cells_column_labels(",
+    "    columns = gt::vars(q.value))",
     ")"
   )
+
+  # kable calls ----------------------------------------------------------------
+  # adding q-value formatting, kable
+  x[["kable_calls"]][["fmt_qvalue"]] <-
+    "mutate(q.value = x$qvalue_fun(q.value))"
+
 
   # Returns the table 1 object
   return(x)
@@ -163,6 +174,12 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
       by = c("variable", "row_type")
     )
 
+  x$table_header <-
+    x$table_header %>%
+    bind_rows(
+      tibble(column = "q.value", label = "**q-value**")
+    )
+
   x$call_list <- c(x$call_list, list(add_q = match.call()))
 
   # returning qvalue method
@@ -177,22 +194,30 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     pull("method_label")
 
   x$qvalue_fun <- pvalue_fun
+
+  # gt function calls ----------------------------------------------------------
   # adding p-value formatting
   x[["gt_calls"]][["fmt_qvalue"]] <-
-    "fmt(columns = vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)" %>%
+    "gt::fmt(columns = gt::vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)" %>%
     glue()
   # column headers
-  x[["gt_calls"]][["cols_label_qvalue"]] <-
-    "cols_label(q.value = md('**q-value**'))" %>%
-    glue()
+  x$gt_calls[["cols_label"]] = glue(
+    "{table_header_to_gt(x$table_header)}"
+  )
   # column headers abbreviations footnote
   x[["gt_calls"]][["footnote_q_method"]] <- glue(
-    "tab_footnote(",
+    "gt::tab_footnote(",
     "footnote = '{footnote_text}',",
-    "locations = cells_column_labels(",
-    "columns = vars(q.value))",
+    "locations = gt::cells_column_labels(",
+    "columns = gt::vars(q.value))",
     ")"
   )
+
+  # kable function calls -------------------------------------------------------
+  # adding q-value formatting, kable
+  x[["kable_calls"]][["fmt_qvalue"]] <-
+    "mutate(q.value = x$qvalue_fun(q.value))"
+
 
   return(x)
 }

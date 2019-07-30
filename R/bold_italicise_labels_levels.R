@@ -37,6 +37,13 @@ tab_style_bold_labels <- function(x) {
     "rows = row_type == 'label'))"
   )
 
+  x[["kable_calls"]][["tab_style_bold_labels"]] <- glue(
+    "dplyr::mutate(label = dplyr::case_when(",
+    "row_type == 'label' ~ paste0('__', label, '__'), ",
+    "TRUE ~ label",
+    "))"
+  )
+
   x$call_list <- c(x$call_list, list(tab_style_bold_labels = match.call()))
 
   x
@@ -56,6 +63,13 @@ tab_style_bold_levels <- function(x) {
     "tab_style(style = cell_text(weight = 'bold'), ",
     "locations = cells_data(columns = vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
+  )
+
+  x[["kable_calls"]][["tab_style_bold_levels"]] <- glue(
+    "dplyr::mutate(label = dplyr::case_when(",
+    "row_type %in% c('level', 'missing') ~ paste0('__', label, '__'), ",
+    "TRUE ~ label",
+    "))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_bold_levels = match.call()))
@@ -80,6 +94,13 @@ tab_style_italicize_labels <- function(x) {
     "rows = row_type == 'label'))"
   )
 
+  x[["kable_calls"]][["tab_style_italicize_labels"]] <- glue(
+    "dplyr::mutate(label = dplyr::case_when(",
+    "row_type == 'label' ~ paste0('_', label, '_'), ",
+    "TRUE ~ label",
+    "))"
+  )
+
   x$call_list <- c(x$call_list, list(tab_style_italicize_labels = match.call()))
 
   x
@@ -100,6 +121,13 @@ tab_style_italicize_levels <- function(x) {
     "tab_style(style = cell_text(style = 'italic'), ",
     "locations = cells_data(columns = vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
+  )
+
+  x[["kable_calls"]][["tab_style_italicize_levels"]] <- glue(
+    "dplyr::mutate(label = dplyr::case_when(",
+    "row_type %in% c('level', 'missing') ~ paste0('_', label, '_'), ",
+    "TRUE ~ label",
+    "))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_italicize_levels = match.call()))

@@ -51,6 +51,7 @@ We'll be using the `trial` data set throughout this example.  This set contains 
 
 ```{r, message=FALSE}
 library(dplyr)
+library(gt)
 library(gtsummary)
 
 # printing trial data
@@ -167,7 +168,7 @@ trial2 %>%
   # bold p-values under a given threshold (default is 0.05)
   tab_style_bold_p(t = 0.2) %>%
   # include percent in headers
-  cols_label_summary(stat_by = md("**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"))
+  cols_label_summary(stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
 ```
 
 Each of the modification functions have additional options outlined in their respective help files.

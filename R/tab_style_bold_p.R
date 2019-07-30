@@ -46,6 +46,8 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
   # storing column names and gt_call name
   col_name <- ifelse(q == FALSE, "p.value", "q.value")
+  fun_name <- ifelse(q == FALSE, "pvalue_fun", "qvalue_fun")
+  kable_call_name <- ifelse(q == FALSE, "fmt_pvalue", "fmt_qvalue")
   gt_call_name <- glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bold
@@ -55,6 +57,15 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
     "tab_style(style = cell_text(weight = 'bold'), ",
     "locations = cells_data(columns = vars({col_name}),",
     "rows = {col_name} <= x${col_name}_bold_t))"
+  )
+
+  # kable formatting -----------------------------------------------------------
+  # replacing previous kable call, kable
+  x[["kable_calls"]][[kable_call_name]] <- glue(
+    "mutate({col_name} = dplyr::case_when(",
+    "{col_name} <= {t} ~ paste0('__', x${fun_name}({col_name}), '__'), ",
+    "TRUE ~ x${fun_name}({col_name})",
+    "))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
@@ -90,6 +101,15 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
     "tab_style(style = cell_text(weight = 'bold'), ",
     "locations = cells_data(columns = vars(p.value),",
     "rows = p.value <= x$pvalue_bold_t))"
+  )
+
+  # kable formatting -----------------------------------------------------------
+  # replacing previous kable call, kable
+  x[["kable_calls"]][["fmt_pvalue"]] <- glue(
+    "mutate(p.value = dplyr::case_when(",
+    "p.value <= {t} ~ paste0('__', x$inputs$pvalue_fun(p.value), '__'), ",
+    "TRUE ~ x$inputs$pvalue_fun(p.value)",
+    "))"
   )
 
   x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
@@ -129,8 +149,11 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
     stop("Before q-values are bolded, run add_q() to calculate the q-values")
   }
 
+  # gt formatting --------------------------------------------------------------
   # storing column names and gt_call name
   col_name <- ifelse(q == FALSE, "p.value", "q.value")
+  fun_name <- ifelse(q == FALSE, "pvalue_fun", "qvalue_fun")
+  kable_call_name <- ifelse(q == FALSE, "fmt_pvalue", "fmt_qvalue")
   gt_call_name <- glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
   # returning threshold for bold
@@ -141,6 +164,17 @@ tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
     "locations = cells_data(columns = vars({col_name}),",
     "rows = {col_name} <= x${col_name}_bold_t))"
   )
+
+  # # kable formatting -----------------------------------------------------------
+  # # replacing previous kable call, kable
+  # x[["kable_calls"]][[kable_call_name]] <- glue(
+  #   "mutate({col_name} = dplyr::case_when(",
+  #   "{col_name} <= {t} ~ paste0('__', x${fun_name}({col_name}), '__'), ",
+  #   "TRUE ~ x${fun_name}({col_name})",
+  #   "))"
+  # )
+  #
+  # print(x[["kable_calls"]])
 
   x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
 

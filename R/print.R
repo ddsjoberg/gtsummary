@@ -9,15 +9,65 @@ NULL
 
 #' @rdname print_gtsummary
 #' @export
-print.tbl_summary <- function(x, ...) as_gt(x) %>% print()
+print.tbl_summary <- function(x, ...) {
+  # select print engine
+  print_engine <-
+    getOption("gtsummary.print_engine") %||%
+    ifelse(
+      "gt" %in% utils::installed.packages(),
+      "gt", "kable"
+    )
+
+  # printing message about downloading gt package
+  if (is.null(getOption("gtsummary.print_engine")) && print_engine == "kable") {
+    warn_deprecated(glue(
+      "Results will be printed using 'knitr::kable()'\n",
+      "For improved formatting install the gt package.\n",
+      "'remotes::install_github(\"rstudio/gt\")'\n\n",
+      "If you prefer to always use knitr::kable(), add the option\n",
+      "'option(gtsummary.print_engine = \"kable\")' to your script."
+    ))
+  }
+
+  # printing results
+  if (print_engine == "gt") return(as_gt(x) %>% print())
+  else if (print_engine == "kable") return(as_kable(x) %>% print())
+  else stop(glue("'{print_engine}' is not a valid print engine. ",
+                 "Please select 'gt' or 'kable'"))
+}
 
 #' @rdname print_gtsummary
 #' @export
 knit_print.tbl_summary <- function(x, ...) {
-  if ("word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
+  # select print engine
+  print_engine <-
+    getOption("gtsummary.print_engine") %||%
+    ifelse(
+      "gt" %in% utils::installed.packages(),
+      "gt", "kable"
+    )
+
+  # printing message about downloading gt package
+  if (is.null(getOption("gtsummary.print_engine")) && print_engine == "kable") {
+    warn_deprecated(glue(
+      "Results will be printed using 'knitr::kable()'\n",
+      "For improved formatting install the gt package.\n",
+      "'remotes::install_github(\"rstudio/gt\")'\n\n",
+      "If you prefer to always use knitr::kable(), add the option\n",
+      "'option(gtsummary.print_engine = \"kable\")' to your script."
+    ))
+  }
+
+  # don't use word_document with gt engine
+  if (print_engine == "gt" && "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
     warning("Output 'word_document' is not suported by the {gt} package. Use 'output: rtf_document' for output compatible with MS Word.")
   }
-  as_gt(x) %>% knitr::knit_print()
+
+  # printing results
+  if (print_engine == "gt") return(as_gt(x) %>% knitr::knit_print())
+  else if (print_engine == "kable") return(as_kable(x) %>% knitr::knit_print())
+  else stop(glue("'{print_engine}' is not a valid print engine. ",
+                 "Please select 'gt' or 'kable'"))
 }
 
 #' @rdname print_gtsummary

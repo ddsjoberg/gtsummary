@@ -54,15 +54,16 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
       left_join(counts, by = c("variable", "row_type"))
   }
 
-  # column headers
-  x[["gt_calls"]][[glue("cols_label:{ifelse(missing == FALSE, 'n', 'n_missing')}")]] <-
-    glue(
-      "cols_label({ifelse(missing == FALSE, 'n', 'n_missing')} = ",
-      "md('**{ifelse(missing == FALSE, 'N', 'N Missing')}**'))"
-    )
-
   # replacing old table_body with new
   x$table_body <- table_body
+
+  # updating header
+  if (missing == FALSE){
+    x <- cols_label_summary(x, n = "**N**")
+  }
+  else if (missing == TRUE){
+    x <- cols_label_summary(x, n_missing = "**N Missing**")
+  }
 
   # adding indicator to output that add_n was run on this data
   x$call_list <- c(x$call_list, list(add_n = match.call()))
