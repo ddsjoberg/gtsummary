@@ -60,6 +60,9 @@ cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL, ...) {
 
   # stat_by --------------------------------------------------------------------
   if (!is.null(stat_by)) {
+    if (!rlang::is_string(stat_by)) {
+      "'stat_by' must be a string of length one."
+    }
     x$table_header <-
       x$df_by %>%
       rename(level = .data$by_chr) %>%
@@ -70,6 +73,9 @@ cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL, ...) {
 
   # stat_overall ---------------------------------------------------------------
   if (!is.null(stat_overall)) {
+    if (!rlang::is_string(stat_overall)) {
+      "'stat_overall' must be a string of length one."
+    }
     x$table_header <-
       tibble(column = "stat_0", N = nrow(x$inputs$data)) %>%
       mutate(label = glue(stat_overall) %>% as.character()) %>%
@@ -89,6 +95,9 @@ cols_label_summary <- function(x, stat_overall = NULL, stat_by = NULL, ...) {
         "{names(dots) %>% setdiff(names(x$table_body)) %>% glue_collapse(sep = ', ')}, ",
         "are not column names in 'table_body'"
       ))
+    }
+    if (map_lgl(dots, ~!rlang::is_string(.)) %>% any()) {
+      stop("All arguments passed via '...' must be strings of length one.")
     }
 
     x$table_header <-

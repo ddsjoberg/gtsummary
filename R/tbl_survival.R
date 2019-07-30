@@ -101,31 +101,27 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of 'times' and 'probs' must be specified.")
   }
-
-  # converting headers to un-evaluated string ----------------------------------
-  if (!is.null(header_label)) {
-    header_label <- deparse(substitute(header_label))
-  } else if (is.null(probs)) {
-    header_label <- deparse(substitute(gt::md("**Time**")))
-  } else {
-    header_label <- deparse(substitute(gt::md("**Quantile**")))
+  if (!rlang::is_string(label) || !rlang::is_string(level_label) ||
+      !rlang::is_string(header_label %||% "") ||
+      !rlang::is_string(header_label %||% "")) {
+    stop("'label', 'header_label', and 'level_label' arguments must be string of length one.")
   }
 
-  if (!is.null(header_estimate)) {
-    header_estimate <- deparse(substitute(header_estimate))
-  } else if (is.null(probs)) {
-    header_estimate <- deparse(substitute(gt::md("**Probability**")))
-  } else {
-    header_estimate <- deparse(substitute(gt::md("**Time**")))
-  }
+  # defining default headers ---------------------------------------------------
+  header_label <-
+    header_label %||% ifelse(is.null(probs), "**Time**", "**Quantile**")
+  header_estimate <-
+    header_estimate %||% ifelse(is.null(probs), "**Probability**", "**Time**")
 
-  # returning results ---------------------------------------------------------
-  # first assigning a function to formating estimates and conf.high and conf.low
-  if (is.null(estimate_fun)) {
-    if (!is.null(times)) {
-      estimate_fun <- partial(style_percent, symbol = TRUE)
-    } else if (!is.null(probs)) estimate_fun <- partial(style_sigfig, digits = 3)
-  }
+  # defining estimate_fun ------------------------------------------------------
+  # assigning a function to formating estimates and conf.high and conf.low
+  estimate_fun <-
+    estimate_fun %||%
+    switch(
+      is.null(times) + 1,
+      partial(style_percent, symbol = TRUE),
+      partial(style_sigfig, digits = 3)
+    )
 
   # putting results into tibble -------------------------------------------------
   if (!is.null(probs)) {
@@ -195,7 +191,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
         NA_character_
       )
     ) %>%
-    select(c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
+    select(starts_with("level_label"), c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
   table_body <- table_long
 
   cols_hide_list <-
@@ -213,6 +209,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
         column == "label" ~ glue("{header_label}"),
         column == "estimate" ~ glue("{header_estimate}"),
         column == "ci" ~ glue("**{x$conf.int*100}% CI**"),
+        column == "level_label" ~ "**Group**",
         TRUE ~ column
       )
     )
@@ -337,20 +334,25 @@ tbl_survival_gt_calls <- quote(list(
   gt = glue("gt::gt(data = x$table_body, groupname_col = 'level_label')"),
   # centering columns except time
   cols_align = glue(
-    "gt::cols_align(align = 'center') %>%",
-    "gt::cols_align(align = 'left', columns = vars(label))"
+    "gt::cols_align(align = 'center') %>% ",
+    "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
-  # hiding columns not for printing
-  cols_hide = glue("gt::cols_hide(columns = gt::vars({cols_hide_list}))"),
+
   # labelling columns
   cols_label =
-    glue('gt::cols_label(label = {header_label}, estimate = {header_estimate}, ci = gt::md("**{x$conf.int*100}% CI**"))'),
+    glue('{table_header_to_gt(dplyr::filter(table_header, column != "level_label"))}'),
+
+  # hiding columns not for printing
+  cols_hide = glue("gt::cols_hide(columns = gt::vars({cols_hide_list}))"),
+
   # styling the percentages
   fmt_percent =
     glue("gt::fmt(columns = gt::vars(estimate), fns = x$estimate_fun)"),
+
   # formatting missing columns for estimates
   fmt_missing =
     glue("gt::fmt_missing(columns = gt::vars(estimate, ci), rows = NULL, missing_text = '---')"),
+
   # adding CI footnote
   footnote_abbreviation =
     glue(
@@ -363,6 +365,15 @@ tbl_survival_gt_calls <- quote(list(
 tbl_survival_kable_calls <- quote(list(
   # first call to gt
   kable = glue("x$table_body"),
+
+  # if strata is present, then only keeping first row
+  strata = switch(
+    "level_label" %in% names(table_body) + 1,
+    NULL,
+    glue("dplyr::group_by(level) %>% ",
+         "dplyr::mutate(level_label = ifelse(dplyr::row_number() == 1, level_label, NA)) %>% ",
+         "dplyr::ungroup()")
+  ),
 
   # styling the percentages
   fmt_percent =
