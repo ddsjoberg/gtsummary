@@ -146,8 +146,6 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   x[["kable_calls"]][["fmt_pvalue"]] <-
     "mutate(p.value = x$pvalue_fun(p.value))"
 
-
-
   x
 }
 

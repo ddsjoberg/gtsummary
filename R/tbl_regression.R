@@ -93,7 +93,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     pvalue_fun %||%
     getOption("gtsummary.pvalue_fun", default = style_pvalue)
   estimate_fun <-
-    pvalue_fun %||%
+    estimate_fun %||%
     getOption(
       "gtsummary.tbl_regression.estimate_fun",
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
