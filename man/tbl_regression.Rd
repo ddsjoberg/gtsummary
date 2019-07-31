@@ -5,9 +5,8 @@
 \title{Display regression model results in table}
 \usage{
 tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
-  exclude = NULL, show_yesno = NULL, conf.level = 0.95,
-  intercept = FALSE, estimate_fun = ifelse(exponentiate == TRUE,
-  style_ratio, style_sigfig), pvalue_fun = style_pvalue)
+  exclude = NULL, show_yesno = NULL, conf.level = NULL,
+  intercept = FALSE, estimate_fun = NULL, pvalue_fun = NULL)
 }
 \arguments{
 \item{x}{regression model object}
@@ -51,6 +50,19 @@ to perform the initial model formatting. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 for detailed examples.
 }
+\section{Setting Defaults}{
+
+If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set.
+\itemize{
+\item \code{option(gtsummary.pvalue_fun = new_function)}
+\item \code{option(gtsummary.tbl_regression.estimate_fun = new_function)}
+\item \code{option(gtsummary.conf.level = 0.90)}
+}
+}
+
 \section{Note}{
 
 The N reported in the \code{tbl_regression()} output is the number of observations

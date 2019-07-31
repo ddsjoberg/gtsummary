@@ -4,8 +4,8 @@
 \alias{add_p}
 \title{Adds p-values to summary tables}
 \usage{
-add_p(x, test = NULL, pvalue_fun = style_pvalue,
-  group = x$inputs$group, include = NULL, exclude = NULL)
+add_p(x, test = NULL, pvalue_fun = NULL, group = x$inputs$group,
+  include = NULL, exclude = NULL)
 }
 \arguments{
 \item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
@@ -38,6 +38,18 @@ calculate p-values with correlated data. Default is \code{NULL}}
 \description{
 Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.
 }
+\section{Setting Defaults}{
+
+If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set. Please note the default option for the estimate is the same
+as it is for \code{tbl_regression()}.
+\itemize{
+\item \code{option(gtsummary.pvalue_fun = new_function)}
+}
+}
+
 \section{Example Output}{
 
 \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}

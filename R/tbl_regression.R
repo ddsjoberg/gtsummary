@@ -6,6 +6,17 @@
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
+#' @section Setting Defaults:
+#' If you like to consistently use a different function to format p-values or
+#' estimates, you can set options in the script or in the user- or
+#' project-level startup file, '.Rprofile'.  The default confidence level can
+#' also be set.
+#' \itemize{
+#'   \item `option(gtsummary.pvalue_fun = new_function)`
+#'   \item `option(gtsummary.tbl_regression.estimate_fun = new_function)`
+#'   \item `option(gtsummary.conf.level = 0.90)`
+#' }
+#'
 #' @section Note:
 #' The N reported in the `tbl_regression()` output is the number of observations
 #' in the data frame `model.frame(x)`. Depending on the model input, this N
@@ -73,14 +84,24 @@
 #'
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 #'
-tbl_regression <- function(x, label = NULL,
-                           exponentiate = FALSE,
-                           include = NULL,
-                           exclude = NULL,
-                           show_yesno = NULL,
-                           conf.level = 0.95, intercept = FALSE,
-                           estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-                           pvalue_fun = style_pvalue) {
+tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
+                           include = NULL, exclude = NULL,
+                           show_yesno = NULL, conf.level = NULL, intercept = FALSE,
+                           estimate_fun = NULL, pvalue_fun = NULL) {
+  # setting defaults -----------------------------------------------------------
+  pvalue_fun <-
+    pvalue_fun %||%
+    getOption("gtsummary.pvalue_fun", default = style_pvalue)
+  estimate_fun <-
+    pvalue_fun %||%
+    getOption(
+      "gtsummary.tbl_regression.estimate_fun",
+      default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
+    )
+  conf.level <-
+    conf.level %||%
+    getOption("gtsummary.conf.level", default = 0.95)
+
   # checking estimate_fun and pvalue_fun are functions
   if (!is.function(estimate_fun) | !is.function(pvalue_fun)) {
     stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")

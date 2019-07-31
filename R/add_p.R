@@ -2,6 +2,16 @@
 #'
 #' Adds p-values to tables created by `tbl_summary` by comparing values across groups.
 #'
+#' @section Setting Defaults:
+#' If you like to consistently use a different function to format p-values or
+#' estimates, you can set options in the script or in the user- or
+#' project-level startup file, '.Rprofile'.  The default confidence level can
+#' also be set. Please note the default option for the estimate is the same
+#' as it is for `tbl_regression()`.
+#' \itemize{
+#'   \item `option(gtsummary.pvalue_fun = new_function)`
+#' }
+#'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param test list of formulas specifying statistical tests to perform,
 #' e.g. \code{list(all_continuous() = "t.test", all_categorical() = "fisher.test")}.
@@ -28,8 +38,13 @@
 #' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
 #'
 
-add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
+add_p <- function(x, test = NULL, pvalue_fun = NULL,
                   group = x$inputs$group, include=NULL, exclude=NULL) {
+
+  # setting defaults -----------------------------------------------------------
+  pvalue_fun <-
+    pvalue_fun %||%
+    getOption("gtsummary.pvalue_fun", default = style_pvalue)
 
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
