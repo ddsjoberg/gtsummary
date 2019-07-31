@@ -6,9 +6,8 @@
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
-  hide_n = FALSE, show_yesno = NULL, conf.level = 0.95,
-  estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-  pvalue_fun = style_pvalue)
+  hide_n = FALSE, show_yesno = NULL, conf.level = NULL,
+  estimate_fun = NULL, pvalue_fun = NULL)
 }
 \arguments{
 \item{data}{data frame to be used in univariate regression modeling.  Data
@@ -60,6 +59,20 @@ arguments. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 for detailed examples.
 }
+\section{Setting Defaults}{
+
+If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set. Please note the default option for the estimate is the same
+as it is for \code{tbl_regression()}.
+\itemize{
+\item \code{option(gtsummary.pvalue_fun = new_function)}
+\item \code{option(gtsummary.tbl_regression.estimate_fun = new_function)}
+\item \code{option(gtsummary.conf.level = 0.90)}
+}
+}
+
 \section{Note}{
 
 The N reported in the \code{tbl_uvregression()} output is the number of observations
