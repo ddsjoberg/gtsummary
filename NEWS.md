@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Users can now set default p-value formatting functions, regression coefficient formatting functions, and default confidence level for confidence intervals (#120)
+
 * The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`. (#180)
 
 * `tbl_stack()` fix for `tbl_uvregression` objects (#175)
