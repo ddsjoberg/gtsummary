@@ -38,7 +38,11 @@ for a detailed exploration of the output options.
 
 ## Installation
 
-You can install the production version of {gtsummary} with:
+The {gtsummary} package was written as a companion to the {gt} package
+from RStudio, and it is recommended to install both {gt} and
+{gtsummary}. If {gt} is not installed, `knitr::kable()` will be used to
+produce the summary tables. You can install {gtsummary} and {gt} with
+the following code.
 
 ``` r
 install.packages("remotes")
@@ -60,6 +64,7 @@ The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ``` r
 library(gtsummary)
+#> Loading required package: gt
 t1 <-
   tbl_summary(
     data = trial[c("trt", "age", "grade", "response")],
