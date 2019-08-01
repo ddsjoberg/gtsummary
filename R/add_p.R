@@ -9,7 +9,7 @@
 #' also be set. Please note the default option for the estimate is the same
 #' as it is for `tbl_regression()`.
 #' \itemize{
-#'   \item `option(gtsummary.pvalue_fun = new_function)`
+#'   \item `options(gtsummary.pvalue_fun = new_function)`
 #' }
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function

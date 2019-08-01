@@ -46,7 +46,7 @@ project-level startup file, '.Rprofile'.  The default confidence level can
 also be set. Please note the default option for the estimate is the same
 as it is for \code{tbl_regression()}.
 \itemize{
-\item \code{option(gtsummary.pvalue_fun = new_function)}
+\item \code{options(gtsummary.pvalue_fun = new_function)}
 }
 }
 

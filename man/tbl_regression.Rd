@@ -57,9 +57,9 @@ estimates, you can set options in the script or in the user- or
 project-level startup file, '.Rprofile'.  The default confidence level can
 also be set.
 \itemize{
-\item \code{option(gtsummary.pvalue_fun = new_function)}
-\item \code{option(gtsummary.tbl_regression.estimate_fun = new_function)}
-\item \code{option(gtsummary.conf.level = 0.90)}
+\item \code{options(gtsummary.pvalue_fun = new_function)}
+\item \code{options(gtsummary.tbl_regression.estimate_fun = new_function)}
+\item \code{options(gtsummary.conf.level = 0.90)}
 }
 }
 
