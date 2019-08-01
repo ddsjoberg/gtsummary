@@ -12,9 +12,9 @@
 #' also be set. Please note the default option for the estimate is the same
 #' as it is for `tbl_regression()`.
 #' \itemize{
-#'   \item `option(gtsummary.pvalue_fun = new_function)`
-#'   \item `option(gtsummary.tbl_regression.estimate_fun = new_function)`
-#'   \item `option(gtsummary.conf.level = 0.90)`
+#'   \item `options(gtsummary.pvalue_fun = new_function)`
+#'   \item `options(gtsummary.tbl_regression.estimate_fun = new_function)`
+#'   \item `options(gtsummary.conf.level = 0.90)`
 #' }
 #'
 #' @section Note:

@@ -12,9 +12,9 @@
 #' project-level startup file, '.Rprofile'.  The default confidence level can
 #' also be set.
 #' \itemize{
-#'   \item `option(gtsummary.pvalue_fun = new_function)`
-#'   \item `option(gtsummary.tbl_regression.estimate_fun = new_function)`
-#'   \item `option(gtsummary.conf.level = 0.90)`
+#'   \item `options(gtsummary.pvalue_fun = new_function)`
+#'   \item `options(gtsummary.tbl_regression.estimate_fun = new_function)`
+#'   \item `options(gtsummary.conf.level = 0.90)`
 #' }
 #'
 #' @section Note:
