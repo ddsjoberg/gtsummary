@@ -65,8 +65,16 @@ add_overall <- function(x, last = FALSE) {
       )
   }
 
+  x$table_header <-
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+
   # adding header
-  x <- cols_label_summary(x, stat_overall = "**Overall**, N = {N}")
+  x <- modify_header_internal(x, stat_0 = "**Overall**, N = {N}")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   x
 }

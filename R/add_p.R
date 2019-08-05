@@ -121,30 +121,31 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   x$pvalue_fun <- pvalue_fun
   x$meta_data <- meta_data
 
-  x$call_list <- c(x$call_list, list(add_p = match.call()))
+  x$table_header <-
+    tibble(column = names(table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing() %>%
+    table_header_fmt(p.value = "x$pvalue_fun")
 
   # updating header
-  x <- cols_label_summary(x, p.value = "**p-value**")
+  x <- modify_header_internal(x, p.value = "**p-value**")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
+
+
+  x$call_list <- c(x$call_list, list(add_p = match.call()))
 
   # gt formatting --------------------------------------------------------------
-  # adding p-value formatting, gt
-  x[["gt_calls"]][["fmt_pvalue"]] <-
-    "gt::fmt(columns = gt::vars(p.value), rows = !is.na(p.value), fns = x$pvalue_fun)" %>%
-    glue()
-
   # adding footnote listing statistics presented in table
   x[["gt_calls"]][["footnote_add_p"]] <- glue(
     "gt::tab_footnote(",
-    'footnote = "{footnote_add_p(meta_data)}",',
+    'footnote = "{footnote_add_p(meta_data)}", ',
     "locations = gt::cells_column_labels(",
     "columns = gt::vars(p.value))",
     ")"
   )
 
-  # kable formatting -----------------------------------------------------------
-  # adding p-value formatting, kable
-  x[["kable_calls"]][["fmt_pvalue"]] <-
-    "mutate(p.value = x$pvalue_fun(p.value))"
 
   x
 }

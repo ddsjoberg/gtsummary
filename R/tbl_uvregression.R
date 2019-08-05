@@ -207,14 +207,15 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     )
 
   # column labels
+  # table of column headers
   table_header <-
-    tribble(
-      ~column, ~label,
-      "label", "**Characteristic**",
-      "N", "**N**",
-      "estimate", glue("**{estimate_header(model_obj_list[[1]], exponentiate)}**"),
-      "conf.low", glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
-      "p.value", "**p-value**"
+    tibble(column = names(table_body)) %>%
+    table_header_fill_missing() %>%
+    table_header_fmt(
+      p.value = "x$inputs$pvalue_fun",
+      estimate = "x$inputs$estimate_fun",
+      conf.low = "x$inputs$estimate_fun",
+      conf.high = "x$inputs$estimate_fun"
     )
 
   # creating a meta_data table (this will be used in subsequent functions, eg add_global_p)
@@ -235,12 +236,25 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     kable_calls = eval(kable_tbl_uvregression)
   )
 
-  # hiding N column if requested
-  if (hide_n == TRUE) {
-    results$gt_calls[["cols_hide_n"]] <-
-      glue("cols_hide(columns = vars(N))")
+  # column headers
+  results <- modify_header_internal(
+    results,
+    label = "**Characteristic**",
+    estimate = glue("**{estimate_header(model_obj_list[[1]], exponentiate)}**"),
+    conf.low = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
+    p.value = "**p-value**"
+  )
+
+  # unhiding N column and assigning label, if requested
+  if (hide_n == FALSE) {
+    results <- modify_header_internal(
+      results,
+      N = "**N**",
+    )
   }
 
+  # writing additional gt and kable calls with data from table_header
+  results <- update_calls_from_table_header(results)
 
   class(results) <- "tbl_uvregression"
   results
@@ -257,14 +271,8 @@ gt_tbl_uvregression <- quote(list(
   # label column indented and left just
   cols_align = glue(
     "gt::cols_align(align = 'center') %>% ",
-    "gt::cols_align(align = 'left', columns = vars(label))"
+    "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
-
-  # do not print columns variable or row_type columns
-  # here i do a setdiff of the variables i want to print by default
-  cols_hide =
-    "gt::cols_hide(columns = gt::vars(variable, row_ref, row_type, var_type))" %>%
-      glue(),
 
   # NAs do not show in table
   fmt_missing =
@@ -273,22 +281,7 @@ gt_tbl_uvregression <- quote(list(
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
-      glue(),
-
-  # column headers
-  cols_label = glue(
-    "{table_header_to_gt(table_header)}"
-  ),
-
-  # adding p-value formatting (evaluate the expression with eval() function)
-  fmt_pvalue =
-    "gt::fmt(columns = gt::vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
-      glue(),
-
-  # ceof and confidence interval formatting
-  fmt_estimate =
-    "gt::fmt(columns = gt::vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
+    "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_ref == TRUE, missing_text = '---')" %>%
       glue(),
 
   # combining conf.low and conf.high to print confidence interval
@@ -301,7 +294,7 @@ gt_tbl_uvregression <- quote(list(
     "gt::tab_style(",
     "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
     "locations = gt::cells_data(",
-    "columns = gt::vars(label),",
+    "columns = gt::vars(label), ",
     "rows = row_type != 'label'",
     "))"
   ),
@@ -319,11 +312,8 @@ kable_tbl_uvregression <- quote(list(
   # first call to the gt function
   kable = glue("x$table_body"),
 
-  # ceof and confidence interval formatting
-  fmt_estimate = glue(
-    "dplyr::mutate_at(dplyr::vars(estimate, conf.low, conf.high), ",
-    "~x$inputs$estimate_fun(.))"
-  ),
+  #  placeholder, so the formatting calls are performed other calls below
+  fmt = NULL,
 
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
@@ -333,11 +323,7 @@ kable_tbl_uvregression <- quote(list(
   fmt_missing_ref = glue(
     "dplyr::mutate_at(dplyr::vars(estimate, conf.low), ",
     "~ dplyr::case_when(row_ref == TRUE ~ '---', TRUE ~ .))"
-  ),
-
-  # adding p-value formatting (evaluate the expression with eval() function)
-  fmt_pvalue =
-    "dplyr::mutate(p.value = x$inputs$pvalue_fun(p.value))" %>% glue()
+  )
 ))
 
 

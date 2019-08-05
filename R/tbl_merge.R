@@ -34,9 +34,14 @@
 tbl_merge <- function(tbls,
                       tab_spanner = paste0(c("Model "), 1:length(tbls))) {
   # input checks ---------------------------------------------------------------
+  # class of tbls
+  if (!"list" %in% class(tbls)) {
+    stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
+  }
+
   # checking all inputs are class tbl_regression, tbl_uvregression, or tbl_stack
   if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack") %>% any()) {
-    stop("All objects in 'tbls' must be class 'tbl_regression' or 'tbl_uvregression'")
+    stop("All objects in 'tbls' must be class 'tbl_regression', 'tbl_uvregression', or 'tbl_stack'")
   }
 
   # at least two objects must be passed
@@ -70,7 +75,7 @@ tbl_merge <- function(tbls,
       table = .data$data
     )
 
-  # cycling through all tbls, merging results into a column tibble called table
+  # cycling through all tbls, merging results into a column tibble
   for (i in 2:tbls_length) {
     merged_table <-
       merged_table %>%
@@ -95,23 +100,28 @@ tbl_merge <- function(tbls,
   # unnesting results from within variable column tibbles
   table_body <-
     merged_table %>%
-    unnest()
+    unnest() %>%
+    select(.data$label, everything())
+
+  # stacking all table_header dfs together and renaming
+  table_header <-
+    imap_dfr(
+      tbls,
+      ~ pluck(.x, "table_header") %>%
+        mutate(
+          column = paste0(column, "_", .y),
+          fmt = stringr::str_replace(fmt, stringr::fixed("x$"), paste0("x$tbls[[", .y, "]]$"))
+        )
+    )
+
+  table_header <-
+    tibble(column = names(table_body)) %>%
+    left_join(table_header, by = "column") %>%
+    table_header_fill_missing()
 
 
-  # creating column headers and footnotes --------------------------------------
-  # creating column header for base variable (label, estimate, conf.low, and p.value)
-  cols_label_base_vars <-
-    imap_chr(
-      tbl_inputs(tbls),
-      ~ glue(
-        "estimate_{.y} = gt::md('**{estimate_header(.x$x, .x$exponentiate)}**'), ",
-        "conf.low_{.y} = gt::md('**{.x$conf.level*100}% CI**'), ",
-        "p.value_{.y} = gt::md('**p-value**')"
-      )
-    ) %>%
-    glue_collapse(sep = ", ") %>%
-    glue(", label = gt::md('**Characteristic**')")
 
+  # creating column footnotes --------------------------------------
   # creating list of footnote information
   footnote_abbreviation <- list()
   footnote_abbreviation[["footnote"]] <-
@@ -142,22 +152,27 @@ tbl_merge <- function(tbls,
     c(paste0("conf.low_", 1:tbls_length)) %>%
     glue_collapse(sep = ", ")
 
-  # kable calls ----------------------------------------------------------------
-  #TODO: these need to be refactored
-  kable_calls <- list(kable = glue("x$table_body"))
-  table_header <- tibble(column = names(table_body), label = .data$column)
-
   # returning results
   results <- list(
     table_body = table_body,
     table_header = table_header,
+    tbls = tbls,
     estimate_funs = map(tbl_inputs(tbls), pluck("estimate_fun")),
     pvalue_funs = map(tbl_inputs(tbls), pluck("pvalue_fun")),
     qvalue_funs = map(tbls, pluck("qvalue_fun")),
     call_list = list(tbl_merge = match.call()),
     gt_calls = eval(gt_tbl_merge),
-    kable_calls = kable_calls
+    kable_calls = eval(kable_tbl_merge)
   )
+
+  # setting column headers
+  results <- modify_header_internal(
+    results,
+    label = "**Characteristic**",
+  )
+
+  # writing additional gt and kable calls with data from table_header
+  results <- update_calls_from_table_header(results)
 
   class(results) <- "tbl_merge"
   results
@@ -171,19 +186,10 @@ gt_tbl_merge <- quote(list(
     glue(),
 
   # label column indented and left just
-  gt_calls = glue(
+  cols_align = glue(
     "gt::cols_align(align = 'center') %>% ",
     "gt::cols_align(align = 'left', columns = vars(label))"
   ),
-
-  # do not print columns variable or row_type columns
-  cols_hide = c(
-    "gt::cols_hide(columns = gt::vars(variable, row_type, var_type))",
-    "gt::cols_hide(columns = gt::starts_with('row_ref_'))",
-    "gt::cols_hide(columns = gt::starts_with('N_'))",
-    "gt::cols_hide(columns = gt::starts_with('nevent_'))"
-  ) %>%
-    glue_collapse(sep = " %>% "),
 
   # NAs do not show in table
   fmt_missing = "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
@@ -223,9 +229,6 @@ gt_tbl_merge <- quote(list(
       compact() %>%
       glue_collapse_null(),
 
-  # column headers
-  cols_label = glue("gt::cols_label({cols_label_base_vars})"),
-
   # column headers abbreviations footnote
   footnote_abbreviation = glue(
     "gt::tab_footnote(",
@@ -234,24 +237,6 @@ gt_tbl_merge <- quote(list(
     "columns = gt::vars({footnote_abbreviation$columns}))",
     ")"
   ),
-
-  # adding p-value formatting (evaluate the expression with eval() function)
-  fmt_pvalue =
-    map(
-      1:tbls_length,
-      ~ glue("gt::fmt(columns = gt::vars(p.value_{.x}), rows = !is.na(p.value_{.x}), fns = x$pvalue_funs[[{.x}]])")
-    ) %>%
-      glue_collapse(" %>% "),
-
-  # ceof and confidence interval formatting
-  fmt_estimate =
-    map(
-      1:tbls_length,
-      ~ paste0(c("estimate_", "conf.low_", "conf.high_"), .x, collapse = ", ") %>% {
-        glue("gt::fmt(columns = gt::vars({.}), rows = !is.na(estimate_{.x}), fns = x$estimate_funs[[{.x}]])")
-      }
-    ) %>%
-      glue_collapse(" %>% "),
 
   # combining conf.low and conf.high to print confidence interval
   # example result:
@@ -285,36 +270,6 @@ gt_tbl_merge <- quote(list(
     ) %>%
       glue_collapse(sep = " %>% "),
 
-  # qvalue format
-  fmt_qvalue =
-    tbls %>%
-      map(pluck("qvalue_fun")) %>%
-      imap(
-        function(x, y) {
-          if (is.null(x)) {
-            return(NULL)
-          }
-          glue("gt::fmt(columns = gt::vars(q.value_{y}), rows = !is.na(q.value_{y}), fns = x$qvalue_funs[[{y}]])")
-        }
-      ) %>%
-      compact() %>%
-      glue_collapse_null(" %>% "),
-
-  # qvalue column header
-  cols_label_qvalue =
-    tbls %>%
-      map(pluck("qvalue_fun")) %>%
-      imap(
-        function(x, y) {
-          if (is.null(x)) {
-            return(NULL)
-          }
-          glue("gt::cols_label(q.value_{y} = gt::md('**q-value**'))")
-        }
-      ) %>%
-      compact() %>%
-      glue_collapse_null(" %>% "),
-
   # qvalue method footnote
   footnote_q_method =
     tbls %>%
@@ -346,6 +301,34 @@ gt_tbl_merge <- quote(list(
       ) %>%
       pull("gt_call") %>%
       glue_collapse_null(sep = " %>% ")
+))
+
+# kable function calls ------------------------------------------------------------
+# quoting returns an expression to be evaluated later
+kable_tbl_merge <- quote(list(
+  # first call to the gt function
+  kable = glue("x$table_body"),
+
+  #  placeholder, so the formatting calls are performed other calls below
+  fmt = NULL,
+
+  # combining conf.low and conf.high to print confidence interval
+  cols_merge_ci =
+    map(1:tbls_length,
+        ~ "dplyr::mutate(conf.low_{.x} = ifelse(is.na(estimate_{.x}), NA, paste0(conf.low_{.x}, \", \", conf.high_{.x})) %>% as.character())" %>%
+          glue()
+    ) %>%
+    glue_collapse_null(sep = " %>% "),
+
+  # Show "---" for reference groups
+  fmt_missing_ref =
+    map(1:tbls_length,
+        ~ glue(
+          "dplyr::mutate_at(dplyr::vars(estimate_{.x}, conf.low_{.x}), ",
+          "~ dplyr::case_when(row_ref_{.x} == TRUE ~ '---', TRUE ~ .))"
+        )
+    ) %>%
+    glue_collapse_null(sep = " %>% ")
 ))
 
 

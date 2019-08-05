@@ -2,19 +2,19 @@
 % Please edit documentation in R/bold_italicise_labels_levels.R
 \name{bold_italicize_labels_levels}
 \alias{bold_italicize_labels_levels}
-\alias{tab_style_bold_labels}
-\alias{tab_style_bold_levels}
-\alias{tab_style_italicize_labels}
-\alias{tab_style_italicize_levels}
+\alias{bold_labels}
+\alias{bold_levels}
+\alias{italicize_labels}
+\alias{italicize_levels}
 \title{Bold or Italicize labels or levels in gtsummary tables}
 \usage{
-tab_style_bold_labels(x)
+bold_labels(x)
 
-tab_style_bold_levels(x)
+bold_levels(x)
 
-tab_style_italicize_labels(x)
+italicize_labels(x)
 
-tab_style_italicize_levels(x)
+italicize_levels(x)
 }
 \arguments{
 \item{x}{an object created using gtsummary functions}
@@ -24,13 +24,13 @@ Bold or Italicize labels or levels in gtsummary tables
 }
 \section{Functions}{
 \itemize{
-\item \code{tab_style_bold_labels}: Bold labels in gtsummary tables
+\item \code{bold_labels}: Bold labels in gtsummary tables
 
-\item \code{tab_style_bold_levels}: Bold levels in gtsummary tables
+\item \code{bold_levels}: Bold levels in gtsummary tables
 
-\item \code{tab_style_italicize_labels}: Italicize labels in gtsummary tables
+\item \code{italicize_labels}: Italicize labels in gtsummary tables
 
-\item \code{tab_style_italicize_levels}: Italicize levels in gtsummary tables
+\item \code{italicize_levels}: Italicize levels in gtsummary tables
 }}
 
 \section{Example Output}{
@@ -43,36 +43,38 @@ tbl_bold_ital_ex <-
   trial \%>\%
   dplyr::select(trt, age, grade) \%>\%
   tbl_summary() \%>\%
-  tab_style_bold_labels() \%>\%
-  tab_style_bold_levels() \%>\%
-  tab_style_italicize_labels() \%>\%
-  tab_style_italicize_levels()
+  bold_labels() \%>\%
+  bold_levels() \%>\%
+  italicize_labels() \%>\%
+  italicize_levels()
 }
 \seealso{
 Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
+  \code{\link{bold_p.tbl_regression}},
   \code{\link{inline_text.tbl_regression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
   \code{\link{tbl_stack}}
 
 Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
+  \code{\link{bold_p.tbl_uvregression}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
   \code{\link{tbl_uvregression}}
 }

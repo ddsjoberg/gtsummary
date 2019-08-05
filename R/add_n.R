@@ -57,13 +57,21 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
   # replacing old table_body with new
   x$table_body <- table_body
 
+  x$table_header <-
+    tibble(column = names(table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+
   # updating header
   if (missing == FALSE){
-    x <- cols_label_summary(x, n = "**N**")
+    x <- modify_header_internal(x, n = "**N**")
   }
   else if (missing == TRUE){
-    x <- cols_label_summary(x, n_missing = "**N Missing**")
+    x <- modify_header_internal(x, n_missing = "**N Missing**")
   }
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   # adding indicator to output that add_n was run on this data
   x$call_list <- c(x$call_list, list(add_n = match.call()))

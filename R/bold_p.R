@@ -1,16 +1,16 @@
 #' Bold significant p-values
 #'
-#' Bold p-values below a chosen threshold (e.g. <.05)
+#' Bold p-values below a chosen threshold (e.g. <0.05)
 #' in tables created by `tbl_summary`.
 #'
 #' @param x an object created using gtsummary functions
 #' @param ... further arguments passed to other methods.
-#' @author Daniel D. Sjoberg
-#' @seealso \code{\link{tab_style_bold_p.tbl_summary}},
-#' \code{\link{tab_style_bold_p.tbl_regression}},
-#' \code{\link{tab_style_bold_p.tbl_uvregression}}
+#' @author Daniel D. Sjoberg, Esther Drill
+#' @seealso \code{\link{bold_p.tbl_summary}},
+#' \code{\link{bold_p.tbl_regression}},
+#' \code{\link{bold_p.tbl_uvregression}}
 #' @export
-tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
+bold_p <- function(x, ...) UseMethod("bold_p")
 
 
 #' Bold significant p-values
@@ -22,18 +22,18 @@ tab_style_bold_p <- function(x, ...) UseMethod("tab_style_bold_p")
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @family tbl_summary tools
-#' @author Daniel D. Sjoberg
+#' @author Daniel D. Sjoberg, Esther Drill
 #' @examples
 #' tbl_sum_bold_p_ex <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = "trt") %>%
 #'   add_p() %>%
-#'   tab_style_bold_p()
+#'   bold_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_bold_p_ex.png}{options: width=50\%}}
 #' @export
-tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
+bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_p has been previously run
   if (is.null(x$call_list$add_p)) {
@@ -47,28 +47,18 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
   # storing column names and gt_call name
   col_name <- ifelse(q == FALSE, "p.value", "q.value")
   fun_name <- ifelse(q == FALSE, "pvalue_fun", "qvalue_fun")
-  kable_call_name <- ifelse(q == FALSE, "fmt_pvalue", "fmt_qvalue")
-  gt_call_name <- glue("tab_style_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
-  # returning threshold for bold
-  x[[glue("{col_name}_bold_t")]] <- t
-  # adding p-value formatting
-  x[["gt_calls"]][[gt_call_name]] <- glue(
-    "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars({col_name}),",
-    "rows = {col_name} <= x${col_name}_bold_t))"
-  )
+  # modifying table_header with bold threshold
+  x$table_header$bold <-
+    ifelse(
+      x$table_header$column == col_name,
+      t, x$table_header$bold
+    )
 
-  # kable formatting -----------------------------------------------------------
-  # replacing previous kable call, kable
-  x[["kable_calls"]][[kable_call_name]] <- glue(
-    "mutate({col_name} = dplyr::case_when(",
-    "{col_name} <= {t} ~ paste0('__', x${fun_name}({col_name}), '__'), ",
-    "TRUE ~ x${fun_name}({col_name})",
-    "))"
-  )
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
-  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
+  x$call_list <- c(x$call_list, list(bold_p = match.call()))
 
   x
 }
@@ -81,38 +71,39 @@ tab_style_bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @param x an object created using `tbl_regression` function
 #' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
 #' @param ... not used
-#' @author Daniel D. Sjoberg
+#' @author Daniel D. Sjoberg, Esther Drill
 #' @family tbl_regression tools
 #' @examples
 #' tbl_lm_bold_p_ex <-
 #'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
-#'   tab_style_bold_p()
+#'   bold_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
 #' @export
 #'
-tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
+bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
-  # returning threshold for bold
-  x[[glue("pvalue_bold_t")]] <- t
-  # adding p-value formatting
-  x[["gt_calls"]][["tab_style_bold_pvalue"]] <- glue(
-    "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars(p.value),",
-    "rows = p.value <= x$pvalue_bold_t))"
-  )
+  # modifying table_header with bold threshold
+  x$table_header$bold <-
+    ifelse(
+      x$table_header$column == "p.value",
+      t, x$table_header$bold
+    )
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   # kable formatting -----------------------------------------------------------
   # replacing previous kable call, kable
-  x[["kable_calls"]][["fmt_pvalue"]] <- glue(
-    "mutate(p.value = dplyr::case_when(",
-    "p.value <= {t} ~ paste0('__', x$inputs$pvalue_fun(p.value), '__'), ",
-    "TRUE ~ x$inputs$pvalue_fun(p.value)",
-    "))"
-  )
+  # x[["kable_calls"]][["fmt_pvalue"]] <- glue(
+  #   "mutate(p.value = dplyr::case_when(",
+  #   "p.value <= {t} ~ paste0('__', x$inputs$pvalue_fun(p.value), '__'), ",
+  #   "TRUE ~ x$inputs$pvalue_fun(p.value)",
+  #   "))"
+  # )
 
-  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
+  x$call_list <- c(x$call_list, list(bold_p = match.call()))
 
   x
 }
@@ -125,7 +116,7 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
-#' @author Daniel D. Sjoberg
+#' @author Daniel D. Sjoberg, Esther Drill
 #' @family tbl_uvregression tools
 #' @export
 #' @examples
@@ -138,45 +129,31 @@ tab_style_bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #'     method.args = list(family = binomial),
 #'     exponentiate = TRUE
 #'   ) %>%
-#'   tab_style_bold_p(t = 0.25)
+#'   bold_p(t = 0.25)
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uvglm_bold_p_ex.png}{options: width=50\%}}
 
-tab_style_bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
+bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   # checking that add_q has been previously run if bold q-values
   if (q == TRUE & is.null(x$call_list$add_q)) {
     stop("Before q-values are bolded, run add_q() to calculate the q-values")
   }
 
-  # gt formatting --------------------------------------------------------------
-  # storing column names and gt_call name
   col_name <- ifelse(q == FALSE, "p.value", "q.value")
   fun_name <- ifelse(q == FALSE, "pvalue_fun", "qvalue_fun")
-  kable_call_name <- ifelse(q == FALSE, "fmt_pvalue", "fmt_qvalue")
-  gt_call_name <- glue("fmt_bold_{ifelse(q == FALSE, 'p', 'q')}")
 
-  # returning threshold for bold
-  x[[glue("{col_name}_bold_t")]] <- t
-  # adding p-value formatting
-  x[["gt_calls"]][[gt_call_name]] <- glue(
-    "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars({col_name}),",
-    "rows = {col_name} <= x${col_name}_bold_t))"
-  )
+  # modifying table_header with bold threshold
+  x$table_header$bold <-
+    ifelse(
+      x$table_header$column == col_name,
+      t, x$table_header$bold
+    )
 
-  # # kable formatting -----------------------------------------------------------
-  # # replacing previous kable call, kable
-  # x[["kable_calls"]][[kable_call_name]] <- glue(
-  #   "mutate({col_name} = dplyr::case_when(",
-  #   "{col_name} <= {t} ~ paste0('__', x${fun_name}({col_name}), '__'), ",
-  #   "TRUE ~ x${fun_name}({col_name})",
-  #   "))"
-  # )
-  #
-  # print(x[["kable_calls"]])
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
-  x$call_list <- c(x$call_list, list(tab_style_bold_p = match.call()))
+  x$call_list <- c(x$call_list, list(bold_p = match.call()))
 
   x
 }

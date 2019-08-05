@@ -229,10 +229,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
     unnest(!!sym("stat_table"))
 
   # table of column headers
-  table_header <- tibble(
-    column = "label",
-    label = "**Characteristic**"
-  )
+  table_header <-
+    tibble(column = names(table_body) %>% setdiff("summary_type")) %>%
+    table_header_fill_missing()
 
   # returning all results in a list
   results <- list(
@@ -242,6 +241,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
     table_header = table_header,
     meta_data = meta_data,
     inputs = tbl_summary_inputs,
+    N = nrow(data),
     call_list = list(tbl_summary = match.call())
   )
 
@@ -261,10 +261,15 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 
   # adding headers
   if (is.null(by)) {
-    results <- cols_label_summary(results, stat_overall = "**N = {N}**")
+    results <- modify_header_internal(results, stat_0 = "**N = {N}**",
+                                      label = "**Characteristic**")
   } else {
-    results <- cols_label_summary(results, stat_by = "**{level}**, N = {n}")
+    results <- modify_header_internal(results, stat_by = "**{level}**, N = {n}",
+                                      label = "**Characteristic**")
   }
+
+  # writing additional gt and kable calls with data from table_header
+  results <- update_calls_from_table_header(results)
 
   return(results)
 }
@@ -280,9 +285,6 @@ gt_tbl_summary <- quote(list(
     "gt::cols_align(align = 'center') %>% ",
     "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
-
-  # do not print columns variable or row_type columns
-  cols_hide = glue("gt::cols_hide(columns = gt::vars(variable, row_type))"),
 
   # NAs do not show in table
   fmt_missing = glue("gt::fmt_missing(columns = gt::everything(), missing_text = '')"),

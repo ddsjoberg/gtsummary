@@ -64,7 +64,6 @@ The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ``` r
 library(gtsummary)
-#> Loading required package: gt
 t1 <-
   tbl_summary(
     data = trial[c("trt", "age", "grade", "response")],
@@ -109,3 +108,23 @@ contributors\!
 [@margarethannum](https://github.com/margarethannum),
 [@michaelcurry1123](https://github.com/michaelcurry1123), and
 [@sammo3182](https://github.com/sammo3182)
+
+## Print Engine
+
+{gtsummary} uses the {gt} package to print all summary tables. In
+addition to supporting {gt}, the {gtsummary} package works well with
+`knitr::kable()`. This is particularly useful when outputting documents
+to Microsoft Word. If the {gt} package is not installed, {gtsummary}
+will fall back to `knitr::kable()`. To explicitly set the printing
+engine, set the option in the script or in the user- or project R
+profile, `.Rprofile`.
+
+    options(gtsummary.print_engine = "kable") 
+
+or
+
+    options(gtsummary.print_engine = "gt")
+
+Output from `kable` is less full featured compared to summary tables
+produced with {gt}. For example, `kable` summary tables do not include
+indentation, footnotes, and spanning header rows.

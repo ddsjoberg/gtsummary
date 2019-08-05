@@ -1,12 +1,12 @@
-context("test-tab_style_bold_p")
+context("test-bold_p")
 
 #### new comment
 test_that("no errors/warnings with standard use in tbl_summary() and add_p()", {
   tbl_summary_comp <- tbl_summary(mtcars, by = "am") %>%
     add_p()
 
-  expect_error(tab_style_bold_p(tbl_summary_comp), NA)
-  expect_warning(tab_style_bold_p(tbl_summary_comp), NA)
+  expect_error(bold_p(tbl_summary_comp), NA)
+  expect_warning(bold_p(tbl_summary_comp), NA)
 })
 
 
@@ -14,7 +14,7 @@ test_that("expect error with use in tbl_summary() but NO add_p()", {
   table1_without_comp <-
     tbl_summary(mtcars, by = "am")
 
-  expect_error(tab_style_bold_p(table1_without_comp),
+  expect_error(bold_p(table1_without_comp),
     "Before p-values are bolded, run add_p() to calculate the p-values",
     fixed = TRUE
   )
@@ -28,8 +28,8 @@ test_that("no errors/warnings with q=TRUE and add_q() used in tbl_summary", {
     add_p() %>%
     add_q()
 
-  expect_error(tab_style_bold_p(table1_comp_with_q, q = TRUE), NA)
-  expect_warning(tab_style_bold_p(table1_comp_with_q, q = TRUE), NA)
+  expect_error(bold_p(table1_comp_with_q, q = TRUE), NA)
+  expect_warning(bold_p(table1_comp_with_q, q = TRUE), NA)
 })
 
 
@@ -38,7 +38,7 @@ test_that("expect error with q=TRUE and add_q() NOT USED in tbl_summary", {
     tbl_summary(mtcars, by = "am") %>%
     add_p()
 
-  expect_error(tab_style_bold_p(table1_comp_without_q, q = TRUE),
+  expect_error(bold_p(table1_comp_without_q, q = TRUE),
     "Before q-values are bolded, run add_q() to calculate the q-values",
     fixed = TRUE
   )
@@ -49,8 +49,8 @@ test_that("no errors/warnings with standard use in tbl_regression()", {
   fmt_reg <- lm(mpg ~ hp + am, mtcars) %>%
     tbl_regression()
 
-  expect_error(tab_style_bold_p(fmt_reg), NA)
-  expect_warning(tab_style_bold_p(fmt_reg), NA)
+  expect_error(bold_p(fmt_reg), NA)
+  expect_warning(bold_p(fmt_reg), NA)
 })
 
 
@@ -61,8 +61,8 @@ test_that("no errors/warnings with standard use in tbl_uvregression()", {
       y = age
     )
 
-  expect_error(tab_style_bold_p(fmt_uni_reg, p = 0.3), NA)
-  expect_warning(tab_style_bold_p(fmt_uni_reg, p = 0.3), NA)
+  expect_error(bold_p(fmt_uni_reg, p = 0.3), NA)
+  expect_warning(bold_p(fmt_uni_reg, p = 0.3), NA)
 })
 
 
@@ -74,6 +74,6 @@ test_that("no errors/warnings with use in tbl_uvregression() with add_global_p()
     ) %>%
     add_global_p()
 
-  expect_error(tab_style_bold_p(fmt_uni_reg_global_p, p = 0.3), NA)
-  expect_warning(tab_style_bold_p(fmt_uni_reg_global_p, p = 0.3), NA)
+  expect_error(bold_p(fmt_uni_reg_global_p, p = 0.3), NA)
+  expect_warning(bold_p(fmt_uni_reg_global_p, p = 0.3), NA)
 })
