@@ -11,7 +11,12 @@
 #'
 #' @param x object created by a function from the gtsummary package
 #' (e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})
-#' @param omit vector of gt commands to omit. Default is `NULL`
+#' @param include character vector naming gt commands to include in printing.
+#' Default is `NULL`, which utilizes all commands in `x$gt_calls`.
+#' @param exclude character vector naming gt commands to exclude in printing.
+#' Default is `NULL`.
+#' @param omit DEPRECATED. argument is synonymous with `exclude`
+#' vector of named gt commands to omit. Default is `NULL`
 #' @export
 #' @seealso \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
 #' @author Daniel D. Sjoberg
@@ -26,16 +31,26 @@
 #'
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
 
-as_gt <- function(x, omit = NULL) {
+as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
+  # making list of commands to include -----------------------------------------
+  if (!is.null(omit)) {
+    warn_deprecated("The 'omit' argument is deprecated. Please use 'include' and 'exclude' arguments.")
+    if (is.null(exclude)) exclude <- omit
+  }
+  if (is.null(include)) include <- names(x$gt_calls)
+  # this ensures list is in the same order as names(x$gt_calls)
+  include <- names(x$gt_calls) %>% intersect(include)
+
   # user cannot omit the first 'gt' command
-  omit <- omit %>% setdiff("gt")
+  call_names <- include %>% setdiff(exclude)
+  call_names <- "gt" %>% union(call_names)
 
   # taking each gt function call, concatenating them with %>% separating them
-  x$gt_calls[names(x$gt_calls) %>% setdiff(omit)] %>%
+  x$gt_calls[call_names] %>%
     # removing NULL elements
     compact() %>%
     glue_collapse(sep = " %>% ") %>%
     # converting strings into expressions to run
-    parse(text = .) %>%
+    str2expression() %>%
     eval()
 }

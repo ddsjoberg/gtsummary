@@ -64,7 +64,8 @@ inline_text(surv_table,
 )
 }
 \seealso{
-Other tbl_survival tools: \code{\link{tbl_survival.survfit}}
+Other tbl_survival tools: \code{\link{modify_header}},
+  \code{\link{tbl_survival.survfit}}
 }
 \author{
 Karissa Whiting

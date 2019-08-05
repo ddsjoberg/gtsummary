@@ -33,14 +33,15 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Emily C. Zabor
   \item Margie Hannum
   \item Karissa Whiting
+  \item Emily C. Zabor
 }
 
 Other contributors:
 \itemize{
   \item Michael Curry [contributor]
+  \item Esther Drill [contributor]
   \item Jessica Flynn [contributor]
 }
 

@@ -103,10 +103,17 @@ add_nevent.tbl_regression <- function(x, ...) {
     return(x)
   }
 
+  # column label
+  x$table_header <-
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
+
   x$call_list <- c(x$call_list, list(add_nevent = match.call()))
 
-  x$gt_calls[["cols_hide_nevent"]] <-
-    glue("cols_hide(columns = vars(nevent))")
   x
 }
 
@@ -171,18 +178,13 @@ add_nevent.tbl_uvregression <- function(x, ...) {
 
   # column label
   x$table_header <-
-    x$table_header %>%
-    bind_rows(
-      tibble(column = "nevent", label = "**Event N**")
-    )
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+  x <- modify_header_internal(x, nevent = "**Event N**")
 
-  x$gt_calls[["cols_nevent"]] <-
-    "gt::cols_move(columns = gt::vars(nevent), after = gt::vars(N))" %>%
-    glue::as_glue()
-
-  x$gt_calls[["cols_label"]] = glue(
-    "{table_header_to_gt(x$table_header)}"
-  )
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   x
 }

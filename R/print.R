@@ -62,7 +62,15 @@ knit_print.tbl_summary <- function(x, ...) {
 
   # don't use word_document with gt engine
   if (print_engine == "gt" && "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
-    warning("Output 'word_document' is not suported by the {gt} package. Use 'output: rtf_document' for output compatible with MS Word.")
+    warning(paste0(
+      "\nOutput 'word_document' is not suported by the {gt} package.\n",
+      "Use 'output: rtf_document' for output compatible with MS Word.\n\n",
+      "Alternatively, you can use 'knitr::kable()' as the print engine and \n",
+      "continue to use 'word_document'. However, some formatting may be lost,\n",
+      "such as spanning table headers and footnotes.\n\n",
+      "To use 'knitr::kable()' include the following code in your script:\n\n",
+      "'options(gtsummary.print_engine = \"kable\")'"
+      ))
   }
 
   # printing results

@@ -102,7 +102,8 @@ tbl_nostrata_ex2 <-
   )
 }
 \seealso{
-Other tbl_survival tools: \code{\link{inline_text.tbl_survival}}
+Other tbl_survival tools: \code{\link{inline_text.tbl_survival}},
+  \code{\link{modify_header}}
 }
 \author{
 Daniel D. Sjoberg

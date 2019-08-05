@@ -3,13 +3,28 @@ Title: Presentation-Ready Data Summary and Analytic Result
     Tables
 Version: 1.1.1.9002
 Authors@R: 
-    c(person("Daniel D.", "Sjoberg", role = c("aut", "cre"), 
+    c(person(given = "Daniel D.",
+             family = "Sjoberg",
+             role = c("aut", "cre"),
              email = "danield.sjoberg@gmail.com"),
-      person("Emily C.", "Zabor", role = "aut"),
-      person("Margie", "Hannum", role = "aut"),
-      person("Karissa", "Whiting", role = "aut"),
-      person("Michael", "Curry", role = "ctb"),
-      person("Jessica", "Flynn", role = "ctb"))
+      person(given = "Margie",
+             family = "Hannum",
+             role = "aut"),
+      person(given = "Karissa",
+             family = "Whiting",
+             role = "aut"),
+      person(given = "Emily C.",
+             family = "Zabor",
+             role = "aut"),
+      person(given = "Michael",
+             family = "Curry",
+             role = "ctb"),
+      person(given = "Esther",
+             family = "Drill",
+             role = "ctb"),
+      person(given = "Jessica",
+             family = "Flynn",
+             role = "ctb"))
 Description: Creates presentation-ready tables summarizing data
     sets, regression models, and more. The code to create the tables is
     concise and highly customizable. Data frames can be summarized with
@@ -43,11 +58,12 @@ Imports:
 Suggests: 
     car (>= 3.0.2),
     covr (>= 3.2.1),
+    curl (>= 3.3),
     geepack (>= 1.2.1),
     ggplot2 (>= 3.1.0),
     Hmisc (>= 4.2.0),
     lme4 (>= 1.1.18.1),
-    remotes,
+    remotes (>= 2.1.0),
     rmarkdown (>= 1.11),
     spelling (>= 2.0),
     testthat (>= 2.1.0)

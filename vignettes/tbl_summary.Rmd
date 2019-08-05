@@ -40,7 +40,8 @@ Here's how this translates into the use of `tbl_summary()`.
 Before going through the tutorial, install {gt} and {gtsummary}, and load packages.
 
 ```{r, message=FALSE}
-remotes::install_github("rstudio/gt", quiet = TRUE)
+if(curl::has_internet())
+  remotes::install_github("rstudio/gt", quiet = TRUE)
 # remotes::install_github("ddsjoberg/gtsummary")
 
 library(dplyr)
@@ -120,12 +121,12 @@ The {gtsummary} package has built-in functions for adding to results from `tbl_s
 
 The {gtsummary} package comes with functions specifically made to modify and format summary tables.  These functions share the same prefixes as functions from the {gt} package to ease use.
 
-    cols_label_summary()          relabel columns in summary table  
-    tab_style_bold_labels()       bold variable labels  
-    tab_style_bold_levels()       bold variable levels  
-    tab_style_italicize_labels()  italicize variable labels  
-    tab_style_italicize_levels()  italicize variable levels  
-    tab_style_bold_p()            bold significant p-values  
+    modify_header()         relabel columns in summary table  
+    bold_labels()           bold variable labels  
+    bold_levels()           bold variable levels  
+    italicize_labels()      italicize variable labels  
+    italicize_levels()      italicize variable levels  
+    bold_p()                bold significant p-values  
 
 ### {gt} functions to format table
 
@@ -172,12 +173,12 @@ trial2 %>%
   # add statistic labels
   add_stat_label() %>%
   # bold variable labels, italicize levels
-  tab_style_bold_labels() %>%
-  tab_style_italicize_levels() %>%
+  bold_labels() %>%
+  italicize_levels() %>%
   # bold p-values under a given threshold (default is 0.05)
-  tab_style_bold_p(t = 0.2) %>%
+  bold_p(t = 0.2) %>%
   # include percent in headers
-  cols_label_summary(stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
+  modify_header(stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
 ```
 
 Each of the modification functions have additional options outlined in their respective help files.

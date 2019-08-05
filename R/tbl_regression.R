@@ -180,15 +180,16 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # model N
   n <- stats::model.frame(x) %>% nrow()
 
+  # table of column headers
   table_header <-
-    tribble(
-      ~column, ~label,
-      "label", glue("**N = {n}**"),
-      "estimate", glue("**{estimate_header(x, exponentiate)}**"),
-      "conf.low", glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
-      "p.value", "**p-value**"
+    tibble(column = names(table_body)) %>%
+    table_header_fill_missing() %>%
+    table_header_fmt(
+      p.value = "x$inputs$pvalue_fun",
+      estimate = "x$inputs$estimate_fun",
+      conf.low = "x$inputs$estimate_fun",
+      conf.high = "x$inputs$estimate_fun"
     )
-
 
   # footnote abbreviation details
   footnote_abbr <-
@@ -213,7 +214,19 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     kable_calls = eval(kable_tbl_regression)
   )
 
-  # assigning a class of tbl_regression (for special printing in Rmarkdown)
+  # setting column headers
+  results <- modify_header_internal(
+    results,
+    label = "**N = {n}**",
+    estimate = glue("**{estimate_header(x, exponentiate)}**"),
+    conf.low = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
+    p.value = "**p-value**"
+  )
+
+  # writing additional gt and kable calls with data from table_header
+  results <- update_calls_from_table_header(results)
+
+    # assigning a class of tbl_regression (for special printing in Rmarkdown)
   class(results) <- "tbl_regression"
 
   results
@@ -227,15 +240,10 @@ gt_tbl_regression <- quote(list(
     glue(),
 
   # label column indented and left just
-  gt_calls = glue(
+  cols_align = glue(
     "gt::cols_align(align = 'center') %>% ",
     "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
-
-  # do not print columns variable or row_type columns
-  # here i do a setdiff of the variables i want to print by default
-  cols_hide = "gt::cols_hide(columns = gt::vars(variable, row_ref, row_type, var_type, N))" %>%
-    glue(),
 
   # NAs do not show in table
   fmt_missing = "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
@@ -243,32 +251,17 @@ gt_tbl_regression <- quote(list(
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_type == 'level', missing_text = '---')" %>%
+    "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_ref == TRUE, missing_text = '---')" %>%
     glue(),
-
-  # column headers
-  cols_label = glue(
-    "{table_header_to_gt(table_header)}"
-  ),
 
   # column headers abbreviations footnote
   footnote_abbreviation = glue(
     "gt::tab_footnote(",
-    "footnote = '{footnote_abbr}',",
+    "footnote = '{footnote_abbr}', ",
     "locations = gt::cells_column_labels(",
     "columns = {footnote_location})",
     ")"
   ),
-
-  # adding p-value formatting (evaluate the expression with eval() function)
-  fmt_pvalue =
-    "gt::fmt(columns = gt::vars(p.value), rows = !is.na(p.value), fns = x$inputs$pvalue_fun)" %>%
-    glue(),
-
-  # ceof and confidence interval formatting
-  fmt_estimate =
-    "gt::fmt(columns = gt::vars(estimate, conf.low, conf.high), rows = !is.na(estimate), fns = x$inputs$estimate_fun)" %>%
-    glue(),
 
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
@@ -280,7 +273,7 @@ gt_tbl_regression <- quote(list(
     "gt::tab_style(",
     "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
     "locations = gt::cells_data(",
-    "columns = gt::vars(label),",
+    "columns = gt::vars(label), ",
     "rows = row_type != 'label'",
     "))"
   )
@@ -293,11 +286,8 @@ kable_tbl_regression <- quote(list(
   # first call to the gt function
   kable = glue("x$table_body"),
 
-  # ceof and confidence interval formatting
-  fmt_estimate = glue(
-    "dplyr::mutate_at(dplyr::vars(estimate, conf.low, conf.high), ",
-    "~x$inputs$estimate_fun(.))"
-  ),
+  #  placeholder, so the formatting calls are performed other calls below
+  fmt = NULL,
 
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
@@ -307,11 +297,7 @@ kable_tbl_regression <- quote(list(
   fmt_missing_ref = glue(
     "dplyr::mutate_at(dplyr::vars(estimate, conf.low), ",
     "~ dplyr::case_when(row_ref == TRUE ~ '---', TRUE ~ .))"
-  ),
-
-  # adding p-value formatting (evaluate the expression with eval() function)
-  fmt_pvalue =
-    "dplyr::mutate(p.value = x$inputs$pvalue_fun(p.value))" %>% glue()
+  )
 ))
 
 

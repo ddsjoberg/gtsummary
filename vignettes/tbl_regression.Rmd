@@ -33,7 +33,8 @@ To start, a quick note on the magrittr package's pipe function, `%>%`.  By defau
 Before going through the tutorial, install {gt} and {gtsummary}, and load packages.
 
 ```{r, message=FALSE}
-remotes::install_github("rstudio/gt")
+if(curl::has_internet()) 
+  remotes::install_github("rstudio/gt")
 # remotes::install_github("ddsjoberg/gtsummary")
 
 library(gtsummary)
@@ -98,11 +99,11 @@ The {gtsummary} package has built-in functions for adding to results from `tbl_r
 
 The {gtsummary} package comes with functions specifically made to modify and format summary tables.  These functions share the same prefixes as functions from the {gt} package to ease use.
 
-    tab_style_bold_labels()       bold variable labels  
-    tab_style_bold_levels()       bold variable levels  
-    tab_style_italicize_labels()  italicize variable labels  
-    tab_style_italicize_levels()  italicize variable levels  
-    tab_style_bold_p()            bold significant p-values  
+    bold_labels()       bold variable labels  
+    bold_levels()       bold variable levels  
+    italicize_labels()  italicize variable labels  
+    italicize_levels()  italicize variable levels  
+    bold_p()            bold significant p-values  
 
 ### {gt} functions to format table
 
@@ -134,9 +135,9 @@ m1 %>%
                  pvalue_fun = function(x) style_pvalue(x, digits = 2),
                  estimate_fun = function(x) style_ratio(x, digits = 3))  %>% 
   add_global_p() %>%
-  tab_style_bold_p(t = 0.10) %>%
-  tab_style_bold_labels() %>% 
-  tab_style_italicize_levels()
+  bold_p(t = 0.10) %>%
+  bold_labels() %>% 
+  italicize_levels()
 ```
 
 ##  Report Results Inline {#inline_text}
@@ -146,7 +147,7 @@ Reproducible reports are an important part of good practices.  We often need to 
 Let's first create a regression model table.
 
 ```{r}
-tbl_m1 = tbl_regression(m1, exponentiate = TRUE)
+tbl_m1 <- tbl_regression(m1, exponentiate = TRUE)
 tbl_m1
 ```
 
@@ -206,7 +207,7 @@ If the user does not want a specific {gt} function to run, any {gt} call can be 
 
 ```{r remedy001}
 tbl_regression(m1) %>%
-  as_gt(omit = "tab_style_text_indent")
+  as_gt(exclude = "tab_style_text_indent")
 ```
 
 ## Univariate Regression {#tbl_uvregression}
@@ -226,9 +227,9 @@ trial %>%
   # adjusts global p-values for multiple testing (default method: FDR)
   add_q() %>%
   # bold p-values under a given threshold (default 0.05)
-  tab_style_bold_p() %>%
+  bold_p() %>%
   # now bold q-values under the threshold of 0.10
-  tab_style_bold_p(t = 0.10, q = TRUE) %>%
-  tab_style_bold_labels()
+  bold_p(t = 0.10, q = TRUE) %>%
+  bold_labels()
 ```
 
