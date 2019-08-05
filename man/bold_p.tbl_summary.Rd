@@ -43,6 +43,6 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{tbl_summary}}
 }
 \author{
-Daniel D. Sjoberg
+Daniel D. Sjoberg, Esther Drill
 }
 \concept{tbl_summary tools}

@@ -39,6 +39,6 @@ Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{tbl_stack}}
 }
 \author{
-Daniel D. Sjoberg
+Daniel D. Sjoberg, Esther Drill
 }
 \concept{tbl_regression tools}

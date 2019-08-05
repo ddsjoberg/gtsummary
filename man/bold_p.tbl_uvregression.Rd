@@ -47,6 +47,6 @@ Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{tbl_uvregression}}
 }
 \author{
-Daniel D. Sjoberg
+Daniel D. Sjoberg, Esther Drill
 }
 \concept{tbl_uvregression tools}
