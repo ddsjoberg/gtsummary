@@ -46,7 +46,7 @@ as_kable <- function(x, include = NULL, exclude = NULL, omit = NULL, ...) {
     compact() %>%
     glue_collapse(sep = " %>% ") %>%
     # converting strings into expressions to run
-    str2expression() %>%
+    parse(text = .) %>%
     eval() %>%
     # performing final modifcations prior to returning kable object
     mutate_all(~ifelse(is.na(.), "", .)) %>%

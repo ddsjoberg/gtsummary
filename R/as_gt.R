@@ -51,6 +51,6 @@ as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
     compact() %>%
     glue_collapse(sep = " %>% ") %>%
     # converting strings into expressions to run
-    str2expression() %>%
+    parse(text = .) %>%
     eval()
 }

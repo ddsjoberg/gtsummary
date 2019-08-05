@@ -21,5 +21,5 @@ in tables created by \code{tbl_summary}.
 \code{\link{bold_p.tbl_uvregression}}
 }
 \author{
-Daniel D. Sjoberg
+Daniel D. Sjoberg, Esther Drill
 }
