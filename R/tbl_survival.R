@@ -97,6 +97,16 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  missing = "-",
                                  estimate_fun = NULL,
                                  ...) {
+  # setting defaults -----------------------------------------------------------
+  estimate_fun <-
+    estimate_fun %||%
+    getOption("gtsummary.tbl_survival.estimate_fun") %||%
+    switch(
+      is.null(times) + 1,
+      partial(style_percent, symbol = TRUE),
+      partial(style_sigfig, digits = 3)
+    )
+
   # input checks ---------------------------------------------------------------
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of 'times' and 'probs' must be specified.")
