@@ -45,9 +45,8 @@
 #' Options are 'frequency' where results are sorted in
 #' descending order of frequency and 'alphanumeric',
 #' e.g. `sort = list(everything() ~ "frequency")`
-#' @param row_percent logical value indicating whether to calculate
-#' percentages within column or across rows.  Default is to calculate
-#' percentages within columns: `row_percent = FALSE`
+#' @param percent indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
 #'
 #' @section select helpers:
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
@@ -134,9 +133,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
                         statistic = NULL, digits = NULL, group = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
-                        row_percent = FALSE) {
+                        percent = c("column", "row", "cell")) {
   # matching arguments
   missing <- match.arg(missing)
+  percent <- match.arg(percent)
 
   # ungrouping data
   data <- data %>% ungroup()
@@ -223,7 +223,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
           dichotomous_value = ..3, var_label = ..4, stat_display = ..5,
           digits = ..6, class = ..7, missing = missing,
           missing_text = missing_text, sort = ..8,
-          row_percent = row_percent
+          percent = percent
         )
       )
     ) %>%

@@ -7,7 +7,7 @@
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,
   missing = c("ifany", "always", "no"), missing_text = "Unknown",
-  sort = NULL, row_percent = FALSE)
+  sort = NULL, percent = c("column", "row", "cell"))
 }
 \arguments{
 \item{data}{a data frame}
@@ -61,9 +61,8 @@ Options are 'frequency' where results are sorted in
 descending order of frequency and 'alphanumeric',
 e.g. \code{sort = list(everything() ~ "frequency")}}
 
-\item{row_percent}{logical value indicating whether to calculate
-percentages within column or across rows.  Default is to calculate
-percentages within columns: \code{row_percent = FALSE}}
+\item{percent}{indicates the type of percentage to return. Must be one of
+\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}}
 }
 \description{
 The \code{tbl_summary} function calculates descriptive statistics for
