@@ -2,7 +2,9 @@
 
 * Users can now set default p-value formatting functions, regression coefficient formatting functions, and default confidence level for confidence intervals (#120)
 
-* The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`. (#180)
+* The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`.  Function `as_kable()` added. (#180)
+
+* The function `as_gt()` now has `include = ` and `exclude = ` arguments
 
 * Updated some function names to be the same as they were in the first version
 
@@ -13,6 +15,8 @@
     italicize_labels()  <-  tab_style_italicize_labels()  
     italicize_levels()  <-  tab_style_italicize_levels()  
 ```
+
+* Passing named lists in `tbl_summary()` is not defunct. 
 
 * `tbl_stack()` fix for `tbl_uvregression` objects (#175)
 
@@ -52,7 +56,7 @@
 
 # gtsummary 1.0.0 
 
-First release since major refactoring.  The {gt} package is now used as the backend to create all tables.  Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
+First release since major re-factoring.  The {gt} package is now used as the print engine to create all tables.  Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
 
 ### Updated Function Names
 

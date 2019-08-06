@@ -157,3 +157,35 @@ bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 
   x
 }
+
+#' Bold significant p-values
+#'
+#' Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_stack}}
+#'
+#' @param x an object created using `tbl_stack` function
+#' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
+#' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
+#' @param ... not used
+#' @author Daniel D. Sjoberg
+#' @family tbl_uvregression tools
+#' @family tbl_regression tools
+#' @export
+#' @examples
+#' t1 <- tbl_regression(lm(age ~ response, trial))
+#' t2 <- tbl_regression(lm(age ~ grade, trial))
+#'
+#' bold_p_stack_ex <-
+#'   tbl_stack(list(t1, t2)) %>%
+#'   bold_p(t = 0.10)
+#' @section Example Output:
+#' \if{html}{\figure{bold_p_stack_ex.png}{options: width=50\%}}
+
+bold_p.tbl_stack <- function(x, t = 0.05, q = FALSE, ...) {
+
+  # assigning the class to be the same as the first stacked object
+  class(x) <- class(x$tbl_regression_list[[1]])
+
+  # resubmitting bold_p under new class
+  if (class(x) == "tbl_uvregression") bold_p(x = x, t = t, q = q)
+  else bold_p(x = x, t = t)
+}

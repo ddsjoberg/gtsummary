@@ -46,6 +46,7 @@ tbl_lm_global_ex1 <-
 Other tbl_regression tools: \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
   \code{\link{bold_p.tbl_regression}},
+  \code{\link{bold_p.tbl_stack}},
   \code{\link{inline_text.tbl_regression}},
   \code{\link{modify_header}},
   \code{\link{sort_p.tbl_regression}},
