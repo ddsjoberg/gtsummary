@@ -595,15 +595,15 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group,
 #' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
-#' @param row_percent Logical value indicating whether to calculate
-#' percentages within column to across rows
+#' @param percent indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 calculate_summary_stat <- function(data, variable, by, summary_type,
                                    dichotomous_value, var_label, stat_display,
                                    digits, class, missing, missing_text, sort,
-                                   row_percent) {
+                                   percent) {
 
   # if class is NA, then do not calculate summary statistics
   if (is.na(class)) {
@@ -653,7 +653,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     return(
       summarize_categorical(
         data, variable, by, var_label, stat_display, dichotomous_value,
-        missing, missing_text, sort, row_percent
+        missing, missing_text, sort, percent
       )
     )
   }
@@ -813,8 +813,8 @@ df_by <- function(data, by) {
 #' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
-#' @param row_percent Logical value indicating whether to calculate
-#' percentages within column to across rows
+#' @param percent indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
 #' @param percent_fun function to round and format percentages.  Default
 #' is `style_percent()`
 #' @return formatted summary statistics in a tibble.
@@ -823,7 +823,7 @@ df_by <- function(data, by) {
 
 summarize_categorical <- function(data, variable, by, var_label,
                                   stat_display, dichotomous_value, missing,
-                                  missing_text, sort, row_percent) {
+                                  missing_text, sort, percent) {
   percent_fun <-
     getOption("gtsummary.tbl_summary.percent_fun",
               default = style_percent)
@@ -863,7 +863,11 @@ summarize_categorical <- function(data, variable, by, var_label,
   # for column percent, group by 'by_col'
   # for row percents, group by 'variable'
   percent_group_by_var <-
-    ifelse(row_percent == TRUE, "variable", "by_col")
+    case_when(
+      percent == "column" ~ "by_col",
+      percent == "row" ~ "variable",
+      percent == "cell" ~ ""
+    )
 
   # nesting data and changing by variable
   tab0 <-
@@ -979,12 +983,12 @@ summarize_categorical <- function(data, variable, by, var_label,
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
 #   stat_display = "{n}/{N} ({p}%)", dichotomous_value = 50, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
 #   stat_display = "{n}/{N} ({p}%)", dichotomous_value = NULL, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = NULL, var_label = "WTF",
@@ -999,7 +1003,7 @@ summarize_categorical <- function(data, variable, by, var_label,
 # summarize_categorical(
 #   data = mtcars, variable = "cyl", by = "am", var_label = "WTF",
 #   stat_display = "{n} ({p}%)", dichotomous_value = NULL, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 
 

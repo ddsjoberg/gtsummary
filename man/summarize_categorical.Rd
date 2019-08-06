@@ -5,7 +5,7 @@
 \title{Calculates and formats N's and percentages for categorical and dichotomous data}
 \usage{
 summarize_categorical(data, variable, by, var_label, stat_display,
-  dichotomous_value, missing, missing_text, sort, row_percent)
+  dichotomous_value, missing, missing_text, sort, percent)
 }
 \arguments{
 \item{data}{Data frame}
@@ -33,8 +33,8 @@ zero counts (\code{"always"}). Default is \code{"ifany"}.}
 \item{sort}{string indicating whether to sort categorical
 variables by 'alphanumeric' or 'frequency'}
 
-\item{row_percent}{Logical value indicating whether to calculate
-percentages within column to across rows}
+\item{percent}{indicates the type of percentage to return. Must be one of
+\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}}
 
 \item{percent_fun}{function to round and format percentages.  Default
 is \code{style_percent()}}

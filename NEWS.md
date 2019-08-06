@@ -1,8 +1,10 @@
 # gtsummary (development version)
 
-* Users can now set default p-value formatting functions, regression coefficient formatting functions, and default confidence level for confidence intervals (#120)
+* Added support for column, row, and cell percentages in `tabl_summary()` (#181)
 
-* The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`.  Function `as_kable()` added. (#180)
+* Users can now set default p-value formatting functions, regression coefficient formatting functions, default level for confidence intervals, and formatting functions in `tbl_survival()` (#120)
+
+* The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`.  The `as_kable()` function was added to the package as well. (#180)
 
 * The function `as_gt()` now has `include = ` and `exclude = ` arguments
 

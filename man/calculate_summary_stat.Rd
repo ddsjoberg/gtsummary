@@ -6,7 +6,7 @@
 \usage{
 calculate_summary_stat(data, variable, by, summary_type, dichotomous_value,
   var_label, stat_display, digits, class, missing, missing_text, sort,
-  row_percent)
+  percent)
 }
 \arguments{
 \item{data}{Data frame}
@@ -41,8 +41,8 @@ zero counts ("always"). Default is "ifany".}
 \item{sort}{string indicating whether to sort categorical
 variables by 'alphanumeric' or 'frequency'}
 
-\item{row_percent}{Logical value indicating whether to calculate
-percentages within column to across rows}
+\item{percent}{indicates the type of percentage to return. Must be one of
+\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}}
 }
 \description{
 This function takes in the meta data table, and calls the appropriate summarize function.
