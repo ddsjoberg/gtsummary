@@ -233,3 +233,23 @@ trial %>%
   bold_labels()
 ```
 
+## Setting Default Options {#options}
+
+The {gtsummary} regression functions and their related functions have sensible defaults for rounding and formatting results.  If you, however, would like to change the defaults there are a few options.  The default options can be changed for in a single script with addition an `options()` command in the script.  The defaults can also be set on the project- or user-level R profile, `.Rprofile`.
+
+```{r, eval=FALSE}
+help("Rprofile")
+
+usethis::edit_r_profile()
+```
+
+The following parameters are available to be set:
+
+| Option           | Description                                         | Example                                                                                   |
+|------------------|-----------------------------------------------------|-------------------------------------------------------------------------------------------|
+| p-value          | Formatting and rounding p-values                    | `options(gtsummary.pvalue_fun = function(x) style_pvalue(x, digits = 2)`                  |
+| coefficient      | Formatting and rounding for regression coefficients | `options(gtsummary.tbl_regression.estimate_fun = function(x) style_sigfig(x, digits = 3)` |
+| confidence level | Set level for limits                                | `options(gtsummary.conf.level = 0.90)`                                                    |
+| print engine     | Print tables with `gt` or `kable`                   | `options(gtsummary.print_engine = "kable")`   `options(gtsummary.print_engine = "gt")`    |
+
+

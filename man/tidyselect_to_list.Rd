@@ -4,7 +4,7 @@
 \alias{tidyselect_to_list}
 \title{Convert tidyselect to variable list}
 \usage{
-tidyselect_to_list(.data, x, .meta_data = NULL)
+tidyselect_to_list(.data, x, .meta_data = NULL, input_type = NULL)
 }
 \arguments{
 \item{.data}{data with variables to select from}
@@ -12,6 +12,8 @@ tidyselect_to_list(.data, x, .meta_data = NULL)
 \item{x}{list of tidyselect formulas}
 
 \item{.meta_data}{meta data from tbl_summary. Default is NULL}
+
+\item{input_type}{indicates type of example to print in deprecation note}
 }
 \description{
 Functions takes a list of tidyselect formulas, e.g. \code{list(starts_with("age") ~ "continuous")},

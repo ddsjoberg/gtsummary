@@ -42,7 +42,7 @@ vector, e.g. `show_yesno = c("var1", "var2")``}
 \item{conf.level}{must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.
+\item{estimate_fun}{function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 

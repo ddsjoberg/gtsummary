@@ -35,6 +35,9 @@ variables by 'alphanumeric' or 'frequency'}
 
 \item{row_percent}{Logical value indicating whether to calculate
 percentages within column to across rows}
+
+\item{percent_fun}{function to round and format percentages.  Default
+is \code{style_percent()}}
 }
 \value{
 formatted summary statistics in a tibble.

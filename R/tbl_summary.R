@@ -167,8 +167,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   )
 
   # converting tidyselect formula lists to named lists
-  type <- tidyselect_to_list(data, type)
-  value <- tidyselect_to_list(data, value)
+  type <- tidyselect_to_list(data, type, input_type = "type")
+  value <- tidyselect_to_list(data, value, input_type = "value")
 
   # creating a table with meta data about each variable
   meta_data <- tibble(
@@ -185,9 +185,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   if (!is.null(group)) meta_data <- meta_data %>% filter(!!parse_expr("!variable %in% group"))
 
   # converting tidyselect formula lists to named lists
-  label <- tidyselect_to_list(data, label, .meta_data = meta_data)
-  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data)
-  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data)
+  label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
+  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, input_type = "statistic")
+  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, input_type = "digits")
   sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
 
   # assigning variable characteristics

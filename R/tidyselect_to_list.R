@@ -6,15 +6,30 @@
 #' @param .data data with variables to select from
 #' @param x list of tidyselect formulas
 #' @param .meta_data meta data from tbl_summary. Default is NULL
+#' @param input_type indicates type of example to print in deprecation note
 #' @keywords internal
 
-tidyselect_to_list <- function(.data, x, .meta_data = NULL) {
+tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
   # if x is a named list, print depcrecation note and return the input as is
   if (!is.null(names(x))) {
+    example_text <-
+      switch(
+        input_type %||% "mixed",
+        "type" = "type = list(\"age\" ~ \"continuous\", all_integer() ~ \"categorical\")",
+        "label" = "label = list(\"age\" ~ \"Age, years\", \"response\" ~ \"Tumor Response\")",
+        "statistic" = "statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\") \nstatistic = list(\"age\" = \"{median}\")",
+        "digits" = "digits = list(\"age\" ~ 2)\ndigits = list(all_continuous() ~ 2)",
+        "value" = "value = list(\"grade\" ~ \"III\") \nvalue = list(all_logical() ~ FALSE)",
+        "test" = "test = list(all_continuous() ~ \"t.test\") \ntest = list(\"age\" ~ \"kruskal.test\")",
+        "mixed" = "label = list(\"age\" ~ \"Age, years\") \nstatistic = list(all_continuous() ~ \"{mean} ({sd})\")"
+      )
+
     warn_deprecated(glue(
-      "Passing named lists is deprecated, e.g. 'list(marker = \"continuous\", age = \"continuous\")'. ",
-      "Please review function help file and utilize the tidyselect functions as formulas, ",
-      "e.g. 'list(vars(marker, age) ~ \"continuous\")'"
+      "Passing named lists is deprecated. \n",
+      "Update code to pass a list of formulas. \n",
+      "The LHS of the formula selects the variables, and \n",
+      "the RHS are the instructions.  For example, \n\n",
+      "{example_text}"
     ))
     return(x)
   }

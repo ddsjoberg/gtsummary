@@ -815,6 +815,8 @@ df_by <- function(data, by) {
 #' variables by 'alphanumeric' or 'frequency'
 #' @param row_percent Logical value indicating whether to calculate
 #' percentages within column to across rows
+#' @param percent_fun function to round and format percentages.  Default
+#' is `style_percent()`
 #' @return formatted summary statistics in a tibble.
 #' @keywords internal
 #' @author Daniel D. Sjoberg
@@ -822,6 +824,9 @@ df_by <- function(data, by) {
 summarize_categorical <- function(data, variable, by, var_label,
                                   stat_display, dichotomous_value, missing,
                                   missing_text, sort, row_percent) {
+  percent_fun <-
+    getOption("gtsummary.tbl_summary.percent_fun",
+              default = style_percent)
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -893,7 +898,7 @@ summarize_categorical <- function(data, variable, by, var_label,
     group_by(!!sym(percent_group_by_var)) %>%
     mutate(
       N = sum(.data$n),
-      p = style_percent(.data$n / .data$N),
+      p = percent_fun(.data$n / .data$N),
       stat = as.character(glue(stat_display))
     ) %>%
     select(c("by_col", "var_level_freq", "variable", "stat")) %>%

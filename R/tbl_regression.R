@@ -44,7 +44,7 @@
 #' single row, when the 'No' category is the reference group.  To print both
 #' levels in the output table, include the variable name in the show_yesno
 #' vector, e.g. `show_yesno = c("var1", "var2")``
-#' @param estimate_fun function to round and format beta coefficient estimates.
+#' @param estimate_fun function to round and format coefficient estimates.
 #' Default is [style_sigfig] when the coefficients are not transformed, and
 #' [style_ratio] when the coefficients have been exponentiated.
 #' @param pvalue_fun function to round and format p-values.
@@ -140,7 +140,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   }
 
   # converting tidyselect formula lists to named lists
-  label <- tidyselect_to_list(stats::model.frame(x), label)
+  label <- tidyselect_to_list(stats::model.frame(x), label, input_type = "label")
 
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function

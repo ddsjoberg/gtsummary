@@ -55,7 +55,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
 
   # test -----------------------------------------------------------------------
   # parsing into a named list
-  test <- tidyselect_to_list(x$inputs$data, test, .meta_data = x$meta_data)
+  test <- tidyselect_to_list(x$inputs$data, test, .meta_data = x$meta_data, input_type = "test")
 
   if (!is.null(test)) {
     # checking that all inputs are named
