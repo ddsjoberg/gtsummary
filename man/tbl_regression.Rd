@@ -32,7 +32,7 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{intercept}{logical argument indicating whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.
+\item{estimate_fun}{function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
