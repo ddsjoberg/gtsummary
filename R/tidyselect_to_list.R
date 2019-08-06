@@ -17,14 +17,14 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
         input_type %||% "mixed",
         "type" = "type = list(\"age\" ~ \"continuous\", all_integer() ~ \"categorical\")",
         "label" = "label = list(\"age\" ~ \"Age, years\", \"response\" ~ \"Tumor Response\")",
-        "statistic" = "statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\") \nstatistic = list(\"age\" = \"{median}\")",
+        "statistic" = "statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\") \nstatistic = list(\"age\" ~ \"{median}\")",
         "digits" = "digits = list(\"age\" ~ 2)\ndigits = list(all_continuous() ~ 2)",
         "value" = "value = list(\"grade\" ~ \"III\") \nvalue = list(all_logical() ~ FALSE)",
         "test" = "test = list(all_continuous() ~ \"t.test\") \ntest = list(\"age\" ~ \"kruskal.test\")",
         "mixed" = "label = list(\"age\" ~ \"Age, years\") \nstatistic = list(all_continuous() ~ \"{mean} ({sd})\")"
       )
 
-    warn_deprecated(glue(
+    stop_defunct(glue(
       "Passing named lists is deprecated. \n",
       "Update code to pass a list of formulas. \n",
       "The LHS of the formula selects the variables, and \n",

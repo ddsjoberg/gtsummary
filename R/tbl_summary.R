@@ -135,7 +135,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
                         row_percent = FALSE) {
+  # matching arguments
   missing <- match.arg(missing)
+
   # ungrouping data
   data <- data %>% ungroup()
 

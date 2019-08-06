@@ -4,6 +4,16 @@
 
 * The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`. (#180)
 
+* Updated some function names to be the same as they were in the first version
+
+```r
+    bold_p()            <-  tab_style_bold_p()  
+    bold_labels()       <-  tab_style_bold_labels()  
+    bold_levels()       <-  tab_style_bold_levels()  
+    italicize_labels()  <-  tab_style_italicize_labels()  
+    italicize_levels()  <-  tab_style_italicize_levels()  
+```
+
 * `tbl_stack()` fix for `tbl_uvregression` objects (#175)
 
 * Option to exclude some variables from testing when using `add_p()` (#164)
