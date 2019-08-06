@@ -25,8 +25,8 @@ NULL
 #' @export
 bold_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression") %>% all()) {
-    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvregression'")
+  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression", "tbl_stack", "tbl_merge") %>% all()) {
+    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', 'tbl_uvregression', 'tbl_stack', or 'tbl_merge'")
   }
 
   # bold labels ----------------------------------------------------------------
@@ -56,8 +56,8 @@ bold_labels <- function(x) {
 #' @export
 bold_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression") %>% all()) {
-    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvregression'")
+  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression", "tbl_stack", "tbl_merge") %>% all()) {
+    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', 'tbl_uvregression', 'tbl_stack', or 'tbl_merge'")
   }
 
   # bold levels ----------------------------------------------------------------
@@ -88,8 +88,8 @@ bold_levels <- function(x) {
 #' @export
 italicize_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression") %>% all()) {
-    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvregression'")
+  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression", "tbl_stack", "tbl_merge") %>% all()) {
+    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', 'tbl_uvregression', 'tbl_stack', or 'tbl_merge'")
   }
 
   # italicize labels ----------------------------------------------------------------
@@ -120,8 +120,8 @@ italicize_labels <- function(x) {
 #' @export
 italicize_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression") %>% all()) {
-    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', or 'tbl_uvregression'")
+  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression", "tbl_stack", "tbl_merge", "tbl_stack", "tbl_merge") %>% all()) {
+    stop("Class of 'x' must be 'tbl_summary', 'tbl_regression', 'tbl_uvregression', 'tbl_stack', or 'tbl_merge'")
   }
 
   # italicize levels -----------------------------------------------------------
