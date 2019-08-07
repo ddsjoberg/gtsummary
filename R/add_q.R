@@ -24,6 +24,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary tools
 #' @export
+#' @return A `tbl_summary` object
 #' @examples
 #' tbl_sum_q_ex <-
 #'   trial %>%
@@ -123,6 +124,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @export
+#' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uvr_q_ex <-
 #'   trial %>%

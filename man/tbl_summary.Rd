@@ -64,6 +64,9 @@ e.g. \code{sort = list(everything() ~ "frequency")}}
 \item{percent}{indicates the type of percentage to return. Must be one of
 \code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 The \code{tbl_summary} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.  Review the

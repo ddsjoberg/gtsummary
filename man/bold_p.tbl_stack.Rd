@@ -12,6 +12,9 @@
 \item{...}{arguments passed to \code{bold_p.*()} method that
 matches the first object in the \code{tbl_stack}}
 }
+\value{
+A \code{tbl_stack} object
+}
 \description{
 Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_stack}}
 }

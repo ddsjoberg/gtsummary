@@ -13,6 +13,9 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 Sort variables in tables created by \code{\link{tbl_summary}} by ascending p-values
 }

@@ -29,6 +29,9 @@ pre-styled in 'x'. Default is x$estimate_fun}
 
 \item{...}{not used}
 }
+\value{
+A string reporting results from a gtsummary table
+}
 \description{
 for inline reporting in an R markdown document.
 }

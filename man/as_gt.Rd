@@ -19,6 +19,9 @@ Default is \code{NULL}.}
 \item{omit}{DEPRECATED. argument is synonymous with \code{exclude}
 vector of named gt commands to omit. Default is \code{NULL}}
 }
+\value{
+A \code{gt_tbl} object
+}
 \description{
 Function converts object to a gt_tbl object.  This function is used in the
 background when the results are printed or knit.  A user can use this function

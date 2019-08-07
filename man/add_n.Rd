@@ -15,6 +15,9 @@ or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 \item{last}{logical indicator to include N column last in table.
 Default is \code{FALSE}, which will display N column first.}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 For each variable in a \code{tbl_summary} table, the \code{add_n} function adds a column with the
 total number of non-missing (or missing) observations

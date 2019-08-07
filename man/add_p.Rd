@@ -35,6 +35,9 @@ calculate p-values with correlated data. Default is \code{NULL}}
 
 \item{exclude}{names of variables to exclude from output.}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.
 }

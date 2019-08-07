@@ -19,6 +19,9 @@ italicize_levels(x)
 \arguments{
 \item{x}{an object created using gtsummary functions}
 }
+\value{
+Functions return the same class of gtsummary object supplied
+}
 \description{
 Bold or Italicize labels or levels in gtsummary tables
 }

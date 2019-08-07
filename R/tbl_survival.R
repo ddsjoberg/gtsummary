@@ -47,6 +47,7 @@ tbl_survival <- function(x, ...) {
 #' @family tbl_survival tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_survival` object
 #' @examples
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
@@ -86,7 +87,6 @@ tbl_survival <- function(x, ...) {
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{tbl_nostrata_ex2.png}{options: width=40\%}}
-#'
 
 tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  label = ifelse(is.null(probs), "{time}", "{prob*100}%"),

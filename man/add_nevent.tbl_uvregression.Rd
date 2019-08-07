@@ -11,6 +11,9 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_uvregression} object
+}
 \description{
 Adds a column of the number of events to tables created with
 \link{tbl_regression} or \link{tbl_uvregression}.  Supported

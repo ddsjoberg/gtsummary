@@ -12,6 +12,7 @@
 #' @seealso [tbl_merge]
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_stack` object
 #' @examples
 #' # Example 1 - stacking two tbl_regression objects
 #' t1 <-

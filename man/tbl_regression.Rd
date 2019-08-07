@@ -43,6 +43,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 }
+\value{
+A \code{tbl_regression} object
+}
 \description{
 This function uses \href{https://broom.tidyverse.org/reference/brms_tidiers.html}{broom::tidy} and
 \href{https://github.com/bbolker/broom.mixed}{broom.mixed::tidy}

@@ -15,6 +15,7 @@
 #' \code{\link{add_global_p.tbl_uvregression}}
 #' @author Daniel D. Sjoberg
 #' @export
+
 add_global_p <- function(x, ...) {
   # must have car package installed to use this function
   if (!requireNamespace("car", quietly = TRUE)) {
@@ -50,9 +51,9 @@ add_global_p <- function(x, ...) {
 #'   tbl_regression() %>%
 #'   add_global_p()
 #' @export
+#' @return A `tbl_regression` object
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
-#'
 
 add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
@@ -145,6 +146,7 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'   ) %>%
 #'   add_global_p()
 #' @export
+#' @return A `tbl_uvregression` object
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'

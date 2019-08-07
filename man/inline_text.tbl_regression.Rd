@@ -31,6 +31,9 @@ Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
 
 \item{...}{not used}
 }
+\value{
+A string reporting results from a gtsummary table
+}
 \description{
 Takes an object with class \code{tbl_regression}, and the
 location of the statistic to report and returns the statistic for reporting

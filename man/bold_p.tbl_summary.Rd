@@ -15,6 +15,9 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 Bold p-values in tables created by \code{\link{tbl_summary}}
 }

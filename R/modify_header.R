@@ -38,6 +38,7 @@
 #'   modify_header(
 #'     stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"
 #'   )
+#' @return Functions return the same class of gtsummary object supplied
 #' @export
 #' @section Example Output:
 #' \if{html}{Example 1}

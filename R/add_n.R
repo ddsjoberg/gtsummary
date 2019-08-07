@@ -11,6 +11,7 @@
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_summary` object
 #' @examples
 #' tbl_n_ex <-
 #'   trial %>%

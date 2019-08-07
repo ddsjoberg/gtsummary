@@ -102,6 +102,7 @@
 #' will be displayed.  Otherwise, the value to display must be specified in
 #' the `value` argument, e.g. `value = list("varname" ~ "level to show")`
 #' @export
+#' @return A `tbl_summary` object
 #' @family tbl_summary tools
 #' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @author Daniel D. Sjoberg

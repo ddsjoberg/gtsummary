@@ -57,6 +57,7 @@
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
 #' @export
+#' @return A `tbl_regression` object
 #' @examples
 #' library(survival)
 #' tbl_regression_ex1 <-

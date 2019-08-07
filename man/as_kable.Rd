@@ -20,6 +20,9 @@ Default is \code{NULL}.}
 
 \item{...}{additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }
+\value{
+A \code{knitr_kable} object
+}
 \description{
 Function converts object to a knitr_kable object.  This function is used in the
 background when the results are printed or knit.  A user can use this function

@@ -6,6 +6,7 @@
 #' @family tbl_summary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
+#' @return Functions return the same class of gtsummary object supplied
 #' @examples
 #' tbl_bold_ital_ex <-
 #'   trial %>%

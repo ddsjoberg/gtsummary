@@ -46,6 +46,7 @@
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 #' @family tbl_uvregression tools
 #' @export
+#' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uv_ex1 <-
 #'   tbl_uvregression(

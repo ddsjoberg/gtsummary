@@ -26,6 +26,9 @@ or HTML (\code{"html"}).  The text is interpreted with the {gt} package's \code{
 \code{html()} functions.  The default is \code{"md"}, and is ignored when the print engine
 is \code{knitr::kable()}.}
 }
+\value{
+Functions return the same class of gtsummary object supplied
+}
 \description{
 Column labels can be modified to include calculated statistics,
 e.g. the N can be dynamically included by wrapping it in curly brackets

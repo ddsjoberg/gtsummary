@@ -27,6 +27,7 @@
 #' @family tbl_summary tools
 #' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @export
+#' @return A `tbl_summary` object
 #' @author Emily C. Zabor, Daniel D. Sjoberg
 #' @examples
 #' add_comp_ex1 <-

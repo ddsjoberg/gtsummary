@@ -12,6 +12,9 @@
 
 \item{...}{arguments to be passed to \link[car:Anova]{car::Anova}.}
 }
+\value{
+A \code{tbl_uvregression} object
+}
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument
 \code{type = "III"} to calculate global p-values for categorical variables.

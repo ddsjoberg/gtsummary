@@ -12,6 +12,9 @@ add_overall(x, last = FALSE)
 \item{last}{logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 Adds a column with overall summary statistics to tables
 created by \code{tbl_summary}.
