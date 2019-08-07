@@ -7,6 +7,7 @@
 #' @param x list of tidyselect formulas
 #' @param .meta_data meta data from tbl_summary. Default is NULL
 #' @param input_type indicates type of example to print in deprecation note
+#' @noRd
 #' @keywords internal
 
 tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {

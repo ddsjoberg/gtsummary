@@ -17,7 +17,9 @@
 #' or `broom.mixed::tidy`.
 #' @param conf.level confidence level passed directly to `broom::tidy`
 #' or `broom.mixed::tidy`.
+#' @noRd
 #' @keywords internal
+#' @author Daniel D. Sjoberg
 
 # Points function to use mixed vs non-mixed version of broom
 tidy_wrap <- function(x, exponentiate, conf.level) {

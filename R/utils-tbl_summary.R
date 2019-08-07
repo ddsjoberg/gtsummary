@@ -8,6 +8,7 @@
 #' @param data data frame
 #' @param variable string vector of column names from data
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 assign_class <- function(data, variable) {
@@ -43,6 +44,7 @@ assign_class <- function(data, variable) {
 #' @param class class of \code{variable}
 #' @return value that will be printed in table for dichotomous data
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 # wrapper for assign_dichotomous_value_one() function
@@ -115,6 +117,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 #' continuous or categorical. Can be \code{NULL}.
 #' @return vector of stat_display selections for each variable
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 assign_stat_display <- function(variable, summary_type, stat_display) {
@@ -163,6 +166,7 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #' e.g. \code{summary_type = list(age = "continuous")}
 #' @return Vector summary types `c("continuous", "categorical", "dichotomous")`.
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 #' @examples
 #' gtsummary:::assign_summary_type(
@@ -260,6 +264,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
 #' @param by_var categorical variable
 #' @param test list of user defined statistical tests and corresponding variables
 #' @return most appropriate test as text of the test function
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -397,6 +402,7 @@ assign_var_label <- function(data, variable, var_label) {
 #' @param type the type of variable, one of categorical or continuous, from the metadata
 #' @param test list of statistical tests from meta data
 #' @return a table of p-values for each variable
+#' @noRd
 #' @keywords internal
 #' @author Emily C. Zabor
 
@@ -600,6 +606,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group,
 #' variables by 'alphanumeric' or 'frequency'
 #' @param percent indicates the type of percentage to return. Must be one of
 #' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -694,6 +701,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
 #' @param x vector containing the values of a continuous variable. This can be
 #' raw data values or a vector of summary statistics themselves
 #' @return the rounded values
+#' @noRd
 #' @keywords internal
 #' @author Emily Zabor, Daniel D. Sjoberg
 
@@ -765,6 +773,7 @@ continuous_digits_guess_one <- function(data,
 #'
 #' @param data data frame
 #' @param by character name of the `by` variable found in data
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -821,6 +830,7 @@ df_by <- function(data, by) {
 #' @param percent_fun function to round and format percentages.  Default
 #' is `style_percent()`
 #' @return formatted summary statistics in a tibble.
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -1030,6 +1040,7 @@ summarize_categorical <- function(data, variable, by, var_label,
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @param missing_text String to display for count of missing observations.
 #' @return formatted summary statistics in a tibble.
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @importFrom stringr str_extract_all str_remove_all fixed
@@ -1158,6 +1169,7 @@ summarize_continuous <- function(data, variable, by, digits,
 #' The names of the list elements are variable names or '..categorical..' for assigning
 #' all variables of that type.  If both a variable name and '..categorical..' are
 #' specified, the variable name takes precedent
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
