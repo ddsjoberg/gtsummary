@@ -841,6 +841,13 @@ summarize_categorical <- function(data, variable, by, var_label,
     getOption("gtsummary.tbl_summary.percent_fun",
       default = style_percent
     )
+  if (!rlang::is_function(percent_fun)) {
+    stop(paste0(
+      "'percent_fun' is not a valid function.  Please pass only a function\n",
+      "object. For example, to round percentages to 2 decimal places, \n\n",
+      "'options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(\"%.2f\", 100 * x))'"
+    ))
+  }
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -1611,7 +1618,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
   }
 
   # replacing statistics in {}, with their labels
-  for (i in 1:nrow(labels)) {
+  for (i in seq_len(nrow(labels))) {
     stat_display <-
       stringr::str_replace_all(
         stat_display,

@@ -303,3 +303,14 @@ The following parameters are available to be set:
 | Formatting and rounding percentages                 | `options(gtsummary.tbl_summary.percent_fun = function(x) sprintf("%.2f", 100 * x))`                              | `tbl_summary()`                                                                  |
 | Print tables with `gt` or `kable`                   | `options(gtsummary.print_engine = "kable")`   `options(gtsummary.print_engine = "gt")`    | All `tbl_*()` functions                                                          |
 
+When setting default rounding/formatting functions, set the default to a function object rather than an evaluated function.  For example, if you want to round percentages to 3 significant figures use,
+
+```{r,eval=FALSE}
+options(gtsummary.tbl_summary.percent_fun = function(x) sigfig(x, digits = 3))
+```
+
+NOT
+
+```{r,eval=FALSE}
+options(gtsummary.tbl_summary.percent_fun = sigfig(x, digits = 3))
+```

@@ -46,6 +46,12 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   pvalue_fun <-
     pvalue_fun %||%
     getOption("gtsummary.pvalue_fun", default = style_pvalue)
+  if (!rlang::is_function(pvalue_fun)) {
+    stop(paste0(
+      "'pvalue_fun' is not a valid function.  Please pass only a function\n",
+      "object. For example, 'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
+    ))
+  }
 
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
