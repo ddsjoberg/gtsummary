@@ -43,6 +43,9 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
         x < 0.001 ~ "<0.001"
       )
   }
+  else {
+    stop("'digits' argument must be 1 or 2.")
+  }
 
   # prepending a p = in front of value
   if (prepend_p == TRUE) {
