@@ -49,7 +49,8 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   if (!rlang::is_function(pvalue_fun)) {
     stop(paste0(
       "'pvalue_fun' is not a valid function.  Please pass only a function\n",
-      "object. For example, 'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
+      "object. For example,\n\n",
+      "'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
     ))
   }
 
@@ -57,16 +58,22 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
-    stop("Cannot add comparison when no 'by' variable in original tbl_summary() call")
+    stop(paste0("Cannot add comparison when no 'by' variable ",
+                "in original tbl_summary() call"))
   }
 
   # test -----------------------------------------------------------------------
   # parsing into a named list
-  test <- tidyselect_to_list(x$inputs$data, test, .meta_data = x$meta_data, input_type = "test")
+  test <- tidyselect_to_list(
+    x$inputs$data, test,
+    .meta_data = x$meta_data, input_type = "test"
+  )
 
   if (!is.null(test)) {
     # checking that all inputs are named
-    if ((names(test) %>% purrr::discard(. == "") %>% length()) != length(test)) {
+    if ((names(test) %>%
+         purrr::discard(. == "") %>%
+         length()) != length(test)) {
       stop(glue(
         "Each element in 'test' must be named. ",
         "For example, 'test = list(age = \"t.test\", ptstage = \"fisher.test\")'"

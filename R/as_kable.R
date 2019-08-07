@@ -10,7 +10,6 @@
 #' Default is `NULL`, which utilizes all commands in `x$kable_calls`.
 #' @param exclude character vector naming kable commands to exclude in printing.
 #' Default is `NULL`.
-#' @param omit DEPRECATED. argument is synonymous with `exclude` vector of named kable commands to omit. Default is `NULL`
 #' @param ... additional arguments passed to [knitr::kable]
 #' @export
 #' @return A `knitr_kable` object
@@ -20,17 +19,13 @@
 #' trial %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_kable()
-as_kable <- function(x, include = NULL, exclude = NULL, omit = NULL, ...) {
+as_kable <- function(x, include = NULL, exclude = NULL, ...) {
   # making list of commands to include -----------------------------------------
-  if (!is.null(omit)) {
-    warn_deprecated("The 'omit' argument is deprecated. Please use 'include' and 'exclude' arguments.")
-    if (is.null(exclude)) exclude <- omit
-  }
   if (is.null(include)) include <- names(x$kable_calls)
   # this ensures list is in the same order as names(x$kable_calls)
   include <- names(x$kable_calls) %>% intersect(include)
 
-  # user cannot omit the first 'kable' command
+  # user cannot exclude the first 'kable' command
   call_names <- include %>% setdiff(exclude)
   call_names <- "kable" %>% union(call_names)
 

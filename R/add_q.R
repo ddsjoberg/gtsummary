@@ -35,7 +35,8 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_q_ex.png}{options: width=50\%}}
 
-add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...) {
+add_q.tbl_summary <- function(x, method = "fdr",
+                              pvalue_fun = x$pvalue_fun, ...) {
 
   # This adjusts p-values for multiple testing. Default method is fdr.
   if (!("add_p" %in% names(x$call_list))) {
@@ -141,8 +142,8 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 add_q.tbl_uvregression <- function(x, method = "fdr",
                                    pvalue_fun = x$inputs$pvalue_fun, ...) {
 
-  # This adjusts p-values for multiple testing but only when the global approach is used.
-  # Default method is fdr.
+  # This adjusts p-values for multiple testing but only when the
+  # global approach is used. Default method is fdr.
   if (!("p.value_global" %in% colnames(x$meta_data))) {
     stop(glue(
       "You need global p-values first. Use the function add_global_p() after ",

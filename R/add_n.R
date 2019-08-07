@@ -39,7 +39,9 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
         )
       )
     ) %>%
-    set_names(c("variable", "row_type", ifelse(missing == FALSE, "n", "n_missing")))
+    set_names(c(
+      "variable", "row_type", ifelse(missing == FALSE, "n", "n_missing")
+    ))
 
   # merging result with existing tbl_summary
   if (last == FALSE) {

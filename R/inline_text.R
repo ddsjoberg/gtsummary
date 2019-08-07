@@ -371,7 +371,8 @@ inline_text.tbl_survival <-
     # select time --------------------------------------------------------------
     # when specified timpoint is not in tbl_survival,
     # return result for closest time and give warning
-    display_fixed <- result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
+    display_fixed <-
+      result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
     if (!fixed_val %in% result$fixed_var) {
       message(glue(
         "Specified 'time' or 'prob' not in 'x': '{fixed_val}'. ",

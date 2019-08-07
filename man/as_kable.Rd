@@ -4,7 +4,7 @@
 \alias{as_kable}
 \title{Convert to knitr_kable object}
 \usage{
-as_kable(x, include = NULL, exclude = NULL, omit = NULL, ...)
+as_kable(x, include = NULL, exclude = NULL, ...)
 }
 \arguments{
 \item{x}{object created by a function from the gtsummary package
@@ -15,8 +15,6 @@ Default is \code{NULL}, which utilizes all commands in \code{x$kable_calls}.}
 
 \item{exclude}{character vector naming kable commands to exclude in printing.
 Default is \code{NULL}.}
-
-\item{omit}{DEPRECATED. argument is synonymous with \code{exclude} vector of named kable commands to omit. Default is \code{NULL}}
 
 \item{...}{additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }
