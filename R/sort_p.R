@@ -26,7 +26,7 @@ sort_p <- function(x, ...) UseMethod("sort_p")
 #' tbl_sum_sort_p_ex <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   sort_p()
 #' @section Example Output:

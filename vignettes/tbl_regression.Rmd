@@ -203,7 +203,7 @@ tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% head(n = 3)
 
 The {gt} functions are called in the order they appear, always beginning with the `gt()` function.
 
-If the user does not want a specific {gt} function to run, any {gt} call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_regression()` call creates many named {gt} function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be omitted.  In this example, the default indentation will be omitted from the output.
+If the user does not want a specific {gt} function to run, any {gt} call can be excluded in the `as_gt()` function by specifying the `exclude` argument.  For example, the `tbl_regression()` call creates many named {gt} function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be excluded.  In this example, the default indentation will be excluded from the output.
 
 ```{r remedy001}
 tbl_regression(m1) %>%
@@ -235,7 +235,7 @@ trial %>%
 
 ## Setting Default Options {#options}
 
-The {gtsummary} regression functions and their related functions have sensible defaults for rounding and formatting results.  If you, however, would like to change the defaults there are a few options.  The default options can be changed for in a single script with addition an `options()` command in the script.  The defaults can also be set on the project- or user-level R profile, `.Rprofile`.
+The {gtsummary} regression functions and their related functions have sensible defaults for rounding and formatting results.  If you, however, would like to change the defaults there are a few options.  The default options can be changed in a single script with addition an `options()` command in the script.  The defaults can also be set on the project- or user-level R profile, `.Rprofile`.
 
 ```{r, eval=FALSE}
 help("Rprofile")
@@ -247,8 +247,7 @@ The following parameters are available to be set:
 
 | Description                                         | Example                                                                                   | Functions                                                                        |
 |-----------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
-| Formatting and rounding p-values                    | `options(gtsummary.pvalue_fun = function(x) style_pvalue(x, digits = 2)`                  | `add_p()`, `tbl_regression()`, `tbl_uvregression()`, `add_global_p()`, `add_q()` |
-| Formatting and rounding for regression coefficients | `options(gtsummary.tbl_regression.estimate_fun = function(x) style_sigfig(x, digits = 3)` | `tbl_regression()`, `tbl_uvregression()`                                         |
+| Formatting and rounding p-values                    | `options(gtsummary.pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 2))`                  | `add_p()`, `tbl_regression()`, `tbl_uvregression()`                              |
+| Formatting and rounding for regression coefficients | `options(gtsummary.tbl_regression.estimate_fun = function(x) gtsummary::style_sigfig(x, digits = 3))` | `tbl_regression()`, `tbl_uvregression()`                                         |
 | Set level for limits                                | `options(gtsummary.conf.level = 0.90)`                                                    | `tbl_regression()`, `tbl_uvregression()`                                         |
 | Print tables with `gt` or `kable`                   | `options(gtsummary.print_engine = "kable")`   `options(gtsummary.print_engine = "gt")`    | All `tbl_*()` functions                                                          |
-

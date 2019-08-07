@@ -25,7 +25,7 @@ created by \code{tbl_summary}.
 tbl_overall_ex <-
   trial \%>\%
   dplyr::select(age, response, grade, trt) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_overall()
 }
 \seealso{

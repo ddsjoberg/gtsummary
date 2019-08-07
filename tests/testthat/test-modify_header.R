@@ -1,7 +1,7 @@
 context("test-modify_header")
 
 tbl_summary_noby <- trial %>% tbl_summary()
-tbl_summary_by <- trial %>% tbl_summary(by = "trt")
+tbl_summary_by <- trial %>% tbl_summary(by = trt)
 
 test_that("input checks", {
   expect_error(

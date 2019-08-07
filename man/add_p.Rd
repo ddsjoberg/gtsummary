@@ -59,7 +59,7 @@ as it is for \code{tbl_regression()}.
 add_comp_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_p()
 }
 \seealso{

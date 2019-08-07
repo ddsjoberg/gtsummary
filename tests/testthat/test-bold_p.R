@@ -2,7 +2,7 @@ context("test-bold_p")
 
 #### new comment
 test_that("no errors/warnings with standard use in tbl_summary() and add_p()", {
-  tbl_summary_comp <- tbl_summary(mtcars, by = "am") %>%
+  tbl_summary_comp <- tbl_summary(mtcars, by = am) %>%
     add_p()
 
   expect_error(bold_p(tbl_summary_comp), NA)
@@ -12,7 +12,7 @@ test_that("no errors/warnings with standard use in tbl_summary() and add_p()", {
 
 test_that("expect error with use in tbl_summary() but NO add_p()", {
   table1_without_comp <-
-    tbl_summary(mtcars, by = "am")
+    tbl_summary(mtcars, by = am)
 
   expect_error(bold_p(table1_without_comp),
     "Before p-values are bolded, run add_p() to calculate the p-values",
@@ -24,7 +24,7 @@ test_that("expect error with use in tbl_summary() but NO add_p()", {
 
 test_that("no errors/warnings with q=TRUE and add_q() used in tbl_summary", {
   table1_comp_with_q <-
-    tbl_summary(mtcars, by = "am") %>%
+    tbl_summary(mtcars, by = am) %>%
     add_p() %>%
     add_q()
 
@@ -35,7 +35,7 @@ test_that("no errors/warnings with q=TRUE and add_q() used in tbl_summary", {
 
 test_that("expect error with q=TRUE and add_q() NOT USED in tbl_summary", {
   table1_comp_without_q <-
-    tbl_summary(mtcars, by = "am") %>%
+    tbl_summary(mtcars, by = am) %>%
     add_p()
 
   expect_error(bold_p(table1_comp_without_q, q = TRUE),

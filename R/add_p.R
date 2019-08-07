@@ -32,7 +32,7 @@
 #' add_comp_ex1 <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_p()
 #' @section Example Output:
 #' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}

@@ -30,9 +30,9 @@ To start, a quick note on the `magrittr` package's pipe function, `%>%`.  By def
 Here's how this translates into the use of `tbl_summary()`.
 
     mtcars %>% tbl_summary() is equivalent to tbl_summary(mtcars)
-    mtcars %>% tbl_summary(by = "am") is equivalent to tbl_summary(mtcars, by = "am")
-    tbl_summary(mtcars, by = "am") %>% add_p() is equivalent to
-        tbl = tbl_summary(mtcars, by = "am")
+    mtcars %>% tbl_summary(by = am) is equivalent to tbl_summary(mtcars, by = am)
+    tbl_summary(mtcars, by = am) %>% add_p() is equivalent to
+        tbl = tbl_summary(mtcars, by = am)
         add_p(tbl)
     
 ## Setup
@@ -83,7 +83,7 @@ tbl_summary(trial2)
 This is a great table, but for trial data the summary statistics should be split by randomization group.  While reporting p-values for baseline characteristics in a randomized trial isn't recommended, we'll do it here as an illustration of the feature.  To compare two or more groups, include `add_p()` with the function call.
 
 ```{r}
-tbl_summary(trial2, by = "trt") %>% add_p()
+tbl_summary(trial2, by = trt) %>% add_p()
 ```
 
 ## Customize Output
@@ -136,7 +136,7 @@ To use the {gt} package functions with {gtsummary} tables, the summary table mus
 
 ```
 trial %>%
-  tbl_summary(by = "trt", missing = "no") %>%
+  tbl_summary(by = trt, missing = "no") %>%
   add_n() %>%
   as_gt() %>%
   <gt functions>
@@ -159,7 +159,7 @@ The code below calculates the standard table with summary statistics split by tr
 ```{r}
 trial2 %>%
   # build base summary table
-  tbl_summary(by = "trt",
+  tbl_summary(by = trt,
               # change variable labels
               label = list("marker" ~ "Marker, ng/mL",
                            "stage" ~ "Clinical T Stage"),
@@ -213,7 +213,7 @@ Note that dichotomous variables are, by default, included with `all_categorical(
 trial %>%
   dplyr::select(trt, response, age, stage, marker, grade) %>%
   tbl_summary(
-    by = "trt",
+    by = trt,
     type = list(c("response", "grade") ~ "categorical"), # select by variables in a vector
     statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{p}%") # select by summary type/attribute
   ) %>%
@@ -228,7 +228,7 @@ Reproducible reports are an import part of good practices.  We often need to rep
 First create a basic summary table.
 
 ```{r}
-tab1 = tbl_summary(trial2, by = "trt")
+tab1 = tbl_summary(trial2, by = trt)
 tab1
 ```
 
@@ -274,20 +274,20 @@ tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% head(n = 3)
 
 The {gt} functions are called in the order they appear, always beginning with the `gt()` function.
 
-If the user does not want a specific {gt} function to run (i.e. would like to change default printing), any {gt} call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_summary()` call creates many named {gt} function calls: *`r tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any of these can be omitted.  In the example below, the default footnote will be omitted from the output.
+If the user does not want a specific {gt} function to run (i.e. would like to change default printing), any {gt} call can be excluded in the `as_gt()` function by specifying the `exclude` argument.  For example, the `tbl_summary()` call creates many named {gt} function calls: *`r tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any of these can be excluded.  In the example below, the default footnote will be excluded from the output.
 
 After the `as_gt()` function is run, additional formatting may be added to the table using {gt} formatting functions. In the example below, a spanning header for the `by = ` variable is included with the {gt} function `tab_spanner()`.
 
 ```{r remedy001}
-tbl_summary(trial2, by = "trt") %>%
-  as_gt(omit = "footnote_stat_label") %>%
+tbl_summary(trial2, by = trt) %>%
+  as_gt(exclude = "footnote_stat_label") %>%
   gt::tab_spanner(label = "Randomization Group",
               columns = gt::starts_with("stat_"))
 ```
 
 ## Setting Default Options {#options}
 
-The `tbl_summary()` function and it's related functions have sensible defaults for rounding and formatting results.  If you, however, would like to change the defaults there are a few options.  The default options can be changed for in a single script with addition an `options()` command in the script.  The defaults can also be set on the project- or user-level R profile, `.Rprofile`.
+The `tbl_summary()` function and it's related functions have sensible defaults for rounding and formatting results.  If you, however, would like to change the defaults there are a few options.  The default options can be changed for a single script with addition an `options()` command in the script.  The defaults can also be set on the project- or user-level R profile, `.Rprofile`.
 
 ```{r, eval=FALSE}
 help("Rprofile")
@@ -299,7 +299,7 @@ The following parameters are available to be set:
 
 | Description                                         | Example                                                                                   | Functions                                                                        |
 |-----------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
-| Formatting and rounding p-values                    | `options(gtsummary.pvalue_fun = function(x) style_pvalue(x, digits = 2)`                  | `add_p()`, `tbl_regression()`, `tbl_uvregression()`, `add_global_p()`, `add_q()` |
-| Formatting and rounding percentages                 | `options(gtsummary.tbl_summary.percent_fun = style_percent)`                              | `tbl_summary()`                                                                  |
+| Formatting and rounding p-values                    | `options(gtsummary.pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 2))`                  | `add_p()`, `tbl_regression()`, `tbl_uvregression()`                              |
+| Formatting and rounding percentages                 | `options(gtsummary.tbl_summary.percent_fun = function(x) sprintf("%.2f", 100 * x))`                              | `tbl_summary()`                                                                  |
 | Print tables with `gt` or `kable`                   | `options(gtsummary.print_engine = "kable")`   `options(gtsummary.print_engine = "gt")`    | All `tbl_*()` functions                                                          |
 

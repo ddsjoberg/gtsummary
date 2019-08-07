@@ -151,7 +151,7 @@ tbl_summary_ex2 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(
-    by = "trt",
+    by = trt,
     label = list("age" ~ "Patient Age"),
     statistic = list(all_continuous() ~ "{mean} ({sd})"),
     digits = list(vars(age) ~ c(0, 1))
