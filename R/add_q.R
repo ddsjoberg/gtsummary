@@ -69,7 +69,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   x$table_header <-
     tibble(column = names(x$table_body)) %>%
     left_join(x$table_header, by = "column") %>%
-    table_header_fill_missing()  %>%
+    table_header_fill_missing() %>%
     table_header_fmt(q.value = "x$qvalue_fun")
 
   # adding  column header

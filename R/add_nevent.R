@@ -173,8 +173,10 @@ add_nevent.tbl_uvregression <- function(x, ...) {
       table_nevent,
       by = c("variable", "var_type", "row_type", "label")
     ) %>%
-    select(.data$variable, .data$var_type, .data$row_type,
-           .data$label, .data$N, .data$nevent, everything())
+    select(
+      .data$variable, .data$var_type, .data$row_type,
+      .data$label, .data$N, .data$nevent, everything()
+    )
 
   # column label
   x$table_header <-

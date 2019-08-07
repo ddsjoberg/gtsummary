@@ -39,7 +39,7 @@
 #'
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
-                  group = x$inputs$group, include=NULL, exclude=NULL) {
+                  group = x$inputs$group, include = NULL, exclude = NULL) {
 
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
@@ -72,7 +72,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
     stop("Input 'pvalue_fun' must be a function.")
   }
 
-  #Getting p-values only for included variables
+  # Getting p-values only for included variables
   if (is.null(include)) include <- x$table_body$variable %>% unique()
   include <- include %>% setdiff(exclude)
 

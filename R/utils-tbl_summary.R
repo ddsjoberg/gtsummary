@@ -400,20 +400,23 @@ assign_var_label <- function(data, variable, var_label) {
 #' @keywords internal
 #' @author Emily C. Zabor
 
-calculate_pvalue <- function(data, variable, by, test, type, group, include=NULL, exclude=NULL) {
+calculate_pvalue <- function(data, variable, by, test, type, group, include = NULL, exclude = NULL) {
   pmap_dbl(
     list(variable, by, test, type),
     ~ calculate_pvalue_one(data, ..1, ..2, ..3, ..4, group,
-                           include=include, exclude=exclude)
+      include = include, exclude = exclude
+    )
   )
 }
 
 calculate_pvalue_one <- function(data, variable, by, test, type, group,
-                                 include=NULL, exclude=NULL) {
+                                 include = NULL, exclude = NULL) {
 
-  #omitting variables not in include
+  # omitting variables not in include
 
-  if(!(variable %in% include)) return(NA)
+  if (!(variable %in% include)) {
+    return(NA)
+  }
 
   # if there is no by variable, and thus test is NA, return NA
   if (is.na(test)) {
@@ -826,7 +829,8 @@ summarize_categorical <- function(data, variable, by, var_label,
                                   missing_text, sort, percent) {
   percent_fun <-
     getOption("gtsummary.tbl_summary.percent_fun",
-              default = style_percent)
+      default = style_percent
+    )
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -1628,13 +1632,15 @@ footnote_stat_label <- function(meta_data) {
 # when a NULL is passed, it is returned as a NULL
 enquo_to_string <- function(by_enquo) {
   # returning NULL if NULL was passed
-  if (rlang::quo_is_null(by_enquo)) return(NULL)
+  if (rlang::quo_is_null(by_enquo)) {
+    return(NULL)
+  }
 
   # converting enquo to string
   by_quo_text <- rlang::quo_text(by_enquo)
 
   # is user supplied string, then stopping with error
-  if(startsWith(by_quo_text, "\"") && endsWith(by_quo_text, "\"")) {
+  if (startsWith(by_quo_text, "\"") && endsWith(by_quo_text, "\"")) {
     stop_defunct(paste0(
       "\nPassing the 'by' argument as a string is defunct.\n",
       "Please pass the 'by' argument without quotes. For example, \n\n",
@@ -1644,5 +1650,3 @@ enquo_to_string <- function(by_enquo) {
 
   by_quo_text
 }
-
-

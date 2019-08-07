@@ -31,10 +31,16 @@ print.tbl_summary <- function(x, ...) {
   }
 
   # printing results
-  if (print_engine == "gt") return(as_gt(x) %>% print())
-  else if (print_engine == "kable") return(as_kable(x) %>% print())
-  else stop(glue("'{print_engine}' is not a valid print engine. ",
-                 "Please select 'gt' or 'kable' in 'options(gtsummary.print_engine = \"gt\")'"))
+  if (print_engine == "gt") {
+    return(as_gt(x) %>% print())
+  } else if (print_engine == "kable") {
+    return(as_kable(x) %>% print())
+  } else {
+    stop(glue(
+      "'{print_engine}' is not a valid print engine. ",
+      "Please select 'gt' or 'kable' in 'options(gtsummary.print_engine = \"gt\")'"
+    ))
+  }
 }
 
 #' @rdname print_gtsummary
@@ -70,14 +76,20 @@ knit_print.tbl_summary <- function(x, ...) {
       "such as spanning table headers and footnotes.\n\n",
       "To use 'knitr::kable()' include the following code in your script:\n\n",
       "'options(gtsummary.print_engine = \"kable\")'"
-      ))
+    ))
   }
 
   # printing results
-  if (print_engine == "gt") return(as_gt(x) %>% knitr::knit_print())
-  else if (print_engine == "kable") return(as_kable(x) %>% knitr::knit_print())
-  else stop(glue("'{print_engine}' is not a valid print engine. ",
-                 "Please select 'gt' or 'kable' in 'options(gtsummary.print_engine = \"gt\")'"))
+  if (print_engine == "gt") {
+    return(as_gt(x) %>% knitr::knit_print())
+  } else if (print_engine == "kable") {
+    return(as_kable(x) %>% knitr::knit_print())
+  } else {
+    stop(glue(
+      "'{print_engine}' is not a valid print engine. ",
+      "Please select 'gt' or 'kable' in 'options(gtsummary.print_engine = \"gt\")'"
+    ))
+  }
 }
 
 #' @rdname print_gtsummary

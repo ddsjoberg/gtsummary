@@ -8,27 +8,27 @@ table_header_fill_missing <- function(table_header) {
 
   # label ----------------------------------------------------------------------
   if (!"label" %in% names(table_header)) {
-    table_header$label = NA_character_
+    table_header$label <- NA_character_
   }
 
   # hide -----------------------------------------------------------------------
   if (!"hide" %in% names(table_header)) {
-    table_header$hide = TRUE
+    table_header$hide <- TRUE
   }
 
   # text_interpret -------------------------------------------------------------
   if (!"text_interpret" %in% names(table_header)) {
-    table_header$text_interpret = "gt::md"
+    table_header$text_interpret <- "gt::md"
   }
 
   # fmt ------------------------------------------------------------------------
   if (!"fmt" %in% names(table_header)) {
-    table_header$fmt = NA_character_
+    table_header$fmt <- NA_character_
   }
 
   # bold -----------------------------------------------------------------------
   if (!"bold" %in% names(table_header)) {
-    table_header$bold = NA_real_
+    table_header$bold <- NA_real_
   }
 
   # filling in missing values with default -------------------------------------
@@ -36,9 +36,9 @@ table_header_fill_missing <- function(table_header) {
     table_header %>%
     mutate(
       label = coalesce(.data$label, .data$column),
-      hide =  coalesce(.data$hide, TRUE),
-      text_interpret =  coalesce(.data$text_interpret, "gt::md"),
-      bold =  coalesce(.data$bold, NA_real_)
+      hide = coalesce(.data$hide, TRUE),
+      text_interpret = coalesce(.data$text_interpret, "gt::md"),
+      bold = coalesce(.data$bold, NA_real_)
     )
 
   table_header
@@ -47,7 +47,7 @@ table_header_fill_missing <- function(table_header) {
 # this functions modfies table_header with the formatting function
 table_header_fmt <- function(table_header, ...) {
   # saving passed_dots arguments as a named list
-  passed_dots <-list(...)
+  passed_dots <- list(...)
 
   # ordering the names to be the same as in table_header
   names_ordered <- table_header$column %>% intersect(names(passed_dots))
@@ -64,7 +64,7 @@ table_header_fmt <- function(table_header, ...) {
   table_header[
     table_header$column %in% table_header_update$column, # selecting rows
     c("column", "fmt") # selecting columns
-    ] <- table_header_update[c("column", "fmt")]
+  ] <- table_header_update[c("column", "fmt")]
 
   table_header
 }
@@ -101,7 +101,9 @@ table_header_to_gt_fmt <- function(table_header) {
   # combining codes into single vector
   code_vct <- c(fmt_code_vct, bold_code_vct)
 
-  if (length(code_vct) == 0) return(NULL)
+  if (length(code_vct) == 0) {
+    return(NULL)
+  }
 
   code_vct %>%
     glue_collapse(sep = " %>% ")
@@ -131,7 +133,9 @@ table_header_to_gt_cols_hide <- function(table_header) {
     ) %>%
     pull(.data$column) %>%
     glue_collapse(sep = ", ") %>%
-    {glue("gt::cols_hide(columns = gt::vars({.}))")}
+    {
+      glue("gt::cols_hide(columns = gt::vars({.}))")
+    }
 }
 
 
@@ -141,8 +145,12 @@ table_header_to_kable_cols_hide <- function(table_header) {
   table_header %>%
     filter(.data$hide == TRUE) %>%
     pull(.data$column) %>%
-    {paste0("\"", ., "\"", collapse = ", ")} %>%
-    {glue("dplyr::select(-c({.}))")}
+    {
+      paste0("\"", ., "\"", collapse = ", ")
+    } %>%
+    {
+      glue("dplyr::select(-c({.}))")
+    }
 }
 
 # kable table_header to formatted columns and bolding code
@@ -163,7 +171,9 @@ table_header_to_kable_fmt <- function(table_header) {
     ) %>%
     pull("col_code")
 
-  if (length(code_vct) == 0) return(NULL)
+  if (length(code_vct) == 0) {
+    return(NULL)
+  }
 
   code_vct %>%
     glue_collapse(sep = " %>% ")
@@ -199,5 +209,3 @@ update_calls_from_table_header <- function(x) {
   # returning gtsummary object
   x
 }
-
-

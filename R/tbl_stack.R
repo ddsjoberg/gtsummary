@@ -85,8 +85,10 @@ tbl_stack <- function(tbls) {
   }
 
   # stacking tables ------------------------------------------------------------
-  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c("inputs", "gt_calls", "kable_calls", "estimate_funs",
-                                                        "pvalue_funs", "qvalue_funs", "table_header"))]
+  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c(
+    "inputs", "gt_calls", "kable_calls", "estimate_funs",
+    "pvalue_funs", "qvalue_funs", "table_header"
+  ))]
 
   results$table_body <-
     map_dfr(

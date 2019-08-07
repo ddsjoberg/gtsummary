@@ -112,8 +112,8 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     stop("One and only one of 'times' and 'probs' must be specified.")
   }
   if (!rlang::is_string(label) || !rlang::is_string(level_label) ||
-      !rlang::is_string(header_label %||% "") ||
-      !rlang::is_string(header_label %||% "")) {
+    !rlang::is_string(header_label %||% "") ||
+    !rlang::is_string(header_label %||% "")) {
     stop("'label', 'header_label', and 'level_label' arguments must be string of length one.")
   }
 
@@ -240,7 +240,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       ci = glue("**{x$conf.int*100}% CI**")
     )
 
-  if("level_label" %in% names(result$table_body)) {
+  if ("level_label" %in% names(result$table_body)) {
     result <-
       modify_header_internal(
         result,
@@ -406,9 +406,11 @@ tbl_survival_kable_calls <- quote(list(
   strata = switch(
     "level_label" %in% names(table_body) + 1,
     NULL,
-    glue("dplyr::group_by(level) %>% ",
-         "dplyr::mutate(level_label = ifelse(dplyr::row_number() == 1, level_label, NA)) %>% ",
-         "dplyr::ungroup()")
+    glue(
+      "dplyr::group_by(level) %>% ",
+      "dplyr::mutate(level_label = ifelse(dplyr::row_number() == 1, level_label, NA)) %>% ",
+      "dplyr::ungroup()"
+    )
   ),
 
   # styling the percentages

@@ -57,9 +57,13 @@ modify_header <- function(x, stat_by = NULL, ..., text_interpret = c("md", "html
     passed_dots <- list(...)
   }
 
-  do.call(modify_header_internal,
-          c(list(x = x, stat_by = stat_by, text_interpret = text_interpret,
-               .save_call = TRUE), passed_dots))
+  do.call(
+    modify_header_internal,
+    c(list(
+      x = x, stat_by = stat_by, text_interpret = text_interpret,
+      .save_call = TRUE
+    ), passed_dots)
+  )
 }
 
 modify_header_internal <- function(x, stat_by = NULL, ...,
@@ -87,12 +91,11 @@ modify_header_internal <- function(x, stat_by = NULL, ...,
       x$df_by %>%
       rename(level = .data$by_chr) %>%
       mutate(
-        label = glue(stat_by)  %>% as.character()
+        label = glue(stat_by) %>% as.character()
       )
 
     passed_args <- stat_by_header$label
     names(passed_args) <- stat_by_header$by_col
-
   }
 
   # mapping over dots and updating labels --------------------------------------
@@ -103,8 +106,8 @@ modify_header_internal <- function(x, stat_by = NULL, ...,
 
     # saving passed_dots arguments as a named list
     passed_dots <- list(...)
-      # substitute(list(...))[-1] %>%
-      # sapply(I)
+    # substitute(list(...))[-1] %>%
+    # sapply(I)
 
     # checking inputs
     if (names(passed_dots) %>% setdiff(names(x$table_body)) %>% length() > 0) {
@@ -113,18 +116,18 @@ modify_header_internal <- function(x, stat_by = NULL, ...,
         "is/are not column names in 'x$table_body'"
       ))
     }
-    if (map_lgl(passed_dots, ~!rlang::is_string(.)) %>% any()) {
+    if (map_lgl(passed_dots, ~ !rlang::is_string(.)) %>% any()) {
       stop("All arguments passed via '...' must be strings of length one.")
     }
-    if (map_lgl(passed_dots, ~stringr::str_detect(., stringr::fixed("{n}"))) %>% any() && is.null(n)) {
+    if (map_lgl(passed_dots, ~ stringr::str_detect(., stringr::fixed("{n}"))) %>% any() && is.null(n)) {
       stop("{n} value not available in 'x'")
     }
-    if (map_lgl(passed_dots, ~stringr::str_detect(., stringr::fixed("{N}"))) %>% any() && is.null(N)) {
+    if (map_lgl(passed_dots, ~ stringr::str_detect(., stringr::fixed("{N}"))) %>% any() && is.null(N)) {
       stop("{N} value not available in 'x'")
     }
 
     # applying glue arguments
-    passed_dots <- map_chr(passed_dots, ~stringr::str_glue(.))
+    passed_dots <- map_chr(passed_dots, ~ stringr::str_glue(.))
 
     passed_args <- c(passed_args, passed_dots)
   }
@@ -146,7 +149,7 @@ modify_header_internal <- function(x, stat_by = NULL, ...,
   x$table_header[
     x$table_header$column %in% table_header_update$column, # selecting rows
     c("column", "label", "text_interpret", "hide") # selecting columns
-    ] <-
+  ] <-
     table_header_update[c("column", "label", "text_interpret", "hide")]
 
   # updating gt function calls -------------------------------------------------
@@ -154,12 +157,9 @@ modify_header_internal <- function(x, stat_by = NULL, ...,
     table_header_to_gt_cols_label(x$table_header)
 
   # keeping track of all functions previously run ------------------------------
-  if (.save_call == TRUE)
+  if (.save_call == TRUE) {
     x$call_list <- c(x$call_list, list(cols_label_summary = match.call()))
+  }
 
   x
 }
-
-
-
-

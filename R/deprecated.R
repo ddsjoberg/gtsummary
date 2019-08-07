@@ -25,8 +25,11 @@ cols_label_summary <- function(stat_overall = NULL, ...) {
   signal_soft_deprecated(
     "cols_label_summary() is deprecated. Please use modify_header() instead."
   )
-  if (!is.null(stat_overall)) modify_header(stat_0 = stat_overall, ...)
-  else modify_header(...)
+  if (!is.null(stat_overall)) {
+    modify_header(stat_0 = stat_overall, ...)
+  } else {
+    modify_header(...)
+  }
 }
 
 #' @rdname deprecated

@@ -19,7 +19,6 @@
 #' trial %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_kable()
-
 as_kable <- function(x, include = NULL, exclude = NULL, omit = NULL, ...) {
   # making list of commands to include -----------------------------------------
   if (!is.null(omit)) {
@@ -49,6 +48,6 @@ as_kable <- function(x, include = NULL, exclude = NULL, omit = NULL, ...) {
     parse(text = .) %>%
     eval() %>%
     # performing final modifcations prior to returning kable object
-    mutate_all(~ifelse(is.na(.), "", .)) %>%
+    mutate_all(~ ifelse(is.na(.), "", .)) %>%
     knitr::kable(col.names = col_labels, ...)
 }
