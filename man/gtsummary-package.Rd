@@ -33,16 +33,16 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Margie Hannum
-  \item Karissa Whiting
+  \item Margie Hannum (0000-0002-2953-0449)
+  \item Karissa Whiting (0000-0002-4683-1868)
   \item Emily C. Zabor
 }
 
 Other contributors:
 \itemize{
-  \item Michael Curry [contributor]
+  \item Michael Curry (0000-0002-0261-4044) [contributor]
   \item Esther Drill [contributor]
-  \item Jessica Flynn [contributor]
+  \item Jessica Flynn (0000-0001-8310-6684) [contributor]
 }
 
 }
