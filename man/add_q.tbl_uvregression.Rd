@@ -23,6 +23,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 
 \item{...}{further arguments passed to or from other methods}
 }
+\value{
+A \code{tbl_uvregression} object
+}
 \description{
 The adjustments to the p-values is performed with
 \link[stats:p.adjust]{stats::p.adjust}.

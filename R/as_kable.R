@@ -13,6 +13,7 @@
 #' @param omit DEPRECATED. argument is synonymous with `exclude` vector of named kable commands to omit. Default is `NULL`
 #' @param ... additional arguments passed to [knitr::kable]
 #' @export
+#' @return A `knitr_kable` object
 #' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression]
 #' @author Daniel D. Sjoberg
 #' @examples

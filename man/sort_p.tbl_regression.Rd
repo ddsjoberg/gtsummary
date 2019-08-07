@@ -11,6 +11,9 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_regression} object
+}
 \description{
 Sort variables in tables created by \code{\link{tbl_regression}} by ascending p-values
 }

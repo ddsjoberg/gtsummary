@@ -22,6 +22,7 @@ bold_p <- function(x, ...) UseMethod("bold_p")
 #' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
 #' @param ... not used
 #' @family tbl_summary tools
+#' @return A `tbl_summary` object
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @examples
 #' tbl_sum_bold_p_ex <-
@@ -81,7 +82,8 @@ bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
 #' @export
-#'
+#' @return A `tbl_regression` object
+
 bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
   # modifying table_header with bold threshold
@@ -119,6 +121,7 @@ bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @family tbl_uvregression tools
 #' @export
+#' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uvglm_bold_p_ex <-
 #'   trial %>%
@@ -169,6 +172,7 @@ bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 #' @family tbl_uvregression tools
 #' @family tbl_regression tools
 #' @export
+#' @return A `tbl_stack` object
 #' @examples
 #' t1 <- tbl_regression(lm(age ~ response, trial))
 #' t2 <- tbl_regression(lm(age ~ grade, trial))

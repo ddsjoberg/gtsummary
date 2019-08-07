@@ -13,6 +13,9 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_uvregression} object
+}
 \description{
 Sort variables in tables created by \code{\link{tbl_uvregression}} by ascending p-values
 }

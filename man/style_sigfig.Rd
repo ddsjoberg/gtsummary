@@ -12,6 +12,9 @@ style_sigfig(x, digits = 2)
 \item{digits}{integer specifying the minimum number of significant
 digits to display}
 }
+\value{
+A character vector of styled numbers
+}
 \description{
 Converts a numeric argument into a string that has been rounded to a
 significant figure-like number. Scientific notation output

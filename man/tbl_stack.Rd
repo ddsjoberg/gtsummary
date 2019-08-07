@@ -9,6 +9,9 @@ tbl_stack(tbls)
 \arguments{
 \item{tbls}{list of gtsummary regression objects}
 }
+\value{
+A \code{tbl_stack} object
+}
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
 or more \code{tbl_regression} or \code{tbl_merge} objects.

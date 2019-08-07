@@ -13,6 +13,8 @@ style_percent(x, symbol = FALSE)
 }
 \value{
 Formatted percentages
+
+A character vector of styled percentages
 }
 \description{
 Style percentages to be displayed in tables or text

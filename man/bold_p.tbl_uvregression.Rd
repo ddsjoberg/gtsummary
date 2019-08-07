@@ -15,6 +15,9 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_uvregression} object
+}
 \description{
 Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_uvregression}}
 }

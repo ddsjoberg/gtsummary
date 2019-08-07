@@ -9,6 +9,9 @@ add_stat_label(x)
 \arguments{
 \item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 Adds a column with labels describing the summary statistics presented for
 each variable in the table.

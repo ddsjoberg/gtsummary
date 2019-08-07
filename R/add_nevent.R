@@ -36,6 +36,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @export
+#' @return A `tbl_regression` object
 #' @examples
 #' tbl_reg_nevent_ex <-
 #'   glm(response ~ trt, trial, family = binomial) %>%
@@ -136,6 +137,7 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @export
+#' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uv_nevent_ex <-
 #'   trial %>%

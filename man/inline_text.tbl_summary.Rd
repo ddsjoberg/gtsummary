@@ -28,6 +28,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 
 \item{...}{not used}
 }
+\value{
+A string reporting results from a gtsummary table
+}
 \description{
 Extracts and returns statistics from a \code{tbl_summary} object for
 inline reporting in an R markdown document. Detailed examples in the

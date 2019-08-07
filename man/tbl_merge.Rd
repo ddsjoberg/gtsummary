@@ -11,6 +11,9 @@ tbl_merge(tbls, tab_spanner = paste0(c("Model "), 1:length(tbls)))
 
 \item{tab_spanner}{Spanning headers. Character vector with same length as \code{tbls}}
 }
+\value{
+A \code{tbl_merge} object
+}
 \description{
 Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, or \code{tbl_stack}
 objects and adds appropriate spanning headers.

@@ -16,6 +16,8 @@ Default is 1.}
 }
 \value{
 Formatted p-values
+
+A character vector of styled p-values
 }
 \description{
 Style p-values to be displayed in tables or text

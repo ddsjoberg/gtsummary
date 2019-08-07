@@ -10,6 +10,7 @@
 #' @seealso [tbl_stack]
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_merge` object
 #' @examples
 #' library(survival)
 #' t1 <-

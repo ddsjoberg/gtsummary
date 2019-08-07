@@ -18,6 +18,7 @@
 #' @param omit DEPRECATED. argument is synonymous with `exclude`
 #' vector of named gt commands to omit. Default is `NULL`
 #' @export
+#' @return A `gt_tbl` object
 #' @seealso \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
 #' @author Daniel D. Sjoberg
 #' @examples

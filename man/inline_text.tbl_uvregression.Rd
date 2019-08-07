@@ -31,6 +31,9 @@ Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
 
 \item{...}{not used}
 }
+\value{
+A string reporting results from a gtsummary table
+}
 \description{
 Extracts and returns statistics from a table created by the \code{tbl_uvregression}
 function for inline reporting in an R markdown document.
