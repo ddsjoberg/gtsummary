@@ -1624,4 +1624,25 @@ footnote_stat_label <- function(meta_data) {
     paste0("Statistics presented: ", .)
 }
 
+# the by variable is supplied is a bare, and ocnverted to a string.
+# when a NULL is passed, it is returned as a NULL
+enquo_to_string <- function(by_enquo) {
+  # returning NULL if NULL was passed
+  if (rlang::quo_is_null(by_enquo)) return(NULL)
+
+  # converting enquo to string
+  by_quo_text <- rlang::quo_text(by_enquo)
+
+  # is user supplied string, then stopping with error
+  if(startsWith(by_quo_text, "\"") && endsWith(by_quo_text, "\"")) {
+    stop_defunct(paste0(
+      "\nPassing the 'by' argument as a string is defunct.\n",
+      "Please pass the 'by' argument without quotes. For example, \n\n",
+      "tbl_summary(data, by = varname)"
+    ))
+  }
+
+  by_quo_text
+}
+
 

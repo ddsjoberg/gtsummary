@@ -28,7 +28,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' tbl_sum_q_ex <-
 #'   trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   add_q()
 #' @section Example Output:

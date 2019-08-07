@@ -17,7 +17,7 @@
 #' @author Daniel D. Sjoberg
 #' @examples
 #' trial %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   as_kable()
 
 as_kable <- function(x, include = NULL, exclude = NULL, omit = NULL, ...) {

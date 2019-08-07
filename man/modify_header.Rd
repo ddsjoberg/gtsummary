@@ -50,7 +50,7 @@ tbl_col_ex1 <-
 
 tbl_col_ex2 <-
   trial[c("age", "grade", "response", "trt")] \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   modify_header(
     stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"
   )

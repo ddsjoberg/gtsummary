@@ -115,7 +115,7 @@
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(
-#'     by = "trt",
+#'     by = trt,
 #'     label = list("age" ~ "Patient Age"),
 #'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
 #'     digits = list(vars(age) ~ c(0, 1))
@@ -140,6 +140,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 
   # ungrouping data
   data <- data %>% ungroup()
+
+  # converting bare by to string -----------------------------------------------
+  # by_enquo <- rlang::enquo(by)
+  by <- enquo_to_string(rlang::enquo(by))
 
   # will return call, and all object passed to in tbl_summary call
   # the object func_inputs is a list of every object passed to the function

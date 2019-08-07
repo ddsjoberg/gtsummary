@@ -27,7 +27,7 @@ Bold p-values in tables created by \code{\link{tbl_summary}}
 tbl_sum_bold_p_ex <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   bold_p()
 }

@@ -27,7 +27,7 @@ if they wish to add customized formatting available via \link[knitr:kable]{knitr
 }
 \examples{
 trial \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   as_kable()
 }
 \seealso{

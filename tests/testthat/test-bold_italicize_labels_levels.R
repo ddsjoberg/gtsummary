@@ -1,7 +1,7 @@
 context("test-tab_style")
 
 tbl <- trial %>%
-  tbl_summary(by = "trt") %>%
+  tbl_summary(by = trt) %>%
   add_p() %>%
   add_q()
 

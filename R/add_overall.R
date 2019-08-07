@@ -13,7 +13,7 @@
 #' tbl_overall_ex <-
 #'   trial %>%
 #'   dplyr::select(age, response, grade, trt) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_overall()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
@@ -49,7 +49,7 @@ add_overall <- function(x, last = FALSE) {
     stop("An error occured in 'add_overall()', cannot merge overall statistics")
   }
 
-  # adding overall stat to the table1 data frame
+  # adding overall stat to the table_body data frame
   if (last == FALSE) {
     x$table_body <-
       bind_cols(

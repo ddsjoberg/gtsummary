@@ -39,7 +39,7 @@ for detailed examples in the 'Advanced Customization' section.
 \donttest{
 as_gt_ex <-
   trial \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   as_gt()
 }
 }

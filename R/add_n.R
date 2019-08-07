@@ -15,7 +15,7 @@
 #' tbl_n_ex <-
 #'   trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_n()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
