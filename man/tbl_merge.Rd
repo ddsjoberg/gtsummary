@@ -4,7 +4,7 @@
 \alias{tbl_merge}
 \title{Merge two or more gtsummary regression objects}
 \usage{
-tbl_merge(tbls, tab_spanner = paste0(c("Model "), 1:length(tbls)))
+tbl_merge(tbls, tab_spanner = paste0(c("Model "), seq_len(length(tbls))))
 }
 \arguments{
 \item{tbls}{list of gtsummary regression objects}

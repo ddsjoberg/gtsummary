@@ -34,7 +34,7 @@
 #' \if{html}{\figure{tbl_merge_ex.png}{options: width=50\%}}
 #'
 tbl_merge <- function(tbls,
-                      tab_spanner = paste0(c("Model "), 1:length(tbls))) {
+                      tab_spanner = paste0(c("Model "), seq_len(length(tbls)))) {
   # input checks ---------------------------------------------------------------
   # class of tbls
   if (!"list" %in% class(tbls)) {
@@ -165,7 +165,7 @@ tbl_merge <- function(tbls,
     {
       switch(length(.) > 0 + 1, paste0("estimate_", .), NULL)
     } %>%
-    c(paste0("conf.low_", 1:tbls_length)) %>%
+    c(paste0("conf.low_", seq_len(tbls_length))) %>%
     glue_collapse(sep = ", ")
 
   # returning results
@@ -260,7 +260,7 @@ gt_tbl_merge <- quote(list(
   #   cols_merge(col_1 = vars(conf.low_2), col_2 = vars(conf.high_2), pattern = '{1}, {2}')
   cols_merge_ci =
     map(
-      1:tbls_length,
+      seq_len(tbls_length),
       ~ paste0(
         "gt::cols_merge(",
         glue("col_1 = gt::vars(conf.low_{.x}), col_2 = gt::vars(conf.high_{.x}), "),
@@ -282,7 +282,7 @@ gt_tbl_merge <- quote(list(
   # table spanner
   tab_spanner =
     glue(
-      "gt::tab_spanner(label = '{tab_spanner}', columns = gt::ends_with('_{1:tbls_length}'))"
+      "gt::tab_spanner(label = '{tab_spanner}', columns = gt::ends_with('_{seq_len(tbls_length)}'))"
     ) %>%
       glue_collapse(sep = " %>% "),
 
@@ -331,7 +331,7 @@ kable_tbl_merge <- quote(list(
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
     map(
-      1:tbls_length,
+      seq_len(tbls_length),
       ~ "dplyr::mutate(conf.low_{.x} = ifelse(is.na(estimate_{.x}), NA, paste0(conf.low_{.x}, \", \", conf.high_{.x})) %>% as.character())" %>%
         glue()
     ) %>%
@@ -340,7 +340,7 @@ kable_tbl_merge <- quote(list(
   # Show "---" for reference groups
   fmt_missing_ref =
     map(
-      1:tbls_length,
+      seq_len(tbls_length),
       ~ glue(
         "dplyr::mutate_at(dplyr::vars(estimate_{.x}, conf.low_{.x}), ",
         "~ dplyr::case_when(row_ref_{.x} == TRUE ~ '---', TRUE ~ .))"
