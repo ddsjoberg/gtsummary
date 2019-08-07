@@ -41,7 +41,7 @@ for detailed examples in the 'Advanced Customization' section.
 \examples{
 \donttest{
 as_gt_ex <-
-  trial \%>\%
+  trial[c("trt", "age", "response", "grade")] \%>\%
   tbl_summary(by = trt) \%>\%
   as_gt()
 }
