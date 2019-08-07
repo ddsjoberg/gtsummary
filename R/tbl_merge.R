@@ -59,7 +59,7 @@ tbl_merge <- function(tbls,
             vars(-c("variable", "var_type", "row_type", "label")),
             ~ glue("{.}_{y}")
           ) %>%
-          nest(-c("variable", "var_type"))
+          nest(data = -one_of(c("variable", "var_type")))
       }
     )
 
@@ -95,7 +95,7 @@ tbl_merge <- function(tbls,
   # unnesting results from within variable column tibbles
   table_body <-
     merged_table %>%
-    unnest()
+    unnest("table")
 
 
   # creating column headers and footnotes --------------------------------------
