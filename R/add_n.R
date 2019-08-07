@@ -63,10 +63,10 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
     table_header_fill_missing()
 
   # updating header
-  if (missing == FALSE){
+  if (missing == FALSE) {
     x <- modify_header_internal(x, n = "**N**")
   }
-  else if (missing == TRUE){
+  else if (missing == TRUE) {
     x <- modify_header_internal(x, n_missing = "**N Missing**")
   }
 

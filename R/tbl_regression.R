@@ -172,7 +172,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
   include <- include %>% setdiff(exclude)
 
-    # keeping variables indicated in `include`
+  # keeping variables indicated in `include`
   table_body <-
     table_body %>%
     filter(.data$variable %in% include)
@@ -226,7 +226,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # writing additional gt and kable calls with data from table_header
   results <- update_calls_from_table_header(results)
 
-    # assigning a class of tbl_regression (for special printing in Rmarkdown)
+  # assigning a class of tbl_regression (for special printing in Rmarkdown)
   class(results) <- "tbl_regression"
 
   results
@@ -252,7 +252,7 @@ gt_tbl_regression <- quote(list(
   # Show "---" for reference groups
   fmt_missing_ref =
     "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_ref == TRUE, missing_text = '---')" %>%
-    glue(),
+      glue(),
 
   # column headers abbreviations footnote
   footnote_abbreviation = glue(
@@ -266,7 +266,7 @@ gt_tbl_regression <- quote(list(
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
     "gt::cols_merge(col_1 = gt::vars(conf.low), col_2 = gt::vars(conf.high), pattern = '{1}, {2}')" %>%
-    glue::as_glue(),
+      glue::as_glue(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(

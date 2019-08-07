@@ -267,11 +267,15 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 
   # adding headers
   if (is.null(by)) {
-    results <- modify_header_internal(results, stat_0 = "**N = {N}**",
-                                      label = "**Characteristic**")
+    results <- modify_header_internal(results,
+      stat_0 = "**N = {N}**",
+      label = "**Characteristic**"
+    )
   } else {
-    results <- modify_header_internal(results, stat_by = "**{level}**, N = {n}",
-                                      label = "**Characteristic**")
+    results <- modify_header_internal(results,
+      stat_by = "**{level}**, N = {n}",
+      label = "**Characteristic**"
+    )
   }
 
   # writing additional gt and kable calls with data from table_header
@@ -320,5 +324,3 @@ kable_tbl_summary <- quote(list(
   # first call
   kable = glue("x$table_body")
 ))
-
-

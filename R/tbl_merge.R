@@ -314,21 +314,23 @@ kable_tbl_merge <- quote(list(
 
   # combining conf.low and conf.high to print confidence interval
   cols_merge_ci =
-    map(1:tbls_length,
-        ~ "dplyr::mutate(conf.low_{.x} = ifelse(is.na(estimate_{.x}), NA, paste0(conf.low_{.x}, \", \", conf.high_{.x})) %>% as.character())" %>%
-          glue()
+    map(
+      1:tbls_length,
+      ~ "dplyr::mutate(conf.low_{.x} = ifelse(is.na(estimate_{.x}), NA, paste0(conf.low_{.x}, \", \", conf.high_{.x})) %>% as.character())" %>%
+        glue()
     ) %>%
-    glue_collapse_null(sep = " %>% "),
+      glue_collapse_null(sep = " %>% "),
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    map(1:tbls_length,
-        ~ glue(
-          "dplyr::mutate_at(dplyr::vars(estimate_{.x}, conf.low_{.x}), ",
-          "~ dplyr::case_when(row_ref_{.x} == TRUE ~ '---', TRUE ~ .))"
-        )
+    map(
+      1:tbls_length,
+      ~ glue(
+        "dplyr::mutate_at(dplyr::vars(estimate_{.x}, conf.low_{.x}), ",
+        "~ dplyr::case_when(row_ref_{.x} == TRUE ~ '---', TRUE ~ .))"
+      )
     ) %>%
-    glue_collapse_null(sep = " %>% ")
+      glue_collapse_null(sep = " %>% ")
 ))
 
 
