@@ -10,3 +10,7 @@
 
 # allowing for the use of the dot when piping
 utils::globalVariables(c("."))
+
+tidyr_has_legacy_nest <- function() {
+  exists("unnest_legacy", asNamespace("tidyr"))
+}

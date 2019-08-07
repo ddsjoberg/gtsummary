@@ -50,18 +50,26 @@ tbl_merge <- function(tbls,
 
   # merging tables -------------------------------------------------------------
   # nesting data by variable (one line per variable), and renaming columns with number suffix
-  nested_table <-
-    tbls %>%
-    imap(
-      function(x, y) {
-        pluck(x, "table_body") %>%
-          rename_at(
-            vars(-c("variable", "var_type", "row_type", "label")),
-            ~ glue("{.}_{y}")
-          ) %>%
-          nest(data = -one_of(c("variable", "var_type")))
-      }
+  nested_table <- tbls %>%
+    map("table_body") %>%
+    imap(function(x, y) {
+      rename_at(
+        x,
+        vars(-c("variable", "var_type", "row_type", "label")),
+        ~ glue("{.}_{y}")
+      )
+    })
+  if (tidyr_has_legacy_nest()) {
+    nested_table <- map(
+      nested_table,
+      ~ nest(.x, data = -one_of(c("variable", "var_type")))
     )
+  } else {
+    nested_table <- map(
+      nested_table,
+      ~ nest(.x, -c("variable", "var_type"))
+    )
+  }
 
   # merging formatted objects together
   merged_table <-
@@ -93,10 +101,11 @@ tbl_merge <- function(tbls,
   }
 
   # unnesting results from within variable column tibbles
-  table_body <-
-    merged_table %>%
-    unnest("table")
-
+  if (tidyr_has_legacy_nest()) {
+    table_body <- unnest(merged_table, "table")
+  } else {
+    table_body <- unnest(merged_table)
+  }
 
   # creating column headers and footnotes --------------------------------------
   # creating column header for base variable (label, estimate, conf.low, and p.value)
