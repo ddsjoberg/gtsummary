@@ -67,7 +67,7 @@ library(gtsummary)
 t1 <-
   tbl_summary(
     data = trial[c("trt", "age", "grade", "response")],
-    by = "trt"
+    by = trt
   ) %>%
   add_p() 
 ```
@@ -103,6 +103,7 @@ contributors\!
 [@ahinton-mmc](https://github.com/ahinton-mmc),
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@emilyvertosick](https://github.com/emilyvertosick),
+[@jennybc](https://github.com/jennybc),
 [@jflynn264](https://github.com/jflynn264),
 [@karissawhiting](https://github.com/karissawhiting),
 [@margarethannum](https://github.com/margarethannum),
