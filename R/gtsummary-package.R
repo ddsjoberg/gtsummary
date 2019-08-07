@@ -10,6 +10,7 @@
 # allowing for the use of the dot when piping
 utils::globalVariables(c("."))
 
+# THIS IS FROM PR #195, won't be required when tidyr >=1.0.0 is deps
 tidyr_has_legacy_nest <- function() {
   exists("unnest_legacy", asNamespace("tidyr"))
 }
