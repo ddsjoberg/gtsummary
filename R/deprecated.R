@@ -66,9 +66,10 @@ tab_style_bold_labels <- function(...) {
 #' @export
 
 tab_style_italicize_levels <- function(...) {
-  signal_soft_deprecated(
-    "tab_style_italicize_levels() is deprecated. Please use italicize_levels() instead."
-  )
+  signal_soft_deprecated(paste0(
+    "tab_style_italicize_levels() is deprecated. ",
+    "Please use italicize_levels() instead."
+  ))
   italicize_levels(...)
 }
 
@@ -76,9 +77,10 @@ tab_style_italicize_levels <- function(...) {
 #' @export
 
 tab_style_italicize_labels <- function(...) {
-  signal_soft_deprecated(
-    "tab_style_italicize_labels() is deprecated. Please use italicize_labels() instead."
-  )
+  signal_soft_deprecated(paste0(
+    "tab_style_italicize_labels() is deprecated. ",
+    "Please use italicize_labels() instead."
+  ))
   italicize_labels(...)
 }
 

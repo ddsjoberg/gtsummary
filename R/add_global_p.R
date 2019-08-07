@@ -174,7 +174,9 @@ add_global_p.tbl_uvregression <- function(x, ...) {
         as.data.frame() %>%
         tibble::rownames_to_column(var = "variable") %>%
         filter(variable == .y) %>%
-        select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
+        select(c(
+          "variable", starts_with("Pr(>")
+        )) %>% # selecting the pvalue column
         set_names(c("variable", "p.value_global"))
     ) %>%
     select(c("variable", "p.value_global"))

@@ -24,12 +24,15 @@ add_overall <- function(x, last = FALSE) {
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
-    stop("Cannot add Overall column when no 'by' variable in original tbl_summary")
+    stop(
+      "Cannot add Overall column when no 'by' variable in original tbl_summary"
+    )
   }
 
   x_copy <- x
 
-  # removing 'by' variable from data (so it won't show up in the overall tbl_summary)
+  # removing 'by' variable from data
+  # (so it won't show up in the overall tbl_summary)
   x_copy$inputs[["data"]] <- x$inputs[["data"]] %>% select(-c(x[["by"]]))
 
   # replacing the function call by variable to NULL to get results overall
@@ -40,12 +43,13 @@ add_overall <- function(x, last = FALSE) {
     do.call(tbl_summary, x_copy$inputs) %>%
     pluck("table_body")
 
-  # checking the original tbl_summary and the added overall, are the same before binding (excluding headers)
+  # checking the original tbl_summary and the added overall,
+  # are the same before binding (excluding headers)
   if (!identical(
     x$table_body %>%
-      select(c("row_type", "variable", "label")),
+    select(c("row_type", "variable", "label")),
     overall %>%
-      select(c("row_type", "variable", "label"))
+    select(c("row_type", "variable", "label"))
   )) {
     stop("An error occured in 'add_overall()', cannot merge overall statistics")
   }

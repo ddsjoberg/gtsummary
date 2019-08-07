@@ -35,7 +35,8 @@
 as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
   # making list of commands to include -----------------------------------------
   if (!is.null(omit)) {
-    warn_deprecated("The 'omit' argument is deprecated. Please use 'include' and 'exclude' arguments.")
+    warn_deprecated(paste0("The 'omit' argument is deprecated. ",
+      "Please use 'include' and 'exclude' arguments."))
     if (is.null(exclude)) exclude <- omit
   }
   if (is.null(include)) include <- names(x$gt_calls)
