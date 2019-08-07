@@ -1068,7 +1068,7 @@ summarize_continuous <- function(data, variable, by, digits,
   data <-
     data %>%
     group_by(!!sym("by_col")) %>%
-    nest(.key = "data")
+    nest()
 
   # nesting data and calculating descriptive stats
   stats <-

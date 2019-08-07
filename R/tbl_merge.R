@@ -1,6 +1,7 @@
 #' Merge two or more gtsummary regression objects
 #'
-#' Merges two or more `tbl_regression`, `tbl_uvregression`, or `tbl_stack` objects and adds appropriate spanning headers.
+#' Merges two or more `tbl_regression`, `tbl_uvregression`, or `tbl_stack`
+#' objects and adds appropriate spanning headers.
 #'
 #' @param tbls list of gtsummary regression objects
 #' @param tab_spanner Spanning headers. Character vector with same length as `tbls`
@@ -55,18 +56,28 @@ tbl_merge <- function(tbls,
 
   # merging tables -------------------------------------------------------------
   # nesting data by variable (one line per variable), and renaming columns with number suffix
-  nested_table <-
-    tbls %>%
-    imap(
-      function(x, y) {
-        pluck(x, "table_body") %>%
-          rename_at(
-            vars(-c("variable", "var_type", "row_type", "label")),
-            ~ glue("{.}_{y}")
-          ) %>%
-          nest(-c("variable", "var_type"))
-      }
+  nested_table <- tbls %>%
+    map("table_body") %>%
+    imap(function(x, y) {
+      rename_at(
+        x,
+        vars(-c("variable", "var_type", "row_type", "label")),
+        ~ glue("{.}_{y}")
+      )
+    })
+
+  # THIS IS FROM PR #195, the if-else won't be required when tidyr >=1.0.0 is deps
+  if (tidyr_has_legacy_nest()) {
+    nested_table <- map(
+      nested_table,
+      ~ nest(.x, data = -one_of(c("variable", "var_type")))
     )
+  } else {
+    nested_table <- map(
+      nested_table,
+      ~ nest(.x, -c("variable", "var_type"))
+    )
+  }
 
   # merging formatted objects together
   merged_table <-
@@ -98,10 +109,16 @@ tbl_merge <- function(tbls,
   }
 
   # unnesting results from within variable column tibbles
-  table_body <-
-    merged_table %>%
-    unnest() %>%
-    select(.data$label, everything())
+  # THIS IS FROM PR #195, the if-else won't be required when tidyr >=1.0.0 is deps
+  if (tidyr_has_legacy_nest()) {
+    table_body <-
+      unnest(merged_table, "table") %>%
+      select(.data$label, everything())
+  } else {
+    table_body <-
+      unnest(merged_table) %>%
+      select(.data$label, everything())
+  }
 
   # stacking all table_header dfs together and renaming
   table_header <-
@@ -118,8 +135,6 @@ tbl_merge <- function(tbls,
     tibble(column = names(table_body)) %>%
     left_join(table_header, by = "column") %>%
     table_header_fill_missing()
-
-
 
   # creating column footnotes --------------------------------------
   # creating list of footnote information
