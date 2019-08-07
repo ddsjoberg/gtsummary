@@ -31,7 +31,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
   }
 
   # rounding large pvalues to 1 digit
-  if (digits == 1) {
+  else if (digits == 1) {
     p_fmt <-
       case_when(
         x > 1 ~ NA_character_,
