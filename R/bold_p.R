@@ -163,8 +163,8 @@ bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 #' Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_stack}}
 #'
 #' @param x an object created using `tbl_stack` function
-#' @param ... arguments passed to `bold_p.*()` method that m
-#' atches the first object in the `tbl_stack`
+#' @param ... arguments passed to `bold_p.*()` method that
+#' matches the first object in the `tbl_stack`
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @family tbl_regression tools

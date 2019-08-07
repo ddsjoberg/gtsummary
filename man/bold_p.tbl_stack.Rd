@@ -4,16 +4,13 @@
 \alias{bold_p.tbl_stack}
 \title{Bold significant p-values}
 \usage{
-\method{bold_p}{tbl_stack}(x, t = 0.05, q = FALSE, ...)
+\method{bold_p}{tbl_stack}(x, ...)
 }
 \arguments{
 \item{x}{an object created using \code{tbl_stack} function}
 
-\item{t}{Determines the threshold below which p-values will be bold. Default is 0.05.}
-
-\item{q}{logical argument. When TRUE will bold the q-value column rather than the p-values}
-
-\item{...}{not used}
+\item{...}{arguments passed to \code{bold_p.*()} method that
+matches the first object in the \code{tbl_stack}}
 }
 \description{
 Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_stack}}
