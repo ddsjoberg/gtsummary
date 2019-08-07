@@ -119,7 +119,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
       ))
     }
     if ("list" %in% class(label)) {
-      if (some(label, negate(rlang::is_bare_formula))) {
+      if (purrr::some(label, negate(rlang::is_bare_formula))) {
         stop(glue(
           "'label' argument must be a list of formulas. ",
           "LHS of the formula is the variable specification, ",

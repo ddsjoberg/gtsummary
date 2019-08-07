@@ -1373,7 +1373,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
       ))
     }
     if ("list" %in% class(label)) {
-      if (some(label, negate(rlang::is_bare_formula))) {
+      if (purrr::some(label, negate(rlang::is_bare_formula))) {
         stop(glue(
           "'label' argument must be a list of formulas. ",
           "LHS of the formula is the variable specification, ",
