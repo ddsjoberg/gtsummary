@@ -40,10 +40,11 @@
 #'
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
-                  group = NULL, include = NULL, exclude = NULL) {
+                  group = x$inputs$group, include = NULL, exclude = NULL) {
 
-  # converting bare arguments to string -----------------------------------------------
+  # converting bare arguments to string ----------------------------------------
   group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
+  if (group == "x$inputs$group") group <- x$inputs$group
 
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
