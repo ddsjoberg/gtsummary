@@ -5,5 +5,7 @@ if (ci_on_travis()) {
   get_stage("install") %>%
     add_step(step_install_github("rstudio/gt"))
 
-  do_pkgdown()
+  if (ci_is_env("TRAVIS_R_VERSION_STRING", "release")) {
+    do_pkgdown()
+  }
 }
