@@ -93,7 +93,7 @@ Side-by-side regression model results from `tbl_merge()`
 
 Survival Estimates from `tbl_survival()`
 
-<img src="man/figures/tbl_strata_ex1.png" width="30%">
+<img src="man/figures/tbl_strata_ex1.png" width="31%">
 
 ## Print Engine
 
