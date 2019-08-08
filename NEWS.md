@@ -1,5 +1,27 @@
 # gtsummary (development version)
 
+* In `tbl_summary()` the `by = ` argument accepts a bare variable name instead of the variable name passed as a string (#193)
+
+* Added support for column, row, and cell percentages in `tabl_summary()` (#181)
+
+* Users can now set default p-value formatting functions, regression coefficient formatting functions, default level for confidence intervals, and formatting functions in `tbl_survival()` (#120)
+
+* The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`.  The `as_kable()` function was added to the package as well. (#180)
+
+* The function `as_gt()` now has `include = ` and `exclude = ` arguments
+
+* Updated some function names to be the same as they were in the first version
+
+```r
+    bold_p()            <-  tab_style_bold_p()  
+    bold_labels()       <-  tab_style_bold_labels()  
+    bold_levels()       <-  tab_style_bold_levels()  
+    italicize_labels()  <-  tab_style_italicize_labels()  
+    italicize_levels()  <-  tab_style_italicize_levels()  
+```
+
+* Passing named lists in `tbl_summary()` is not defunct. 
+
 * `tbl_stack()` fix for `tbl_uvregression` objects (#175)
 
 * Option to exclude some variables from testing when using `add_p()` (#164)
@@ -8,7 +30,7 @@
 
 # gtsummary 1.1.1
 
-* modify `tbl_merge()` to accommodate `tbl_stack()` object (#167)
+* Modified `tbl_merge()` to accommodate `tbl_stack()` object (#167)
 
 * Bug fix with incorrect column order in `tbl_summary()` with 10+ levels of by variable (#166)
 
@@ -38,7 +60,7 @@
 
 # gtsummary 1.0.0 
 
-First release since major refactoring.  The {gt} package is now used as the backend to create all tables.  Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
+First release since major re-factoring.  The {gt} package is now used as the print engine to create all tables.  Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
 
 ### Updated Function Names
 

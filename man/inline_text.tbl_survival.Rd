@@ -29,6 +29,9 @@ pre-styled in 'x'. Default is x$estimate_fun}
 
 \item{...}{not used}
 }
+\value{
+A string reporting results from a gtsummary table
+}
 \description{
 for inline reporting in an R markdown document.
 }
@@ -64,7 +67,8 @@ inline_text(surv_table,
 )
 }
 \seealso{
-Other tbl_survival tools: \code{\link{tbl_survival.survfit}}
+Other tbl_survival tools: \code{\link{modify_header}},
+  \code{\link{tbl_survival.survfit}}
 }
 \author{
 Karissa Whiting

@@ -35,6 +35,9 @@ all_dichotomous()
 \item{dichotomous}{logical indicating whether to include dichotomous variables.
 Default is \code{TRUE}}
 }
+\value{
+A character vector of column names selected
+}
 \description{
 Set of functions to supplement the {tidyselect} set of functions for selecting
 columns of data frames. \code{all_continuous()}, \code{all_categorical()}, and

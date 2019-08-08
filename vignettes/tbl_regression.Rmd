@@ -11,8 +11,6 @@ vignette: >
 
 
 ```{r setup, include = FALSE}
-library(gtsummary)
-library(dplyr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -29,6 +27,21 @@ To start, a quick note on the magrittr package's pipe function, `%>%`.  By defau
     x %>% f(y) is equivalent to f(x, y)
     y %>% f(x, .) is equivalent to f(x, y)
     z %>% f(x, y, arg = .) is equivalent to f(x, y, arg = z)
+
+## Setup
+
+Before going through the tutorial, install {gt} and {gtsummary}, and load packages.
+
+```{r, message=FALSE}
+if(curl::has_internet()) 
+  remotes::install_github("rstudio/gt")
+# remotes::install_github("ddsjoberg/gtsummary")
+
+library(gtsummary)
+library(dplyr)
+```
+
+Examples utilize the {gt} package to generate tables.  The  `knitr::kable()` function will be used to generate tables ff the {gt} package is not available, or if the user requests with `options(gtsummary.print_engine = "kable")`. 
 
 ## Basic Usage
 
@@ -86,11 +99,11 @@ The {gtsummary} package has built-in functions for adding to results from `tbl_r
 
 The {gtsummary} package comes with functions specifically made to modify and format summary tables.  These functions share the same prefixes as functions from the {gt} package to ease use.
 
-    tab_style_bold_labels()       bold variable labels  
-    tab_style_bold_levels()       bold variable levels  
-    tab_style_italicize_labels()  italicize variable labels  
-    tab_style_italicize_levels()  italicize variable levels  
-    tab_style_bold_p()            bold significant p-values  
+    bold_labels()       bold variable labels  
+    bold_levels()       bold variable levels  
+    italicize_labels()  italicize variable labels  
+    italicize_levels()  italicize variable levels  
+    bold_p()            bold significant p-values  
 
 ### {gt} functions to format table
 
@@ -122,9 +135,9 @@ m1 %>%
                  pvalue_fun = function(x) style_pvalue(x, digits = 2),
                  estimate_fun = function(x) style_ratio(x, digits = 3))  %>% 
   add_global_p() %>%
-  tab_style_bold_p(t = 0.10) %>%
-  tab_style_bold_labels() %>% 
-  tab_style_italicize_levels()
+  bold_p(t = 0.10) %>%
+  bold_labels() %>% 
+  italicize_levels()
 ```
 
 ##  Report Results Inline {#inline_text}
@@ -134,7 +147,7 @@ Reproducible reports are an important part of good practices.  We often need to 
 Let's first create a regression model table.
 
 ```{r}
-tbl_m1 = tbl_regression(m1, exponentiate = TRUE)
+tbl_m1 <- tbl_regression(m1, exponentiate = TRUE)
 tbl_m1
 ```
 
@@ -190,11 +203,11 @@ tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% head(n = 3)
 
 The {gt} functions are called in the order they appear, always beginning with the `gt()` function.
 
-If the user does not want a specific {gt} function to run, any {gt} call can be omitted in the `as_gt()` function by specifying the `omit` argument.  For example, the `tbl_regression()` call creates many named {gt} function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be omitted.  In this example, the default indentation will be omitted from the output.
+If the user does not want a specific {gt} function to run, any {gt} call can be excluded in the `as_gt()` function by specifying the `exclude` argument.  For example, the `tbl_regression()` call creates many named {gt} function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be excluded.  In this example, the default indentation will be excluded from the output.
 
 ```{r remedy001}
 tbl_regression(m1) %>%
-  as_gt(omit = "tab_style_text_indent")
+  as_gt(exclude = "tab_style_text_indent")
 ```
 
 ## Univariate Regression {#tbl_uvregression}
@@ -214,9 +227,39 @@ trial %>%
   # adjusts global p-values for multiple testing (default method: FDR)
   add_q() %>%
   # bold p-values under a given threshold (default 0.05)
-  tab_style_bold_p() %>%
+  bold_p() %>%
   # now bold q-values under the threshold of 0.10
-  tab_style_bold_p(t = 0.10, q = TRUE) %>%
-  tab_style_bold_labels()
+  bold_p(t = 0.10, q = TRUE) %>%
+  bold_labels()
 ```
 
+## Setting Default Options {#options}
+
+The {gtsummary} regression functions and their related functions have sensible defaults for rounding and formatting results.  If you, however, would like to change the defaults there are a few options.  The default options can be changed in a single script with addition an `options()` command in the script.  The defaults can also be set on the project- or user-level R profile, `.Rprofile`.
+
+```{r, eval=FALSE}
+help("Rprofile")
+
+usethis::edit_r_profile()
+```
+
+The following parameters are available to be set:
+
+| Description                                         | Example                                                                                   | Functions                                                                        |
+|-----------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| Formatting and rounding p-values                    | `options(gtsummary.pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 2))`                  | `add_p()`, `tbl_regression()`, `tbl_uvregression()`                              |
+| Formatting and rounding for regression coefficients | `options(gtsummary.tbl_regression.estimate_fun = function(x) gtsummary::style_sigfig(x, digits = 3))` | `tbl_regression()`, `tbl_uvregression()`                                         |
+| Set level for limits                                | `options(gtsummary.conf.level = 0.90)`                                                    | `tbl_regression()`, `tbl_uvregression()`                                         |
+| Print tables with `gt` or `kable`                   | `options(gtsummary.print_engine = "kable")`   `options(gtsummary.print_engine = "gt")`    | All `tbl_*()` functions                                                          |
+
+When setting default rounding/formatting functions, set the default to a function object rather than an evaluated function.  For example, if you want to round estimates to 3 significant figures use,
+
+```{r,eval=FALSE}
+options(gtsummary.tbl_regression.estimate_fun = function(x) sigfig(x, digits = 3))
+```
+
+NOT
+
+```{r,eval=FALSE}
+options(gtsummary.tbl_regression.estimate_fun = sigfig(x, digits = 3))
+```

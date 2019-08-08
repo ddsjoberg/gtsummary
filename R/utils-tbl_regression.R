@@ -17,7 +17,9 @@
 #' or `broom.mixed::tidy`.
 #' @param conf.level confidence level passed directly to `broom::tidy`
 #' or `broom.mixed::tidy`.
+#' @noRd
 #' @keywords internal
+#' @author Daniel D. Sjoberg
 
 # Points function to use mixed vs non-mixed version of broom
 tidy_wrap <- function(x, exponentiate, conf.level) {
@@ -55,8 +57,15 @@ tidy_wrap <- function(x, exponentiate, conf.level) {
 }
 
 
-# this function takea a model object and a tidied version (fomr the broom package)
-# and returns a parsed table of all results with labels and reference rows included
+#' Function takes a model object and a tidied version (from the broom package)
+#' and returns a parsed table of all results with labels and reference rows included
+#'
+#' @param fit model object
+#' @param tidy broom tidy result
+#' @inheritParams tbl_regression
+#' @noRd
+#' @keywords internal
+
 parse_fit <- function(fit, tidy, label, show_yesno) {
   # extracting model frame
   model_frame <- stats::model.frame(fit)
@@ -320,7 +329,11 @@ parse_fit <- function(fit, tidy, label, show_yesno) {
   map_dfr(result$table, ~.x)
 }
 
-# adding in refernce rows, and header rows for categorical and interaction variables
+#' Adds refernce rows, and header rows for categorical and interaction variables
+#'
+#' @noRd
+#' @keywords internal
+
 parse_final_touches <- function(group, group_lbl, single_row, var_type, data, model_frame) {
   # this is for continuous variables, and numeric on numeric interactions
   if (single_row == TRUE) {

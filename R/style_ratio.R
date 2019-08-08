@@ -12,6 +12,7 @@
 #' digits to display for numbers below 1. Numbers larger than 1 will be be `digits + 1`.
 #' Default is `digits = 2`.
 #' @export
+#' @return A character vector of styled ratios
 #' @seealso \code{\link{style_sigfig}}
 #' @author Daniel D. Sjoberg
 #' @examples

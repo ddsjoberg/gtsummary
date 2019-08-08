@@ -11,6 +11,9 @@ inline_text(x, ...)
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+A string reporting results from a gtsummary table
+}
 \description{
 Report statistics from gtsummary tables inline
 }

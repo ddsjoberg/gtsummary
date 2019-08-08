@@ -3,6 +3,7 @@
 #'
 #' @param x object created from a gtsummary function
 #' @param ... further arguments passed to or from other methods.
+#' @return A string reporting results from a gtsummary table
 #' @author Daniel D. Sjoberg
 #' @seealso [inline_text.tbl_summary], [inline_text.tbl_regression],
 #' [inline_text.tbl_uvregression], [inline_text.tbl_survival]
@@ -28,9 +29,10 @@ inline_text <- function(x, ...) {
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A string reporting results from a gtsummary table
 #' @examples
 #' t1 <- tbl_summary(trial)
-#' t2 <- tbl_summary(trial, by = "trt") %>% add_p()
+#' t2 <- tbl_summary(trial, by = trt) %>% add_p()
 #'
 #' inline_text(t1, variable = "age")
 #' inline_text(t2, variable = "grade", level = "I", column = "Drug")
@@ -151,6 +153,7 @@ inline_text.tbl_summary <-
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @export
+#' @return A string reporting results from a gtsummary table
 #' @examples
 #' inline_text_ex1 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
@@ -235,6 +238,7 @@ inline_text.tbl_regression <-
 #' @inherit inline_text.tbl_regression
 #' @family tbl_uvregression tools
 #' @export
+#' @return A string reporting results from a gtsummary table
 #' @examples
 #' inline_text_ex1 <-
 #'   trial %>%
@@ -290,6 +294,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' }
 #' @author Karissa Whiting
 #' @family tbl_survival tools
+#' @return A string reporting results from a gtsummary table
 #' @export
 #' @examples
 #' library(survival)
@@ -366,7 +371,8 @@ inline_text.tbl_survival <-
     # select time --------------------------------------------------------------
     # when specified timpoint is not in tbl_survival,
     # return result for closest time and give warning
-    display_fixed <- result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
+    display_fixed <-
+      result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
     if (!fixed_val %in% result$fixed_var) {
       message(glue(
         "Specified 'time' or 'prob' not in 'x': '{fixed_val}'. ",

@@ -12,6 +12,9 @@ add_overall(x, last = FALSE)
 \item{last}{logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 Adds a column with overall summary statistics to tables
 created by \code{tbl_summary}.
@@ -25,7 +28,7 @@ created by \code{tbl_summary}.
 tbl_overall_ex <-
   trial \%>\%
   dplyr::select(age, response, grade, trt) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_overall()
 }
 \seealso{
@@ -33,10 +36,10 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_p}}, \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

@@ -4,13 +4,23 @@
 \alias{as_gt}
 \title{Convert to gt_tbl object}
 \usage{
-as_gt(x, omit = NULL)
+as_gt(x, include = NULL, exclude = NULL, omit = NULL)
 }
 \arguments{
 \item{x}{object created by a function from the gtsummary package
 (e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})}
 
-\item{omit}{vector of gt commands to omit. Default is \code{NULL}}
+\item{include}{character vector naming gt commands to include in printing.
+Default is \code{NULL}, which utilizes all commands in \code{x$gt_calls}.}
+
+\item{exclude}{character vector naming gt commands to exclude in printing.
+Default is \code{NULL}.}
+
+\item{omit}{DEPRECATED. argument is synonymous with \code{exclude}
+vector of named gt commands to omit. Default is \code{NULL}}
+}
+\value{
+A \code{gt_tbl} object
 }
 \description{
 Function converts object to a gt_tbl object.  This function is used in the
@@ -29,10 +39,12 @@ for detailed examples in the 'Advanced Customization' section.
 }
 
 \examples{
+\donttest{
 as_gt_ex <-
-  trial \%>\%
-  tbl_summary(by = "trt") \%>\%
+  trial[c("trt", "age", "response", "grade")] \%>\%
+  tbl_summary(by = trt) \%>\%
   as_gt()
+}
 }
 \seealso{
 \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}

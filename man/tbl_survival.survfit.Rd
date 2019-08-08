@@ -33,12 +33,12 @@ call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, \code{'{n.event
 \code{'{strata}'}. See below for details.}
 
 \item{header_label}{string to be displayed as column header.
-Default is \code{md('**Time**')} when \code{time} is specified, and
-\code{md('**Quantile**')} when \code{probs} is specified.}
+Default is \code{'**Time**'} when \code{time} is specified, and
+\code{'**Quantile**'} when \code{probs} is specified.}
 
 \item{header_estimate}{string to be displayed as column header of the Kaplan-Meier
-estimate.  Default is \code{md('**Probability**')} when \code{time} is specified, and
-\code{md('**Time**')} when \code{probs} is specified.}
+estimate.  Default is \code{'**Probability**'} when \code{time} is specified, and
+\code{'**Time**'} when \code{probs} is specified.}
 
 \item{failure}{calculate failure probabilities rather than survival probabilities.
 Default is \code{FALSE}.  Does NOT apply to survival quantile requests}
@@ -51,6 +51,9 @@ The default is \code{style_percent(x, symbol = TRUE)} for survival probabilities
 \code{style_sigfig(x, digits = 3)} for time estimates.}
 
 \item{...}{not used}
+}
+\value{
+A \code{tbl_survival} object
 }
 \description{
 Function takes a \code{survfit} object as an argument, and provides a
@@ -98,13 +101,12 @@ fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 tbl_nostrata_ex2 <-
   tbl_survival(fit2,
     probs = c(0.1, 0.2),
-    header_estimate = md("**Months**")
+    header_estimate = "**Months**"
   )
 }
 \seealso{
-\link[gt:md]{gt::md}, \link[gt:html]{gt::html}
-
-Other tbl_survival tools: \code{\link{inline_text.tbl_survival}}
+Other tbl_survival tools: \code{\link{inline_text.tbl_survival}},
+  \code{\link{modify_header}}
 }
 \author{
 Daniel D. Sjoberg

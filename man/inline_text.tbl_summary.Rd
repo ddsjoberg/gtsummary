@@ -28,6 +28,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 
 \item{...}{not used}
 }
+\value{
+A string reporting results from a gtsummary table
+}
 \description{
 Extracts and returns statistics from a \code{tbl_summary} object for
 inline reporting in an R markdown document. Detailed examples in the
@@ -35,7 +38,7 @@ inline reporting in an R markdown document. Detailed examples in the
 }
 \examples{
 t1 <- tbl_summary(trial)
-t2 <- tbl_summary(trial, by = "trt") \%>\% add_p()
+t2 <- tbl_summary(trial, by = trt) \%>\% add_p()
 
 inline_text(t1, variable = "age")
 inline_text(t2, variable = "grade", level = "I", column = "Drug")
@@ -47,9 +50,9 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

@@ -13,6 +13,9 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 Sort variables in tables created by \code{\link{tbl_summary}} by ascending p-values
 }
@@ -25,7 +28,7 @@ Sort variables in tables created by \code{\link{tbl_summary}} by ascending p-val
 tbl_sum_sort_p_ex <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   sort_p()
 }
@@ -35,10 +38,9 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
-  \code{\link{tbl_summary}}
+  \code{\link{modify_header}}, \code{\link{tbl_summary}}
 }
 \author{
 Karissa Whiting

@@ -8,6 +8,7 @@
 #' @param data data frame
 #' @param variable string vector of column names from data
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 assign_class <- function(data, variable) {
@@ -43,6 +44,7 @@ assign_class <- function(data, variable) {
 #' @param class class of \code{variable}
 #' @return value that will be printed in table for dichotomous data
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 # wrapper for assign_dichotomous_value_one() function
@@ -115,6 +117,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 #' continuous or categorical. Can be \code{NULL}.
 #' @return vector of stat_display selections for each variable
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 assign_stat_display <- function(variable, summary_type, stat_display) {
@@ -163,6 +166,7 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #' e.g. \code{summary_type = list(age = "continuous")}
 #' @return Vector summary types `c("continuous", "categorical", "dichotomous")`.
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 #' @examples
 #' gtsummary:::assign_summary_type(
@@ -260,6 +264,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
 #' @param by_var categorical variable
 #' @param test list of user defined statistical tests and corresponding variables
 #' @return most appropriate test as text of the test function
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -397,23 +402,27 @@ assign_var_label <- function(data, variable, var_label) {
 #' @param type the type of variable, one of categorical or continuous, from the metadata
 #' @param test list of statistical tests from meta data
 #' @return a table of p-values for each variable
+#' @noRd
 #' @keywords internal
 #' @author Emily C. Zabor
 
-calculate_pvalue <- function(data, variable, by, test, type, group, include=NULL, exclude=NULL) {
+calculate_pvalue <- function(data, variable, by, test, type, group, include = NULL, exclude = NULL) {
   pmap_dbl(
     list(variable, by, test, type),
     ~ calculate_pvalue_one(data, ..1, ..2, ..3, ..4, group,
-                           include=include, exclude=exclude)
+      include = include, exclude = exclude
+    )
   )
 }
 
 calculate_pvalue_one <- function(data, variable, by, test, type, group,
-                                 include=NULL, exclude=NULL) {
+                                 include = NULL, exclude = NULL) {
 
-  #omitting variables not in include
+  # omitting variables not in include
 
-  if(!(variable %in% include)) return(NA)
+  if (!(variable %in% include)) {
+    return(NA)
+  }
 
   # if there is no by variable, and thus test is NA, return NA
   if (is.na(test)) {
@@ -501,7 +510,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group,
   }
 
   # Random effects - continuous or dichotomous
-  if (test == "lme4" & type %in% c("continuous", "dichotomous")) {
+  if (test == "lme4" & type %in% c("continuous")) {
     form1 <- get("as.formula")(paste0(by, " ~ ", variable, " + (1 | ", group, ")"))
     mod1 <- tryCatch(
       lme4::glmer(form1, data = get("na.omit")(data), family = get("binomial")),
@@ -520,7 +529,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group,
   }
 
   # Random effects - categorical
-  if (test == "lme4" & type == "categorical") {
+  if (test == "lme4" & type %in% c("categorical", "dichotomous")) {
     form0 <- get("as.formula")(paste0(by, " ~ 1 + (1 | ", group, ")"))
     form1 <- get("as.formula")(paste0(
       by, " ~ factor(", variable,
@@ -595,15 +604,16 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group,
 #' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
-#' @param row_percent Logical value indicating whether to calculate
-#' percentages within column to across rows
+#' @param percent indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 calculate_summary_stat <- function(data, variable, by, summary_type,
                                    dichotomous_value, var_label, stat_display,
                                    digits, class, missing, missing_text, sort,
-                                   row_percent) {
+                                   percent) {
 
   # if class is NA, then do not calculate summary statistics
   if (is.na(class)) {
@@ -653,7 +663,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     return(
       summarize_categorical(
         data, variable, by, var_label, stat_display, dichotomous_value,
-        missing, missing_text, sort, row_percent
+        missing, missing_text, sort, percent
       )
     )
   }
@@ -691,6 +701,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
 #' @param x vector containing the values of a continuous variable. This can be
 #' raw data values or a vector of summary statistics themselves
 #' @return the rounded values
+#' @noRd
 #' @keywords internal
 #' @author Emily Zabor, Daniel D. Sjoberg
 
@@ -762,6 +773,7 @@ continuous_digits_guess_one <- function(data,
 #'
 #' @param data data frame
 #' @param by character name of the `by` variable found in data
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -813,15 +825,29 @@ df_by <- function(data, by) {
 #' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
-#' @param row_percent Logical value indicating whether to calculate
-#' percentages within column to across rows
+#' @param percent indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
+#' @param percent_fun function to round and format percentages.  Default
+#' is `style_percent()`
 #' @return formatted summary statistics in a tibble.
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 summarize_categorical <- function(data, variable, by, var_label,
                                   stat_display, dichotomous_value, missing,
-                                  missing_text, sort, row_percent) {
+                                  missing_text, sort, percent) {
+  percent_fun <-
+    getOption("gtsummary.tbl_summary.percent_fun",
+      default = style_percent
+    )
+  if (!rlang::is_function(percent_fun)) {
+    stop(paste0(
+      "'percent_fun' is not a valid function.  Please pass only a function\n",
+      "object. For example, to round percentages to 2 decimal places, \n\n",
+      "'options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(\"%.2f\", 100 * x))'"
+    ))
+  }
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -858,7 +884,11 @@ summarize_categorical <- function(data, variable, by, var_label,
   # for column percent, group by 'by_col'
   # for row percents, group by 'variable'
   percent_group_by_var <-
-    ifelse(row_percent == TRUE, "variable", "by_col")
+    case_when(
+      percent == "column" ~ "by_col",
+      percent == "row" ~ "variable",
+      percent == "cell" ~ ""
+    )
 
   # nesting data and changing by variable
   tab0 <-
@@ -893,7 +923,7 @@ summarize_categorical <- function(data, variable, by, var_label,
     group_by(!!sym(percent_group_by_var)) %>%
     mutate(
       N = sum(.data$n),
-      p = style_percent(.data$n / .data$N),
+      p = percent_fun(.data$n / .data$N),
       stat = as.character(glue(stat_display))
     ) %>%
     select(c("by_col", "var_level_freq", "variable", "stat")) %>%
@@ -974,12 +1004,12 @@ summarize_categorical <- function(data, variable, by, var_label,
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
 #   stat_display = "{n}/{N} ({p}%)", dichotomous_value = 50, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
 #   stat_display = "{n}/{N} ({p}%)", dichotomous_value = NULL, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = NULL, var_label = "WTF",
@@ -994,7 +1024,7 @@ summarize_categorical <- function(data, variable, by, var_label,
 # summarize_categorical(
 #   data = mtcars, variable = "cyl", by = "am", var_label = "WTF",
 #   stat_display = "{n} ({p}%)", dichotomous_value = NULL, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 
 
@@ -1017,6 +1047,7 @@ summarize_categorical <- function(data, variable, by, var_label,
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @param missing_text String to display for count of missing observations.
 #' @return formatted summary statistics in a tibble.
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @importFrom stringr str_extract_all str_remove_all fixed
@@ -1145,6 +1176,7 @@ summarize_continuous <- function(data, variable, by, digits,
 #' The names of the list elements are variable names or '..categorical..' for assigning
 #' all variables of that type.  If both a variable name and '..categorical..' are
 #' specified, the variable name takes precedent
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -1360,7 +1392,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
       ))
     }
     if ("list" %in% class(label)) {
-      if (some(label, negate(rlang::is_bare_formula))) {
+      if (purrr::some(label, negate(rlang::is_bare_formula))) {
         stop(glue(
           "'label' argument must be a list of formulas. ",
           "LHS of the formula is the variable specification, ",
@@ -1586,7 +1618,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
   }
 
   # replacing statistics in {}, with their labels
-  for (i in 1:nrow(labels)) {
+  for (i in seq_len(nrow(labels))) {
     stat_display <-
       stringr::str_replace_all(
         stat_display,
@@ -1613,4 +1645,27 @@ footnote_stat_label <- function(meta_data) {
     pull("message") %>%
     paste(collapse = "; ") %>%
     paste0("Statistics presented: ", .)
+}
+
+# the by variable is supplied is a bare, and ocnverted to a string.
+# when a NULL is passed, it is returned as a NULL
+enquo_to_string <- function(by_enquo, arg_name) {
+  # returning NULL if NULL was passed
+  if (rlang::quo_is_null(by_enquo)) {
+    return(NULL)
+  }
+
+  # converting enquo to string
+  by_quo_text <- rlang::quo_text(by_enquo)
+
+  # is user supplied string, then stopping with error
+  if (startsWith(by_quo_text, "\"") && endsWith(by_quo_text, "\"")) {
+    stop_defunct(glue(
+      "\nPassing the '{arg_name}' argument as a string is defunct.\n",
+      "Please pass the {arg_name} argument without quotes. For example, \n\n",
+      "foo({arg_name} = varname)"
+    ))
+  }
+
+  by_quo_text
 }

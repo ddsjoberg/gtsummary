@@ -14,11 +14,11 @@ test_that("tbl_summary creates output without error/warning (no by var)", {
 
 test_that("tbl_summary creates output without error/warning (with by var)", {
   expect_error(
-    tbl_summary(mtcars, by = "am"),
+    tbl_summary(mtcars, by = am),
     NA
   )
   expect_warning(
-    tbl_summary(mtcars, by = "am"),
+    tbl_summary(mtcars, by = am),
     NA
   )
 })
@@ -35,10 +35,10 @@ test_that("tbl_summary throws errors/messages with bad 'sort = ' specifications"
   )
 })
 
-test_that("tbl_summary omits date var", {
-  expect_message(
-    tbl_summary(sp500),
-    "Column(s)*"
+test_that("tbl_summary value argument works properly", {
+  expect_error(
+    tbl_summary(trial, value = "grade" ~ "III"),
+    NA
   )
 })
 
@@ -56,15 +56,15 @@ test_that("tbl_summary returns errors with bad inputs", {
     "*"
   )
   expect_error(
-    tbl_summary(trial, by = "THIS_IS_NOT_A_VARIABLE"),
+    tbl_summary(trial, by = THIS_IS_NOT_A_VARIABLE),
     "*"
   )
   expect_error(
-    tbl_summary(trial, by = "response"),
+    tbl_summary(trial, by = response),
     "*"
   )
   expect_error(
-    tbl_summary(trial, type = "response"),
+    tbl_summary(trial, type = response),
     "*"
   )
   expect_error(
