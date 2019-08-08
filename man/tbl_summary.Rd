@@ -12,9 +12,9 @@ tbl_summary(data, by = NULL, label = NULL, type = NULL,
 \arguments{
 \item{data}{a data frame}
 
-\item{by}{a character vector specifying a column in data.
+\item{by}{a column name in data.
 Summary statistics will be calculated separately for each level of the \code{by}
-variable. If \code{NULL}, summary statistics
+variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
 are calculated using all observations.}
 
 \item{label}{list of formulas specifying variables labels,
@@ -44,7 +44,7 @@ rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
 to 1 decimal place, and the SD to 2 use \code{digits = list("age" ~ c(1, 2))}.}
 
-\item{group}{character vector of an ID or grouping variable for which summary
+\item{group}{column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in \link{add_p} to
 calculate p-values with correlated data. Default is \code{NULL}}
 

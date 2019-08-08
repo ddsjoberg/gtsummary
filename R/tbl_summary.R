@@ -6,9 +6,9 @@
 #' for detailed examples.
 #'
 #' @param data a data frame
-#' @param by a character vector specifying a column in data.
+#' @param by a column name in data.
 #' Summary statistics will be calculated separately for each level of the `by`
-#' variable. If `NULL`, summary statistics
+#' variable (e.g. `by = trt`). If `NULL`, summary statistics
 #' are calculated using all observations.
 #' @param label list of formulas specifying variables labels,
 #' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`.  If `NULL`, the
@@ -32,7 +32,7 @@
 #' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list("age" ~ c(1, 2))`.
-#' @param group character vector of an ID or grouping variable for which summary
+#' @param group column name of an ID or grouping variable for which summary
 #' statistics should not be printed. The column may be used in [add_p] to
 #' calculate p-values with correlated data. Default is `NULL`
 #' @param missing indicates whether to include counts of `NA` values in the table.
@@ -142,9 +142,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   # ungrouping data
   data <- data %>% ungroup()
 
-  # converting bare by to string -----------------------------------------------
-  # by_enquo <- rlang::enquo(by)
-  by <- enquo_to_string(rlang::enquo(by))
+  # converting bare arguments to string -----------------------------------------------
+  by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
+  group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
 
   # will return call, and all object passed to in tbl_summary call
   # the object func_inputs is a list of every object passed to the function
