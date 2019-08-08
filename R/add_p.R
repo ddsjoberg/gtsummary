@@ -15,13 +15,21 @@
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
 #' @param test list of formulas specifying statistical tests to perform,
 #' e.g. \code{list(all_continuous() = "t.test", all_categorical() = "fisher.test")}.
-#' Options include "t.test" for a t-test,
-#' "wilcox.test" for a Wilcoxon rank-sum test,
-#' "kruskal.test" for a Kruskal-Wallis rank-sum test,
-#' "chisq.test" for a Chi-squared test of independence,
-#' "fisher.test" for a Fisher's exact test,
-#' and "lme4" for a random intercept model to account for clustered data.
-#' For "lme4" to be used "group" must also be specified in the [tbl_summary] call. Defaults to "kruskal.test" for continuous variables, "chisq.test" for categorical variables with all expected cell counts >=5, and "fisher.test" for categorical variables with any expected cell count <5. A custom test function can be added for all or some variables. See Examples for details.
+#' Options include
+#' * `"t.test"` for a t-test,
+#' * `"wilcox.test"` for a Wilcoxon rank-sum test,
+#' * `"kruskal.test"` for a Kruskal-Wallis rank-sum test,
+#' * `"chisq.test"` for a Chi-squared test of independence,
+#' * `"fisher.test"` for a Fisher's exact test,
+#' * `"lme4"` for a random intercept model to account for clustered data.
+#' The `by` argument must be binary for this option, also `"group"` must be
+#' specified in the [tbl_summary] call.
+#'
+#' Defaults to `"kruskal.test"` for continuous variables, `"chisq.test"` for
+#' categorical variables with all expected cell counts >=5, and `"fisher.test"`
+#' for categorical variables with any expected cell count <5.
+#' A custom test function can be added for all or some variables. See below for
+#' an example.
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
@@ -36,10 +44,11 @@
 #'   tbl_summary(by = trt) %>%
 #'   add_p()
 #'
-#' # Conduct a custom McNemar test for response
+#' # Conduct a custom McNemar test for response,
+#' # The custom function must return a single p-value, or NA
 #' add_p_test.mcnemar <- function(data, variable, by, ...) {
 #'    stats::mcnemar.test(data[[variable]], data[[by]])$p.value
-#'    }
+#'  }
 #'
 #' trial %>%
 #'    dplyr::select(age, grade, response, trt) %>%
