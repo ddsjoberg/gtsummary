@@ -66,7 +66,7 @@ formatted summary of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -176,14 +176,14 @@ call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code
     <tr>
       <th>header_label</th>
       <td><p>string to be displayed as column header.
-Default is <code>md('**Time**')</code> when <code>time</code> is specified, and
-<code>md('**Quantile**')</code> when <code>probs</code> is specified.</p></td>
+Default is <code>'**Time**'</code> when <code>time</code> is specified, and
+<code>'**Quantile**'</code> when <code>probs</code> is specified.</p></td>
     </tr>
     <tr>
       <th>header_estimate</th>
       <td><p>string to be displayed as column header of the Kaplan-Meier
-estimate.  Default is <code>md('**Probability**')</code> when <code>time</code> is specified, and
-<code>md('**Time**')</code> when <code>probs</code> is specified.</p></td>
+estimate.  Default is <code>'**Probability**'</code> when <code>time</code> is specified, and
+<code>'**Time**'</code> when <code>probs</code> is specified.</p></td>
     </tr>
     <tr>
       <th>failure</th>
@@ -206,6 +206,10 @@ The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE
       <td><p>not used</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>tbl_survival</code> object</p>
     
     <h2 class="hasAnchor" id="level-label-argument"><a class="anchor" href="#level-label-argument"></a>level_label argument</h2>
 
@@ -234,8 +238,8 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='https://www.rdocumentation.org/packages/gt/topics/md'>gt::md</a>, <a href='https://www.rdocumentation.org/packages/gt/topics/html'>gt::html</a></p>
-<p>Other tbl_survival tools: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code></p></div>
+    <div class='dont-index'><p>Other tbl_survival tools: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -251,7 +255,7 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
 <span class='no'>tbl_nostrata_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit2</span>,
     <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
-    <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='fu'>md</span>(<span class='st'>"**Months**"</span>)
+    <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='st'>"**Months**"</span>
   )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -259,6 +263,8 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#level-label-argument">level_label argument</a></li>
 
       <li><a href="#example-output">Example Output</a></li>
@@ -275,7 +281,7 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

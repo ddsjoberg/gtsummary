@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sort variables in table by ascending p-values — sort_p • gtsummary</title>
+<title>Bold significant p-values — bold_p.tbl_regression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Sort variables in table by ascending p-values — sort_p" />
+<meta property="og:title" content="Bold significant p-values — bold_p.tbl_regression" />
 
-<meta property="og:description" content="Sort tables created by gtsummary by p-values" />
+<meta property="og:description" content="Bold p-values below a chosen threshold (e.g. &amp;lt;.05) in tables
+created by tbl_regression." />
 
 <meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -119,50 +120,82 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sort variables in table by ascending p-values</h1>
+    <h1>Bold significant p-values</h1>
     
-    <div class="hidden name"><code>sort_p.Rd</code></div>
+    <div class="hidden name"><code>bold_p.tbl_regression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Sort tables created by gtsummary by p-values</p>
+    <p>Bold p-values below a chosen threshold (e.g. &lt;.05) in tables
+created by <code><a href='tbl_regression.html'>tbl_regression</a></code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>sort_p</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
+<span class='fu'><a href='bold_p.html'>bold_p</a></span>(<span class='no'>x</span>, <span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>an object created using gtsummary functions</p></td>
+      <td><p>an object created using <code>tbl_regression</code> function</p></td>
+    </tr>
+    <tr>
+      <th>t</th>
+      <td><p>Determines the threshold below which p-values will be bold. Default is 0.05.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to other methods.</p></td>
+      <td><p>not used</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>tbl_regression</code> object</p>
+    
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p><img src='figures/tbl_lm_bold_p_ex.png' width=50% /></p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-<code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
-<code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code></p></div>
+    <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
+  <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
+  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
+  <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
+  <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code>,
+  <code><a href='tbl_stack.html'>tbl_stack</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>tbl_lm_bold_p_ex</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/family'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='bold_p.html'>bold_p</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#example-output">Example Output</a></li>
+
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
-    <p>Karissa Whiting</p>
+    <p>Daniel D. Sjoberg, Esther Drill</p>
   </div>
 </div>
 

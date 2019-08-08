@@ -20,7 +20,8 @@
     categorical variables. Common regression models, such as logistic
     regression and Cox proportional hazards regression, are automatically
     identified and the tables are pre-filled with appropriate column
-    headers.">
+    headers. The package is enhanced when the {gt} package is installed.
+    Use this code to install: 'remotes::install_github(&quot;rstudio/gt&quot;)'.">
 <meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -41,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -110,9 +111,10 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the production version of {gtsummary} with:</p>
+<p>The {gtsummary} package was written as a companion to the {gt} package from RStudio, and it is recommended to install both {gt} and {gtsummary}. If {gt} is not installed, <code><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">knitr::kable()</a></code> will be used to produce the summary tables. You can install {gtsummary} and {gt} with the following code.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"rstudio/gt"</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</a></code></pre></div>
 <p>and the development version with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>, <span class="dt">ref =</span> <span class="st">"dev"</span>)</a></code></pre></div>
 </div>
@@ -124,13 +126,12 @@
 <h3 class="hasAnchor">
 <a href="#summary-table" class="anchor"></a>Summary Table</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gtsummary)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; Loading required package: gt</span></a>
-<a class="sourceLine" id="cb3-3" title="3">t1 &lt;-</a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="st">  </span><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(</a>
-<a class="sourceLine" id="cb3-5" title="5">    <span class="dt">data =</span> trial[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"trt"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"response"</span>)],</a>
-<a class="sourceLine" id="cb3-6" title="6">    <span class="dt">by =</span> <span class="st">"trt"</span></a>
-<a class="sourceLine" id="cb3-7" title="7">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="st">  </span><span class="kw"><a href="reference/add_p.html">add_p</a></span>() </a></code></pre></div>
+<a class="sourceLine" id="cb3-2" title="2">t1 &lt;-</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="st">  </span><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(</a>
+<a class="sourceLine" id="cb3-4" title="4">    <span class="dt">data =</span> trial[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"trt"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"response"</span>)],</a>
+<a class="sourceLine" id="cb3-5" title="5">    <span class="dt">by =</span> trt</a>
+<a class="sourceLine" id="cb3-6" title="6">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="st">  </span><span class="kw"><a href="reference/add_p.html">add_p</a></span>() </a></code></pre></div>
 <p><img src="reference/figures/README-tbl_summary.png" width="60%"></p>
 </div>
 <div id="regression-models" class="section level3">
@@ -138,9 +139,8 @@
 <a href="#regression-models" class="anchor"></a>Regression Models</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">mod1 &lt;-<span class="st"> </span></a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(response <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>grade, trial, <span class="dt">family =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/family">binomial</a></span>(<span class="dt">link =</span> <span class="st">"logit"</span>))</a>
-<a class="sourceLine" id="cb4-3" title="3">t2 &lt;-</a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(mod1,</a>
-<a class="sourceLine" id="cb4-5" title="5">                 <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb4-3" title="3"></a>
+<a class="sourceLine" id="cb4-4" title="4">t2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-tbl_regression.png" width="44%"></p>
 </div>
 <div id="other-tables" class="section level3">
@@ -150,8 +150,17 @@
 <p><img src="reference/figures/tbl_merge_ex.png" width="60%"></p>
 <p>Survival Estimates from <code><a href="reference/tbl_survival.html">tbl_survival()</a></code></p>
 <p><img src="reference/figures/tbl_strata_ex1.png" width="30%"></p>
-<p>Please note that the {gtsummary} project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, and <a href="https://github.com/sammo3182">@sammo3182</a></p>
+<p>Please note that the {gtsummary} project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, and <a href="https://github.com/sammo3182">@sammo3182</a></p>
 </div>
+</div>
+<div id="print-engine" class="section level2">
+<h2 class="hasAnchor">
+<a href="#print-engine" class="anchor"></a>Print Engine</h2>
+<p>{gtsummary} uses the {gt} package to print all summary tables. In addition to supporting {gt}, the {gtsummary} package works well with <code><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">knitr::kable()</a></code>. This is particularly useful when outputting documents to Microsoft Word. If the {gt} package is not installed, {gtsummary} will fall back to <code><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">knitr::kable()</a></code>. To explicitly set the printing engine, set the option in the script or in the user- or project R profile, <code>.Rprofile</code>.</p>
+<pre><code><a href="https://www.rdocumentation.org/packages/base/topics/options">options(gtsummary.print_engine = "kable") </a></code></pre>
+<p>or</p>
+<pre><code><a href="https://www.rdocumentation.org/packages/base/topics/options">options(gtsummary.print_engine = "gt")</a></code></pre>
+<p>Output from <code>kable</code> is less full featured compared to summary tables produced with {gt}. For example, <code>kable</code> summary tables do not include indentation, footnotes, and spanning header rows.</p>
 </div>
   </div>
 
@@ -175,10 +184,13 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Daniel D. Sjoberg <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Emily C. Zabor <br><small class="roles"> Author </small>  </li>
-<li>Margie Hannum <br><small class="roles"> Author </small>  </li>
-<li>Karissa Whiting <br><small class="roles"> Author </small>  </li>
+<li>
+<a href="http://www.danieldsjoberg.com/">Daniel D. Sjoberg</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0862-2018" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>
+<a href="http://margarethannum.github.io/">Margie Hannum</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-2953-0449" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>Karissa Whiting <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4683-1868" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>
+<a href="http://www.danieldsjoberg.com/">Emily C. Zabor</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-1402-4498" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -198,7 +210,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href="http://www.danieldsjoberg.com/">Daniel D. Sjoberg</a>, <a href="http://margarethannum.github.io/">Margie Hannum</a>, Karissa Whiting, <a href="http://www.danieldsjoberg.com/">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
