@@ -95,21 +95,6 @@ Survival Estimates from `tbl_survival()`
 
 <img src="man/figures/tbl_strata_ex1.png" width="30%">
 
-Please note that the {gtsummary} project is released with a [Contributor
-Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms. A big thank you to all
-contributors\!  
-[@ablack3](https://github.com/ablack3),
-[@ahinton-mmc](https://github.com/ahinton-mmc),
-[@ddsjoberg](https://github.com/ddsjoberg),
-[@emilyvertosick](https://github.com/emilyvertosick),
-[@jennybc](https://github.com/jennybc),
-[@jflynn264](https://github.com/jflynn264),
-[@karissawhiting](https://github.com/karissawhiting),
-[@margarethannum](https://github.com/margarethannum),
-[@michaelcurry1123](https://github.com/michaelcurry1123), and
-[@sammo3182](https://github.com/sammo3182)
-
 ## Print Engine
 
 {gtsummary} uses the {gt} package to print all summary tables. In
@@ -129,3 +114,18 @@ or
 Output from `kable` is less full featured compared to summary tables
 produced with {gt}. For example, `kable` summary tables do not include
 indentation, footnotes, and spanning header rows.
+
+Please note that the {gtsummary} project is released with a [Contributor
+Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
+project, you agree to abide by its terms. A big thank you to all
+contributors\!  
+[@ablack3](https://github.com/ablack3),
+[@ahinton-mmc](https://github.com/ahinton-mmc),
+[@ddsjoberg](https://github.com/ddsjoberg),
+[@emilyvertosick](https://github.com/emilyvertosick),
+[@jennybc](https://github.com/jennybc),
+[@jflynn264](https://github.com/jflynn264),
+[@karissawhiting](https://github.com/karissawhiting),
+[@margarethannum](https://github.com/margarethannum),
+[@michaelcurry1123](https://github.com/michaelcurry1123), and
+[@sammo3182](https://github.com/sammo3182)
