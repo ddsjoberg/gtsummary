@@ -67,7 +67,7 @@ tbl_summary vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -175,6 +175,10 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A string reporting results from a gtsummary table</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
@@ -182,15 +186,15 @@ and return a string that is the rounded/formatted p-value (e.g.
   <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
+  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>)
-<span class='no'>t2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_p.html'>add_p</a></span>()
+<span class='no'>t2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
 <span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; [1] "46 (37, 57)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"I"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"Drug"</span>)</div><div class='output co'>#&gt; [1] "38 (36%)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"p.value"</span>)</div><div class='output co'>#&gt; [1] "p=0.3"</div></pre>
   </div>
@@ -199,6 +203,8 @@ and return a string that is the rounded/formatted p-value (e.g.
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
@@ -211,7 +217,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

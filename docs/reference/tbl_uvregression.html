@@ -68,7 +68,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -138,9 +138,8 @@ for detailed examples.</p>
 
     <pre class="usage"><span class='fu'>tbl_uvregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>, <span class='no'>style_ratio</span>, <span class='no'>style_sigfig</span>),
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>)</pre>
+  <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,7 +198,7 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></td
     </tr>
     <tr>
       <th>estimate_fun</th>
-      <td><p>function to round and format beta coefficient estimates.
+      <td><p>function to round and format coefficient estimates.
 Default is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are not transformed, and
 <a href='style_ratio.html'>style_ratio</a> when the coefficients have been exponentiated.</p></td>
     </tr>
@@ -213,6 +212,23 @@ and return a string that is the rounded/formatted p-value (e.g.
 <code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>tbl_uvregression</code> object</p>
+    
+    <h2 class="hasAnchor" id="setting-defaults"><a class="anchor" href="#setting-defaults"></a>Setting Defaults</h2>
+
+    
+    <p>If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set. Please note the default option for the estimate is the same
+as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p><ul>
+<li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.pvalue_fun = new_function)</a></code></p></li>
+<li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.tbl_regression.estimate_fun = new_function)</a></code></p></li>
+<li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.conf.level = 0.90)</a></code></p></li>
+</ul>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -242,9 +258,11 @@ units in your model.  Here are some common exceptions.</p><ol>
   <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
   <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
+  <code><a href='bold_p.tbl_uvregression.html'>bold_p.tbl_uvregression</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code></p></div>
     
 
@@ -275,6 +293,10 @@ units in your model.  Here are some common exceptions.</p><ol>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#setting-defaults">Setting Defaults</a></li>
+
       <li><a href="#note">Note</a></li>
 
       <li><a href="#example-output">Example Output</a></li>
@@ -291,7 +313,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

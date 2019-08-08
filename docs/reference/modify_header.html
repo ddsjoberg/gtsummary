@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a column of q values to account for
-multiple comparisons — add_q.tbl_uvregression • gtsummary</title>
+<title>Modify column headers in summary tables — modify_header • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,11 +30,11 @@ multiple comparisons — add_q.tbl_uvregression • gtsummary</title>
 
 
 
-<meta property="og:title" content="Add a column of q values to account for
-multiple comparisons — add_q.tbl_uvregression" />
+<meta property="og:title" content="Modify column headers in summary tables — modify_header" />
 
-<meta property="og:description" content="The adjustments to the p-values is performed with
-stats::p.adjust." />
+<meta property="og:description" content="Column labels can be modified to include calculated statistics,
+e.g. the N can be dynamically included by wrapping it in curly brackets
+(following glue::glue syntax)." />
 
 <meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -122,83 +121,111 @@ stats::p.adjust." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a column of q values to account for
-multiple comparisons</h1>
+    <h1>Modify column headers in summary tables</h1>
     
-    <div class="hidden name"><code>add_q.tbl_uvregression.Rd</code></div>
+    <div class="hidden name"><code>modify_header.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The adjustments to the p-values is performed with
-<a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a>.</p>
+    <p>Column labels can be modified to include calculated statistics,
+e.g. the N can be dynamically included by wrapping it in curly brackets
+(following <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> syntax).</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
-<span class='fu'><a href='add_q.html'>add_q</a></span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"fdr"</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>pvalue_fun</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>modify_header</span>(<span class='no'>x</span>, <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>text_interpret</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"md"</span>, <span class='st'>"html"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_uvregression</code> object</p></td>
+      <td><p>gtsummary object, e.g. <code>tbl_summary</code>, <code>tbl_regression</code></p></td>
     </tr>
     <tr>
-      <th>method</th>
-      <td><p>character argument indicating method to be used for p-value adjustment.
-Methods from <a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a> are accepted. Default is <code>method = 'fdr'</code>.</p></td>
-    </tr>
-    <tr>
-      <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.
-Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+      <th>stat_by</th>
+      <td><p>string vector of text to include above the summary statistics
+stratified by a variable.  Only use with <code>tbl_summary</code> objects.
+The following fields are available for use in the
+headers: <code>{n}</code>, <code>{N}</code>, <code>{p}</code>, and <code>{level}</code>.  <code>{n}</code> is the number of observations in
+each by group. <code>{N}</code> is the total number of observations. <code>{p}</code> is the percent
+in a by group. <code>{level}</code> is the by variable level.
+Syntax follows the <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> function,
+e.g. <code>stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</code>.
+The <code>by</code> argument from the parent <code><a href='tbl_summary.html'>tbl_summary()</a></code> cannot be <code>NULL</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to or from other methods</p></td>
+      <td><p>specify column label of any other column in <code>.$table_body</code>.<code>Argument is the column name, and the value is the new column header. Use</code>print(x$table_body)` to see columns available.</p></td>
+    </tr>
+    <tr>
+      <th>text_interpret</th>
+      <td><p>indicates whether text will be interpreted as markdown (<code>"md"</code>)
+or HTML (<code>"html"</code>).  The text is interpreted with the gt package's <code>md()</code> or
+<code>html()</code> functions.  The default is <code>"md"</code>, and is ignored when the print engine
+is <code><a href='https://www.rdocumentation.org/packages/knitr/topics/kable'>knitr::kable()</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>tbl_uvregression</code> object</p>
+    <p>Functions return the same class of gtsummary object supplied</p>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
-    <p><img src='figures/tbl_uvr_q_ex.png' width=50% /></p>
+    <p>Example 1</p>
+<p><img src='figures/tbl_col_ex1.png' width=31% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_col_ex2.png' width=50% /></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
+    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
+  <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
+  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
+  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
+  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
+  <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
+  <code><a href='tbl_summary.html'>tbl_summary</a></code></p>
+<p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
+  <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
+  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a></code>,
+  <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
+  <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
+  <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code>,
+  <code><a href='tbl_stack.html'>tbl_stack</a></code></p>
+<p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
   <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
+  <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
   <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
   <code><a href='bold_p.tbl_uvregression.html'>bold_p.tbl_uvregression</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
-  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code>,
-  <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
+  <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p>
+<p>Other tbl_survival tools: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code>,
+  <code><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_uvr_q_ex</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>marker</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
-    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>lm</span>,
-    <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>age</span>
-  ) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_q.html'>add_q</a></span>()</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tbl_col_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>modify_header</span>(<span class='kw'>stat_0</span> <span class='kw'>=</span> <span class='st'>"**All Patients**, N = {N}"</span>)
+
+<span class='no'>tbl_col_ex2</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>modify_header</span>(
+    <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='st'>"**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</span>
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -215,7 +242,7 @@ and return a string that is the rounded/formatted p-value (e.g.
     </ul>
 
     <h2>Author</h2>
-    <p>Esther Drill, Daniel D. Sjoberg</p>
+    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 

@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -130,13 +130,13 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>tab_style_bold_labels</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='fu'>bold_labels</span>(<span class='no'>x</span>)
 
-<span class='fu'>tab_style_bold_levels</span>(<span class='no'>x</span>)
+<span class='fu'>bold_levels</span>(<span class='no'>x</span>)
 
-<span class='fu'>tab_style_italicize_labels</span>(<span class='no'>x</span>)
+<span class='fu'>italicize_labels</span>(<span class='no'>x</span>)
 
-<span class='fu'>tab_style_italicize_levels</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>italicize_levels</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,13 +147,17 @@
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Functions return the same class of gtsummary object supplied</p>
+    
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     <ul>
-<li><p><code>tab_style_bold_labels</code>: Bold labels in gtsummary tables</p></li>
-<li><p><code>tab_style_bold_levels</code>: Bold levels in gtsummary tables</p></li>
-<li><p><code>tab_style_italicize_labels</code>: Italicize labels in gtsummary tables</p></li>
-<li><p><code>tab_style_italicize_levels</code>: Italicize levels in gtsummary tables</p></li>
+<li><p><code>bold_labels</code>: Bold labels in gtsummary tables</p></li>
+<li><p><code>bold_levels</code>: Bold levels in gtsummary tables</p></li>
+<li><p><code>italicize_labels</code>: Italicize labels in gtsummary tables</p></li>
+<li><p><code>italicize_levels</code>: Italicize levels in gtsummary tables</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
@@ -167,24 +171,28 @@
   <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
   <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
-  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
+  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p>
 <p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
   <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
+  <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a></code>,
+  <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
   <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code>,
   <code><a href='tbl_stack.html'>tbl_stack</a></code></p>
 <p>Other tbl_uvregression tools: <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code>,
   <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a></code>,
   <code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a></code>,
+  <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
+  <code><a href='bold_p.tbl_uvregression.html'>bold_p.tbl_uvregression</a></code>,
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_uvregression.html'>tab_style_bold_p.tbl_uvregression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code>,
   <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
     
@@ -194,16 +202,18 @@
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>tab_style_bold_labels</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>tab_style_bold_levels</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>tab_style_italicize_labels</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>tab_style_italicize_levels</span>()</div></pre>
+  <span class='fu'>bold_labels</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>bold_levels</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>italicize_labels</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>italicize_levels</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#functions">Functions</a></li>
 
       <li><a href="#example-output">Example Output</a></li>
@@ -220,7 +230,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
