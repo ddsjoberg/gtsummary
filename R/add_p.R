@@ -9,7 +9,7 @@
 #' also be set. Please note the default option for the estimate is the same
 #' as it is for `tbl_regression()`.
 #' \itemize{
-#'   \item `option(gtsummary.pvalue_fun = new_function)`
+#'   \item `options(gtsummary.pvalue_fun = new_function)`
 #' }
 #'
 #' @param x object with class `tbl_summary` from the [tbl_summary] function
@@ -27,39 +27,57 @@
 #' @family tbl_summary tools
 #' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @export
+#' @return A `tbl_summary` object
 #' @author Emily C. Zabor, Daniel D. Sjoberg
 #' @examples
 #' add_comp_ex1 <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_p()
 #' @section Example Output:
 #' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
 #'
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
-                  group = x$inputs$group, include=NULL, exclude=NULL) {
+                  group = x$inputs$group, include = NULL, exclude = NULL) {
+
+  # converting bare arguments to string ----------------------------------------
+  group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
+  if (group == "x$inputs$group") group <- x$inputs$group
 
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
     getOption("gtsummary.pvalue_fun", default = style_pvalue)
+  if (!rlang::is_function(pvalue_fun)) {
+    stop(paste0(
+      "'pvalue_fun' is not a valid function.  Please pass only a function\n",
+      "object. For example,\n\n",
+      "'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
+    ))
+  }
 
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
-    stop("Cannot add comparison when no 'by' variable in original tbl_summary() call")
+    stop(paste0("Cannot add comparison when no 'by' variable ",
+                "in original tbl_summary() call"))
   }
 
   # test -----------------------------------------------------------------------
   # parsing into a named list
-  test <- tidyselect_to_list(x$inputs$data, test, .meta_data = x$meta_data)
+  test <- tidyselect_to_list(
+    x$inputs$data, test,
+    .meta_data = x$meta_data, input_type = "test"
+  )
 
   if (!is.null(test)) {
     # checking that all inputs are named
-    if ((names(test) %>% purrr::discard(. == "") %>% length()) != length(test)) {
+    if ((names(test) %>%
+         purrr::discard(. == "") %>%
+         length()) != length(test)) {
       stop(glue(
         "Each element in 'test' must be named. ",
         "For example, 'test = list(age = \"t.test\", ptstage = \"fisher.test\")'"
@@ -72,7 +90,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
     stop("Input 'pvalue_fun' must be a function.")
   }
 
-  #Getting p-values only for included variables
+  # Getting p-values only for included variables
   if (is.null(include)) include <- x$table_body$variable %>% unique()
   include <- include %>% setdiff(exclude)
 
@@ -98,8 +116,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
         test = .data$stat_test,
         type = .data$summary_type,
         group = group,
-        include = include,
-        exclude = exclude
+        include = include
       )
     )
 
@@ -121,30 +138,31 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   x$pvalue_fun <- pvalue_fun
   x$meta_data <- meta_data
 
-  x$call_list <- c(x$call_list, list(add_p = match.call()))
+  x$table_header <-
+    tibble(column = names(table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing() %>%
+    table_header_fmt(p.value = "x$pvalue_fun")
 
   # updating header
-  x <- cols_label_summary(x, p.value = "**p-value**")
+  x <- modify_header_internal(x, p.value = "**p-value**")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
+
+
+  x$call_list <- c(x$call_list, list(add_p = match.call()))
 
   # gt formatting --------------------------------------------------------------
-  # adding p-value formatting, gt
-  x[["gt_calls"]][["fmt_pvalue"]] <-
-    "gt::fmt(columns = gt::vars(p.value), rows = !is.na(p.value), fns = x$pvalue_fun)" %>%
-    glue()
-
   # adding footnote listing statistics presented in table
   x[["gt_calls"]][["footnote_add_p"]] <- glue(
     "gt::tab_footnote(",
-    'footnote = "{footnote_add_p(meta_data)}",',
+    'footnote = "{footnote_add_p(meta_data)}", ',
     "locations = gt::cells_column_labels(",
     "columns = gt::vars(p.value))",
     ")"
   )
 
-  # kable formatting -----------------------------------------------------------
-  # adding p-value formatting, kable
-  x[["kable_calls"]][["fmt_pvalue"]] <-
-    "mutate(p.value = x$pvalue_fun(p.value))"
 
   x
 }

@@ -11,11 +11,12 @@
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_summary` object
 #' @examples
 #' tbl_n_ex <-
 #'   trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_n()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
@@ -38,7 +39,9 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
         )
       )
     ) %>%
-    set_names(c("variable", "row_type", ifelse(missing == FALSE, "n", "n_missing")))
+    set_names(c(
+      "variable", "row_type", ifelse(missing == FALSE, "n", "n_missing")
+    ))
 
   # merging result with existing tbl_summary
   if (last == FALSE) {
@@ -57,13 +60,21 @@ add_n <- function(x, missing = FALSE, last = FALSE) {
   # replacing old table_body with new
   x$table_body <- table_body
 
+  x$table_header <-
+    tibble(column = names(table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+
   # updating header
-  if (missing == FALSE){
-    x <- cols_label_summary(x, n = "**N**")
+  if (missing == FALSE) {
+    x <- modify_header_internal(x, n = "**N**")
   }
-  else if (missing == TRUE){
-    x <- cols_label_summary(x, n_missing = "**N Missing**")
+  else if (missing == TRUE) {
+    x <- modify_header_internal(x, n_missing = "**N Missing**")
   }
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   # adding indicator to output that add_n was run on this data
   x$call_list <- c(x$call_list, list(add_n = match.call()))

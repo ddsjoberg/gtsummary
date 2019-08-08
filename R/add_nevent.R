@@ -36,6 +36,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @export
+#' @return A `tbl_regression` object
 #' @examples
 #' tbl_reg_nevent_ex <-
 #'   glm(response ~ trt, trial, family = binomial) %>%
@@ -61,8 +62,9 @@ add_nevent.tbl_regression <- function(x, ...) {
   else if (
     # GLM or GEE
     (class(x$model_obj)[1] %in% c("glm", "geeglm")) |
-      # lme4 GLM
-      (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
+    # lme4 GLM
+    (class(x$model_obj)[1] == "glmerMod" &
+     attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
     # checking family (must be binomial)
     if (class(x$model_obj)[1] %in% c("glm", "geeglm")) {
       if (x$model_obj$family$family != "binomial") {
@@ -70,7 +72,8 @@ add_nevent.tbl_regression <- function(x, ...) {
       }
       formula <- x$model_obj$formula %>% stats::as.formula()
     }
-    else if (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
+    else if (class(x$model_obj)[1] == "glmerMod" &
+             attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
       if (x$model_obj@resp$family$family != "binomial") {
         stop("Model type not supported")
       }
@@ -103,10 +106,17 @@ add_nevent.tbl_regression <- function(x, ...) {
     return(x)
   }
 
+  # column label
+  x$table_header <-
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
+
   x$call_list <- c(x$call_list, list(add_nevent = match.call()))
 
-  x$gt_calls[["cols_hide_nevent"]] <-
-    glue("cols_hide(columns = vars(nevent))")
   x
 }
 
@@ -129,6 +139,7 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @export
+#' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uv_nevent_ex <-
 #'   trial %>%
@@ -166,23 +177,20 @@ add_nevent.tbl_uvregression <- function(x, ...) {
       table_nevent,
       by = c("variable", "var_type", "row_type", "label")
     ) %>%
-    select(.data$variable, .data$var_type, .data$row_type,
-           .data$label, .data$N, .data$nevent, everything())
+    select(
+      .data$variable, .data$var_type, .data$row_type,
+      .data$label, .data$N, .data$nevent, everything()
+    )
 
   # column label
   x$table_header <-
-    x$table_header %>%
-    bind_rows(
-      tibble(column = "nevent", label = "**Event N**")
-    )
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+  x <- modify_header_internal(x, nevent = "**Event N**")
 
-  x$gt_calls[["cols_nevent"]] <-
-    "gt::cols_move(columns = gt::vars(nevent), after = gt::vars(N))" %>%
-    glue::as_glue()
-
-  x$gt_calls[["cols_label"]] = glue(
-    "{table_header_to_gt(x$table_header)}"
-  )
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   x
 }

@@ -4,15 +4,19 @@
 \alias{tbl_merge}
 \title{Merge two or more gtsummary regression objects}
 \usage{
-tbl_merge(tbls, tab_spanner = paste0(c("Model "), 1:length(tbls)))
+tbl_merge(tbls, tab_spanner = paste0(c("Model "), seq_len(length(tbls))))
 }
 \arguments{
 \item{tbls}{list of gtsummary regression objects}
 
 \item{tab_spanner}{Spanning headers. Character vector with same length as \code{tbls}}
 }
+\value{
+A \code{tbl_merge} object
+}
 \description{
-Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, or \code{tbl_stack} objects and adds appropriate spanning headers.
+Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, or \code{tbl_stack}
+objects and adds appropriate spanning headers.
 }
 \section{Example Output}{
 
@@ -45,18 +49,22 @@ tbl_merge_ex <-
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_regression}},
+  \code{\link{bold_p.tbl_stack}},
   \code{\link{inline_text.tbl_regression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_regression}}, \code{\link{tbl_stack}}
 
 Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_stack}},
+  \code{\link{bold_p.tbl_uvregression}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
   \code{\link{tbl_stack}}, \code{\link{tbl_uvregression}}
 }
 \author{

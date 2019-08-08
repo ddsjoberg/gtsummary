@@ -32,7 +32,7 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{intercept}{logical argument indicating whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.
+\item{estimate_fun}{function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
@@ -42,6 +42,9 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
+}
+\value{
+A \code{tbl_regression} object
 }
 \description{
 This function uses \href{https://broom.tidyverse.org/reference/brms_tidiers.html}{broom::tidy} and
@@ -57,9 +60,9 @@ estimates, you can set options in the script or in the user- or
 project-level startup file, '.Rprofile'.  The default confidence level can
 also be set.
 \itemize{
-\item \code{option(gtsummary.pvalue_fun = new_function)}
-\item \code{option(gtsummary.tbl_regression.estimate_fun = new_function)}
-\item \code{option(gtsummary.conf.level = 0.90)}
+\item \code{options(gtsummary.pvalue_fun = new_function)}
+\item \code{options(gtsummary.tbl_regression.estimate_fun = new_function)}
+\item \code{options(gtsummary.conf.level = 0.90)}
 }
 }
 
@@ -115,9 +118,11 @@ See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_re
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_regression}},
+  \code{\link{bold_p.tbl_stack}},
   \code{\link{inline_text.tbl_regression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_stack}}
 }
 \author{

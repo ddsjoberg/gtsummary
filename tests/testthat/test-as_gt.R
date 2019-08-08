@@ -1,7 +1,6 @@
 context("test-as_gt")
 
-if(requireNamespace("gt", quietly = TRUE)) {
-
+if (requireNamespace("gt", quietly = TRUE)) {
   test_that("tbl_summary", {
     expect_error(tbl_summary(trial) %>% as_gt(), NA)
     expect_warning(tbl_summary(trial) %>% as_gt(), NA)
@@ -24,5 +23,4 @@ if(requireNamespace("gt", quietly = TRUE)) {
     expect_error(tbl_survival(fit1, times = c(12, 24), label = "{time} Months") %>% as_gt(), NA)
     expect_warning(tbl_survival(fit1, times = c(12, 24), label = "{time} Months") %>% as_gt(), NA)
   })
-
 }

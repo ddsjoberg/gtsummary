@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -130,8 +130,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>,
-  <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>group</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,7 +163,7 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     <tr>
       <th>group</th>
-      <td><p>character vector of an ID or grouping variable for which summary
+      <td><p>column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in add_p to
 calculate p-values with correlated data. Default is <code>NULL</code></p></td>
     </tr>
@@ -176,6 +176,21 @@ calculate p-values with correlated data. Default is <code>NULL</code></p></td>
       <td><p>names of variables to exclude from output.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>tbl_summary</code> object</p>
+    
+    <h2 class="hasAnchor" id="setting-defaults"><a class="anchor" href="#setting-defaults"></a>Setting Defaults</h2>
+
+    
+    <p>If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set. Please note the default option for the estimate is the same
+as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p><ul>
+<li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.pvalue_fun = new_function)</a></code></p></li>
+</ul>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
@@ -190,10 +205,10 @@ calculate p-values with correlated data. Default is <code>NULL</code></p></td>
   <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
+  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
     
 
@@ -201,7 +216,7 @@ calculate p-values with correlated data. Default is <code>NULL</code></p></td>
     <pre class="examples"><div class='input'><span class='no'>add_comp_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>add_p</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -209,6 +224,10 @@ calculate p-values with correlated data. Default is <code>NULL</code></p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#setting-defaults">Setting Defaults</a></li>
+
       <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>
@@ -223,7 +242,7 @@ calculate p-values with correlated data. Default is <code>NULL</code></p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

@@ -15,6 +15,9 @@ or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 \item{last}{logical indicator to include N column last in table.
 Default is \code{FALSE}, which will display N column first.}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 For each variable in a \code{tbl_summary} table, the \code{add_n} function adds a column with the
 total number of non-missing (or missing) observations
@@ -28,7 +31,7 @@ total number of non-missing (or missing) observations
 tbl_n_ex <-
   trial \%>\%
   dplyr::select(trt, age, grade, response) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_n()
 }
 \seealso{
@@ -36,10 +39,10 @@ Other tbl_summary tools: \code{\link{add_overall}},
   \code{\link{add_p}}, \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

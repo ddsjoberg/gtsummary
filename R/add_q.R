@@ -24,17 +24,19 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary tools
 #' @export
+#' @return A `tbl_summary` object
 #' @examples
 #' tbl_sum_q_ex <-
 #'   trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   add_q()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_q_ex.png}{options: width=50\%}}
 
-add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...) {
+add_q.tbl_summary <- function(x, method = "fdr",
+                              pvalue_fun = x$pvalue_fun, ...) {
 
   # This adjusts p-values for multiple testing. Default method is fdr.
   if (!("add_p" %in% names(x$call_list))) {
@@ -66,8 +68,17 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
       by = c("variable", "row_type")
     )
 
-  # updating header
-  x <- cols_label_summary(x, q.value = "**q-value**")
+  x$table_header <-
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing() %>%
+    table_header_fmt(q.value = "x$qvalue_fun")
+
+  # adding  column header
+  x <- modify_header_internal(x, q.value = "**q-value**")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   # keep track of what functions have been called
   x$call_list <- c(x$call_list, list(add_q = match.call()))
@@ -86,12 +97,6 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
   x$qvalue_fun <- pvalue_fun
 
   # gt calls -------------------------------------------------------------------
-  # adding p-value formatting
-  x[["gt_calls"]][["fmt_qvalue"]] <-
-    "gt::fmt(columns = gt::vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)"
-  # updating function calls
-  x[["gt_calls"]][["cols_label"]] <-
-    table_header_to_gt(x$table_header)
   # column headers abbreviations footnote
   x[["gt_calls"]][["footnote_q_method"]] <- glue(
     "gt::tab_footnote(",
@@ -100,12 +105,6 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
     "    columns = gt::vars(q.value))",
     ")"
   )
-
-  # kable calls ----------------------------------------------------------------
-  # adding q-value formatting, kable
-  x[["kable_calls"]][["fmt_qvalue"]] <-
-    "mutate(q.value = x$qvalue_fun(q.value))"
-
 
   # Returns the table 1 object
   return(x)
@@ -126,6 +125,7 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @export
+#' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uvr_q_ex <-
 #'   trial %>%
@@ -142,8 +142,8 @@ add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 add_q.tbl_uvregression <- function(x, method = "fdr",
                                    pvalue_fun = x$inputs$pvalue_fun, ...) {
 
-  # This adjusts p-values for multiple testing but only when the global approach is used.
-  # Default method is fdr.
+  # This adjusts p-values for multiple testing but only when the
+  # global approach is used. Default method is fdr.
   if (!("p.value_global" %in% colnames(x$meta_data))) {
     stop(glue(
       "You need global p-values first. Use the function add_global_p() after ",
@@ -175,10 +175,17 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     )
 
   x$table_header <-
-    x$table_header %>%
-    bind_rows(
-      tibble(column = "q.value", label = "**q-value**")
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing() %>%
+    table_header_fmt(
+      q.value = "x$qvalue_fun"
     )
+
+  x <- modify_header_internal(x, q.value = "**q-value**")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   x$call_list <- c(x$call_list, list(add_q = match.call()))
 
@@ -196,14 +203,6 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
   x$qvalue_fun <- pvalue_fun
 
   # gt function calls ----------------------------------------------------------
-  # adding p-value formatting
-  x[["gt_calls"]][["fmt_qvalue"]] <-
-    "gt::fmt(columns = gt::vars(q.value), rows = !is.na(q.value), fns = x$qvalue_fun)" %>%
-    glue()
-  # column headers
-  x$gt_calls[["cols_label"]] = glue(
-    "{table_header_to_gt(x$table_header)}"
-  )
   # column headers abbreviations footnote
   x[["gt_calls"]][["footnote_q_method"]] <- glue(
     "gt::tab_footnote(",
@@ -212,12 +211,6 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     "columns = gt::vars(q.value))",
     ")"
   )
-
-  # kable function calls -------------------------------------------------------
-  # adding q-value formatting, kable
-  x[["kable_calls"]][["fmt_qvalue"]] <-
-    "mutate(q.value = x$qvalue_fun(q.value))"
-
 
   return(x)
 }

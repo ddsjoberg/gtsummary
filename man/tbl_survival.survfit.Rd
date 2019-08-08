@@ -52,6 +52,9 @@ The default is \code{style_percent(x, symbol = TRUE)} for survival probabilities
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_survival} object
+}
 \description{
 Function takes a \code{survfit} object as an argument, and provides a
 formatted summary of the results
@@ -102,7 +105,8 @@ tbl_nostrata_ex2 <-
   )
 }
 \seealso{
-Other tbl_survival tools: \code{\link{inline_text.tbl_survival}}
+Other tbl_survival tools: \code{\link{inline_text.tbl_survival}},
+  \code{\link{modify_header}}
 }
 \author{
 Daniel D. Sjoberg

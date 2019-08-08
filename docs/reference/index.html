@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -172,12 +172,6 @@
         </td>
         <td><p>Add a column of q values to account for
 multiple comparisons</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cols_label_summary.html">cols_label_summary()</a></code> </p>
-        </td>
-        <td><p>Relabel columns in summary table</p></td>
       </tr><tr>
         
         <td>
@@ -296,6 +290,18 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="as_kable.html">as_kable()</a></code> </p>
+        </td>
+        <td><p>Convert to knitr_kable object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="modify_header.html">modify_header()</a></code> </p>
+        </td>
+        <td><p>Modify column headers in summary tables</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="style_percent.html">style_percent()</a></code> </p>
         </td>
         <td><p>Style percentages to be displayed in tables or text</p></td>
@@ -320,13 +326,13 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="bold_italicize_labels_levels.html">tab_style_bold_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_bold_levels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_italicize_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_italicize_levels()</a></code> </p>
+          <p><code><a href="bold_italicize_labels_levels.html">bold_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">bold_levels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_levels()</a></code> </p>
         </td>
         <td><p>Bold or Italicize labels or levels in gtsummary tables</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_summary.html">tab_style_bold_p(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
+          <p><code><a href="bold_p.tbl_summary.html">bold_p(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
         </td>
         <td><p>Bold significant p-values</p></td>
       </tr><tr>
@@ -338,7 +344,7 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_regression.html">tab_style_bold_p(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
+          <p><code><a href="bold_p.tbl_regression.html">bold_p(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Bold significant p-values</p></td>
       </tr><tr>
@@ -350,7 +356,7 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_uvregression.html">tab_style_bold_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
+          <p><code><a href="bold_p.tbl_uvregression.html">bold_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Bold significant p-values</p></td>
       </tr><tr>
@@ -359,6 +365,12 @@ multiple comparisons</p></td>
           <p><code><a href="sort_p.tbl_uvregression.html">sort_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Sort variables in table by ascending p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="bold_p.tbl_stack.html">bold_p(<i>&lt;tbl_stack&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Bold significant p-values</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -443,7 +455,7 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.html">tab_style_bold_p()</a></code> </p>
+          <p><code><a href="bold_p.html">bold_p()</a></code> </p>
         </td>
         <td><p>Bold significant p-values</p></td>
       </tr><tr>
@@ -480,7 +492,7 @@ multiple comparisons</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
