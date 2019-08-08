@@ -116,8 +116,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
         test = .data$stat_test,
         type = .data$summary_type,
         group = group,
-        include = include,
-        exclude = exclude
+        include = include
       )
     )
 
