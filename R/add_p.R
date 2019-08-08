@@ -21,7 +21,7 @@
 #' "chisq.test" for a Chi-squared test of independence,
 #' "fisher.test" for a Fisher's exact test,
 #' and "lme4" for a random intercept model to account for clustered data.
-#' For "lme4" to be used "group" must also be specified in the [tbl_summary] call.
+#' For "lme4" to be used "group" must also be specified in the [tbl_summary] call. Defaults to "kruskal.test" for continuous variables, "chisq.test" for categorical variables with all expected cell counts >=5, and "fisher.test" for categorical variables with any expected cell count <5. A custom test function can be added for all or some variables. See Examples for details.
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
@@ -35,6 +35,17 @@
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p()
+#'
+#' # Conduct a custom McNemar test for response
+#' add_p_test.mcnemar <- function(data, variable, by, ...) {
+#'    stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+#'    }
+#'
+#' trial %>%
+#'    dplyr::select(age, grade, response, trt) %>%
+#'    tbl_summary(by = trt) %>%
+#'    add_p(test = "response" ~ "mcnemar")
+#'
 #' @section Example Output:
 #' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
 #'
