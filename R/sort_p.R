@@ -26,11 +26,12 @@ sort_p <- function(x, ...) UseMethod("sort_p")
 #' tbl_sum_sort_p_ex <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   sort_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_sort_p_ex.png}{options: width=50\%}}
+#' @return A `tbl_summary` object
 #' @export
 sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 
@@ -81,7 +82,7 @@ sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_sort_p_ex.png}{options: width=50\%}}
 #' @export
-#'
+#' @return A `tbl_regression` object
 
 sort_p.tbl_regression <- function(x, ...) {
   table_body <- x$table_body %>%
@@ -124,7 +125,7 @@ sort_p.tbl_regression <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uvglm_sort_p_ex.png}{options: width=50\%}}
 #' @export
-#'
+#' @return A `tbl_uvregression` object
 
 sort_p.tbl_uvregression <- function(x, q = FALSE, ...) {
 

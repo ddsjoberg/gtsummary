@@ -24,6 +24,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 
 \item{...}{further arguments passed to or from other methods}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 The adjustments to the p-values is performed with
 \link[stats:p.adjust]{stats::p.adjust}.
@@ -37,7 +40,7 @@ The adjustments to the p-values is performed with
 tbl_sum_q_ex <-
   trial \%>\%
   dplyr::select(trt, age, grade, response) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   add_q()
 }
@@ -46,10 +49,10 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

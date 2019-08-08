@@ -9,6 +9,9 @@ tbl_stack(tbls)
 \arguments{
 \item{tbls}{list of gtsummary regression objects}
 }
+\value{
+A \code{tbl_stack} object
+}
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
 or more \code{tbl_regression} or \code{tbl_merge} objects.
@@ -76,18 +79,22 @@ tbl_stack_ex2 <-
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_regression}},
+  \code{\link{bold_p.tbl_stack}},
   \code{\link{inline_text.tbl_regression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}}
 
 Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_stack}},
+  \code{\link{bold_p.tbl_uvregression}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
 }
 \author{

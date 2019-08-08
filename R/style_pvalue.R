@@ -6,6 +6,7 @@
 #' @param prepend_p logical. Should 'p=' be prepended to formatted p-value. Default is FALSE
 #' @return Formatted p-values
 #' @export
+#' @return A character vector of styled p-values
 #' @author Daniel D. Sjoberg
 #' @examples
 #' pvals <- c(
@@ -30,7 +31,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
   }
 
   # rounding large pvalues to 1 digit
-  if (digits == 1) {
+  else if (digits == 1) {
     p_fmt <-
       case_when(
         x > 1 ~ NA_character_,
@@ -41,6 +42,9 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
         x >= 0.001 ~ sprintf("%.3f", x),
         x < 0.001 ~ "<0.001"
       )
+  }
+  else {
+    stop("'digits' argument must be 1 or 2.")
   }
 
   # prepending a p = in front of value

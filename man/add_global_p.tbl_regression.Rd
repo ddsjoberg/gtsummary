@@ -20,6 +20,9 @@ Default is \code{FALSE}}
 
 \item{...}{arguments to be passed to \link[car:Anova]{car::Anova}}
 }
+\value{
+A \code{tbl_regression} object
+}
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument
 \code{type = "III"} to calculate global p-values for categorical variables.
@@ -45,9 +48,11 @@ tbl_lm_global_ex1 <-
 \seealso{
 Other tbl_regression tools: \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_regression}},
+  \code{\link{bold_p.tbl_stack}},
   \code{\link{inline_text.tbl_regression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
   \code{\link{tbl_stack}}
 }

@@ -1,3 +1,4 @@
+library(gt)
 library(gtsummary)
 library(glue)
 library(here)
@@ -18,13 +19,18 @@ update_table_png <- function(input_file_path) {
     # find, extract and clean example code from doc text
     where_is_example <- which(str_detect(file_text, "examples\\{"))
     file_text_trunc <- file_text[where_is_example:length(file_text)]
+
+
     example_code <- file_text_trunc[2:(min(which(file_text_trunc == "}")) - 1)] %>%
       str_remove_all("\\\\")
+
+    example_code <-  example_code[!str_detect(example_code, "donttest")]
 
     # evaluate example code and save to environment -> html (temprary) -> png
     # use map() because there may be multiple resulting objects from one example code chunk
     res_obj <- evalute_examples_code(example_code)
     res_obj <- res_obj[which(str_detect(names(res_obj), "_ex"))]
+
     map2(res_obj, names(res_obj), ~ save_html_then_png(.x, .y))
   }
 
@@ -76,4 +82,4 @@ all_files <- list.files(here("man"), full.names = TRUE) %>%
 walk(all_files, ~ update_table_png(.x))
 
 # Or Run on individual files as needed::
-# update_table_png(here("man", "tbl_summary.Rd"))
+# update_table_png(here("man", "as_gt.Rd"))

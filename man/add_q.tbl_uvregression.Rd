@@ -23,6 +23,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 
 \item{...}{further arguments passed to or from other methods}
 }
+\value{
+A \code{tbl_uvregression} object
+}
 \description{
 The adjustments to the p-values is performed with
 \link[stats:p.adjust]{stats::p.adjust}.
@@ -47,9 +50,11 @@ tbl_uvr_q_ex <-
 Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_stack}},
+  \code{\link{bold_p.tbl_uvregression}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
   \code{\link{tbl_uvregression}}
 }

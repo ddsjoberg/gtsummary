@@ -10,6 +10,7 @@
 #' @param dichotomous logical indicating whether to include dichotomous variables.
 #' Default is `TRUE`
 #' @export
+#' @return A character vector of column names selected
 all_numeric <- function() {
   which(data_env$numeric)
 }

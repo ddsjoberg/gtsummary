@@ -27,13 +27,16 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{character vector of an ID or grouping variable for which summary
+\item{group}{column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in \link{add_p} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
 \item{include}{names of variables to include in output.}
 
 \item{exclude}{names of variables to exclude from output.}
+}
+\value{
+A \code{tbl_summary} object
 }
 \description{
 Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.
@@ -46,7 +49,7 @@ project-level startup file, '.Rprofile'.  The default confidence level can
 also be set. Please note the default option for the estimate is the same
 as it is for \code{tbl_regression()}.
 \itemize{
-\item \code{option(gtsummary.pvalue_fun = new_function)}
+\item \code{options(gtsummary.pvalue_fun = new_function)}
 }
 }
 
@@ -59,7 +62,7 @@ as it is for \code{tbl_regression()}.
 add_comp_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_p()
 }
 \seealso{
@@ -70,10 +73,10 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

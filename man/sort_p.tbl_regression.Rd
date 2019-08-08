@@ -11,6 +11,9 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{tbl_regression} object
+}
 \description{
 Sort variables in tables created by \code{\link{tbl_regression}} by ascending p-values
 }
@@ -29,10 +32,11 @@ tbl_lm_sort_p_ex <-
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_regression}},
+  \code{\link{bold_p.tbl_stack}},
   \code{\link{inline_text.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
-  \code{\link{tbl_stack}}
+  \code{\link{modify_header}}, \code{\link{tbl_merge}},
+  \code{\link{tbl_regression}}, \code{\link{tbl_stack}}
 }
 \author{
 Karissa Whiting

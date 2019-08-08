@@ -6,9 +6,9 @@
 #' for detailed examples.
 #'
 #' @param data a data frame
-#' @param by a character vector specifying a column in data.
+#' @param by a column name in data.
 #' Summary statistics will be calculated separately for each level of the `by`
-#' variable. If `NULL`, summary statistics
+#' variable (e.g. `by = trt`). If `NULL`, summary statistics
 #' are calculated using all observations.
 #' @param label list of formulas specifying variables labels,
 #' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`.  If `NULL`, the
@@ -32,7 +32,7 @@
 #' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list("age" ~ c(1, 2))`.
-#' @param group character vector of an ID or grouping variable for which summary
+#' @param group column name of an ID or grouping variable for which summary
 #' statistics should not be printed. The column may be used in [add_p] to
 #' calculate p-values with correlated data. Default is `NULL`
 #' @param missing indicates whether to include counts of `NA` values in the table.
@@ -45,9 +45,8 @@
 #' Options are 'frequency' where results are sorted in
 #' descending order of frequency and 'alphanumeric',
 #' e.g. `sort = list(everything() ~ "frequency")`
-#' @param row_percent logical value indicating whether to calculate
-#' percentages within column or across rows.  Default is to calculate
-#' percentages within columns: `row_percent = FALSE`
+#' @param percent indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
 #'
 #' @section select helpers:
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
@@ -103,6 +102,7 @@
 #' will be displayed.  Otherwise, the value to display must be specified in
 #' the `value` argument, e.g. `value = list("varname" ~ "level to show")`
 #' @export
+#' @return A `tbl_summary` object
 #' @family tbl_summary tools
 #' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @author Daniel D. Sjoberg
@@ -116,7 +116,7 @@
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(
-#'     by = "trt",
+#'     by = trt,
 #'     label = list("age" ~ "Patient Age"),
 #'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
 #'     digits = list(vars(age) ~ c(0, 1))
@@ -134,10 +134,17 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
                         statistic = NULL, digits = NULL, group = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
-                        row_percent = FALSE) {
+                        percent = c("column", "row", "cell")) {
+  # matching arguments
   missing <- match.arg(missing)
+  percent <- match.arg(percent)
+
   # ungrouping data
   data <- data %>% ungroup()
+
+  # converting bare arguments to string -----------------------------------------------
+  by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
+  group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
 
   # will return call, and all object passed to in tbl_summary call
   # the object func_inputs is a list of every object passed to the function
@@ -167,8 +174,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   )
 
   # converting tidyselect formula lists to named lists
-  type <- tidyselect_to_list(data, type)
-  value <- tidyselect_to_list(data, value)
+  type <- tidyselect_to_list(data, type, input_type = "type")
+  value <- tidyselect_to_list(data, value, input_type = "value")
 
   # creating a table with meta data about each variable
   meta_data <- tibble(
@@ -185,9 +192,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
   if (!is.null(group)) meta_data <- meta_data %>% filter(!!parse_expr("!variable %in% group"))
 
   # converting tidyselect formula lists to named lists
-  label <- tidyselect_to_list(data, label, .meta_data = meta_data)
-  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data)
-  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data)
+  label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
+  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, input_type = "statistic")
+  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, input_type = "digits")
   sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
 
   # assigning variable characteristics
@@ -221,7 +228,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
           dichotomous_value = ..3, var_label = ..4, stat_display = ..5,
           digits = ..6, class = ..7, missing = missing,
           missing_text = missing_text, sort = ..8,
-          row_percent = row_percent
+          percent = percent
         )
       )
     ) %>%
@@ -229,10 +236,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
     unnest(!!sym("stat_table"))
 
   # table of column headers
-  table_header <- tibble(
-    column = "label",
-    label = "**Characteristic**"
-  )
+  table_header <-
+    tibble(column = names(table_body) %>% setdiff("summary_type")) %>%
+    table_header_fill_missing()
 
   # returning all results in a list
   results <- list(
@@ -242,6 +248,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
     table_header = table_header,
     meta_data = meta_data,
     inputs = tbl_summary_inputs,
+    N = nrow(data),
     call_list = list(tbl_summary = match.call())
   )
 
@@ -261,10 +268,19 @@ tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL
 
   # adding headers
   if (is.null(by)) {
-    results <- cols_label_summary(results, stat_overall = "**N = {N}**")
+    results <- modify_header_internal(results,
+      stat_0 = "**N = {N}**",
+      label = "**Characteristic**"
+    )
   } else {
-    results <- cols_label_summary(results, stat_by = "**{level}**, N = {n}")
+    results <- modify_header_internal(results,
+      stat_by = "**{level}**, N = {n}",
+      label = "**Characteristic**"
+    )
   }
+
+  # writing additional gt and kable calls with data from table_header
+  results <- update_calls_from_table_header(results)
 
   return(results)
 }
@@ -280,9 +296,6 @@ gt_tbl_summary <- quote(list(
     "gt::cols_align(align = 'center') %>% ",
     "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
-
-  # do not print columns variable or row_type columns
-  cols_hide = glue("gt::cols_hide(columns = gt::vars(variable, row_type))"),
 
   # NAs do not show in table
   fmt_missing = glue("gt::fmt_missing(columns = gt::everything(), missing_text = '')"),
@@ -312,5 +325,3 @@ kable_tbl_summary <- quote(list(
   # first call
   kable = glue("x$table_body")
 ))
-
-

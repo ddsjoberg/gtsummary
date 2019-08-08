@@ -1,15 +1,37 @@
 Package: gtsummary
 Title: Presentation-Ready Data Summary and Analytic Result
     Tables
-Version: 1.1.1.9002
+Version: 1.1.1.9003
 Authors@R: 
-    c(person("Daniel D.", "Sjoberg", role = c("aut", "cre"), 
-             email = "danield.sjoberg@gmail.com"),
-      person("Emily C.", "Zabor", role = "aut"),
-      person("Margie", "Hannum", role = "aut"),
-      person("Karissa", "Whiting", role = "aut"),
-      person("Michael", "Curry", role = "ctb"),
-      person("Jessica", "Flynn", role = "ctb"))
+    c(person(given = "Daniel D.",
+             family = "Sjoberg",
+             role = c("aut", "cre"),
+             email = "danield.sjoberg@gmail.com",
+             comment = c(ORCID = "0000-0003-0862-2018")),
+      person(given = "Margie",
+             family = "Hannum",
+             role = "aut",
+             comment = c(ORCID = "0000-0002-2953-0449")),
+      person(given = "Karissa",
+             family = "Whiting",
+             role = "aut",
+             comment = c(ORCID = "0000-0002-4683-1868")),
+      person(given = "Emily C.",
+             family = "Zabor",
+             role = "aut",
+             comment = c(ORCID = "0000-0002-1402-4498")),
+      person(given = "Michael",
+             family = "Curry",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-0261-4044")),
+      person(given = "Esther",
+             family = "Drill",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-3315-4538")),
+      person(given = "Jessica",
+             family = "Flynn",
+             role = "ctb",
+             comment = c(ORCID = "0000-0001-8310-6684")))
 Description: Creates presentation-ready tables summarizing data
     sets, regression models, and more. The code to create the tables is
     concise and highly customizable. Data frames can be summarized with
@@ -43,14 +65,16 @@ Imports:
 Suggests: 
     car (>= 3.0.2),
     covr (>= 3.2.1),
+    curl (>= 3.3),
     geepack (>= 1.2.1),
     ggplot2 (>= 3.1.0),
     Hmisc (>= 4.2.0),
     lme4 (>= 1.1.18.1),
-    remotes,
+    remotes (>= 2.1.0),
     rmarkdown (>= 1.11),
     spelling (>= 2.0),
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    usethis (>= 1.5.0)
 Enhances:
     gt (>= 0.1.0)
 VignetteBuilder: 

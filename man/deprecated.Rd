@@ -3,12 +3,30 @@
 \name{deprecated}
 \alias{deprecated}
 \alias{add_comparison}
+\alias{cols_label_summary}
 \alias{add_global}
+\alias{tab_style_bold_p}
+\alias{tab_style_bold_labels}
+\alias{tab_style_italicize_levels}
+\alias{tab_style_italicize_labels}
+\alias{tab_style_bold_levels}
 \title{Deprecated functions}
 \usage{
 add_comparison(...)
 
+cols_label_summary(stat_overall = NULL, ...)
+
 add_global(...)
+
+tab_style_bold_p(...)
+
+tab_style_bold_labels(...)
+
+tab_style_italicize_levels(...)
+
+tab_style_italicize_labels(...)
+
+tab_style_bold_levels(...)
 }
 \description{
 Some functions have been deprecated and are no longer being actively

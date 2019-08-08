@@ -4,13 +4,22 @@
 \alias{as_kable}
 \title{Convert to knitr_kable object}
 \usage{
-as_kable(x, omit = NULL)
+as_kable(x, include = NULL, exclude = NULL, ...)
 }
 \arguments{
 \item{x}{object created by a function from the gtsummary package
-(e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})}
+(e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{omit}{vector of named kable commands to omit. Default is \code{NULL}}
+\item{include}{character vector naming kable commands to include in printing.
+Default is \code{NULL}, which utilizes all commands in \code{x$kable_calls}.}
+
+\item{exclude}{character vector naming kable commands to exclude in printing.
+Default is \code{NULL}.}
+
+\item{...}{additional arguments passed to \link[knitr:kable]{knitr::kable}}
+}
+\value{
+A \code{knitr_kable} object
 }
 \description{
 Function converts object to a knitr_kable object.  This function is used in the
@@ -19,8 +28,8 @@ if they wish to add customized formatting available via \link[knitr:kable]{knitr
 }
 \examples{
 trial \%>\%
-tbl_summary(by = "trt") \%>\%
-as_kable()
+  tbl_summary(by = trt) \%>\%
+  as_kable()
 }
 \seealso{
 \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
