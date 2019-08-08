@@ -27,3 +27,27 @@ test_that("tab_style: bold and italicize", {
     NA
   )
 })
+
+
+test_that("error when non-gtsummary object passed", {
+  expect_error(
+    mtcars %>%
+      bold_labels(),
+    "*"
+  )
+  expect_error(
+    mtcars %>%
+      bold_levels(),
+    "*"
+  )
+  expect_error(
+    mtcars %>%
+      italicize_labels(),
+    "*"
+  )
+  expect_error(
+    mtcars %>%
+      italicize_levels(),
+    "*"
+  )
+})
