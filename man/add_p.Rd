@@ -4,7 +4,7 @@
 \alias{add_p}
 \title{Adds p-values to summary tables}
 \usage{
-add_p(x, test = NULL, pvalue_fun = NULL, group = NULL,
+add_p(x, test = NULL, pvalue_fun = NULL, group = x$inputs$group,
   include = NULL, exclude = NULL)
 }
 \arguments{
