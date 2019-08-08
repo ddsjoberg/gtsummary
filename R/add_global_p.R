@@ -15,10 +15,13 @@
 #' \code{\link{add_global_p.tbl_uvregression}}
 #' @author Daniel D. Sjoberg
 #' @export
+
 add_global_p <- function(x, ...) {
   # must have car package installed to use this function
   if (!requireNamespace("car", quietly = TRUE)) {
-    stop("The 'car' package is required for 'add_global_p'. Install with install.packages('car')", call. = FALSE)
+    stop(paste0(
+      "The 'car' package is required for 'add_global_p'.\n",
+      "Install with install.packages('car')"), call. = FALSE)
   }
   UseMethod("add_global_p")
 }
@@ -50,9 +53,9 @@ add_global_p <- function(x, ...) {
 #'   tbl_regression() %>%
 #'   add_global_p()
 #' @export
+#' @return A `tbl_regression` object
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
-#'
 
 add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 
@@ -109,7 +112,8 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
     x$table_body <-
       x$table_body %>%
       mutate(
-        p.value = if_else(.data$variable %in% terms & .data$row_type == "level", NA_real_, .data$p.value)
+        p.value = if_else(.data$variable %in% terms & .data$row_type == "level",
+                          NA_real_, .data$p.value)
       )
   }
 
@@ -145,6 +149,7 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'   ) %>%
 #'   add_global_p()
 #' @export
+#' @return A `tbl_uvregression` object
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'
@@ -161,12 +166,17 @@ add_global_p.tbl_uvregression <- function(x, ...) {
   global_p <-
     imap_dfr(
       x$tbl_regression_list,
-      ~ do.call(car::Anova, c(list(mod = .x[["model_obj"]], type = "III"), passed_dots)) %>%
+      ~ do.call(
+        car::Anova,
+        c(list(mod = .x[["model_obj"]], type = "III"), passed_dots)
+      ) %>%
         # ~ car::Anova(.x[["model_obj"]], type = "III") %>%
         as.data.frame() %>%
         tibble::rownames_to_column(var = "variable") %>%
         filter(variable == .y) %>%
-        select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
+        select(c(
+          "variable", starts_with("Pr(>")
+        )) %>% # selecting the pvalue column
         set_names(c("variable", "p.value_global"))
     ) %>%
     select(c("variable", "p.value_global"))

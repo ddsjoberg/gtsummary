@@ -4,8 +4,8 @@
 \alias{add_p}
 \title{Adds p-values to summary tables}
 \usage{
-add_p(x, test = NULL, pvalue_fun = style_pvalue,
-  group = x$inputs$group, include = NULL, exclude = NULL)
+add_p(x, test = NULL, pvalue_fun = NULL, group = NULL,
+  include = NULL, exclude = NULL)
 }
 \arguments{
 \item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
@@ -27,7 +27,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{character vector of an ID or grouping variable for which summary
+\item{group}{column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in \link{add_p} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
@@ -35,9 +35,24 @@ calculate p-values with correlated data. Default is \code{NULL}}
 
 \item{exclude}{names of variables to exclude from output.}
 }
+\value{
+A \code{tbl_summary} object
+}
 \description{
 Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.
 }
+\section{Setting Defaults}{
+
+If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set. Please note the default option for the estimate is the same
+as it is for \code{tbl_regression()}.
+\itemize{
+\item \code{options(gtsummary.pvalue_fun = new_function)}
+}
+}
+
 \section{Example Output}{
 
 \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
@@ -47,7 +62,7 @@ Adds p-values to tables created by \code{tbl_summary} by comparing values across
 add_comp_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_p()
 }
 \seealso{
@@ -58,10 +73,10 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

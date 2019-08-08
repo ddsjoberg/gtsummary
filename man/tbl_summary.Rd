@@ -7,14 +7,14 @@
 tbl_summary(data, by = NULL, label = NULL, type = NULL,
   value = NULL, statistic = NULL, digits = NULL, group = NULL,
   missing = c("ifany", "always", "no"), missing_text = "Unknown",
-  sort = NULL, row_percent = FALSE)
+  sort = NULL, percent = c("column", "row", "cell"))
 }
 \arguments{
 \item{data}{a data frame}
 
-\item{by}{a character vector specifying a column in data.
+\item{by}{a column name in data.
 Summary statistics will be calculated separately for each level of the \code{by}
-variable. If \code{NULL}, summary statistics
+variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
 are calculated using all observations.}
 
 \item{label}{list of formulas specifying variables labels,
@@ -44,7 +44,7 @@ rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
 to 1 decimal place, and the SD to 2 use \code{digits = list("age" ~ c(1, 2))}.}
 
-\item{group}{character vector of an ID or grouping variable for which summary
+\item{group}{column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in \link{add_p} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
@@ -61,9 +61,11 @@ Options are 'frequency' where results are sorted in
 descending order of frequency and 'alphanumeric',
 e.g. \code{sort = list(everything() ~ "frequency")}}
 
-\item{row_percent}{logical value indicating whether to calculate
-percentages within column or across rows.  Default is to calculate
-percentages within columns: \code{row_percent = FALSE}}
+\item{percent}{indicates the type of percentage to return. Must be one of
+\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}}
+}
+\value{
+A \code{tbl_summary} object
 }
 \description{
 The \code{tbl_summary} function calculates descriptive statistics for
@@ -152,7 +154,7 @@ tbl_summary_ex2 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(
-    by = "trt",
+    by = trt,
     label = list("age" ~ "Patient Age"),
     statistic = list(all_continuous() ~ "{mean} ({sd})"),
     digits = list(vars(age) ~ c(0, 1))
@@ -166,10 +168,10 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
-  \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}}
+  \code{\link{modify_header}},
+  \code{\link{sort_p.tbl_summary}}
 }
 \author{
 Daniel D. Sjoberg

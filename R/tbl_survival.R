@@ -30,11 +30,11 @@ tbl_survival <- function(x, ...) {
 #' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and
 #' `'{strata}'`. See below for details.
 #' @param header_label string to be displayed as column header.
-#' Default is \code{md('**Time**')} when `time` is specified, and
-#' \code{md('**Quantile**')} when `probs` is specified.
+#' Default is \code{'**Time**'} when `time` is specified, and
+#' \code{'**Quantile**'} when `probs` is specified.
 #' @param header_estimate string to be displayed as column header of the Kaplan-Meier
-#' estimate.  Default is \code{md('**Probability**')} when `time` is specified, and
-#' \code{md('**Time**')} when `probs` is specified.
+#' estimate.  Default is \code{'**Probability**'} when `time` is specified, and
+#' \code{'**Time**'} when `probs` is specified.
 #' @param failure calculate failure probabilities rather than survival probabilities.
 #' Default is `FALSE`.  Does NOT apply to survival quantile requests
 #' @param missing character string indicating what to replace missing confidence
@@ -44,10 +44,10 @@ tbl_survival <- function(x, ...) {
 #' `style_sigfig(x, digits = 3)` for time estimates.
 #' @param ... not used
 #' @importFrom stringr str_split
-#' @seealso [gt::md], [gt::html]
 #' @family tbl_survival tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_survival` object
 #' @examples
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
@@ -61,7 +61,7 @@ tbl_survival <- function(x, ...) {
 #' tbl_nostrata_ex2 <-
 #'   tbl_survival(fit2,
 #'     probs = c(0.1, 0.2),
-#'     header_estimate = md("**Months**")
+#'     header_estimate = "**Months**"
 #'   )
 #' @section level_label argument:
 #' The `level_label` is used to modify the stratum labels. The default is
@@ -87,7 +87,6 @@ tbl_survival <- function(x, ...) {
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{tbl_nostrata_ex2.png}{options: width=40\%}}
-#'
 
 tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  label = ifelse(is.null(probs), "{time}", "{prob*100}%"),
@@ -98,35 +97,41 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  missing = "-",
                                  estimate_fun = NULL,
                                  ...) {
+  # setting defaults -----------------------------------------------------------
+  estimate_fun <-
+    estimate_fun %||%
+    getOption("gtsummary.tbl_survival.estimate_fun") %||%
+    switch(
+      is.null(times) + 1,
+      partial(style_percent, symbol = TRUE),
+      partial(style_sigfig, digits = 3)
+    )
+
   # input checks ---------------------------------------------------------------
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of 'times' and 'probs' must be specified.")
   }
-
-  # converting headers to un-evaluated string ----------------------------------
-  if (!is.null(header_label)) {
-    header_label <- deparse(substitute(header_label))
-  } else if (is.null(probs)) {
-    header_label <- deparse(substitute(md("**Time**")))
-  } else {
-    header_label <- deparse(substitute(md("**Quantile**")))
+  if (!rlang::is_string(label) || !rlang::is_string(level_label) ||
+    !rlang::is_string(header_label %||% "") ||
+    !rlang::is_string(header_label %||% "")) {
+    stop("'label', 'header_label', and 'level_label' arguments must be string of length one.")
   }
 
-  if (!is.null(header_estimate)) {
-    header_estimate <- deparse(substitute(header_estimate))
-  } else if (is.null(probs)) {
-    header_estimate <- deparse(substitute(md("**Probability**")))
-  } else {
-    header_estimate <- deparse(substitute(md("**Time**")))
-  }
+  # defining default headers ---------------------------------------------------
+  header_label <-
+    header_label %||% ifelse(is.null(probs), "**Time**", "**Quantile**")
+  header_estimate <-
+    header_estimate %||% ifelse(is.null(probs), "**Probability**", "**Time**")
 
-  # returning results ---------------------------------------------------------
-  # first assigning a function to formating estimates and conf.high and conf.low
-  if (is.null(estimate_fun)) {
-    if (!is.null(times)) {
-      estimate_fun <- partial(style_percent, symbol = TRUE)
-    } else if (!is.null(probs)) estimate_fun <- partial(style_sigfig, digits = 3)
-  }
+  # defining estimate_fun ------------------------------------------------------
+  # assigning a function to formating estimates and conf.high and conf.low
+  estimate_fun <-
+    estimate_fun %||%
+    switch(
+      is.null(times) + 1,
+      partial(style_percent, symbol = TRUE),
+      partial(style_sigfig, digits = 3)
+    )
 
   # putting results into tibble -------------------------------------------------
   if (!is.null(probs)) {
@@ -196,7 +201,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
         NA_character_
       )
     ) %>%
-    select(c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
+    select(starts_with("level_label"), c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
   table_body <- table_long
 
   cols_hide_list <-
@@ -207,14 +212,46 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     intersect(names(table_body)) %>%
     paste(collapse = ", ")
 
+  # table of column headers
+  table_header <-
+    tibble(column = names(table_body)) %>%
+    table_header_fill_missing() %>%
+    table_header_fmt(
+      estimate = "x$estimate_fun"
+    )
+
+  # creating object to return
   result <- list()
   result[["table_body"]] <- table_body
+  result[["table_header"]] <- table_header
   result[["table_long"]] <- table_long
   result[["survfit"]] <- x
   result[["estimate_fun"]] <- estimate_fun
   result[["call_list"]] <- list(tbl_survival = match.call())
   result[["gt_calls"]] <- eval(tbl_survival_gt_calls)
+  result[["kable_calls"]] <- eval(tbl_survival_kable_calls)
 
+  # specifying labels
+  result <-
+    modify_header_internal(
+      result,
+      label = glue("{header_label}"),
+      estimate = glue("{header_estimate}"),
+      ci = glue("**{x$conf.int*100}% CI**")
+    )
+
+  if ("level_label" %in% names(result$table_body)) {
+    result <-
+      modify_header_internal(
+        result,
+        level_label = "**Group**"
+      )
+  }
+
+  # writing additional gt and kable calls with data from table_header
+  result <- update_calls_from_table_header(result)
+
+  # returning results
   class(result) <- "tbl_survival"
   result
 }
@@ -322,30 +359,65 @@ surv_quantile <- function(x, probs) {
 
 tbl_survival_gt_calls <- quote(list(
   # first call to gt
-  gt = glue("gt(data = x$table_body, groupname_col = 'level_label')"),
+  gt = glue("gt::gt(data = x$table_body, groupname_col = 'level_label')"),
+
   # centering columns except time
   cols_align = glue(
-    "cols_align(align = 'center') %>%",
-    "cols_align(align = 'left', columns = vars(label))"
+    "gt::cols_align(align = 'center') %>% ",
+    "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
-  # hiding columns not for printing
-  cols_hide = glue("cols_hide(columns = vars({cols_hide_list}))"),
-  # labelling columns
-  cols_label =
-    glue('cols_label(label = {header_label}, estimate = {header_estimate}, ci = md("**{x$conf.int*100}% CI**"))'),
-  # styling the percentages
-  fmt_percent =
-    glue("fmt(columns = vars(estimate), fns = x$estimate_fun)"),
+
+  # # labelling columns
+  # cols_label =
+  #   glue('{table_header_to_gt_cols_label(dplyr::filter(table_header, column != "level_label"))}'),
+
+  # # hiding columns not for printing
+  # cols_hide = glue("gt::cols_hide(columns = gt::vars({cols_hide_list}))"),
+
+  # # styling the percentages
+  # fmt_percent =
+  #   glue("gt::fmt(columns = gt::vars(estimate), fns = x$estimate_fun)"),
+
   # formatting missing columns for estimates
   fmt_missing =
-    glue("fmt_missing(columns = vars(estimate, ci), rows = NULL, missing_text = '---')"),
-  # cols_merge_ci =
-  #   "cols_merge(col_1 = vars(conf.low), col_2 = vars(conf.high), pattern = '{1}, {2}')" %>%
-  #   as_glue(),
+    glue("gt::fmt_missing(columns = gt::vars(estimate, ci), rows = NULL, missing_text = '---')"),
+
   # adding CI footnote
   footnote_abbreviation =
     glue(
-      "tab_footnote(footnote = 'CI = Confidence Interval',",
-      "locations = cells_column_labels(columns = vars(ci)))"
+      "gt::tab_footnote(footnote = 'CI = Confidence Interval',",
+      "locations = gt::cells_column_labels(columns = gt::vars(ci)))"
+    ),
+
+  # hding conf.high (in the other objects the ci is created with cols_merge, but not in tbl_survival so we need this additional call)
+  cols_hide_conf.high =
+    "gt::cols_hide(columns = gt::vars(conf.high))"
+))
+
+
+tbl_survival_kable_calls <- quote(list(
+  # first call to gt
+  kable = glue("x$table_body"),
+
+  #  placeholder, so the formatting calls are performed other calls below
+  fmt = NULL,
+
+  # if strata is present, then only keeping first row
+  strata = switch(
+    "level_label" %in% names(table_body) + 1,
+    NULL,
+    glue(
+      "dplyr::group_by(level) %>% ",
+      "dplyr::mutate(level_label = ifelse(dplyr::row_number() == 1, level_label, NA)) %>% ",
+      "dplyr::ungroup()"
     )
+  ),
+
+  # styling the percentages
+  # fmt_percent =
+  #   glue("dplyr::mutate(estimate = x$estimate_fun(estimate))"),
+
+  # formatting missing columns for estimates
+  fmt_missing =
+    glue("dplyr::mutate_at(dplyr::vars(estimate, ci), ~ ifelse(is.na(.), '---', .))")
 ))
