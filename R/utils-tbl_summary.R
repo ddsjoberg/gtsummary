@@ -510,7 +510,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group,
   }
 
   # Random effects - continuous or dichotomous
-  if (test == "lme4" & type %in% c("continuous", "dichotomous")) {
+  if (test == "lme4" & type %in% c("continuous")) {
     form1 <- get("as.formula")(paste0(by, " ~ ", variable, " + (1 | ", group, ")"))
     mod1 <- tryCatch(
       lme4::glmer(form1, data = get("na.omit")(data), family = get("binomial")),
@@ -529,7 +529,7 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group,
   }
 
   # Random effects - categorical
-  if (test == "lme4" & type == "categorical") {
+  if (test == "lme4" & type %in% c("categorical", "dichotomous")) {
     form0 <- get("as.formula")(paste0(by, " ~ 1 + (1 | ", group, ")"))
     form1 <- get("as.formula")(paste0(
       by, " ~ factor(", variable,
@@ -1649,7 +1649,7 @@ footnote_stat_label <- function(meta_data) {
 
 # the by variable is supplied is a bare, and ocnverted to a string.
 # when a NULL is passed, it is returned as a NULL
-enquo_to_string <- function(by_enquo) {
+enquo_to_string <- function(by_enquo, arg_name) {
   # returning NULL if NULL was passed
   if (rlang::quo_is_null(by_enquo)) {
     return(NULL)
@@ -1660,10 +1660,10 @@ enquo_to_string <- function(by_enquo) {
 
   # is user supplied string, then stopping with error
   if (startsWith(by_quo_text, "\"") && endsWith(by_quo_text, "\"")) {
-    stop_defunct(paste0(
-      "\nPassing the 'by' argument as a string is defunct.\n",
-      "Please pass the 'by' argument without quotes. For example, \n\n",
-      "tbl_summary(data, by = varname)"
+    stop_defunct(glue(
+      "\nPassing the '{arg_name}' argument as a string is defunct.\n",
+      "Please pass the {arg_name} argument without quotes. For example, \n\n",
+      "foo({arg_name} = varname)"
     ))
   }
 
