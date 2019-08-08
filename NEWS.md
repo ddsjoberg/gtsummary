@@ -1,8 +1,10 @@
 # gtsummary (development version)
 
+* Users can now write custom functions to calculate p-values in `add_p()` (#194)
+
 * In `tbl_summary()` the `by = ` argument accepts a bare variable name instead of the variable name passed as a string (#193)
 
-* Added support for column, row, and cell percentages in `tabl_summary()` (#181)
+* Added support for column, row, and cell percentages in `tbl_summary()` (#181)
 
 * Users can now set default p-value formatting functions, regression coefficient formatting functions, default level for confidence intervals, and formatting functions in `tbl_survival()` (#120)
 

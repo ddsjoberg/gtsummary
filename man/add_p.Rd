@@ -12,13 +12,23 @@ add_p(x, test = NULL, pvalue_fun = NULL, group = x$inputs$group,
 
 \item{test}{list of formulas specifying statistical tests to perform,
 e.g. \code{list(all_continuous() = "t.test", all_categorical() = "fisher.test")}.
-Options include "t.test" for a t-test,
-"wilcox.test" for a Wilcoxon rank-sum test,
-"kruskal.test" for a Kruskal-Wallis rank-sum test,
-"chisq.test" for a Chi-squared test of independence,
-"fisher.test" for a Fisher's exact test,
-and "lme4" for a random intercept model to account for clustered data.
-For "lme4" to be used "group" must also be specified in the \link{tbl_summary} call.}
+Options include
+\itemize{
+\item \code{"t.test"} for a t-test,
+\item \code{"wilcox.test"} for a Wilcoxon rank-sum test,
+\item \code{"kruskal.test"} for a Kruskal-Wallis rank-sum test,
+\item \code{"chisq.test"} for a Chi-squared test of independence,
+\item \code{"fisher.test"} for a Fisher's exact test,
+\item \code{"lme4"} for a random intercept model to account for clustered data.
+The \code{by} argument must be binary for this option, also \code{"group"} must be
+specified in the \link{tbl_summary} call.
+}
+
+Defaults to \code{"kruskal.test"} for continuous variables, \code{"chisq.test"} for
+categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
+for categorical variables with any expected cell count <5.
+A custom test function can be added for all or some variables. See below for
+an example.}
 
 \item{pvalue_fun}{function to round and format p-values.
 Default is \code{\link{style_pvalue}}.
@@ -64,6 +74,18 @@ add_comp_ex1 <-
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(by = trt) \%>\%
   add_p()
+
+# Conduct a custom McNemar test for response,
+# The custom function must return a single p-value, or NA
+add_p_test.mcnemar <- function(data, variable, by, ...) {
+   stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+ }
+
+trial \%>\%
+   dplyr::select(age, grade, response, trt) \%>\%
+   tbl_summary(by = trt) \%>\%
+   add_p(test = "response" ~ "mcnemar")
+
 }
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
