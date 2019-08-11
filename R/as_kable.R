@@ -1,19 +1,20 @@
 #' Convert to knitr_kable object
 #'
-#' Function converts object to a knitr_kable object.  This function is used in the
-#' background when the results are printed or knit.  A user can use this function
-#' if they wish to add customized formatting available via [knitr::kable]
+#' Function converts gtsummary objects to a knitr_kable objects.  This function
+#' is used in the background when the results are printed or knit.  A user can
+#' use this function if they wish to add customized formatting available
+#' via [knitr::kable].
 #'
-#' @param x object created by a function from the gtsummary package
+#' @param x Object created by a function from the gtsummary package
 #' (e.g. [tbl_summary] or [tbl_regression])
-#' @param include character vector naming kable commands to include in printing.
+#' @param include Character vector naming kable commands to include in printing.
 #' Default is `NULL`, which utilizes all commands in `x$kable_calls`.
-#' @param exclude character vector naming kable commands to exclude in printing.
+#' @param exclude Character vector naming kable commands to exclude in printing.
 #' Default is `NULL`.
-#' @param ... additional arguments passed to [knitr::kable]
+#' @param ... Additional arguments passed to [knitr::kable]
 #' @export
 #' @return A `knitr_kable` object
-#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression]
+#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survival]
 #' @author Daniel D. Sjoberg
 #' @examples
 #' trial %>%

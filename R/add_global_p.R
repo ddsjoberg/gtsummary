@@ -10,7 +10,7 @@
 #' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object
-#' @param ... further arguments passed to or from other methods.
+#' @param ... Further arguments passed to or from other methods.
 #' @seealso \code{\link{add_global_p.tbl_regression}},
 #' \code{\link{add_global_p.tbl_uvregression}}
 #' @author Daniel D. Sjoberg
@@ -37,14 +37,14 @@ add_global_p <- function(x, ...) {
 #' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
 #'
-#' @param x object with class `tbl_regression` from the
+#' @param x Object with class `tbl_regression` from the
 #' [tbl_regression] function
 #' @param terms Character vector of terms for which to add global p-values.  Default
 #' is `NULL` which will add global p-values for all categorical variables
-#' @param keep logical argument indicating whether to also retain the individual
+#' @param keep Logical argument indicating whether to also retain the individual
 #' p-values in the table output for each level of the categorical variable.
 #' Default is `FALSE`
-#' @param ... arguments to be passed to [car::Anova]
+#' @param ... Additional arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @examples
@@ -126,15 +126,10 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #'
 #' This function uses [car::Anova] with argument
 #' `type = "III"` to calculate global p-values for categorical variables.
-#
-#' @section Note:
-#' If a needed class of model is not supported by
-#' [car::Anova], please create an
-#' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
-#' @param x object with class `tbl_uvregression` from the
+#' @param x Object with class `tbl_uvregression` from the
 #' [tbl_uvregression] function
-#' @param ... arguments to be passed to [car::Anova].
+#' @param ... Additional arguments to be passed to [car::Anova].
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @examples

@@ -126,7 +126,7 @@
 
     <div class="ref-description">
     
-    <p>Sort variables in tables created by <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code> by ascending p-values</p>
+    <p>Sort variables in tables created by <a href='tbl_uvregression.html'>tbl_uvregression</a> by ascending p-values</p>
     
     </div>
 
@@ -142,11 +142,12 @@
     </tr>
     <tr>
       <th>q</th>
-      <td><p>logical argument. When TRUE will sort by the q-value column rather than the p-values</p></td>
+      <td><p>logical argument. When <code>TRUE</code> will sort by the q-value column
+rather than the p-values</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
     
@@ -175,7 +176,7 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_uvglm_sort_p_ex</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>marker</span>, <span class='no'>response</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>age</span>, <span class='no'>marker</span>, <span class='no'>response</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
@@ -205,7 +206,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

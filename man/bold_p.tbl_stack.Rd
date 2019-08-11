@@ -2,12 +2,12 @@
 % Please edit documentation in R/bold_p.R
 \name{bold_p.tbl_stack}
 \alias{bold_p.tbl_stack}
-\title{Bold significant p-values}
+\title{Bold significant p-values or q-values}
 \usage{
 \method{bold_p}{tbl_stack}(x, ...)
 }
 \arguments{
-\item{x}{an object created using \code{tbl_stack} function}
+\item{x}{Object created using \link{tbl_stack} function}
 
 \item{...}{arguments passed to \code{bold_p.*()} method that
 matches the first object in the \code{tbl_stack}}
@@ -16,7 +16,8 @@ matches the first object in the \code{tbl_stack}}
 A \code{tbl_stack} object
 }
 \description{
-Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_stack}}
+Bold values below a chosen threshold (e.g. <0.05)
+in \link{tbl_stack} tables.
 }
 \section{Example Output}{
 

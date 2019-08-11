@@ -1,10 +1,10 @@
 #' Style p-values to be displayed in tables or text
 #'
-#' @param x numeric vector of p-values.
-#' @param digits number of digits large p-values are rounded. Must be 1 or 2.
+#' @param x Numeric vector of p-values.
+#' @param digits Number of digits large p-values are rounded. Must be 1 or 2.
 #' Default is 1.
-#' @param prepend_p logical. Should 'p=' be prepended to formatted p-value. Default is FALSE
-#' @return Formatted p-values
+#' @param prepend_p Logical. Should 'p=' be prepended to formatted p-value.
+#' Default is `FALSE`
 #' @export
 #' @return A character vector of styled p-values
 #' @author Daniel D. Sjoberg

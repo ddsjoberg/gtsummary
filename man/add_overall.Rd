@@ -7,9 +7,9 @@
 add_overall(x, last = FALSE)
 }
 \arguments{
-\item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
+\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{last}{logical indicator to display overall column last in table.
+\item{last}{Logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
 }
 \value{

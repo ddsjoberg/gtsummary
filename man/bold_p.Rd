@@ -2,18 +2,18 @@
 % Please edit documentation in R/bold_p.R
 \name{bold_p}
 \alias{bold_p}
-\title{Bold significant p-values}
+\title{Bold significant p-values or q-values}
 \usage{
 bold_p(x, ...)
 }
 \arguments{
-\item{x}{an object created using gtsummary functions}
+\item{x}{Object created using gtsummary functions}
 
-\item{...}{further arguments passed to other methods.}
+\item{...}{Additional arguments passed to other methods.}
 }
 \description{
-Bold p-values below a chosen threshold (e.g. <0.05)
-in tables created by \code{tbl_summary}.
+Bold values below a chosen threshold (e.g. <0.05)
+in gtsummary tables.
 }
 \seealso{
 \code{\link{bold_p.tbl_summary}},

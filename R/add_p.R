@@ -12,9 +12,9 @@
 #'   \item `options(gtsummary.pvalue_fun = new_function)`
 #' }
 #'
-#' @param x object with class `tbl_summary` from the [tbl_summary] function
-#' @param test list of formulas specifying statistical tests to perform,
-#' e.g. \code{list(all_continuous() = "t.test", all_categorical() = "fisher.test")}.
+#' @param x Object with class `tbl_summary` from the [tbl_summary] function
+#' @param test List of formulas specifying statistical tests to perform,
+#' e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 #' Options include
 #' * `"t.test"` for a t-test,
 #' * `"wilcox.test"` for a Wilcoxon rank-sum test,
@@ -22,10 +22,10 @@
 #' * `"chisq.test"` for a Chi-squared test of independence,
 #' * `"fisher.test"` for a Fisher's exact test,
 #' * `"lme4"` for a random intercept model to account for clustered data.
-#' The `by` argument must be binary for this option, also `"group"` must be
+#' The `by` argument must be binary for this option, and `"group"` must be
 #' specified in the [tbl_summary] call.
 #'
-#' Defaults to `"kruskal.test"` for continuous variables, `"chisq.test"` for
+#' Tests default to `"kruskal.test"` for continuous variables, `"chisq.test"` for
 #' categorical variables with all expected cell counts >=5, and `"fisher.test"`
 #' for categorical variables with any expected cell count <5.
 #' A custom test function can be added for all or some variables. See below for

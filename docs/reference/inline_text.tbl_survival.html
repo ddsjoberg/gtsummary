@@ -140,37 +140,39 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object created from  <a href='tbl_survival.html'>tbl_survival</a></p></td>
+      <td><p>Object created from  <a href='tbl_survival.html'>tbl_survival</a></p></td>
     </tr>
     <tr>
       <th>strata</th>
-      <td><p>if <code>tbl_survival</code> estimates are stratified, level of the stratum
+      <td><p>If <code>tbl_survival</code> estimates are stratified, level of the stratum
 to report. Default is <code>NULL</code> when <code>tbl_survival</code> have no specified strata.</p></td>
     </tr>
     <tr>
       <th>time</th>
-      <td><p>time for which to return survival probability</p></td>
+      <td><p>Time for which to return survival probability</p></td>
     </tr>
     <tr>
       <th>prob</th>
-      <td><p>probability for which to return survival time</p></td>
+      <td><p>Probability for which to return survival time.  For median
+survival use <code>prob = 0.50</code></p></td>
     </tr>
     <tr>
       <th>pattern</th>
-      <td><p>statistics to return.  Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting.
+      <td><p>String indicating the statistics to return.  Uses
+<a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting.
 Default is <code>'{estimate} ({conf.level*100}% {ci})'</code>.  All columns from
-<code>x$table_long</code> are available to print as well as the confidence level (conf.level).
-Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting. See below for details.</p></td>
+<code>x$table_long</code> are available to print as well as the
+confidence level (conf.level). See below for details.</p></td>
     </tr>
     <tr>
       <th>estimate_fun</th>
-      <td><p>function to round/style estimate and lower/upper confidence
-interval estimates.  Notably, this does not style the 'ci' column, which is
-pre-styled in 'x'. Default is x$estimate_fun</p></td>
+      <td><p>function to round/style estimate and lower/upper
+confidence interval estimates.  Note, this does not style the 'ci' column,
+which is a string. Default is x$estimate_fun</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
     
@@ -183,7 +185,7 @@ pre-styled in 'x'. Default is x$estimate_fun</p></td>
     
     <p>The following items are available to print.  Use <code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print(x$table_long)</a></code> to
 print the table the estimates are extracted from.</p><ul>
-<li><p><code>{label}</code> time or prob label</p></li>
+<li><p><code>{label}</code> 'time' or 'prob' label</p></li>
 <li><p><code>{estimate}</code> survival or survival time estimate formatted with 'estimate_fun'</p></li>
 <li><p><code>{conf.low}</code> lower limit of confidence interval formatted with 'estimate_fun'</p></li>
 <li><p><code>{conf.high}</code> upper limit of confidence interval formatted with 'estimate_fun'</p></li>
@@ -235,7 +237,7 @@ print the table the estimates are extracted from.</p><ul>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

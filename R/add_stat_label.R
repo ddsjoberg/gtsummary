@@ -1,9 +1,9 @@
 #' Add statistic labels column
 #'
 #' Adds a column with labels describing the summary statistics presented for
-#' each variable in the table.
+#' each variable in the [tbl_summary] table.
 #'
-#' @param x object with class `tbl_summary` from the [tbl_summary] function
+#' @param x Object with class `tbl_summary` from the [tbl_summary] function
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export

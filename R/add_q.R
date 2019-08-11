@@ -2,25 +2,23 @@
 #' multiple comparisons
 #'
 #' @param x `tbl_summary` or `tbl_uvregression` object
-#' @param ... further arguments passed to or from other methods.
+#' @param ... Additional arguments passed to other methods.
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @seealso \code{\link{add_q.tbl_summary}}, \code{\link{add_q.tbl_uvregression}},
 #' \code{\link{tbl_summary}}, \code{\link{tbl_uvregression}}
 #' @export
 add_q <- function(x, ...) UseMethod("add_q")
 
-#' Add a column of q values to account for
-#' multiple comparisons
+#' Add a column of q-values to account for multiple comparisons
 #'
-#' The adjustments to the p-values is performed with
-#' [stats::p.adjust].
+#' Adjustments to are p-values are performed with [stats::p.adjust].
 #'
 #' @param x `tbl_summary` object
-#' @param method character argument indicating method to be used for p-value
+#' @param method String indicating method to be used for p-value
 #' adjustment. Methods from
 #' [stats::p.adjust] are accepted.  Default is `method = 'fdr'`.
 #' @inheritParams tbl_regression
-#' @param ...	further arguments passed to or from other methods
+#' @param ...	Additional arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary tools
 #' @export
@@ -111,17 +109,15 @@ add_q.tbl_summary <- function(x, method = "fdr",
 }
 
 
-#' Add a column of q values to account for
-#' multiple comparisons
+#' Add a column of q-values to account for multiple comparisons
 #'
-#' The adjustments to the p-values is performed with
-#' [stats::p.adjust].
+#' Adjustments to are p-values are performed with [stats::p.adjust].
 #'
 #' @param x `tbl_uvregression` object
-#' @param method character argument indicating method to be used for p-value adjustment.
+#' @param method String indicating method to be used for p-value adjustment.
 #' Methods from [stats::p.adjust] are accepted. Default is `method = 'fdr'`.
 #' @inheritParams tbl_regression
-#' @param ...	further arguments passed to or from other methods
+#' @param ...	Additional arguments passed to or from other methods
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @export
@@ -217,14 +213,22 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
 
 
 # match method input to display name
-add_q_method_lookup <- tibble::tribble(
-  ~method, ~method_label,
-  "holm", "Holm correction for multiple testing",
-  "hochberg", "Hochberg correction for multiple testing",
-  "hommel", "Hommel correction for multiple testing",
-  "bonferroni", "Bonferroni correction for multiple testing",
-  "BH", "Benjamini & Hochberg correction for multiple testing",
-  "BY", "Benjamini & Yekutieli correction for multiple testing",
-  "fdr", "False discovery rate correction for multiple testing",
-  "none", "No correction for multiple testing"
-)
+add_q_method_lookup <-
+  tibble::tibble(
+    method = stats::p.adjust.methods
+  ) %>%
+  left_join(
+    tibble::tribble(
+      ~method, ~method_label,
+      "holm", "Holm correction for multiple testing",
+      "hochberg", "Hochberg correction for multiple testing",
+      "hommel", "Hommel correction for multiple testing",
+      "bonferroni", "Bonferroni correction for multiple testing",
+      "BH", "Benjamini & Hochberg correction for multiple testing",
+      "BY", "Benjamini & Yekutieli correction for multiple testing",
+      "fdr", "False discovery rate correction for multiple testing",
+      "none", "No correction for multiple testing"
+    ),
+    by = "method"
+  ) %>%
+  mutate(method_label = coalesce(method_label, method))

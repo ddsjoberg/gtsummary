@@ -8,7 +8,7 @@
 #' Proportion Hazards regression models ([survival::coxph]).
 #'
 #' @param x `tbl_regerssion` or `tbl_uvregression` object
-#' @param ... further arguments passed to or from other methods.
+#' @param ... Additional arguments passed to or from other methods.
 #' @export
 #' @author Daniel D. Sjoberg
 #' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],
@@ -19,7 +19,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' Add number of events to a regression table
 #'
 #' This function adds a column of the number of events to tables created with
-#' [tbl_regression] or [tbl_uvregression].  Supported
+#' [tbl_regression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
 #' [stats::glm], [lme4::glmer], and
 #' [geepack::geeglm]) and Cox
@@ -31,7 +31,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' of events is accessible via the [inline_text] function for printing in a report.
 #'
 #' @param x `tbl_regression` object
-#' @param ... not used
+#' @param ... Not used
 #' @export
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
@@ -44,7 +44,6 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #'   add_nevent()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_reg_nevent_ex.png}{options: width=50\%}}
-#'
 
 add_nevent.tbl_regression <- function(x, ...) {
   # if model is a cox model, adding number of events as well
@@ -123,7 +122,7 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' Add number of events to a regression table
 #'
 #' Adds a column of the number of events to tables created with
-#' [tbl_regression] or [tbl_uvregression].  Supported
+#' [tbl_uvregression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
 #' [stats::glm], [lme4::glmer], and
 #' [geepack::geeglm]) and Cox
@@ -135,7 +134,7 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' accessible via the [inline_text] function for printing in a report.
 #'
 #' @param x `tbl_uvregerssion` object
-#' @param ... not used
+#' @param ... Not used
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @export

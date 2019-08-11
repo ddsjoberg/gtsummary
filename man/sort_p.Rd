@@ -7,17 +7,16 @@
 sort_p(x, ...)
 }
 \arguments{
-\item{x}{an object created using gtsummary functions}
+\item{x}{An object created using gtsummary functions}
 
-\item{...}{further arguments passed to other methods.}
+\item{...}{Additional arguments passed to other methods.}
 }
 \description{
 Sort tables created by gtsummary by p-values
 }
 \seealso{
-\code{\link{sort_p.tbl_summary}},
-\code{\link{sort_p.tbl_regression}},
-\code{\link{sort_p.tbl_uvregression}}
+\link{sort_p.tbl_summary}, \link{sort_p.tbl_regression},
+\link{sort_p.tbl_uvregression}
 }
 \author{
 Karissa Whiting

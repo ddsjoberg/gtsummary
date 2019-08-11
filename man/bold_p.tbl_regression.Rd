@@ -2,23 +2,23 @@
 % Please edit documentation in R/bold_p.R
 \name{bold_p.tbl_regression}
 \alias{bold_p.tbl_regression}
-\title{Bold significant p-values}
+\title{Bold significant p-values or q-values}
 \usage{
 \method{bold_p}{tbl_regression}(x, t = 0.05, ...)
 }
 \arguments{
-\item{x}{an object created using \code{tbl_regression} function}
+\item{x}{Object created using \link{tbl_regression} function}
 
-\item{t}{Determines the threshold below which p-values will be bold. Default is 0.05.}
+\item{t}{Threshold below which values will be bold. Default is 0.05.}
 
-\item{...}{not used}
+\item{...}{Not used}
 }
 \value{
 A \code{tbl_regression} object
 }
 \description{
-Bold p-values below a chosen threshold (e.g. <.05) in tables
-created by \code{\link{tbl_regression}}.
+Bold values below a chosen threshold (e.g. <0.05)
+in \link{tbl_regression} tables.
 }
 \section{Example Output}{
 
