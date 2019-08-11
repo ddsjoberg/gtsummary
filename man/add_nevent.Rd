@@ -9,7 +9,7 @@ add_nevent(x, ...)
 \arguments{
 \item{x}{\code{tbl_regerssion} or \code{tbl_uvregression} object}
 
-\item{...}{further arguments passed to or from other methods.}
+\item{...}{Additional arguments passed to or from other methods.}
 }
 \description{
 Adds a column of the number of events to tables created with

@@ -6,7 +6,7 @@
 #' If combining `tbl_stack()` and `tbl_merge()`, merge first then stack, or stack
 #' first and then merge.
 #'
-#' @param tbls list of gtsummary regression objects
+#' @param tbls List of gtsummary regression objects
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @seealso [tbl_merge]

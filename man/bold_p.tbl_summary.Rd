@@ -2,24 +2,26 @@
 % Please edit documentation in R/bold_p.R
 \name{bold_p.tbl_summary}
 \alias{bold_p.tbl_summary}
-\title{Bold significant p-values}
+\title{Bold significant p-values or q-values}
 \usage{
 \method{bold_p}{tbl_summary}(x, t = 0.05, q = FALSE, ...)
 }
 \arguments{
-\item{x}{an object created using \code{tbl_summary} function}
+\item{x}{Object created using \code{tbl_summary} function}
 
-\item{t}{threshold below which p-values will be bold. Default is 0.05.}
+\item{t}{Threshold below which values will be bold. Default is 0.05.}
 
-\item{q}{logical argument. When TRUE will bold the q-value column rather than the p-values}
+\item{q}{Logical argument. When TRUE will bold the q-value column rather
+than the p-values. Default is \code{FALSE}.}
 
-\item{...}{not used}
+\item{...}{Not used}
 }
 \value{
 A \code{tbl_summary} object
 }
 \description{
-Bold p-values in tables created by \code{\link{tbl_summary}}
+Bold values below a chosen threshold (e.g. <0.05)
+in \link{tbl_summary} tables.
 }
 \section{Example Output}{
 

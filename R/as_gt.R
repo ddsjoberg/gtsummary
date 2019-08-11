@@ -1,25 +1,26 @@
-#' Convert to gt_tbl object
+#' Convert gtsummary object to a gt_tbl object
 #'
-#' Function converts object to a gt_tbl object.  This function is used in the
-#' background when the results are printed or knit.  A user can use this function
-#' if they wish to add customized formatting available via the
-#' [gt package](https://gt.rstudio.com/index.html).  Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+#' Function converts gtsummary objects to a gt_tbl objects.
+#' Function is used in the background when the results are printed or knit.
+#' A user can use this function if they wish to add customized formatting
+#' available via the [gt package](https://gt.rstudio.com/index.html).
+#' Review the
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
 #' or
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
 #' for detailed examples in the 'Advanced Customization' section.
 #'
-#' @param x object created by a function from the gtsummary package
-#' (e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})
-#' @param include character vector naming gt commands to include in printing.
+#' @param x Object created by a function from the gtsummary package
+#' (e.g. [tbl_summary] or [tbl_regression])
+#' @param include Character vector naming gt commands to include in printing.
 #' Default is `NULL`, which utilizes all commands in `x$gt_calls`.
-#' @param exclude character vector naming gt commands to exclude in printing.
+#' @param exclude Character vector naming gt commands to exclude in printing.
 #' Default is `NULL`.
-#' @param omit DEPRECATED. argument is synonymous with `exclude`
+#' @param omit DEPRECATED. Argument is synonymous with `exclude`
 #' vector of named gt commands to omit. Default is `NULL`
 #' @export
 #' @return A `gt_tbl` object
-#' @seealso \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
+#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survival]
 #' @author Daniel D. Sjoberg
 #' @examples
 #' \donttest{

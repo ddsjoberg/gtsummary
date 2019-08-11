@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bold significant p-values — bold_p.tbl_uvregression • gtsummary</title>
+<title>Bold significant p-values or q-values — bold_p.tbl_uvregression • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Bold significant p-values — bold_p.tbl_uvregression" />
+<meta property="og:title" content="Bold significant p-values or q-values — bold_p.tbl_uvregression" />
 
-<meta property="og:description" content="Bold p-values below a chosen threshold (e.g. &amp;lt;.05) in tables created by tbl_uvregression" />
+<meta property="og:description" content="Bold values below a chosen threshold (e.g. &amp;lt;0.05)
+in tbl_uvregression tables." />
 
 <meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -119,14 +120,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bold significant p-values</h1>
+    <h1>Bold significant p-values or q-values</h1>
     
     <div class="hidden name"><code>bold_p.tbl_uvregression.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Bold p-values below a chosen threshold (e.g. &lt;.05) in tables created by <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p>
+    <p>Bold values below a chosen threshold (e.g. &lt;0.05)
+in <a href='tbl_uvregression.html'>tbl_uvregression</a> tables.</p>
     
     </div>
 
@@ -138,19 +140,20 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>an object created using <code>tbl_uvregression</code> function</p></td>
+      <td><p>Object created using <a href='tbl_uvregression.html'>tbl_uvregression</a> function</p></td>
     </tr>
     <tr>
       <th>t</th>
-      <td><p>Determines the threshold below which p-values will be bold. Default is 0.05.</p></td>
+      <td><p>Threshold below which values will be bold. Default is 0.05.</p></td>
     </tr>
     <tr>
       <th>q</th>
-      <td><p>logical argument. When TRUE will bold the q-value column rather than the p-values</p></td>
+      <td><p>Logical argument. When TRUE will bold the q-value column rather
+than the p-values. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
     
@@ -180,7 +183,7 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_uvglm_bold_p_ex</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>marker</span>, <span class='no'>response</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>age</span>, <span class='no'>marker</span>, <span class='no'>response</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
@@ -210,7 +213,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

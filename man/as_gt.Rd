@@ -2,34 +2,35 @@
 % Please edit documentation in R/as_gt.R
 \name{as_gt}
 \alias{as_gt}
-\title{Convert to gt_tbl object}
+\title{Convert gtsummary object to a gt_tbl object}
 \usage{
 as_gt(x, include = NULL, exclude = NULL, omit = NULL)
 }
 \arguments{
-\item{x}{object created by a function from the gtsummary package
-(e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})}
+\item{x}{Object created by a function from the gtsummary package
+(e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{include}{character vector naming gt commands to include in printing.
+\item{include}{Character vector naming gt commands to include in printing.
 Default is \code{NULL}, which utilizes all commands in \code{x$gt_calls}.}
 
-\item{exclude}{character vector naming gt commands to exclude in printing.
+\item{exclude}{Character vector naming gt commands to exclude in printing.
 Default is \code{NULL}.}
 
-\item{omit}{DEPRECATED. argument is synonymous with \code{exclude}
+\item{omit}{DEPRECATED. Argument is synonymous with \code{exclude}
 vector of named gt commands to omit. Default is \code{NULL}}
 }
 \value{
 A \code{gt_tbl} object
 }
 \description{
-Function converts object to a gt_tbl object.  This function is used in the
-background when the results are printed or knit.  A user can use this function
-if they wish to add customized formatting available via the
-\href{https://gt.rstudio.com/index.html}{gt package}.  Review the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+Function converts gtsummary objects to a gt_tbl objects.
+Function is used in the background when the results are printed or knit.
+A user can use this function if they wish to add customized formatting
+available via the \href{https://gt.rstudio.com/index.html}{gt package}.
+Review the
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
 or
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
 for detailed examples in the 'Advanced Customization' section.
 }
 \section{Example Output}{
@@ -47,7 +48,7 @@ as_gt_ex <-
 }
 }
 \seealso{
-\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
+\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_survival}
 }
 \author{
 Daniel D. Sjoberg

@@ -7,9 +7,9 @@
 style_ratio(x, digits = 2)
 }
 \arguments{
-\item{x}{numeric vector}
+\item{x}{Numeric vector}
 
-\item{digits}{integer specifying the number of significant
+\item{digits}{Integer specifying the number of significant
 digits to display for numbers below 1. Numbers larger than 1 will be be \code{digits + 1}.
 Default is \code{digits = 2}.}
 }
@@ -32,7 +32,7 @@ c(
   style_ratio()
 }
 \seealso{
-\code{\link{style_sigfig}}
+\link{style_sigfig}
 }
 \author{
 Daniel D. Sjoberg

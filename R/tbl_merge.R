@@ -3,8 +3,9 @@
 #' Merges two or more `tbl_regression`, `tbl_uvregression`, or `tbl_stack`
 #' objects and adds appropriate spanning headers.
 #'
-#' @param tbls list of gtsummary regression objects
-#' @param tab_spanner Spanning headers. Character vector with same length as `tbls`
+#' @param tbls List of gtsummary regression objects
+#' @param tab_spanner Character vector specifying the spanning headers.
+#' Must be same length as `tbls`argument
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @seealso [tbl_stack]

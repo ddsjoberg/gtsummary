@@ -4,65 +4,66 @@
 \alias{tbl_summary}
 \title{Create a table of summary statistics}
 \usage{
-tbl_summary(data, by = NULL, label = NULL, type = NULL,
-  value = NULL, statistic = NULL, digits = NULL, group = NULL,
+tbl_summary(data, by = NULL, label = NULL, statistic = NULL,
+  digits = NULL, type = NULL, value = NULL, group = NULL,
   missing = c("ifany", "always", "no"), missing_text = "Unknown",
   sort = NULL, percent = c("column", "row", "cell"))
 }
 \arguments{
-\item{data}{a data frame}
+\item{data}{A data frame}
 
-\item{by}{a column name in data.
+\item{by}{A column name in data.
 Summary statistics will be calculated separately for each level of the \code{by}
 variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
 are calculated using all observations.}
 
-\item{label}{list of formulas specifying variables labels,
-e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}.  If \code{NULL}, the
+\item{label}{List of formulas specifying variables labels,
+e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}.  If a
+variable's label is not specifed here, the
 function will take the label attribute (\code{attr(data$age, "label")}).  If
 attribute label is \code{NULL}, the variable name will be used.}
 
-\item{type}{list of formulas specifying variable types. Accepted values
-are \code{c("continuous", "categorical", "dichotomous")},
-e.g. \code{type = list(contains(age) ~ "continuous", "female" ~ "dichotomous")}.
-If type not specified for a variable, the function
-will default to an appropriate summary type.  See below for details.}
-
-\item{value}{list of formulas specifying the value to display for dichotomous
-variables.  See below for details.}
-
-\item{statistic}{list of formulas specifying types of summary statistics to display
-for each variable.  The default is
+\item{statistic}{List of formulas specifying types of summary statistics to
+display for each variable.  The default is
 \code{list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}\%)")}.
 See below for details.}
 
-\item{digits}{list of formulas specifying the number of decimal
-places to round continuous summary statistics. If not specified, \code{tbl_summary} guesses an
-appropriate number of decimals to round statistics. When multiple statistics
-are displayed for a single variable, supply a vector
+\item{digits}{List of formulas specifying the number of decimal
+places to round continuous summary statistics. If not specified,
+\code{tbl_summary} guesses an appropriate number of decimals to round statistics.
+When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
 to 1 decimal place, and the SD to 2 use \code{digits = list("age" ~ c(1, 2))}.}
 
-\item{group}{column name of an ID or grouping variable for which summary
+\item{type}{List of formulas specifying variable types. Accepted values
+are \code{c("continuous", "categorical", "dichotomous")},
+e.g. \code{type = list(starts_with(age) ~ "continuous", "female" ~ "dichotomous")}.
+If type not specified for a variable, the function
+will default to an appropriate summary type.  See below for details.}
+
+\item{value}{List of formulas specifying the value to display for dichotomous
+variables.  See below for details.}
+
+\item{group}{Column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in \link{add_p} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
-\item{missing}{indicates whether to include counts of \code{NA} values in the table.
+\item{missing}{Indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),
-\code{"ifany"} (only display NA if the count is positive), and \code{"always"}
+\code{"ifany"} (only display if any NA values), and \code{"always"}
 (includes NA count row for all variables). Default is \code{"ifany"}.}
 
-\item{missing_text}{String to display label for count of missing observations.
+\item{missing_text}{String to display for count of missing observations.
 Default is \code{"Unknown"}.}
 
-\item{sort}{list of formulas specifying the type of sorting to perform. Default is NULL.
-Options are 'frequency' where results are sorted in
-descending order of frequency and 'alphanumeric',
+\item{sort}{List of formulas specifying the type of sorting to perform for
+categorical data. Options are \code{frequency} where results are sorted in
+descending order of frequency and \code{alphanumeric},
 e.g. \code{sort = list(everything() ~ "frequency")}}
 
-\item{percent}{indicates the type of percentage to return. Must be one of
-\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}}
+\item{percent}{Indicates the type of percentage to return. Must be one of
+\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}.}
 }
 \value{
 A \code{tbl_summary} object
@@ -87,8 +88,8 @@ the proportion of events that are \code{TRUE} on a single row. To show both rows
 (i.e. a row for \code{TRUE} and a row for \code{FALSE}) use
 \code{type = list(all_logical() ~ "categorical")}.
 
-The select helpers are available for use in any argument that accepts
-a list of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
+The select helpers are available for use in any argument that accepts a list
+of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
 }
 
 \section{statistic argument}{
@@ -105,7 +106,7 @@ For categorical variables the following statistics are available to display.
 \itemize{
 \item \code{{n}} frequency
 \item \code{{N}} denominator, or cohort size
-\item \code{{p}} percent formatted by \link{style_percent}
+\item \code{{p}} formatted percentage
 }
 For continuous variables the following statistics are available to display.
 \itemize{

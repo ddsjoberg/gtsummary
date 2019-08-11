@@ -1,10 +1,10 @@
-#' Bold significant p-values
+#' Bold significant p-values or q-values
 #'
-#' Bold p-values below a chosen threshold (e.g. <0.05)
-#' in tables created by `tbl_summary`.
+#' Bold values below a chosen threshold (e.g. <0.05)
+#' in gtsummary tables.
 #'
-#' @param x an object created using gtsummary functions
-#' @param ... further arguments passed to other methods.
+#' @param x Object created using gtsummary functions
+#' @param ... Additional arguments passed to other methods.
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @seealso \code{\link{bold_p.tbl_summary}},
 #' \code{\link{bold_p.tbl_regression}},
@@ -13,14 +13,16 @@
 bold_p <- function(x, ...) UseMethod("bold_p")
 
 
-#' Bold significant p-values
+#' Bold significant p-values or q-values
 #'
-#' Bold p-values in tables created by \code{\link{tbl_summary}}
+#' Bold values below a chosen threshold (e.g. <0.05)
+#' in [tbl_summary] tables.
 #'
-#' @param x an object created using `tbl_summary` function
-#' @param t threshold below which p-values will be bold. Default is 0.05.
-#' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
-#' @param ... not used
+#' @param x Object created using `tbl_summary` function
+#' @param t Threshold below which values will be bold. Default is 0.05.
+#' @param q Logical argument. When TRUE will bold the q-value column rather
+#' than the p-values. Default is `FALSE`.
+#' @param ... Not used
 #' @family tbl_summary tools
 #' @return A `tbl_summary` object
 #' @author Daniel D. Sjoberg, Esther Drill
@@ -64,14 +66,13 @@ bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
   x
 }
 
-#' Bold significant p-values
+#' Bold significant p-values or q-values
 #'
-#' Bold p-values below a chosen threshold (e.g. <.05) in tables
-#' created by \code{\link{tbl_regression}}.
+#' Bold values below a chosen threshold (e.g. <0.05)
+#' in [tbl_regression] tables.
 #'
-#' @param x an object created using `tbl_regression` function
-#' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
-#' @param ... not used
+#' @param x Object created using [tbl_regression] function
+#' @inheritParams bold_p.tbl_summary
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @family tbl_regression tools
 #' @examples
@@ -96,28 +97,18 @@ bold_p.tbl_regression <- function(x, t = 0.05, ...) {
   # updating gt and kable calls with data from table_header
   x <- update_calls_from_table_header(x)
 
-  # kable formatting -----------------------------------------------------------
-  # replacing previous kable call, kable
-  # x[["kable_calls"]][["fmt_pvalue"]] <- glue(
-  #   "mutate(p.value = dplyr::case_when(",
-  #   "p.value <= {t} ~ paste0('__', x$inputs$pvalue_fun(p.value), '__'), ",
-  #   "TRUE ~ x$inputs$pvalue_fun(p.value)",
-  #   "))"
-  # )
-
   x$call_list <- c(x$call_list, list(bold_p = match.call()))
 
   x
 }
 
-#' Bold significant p-values
+#' Bold significant p-values or q-values
 #'
-#' Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_uvregression}}
+#' Bold values below a chosen threshold (e.g. <0.05)
+#' in [tbl_uvregression] tables.
 #'
-#' @param x an object created using `tbl_uvregression` function
-#' @param t Determines the threshold below which p-values will be bold. Default is 0.05.
-#' @param q logical argument. When TRUE will bold the q-value column rather than the p-values
-#' @param ... not used
+#' @param x Object created using [tbl_uvregression] function
+#' @inheritParams bold_p.tbl_summary
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @family tbl_uvregression tools
 #' @export
@@ -161,11 +152,12 @@ bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
   x
 }
 
-#' Bold significant p-values
+#' Bold significant p-values or q-values
 #'
-#' Bold p-values below a chosen threshold (e.g. <.05) in tables created by \code{\link{tbl_stack}}
+#' Bold values below a chosen threshold (e.g. <0.05)
+#' in [tbl_stack] tables.
 #'
-#' @param x an object created using `tbl_stack` function
+#' @param x Object created using [tbl_stack] function
 #' @param ... arguments passed to `bold_p.*()` method that
 #' matches the first object in the `tbl_stack`
 #' @author Daniel D. Sjoberg

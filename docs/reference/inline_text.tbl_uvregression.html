@@ -147,23 +147,24 @@ Detailed examples in the
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object created from  <a href='tbl_regression.html'>tbl_regression</a></p></td>
+      <td><p>Object created from <a href='tbl_uvregression.html'>tbl_uvregression</a></p></td>
     </tr>
     <tr>
       <th>variable</th>
-      <td><p>variable name of statistic to present</p></td>
+      <td><p>Variable name of statistics to present</p></td>
     </tr>
     <tr>
       <th>level</th>
-      <td><p>level of the variable to display for categorical variables.
+      <td><p>Level of the variable to display for categorical variables.
 Default is <code>NULL</code>, returning the top row in the table for the variable.</p></td>
     </tr>
     <tr>
       <th>pattern</th>
-      <td><p>statistics to return.  Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting.
-Default is <code>"{estimate} ({conf.level }% CI  {conf.low}, {conf.high}; {p.value})"</code>.  All columns from
-<code>x$table_body</code> are available to print as well as the confidence level (conf.level).
-Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting. See below for details.</p></td>
+      <td><p>String indicating the statistics to return.
+Uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> formatting.
+Default is <code>"{estimate} ({conf.level }% CI  {conf.low}, {conf.high}; {p.value})"</code>.
+All columns from <code>x$table_body</code> are available to print as well as the
+confidence level (conf.level). See below for details.</p></td>
     </tr>
     <tr>
       <th>estimate_fun</th>
@@ -178,7 +179,7 @@ Default is <code>function(x) style_pvalue(x, prepend_p = TRUE)</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
     
@@ -217,7 +218,7 @@ print the table the estimates are extracted from.</p><ul>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>inline_text_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
@@ -246,7 +247,7 @@ print the table the estimates are extracted from.</p><ul>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.danieldsjoberg.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
