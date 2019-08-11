@@ -9,14 +9,14 @@
 \arguments{
 \item{x}{\code{tbl_uvregerssion} object}
 
-\item{...}{not used}
+\item{...}{Not used}
 }
 \value{
 A \code{tbl_uvregression} object
 }
 \description{
 Adds a column of the number of events to tables created with
-\link{tbl_regression} or \link{tbl_uvregression}.  Supported
+\link{tbl_uvregression}.  Supported
 model types include GLMs with binomial distribution family (e.g.
 \link[stats:glm]{stats::glm}, \link[lme4:glmer]{lme4::glmer}, and
 \link[geepack:geeglm]{geepack::geeglm}) and Cox

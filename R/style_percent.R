@@ -1,8 +1,8 @@
 #' Style percentages to be displayed in tables or text
 #'
 #' @param x numeric vector of percentages
-#' @param symbol logical indicator to include percent symbol in output.  Default is FALSE.
-#' @return Formatted percentages
+#' @param symbol Logical indicator to include percent symbol in output.
+#' Default is `FALSE`.
 #' @export
 #' @return A character vector of styled percentages
 #' @author Daniel D. Sjoberg

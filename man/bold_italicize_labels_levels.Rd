@@ -17,7 +17,7 @@ italicize_labels(x)
 italicize_levels(x)
 }
 \arguments{
-\item{x}{an object created using gtsummary functions}
+\item{x}{Object created using gtsummary functions}
 }
 \value{
 Functions return the same class of gtsummary object supplied

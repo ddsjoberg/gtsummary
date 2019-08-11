@@ -7,15 +7,15 @@
 \method{sort_p}{tbl_regression}(x, ...)
 }
 \arguments{
-\item{x}{an object created using \code{tbl_regression} function}
+\item{x}{An object created using \code{tbl_regression} function}
 
-\item{...}{not used}
+\item{...}{Not used}
 }
 \value{
 A \code{tbl_regression} object
 }
 \description{
-Sort variables in tables created by \code{\link{tbl_regression}} by ascending p-values
+Sort variables in tables created by \link{tbl_regression} by ascending p-values
 }
 \section{Example Output}{
 

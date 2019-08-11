@@ -7,24 +7,25 @@
 as_kable(x, include = NULL, exclude = NULL, ...)
 }
 \arguments{
-\item{x}{object created by a function from the gtsummary package
+\item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{include}{character vector naming kable commands to include in printing.
+\item{include}{Character vector naming kable commands to include in printing.
 Default is \code{NULL}, which utilizes all commands in \code{x$kable_calls}.}
 
-\item{exclude}{character vector naming kable commands to exclude in printing.
+\item{exclude}{Character vector naming kable commands to exclude in printing.
 Default is \code{NULL}.}
 
-\item{...}{additional arguments passed to \link[knitr:kable]{knitr::kable}}
+\item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }
 \value{
 A \code{knitr_kable} object
 }
 \description{
-Function converts object to a knitr_kable object.  This function is used in the
-background when the results are printed or knit.  A user can use this function
-if they wish to add customized formatting available via \link[knitr:kable]{knitr::kable}
+Function converts gtsummary objects to a knitr_kable objects.  This function
+is used in the background when the results are printed or knit.  A user can
+use this function if they wish to add customized formatting available
+via \link[knitr:kable]{knitr::kable}.
 }
 \examples{
 trial \%>\%
@@ -32,7 +33,7 @@ trial \%>\%
   as_kable()
 }
 \seealso{
-\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
+\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_survival}
 }
 \author{
 Daniel D. Sjoberg

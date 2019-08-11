@@ -1,26 +1,31 @@
-#' Modify column headers in summary tables
+#' Modify column headers in gtsummary tables
 #'
-#' Column labels can be modified to include calculated statistics,
+#' Column labels can be modified to include calculated statistics;
 #' e.g. the N can be dynamically included by wrapping it in curly brackets
 #' (following [glue::glue] syntax).
 #'
-#' @param x gtsummary object, e.g. `tbl_summary`, `tbl_regression`
-#' @param stat_by string vector of text to include above the summary statistics
-#' stratified by a variable.  Only use with `tbl_summary` objects.
+#' @param x gtsummary object, e.g. `tbl_summary` or `tbl_regression`
+#' @param stat_by String specifying text to include above the summary statistics
+#' stratified by a variable.  Only use with stratified `tbl_summary` objects.
 #' The following fields are available for use in the
-#' headers: `{n}`, `{N}`, `{p}`, and `{level}`.  `{n}` is the number of observations in
-#' each by group. `{N}` is the total number of observations. `{p}` is the percent
-#' in a by group. `{level}` is the by variable level.
-#' Syntax follows the [glue::glue] function,
-#' e.g. `stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"`.
+#' headers:
+#' * `{n}` number of observations in each group,
+#' * `{N}` total number of observations,
+#' * `{p}` percentage in each group,
+#' * `{level}` the 'by' variable level,
+#' * `"fisher.test"` for a Fisher's exact test,
+#'
+#' Syntax follows [glue::glue],
+#' e.g. `stat_by = "**{level}**, N = {n} ({style_percent(p)\%})"`.
 #' The `by` argument from the parent `tbl_summary()` cannot be `NULL`.
-#' @param ... specify column label of any other column in `.$table_body`.`
-#' Argument is the column name, and the value is the new column header. Use
+#' @param ... Specifies column label of any other column in `.$table_body`.
+#' Argument is the column name, and the value is the new column header
+#' (e.g. `p.value = "Model P-values"`). Use
 #' `print(x$table_body)` to see columns available.
 #' @param text_interpret indicates whether text will be interpreted as markdown (`"md"`)
 #' or HTML (`"html"`).  The text is interpreted with the {gt} package's `md()` or
 #' `html()` functions.  The default is `"md"`, and is ignored when the print engine
-#' is `knitr::kable()`.
+#' is not {gt}.
 #' @family tbl_summary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
@@ -38,7 +43,7 @@
 #'   modify_header(
 #'     stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"
 #'   )
-#' @return Functions return the same class of gtsummary object supplied
+#' @return Function return the same class of gtsummary object supplied
 #' @export
 #' @section Example Output:
 #' \if{html}{Example 1}

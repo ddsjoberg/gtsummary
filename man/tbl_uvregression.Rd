@@ -10,44 +10,43 @@ tbl_uvregression(data, method, y, method.args = NULL,
   estimate_fun = NULL, pvalue_fun = NULL)
 }
 \arguments{
-\item{data}{data frame to be used in univariate regression modeling.  Data
+\item{data}{Data frame to be used in univariate regression modeling.  Data
 frame includes the outcome variable(s) and the independent variables.}
 
-\item{method}{regression method (e.g. \code{\link[stats]{lm}},
-\code{\link[stats]{glm}}, \code{\link[survival]{coxph}}, and more).}
+\item{method}{Regression method (e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph}, and more).}
 
-\item{y}{model outcome as a string (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
+\item{y}{Model outcome (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
 
-\item{method.args}{list of additional arguments passed on to the regression
+\item{method.args}{List of additional arguments passed on to the regression
 function defined by \code{method}.}
 
-\item{formula}{string that becomes the model formula.
-Uses \code{\link[glue]{glue}} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
+\item{formula}{String of the model formula.
+Uses \link[glue:glue]{glue::glue} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
 is the dependent variable, and \code{{x}} represents a single covariate. For a
-random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
+random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
-\item{exponentiate}{logical indicating whether or not to exponentiate the
+\item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{label}{list of formulas specifying variables labels,
+\item{label}{List of formulas specifying variables labels,
 e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
-\item{hide_n}{hide N column. Default is \code{FALSE}}
+\item{hide_n}{Hide N column. Default is \code{FALSE}}
 
 \item{show_yesno}{By default yes/no categorical variables are printed on a
 single row, when the 'No' category is the reference group.  To print both
 levels in the output table, include the variable name in the show_yesno
 vector, e.g. `show_yesno = c("var1", "var2")``}
 
-\item{conf.level}{must be strictly greater than 0 and less than 1.
+\item{conf.level}{Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{estimate_fun}{function to round and format coefficient estimates.
+\item{estimate_fun}{Function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,

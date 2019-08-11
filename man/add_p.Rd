@@ -8,10 +8,10 @@ add_p(x, test = NULL, pvalue_fun = NULL, group = x$inputs$group,
   include = NULL, exclude = NULL)
 }
 \arguments{
-\item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
+\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{test}{list of formulas specifying statistical tests to perform,
-e.g. \code{list(all_continuous() = "t.test", all_categorical() = "fisher.test")}.
+\item{test}{List of formulas specifying statistical tests to perform,
+e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 Options include
 \itemize{
 \item \code{"t.test"} for a t-test,
@@ -20,30 +20,30 @@ Options include
 \item \code{"chisq.test"} for a Chi-squared test of independence,
 \item \code{"fisher.test"} for a Fisher's exact test,
 \item \code{"lme4"} for a random intercept model to account for clustered data.
-The \code{by} argument must be binary for this option, also \code{"group"} must be
+The \code{by} argument must be binary for this option, and \code{"group"} must be
 specified in the \link{tbl_summary} call.
 }
 
-Defaults to \code{"kruskal.test"} for continuous variables, \code{"chisq.test"} for
+Tests default to \code{"kruskal.test"} for continuous variables, \code{"chisq.test"} for
 categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
 for categorical variables with any expected cell count <5.
 A custom test function can be added for all or some variables. See below for
 an example.}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{column name of an ID or grouping variable for which summary
+\item{group}{Column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in \link{add_p} to
 calculate p-values with correlated data. Default is \code{NULL}}
 
-\item{include}{names of variables to include in output.}
+\item{include}{Names of variables to include in output.}
 
-\item{exclude}{names of variables to exclude from output.}
+\item{exclude}{Names of variables to exclude from output.}
 }
 \value{
 A \code{tbl_summary} object

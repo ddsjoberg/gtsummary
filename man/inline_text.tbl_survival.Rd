@@ -9,25 +9,27 @@
   estimate_fun = x$estimate_fun, ...)
 }
 \arguments{
-\item{x}{object created from  \link{tbl_survival}}
+\item{x}{Object created from  \link{tbl_survival}}
 
-\item{strata}{if \code{tbl_survival} estimates are stratified, level of the stratum
+\item{strata}{If \code{tbl_survival} estimates are stratified, level of the stratum
 to report. Default is \code{NULL} when \code{tbl_survival} have no specified strata.}
 
-\item{time}{time for which to return survival probability}
+\item{time}{Time for which to return survival probability}
 
-\item{prob}{probability for which to return survival time}
+\item{prob}{Probability for which to return survival time.  For median
+survival use \code{prob = 0.50}}
 
-\item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
+\item{pattern}{String indicating the statistics to return.  Uses
+\link[glue:glue]{glue::glue} formatting.
 Default is \code{'{estimate} ({conf.level*100}\% {ci})'}.  All columns from
-\code{x$table_long} are available to print as well as the confidence level (conf.level).
-Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
+\code{x$table_long} are available to print as well as the
+confidence level (conf.level). See below for details.}
 
-\item{estimate_fun}{function to round/style estimate and lower/upper confidence
-interval estimates.  Notably, this does not style the 'ci' column, which is
-pre-styled in 'x'. Default is x$estimate_fun}
+\item{estimate_fun}{function to round/style estimate and lower/upper
+confidence interval estimates.  Note, this does not style the 'ci' column,
+which is a string. Default is x$estimate_fun}
 
-\item{...}{not used}
+\item{...}{Not used}
 }
 \value{
 A string reporting results from a gtsummary table
@@ -40,7 +42,7 @@ for inline reporting in an R markdown document.
 The following items are available to print.  Use \code{print(x$table_long)} to
 print the table the estimates are extracted from.
 \itemize{
-\item \code{{label}} time or prob label
+\item \code{{label}} 'time' or 'prob' label
 \item \code{{estimate}} survival or survival time estimate formatted with 'estimate_fun'
 \item \code{{conf.low}} lower limit of confidence interval formatted with 'estimate_fun'
 \item \code{{conf.high}} upper limit of confidence interval formatted with 'estimate_fun'

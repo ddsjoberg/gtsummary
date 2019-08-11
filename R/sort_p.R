@@ -1,25 +1,24 @@
-
 #' Sort variables in table by ascending p-values
 #'
 #' Sort tables created by gtsummary by p-values
 #'
-#' @param x an object created using gtsummary functions
-#' @param ... further arguments passed to other methods.
+#' @param x An object created using gtsummary functions
+#' @param ... Additional arguments passed to other methods.
 #' @author Karissa Whiting
-#' @seealso \code{\link{sort_p.tbl_summary}},
-#' \code{\link{sort_p.tbl_regression}},
-#' \code{\link{sort_p.tbl_uvregression}}
+#' @seealso [sort_p.tbl_summary], [sort_p.tbl_regression],
+#' [sort_p.tbl_uvregression]
 #' @export
 #' @keywords internal
 sort_p <- function(x, ...) UseMethod("sort_p")
 
 #' Sort variables in table by ascending p-values
 #'
-#' Sort variables in tables created by \code{\link{tbl_summary}} by ascending p-values
+#' Sort variables in tables created by [tbl_summary] by ascending p-values
 #'
-#' @param x an object created using `tbl_summary` function
-#' @param q logical argument. When TRUE will sort by the q-value column rather than the p-values
-#' @param ... not used
+#' @param x An object created using `tbl_summary` function
+#' @param q Logical argument. When `TRUE` will sort by the q-value column
+#' rather than the p-values
+#' @param ... Not used
 #' @family tbl_summary tools
 #' @author Karissa Whiting
 #' @examples
@@ -68,10 +67,10 @@ sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 
 #' Sort variables in table by ascending p-values
 #'
-#' Sort variables in tables created by \code{\link{tbl_regression}} by ascending p-values
+#' Sort variables in tables created by [tbl_regression] by ascending p-values
 #'
-#' @param x an object created using `tbl_regression` function
-#' @param ... not used
+#' @param x An object created using `tbl_regression` function
+#' @param ... Not used
 #' @family tbl_regression tools
 #' @author Karissa Whiting
 #' @examples
@@ -104,11 +103,12 @@ sort_p.tbl_regression <- function(x, ...) {
 
 #' Sort variables in table by ascending p-values
 #'
-#' Sort variables in tables created by \code{\link{tbl_uvregression}} by ascending p-values
+#' Sort variables in tables created by [tbl_uvregression] by ascending p-values
 #'
 #' @param x an object created using `tbl_uvregression` function
-#' @param q logical argument. When TRUE will sort by the q-value column rather than the p-values
-#' @param ... not used
+#' @param q logical argument. When `TRUE` will sort by the q-value column
+#' rather than the p-values
+#' @param ... Not used
 #' @family tbl_uvregression tools
 #' @author Karissa Whiting
 #' @examples

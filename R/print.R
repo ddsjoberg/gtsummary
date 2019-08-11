@@ -1,10 +1,10 @@
 #' print and knit_print methods for gtsummary objects
 #'
 #' @name print_gtsummary
-#' @param x an object created using gtsummary functions
-#' @param ... not used
+#' @param x An object created using gtsummary functions
+#' @param ... Not used
 #' @author Daniel D. Sjoberg
-#' @seealso \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
+#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression]
 NULL
 
 #' @rdname print_gtsummary
