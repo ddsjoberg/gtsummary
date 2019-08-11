@@ -1,7 +1,7 @@
 #' Bold or Italicize labels or levels in gtsummary tables
 #'
 #' @name bold_italicize_labels_levels
-#' @param x an object created using gtsummary functions
+#' @param x Object created using gtsummary functions
 #' @author Daniel D. Sjoberg
 #' @family tbl_summary tools
 #' @family tbl_regression tools

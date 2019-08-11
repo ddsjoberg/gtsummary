@@ -8,17 +8,17 @@
   ...)
 }
 \arguments{
-\item{x}{object with class \code{tbl_regression} from the
+\item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
 \item{terms}{Character vector of terms for which to add global p-values.  Default
 is \code{NULL} which will add global p-values for all categorical variables}
 
-\item{keep}{logical argument indicating whether to also retain the individual
+\item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is \code{FALSE}}
 
-\item{...}{arguments to be passed to \link[car:Anova]{car::Anova}}
+\item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}}
 }
 \value{
 A \code{tbl_regression} object

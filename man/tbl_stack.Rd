@@ -7,7 +7,7 @@
 tbl_stack(tbls)
 }
 \arguments{
-\item{tbls}{list of gtsummary regression objects}
+\item{tbls}{List of gtsummary regression objects}
 }
 \value{
 A \code{tbl_stack} object

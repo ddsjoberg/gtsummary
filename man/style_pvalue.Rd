@@ -7,16 +7,15 @@
 style_pvalue(x, digits = 1, prepend_p = FALSE)
 }
 \arguments{
-\item{x}{numeric vector of p-values.}
+\item{x}{Numeric vector of p-values.}
 
-\item{digits}{number of digits large p-values are rounded. Must be 1 or 2.
+\item{digits}{Number of digits large p-values are rounded. Must be 1 or 2.
 Default is 1.}
 
-\item{prepend_p}{logical. Should 'p=' be prepended to formatted p-value. Default is FALSE}
+\item{prepend_p}{Logical. Should 'p=' be prepended to formatted p-value.
+Default is \code{FALSE}}
 }
 \value{
-Formatted p-values
-
 A character vector of styled p-values
 }
 \description{

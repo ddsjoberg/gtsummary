@@ -1,7 +1,7 @@
-#' Creates table of univariate statistics for time-to-event endpoints
+#' Creates table of univariate summary statistics for time-to-event endpoints
 #'
-#' @param x a survfit or cuminc object
-#' @param ... further arguments passed to other methods
+#' @param x A survfit object
+#' @param ... Additional arguments passed to other methods
 #' @seealso [tbl_survival.survfit]
 #' @export
 tbl_survival <- function(x, ...) {
@@ -13,36 +13,37 @@ tbl_survival <- function(x, ...) {
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'
-#' @param x a survfit object with a no stratification
+#' @param x A survfit object with a no stratification
 #' (e.g. `survfit(Surv(ttdeath, death) ~ 1, trial)`), or a single stratifying
 #' variable (e.g. `survfit(Surv(ttdeath, death) ~ trt, trial)`)
-#' @param times numeric vector of times for which to return survival probabilities.
-#' @param probs numeric vector of probabilities with values in (0,1)
+#' @param times Numeric vector of times for which to return survival probabilities.
+#' @param probs Numeric vector of probabilities with values in (0,1)
 #' specifying the survival quantiles to return
-#' @param label string defining the label shown for the time or prob column.
+#' @param label String defining the label shown for the time or prob column.
 #' Default is `"{time}"` or `"{prob*100}%"`.  The input uses [glue::glue] notation to
 #' convert the string into a label.  A common label may be `"{time} Months"`, which
 #' would resolve to "6 Months" or "12 Months" depending on specified \code{times}.
-#' @param level_label used when survival results are stratified.
+#' @param level_label Used when survival results are stratified.
 #' It is a string defining the label shown.  The input uses
 #' [glue::glue] notation to convert the string into a label.
 #' The default is \code{"{level}, N = {n}"}.  Other information available to
 #' call are `'{n}'`, `'{level}'`, `'{n.event.tot}'`, `'{n.event.strata}'`, and
 #' `'{strata}'`. See below for details.
-#' @param header_label string to be displayed as column header.
+#' @param header_label String to be displayed as column header.
 #' Default is \code{'**Time**'} when `time` is specified, and
 #' \code{'**Quantile**'} when `probs` is specified.
-#' @param header_estimate string to be displayed as column header of the Kaplan-Meier
+#' @param header_estimate String to be displayed as column header of the Kaplan-Meier
 #' estimate.  Default is \code{'**Probability**'} when `time` is specified, and
 #' \code{'**Time**'} when `probs` is specified.
-#' @param failure calculate failure probabilities rather than survival probabilities.
+#' @param failure Calculate failure probabilities rather than survival probabilities.
 #' Default is `FALSE`.  Does NOT apply to survival quantile requests
-#' @param missing character string indicating what to replace missing confidence
+#' @param missing String indicating what to replace missing confidence
 #' limits with in output.  Default is `missing = "-"`
-#' @param estimate_fun function used to format the estimate and confidence limits.
-#' The default is `style_percent(x, symbol = TRUE)` for survival probabilities, and
+#' @param estimate_fun Function used to format the estimate and confidence
+#' limits. The default is `style_percent(x, symbol = TRUE)` for survival
+#' probabilities, and
 #' `style_sigfig(x, digits = 3)` for time estimates.
-#' @param ... not used
+#' @param ... Not used
 #' @importFrom stringr str_split
 #' @family tbl_survival tools
 #' @author Daniel D. Sjoberg
@@ -367,17 +368,6 @@ tbl_survival_gt_calls <- quote(list(
     "gt::cols_align(align = 'left', columns = gt::vars(label))"
   ),
 
-  # # labelling columns
-  # cols_label =
-  #   glue('{table_header_to_gt_cols_label(dplyr::filter(table_header, column != "level_label"))}'),
-
-  # # hiding columns not for printing
-  # cols_hide = glue("gt::cols_hide(columns = gt::vars({cols_hide_list}))"),
-
-  # # styling the percentages
-  # fmt_percent =
-  #   glue("gt::fmt(columns = gt::vars(estimate), fns = x$estimate_fun)"),
-
   # formatting missing columns for estimates
   fmt_missing =
     glue("gt::fmt_missing(columns = gt::vars(estimate, ci), rows = NULL, missing_text = '---')"),
@@ -412,10 +402,6 @@ tbl_survival_kable_calls <- quote(list(
       "dplyr::ungroup()"
     )
   ),
-
-  # styling the percentages
-  # fmt_percent =
-  #   glue("dplyr::mutate(estimate = x$estimate_fun(estimate))"),
 
   # formatting missing columns for estimates
   fmt_missing =

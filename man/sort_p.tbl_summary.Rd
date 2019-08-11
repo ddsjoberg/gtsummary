@@ -7,17 +7,18 @@
 \method{sort_p}{tbl_summary}(x, q = FALSE, ...)
 }
 \arguments{
-\item{x}{an object created using \code{tbl_summary} function}
+\item{x}{An object created using \code{tbl_summary} function}
 
-\item{q}{logical argument. When TRUE will sort by the q-value column rather than the p-values}
+\item{q}{Logical argument. When \code{TRUE} will sort by the q-value column
+rather than the p-values}
 
-\item{...}{not used}
+\item{...}{Not used}
 }
 \value{
 A \code{tbl_summary} object
 }
 \description{
-Sort variables in tables created by \code{\link{tbl_summary}} by ascending p-values
+Sort variables in tables created by \link{tbl_summary} by ascending p-values
 }
 \section{Example Output}{
 

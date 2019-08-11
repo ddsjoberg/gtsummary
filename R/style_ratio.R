@@ -7,13 +7,13 @@
 #' 2 significant figures for numbers less than 1 and 3 significant figures 1 and
 #' larger. `style_ratio()` performs significant figure-like rounding in this manner.
 #'
-#' @param x numeric vector
-#' @param digits integer specifying the number of significant
+#' @param x Numeric vector
+#' @param digits Integer specifying the number of significant
 #' digits to display for numbers below 1. Numbers larger than 1 will be be `digits + 1`.
 #' Default is `digits = 2`.
 #' @export
 #' @return A character vector of styled ratios
-#' @seealso \code{\link{style_sigfig}}
+#' @seealso [style_sigfig]
 #' @author Daniel D. Sjoberg
 #' @examples
 #' c(

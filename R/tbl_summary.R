@@ -5,48 +5,49 @@
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' for detailed examples.
 #'
-#' @param data a data frame
-#' @param by a column name in data.
+#' @param data A data frame
+#' @param by A column name in data.
 #' Summary statistics will be calculated separately for each level of the `by`
 #' variable (e.g. `by = trt`). If `NULL`, summary statistics
 #' are calculated using all observations.
-#' @param label list of formulas specifying variables labels,
-#' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`.  If `NULL`, the
+#' @param label List of formulas specifying variables labels,
+#' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`.  If a
+#' variable's label is not specifed here, the
 #' function will take the label attribute (`attr(data$age, "label")`).  If
 #' attribute label is `NULL`, the variable name will be used.
-#' @param type list of formulas specifying variable types. Accepted values
+#' @param type List of formulas specifying variable types. Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
-#' e.g. `type = list(contains(age) ~ "continuous", "female" ~ "dichotomous")`.
+#' e.g. `type = list(starts_with(age) ~ "continuous", "female" ~ "dichotomous")`.
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type.  See below for details.
-#' @param value list of formulas specifying the value to display for dichotomous
+#' @param value List of formulas specifying the value to display for dichotomous
 #' variables.  See below for details.
-#' @param statistic list of formulas specifying types of summary statistics to display
-#' for each variable.  The default is
+#' @param statistic List of formulas specifying types of summary statistics to
+#' display for each variable.  The default is
 #' `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
 #' See below for details.
-#' @param digits list of formulas specifying the number of decimal
-#' places to round continuous summary statistics. If not specified, `tbl_summary` guesses an
-#' appropriate number of decimals to round statistics. When multiple statistics
-#' are displayed for a single variable, supply a vector
+#' @param digits List of formulas specifying the number of decimal
+#' places to round continuous summary statistics. If not specified,
+#' `tbl_summary` guesses an appropriate number of decimals to round statistics.
+#' When multiple statistics are displayed for a single variable, supply a vector
 #' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list("age" ~ c(1, 2))`.
-#' @param group column name of an ID or grouping variable for which summary
+#' @param group Column name of an ID or grouping variable for which summary
 #' statistics should not be printed. The column may be used in [add_p] to
 #' calculate p-values with correlated data. Default is `NULL`
-#' @param missing indicates whether to include counts of `NA` values in the table.
+#' @param missing Indicates whether to include counts of `NA` values in the table.
 #' Allowed values are `"no"` (never display NA values),
-#' `"ifany"` (only display NA if the count is positive), and `"always"`
+#' `"ifany"` (only display if any NA values), and `"always"`
 #' (includes NA count row for all variables). Default is `"ifany"`.
-#' @param missing_text String to display label for count of missing observations.
+#' @param missing_text String to display for count of missing observations.
 #' Default is `"Unknown"`.
-#' @param sort list of formulas specifying the type of sorting to perform. Default is NULL.
-#' Options are 'frequency' where results are sorted in
-#' descending order of frequency and 'alphanumeric',
+#' @param sort List of formulas specifying the type of sorting to perform for
+#' categorical data. Options are `frequency` where results are sorted in
+#' descending order of frequency and `alphanumeric`,
 #' e.g. `sort = list(everything() ~ "frequency")`
-#' @param percent indicates the type of percentage to return. Must be one of
-#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
+#' @param percent Indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`.
 #'
 #' @section select helpers:
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
@@ -61,8 +62,8 @@
 #' (i.e. a row for `TRUE` and a row for `FALSE`) use
 #' `type = list(all_logical() ~ "categorical")`.
 #'
-#' The select helpers are available for use in any argument that accepts
-#' a list of formulas (e.g. `statistic`, `type`, `digits`, `value`, `sort`, etc.)
+#' The select helpers are available for use in any argument that accepts a list
+#' of formulas (e.g. `statistic`, `type`, `digits`, `value`, `sort`, etc.)
 #'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
@@ -77,7 +78,7 @@
 #' \itemize{
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
-#'   \item `{p}` percent formatted by [style_percent]
+#'   \item `{p}` formatted percentage
 #' }
 #' For continuous variables the following statistics are available to display.
 #' \itemize{
@@ -130,8 +131,8 @@
 #'
 #' \if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
 #'
-tbl_summary <- function(data, by = NULL, label = NULL, type = NULL, value = NULL,
-                        statistic = NULL, digits = NULL, group = NULL,
+tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
+                        digits = NULL, type = NULL, value = NULL, group = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
                         percent = c("column", "row", "cell")) {

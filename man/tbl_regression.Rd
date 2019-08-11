@@ -9,35 +9,35 @@ tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
   intercept = FALSE, estimate_fun = NULL, pvalue_fun = NULL)
 }
 \arguments{
-\item{x}{regression model object}
+\item{x}{Regression model object}
 
-\item{label}{list of formulas specifying variables labels,
+\item{label}{List of formulas specifying variables labels,
 e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
-\item{exponentiate}{logical indicating whether or not to exponentiate the
+\item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{include}{names of variables to include in output.}
+\item{include}{Names of variables to include in output.}
 
-\item{exclude}{names of variables to exclude from output.}
+\item{exclude}{Names of variables to exclude from output.}
 
 \item{show_yesno}{By default yes/no categorical variables are printed on a
 single row, when the 'No' category is the reference group.  To print both
 levels in the output table, include the variable name in the show_yesno
 vector, e.g. `show_yesno = c("var1", "var2")``}
 
-\item{conf.level}{must be strictly greater than 0 and less than 1.
+\item{conf.level}{Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{intercept}{logical argument indicating whether to include the intercept
+\item{intercept}{Logical argument indicating whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{estimate_fun}{function to round and format coefficient estimates.
+\item{estimate_fun}{Function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
@@ -47,15 +47,14 @@ and return a string that is the rounded/formatted p-value (e.g.
 A \code{tbl_regression} object
 }
 \description{
-This function uses \href{https://broom.tidyverse.org/reference/brms_tidiers.html}{broom::tidy} and
-\href{https://github.com/bbolker/broom.mixed}{broom.mixed::tidy}
+This function uses \link[broom:tidy]{broom::tidy} and \link[broom.mixed:tidy]{broom.mixed::tidy}
 to perform the initial model formatting. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 for detailed examples.
 }
 \section{Setting Defaults}{
 
-If you like to consistently use a different function to format p-values or
+If you prefer to consistently use a different function to format p-values or
 estimates, you can set options in the script or in the user- or
 project-level startup file, '.Rprofile'.  The default confidence level can
 also be set.

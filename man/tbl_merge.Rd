@@ -7,9 +7,10 @@
 tbl_merge(tbls, tab_spanner = paste0(c("Model "), seq_len(length(tbls))))
 }
 \arguments{
-\item{tbls}{list of gtsummary regression objects}
+\item{tbls}{List of gtsummary regression objects}
 
-\item{tab_spanner}{Spanning headers. Character vector with same length as \code{tbls}}
+\item{tab_spanner}{Character vector specifying the spanning headers.
+Must be same length as \code{tbls}argument}
 }
 \value{
 A \code{tbl_merge} object

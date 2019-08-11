@@ -28,18 +28,17 @@
 #'
 #' This list is not exhaustive, and care should be taken for each number reported.
 #'
-#' @param data data frame to be used in univariate regression modeling.  Data
+#' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
-#' @param method regression method (e.g. \code{\link[stats]{lm}},
-#' \code{\link[stats]{glm}}, \code{\link[survival]{coxph}}, and more).
-#' @param y model outcome as a string (e.g. `y = recurrence` or `y = Surv(time, recur)`)
-#' @param formula string that becomes the model formula.
-#' Uses \code{\link[glue]{glue}} syntax. Default is `"{y} ~ {x}"`, where `{y}`
+#' @param method Regression method (e.g. [lm], [glm], [survival::coxph], and more).
+#' @param y Model outcome (e.g. `y = recurrence` or `y = Surv(time, recur)`)
+#' @param formula String of the model formula.
+#' Uses [glue::glue] syntax. Default is `"{y} ~ {x}"`, where `{y}`
 #' is the dependent variable, and `{x}` represents a single covariate. For a
-#' random intercept, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
-#' @param method.args list of additional arguments passed on to the regression
+#' random intercept model, the formula may be `formula = "{y} ~ {x} + (1 | gear)"`.
+#' @param method.args List of additional arguments passed on to the regression
 #' function defined by `method`.
-#' @param hide_n hide N column. Default is `FALSE`
+#' @param hide_n Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
 #' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg

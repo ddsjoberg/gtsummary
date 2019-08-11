@@ -9,15 +9,16 @@
 \arguments{
 \item{x}{an object created using \code{tbl_uvregression} function}
 
-\item{q}{logical argument. When TRUE will sort by the q-value column rather than the p-values}
+\item{q}{logical argument. When \code{TRUE} will sort by the q-value column
+rather than the p-values}
 
-\item{...}{not used}
+\item{...}{Not used}
 }
 \value{
 A \code{tbl_uvregression} object
 }
 \description{
-Sort variables in tables created by \code{\link{tbl_uvregression}} by ascending p-values
+Sort variables in tables created by \link{tbl_uvregression} by ascending p-values
 }
 \section{Example Output}{
 

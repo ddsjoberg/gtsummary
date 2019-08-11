@@ -2,35 +2,44 @@
 % Please edit documentation in R/modify_header.R
 \name{modify_header}
 \alias{modify_header}
-\title{Modify column headers in summary tables}
+\title{Modify column headers in gtsummary tables}
 \usage{
 modify_header(x, stat_by = NULL, ..., text_interpret = c("md", "html"))
 }
 \arguments{
-\item{x}{gtsummary object, e.g. \code{tbl_summary}, \code{tbl_regression}}
+\item{x}{gtsummary object, e.g. \code{tbl_summary} or \code{tbl_regression}}
 
-\item{stat_by}{string vector of text to include above the summary statistics
-stratified by a variable.  Only use with \code{tbl_summary} objects.
+\item{stat_by}{String specifying text to include above the summary statistics
+stratified by a variable.  Only use with stratified \code{tbl_summary} objects.
 The following fields are available for use in the
-headers: \code{{n}}, \code{{N}}, \code{{p}}, and \code{{level}}.  \code{{n}} is the number of observations in
-each by group. \code{{N}} is the total number of observations. \code{{p}} is the percent
-in a by group. \code{{level}} is the by variable level.
-Syntax follows the \link[glue:glue]{glue::glue} function,
-e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"}.
+headers:
+\itemize{
+\item \code{{n}} number of observations in each group,
+\item \code{{N}} total number of observations,
+\item \code{{p}} percentage in each group,
+\item \code{{level}} the 'by' variable level,
+\item \code{"fisher.test"} for a Fisher's exact test,
+}
+
+Syntax follows \link[glue:glue]{glue::glue},
+e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)\\\%})"}.
 The \code{by} argument from the parent \code{tbl_summary()} cannot be \code{NULL}.}
 
-\item{...}{specify column label of any other column in \code{.$table_body}.\code{Argument is the column name, and the value is the new column header. Use}print(x$table_body)` to see columns available.}
+\item{...}{Specifies column label of any other column in \code{.$table_body}.
+Argument is the column name, and the value is the new column header
+(e.g. \code{p.value = "Model P-values"}). Use
+\code{print(x$table_body)} to see columns available.}
 
 \item{text_interpret}{indicates whether text will be interpreted as markdown (\code{"md"})
 or HTML (\code{"html"}).  The text is interpreted with the {gt} package's \code{md()} or
 \code{html()} functions.  The default is \code{"md"}, and is ignored when the print engine
-is \code{knitr::kable()}.}
+is not {gt}.}
 }
 \value{
-Functions return the same class of gtsummary object supplied
+Function return the same class of gtsummary object supplied
 }
 \description{
-Column labels can be modified to include calculated statistics,
+Column labels can be modified to include calculated statistics;
 e.g. the N can be dynamically included by wrapping it in curly brackets
 (following \link[glue:glue]{glue::glue} syntax).
 }
