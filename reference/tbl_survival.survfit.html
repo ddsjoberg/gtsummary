@@ -144,29 +144,29 @@ formatted summary of the results</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a survfit object with a no stratification
+      <td><p>A survfit object with a no stratification
 (e.g. <code>survfit(Surv(ttdeath, death) ~ 1, trial)</code>), or a single stratifying
 variable (e.g. <code>survfit(Surv(ttdeath, death) ~ trt, trial)</code>)</p></td>
     </tr>
     <tr>
       <th>times</th>
-      <td><p>numeric vector of times for which to return survival probabilities.</p></td>
+      <td><p>Numeric vector of times for which to return survival probabilities.</p></td>
     </tr>
     <tr>
       <th>probs</th>
-      <td><p>numeric vector of probabilities with values in (0,1)
+      <td><p>Numeric vector of probabilities with values in (0,1)
 specifying the survival quantiles to return</p></td>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>string defining the label shown for the time or prob column.
+      <td><p>String defining the label shown for the time or prob column.
 Default is <code>"{time}"</code> or <code>"{prob*100}%"</code>.  The input uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> notation to
 convert the string into a label.  A common label may be <code>"{time} Months"</code>, which
 would resolve to "6 Months" or "12 Months" depending on specified <code>times</code>.</p></td>
     </tr>
     <tr>
       <th>level_label</th>
-      <td><p>used when survival results are stratified.
+      <td><p>Used when survival results are stratified.
 It is a string defining the label shown.  The input uses
 <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> notation to convert the string into a label.
 The default is <code>"{level}, N = {n}"</code>.  Other information available to
@@ -175,35 +175,36 @@ call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code
     </tr>
     <tr>
       <th>header_label</th>
-      <td><p>string to be displayed as column header.
+      <td><p>String to be displayed as column header.
 Default is <code>'**Time**'</code> when <code>time</code> is specified, and
 <code>'**Quantile**'</code> when <code>probs</code> is specified.</p></td>
     </tr>
     <tr>
       <th>header_estimate</th>
-      <td><p>string to be displayed as column header of the Kaplan-Meier
+      <td><p>String to be displayed as column header of the Kaplan-Meier
 estimate.  Default is <code>'**Probability**'</code> when <code>time</code> is specified, and
 <code>'**Time**'</code> when <code>probs</code> is specified.</p></td>
     </tr>
     <tr>
       <th>failure</th>
-      <td><p>calculate failure probabilities rather than survival probabilities.
+      <td><p>Calculate failure probabilities rather than survival probabilities.
 Default is <code>FALSE</code>.  Does NOT apply to survival quantile requests</p></td>
     </tr>
     <tr>
       <th>missing</th>
-      <td><p>character string indicating what to replace missing confidence
+      <td><p>String indicating what to replace missing confidence
 limits with in output.  Default is <code>missing = "-"</code></p></td>
     </tr>
     <tr>
       <th>estimate_fun</th>
-      <td><p>function used to format the estimate and confidence limits.
-The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE)</a></code> for survival probabilities, and
+      <td><p>Function used to format the estimate and confidence
+limits. The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE)</a></code> for survival
+probabilities, and
 <code><a href='style_sigfig.html'>style_sigfig(x, digits = 3)</a></code> for time estimates.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
     

@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a column of q values to account for
-multiple comparisons — add_q.tbl_summary • gtsummary</title>
+<title>Add a column of q-values to account for multiple comparisons — add_q.tbl_summary • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,11 +30,9 @@ multiple comparisons — add_q.tbl_summary • gtsummary</title>
 
 
 
-<meta property="og:title" content="Add a column of q values to account for
-multiple comparisons — add_q.tbl_summary" />
+<meta property="og:title" content="Add a column of q-values to account for multiple comparisons — add_q.tbl_summary" />
 
-<meta property="og:description" content="The adjustments to the p-values is performed with
-stats::p.adjust." />
+<meta property="og:description" content="Adjustments to are p-values are performed with stats::p.adjust." />
 
 <meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -122,16 +119,14 @@ stats::p.adjust." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a column of q values to account for
-multiple comparisons</h1>
+    <h1>Add a column of q-values to account for multiple comparisons</h1>
     
     <div class="hidden name"><code>add_q.tbl_summary.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The adjustments to the p-values is performed with
-<a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a>.</p>
+    <p>Adjustments to are p-values are performed with <a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a>.</p>
     
     </div>
 
@@ -148,14 +143,14 @@ multiple comparisons</h1>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>character argument indicating method to be used for p-value
+      <td><p>String indicating method to be used for p-value
 adjustment. Methods from
 <a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a> are accepted.  Default is <code>method = 'fdr'</code>.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.
-Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
+      <td><p>Function to round and format p-values.
+Default is <a href='style_pvalue.html'>style_pvalue</a>.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
@@ -163,7 +158,7 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to or from other methods</p></td>
+      <td><p>Additional arguments passed to or from other methods</p></td>
     </tr>
     </table>
     

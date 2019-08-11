@@ -138,12 +138,12 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function</p></td>
+      <td><p>Object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function</p></td>
     </tr>
     <tr>
       <th>test</th>
-      <td><p>list of formulas specifying statistical tests to perform,
-e.g. <code>list(all_continuous() = "t.test", all_categorical() = "fisher.test")</code>.
+      <td><p>List of formulas specifying statistical tests to perform,
+e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")</a></code>.
 Options include</p><ul>
 <li><p><code>"t.test"</code> for a t-test,</p></li>
 <li><p><code>"wilcox.test"</code> for a Wilcoxon rank-sum test,</p></li>
@@ -151,11 +151,11 @@ Options include</p><ul>
 <li><p><code>"chisq.test"</code> for a Chi-squared test of independence,</p></li>
 <li><p><code>"fisher.test"</code> for a Fisher's exact test,</p></li>
 <li><p><code>"lme4"</code> for a random intercept model to account for clustered data.
-The <code>by</code> argument must be binary for this option, also <code>"group"</code> must be
+The <code>by</code> argument must be binary for this option, and <code>"group"</code> must be
 specified in the <a href='tbl_summary.html'>tbl_summary</a> call.</p></li>
 </ul>
 
-<p>Defaults to <code>"kruskal.test"</code> for continuous variables, <code>"chisq.test"</code> for
+<p>Tests default to <code>"kruskal.test"</code> for continuous variables, <code>"chisq.test"</code> for
 categorical variables with all expected cell counts &gt;=5, and <code>"fisher.test"</code>
 for categorical variables with any expected cell count &lt;5.
 A custom test function can be added for all or some variables. See below for
@@ -163,8 +163,8 @@ an example.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.
-Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
+      <td><p>Function to round and format p-values.
+Default is <a href='style_pvalue.html'>style_pvalue</a>.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
@@ -172,17 +172,17 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     <tr>
       <th>group</th>
-      <td><p>column name of an ID or grouping variable for which summary
+      <td><p>Column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in add_p to
 calculate p-values with correlated data. Default is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>include</th>
-      <td><p>names of variables to include in output.</p></td>
+      <td><p>Names of variables to include in output.</p></td>
     </tr>
     <tr>
       <th>exclude</th>
-      <td><p>names of variables to exclude from output.</p></td>
+      <td><p>Names of variables to exclude from output.</p></td>
     </tr>
     </table>
     

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bold significant p-values — bold_p.tbl_summary • gtsummary</title>
+<title>Bold significant p-values or q-values — bold_p.tbl_summary • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Bold significant p-values — bold_p.tbl_summary" />
+<meta property="og:title" content="Bold significant p-values or q-values — bold_p.tbl_summary" />
 
-<meta property="og:description" content="Bold p-values in tables created by tbl_summary" />
+<meta property="og:description" content="Bold values below a chosen threshold (e.g. &amp;lt;0.05)
+in tbl_summary tables." />
 
 <meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -119,14 +120,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bold significant p-values</h1>
+    <h1>Bold significant p-values or q-values</h1>
     
     <div class="hidden name"><code>bold_p.tbl_summary.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Bold p-values in tables created by <code><a href='tbl_summary.html'>tbl_summary</a></code></p>
+    <p>Bold values below a chosen threshold (e.g. &lt;0.05)
+in <a href='tbl_summary.html'>tbl_summary</a> tables.</p>
     
     </div>
 
@@ -138,19 +140,20 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>an object created using <code>tbl_summary</code> function</p></td>
+      <td><p>Object created using <code>tbl_summary</code> function</p></td>
     </tr>
     <tr>
       <th>t</th>
-      <td><p>threshold below which p-values will be bold. Default is 0.05.</p></td>
+      <td><p>Threshold below which values will be bold. Default is 0.05.</p></td>
     </tr>
     <tr>
       <th>q</th>
-      <td><p>logical argument. When TRUE will bold the q-value column rather than the p-values</p></td>
+      <td><p>Logical argument. When TRUE will bold the q-value column rather
+than the p-values. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
     
