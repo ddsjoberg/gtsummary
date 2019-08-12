@@ -2,48 +2,102 @@
 #'
 #' Adds p-values to tables created by `tbl_summary` by comparing values across groups.
 #'
-#' @param x object with class `tbl_summary` from the [tbl_summary] function
-#' @param test list of formulas specifying statistical tests to perform,
-#' e.g. \code{list(all_continuous() = "t.test", all_categorical() = "fisher.test")}.
-#' Options include "t.test" for a t-test,
-#' "wilcox.test" for a Wilcoxon rank-sum test,
-#' "kruskal.test" for a Kruskal-Wallis rank-sum test,
-#' "chisq.test" for a Chi-squared test of independence,
-#' "fisher.test" for a Fisher's exact test,
-#' and "lme4" for a random intercept model to account for clustered data.
-#' For "lme4" to be used "group" must also be specified in the [tbl_summary] call.
+#' @section Setting Defaults:
+#' If you like to consistently use a different function to format p-values or
+#' estimates, you can set options in the script or in the user- or
+#' project-level startup file, '.Rprofile'.  The default confidence level can
+#' also be set. Please note the default option for the estimate is the same
+#' as it is for `tbl_regression()`.
+#' \itemize{
+#'   \item `options(gtsummary.pvalue_fun = new_function)`
+#' }
+#'
+#' @param x Object with class `tbl_summary` from the [tbl_summary] function
+#' @param test List of formulas specifying statistical tests to perform,
+#' e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
+#' Options include
+#' * `"t.test"` for a t-test,
+#' * `"wilcox.test"` for a Wilcoxon rank-sum test,
+#' * `"kruskal.test"` for a Kruskal-Wallis rank-sum test,
+#' * `"chisq.test"` for a Chi-squared test of independence,
+#' * `"fisher.test"` for a Fisher's exact test,
+#' * `"lme4"` for a random intercept model to account for clustered data.
+#' The `by` argument must be binary for this option, and `"group"` must be
+#' specified in the [tbl_summary] call.
+#'
+#' Tests default to `"kruskal.test"` for continuous variables, `"chisq.test"` for
+#' categorical variables with all expected cell counts >=5, and `"fisher.test"`
+#' for categorical variables with any expected cell count <5.
+#' A custom test function can be added for all or some variables. See below for
+#' an example.
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
 #' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @export
+#' @return A `tbl_summary` object
 #' @author Emily C. Zabor, Daniel D. Sjoberg
 #' @examples
 #' add_comp_ex1 <-
 #'   trial %>%
 #'   dplyr::select(age, grade, response, trt) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_p()
+#'
+#' # Conduct a custom McNemar test for response,
+#' # The custom function must return a single p-value, or NA
+#' add_p_test.mcnemar <- function(data, variable, by, ...) {
+#'    stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+#'  }
+#'
+#' trial %>%
+#'    dplyr::select(age, grade, response, trt) %>%
+#'    tbl_summary(by = trt) %>%
+#'    add_p(test = "response" ~ "mcnemar")
+#'
 #' @section Example Output:
 #' \if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
 #'
 
-add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
-                  group = x$inputs$group) {
+add_p <- function(x, test = NULL, pvalue_fun = NULL,
+                  group = x$inputs$group, include = NULL, exclude = NULL) {
+
+  # converting bare arguments to string ----------------------------------------
+  group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
+  if (group == "x$inputs$group") group <- x$inputs$group
+
+  # setting defaults -----------------------------------------------------------
+  pvalue_fun <-
+    pvalue_fun %||%
+    getOption("gtsummary.pvalue_fun", default = style_pvalue)
+  if (!rlang::is_function(pvalue_fun)) {
+    stop(paste0(
+      "'pvalue_fun' is not a valid function.  Please pass only a function\n",
+      "object. For example,\n\n",
+      "'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
+    ))
+  }
+
   # checking that input is class tbl_summary
   if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
-    stop("Cannot add comparison when no 'by' variable in original tbl_summary() call")
+    stop(paste0("Cannot add comparison when no 'by' variable ",
+                "in original tbl_summary() call"))
   }
 
   # test -----------------------------------------------------------------------
   # parsing into a named list
-  test <- tidyselect_to_list(x$inputs$data, test, .meta_data = x$meta_data)
+  test <- tidyselect_to_list(
+    x$inputs$data, test,
+    .meta_data = x$meta_data, input_type = "test"
+  )
 
   if (!is.null(test)) {
     # checking that all inputs are named
-    if ((names(test) %>% purrr::discard(. == "") %>% length()) != length(test)) {
+    if ((names(test) %>%
+         purrr::discard(. == "") %>%
+         length()) != length(test)) {
       stop(glue(
         "Each element in 'test' must be named. ",
         "For example, 'test = list(age = \"t.test\", ptstage = \"fisher.test\")'"
@@ -55,6 +109,11 @@ add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
   if (!is.function(pvalue_fun)) {
     stop("Input 'pvalue_fun' must be a function.")
   }
+
+  # Getting p-values only for included variables
+  if (is.null(include)) include <- x$table_body$variable %>% unique()
+  include <- include %>% setdiff(exclude)
+
 
   # getting the test name and pvalue
   meta_data <-
@@ -76,7 +135,8 @@ add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
         by = x$inputs$by,
         test = .data$stat_test,
         type = .data$summary_type,
-        group = group
+        group = group,
+        include = include
       )
     )
 
@@ -96,26 +156,33 @@ add_p <- function(x, test = NULL, pvalue_fun = style_pvalue,
 
   x$table_body <- table_body
   x$pvalue_fun <- pvalue_fun
-  # adding p-value formatting
-  x[["gt_calls"]][["fmt_pvalue"]] <-
-    "fmt(columns = vars(p.value), rows = !is.na(p.value), fns = x$pvalue_fun)" %>%
-    glue()
-  # column headers
-  x[["gt_calls"]][["cols_label_pvalue"]] <-
-    "cols_label(p.value = md('**p-value**'))" %>%
-    glue()
-
   x$meta_data <- meta_data
+
+  x$table_header <-
+    tibble(column = names(table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing() %>%
+    table_header_fmt(p.value = "x$pvalue_fun")
+
+  # updating header
+  x <- modify_header_internal(x, p.value = "**p-value**")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
+
+
   x$call_list <- c(x$call_list, list(add_p = match.call()))
 
+  # gt formatting --------------------------------------------------------------
   # adding footnote listing statistics presented in table
   x[["gt_calls"]][["footnote_add_p"]] <- glue(
-    "tab_footnote(",
-    'footnote = "{footnote_add_p(meta_data)}",',
-    "locations = cells_column_labels(",
-    "columns = vars(p.value))",
+    "gt::tab_footnote(",
+    'footnote = "{footnote_add_p(meta_data)}", ',
+    "locations = gt::cells_column_labels(",
+    "columns = gt::vars(p.value))",
     ")"
   )
+
 
   x
 }
