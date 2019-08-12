@@ -92,3 +92,61 @@ tab_style_bold_levels <- function(...) {
   )
   bold_levels(...)
 }
+
+
+
+#' @rdname deprecated
+#' @export
+
+fmt_uni_regression <- function(...) {
+  stop_defunct(
+    "fmt_uni_regression() is defunct. Please use tbl_uvregression() instead."
+  )
+}
+
+#' @rdname deprecated
+#' @export
+
+fmt_table1 <- function(...) {
+  stop_defunct(
+    "fmt_table1() is defunct. Please use tbl_summary() instead."
+  )
+}
+
+
+#' @rdname deprecated
+#' @export
+
+fmt_regression <- function(...) {
+  stop_defunct(
+    "fmt_regression() is defunct. Please use tbl_regression() instead."
+  )
+}
+
+
+#' @rdname deprecated
+#' @export
+
+fmt_beta <- function(...) {
+  stop_defunct(
+    "fmt_beta() is defunct. Please use style_sigfig() instead."
+  )
+}
+
+#' @rdname deprecated
+#' @export
+
+fmt_percent <- function(...) {
+  stop_defunct(
+    "fmt_percent() is defunct. Please use style_percent() instead."
+  )
+}
+
+#' @rdname deprecated
+#' @export
+
+fmt_pvalue <- function(...) {
+  stop_defunct(
+    "fmt_pvalue() is defunct. Please use style_pvalue() instead."
+  )
+}

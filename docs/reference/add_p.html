@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9004</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>group</span>,
+    <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -150,9 +150,9 @@ Options include</p><ul>
 <li><p><code>"kruskal.test"</code> for a Kruskal-Wallis rank-sum test,</p></li>
 <li><p><code>"chisq.test"</code> for a Chi-squared test of independence,</p></li>
 <li><p><code>"fisher.test"</code> for a Fisher's exact test,</p></li>
-<li><p><code>"lme4"</code> for a random intercept model to account for clustered data.
-The <code>by</code> argument must be binary for this option, and <code>"group"</code> must be
-specified in the <a href='tbl_summary.html'>tbl_summary</a> call.</p></li>
+<li><p><code>"lme4"</code> for a random intercept logistic regression model to account for
+clustered data, <code><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>lme4::glmer(by ~ variable + (1 | group), family = binomial)</a></code>.
+The <code>by</code> argument must be binary for this option.</p></li>
 </ul>
 
 <p>Tests default to <code>"kruskal.test"</code> for continuous variables, <code>"chisq.test"</code> for
@@ -168,13 +168,14 @@ Default is <a href='style_pvalue.html'>style_pvalue</a>.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://www.rdocumentation.org/packages/purrr/topics/partial'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
     </tr>
     <tr>
       <th>group</th>
-      <td><p>Column name of an ID or grouping variable for which summary
-statistics should not be printed. The column may be used in add_p to
-calculate p-values with correlated data. Default is <code>NULL</code></p></td>
+      <td><p>Column name of an ID or grouping variable. The column can be
+used calculate p-values with correlated data (e.g. when the test argument
+is <code>"lme4"</code>). Default is <code>NULL</code>.  If specified,
+the row associated with this variable is omitted from the summary table.</p></td>
     </tr>
     <tr>
       <th>include</th>
@@ -224,7 +225,7 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>add_comp_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>add_p</span>()
 
@@ -235,7 +236,7 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
  }
 
 <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
    <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
    <span class='fu'>add_p</span>(<span class='kw'>test</span> <span class='kw'>=</span> <span class='st'>"response"</span> ~ <span class='st'>"mcnemar"</span>)</div><div class='output co'>#&gt; <span class='message'>Error in 'add_p()' for variable 'response' and test 'mcnemar', p-value omitted:</span>
 #&gt; <span class='message'>Error in UseMethod("add_p_test"): no applicable method for 'add_p_test' applied to an object of class "c('mcnemar', 'tbl_df', 'tbl', 'data.frame')"</span></div><div class='output co'>#&gt; &lt;style&gt;html {
