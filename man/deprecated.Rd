@@ -10,6 +10,12 @@
 \alias{tab_style_italicize_levels}
 \alias{tab_style_italicize_labels}
 \alias{tab_style_bold_levels}
+\alias{fmt_uni_regression}
+\alias{fmt_table1}
+\alias{fmt_regression}
+\alias{fmt_beta}
+\alias{fmt_percent}
+\alias{fmt_pvalue}
 \title{Deprecated functions}
 \usage{
 add_comparison(...)
@@ -27,6 +33,18 @@ tab_style_italicize_levels(...)
 tab_style_italicize_labels(...)
 
 tab_style_bold_levels(...)
+
+fmt_uni_regression(...)
+
+fmt_table1(...)
+
+fmt_regression(...)
+
+fmt_beta(...)
+
+fmt_percent(...)
+
+fmt_pvalue(...)
 }
 \description{
 Some functions have been deprecated and are no longer being actively

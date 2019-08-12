@@ -21,15 +21,19 @@
 #' * `"kruskal.test"` for a Kruskal-Wallis rank-sum test,
 #' * `"chisq.test"` for a Chi-squared test of independence,
 #' * `"fisher.test"` for a Fisher's exact test,
-#' * `"lme4"` for a random intercept model to account for clustered data.
-#' The `by` argument must be binary for this option, and `"group"` must be
-#' specified in the [tbl_summary] call.
+#' * `"lme4"` for a random intercept logistic regression model to account for
+#' clustered data, `lme4::glmer(by ~ variable + (1 | group), family = binomial)`.
+#' The `by` argument must be binary for this option.
 #'
 #' Tests default to `"kruskal.test"` for continuous variables, `"chisq.test"` for
 #' categorical variables with all expected cell counts >=5, and `"fisher.test"`
 #' for categorical variables with any expected cell count <5.
 #' A custom test function can be added for all or some variables. See below for
 #' an example.
+#' @param group Column name of an ID or grouping variable. The column can be
+#' used calculate p-values with correlated data (e.g. when the test argument
+#' is `"lme4"`). Default is `NULL`.  If specified,
+#' the row associated with this variable is omitted from the summary table.
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
@@ -60,11 +64,21 @@
 #'
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
-                  group = x$inputs$group, include = NULL, exclude = NULL) {
+                  group = NULL, include = NULL, exclude = NULL) {
 
   # converting bare arguments to string ----------------------------------------
   group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
-  if (group == "x$inputs$group") group <- x$inputs$group
+
+  # group argument -------------------------------------------------------------
+  if (!is.null(group)) {
+    # checking group is in the data frame
+    if (!group %in% x$meta_data$variable) {
+      stop(glue("'{group}' is not a column name in the input data frame."))
+    }
+    # dropping group variable from table_body and meta_data
+    x$table_body <- x$table_body %>% filter(.data$variable != group)
+    x$meta_data <- x$meta_data %>% filter(.data$variable != group)
+  }
 
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-

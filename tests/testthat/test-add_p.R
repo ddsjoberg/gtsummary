@@ -11,8 +11,8 @@ test_that("add_p creates output without error/warning", {
   )
 
   expect_error(
-    tbl_summary(trial, by = trt, group = response) %>%
-      add_p(test = everything() ~ "lme4"),
+    tbl_summary(trial, by = trt) %>%
+      add_p(test = everything() ~ "lme4", group = response),
     NA
   )
 })
