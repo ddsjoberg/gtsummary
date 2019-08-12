@@ -35,6 +35,8 @@
 <meta property="og:description" content="For variables where the summary type was not specified in the function
 call of tbl_summary, assign_summary_type assigns a type based on class and
 number of unique levels." />
+
+<meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -65,7 +67,7 @@ number of unique levels." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9002</span>
       </span>
     </div>
 
@@ -165,7 +167,7 @@ e.g. <code>summary_type = list(age = "continuous")</code></p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw pkg'>gtsummary</span><span class='kw ns'>:::</span><span class='fu'><a href='https://github.com/ddsjoberg/gtsummary/reference/assign_summary_type.html'>assign_summary_type</a></span>(
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
-  <span class='kw'>variable</span> <span class='kw'>=</span>  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>mtcars</span>),
+  <span class='kw'>variable</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>mtcars</span>),
   <span class='kw'>class</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/apply'>apply</a></span>(<span class='no'>mtcars</span>, <span class='fl'>2</span>, <span class='no'>class</span>),
   <span class='kw'>summary_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</div><div class='output co'>#&gt;  [1] "continuous"  "categorical" "continuous"  "continuous"  "continuous" 

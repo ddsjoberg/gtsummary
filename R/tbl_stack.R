@@ -6,12 +6,13 @@
 #' If combining `tbl_stack()` and `tbl_merge()`, merge first then stack, or stack
 #' first and then merge.
 #'
-#' @param tbls list of gtsummary regression objects
+#' @param tbls List of gtsummary regression objects
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @seealso [tbl_merge]
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_stack` object
 #' @examples
 #' # Example 1 - stacking two tbl_regression objects
 #' t1 <-
@@ -53,12 +54,7 @@
 #' row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 #' row2 <- tbl_merge(list(t2, t4))
 #' tbl_stack_ex2 <-
-#'   tbl_stack(list(row1, row2)) %>%
-#'   as_gt() %>%
-#'   tab_footnote(
-#'     footnote = "Adjusted for cancer grade, state, and marker level.",
-#'     locations = cells_data(columns = "label", rows = 4)
-#'   )
+#'   tbl_stack(list(row1, row2))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -72,12 +68,12 @@ tbl_stack <- function(tbls) {
   # input checks ---------------------------------------------------------------
   # class of tbls
   if (!"list" %in% class(tbls)) {
-    stop("Expecting 'tbls' to be a list, e.g. tbls = list(tbl1, tbl2)")
+    stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
-  # checking all inputs are class tbl_regression or tbl_merge
-  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_merge") %>% any()) {
-    stop("All objects in 'tbls' must be class 'tbl_regression' or 'tbl_uvregression'")
+  # checking all inputs are class tbl_uvregression, tbl_regression or tbl_merge
+  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression", "tbl_merge") %>% any()) {
+    stop("All objects in 'tbls' must be class 'tbl_regression', 'tbl_uvregression', or 'tbl_merge'")
   }
 
   # at least two objects must be passed
@@ -90,7 +86,10 @@ tbl_stack <- function(tbls) {
   }
 
   # stacking tables ------------------------------------------------------------
-  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c("inputs", "gt_calls", "estimate_funs", "pvalue_funs", "qvalue_funs"))]
+  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c(
+    "inputs", "gt_calls", "kable_calls", "estimate_funs",
+    "pvalue_funs", "qvalue_funs", "table_header"
+  ))]
 
   results$table_body <-
     map_dfr(

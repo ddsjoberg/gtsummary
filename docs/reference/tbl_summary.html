@@ -36,6 +36,8 @@
 continuous, categorical, and dichotomous variables.  Review the
 tbl_summary vignette
 for detailed examples." />
+
+<meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -66,7 +68,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -134,109 +136,129 @@ for detailed examples.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_summary</span>(<span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>tbl_summary</span>(<span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>), <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>,
-  <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>row_percent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>percent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"column"</span>, <span class='st'>"row"</span>, <span class='st'>"cell"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>a data frame</p></td>
+      <td><p>A data frame</p></td>
     </tr>
     <tr>
       <th>by</th>
-      <td><p>a character vector specifying a column in data.
+      <td><p>A column name in data.
 Summary statistics will be calculated separately for each level of the <code>by</code>
-variable. If <code>NULL</code>, summary statistics
+variable (e.g. <code>by = trt</code>). If <code>NULL</code>, summary statistics
 are calculated using all observations.</p></td>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>named list of variable labels,
-e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(age = "Age, yrs", ptstage = "Path T Stage")</a></code>.  If <code>NULL</code>, the
+      <td><p>List of formulas specifying variables labels,
+e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")</a></code>.  If a
+variable's label is not specifed here, the
 function will take the label attribute (<code><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr(data$age, "label")</a></code>).  If
 attribute label is <code>NULL</code>, the variable name will be used.</p></td>
     </tr>
     <tr>
+      <th>statistic</th>
+      <td><p>List of formulas specifying types of summary statistics to
+display for each variable.  The default is
+<code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")</a></code>.
+See below for details.</p></td>
+    </tr>
+    <tr>
+      <th>digits</th>
+      <td><p>List of formulas specifying the number of decimal
+places to round continuous summary statistics. If not specified,
+<code>tbl_summary</code> guesses an appropriate number of decimals to round statistics.
+When multiple statistics are displayed for a single variable, supply a vector
+rather than an integer.  For example, if the
+statistic being calculated is <code>"{mean} ({sd})"</code> and you want the mean rounded
+to 1 decimal place, and the SD to 2 use <code>digits = list("age" ~ c(1, 2))</code>.</p></td>
+    </tr>
+    <tr>
       <th>type</th>
-      <td><p>named list that specifies data types of variables. Accepted values
+      <td><p>List of formulas specifying variable types. Accepted values
 are <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("continuous", "categorical", "dichotomous")</a></code>,
-e.g. <code>type = list(age = "continuous", female = "dichotomous")</code>.
+e.g. <code>type = list(starts_with(age) ~ "continuous", "female" ~ "dichotomous")</code>.
 If type not specified for a variable, the function
 will default to an appropriate summary type.  See below for details.</p></td>
     </tr>
     <tr>
       <th>value</th>
-      <td><p>named list that specifies the value to display for dichotomous
+      <td><p>List of formulas specifying the value to display for dichotomous
 variables.  See below for details.</p></td>
     </tr>
     <tr>
-      <th>statistic</th>
-      <td><p>named list of the types of summary statistics to display
-for each variable or variable class.  The default is
-<code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")</a></code>.
-See below for details.</p></td>
-    </tr>
-    <tr>
-      <th>digits</th>
-      <td><p>named list of integers indicating the number of decimal
-places to round continuous summary statistics. Names of the list can be any
-continuous variable in 'data', or <code>"..continuous"</code> to apply rounding to all
-continuous variables.  If not specified, <code>tbl_summary</code> guesses an
-appropriate number of decimals to round statistics. When multiple statistics
-are displayed for a single variable (e.g. <code>{mean} ({sd})</code>), supply a vector
-rather than an integer.  For example, if the
-statistic being calculated is <code>"{mean} ({sd})"</code> and you want the mean rounded
-to 1 decimal place, and the SD to 2 use <code>digits = list(age = c(1, 2))</code>.</p></td>
-    </tr>
-    <tr>
       <th>group</th>
-      <td><p>character vector of an ID or grouping variable for which summary
+      <td><p>Column name of an ID or grouping variable for which summary
 statistics should not be printed. The column may be used in <a href='add_p.html'>add_p</a> to
 calculate p-values with correlated data. Default is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>missing</th>
-      <td><p>indicates whether to include counts of <code>NA</code> values in the table.
+      <td><p>Indicates whether to include counts of <code>NA</code> values in the table.
 Allowed values are <code>"no"</code> (never display NA values),
-<code>"ifany"</code> (only display NA if the count is positive), and <code>"always"</code>
-(display NA’s even for zero counts). Default is <code>"ifany"</code>.</p></td>
+<code>"ifany"</code> (only display if any NA values), and <code>"always"</code>
+(includes NA count row for all variables). Default is <code>"ifany"</code>.</p></td>
     </tr>
     <tr>
       <th>missing_text</th>
-      <td><p>String to display label for count of missing observations.
+      <td><p>String to display for count of missing observations.
 Default is <code>"Unknown"</code>.</p></td>
     </tr>
     <tr>
       <th>sort</th>
-      <td><p>named list indicating the type of sorting to perform. Default is NULL.
-Options are 'frequency' where results are sorted in
-descending order of frequency and 'alphanumeric'</p></td>
+      <td><p>List of formulas specifying the type of sorting to perform for
+categorical data. Options are <code>frequency</code> where results are sorted in
+descending order of frequency and <code>alphanumeric</code>,
+e.g. <code>sort = list(everything() ~ "frequency")</code></p></td>
     </tr>
     <tr>
-      <th>row_percent</th>
-      <td><p>logical value indicating whether to calculate
-percentages within column or across rows.  Default is to calculate
-percentages within columns: <code>row_percent = FALSE</code></p></td>
+      <th>percent</th>
+      <td><p>Indicates the type of percentage to return. Must be one of
+<code>"column"</code>, <code>"row"</code>, or <code>"cell"</code>. Default is <code>"column"</code>.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>tbl_summary</code> object</p>
+    
+    <h2 class="hasAnchor" id="select-helpers"><a class="anchor" href="#select-helpers"></a>select helpers</h2>
+
+    
+    <p><a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers'>Select helpers</a>
+from the {tidyselect} package and {gtsummary} package are available to
+modify default behavior for groups of variables.
+For example, by default continuous variables are reported with the median
+and IQR.  To change all continuous variables to mean and standard deviation use
+<code>statistic = list(all_continuous() ~ "{mean} ({sd})")</code>.</p>
+<p>All columns with class logical are displayed as dichotomous variables showing
+the proportion of events that are <code>TRUE</code> on a single row. To show both rows
+(i.e. a row for <code>TRUE</code> and a row for <code>FALSE</code>) use
+<code>type = list(all_logical() ~ "categorical")</code>.</p>
+<p>The select helpers are available for use in any argument that accepts a list
+of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>, <code>value</code>, <code>sort</code>, etc.)</p>
     
     <h2 class="hasAnchor" id="statistic-argument"><a class="anchor" href="#statistic-argument"></a>statistic argument</h2>
 
     
     <p>The statistic argument specifies the statistics presented in the table. The
-input is a named list where the names correspond to the column names from the
-input 'data' and the elements specify the statistic to report. For example,
-<code>statistic = list(age = "{mean} ({sd})")</code> would report the mean and
-standard deviation for age. A statistic name that appears between curly brackets
+input is a list of formulas that specify the statistics to report. For example,
+<code>statistic = list("age" ~ "{mean} ({sd})")</code> would report the mean and
+standard deviation for age; <code>statistic = list(all_continuous() ~ "{mean} ({sd})")</code>
+would report the mean and standard deviation for all continuous variables.
+A statistic name that appears between curly brackets
 will be replaced with the numeric statistic (see <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a>).</p>
 <p>For categorical variables the following statistics are available to display.</p><ul>
 <li><p><code>{n}</code> frequency</p></li>
 <li><p><code>{N}</code> denominator, or cohort size</p></li>
-<li><p><code>{p}</code> percent formatted by <a href='style_percent.html'>style_percent</a></p></li>
+<li><p><code>{p}</code> formatted percentage</p></li>
 </ul><p>For continuous variables the following statistics are available to display.</p><ul>
 <li><p><code>{median}</code> median</p></li>
 <li><p><code>{mean}</code> mean</p></li>
@@ -247,10 +269,6 @@ will be replaced with the numeric statistic (see <a href='https://www.rdocumenta
 <li><p><code>{p##}</code> any integer percentile, where <code>##</code> is an integer from 0 to 100</p></li>
 <li><p><code>{foo}</code> any function of the form <code>foo(x)</code> is accepted where <code>x</code> is a numeric vector</p></li>
 </ul>
-    <p>If all continuous or categorical variables will be summarized with the same
-statistics, the <code>..continuous..</code> and <code>..categorical..</code> shortcuts can be used
-in place of the individual column names.  Dichotomous variables are summarized
-as categorical variables.</p>
     
     <h2 class="hasAnchor" id="type-argument"><a class="anchor" href="#type-argument"></a>type argument</h2>
 
@@ -263,7 +281,7 @@ output table, rather than one row per level of the variable.
 Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
 and the TRUE, 1, and yes rows
 will be displayed.  Otherwise, the value to display must be specified in
-the <code>value</code> argument, e.g. <code>value = list(varname = "level to show")</code></p>
+the <code>value</code> argument, e.g. <code>value = list("varname" ~ "level to show")</code></p>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
@@ -275,29 +293,32 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
+    <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed examples</p>
+<p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
   <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
   <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
+  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
-  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code></p></div>
+  <code><a href='modify_header.html'>modify_header</a></code>,
+  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>()
 
 <span class='no'>tbl_summary_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>(
-    <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>,
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Patient Age"</span>)
+    <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>,
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"age"</span> ~ <span class='st'>"Patient Age"</span>),
+    <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() ~ <span class='st'>"{mean} ({sd})"</span>),
+    <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/vars'>vars</a></span>(<span class='no'>age</span>) ~ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>))
   )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -305,6 +326,10 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#select-helpers">select helpers</a></li>
+
       <li><a href="#statistic-argument">statistic argument</a></li>
 
       <li><a href="#type-argument">type argument</a></li>
@@ -323,7 +348,7 @@ the <code>value</code> argument, e.g. <code>value = list(varname = "level to sho
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

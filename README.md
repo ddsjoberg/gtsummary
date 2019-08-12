@@ -13,7 +13,7 @@ status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-## gtsummary
+## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
 
 The {gtsummary} package creates presentation-ready tables summarizing
 data sets, regression models, and more. The code to create the tables is
@@ -38,10 +38,15 @@ for a detailed exploration of the output options.
 
 ## Installation
 
-You can install the production version of {gtsummary} with:
+The {gtsummary} package was written as a companion to the {gt} package
+from RStudio, and it is recommended to install both {gt} and
+{gtsummary}. If {gt} is not installed, `knitr::kable()` will be used to
+produce the summary tables. You can install {gtsummary} and {gt} with
+the following code.
 
 ``` r
 install.packages("remotes")
+remotes::install_github("rstudio/gt")
 remotes::install_github("ddsjoberg/gtsummary")
 ```
 
@@ -59,11 +64,10 @@ The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ``` r
 library(gtsummary)
-#> Loading required package: gt
 t1 <-
   tbl_summary(
     data = trial[c("trt", "age", "grade", "response")],
-    by = "trt"
+    by = trt
   ) %>%
   add_p() 
 ```
@@ -75,9 +79,8 @@ t1 <-
 ``` r
 mod1 <- 
   glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
-t2 <-
-  tbl_regression(mod1,
-                 exponentiate = TRUE)
+
+t2 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
 <img src="man/figures/README-tbl_regression.png" width="44%">
@@ -90,13 +93,38 @@ Side-by-side regression model results from `tbl_merge()`
 
 Survival Estimates from `tbl_survival()`
 
-<img src="man/figures/tbl_strata_ex1.png" width="30%">
+<img src="man/figures/tbl_strata_ex1.png" width="31%">
+
+## Print Engine
+
+{gtsummary} uses the {gt} package to print all summary tables. In
+addition to supporting {gt}, the {gtsummary} package works well with
+`knitr::kable()`. This is particularly useful when outputting documents
+to Microsoft Word. If the {gt} package is not installed, {gtsummary}
+will fall back to `knitr::kable()`. To explicitly set the printing
+engine, set the option in the script or in the user- or project R
+profile, `.Rprofile`.
+
+    options(gtsummary.print_engine = "kable") 
+
+or
+
+    options(gtsummary.print_engine = "gt")
+
+Output from `kable` is less full featured compared to summary tables
+produced with {gt}. For example, `kable` summary tables do not include
+indentation, footnotes, and spanning header rows.
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms. A big thank you to all
 contributors\!  
+[@ablack3](https://github.com/ablack3),
+[@ahinton-mmc](https://github.com/ahinton-mmc),
 [@ddsjoberg](https://github.com/ddsjoberg),
+[@emilyvertosick](https://github.com/emilyvertosick),
+[@jennybc](https://github.com/jennybc),
+[@jflynn264](https://github.com/jflynn264),
 [@karissawhiting](https://github.com/karissawhiting),
 [@margarethannum](https://github.com/margarethannum),
 [@michaelcurry1123](https://github.com/michaelcurry1123), and

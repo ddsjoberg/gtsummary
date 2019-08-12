@@ -81,8 +81,10 @@ signal_soft_deprecated <- function(msg, id = msg, env = rlang::caller_env(2)) {
     rlang::is_reference(topenv(env), rlang::global_env())
   }
 
-  if (rlang::is_true(rlang::peek_option("lifecycle_verbose_soft_deprecation")) ||
-    env_inherits_global(env)) {
+  if (rlang::is_true(
+    rlang::peek_option("lifecycle_verbose_soft_deprecation")
+  ) ||
+  env_inherits_global(env)) {
     warn_deprecated(msg, id)
     return(invisible(NULL))
   }
@@ -91,8 +93,10 @@ signal_soft_deprecated <- function(msg, id = msg, env = rlang::caller_env(2)) {
   # testthat clones the namespace
   tested_package <- Sys.getenv("TESTTHAT_PKG")
   if (nzchar(tested_package) &&
-    identical(Sys.getenv("NOT_CRAN"), "true") &&
-    rlang::env_name(topenv(env)) == rlang::env_name(rlang::ns_env(tested_package))) {
+      identical(Sys.getenv("NOT_CRAN"), "true") &&
+      rlang::env_name(
+        topenv(env)) == rlang::env_name(rlang::ns_env(tested_package))
+  ) {
     warn_deprecated(msg, id)
     return(invisible(NULL))
   }
@@ -127,7 +131,8 @@ warn_deprecated <- function(msg, id = msg) {
   }
 
   if (!rlang::is_true(rlang::peek_option("lifecycle_repeat_warnings"))) {
-    msg <- paste0(msg, "\n", silver("This warning is displayed once per session."))
+    msg <- paste0(msg, "\n",
+                  silver("This warning is displayed once per session."))
   }
 
   .Signal(msg = msg)
@@ -218,28 +223,28 @@ lifecycle_img <- function(stage, url) {
 
   switch(stage,
 
-    experimental = ,
-    maturing = ,
-    stable = ,
-    questioning = ,
-    retired = ,
-    archived =
-      sprintf(
-        "\\out{<a href='%s'><img src='%s' alt='%s lifecycle'></a>}",
-        url,
-        file.path("figures", file),
-        stage_alt
-      ),
-    `soft-deprecated` = ,
-    deprecated = ,
-    defunct =
-      sprintf(
-        "\\figure{%s}{options: alt='%s lifecycle'}",
-        file,
-        stage_alt
-      ),
+         experimental = ,
+         maturing = ,
+         stable = ,
+         questioning = ,
+         retired = ,
+         archived =
+           sprintf(
+             "\\out{<a href='%s'><img src='%s' alt='%s lifecycle'></a>}",
+             url,
+             file.path("figures", file),
+             stage_alt
+           ),
+         `soft-deprecated` = ,
+         deprecated = ,
+         defunct =
+           sprintf(
+             "\\figure{%s}{options: alt='%s lifecycle'}",
+             file,
+             stage_alt
+           ),
 
-    rlang::abort(sprintf("Unknown lifecycle stage `%s`", stage))
+         rlang::abort(sprintf("Unknown lifecycle stage `%s`", stage))
   )
 }
 upcase1 <- function(x) {

@@ -33,11 +33,13 @@
 <meta property="og:title" content="Add number of events to a regression table — add_nevent.tbl_regression" />
 
 <meta property="og:description" content="This function adds a column of the number of events to tables created with
-tbl_regression or tbl_uvregression.  Supported
+tbl_regression.  Supported
 model types include GLMs with binomial distribution family (e.g.
 stats::glm, lme4::glmer, and
 geepack::geeglm) and Cox
 Proportion Hazards regression models (survival::coxph)." />
+
+<meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -68,7 +70,7 @@ Proportion Hazards regression models (survival::coxph)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -130,7 +132,7 @@ Proportion Hazards regression models (survival::coxph)." />
     <div class="ref-description">
     
     <p>This function adds a column of the number of events to tables created with
-<a href='tbl_regression.html'>tbl_regression</a> or <a href='tbl_uvregression.html'>tbl_uvregression</a>.  Supported
+<a href='tbl_regression.html'>tbl_regression</a>.  Supported
 model types include GLMs with binomial distribution family (e.g.
 <a href='https://www.rdocumentation.org/packages/stats/topics/glm'>stats::glm</a>, <a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>lme4::glmer</a>, and
 <a href='https://www.rdocumentation.org/packages/geepack/topics/geeglm'>geepack::geeglm</a>) and Cox
@@ -150,9 +152,13 @@ Proportion Hazards regression models (<a href='https://www.rdocumentation.org/pa
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>tbl_regression</code> object</p>
     
     <h2 class="hasAnchor" id="reporting-event-n"><a class="anchor" href="#reporting-event-n"></a>Reporting Event N</h2>
 
@@ -170,9 +176,11 @@ of events is accessible via the <a href='inline_text.html'>inline_text</a> funct
 
     <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a></code>,
+  <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
   <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
-  <code><a href='tab_style_bold_p.tbl_regression.html'>tab_style_bold_p.tbl_regression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code>,
   <code><a href='tbl_stack.html'>tbl_stack</a></code></p></div>
     
@@ -188,6 +196,8 @@ of events is accessible via the <a href='inline_text.html'>inline_text</a> funct
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#reporting-event-n">Reporting Event N</a></li>
 
       <li><a href="#example-output">Example Output</a></li>
@@ -204,7 +214,7 @@ of events is accessible via the <a href='inline_text.html'>inline_text</a> funct
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

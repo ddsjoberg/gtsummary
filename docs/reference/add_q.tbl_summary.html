@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a column of q values to account for
-multiple comparisons — add_q.tbl_summary • gtsummary</title>
+<title>Add a column of q-values to account for multiple comparisons — add_q.tbl_summary • gtsummary</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,11 +30,11 @@ multiple comparisons — add_q.tbl_summary • gtsummary</title>
 
 
 
-<meta property="og:title" content="Add a column of q values to account for
-multiple comparisons — add_q.tbl_summary" />
+<meta property="og:title" content="Add a column of q-values to account for multiple comparisons — add_q.tbl_summary" />
 
-<meta property="og:description" content="The adjustments to the p-values is performed with
-stats::p.adjust." />
+<meta property="og:description" content="Adjustments to are p-values are performed with stats::p.adjust." />
+
+<meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -66,7 +65,7 @@ stats::p.adjust." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -120,16 +119,14 @@ stats::p.adjust." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a column of q values to account for
-multiple comparisons</h1>
+    <h1>Add a column of q-values to account for multiple comparisons</h1>
     
     <div class="hidden name"><code>add_q.tbl_summary.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The adjustments to the p-values is performed with
-<a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a>.</p>
+    <p>Adjustments to are p-values are performed with <a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a>.</p>
     
     </div>
 
@@ -146,24 +143,28 @@ multiple comparisons</h1>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>character argument indicating method to be used for p-value
+      <td><p>String indicating method to be used for p-value
 adjustment. Methods from
 <a href='https://www.rdocumentation.org/packages/stats/topics/p.adjust'>stats::p.adjust</a> are accepted.  Default is <code>method = 'fdr'</code>.</p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
-      <td><p>function to round and format p-values.
-Default is <code><a href='style_pvalue.html'>style_pvalue</a></code>.
+      <td><p>Function to round and format p-values.
+Default is <a href='style_pvalue.html'>style_pvalue</a>.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+<code><a href='https://www.rdocumentation.org/packages/purrr/topics/partial'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to or from other methods</p></td>
+      <td><p>Additional arguments passed to or from other methods</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>tbl_summary</code> object</p>
     
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
@@ -176,18 +177,18 @@ and return a string that is the rounded/formatted p-value (e.g.
   <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
   <code><a href='add_stat_label.html'>add_stat_label</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='cols_label_summary.html'>cols_label_summary</a></code>,
+  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tab_style_bold_p.tbl_summary.html'>tab_style_bold_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_sum_q_ex</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"trt"</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/dplyr/topics/select'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_q.html'>add_q</a></span>()</div></pre>
   </div>
@@ -196,6 +197,8 @@ and return a string that is the rounded/formatted p-value (e.g.
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#example-output">Example Output</a></li>
 
       <li><a href="#see-also">See also</a></li>
@@ -210,7 +213,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

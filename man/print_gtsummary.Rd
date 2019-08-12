@@ -41,9 +41,9 @@
 \method{knit_print}{tbl_stack}(x, ...)
 }
 \arguments{
-\item{x}{an object created using gtsummary functions}
+\item{x}{An object created using gtsummary functions}
 
-\item{...}{not used}
+\item{...}{Not used}
 }
 \description{
 print and knit_print methods for gtsummary objects

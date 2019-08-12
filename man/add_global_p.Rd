@@ -9,7 +9,7 @@ add_global_p(x, ...)
 \arguments{
 \item{x}{\code{tbl_regression} or \code{tbl_uvregression} object}
 
-\item{...}{further arguments passed to or from other methods.}
+\item{...}{Further arguments passed to or from other methods.}
 }
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument

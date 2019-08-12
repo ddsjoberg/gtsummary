@@ -32,6 +32,9 @@
 
 <meta property="og:title" content="Function reference" />
 
+<meta property="og:image" content="https://github.com/ddsjoberg/gtsummary/logo.png" />
+<meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -60,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
       </span>
     </div>
 
@@ -167,14 +170,7 @@
         <td>
           <p><code><a href="add_q.tbl_summary.html">add_q(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Add a column of q values to account for
-multiple comparisons</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cols_label_summary.html">cols_label_summary()</a></code> </p>
-        </td>
-        <td><p>Relabel columns in summary table</p></td>
+        <td><p>Add a column of q-values to account for multiple comparisons</p></td>
       </tr><tr>
         
         <td>
@@ -230,8 +226,7 @@ multiple comparisons</p></td>
         <td>
           <p><code><a href="add_q.tbl_uvregression.html">add_q(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Add a column of q values to account for
-multiple comparisons</p></td>
+        <td><p>Add a column of q-values to account for multiple comparisons</p></td>
       </tr><tr>
         
         <td>
@@ -289,7 +284,19 @@ multiple comparisons</p></td>
         <td>
           <p><code><a href="as_gt.html">as_gt()</a></code> </p>
         </td>
-        <td><p>Convert to gt_tbl object</p></td>
+        <td><p>Convert gtsummary object to a gt_tbl object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="as_kable.html">as_kable()</a></code> </p>
+        </td>
+        <td><p>Convert to knitr_kable object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="modify_header.html">modify_header()</a></code> </p>
+        </td>
+        <td><p>Modify column headers in gtsummary tables</p></td>
       </tr><tr>
         
         <td>
@@ -317,15 +324,15 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="bold_italicize_labels_levels.html">tab_style_bold_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_bold_levels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_italicize_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">tab_style_italicize_levels()</a></code> </p>
+          <p><code><a href="bold_italicize_labels_levels.html">bold_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">bold_levels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_levels()</a></code> </p>
         </td>
         <td><p>Bold or Italicize labels or levels in gtsummary tables</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_summary.html">tab_style_bold_p(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
+          <p><code><a href="bold_p.tbl_summary.html">bold_p(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Bold significant p-values</p></td>
+        <td><p>Bold significant p-values or q-values</p></td>
       </tr><tr>
         
         <td>
@@ -335,9 +342,9 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_regression.html">tab_style_bold_p(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
+          <p><code><a href="bold_p.tbl_regression.html">bold_p(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Bold significant p-values</p></td>
+        <td><p>Bold significant p-values or q-values</p></td>
       </tr><tr>
         
         <td>
@@ -347,15 +354,35 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.tbl_uvregression.html">tab_style_bold_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
+          <p><code><a href="bold_p.tbl_uvregression.html">bold_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Bold significant p-values</p></td>
+        <td><p>Bold significant p-values or q-values</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="sort_p.tbl_uvregression.html">sort_p(<i>&lt;tbl_uvregression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Sort variables in table by ascending p-values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="bold_p.tbl_stack.html">bold_p(<i>&lt;tbl_stack&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Bold significant p-values or q-values</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-select-helpers" class="hasAnchor"><a href="#section-select-helpers" class="anchor"></a>Select Helpers</h2>
+          <p class="section-desc"><p>Functions to select groups of variables</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="select_helpers.html">all_numeric()</a></code> <code><a href="select_helpers.html">all_character()</a></code> <code><a href="select_helpers.html">all_integer()</a></code> <code><a href="select_helpers.html">all_double()</a></code> <code><a href="select_helpers.html">all_logical()</a></code> <code><a href="select_helpers.html">all_factor()</a></code> <code><a href="select_helpers.html">all_continuous()</a></code> <code><a href="select_helpers.html">all_categorical()</a></code> <code><a href="select_helpers.html">all_dichotomous()</a></code> </p>
+        </td>
+        <td><p>Select helper functions</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -376,18 +403,6 @@ multiple comparisons</p></td>
           <p><code><a href="print_gtsummary.html">print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_stack&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_stack&gt;</i>)</a></code> </p>
         </td>
         <td><p>print and knit_print methods for gtsummary objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="knit_print.html">knit_print</a></code> </p>
-        </td>
-        <td><p>A custom printing function</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pipe.html">%>%</a></code> </p>
-        </td>
-        <td><p>magrittr forward-pipe operator</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -438,9 +453,9 @@ multiple comparisons</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tab_style_bold_p.html">tab_style_bold_p()</a></code> </p>
+          <p><code><a href="bold_p.html">bold_p()</a></code> </p>
         </td>
-        <td><p>Bold significant p-values</p></td>
+        <td><p>Bold significant p-values or q-values</p></td>
       </tr><tr>
         
         <td>
@@ -452,7 +467,7 @@ multiple comparisons</p></td>
         <td>
           <p><code><a href="tbl_survival.html">tbl_survival()</a></code> </p>
         </td>
-        <td><p>Creates table of univariate statistics for time-to-event endpoints</p></td>
+        <td><p>Creates table of univariate summary statistics for time-to-event endpoints</p></td>
       </tr>
     </tbody>
     </table>
@@ -465,6 +480,7 @@ multiple comparisons</p></td>
       <li><a href="#section-regression-model-functions">Regression Model Functions</a></li>
       <li><a href="#section-inline-reporting">Inline Reporting</a></li>
       <li><a href="#section-general-formatting-styling-functions">General Formatting/Styling Functions</a></li>
+      <li><a href="#section-select-helpers">Select Helpers</a></li>
       <li><a href="#section-misc-functions">Misc. Functions</a></li>
       <li><a href="#section-example-datasets">Example Datasets</a></li>
       <li><a href="#section-s-generics">S3 Generics</a></li>
@@ -474,7 +490,7 @@ multiple comparisons</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Daniel D. Sjoberg, Emily C. Zabor, Margie Hannum, Karissa Whiting.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
