@@ -1,12 +1,13 @@
 #' Add statistic labels column
 #'
 #' Adds a column with labels describing the summary statistics presented for
-#' each variable in the table.
+#' each variable in the [tbl_summary] table.
 #'
-#' @param x object with class `tbl_summary` from the [tbl_summary] function
+#' @param x Object with class `tbl_summary` from the [tbl_summary] function
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_summary` object
 #' @examples
 #' tbl_stat_ex <-
 #'   trial %>%
@@ -43,15 +44,23 @@ add_stat_label <- function(x) {
       )
     )
 
-  # keeping track of all functions previously run
-  x$call_list <- c(x$call_list, list(add_stat_label = match.call()))
+  x$table_header <-
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
 
-  # column headers
-  x[["gt_calls"]][["cols_label:stat_label"]] <-
-    glue("cols_label(stat_label = md('**Statistic**'))")
+  # updating header
+  x <- modify_header_internal(x, stat_label = "**Statistic**")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   # removing previous footnote about which statistics are presented
   x[["gt_calls"]][["footnote_stat_label"]] <- NULL
+
+  # keeping track of all functions previously run
+  x$call_list <- c(x$call_list, list(add_stat_label = match.call()))
+
 
   return(x)
 }

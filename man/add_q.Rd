@@ -10,7 +10,7 @@ add_q(x, ...)
 \arguments{
 \item{x}{\code{tbl_summary} or \code{tbl_uvregression} object}
 
-\item{...}{further arguments passed to or from other methods.}
+\item{...}{Additional arguments passed to other methods.}
 }
 \description{
 Add a column of q values to account for

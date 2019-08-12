@@ -2,8 +2,7 @@
 % Please edit documentation in R/add_q.R
 \name{add_q.tbl_summary}
 \alias{add_q.tbl_summary}
-\title{Add a column of q values to account for
-multiple comparisons}
+\title{Add a column of q-values to account for multiple comparisons}
 \usage{
 \method{add_q}{tbl_summary}(x, method = "fdr",
   pvalue_fun = x$pvalue_fun, ...)
@@ -11,22 +10,24 @@ multiple comparisons}
 \arguments{
 \item{x}{\code{tbl_summary} object}
 
-\item{method}{character argument indicating method to be used for p-value
+\item{method}{String indicating method to be used for p-value
 adjustment. Methods from
 \link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = 'fdr'}.}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{...}{further arguments passed to or from other methods}
+\item{...}{Additional arguments passed to or from other methods}
+}
+\value{
+A \code{tbl_summary} object
 }
 \description{
-The adjustments to the p-values is performed with
-\link[stats:p.adjust]{stats::p.adjust}.
+Adjustments to are p-values are performed with \link[stats:p.adjust]{stats::p.adjust}.
 }
 \section{Example Output}{
 
@@ -37,7 +38,7 @@ The adjustments to the p-values is performed with
 tbl_sum_q_ex <-
   trial \%>\%
   dplyr::select(trt, age, grade, response) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   add_q()
 }
@@ -46,10 +47,10 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}}, \code{\link{add_p}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

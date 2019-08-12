@@ -4,9 +4,9 @@ context("test-inline_text")
 # inline_text.tbl_summary tests --------------
 
 test_inline1 <- trial %>% tbl_summary()
-test_inline2 <- trial %>% tbl_summary(by = "trt")
+test_inline2 <- trial %>% tbl_summary(by = trt)
 test_inline2b <- trial %>%
-  tbl_summary(by = "trt") %>%
+  tbl_summary(by = trt) %>%
   add_p()
 
 test_that("inline_text.tbl_summary: no by", {

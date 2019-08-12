@@ -6,53 +6,54 @@
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
-  hide_n = FALSE, show_yesno = NULL, conf.level = 0.95,
-  estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-  pvalue_fun = style_pvalue)
+  hide_n = FALSE, show_yesno = NULL, conf.level = NULL,
+  estimate_fun = NULL, pvalue_fun = NULL)
 }
 \arguments{
-\item{data}{data frame to be used in univariate regression modeling.  Data
+\item{data}{Data frame to be used in univariate regression modeling.  Data
 frame includes the outcome variable(s) and the independent variables.}
 
-\item{method}{regression method (e.g. \code{\link[stats]{lm}},
-\code{\link[stats]{glm}}, \code{\link[survival]{coxph}}, and more).}
+\item{method}{Regression method (e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph}, and more).}
 
-\item{y}{model outcome as a string (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
+\item{y}{Model outcome (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
 
-\item{method.args}{list of additional arguments passed on to the regression
+\item{method.args}{List of additional arguments passed on to the regression
 function defined by \code{method}.}
 
-\item{formula}{string that becomes the model formula.
-Uses \code{\link[glue]{glue}} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
+\item{formula}{String of the model formula.
+Uses \link[glue:glue]{glue::glue} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
 is the dependent variable, and \code{{x}} represents a single covariate. For a
-random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
+random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
-\item{exponentiate}{logical indicating whether or not to exponentiate the
+\item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{label}{list of formulas specifying variables labels,
+\item{label}{List of formulas specifying variables labels,
 e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
-\item{hide_n}{hide N column. Default is \code{FALSE}}
+\item{hide_n}{Hide N column. Default is \code{FALSE}}
 
 \item{show_yesno}{By default yes/no categorical variables are printed on a
 single row, when the 'No' category is the reference group.  To print both
 levels in the output table, include the variable name in the show_yesno
 vector, e.g. `show_yesno = c("var1", "var2")``}
 
-\item{conf.level}{must be strictly greater than 0 and less than 1.
+\item{conf.level}{Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.
+\item{estimate_fun}{Function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
+}
+\value{
+A \code{tbl_uvregression} object
 }
 \description{
 The \code{tbl_uvregression} function arguments are similar to the \link{tbl_regression}
@@ -60,6 +61,20 @@ arguments. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 for detailed examples.
 }
+\section{Setting Defaults}{
+
+If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set. Please note the default option for the estimate is the same
+as it is for \code{tbl_regression()}.
+\itemize{
+\item \code{options(gtsummary.pvalue_fun = new_function)}
+\item \code{options(gtsummary.tbl_regression.estimate_fun = new_function)}
+\item \code{options(gtsummary.conf.level = 0.90)}
+}
+}
+
 \section{Note}{
 
 The N reported in the \code{tbl_uvregression()} output is the number of observations
@@ -115,9 +130,11 @@ Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_stack}},
+  \code{\link{bold_p.tbl_uvregression}},
   \code{\link{inline_text.tbl_uvregression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_stack}}
 }
 \author{

@@ -1,8 +1,8 @@
 #' Report statistics from gtsummary tables inline
 #'
-#'
-#' @param x object created from a gtsummary function
-#' @param ... further arguments passed to or from other methods.
+#' @param x Object created from a gtsummary function
+#' @param ... Additional arguments passed to other methods.
+#' @return A string reporting results from a gtsummary table
 #' @author Daniel D. Sjoberg
 #' @seealso [inline_text.tbl_summary], [inline_text.tbl_regression],
 #' [inline_text.tbl_uvregression], [inline_text.tbl_survival]
@@ -17,20 +17,21 @@ inline_text <- function(x, ...) {
 #' inline reporting in an R markdown document. Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text}{tbl_summary vignette}
 #'
-#' @param x object created from  [tbl_summary]
-#' @param variable variable name of statistic to present
-#' @param level level of the variable to display for categorical variables.
+#' @param x Object created from  [tbl_summary]
+#' @param variable Variable name of statistic to present
+#' @param level Level of the variable to display for categorical variables.
 #' Can also specify the 'Unknown' row.  Default is `NULL`
-#' @param column column name to return from `x$table_body`.
+#' @param column Column name to return from `x$table_body`.
 #' Can also pass the level of a by variable.
 #' @inheritParams tbl_regression
-#' @param ... not used
+#' @param ... Not used
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A string reporting results from a gtsummary table
 #' @examples
 #' t1 <- tbl_summary(trial)
-#' t2 <- tbl_summary(trial, by = "trt") %>% add_p()
+#' t2 <- tbl_summary(trial, by = trt) %>% add_p()
 #'
 #' inline_text(t1, variable = "age")
 #' inline_text(t2, variable = "grade", level = "I", column = "Drug")
@@ -117,18 +118,19 @@ inline_text.tbl_summary <-
 #' Report statistics from regression summary tables inline
 #'
 #' Takes an object with class `tbl_regression`, and the
-#' location of the statistic to report and returns the statistic for reporting
+#' location of the statistic to report and returns statistics for reporting
 #' inline in an R markdown document.  Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
 #'
-#' @param x object created from  [tbl_regression]
-#' @param variable variable name of statistic to present
-#' @param level level of the variable to display for categorical variables.
+#' @param x Object created from  [tbl_regression]
+#' @param variable Variable name of statistics to present
+#' @param level Level of the variable to display for categorical variables.
 #' Default is `NULL`, returning the top row in the table for the variable.
-#' @param pattern statistics to return.  Uses [glue::glue] formatting.
-#' Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.  All columns from
-#' `x$table_body` are available to print as well as the confidence level (conf.level).
-#' Uses [glue::glue] formatting. See below for details.
+#' @param pattern String indicating the statistics to return.
+#' Uses [glue::glue] formatting.
+#' Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.
+#' All columns from `x$table_body` are available to print as well as the
+#' confidence level (conf.level). See below for details.
 #' @param estimate_fun function to style model coefficient estimates.
 #' Columns 'estimate', 'conf.low', and 'conf.high' are formatted.
 #' Default is `x$inputs$estimate_fun`
@@ -147,10 +149,11 @@ inline_text.tbl_summary <-
 #'   \item `{N}` number of observations in model
 #'   \item `{label}` variable/variable level label
 #' }
-#' @param ... not used
+#' @param ... Not used
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @export
+#' @return A string reporting results from a gtsummary table
 #' @examples
 #' inline_text_ex1 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
@@ -232,9 +235,11 @@ inline_text.tbl_regression <-
 #' Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
 #'
+#' @param x Object created from [tbl_uvregression]
 #' @inherit inline_text.tbl_regression
 #' @family tbl_uvregression tools
 #' @export
+#' @return A string reporting results from a gtsummary table
 #' @examples
 #' inline_text_ex1 <-
 #'   trial %>%
@@ -253,29 +258,30 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 
 #' Report statistics from survival summary tables inline
 #'
-# 'Extracts and returns statistics from a table created by the `tbl_survival`
+# 'Extracts and returns statistics from a table created by [tbl_survival]
 #' for inline reporting in an R markdown document.
-
 #'
-#' @param x object created from  [tbl_survival]
-#' @param strata if `tbl_survival` estimates are stratified, level of the stratum
+#' @param x Object created from  [tbl_survival]
+#' @param strata If `tbl_survival` estimates are stratified, level of the stratum
 #' to report. Default is `NULL` when `tbl_survival` have no specified strata.
-#' @param time time for which to return survival probability
-#' @param prob probability for which to return survival time
-#' @param pattern statistics to return.  Uses [glue::glue] formatting.
+#' @param time Time for which to return survival probability
+#' @param prob Probability for which to return survival time.  For median
+#' survival use `prob = 0.50`
+#' @param pattern String indicating the statistics to return.  Uses
+#' [glue::glue] formatting.
 #' Default is \code{'{estimate} ({conf.level*100}\% {ci})'}.  All columns from
-#' `x$table_long` are available to print as well as the confidence level (conf.level).
-#' Uses [glue::glue] formatting. See below for details.
-#' @param estimate_fun function to round/style estimate and lower/upper confidence
-#' interval estimates.  Notably, this does not style the 'ci' column, which is
-#' pre-styled in 'x'. Default is x$estimate_fun
-#' @param ... not used
+#' `x$table_long` are available to print as well as the
+#' confidence level (conf.level). See below for details.
+#' @param estimate_fun function to round/style estimate and lower/upper
+#' confidence interval estimates.  Note, this does not style the 'ci' column,
+#' which is a string. Default is x$estimate_fun
+#' @param ... Not used
 #'
 #' @section pattern argument:
 #' The following items are available to print.  Use `print(x$table_long)` to
 #' print the table the estimates are extracted from.
 #' \itemize{
-#'   \item `{label}` time or prob label
+#'   \item `{label}` 'time' or 'prob' label
 #'   \item `{estimate}` survival or survival time estimate formatted with 'estimate_fun'
 #'   \item `{conf.low}` lower limit of confidence interval formatted with 'estimate_fun'
 #'   \item `{conf.high}` upper limit of confidence interval formatted with 'estimate_fun'
@@ -290,6 +296,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' }
 #' @author Karissa Whiting
 #' @family tbl_survival tools
+#' @return A string reporting results from a gtsummary table
 #' @export
 #' @examples
 #' library(survival)
@@ -366,7 +373,8 @@ inline_text.tbl_survival <-
     # select time --------------------------------------------------------------
     # when specified timpoint is not in tbl_survival,
     # return result for closest time and give warning
-    display_fixed <- result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
+    display_fixed <-
+      result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
     if (!fixed_val %in% result$fixed_var) {
       message(glue(
         "Specified 'time' or 'prob' not in 'x': '{fixed_val}'. ",

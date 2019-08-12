@@ -9,10 +9,11 @@ style_percent(x, symbol = FALSE)
 \arguments{
 \item{x}{numeric vector of percentages}
 
-\item{symbol}{logical indicator to include percent symbol in output.  Default is FALSE.}
+\item{symbol}{Logical indicator to include percent symbol in output.
+Default is \code{FALSE}.}
 }
 \value{
-Formatted percentages
+A character vector of styled percentages
 }
 \description{
 Style percentages to be displayed in tables or text
