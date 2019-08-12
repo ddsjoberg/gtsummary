@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9004</span>
       </span>
     </div>
 
@@ -105,13 +105,13 @@
 <h2 class="hasAnchor">
 <a href="#gtsummary" class="anchor"></a>gtsummary <a href="https://github.com/ddsjoberg/gtsummary"><img src="reference/figures/logo.png" align="right" height="120"></a>
 </h2>
-<p>The {gtsummary} package creates presentation-ready tables summarizing data sets, regression models, and more. The code to create the tables is concise and highly customizable. The resulting tables are gorgeous! Data frames can be summarized with any function, e.g. mean(), median(), even user-written functions. Regression models are summarized and include the reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The package uses <a href="https://broom.tidyverse.org/">{broom}</a> to perform initial tidying of the regression models, which means there is broad support for many types of regression models.</p>
+<p>The {gtsummary} package provides an elegant and flexible way to create publication-ready and reproducible analytical tables. The tables summarize data sets, regression models, and more. The code is concise and the tables are highly customizable. Data frames can be summarized with any function, e.g. mean(), median(), even user-written functions. Regression models are summarized and include the reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The package uses <a href="https://broom.tidyverse.org/">{broom}</a> to perform initial tidying of the regression models, which means there is broad support for many types of regression models.</p>
 <p>{gtsummary} uses the <a href="https://gt.rstudio.com/">{gt}</a> package enabling each table to be tailored to your preferences. If you label your data (which I recommend!), the labels will be used in the table output. With {gtsummary} and <a href="http://larmarange.github.io/labelled/">{labelled}</a> data, you get beautifully formatted, ready-to-share tables in a single line of code! Check out the examples below, and review the vignettes for a detailed exploration of the output options.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The {gtsummary} package was written as a companion to the {gt} package from RStudio, and it is recommended to install both {gt} and {gtsummary}. If {gt} is not installed, <code><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">knitr::kable()</a></code> will be used to produce the summary tables. You can install {gtsummary} and {gt} with the following code.</p>
+<p>The {gtsummary} package was written as a companion to the {gt} package from RStudio, and it is recommended to install both {gt} and {gtsummary}. The {gt} package is not automatically installed. If {gt} is not installed, <code><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">knitr::kable()</a></code> will be used to produce the summary tables. You can install {gtsummary} and {gt} with the following code.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"rstudio/gt"</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</a></code></pre></div>

@@ -68,7 +68,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9004</span>
       </span>
     </div>
 
@@ -158,8 +158,8 @@ are calculated using all observations.</p></td>
     <tr>
       <th>label</th>
       <td><p>List of formulas specifying variables labels,
-e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")</a></code>.  If a
-variable's label is not specifed here, the
+e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(vars(age) ~ "Age, yrs", vars(ptstage) ~ "Path T Stage")</a></code>.  If a
+variable's label is not specified here, the
 function will take the label attribute (<code><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr(data$age, "label")</a></code>).  If
 attribute label is <code>NULL</code>, the variable name will be used.</p></td>
     </tr>
@@ -195,9 +195,8 @@ variables.  See below for details.</p></td>
     </tr>
     <tr>
       <th>group</th>
-      <td><p>Column name of an ID or grouping variable for which summary
-statistics should not be printed. The column may be used in <a href='add_p.html'>add_p</a> to
-calculate p-values with correlated data. Default is <code>NULL</code></p></td>
+      <td><p>DEPRECATED. Previously required to work with the 'group'
+argument in <a href='add_p.html'>add_p</a>. No longer required.</p></td>
     </tr>
     <tr>
       <th>missing</th>

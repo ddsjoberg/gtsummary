@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9004</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>group</span>,
+    <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -150,9 +150,9 @@ Options include</p><ul>
 <li><p><code>"kruskal.test"</code> for a Kruskal-Wallis rank-sum test,</p></li>
 <li><p><code>"chisq.test"</code> for a Chi-squared test of independence,</p></li>
 <li><p><code>"fisher.test"</code> for a Fisher's exact test,</p></li>
-<li><p><code>"lme4"</code> for a random intercept model to account for clustered data.
-The <code>by</code> argument must be binary for this option, and <code>"group"</code> must be
-specified in the <a href='tbl_summary.html'>tbl_summary</a> call.</p></li>
+<li><p><code>"lme4"</code> for a random intercept logistic regression model to account for
+clustered data, <code><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>lme4::glmer(by ~ variable + (1 | group), family = binomial)</a></code>.
+The <code>by</code> argument must be binary for this option.</p></li>
 </ul>
 
 <p>Tests default to <code>"kruskal.test"</code> for continuous variables, <code>"chisq.test"</code> for
@@ -172,9 +172,10 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     <tr>
       <th>group</th>
-      <td><p>Column name of an ID or grouping variable for which summary
-statistics should not be printed. The column may be used in add_p to
-calculate p-values with correlated data. Default is <code>NULL</code></p></td>
+      <td><p>Column name of an ID or grouping variable. The column can be
+used calculate p-values with correlated data (e.g. when the test argument
+is <code>"lme4"</code>). Default is <code>NULL</code>.  If specified,
+the row associated with this variable is omitted from the summary table.</p></td>
     </tr>
     <tr>
       <th>include</th>
