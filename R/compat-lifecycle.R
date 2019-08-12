@@ -115,7 +115,7 @@ warn_deprecated <- function(msg, id = msg) {
   }
 
   if (!rlang::is_true(rlang::peek_option("lifecycle_repeat_warnings")) &&
-    rlang::env_has(deprecation_env, id)) {
+      rlang::env_has(deprecation_env, id)) {
     return(invisible(NULL))
   }
 
