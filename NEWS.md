@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `group = ` argument in `tbl_summary()` has been moved to `add_p()` (#208)
+
 * Users can now write custom functions to calculate p-values in `add_p()` (#194)
 
 * In `tbl_summary()` the `by = ` argument accepts a bare variable name instead of the variable name passed as a string (#193)
