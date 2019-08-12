@@ -18,8 +18,8 @@ variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
 are calculated using all observations.}
 
 \item{label}{List of formulas specifying variables labels,
-e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}.  If a
-variable's label is not specifed here, the
+e.g. \code{list(vars(age) ~ "Age, yrs", vars(ptstage) ~ "Path T Stage")}.  If a
+variable's label is not specified here, the
 function will take the label attribute (\code{attr(data$age, "label")}).  If
 attribute label is \code{NULL}, the variable name will be used.}
 
@@ -45,9 +45,8 @@ will default to an appropriate summary type.  See below for details.}
 \item{value}{List of formulas specifying the value to display for dichotomous
 variables.  See below for details.}
 
-\item{group}{Column name of an ID or grouping variable for which summary
-statistics should not be printed. The column may be used in \link{add_p} to
-calculate p-values with correlated data. Default is \code{NULL}}
+\item{group}{DEPRECATED. Previously required to work with the 'group'
+argument in \link{add_p}. No longer required.}
 
 \item{missing}{Indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),

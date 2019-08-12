@@ -3,7 +3,8 @@
 #' These functions calculate pvalues for various tests.
 #'
 #' @param data input data set
-#' @param variable categorical or continuous variable for which a test with \code{by_var} is desired
+#' @param variable categorical or continuous variable for which a
+#' test with \code{by_var} is desired
 #' @param by categorical variable
 #' @param group the group variable for clustered data
 #' @keywords internal
@@ -13,21 +14,21 @@
 add_p_test <- function(data, ...) UseMethod("add_p_test")
 
 add_p_test.t.test <- function(data, variable, by, ...) {
-  stats::t.test(data[[variable]] ~ data[[by]])$p.value
+  stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
 }
 
 add_p_test.kruskal.test <- function(data, variable, by, ...) {
-  stats::kruskal.test(data[[variable]], data[[by]])$p.value
+  stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
 }
 
 add_p_test.wilcox.test <- add_p_test.kruskal.test
 
 add_p_test.chisq.test <- function(data, variable, by, ...) {
-  stats::chisq.test(data[[variable]], data[[by]])$p.value
+  stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
 }
 
 add_p_test.fisher.test <- function(data, variable, by, ...) {
-  stats::fisher.test(data[[variable]], data[[by]])$p.value
+  stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
 }
 
 add_p_test.lme4 <- function(data, variable, by, group, type, ...) {

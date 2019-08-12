@@ -21,6 +21,27 @@
 #'   tbl_summary(by = trt) %>%
 #'   as_kable()
 as_kable <- function(x, include = NULL, exclude = NULL, ...) {
+  # print message about kable limitations
+  # printing message about downloading gt package
+  if (is.null(getOption("gtsummary.print_engine"))) {
+    warn_deprecated(glue(
+      "Results will be printed using 'knitr::kable()' and do not \n",
+      "support footers or spanning headers. \n",
+      "For tables styled by the gt package, use the installation code below.\n",
+      "'remotes::install_github(\"rstudio/gt\")'\n\n",
+      "If you prefer to always use 'knitr::kable()', add the option\n",
+      "'options(gtsummary.print_engine = \"kable\")' to your script\n",
+      "or in a user- or project-level startup file, '.Rprofile'."
+    ))
+  } else {
+    warn_deprecated(glue(
+    "Results printed using 'knitr::kable()' do not support footers \n",
+    "or spanning headers. \n",
+    "Tables styled by the gt package support footers and spanning headers."
+  ))
+}
+
+
   # making list of commands to include -----------------------------------------
   if (is.null(include)) include <- names(x$kable_calls)
   # this ensures list is in the same order as names(x$kable_calls)
