@@ -4,7 +4,7 @@
 \alias{add_p}
 \title{Adds p-values to summary tables}
 \usage{
-add_p(x, test = NULL, pvalue_fun = NULL, group = x$inputs$group,
+add_p(x, test = NULL, pvalue_fun = NULL, group = NULL,
   include = NULL, exclude = NULL)
 }
 \arguments{
@@ -19,9 +19,9 @@ Options include
 \item \code{"kruskal.test"} for a Kruskal-Wallis rank-sum test,
 \item \code{"chisq.test"} for a Chi-squared test of independence,
 \item \code{"fisher.test"} for a Fisher's exact test,
-\item \code{"lme4"} for a random intercept model to account for clustered data.
-The \code{by} argument must be binary for this option, and \code{"group"} must be
-specified in the \link{tbl_summary} call.
+\item \code{"lme4"} for a random intercept logistic regression model to account for
+clustered data, \code{lme4::glmer(by ~ variable + (1 | group), family = binomial)}.
+The \code{by} argument must be binary for this option.
 }
 
 Tests default to \code{"kruskal.test"} for continuous variables, \code{"chisq.test"} for
@@ -37,9 +37,10 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{Column name of an ID or grouping variable for which summary
-statistics should not be printed. The column may be used in \link{add_p} to
-calculate p-values with correlated data. Default is \code{NULL}}
+\item{group}{Column name of an ID or grouping variable. The column can be
+used calculate p-values with correlated data (e.g. when the test argument
+is \code{"lme4"}). Default is \code{NULL}.  If specified,
+the row associated with this variable is omitted from the summary table.}
 
 \item{include}{Names of variables to include in output.}
 

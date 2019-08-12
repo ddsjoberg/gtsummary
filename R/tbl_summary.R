@@ -11,8 +11,8 @@
 #' variable (e.g. `by = trt`). If `NULL`, summary statistics
 #' are calculated using all observations.
 #' @param label List of formulas specifying variables labels,
-#' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`.  If a
-#' variable's label is not specifed here, the
+#' e.g. `list(vars(age) ~ "Age, yrs", vars(ptstage) ~ "Path T Stage")`.  If a
+#' variable's label is not specified here, the
 #' function will take the label attribute (`attr(data$age, "label")`).  If
 #' attribute label is `NULL`, the variable name will be used.
 #' @param type List of formulas specifying variable types. Accepted values
@@ -33,9 +33,6 @@
 #' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list("age" ~ c(1, 2))`.
-#' @param group Column name of an ID or grouping variable for which summary
-#' statistics should not be printed. The column may be used in [add_p] to
-#' calculate p-values with correlated data. Default is `NULL`
 #' @param missing Indicates whether to include counts of `NA` values in the table.
 #' Allowed values are `"no"` (never display NA values),
 #' `"ifany"` (only display if any NA values), and `"always"`
@@ -48,6 +45,8 @@
 #' e.g. `sort = list(everything() ~ "frequency")`
 #' @param percent Indicates the type of percentage to return. Must be one of
 #' `"column"`, `"row"`, or `"cell"`. Default is `"column"`.
+#' @param group DEPRECATED. Previously required to work with the 'group'
+#' argument in [add_p]. No longer required.
 #'
 #' @section select helpers:
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
@@ -145,6 +144,15 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # converting bare arguments to string -----------------------------------------------
   by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
+
+  # deprecation note about group
+  if (!rlang::quo_is_null(rlang::enquo(group))) {
+    stop_defunct(glue(
+      "Passing the 'group' argument in 'tbl_summary()' is defunct.\n",
+      "Please pass the column in 'add_p()'. For example,\n\n",
+      "tbl_summary() %>% add_p(group = varname)"
+    ))
+  }
   group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
 
   # will return call, and all object passed to in tbl_summary call

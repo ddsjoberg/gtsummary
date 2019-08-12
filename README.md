@@ -15,18 +15,19 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 
 ## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
 
-The {gtsummary} package creates presentation-ready tables summarizing
-data sets, regression models, and more. The code to create the tables is
-concise and highly customizable. The resulting tables are gorgeous\!
-Data frames can be summarized with any function, e.g. mean(), median(),
-even user-written functions. Regression models are summarized and
-include the reference rows for categorical variables. Common regression
-models, such as logistic regression and Cox proportional hazards
-regression, are automatically identified and the tables are pre-filled
-with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The
-package uses [{broom}](https://broom.tidyverse.org/) to perform initial
-tidying of the regression models, which means there is broad support for
-many types of regression models.
+The {gtsummary} package provides an elegant and flexible way to create
+publication-ready and reproducible analytical tables. The tables
+summarize data sets, regression models, and more. The code is concise
+and the tables are highly customizable. Data frames can be summarized
+with any function, e.g. mean(), median(), even user-written functions.
+Regression models are summarized and include the reference rows for
+categorical variables. Common regression models, such as logistic
+regression and Cox proportional hazards regression, are automatically
+identified and the tables are pre-filled with appropriate column headers
+(i.e. Odds Ratio, and Hazard Ratio). The package uses
+[{broom}](https://broom.tidyverse.org/) to perform initial tidying of
+the regression models, which means there is broad support for many types
+of regression models.
 
 {gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
 each table to be tailored to your preferences. If you label your data
@@ -40,9 +41,9 @@ for a detailed exploration of the output options.
 
 The {gtsummary} package was written as a companion to the {gt} package
 from RStudio, and it is recommended to install both {gt} and
-{gtsummary}. If {gt} is not installed, `knitr::kable()` will be used to
-produce the summary tables. You can install {gtsummary} and {gt} with
-the following code.
+{gtsummary}. The {gt} package is not automatically installed. If {gt} is
+not installed, `knitr::kable()` will be used to produce the summary
+tables. You can install {gtsummary} and {gt} with the following code.
 
 ``` r
 install.packages("remotes")
@@ -127,5 +128,6 @@ contributors\!
 [@jflynn264](https://github.com/jflynn264),
 [@karissawhiting](https://github.com/karissawhiting),
 [@margarethannum](https://github.com/margarethannum),
-[@michaelcurry1123](https://github.com/michaelcurry1123), and
-[@sammo3182](https://github.com/sammo3182)
+[@michaelcurry1123](https://github.com/michaelcurry1123),
+[@sammo3182](https://github.com/sammo3182), and
+[@zabore](https://github.com/zabore)
