@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.2.0
 
 * The `group = ` argument in `tbl_summary()` has been moved to `add_p()` (#208)
 
