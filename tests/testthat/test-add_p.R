@@ -24,3 +24,12 @@ test_that("add_p creates errors when non-function in input", {
     "*"
   )
 })
+
+
+test_that("add_p creates errors named list passed for test", {
+  expect_error(
+    tbl_summary(mtcars, by = am) %>%
+      add_p(test = list(cyl = "t.test")),
+    "*"
+  )
+})

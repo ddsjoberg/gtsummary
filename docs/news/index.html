@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -121,6 +121,32 @@
       
     </div>
 
+    <div id="gtsummary-120" class="section level1">
+<h1 class="page-header">
+<a href="#gtsummary-120" class="anchor"></a>gtsummary 1.2.0<small> Unreleased </small>
+</h1>
+<ul>
+<li><p>The <code>group =</code> argument in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> has been moved to <code><a href="../reference/add_p.html">add_p()</a></code> (#208)</p></li>
+<li><p>Users can now write custom functions to calculate p-values in <code><a href="../reference/add_p.html">add_p()</a></code> (#194)</p></li>
+<li><p>In <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> the <code>by =</code> argument accepts a bare variable name instead of the variable name passed as a string (#193)</p></li>
+<li><p>Added support for column, row, and cell percentages in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> (#181)</p></li>
+<li><p>Users can now set default p-value formatting functions, regression coefficient formatting functions, default level for confidence intervals, and formatting functions in <code><a href="../reference/tbl_survival.html">tbl_survival()</a></code> (#120)</p></li>
+<li><p>The {gt} package is no longer a required dependency. If {gt} is not installed, tables will be printed with <code><a href="https://www.rdocumentation.org/packages/knitr/topics/kable">knitr::kable()</a></code>. The <code><a href="../reference/as_kable.html">as_kable()</a></code> function was added to the package as well. (#180)</p></li>
+<li><p>The function <code><a href="../reference/as_gt.html">as_gt()</a></code> now has <code>include =</code> and <code>exclude =</code> arguments</p></li>
+<li><p>Updated some function names to be the same as they were in the first version</p></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">    <span class="kw"><a href="../reference/bold_p.html">bold_p</a></span>()            &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_p</a></span>()  </a>
+<a class="sourceLine" id="cb1-2" title="2">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span>()       &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_labels</a></span>()  </a>
+<a class="sourceLine" id="cb1-3" title="3">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span>()       &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_levels</a></span>()  </a>
+<a class="sourceLine" id="cb1-4" title="4">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span>()  </a>
+<a class="sourceLine" id="cb1-5" title="5">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span>()  </a></code></pre></div>
+<ul>
+<li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is not defunct.</p></li>
+<li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (#175)</p></li>
+<li><p>Option to exclude some variables from testing when using <code><a href="../reference/add_p.html">add_p()</a></code> (#164)</p></li>
+<li><p>Updates after {gt} package renamed <code>cells_style()</code> to <code>cell_text()</code> (#78)</p></li>
+</ul>
+</div>
     <div id="gtsummary-111" class="section level1">
 <h1 class="page-header">
 <a href="#gtsummary-111" class="anchor"></a>gtsummary 1.1.1<small> Unreleased </small>
@@ -183,6 +209,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#gtsummary-120">1.2.0</a></li>
         <li><a href="#gtsummary-111">1.1.1</a></li>
         <li><a href="#gtsummary-110">1.1.0</a></li>
         <li><a href="#gtsummary-100">1.0.0</a></li>

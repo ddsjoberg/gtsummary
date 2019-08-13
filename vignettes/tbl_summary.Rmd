@@ -50,7 +50,7 @@ library(dplyr)
 
 ```{r, eval=FALSE}
 remotes::install_github("rstudio/gt")
-remotes::install_github("ddsjoberg/gtsummary")
+install.packages("gtsummary")
 
 library(gtsummary)
 library(dplyr)
@@ -73,7 +73,7 @@ We'll be using the `trial` data set throughout this example.  This set contains 
 
 ```{r, message=FALSE}
 # printing trial data
-head(trial) %>% gt::gt()
+head(trial) %>% knitr::kable()
 ```
 
 The default output from `tbl_summary()` is meant to be publication ready.  Let's start by creating a table of summary statistics from the `trial` data set.  The `tbl_summary()` can take, at minimum, a data set as the only input, and returns descriptive statistics for each column in the data frame.
@@ -289,11 +289,21 @@ If the user does not want a specific {gt} function to run (i.e. would like to ch
 
 After the `as_gt()` function is run, additional formatting may be added to the table using {gt} formatting functions. In the example below, a spanning header for the `by = ` variable is included with the {gt} function `tab_spanner()`.
 
-```{r remedy001}
+```{r as_gt2, eval=FALSE}
 tbl_summary(trial2, by = trt) %>%
   as_gt(exclude = "footnote_stat_label") %>%
   gt::tab_spanner(label = "Randomization Group",
-              columns = gt::starts_with("stat_"))
+                  columns = gt::starts_with("stat_"))
+```
+
+```{r as_gt1, echo=FALSE}
+# this code chunk only works if gt is installed
+if (requireNamespace("gt", quietly = TRUE)) {
+  tbl_summary(trial2, by = trt) %>%
+    as_gt(exclude = "footnote_stat_label") %>%
+    gt::tab_spanner(label = "Randomization Group",
+                    columns = gt::starts_with("stat_"))
+}
 ```
 
 ## Setting Default Options {#options}

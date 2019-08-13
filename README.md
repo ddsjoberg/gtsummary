@@ -9,6 +9,8 @@ status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://tr
 status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage
 status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/gtsummary?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
@@ -48,13 +50,13 @@ tables. You can install {gtsummary} and {gt} with the following code.
 ``` r
 install.packages("remotes")
 remotes::install_github("rstudio/gt")
-remotes::install_github("ddsjoberg/gtsummary")
+install.packages("gtsummary")
 ```
 
 and the development version with:
 
 ``` r
-remotes::install_github("ddsjoberg/gtsummary", ref = "dev")
+remotes::install_github("ddsjoberg/gtsummary")
 ```
 
 ## Examples
@@ -115,6 +117,8 @@ or
 Output from `kable` is less full featured compared to summary tables
 produced with {gt}. For example, `kable` summary tables do not include
 indentation, footnotes, and spanning header rows.
+
+## Contributing
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
