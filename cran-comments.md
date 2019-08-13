@@ -15,4 +15,4 @@ Suggests or Enhances not in mainstream repositories:
 Thank you for reviewing this update to my package.  
 The package is Enhanced by the gt package, which is available on GitHub (rstudio/gt).  
 As the gt package is not yet in a mainstream repository, we get the NOTE in the R CMD Check.  
-The optional installation instructions appear in the package description and on the README page.
+The optional installation instructions appear in the package description.
