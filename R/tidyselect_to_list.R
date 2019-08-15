@@ -78,6 +78,12 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
     ~ as.character(.x) %>% stringr::str_remove(stringr::fixed("~"))
   )
 
+  # if user passed odd name quoted with back ticks, removing them
+  lhs <- map_if(
+    lhs, ~ startsWith(.x, "`") && endsWith(.x, "`"),
+    ~ stringr::str_sub(.x, 2, -2)
+  )
+
   # converting rhs and lhs into a named list
   result <-
     map2(lhs, rhs, ~ rep(list(.y), length(.x)) %>% rlang::set_names(.x)) %>%

@@ -1460,5 +1460,10 @@ enquo_to_string <- function(by_enquo, arg_name) {
     ))
   }
 
+  # if user passed odd name quoted with back ticks, removing them
+  if (startsWith(by_quo_text, "`") && endsWith(by_quo_text, "`")) {
+    by_quo_text <- stringr::str_sub(by_quo_text, 2, -2)
+  }
+
   by_quo_text
 }
