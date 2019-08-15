@@ -60,8 +60,8 @@ tables. You can install {gtsummary} and {gt} with the following code.
     remotes::install_github("rstudio/gt")
     ```
     
-      - If you experience issues installing {gt} on Windows, download
-        and install [Rtools from
+      - If you experience issues installing {gt} on Windows, install
+        [Rtools from
         CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart
         R, and attempt installation again.
 
