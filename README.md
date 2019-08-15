@@ -47,13 +47,25 @@ from RStudio, and it is recommended to install both {gt} and
 not installed, `knitr::kable()` will be used to produce the summary
 tables. You can install {gtsummary} and {gt} with the following code.
 
-``` r
-install.packages("remotes")
-remotes::install_github("rstudio/gt")
-install.packages("gtsummary")
-```
+1.  Install {gtsummary}
+    
+    ``` r
+    install.packages("gtsummary")
+    ```
 
-and the development version with:
+2.  Install {gt} from GitHub (recommended)
+    
+    ``` r
+    install.packages("remotes")
+    remotes::install_github("rstudio/gt")
+    ```
+    
+      - If you experience issues installing {gt} on Windows, download
+        and install [Rtools from
+        CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart
+        R, and attempt installation again.
+
+Install the development version of {gtsummary} with:
 
 ``` r
 remotes::install_github("ddsjoberg/gtsummary")
