@@ -153,7 +153,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       "tbl_summary() %>% add_p(group = varname)"
     ))
   }
-  group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
 
   # will return call, and all object passed to in tbl_summary call
   # the object func_inputs is a list of every object passed to the function
