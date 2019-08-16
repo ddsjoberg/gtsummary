@@ -75,13 +75,14 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
   # [1] "~grade"
   lhs <- map_if(
     lhs, ~ class(.x) == "quosures",
-    ~ as.character(.x) %>% stringr::str_remove(stringr::fixed("~"))
-  )
-
-  # if user passed odd name quoted with back ticks, removing them
-  lhs <- map_if(
-    lhs, ~ startsWith(.x, "`") && endsWith(.x, "`"),
-    ~ stringr::str_sub(.x, 2, -2)
+    ~ as.character(.x) %>%
+      # remove ~ from quosure
+      stringr::str_remove(stringr::fixed("~")) %>%
+      # if variable name was wrapped in backticks, remove them
+      {ifelse(
+        startsWith(., "`") && endsWith(., "`"),
+        stringr::str_sub(., 2, -2), .
+      )}
   )
 
   # converting rhs and lhs into a named list
