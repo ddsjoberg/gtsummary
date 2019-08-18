@@ -37,26 +37,27 @@ Here's how this translates into the use of `tbl_summary()`.
     
 ## Setup
 
-Before going through the tutorial, install {gt} and {gtsummary}, and load packages.
+Before going through the tutorial, install {gtsummary} and {gt}.
 
 ```{r, include=FALSE}
 if(curl::has_internet()) 
   remotes::install_github("rstudio/gt")
-# remotes::install_github("ddsjoberg/gtsummary")
 
 library(gtsummary)
 library(dplyr)
 ```
 
 ```{r, eval=FALSE}
-remotes::install_github("rstudio/gt")
 install.packages("gtsummary")
+remotes::install_github("rstudio/gt")
 
 library(gtsummary)
 library(dplyr)
 ```
 
 Examples utilize the {gt} package to generate tables.  The  `knitr::kable()` function will be used to generate tables if the {gt} package is not available, or if the user requests with `options(gtsummary.print_engine = "kable")`. 
+
+- If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
 
 ## Basic Usage
 
@@ -328,10 +329,4 @@ When setting default rounding/formatting functions, set the default to a functio
 
 ```{r,eval=FALSE}
 options(gtsummary.tbl_summary.percent_fun = function(x) sigfig(x, digits = 3))
-```
-
-NOT
-
-```{r,eval=FALSE}
-options(gtsummary.tbl_summary.percent_fun = sigfig(x, digits = 3))
 ```
