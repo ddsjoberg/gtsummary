@@ -171,8 +171,8 @@ trial2 %>%
   tbl_summary(
     by = trt,
     # change variable labels
-    label = list("marker" ~ "Marker, ng/mL",
-                 "stage" ~ "Clinical T Stage"),
+    label = list(vars(marker) ~ "Marker, ng/mL",
+                 vars(stage) ~ "Clinical T Stage"),
     # change statistics printed in table
     statistic = list(all_continuous() ~ "{mean} ({sd})",
                      all_categorical() ~ "{n} / {N} ({p}%)"),
