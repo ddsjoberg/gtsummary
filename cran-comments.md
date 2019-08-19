@@ -1,3 +1,11 @@
+## Resubmission Comments
+
+Thank you for reviewing the package submitted 2019-08-19. 
+Based on your comments the following changes were made.
+1. The 'gt' package is referred to within single quotes in the DESCRIPTION file.
+2. The full URL is now provided for the link in the README.md file (rather than the relative link).
+
+
 ## Test environments
 * local Windows 10 install, R 3.6.1
 * Ubuntu 16.04.6 LTS (on travis-ci), (devel, release, and oldrel)
