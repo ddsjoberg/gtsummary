@@ -13,6 +13,7 @@ Suggests or Enhances not in mainstream repositories:
 ## Additional Comments
 
 Thank you for reviewing this update to my package.  
-The package is Enhanced by the gt package, which is available on GitHub (rstudio/gt).  
-As the gt package is not yet in a mainstream repository, we get the NOTE in the R CMD Check.  
-The optional installation instructions appear in the package description.
+The package lists the gt package in the Enhances field, and is not available on CRAN.  
+The gt package is available on GitHub (rstudio/gt).  
+As the gt package is not yet in a mainstream repository, we get the NOTE about mainstream repositories in the R CMD Check.  
+The optional installation instructions for the gt package appear in the package description.

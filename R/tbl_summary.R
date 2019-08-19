@@ -117,7 +117,7 @@
 #'   dplyr::select(age, grade, response, trt) %>%
 #'   tbl_summary(
 #'     by = trt,
-#'     label = list("age" ~ "Patient Age"),
+#'     label = list(vars(age) ~ "Patient Age"),
 #'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
 #'     digits = list(vars(age) ~ c(0, 1))
 #'   )
