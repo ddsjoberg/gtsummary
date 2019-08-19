@@ -9,6 +9,8 @@ status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://tr
 status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage
 status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/gtsummary?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
@@ -45,16 +47,28 @@ from RStudio, and it is recommended to install both {gt} and
 not installed, `knitr::kable()` will be used to produce the summary
 tables. You can install {gtsummary} and {gt} with the following code.
 
+1.  Install {gtsummary}
+    
+    ``` r
+    install.packages("gtsummary")
+    ```
+
+2.  Install {gt} from GitHub (recommended)
+    
+    ``` r
+    install.packages("remotes")
+    remotes::install_github("rstudio/gt")
+    ```
+    
+      - If you experience issues installing {gt} on Windows, install
+        [Rtools from
+        CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart
+        R, and attempt installation again.
+
+Install the development version of {gtsummary} with:
+
 ``` r
-install.packages("remotes")
-remotes::install_github("rstudio/gt")
 remotes::install_github("ddsjoberg/gtsummary")
-```
-
-and the development version with:
-
-``` r
-remotes::install_github("ddsjoberg/gtsummary", ref = "dev")
 ```
 
 ## Examples
@@ -116,10 +130,13 @@ Output from `kable` is less full featured compared to summary tables
 produced with {gt}. For example, `kable` summary tables do not include
 indentation, footnotes, and spanning header rows.
 
+## Contributing
+
 Please note that the {gtsummary} project is released with a [Contributor
-Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms. A big thank you to all
-contributors\!  
+Code of
+Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms. A big
+thank you to all contributors\!  
 [@ablack3](https://github.com/ablack3),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
 [@ddsjoberg](https://github.com/ddsjoberg),

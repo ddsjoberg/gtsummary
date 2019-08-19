@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.org/ddsjoberg/gtsummary)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/gtsummary?branch=master)
+[![CRAN status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
@@ -30,16 +31,25 @@ The {gtsummary} package provides an elegant and flexible way to create publicati
 
 The {gtsummary} package was written as a companion to the {gt} package from RStudio, and it is recommended to install both {gt} and {gtsummary}.  The {gt} package is not automatically installed. If {gt} is not installed, `knitr::kable()` will be used to produce the summary tables.  You can install {gtsummary} and {gt} with the following code.  
 
+1. Install {gtsummary}
+
+    ``` r
+    install.packages("gtsummary")
+    ```
+
+1. Install {gt} from GitHub (recommended)
+
+    ``` r
+    install.packages("remotes")
+    remotes::install_github("rstudio/gt")
+    ```
+    - If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
+
+
+Install the development version of {gtsummary} with:
+
 ``` r
-install.packages("remotes")
-remotes::install_github("rstudio/gt")
 remotes::install_github("ddsjoberg/gtsummary")
-```
-
-and the development version with:
-
-``` r
-remotes::install_github("ddsjoberg/gtsummary", ref = "dev")
 ```
 
 ## Examples
@@ -93,6 +103,7 @@ or
 
 Output from `kable` is less full featured compared to summary tables produced with {gt}.  For example, `kable` summary tables do not include indentation, footnotes, and spanning header rows.
 
+## Contributing
 
-Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!  
+Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!  
 `r usethis::use_tidy_thanks(from = "1970-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`

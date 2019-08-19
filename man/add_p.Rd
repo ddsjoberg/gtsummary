@@ -66,11 +66,17 @@ as it is for \code{tbl_regression()}.
 
 \section{Example Output}{
 
-\if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
+\if{html}{Example 1}
+
+\if{html}{\figure{add_p_ex1.png}{options: width=60\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
 }
 
 \examples{
-add_comp_ex1 <-
+add_p_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
   tbl_summary(by = trt) \%>\%
@@ -79,13 +85,14 @@ add_comp_ex1 <-
 # Conduct a custom McNemar test for response,
 # The custom function must return a single p-value, or NA
 add_p_test.mcnemar <- function(data, variable, by, ...) {
-   stats::mcnemar.test(data[[variable]], data[[by]])$p.value
- }
+  stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+}
 
-trial \%>\%
-   dplyr::select(age, grade, response, trt) \%>\%
-   tbl_summary(by = trt) \%>\%
-   add_p(test = "response" ~ "mcnemar")
+add_p_ex2 <-
+  trial \%>\%
+  dplyr::select(response, trt) \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_p(test = vars(response) ~ "mcnemar")
 
 }
 \seealso{
