@@ -26,7 +26,7 @@
     italicize_levels()  <-  tab_style_italicize_levels()  
 ```
 
-* Passing named lists in `tbl_summary()` is not defunct. 
+* Passing named lists in `tbl_summary()` is now defunct. 
 
 * `tbl_stack()` fix for `tbl_uvregression` objects (#175)
 
