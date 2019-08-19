@@ -36,6 +36,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 <meta property="og:title" content="Changelog" />
 
@@ -124,6 +130,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -140,7 +152,7 @@
 
     <div id="gtsummary-120" class="section level1">
 <h1 class="page-header">
-<a href="#gtsummary-120" class="anchor"></a>gtsummary 1.2.0<small> Unreleased </small>
+<a href="#gtsummary-120" class="anchor"></a>gtsummary 1.2.0<small> 2019-08-19 </small>
 </h1>
 <ul>
 <li><p>Users can pass variable names in backticks (#212)</p></li>
@@ -159,7 +171,7 @@
 <a class="sourceLine" id="cb1-4" title="4">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span>()  </a>
 <a class="sourceLine" id="cb1-5" title="5">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span>()  </a></code></pre></div>
 <ul>
-<li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is not defunct.</p></li>
+<li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is now defunct.</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (#175)</p></li>
 <li><p>Option to exclude some variables from testing when using <code><a href="../reference/add_p.html">add_p()</a></code> (#164)</p></li>
 <li><p>Updates after {gt} package renamed <code>cells_style()</code> to <code>cell_text()</code> (#78)</p></li>
@@ -250,6 +262,23 @@
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: 'fd7c21cad87500b8877c475ed3a4cece',
+    indexName: 'gtsummary',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>
