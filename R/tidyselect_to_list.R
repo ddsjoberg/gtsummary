@@ -21,17 +21,17 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
         "statistic" = "statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\") \nstatistic = list(vars(age) ~ \"{median}\")",
         "digits" = "digits = list(vars(age) ~ 2)\ndigits = list(all_continuous() ~ 2)",
         "value" = "value = list(vars(grade) ~ \"III\") \nvalue = list(all_logical() ~ FALSE)",
-        "test" = "test = list(all_continuous() ~ \"t.test\") \ntest = list(\"age\" ~ \"kruskal.test\")",
+        "test" = "test = list(all_continuous() ~ \"t.test\") \ntest = list(vars(age) ~ \"kruskal.test\")",
         "mixed" = "label = list(vars(age) ~ \"Age, years\") \nstatistic = list(all_continuous() ~ \"{mean} ({sd})\")"
       )
 
-    stop_defunct(glue(
+    stop(glue(
       "Passing named lists is deprecated. \n",
       "Update code to pass a list of formulas. \n",
       "The LHS of the formula selects the variables, and \n",
       "the RHS are the instructions.  For example, \n\n",
       "{example_text}"
-    ))
+    ), call. = FALSE)
     return(x)
   }
 
@@ -75,7 +75,14 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
   # [1] "~grade"
   lhs <- map_if(
     lhs, ~ class(.x) == "quosures",
-    ~ as.character(.x) %>% stringr::str_remove(stringr::fixed("~"))
+    ~ as.character(.x) %>%
+      # remove ~ from quosure
+      stringr::str_remove(stringr::fixed("~")) %>%
+      # if variable name was wrapped in backticks, remove them
+      {ifelse(
+        startsWith(., "`") && endsWith(., "`"),
+        stringr::str_sub(., 2, -2), .
+      )}
   )
 
   # converting rhs and lhs into a named list

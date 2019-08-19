@@ -42,6 +42,25 @@ test_that("tbl_summary value argument works properly", {
   )
 })
 
+test_that("tbl_summary-inputs with backticks", {
+  trial2 <- trial[c("trt", "age")]
+  trial2$`bad trt` <- trial2$trt
+
+  expect_error(
+    trial2 %>% tbl_summary(by = `bad trt`),
+    NA
+  )
+
+ expect_equal(
+   trial2 %>%
+     tbl_summary(label = vars(`bad trt`) ~ "OMG") %>%
+     purrr::pluck("meta_data") %>%
+     dplyr::filter(.data$variable == "bad trt") %>%
+     dplyr::pull(.data$var_label),
+   "OMG"
+ )
+})
+
 test_that("tbl_summary returns errors with bad inputs", {
   expect_error(
     tbl_summary(tibble::tibble()),

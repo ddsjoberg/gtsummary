@@ -63,7 +63,7 @@
 #'     trial %>% dplyr::select(ttdeath, death, age, grade, response),
 #'     method = coxph,
 #'     y = Surv(ttdeath, death),
-#'     label = list("grade" ~ "Grade"),
+#'     label = list(vars(grade) ~ "Grade"),
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )

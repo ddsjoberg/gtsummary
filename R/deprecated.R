@@ -136,15 +136,6 @@ fmt_beta <- function(...) {
 #' @rdname deprecated
 #' @export
 
-fmt_percent <- function(...) {
-  stop_defunct(
-    "fmt_percent() is defunct. Please use style_percent() instead."
-  )
-}
-
-#' @rdname deprecated
-#' @export
-
 fmt_pvalue <- function(...) {
   stop_defunct(
     "fmt_pvalue() is defunct. Please use style_pvalue() instead."

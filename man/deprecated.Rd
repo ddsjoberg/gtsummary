@@ -14,7 +14,6 @@
 \alias{fmt_table1}
 \alias{fmt_regression}
 \alias{fmt_beta}
-\alias{fmt_percent}
 \alias{fmt_pvalue}
 \title{Deprecated functions}
 \usage{
@@ -41,8 +40,6 @@ fmt_table1(...)
 fmt_regression(...)
 
 fmt_beta(...)
-
-fmt_percent(...)
 
 fmt_pvalue(...)
 }

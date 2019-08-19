@@ -16,23 +16,17 @@
 #' library(survival)
 #' t1 <-
 #'   glm(response ~ trt + grade + age, trial, family = binomial) %>%
-#'   tbl_regression(
-#'     label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
-#'     exponentiate = TRUE
-#'   )
+#'   tbl_regression(exponentiate = TRUE)
 #' t2 <-
 #'   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
-#'   tbl_regression(
-#'     label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
-#'     exponentiate = TRUE
-#'   )
+#'   tbl_regression(exponentiate = TRUE)
 #' tbl_merge_ex <-
 #'   tbl_merge(
 #'     tbls = list(t1, t2),
 #'     tab_spanner = c("Tumor Response", "Time to Death")
 #'   )
 #' @section Example Output:
-#' \if{html}{\figure{tbl_merge_ex.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_merge_ex.png}{options: width=70\%}}
 #'
 tbl_merge <- function(tbls,
                       tab_spanner = paste0(c("Model "), seq_len(length(tbls)))) {

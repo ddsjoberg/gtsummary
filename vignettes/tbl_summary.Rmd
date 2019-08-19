@@ -37,26 +37,27 @@ Here's how this translates into the use of `tbl_summary()`.
     
 ## Setup
 
-Before going through the tutorial, install {gt} and {gtsummary}, and load packages.
+Before going through the tutorial, install {gtsummary} and {gt}.
 
 ```{r, include=FALSE}
 if(curl::has_internet()) 
   remotes::install_github("rstudio/gt")
-# remotes::install_github("ddsjoberg/gtsummary")
 
 library(gtsummary)
 library(dplyr)
 ```
 
 ```{r, eval=FALSE}
+install.packages("gtsummary")
 remotes::install_github("rstudio/gt")
-remotes::install_github("ddsjoberg/gtsummary")
 
 library(gtsummary)
 library(dplyr)
 ```
 
 Examples utilize the {gt} package to generate tables.  The  `knitr::kable()` function will be used to generate tables if the {gt} package is not available, or if the user requests with `options(gtsummary.print_engine = "kable")`. 
+
+- If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
 
 ## Basic Usage
 
@@ -73,7 +74,7 @@ We'll be using the `trial` data set throughout this example.  This set contains 
 
 ```{r, message=FALSE}
 # printing trial data
-head(trial) %>% gt::gt()
+head(trial) %>% knitr::kable()
 ```
 
 The default output from `tbl_summary()` is meant to be publication ready.  Let's start by creating a table of summary statistics from the `trial` data set.  The `tbl_summary()` can take, at minimum, a data set as the only input, and returns descriptive statistics for each column in the data frame.
@@ -170,8 +171,8 @@ trial2 %>%
   tbl_summary(
     by = trt,
     # change variable labels
-    label = list("marker" ~ "Marker, ng/mL",
-                 "stage" ~ "Clinical T Stage"),
+    label = list(vars(marker) ~ "Marker, ng/mL",
+                 vars(stage) ~ "Clinical T Stage"),
     # change statistics printed in table
     statistic = list(all_continuous() ~ "{mean} ({sd})",
                      all_categorical() ~ "{n} / {N} ({p}%)"),
@@ -257,7 +258,7 @@ If you display a statistic from a categorical variable, include the `level` argu
 > `` `r
 inline_text(tab1, variable = "stage", level = "T1", column = "Drug")` `` resolves to "`r inline_text(tab1, variable = "stage", level = "T1", column = "Drug")`"
 
-For more detail about inline code, review to the  [Rstudio documentation page](https://rmarkdown.rstudio.com/lesson-4.html).
+For more detail about inline code, review to the  [RStudio documentation page](https://rmarkdown.rstudio.com/lesson-4.html).
 
 ## Advanced Customization {#advanced}
 
@@ -289,11 +290,21 @@ If the user does not want a specific {gt} function to run (i.e. would like to ch
 
 After the `as_gt()` function is run, additional formatting may be added to the table using {gt} formatting functions. In the example below, a spanning header for the `by = ` variable is included with the {gt} function `tab_spanner()`.
 
-```{r remedy001}
+```{r as_gt2, eval=FALSE}
 tbl_summary(trial2, by = trt) %>%
   as_gt(exclude = "footnote_stat_label") %>%
   gt::tab_spanner(label = "Randomization Group",
-              columns = gt::starts_with("stat_"))
+                  columns = gt::starts_with("stat_"))
+```
+
+```{r as_gt1, echo=FALSE}
+# this code chunk only works if gt is installed
+if (requireNamespace("gt", quietly = TRUE)) {
+  tbl_summary(trial2, by = trt) %>%
+    as_gt(exclude = "footnote_stat_label") %>%
+    gt::tab_spanner(label = "Randomization Group",
+                    columns = gt::starts_with("stat_"))
+}
 ```
 
 ## Setting Default Options {#options}
@@ -318,10 +329,4 @@ When setting default rounding/formatting functions, set the default to a functio
 
 ```{r,eval=FALSE}
 options(gtsummary.tbl_summary.percent_fun = function(x) sigfig(x, digits = 3))
-```
-
-NOT
-
-```{r,eval=FALSE}
-options(gtsummary.tbl_summary.percent_fun = sigfig(x, digits = 3))
 ```
