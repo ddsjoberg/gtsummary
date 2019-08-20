@@ -33,15 +33,6 @@ To start, a quick note on the {magrittr} package's pipe function, `%>%`.  By def
 Before going through the tutorial, install {gtsummary} and {gt}.
 
 ```{r, include=FALSE}
-# on CRAN checks, cannot install a package to default location
-# installing to temp dir, and adding the temp directory to the libPath
-if(curl::has_internet()) {
-  temp_path <- file.path(tempdir(), "gtsummary")
-  suppressWarnings(dir.create(temp_path))
-  remotes::install_github("rstudio/gt", lib = temp_path)
-  .libPaths(temp_path)
-}
-
 library(gtsummary)
 library(dplyr)
 ```
@@ -54,7 +45,7 @@ library(gtsummary)
 library(dplyr)
 ```
 
-If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
+If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.  The vignettes shown on cran.r-project.org does not use the {gt} package to print tables.  For examples with {gt}, browse to the gtsummary [website](http://www.danieldsjoberg.com/gtsummary/).
 
 Examples utilize the {gt} package to generate tables.  The  `knitr::kable()` function will be used to generate tables if the {gt} package is not available, or if the user requests with `options(gtsummary.print_engine = "kable")`. 
 
