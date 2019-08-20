@@ -1,3 +1,7 @@
+# gtsummary (development version)
+
+* Added ability to name custom `add_p()` tests (#213)
+
 # gtsummary 1.2.0
 
 * Users can pass variable names in backticks (#212)
