@@ -160,8 +160,11 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
         group = group,
         include = include
       ),
-      p.value = map_dbl(test_result, ~pluck(.x, "p") %||% NA_real_),
-      stat_test_lbl = map_chr(test_result, ~pluck(.x, "test") %||% NA_character_)
+      # grabbing p-value and test label from test_result
+      p.value = map_dbl(.data$test_result,
+                        ~pluck(.x, "p") %||% NA_real_),
+      stat_test_lbl = map_chr(.data$test_result,
+                              ~pluck(.x, "test") %||% NA_character_)
     ) %>%
     select(-.data$test_result)
 
