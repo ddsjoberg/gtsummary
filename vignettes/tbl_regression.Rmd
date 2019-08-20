@@ -33,9 +33,6 @@ To start, a quick note on the {magrittr} package's pipe function, `%>%`.  By def
 Before going through the tutorial, install {gtsummary} and {gt}.
 
 ```{r, include=FALSE}
-if(curl::has_internet()) 
-  remotes::install_github("rstudio/gt")
-
 library(gtsummary)
 library(dplyr)
 ```
@@ -47,6 +44,8 @@ remotes::install_github("rstudio/gt")
 library(gtsummary)
 library(dplyr)
 ```
+
+If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.  The vignettes hosted on https://cran.r-project.org do not use the {gt} package to print tables.  For examples with {gt}, browse to the {gtsummary} [website](http://www.danieldsjoberg.com/gtsummary/).
 
 Examples utilize the {gt} package to generate tables.  The  `knitr::kable()` function will be used to generate tables if the {gt} package is not available, or if the user requests with `options(gtsummary.print_engine = "kable")`. 
 
@@ -279,3 +278,4 @@ When setting default rounding/formatting functions, set the default to a functio
 ```{r,eval=FALSE}
 options(gtsummary.tbl_regression.estimate_fun = function(x) sigfig(x, digits = 3))
 ```
+
