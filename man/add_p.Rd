@@ -83,7 +83,7 @@ add_p_ex1 <-
   add_p()
 
 # Conduct a custom McNemar test for response,
-# Function returns a named list(p = ?, test = ?)
+# Function must return a named list(p = ?, test = ?)
 add_p_test.mcnemar <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
