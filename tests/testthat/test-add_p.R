@@ -26,6 +26,16 @@ test_that("add_p creates errors when non-function in input", {
 })
 
 
+test_that("add_p works well", {
+  expect_error(
+    tbl_summary(mtcars, by = am) %>%
+      add_p(test = list(vars(mpg) ~ "t.test",
+                        vars(hp) ~ "kruskal.test")),
+    NA
+  )
+})
+
+
 test_that("add_p creates errors named list passed for test", {
   expect_error(
     tbl_summary(mtcars, by = am) %>%

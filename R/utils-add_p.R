@@ -14,24 +14,44 @@
 add_p_test <- function(data, ...) UseMethod("add_p_test")
 
 add_p_test.t.test <- function(data, variable, by, ...) {
-  stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
+  result = list()
+  result$p <- stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
+  result$test <- "t-test"
+  result
 }
 
 add_p_test.kruskal.test <- function(data, variable, by, ...) {
-  stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result = list()
+  result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result$test <- "Kruskal-Wallis test"
+  result
 }
 
-add_p_test.wilcox.test <- add_p_test.kruskal.test
+add_p_test.wilcox.test <- function(data, variable, by, ...) {
+  result = list()
+  if (length(unique(data[[by]])) > 2)
+    stop("Wilcoxon rank-sum test cannot be calculated with more than 2 groups")
+  result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result$test <- "Wilcoxon rank-sum test"
+  result
+}
 
 add_p_test.chisq.test <- function(data, variable, by, ...) {
-  stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result = list()
+  result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result$test <- "chi-square test of independence"
+  result
 }
 
 add_p_test.fisher.test <- function(data, variable, by, ...) {
-  stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result = list()
+  result$p <- stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result$test <- "Fisher's exact test"
+  result
 }
 
 add_p_test.lme4 <- function(data, variable, by, group, type, ...) {
+  result = list()
   # input checks for lme4 tests
   if (data[[by]] %>% unique() %>% length() != 2) {
     # only allowing logistic regression models for now
@@ -57,7 +77,9 @@ add_p_test.lme4 <- function(data, variable, by, group, type, ...) {
                       data = data, family = stats::binomial)
 
   #returning p-value
-  stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
+  result$p <- stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
+  result$test <- "random intercept logistic regression"
+  result
 }
 
 
@@ -66,7 +88,7 @@ add_p_test.lme4 <- function(data, variable, by, group, type, ...) {
 add_p_test_safe <- function(data, variable, by, group, test, include = NULL, type) {
   # omitting variables not in include
   if (!variable %in% include) {
-    return(NA)
+    return(NULL)
   }
 
   # keeping non-missing values
@@ -88,11 +110,12 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
   warning = function(w) {
     message(glue("Warning in 'add_p()' for variable '{variable}' ",
                  "and test '{test}', p-value omitted:\n", as.character(w)))
-
+    return(NULL)
   },
   error = function(e) {
     message(glue("Error in 'add_p()' for variable '{variable}' ",
                  "and test '{test}', p-value omitted:\n", as.character(e)))
+    return(NULL)
   })
 
   pval
@@ -100,7 +123,7 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
 
 # vectorized version of the functions that calculate a single pvalue
 calculate_pvalue <- function(data, variable, by, test, type, group, include) {
-  pmap_dbl(
+  pmap(
     list(variable, by, test, type),
     ~ add_p_test_safe(
       data = data, variable = ..1, by = ..2,

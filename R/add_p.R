@@ -49,14 +49,16 @@
 #'   add_p()
 #'
 #' # Conduct a custom McNemar test for response,
-#' # The custom function must return a single p-value, or NA
+#' # Function must return a named list(p = ?, test = ?)
 #' add_p_test.mcnemar <- function(data, variable, by, ...) {
-#'   stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+#'   result <- list()
+#'   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+#'   result$test <- "McNemar's test"
+#'   result
 #' }
 #'
 #' add_p_ex2 <-
-#'   trial %>%
-#'   dplyr::select(response, trt) %>%
+#'   trial[c("response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p(test = vars(response) ~ "mcnemar")
 #'
@@ -149,7 +151,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
         group = group
       ),
       # calculating pvalue
-      p.value = calculate_pvalue(
+      test_result = calculate_pvalue(
         data = x$inputs$data,
         variable = .data$variable,
         by = x$inputs$by,
@@ -157,8 +159,14 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
         type = .data$summary_type,
         group = group,
         include = include
-      )
-    )
+      ),
+      # grabbing p-value and test label from test_result
+      p.value = map_dbl(.data$test_result,
+                        ~pluck(.x, "p") %||% NA_real_),
+      stat_test_lbl = map_chr(.data$test_result,
+                              ~pluck(.x, "test") %||% NA_character_)
+    ) %>%
+    select(-.data$test_result)
 
   # creating pvalue column for table_body merge
   pvalue_column <-
@@ -203,28 +211,14 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
     ")"
   )
 
-
   x
 }
 
-# creates a tibble linking test names to labels
-stat_test_names <- tibble::tribble(
-  ~stat_test, ~stat_test_label,
-  "t.test", "t-test",
-  "fisher.test", "Fisher's exact test",
-  "wilcox.test", "Wilcoxon rank-sum test",
-  "kruskal.test", "Kruskal-Wallis test",
-  "chisq.test", "chi-square test of independence",
-  "lme4", "mixed-effects regression model with random intercept"
-)
-
 # function to create text for footnote
 footnote_add_p <- function(meta_data) {
-  meta_data %>%
-    select("stat_test") %>%
-    distinct() %>%
-    left_join(stat_test_names, by = "stat_test") %>%
-    pull("stat_test_label") %>%
+  meta_data$stat_test_lbl %>%
+    keep(~!is.na(.)) %>%
+    unique() %>%
     paste(collapse = "; ") %>%
     paste0("Statistical tests performed: ", .)
 }
