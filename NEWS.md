@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Vignettes install the {gt} package to a temporary directory (required for CRAN check) (#217)
+
 * Added ability to name custom `add_p()` tests (#213)
 
 # gtsummary 1.2.0
