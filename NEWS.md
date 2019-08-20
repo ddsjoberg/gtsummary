@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.2.1
 
 * Vignettes install the {gt} package to a temporary directory (required for CRAN check) (#217)
 
