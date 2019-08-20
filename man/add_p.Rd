@@ -83,14 +83,16 @@ add_p_ex1 <-
   add_p()
 
 # Conduct a custom McNemar test for response,
-# The custom function must return a single p-value, or NA
+# Function must return a named list(p = ?, test = ?)
 add_p_test.mcnemar <- function(data, variable, by, ...) {
-  stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+  result <- list()
+  result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+  result$test <- "McNemar's test"
+  result
 }
 
 add_p_ex2 <-
-  trial \%>\%
-  dplyr::select(response, trt) \%>\%
+  trial[c("response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p(test = vars(response) ~ "mcnemar")
 
