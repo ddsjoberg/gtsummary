@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -43,12 +45,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
+
 <meta property="og:title" content="Adds p-values to summary tables — add_p" />
-
 <meta property="og:description" content="Adds p-values to tables created by tbl_summary by comparing values across groups." />
-
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -119,7 +121,6 @@
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -154,14 +155,12 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Adds p-values to tables created by <code>tbl_summary</code> by comparing values across groups.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -215,11 +214,10 @@ the row associated with this variable is omitted from the summary table.</p></td
       <td><p>Names of variables to exclude from output.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>tbl_summary</code> object</p>
-    
     <h2 class="hasAnchor" id="setting-defaults"><a class="anchor" href="#setting-defaults"></a>Setting Defaults</h2>
 
     
@@ -230,7 +228,6 @@ also be set. Please note the default option for the estimate is the same
 as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p><ul>
 <li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.pvalue_fun = new_function)</a></code></p></li>
 </ul>
-    
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -238,7 +235,6 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
 <p><img src='figures/add_p_ex1.png' width=60% /></p>
 <p>Example 2</p>
 <p><img src='figures/add_p_ex2.png' width=45% /></p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed examples</p>
@@ -252,7 +248,6 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
   <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
   <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>add_p_ex1</span> <span class='kw'>&lt;-</span>
@@ -279,15 +274,10 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#setting-defaults">Setting Defaults</a></li>
-
       <li><a href="#example-output">Example Output</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

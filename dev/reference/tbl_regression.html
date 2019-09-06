@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -43,15 +45,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Display regression model results in table — tbl_regression" />
 
+<meta property="og:title" content="Display regression model results in table — tbl_regression" />
 <meta property="og:description" content="This function uses broom::tidy and broom.mixed::tidy
 to perform the initial model formatting. Review the
 tbl_regression vignette
 for detailed examples." />
-
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
@@ -122,7 +124,6 @@ for detailed examples." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -157,18 +158,16 @@ for detailed examples." />
     </div>
 
     <div class="ref-description">
-    
     <p>This function uses <a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a> and <a href='https://www.rdocumentation.org/packages/broom.mixed/topics/reexports'>broom.mixed::tidy</a>
 to perform the initial model formatting. Review the
 <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html'>tbl_regression vignette</a>
 for detailed examples.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>tbl_regression</span>(<span class='no'>x</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -227,11 +226,10 @@ and return a string that is the rounded/formatted p-value (e.g.
 <code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>tbl_regression</code> object</p>
-    
     <h2 class="hasAnchor" id="setting-defaults"><a class="anchor" href="#setting-defaults"></a>Setting Defaults</h2>
 
     
@@ -243,7 +241,6 @@ also be set.</p><ul>
 <li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.tbl_regression.estimate_fun = new_function)</a></code></p></li>
 <li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.conf.level = 0.90)</a></code></p></li>
 </ul>
-    
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     
@@ -257,7 +254,6 @@ or unit of analysis, may differ across models. Here are some common examples.</p
 <li><p>GEE regression models with clustered data.</p></li>
 </ol>
     <p>This list is not exhaustive, and care should be taken for each number reported.</p>
-    
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -267,7 +263,6 @@ or unit of analysis, may differ across models. Here are some common examples.</p
 <p><img src='figures/tbl_regression_ex2.png' width=50% /></p>
 <p>Example 3</p>
 <p><img src='figures/tbl_regression_ex3.png' width=50% /></p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>See tbl_regression <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html'>vignette</a> for detailed examples</p>
@@ -280,7 +275,6 @@ or unit of analysis, may differ across models. Here are some common examples.</p
   <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
@@ -305,17 +299,11 @@ or unit of analysis, may differ across models. Here are some common examples.</p
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#setting-defaults">Setting Defaults</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#example-output">Example Output</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
