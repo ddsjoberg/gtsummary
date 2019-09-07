@@ -1051,9 +1051,8 @@ calculate_single_stat <- function(x, stat_name) {
 # this should include EVERY input of \code{\link{tbl_summary}} in the same order
 # copy and paste them from \code{\link{tbl_summary}}
 
-tbl_summary_input_checks <- function(data, by, label, type, value,
-                                     statistic, digits, missing, missing_text,
-                                     group, sort) {
+tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
+                                     digits, missing, missing_text, sort) {
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
@@ -1278,11 +1277,6 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   # checking the length is one
   if (length(missing_text) != 1) {
     stop("Argument 'missing_text' must be a character string of length 1.")
-  }
-
-  # group ----------------------------------------------------------------------
-  if (length(group) > 1) {
-    stop("'group' must be `NULL` or length 1.")
   }
 
   # sort -----------------------------------------------------------------------

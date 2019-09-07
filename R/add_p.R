@@ -74,10 +74,27 @@
 #' \if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
-                  group = NULL, include = NULL, exclude = NULL) {
+                   group = NULL, include = NULL, exclude = NULL) {
 
   # converting bare arguments to string ----------------------------------------
   group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
+
+  # putting arguments in a list to pass to tbl_summary_
+  add_p_args <- as.list(environment())
+
+  # passing arguments to add_p_
+  do.call(add_p_, add_p_args)
+}
+
+#' Standard evaluation version of add_p()
+#'
+#' The `'group ='` argument can be passed as a string, rather than with non-standard
+#' evaluation as in [add_p]
+#'
+#' @inheritParams add_p
+#' @export
+add_p_ <- function(x, test = NULL, pvalue_fun = NULL,
+                  group = NULL, include = NULL, exclude = NULL) {
 
   # group argument -------------------------------------------------------------
   if (!is.null(group)) {
