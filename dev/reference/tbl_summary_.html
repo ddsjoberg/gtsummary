@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Implement significant figure-like rounding for ratios — style_ratio • gtsummary</title>
+<title>Standard evaluation version of tbl_summary() — tbl_summary_ • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,13 +46,9 @@
 
 
 
-<meta property="og:title" content="Implement significant figure-like rounding for ratios — style_ratio" />
-<meta property="og:description" content="When reporting ratios, such as relative risk or an odds ratio, we'll often
-want the rounding to be similar on each side of the number 1.  For example,
-if we report an odds ratio of 0.95 with a confidence interval of 0.70 to 1.24,
-we would want to round to two decimal places for all values. In other words,
-2 significant figures for numbers less than 1 and 3 significant figures 1 and
-larger. style_ratio() performs significant figure-like rounding in this manner." />
+<meta property="og:title" content="Standard evaluation version of tbl_summary() — tbl_summary_" />
+<meta property="og:description" content="The 'by =' argument can be passed as a string, rather than with non-standard
+evaluation as in tbl_summary" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -154,63 +150,112 @@ larger. style_ratio() performs significant figure-like rounding in this manner."
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Implement significant figure-like rounding for ratios</h1>
+    <h1>Standard evaluation version of tbl_summary()</h1>
     
-    <div class="hidden name"><code>style_ratio.Rd</code></div>
+    <div class="hidden name"><code>tbl_summary_.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>When reporting ratios, such as relative risk or an odds ratio, we'll often
-want the rounding to be similar on each side of the number 1.  For example,
-if we report an odds ratio of 0.95 with a confidence interval of 0.70 to 1.24,
-we would want to round to two decimal places for all values. In other words,
-2 significant figures for numbers less than 1 and 3 significant figures 1 and
-larger. <code>style_ratio()</code> performs significant figure-like rounding in this manner.</p>
+    <p>The <code>'by ='</code> argument can be passed as a string, rather than with non-standard
+evaluation as in <a href='tbl_summary.html'>tbl_summary</a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>style_ratio</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
+    <pre class="usage"><span class='fu'>tbl_summary_</span>(<span class='no'>data</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ifany"</span>,
+  <span class='st'>"always"</span>, <span class='st'>"no"</span>), <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>, <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>percent</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"column"</span>, <span class='st'>"row"</span>, <span class='st'>"cell"</span>), <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>Numeric vector</p></td>
+      <th>data</th>
+      <td><p>A data frame</p></td>
+    </tr>
+    <tr>
+      <th>by</th>
+      <td><p>A column name in data.
+Summary statistics will be calculated separately for each level of the <code>by</code>
+variable (e.g. <code>by = trt</code>). If <code>NULL</code>, summary statistics
+are calculated using all observations.</p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>List of formulas specifying variables labels,
+e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(vars(age) ~ "Age, yrs", vars(ptstage) ~ "Path T Stage")</a></code>.  If a
+variable's label is not specified here, the
+function will take the label attribute (<code><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr(data$age, "label")</a></code>).  If
+attribute label is <code>NULL</code>, the variable name will be used.</p></td>
+    </tr>
+    <tr>
+      <th>statistic</th>
+      <td><p>List of formulas specifying types of summary statistics to
+display for each variable.  The default is
+<code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")</a></code>.
+See below for details.</p></td>
     </tr>
     <tr>
       <th>digits</th>
-      <td><p>Integer specifying the number of significant
-digits to display for numbers below 1. Numbers larger than 1 will be be <code>digits + 1</code>.
-Default is <code>digits = 2</code>.</p></td>
+      <td><p>List of formulas specifying the number of decimal
+places to round continuous summary statistics. If not specified,
+<code>tbl_summary</code> guesses an appropriate number of decimals to round statistics.
+When multiple statistics are displayed for a single variable, supply a vector
+rather than an integer.  For example, if the
+statistic being calculated is <code>"{mean} ({sd})"</code> and you want the mean rounded
+to 1 decimal place, and the SD to 2 use <code>digits = list("age" ~ c(1, 2))</code>.</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>List of formulas specifying variable types. Accepted values
+are <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("continuous", "categorical", "dichotomous")</a></code>,
+e.g. <code>type = list(starts_with(age) ~ "continuous", "female" ~ "dichotomous")</code>.
+If type not specified for a variable, the function
+will default to an appropriate summary type.  See below for details.</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>List of formulas specifying the value to display for dichotomous
+variables.  See below for details.</p></td>
+    </tr>
+    <tr>
+      <th>missing</th>
+      <td><p>Indicates whether to include counts of <code>NA</code> values in the table.
+Allowed values are <code>"no"</code> (never display NA values),
+<code>"ifany"</code> (only display if any NA values), and <code>"always"</code>
+(includes NA count row for all variables). Default is <code>"ifany"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>missing_text</th>
+      <td><p>String to display for count of missing observations.
+Default is <code>"Unknown"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>sort</th>
+      <td><p>List of formulas specifying the type of sorting to perform for
+categorical data. Options are <code>frequency</code> where results are sorted in
+descending order of frequency and <code>alphanumeric</code>,
+e.g. <code>sort = list(everything() ~ "frequency")</code></p></td>
+    </tr>
+    <tr>
+      <th>percent</th>
+      <td><p>Indicates the type of percentage to return. Must be one of
+<code>"column"</code>, <code>"row"</code>, or <code>"cell"</code>. Default is <code>"column"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>group</th>
+      <td><p>DEPRECATED. Previously required to work with the 'group'
+argument in <a href='add_p.html'>add_p</a>. No longer required.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A character vector of styled ratios</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='style_sigfig.html'>style_sigfig</a></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(
-  <span class='fl'>0.123</span>, <span class='fl'>0.9</span>, <span class='fl'>1.1234</span>, <span class='fl'>12.345</span>, <span class='fl'>101.234</span>, -<span class='fl'>0.123</span>,
-  -<span class='fl'>0.9</span>, -<span class='fl'>1.1234</span>, -<span class='fl'>12.345</span>, -<span class='fl'>101.234</span>
-) <span class='kw'>%&gt;%</span>
-  <span class='fu'>style_ratio</span>()</div><div class='output co'>#&gt;  [1] "0.12"  "0.90"  "1.12"  "12.3"  "101"   "-0.12" "-0.90" "-1.12" "-12.3"
-#&gt; [10] "-101" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 
