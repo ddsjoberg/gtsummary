@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Add standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
+
 # gtsummary 1.2.1
 
 * Vignettes install the {gt} package to a temporary directory (required for CRAN check) (#217)

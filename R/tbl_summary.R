@@ -129,21 +129,41 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
-#'
+
 tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL, group = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
                         percent = c("column", "row", "cell")) {
+
+  # converting bare arguments to string -----------------------------------------------
+  by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
+
+  # putting arguments in a list to pass to tbl_summary_
+  tbl_summary_args <- as.list(environment())
+
+  # passing arguments to tbl_summary_
+  do.call(tbl_summary_, tbl_summary_args)
+}
+
+#' Standard evaluation version of tbl_summary()
+#'
+#' The `'by ='` argument can be passed as a string, rather than with non-standard
+#' evaluation as in [tbl_summary]
+#'
+#' @inheritParams tbl_summary
+#' @export
+tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
+                        digits = NULL, type = NULL, value = NULL,
+                        missing = c("ifany", "always", "no"),
+                        missing_text = "Unknown", sort = NULL,
+                        percent = c("column", "row", "cell"), group = NULL) {
   # matching arguments
   missing <- match.arg(missing)
   percent <- match.arg(percent)
 
   # ungrouping data
   data <- data %>% ungroup()
-
-  # converting bare arguments to string -----------------------------------------------
-  by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
 
   # deprecation note about group
   if (!rlang::quo_is_null(rlang::enquo(group))) {
@@ -178,7 +198,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # checking function inputs
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,
-    digits, missing, missing_text, group, sort
+    digits, missing, missing_text, sort
   )
 
   # converting tidyselect formula lists to named lists
@@ -196,8 +216,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
   # excluding by variable
   if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
-  # excluding id variable
-  if (!is.null(group)) meta_data <- meta_data %>% filter(!!parse_expr("!variable %in% group"))
 
   # converting tidyselect formula lists to named lists
   label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
