@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Add standard evaluation variants, `tbl_summary_()` and `add_p_()`
+* Add standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
 
 # gtsummary 1.2.1
 
