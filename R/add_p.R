@@ -51,6 +51,7 @@
 #' # Conduct a custom McNemar test for response,
 #' # Function must return a named list of the p-value and the
 #' # test name: list(p = 0.123, test = "McNemar's test")
+#' # The '...' must be included as input
 #' my_mcnemar <- function(data, variable, by, ...) {
 #'   result <- list()
 #'   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
@@ -87,7 +88,8 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
 #' Standard evaluation version of add_p()
 #'
 #' The `'group ='` argument can be passed as a string, rather than with non-standard
-#' evaluation as in [add_p]
+#' evaluation as in [add_p]. Review the help file for [add_p] fully documented
+#' options and arguments.
 #'
 #' @inheritParams add_p
 #' @export
