@@ -2,7 +2,7 @@
 
 * Add standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
 
-* Remove `gt::cols_merge()` function ahead of the gt PR #355 that changes the `cols_merge()` API (#222)
+* Removed `gt::cols_merge()` function ahead of the gt PR #355 that changes the `cols_merge()` API (#222)
 
 * Updated the `show_yesno` argument to `show_single_row`. It is now generic and any binary variable can be shown on a single row. (#220)
 
