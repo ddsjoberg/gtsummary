@@ -6,6 +6,8 @@
 
 * Updated the `show_yesno` argument to `show_single_row`. It is now generic and any binary variable can be shown on a single row. (#220)
 
+* Updated API for using custom functions to calculate p-values in `add_p()`. USer now reference a custom function by its name. (#226)
+
 # gtsummary 1.2.1
 
 * Vignettes install the {gt} package to a temporary directory (required for CRAN check) (#217)
