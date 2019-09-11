@@ -5,7 +5,7 @@
 \title{Display regression model results in table}
 \usage{
 tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
-  exclude = NULL, show_yesno = NULL, conf.level = NULL,
+  exclude = NULL, show_single_row = NULL, conf.level = NULL,
   intercept = FALSE, estimate_fun = NULL, pvalue_fun = NULL)
 }
 \arguments{
@@ -21,10 +21,10 @@ coefficient estimates. Default is \code{FALSE}.}
 
 \item{exclude}{Names of variables to exclude from output.}
 
-\item{show_yesno}{By default yes/no categorical variables are printed on a
-single row, when the 'No' category is the reference group.  To print both
-levels in the output table, include the variable name in the show_yesno
-vector, e.g. `show_yesno = c("var1", "var2")``}
+\item{show_single_row}{By default categorical variables are printed on a
+multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+the regression coefficient on a single row, include the variable name here,
+e.g. \code{show_single_row = c("var1", "var2")}}
 
 \item{conf.level}{Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}

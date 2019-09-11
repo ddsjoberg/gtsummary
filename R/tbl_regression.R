@@ -41,7 +41,7 @@
 #' in the output.  Default is `FALSE`
 #' @param show_single_row By default categorical variables are printed on a
 #' multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
-#' the regression coefficient on a single row, include the variable names here,
+#' the regression coefficient on a single row, include the variable name here,
 #' e.g. `show_single_row = c("var1", "var2")`
 #' @param estimate_fun Function to round and format coefficient estimates.
 #' Default is [style_sigfig] when the coefficients are not transformed, and
@@ -160,8 +160,8 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     # adding character CI
     mutate(
       ci = if_else(
-        !is.na(conf.low),
-        paste0(estimate_fun(conf.low), ", ", estimate_fun(conf.high)),
+        !is.na(.data$conf.low),
+        paste0(estimate_fun(.data$conf.low), ", ", estimate_fun(.data$conf.high)),
         NA_character_
       )
     ) %>%

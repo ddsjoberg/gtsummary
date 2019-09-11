@@ -79,7 +79,7 @@
 tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
-                             hide_n = FALSE, show_yesno = NULL, conf.level = NULL,
+                             hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL) {
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
@@ -192,7 +192,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
         exponentiate = exponentiate,
         conf.level = conf.level,
         label = label,
-        show_yesno = show_yesno
+        show_single_row = intersect(.y, show_single_row)
       )
     )
 
