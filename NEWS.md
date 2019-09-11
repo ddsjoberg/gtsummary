@@ -6,7 +6,7 @@
 
 * Updated the `show_yesno` argument to `show_single_row`. It is now generic and any binary variable can be shown on a single row. (#220)
 
-* Updated API for using custom functions to calculate p-values in `add_p()`. USer now reference a custom function by its name. (#226)
+* Updated API for using custom functions to calculate p-values in `add_p()`. User now may reference a custom function by its name. (#226)
 
 # gtsummary 1.2.1
 
