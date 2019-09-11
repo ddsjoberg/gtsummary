@@ -2,6 +2,10 @@
 
 * Add standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
 
+* Remove `gt::cols_merge()` function ahead of the gt PR #355 that changes the `cols_merge()` API (#222)
+
+* Updated the `show_yesno` argument to `show_single_row`. It is now generic and any binary variable can be shown on a single row. (#220)
+
 # gtsummary 1.2.1
 
 * Vignettes install the {gt} package to a temporary directory (required for CRAN check) (#217)
