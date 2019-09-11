@@ -39,10 +39,10 @@
 #' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept Logical argument indicating whether to include the intercept
 #' in the output.  Default is `FALSE`
-#' @param show_yesno By default yes/no categorical variables are printed on a
-#' single row, when the 'No' category is the reference group.  To print both
-#' levels in the output table, include the variable name in the show_yesno
-#' vector, e.g. `show_yesno = c("var1", "var2")``
+#' @param show_single_row By default categorical variables are printed on a
+#' multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+#' the regression coefficient on a single row, include the variable names here,
+#' e.g. `show_single_row = c("var1", "var2")`
 #' @param estimate_fun Function to round and format coefficient estimates.
 #' Default is [style_sigfig] when the coefficients are not transformed, and
 #' [style_ratio] when the coefficients have been exponentiated.
@@ -83,10 +83,10 @@
 #' \if{html}{Example 3}
 #'
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
-#'
+
 tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
                            include = NULL, exclude = NULL,
-                           show_yesno = NULL, conf.level = NULL, intercept = FALSE,
+                           show_single_row = NULL, conf.level = NULL, intercept = FALSE,
                            estimate_fun = NULL, pvalue_fun = NULL) {
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
@@ -155,7 +155,18 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # outputing a tibble of the parsed model with
   # rows for reference groups, and headers for
   # categorical variables
-  table_body <- parse_fit(x, tidy_model, label, show_yesno)
+  table_body <-
+    parse_fit(x, tidy_model, label, show_single_row) %>%
+    # adding character CI
+    mutate(
+      ci = if_else(
+        !is.na(conf.low),
+        paste0(estimate_fun(conf.low), ", ", estimate_fun(conf.high)),
+        NA_character_
+      )
+    ) %>%
+    # moving pvalue col to end of df
+    select(-.data$p.value, .data$p.value)
 
   # including and excluding variables/intercept indicated
   # Note, include = names(stats::model.frame(mod_nlme))
@@ -186,9 +197,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     table_header_fill_missing() %>%
     table_header_fmt(
       p.value = "x$inputs$pvalue_fun",
-      estimate = "x$inputs$estimate_fun",
-      conf.low = "x$inputs$estimate_fun",
-      conf.high = "x$inputs$estimate_fun"
+      estimate = "x$inputs$estimate_fun"
     )
 
   # footnote abbreviation details
@@ -219,7 +228,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     results,
     label = "**N = {n}**",
     estimate = glue("**{estimate_header(x, exponentiate)}**"),
-    conf.low = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
+    ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
     p.value = "**p-value**"
   )
 
@@ -251,7 +260,7 @@ gt_tbl_regression <- quote(list(
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_ref == TRUE, missing_text = '---')" %>%
+    "gt::fmt_missing(columns = gt::vars(estimate, ci), rows = row_ref == TRUE, missing_text = '---')" %>%
       glue(),
 
   # column headers abbreviations footnote
@@ -262,11 +271,6 @@ gt_tbl_regression <- quote(list(
     "columns = {footnote_location})",
     ")"
   ),
-
-  # combining conf.low and conf.high to print confidence interval
-  cols_merge_ci =
-    "gt::cols_merge(col_1 = gt::vars(conf.low), col_2 = gt::vars(conf.high), pattern = '{1}, {2}')" %>%
-      glue::as_glue(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
