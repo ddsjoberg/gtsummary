@@ -33,7 +33,7 @@ e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
 \item{hide_n}{Hide N column. Default is \code{FALSE}}
 
-\item{show_single_row}{By default categorical variables are printed on a
+\item{show_single_row}{By default categorical variables are printed on
 multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
 the regression coefficient on a single row, include the variable name here,
 e.g. \code{show_single_row = c("var1", "var2")}}

@@ -39,7 +39,7 @@
 #' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept Logical argument indicating whether to include the intercept
 #' in the output.  Default is `FALSE`
-#' @param show_single_row By default categorical variables are printed on a
+#' @param show_single_row By default categorical variables are printed on
 #' multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
 #' the regression coefficient on a single row, include the variable name here,
 #' e.g. `show_single_row = c("var1", "var2")`
