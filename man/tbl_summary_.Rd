@@ -66,5 +66,6 @@ argument in \link{add_p}. No longer required.}
 }
 \description{
 The \code{'by ='} argument can be passed as a string, rather than with non-standard
-evaluation as in \link{tbl_summary}
+evaluation as in \link{tbl_summary}. Review the help file for \link{tbl_summary} fully
+documented options and arguments.
 }

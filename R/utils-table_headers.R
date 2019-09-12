@@ -127,10 +127,7 @@ table_header_to_gt_cols_label <- function(table_header) {
 # gt table_header to gt cols_hide code
 table_header_to_gt_cols_hide <- function(table_header) {
   table_header %>%
-    filter(
-      .data$hide == TRUE,
-      !startsWith(.data$column, "conf.high")
-    ) %>%
+    filter(.data$hide == TRUE) %>%
     pull(.data$column) %>%
     glue_collapse(sep = ", ") %>%
     {

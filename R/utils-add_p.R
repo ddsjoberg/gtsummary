@@ -1,33 +1,20 @@
-#' Tests used in add_p
-#'
-#' These functions calculate pvalues for various tests.
-#'
-#' @param data input data set
-#' @param variable categorical or continuous variable for which a
-#' test with \code{by_var} is desired
-#' @param by categorical variable
-#' @param group the group variable for clustered data
-#' @keywords internal
-#' @noRd
-#' @author Daniel D. Sjoberg
+# Tests used in add_p
 
-add_p_test <- function(data, ...) UseMethod("add_p_test")
-
-add_p_test.t.test <- function(data, variable, by, ...) {
+add_p_test_t.test <- function(data, variable, by, ...) {
   result = list()
   result$p <- stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
   result$test <- "t-test"
   result
 }
 
-add_p_test.kruskal.test <- function(data, variable, by, ...) {
+add_p_test_kruskal.test <- function(data, variable, by, ...) {
   result = list()
   result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "Kruskal-Wallis test"
   result
 }
 
-add_p_test.wilcox.test <- function(data, variable, by, ...) {
+add_p_test_wilcox.test <- function(data, variable, by, ...) {
   result = list()
   if (length(unique(data[[by]])) > 2)
     stop("Wilcoxon rank-sum test cannot be calculated with more than 2 groups")
@@ -36,21 +23,21 @@ add_p_test.wilcox.test <- function(data, variable, by, ...) {
   result
 }
 
-add_p_test.chisq.test <- function(data, variable, by, ...) {
+add_p_test_chisq.test <- function(data, variable, by, ...) {
   result = list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "chi-square test of independence"
   result
 }
 
-add_p_test.fisher.test <- function(data, variable, by, ...) {
+add_p_test_fisher.test <- function(data, variable, by, ...) {
   result = list()
   result$p <- stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "Fisher's exact test"
   result
 }
 
-add_p_test.lme4 <- function(data, variable, by, group, type, ...) {
+add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
   result = list()
   # input checks for lme4 tests
   if (data[[by]] %>% unique() %>% length() != 2) {
@@ -93,18 +80,25 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
 
   # keeping non-missing values
   data <- stats::na.omit(data[c(variable, by, group)])
-  # add class of the test type to have the method function work
-  class(data) <- c(test, class(data))
 
   # calculating pvalue
   tryCatch({
+    test_func <- switch(
+      test,
+      t.test = add_p_test_t.test,
+      kruskal.test = add_p_test_kruskal.test,
+      wilcox.test = add_p_test_wilcox.test,
+      chisq.test = add_p_test_chisq.test,
+      fisher.test = add_p_test_fisher.test,
+      lme4 = add_p_test_lme4
+    ) %||% # if not an internal test, then resolving to function name supplied
+      test
+
     # initializing to NA
     pval <- NA_real_
-    pval <- add_p_test(
-      data = data, variable = variable,
-      by = by, group = group, test = test,
-      type = type
-    )
+    pval <- do.call(test_func, list(data = data, variable = variable,
+                                    by = by, group = group, test = test,
+                                    type = type))
   },
   # printing warning and errors as message
   warning = function(w) {

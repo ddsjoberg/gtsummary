@@ -6,7 +6,7 @@
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
-  hide_n = FALSE, show_yesno = NULL, conf.level = NULL,
+  hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
   estimate_fun = NULL, pvalue_fun = NULL)
 }
 \arguments{
@@ -33,10 +33,10 @@ e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
 \item{hide_n}{Hide N column. Default is \code{FALSE}}
 
-\item{show_yesno}{By default yes/no categorical variables are printed on a
-single row, when the 'No' category is the reference group.  To print both
-levels in the output table, include the variable name in the show_yesno
-vector, e.g. `show_yesno = c("var1", "var2")``}
+\item{show_single_row}{By default categorical variables are printed on
+multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+the regression coefficient on a single row, include the variable name here,
+e.g. \code{show_single_row = c("var1", "var2")}}
 
 \item{conf.level}{Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}

@@ -149,7 +149,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 #' Standard evaluation version of tbl_summary()
 #'
 #' The `'by ='` argument can be passed as a string, rather than with non-standard
-#' evaluation as in [tbl_summary]
+#' evaluation as in [tbl_summary]. Review the help file for [tbl_summary] fully
+#' documented options and arguments.
 #'
 #' @inheritParams tbl_summary
 #' @export
