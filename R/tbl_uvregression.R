@@ -79,7 +79,7 @@
 tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
-                             hide_n = FALSE, show_yesno = NULL, conf.level = NULL,
+                             hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL) {
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
@@ -192,7 +192,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
         exponentiate = exponentiate,
         conf.level = conf.level,
         label = label,
-        show_yesno = show_yesno
+        show_single_row = intersect(.y, show_single_row)
       )
     )
 
@@ -241,7 +241,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     results,
     label = "**Characteristic**",
     estimate = glue("**{estimate_header(model_obj_list[[1]], exponentiate)}**"),
-    conf.low = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
+    ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
     p.value = "**p-value**"
   )
 
@@ -281,13 +281,8 @@ gt_tbl_uvregression <- quote(list(
 
   # Show "---" for reference groups
   fmt_missing_ref =
-    "gt::fmt_missing(columns = gt::vars(estimate, conf.low, conf.high), rows = row_ref == TRUE, missing_text = '---')" %>%
+    "gt::fmt_missing(columns = gt::vars(estimate, ci), rows = row_ref == TRUE, missing_text = '---')" %>%
       glue(),
-
-  # combining conf.low and conf.high to print confidence interval
-  cols_merge_ci =
-    "gt::cols_merge(col_1 = gt::vars(conf.low), col_2 = gt::vars(conf.high), pattern = '{1}, {2}')" %>%
-      glue::as_glue(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(

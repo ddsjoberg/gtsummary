@@ -48,11 +48,11 @@
 #'   tbl_summary(by = trt) %>%
 #'   add_p()
 #'
-#' \donttest{
 #' # Conduct a custom McNemar test for response,
-#' # Function must return a named list(p = 0.05, test = "McNemar's test")
-#' # Function names begins with 'add_p_test.' and ends with the alias
-#' add_p_test.mcnemar <- function(data, variable, by, ...) {
+#' # Function must return a named list of the p-value and the
+#' # test name: list(p = 0.123, test = "McNemar's test")
+#' # The '...' must be included as input
+#' my_mcnemar <- function(data, variable, by, ...) {
 #'   result <- list()
 #'   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
 #'   result$test <- "McNemar's test"
@@ -62,8 +62,7 @@
 #' add_p_ex2 <-
 #'   trial[c("response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
-#'   add_p(test = vars(response) ~ "mcnemar")
-#' }
+#'   add_p(test = vars(response) ~ "my_mcnemar")
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -89,7 +88,8 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
 #' Standard evaluation version of add_p()
 #'
 #' The `'group ='` argument can be passed as a string, rather than with non-standard
-#' evaluation as in [add_p]
+#' evaluation as in [add_p]. Review the help file for [add_p] fully documented
+#' options and arguments.
 #'
 #' @inheritParams add_p
 #' @export

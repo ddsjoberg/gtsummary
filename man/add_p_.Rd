@@ -48,5 +48,6 @@ the row associated with this variable is omitted from the summary table.}
 }
 \description{
 The \code{'group ='} argument can be passed as a string, rather than with non-standard
-evaluation as in \link{add_p}
+evaluation as in \link{add_p}. Review the help file for \link{add_p} fully documented
+options and arguments.
 }
