@@ -93,7 +93,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9002</span>
       </span>
     </div>
 
@@ -165,7 +165,7 @@ for detailed examples.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tbl_regression</span>(<span class='no'>x</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>show_single_row</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -194,11 +194,11 @@ coefficient estimates. Default is <code>FALSE</code>.</p></td>
       <td><p>Names of variables to exclude from output.</p></td>
     </tr>
     <tr>
-      <th>show_yesno</th>
-      <td><p>By default yes/no categorical variables are printed on a
-single row, when the 'No' category is the reference group.  To print both
-levels in the output table, include the variable name in the show_yesno
-vector, e.g. `show_yesno = c("var1", "var2")``</p></td>
+      <th>show_single_row</th>
+      <td><p>By default categorical variables are printed on
+multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+the regression coefficient on a single row, include the variable name here,
+e.g. <code>show_single_row = c("var1", "var2")</code></p></td>
     </tr>
     <tr>
       <th>conf.level</th>
