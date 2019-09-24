@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Add standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
+* Added standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
 
 * Removed `gt::cols_merge()` function ahead of the gt PR #355 that changes the `cols_merge()` API (#222)
 
@@ -10,7 +10,7 @@
 
 # gtsummary 1.2.1
 
-* Vignettes install the {gt} package to a temporary directory (required for CRAN check) (#217)
+* Vignettes no longer install the {gt} package (required for CRAN check) (#217)
 
 * Added ability to name custom `add_p()` tests (#213)
 
