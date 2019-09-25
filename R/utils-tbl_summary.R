@@ -8,10 +8,11 @@
 #' @param data data frame
 #' @param variable string vector of column names from data
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 assign_class <- function(data, variable) {
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "double")
+  classes_expected <- c("character", "factor", "numeric", "logical", "integer")
 
   # extracing the base R class
   classes_return <-
@@ -43,6 +44,7 @@ assign_class <- function(data, variable) {
 #' @param class class of \code{variable}
 #' @return value that will be printed in table for dichotomous data
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 # wrapper for assign_dichotomous_value_one() function
@@ -115,6 +117,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
 #' continuous or categorical. Can be \code{NULL}.
 #' @return vector of stat_display selections for each variable
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 
 assign_stat_display <- function(variable, summary_type, stat_display) {
@@ -163,15 +166,15 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #' e.g. \code{summary_type = list(age = "continuous")}
 #' @return Vector summary types `c("continuous", "categorical", "dichotomous")`.
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 #' @examples
 #' gtsummary:::assign_summary_type(
 #'   data = mtcars,
-#'   variable =  names(mtcars),
+#'   variable = names(mtcars),
 #'   class = apply(mtcars, 2, class),
 #'   summary_type = NULL, value = NULL
 #' )
-
 assign_summary_type <- function(data, variable, class, summary_type, value) {
   map2_chr(
     variable, class,
@@ -261,6 +264,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
 #' @param by_var categorical variable
 #' @param test list of user defined statistical tests and corresponding variables
 #' @return most appropriate test as text of the test function
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -280,10 +284,14 @@ assign_test <- function(data, var, var_summary_type, by_var, test, group) {
 
 assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # if the 'by' variable is null, no tests will be performed
-  if (is.null(by_var)) return(NA_character_)
+  if (is.null(by_var)) {
+    return(NA_character_)
+  }
 
   # if user specifed test to be performed, do that test.
-  if (!is.null(test[[var]])) return(test[[var]])
+  if (!is.null(test[[var]])) {
+    return(test[[var]])
+  }
 
   # if user specifed test to be performed for ..continuous.. or
   # ..categorical.., do that test for that class of variable
@@ -296,7 +304,9 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   }
 
   # if group variable supplied, fit a random effects model
-  if (!is.null(group) & length(unique(data[[by_var]])) == 2) return("lme4")
+  if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
+    return("lme4")
+  }
 
   # unless by_var has >2 levels, then return NA with a message
   if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
@@ -321,7 +331,9 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
     min()
 
   # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
-  if (min_exp >= 5) return("chisq.test")
+  if (min_exp >= 5) {
+    return("chisq.test")
+  }
   return("fisher.test")
 }
 
@@ -353,7 +365,6 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 #' @author Daniel D. Sjoberg
 #' @examples
 #' gtsummary:::assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
-
 assign_var_label <- function(data, variable, var_label) {
   map_chr(
     variable,
@@ -362,199 +373,6 @@ assign_var_label <- function(data, variable, var_label) {
       .x
   )
 }
-
-# n = 10
-# dta = tibble(
-#   age = rnorm(n),
-#   sex = 1
-# )
-# attr(dta[["age"]], "label") = "Patient Age, yrs"
-#
-# var_label_one(dta, "age", NULL)
-#
-# meta =
-#   tibble(
-#     variable = names(dta)
-#   )
-#
-# mutate(meta, var_label = var_label(dta, variable, NULL))
-# mutate(meta, var_label = var_label(dta, variable, list(sex = "Gender")))
-
-
-
-#' This function takes in the meta-data and calculates an appropriate p-value
-#'
-#' @param data input data set
-#' @param variable categorical or continuous variable for which a test with \code{by_var} is desired
-#' @param by categorical variable
-#' @param group the group variable for clustered data
-#' @param type the type of variable, one of categorical or continuous, from the metadata
-#' @param test list of statistical tests from meta data
-#' @return a table of p-values for each variable
-#' @keywords internal
-#' @author Emily C. Zabor
-
-calculate_pvalue <- function(data, variable, by, test, type, group) {
-  pmap_dbl(
-    list(variable, by, test, type),
-    ~ calculate_pvalue_one(data, ..1, ..2, ..3, ..4, group)
-  )
-}
-
-calculate_pvalue_one <- function(data, variable, by, test, type, group) {
-
-  # if there is no by variable, and thus test is NA, return NA
-  if (is.na(test)) return(NA)
-
-  # convert by variables to factor (some functions don't allow strings)
-  data[[by]] <- data[[by]] %>% factor()
-
-  # omitting missing values before calculating pvalues
-  data <- data %>% select(c(group, variable, by)) %>% stats::na.omit()
-
-  # Wilcoxon and Kruskal-Wallis tests
-  if (test %in% c("wilcox.test", "kruskal.test")) {
-    tryCatch(
-      pval <- stats::kruskal.test(data[[variable]], data[[by]])$p.value,
-      warning = function(w) {
-        message(paste0("For variable ", variable, ": ", w))
-        pval <<- NA
-      },
-      error = function(e) {
-        message(paste0("For variable ", variable, ": ", e))
-        pval <<- NA
-      },
-      finally = {
-        return(pval)
-      }
-    )
-  }
-
-  # T-test
-  if (test == "t.test") {
-    tryCatch(
-      pval <- stats::t.test(data[[variable]] ~ data[[by]])$p.value,
-      warning = function(w) {
-        message(paste0("For variable ", variable, ": ", w))
-        pval <<- NA
-      },
-      error = function(e) {
-        message(paste0("For variable ", variable, ": ", e))
-        pval <<- NA
-      },
-      finally = {
-        return(pval)
-      }
-    )
-  }
-
-  # Chi-squared test
-  if (test == "chisq.test") {
-    tryCatch(
-      pval <- stats::chisq.test(data[[variable]], data[[by]])$p.value,
-      warning = function(w) {
-        message(paste0("For variable ", variable, ": ", w))
-        pval <<- NA
-      },
-      error = function(e) {
-        message(paste0("For variable ", variable, ": ", e))
-        pval <<- NA
-      },
-      finally = {
-        return(pval)
-      }
-    )
-  }
-
-  # Fisher's exact test
-  if (test == "fisher.test") {
-    tryCatch(
-      pval <- stats::fisher.test(data[[variable]], data[[by]])$p.value,
-      warning = function(w) {
-        message(paste0("For variable ", variable, ": ", w))
-        pval <<- NA
-      },
-      error = function(e) {
-        message(paste0("For variable ", variable, ": ", e))
-        pval <<- NA
-      },
-      finally = {
-        return(pval)
-      }
-    )
-  }
-
-  # Random effects - continuous or dichotomous
-  if (test == "lme4" & type %in% c("continuous", "dichotomous")) {
-    form1 <- get("as.formula")(paste0(by, " ~ ", variable, " + (1 | ", group, ")"))
-    mod1 <- tryCatch(
-      lme4::glmer(form1, data = get("na.omit")(data), family = get("binomial")),
-      warning = function(w) {
-        message(paste0("For variable ", variable, ": ", w))
-      },
-      error = function(e) {
-        message(paste0("For variable ", variable, ": ", e))
-      }
-    )
-    if (class(mod1) != "glmerMod") {
-      return(NA)
-    } else {
-      return(summary(mod1)$coefficients[2, "Pr(>|z|)"])
-    }
-  }
-
-  # Random effects - categorical
-  if (test == "lme4" & type == "categorical") {
-    form0 <- get("as.formula")(paste0(by, " ~ 1 + (1 | ", group, ")"))
-    form1 <- get("as.formula")(paste0(
-      by, " ~ factor(", variable,
-      ") + (1 | ", group, ")"
-    ))
-    mod0 <- tryCatch(
-      lme4::glmer(form0, data = get("na.omit")(data), family = get("binomial")),
-      warning = function(w) {
-        message(paste0("For variable ", variable, ": ", w))
-      },
-      error = function(e) {
-        message(paste0("For variable ", variable, ": ", e))
-      }
-    )
-    mod1 <- tryCatch(
-      lme4::glmer(form1, data = get("na.omit")(data), family = get("binomial")),
-      warning = function(w) {
-        message(paste0("For variable ", variable, ": ", w))
-      },
-      error = function(e) {
-        message(paste0("For variable ", variable, ": ", e))
-      }
-    )
-    if (class(mod1) != "glmerMod") {
-      return(NA)
-    } else {
-      return(get("anova")(mod0, mod1)$"Pr(>Chisq)"[2])
-    }
-  }
-}
-
-
-# calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      test = "wilcox.test", group = NULL, type = "continuous")
-# calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      test = "kruskal.test", group = NULL, type = "continuous")
-# calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      test = "t.test", group = NULL, type = "continuous")
-# calculate_pvalue_one(data = mtcars, variable = "gear", by = "am",
-#                      test = "chisq.test", group = NULL, type = "categorical")
-# calculate_pvalue_one(data = mtcars, variable = "gear", by = "am",
-#                      test = "fisher.test", group = NULL, type = "categorical")
-# calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      group = "gear", test = "lme4", type = "continuous")
-# calculate_pvalue_one(data = mtcars, variable = "hp", by = "am",
-#                      group = "gear", test = "lme4", type = "categorical")
-# calculate_pvalue_one(data = mtcars, variable = "mpg", by = "am",
-#                      group = "gear", test = "lme4", type = "continuous")
-
-
 
 
 #' This function takes in the meta data table, and calls the appropriate summarize function.
@@ -579,15 +397,16 @@ calculate_pvalue_one <- function(data, variable, by, test, type, group) {
 #' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
-#' @param row_percent Logical value indicating whether to calculate
-#' percentages within column to across rows
+#' @param percent indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 calculate_summary_stat <- function(data, variable, by, summary_type,
                                    dichotomous_value, var_label, stat_display,
                                    digits, class, missing, missing_text, sort,
-                                   row_percent) {
+                                   percent) {
 
   # if class is NA, then do not calculate summary statistics
   if (is.na(class)) {
@@ -637,7 +456,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
     return(
       summarize_categorical(
         data, variable, by, var_label, stat_display, dichotomous_value,
-        missing, missing_text, sort, row_percent
+        missing, missing_text, sort, percent
       )
     )
   }
@@ -675,6 +494,7 @@ calculate_summary_stat <- function(data, variable, by, summary_type,
 #' @param x vector containing the values of a continuous variable. This can be
 #' raw data values or a vector of summary statistics themselves
 #' @return the rounded values
+#' @noRd
 #' @keywords internal
 #' @author Emily Zabor, Daniel D. Sjoberg
 
@@ -697,20 +517,30 @@ continuous_digits_guess_one <- function(data,
                                         class,
                                         digits = NULL) {
   # if class is NA (meaning all values are NA), returning NA
-  if (is.na(class)) return(NA)
+  if (is.na(class)) {
+    return(NA)
+  }
 
   # if the variable is not continuous type, return NA
-  if (summary_type != "continuous") return(NA)
+  if (summary_type != "continuous") {
+    return(NA)
+  }
 
   # if the number of digits is specified for a variable, return specified number
-  if (!is.null(digits[[variable]])) return(digits[[variable]])
+  if (!is.null(digits[[variable]])) {
+    return(digits[[variable]])
+  }
 
   # if the number of digits is specified for a all continuous variables,
   # return specified number
-  if (!is.null(digits[["..continuous.."]])) return(digits[["..continuous.."]])
+  if (!is.null(digits[["..continuous.."]])) {
+    return(digits[["..continuous.."]])
+  }
 
   # if class is integer, then round everythng to nearest integer
-  if (class == "integer") return(0)
+  if (class == "integer") {
+    return(0)
+  }
 
   # calculate the spread of the variable
   var_spread <- stats::quantile(data[[variable]], probs = c(0.95), na.rm = TRUE) -
@@ -736,6 +566,7 @@ continuous_digits_guess_one <- function(data,
 #'
 #' @param data data frame
 #' @param by character name of the `by` variable found in data
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -787,15 +618,29 @@ df_by <- function(data, by) {
 #' @param missing_text String to display for count of missing observations.
 #' @param sort string indicating whether to sort categorical
 #' variables by 'alphanumeric' or 'frequency'
-#' @param row_percent Logical value indicating whether to calculate
-#' percentages within column to across rows
+#' @param percent indicates the type of percentage to return. Must be one of
+#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
+#' @param percent_fun function to round and format percentages.  Default
+#' is `style_percent()`
 #' @return formatted summary statistics in a tibble.
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 summarize_categorical <- function(data, variable, by, var_label,
                                   stat_display, dichotomous_value, missing,
-                                  missing_text, sort, row_percent) {
+                                  missing_text, sort, percent) {
+  percent_fun <-
+    getOption("gtsummary.tbl_summary.percent_fun",
+      default = style_percent
+    )
+  if (!rlang::is_function(percent_fun)) {
+    stop(paste0(
+      "'percent_fun' is not a valid function.  Please pass only a function\n",
+      "object. For example, to round percentages to 2 decimal places, \n\n",
+      "'options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(\"%.2f\", 100 * x))'"
+    ))
+  }
 
   # counting total missing
   tot_n_miss <- sum(is.na(data[[variable]]))
@@ -832,7 +677,11 @@ summarize_categorical <- function(data, variable, by, var_label,
   # for column percent, group by 'by_col'
   # for row percents, group by 'variable'
   percent_group_by_var <-
-    ifelse(row_percent == TRUE, "variable", "by_col")
+    case_when(
+      percent == "column" ~ "by_col",
+      percent == "row" ~ "variable",
+      percent == "cell" ~ ""
+    )
 
   # nesting data and changing by variable
   tab0 <-
@@ -845,16 +694,16 @@ summarize_categorical <- function(data, variable, by, var_label,
   # if there is a dichotomous value supplied, merging it in to ensure it gets counted (when unobserved)
   if (!is.null(dichotomous_value)) {
     # making factors character here
-    if(is.factor(tab0$variable)) {
+    if (is.factor(tab0$variable)) {
       tab0 <-
         tab0 %>%
         mutate(variable = as.character(variable)) %>%
         full_join(tibble(variable = as.character(dichotomous_value)), by = "variable")
     }
     else {
-    tab0 <-
-      tab0 %>%
-      full_join(tibble(variable = dichotomous_value), by = "variable")
+      tab0 <-
+        tab0 %>%
+        full_join(tibble(variable = dichotomous_value), by = "variable")
     }
   }
 
@@ -867,7 +716,7 @@ summarize_categorical <- function(data, variable, by, var_label,
     group_by(!!sym(percent_group_by_var)) %>%
     mutate(
       N = sum(.data$n),
-      p = style_percent(.data$n / .data$N),
+      p = percent_fun(.data$n / .data$N),
       stat = as.character(glue(stat_display))
     ) %>%
     select(c("by_col", "var_level_freq", "variable", "stat")) %>%
@@ -901,7 +750,9 @@ summarize_categorical <- function(data, variable, by, var_label,
     group_by(!!sym("by_col")) %>%
     nest() %>%
     mutate(
-      missing_count = map_chr(data, ~ .x[[1]] %>% is.na() %>% sum())
+      missing_count = map_chr(data, ~ .x[[1]] %>%
+        is.na() %>%
+        sum())
     ) %>%
     select(c("by_col", "missing_count")) %>%
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
@@ -946,12 +797,12 @@ summarize_categorical <- function(data, variable, by, var_label,
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
 #   stat_display = "{n}/{N} ({p}%)", dichotomous_value = 50, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
 #   stat_display = "{n}/{N} ({p}%)", dichotomous_value = NULL, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 # summarize_categorical(
 #   data = lung, variable = "ph.karno", by = NULL, var_label = "WTF",
@@ -966,7 +817,7 @@ summarize_categorical <- function(data, variable, by, var_label,
 # summarize_categorical(
 #   data = mtcars, variable = "cyl", by = "am", var_label = "WTF",
 #   stat_display = "{n} ({p}%)", dichotomous_value = NULL, missing = "ifany",
-#   row_percent = FALSE
+#   percent = "column"
 # )
 
 
@@ -989,6 +840,7 @@ summarize_categorical <- function(data, variable, by, var_label,
 #' zero counts (`"always"`). Default is `"ifany"`.
 #' @param missing_text String to display for count of missing observations.
 #' @return formatted summary statistics in a tibble.
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @importFrom stringr str_extract_all str_remove_all fixed
@@ -1027,7 +879,7 @@ summarize_continuous <- function(data, variable, by, digits,
   data <-
     data %>%
     group_by(!!sym("by_col")) %>%
-    nest(.key = "data")
+    nest()
 
   # nesting data and calculating descriptive stats
   stats <-
@@ -1052,7 +904,10 @@ summarize_continuous <- function(data, variable, by, digits,
       # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
       df_result = map2(
         .data$stat_name_list, .data$stat_result_list_fmt,
-        ~ .y %>% t() %>% as_tibble(.name_repair = "minimal") %>% set_names(.x)
+        ~ .y %>%
+          t() %>%
+          as_tibble(.name_repair = "minimal") %>%
+          set_names(.x)
       ),
       # rounding statistics and concatenating results
       stat = map_chr(
@@ -1079,7 +934,9 @@ summarize_continuous <- function(data, variable, by, digits,
       missing_count =
         map_chr(
           data,
-          ~ .x[[1]] %>% is.na() %>% sum()
+          ~ .x[[1]] %>%
+            is.na() %>%
+            sum()
         )
     ) %>%
     select(c("by_col", "missing_count")) %>%
@@ -1112,6 +969,7 @@ summarize_continuous <- function(data, variable, by, digits,
 #' The names of the list elements are variable names or '..categorical..' for assigning
 #' all variables of that type.  If both a variable name and '..categorical..' are
 #' specified, the variable name takes precedent
+#' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
@@ -1121,14 +979,22 @@ assign_sort <- function(variable, summary_type, sort) {
     variable, summary_type,
     function(variable, summary_type) {
       # only assigning sort type for caegorical data
-      if (summary_type == "dichotomous") return("alphanumeric")
-      if (summary_type != "categorical") return(NA_character_)
+      if (summary_type == "dichotomous") {
+        return("alphanumeric")
+      }
+      if (summary_type != "categorical") {
+        return(NA_character_)
+      }
 
       # if variable was specified, then use that
-      if (!is.null(sort[[variable]])) return(sort[[variable]])
+      if (!is.null(sort[[variable]])) {
+        return(sort[[variable]])
+      }
 
       # if the sort list has ..categorical.. name, then use that for all categorical variables
-      if (!is.null(sort[["..categorical.."]])) return(sort[["..categorical.."]])
+      if (!is.null(sort[["..categorical.."]])) {
+        return(sort[["..categorical.."]])
+      }
 
       # otherwise, return "alphanumeric"
       return("alphanumeric")
@@ -1185,9 +1051,8 @@ calculate_single_stat <- function(x, stat_name) {
 # this should include EVERY input of \code{\link{tbl_summary}} in the same order
 # copy and paste them from \code{\link{tbl_summary}}
 
-tbl_summary_input_checks <- function(data, by, label, type, value,
-                                     statistic, digits, missing, missing_text,
-                                     group, sort) {
+tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
+                                     digits, missing, missing_text, sort) {
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
@@ -1223,139 +1088,185 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
   }
 
   # type -----------------------------------------------------------------------
-  if (!is.null(type)) {
-    # checking that all inputs are named
-    if ((names(type) %>% purrr::discard(. == "") %>% length()) != length(type)) {
+  if (!is.null(type) & is.null(names(type))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(type) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'type' must be named. ",
-        "For example, 'type = list(age = \"continuous\", female = \"dichotomous\")'"
+        "'type' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the type specification: ",
+        "list(vars(age, marker) ~ \"continuous\")"
+      ))
+    }
+    if ("list" %in% class(type)) {
+      if (some(type, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'type' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the type specification: ",
+          "list(vars(age, marker) ~ \"continuous\")"
+        ))
+      }
+    }
+
+    # all sepcifed types are continuous, categorical, or dichotomous
+    if ("formula" %in% class(type)) type <- list(type)
+    if (!every(type, ~ eval(rlang::f_rhs(.x)) %in% c("continuous", "categorical", "dichotomous")) |
+      !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'type'  argument must of one and only one of ",
+        "\"continuous\", \"categorical\", or \"dichotomous\""
       ))
     }
 
-    # checking that all names in list are variable names from data.
-    summary_type_not_in_data <- setdiff(names(type), names(data))
-    if (length(summary_type_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'type' are not found in 'data' and ",
-        "were ignored: {paste0(summary_type_not_in_data, collapse = ', ')}"
-      ))
-    }
-
-    # checking all inputs are continuous, categorial, or dichotomous
-    summary_type_value_not_valid <-
-      setdiff(
-        type %>% unlist() %>% unique(),
-        c("categorical", "dichotomous", "continuous")
-      )
-    if (length(summary_type_value_not_valid) > 0) {
+    # functions all_continuous, all_categorical, and all_dichotomous cannot be used for type
+    if (some(
+      type,
+      ~ deparse(.x) %>% # converts a formula to a string
+        stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
+        any()
+    )) {
       stop(glue(
-        "'type' values must be 'continuous', 'categorical', or 'dichotomous'. ",
-        "'{paste0(summary_type_value_not_valid, collapse = ', ')}' not valid."
+        "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
+        "cannot be used in the 'type' argument."
       ))
     }
   }
 
   # value ----------------------------------------------------------------------
-  if (!is.null(value)) {
-    # checking that all inputs are named
-    if ((names(value) %>% purrr::discard(. == "") %>% length()) != length(value)) {
+  if (!is.null(value) & is.null(names(value))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(value) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'value' must be named. ",
-        "For example, 'value = list(varname = \"level to show\")'"
+        "'value' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the value specification: ",
+        "list(vars(stage) ~ \"T1\")"
       ))
     }
+    if ("list" %in% class(value)) {
+      if (some(value, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'value' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the value specification: ",
+          "list(vars(stage) ~ \"T1\")"
+        ))
+      }
+    }
 
-    # checking class of values passed values
-    value %>%
-      imap(
-        function(.x, .y) {
-          if ("character" %in% class(data[[.y]])) {
-            if (is.numeric(.x))
-              stop(glue(
-                "Column '{.y}' is class character, and value passed is numeric"
-              ))
-          }
-          else if (is.numeric(data[[.y]])) {
-            if ("character" %in% class(.x))
-            stop(glue(
-              "Column '{.y}' is numeric, and value passed is character"
-            ))
-          }
-        }
-      )
+    # functions all_continuous, all_categorical, and all_dichotomous cannot be used for value
+    if (some(
+      value,
+      ~ deparse(.x) %>% # converts a formula to a string
+        stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
+        any()
+    )) {
+      stop(glue(
+        "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
+        "cannot be used in the 'value' argument."
+      ))
+    }
   }
 
   # label ----------------------------------------------------------------------
-  if (!is.null(label)) {
-    # checking that all inputs are named
-    if ((names(label) %>% purrr::discard(. == "") %>% length()) != length(label)) {
+  if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(label) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'label' must be named. ",
-        "For example, 'label = list(age = \"Age, yrs\", ptstage = \"Path T Stage\")'"
+        "'label' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the label specification: ",
+        "list(vars(stage) ~ \"T Stage\")"
       ))
     }
+    if ("list" %in% class(label)) {
+      if (purrr::some(label, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'label' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the label specification: ",
+          "list(vars(stage) ~ \"T Stage\")"
+        ))
+      }
+    }
 
-    # checking that all names in list are variable names from data.
-    var_label_not_in_data <- setdiff(names(label), names(data))
-    if (length(var_label_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'label' are not found in 'data' and ",
-        "were ignored: {paste0(var_label_not_in_data, collapse = ', ')}"
+    # all sepcifed labels must be a string of length 1
+    if ("formula" %in% class(label)) label <- list(label)
+    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'label' argument must be a string."
       ))
     }
   }
 
   # statistic ------------------------------------------------------------------
-  if (!is.null(statistic)) {
-    # checking that all inputs are named
-    if ((names(statistic) %>% purrr::discard(. == "") %>% length()) != length(statistic)) {
+  if (!is.null(statistic) & is.null(names(statistic))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(statistic) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'statistic' must be named. ",
-        "For example, 'statistic = list(..continuous.. = \"{median} ({p25}, {p75})\", ..categorical.. = \"{n} ({p}%)\")'"
+        "'statistic' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the statistic specification: ",
+        "list(all_categorical() ~ \"{n} / {N}\")"
       ))
     }
+    if ("list" %in% class(statistic)) {
+      if (some(statistic, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'statistic' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the statistic specification: ",
+          "list(all_categorical() ~ \"{n} / {N}\")"
+        ))
+      }
+    }
 
-    # checking that all names in list are continuous or categorical
-    stat_display_names_not_valid <-
-      names(statistic) %>%
-      setdiff(c(names(data) %>% setdiff(c(by, group)), "..continuous..", "..categorical.."))
-    if (length(stat_display_names_not_valid) > 0) {
-      message(glue(
-        "Expecting list names '..continuous..',  '..categorical..', or a column name from 'data'. ",
-        "The following names from 'statistic' are not valid and ",
-        "were ignored: {paste0(stat_display_names_not_valid, collapse = ', ')}"
+    # all sepcifed statistics must be a string of length 1
+    if ("formula" %in% class(statistic)) statistic <- list(statistic)
+    if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'statistic' argument must be a string."
       ))
     }
   }
 
   # digits ---------------------------------------------------------------------
-  if (!is.null(digits)) {
-    # checking that all inputs are named
-    if ((names(digits) %>% purrr::discard(. == "") %>% length()) != length(digits)) {
+  if (!is.null(digits) & is.null(names(digits))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(digits) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'digits' must be named. ",
-        "For example, 'digits = list(age = 1)'"
+        "'digits' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the digits specification: ",
+        "list(vars(age, marker) ~ 1)"
       ))
+    }
+    if ("list" %in% class(digits)) {
+      if (some(digits, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'digits' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the digits specification: ",
+          "list(vars(age, marker) ~ 1)"
+        ))
+      }
     }
 
-    # checking that all names in list are variable names from data.
-    digits_not_in_data <- setdiff(names(digits), c(names(data), "..continuous.."))
-    if (length(digits_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'digits' are not found in 'data' and ",
-        "were ignored: {paste0(digits_not_in_data, collapse = ', ')}"
-      ))
-    }
-
-    # specified digits must be a non-negative integer
-    digits_value_not_valid <-
-      setdiff(digits %>% unlist() %>% unique(), 0:100)
-    if (length(digits_value_not_valid) > 0) {
-      stop(glue(
-        "'digits' values must be non-negative integers. ",
-        "'{paste0(digits_value_not_valid, collapse = ', ')}' not valid input."
-      ))
-    }
+    # # specified digits must be a non-negative integer
+    # digits_value_not_valid <-
+    #   setdiff(digits %>% unlist() %>% unique(), 0:100)
+    # if (length(digits_value_not_valid) > 0) {
+    #   stop(glue(
+    #     "'digits' values must be non-negative integers. ",
+    #     "'{paste0(digits_value_not_valid, collapse = ', ')}' not valid input."
+    #   ))
+    # }
   }
 
   # missing_text ---------------------------------------------------------------
@@ -1368,37 +1279,37 @@ tbl_summary_input_checks <- function(data, by, label, type, value,
     stop("Argument 'missing_text' must be a character string of length 1.")
   }
 
-  # group ----------------------------------------------------------------------
-  if (length(group) > 1) {
-    stop("'group' must be `NULL` or length 1.")
-  }
-
   # sort -----------------------------------------------------------------------
-  if (!is.null(sort)) {
-    # checking that all inputs are named
-    if ((names(sort) %>% purrr::discard(. == "") %>% length()) != length(sort)) {
+  if (!is.null(sort) & is.null(names(sort))) { # checking names for deprecated named list input
+
+    # checking input type: must be a list of formulas, or one formula
+    if (!class(sort) %in% c("list", "formula")) {
       stop(glue(
-        "Each element in 'sort' must be named. ",
-        "For example, 'sort = list(..categorical.. = \"frequency\")'"
+        "'sort' argument must be a list of formulas. ",
+        "LHS of the formula is the variable specification, ",
+        "and the RHS is the sort specification: ",
+        "list(vars(age, marker) ~ 1)"
       ))
     }
+    if ("list" %in% class(sort)) {
+      if (some(sort, negate(rlang::is_bare_formula))) {
+        stop(glue(
+          "'sort' argument must be a list of formulas. ",
+          "LHS of the formula is the variable specification, ",
+          "and the RHS is the sort specification: ",
+          "list(vars(stage, marker) ~ \"frequency\")"
+        ))
+      }
+    }
 
-    # checking that all names in list are variable names from data.
-    var_sort_not_in_data <- setdiff(names(sort), c(names(data), "..categorical.."))
-    if (length(var_sort_not_in_data) > 0) {
-      message(glue(
-        "The following names from 'sort' are not valid ",
-        "were ignored: {paste0(var_sort_not_in_data, collapse = ', ')}"
+    # all sepcifed types are frequency or alphanumeric
+    if ("formula" %in% class(sort)) sort <- list(sort)
+    if (!every(sort, ~ eval(rlang::f_rhs(.x)) %in% c("frequency", "alphanumeric")) |
+      !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+      stop(glue(
+        "The RHS of the formula in the 'sort' argument must of one and only one of ",
+        "\"frequency\" or \"alphanumeric\""
       ))
-    }
-
-    # checking that all the values are length 1
-    if (map_lgl(sort, ~ length(.x) != 1) %>% any()) {
-      stop("The length of all elements in 'sort' must be 1.")
-    }
-    # checking that all values are "alphanumeric" OR "frequency"
-    if (unlist(sort) %>% setdiff(c("alphanumeric", "frequency")) %>% length() > 0) {
-      stop("Elements of 'sort' must be one of 'frequency' or 'alphanumeric'")
     }
   }
 }
@@ -1494,7 +1405,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
   }
 
   # replacing statistics in {}, with their labels
-  for (i in 1:nrow(labels)) {
+  for (i in seq_len(nrow(labels))) {
     stat_display <-
       stringr::str_replace_all(
         stat_display,
@@ -1521,4 +1432,32 @@ footnote_stat_label <- function(meta_data) {
     pull("message") %>%
     paste(collapse = "; ") %>%
     paste0("Statistics presented: ", .)
+}
+
+# the by variable is supplied is a bare, and ocnverted to a string.
+# when a NULL is passed, it is returned as a NULL
+enquo_to_string <- function(by_enquo, arg_name) {
+  # returning NULL if NULL was passed
+  if (rlang::quo_is_null(by_enquo)) {
+    return(NULL)
+  }
+
+  # converting enquo to string
+  by_quo_text <- rlang::quo_text(by_enquo)
+
+  # is user supplied string, then stopping with error
+  if (startsWith(by_quo_text, "\"") && endsWith(by_quo_text, "\"")) {
+    stop_defunct(glue(
+      "\nPassing the '{arg_name}' argument as a string is defunct.\n",
+      "Please pass the {arg_name} argument without quotes. For example, \n\n",
+      "foo({arg_name} = varname)"
+    ))
+  }
+
+  # if user passed odd name quoted with back ticks, removing them
+  if (startsWith(by_quo_text, "`") && endsWith(by_quo_text, "`")) {
+    by_quo_text <- stringr::str_sub(by_quo_text, 2, -2)
+  }
+
+  by_quo_text
 }

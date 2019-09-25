@@ -1,4 +1,5 @@
 context("test-tbl_survival")
+library(survival)
 
 test_that("no errors/warnings with stratified variable", {
   s1 <- survfit(Surv(ttdeath, death) ~ trt, trial)

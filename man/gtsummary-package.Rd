@@ -7,6 +7,8 @@
 \title{gtsummary: Presentation-Ready Data Summary and Analytic Result
     Tables}
 \description{
+\if{html}{\figure{logo.png}{options: align='right'}}
+
 Creates presentation-ready tables summarizing data
     sets, regression models, and more. The code to create the tables is
     concise and highly customizable. Data frames can be summarized with
@@ -15,7 +17,8 @@ Creates presentation-ready tables summarizing data
     categorical variables. Common regression models, such as logistic
     regression and Cox proportional hazards regression, are automatically
     identified and the tables are pre-filled with appropriate column
-    headers.
+    headers. The package is enhanced when the 'gt' package is installed.
+    Use this code to install: 'remotes::install_github("rstudio/gt")'.
 }
 \seealso{
 Useful links:
@@ -26,13 +29,20 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Daniel D. Sjoberg \email{danield.sjoberg@gmail.com}
+\strong{Maintainer}: Daniel D. Sjoberg \email{danield.sjoberg@gmail.com} (0000-0003-0862-2018)
 
 Authors:
 \itemize{
-  \item Emily C. Zabor
-  \item Margie Hannum
-  \item Karissa Whiting
+  \item Margie Hannum (0000-0002-2953-0449)
+  \item Karissa Whiting (0000-0002-4683-1868)
+  \item Emily C. Zabor (0000-0002-1402-4498)
+}
+
+Other contributors:
+\itemize{
+  \item Michael Curry (0000-0002-0261-4044) [contributor]
+  \item Esther Drill (0000-0002-3315-4538) [contributor]
+  \item Jessica Flynn (0000-0001-8310-6684) [contributor]
 }
 
 }

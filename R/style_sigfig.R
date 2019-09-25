@@ -3,18 +3,19 @@
 #' Converts a numeric argument into a string that has been rounded to a
 #' significant figure-like number. Scientific notation output
 #' is avoided, however, and additional significant figures may be displayed for
-#' numbers large numbers.  For example, if the number of significant digits
+#' large numbers.  For example, if the number of significant digits
 #' requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).
 #'
 #' If 2 sig figs are input, the number is rounded to 2 decimal places
 #' when `abs(x) < 1`, 1 decimal place when `abs(x) >= 1 & abs(x) < 10`,
 #' and to the nearest integer when `abs(x) >= 10`.
 #'
-#' @param x numeric vector
-#' @param digits integer specifying the minimum number of significant
+#' @param x Numeric vector
+#' @param digits Integer specifying the minimum number of significant
 #' digits to display
 #' @importFrom stringr str_starts str_remove
 #' @export
+#' @return A character vector of styled numbers
 #' @author Daniel D. Sjoberg
 #' @examples
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345, NA, -0.001) %>%

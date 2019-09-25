@@ -10,17 +10,18 @@
   style_pvalue(x, prepend_p = TRUE), ...)
 }
 \arguments{
-\item{x}{object created from  \link{tbl_regression}}
+\item{x}{Object created from \link{tbl_uvregression}}
 
-\item{variable}{variable name of statistic to present}
+\item{variable}{Variable name of statistics to present}
 
-\item{level}{level of the variable to display for categorical variables.
+\item{level}{Level of the variable to display for categorical variables.
 Default is \code{NULL}, returning the top row in the table for the variable.}
 
-\item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
-Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.  All columns from
-\code{x$table_body} are available to print as well as the confidence level (conf.level).
-Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
+\item{pattern}{String indicating the statistics to return.
+Uses \link[glue:glue]{glue::glue} formatting.
+Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.
+All columns from \code{x$table_body} are available to print as well as the
+confidence level (conf.level). See below for details.}
 
 \item{estimate_fun}{function to style model coefficient estimates.
 Columns 'estimate', 'conf.low', and 'conf.high' are formatted.
@@ -29,7 +30,10 @@ Default is \code{x$inputs$estimate_fun}}
 \item{pvalue_fun}{function to style p-values and/or q-values.
 Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
 
-\item{...}{not used}
+\item{...}{Not used}
+}
+\value{
+A string reporting results from a gtsummary table
 }
 \description{
 Extracts and returns statistics from a table created by the \code{tbl_uvregression}
@@ -71,8 +75,11 @@ Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{add_nevent.tbl_uvregression}},
   \code{\link{add_q.tbl_uvregression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_stack}},
+  \code{\link{bold_p.tbl_uvregression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_uvregression}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
+  \code{\link{tbl_uvregression}}
 }
 \concept{tbl_uvregression tools}

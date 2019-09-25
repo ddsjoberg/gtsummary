@@ -1,8 +1,7 @@
 #' Deprecated functions
 #'
 #' Some functions have been deprecated and are no longer being actively
-#' supported. Please use these functions instead:
-#' [add_p], [add_global_p].
+#' supported.
 #'
 #' @name deprecated
 #' @keywords internal
@@ -21,9 +20,124 @@ add_comparison <- function(...) {
 #' @rdname deprecated
 #' @export
 
+cols_label_summary <- function(stat_overall = NULL, ...) {
+  signal_soft_deprecated(
+    "cols_label_summary() is deprecated. Please use modify_header() instead."
+  )
+  if (!is.null(stat_overall)) {
+    modify_header(stat_0 = stat_overall, ...)
+  } else {
+    modify_header(...)
+  }
+}
+
+#' @rdname deprecated
+#' @export
+
 add_global <- function(...) {
   signal_soft_deprecated(
     "add_global() is deprecated. Please use add_global_p() instead."
   )
   add_global_p(...)
+}
+
+#' @rdname deprecated
+#' @export
+
+tab_style_bold_p <- function(...) {
+  signal_soft_deprecated(
+    "tab_style_bold_p() is deprecated. Please use bold_p() instead."
+  )
+  bold_p(...)
+}
+
+#' @rdname deprecated
+#' @export
+
+tab_style_bold_labels <- function(...) {
+  signal_soft_deprecated(
+    "tab_style_bold_labels() is deprecated. Please use bold_labels() instead."
+  )
+  bold_labels(...)
+}
+
+#' @rdname deprecated
+#' @export
+
+tab_style_italicize_levels <- function(...) {
+  signal_soft_deprecated(paste0(
+    "tab_style_italicize_levels() is deprecated. ",
+    "Please use italicize_levels() instead."
+  ))
+  italicize_levels(...)
+}
+
+#' @rdname deprecated
+#' @export
+
+tab_style_italicize_labels <- function(...) {
+  signal_soft_deprecated(paste0(
+    "tab_style_italicize_labels() is deprecated. ",
+    "Please use italicize_labels() instead."
+  ))
+  italicize_labels(...)
+}
+
+#' @rdname deprecated
+#' @export
+
+tab_style_bold_levels <- function(...) {
+  signal_soft_deprecated(
+    "tab_style_bold_levels() is deprecated. Please use bold_levels() instead."
+  )
+  bold_levels(...)
+}
+
+
+
+#' @rdname deprecated
+#' @export
+
+fmt_uni_regression <- function(...) {
+  stop_defunct(
+    "fmt_uni_regression() is defunct. Please use tbl_uvregression() instead."
+  )
+}
+
+#' @rdname deprecated
+#' @export
+
+fmt_table1 <- function(...) {
+  stop_defunct(
+    "fmt_table1() is defunct. Please use tbl_summary() instead."
+  )
+}
+
+
+#' @rdname deprecated
+#' @export
+
+fmt_regression <- function(...) {
+  stop_defunct(
+    "fmt_regression() is defunct. Please use tbl_regression() instead."
+  )
+}
+
+
+#' @rdname deprecated
+#' @export
+
+fmt_beta <- function(...) {
+  stop_defunct(
+    "fmt_beta() is defunct. Please use style_sigfig() instead."
+  )
+}
+
+#' @rdname deprecated
+#' @export
+
+fmt_pvalue <- function(...) {
+  stop_defunct(
+    "fmt_pvalue() is defunct. Please use style_pvalue() instead."
+  )
 }

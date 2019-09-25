@@ -2,17 +2,17 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival}
 \alias{tbl_survival}
-\title{Creates table of univariate statistics for time-to-event endpoints}
+\title{Creates table of univariate summary statistics for time-to-event endpoints}
 \usage{
 tbl_survival(x, ...)
 }
 \arguments{
-\item{x}{a survfit or cuminc object}
+\item{x}{A survfit object}
 
-\item{...}{further arguments passed to other methods}
+\item{...}{Additional arguments passed to other methods}
 }
 \description{
-Creates table of univariate statistics for time-to-event endpoints
+Creates table of univariate summary statistics for time-to-event endpoints
 }
 \seealso{
 \link{tbl_survival.survfit}

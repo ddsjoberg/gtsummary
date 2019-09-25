@@ -8,17 +8,20 @@
   ...)
 }
 \arguments{
-\item{x}{object with class \code{tbl_regression} from the
+\item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
 \item{terms}{Character vector of terms for which to add global p-values.  Default
 is \code{NULL} which will add global p-values for all categorical variables}
 
-\item{keep}{logical argument indicating whether to also retain the individual
+\item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is \code{FALSE}}
 
-\item{...}{arguments to be passed to \link[car:Anova]{car::Anova}}
+\item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}}
+}
+\value{
+A \code{tbl_regression} object
 }
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument
@@ -45,9 +48,11 @@ tbl_lm_global_ex1 <-
 \seealso{
 Other tbl_regression tools: \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_regression}},
+  \code{\link{bold_p.tbl_stack}},
   \code{\link{inline_text.tbl_regression}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
   \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
   \code{\link{tbl_stack}}
 }

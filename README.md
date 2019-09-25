@@ -9,24 +9,27 @@ status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://tr
 status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage
 status](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/github/ddsjoberg/gtsummary?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-## gtsummary
+## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
 
-The {gtsummary} package creates presentation-ready tables summarizing
-data sets, regression models, and more. The code to create the tables is
-concise and highly customizable. The resulting tables are gorgeous\!
-Data frames can be summarized with any function, e.g. mean(), median(),
-even user-written functions. Regression models are summarized and
-include the reference rows for categorical variables. Common regression
-models, such as logistic regression and Cox proportional hazards
-regression, are automatically identified and the tables are pre-filled
-with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The
-package uses [{broom}](https://broom.tidyverse.org/) to perform initial
-tidying of the regression models, which means there is broad support for
-many types of regression models.
+The {gtsummary} package provides an elegant and flexible way to create
+publication-ready and reproducible analytical tables. The tables
+summarize data sets, regression models, and more. The code is concise
+and the tables are highly customizable. Data frames can be summarized
+with any function, e.g. mean(), median(), even user-written functions.
+Regression models are summarized and include the reference rows for
+categorical variables. Common regression models, such as logistic
+regression and Cox proportional hazards regression, are automatically
+identified and the tables are pre-filled with appropriate column headers
+(i.e. Odds Ratio, and Hazard Ratio). The package uses
+[{broom}](https://broom.tidyverse.org/) to perform initial tidying of
+the regression models, which means there is broad support for many types
+of regression models.
 
 {gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
 each table to be tailored to your preferences. If you label your data
@@ -38,17 +41,34 @@ for a detailed exploration of the output options.
 
 ## Installation
 
-You can install the production version of {gtsummary} with:
+The {gtsummary} package was written as a companion to the {gt} package
+from RStudio, and it is recommended to install both {gt} and
+{gtsummary}. The {gt} package is not automatically installed. If {gt} is
+not installed, `knitr::kable()` will be used to produce the summary
+tables. You can install {gtsummary} and {gt} with the following code.
+
+1.  Install {gtsummary}
+    
+    ``` r
+    install.packages("gtsummary")
+    ```
+
+2.  Install {gt} from GitHub (recommended)
+    
+    ``` r
+    install.packages("remotes")
+    remotes::install_github("rstudio/gt")
+    ```
+    
+      - If you experience issues installing {gt} on Windows, install
+        [Rtools from
+        CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart
+        R, and attempt installation again.
+
+Install the development version of {gtsummary} with:
 
 ``` r
-install.packages("remotes")
 remotes::install_github("ddsjoberg/gtsummary")
-```
-
-and the development version with:
-
-``` r
-remotes::install_github("ddsjoberg/gtsummary", ref = "dev")
 ```
 
 ## Examples
@@ -59,11 +79,10 @@ The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ``` r
 library(gtsummary)
-#> Loading required package: gt
 t1 <-
   tbl_summary(
     data = trial[c("trt", "age", "grade", "response")],
-    by = "trt"
+    by = trt
   ) %>%
   add_p() 
 ```
@@ -75,9 +94,8 @@ t1 <-
 ``` r
 mod1 <- 
   glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
-t2 <-
-  tbl_regression(mod1,
-                 exponentiate = TRUE)
+
+t2 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
 <img src="man/figures/README-tbl_regression.png" width="44%">
@@ -90,14 +108,43 @@ Side-by-side regression model results from `tbl_merge()`
 
 Survival Estimates from `tbl_survival()`
 
-<img src="man/figures/tbl_strata_ex1.png" width="30%">
+<img src="man/figures/tbl_strata_ex1.png" width="31%">
+
+## Print Engine
+
+{gtsummary} uses the {gt} package to print all summary tables. In
+addition to supporting {gt}, the {gtsummary} package works well with
+`knitr::kable()`. This is particularly useful when outputting documents
+to Microsoft Word. If the {gt} package is not installed, {gtsummary}
+will fall back to `knitr::kable()`. To explicitly set the printing
+engine, set the option in the script or in the user- or project R
+profile, `.Rprofile`.
+
+    options(gtsummary.print_engine = "kable") 
+
+or
+
+    options(gtsummary.print_engine = "gt")
+
+Output from `kable` is less full featured compared to summary tables
+produced with {gt}. For example, `kable` summary tables do not include
+indentation, footnotes, and spanning header rows.
+
+## Contributing
 
 Please note that the {gtsummary} project is released with a [Contributor
-Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms. A big thank you to all
-contributors\!  
+Code of
+Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms. A big
+thank you to all contributors\!  
+[@ablack3](https://github.com/ablack3),
+[@ahinton-mmc](https://github.com/ahinton-mmc),
 [@ddsjoberg](https://github.com/ddsjoberg),
+[@emilyvertosick](https://github.com/emilyvertosick),
+[@jennybc](https://github.com/jennybc),
+[@jflynn264](https://github.com/jflynn264),
 [@karissawhiting](https://github.com/karissawhiting),
 [@margarethannum](https://github.com/margarethannum),
-[@michaelcurry1123](https://github.com/michaelcurry1123), and
-[@sammo3182](https://github.com/sammo3182)
+[@michaelcurry1123](https://github.com/michaelcurry1123),
+[@sammo3182](https://github.com/sammo3182), and
+[@zabore](https://github.com/zabore)

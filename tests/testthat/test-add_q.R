@@ -2,7 +2,7 @@ context("test-add_q")
 
 test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
   table1 <- trial %>%
-    tbl_summary(by = "trt") %>%
+    tbl_summary(by = trt) %>%
     add_p()
 
   expect_error(add_q(table1), NA)
@@ -11,7 +11,7 @@ test_that("no errors/warnings with standard use after tbl_summary() and add_p()"
 
 
 test_that("expect error if no p value in table 1", {
-  table1 <- trial %>% tbl_summary(by = "trt")
+  table1 <- trial %>% tbl_summary(by = trt)
 
   expect_error(
     add_q(table1),

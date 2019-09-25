@@ -8,7 +8,7 @@
 #' Proportion Hazards regression models ([survival::coxph]).
 #'
 #' @param x `tbl_regerssion` or `tbl_uvregression` object
-#' @param ... further arguments passed to or from other methods.
+#' @param ... Additional arguments passed to or from other methods.
 #' @export
 #' @author Daniel D. Sjoberg
 #' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],
@@ -19,7 +19,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' Add number of events to a regression table
 #'
 #' This function adds a column of the number of events to tables created with
-#' [tbl_regression] or [tbl_uvregression].  Supported
+#' [tbl_regression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
 #' [stats::glm], [lme4::glmer], and
 #' [geepack::geeglm]) and Cox
@@ -31,11 +31,12 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' of events is accessible via the [inline_text] function for printing in a report.
 #'
 #' @param x `tbl_regression` object
-#' @param ... not used
+#' @param ... Not used
 #' @export
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @export
+#' @return A `tbl_regression` object
 #' @examples
 #' tbl_reg_nevent_ex <-
 #'   glm(response ~ trt, trial, family = binomial) %>%
@@ -43,7 +44,6 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #'   add_nevent()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_reg_nevent_ex.png}{options: width=50\%}}
-#'
 
 add_nevent.tbl_regression <- function(x, ...) {
   # if model is a cox model, adding number of events as well
@@ -61,8 +61,9 @@ add_nevent.tbl_regression <- function(x, ...) {
   else if (
     # GLM or GEE
     (class(x$model_obj)[1] %in% c("glm", "geeglm")) |
-      # lme4 GLM
-      (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
+    # lme4 GLM
+    (class(x$model_obj)[1] == "glmerMod" &
+     attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
     # checking family (must be binomial)
     if (class(x$model_obj)[1] %in% c("glm", "geeglm")) {
       if (x$model_obj$family$family != "binomial") {
@@ -70,7 +71,8 @@ add_nevent.tbl_regression <- function(x, ...) {
       }
       formula <- x$model_obj$formula %>% stats::as.formula()
     }
-    else if (class(x$model_obj)[1] == "glmerMod" & attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
+    else if (class(x$model_obj)[1] == "glmerMod" &
+             attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
       if (x$model_obj@resp$family$family != "binomial") {
         stop("Model type not supported")
       }
@@ -103,17 +105,24 @@ add_nevent.tbl_regression <- function(x, ...) {
     return(x)
   }
 
+  # column label
+  x$table_header <-
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
+
   x$call_list <- c(x$call_list, list(add_nevent = match.call()))
 
-  x$gt_calls[["cols_hide_nevent"]] <-
-    glue("cols_hide(columns = vars(nevent))")
   x
 }
 
 #' Add number of events to a regression table
 #'
 #' Adds a column of the number of events to tables created with
-#' [tbl_regression] or [tbl_uvregression].  Supported
+#' [tbl_uvregression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
 #' [stats::glm], [lme4::glmer], and
 #' [geepack::geeglm]) and Cox
@@ -125,10 +134,11 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' accessible via the [inline_text] function for printing in a report.
 #'
 #' @param x `tbl_uvregerssion` object
-#' @param ... not used
+#' @param ... Not used
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @export
+#' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uv_nevent_ex <-
 #'   trial %>%
@@ -165,13 +175,21 @@ add_nevent.tbl_uvregression <- function(x, ...) {
     left_join(
       table_nevent,
       by = c("variable", "var_type", "row_type", "label")
+    ) %>%
+    select(
+      .data$variable, .data$var_type, .data$row_type,
+      .data$label, .data$N, .data$nevent, everything()
     )
 
-  x$gt_calls[["cols_nevent"]] <-
-    list(
-      "cols_move(columns = vars(nevent), after = vars(N))",
-      "cols_label(nevent = md('**Event N**'))"
-    ) %>%
-    glue_collapse(sep = " %>% ")
+  # column label
+  x$table_header <-
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
+  x <- modify_header_internal(x, nevent = "**Event N**")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
+
   x
 }

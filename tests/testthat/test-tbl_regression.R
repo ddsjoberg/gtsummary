@@ -15,22 +15,22 @@ mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial
 
 mod_lm_interaction <- lm(age ~ trt * grade * response, data = trial)
 
-lung2 = lung
+lung2 <- lung
 Hmisc::label(lung2$sex) <- "Gender"
 Hmisc::label(lung2$age) <- "AGE"
-cox_hmisclbl <- coxph(Surv(time,status)~age+sex,data = lung2)
+cox_hmisclbl <- coxph(Surv(time, status) ~ age + sex, data = lung2)
 
 
 test_that("glm: logistic and poisson regression", {
   expect_error(tbl_regression(mod_logistic), NA)
   expect_warning(tbl_regression(mod_logistic), NA)
-  expect_error(tbl_regression(mod_poisson), NA)
-  expect_warning(tbl_regression(mod_poisson), NA)
+  expect_error(tbl_regression(mod_poisson, show_single_row = "trt"), NA)
+  expect_warning(tbl_regression(mod_poisson, show_single_row = "trt"), NA)
 
   expect_error(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
   expect_warning(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
-  expect_error(tbl_regression(mod_poisson, exponentiate = TRUE), NA)
-  expect_warning(tbl_regression(mod_poisson, exponentiate = TRUE), NA)
+  expect_error(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)
+  expect_warning(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)
 })
 
 test_that("lm: no errors/warnings with standard use", {
@@ -76,6 +76,14 @@ test_that("tbl_regression creates errors when inputs are wrong", {
     "*"
   )
   expect_error(
+    tbl_regression(mod_lm_interaction, label = list("Age")),
+    "*"
+  )
+  expect_error(
+    tbl_regression(mod_lm_interaction, label = list("age" ~ c("Age", "Two"))),
+    "*"
+  )
+  expect_error(
     tbl_regression(mod_lm_interaction, include = "INCLUDE ME!"),
     "*"
   )
@@ -85,4 +93,11 @@ test_that("tbl_regression creates errors when inputs are wrong", {
 test_that("No errors/warnings when data is labelled using Hmisc", {
   expect_error(tbl_regression(cox_hmisclbl), NA)
   expect_warning(tbl_regression(cox_hmisclbl), NA)
+})
+
+test_that("show_single_row errors print", {
+  expect_error(tbl_regression(mod_lm_interaction, show_single_row = "NOT_A_VA"),
+               "*")
+  expect_error(tbl_regression(mod_lm_interaction, show_single_row = "grade"),
+               "*")
 })

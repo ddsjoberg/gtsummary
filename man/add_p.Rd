@@ -4,61 +4,112 @@
 \alias{add_p}
 \title{Adds p-values to summary tables}
 \usage{
-add_p(x, test = NULL, pvalue_fun = style_pvalue,
-  group = x$inputs$group)
+add_p(x, test = NULL, pvalue_fun = NULL, group = NULL,
+  include = NULL, exclude = NULL)
 }
 \arguments{
-\item{x}{object with class \code{tbl_summary} from the \link{tbl_summary} function}
+\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{test}{named list of statistical tests to perform,
-e.g. \code{list(age = "t.test", ptstage = "fisher.test")}. Use the names
-\code{..continuous..} and \code{..categorical..} to specify a test for all variables
-of that type (\code{..categorical..} is applied to both categorical and
-dichotomous variables).
-Options include "t.test" for a t-test,
-"wilcox.test" for a Wilcoxon rank-sum test,
-"kruskal.test" for a Kruskal-Wallis rank-sum test,
-"chisq.test" for a Chi-squared test of independence,
-"fisher.test" for a Fisher's exact test,
-and "lme4" for a random intercept model to account for clustered data.
-For "lme4" to be used "group" must also be specified in the \link{tbl_summary} call.}
+\item{test}{List of formulas specifying statistical tests to perform,
+e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
+Options include
+\itemize{
+\item \code{"t.test"} for a t-test,
+\item \code{"wilcox.test"} for a Wilcoxon rank-sum test,
+\item \code{"kruskal.test"} for a Kruskal-Wallis rank-sum test,
+\item \code{"chisq.test"} for a Chi-squared test of independence,
+\item \code{"fisher.test"} for a Fisher's exact test,
+\item \code{"lme4"} for a random intercept logistic regression model to account for
+clustered data, \code{lme4::glmer(by ~ variable + (1 | group), family = binomial)}.
+The \code{by} argument must be binary for this option.
+}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+Tests default to \code{"kruskal.test"} for continuous variables, \code{"chisq.test"} for
+categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
+for categorical variables with any expected cell count <5.
+A custom test function can be added for all or some variables. See below for
+an example.}
+
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{character vector of an ID or grouping variable for which summary
-statistics should not be printed. The column may be used in \link{add_p} to
-calculate p-values with correlated data. Default is \code{NULL}}
+\item{group}{Column name of an ID or grouping variable. The column can be
+used calculate p-values with correlated data (e.g. when the test argument
+is \code{"lme4"}). Default is \code{NULL}.  If specified,
+the row associated with this variable is omitted from the summary table.}
+
+\item{include}{Names of variables to include in output.}
+
+\item{exclude}{Names of variables to exclude from output.}
+}
+\value{
+A \code{tbl_summary} object
 }
 \description{
 Adds p-values to tables created by \code{tbl_summary} by comparing values across groups.
 }
+\section{Setting Defaults}{
+
+If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set. Please note the default option for the estimate is the same
+as it is for \code{tbl_regression()}.
+\itemize{
+\item \code{options(gtsummary.pvalue_fun = new_function)}
+}
+}
+
 \section{Example Output}{
 
-\if{html}{\figure{add_comp_ex1.png}{options: width=60\%}}
+\if{html}{Example 1}
+
+\if{html}{\figure{add_p_ex1.png}{options: width=60\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
 }
 
 \examples{
-add_comp_ex1 <-
+add_p_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, response, trt) \%>\%
-  tbl_summary(by = "trt") \%>\%
+  tbl_summary(by = trt) \%>\%
   add_p()
+
+# Conduct a custom McNemar test for response,
+# Function must return a named list of the p-value and the
+# test name: list(p = 0.123, test = "McNemar's test")
+# The '...' must be included as input
+my_mcnemar <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+  result$test <- "McNemar's test"
+  result
+}
+
+add_p_ex2 <-
+  trial[c("response", "trt")] \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_p(test = vars(response) ~ "my_mcnemar")
 }
 \seealso{
+See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+
 Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{add_overall}},
   \code{\link{add_q.tbl_summary}},
   \code{\link{add_stat_label}},
   \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
+  \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
   \code{\link{tbl_summary}}
 }
 \author{

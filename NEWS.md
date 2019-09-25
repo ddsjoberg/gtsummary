@@ -1,6 +1,64 @@
 # gtsummary (development version)
 
+* Added standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
+
+* Removed `gt::cols_merge()` function ahead of the gt PR #355 that changes the `cols_merge()` API (#222)
+
+* Updated the `show_yesno` argument to `show_single_row`. It is now generic and any binary variable can be shown on a single row. (#220)
+
+* Updated API for using custom functions to calculate p-values in `add_p()`. User now may reference a custom function by its name. (#226)
+
+# gtsummary 1.2.1
+
+* Vignettes no longer install the {gt} package (required for CRAN check) (#217)
+
+* Added ability to name custom `add_p()` tests (#213)
+
+# gtsummary 1.2.0
+
+* Users can pass variable names in backticks (#212)
+
+* The `group = ` argument in `tbl_summary()` has been moved to `add_p()` (#208)
+
+* Users can now write custom functions to calculate p-values in `add_p()` (#194)
+
+* In `tbl_summary()` the `by = ` argument accepts a bare variable name instead of the variable name passed as a string (#193)
+
+* Added support for column, row, and cell percentages in `tbl_summary()` (#181)
+
+* Users can now set default p-value formatting functions, regression coefficient formatting functions, default level for confidence intervals, and formatting functions in `tbl_survival()` (#120)
+
+* The {gt} package is no longer a required dependency.  If {gt} is not installed, tables will be printed with `knitr::kable()`.  The `as_kable()` function was added to the package as well. (#180)
+
+* The function `as_gt()` now has `include = ` and `exclude = ` arguments
+
+* Updated some function names to be the same as they were in the first version
+
+```r
+    bold_p()            <-  tab_style_bold_p()  
+    bold_labels()       <-  tab_style_bold_labels()  
+    bold_levels()       <-  tab_style_bold_levels()  
+    italicize_labels()  <-  tab_style_italicize_labels()  
+    italicize_levels()  <-  tab_style_italicize_levels()  
+```
+
+* Passing named lists in `tbl_summary()` is now defunct. 
+
+* `tbl_stack()` fix for `tbl_uvregression` objects (#175)
+
+* Option to exclude some variables from testing when using `add_p()` (#164)
+
+* Updates after {gt} package renamed `cells_style()` to `cell_text()` (#78)
+
+# gtsummary 1.1.1
+
+* Modified `tbl_merge()` to accommodate `tbl_stack()` object (#167)
+
+* Bug fix with incorrect column order in `tbl_summary()` with 10+ levels of by variable (#166)
+
 # gtsummary 1.1.0
+
+* Added {tidyselect} and {gtsummary} variable select functions (#146)
 
 * Added `tbl_stack()` function (#152)
 
@@ -24,7 +82,7 @@
 
 # gtsummary 1.0.0 
 
-First release since major refactoring.  The {gt} package is now used as the backend to create all tables.  Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
+First release since major re-factoring.  The {gt} package is now used as the print engine to create all tables.  Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added.  The API for some functions has also been updated.  Review documentation and vignettes for details.
 
 ### Updated Function Names
 
