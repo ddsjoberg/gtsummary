@@ -72,9 +72,8 @@ Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{bold_p.tbl_stack}},
   \code{\link{modify_header}},
   \code{\link{sort_p.tbl_regression}},
-  \code{\link{tbl_merge}},
-  \code{\link{tbl_regression_crr2}},
-  \code{\link{tbl_regression}}, \code{\link{tbl_stack}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
+  \code{\link{tbl_stack}}
 }
 \author{
 Daniel D. Sjoberg
