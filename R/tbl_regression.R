@@ -149,15 +149,13 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   },
   error = function(e) {
     usethis::ui_oops(paste0(
-      "{usethis::ui_code('tbl_regression()')} utilizes ",
-      "{usethis::ui_code('stats::model.frame()')} which returned an error when ",
-      "called.\nThis can occur when model objects are created within a ",
-      "functional programming framework,\nsuch as {usethis::ui_code('lappy()')} and ",
-      "{usethis::ui_code('purrr::map()')}. While regression model functions ",
-      "{usethis::ui_code('lm()')} and {usethis::ui_code('glm()')}\ndo not ",
-      "return errors in this setting, not all regression modeling functions ",
-      "have been written\nwith the same robustness. Please review the ",
-      "GitHub issue linked below for a possible solution."
+      "There was an error calling {usethis::ui_code('stats::model.frame(x)')}.\n\n",
+      "Most likely, this is because the argument passed in {usethis::ui_code('x =')} ",
+      "was\nmisspelled, does not exist, or is not a regression model.\n\n",
+      "Rarely, this error may occur if the model object was created within\na ",
+      "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
+      "{usethis::ui_code('purrr::map()')}, etc.).\n",
+      "Review the GitHub issue linked below for a possible solution."
     ))
     usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
     stop(e)
