@@ -140,7 +140,27 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   }
 
   # converting tidyselect formula lists to named lists
-  label <- tidyselect_to_list(stats::model.frame(x), label, input_type = "label")
+  # extracting model frame
+  model_frame <- tryCatch({
+    stats::model.frame(x)
+  },
+  warning = function(w) {
+    warning(x)
+  },
+  error = function(e) {
+    usethis::ui_oops(paste0(
+      "There was an error calling {usethis::ui_code('stats::model.frame(x)')}.\n\n",
+      "Most likely, this is because the argument passed in {usethis::ui_code('x =')} ",
+      "was\nmisspelled, does not exist, or is not a regression model.\n\n",
+      "Rarely, this error may occur if the model object was created within\na ",
+      "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
+      "{usethis::ui_code('purrr::map()')}, etc.).\n",
+      "Review the GitHub issue linked below for a possible solution."
+    ))
+    usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
+    stop(e)
+  })
+  label <- tidyselect_to_list(model_frame, label, input_type = "label")
 
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
