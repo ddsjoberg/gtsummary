@@ -4,10 +4,10 @@
 \alias{tbl_merge}
 \title{Merge two or more gtsummary regression objects}
 \usage{
-tbl_merge(tbls, tab_spanner = paste0(c("Model "), seq_len(length(tbls))))
+tbl_merge(tbls, tab_spanner = paste0(c("Table "), seq_len(length(tbls))))
 }
 \arguments{
-\item{tbls}{List of gtsummary regression objects}
+\item{tbls}{List of gtsummary objects to merge}
 
 \item{tab_spanner}{Character vector specifying the spanning headers.
 Must be same length as \code{tbls}argument}
@@ -16,8 +16,8 @@ Must be same length as \code{tbls}argument}
 A \code{tbl_merge} object
 }
 \description{
-Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, or \code{tbl_stack}
-objects and adds appropriate spanning headers.
+Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_stack},
+of \code{tbl_summary} objects and adds appropriate spanning headers.
 }
 \section{Example Output}{
 
@@ -61,9 +61,21 @@ Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
   \code{\link{modify_header}},
   \code{\link{sort_p.tbl_uvregression}},
   \code{\link{tbl_stack}}, \code{\link{tbl_uvregression}}
+
+Other tbl_summary tools: \code{\link{add_n}},
+  \code{\link{add_overall}}, \code{\link{add_p}},
+  \code{\link{add_q.tbl_summary}},
+  \code{\link{add_stat_label}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_summary}},
+  \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
+  \code{\link{sort_p.tbl_summary}},
+  \code{\link{tbl_summary}}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
+\concept{tbl_summary tools}
 \concept{tbl_uvregression tools}

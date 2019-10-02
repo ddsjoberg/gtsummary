@@ -209,7 +209,13 @@ add_p_ <- function(x, test = NULL, pvalue_fun = NULL,
     tibble(column = names(table_body)) %>%
     left_join(x$table_header, by = "column") %>%
     table_header_fill_missing() %>%
-    table_header_fmt(p.value = "x$pvalue_fun")
+    table_header_fmt(p.value = "x$pvalue_fun") %>%
+    mutate(footnote = map2(
+      column, footnote,
+      function(x, y) {
+        if (x == "p.value") return(c(y, footnote_add_p(meta_data))); return(y)
+      }
+    ))
 
   # updating header
   x <- modify_header_internal(x, p.value = "**p-value**")
@@ -219,16 +225,6 @@ add_p_ <- function(x, test = NULL, pvalue_fun = NULL,
 
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-
-  # gt formatting --------------------------------------------------------------
-  # adding footnote listing statistics presented in table
-  x[["gt_calls"]][["footnote_add_p"]] <- glue(
-    "gt::tab_footnote(",
-    'footnote = "{footnote_add_p(meta_data)}", ',
-    "locations = gt::cells_column_labels(",
-    "columns = gt::vars(p.value))",
-    ")"
-  )
 
   x
 }

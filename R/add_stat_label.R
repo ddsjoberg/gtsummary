@@ -47,7 +47,14 @@ add_stat_label <- function(x) {
   x$table_header <-
     tibble(column = names(x$table_body)) %>%
     left_join(x$table_header, by = "column") %>%
-    table_header_fill_missing()
+    table_header_fill_missing() %>%
+    # removing statistics presented footnote
+    mutate(
+      footnote = map2(
+        column, footnote,
+        function(x, y) {if (x == "label") return(NULL); return(y)}
+      )
+    )
 
   # updating header
   x <- modify_header_internal(x, stat_label = "**Statistic**")

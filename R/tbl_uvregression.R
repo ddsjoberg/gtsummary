@@ -210,13 +210,8 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   # table of column headers
   table_header <-
     tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    table_header_fmt(
-      p.value = "x$inputs$pvalue_fun",
-      estimate = "x$inputs$estimate_fun",
-      conf.low = "x$inputs$estimate_fun",
-      conf.high = "x$inputs$estimate_fun"
-    )
+    left_join(tbl_regression_list %>% pluck(1, "table_header"),
+              by = "column")
 
   # creating a meta_data table (this will be used in subsequent functions, eg add_global_p)
   meta_data <-
