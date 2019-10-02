@@ -14,4 +14,4 @@ Checklist for PR reviewer
 - [ ] NEWS.md has been updated under the heading "`# mskRvis (development version)`"?
 - [ ] When the branch is ready to be merged into dev, bump the version number using `usethis::use_version(which = "dev")`, approve, and merge the PR.
 
-\* If this is PR into the master branch, use [this checklist](https://github.mskcc.org/raw/datadojo/mskRutils/master/.github/pull_request_into_master_checklist.md).
+\* If this is PR into the master branch, use [this checklist](https://raw.githubusercontent.com/ddsjoberg/gtsummary/master/.github/pull_request_into_master_checklist.md).
