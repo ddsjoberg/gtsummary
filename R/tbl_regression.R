@@ -224,7 +224,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     # adding footnotes to table_header tibble
     mutate(
       footnote_abbrev = map2(
-        column, footnote_abbrev,
+        .data$column, .data$footnote_abbrev,
         function(x1, y1) {
           if (x1 %in% c("estimate", "ci"))
             return(c(y1, estimate_header(x, exponentiate) %>% attr("footnote")))
@@ -232,18 +232,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
         }
       )
     )
-
-  # footnote abbreviation details
-  footnote_abbr <-
-    estimate_header(x, exponentiate) %>%
-    attr("footnote") %>%
-    c("CI = Confidence Interval") %>%
-    paste(collapse = ", ")
-  footnote_location <- ifelse(
-    is.null(attr(estimate_header(x, exponentiate), "footnote")),
-    "vars(conf.low)",
-    "vars(estimate, conf.low)"
-  )
 
   results <- list(
     table_body = table_body,
@@ -316,10 +304,6 @@ kable_tbl_regression <- quote(list(
 
   #  placeholder, so the formatting calls are performed other calls below
   fmt = NULL,
-
-  # combining conf.low and conf.high to print confidence interval
-  cols_merge_ci =
-    "dplyr::mutate(conf.low = ifelse(is.na(estimate), NA, glue::glue('{conf.low}, {conf.high}') %>% as.character()))" %>% glue::as_glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref = glue(

@@ -268,7 +268,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
     table_header_fill_missing() %>%
     mutate(
       footnote = map2(
-        column, footnote,
+        .data$column, .data$footnote,
         function(x, y) {
           if (x == "label") return(c(y, footnote_stat_label(meta_data))); return(y)
         }

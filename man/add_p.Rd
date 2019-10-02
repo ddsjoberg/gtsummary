@@ -89,7 +89,7 @@ add_p_ex1 <-
 my_mcnemar <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
-  result$test <- "McNemar's test"
+  result$test <- "McNemar\\\\'s test"
   result
 }
 

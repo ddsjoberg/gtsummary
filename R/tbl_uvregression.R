@@ -287,13 +287,7 @@ gt_tbl_uvregression <- quote(list(
     "columns = gt::vars(label), ",
     "rows = row_type != 'label'",
     "))"
-  ),
-
-  # column headers abbreviations footnote
-  # extracting from the first variable regression model
-  footnote_abbreviation =
-    tbl_regression_list %>%
-      pluck(1, "gt_calls", "footnote_abbreviation")
+  )
 ))
 
 # kable function calls ------------------------------------------------------------
@@ -304,10 +298,6 @@ kable_tbl_uvregression <- quote(list(
 
   #  placeholder, so the formatting calls are performed other calls below
   fmt = NULL,
-
-  # combining conf.low and conf.high to print confidence interval
-  cols_merge_ci =
-    "dplyr::mutate(conf.low = ifelse(is.na(estimate), NA, glue::glue('{conf.low}, {conf.high}') %>% as.character()))" %>% glue::as_glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref = glue(

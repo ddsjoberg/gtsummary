@@ -55,7 +55,7 @@
 #' my_mcnemar <- function(data, variable, by, ...) {
 #'   result <- list()
 #'   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
-#'   result$test <- "McNemar's test"
+#'   result$test <- "McNemar\\'s test"
 #'   result
 #' }
 #'
@@ -211,7 +211,7 @@ add_p_ <- function(x, test = NULL, pvalue_fun = NULL,
     table_header_fill_missing() %>%
     table_header_fmt(p.value = "x$pvalue_fun") %>%
     mutate(footnote = map2(
-      column, footnote,
+      .data$column, .data$footnote,
       function(x, y) {
         if (x == "p.value") return(c(y, footnote_add_p(meta_data))); return(y)
       }

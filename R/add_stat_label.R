@@ -51,7 +51,7 @@ add_stat_label <- function(x) {
     # removing statistics presented footnote
     mutate(
       footnote = map2(
-        column, footnote,
+        .data$column, .data$footnote,
         function(x, y) {if (x == "label") return(NULL); return(y)}
       )
     )

@@ -33,7 +33,7 @@ add_p_test_chisq.test <- function(data, variable, by, ...) {
 add_p_test_fisher.test <- function(data, variable, by, ...) {
   result = list()
   result$p <- stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
-  result$test <- "Fisher's exact test"
+  result$test <- "Fisher\\'s exact test"
   result
 }
 

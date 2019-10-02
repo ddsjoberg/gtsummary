@@ -126,21 +126,21 @@ tbl_merge <- function(tbls,
       tbls,
       ~ pluck(.x, "table_header") %>%
         mutate(
-          column = paste0(column, "_", .y),
+          column = paste0(.data$column, "_", .y),
           fmt = stringr::str_replace(fmt, stringr::fixed("x$"), paste0("x$tbls[[", .y, "]]$"))
         )
     ) %>%
     # using the identifying columns from first passed object
     mutate(
       column = case_when(
-        column == "label_1" ~ "label",
-        column == "variable_1" ~ "variable",
-        column == "row_type_1" ~ "row_type",
-        TRUE ~ column
+        .data$column == "label_1" ~ "label",
+        .data$column == "variable_1" ~ "variable",
+        .data$column == "row_type_1" ~ "row_type",
+        TRUE ~ .data$column
       )
     ) %>%
     # deleting labels from subsequent merged tables (i >= 2)
-    filter(!startsWith(column, "label_"))
+    filter(!startsWith(.data$column, "label_"))
 
   table_header <-
     tibble(column = names(table_body)) %>%
@@ -256,15 +256,6 @@ kable_tbl_merge <- quote(list(
     compact() %>%
     unlist() %>%
     glue_collapse_null()
-
-    # map(
-    #   seq_len(tbls_length),
-    #   ~ glue(
-    #     "dplyr::mutate_at(dplyr::vars(estimate_{.x}, ci_{.x}), ",
-    #     "~ dplyr::case_when(row_ref_{.x} == TRUE ~ '---', TRUE ~ .))"
-    #   )
-    # ) %>%
-    #   glue_collapse_null(sep = " %>% ")
 ))
 
 
