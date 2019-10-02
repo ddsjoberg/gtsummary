@@ -62,9 +62,6 @@ add_stat_label <- function(x) {
   # updating gt and kable calls with data from table_header
   x <- update_calls_from_table_header(x)
 
-  # removing previous footnote about which statistics are presented
-  x[["gt_calls"]][["footnote_stat_label"]] <- NULL
-
   # keeping track of all functions previously run
   x$call_list <- c(x$call_list, list(add_stat_label = match.call()))
 
