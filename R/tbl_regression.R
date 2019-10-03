@@ -356,8 +356,8 @@ estimate_header <- function(x, exponentiate) {
     attr(header, "footnote") <- "HR = Hazard Ratio"
   }
   else {
-    header <- ifelse(exponentiate == TRUE ,"exp(β)", "β")
-    attr(header, "footnote") <- "β = Regression Coefficient"
+    header <- ifelse(exponentiate == TRUE ,"exp(Beta)", "Beta")
+    attr(header, "footnote") <- "Beta = Regression Coefficient"
 
   }
 
