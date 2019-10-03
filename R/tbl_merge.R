@@ -37,9 +37,11 @@ tbl_merge <- function(tbls,
     stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
-  # checking all inputs are class tbl_regression, tbl_uvregression, or tbl_stack
-  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack") %>% any()) {
-    stop("All objects in 'tbls' must be class 'tbl_regression', 'tbl_uvregression', or 'tbl_stack'")
+  # checking all inputs are class tbl_regression, tbl_uvregression, tbl_regression, or tbl_stack
+  if (!map_chr(tbls, class) %in%
+      c("tbl_regression", "tbl_uvregression", "tbl_summary", "tbl_stack") %>% all()) {
+    stop(paste("All objects in 'tbls' must be class 'tbl_regression',",
+               "'tbl_uvregression', 'tbl_summary', or 'tbl_stack'"))
   }
 
   # at least two objects must be passed
@@ -50,6 +52,19 @@ tbl_merge <- function(tbls,
   if (tbls_length != length(tab_spanner)) {
     stop("'tbls' and 'tab_spanner' must be the same length")
   }
+
+  # for tbl_summary, moving footnote above label column to the first stat_* column
+  tbls <- map_if(
+    tbls,
+    ~ class(.x) == "tbl_summary",
+    function(x){
+      x$table_header$footnote[startsWith(x$table_header$column, "stat_")][1] =
+        x$table_header$footnote[x$table_header$column == "label"][1]
+
+      x$table_header$footnote[x$table_header$column == "label"][1] = list(NULL)
+      return(x)
+    }
+  )
 
   # merging tables -------------------------------------------------------------
   # nesting data by variable (one line per variable), and renaming columns with number suffix
