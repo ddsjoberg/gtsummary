@@ -16,18 +16,6 @@
 #'   \item `options(gtsummary.conf.level = 0.90)`
 #' }
 #'
-#' @section Note:
-#' The N reported in the `tbl_regression()` output is the number of observations
-#' in the data frame `model.frame(x)`. Depending on the model input, this N
-#' may represent different quantities. In most cases, it is the total number of
-#' observations in your model; however, the precise definition of an observation,
-#' or unit of analysis, may differ across models. Here are some common examples.
-#' 1. Survival regression models including time dependent covariates.
-#' 2. Random- or mixed-effects regression models with clustered data.
-#' 3. GEE regression models with clustered data.
-#'
-#' This list is not exhaustive, and care should be taken for each number reported.
-#'
 #' @param x Regression model object
 #' @param exponentiate Logical indicating whether to exponentiate the
 #' coefficient estimates. Default is `FALSE`.
@@ -247,7 +235,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # setting column headers
   results <- modify_header_internal(
     results,
-    label = "**N = {n}**",
+    label = "**Characteristic**",
     estimate = glue("**{estimate_header(x, exponentiate)}**"),
     ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
     p.value = "**p-value**"

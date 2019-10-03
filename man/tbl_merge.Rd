@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_merge.R
 \name{tbl_merge}
 \alias{tbl_merge}
-\title{Merge two or more gtsummary regression objects}
+\title{Merge two or more gtsummary objects}
 \usage{
 tbl_merge(tbls, tab_spanner = paste0(c("Table "), seq_len(length(tbls))))
 }
@@ -10,7 +10,7 @@ tbl_merge(tbls, tab_spanner = paste0(c("Table "), seq_len(length(tbls))))
 \item{tbls}{List of gtsummary objects to merge}
 
 \item{tab_spanner}{Character vector specifying the spanning headers.
-Must be same length as \code{tbls}argument}
+Must be same length as \code{tbls} argument}
 }
 \value{
 A \code{tbl_merge} object
@@ -21,10 +21,17 @@ or \code{tbl_summary} objects and adds appropriate spanning headers.
 }
 \section{Example Output}{
 
-\if{html}{\figure{tbl_merge_ex.png}{options: width=70\%}}
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_merge_ex1.png}{options: width=70\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_merge_ex2.png}{options: width=65\%}}
 }
 
 \examples{
+# Side-by-side Regression Models
 library(survival)
 t1 <-
   glm(response ~ trt + grade + age, trial, family = binomial) \%>\%
@@ -32,11 +39,31 @@ t1 <-
 t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) \%>\%
   tbl_regression(exponentiate = TRUE)
-tbl_merge_ex <-
+tbl_merge_ex1 <-
   tbl_merge(
     tbls = list(t1, t2),
     tab_spanner = c("Tumor Response", "Time to Death")
   )
+\donttest{
+# Descriptive statistics alongside univariate regression, with no spanning header
+t3 <-
+  trial \%>\%
+  dplyr::select(age, grade, response) \%>\%
+  tbl_summary(missing = "no") \%>\%
+  add_n()
+t4 <-
+  tbl_uvregression(
+    trial \%>\% dplyr::select(ttdeath, death, age, grade, response),
+    method = coxph,
+    y = Surv(ttdeath, death),
+    exponentiate = TRUE,
+    hide_n = TRUE
+  )
+tbl_merge_ex2 <-
+  tbl_merge(tbls = list(t3, t4)) \%>\%
+  as_gt(exclude = "tab_spanner") \%>\%
+  gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
+}
 }
 \seealso{
 \link{tbl_stack}

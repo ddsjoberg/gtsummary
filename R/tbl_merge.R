@@ -1,11 +1,11 @@
-#' Merge two or more gtsummary regression objects
+#' Merge two or more gtsummary objects
 #'
 #' Merges two or more `tbl_regression`, `tbl_uvregression`, `tbl_stack`,
 #' or `tbl_summary` objects and adds appropriate spanning headers.
 #'
 #' @param tbls List of gtsummary objects to merge
 #' @param tab_spanner Character vector specifying the spanning headers.
-#' Must be same length as `tbls`argument
+#' Must be same length as `tbls` argument
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @family tbl_summary tools
@@ -14,6 +14,7 @@
 #' @export
 #' @return A `tbl_merge` object
 #' @examples
+#' # Side-by-side Regression Models
 #' library(survival)
 #' t1 <-
 #'   glm(response ~ trt + grade + age, trial, family = binomial) %>%
@@ -21,13 +22,39 @@
 #' t2 <-
 #'   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#' tbl_merge_ex <-
+#' tbl_merge_ex1 <-
 #'   tbl_merge(
 #'     tbls = list(t1, t2),
 #'     tab_spanner = c("Tumor Response", "Time to Death")
 #'   )
+#' \donttest{
+#' # Descriptive statistics alongside univariate regression, with no spanning header
+#' t3 <-
+#'   trial %>%
+#'   dplyr::select(age, grade, response) %>%
+#'   tbl_summary(missing = "no") %>%
+#'   add_n()
+#' t4 <-
+#'   tbl_uvregression(
+#'     trial %>% dplyr::select(ttdeath, death, age, grade, response),
+#'     method = coxph,
+#'     y = Surv(ttdeath, death),
+#'     exponentiate = TRUE,
+#'     hide_n = TRUE
+#'   )
+#' tbl_merge_ex2 <-
+#'   tbl_merge(tbls = list(t3, t4)) %>%
+#'   as_gt(exclude = "tab_spanner") %>%
+#'   gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
+#' }
 #' @section Example Output:
-#' \if{html}{\figure{tbl_merge_ex.png}{options: width=70\%}}
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{tbl_merge_ex1.png}{options: width=70\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{tbl_merge_ex2.png}{options: width=65\%}}
 #'
 tbl_merge <- function(tbls,
                       tab_spanner = paste0(c("Table "), seq_len(length(tbls)))) {
@@ -71,9 +98,15 @@ tbl_merge <- function(tbls,
   nested_table <- tbls %>%
     map("table_body") %>%
     imap(function(x, y) {
+      # creating a column that is the variable label
+      group_by(x, .data$variable) %>%
+      mutate(
+        var_label = ifelse(.data$row_type == "label", .data$label, NA)
+      ) %>%
+      tidyr::fill(.data$var_label, .direction = "downup") %>%
+      ungroup() %>%
       rename_at(
-        x,
-        vars(-c("variable", "row_type", "label")),
+        vars(-c("variable", "row_type", "var_label", "label")),
         ~ glue("{.}_{y}")
       )
     })
@@ -82,12 +115,12 @@ tbl_merge <- function(tbls,
   if (tidyr_has_legacy_nest()) {
     nested_table <- map(
       nested_table,
-      ~ nest(.x, data = -one_of(c("variable")))
+      ~ nest(.x, data = -one_of(c("variable", "var_label")))
     )
   } else {
     nested_table <- map(
       nested_table,
-      ~ nest(.x, -c("variable"))
+      ~ nest(.x, -c("variable", "var_label"))
     )
   }
 
@@ -104,7 +137,7 @@ tbl_merge <- function(tbls,
       merged_table %>%
       full_join(
         nested_table[[i]],
-        by = "variable"
+        by = c("variable", "var_label")
       ) %>%
       mutate(
         table = map2(
@@ -127,10 +160,14 @@ tbl_merge <- function(tbls,
   # THIS IS FROM PR #195, the if-else won't be required when tidyr >=1.0.0 is deps
   if (tidyr_has_legacy_nest()) {
     table_body <-
-      unnest(merged_table, "table") %>%
+      merged_table %>%
+      select(-.data$var_label) %>%
+      unnest("table") %>%
       select(.data$label, everything())
   } else {
     table_body <-
+      merged_table %>%
+      select(-.data$var_label) %>%
       unnest(merged_table) %>%
       select(.data$label, everything())
   }
