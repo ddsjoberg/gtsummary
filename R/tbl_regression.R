@@ -356,7 +356,9 @@ estimate_header <- function(x, exponentiate) {
     attr(header, "footnote") <- "HR = Hazard Ratio"
   }
   else {
-    header <- ifelse(exponentiate == TRUE ,"Coefficient", "log(Coefficient)")
+    header <- ifelse(exponentiate == TRUE ,"exp(β)", "β")
+    attr(header, "footnote") <- "β = Regression Coefficient"
+
   }
 
   # adding CI to abbreviation footnote
