@@ -56,6 +56,10 @@ add_q.tbl_summary <- function(x, method = "fdr",
       q.value = stats::p.adjust(.data$p.value, method = method)
     )
 
+  # footnote text
+  footnote_text <-
+    add_q_method_lookup[add_q_method_lookup$method == method, ]$method_label
+
   # adding q value to summary table
   x$table_body <-
     x$table_body %>%
@@ -70,7 +74,11 @@ add_q.tbl_summary <- function(x, method = "fdr",
     tibble(column = names(x$table_body)) %>%
     left_join(x$table_header, by = "column") %>%
     table_header_fill_missing() %>%
-    table_header_fmt(q.value = "x$qvalue_fun")
+    table_header_fmt(q.value = "x$qvalue_fun") %>%
+    mutate(footnote = map2(
+      .data$column, .data$footnote,
+      function(x, y) {if (x == "q.value") return(c(y, footnote_text)); return(y)}
+    ))
 
   # adding  column header
   x <- modify_header_internal(x, q.value = "**q-value**")
@@ -83,26 +91,7 @@ add_q.tbl_summary <- function(x, method = "fdr",
 
   # returning qvalue method
   x$qvalue_method <- method
-
-  # footnote text
-  footnote_text <-
-    method %>%
-    {
-      filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))
-    } %>%
-    pull("method_label")
-
   x$qvalue_fun <- pvalue_fun
-
-  # gt calls -------------------------------------------------------------------
-  # column headers abbreviations footnote
-  x[["gt_calls"]][["footnote_q_method"]] <- glue(
-    "gt::tab_footnote(",
-    "  footnote = '{footnote_text}',",
-    "  locations = gt::cells_column_labels(",
-    "    columns = gt::vars(q.value))",
-    ")"
-  )
 
   # Returns the table 1 object
   return(x)
@@ -152,6 +141,10 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     stop("Input 'pvalue_fun' must be a function.")
   }
 
+  # footnote text
+  footnote_text <-
+    add_q_method_lookup[add_q_method_lookup$method == method, ]$method_label
+
   # adding exact and printable q value to meta_data
   x$meta_data <-
     x$meta_data %>%
@@ -174,9 +167,11 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     tibble(column = names(x$table_body)) %>%
     left_join(x$table_header, by = "column") %>%
     table_header_fill_missing() %>%
-    table_header_fmt(
-      q.value = "x$qvalue_fun"
-    )
+    table_header_fmt(q.value = "x$qvalue_fun") %>%
+    mutate(footnote = map2(
+      .data$column, .data$footnote,
+      function(x, y) {if (x == "q.value") return(c(y, footnote_text)); return(y)}
+    ))
 
   x <- modify_header_internal(x, q.value = "**q-value**")
 
@@ -187,26 +182,7 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
 
   # returning qvalue method
   x$qvalue_method <- method
-
-  # footnote text
-  footnote_text <-
-    method %>%
-    {
-      filter(add_q_method_lookup, !!parse_expr(glue("method == '{.}'")))
-    } %>%
-    pull("method_label")
-
   x$qvalue_fun <- pvalue_fun
-
-  # gt function calls ----------------------------------------------------------
-  # column headers abbreviations footnote
-  x[["gt_calls"]][["footnote_q_method"]] <- glue(
-    "gt::tab_footnote(",
-    "footnote = '{footnote_text}',",
-    "locations = gt::cells_column_labels(",
-    "columns = gt::vars(q.value))",
-    ")"
-  )
 
   return(x)
 }

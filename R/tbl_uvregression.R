@@ -210,13 +210,8 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   # table of column headers
   table_header <-
     tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    table_header_fmt(
-      p.value = "x$inputs$pvalue_fun",
-      estimate = "x$inputs$estimate_fun",
-      conf.low = "x$inputs$estimate_fun",
-      conf.high = "x$inputs$estimate_fun"
-    )
+    left_join(tbl_regression_list %>% pluck(1, "table_header"),
+              by = "column")
 
   # creating a meta_data table (this will be used in subsequent functions, eg add_global_p)
   meta_data <-
@@ -292,13 +287,7 @@ gt_tbl_uvregression <- quote(list(
     "columns = gt::vars(label), ",
     "rows = row_type != 'label'",
     "))"
-  ),
-
-  # column headers abbreviations footnote
-  # extracting from the first variable regression model
-  footnote_abbreviation =
-    tbl_regression_list %>%
-      pluck(1, "gt_calls", "footnote_abbreviation")
+  )
 ))
 
 # kable function calls ------------------------------------------------------------
@@ -309,10 +298,6 @@ kable_tbl_uvregression <- quote(list(
 
   #  placeholder, so the formatting calls are performed other calls below
   fmt = NULL,
-
-  # combining conf.low and conf.high to print confidence interval
-  cols_merge_ci =
-    "dplyr::mutate(conf.low = ifelse(is.na(estimate), NA, glue::glue('{conf.low}, {conf.high}') %>% as.character()))" %>% glue::as_glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref = glue(

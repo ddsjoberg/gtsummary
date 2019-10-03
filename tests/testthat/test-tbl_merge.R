@@ -11,22 +11,21 @@ t0 <-
     y = response,
     method.args = list(family = binomial),
     exponentiate = TRUE,
-    label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
   )
 # MVA logistic regression
 t1 <-
   glm(response ~ trt + grade + age, trial, family = binomial) %>%
   tbl_regression(
-    label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
     exponentiate = TRUE
   )
 # MVA cox regression
 t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
   tbl_regression(
-    label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
     exponentiate = TRUE
   )
+
+
 
 # tbl_stack adjusted model
 covars <- c("trt", "age")
@@ -41,7 +40,6 @@ coxph(
 ) %>%
   tbl_regression(
     include = .x,
-    label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
     exponentiate = TRUE
   ))
 
@@ -53,7 +51,6 @@ adj_mods[["grade_mod"]] <- coxph(
   trial
 ) %>%
   tbl_regression(
-    label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
     exponentiate = TRUE
   )
 

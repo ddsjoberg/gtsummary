@@ -16,18 +16,6 @@
 #'   \item `options(gtsummary.conf.level = 0.90)`
 #' }
 #'
-#' @section Note:
-#' The N reported in the `tbl_regression()` output is the number of observations
-#' in the data frame `model.frame(x)`. Depending on the model input, this N
-#' may represent different quantities. In most cases, it is the total number of
-#' observations in your model; however, the precise definition of an observation,
-#' or unit of analysis, may differ across models. Here are some common examples.
-#' 1. Survival regression models including time dependent covariates.
-#' 2. Random- or mixed-effects regression models with clustered data.
-#' 3. GEE regression models with clustered data.
-#'
-#' This list is not exhaustive, and care should be taken for each number reported.
-#'
 #' @param x Regression model object
 #' @param exponentiate Logical indicating whether to exponentiate the
 #' coefficient estimates. Default is `FALSE`.
@@ -217,20 +205,21 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     table_header_fill_missing() %>%
     table_header_fmt(
       p.value = "x$inputs$pvalue_fun",
-      estimate = "x$inputs$estimate_fun"
+      estimate = "x$inputs$estimate_fun",
+      conf.low = "x$inputs$estimate_fun",
+      conf.high = "x$inputs$estimate_fun"
+    ) %>%
+    # adding footnotes to table_header tibble
+    mutate(
+      footnote_abbrev = map2(
+        .data$column, .data$footnote_abbrev,
+        function(x1, y1) {
+          if (x1 %in% c("estimate", "ci"))
+            return(c(y1, estimate_header(x, exponentiate) %>% attr("footnote")))
+          return(y1)
+        }
+      )
     )
-
-  # footnote abbreviation details
-  footnote_abbr <-
-    estimate_header(x, exponentiate) %>%
-    attr("footnote") %>%
-    c("CI = Confidence Interval") %>%
-    paste(collapse = ", ")
-  footnote_location <- ifelse(
-    is.null(attr(estimate_header(x, exponentiate), "footnote")),
-    "vars(conf.low)",
-    "vars(estimate, conf.low)"
-  )
 
   results <- list(
     table_body = table_body,
@@ -246,7 +235,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # setting column headers
   results <- modify_header_internal(
     results,
-    label = "**N = {n}**",
+    label = "**Characteristic**",
     estimate = glue("**{estimate_header(x, exponentiate)}**"),
     ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
     p.value = "**p-value**"
@@ -283,15 +272,6 @@ gt_tbl_regression <- quote(list(
     "gt::fmt_missing(columns = gt::vars(estimate, ci), rows = row_ref == TRUE, missing_text = '---')" %>%
       glue(),
 
-  # column headers abbreviations footnote
-  footnote_abbreviation = glue(
-    "gt::tab_footnote(",
-    "footnote = '{footnote_abbr}', ",
-    "locations = gt::cells_column_labels(",
-    "columns = {footnote_location})",
-    ")"
-  ),
-
   # indenting levels and missing rows
   tab_style_text_indent = glue(
     "gt::tab_style(",
@@ -313,10 +293,6 @@ kable_tbl_regression <- quote(list(
   #  placeholder, so the formatting calls are performed other calls below
   fmt = NULL,
 
-  # combining conf.low and conf.high to print confidence interval
-  cols_merge_ci =
-    "dplyr::mutate(conf.low = ifelse(is.na(estimate), NA, glue::glue('{conf.low}, {conf.high}') %>% as.character()))" %>% glue::as_glue(),
-
   # Show "---" for reference groups
   fmt_missing_ref = glue(
     "dplyr::mutate_at(dplyr::vars(estimate, conf.low), ",
@@ -328,61 +304,54 @@ kable_tbl_regression <- quote(list(
 
 # identifies headers for common models (logistic, poisson, and cox regression)
 estimate_header <- function(x, exponentiate) {
-  if (
-    (class(x)[1] %in% c("glm", "geeglm")) | # generalized linear models, and GEE GLMs
-      (class(x)[1] == "glmerMod" & attr(class(x), "package") %||% "NULL" == "lme4") # mixed effects models (from lme4 package)
-  ) {
-    if (class(x)[1] %in% c("glm", "geeglm")) {
-      family <- x$family
-    } else if (class(x)[1] == "glmerMod" & attr(class(x), "package") %||% "NULL" == "lme4") {
-      family <- x@resp$family
-    } else {
-      stop("Error occured in 'estimate_header' function")
-    }
+  # first identify the type ----------------------------------------------------
+  model_type = "generic"
+  # GLM and GEE models
+  if (class(x)[1] %in% c("glm", "geeglm") &&
+      x$family$family == "binomial" &&
+      x$family$link == "logit")
+    model_type = "logistic"
+  else if (class(x)[1] %in% c("glm", "geeglm") &&
+           x$family$family == "poisson" &&
+           x$family$link == "log")
+    model_type = "poisson"
+  # Cox Models
+  else if (class(x)[1] == "coxph")
+    model_type = "prop_hazard"
+  # LME4 models
+  else if (class(x)[1] == "glmerMod" &&
+           attr(class(x), "package") == "lme4" &&
+           x@resp$family$family == "binomial" &&
+           x@resp$family$link == "logit")
+    model_type = "logistic"
+  else if (class(x)[1] == "glmerMod" &&
+           attr(class(x), "package") == "lme4" &&
+           x@resp$family$family == "poisson" &&
+           x@resp$family$link == "log")
+    model_type = "poisson"
 
-    # logistic regression
-    if (exponentiate == TRUE & family$family == "binomial" & family$link == "logit") {
-      header <- "OR"
-      attr(header, "footnote") <- "OR = Odds Ratio"
-    }
-    else if (exponentiate == FALSE & family$family == "binomial" & family$link == "logit") {
-      header <- "log(OR)"
-      attr(header, "footnote") <- "OR = Odds Ratio"
-    }
-
-    # poisson regression with log link
-    else if (exponentiate == TRUE & family$family == "poisson" & family$link == "log") {
-      header <- "IRR"
-      attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
-    }
-    else if (exponentiate == FALSE & family$family == "poisson" & family$link == "log") {
-      header <- "log(IRR)"
-      attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
-    }
-
-    # Other models
-    else if (exponentiate == TRUE) {
-      header <- "exp(Coefficient)"
-    } else {
-      header <- "Coefficient"
-    }
+  # assigning header and footer ------------------------------------------------
+  if (model_type == "logistic") {
+    header <- ifelse(exponentiate == TRUE ,"OR", "log(OR)")
+    attr(header, "footnote") <- "OR = Odds Ratio"
   }
-  # Cox PH Regression
-  else if (class(x)[1] == "coxph" & exponentiate == TRUE) {
-    header <- "HR"
+  else if (model_type == "poisson") {
+    header <- ifelse(exponentiate == TRUE ,"IRR", "log(IRR)")
+    attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
+  }
+  else if (model_type == "prop_hazard") {
+    header <- ifelse(exponentiate == TRUE ,"HR", "log(HR)")
     attr(header, "footnote") <- "HR = Hazard Ratio"
   }
-  else if (class(x)[1] == "coxph" & exponentiate == FALSE) {
-    header <- "log(HR)"
-    attr(header, "footnote") <- "HR = Hazard Ratio"
+  else {
+    header <- ifelse(exponentiate == TRUE ,"exp(Beta)", "Beta")
+    attr(header, "footnote") <- "Beta = Regression Coefficient"
+
   }
 
-  # Other models
-  else if (exponentiate == TRUE) {
-    header <- "exp(Coefficient)"
-  } else {
-    header <- "Coefficient"
-  }
+  # adding CI to abbreviation footnote
+  attr(header, "footnote") <- c(attr(header, "footnote"),
+                                "CI = Confidence Interval")
 
   header
 }
