@@ -17,7 +17,7 @@ A \code{tbl_merge} object
 }
 \description{
 Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_stack},
-of \code{tbl_summary} objects and adds appropriate spanning headers.
+or \code{tbl_summary} objects and adds appropriate spanning headers.
 }
 \section{Example Output}{
 

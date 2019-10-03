@@ -1,7 +1,7 @@
 #' Merge two or more gtsummary regression objects
 #'
 #' Merges two or more `tbl_regression`, `tbl_uvregression`, `tbl_stack`,
-#' of `tbl_summary` objects and adds appropriate spanning headers.
+#' or `tbl_summary` objects and adds appropriate spanning headers.
 #'
 #' @param tbls List of gtsummary objects to merge
 #' @param tab_spanner Character vector specifying the spanning headers.
