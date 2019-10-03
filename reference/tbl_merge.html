@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Merge two or more gtsummary regression objects — tbl_merge • gtsummary</title>
+<title>Merge two or more gtsummary objects — tbl_merge • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -43,13 +45,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Merge two or more gtsummary regression objects — tbl_merge" />
 
-<meta property="og:description" content="Merges two or more tbl_regression, tbl_uvregression, or tbl_stack
-objects and adds appropriate spanning headers." />
-
+<meta property="og:title" content="Merge two or more gtsummary objects — tbl_merge" />
+<meta property="og:description" content="Merges two or more tbl_regression, tbl_uvregression, tbl_stack,
+or tbl_summary objects and adds appropriate spanning headers." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -89,7 +91,7 @@ objects and adds appropriate spanning headers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -120,7 +122,6 @@ objects and adds appropriate spanning headers." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -149,43 +150,42 @@ objects and adds appropriate spanning headers." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Merge two or more gtsummary regression objects</h1>
+    <h1>Merge two or more gtsummary objects</h1>
     
     <div class="hidden name"><code>tbl_merge.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
-    <p>Merges two or more <code>tbl_regression</code>, <code>tbl_uvregression</code>, or <code>tbl_stack</code>
-objects and adds appropriate spanning headers.</p>
-    
+    <p>Merges two or more <code>tbl_regression</code>, <code>tbl_uvregression</code>, <code>tbl_stack</code>,
+or <code>tbl_summary</code> objects and adds appropriate spanning headers.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_merge</span>(<span class='no'>tbls</span>, <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Model "</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq_len</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>tbls</span>))))</pre>
-    
+    <pre class="usage"><span class='fu'>tbl_merge</span>(<span class='no'>tbls</span>, <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste0</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Table "</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq_len</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>tbls</span>))))</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>tbls</th>
-      <td><p>List of gtsummary regression objects</p></td>
+      <td><p>List of gtsummary objects to merge</p></td>
     </tr>
     <tr>
       <th>tab_spanner</th>
       <td><p>Character vector specifying the spanning headers.
-Must be same length as <code>tbls</code>argument</p></td>
+Must be same length as <code>tbls</code> argument</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>tbl_merge</code> object</p>
-    
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
-    <p><img src='figures/tbl_merge_ex.png' width=70% /></p>
-    
+    <p>Example 1</p>
+<p><img src='figures/tbl_merge_ex1.png' width=70% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_merge_ex2.png' width=65% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='tbl_stack.html'>tbl_stack</a></p>
@@ -207,34 +207,57 @@ Must be same length as <code>tbls</code>argument</p></td>
   <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a></code>,
   <code><a href='modify_header.html'>modify_header</a></code>,
   <code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a></code>,
-  <code><a href='tbl_stack.html'>tbl_stack</a></code>, <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p></div>
-    
+  <code><a href='tbl_stack.html'>tbl_stack</a></code>, <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p>
+<p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
+  <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
+  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
+  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
+  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
+  <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
+  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
+  <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
+    <pre class="examples"><div class='input'><span class='co'># Side-by-side Regression Models</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>t1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>age</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>t2</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>age</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>tbl_merge_ex</span> <span class='kw'>&lt;-</span>
+<span class='no'>tbl_merge_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_merge</span>(
     <span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>),
     <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Tumor Response"</span>, <span class='st'>"Time to Death"</span>)
-  )</div></pre>
+  )</div><div class='input'><span class='co'># Descriptive statistics alongside univariate regression, with no spanning header</span>
+<span class='no'>t3</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"no"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_n.html'>add_n</a></span>()
+<span class='no'>t4</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
+    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>),
+    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
+    <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
+    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  )
+<span class='no'>tbl_merge_ex2</span> <span class='kw'>&lt;-</span>
+  <span class='fu'>tbl_merge</span>(<span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>t3</span>, <span class='no'>t4</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='as_gt.html'>as_gt</a></span>(<span class='kw'>exclude</span> <span class='kw'>=</span> <span class='st'>"tab_spanner"</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/gt/topics/cols_label'>cols_label</a></span>(<span class='kw'>stat_0_1</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/gt/topics/md'>md</a></span>(<span class='st'>"**Summary Statistics**"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#example-output">Example Output</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

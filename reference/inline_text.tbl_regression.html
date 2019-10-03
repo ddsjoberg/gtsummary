@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -43,15 +45,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Report statistics from regression summary tables inline — inline_text.tbl_regression" />
 
+<meta property="og:title" content="Report statistics from regression summary tables inline — inline_text.tbl_regression" />
 <meta property="og:description" content="Takes an object with class tbl_regression, and the
 location of the statistic to report and returns statistics for reporting
 inline in an R markdown document.  Detailed examples in the
 tbl_regression vignette" />
-
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -91,7 +93,7 @@ tbl_regression vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -122,7 +124,6 @@ tbl_regression vignette" />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -157,12 +158,10 @@ tbl_regression vignette" />
     </div>
 
     <div class="ref-description">
-    
     <p>Takes an object with class <code>tbl_regression</code>, and the
 location of the statistic to report and returns statistics for reporting
 inline in an R markdown document.  Detailed examples in the
 <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text'>tbl_regression vignette</a></p>
-    
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
@@ -170,7 +169,7 @@ inline in an R markdown document.  Detailed examples in the
   <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"</span>,
   <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>estimate_fun</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>)
   <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>...</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -211,11 +210,10 @@ Default is <code>function(x) style_pvalue(x, prepend_p = TRUE)</code></p></td>
       <td><p>Not used</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A string reporting results from a gtsummary table</p>
-    
     <h2 class="hasAnchor" id="pattern-argument"><a class="anchor" href="#pattern-argument"></a>pattern argument</h2>
 
     
@@ -229,7 +227,6 @@ print the table the estimates are extracted from.</p><ul>
 <li><p><code>{N}</code> number of observations in model</p></li>
 <li><p><code>{label}</code> variable/variable level label</p></li>
 </ul>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
@@ -241,7 +238,6 @@ print the table the estimates are extracted from.</p><ul>
   <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
   <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code>,
   <code><a href='tbl_stack.html'>tbl_stack</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>inline_text_ex1</span> <span class='kw'>&lt;-</span>
@@ -254,13 +250,9 @@ print the table the estimates are extracted from.</p><ul>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#pattern-argument">pattern argument</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

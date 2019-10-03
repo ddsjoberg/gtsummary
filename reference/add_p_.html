@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bold significant p-values or q-values — bold_p • gtsummary</title>
+<title>Standard evaluation version of add_p() — add_p_ • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,10 @@
 
 
 
-<meta property="og:title" content="Bold significant p-values or q-values — bold_p" />
-<meta property="og:description" content="Bold values below a chosen threshold (e.g. &amp;lt;0.05)
-in gtsummary tables." />
+<meta property="og:title" content="Standard evaluation version of add_p() — add_p_" />
+<meta property="og:description" content="The 'group =' argument can be passed as a string, rather than with non-standard
+evaluation as in add_p. Review the help file for add_p fully documented
+options and arguments." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -150,47 +151,82 @@ in gtsummary tables." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bold significant p-values or q-values</h1>
+    <h1>Standard evaluation version of add_p()</h1>
     
-    <div class="hidden name"><code>bold_p.Rd</code></div>
+    <div class="hidden name"><code>add_p_.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Bold values below a chosen threshold (e.g. &lt;0.05)
-in gtsummary tables.</p>
+    <p>The <code>'group ='</code> argument can be passed as a string, rather than with non-standard
+evaluation as in <a href='add_p.html'>add_p</a>. Review the help file for <a href='add_p.html'>add_p</a> fully documented
+options and arguments.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bold_p</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>add_p_</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object created using gtsummary functions</p></td>
+      <td><p>Object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Additional arguments passed to other methods.</p></td>
+      <th>test</th>
+      <td><p>List of formulas specifying statistical tests to perform,
+e.g. <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")</a></code>.
+Options include</p><ul>
+<li><p><code>"t.test"</code> for a t-test,</p></li>
+<li><p><code>"wilcox.test"</code> for a Wilcoxon rank-sum test,</p></li>
+<li><p><code>"kruskal.test"</code> for a Kruskal-Wallis rank-sum test,</p></li>
+<li><p><code>"chisq.test"</code> for a Chi-squared test of independence,</p></li>
+<li><p><code>"fisher.test"</code> for a Fisher's exact test,</p></li>
+<li><p><code>"lme4"</code> for a random intercept logistic regression model to account for
+clustered data, <code><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>lme4::glmer(by ~ variable + (1 | group), family = binomial)</a></code>.
+The <code>by</code> argument must be binary for this option.</p></li>
+</ul>
+
+<p>Tests default to <code>"kruskal.test"</code> for continuous variables, <code>"chisq.test"</code> for
+categorical variables with all expected cell counts &gt;=5, and <code>"fisher.test"</code>
+for categorical variables with any expected cell count &lt;5.
+A custom test function can be added for all or some variables. See below for
+an example.</p></td>
+    </tr>
+    <tr>
+      <th>pvalue_fun</th>
+      <td><p>Function to round and format p-values.
+Default is <a href='style_pvalue.html'>style_pvalue</a>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>group</th>
+      <td><p>Column name of an ID or grouping variable. The column can be
+used calculate p-values with correlated data (e.g. when the test argument
+is <code>"lme4"</code>). Default is <code>NULL</code>.  If specified,
+the row associated with this variable is omitted from the summary table.</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>Names of variables to include in output.</p></td>
+    </tr>
+    <tr>
+      <th>exclude</th>
+      <td><p>Names of variables to exclude from output.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
-<code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a></code>,
-<code><a href='bold_p.tbl_uvregression.html'>bold_p.tbl_uvregression</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#see-also">See also</a></li>
     </ul>
 
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg, Esther Drill</p>
   </div>
 </div>
 

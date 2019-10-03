@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -43,14 +45,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Modify column headers in gtsummary tables — modify_header" />
 
+<meta property="og:title" content="Modify column headers in gtsummary tables — modify_header" />
 <meta property="og:description" content="Column labels can be modified to include calculated statistics;
 e.g. the N can be dynamically included by wrapping it in curly brackets
 (following glue::glue syntax)." />
-
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -90,7 +92,7 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -121,7 +123,6 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -156,15 +157,13 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
     </div>
 
     <div class="ref-description">
-    
     <p>Column labels can be modified to include calculated statistics;
 e.g. the N can be dynamically included by wrapping it in curly brackets
 (following <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> syntax).</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>modify_header</span>(<span class='no'>x</span>, <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>text_interpret</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"md"</span>, <span class='st'>"html"</span>))</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -204,11 +203,10 @@ or HTML (<code>"html"</code>).  The text is interpreted with the gt package's <c
 is not gt.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Function return the same class of gtsummary object supplied</p>
-    
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -216,7 +214,6 @@ is not gt.</p></td>
 <p><img src='figures/tbl_col_ex1.png' width=31% /></p>
 <p>Example 2</p>
 <p><img src='figures/tbl_col_ex2.png' width=50% /></p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
@@ -227,7 +224,7 @@ is not gt.</p></td>
   <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
   <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
   <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tbl_summary.html'>tbl_summary</a></code></p>
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_summary.html'>tbl_summary</a></code></p>
 <p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
   <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
@@ -249,7 +246,6 @@ is not gt.</p></td>
   <code><a href='tbl_uvregression.html'>tbl_uvregression</a></code></p>
 <p>Other tbl_survival tools: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code>,
   <code><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_col_ex1</span> <span class='kw'>&lt;-</span>
@@ -268,13 +264,9 @@ is not gt.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#example-output">Example Output</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

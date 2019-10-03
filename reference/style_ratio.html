@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -43,17 +45,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Implement significant figure-like rounding for ratios — style_ratio" />
 
+<meta property="og:title" content="Implement significant figure-like rounding for ratios — style_ratio" />
 <meta property="og:description" content="When reporting ratios, such as relative risk or an odds ratio, we'll often
 want the rounding to be similar on each side of the number 1.  For example,
 if we report an odds ratio of 0.95 with a confidence interval of 0.70 to 1.24,
 we would want to round to two decimal places for all values. In other words,
 2 significant figures for numbers less than 1 and 3 significant figures 1 and
 larger. style_ratio() performs significant figure-like rounding in this manner." />
-
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -93,7 +95,7 @@ larger. style_ratio() performs significant figure-like rounding in this manner."
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -124,7 +126,6 @@ larger. style_ratio() performs significant figure-like rounding in this manner."
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -159,18 +160,16 @@ larger. style_ratio() performs significant figure-like rounding in this manner."
     </div>
 
     <div class="ref-description">
-    
     <p>When reporting ratios, such as relative risk or an odds ratio, we'll often
 want the rounding to be similar on each side of the number 1.  For example,
 if we report an odds ratio of 0.95 with a confidence interval of 0.70 to 1.24,
 we would want to round to two decimal places for all values. In other words,
 2 significant figures for numbers less than 1 and 3 significant figures 1 and
 larger. <code>style_ratio()</code> performs significant figure-like rounding in this manner.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>style_ratio</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -185,15 +184,13 @@ digits to display for numbers below 1. Numbers larger than 1 will be be <code>di
 Default is <code>digits = 2</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A character vector of styled ratios</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='style_sigfig.html'>style_sigfig</a></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(
@@ -207,11 +204,8 @@ Default is <code>digits = 2</code>.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
