@@ -47,16 +47,20 @@ add_stat_label <- function(x) {
   x$table_header <-
     tibble(column = names(x$table_body)) %>%
     left_join(x$table_header, by = "column") %>%
-    table_header_fill_missing()
+    table_header_fill_missing() %>%
+    # removing statistics presented footnote
+    mutate(
+      footnote = map2(
+        .data$column, .data$footnote,
+        function(x, y) {if (x == "label") return(NULL); return(y)}
+      )
+    )
 
   # updating header
   x <- modify_header_internal(x, stat_label = "**Statistic**")
 
   # updating gt and kable calls with data from table_header
   x <- update_calls_from_table_header(x)
-
-  # removing previous footnote about which statistics are presented
-  x[["gt_calls"]][["footnote_stat_label"]] <- NULL
 
   # keeping track of all functions previously run
   x$call_list <- c(x$call_list, list(add_stat_label = match.call()))

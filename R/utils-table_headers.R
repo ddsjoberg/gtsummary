@@ -31,6 +31,16 @@ table_header_fill_missing <- function(table_header) {
     table_header$bold <- NA_real_
   }
 
+  # footnote_abbrev ------------------------------------------------------------
+  if (!"footnote_abbrev" %in% names(table_header)) {
+    table_header$footnote_abbrev <- list(NULL)
+  }
+
+  # footnote -------------------------------------------------------------------
+  if (!"footnote" %in% names(table_header)) {
+    table_header$footnote <- list(NULL)
+  }
+
   # filling in missing values with default -------------------------------------
   table_header <-
     table_header %>%
@@ -124,6 +134,51 @@ table_header_to_gt_cols_label <- function(table_header) {
     }
 }
 
+# gt table_header to gt tab_footnote code
+table_header_to_gt_tab_footnote <- function(table_header) {
+  # initializing results
+  tab_footnote_abbrev <- NULL
+  tab_footnote <- NULL
+
+  # convert abbreviations to a single footnote code
+  footnote_abbrev <-
+    table_header %>%
+    unnest("footnote_abbrev")
+
+  if (nrow(footnote_abbrev) > 0)
+    tab_footnote_abbrev <- glue(
+      "gt::tab_footnote(",
+      "footnote = '{paste(unique(footnote_abbrev$footnote_abbrev), collapse = \", \")}', ",
+      "locations = gt::cells_column_labels(",
+      "columns = gt::vars({paste(unique(footnote_abbrev$column), collapse = \", \")}))",
+      ")"
+    )
+
+  # convert footnotes into gt footnote code
+  footnote <-
+    table_header %>%
+    unnest("footnote")
+
+  if (nrow(footnote) > 0) {
+    tab_footnote <-
+      footnote %>%
+      filter(!is.na(.data$footnote)) %>%
+      mutate(
+        tab_footnote = glue(
+          "gt::tab_footnote(",
+          "footnote = '{footnote}', ",
+          "locations = gt::cells_column_labels(",
+          "columns = gt::vars({column}))",
+          ")"
+        )
+      ) %>%
+      pull(.data$tab_footnote)
+  }
+
+  c(tab_footnote_abbrev, tab_footnote) %>%
+    glue_collapse_null()
+}
+
 # gt table_header to gt cols_hide code
 table_header_to_gt_cols_hide <- function(table_header) {
   table_header %>%
@@ -190,6 +245,10 @@ update_calls_from_table_header <- function(x) {
 
   x$gt_calls[["fmt"]] <-
     glue("{table_header_to_gt_fmt(x$table_header)}")
+
+  x$gt_calls[["tab_footnote"]] <-
+    glue("{table_header_to_gt_tab_footnote(x$table_header)}")
+
 
   # kable calls
   x$kable_calls[["cols_hide"]] <-

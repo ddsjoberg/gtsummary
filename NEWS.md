@@ -1,4 +1,6 @@
-# gtsummary (development version)
+# gtsummary 1.2.2
+
+* Added ability to merge `tbl_summary` objects in `tbl_merge()` (#230)
 
 * Added standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
 

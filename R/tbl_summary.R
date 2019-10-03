@@ -136,7 +136,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         missing_text = "Unknown", sort = NULL,
                         percent = c("column", "row", "cell")) {
 
-  # converting bare arguments to string -----------------------------------------------
+  # converting bare arguments to string ----------------------------------------
   by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
 
   # putting arguments in a list to pass to tbl_summary_
@@ -265,7 +265,15 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   # table of column headers
   table_header <-
     tibble(column = names(table_body) %>% setdiff("summary_type")) %>%
-    table_header_fill_missing()
+    table_header_fill_missing() %>%
+    mutate(
+      footnote = map2(
+        .data$column, .data$footnote,
+        function(x, y) {
+          if (x == "label") return(c(y, footnote_stat_label(meta_data))); return(y)
+        }
+      )
+    )
 
   # returning all results in a list
   results <- list(
@@ -335,15 +343,6 @@ gt_tbl_summary <- quote(list(
     "columns = gt::vars(label),",
     "rows = row_type != 'label'",
     "))"
-  ),
-
-  # adding footnote listing statistics presented in table
-  footnote_stat_label = glue(
-    "gt::tab_footnote(",
-    "footnote = '{footnote_stat_label(meta_data)}',",
-    "locations = gt::cells_column_labels(",
-    "columns = gt::vars(label))",
-    ")"
   )
 ))
 

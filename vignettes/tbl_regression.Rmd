@@ -4,9 +4,11 @@ author: "Daniel D. Sjoberg"
 date: "Last Updated: November 29, 2018"
 output: rmarkdown::html_vignette
 vignette: >
+  %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{Tutorial: tbl_regression}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -216,14 +218,14 @@ If the user does not want a specific {gt} function to run, any {gt} call can be 
 
 ```{r as_gt2, eval=FALSE}
 tbl_regression(m1, exponentiate = TRUE) %>%
-  as_gt(exclude = "footnote_abbreviation")
+  as_gt(exclude = "tab_footnote")
 ```
 
 ```{r as_gt1, echo=FALSE}
 # this code chunk only works if gt is installed
 if (requireNamespace("gt", quietly = TRUE)) {
   tbl_regression(m1, exponentiate = TRUE) %>%
-    as_gt(exclude = "footnote_abbreviation")
+    as_gt(exclude = "tab_footnote")
 }
 ```
 
