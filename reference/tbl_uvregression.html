@@ -47,8 +47,11 @@
 
 
 <meta property="og:title" content="Display univariate regression model results in table — tbl_uvregression" />
-<meta property="og:description" content="The tbl_uvregression function arguments are similar to the tbl_regression
-arguments. Review the
+<meta property="og:description" content="This function estimates univariate regression models and returns them in
+a publication-ready table. The function takes as arguments a data frame,
+the type of regression model, and the outcome variable. Each column in the
+data frame is regressed on the specified outcome. The tbl_uvregression
+function arguments are similar to the tbl_regression arguments. Review the
 tbl_uvregression vignette
 for detailed examples." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
@@ -93,7 +96,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -158,8 +161,11 @@ for detailed examples." />
     </div>
 
     <div class="ref-description">
-    <p>The <code>tbl_uvregression</code> function arguments are similar to the <a href='tbl_regression.html'>tbl_regression</a>
-arguments. Review the
+    <p>This function estimates univariate regression models and returns them in
+a publication-ready table. The function takes as arguments a data frame,
+the type of regression model, and the outcome variable. Each column in the
+data frame is regressed on the specified outcome. The <code>tbl_uvregression</code>
+function arguments are similar to the <a href='tbl_regression.html'>tbl_regression</a> arguments. Review the
 <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression'>tbl_uvregression vignette</a>
 for detailed examples.</p>
     </div>
@@ -243,14 +249,20 @@ and return a string that is the rounded/formatted p-value (e.g.
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>tbl_uvregression</code> object</p>
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+    <p>Example 1</p>
+<p><img src='figures/tbl_uv_ex1.png' width=50% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_uv_ex2.png' width=50% /></p>
     <h2 class="hasAnchor" id="setting-defaults"><a class="anchor" href="#setting-defaults"></a>Setting Defaults</h2>
 
     
-    <p>If you like to consistently use a different function to format p-values or
+    <p>If you prefer to consistently use a different function to format p-values or
 estimates, you can set options in the script or in the user- or
 project-level startup file, '.Rprofile'.  The default confidence level can
-also be set. Please note the default option for the estimate is the same
-as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p><ul>
+also be set.</p><ul>
 <li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.pvalue_fun = new_function)</a></code></p></li>
 <li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.tbl_regression.estimate_fun = new_function)</a></code></p></li>
 <li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.conf.level = 0.90)</a></code></p></li>
@@ -258,7 +270,7 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     
-    <p>The N reported in the <code>tbl_uvregression()</code> output is the number of observations
+    <p>The N reported in the output is the number of observations
 in the data frame <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame(x)</a></code>. Depending on the model input, this N
 may represent different quantities. In most cases, it is the number of people or
 units in your model.  Here are some common exceptions.</p><ol>
@@ -267,13 +279,6 @@ units in your model.  Here are some common exceptions.</p><ol>
 <li><p>GEE regression models with clustered data.</p></li>
 </ol>
     <p>This list is not exhaustive, and care should be taken for each number reported.</p>
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
-
-    
-    <p>Example 1</p>
-<p><img src='figures/tbl_uv_ex1.png' width=50% /></p>
-<p>Example 2</p>
-<p><img src='figures/tbl_uv_ex2.png' width=50% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>See tbl_regression <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression'>vignette</a>  for detailed examples</p>
@@ -315,9 +320,9 @@ units in your model.  Here are some common exceptions.</p><ol>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#example-output">Example Output</a></li>
       <li><a href="#setting-defaults">Setting Defaults</a></li>
       <li><a href="#note">Note</a></li>
-      <li><a href="#example-output">Example Output</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>

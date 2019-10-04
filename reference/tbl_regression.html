@@ -47,8 +47,10 @@
 
 
 <meta property="og:title" content="Display regression model results in table — tbl_regression" />
-<meta property="og:description" content="This function uses broom::tidy and broom.mixed::tidy
-to perform the initial model formatting. Review the
+<meta property="og:description" content="This function takes a regression model object and returns a formatted table
+that is publication-ready. The function is highly customizable
+allowing the user to obtain a bespoke summary table of the
+regression model results. Review the
 tbl_regression vignette
 for detailed examples." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
@@ -93,7 +95,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -158,8 +160,10 @@ for detailed examples." />
     </div>
 
     <div class="ref-description">
-    <p>This function uses <a href='https://www.rdocumentation.org/packages/broom/topics/reexports'>broom::tidy</a> and <a href='https://www.rdocumentation.org/packages/broom.mixed/topics/reexports'>broom.mixed::tidy</a>
-to perform the initial model formatting. Review the
+    <p>This function takes a regression model object and returns a formatted table
+that is publication-ready. The function is highly customizable
+allowing the user to obtain a bespoke summary table of the
+regression model results. Review the
 <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html'>tbl_regression vignette</a>
 for detailed examples.</p>
     </div>
@@ -241,6 +245,18 @@ also be set.</p><ul>
 <li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.tbl_regression.estimate_fun = new_function)</a></code></p></li>
 <li><p><code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(gtsummary.conf.level = 0.90)</a></code></p></li>
 </ul>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    
+    <p>The N reported in the output is the number of observations
+in the data frame <code><a href='https://www.rdocumentation.org/packages/stats/topics/model.frame'>model.frame(x)</a></code>. Depending on the model input, this N
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.</p><ol>
+<li><p>Survival regression models including time dependent covariates.</p></li>
+<li><p>Random- or mixed-effects regression models with clustered data.</p></li>
+<li><p>GEE regression models with clustered data.</p></li>
+</ol>
+    <p>This list is not exhaustive, and care should be taken for each number reported.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -288,6 +304,7 @@ also be set.</p><ul>
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#setting-defaults">Setting Defaults</a></li>
+      <li><a href="#note">Note</a></li>
       <li><a href="#example-output">Example Output</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
