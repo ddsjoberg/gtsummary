@@ -73,7 +73,7 @@ tbl_merge <- function(tbls,
 
   # at least two objects must be passed
   tbls_length <- length(tbls)
-  if (tbls_length < 1) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
+  if (tbls_length < 2) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
 
   # length of cpannign header matches number of models passed
   if (tbls_length != length(tab_spanner)) {
@@ -111,25 +111,16 @@ tbl_merge <- function(tbls,
       )
     })
 
-  # THIS IS FROM PR #195, the if-else won't be required when tidyr >=1.0.0 is deps
-  if (tidyr_has_legacy_nest()) {
-    nested_table <- map(
-      nested_table,
-      ~ nest(.x, data = -one_of(c("variable", "var_label")))
-    )
-  } else {
-    nested_table <- map(
-      nested_table,
-      ~ nest(.x, -c("variable", "var_label"))
-    )
-  }
+  # nesting results within variable
+  nested_table <- map(
+    nested_table,
+    ~ nest(.x, data = -one_of(c("variable", "var_label")))
+  )
 
   # merging formatted objects together
   merged_table <-
     nested_table[[1]] %>%
-    rename(
-      table = .data$data
-    )
+    rename(table = .data$data)
 
   # cycling through all tbls, merging results into a column tibble
   for (i in 2:tbls_length) {
@@ -157,20 +148,11 @@ tbl_merge <- function(tbls,
   }
 
   # unnesting results from within variable column tibbles
-  # THIS IS FROM PR #195, the if-else won't be required when tidyr >=1.0.0 is deps
-  if (tidyr_has_legacy_nest()) {
-    table_body <-
-      merged_table %>%
-      select(-.data$var_label) %>%
-      unnest("table") %>%
-      select(.data$label, everything())
-  } else {
-    table_body <-
-      merged_table %>%
-      select(-.data$var_label) %>%
-      unnest(merged_table) %>%
-      select(.data$label, everything())
-  }
+  table_body <-
+    merged_table %>%
+    select(-.data$var_label) %>%
+    unnest("table") %>%
+    select(.data$label, everything())
 
   # stacking all table_header dfs together and renaming
   table_header <-
