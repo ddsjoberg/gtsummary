@@ -56,18 +56,31 @@ and return a string that is the rounded/formatted p-value (e.g.
 A \code{tbl_uvregression} object
 }
 \description{
-The \code{tbl_uvregression} function arguments are similar to the \link{tbl_regression}
-arguments. Review the
+This function estimates univariate regression models and returns them in
+a publication-ready table. The function takes as arguments a data frame,
+the type of regression model, and the outcome variable. Each column in the
+data frame is regressed on the specified outcome. The \code{tbl_uvregression}
+function arguments are similar to the \link{tbl_regression} arguments. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 for detailed examples.
 }
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
+}
+
 \section{Setting Defaults}{
 
-If you like to consistently use a different function to format p-values or
+If you prefer to consistently use a different function to format p-values or
 estimates, you can set options in the script or in the user- or
 project-level startup file, '.Rprofile'.  The default confidence level can
-also be set. Please note the default option for the estimate is the same
-as it is for \code{tbl_regression()}.
+also be set.
 \itemize{
 \item \code{options(gtsummary.pvalue_fun = new_function)}
 \item \code{options(gtsummary.tbl_regression.estimate_fun = new_function)}
@@ -77,7 +90,7 @@ as it is for \code{tbl_regression()}.
 
 \section{Note}{
 
-The N reported in the \code{tbl_uvregression()} output is the number of observations
+The N reported in the output is the number of observations
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
 may represent different quantities. In most cases, it is the number of people or
 units in your model.  Here are some common exceptions.
@@ -88,17 +101,6 @@ units in your model.  Here are some common exceptions.
 }
 
 This list is not exhaustive, and care should be taken for each number reported.
-}
-
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
-
-\if{html}{Example 2}
-
-\if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
 }
 
 \examples{
