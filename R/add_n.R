@@ -65,7 +65,7 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
       n_miss = purrr::map_int(.data$variable, ~ sum(is.na(x$inputs$data[[.x]]))),
       p = percent_fun(.data$n / .data$N),
       p_miss = percent_fun(.data$n_miss / .data$N),
-      statistic = glue(statistic)
+      statistic = glue(statistic) %>% as.character()
     ) %>%
     select(.data$variable, .data$row_type, n = .data$statistic)
 
