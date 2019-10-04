@@ -1,32 +1,15 @@
 #' Display univariate regression model results in table
 #'
-#' The `tbl_uvregression` function arguments are similar to the [tbl_regression]
-#' arguments. Review the
+#' This function estimates univariate regression models and returns them in
+#' a publication-ready table. The function takes as arguments a data frame,
+#' the type of regression model, and the outcome variable. Each column in the
+#' data frame is regressed on the specified outcome. The `tbl_uvregression`
+#' function arguments are similar to the [tbl_regression] arguments. Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 #' for detailed examples.
 #'
-#' @section Setting Defaults:
-#' If you like to consistently use a different function to format p-values or
-#' estimates, you can set options in the script or in the user- or
-#' project-level startup file, '.Rprofile'.  The default confidence level can
-#' also be set. Please note the default option for the estimate is the same
-#' as it is for `tbl_regression()`.
-#' \itemize{
-#'   \item `options(gtsummary.pvalue_fun = new_function)`
-#'   \item `options(gtsummary.tbl_regression.estimate_fun = new_function)`
-#'   \item `options(gtsummary.conf.level = 0.90)`
-#' }
-#'
-#' @section Note:
-#' The N reported in the `tbl_uvregression()` output is the number of observations
-#' in the data frame `model.frame(x)`. Depending on the model input, this N
-#' may represent different quantities. In most cases, it is the number of people or
-#' units in your model.  Here are some common exceptions.
-#' 1. Survival regression models including time dependent covariates.
-#' 2. Random- or mixed-effects regression models with clustered data.
-#' 3. GEE regression models with clustered data.
-#'
-#' This list is not exhaustive, and care should be taken for each number reported.
+#' @inheritSection tbl_regression Setting Defaults
+#' @inheritSection tbl_regression Note
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
