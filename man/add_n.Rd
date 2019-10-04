@@ -4,16 +4,35 @@
 \alias{add_n}
 \title{Add column with N}
 \usage{
-add_n(x, missing = FALSE, last = FALSE)
+add_n(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
+  last = FALSE, missing = NULL)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{missing}{Logical argument indicating whether to print N (\code{missing = FALSE}),
-or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
+\item{statistic}{String indicating the statistic to report. Default is the
+number of non-missing observation for each variable, \code{statistic = "{n}"}.
+Other statistics available to report include:
+\itemize{
+\item \code{"{N}"} total number of observations,
+\item \code{"{n}"} number of non-missing observations,
+\item \code{"{n_miss}"} number of missing observations,
+\item \code{"{p}"} percent non-missing data,
+\item \code{"{p_miss}"} percent missing data
+The argument uses \link[glue:glue]{glue::glue} syntax and multiple statistics may be reported,
+e.g. \code{statistic = "{n} / {N} ({p}\%)"}
+}}
+
+\item{col_label}{String indicating the column label.  Default is \code{"**N**"}}
+
+\item{footnote}{Logical argument indicating whether to print a footnote
+clarifying the statistics presented. Default is \code{FALSE}}
 
 \item{last}{Logical indicator to include N column last in table.
 Default is \code{FALSE}, which will display N column first.}
+
+\item{missing}{DEPRECATED. Logical argument indicating whether to print N
+(\code{missing = FALSE}), or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 }
 \value{
 A \code{tbl_summary} object
