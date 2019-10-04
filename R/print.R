@@ -20,7 +20,7 @@ print.tbl_summary <- function(x, ...) {
 
   # printing message about downloading gt package
   if (is.null(getOption("gtsummary.print_engine")) && print_engine == "kable") {
-    warn_deprecated(glue(
+    message(glue(
       "Results will be printed using 'knitr::kable()'.\n",
       "For tables styled by the gt package, use the installation code below.\n",
       "'remotes::install_github(\"rstudio/gt\")'\n\n",
