@@ -1,7 +1,9 @@
 #' Display regression model results in table
 #'
-#' This function uses [broom::tidy] and [broom.mixed::tidy]
-#' to perform the initial model formatting. Review the
+#' This function takes a regression model object and returns a formatted table
+#' that is publication-ready. The function is highly customizable
+#' allowing the user to obtain a bespoke summary table of the
+#' regression model results. Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
@@ -16,6 +18,16 @@
 #'   \item `options(gtsummary.conf.level = 0.90)`
 #' }
 #'
+#' @section Note:
+#' The N reported in the output is the number of observations
+#' in the data frame `model.frame(x)`. Depending on the model input, this N
+#' may represent different quantities. In most cases, it is the number of people or
+#' units in your model.  Here are some common exceptions.
+#' 1. Survival regression models including time dependent covariates.
+#' 2. Random- or mixed-effects regression models with clustered data.
+#' 3. GEE regression models with clustered data.
+#'
+#' This list is not exhaustive, and care should be taken for each number reported.
 #' @param x Regression model object
 #' @param exponentiate Logical indicating whether to exponentiate the
 #' coefficient estimates. Default is `FALSE`.

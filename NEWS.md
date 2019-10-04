@@ -1,4 +1,4 @@
-# gtsummary 1.2.2
+# gtsummary (development version)
 
 * Added ability to merge `tbl_summary` objects in `tbl_merge()` (#230)
 
@@ -9,6 +9,10 @@
 * Updated the `show_yesno` argument to `show_single_row`. It is now generic and any binary variable can be shown on a single row. (#220)
 
 * Updated API for using custom functions to calculate p-values in `add_p()`. User now may reference a custom function by its name. (#226)
+
+* Removed legacy support for tidyr version less than 1.0.0 (#235)
+
+* Improvements to documentation
 
 # gtsummary 1.2.1
 

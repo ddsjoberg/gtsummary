@@ -266,12 +266,23 @@ usethis::edit_r_profile()
 
 The following parameters are available to be set:
 
-| Description                                         | Example                                                                                   | Functions                                                                        |
-|-----------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
-| Formatting and rounding p-values                    | `options(gtsummary.pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 2))`                  | `add_p()`, `tbl_regression()`, `tbl_uvregression()`                              |
-| Formatting and rounding for regression coefficients | `options(gtsummary.tbl_regression.estimate_fun = function(x) gtsummary::style_sigfig(x, digits = 3))` | `tbl_regression()`, `tbl_uvregression()`                                         |
-| Set level for limits                                | `options(gtsummary.conf.level = 0.90)`                                                    | `tbl_regression()`, `tbl_uvregression()`                                         |
-| Print tables with `gt` or `kable`                   | `options(gtsummary.print_engine = "kable")`   `options(gtsummary.print_engine = "gt")`    | All `tbl_*()` functions                                                          |
+```{r, echo=FALSE}
+data.frame(
+  `Description` = c("Formatting and rounding p-values", 
+                    "Formatting and rounding for regression coefficients",
+                    "Set level for limits",
+                    "Print tables with `gt` or `kable`"),
+  `Example` = c("`options(gtsummary.pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 2))`",
+                '`options(gtsummary.tbl_regression.estimate_fun = function(x) gtsummary::style_sigfig(x, digits = 3))`',
+                '`options(gtsummary.conf.level = 0.90)`',
+                '`options(gtsummary.print_engine = "kable")`   `options(gtsummary.print_engine = "gt")`'),
+  `Functions` = c("`add_p()`, `tbl_regression()`, `tbl_uvregression()`",
+                  "`tbl_regression()`, `tbl_uvregression()`",
+                  "`tbl_regression()`, `tbl_uvregression()`",
+                  "All `tbl_*()` functions")
+) %>% 
+  knitr::kable()
+```
 
 When setting default rounding/formatting functions, set the default to a function object rather than an evaluated function.  For example, if you want to round estimates to 3 significant figures use,
 
