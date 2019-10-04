@@ -168,7 +168,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # deprecation note about group
   if (!rlang::quo_is_null(rlang::enquo(group))) {
-    stop_defunct(glue(
+    stop(glue(
       "Passing the 'group' argument in 'tbl_summary()' is defunct.\n",
       "Please pass the column in 'add_p()'. For example,\n\n",
       "tbl_summary() %>% add_p(group = varname)"
