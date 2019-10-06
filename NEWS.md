@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `inlude =` and `exclude =` arguments to `tbl_uvregression()` (#240)
+
 * Added ability to merge `tbl_summary` objects in `tbl_merge()` (#230)
 
 * Added standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
