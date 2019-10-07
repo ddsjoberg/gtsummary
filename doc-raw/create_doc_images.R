@@ -81,7 +81,6 @@ purrr::walk(all_files, ~ update_table_png(.x))
 # Or Run on individual files as needed:
 # update_table_png(here::here("man", "add_p.Rd"))
 
-
 # README gt tables -------------------------------------------------------------
 temp_dir <- tempdir()
 # tbl_summary

@@ -53,6 +53,34 @@ test_that("glmer: no errors/warnings with standard use", {
         method.args = list(family = binomial)
       ), NA
   )
+
+
+  expect_error(
+    mtcars %>%
+      dplyr::select("am", "gear", "hp", "cyl") %>%
+      tbl_uvregression(
+        method = glmer,
+        y = am,
+        formula = "{y} ~ {x} + (1 | gear)",
+        method.args = list(family = binomial),
+        label = "cyl" ~ "No. Cylinders",
+        hide_n = TRUE,
+        include = c("am", "gear", "hp", "cyl"),
+        exclude = c("hp")
+      ), NA
+  )
+  expect_warning(
+    mtcars %>%
+      dplyr::select("am", "gear", "hp", "cyl") %>%
+      tbl_uvregression(
+        method = glmer,
+        y = am,
+        formula = "{y} ~ {x} + (1 | gear)",
+        method.args = list(family = binomial),
+        include = c("am", "gear", "hp", "cyl"),
+        exclude = c("hp")
+      ), NA
+  )
 })
 
 test_that("tbl_regression creates errors with bad inputs", {

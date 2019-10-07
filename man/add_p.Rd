@@ -42,9 +42,9 @@ used calculate p-values with correlated data (e.g. when the test argument
 is \code{"lme4"}). Default is \code{NULL}.  If specified,
 the row associated with this variable is omitted from the summary table.}
 
-\item{include}{Names of variables to include in output.}
+\item{include}{Character vector of variable names to include from output.}
 
-\item{exclude}{Names of variables to exclude from output.}
+\item{exclude}{Character vector of variable names to exclude from output.}
 }
 \value{
 A \code{tbl_summary} object
@@ -89,7 +89,7 @@ add_p_ex1 <-
 my_mcnemar <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
-  result$test <- "McNemar's test"
+  result$test <- "McNemar\\\\'s test"
   result
 }
 
@@ -110,7 +110,7 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{inline_text.tbl_summary}},
   \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tbl_summary}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_summary}}
 }
 \author{
 Emily C. Zabor, Daniel D. Sjoberg

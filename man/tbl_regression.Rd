@@ -17,9 +17,9 @@ e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 \item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{include}{Names of variables to include in output.}
+\item{include}{Character vector of variable names to include from output.}
 
-\item{exclude}{Names of variables to exclude from output.}
+\item{exclude}{Character vector of variable names to exclude from output.}
 
 \item{show_single_row}{By default categorical variables are printed on
 multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
@@ -47,8 +47,10 @@ and return a string that is the rounded/formatted p-value (e.g.
 A \code{tbl_regression} object
 }
 \description{
-This function uses \link[broom:tidy]{broom::tidy} and \link[broom.mixed:tidy]{broom.mixed::tidy}
-to perform the initial model formatting. Review the
+This function takes a regression model object and returns a formatted table
+that is publication-ready. The function is highly customizable
+allowing the user to obtain a bespoke summary table of the
+regression model results. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 for detailed examples.
 }
@@ -67,11 +69,10 @@ also be set.
 
 \section{Note}{
 
-The N reported in the \code{tbl_regression()} output is the number of observations
+The N reported in the output is the number of observations
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
-may represent different quantities. In most cases, it is the total number of
-observations in your model; however, the precise definition of an observation,
-or unit of analysis, may differ across models. Here are some common examples.
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.
 \enumerate{
 \item Survival regression models including time dependent covariates.
 \item Random- or mixed-effects regression models with clustered data.

@@ -1,12 +1,20 @@
 # gtsummary (development version)
 
+* Added `inlude =` and `exclude =` arguments to `tbl_uvregression()` (#240)
+
+* Added ability to merge `tbl_summary` objects in `tbl_merge()` (#230)
+
 * Added standard evaluation variants, `tbl_summary_()` and `add_p_()` (#223)
 
-* Removed `gt::cols_merge()` function ahead of the gt PR #355 that changes the `cols_merge()` API (#222)
+* Removed `gt::cols_merge()` function ahead of the {gt} package PR #355 that changes the `cols_merge()` API (#222)
 
 * Updated the `show_yesno` argument to `show_single_row`. It is now generic and any binary variable can be shown on a single row. (#220)
 
 * Updated API for using custom functions to calculate p-values in `add_p()`. User now may reference a custom function by its name. (#226)
+
+* Removed legacy support for tidyr version less than 1.0.0 (#235)
+
+* Improvements to documentation
 
 # gtsummary 1.2.1
 

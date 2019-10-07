@@ -1,32 +1,15 @@
 #' Display univariate regression model results in table
 #'
-#' The `tbl_uvregression` function arguments are similar to the [tbl_regression]
-#' arguments. Review the
+#' This function estimates univariate regression models and returns them in
+#' a publication-ready table. The function takes as arguments a data frame,
+#' the type of regression model, and the outcome variable. Each column in the
+#' data frame is regressed on the specified outcome. The `tbl_uvregression`
+#' function arguments are similar to the [tbl_regression] arguments. Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 #' for detailed examples.
 #'
-#' @section Setting Defaults:
-#' If you like to consistently use a different function to format p-values or
-#' estimates, you can set options in the script or in the user- or
-#' project-level startup file, '.Rprofile'.  The default confidence level can
-#' also be set. Please note the default option for the estimate is the same
-#' as it is for `tbl_regression()`.
-#' \itemize{
-#'   \item `options(gtsummary.pvalue_fun = new_function)`
-#'   \item `options(gtsummary.tbl_regression.estimate_fun = new_function)`
-#'   \item `options(gtsummary.conf.level = 0.90)`
-#' }
-#'
-#' @section Note:
-#' The N reported in the `tbl_uvregression()` output is the number of observations
-#' in the data frame `model.frame(x)`. Depending on the model input, this N
-#' may represent different quantities. In most cases, it is the number of people or
-#' units in your model.  Here are some common exceptions.
-#' 1. Survival regression models including time dependent covariates.
-#' 2. Random- or mixed-effects regression models with clustered data.
-#' 3. GEE regression models with clustered data.
-#'
-#' This list is not exhaustive, and care should be taken for each number reported.
+#' @inheritSection tbl_regression Setting Defaults
+#' @inheritSection tbl_regression Note
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
@@ -79,6 +62,7 @@
 tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
+                             include = NULL, exclude = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL) {
   # setting defaults -----------------------------------------------------------
@@ -154,7 +138,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     stop("'{x}' must appear on RHS of '~' in formula argument")
   }
 
-  # get all x vars
+  # get all x vars -------------------------------------------------------------
   x_vars <- names(data) %>%
     setdiff( # removing outcome variable(s)
       paste0(y, "~1") %>%
@@ -164,6 +148,11 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     setdiff( # removing potential variables added to model formula (e.g. random intercepts)
       all.vars(stats::as.formula(formula)[[3]]) %>% remove_one_x() # the one x removed is the {x}
     )
+  if (!is.null(include)) x_vars <- intersect(x_vars, include)
+  x_vars <- x_vars %>% setdiff(exclude)
+  if (length(x_vars) == 0) {
+    stop("There were no covariates selected.")
+  }
 
   # bulding regression models
   model_obj_list <-
@@ -210,13 +199,8 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   # table of column headers
   table_header <-
     tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    table_header_fmt(
-      p.value = "x$inputs$pvalue_fun",
-      estimate = "x$inputs$estimate_fun",
-      conf.low = "x$inputs$estimate_fun",
-      conf.high = "x$inputs$estimate_fun"
-    )
+    left_join(tbl_regression_list %>% pluck(1, "table_header"),
+              by = "column")
 
   # creating a meta_data table (this will be used in subsequent functions, eg add_global_p)
   meta_data <-
@@ -292,13 +276,7 @@ gt_tbl_uvregression <- quote(list(
     "columns = gt::vars(label), ",
     "rows = row_type != 'label'",
     "))"
-  ),
-
-  # column headers abbreviations footnote
-  # extracting from the first variable regression model
-  footnote_abbreviation =
-    tbl_regression_list %>%
-      pluck(1, "gt_calls", "footnote_abbreviation")
+  )
 ))
 
 # kable function calls ------------------------------------------------------------
@@ -309,10 +287,6 @@ kable_tbl_uvregression <- quote(list(
 
   #  placeholder, so the formatting calls are performed other calls below
   fmt = NULL,
-
-  # combining conf.low and conf.high to print confidence interval
-  cols_merge_ci =
-    "dplyr::mutate(conf.low = ifelse(is.na(estimate), NA, glue::glue('{conf.low}, {conf.high}') %>% as.character()))" %>% glue::as_glue(),
 
   # Show "---" for reference groups
   fmt_missing_ref = glue(
