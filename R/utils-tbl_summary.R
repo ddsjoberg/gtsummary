@@ -1447,7 +1447,7 @@ enquo_to_string <- function(by_enquo, arg_name) {
 
   # is user supplied string, then stopping with error
   if (startsWith(by_quo_text, "\"") && endsWith(by_quo_text, "\"")) {
-    stop_defunct(glue(
+    stop(glue(
       "\nPassing the '{arg_name}' argument as a string is defunct.\n",
       "Please pass the {arg_name} argument without quotes. For example, \n\n",
       "foo({arg_name} = varname)"
