@@ -91,7 +91,7 @@ total number of non-missing (or missing) observations" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9003</span>
       </span>
     </div>
 
@@ -160,7 +160,8 @@ total number of non-missing (or missing) observations" />
 total number of non-missing (or missing) observations</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_n</span>(<span class='no'>x</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>last</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>add_n</span>(<span class='no'>x</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>"{n}"</span>, <span class='kw'>col_label</span> <span class='kw'>=</span> <span class='st'>"**N**"</span>, <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>last</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,14 +171,37 @@ total number of non-missing (or missing) observations</p>
       <td><p>Object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function</p></td>
     </tr>
     <tr>
-      <th>missing</th>
-      <td><p>Logical argument indicating whether to print N (<code>missing = FALSE</code>),
-or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></td>
+      <th>statistic</th>
+      <td><p>String indicating the statistic to report. Default is the
+number of non-missing observation for each variable, <code>statistic = "{n}"</code>.
+Other statistics available to report include:</p><ul>
+<li><p><code>"{N}"</code> total number of observations,</p></li>
+<li><p><code>"{n}"</code> number of non-missing observations,</p></li>
+<li><p><code>"{n_miss}"</code> number of missing observations,</p></li>
+<li><p><code>"{p}"</code> percent non-missing data,</p></li>
+<li><p><code>"{p_miss}"</code> percent missing data
+The argument uses <a href='https://www.rdocumentation.org/packages/glue/topics/glue'>glue::glue</a> syntax and multiple statistics may be reported,
+e.g. <code>statistic = "{n} / {N} ({p}%)"</code></p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>col_label</th>
+      <td><p>String indicating the column label.  Default is <code>"**N**"</code></p></td>
+    </tr>
+    <tr>
+      <th>footnote</th>
+      <td><p>Logical argument indicating whether to print a footnote
+clarifying the statistics presented. Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>last</th>
       <td><p>Logical indicator to include N column last in table.
 Default is <code>FALSE</code>, which will display N column first.</p></td>
+    </tr>
+    <tr>
+      <th>missing</th>
+      <td><p>DEPRECATED. Logical argument indicating whether to print N
+(<code>missing = FALSE</code>), or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></td>
     </tr>
     </table>
 
