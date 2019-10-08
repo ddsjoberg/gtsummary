@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Added `inlude =` and `exclude =` arguments to `tbl_uvregression()` (#240)
+* The `add_n()` function now reports additional statistics: total N, non-missing N, missing N, and their percentages.  The `missing = ` argument has been deprecated in favor of the `statistic = ` argument. (#237)
+
+* Added `include =` and `exclude =` arguments to `tbl_uvregression()` (#240)
 
 * Added ability to merge `tbl_summary` objects in `tbl_merge()` (#230)
 
