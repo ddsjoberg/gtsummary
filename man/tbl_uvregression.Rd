@@ -6,8 +6,9 @@
 \usage{
 tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
-  hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
-  estimate_fun = NULL, pvalue_fun = NULL)
+  include = NULL, exclude = NULL, hide_n = FALSE,
+  show_single_row = NULL, conf.level = NULL, estimate_fun = NULL,
+  pvalue_fun = NULL)
 }
 \arguments{
 \item{data}{Data frame to be used in univariate regression modeling.  Data
@@ -30,6 +31,10 @@ coefficient estimates. Default is \code{FALSE}.}
 
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
+
+\item{include}{Character vector of variable names to include from output.}
+
+\item{exclude}{Character vector of variable names to exclude from output.}
 
 \item{hide_n}{Hide N column. Default is \code{FALSE}}
 

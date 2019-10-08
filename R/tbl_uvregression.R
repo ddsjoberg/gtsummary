@@ -62,6 +62,7 @@
 tbl_uvregression <- function(data, method, y, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
+                             include = NULL, exclude = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL) {
   # setting defaults -----------------------------------------------------------
@@ -137,7 +138,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     stop("'{x}' must appear on RHS of '~' in formula argument")
   }
 
-  # get all x vars
+  # get all x vars -------------------------------------------------------------
   x_vars <- names(data) %>%
     setdiff( # removing outcome variable(s)
       paste0(y, "~1") %>%
@@ -147,6 +148,11 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
     setdiff( # removing potential variables added to model formula (e.g. random intercepts)
       all.vars(stats::as.formula(formula)[[3]]) %>% remove_one_x() # the one x removed is the {x}
     )
+  if (!is.null(include)) x_vars <- intersect(x_vars, include)
+  x_vars <- x_vars %>% setdiff(exclude)
+  if (length(x_vars) == 0) {
+    stop("There were no covariates selected.")
+  }
 
   # bulding regression models
   model_obj_list <-

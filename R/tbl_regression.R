@@ -33,8 +33,8 @@
 #' coefficient estimates. Default is `FALSE`.
 #' @param label List of formulas specifying variables labels,
 #' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`
-#' @param include Names of variables to include in output.
-#' @param exclude Names of variables to exclude from output.
+#' @param include Character vector of variable names to include from output.
+#' @param exclude Character vector of variable names to exclude from output.
 #' @param conf.level Must be strictly greater than 0 and less than 1.
 #' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept Logical argument indicating whether to include the intercept

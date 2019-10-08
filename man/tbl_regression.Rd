@@ -17,9 +17,9 @@ e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 \item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{include}{Names of variables to include in output.}
+\item{include}{Character vector of variable names to include from output.}
 
-\item{exclude}{Names of variables to exclude from output.}
+\item{exclude}{Character vector of variable names to exclude from output.}
 
 \item{show_single_row}{By default categorical variables are printed on
 multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print

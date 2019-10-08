@@ -42,9 +42,9 @@ used calculate p-values with correlated data (e.g. when the test argument
 is \code{"lme4"}). Default is \code{NULL}.  If specified,
 the row associated with this variable is omitted from the summary table.}
 
-\item{include}{Names of variables to include in output.}
+\item{include}{Character vector of variable names to include from output.}
 
-\item{exclude}{Names of variables to exclude from output.}
+\item{exclude}{Character vector of variable names to exclude from output.}
 }
 \value{
 A \code{tbl_summary} object
