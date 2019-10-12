@@ -226,8 +226,9 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
       footnote_abbrev = map2(
         .data$column, .data$footnote_abbrev,
         function(x1, y1) {
-          if (x1 %in% c("estimate", "ci"))
+          if (x1 == "estimate")
             return(c(y1, estimate_header(x, exponentiate) %>% attr("footnote")))
+          else if (x1 == "ci") return(c(y1, "CI = Confidence Interval"))
           return(y1)
         }
       )
@@ -314,7 +315,7 @@ kable_tbl_regression <- quote(list(
 
 
 
-# identifies headers for common models (logistic, poisson, and cox regression)
+# identifies headers for common models (logistic, poisson, and PH regression)
 estimate_header <- function(x, exponentiate) {
   # first identify the type ----------------------------------------------------
   model_type = "generic"
@@ -357,13 +358,7 @@ estimate_header <- function(x, exponentiate) {
   }
   else {
     header <- ifelse(exponentiate == TRUE ,"exp(Beta)", "Beta")
-    attr(header, "footnote") <- "Beta = Regression Coefficient"
-
   }
-
-  # adding CI to abbreviation footnote
-  attr(header, "footnote") <- c(attr(header, "footnote"),
-                                "CI = Confidence Interval")
 
   header
 }
