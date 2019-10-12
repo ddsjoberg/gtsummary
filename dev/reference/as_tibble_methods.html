@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert to knitr_kable object — as_kable • gtsummary</title>
+<title>Convert gtsummary object to tibble — as_tibble_methods • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,11 +48,9 @@
 
 
 
-<meta property="og:title" content="Convert to knitr_kable object — as_kable" />
-<meta property="og:description" content="Function converts gtsummary objects to a knitr_kable objects.  This function
-is used in the background when the results are printed or knit.  A user can
-use this function if they wish to add customized formatting available
-via knitr::kable." />
+<meta property="og:title" content="Convert gtsummary object to tibble — as_tibble_methods" />
+<meta property="og:description" content="Function converts gtsummary objects tibbles. The formatting stored in
+x$kable_calls is applied." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -156,19 +154,39 @@ via knitr::kable." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert to knitr_kable object</h1>
+    <h1>Convert gtsummary object to tibble</h1>
     
-    <div class="hidden name"><code>as_kable.Rd</code></div>
+    <div class="hidden name"><code>as_tibble_methods.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Function converts gtsummary objects to a knitr_kable objects.  This function
-is used in the background when the results are printed or knit.  A user can
-use this function if they wish to add customized formatting available
-via <a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable</a>.</p>
+    <p>Function converts gtsummary objects tibbles. The formatting stored in
+<code>x$kable_calls</code> is applied.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_kable</span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_regression</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_uvregression</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_merge</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_stack</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for tbl_survival</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,49 +207,73 @@ Default is <code>NULL</code>, which utilizes all commands in <code>x$kable_calls
 Default is <code>NULL</code>.</p></td>
     </tr>
     <tr>
+      <th>col_labels</th>
+      <td><p>Logical argument adding column labels to output tibble.
+Default is <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to <a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable</a></p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>knitr_kable</code> object</p>
+    <p>a <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='tbl_summary.html'>tbl_summary</a> <a href='tbl_regression.html'>tbl_regression</a> <a href='tbl_uvregression.html'>tbl_uvregression</a> <a href='tbl_survival.html'>tbl_survival</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>as_kable</span>()</div><div class='output co'>#&gt; <span class='message'>Results will be printed using 'knitr::kable()' and do not </span>
-#&gt; <span class='message'>support footers or spanning headers. </span>
-#&gt; <span class='message'>For tables styled by the gt package, use the installation code below.</span>
-#&gt; <span class='message'>'remotes::install_github("rstudio/gt")'</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>If you prefer to always use 'knitr::kable()', add the option</span>
-#&gt; <span class='message'>'options(gtsummary.print_engine = "kable")' to your script</span>
-#&gt; <span class='message'>or in a user- or project-level startup file, '.Rprofile'.</span></div><div class='output co'>#&gt; 
-#&gt; 
-#&gt; |**Characteristic**     |**Drug**, N = 107 |**Placebo**, N = 93 |
-#&gt; |:----------------------|:-----------------|:-------------------|
-#&gt; |Age, yrs               |47 (39, 58)       |45 (36, 54)         |
-#&gt; |Unknown                |6                 |3                   |
-#&gt; |Marker Level, ng/mL    |0.60 (0.22, 1.21) |0.72 (0.22, 1.53)   |
-#&gt; |Unknown                |5                 |4                   |
-#&gt; |T Stage                |                  |                    |
-#&gt; |T1                     |25 (23%)          |26 (28%)            |
-#&gt; |T2                     |26 (24%)          |23 (25%)            |
-#&gt; |T3                     |29 (27%)          |13 (14%)            |
-#&gt; |T4                     |27 (25%)          |31 (33%)            |
-#&gt; |Grade                  |                  |                    |
-#&gt; |I                      |38 (36%)          |29 (31%)            |
-#&gt; |II                     |34 (32%)          |24 (26%)            |
-#&gt; |III                    |35 (33%)          |40 (43%)            |
-#&gt; |Tumor Response         |53 (51%)          |30 (34%)            |
-#&gt; |Unknown                |4                 |5                   |
-#&gt; |Patient Died           |49 (46%)          |58 (62%)            |
-#&gt; |Months to Death/Censor |24.0 (16.0, 24.0) |20.9 (13.8, 24.0)   |</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>tbl</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>)
+
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; <span class='message'>Results printed using 'knitr::kable()' do not support footers </span>
+#&gt; <span class='message'>or spanning headers. </span>
+#&gt; <span class='message'>Tables styled by the gt package support footers and spanning headers.</span></div><div class='output co'>#&gt; # A tibble: 17 x 3
+#&gt;    `**Characteristic**`   `**Drug**, N = 107` `**Placebo**, N = 93`
+#&gt;    &lt;chr&gt;                  &lt;chr&gt;               &lt;chr&gt;                
+#&gt;  1 Age, yrs               47 (39, 58)         45 (36, 54)          
+#&gt;  2 Unknown                6                   3                    
+#&gt;  3 Marker Level, ng/mL    0.60 (0.22, 1.21)   0.72 (0.22, 1.53)    
+#&gt;  4 Unknown                5                   4                    
+#&gt;  5 T Stage                ""                  ""                   
+#&gt;  6 T1                     25 (23%)            26 (28%)             
+#&gt;  7 T2                     26 (24%)            23 (25%)             
+#&gt;  8 T3                     29 (27%)            13 (14%)             
+#&gt;  9 T4                     27 (25%)            31 (33%)             
+#&gt; 10 Grade                  ""                  ""                   
+#&gt; 11 I                      38 (36%)            29 (31%)             
+#&gt; 12 II                     34 (32%)            24 (26%)             
+#&gt; 13 III                    35 (33%)            40 (43%)             
+#&gt; 14 Tumor Response         53 (51%)            30 (34%)             
+#&gt; 15 Unknown                4                   5                    
+#&gt; 16 Patient Died           49 (46%)            58 (62%)             
+#&gt; 17 Months to Death/Censor 24.0 (16.0, 24.0)   20.9 (13.8, 24.0)    </div><div class='input'>
+<span class='co'># without column labels</span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>tbl</span>, <span class='kw'>col_names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Results printed using 'knitr::kable()' do not support footers </span>
+#&gt; <span class='message'>or spanning headers. </span>
+#&gt; <span class='message'>Tables styled by the gt package support footers and spanning headers.</span></div><div class='output co'>#&gt; # A tibble: 17 x 3
+#&gt;    `**Characteristic**`   `**Drug**, N = 107` `**Placebo**, N = 93`
+#&gt;    &lt;chr&gt;                  &lt;chr&gt;               &lt;chr&gt;                
+#&gt;  1 Age, yrs               47 (39, 58)         45 (36, 54)          
+#&gt;  2 Unknown                6                   3                    
+#&gt;  3 Marker Level, ng/mL    0.60 (0.22, 1.21)   0.72 (0.22, 1.53)    
+#&gt;  4 Unknown                5                   4                    
+#&gt;  5 T Stage                ""                  ""                   
+#&gt;  6 T1                     25 (23%)            26 (28%)             
+#&gt;  7 T2                     26 (24%)            23 (25%)             
+#&gt;  8 T3                     29 (27%)            13 (14%)             
+#&gt;  9 T4                     27 (25%)            31 (33%)             
+#&gt; 10 Grade                  ""                  ""                   
+#&gt; 11 I                      38 (36%)            29 (31%)             
+#&gt; 12 II                     34 (32%)            24 (26%)             
+#&gt; 13 III                    35 (33%)            40 (43%)             
+#&gt; 14 Tumor Response         53 (51%)            30 (34%)             
+#&gt; 15 Unknown                4                   5                    
+#&gt; 16 Patient Died           49 (46%)            58 (62%)             
+#&gt; 17 Months to Death/Censor 24.0 (16.0, 24.0)   20.9 (13.8, 24.0)    </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
