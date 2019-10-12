@@ -85,9 +85,22 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
   }
 
   # calculating global pvalues
+  tryCatch({
+    car_Anova <-
+      x$model_obj %>%
+      car::Anova(type = "III", ...)
+  },
+  error = function(e) {
+    usethis::ui_oops(paste0(
+      "{usethis::ui_code('add_global_p()')} uses ",
+      "{usethis::ui_code('car::Anova()')} to calculate the global p-value,\n",
+      "and the function returned an error while calculating the p-values."
+    ))
+    stop(e)
+  })
+
   global_p <-
-    x$model_obj %>%
-    car::Anova(type = "III", ...) %>%
+    car_Anova %>%
     as.data.frame() %>%
     tibble::rownames_to_column(var = "variable") %>%
     filter(!!parse_expr("variable %in% terms")) %>%
@@ -161,18 +174,33 @@ add_global_p.tbl_uvregression <- function(x, ...) {
   global_p <-
     imap_dfr(
       x$tbl_regression_list,
-      ~ do.call(
-        car::Anova,
-        c(list(mod = .x[["model_obj"]], type = "III"), passed_dots)
-      ) %>%
-        # ~ car::Anova(.x[["model_obj"]], type = "III") %>%
-        as.data.frame() %>%
-        tibble::rownames_to_column(var = "variable") %>%
-        filter(variable == .y) %>%
-        select(c(
-          "variable", starts_with("Pr(>")
-        )) %>% # selecting the pvalue column
-        set_names(c("variable", "p.value_global"))
+      function(x, y) {
+          tryCatch({
+            car_Anova <-
+              do.call(
+                car::Anova,
+                c(list(mod = x[["model_obj"]], type = "III"), passed_dots)
+              )
+          },
+          error = function(e) {
+            usethis::ui_oops(paste0(
+              "{usethis::ui_code('add_global_p()')} uses ",
+              "{usethis::ui_code('car::Anova()')} to calculate the global p-value,\n",
+              "and the function returned an error while calculating the p-value ",
+              "for {usethis::ui_value(y)}."
+            ))
+            stop(e)
+          })
+
+        car_Anova %>%
+          as.data.frame() %>%
+          tibble::rownames_to_column(var = "variable") %>%
+          filter(.data$variable == y) %>%
+          select(c(
+            "variable", starts_with("Pr(>")
+          )) %>% # selecting the pvalue column
+          set_names(c("variable", "p.value_global"))
+      }
     ) %>%
     select(c("variable", "p.value_global"))
 

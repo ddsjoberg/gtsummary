@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Improved error messaging for `add_global_p()` (#243)
+
 * The `add_n()` function now reports additional statistics: total N, non-missing N, missing N, and their percentages.  The `missing = ` argument has been deprecated in favor of the `statistic = ` argument. (#237)
 
 * Added `include =` and `exclude =` arguments to `tbl_uvregression()` (#240)
