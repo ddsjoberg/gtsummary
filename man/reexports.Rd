@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{\%>\%}
+\alias{as_tibble}
 \alias{knit_print}
 \alias{vars}
 \alias{starts_with}
@@ -26,6 +27,8 @@ below to see their documentation.
   \item{knitr}{\code{\link[knitr]{knit_print}}}
 
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
+
+  \item{tibble}{\code{\link[tibble]{as_tibble}}}
 
   \item{tidyselect}{\code{\link[tidyselect]{starts_with}}, \code{\link[tidyselect]{ends_with}}, \code{\link[tidyselect]{contains}}, \code{\link[tidyselect]{matches}}, \code{\link[tidyselect]{one_of}}, \code{\link[tidyselect]{everything}}, \code{\link[tidyselect]{num_range}}, \code{\link[tidyselect]{last_col}}}
 }}

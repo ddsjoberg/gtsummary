@@ -3,6 +3,10 @@
 magrittr::`%>%`
 
 #' @export
+#' @importFrom tibble as_tibble
+tibble::as_tibble
+
+#' @export
 #' @importFrom knitr knit_print
 knitr::knit_print
 
