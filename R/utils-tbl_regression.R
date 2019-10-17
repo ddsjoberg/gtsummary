@@ -95,7 +95,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   for (v in (names(model_frame) %>% rev())) {
 
     # checking character and factor levels
-    if (any(class(model_frame[[v]]) %in% c("character", "factor"))) {
+    if (any(class(model_frame[[v]]) %in% c("character", "factor", "logical"))) {
       term_match <-
         term_match %>%
         mutate(

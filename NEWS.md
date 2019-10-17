@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix where logical variable labels printed as `NA` in `tbl_regression()` (#248)
+
 * Added `as_tibble()` function that converts any gtsummary table to a tibble (#245)
 
 * Improved error messaging for `add_global_p()` (#243)
