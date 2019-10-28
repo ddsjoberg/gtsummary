@@ -1,0 +1,81 @@
+---
+title: "gallery"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gallery}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  eval = FALSE, # NONE of these chunks can eval because it requires gt, and the ywon't run on CRAN
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gtsummary)
+library(gt)
+library(survival)
+library(dplyr)
+```
+
+# Gallery
+
+Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting and non-standard table, please submit it to the gallery via a pull request.
+
+1. Standard summary table with added p-values, and n column.
+1. Univariate table of logistic regression models with number of events column.
+1. Cox model with categorical predictors, showing the distribution of the predictor to the right.
+1. Cox model with categorical predictors, showing the number of events for each level.
+1. ANCOVA model results
+
+*These will all need to be saved as images so they appear on the CRAN documentation as well.*
+
+```{r}
+trial[c("trt", "age", "grade")] %>%
+  tbl_summary(by = trt, missing = "no") %>%
+  add_p() %>%
+  add_n() %>%
+  as_gt() %>%
+  tab_spanner(columns = starts_with("stat_"), md("**Randomization Group**"))
+```
+
+```{r}
+trial[c("response", "age", "grade")] %>%
+  tbl_uvregression(
+    method = glm,
+    y = response, 
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  ) %>%
+  add_nevent()
+```
+
+```{r}
+gt_model <-
+  trial[c("ttdeath", "death", "stage", "grade")] %>%
+  tbl_uvregression(
+    method = coxph,
+    y = Surv(ttdeath, death), 
+    exponentiate = TRUE,
+    hide_n = TRUE
+  )
+
+gt_eventn <-
+  trial %>%
+  filter(death ==  1) %>%
+  select(stage, grade) %>%
+  tbl_summary(
+    statistic = all_categorical() ~ "{n}",
+    label = list(vars(stage) ~ "T Stage", vars(grade) ~ "Grade")
+  ) %>%
+  modify_header(stat_0 = md("**Event N**"))
+
+tbl_merge(list(gt_eventn, gt_model)) %>%
+  as_gt(exclude = "tab_spanner")
+```
+
+
