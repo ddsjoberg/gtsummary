@@ -69,20 +69,13 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
 
   # if tidyselect function returned numeric position, grab character name
   lhs <- map_if(lhs, is.numeric, ~ names(.data)[.x])
-  # TODO: fix this garbage code for dplyr::vars()
-  # if tidyselect function returned quosure, convert to character
-  # > dplyr::vars(grade) %>% as.character()
-  # [1] "~grade"
-  lhs <- map_if(
-    lhs, ~ class(.x) == "quosures",
-    ~ as.character(.x) %>%
-      # remove ~ from quosure
-      stringr::str_remove(stringr::fixed("~")) %>%
-      # if variable name was wrapped in backticks, remove them
-      {ifelse(
-        startsWith(., "`") && endsWith(., "`"),
-        stringr::str_sub(., 2, -2), .
-      )}
+  # grabbing string column names from vars() call
+  lhs <- map(
+    lhs,
+    function(x) {
+      if (class(x) != "quosures") return(x)
+      map_chr(x, rlang::as_label)
+    }
   )
 
   # converting rhs and lhs into a named list
