@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix in `vars()` selection where only first variable listed was being selected (#259)
+
 * Bug fix where logical variable labels printed as `NA` in `tbl_regression()` (#248)
 
 * Added `as_tibble()` function that converts any gtsummary table to a tibble (#245)
