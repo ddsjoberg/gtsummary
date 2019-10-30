@@ -8,7 +8,7 @@ tbl_uvregression(data, method, y, method.args = NULL,
   formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
   include = NULL, exclude = NULL, hide_n = FALSE,
   show_single_row = NULL, conf.level = NULL, estimate_fun = NULL,
-  pvalue_fun = NULL)
+  pvalue_fun = NULL, show_yesno = NULL)
 }
 \arguments{
 \item{data}{Data frame to be used in univariate regression modeling.  Data
@@ -56,6 +56,8 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
+
+\item{show_yesno}{deprecated}
 }
 \value{
 A \code{tbl_uvregression} object
