@@ -11,7 +11,7 @@ tbl_merge(tbls, tab_spanner = NULL)
 
 \item{tab_spanner}{Character vector specifying the spanning headers.
 Must be the same length as \code{tbls}. The
-strings are interpreted with \link[gt:md]{gt::md}.
+strings are interpreted with \code{gt::md}.
 Must be same length as \code{tbls} argument}
 }
 \value{

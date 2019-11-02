@@ -6,7 +6,7 @@
 #' @param tbls List of gtsummary objects to merge
 #' @param tab_spanner Character vector specifying the spanning headers.
 #' Must be the same length as `tbls`. The
-#' strings are interpreted with [gt::md].
+#' strings are interpreted with `gt::md`.
 #' Must be same length as `tbls` argument
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
