@@ -4,12 +4,14 @@
 \alias{tbl_merge}
 \title{Merge two or more gtsummary objects}
 \usage{
-tbl_merge(tbls, tab_spanner = paste0(c("Table "), seq_len(length(tbls))))
+tbl_merge(tbls, tab_spanner = NULL)
 }
 \arguments{
 \item{tbls}{List of gtsummary objects to merge}
 
 \item{tab_spanner}{Character vector specifying the spanning headers.
+Must be the same length as \code{tbls}. The
+strings are interpreted with \code{gt::md}.
 Must be same length as \code{tbls} argument}
 }
 \value{
@@ -42,7 +44,7 @@ t2 <-
 tbl_merge_ex1 <-
   tbl_merge(
     tbls = list(t1, t2),
-    tab_spanner = c("Tumor Response", "Time to Death")
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
 \donttest{
 # Descriptive statistics alongside univariate regression, with no spanning header
