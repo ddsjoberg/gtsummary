@@ -94,7 +94,7 @@ or tbl_summary objects and adds appropriate spanning headers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9008</span>
       </span>
     </div>
 
@@ -164,7 +164,7 @@ or tbl_summary objects and adds appropriate spanning headers." />
 or <code>tbl_summary</code> objects and adds appropriate spanning headers.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_merge</span>(<span class='no'>tbls</span>, <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Table "</span>), <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>tbls</span>))))</pre>
+    <pre class="usage"><span class='fu'>tbl_merge</span>(<span class='no'>tbls</span>, <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,6 +176,8 @@ or <code>tbl_summary</code> objects and adds appropriate spanning headers.</p>
     <tr>
       <th>tab_spanner</th>
       <td><p>Character vector specifying the spanning headers.
+Must be the same length as <code>tbls</code>. The
+strings are interpreted with <code><a href='https://rdrr.io/pkg/gt/man/md.html'>gt::md</a></code>.
 Must be same length as <code>tbls</code> argument</p></td>
     </tr>
     </table>
@@ -236,7 +238,7 @@ Must be same length as <code>tbls</code> argument</p></td>
 <span class='no'>tbl_merge_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_merge</span>(
     <span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>),
-    <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Tumor Response"</span>, <span class='st'>"Time to Death"</span>)
+    <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"**Tumor Response**"</span>, <span class='st'>"**Time to Death**"</span>)
   )
 <span class='co'># \donttest{</span>
 <span class='co'># Descriptive statistics alongside univariate regression, with no spanning header</span>
