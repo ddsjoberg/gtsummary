@@ -1,7 +1,5 @@
 #' Creates table of univariate summary statistics for time-to-event endpoints
 #'
-#' \lifecycle{experimental}
-#'
 #' @param x A survfit object
 #' @param ... Additional arguments passed to other methods
 #' @seealso [tbl_survival.survfit]
@@ -12,6 +10,7 @@ tbl_survival <- function(x, ...) {
 
 #' Creates table of survival probabilities
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'

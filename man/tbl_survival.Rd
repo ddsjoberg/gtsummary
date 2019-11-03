@@ -12,7 +12,7 @@ tbl_survival(x, ...)
 \item{...}{Additional arguments passed to other methods}
 }
 \description{
-\lifecycle{experimental}
+Creates table of univariate summary statistics for time-to-event endpoints
 }
 \seealso{
 \link{tbl_survival.survfit}
