@@ -1,5 +1,7 @@
 #' Creates table of univariate summary statistics for time-to-event endpoints
 #'
+#' \lifecycle{experimental}
+#'
 #' @param x A survfit object
 #' @param ... Additional arguments passed to other methods
 #' @seealso [tbl_survival.survfit]
