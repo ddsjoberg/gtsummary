@@ -50,6 +50,9 @@ library(gtsummary)
 library(gt)
 library(survival)
 library(dplyr)
+library(stringr)
+library(purrr)
+library(forcats)
 ```
 
 ---
@@ -133,5 +136,54 @@ gt_eventn <-
   modify_header(stat_0 = md("**Event N**"))
 
 tbl_merge(list(gt_eventn, gt_model)) %>%
+  as_gt(exclude = "tab_spanner")
+```
+
+---
+
+Regression model where the covariates remain the same, and the outcome changes.
+
+```{r}
+df_models <-
+  tibble(outcome = c("age", "marker")) %>%
+  mutate(
+    outcome_lbl = map_chr(outcome, ~ attr(trial[[.x]], "label")),
+    tbl_reg = map2(
+      outcome, outcome_lbl,
+      ~ lm(str_glue("{.x} ~ trt"), trial) %>%
+        tbl_regression(
+          show_single_row = "trt",
+          # label = list(trt = str_glue(".y"))
+        )
+    )
+  ) 
+
+df_models %>%
+  pull(tbl_reg) %>%
+  tbl_stack() %>%
+  as_gt() %>%
+  tab_footnote(
+    footnote = "Values larger than 0 indicate larger values in the Drug group.", 
+    locations = cells_column_labels(columns = vars(estimate))
+  )
+```
+
+Add descriptive statistics by treatment group to the table above for a table often reported for randomized trials.
+
+```{r}
+gt_sum <- 
+  trial[c("age", "marker", "trt")] %>%
+  mutate(trt = fct_rev(trt)) %>%
+  tbl_summary(by = trt, 
+              statistic = all_continuous() ~ "{mean} ({sd})",
+              missing = "no") %>%
+  add_n() %>%
+  modify_header(stat_by = md("**{level}**"))
+
+tbl_merge(list(
+  gt_sum,
+  pull(df_models, tbl_reg) %>% tbl_stack()
+)) %>%
+  modify_header(estimate_2 = md("**Difference**")) %>%
   as_gt(exclude = "tab_spanner")
 ```
