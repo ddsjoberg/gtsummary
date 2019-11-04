@@ -159,14 +159,31 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
                         percent = c("column", "row", "cell"), group = NULL) {
-  # matching arguments
+  # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
   percent <- match.arg(percent)
 
-  # ungrouping data
+  # ungrouping data ------------------------------------------------------------
   data <- data %>% ungroup()
 
-  # deprecation note about group
+  # deleting obs with missing by values ----------------------------------------
+  # saving variable labels
+  if (sum(is.na(data[[by]])) > 0) {
+    message(glue(
+      "{sum(is.na(data[[by]]))} observations missing `{by}` have been removed. ",
+      "To include these observations, use `forcats::fct_explicit_na()` on `{by}` ",
+      "column before passing to `tbl_summary()`."
+    ))
+    lbls <- purrr::map(data, ~attr(.x, "label"))
+    data <- data[!is.na(data[[by]]), ]
+
+    # re-applying labels---I think this will NOT be necessary after dplyr 0.9.0
+    for (i in names(lbls)) {
+      attr(data[[i]], "label") <- lbls[[i]]
+    }
+  }
+
+  # deprecation note about group -----------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(group))) {
     stop(glue(
       "Passing the 'group' argument in 'tbl_summary()' is defunct.\n",
@@ -175,11 +192,11 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
     ))
   }
 
-  # will return call, and all object passed to in tbl_summary call
+  # will return call, and all object passed to in tbl_summary call -------------
   # the object func_inputs is a list of every object passed to the function
   tbl_summary_inputs <- as.list(environment())
 
-  # removing variables with unsupported variable types from data
+  # removing variables with unsupported variable types from data ---------------
   classes_expected <- c("character", "factor", "numeric", "logical", "integer")
   var_to_remove <-
     map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
@@ -196,17 +213,17 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
     ))
   }
 
-  # checking function inputs
+  # checking function inputs ---------------------------------------------------
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,
     digits, missing, missing_text, sort
   )
 
-  # converting tidyselect formula lists to named lists
+  # converting tidyselect formula lists to named lists -------------------------
   type <- tidyselect_to_list(data, type, input_type = "type")
   value <- tidyselect_to_list(data, value, input_type = "value")
 
-  # creating a table with meta data about each variable
+  # creating a table with meta data about each variable ------------------------
   meta_data <- tibble(
     variable = names(data),
     # assigning class, if entire var is NA, then assigning class NA
@@ -218,13 +235,13 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   # excluding by variable
   if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
 
-  # converting tidyselect formula lists to named lists
+  # converting tidyselect formula lists to named lists -------------------------
   label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
   statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, input_type = "statistic")
   digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, input_type = "digits")
   sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
 
-  # assigning variable characteristics
+  # assigning variable characteristics -----------------------------------------
   meta_data <-
     meta_data %>%
     mutate(
@@ -238,7 +255,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
       sort = assign_sort(.data$variable, .data$summary_type, sort)
     )
 
-  # calculating summary statistics
+  # calculating summary statistics ---------------------------------------------
   table_body <-
     meta_data %>%
     mutate(
@@ -262,7 +279,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
     select(c("variable", "summary_type", "stat_table")) %>%
     unnest(!!sym("stat_table"))
 
-  # table of column headers
+  # table of column headers ----------------------------------------------------
   table_header <-
     tibble(column = names(table_body) %>% setdiff("summary_type")) %>%
     table_header_fill_missing() %>%
@@ -275,7 +292,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
       )
     )
 
-  # returning all results in a list
+  # returning all results in a list --------------------------------------------
   results <- list(
     gt_calls = eval(gt_tbl_summary),
     kable_calls = eval(kable_tbl_summary),
