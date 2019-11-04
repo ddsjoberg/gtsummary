@@ -91,7 +91,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     tbls,
     ~ class(.x) == "tbl_summary",
     function(x){
-      x$table_header$footnote[startsWith(x$table_header$column, "stat_")][1] =
+      x$table_header$footnote[startsWith(x$table_header$column, "stat_")] =
         x$table_header$footnote[x$table_header$column == "label"][1]
 
       x$table_header$footnote[x$table_header$column == "label"][1] = list(NULL)
