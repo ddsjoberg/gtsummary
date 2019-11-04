@@ -52,6 +52,7 @@
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
+#' @param show_yesno deprecated
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
@@ -87,7 +88,13 @@
 tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
                            include = NULL, exclude = NULL,
                            show_single_row = NULL, conf.level = NULL, intercept = FALSE,
-                           estimate_fun = NULL, pvalue_fun = NULL) {
+                           estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL) {
+  # deprecated arguments -------------------------------------------------------
+  if (!is.null(show_yesno)) {
+    lifecycle::deprecate_stop("1.2.2", "tbl_regression(show_yesno = )",
+                              "tbl_regression(show_single_row = )")
+  }
+
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%

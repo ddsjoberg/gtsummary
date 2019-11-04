@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added {lifecycle} badges to mark deprecated and experimental functions (#225)
+
+* `tbl_merge()` now interprets `tab_spanner =` text with `gt::md()` (#253)
+
 * Bug fix where logical variable labels printed as `NA` in `tbl_regression()` (#248)
 
 * Added `as_tibble()` function that converts any gtsummary table to a tibble (#245)
