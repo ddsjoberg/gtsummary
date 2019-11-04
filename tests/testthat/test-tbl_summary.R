@@ -78,8 +78,8 @@ test_that("tbl_summary returns errors with bad inputs", {
     tbl_summary(trial, by = THIS_IS_NOT_A_VARIABLE),
     "*"
   )
-  expect_error(
-    tbl_summary(trial, by = response),
+  expect_message(
+    tbl_summary(trial, by = response), # should get message about missing data
     "*"
   )
   expect_error(

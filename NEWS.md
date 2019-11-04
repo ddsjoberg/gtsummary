@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `by = ` column in `tbl_summary()` now has missing variables dropped rather than halting with error (#279)
+
 * Added {lifecycle} badges to mark deprecated and experimental functions (#225)
 
 * `tbl_merge()` now interprets `tab_spanner =` text with `gt::md()` (#253)
