@@ -1,11 +1,6 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
-r:
-  - oldrel
-  - devel
-  - release
-
 sudo: false
 cache: packages
 warnings_are_errors: false
@@ -13,11 +8,15 @@ warnings_are_errors: false
 r_github_packages:
   - rstudio/gt
 
-after_success:
-  - Rscript -e 'covr::codecov()'
-
-before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
-deploy:
-  provider: script
-  script: Rscript -e 'pkgdown::deploy_site_github()'
-  skip_cleanup: true
+jobs:
+  include:
+  - r: oldrel
+  - r: devel
+  - r: release
+  after_success:
+    - Rscript -e 'covr::codecov()'
+  before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
+  deploy:
+    provider: script
+    script: Rscript -e 'pkgdown::deploy_site_github()'
+    skip_cleanup: true
