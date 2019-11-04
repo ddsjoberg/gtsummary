@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added {lifecycle} badges to mark deprecated and experimental functions (#225)
+
 * `tbl_merge()` now interprets `tab_spanner =` text with `gt::md()` (#253)
 
 * Bug fix where logical variable labels printed as `NA` in `tbl_regression()` (#248)
