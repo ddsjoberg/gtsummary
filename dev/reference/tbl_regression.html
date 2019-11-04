@@ -303,27 +303,9 @@ units in your model.  Here are some common exceptions.</p><ol>
   <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'lme4':</span>
-#&gt; <span class='message'>  method                          from</span>
-#&gt; <span class='message'>  cooks.distance.influence.merMod car </span>
-#&gt; <span class='message'>  influence.merMod                car </span>
-#&gt; <span class='message'>  dfbeta.influence.merMod         car </span>
-#&gt; <span class='message'>  dfbetas.influence.merMod        car </span></div><div class='input'><span class='no'>tbl_regression_ex3</span> <span class='kw'>&lt;-</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='input'><span class='no'>tbl_regression_ex3</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(<span class='no'>am</span> ~ <span class='no'>hp</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>gear</span>), <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'broom.mixed':</span>
-#&gt; <span class='message'>  method         from </span>
-#&gt; <span class='message'>  augment.lme    broom</span>
-#&gt; <span class='message'>  augment.merMod broom</span>
-#&gt; <span class='message'>  glance.lme     broom</span>
-#&gt; <span class='message'>  glance.merMod  broom</span>
-#&gt; <span class='message'>  glance.stanreg broom</span>
-#&gt; <span class='message'>  tidy.brmsfit   broom</span>
-#&gt; <span class='message'>  tidy.gamlss    broom</span>
-#&gt; <span class='message'>  tidy.lme       broom</span>
-#&gt; <span class='message'>  tidy.merMod    broom</span>
-#&gt; <span class='message'>  tidy.rjags     broom</span>
-#&gt; <span class='message'>  tidy.stanfit   broom</span>
-#&gt; <span class='message'>  tidy.stanreg   broom</span></div></pre>
+  <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
