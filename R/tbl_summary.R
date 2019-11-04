@@ -168,7 +168,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # deleting obs with missing by values ----------------------------------------
   # saving variable labels
-  if (sum(is.na(data[[by]])) > 0) {
+  if (!is.null(by) && sum(is.na(data[[by]])) > 0) {
     message(glue(
       "{sum(is.na(data[[by]]))} observations missing `{by}` have been removed. ",
       "To include these observations, use `forcats::fct_explicit_na()` on `{by}` ",
