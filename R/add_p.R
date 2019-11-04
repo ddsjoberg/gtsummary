@@ -59,11 +59,12 @@
 #'   result$test <- "McNemar\\'s test"
 #'   result
 #' }
-#'
+#'\donttest{
 #' add_p_ex2 <-
 #'   trial[c("response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p(test = vars(response) ~ "my_mcnemar")
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
