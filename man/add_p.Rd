@@ -93,11 +93,12 @@ my_mcnemar <- function(data, variable, by, ...) {
   result$test <- "McNemar\\\\'s test"
   result
 }
-
+\donttest{
 add_p_ex2 <-
   trial[c("response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p(test = vars(response) ~ "my_mcnemar")
+}
 }
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
