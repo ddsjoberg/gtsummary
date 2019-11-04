@@ -44,6 +44,7 @@ fmt_beta(...)
 fmt_pvalue(...)
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
 Some functions have been deprecated and are no longer being actively
 supported.
 }

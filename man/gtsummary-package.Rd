@@ -23,7 +23,7 @@ Creates presentation-ready tables summarizing data
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://www.danieldsjoberg.com/gtsummary/}
+  \item \url{https://github.com/ddsjoberg/gtsummary}
   \item Report bugs at \url{https://github.com/ddsjoberg/gtsummary/issues}
 }
 

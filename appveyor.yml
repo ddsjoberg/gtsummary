@@ -7,38 +7,34 @@ init:
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
 
-install:
-  - ps: Bootstrap
-  - cmd: Rscript -e "writeLines('options(repos = \'https://cloud.r-project.org\')', '~/.Rprofile')"
-  - cmd: Rscript -e "getOption('repos')"
-  - cmd: Rscript -e "if (!requireNamespace('remotes')) install.packages('remotes', type = 'binary')"
-  - cmd: Rscript -e "if (getRversion() < '3.2' && !requireNamespace('curl')) install.packages('curl', type = 'binary')"
-  - cmd: Rscript -e "options(pkgType = 'binary'); remotes::install_github('ropenscilabs/tic', upgrade = 'always'); print(tic::dsl_load()); tic::prepare_all_stages()"
+  matrix:
+    - R_VERSION: release
+    - R_VERSION: devel
 
-before_build: Rscript -e "tic::before_install()"
-build_script: Rscript -e "tic::install()"
-after_build: Rscript -e "tic::after_install()"
-before_test: Rscript -e "tic::before_script()"
-test_script: Rscript -e "tic::script()"
-on_success: Rscript -e "try(tic::after_success(), silent = TRUE)"
-on_failure: Rscript -e "tic::after_failure()"
-before_deploy: Rscript -e "tic::before_deploy()"
-deploy_script: Rscript -e "tic::deploy()"
-after_deploy: Rscript -e "tic::after_deploy()"
-on_finish: Rscript -e "tic::after_script()"
+install:
+  ps: Bootstrap
+
+cache:
+  - C:\RLibrary
+
+environment:
+  NOT_CRAN: true
+  # env vars that may need to be set, at least temporarily, from time to time
+  # see https://github.com/krlmlr/r-appveyor#readme for details
+  # USE_RTOOLS: true
+  # R_REMOTES_STANDALONE: true
 
 # Adapt as necessary starting from here
 
-#on_failure:
-#  - 7z a failure.zip *.Rcheck\*
-#  - appveyor PushArtifact failure.zip
+build_script:
+  - travis-tool.sh install_deps
 
-#environment:
-  # The example below will not work for your repository,
-  # you need to encrypt your own token.
-  # Please follow https://ci.appveyor.com/tools/encrypt .
-  #GITHUB_PAT:
-  #  secure: VXO22OHLkl4YhVIomSMwCZyOTx03Xf2WICaVng9xH7gISlAg8a+qrt1DtFtk8sK5
+test_script:
+  - travis-tool.sh run_tests
+
+on_failure:
+  - 7z a failure.zip *.Rcheck\*
+  - appveyor PushArtifact failure.zip
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
