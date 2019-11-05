@@ -2,9 +2,9 @@
 #'
 #' Assists in patching together more complex tables. `tbl_stack()` appends two
 #' or more `tbl_regression` or `tbl_merge` objects.
-#' {gt} attributes from the first regression object are utilized for output table.
-#' If combining `tbl_stack()` and `tbl_merge()`, merge first then stack, or stack
-#' first and then merge.
+#' {gt} attributes from the first regression object are utilized for output
+#' table (read: don't stack a `tbl_regression` object on top of a `tbl_summary`
+#' object).
 #'
 #' @param tbls List of gtsummary regression objects
 #' @family tbl_regression tools
@@ -71,9 +71,20 @@ tbl_stack <- function(tbls) {
     stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
-  # checking all inputs are class tbl_uvregression, tbl_regression or tbl_merge
-  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression", "tbl_merge") %>% any()) {
-    stop("All objects in 'tbls' must be class 'tbl_regression', 'tbl_uvregression', or 'tbl_merge'")
+  # checking all inputs are class tbl_uvregression, tbl_regression, tbl_summary, or tbl_merge
+  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression",
+                                   "tbl_summary", "tbl_merge") %>% any()) {
+    stop("All objects in 'tbls' must be class 'tbl_regression',
+         'tbl_uvregression', 'tbl_summary', or 'tbl_merge'")
+  }
+
+  # printing message if stacking tbl_summary and regression object
+  if ("tbl_summary" %in% map_chr(tbls, class) &&
+      any(c("tbl_regression", "tbl_uvregression") %in% map_chr(tbls, class))) {
+    message(paste(
+      "You are stacking a gtsummary regression table and a summary table,",
+      "which is not recommended. Consider revising the format of your table."
+    ))
   }
 
   # at least two objects must be passed
