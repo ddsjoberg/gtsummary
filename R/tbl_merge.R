@@ -64,7 +64,8 @@ tbl_merge <- function(tbls,
     stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
-  # checking all inputs are class tbl_regression, tbl_uvregression, tbl_regression, or tbl_stack
+  # checking all inputs are class tbl_regression, tbl_uvregression,
+  # tbl_regression, tbl_summary, or tbl_stack
   if (!map_chr(tbls, class) %in%
       c("tbl_regression", "tbl_uvregression", "tbl_summary", "tbl_stack") %>% all()) {
     stop(paste("All objects in 'tbls' must be class 'tbl_regression',",
