@@ -23,6 +23,17 @@ test_that("tbl_summary creates output without error/warning (with by var)", {
   )
 })
 
+test_that("tbl_summary allows for named list input", {
+  expect_error(
+    tbl_summary(mtcars, by = am, label = list(mpg = "New mpg", cyl = "New cyl")),
+    NA
+  )
+  expect_warning(
+    tbl_summary(mtcars, by = am, label = list(mpg = "New mpg", cyl = "New cyl")),
+    NA
+  )
+})
+
 
 test_that("tbl_summary throws errors/messages with bad 'sort = ' specifications", {
   expect_error(
