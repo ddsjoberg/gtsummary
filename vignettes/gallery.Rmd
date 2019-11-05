@@ -27,7 +27,7 @@ if (curl::has_internet()) {
 }
 ```
 
-Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting and non-standard table, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
+Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting table using {gtsummary}, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
 
 ```{r, echo=FALSE, comment=""}
 if (!requireNamespace("gt", quietly = TRUE)) {
@@ -64,7 +64,7 @@ trial[c("trt", "age", "grade")] %>%
 
 ---
 
-Modify the function that formats the p-values, change variable labels, include tumor response status as a column, and add a correction for multiple testing.
+Modify the function that formats the p-values, change variable labels, updating tumor response header, and add a correction for multiple testing.
 ```{r}
 trial[!is.na(trial$response), c("response", "age", "grade")] %>%
   mutate(response = factor(response, labels = c("No Tumor Response", "Tumor Responded"))) %>%
@@ -73,13 +73,13 @@ trial[!is.na(trial$response), c("response", "age", "grade")] %>%
     missing = "no",
     label = list(vars(age) ~ "Patient Age", vars(grade) ~ "Tumor Grade")
   ) %>%
-  add_p(pvalue_fun = purrr::partial(style_pvalue, digits = 2)) %>%
+  add_p(pvalue_fun = partial(style_pvalue, digits = 2)) %>%
   add_q()
 ```
 
 ---
 
-Include missing tumor response as column.
+Include missing tumor response as column using `fct_explicit_na()`.
 
 ```{r}
 trial[c("response", "age", "grade")] %>%
@@ -97,7 +97,7 @@ trial[c("response", "age", "grade")] %>%
 
 ## Regression Tables
 
-Include number of observations and the number of events in a univariate regresssion table.
+Include number of observations and the number of events in a univariate regression table.
 ```{r}
 trial[c("response", "age", "grade")] %>%
   tbl_uvregression(
@@ -162,18 +162,23 @@ Regression model where the covariates remain the same, and the outcome changes.
 df_models <-
   tibble(outcome = c("age", "marker")) %>%
   mutate(
-    tbl_reg = map(
-      outcome,
-      ~ lm(str_glue("{.x} ~ trt"), trial) %>%
-        tbl_regression(show_single_row = "trt",
-                       # label = list(trt = str_glue("{attr(trial[[.x]], "label"))}"))
-        )
+    outcome_label = map_chr(outcome,
+                        ~attr(trial[[.x]], 'label')),
+    lm_model = map(outcome,
+                   ~lm(str_glue("{.x} ~ trt"), trial)),
+    tbl_reg = map2(
+      lm_model, outcome_label,
+      ~tbl_regression(.x, show_single_row = "trt", label = list(trt = .y))
     )
   )
 
 df_models %>%
   pull(tbl_reg) %>%
   tbl_stack() %>%
+  modify_header(
+    label = md("**Model Outcome**"),
+    estimate = md("**Treatment Coef.**")
+  ) %>%
   as_gt() %>%
   tab_footnote(
     footnote = "Values larger than 0 indicate larger values in the Drug group.", 
@@ -193,9 +198,20 @@ gt_sum <-
   add_n() %>%
   modify_header(stat_by = md("**{level}**"))
 
+# before we merge we need to update the variable name in df_models gtsummary tables 
+# to match the tbl_summary object
+df_models2 <-
+  df_models %>%
+  mutate(tbl_reg = map2(tbl_reg, outcome,
+                        function(x, y){
+                          x$table_body$variable <- y 
+                          x
+                        }))
+
+
 tbl_merge(list(
   gt_sum,
-  pull(df_models, tbl_reg) %>% tbl_stack()
+  pull(df_models2, tbl_reg) %>% tbl_stack()
 )) %>%
   modify_header(estimate_2 = md("**Difference**")) %>%
   as_gt(exclude = "tab_spanner")
