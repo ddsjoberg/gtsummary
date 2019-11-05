@@ -114,6 +114,12 @@ library(lme4)
 tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
+
+# for convenience, you can also pass named lists to any arguments
+# that accept formulas (e.g label, etc.)
+ glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
+    tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
+
 }
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
