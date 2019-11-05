@@ -65,8 +65,8 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
       x, ~tidyselect_to_list_one(.data = .data, x = .x, x_name = .y,
                                  .meta_data = .meta_data, input_type = input_type)
     ) %>%
-    unlist() %>%
-    imap(~.x)
+    flatten()
+
 
   # removing duplicates (using the last one listed if variable occurs more than once)
   tokeep <-
@@ -98,7 +98,8 @@ tidyselect_to_list_one <- function(.data, x, x_name, .meta_data = NULL, input_ty
 
   # converting rhs and lhs into a named list
   result <-
-    map2(lhs, rep(rhs, length(lhs)), ~ .y %>% rlang::set_names(.x))
+    map(lhs, ~ list(rhs) %>% rlang::set_names(.x)) %>%
+    flatten()
 
   result
 }
