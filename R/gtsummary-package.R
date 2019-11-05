@@ -13,3 +13,8 @@
 
 # allowing for the use of the dot when piping
 utils::globalVariables(".")
+
+## usethis namespace: start
+#' @importFrom lifecycle deprecate_soft
+## usethis namespace: end
+NULL

@@ -1,5 +1,15 @@
 # gtsummary (development version)
 
+* Users may now pass a list of formulas, named lists, or a combination of both (#251)
+
+* Bug fix in `vars()` selection where only first variable listed was being selected (#259)
+
+* The `by = ` column in `tbl_summary()` now has missing variables dropped rather than halting with error (#279)
+
+* Added {lifecycle} badges to mark deprecated and experimental functions (#225)
+
+* `tbl_merge()` now interprets `tab_spanner =` text with `gt::md()` (#253)
+
 * Bug fix where logical variable labels printed as `NA` in `tbl_regression()` (#248)
 
 * Added `as_tibble()` function that converts any gtsummary table to a tibble (#245)

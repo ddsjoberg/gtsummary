@@ -6,7 +6,8 @@
 \usage{
 tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
   exclude = NULL, show_single_row = NULL, conf.level = NULL,
-  intercept = FALSE, estimate_fun = NULL, pvalue_fun = NULL)
+  intercept = FALSE, estimate_fun = NULL, pvalue_fun = NULL,
+  show_yesno = NULL)
 }
 \arguments{
 \item{x}{Regression model object}
@@ -42,6 +43,8 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
+
+\item{show_yesno}{deprecated}
 }
 \value{
 A \code{tbl_regression} object
@@ -111,6 +114,12 @@ library(lme4)
 tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
+
+# for convenience, you can also pass named lists to any arguments
+# that accept formulas (e.g label, etc.)
+ glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
+    tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
+
 }
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
