@@ -165,12 +165,11 @@ df_models <-
     tbl_reg = map(
       outcome,
       ~ lm(str_glue("{.x} ~ trt"), trial) %>%
-        tbl_regression(
-          show_single_row = "trt",
-          # label = list(trt = str_glue("{attr(trial[[.x]], "label"))}"))
+        tbl_regression(show_single_row = "trt",
+                       # label = list(trt = str_glue("{attr(trial[[.x]], "label"))}"))
         )
     )
-  ) 
+  )
 
 df_models %>%
   pull(tbl_reg) %>%
