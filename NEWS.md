@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added a gallery of tables possible by merging, stacking, and modifying gtsummary arguments (#258)
+
+* `tbl_summary` objects are now stackable with `tbl_stack()` (#255)
+
 * Users may now pass a list of formulas, named lists, or a combination of both (#251)
 
 * Bug fix in `vars()` selection where only first variable listed was being selected (#259)
