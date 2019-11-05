@@ -10,6 +10,7 @@ tbl_survival <- function(x, ...) {
 
 #' Creates table of survival probabilities
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'
