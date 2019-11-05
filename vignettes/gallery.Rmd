@@ -27,10 +27,7 @@ if (curl::has_internet()) {
 }
 ```
 
-Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting and non-standard table, please submit it to the gallery via a pull request.
-
-1. Cox model with categorical predictors, showing the distribution of the predictor to the right.
-1. ANCOVA model results
+Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting and non-standard table, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
 
 ```{r, echo=FALSE, comment=""}
 if (!requireNamespace("gt", quietly = TRUE)) {
@@ -46,39 +43,54 @@ if (!requireNamespace("gt", quietly = TRUE)) {
 ```
 
 ```{r setup, message = FALSE}
-library(gtsummary)
-library(gt)
-library(survival)
-library(dplyr)
-library(stringr)
-library(purrr)
-library(forcats)
+library(gtsummary); library(gt); library(survival)
+library(dplyr); library(stringr); library(purrr); library(forcats)
 ```
 
 ---
 
 ## Summary Tables
 
-Add a spanning header over the group columns for increased clarity.
+Add a spanning header over the group columns for increased clarity, and modify column headers.
 ```{r}
 trial[c("trt", "age", "grade")] %>%
   tbl_summary(by = trt, missing = "no") %>%
   modify_header(stat_by = md("**{level}** N =  {n} ({style_percent(p)}%)")) %>%
   add_n() %>%
+  bold_labels() %>%
   as_gt() %>%
   tab_spanner(columns = starts_with("stat_"), md("**Randomization Group**"))
 ```
 
 ---
 
-Modify the function that formats the p-values, and add a correction for multiple testing.
+Modify the function that formats the p-values, change variable labels, include tumor response status as a column, and add a correction for multiple testing.
 ```{r}
 trial[!is.na(trial$response), c("response", "age", "grade")] %>%
-  tbl_summary(by = response, missing = "no") %>%
-  modify_header(stat_1 = md("**No Tumor Response**"), 
-                stat_2 = md("**Tumor Responded**")) %>%
+  mutate(response = factor(response, labels = c("No Tumor Response", "Tumor Responded"))) %>%
+  tbl_summary(
+    by = response, 
+    missing = "no",
+    label = list(vars(age) ~ "Patient Age", vars(grade) ~ "Tumor Grade")
+  ) %>%
   add_p(pvalue_fun = purrr::partial(style_pvalue, digits = 2)) %>%
   add_q()
+```
+
+---
+
+Include missing tumor response as column.
+
+```{r}
+trial[c("response", "age", "grade")] %>%
+  mutate(
+    response = factor(response, labels = c("No Tumor Response", "Tumor Responded")) %>% 
+      fct_explicit_na(na_level = "Missing Response Status")
+  ) %>%
+  tbl_summary(
+    by = response, 
+    label = list(vars(age) ~ "Patient Age", vars(grade) ~ "Tumor Grade")
+  )  
 ```
 
 ---
@@ -99,16 +111,17 @@ trial[c("response", "age", "grade")] %>%
 
 ---
 
-Include two related models side-by-side.
+Include two related models side-by-side with descriptive statistics.
 ```{r}
-gt_r1 <- glm(response ~ trt + age, trial, family = binomial) %>%
+gt_r1 <- glm(response ~ age + trt, trial, family = binomial) %>%
   tbl_regression(exponentiate = TRUE)
-gt_r2 <- coxph(Surv(ttdeath, death) ~ trt + age, trial) %>%
+gt_r2 <- coxph(Surv(ttdeath, death) ~ age + trt, trial) %>%
   tbl_regression(exponentiate = TRUE)
+gt_t1 <- trial[c("age", "trt")] %>% tbl_summary(missing = "no") %>% add_n()
 
 tbl_merge(
-  list(gt_r1, gt_r2),
-  tab_spanner = c("**Tumor Response**", "**Time to Death**")
+  list(gt_t1, gt_r1, gt_r2),
+  tab_spanner = c("**Summary Statistics**", "**Tumor Response**", "**Time to Death**")
 )
 ```
 
@@ -136,6 +149,8 @@ gt_eventn <-
   modify_header(stat_0 = md("**Event N**"))
 
 tbl_merge(list(gt_eventn, gt_model)) %>%
+  bold_labels() %>%
+  italicize_levels() %>%
   as_gt(exclude = "tab_spanner")
 ```
 
@@ -147,13 +162,12 @@ Regression model where the covariates remain the same, and the outcome changes.
 df_models <-
   tibble(outcome = c("age", "marker")) %>%
   mutate(
-    outcome_lbl = map_chr(outcome, ~ attr(trial[[.x]], "label")),
-    tbl_reg = map2(
-      outcome, outcome_lbl,
+    tbl_reg = map(
+      outcome,
       ~ lm(str_glue("{.x} ~ trt"), trial) %>%
         tbl_regression(
           show_single_row = "trt",
-          # label = list(trt = str_glue(".y"))
+          # label = list(trt = str_glue("{attr(trial[[.x]], "label"))}"))
         )
     )
   ) 
@@ -168,7 +182,7 @@ df_models %>%
   )
 ```
 
-Add descriptive statistics by treatment group to the table above for a table often reported for randomized trials.
+Add descriptive statistics by treatment group to the table above to produce a table often reported for randomized trials.
 
 ```{r}
 gt_sum <- 
