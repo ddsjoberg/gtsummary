@@ -86,13 +86,13 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     stop("'tbls' and 'tab_spanner' must be the same length")
   }
 
-  # if previously called bold/italicize_labels/levels \, print note to doit again
+  # if previously called bold/italicize_labels/levels, print note to do it again
   style_funs <- c("bold_labels", "bold_levels", "italicize_labels", "italicize_levels")
   if (purrr::some(tbls, ~names(pluck(.x, "call_list")) %in% style_funs %>% any())) {
     message(glue::glue(
-      'Syling functions--',
-      '{glue::glue("`{style_funs}()`") %>% glue::glue_collapse(sep = ", ", last = ", and")}',
-      '--need to be re-applied after `tbl_merge()`.'
+      'Styling functions ',
+      '{glue::glue("`{style_funs}()`") %>% glue::glue_collapse(sep = ", ", last = ", and ")}',
+      ' need to be re-applied after `tbl_merge()`.'
     ))
   }
 
