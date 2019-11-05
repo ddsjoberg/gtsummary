@@ -51,9 +51,9 @@
 <meta property="og:title" content="Stacks two or more gtsummary regression objects — tbl_stack" />
 <meta property="og:description" content="Assists in patching together more complex tables. tbl_stack() appends two
 or more tbl_regression or tbl_merge objects.
-gt attributes from the first regression object are utilized for output table.
-If combining tbl_stack() and tbl_merge(), merge first then stack, or stack
-first and then merge." />
+gt attributes from the first regression object are utilized for output
+table (read: don't stack a tbl_regression object on top of a tbl_summary
+object)." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -97,7 +97,7 @@ first and then merge." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9015</span>
       </span>
     </div>
 
@@ -124,6 +124,9 @@ first and then merge." />
     </li>
     <li>
       <a href="../articles/tbl_regression.html">tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/gallery.html">Table Gallery</a>
     </li>
   </ul>
 </li>
@@ -165,9 +168,9 @@ first and then merge." />
     <div class="ref-description">
     <p>Assists in patching together more complex tables. <code>tbl_stack()</code> appends two
 or more <code>tbl_regression</code> or <code>tbl_merge</code> objects.
-gt attributes from the first regression object are utilized for output table.
-If combining <code>tbl_stack()</code> and <code><a href='tbl_merge.html'>tbl_merge()</a></code>, merge first then stack, or stack
-first and then merge.</p>
+gt attributes from the first regression object are utilized for output
+table (read: don't stack a <code>tbl_regression</code> object on top of a <code>tbl_summary</code>
+object).</p>
     </div>
 
     <pre class="usage"><span class='fu'>tbl_stack</span>(<span class='no'>tbls</span>)</pre>

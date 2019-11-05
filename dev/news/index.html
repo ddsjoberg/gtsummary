@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9015</span>
       </span>
     </div>
 
@@ -119,6 +119,9 @@
     </li>
     <li>
       <a href="../articles/tbl_regression.html">tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/gallery.html">Table Gallery</a>
     </li>
   </ul>
 </li>
@@ -161,6 +164,11 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added a gallery of tables possible by merging, stacking, and modifying gtsummary arguments (<a href='https://github.com/ddsjoberg/gtsummary/issues/258'>#258</a>)</p></li>
+<li><p><code>tbl_summary</code> objects are now stackable with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/255'>#255</a>)</p></li>
+<li><p>Users may now pass a list of formulas, named lists, or a combination of both (<a href='https://github.com/ddsjoberg/gtsummary/issues/251'>#251</a>)</p></li>
+<li><p>Bug fix in <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> selection where only first variable listed was being selected (<a href='https://github.com/ddsjoberg/gtsummary/issues/259'>#259</a>)</p></li>
+<li><p>The <code>by =</code> column in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> now has missing variables dropped rather than halting with error (<a href='https://github.com/ddsjoberg/gtsummary/issues/279'>#279</a>)</p></li>
 <li><p>Added {lifecycle} badges to mark deprecated and experimental functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/225'>#225</a>)</p></li>
 <li><p><code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> now interprets <code>tab_spanner =</code> text with <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/253'>#253</a>)</p></li>
 <li><p>Bug fix where logical variable labels printed as <code>NA</code> in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/248'>#248</a>)</p></li>
