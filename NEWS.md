@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* No longer checking outcome variable name for consistency in `tbl_regression()`---only checking independent variable names (#287)
+
 * Added a gallery of tables possible by merging, stacking, and modifying gtsummary arguments (#258)
 
 * `tbl_summary` objects are now stackable with `tbl_stack()` (#255)
