@@ -24,16 +24,10 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
   # check class of input -------------------------------------------------------
   # each element must be a formula or a named element of a list
   is_formula <- map_lgl(x, ~ class(.x) == "formula")
-  is_string <- map_lgl(x, ~ rlang::is_string(.x))
   if (is.null(names(x))) has_name <- rep(FALSE, length(x))
   else has_name <- as.logical(names(x) != "")
 
-
-  # input_format_check <-
-  #   imap_lgl(x, ~ class(.x) == "formula" ||
-  #              (rlang::is_string(.x) && rlang::is_string(.y) && .y != "")
-  #   )
-  if (!all(is_formula | (is_string & has_name))) {
+  if (!all(is_formula | has_name)) {
     example_text <-
       switch(
         input_type %||% "mixed",
@@ -79,7 +73,11 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
 
 tidyselect_to_list_one <- function(.data, x, x_name, .meta_data = NULL, input_type = NULL) {
   # if named list item, return unmodified --------------------------------------
-  if (rlang::is_string(x) && rlang::is_string(x_name) && x_name != "") return(x)
+  if (rlang::is_string(x_name) && x_name != "") {
+    x <- list(x)
+    names(x) <- x_name
+    return(x)
+  }
 
   # registering names of columns in data ---------------------------------------
   tidyselect::scoped_vars(vars = names(.data))
