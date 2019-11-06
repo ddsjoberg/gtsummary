@@ -51,6 +51,8 @@ as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
 
   # taking each gt function call, concatenating them with %>% separating them
   x$gt_calls[call_names] %>%
+    # adding default gt formatting options
+    union(getOption("gtsummary.as_gt.addl_cmds", default = NULL)) %>%
     # removing NULL elements
     compact() %>%
     glue_collapse(sep = " %>% ") %>%
