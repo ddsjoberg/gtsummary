@@ -126,7 +126,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     message(glue(
       "Some variable names contain ':', which may cause formatting issues. ",
       "Please rename columns without ':'.\n\n",
-      "Variable name(s): {paste0('`', names(model_frame[, -1]), '`', collapse = ' ')}"
+      "Variable name(s): {paste0('`', names(model_frame[, -1, drop = FALSE]), '`', collapse = ' ')}"
     ))
   }
 
