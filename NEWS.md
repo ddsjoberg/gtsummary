@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Users can add an option to their script to append any {gt} calls when a {gtsummary} object is printed: `gtsummary.as_gt.addl_cmds`
+
 * No longer checking outcome variable name for consistency in `tbl_regression()`---only checking independent variable names (#287)
 
 * Added a gallery of tables possible by merging, stacking, and modifying gtsummary arguments (#258)
