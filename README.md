@@ -124,8 +124,8 @@ or
 
     options(gtsummary.print_engine = "gt")
 
-Output from `kable` is less full featured compared to summary tables
-produced with {gt}. For example, `kable` summary tables do not include
+Output from {kable} is less full featured compared to summary tables
+produced with {gt}. For example, {kable} summary tables do not include
 indentation, footnotes, and spanning header rows.
 
 ## Contributing
