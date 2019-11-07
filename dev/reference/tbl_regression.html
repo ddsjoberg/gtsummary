@@ -309,10 +309,27 @@ units in your model.  Here are some common exceptions.</p><ol>
   <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='input'><span class='no'>tbl_regression_ex3</span> <span class='kw'>&lt;-</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'lme4':</span>
+#&gt; <span class='message'>  method                          from</span>
+#&gt; <span class='message'>  cooks.distance.influence.merMod car </span>
+#&gt; <span class='message'>  influence.merMod                car </span>
+#&gt; <span class='message'>  dfbeta.influence.merMod         car </span>
+#&gt; <span class='message'>  dfbetas.influence.merMod        car </span></div><div class='input'><span class='no'>tbl_regression_ex3</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(<span class='no'>am</span> ~ <span class='no'>hp</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>gear</span>), <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
+  <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'broom.mixed':</span>
+#&gt; <span class='message'>  method         from </span>
+#&gt; <span class='message'>  augment.lme    broom</span>
+#&gt; <span class='message'>  augment.merMod broom</span>
+#&gt; <span class='message'>  glance.lme     broom</span>
+#&gt; <span class='message'>  glance.merMod  broom</span>
+#&gt; <span class='message'>  glance.stanreg broom</span>
+#&gt; <span class='message'>  tidy.brmsfit   broom</span>
+#&gt; <span class='message'>  tidy.gamlss    broom</span>
+#&gt; <span class='message'>  tidy.lme       broom</span>
+#&gt; <span class='message'>  tidy.merMod    broom</span>
+#&gt; <span class='message'>  tidy.rjags     broom</span>
+#&gt; <span class='message'>  tidy.stanfit   broom</span>
+#&gt; <span class='message'>  tidy.stanreg   broom</span></div><div class='input'>
 <span class='co'># for convenience, you can also pass named lists to any arguments</span>
 <span class='co'># that accept formulas (e.g label, etc.)</span>
  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
@@ -320,7 +337,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_table {
+#&gt; #ulbfdpbcyv .gt_table {
 #&gt;   display: table;
 #&gt;   border-collapse: collapse;
 #&gt;   margin-left: auto;
@@ -345,13 +362,13 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* table.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_heading {
+#&gt; #ulbfdpbcyv .gt_heading {
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* heading.background.color */
 #&gt;   border-bottom-color: #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_title {
+#&gt; #ulbfdpbcyv .gt_title {
 #&gt;   color: #333333;
 #&gt;   font-size: 125%;
 #&gt;   /* heading.title.font.size */
@@ -362,7 +379,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   border-bottom-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_subtitle {
+#&gt; #ulbfdpbcyv .gt_subtitle {
 #&gt;   color: #333333;
 #&gt;   font-size: 85%;
 #&gt;   /* heading.subtitle.font.size */
@@ -373,7 +390,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   border-top-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_bottom_border {
+#&gt; #ulbfdpbcyv .gt_bottom_border {
 #&gt;   border-bottom-style: solid;
 #&gt;   /* heading.border.bottom.style */
 #&gt;   border-bottom-width: 2px;
@@ -382,7 +399,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* heading.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_column_spanner {
+#&gt; #ulbfdpbcyv .gt_column_spanner {
 #&gt;   border-bottom-style: solid;
 #&gt;   border-bottom-width: 2px;
 #&gt;   border-bottom-color: #D3D3D3;
@@ -390,7 +407,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   padding-bottom: 4px;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_col_heading {
+#&gt; #ulbfdpbcyv .gt_col_heading {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* column_labels.background.color */
@@ -404,23 +421,23 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   overflow-x: hidden;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_columns_top_border {
+#&gt; #ulbfdpbcyv .gt_columns_top_border {
 #&gt;   border-top-style: solid;
 #&gt;   border-top-width: 2px;
 #&gt;   border-top-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_columns_bottom_border {
+#&gt; #ulbfdpbcyv .gt_columns_bottom_border {
 #&gt;   border-bottom-style: solid;
 #&gt;   border-bottom-width: 2px;
 #&gt;   border-bottom-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_sep_right {
+#&gt; #ulbfdpbcyv .gt_sep_right {
 #&gt;   border-right: 5px solid #FFFFFF;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_group_heading {
+#&gt; #ulbfdpbcyv .gt_group_heading {
 #&gt;   padding: 8px;
 #&gt;   /* row_group.padding */
 #&gt;   color: #333333;
@@ -445,7 +462,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_empty_group_heading {
+#&gt; #ulbfdpbcyv .gt_empty_group_heading {
 #&gt;   padding: 0.5px;
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
@@ -469,19 +486,19 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_striped {
+#&gt; #ulbfdpbcyv .gt_striped {
 #&gt;   background-color: #8080800D;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_from_md &gt; :first-child {
+#&gt; #ulbfdpbcyv .gt_from_md &gt; :first-child {
 #&gt;   margin-top: 0;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_from_md &gt; :last-child {
+#&gt; #ulbfdpbcyv .gt_from_md &gt; :last-child {
 #&gt;   margin-bottom: 0;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_row {
+#&gt; #ulbfdpbcyv .gt_row {
 #&gt;   padding: 8px;
 #&gt;   /* row.padding */
 #&gt;   margin: 10px;
@@ -492,14 +509,14 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   overflow-x: hidden;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_stub {
+#&gt; #ulbfdpbcyv .gt_stub {
 #&gt;   border-right-style: solid;
 #&gt;   border-right-width: 2px;
 #&gt;   border-right-color: #D3D3D3;
 #&gt;   padding-left: 12px;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_summary_row {
+#&gt; #ulbfdpbcyv .gt_summary_row {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* summary_row.background.color */
@@ -509,7 +526,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* summary_row.text_transform */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_grand_summary_row {
+#&gt; #ulbfdpbcyv .gt_grand_summary_row {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* grand_summary_row.background.color */
@@ -519,19 +536,19 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* grand_summary_row.text_transform */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_first_summary_row {
+#&gt; #ulbfdpbcyv .gt_first_summary_row {
 #&gt;   border-top-style: solid;
 #&gt;   border-top-width: 2px;
 #&gt;   border-top-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_first_grand_summary_row {
+#&gt; #ulbfdpbcyv .gt_first_grand_summary_row {
 #&gt;   border-top-style: double;
 #&gt;   border-top-width: 6px;
 #&gt;   border-top-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_table_body {
+#&gt; #ulbfdpbcyv .gt_table_body {
 #&gt;   border-top-style: solid;
 #&gt;   /* table_body.border.top.style */
 #&gt;   border-top-width: 2px;
@@ -546,7 +563,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* table_body.border.bottom.color */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_footnotes {
+#&gt; #ulbfdpbcyv .gt_footnotes {
 #&gt;   border-top-style: solid;
 #&gt;   /* footnotes.border.top.style */
 #&gt;   border-top-width: 2px;
@@ -555,7 +572,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* footnotes.border.top.color */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_footnote {
+#&gt; #ulbfdpbcyv .gt_footnote {
 #&gt;   font-size: 90%;
 #&gt;   /* footnote.font.size */
 #&gt;   margin: 0px;
@@ -563,7 +580,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* footnote.padding */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_sourcenotes {
+#&gt; #ulbfdpbcyv .gt_sourcenotes {
 #&gt;   border-top-style: solid;
 #&gt;   /* sourcenotes.border.top.style */
 #&gt;   border-top-width: 2px;
@@ -572,48 +589,48 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* sourcenotes.border.top.color */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_sourcenote {
+#&gt; #ulbfdpbcyv .gt_sourcenote {
 #&gt;   font-size: 90%;
 #&gt;   /* sourcenote.font.size */
 #&gt;   padding: 4px;
 #&gt;   /* sourcenote.padding */
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_center {
+#&gt; #ulbfdpbcyv .gt_center {
 #&gt;   text-align: center;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_left {
+#&gt; #ulbfdpbcyv .gt_left {
 #&gt;   text-align: left;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_right {
+#&gt; #ulbfdpbcyv .gt_right {
 #&gt;   text-align: right;
 #&gt;   font-variant-numeric: tabular-nums;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_font_normal {
+#&gt; #ulbfdpbcyv .gt_font_normal {
 #&gt;   font-weight: normal;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_font_bold {
+#&gt; #ulbfdpbcyv .gt_font_bold {
 #&gt;   font-weight: bold;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_font_italic {
+#&gt; #ulbfdpbcyv .gt_font_italic {
 #&gt;   font-style: italic;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_super {
+#&gt; #ulbfdpbcyv .gt_super {
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; 
-#&gt; #hrtfztbnsr .gt_footnote_marks {
+#&gt; #ulbfdpbcyv .gt_footnote_marks {
 #&gt;   font-style: italic;
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; &lt;/style&gt;
-#&gt; &lt;div id="hrtfztbnsr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"&gt;&lt;table class="gt_table"&gt;
+#&gt; &lt;div id="ulbfdpbcyv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"&gt;&lt;table class="gt_table"&gt;
 #&gt;   
 #&gt;   &lt;tr&gt;
 #&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_columns_top_border gt_left" rowspan="1" colspan="1"&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
