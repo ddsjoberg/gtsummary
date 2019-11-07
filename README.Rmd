@@ -44,8 +44,6 @@ The {gtsummary} package was written as a companion to the {gt} package from RStu
     install.packages("remotes")
     remotes::install_github("rstudio/gt")
     ```
-    - If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
-
 
 Install the development version of {gtsummary} with:
 
@@ -69,28 +67,37 @@ t1 <-
   add_p() 
 ```
 
-<img src="man/figures/README-tbl_summary.png" width="60%">
+```{r tbl_summary_print, include = FALSE}
+gt::gtsave(as_gt(t1), file = file.path(tempdir(), "temp.png"))
+```
+
+<img src="man/figures/README-tbl_summary_print-1.png" width="66%">
 
 ### Regression Models
 
 ```{r regress, include = TRUE}
-mod1 <- 
-  glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
+mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
 t2 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-<img src="man/figures/README-tbl_regression.png" width="44%">
+```{r tbl_regression_print, include = FALSE}
+gt::gtsave(as_gt(t2), file = file.path(tempdir(), "temp.png"))
+```
+
+<img src="man/figures/README-tbl_regression_print-1.png" width="50%">
 
 ### Other Tables
 
 Side-by-side regression model results from `tbl_merge()`
 
-<img src="man/figures/tbl_merge_ex.png" width="60%">
+<img src="man/figures/tbl_merge_ex.png" width="66%">
 
 Survival Estimates from `tbl_survival()`
 
 <img src="man/figures/tbl_strata_ex1.png" width="31%">
+
+Review even more output options in the [table gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
 
 ## Print Engine
 
