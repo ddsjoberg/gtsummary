@@ -81,36 +81,23 @@ purrr::walk(all_files, ~ update_table_png(.x))
 # Or Run on individual files as needed:
 # update_table_png(here::here("man", "add_p.Rd"))
 
-# README gt tables -------------------------------------------------------------
-temp_dir <- tempdir()
-# tbl_summary
-tbl_summary(
-  data = trial[c("trt", "age", "grade", "response")],
-  by = trt
-) %>%
-  add_p() %>%
-  as_gt() %>%
-  gt::gtsave(file.path(temp_dir, "README-tbl_summary.html"))
+# TODO: Figure out why this the code does not work for add_p_test methods
+add_p_ex1 <-
+  trial %>%
+  dplyr::select(age, grade, response, trt) %>%
+  tbl_summary(by = trt) %>%
+  add_p()
+gt::gtsave(as_gt(add_p_ex1), here::here("man", "figures", "add_p_ex1.png"))
 
-webshot::webshot(
-  url = file.path(temp_dir, "README-tbl_summary.html"),
-  file = file.path(here::here(), "man/figures/README-tbl_summary.png"),
-  selector = "table", zoom = 2, expand = NULL
-)
+my_mcnemar <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+  result$test <- "McNemar\\'s test"
+  result
+}
 
-
-# tbl_regression
-glm(
-  response ~ trt + age + grade,
-  data = trial,
-  family = binomial(link = "logit")
-) %>%
-  tbl_regression(exponentiate = TRUE) %>%
-  as_gt() %>%
-  gt::gtsave(file.path(temp_dir, "README-tbl_regression.html"))
-
-webshot::webshot(
-  url = file.path(temp_dir, "README-tbl_regression.html"),
-  file = file.path(here::here(), "man/figures/README-tbl_regression.png"),
-  selector = "table", zoom = 2, expand = NULL
-)
+add_p_ex2 <-
+  trial[c("response", "trt")] %>%
+  tbl_summary(by = trt) %>%
+  add_p(test = vars(response) ~ "my_mcnemar")
+gt::gtsave(as_gt(add_p_ex2), here::here("man", "figures", "add_p_ex2.png"))
