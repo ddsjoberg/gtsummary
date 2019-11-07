@@ -61,8 +61,7 @@ e.g. \code{sort = list(everything() ~ "frequency")}}
 \item{percent}{Indicates the type of percentage to return. Must be one of
 \code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}.}
 
-\item{group}{DEPRECATED. Previously required to work with the 'group'
-argument in \link{add_p}. No longer required.}
+\item{group}{DEPRECATED. Migrated to \link{add_p}}
 }
 \description{
 The \code{'by ='} argument can be passed as a string, rather than with non-standard
