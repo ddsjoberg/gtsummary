@@ -75,7 +75,7 @@
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Tutorials
+    Articles
      
     <span class="caret"></span>
   </a>
@@ -142,9 +142,6 @@
 <p>Install {gt} from GitHub (recommended)</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"rstudio/gt"</span>)</a></code></pre></div>
-<ul>
-<li>If you experience issues installing {gt} on Windows, install <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools from CRAN</a>, restart R, and attempt installation again.</li>
-</ul>
 </li>
 </ol>
 <p>Install the development version of {gtsummary} with:</p>
@@ -164,24 +161,24 @@
 <a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="dt">by =</span> trt</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">  ) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="reference/add_p.html">add_p</a></span>() </a></code></pre></div>
-<p><img src="reference/figures/README-tbl_summary.png" width="60%"></p>
+<p><img src="reference/figures/README-tbl_summary_print-1.png" width="66%"></p>
 </div>
 <div id="regression-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#regression-models" class="anchor"></a>Regression Models</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mod1 &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(response <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>grade, trial, <span class="dt">family =</span> <span class="kw"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span>(<span class="dt">link =</span> <span class="st">"logit"</span>))</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">t2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="reference/figures/README-tbl_regression.png" width="44%"></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mod1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(response <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>grade, trial, <span class="dt">family =</span> binomial)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">t2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="reference/figures/README-tbl_regression_print-1.png" width="50%"></p>
 </div>
 <div id="other-tables" class="section level3">
 <h3 class="hasAnchor">
 <a href="#other-tables" class="anchor"></a>Other Tables</h3>
 <p>Side-by-side regression model results from <code><a href="reference/tbl_merge.html">tbl_merge()</a></code></p>
-<p><img src="reference/figures/tbl_merge_ex.png" width="60%"></p>
+<p><img src="reference/figures/tbl_merge_ex.png" width="66%"></p>
 <p>Survival Estimates from <code><a href="reference/tbl_survival.html">tbl_survival()</a></code></p>
 <p><img src="reference/figures/tbl_strata_ex1.png" width="31%"></p>
+<p>Review even more output options in the <a href="http://www.danieldsjoberg.com/gtsummary/articles/gallery.html">table gallery</a>.</p>
 </div>
 </div>
 <div id="print-engine" class="section level2">
@@ -196,7 +193,7 @@
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Please note that the {gtsummary} project is released with a <a href="http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, and <a href="https://github.com/zabore">@zabore</a></p>
+<p>Please note that the {gtsummary} project is released with a <a href="http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/jeanmanguy">@jeanmanguy</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/jwilliman">@jwilliman</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/ltin1214">@ltin1214</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, and <a href="https://github.com/zabore">@zabore</a></p>
 </div>
 
   </div>
