@@ -45,8 +45,7 @@
 #' e.g. `sort = list(everything() ~ "frequency")`
 #' @param percent Indicates the type of percentage to return. Must be one of
 #' `"column"`, `"row"`, or `"cell"`. Default is `"column"`.
-#' @param group DEPRECATED. Previously required to work with the 'group'
-#' argument in [add_p]. No longer required.
+#' @param group DEPRECATED. Migrated to [add_p]
 #'
 #' @section select helpers:
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
@@ -144,10 +143,10 @@
 #' \if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
 
 tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
-                        digits = NULL, type = NULL, value = NULL, group = NULL,
+                        digits = NULL, type = NULL, value = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
-                        percent = c("column", "row", "cell")) {
+                        percent = c("column", "row", "cell"),  group = NULL) {
 
   # converting bare arguments to string ----------------------------------------
   by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
