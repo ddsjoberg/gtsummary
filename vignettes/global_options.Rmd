@@ -35,7 +35,7 @@ To report large p-values rounded to two decimal places rather that one, change t
 options(gtsummary.pvalue_fun = function(x) style_pvalue(x, digits = 2))
 ```
 
-Or equivalently
+or equivalently
  
 ```{r}
 options(gtsummary.pvalue_fun = purrr::partial(style_pvalue, digits = 2))
@@ -89,7 +89,7 @@ tbl_summary(trial)$gt_calls %>% head(n = 4)
 
 You may append additional [{gt} calls](https://gt.rstudio.com/reference/index.html) to this list using the `gtsummary.as_gt.addl_cmds` option---with the following caveats:
 
-1. Only include {gt} functions that you want to apply to *all* tables. For example, a {gt} function that changes the font size would be appropriate. A table-specific header may not.
+1. Only include {gt} functions you want to apply to *all* tables. For example, a {gt} function that changes the font size would be appropriate. A table-specific header may not.
 
 1. All {gt} functions must be referenced using the double-colon prefix (i.e. `gt::foo()`). These functions will execute when the {gt} library is not loaded.
 
