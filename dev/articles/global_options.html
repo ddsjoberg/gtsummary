@@ -127,13 +127,13 @@
 <div id="styling-estimates" class="section level2">
 <h2 class="hasAnchor">
 <a href="#styling-estimates" class="anchor"></a>Styling Estimates</h2>
-<p>The {gtsummary} includes various default functions for styling and formatting statistics. These defaults can be modified with global options.</p>
+<p>The {gtsummary} package includes various default functions for styling and formatting statistics. These defaults can be modified with global options.</p>
 <div id="p-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#p-values" class="anchor"></a>p-values</h3>
 <p>P-values are reported throughout {gtsummary} tables. The default function to style p-values is <code><a href="../reference/style_pvalue.html">style_pvalue()</a></code>. Large p-values are rounded to one decimal place in <code><a href="../reference/style_pvalue.html">style_pvalue()</a></code>. Use the <code>gtsummary.pvalue_fun</code> option to change the function that styles p-values. To report large p-values rounded to two decimal places rather that one, change the default function to <code><a href="../reference/style_pvalue.html">style_pvalue(x, digits = 2)</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.pvalue_fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../reference/style_pvalue.html">style_pvalue</a></span>(x, <span class="dt">digits =</span> <span class="dv">2</span>))</a></code></pre></div>
-<p>Or equivalently</p>
+<p>or equivalently</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.pvalue_fun =</span> purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/partial.html">partial</a></span>(style_pvalue, <span class="dt">digits =</span> <span class="dv">2</span>))</a></code></pre></div>
 </div>
 <div id="percentages" class="section level3">
@@ -148,40 +148,40 @@
 <p>Similar to the above options, the default function for styling estimates in <code><a href="../reference/tbl_survival.html">tbl_survival()</a></code> can be modified with <code>gtsummary.tbl_survival.estimate_fun</code>.</p>
 </div>
 </div>
-<div id="format-gt-tables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#format-gt-tables" class="anchor"></a>Format {gt} Tables</h2>
-<p>Tables created with the {gt} package are incredibly customizable. You can set an option to apply additional {gt} formatting to all {gtsummary} tables. Every table returned from {gtsummary} contains a list of {gt} calls that are applied when printed. For example, here are the first few associated with a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> table.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gtsummary)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial)<span class="op">$</span>gt_calls <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="dt">n =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; $gt</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; gt::gt(data = x$table_body)</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; $cols_align</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; gt::cols_align(align = 'center') %&gt;% gt::cols_align(align = 'left', columns = gt::vars(label))</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; $fmt_missing</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; gt::fmt_missing(columns = gt::everything(), missing_text = '')</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; $tab_style_text_indent</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; gt::tab_style(style = gt::cell_text(indent = gt::px(10), align = 'left'),locations = gt::cells_data(columns = gt::vars(label),rows = row_type != 'label'))</span></a></code></pre></div>
-<p>You may append {gt} calls to this list using the <code>gtsummary.as_gt.addl_cmds</code> option—with the following caveats:</p>
-<ol style="list-style-type: decimal">
-<li><p>Only include {gt} functions that apply to <em>all</em> tables. For example, a {gt} function that changes the font size would be appropriate.</p></li>
-<li><p>All {gt} functions must be referenced using the double-colon prefix—<code>gt::foo()</code>. These functions will execute when the {gt} library is not loaded.</p></li>
-<li><p>Do not include the <code>data=</code> argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> operator. The data argument is taken from the previous function in the sequence.</p></li>
-</ol>
-<p>In the example below, the font size and cell padding is reduced.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.as_gt.addl_cmds =</span> <span class="st">"gt::tab_options(table.font.size = 'small', row.padding = gt::px(1))"</span>)</a></code></pre></div>
-</div>
 <div id="printing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#printing" class="anchor"></a>Printing</h2>
-<p>{gtsummary} uses the {gt} package to print all summary tables. In addition to supporting {gt}, the {gtsummary} package works well with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. This is particularly useful when outputting documents to Microsoft Word. If the {gt} package is not installed, {gtsummary} will fall back to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. To explicitly set the printing engine, set the option in the script or in the user- or project R profile, <code>.Rprofile</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"kable"</span>) </a></code></pre></div>
+<p>{gtsummary} uses the <a href="https://gt.rstudio.com/">{gt}</a> package to print all summary tables. In addition to supporting {gt}, the {gtsummary} package works well with <a href="https://rdrr.io/cran/knitr/man/kable.html"><code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code></a>. This is particularly useful when outputting documents to Microsoft Word. If the {gt} package is not installed, {gtsummary} will fall back to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. To explicitly set the printing engine, set the option in the script or in the user- or project R profile, <code>.Rprofile</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"kable"</span>) </a></code></pre></div>
 <p>or</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"gt"</span>)</a></code></pre></div>
-<p>Output from {kable} is less full featured compared to summary tables produced with {gt}. For example, {kable} summary tables do not include indentation, footnotes, and spanning header rows.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"gt"</span>)</a></code></pre></div>
+<p>Output from {gt} is more full-featured compared to a summary table produced with {kable}. For example, {gt} summary tables can include indentation, footnotes, and spanning header rows.</p>
+</div>
+<div id="format-gt-tables" class="section level2">
+<h2 class="hasAnchor">
+<a href="#format-gt-tables" class="anchor"></a>Format {gt} Tables</h2>
+<p>Tables created with the <a href="https://gt.rstudio.com/">{gt}</a> package are incredibly customizable. You can set an option to apply additional {gt} formatting to all {gtsummary} tables. Every table returned from {gtsummary} contains a list of {gt} calls that are applied when printed. For example, here are the first few associated with a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> table.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gtsummary)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial)<span class="op">$</span>gt_calls <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="dt">n =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; $gt</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; gt::gt(data = x$table_body)</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; $cols_align</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; gt::cols_align(align = 'center') %&gt;% gt::cols_align(align = 'left', columns = gt::vars(label))</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; $fmt_missing</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; gt::fmt_missing(columns = gt::everything(), missing_text = '')</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; $tab_style_text_indent</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; gt::tab_style(style = gt::cell_text(indent = gt::px(10), align = 'left'),locations = gt::cells_data(columns = gt::vars(label),rows = row_type != 'label'))</span></a></code></pre></div>
+<p>You may append additional <a href="https://gt.rstudio.com/reference/index.html">{gt} calls</a> to this list using the <code>gtsummary.as_gt.addl_cmds</code> option—with the following caveats:</p>
+<ol style="list-style-type: decimal">
+<li><p>Only include {gt} functions you want to apply to <em>all</em> tables. For example, a {gt} function that changes the font size would be appropriate. A table-specific header may not.</p></li>
+<li><p>All {gt} functions must be referenced using the double-colon prefix (i.e. <code>gt::foo()</code>). These functions will execute when the {gt} library is not loaded.</p></li>
+<li><p>Do not include the <code>data=</code> argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> operator. The data argument is taken from the previous function in the sequence.</p></li>
+</ol>
+<p>In the example below, the font size and cell padding are reduced globally.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.as_gt.addl_cmds =</span> <span class="st">"gt::tab_options(table.font.size = 'small', row.padding = gt::px(1))"</span>)</a></code></pre></div>
 </div>
   </div>
 
@@ -192,8 +192,8 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#styling-estimates">Styling Estimates</a></li>
-      <li><a href="#format-gt-tables">Format {gt} Tables</a></li>
       <li><a href="#printing">Printing</a></li>
+      <li><a href="#format-gt-tables">Format {gt} Tables</a></li>
       </ul>
 </div>
       </div>
