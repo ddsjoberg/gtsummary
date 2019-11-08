@@ -1,0 +1,104 @@
+---
+title: "Global Options"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{global_options}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  eval = FALSE,
+  comment = "#>"
+)
+```
+
+There are various global options that can be set for {gtsummary}.
+Here we review a complete list of options available to users.
+
+## Styling Estimates
+
+The {gtsummary} package includes various default functions for styling and formatting statistics.
+These defaults can be modified with global options.
+
+### p-values
+
+P-values are reported throughout {gtsummary} tables.
+The default function to style p-values is `style_pvalue()`.
+Large p-values are rounded to one decimal place in `style_pvalue()`.
+Use the `gtsummary.pvalue_fun` option to change the function that styles p-values.
+To report large p-values rounded to two decimal places rather that one, change the default function to `style_pvalue(x, digits = 2)`.
+
+```{r}
+options(gtsummary.pvalue_fun = function(x) style_pvalue(x, digits = 2))
+```
+
+or equivalently
+ 
+```{r}
+options(gtsummary.pvalue_fun = purrr::partial(style_pvalue, digits = 2))
+``` 
+
+### percentages
+
+In `tbl_summary()`, the default function for styling percentages is `style_percent()`.
+If you'd like to update the default, for example, because you'd prefer percentages rounded to one decimal place, you may include the `gtsummary.tbl_summary.percent_fun` option.
+
+```{r}
+options(gtsummary.pvalue_fun = function(x) sprintf(x * 100, fmt='%#.1f'))
+```
+
+### survival estimates
+
+Similar to the above options, the default function for styling estimates in `tbl_survival()` can be modified with `gtsummary.tbl_survival.estimate_fun`.
+
+## Printing
+
+{gtsummary} uses the [{gt}](https://gt.rstudio.com/) package to print all summary tables.
+In addition to supporting {gt}, the {gtsummary} package works well with [`knitr::kable()`](https://rdrr.io/cran/knitr/man/kable.html).
+This is particularly useful when outputting documents to Microsoft Word.
+If the {gt} package is not installed, {gtsummary} will fall back to `knitr::kable()`.
+To explicitly set the printing engine, set the option in the script or in the user- or project R profile, `.Rprofile`.
+
+```{r}
+options(gtsummary.print_engine = "kable") 
+```
+
+or
+
+```{r}
+options(gtsummary.print_engine = "gt")
+```
+
+Output from {gt} is more full-featured compared to a summary table produced with {kable}.
+For example, {gt} summary tables can include indentation, footnotes, and spanning header rows.
+
+
+## Format {gt} Tables
+
+Tables created with the [{gt}](https://gt.rstudio.com/) package are incredibly customizable.
+You can set an option to apply additional {gt} formatting to all {gtsummary} tables.
+Every table returned from {gtsummary} contains a list of {gt} calls that are applied when printed.  For example, here are the first few associated with a `tbl_summary()` table.
+
+```{r, eval = TRUE}
+library(gtsummary)
+tbl_summary(trial)$gt_calls %>% head(n = 4)
+```
+
+You may append additional [{gt} calls](https://gt.rstudio.com/reference/index.html) to this list using the `gtsummary.as_gt.addl_cmds` option---with the following caveats:
+
+1. Only include {gt} functions you want to apply to *all* tables. For example, a {gt} function that changes the font size would be appropriate. A table-specific header may not.
+
+1. All {gt} functions must be referenced using the double-colon prefix (i.e. `gt::foo()`). These functions will execute when the {gt} library is not loaded.
+
+1. Do not include the `data=` argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the `%>%` operator.  The data argument is taken from the previous function in the sequence.
+
+In the example below, the font size and cell padding are reduced globally.
+
+```{r}
+options(gtsummary.as_gt.addl_cmds = "gt::tab_options(table.font.size = 'small', row.padding = gt::px(1))")
+```
+
+
