@@ -82,9 +82,19 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   tbls_length <- length(tbls)
   if (tbls_length < 2) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
 
-  # length of cpannign header matches number of models passed
+  # length of spanning header matches number of models passed
   if (tbls_length != length(tab_spanner)) {
     stop("'tbls' and 'tab_spanner' must be the same length")
+  }
+
+  # if previously called bold/italicize_labels/levels, print note to do it again
+  style_funs <- c("bold_labels", "bold_levels", "italicize_labels", "italicize_levels")
+  if (purrr::some(tbls, ~names(pluck(.x, "call_list")) %in% style_funs %>% any())) {
+    message(glue::glue(
+      'Styling functions ',
+      '{glue::glue("`{style_funs}()`") %>% glue::glue_collapse(sep = ", ", last = ", and ")}',
+      ' need to be re-applied after `tbl_merge()`.'
+    ))
   }
 
   # for tbl_summary, moving footnote above label column to the first stat_* column
