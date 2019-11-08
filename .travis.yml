@@ -3,7 +3,6 @@
 language: r
 jobs:
   include:
-  - r: devel
   - r: release
     before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
     deploy:
