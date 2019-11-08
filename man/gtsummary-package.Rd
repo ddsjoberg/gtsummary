@@ -24,6 +24,7 @@ Creates presentation-ready tables summarizing data
 Useful links:
 \itemize{
   \item \url{https://github.com/ddsjoberg/gtsummary}
+  \item \url{http://www.danieldsjoberg.com/gtsummary/}
   \item Report bugs at \url{https://github.com/ddsjoberg/gtsummary/issues}
 }
 
