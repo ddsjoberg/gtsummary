@@ -20,7 +20,7 @@ Here we review a complete list of options available to users.
 
 ## Styling Estimates
 
-The {gtsummary} includes various default functions for styling and formatting statistics.
+The {gtsummary} package includes various default functions for styling and formatting statistics.
 These defaults can be modified with global options.
 
 ### p-values
@@ -54,36 +54,10 @@ options(gtsummary.pvalue_fun = function(x) sprintf(x * 100, fmt='%#.1f'))
 
 Similar to the above options, the default function for styling estimates in `tbl_survival()` can be modified with `gtsummary.tbl_survival.estimate_fun`.
 
-## Format {gt} Tables
-
-Tables created with the {gt} package are incredibly customizable.
-You can set an option to apply additional {gt} formatting to all {gtsummary} tables.
-Every table returned from {gtsummary} contains a list of {gt} calls that are applied when printed.  For example, here are the first few associated with a `tbl_summary()` table.
-
-```{r, eval = TRUE}
-library(gtsummary)
-tbl_summary(trial)$gt_calls %>% head(n = 4)
-```
-
-You may append {gt} calls to this list using the `gtsummary.as_gt.addl_cmds` option---with the following caveats:
-
-1. Only include {gt} functions that apply to *all* tables. For example, a {gt} function that changes the font size would be appropriate.
-
-1. All {gt} functions must be referenced using the double-colon prefix---`gt::foo()`. These functions will execute when the {gt} library is not loaded.
-
-1. Do not include the `data=` argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the `%>%` operator.  The data argument is taken from the previous function in the sequence.
-
-In the example below, the font size and cell padding is reduced.
-
-```{r}
-options(gtsummary.as_gt.addl_cmds = "gt::tab_options(table.font.size = 'small', row.padding = gt::px(1))")
-```
-
-
 ## Printing
 
-{gtsummary} uses the {gt} package to print all summary tables.
-In addition to supporting {gt}, the {gtsummary} package works well with `knitr::kable()`.
+{gtsummary} uses the [{gt}](https://gt.rstudio.com/) package to print all summary tables.
+In addition to supporting {gt}, the {gtsummary} package works well with [`knitr::kable()`](https://rdrr.io/cran/knitr/man/kable.html).
 This is particularly useful when outputting documents to Microsoft Word.
 If the {gt} package is not installed, {gtsummary} will fall back to `knitr::kable()`.
 To explicitly set the printing engine, set the option in the script or in the user- or project R profile, `.Rprofile`.
@@ -98,5 +72,33 @@ or
 options(gtsummary.print_engine = "gt")
 ```
 
-Output from {kable} is less full featured compared to summary tables produced with {gt}.
-For example, {kable} summary tables do not include indentation, footnotes, and spanning header rows.
+Output from {gt} is more full-featured compared to a summary table produced with {kable}.
+For example, {gt} summary tables can include indentation, footnotes, and spanning header rows.
+
+
+## Format {gt} Tables
+
+Tables created with the [{gt}](https://gt.rstudio.com/) package are incredibly customizable.
+You can set an option to apply additional {gt} formatting to all {gtsummary} tables.
+Every table returned from {gtsummary} contains a list of {gt} calls that are applied when printed.  For example, here are the first few associated with a `tbl_summary()` table.
+
+```{r, eval = TRUE}
+library(gtsummary)
+tbl_summary(trial)$gt_calls %>% head(n = 4)
+```
+
+You may append additional [{gt} calls](https://gt.rstudio.com/reference/index.html) to this list using the `gtsummary.as_gt.addl_cmds` option---with the following caveats:
+
+1. Only include {gt} functions that you want to apply to *all* tables. For example, a {gt} function that changes the font size would be appropriate. A table-specific header may not.
+
+1. All {gt} functions must be referenced using the double-colon prefix (i.e. `gt::foo()`). These functions will execute when the {gt} library is not loaded.
+
+1. Do not include the `data=` argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the `%>%` operator.  The data argument is taken from the previous function in the sequence.
+
+In the example below, the font size and cell padding are reduced globally.
+
+```{r}
+options(gtsummary.as_gt.addl_cmds = "gt::tab_options(table.font.size = 'small', row.padding = gt::px(1))")
+```
+
+
