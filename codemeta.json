@@ -7,10 +7,10 @@
   "identifier": "gtsummary",
   "description": "Creates presentation-ready tables summarizing data\n    sets, regression models, and more. The code to create the tables is\n    concise and highly customizable. Data frames can be summarized with\n    any function, e.g. mean(), median(), even user-written functions.\n    Regression models are summarized and include the reference rows for\n    categorical variables. Common regression models, such as logistic\n    regression and Cox proportional hazards regression, are automatically\n    identified and the tables are pre-filled with appropriate column\n    headers. The package is enhanced when the 'gt' package is installed.\n    Use this code to install: 'remotes::install_github(\"rstudio/gt\")'.",
   "name": "gtsummary: Presentation-Ready Data Summary and Analytic Result\n    Tables",
-  "codeRepository": "http://www.danieldsjoberg.com/gtsummary/",
+  "codeRepository": "https://github.com/ddsjoberg/gtsummary",
   "issueTracker": "https://github.com/ddsjoberg/gtsummary/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.2.1.9002",
+  "version": "1.2.1.9017",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -113,7 +113,7 @@
       "@type": "SoftwareApplication",
       "identifier": "curl",
       "name": "curl",
-      "version": ">= 3.3",
+      "version": ">= 4.2",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -225,6 +225,19 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "forcats",
+      "name": "forcats",
+      "version": ">= 0.4.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=forcats"
     }
   ],
   "softwareRequirements": [
@@ -311,6 +324,19 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "lifecycle",
+      "name": "lifecycle",
+      "version": ">= 0.1.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lifecycle"
     },
     {
       "@type": "SoftwareApplication",
@@ -431,12 +457,26 @@
   ],
   "releaseNotes": "https://github.com/ddsjoberg/gtsummary/blob/master/NEWS.md",
   "readme": "https://github.com/ddsjoberg/gtsummary/blob/master/README.md",
-  "fileSize": "1435.249KB",
+  "fileSize": "1808.279KB",
   "contIntegration": [
     "https://travis-ci.org/ddsjoberg/gtsummary",
     "https://ci.appveyor.com/project/ddsjoberg/gtsummary",
     "https://codecov.io/github/ddsjoberg/gtsummary?branch=master"
   ],
   "developmentStatus": "https://www.tidyverse.org/lifecycle/#maturing",
-  "relatedLink": "https://CRAN.R-project.org/package=gtsummary"
+  "relatedLink": "https://CRAN.R-project.org/package=gtsummary",
+  "keywords": [
+    "r",
+    "summary-tables",
+    "statistics",
+    "rstats",
+    "r-package",
+    "gt",
+    "html5",
+    "easy-to-use",
+    "summary-statistics",
+    "reproducible-research",
+    "reproducibility",
+    "regression-models"
+  ]
 }

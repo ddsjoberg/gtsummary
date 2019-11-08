@@ -64,6 +64,7 @@ tidy_wrap <- function(x, exponentiate, conf.level) {
 #' @param tidy broom tidy result
 #' @inheritParams tbl_regression
 #' @noRd
+#' @importFrom stringr fixed str_detect
 #' @keywords internal
 
 parse_fit <- function(fit, tidy, label, show_single_row) {
@@ -95,12 +96,12 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   for (v in (names(model_frame) %>% rev())) {
 
     # checking character and factor levels
-    if (any(class(model_frame[[v]]) %in% c("character", "factor"))) {
+    if (any(class(model_frame[[v]]) %in% c("character", "factor", "logical"))) {
       term_match <-
         term_match %>%
         mutate(
           variable = ifelse(
-            stringr::str_starts(stringr::fixed(.data$term), stringr::fixed(v)) &
+            stringr::str_starts(fixed(.data$term), fixed(v)) &
               .data$term %in% paste0(v, unique(model_frame[[v]])) &
               is.na(.data$variable),
             v,
@@ -121,10 +122,11 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   }
 
   # if the variable name contains a ':', weird formatting will likely happen
-  if (stringr::str_detect(stringr::fixed(names(model_frame)), stringr::fixed(":")) %>% any()) {
-    warning(glue(
+  if (str_detect(fixed(names(model_frame[, -1, drop = FALSE])), fixed(":")) %>% any()) {
+    message(glue(
       "Some variable names contain ':', which may cause formatting issues. ",
-      "Please rename columns without ':'."
+      "Please rename columns without ':'.\n\n",
+      "Variable name(s): {paste0('`', names(model_frame[, -1, drop = FALSE]), '`', collapse = ' ')}"
     ))
   }
 
@@ -136,8 +138,8 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
         if (any(class(model_frame[[x]]) %in% c("factor", "character"))) {
           unique(model_frame[[x]]) %>%
             as.character() %>%
-            stringr::fixed() %>%
-            stringr::str_detect(stringr::fixed(":")) %>%
+            fixed() %>%
+            str_detect(fixed(":")) %>%
             any() %>%
             return()
         }
@@ -224,7 +226,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
           if (variable_type == "continuous") {
             return(variable_lbl)
           }
-          stringr::str_remove(term_split, pattern = stringr::fixed(variable))
+          stringr::str_remove(term_split, pattern = fixed(variable))
         }
       )
     )

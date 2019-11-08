@@ -50,6 +50,18 @@
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )
+#'
+#' # for convenience, you can also pass named lists to any arguments
+#' # that accept formulas (e.g label, etc.)
+#' library(survival)
+#' trial %>%
+#'    dplyr::select(ttdeath, death, age, grade, response) %>%
+#'    tbl_uvregression(
+#'      method = coxph,
+#'      y = Surv(ttdeath, death),
+#'      label = list(grade = "Grade"),
+#'      exponentiate = TRUE)
+#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -64,7 +76,13 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
                              exponentiate = FALSE, label = NULL,
                              include = NULL, exclude = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
-                             estimate_fun = NULL, pvalue_fun = NULL) {
+                             estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL) {
+  # deprecated arguments -------------------------------------------------------
+  if (!is.null(show_yesno)) {
+    lifecycle::deprecate_stop("1.2.2", "tbl_uvregression(show_yesno = )",
+                              "tbl_uvregression(show_single_row = )")
+  }
+
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%

@@ -52,6 +52,7 @@
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
+#' @param show_yesno deprecated
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
@@ -71,6 +72,12 @@
 #' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
+#'
+#' # for convenience, you can also pass named lists to any arguments
+#' # that accept formulas (e.g label, etc.)
+#'  glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
+#'     tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
+#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -87,7 +94,13 @@
 tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
                            include = NULL, exclude = NULL,
                            show_single_row = NULL, conf.level = NULL, intercept = FALSE,
-                           estimate_fun = NULL, pvalue_fun = NULL) {
+                           estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL) {
+  # deprecated arguments -------------------------------------------------------
+  if (!is.null(show_yesno)) {
+    lifecycle::deprecate_stop("1.2.2", "tbl_regression(show_yesno = )",
+                              "tbl_regression(show_single_row = )")
+  }
+
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
@@ -226,8 +239,9 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
       footnote_abbrev = map2(
         .data$column, .data$footnote_abbrev,
         function(x1, y1) {
-          if (x1 %in% c("estimate", "ci"))
+          if (x1 == "estimate")
             return(c(y1, estimate_header(x, exponentiate) %>% attr("footnote")))
+          else if (x1 == "ci") return(c(y1, "CI = Confidence Interval"))
           return(y1)
         }
       )
@@ -314,7 +328,7 @@ kable_tbl_regression <- quote(list(
 
 
 
-# identifies headers for common models (logistic, poisson, and cox regression)
+# identifies headers for common models (logistic, poisson, and PH regression)
 estimate_header <- function(x, exponentiate) {
   # first identify the type ----------------------------------------------------
   model_type = "generic"
@@ -357,13 +371,7 @@ estimate_header <- function(x, exponentiate) {
   }
   else {
     header <- ifelse(exponentiate == TRUE ,"exp(Beta)", "Beta")
-    attr(header, "footnote") <- "Beta = Regression Coefficient"
-
   }
-
-  # adding CI to abbreviation footnote
-  attr(header, "footnote") <- c(attr(header, "footnote"),
-                                "CI = Confidence Interval")
 
   header
 }

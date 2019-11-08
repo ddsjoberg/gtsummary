@@ -60,11 +60,6 @@ tables. You can install {gtsummary} and {gt} with the following code.
     install.packages("remotes")
     remotes::install_github("rstudio/gt")
     ```
-    
-      - If you experience issues installing {gt} on Windows, install
-        [Rtools from
-        CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart
-        R, and attempt installation again.
 
 Install the development version of {gtsummary} with:
 
@@ -88,28 +83,30 @@ t1 <-
   add_p() 
 ```
 
-<img src="man/figures/README-tbl_summary.png" width="60%">
+<img src="man/figures/README-tbl_summary_print-1.png" width="66%">
 
 ### Regression Models
 
 ``` r
-mod1 <- 
-  glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
+mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
 t2 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-<img src="man/figures/README-tbl_regression.png" width="44%">
+<img src="man/figures/README-tbl_regression_print-1.png" width="50%">
 
 ### Other Tables
 
 Side-by-side regression model results from `tbl_merge()`
 
-<img src="man/figures/tbl_merge_ex.png" width="60%">
+<img src="man/figures/tbl_merge_ex.png" width="66%">
 
 Survival Estimates from `tbl_survival()`
 
 <img src="man/figures/tbl_strata_ex1.png" width="31%">
+
+Review even more output options in the [table
+gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
 
 ## Print Engine
 
@@ -127,8 +124,8 @@ or
 
     options(gtsummary.print_engine = "gt")
 
-Output from `kable` is less full featured compared to summary tables
-produced with {gt}. For example, `kable` summary tables do not include
+Output from {kable} is less full featured compared to summary tables
+produced with {gt}. For example, {kable} summary tables do not include
 indentation, footnotes, and spanning header rows.
 
 ## Contributing
@@ -142,9 +139,12 @@ thank you to all contributors\!
 [@ahinton-mmc](https://github.com/ahinton-mmc),
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@emilyvertosick](https://github.com/emilyvertosick),
+[@jeanmanguy](https://github.com/jeanmanguy),
 [@jennybc](https://github.com/jennybc),
 [@jflynn264](https://github.com/jflynn264),
+[@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
+[@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@sammo3182](https://github.com/sammo3182), and

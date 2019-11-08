@@ -1,5 +1,6 @@
 #' Deprecated functions
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
 #' Some functions have been deprecated and are no longer being actively
 #' supported.
 #'
@@ -11,9 +12,7 @@ NULL
 #' @export
 
 add_comparison <- function(...) {
-  signal_soft_deprecated(
-    "add_comparison() is deprecated. Please use add_p() instead."
-  )
+  lifecycle::deprecate_warn("1.1.0", "gtsummary::add_comparison()", "add_p()")
   add_p(...)
 }
 
@@ -21,9 +20,7 @@ add_comparison <- function(...) {
 #' @export
 
 cols_label_summary <- function(stat_overall = NULL, ...) {
-  signal_soft_deprecated(
-    "cols_label_summary() is deprecated. Please use modify_header() instead."
-  )
+  lifecycle::deprecate_warn("1.0.0", "gtsummary::cols_label_summary()", "modify_header()")
   if (!is.null(stat_overall)) {
     modify_header(stat_0 = stat_overall, ...)
   } else {
@@ -35,9 +32,7 @@ cols_label_summary <- function(stat_overall = NULL, ...) {
 #' @export
 
 add_global <- function(...) {
-  signal_soft_deprecated(
-    "add_global() is deprecated. Please use add_global_p() instead."
-  )
+  lifecycle::deprecate_warn("1.1.0", "gtsummary::add_global()", "add_global_p()")
   add_global_p(...)
 }
 
@@ -45,9 +40,7 @@ add_global <- function(...) {
 #' @export
 
 tab_style_bold_p <- function(...) {
-  signal_soft_deprecated(
-    "tab_style_bold_p() is deprecated. Please use bold_p() instead."
-  )
+  lifecycle::deprecate_warn("1.2.0", "gtsummary::tab_style_bold_p()", "bold_p()")
   bold_p(...)
 }
 
@@ -55,9 +48,7 @@ tab_style_bold_p <- function(...) {
 #' @export
 
 tab_style_bold_labels <- function(...) {
-  signal_soft_deprecated(
-    "tab_style_bold_labels() is deprecated. Please use bold_labels() instead."
-  )
+  lifecycle::deprecate_warn("1.2.0", "gtsummary::tab_style_bold_labels()", "bold_labels()")
   bold_labels(...)
 }
 
@@ -65,10 +56,7 @@ tab_style_bold_labels <- function(...) {
 #' @export
 
 tab_style_italicize_levels <- function(...) {
-  signal_soft_deprecated(paste0(
-    "tab_style_italicize_levels() is deprecated. ",
-    "Please use italicize_levels() instead."
-  ))
+  lifecycle::deprecate_warn("1.2.0", "gtsummary::tab_style_italicize_levels()", "italicize_levels()")
   italicize_levels(...)
 }
 
@@ -76,10 +64,7 @@ tab_style_italicize_levels <- function(...) {
 #' @export
 
 tab_style_italicize_labels <- function(...) {
-  signal_soft_deprecated(paste0(
-    "tab_style_italicize_labels() is deprecated. ",
-    "Please use italicize_labels() instead."
-  ))
+  lifecycle::deprecate_warn("1.2.0", "gtsummary::tab_style_italicize_labels()", "italicize_labels()")
   italicize_labels(...)
 }
 
@@ -87,57 +72,41 @@ tab_style_italicize_labels <- function(...) {
 #' @export
 
 tab_style_bold_levels <- function(...) {
-  signal_soft_deprecated(
-    "tab_style_bold_levels() is deprecated. Please use bold_levels() instead."
-  )
+  lifecycle::deprecate_warn("1.2.0", "gtsummary::tab_style_bold_levels()", "bold_levels()")
   bold_levels(...)
 }
-
-
 
 #' @rdname deprecated
 #' @export
 
 fmt_uni_regression <- function(...) {
-  stop_defunct(
-    "fmt_uni_regression() is defunct. Please use tbl_uvregression() instead."
-  )
+  lifecycle::deprecate_stop("1.0.0", "gtsummary::fmt_uni_regression()", "tbl_uvregression()")
 }
 
 #' @rdname deprecated
 #' @export
 
 fmt_table1 <- function(...) {
-  stop_defunct(
-    "fmt_table1() is defunct. Please use tbl_summary() instead."
-  )
+  lifecycle::deprecate_stop("1.0.0", "gtsummary::fmt_table1()", "tbl_summary()")
 }
-
 
 #' @rdname deprecated
 #' @export
 
 fmt_regression <- function(...) {
-  stop_defunct(
-    "fmt_regression() is defunct. Please use tbl_regression() instead."
-  )
+  lifecycle::deprecate_stop("1.0.0", "gtsummary::fmt_regression()", "tbl_regression()")
 }
-
 
 #' @rdname deprecated
 #' @export
 
 fmt_beta <- function(...) {
-  stop_defunct(
-    "fmt_beta() is defunct. Please use style_sigfig() instead."
-  )
+  lifecycle::deprecate_stop("1.0.0", "gtsummary::fmt_beta()", "style_sigfig()")
 }
 
 #' @rdname deprecated
 #' @export
 
 fmt_pvalue <- function(...) {
-  stop_defunct(
-    "fmt_pvalue() is defunct. Please use style_pvalue() instead."
-  )
+  lifecycle::deprecate_stop("1.0.0", "gtsummary::fmt_pvalue()", "style_pvalue()")
 }

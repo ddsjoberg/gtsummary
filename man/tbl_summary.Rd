@@ -5,9 +5,9 @@
 \title{Create a table of summary statistics}
 \usage{
 tbl_summary(data, by = NULL, label = NULL, statistic = NULL,
-  digits = NULL, type = NULL, value = NULL, group = NULL,
-  missing = c("ifany", "always", "no"), missing_text = "Unknown",
-  sort = NULL, percent = c("column", "row", "cell"))
+  digits = NULL, type = NULL, value = NULL, missing = c("ifany",
+  "always", "no"), missing_text = "Unknown", sort = NULL,
+  percent = c("column", "row", "cell"), group = NULL)
 }
 \arguments{
 \item{data}{A data frame}
@@ -45,9 +45,6 @@ will default to an appropriate summary type.  See below for details.}
 \item{value}{List of formulas specifying the value to display for dichotomous
 variables.  See below for details.}
 
-\item{group}{DEPRECATED. Previously required to work with the 'group'
-argument in \link{add_p}. No longer required.}
-
 \item{missing}{Indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),
 \code{"ifany"} (only display if any NA values), and \code{"always"}
@@ -63,6 +60,8 @@ e.g. \code{sort = list(everything() ~ "frequency")}}
 
 \item{percent}{Indicates the type of percentage to return. Must be one of
 \code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}.}
+
+\item{group}{DEPRECATED. Migrated to \link{add_p}}
 }
 \value{
 A \code{tbl_summary} object
@@ -159,6 +158,19 @@ tbl_summary_ex2 <-
     statistic = list(all_continuous() ~ "{mean} ({sd})"),
     digits = list(vars(age) ~ c(0, 1))
   )
+
+# for convenience, you can also pass named lists to any arguments
+# that accept formulas (e.g label, digits, etc.)
+trial \%>\%
+   dplyr::select(age, grade, response, trt) \%>\%
+   tbl_summary(
+    by = trt,
+    label = list(age = "Patient Age"),
+    statistic = list(all_continuous() ~ "{mean} ({sd})"),
+    digits = list(vars(age) ~ c(0, 1))
+  )
+
+
 }
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples

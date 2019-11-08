@@ -15,9 +15,9 @@ A \code{tbl_stack} object
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
 or more \code{tbl_regression} or \code{tbl_merge} objects.
-{gt} attributes from the first regression object are utilized for output table.
-If combining \code{tbl_stack()} and \code{tbl_merge()}, merge first then stack, or stack
-first and then merge.
+{gt} attributes from the first regression object are utilized for output
+table (read: don't stack a \code{tbl_regression} object on top of a \code{tbl_summary}
+object).
 }
 \section{Example Output}{
 

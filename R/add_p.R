@@ -52,17 +52,19 @@
 #' # Function must return a named list of the p-value and the
 #' # test name: list(p = 0.123, test = "McNemar's test")
 #' # The '...' must be included as input
+#' # This feature is experimental, and the API may change in the future
 #' my_mcnemar <- function(data, variable, by, ...) {
 #'   result <- list()
 #'   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
 #'   result$test <- "McNemar\\'s test"
 #'   result
 #' }
-#'
+#'\donttest{
 #' add_p_ex2 <-
 #'   trial[c("response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p(test = vars(response) ~ "my_mcnemar")
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

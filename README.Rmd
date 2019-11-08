@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 ## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
 
-The {gtsummary} package provides an elegant and flexible way to create publication-ready and reproducible analytical tables.  The tables summarize data sets, regression models, and more. The code is concise and the tables are highly customizable.  Data frames can be summarized with any function, e.g. mean(), median(), even user-written functions. Regression models are summarized and include the reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The package uses [{broom}](https://broom.tidyverse.org/) to perform initial tidying of the regression models, which means there is broad support for many types of regression models.
+The {gtsummary} package provides an elegant and flexible way to create publication-ready and reproducible analytical tables.  The tables summarize data sets, regression models, and more. The code is concise and the tables are highly customizable.  Data frames can be summarized with any function, e.g. mean(), median(), even user-written functions. Regression models are summarized and include the reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The package uses [{broom}](https://broom.tidyverse.org/) to perform initial tidying of the regression models, which means there is broad support for many types of regression models. 
 
 {gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling each table to be tailored to your preferences. If you label your data (which I recommend!), the labels will be used in the table output. With {gtsummary} and [{labelled}](http://larmarange.github.io/labelled/) data, you get beautifully formatted, ready-to-share tables in a single line of code!  Check out the examples below, and review the vignettes for a detailed exploration of the output options.
 
@@ -44,8 +44,6 @@ The {gtsummary} package was written as a companion to the {gt} package from RStu
     install.packages("remotes")
     remotes::install_github("rstudio/gt")
     ```
-    - If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
-
 
 Install the development version of {gtsummary} with:
 
@@ -69,28 +67,37 @@ t1 <-
   add_p() 
 ```
 
-<img src="man/figures/README-tbl_summary.png" width="60%">
+```{r tbl_summary_print, include = FALSE}
+gt::gtsave(as_gt(t1), file = file.path(tempdir(), "temp.png"))
+```
+
+<img src="man/figures/README-tbl_summary_print-1.png" width="66%">
 
 ### Regression Models
 
 ```{r regress, include = TRUE}
-mod1 <- 
-  glm(response ~ trt + age + grade, trial, family = binomial(link = "logit"))
+mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
 t2 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-<img src="man/figures/README-tbl_regression.png" width="44%">
+```{r tbl_regression_print, include = FALSE}
+gt::gtsave(as_gt(t2), file = file.path(tempdir(), "temp.png"))
+```
+
+<img src="man/figures/README-tbl_regression_print-1.png" width="50%">
 
 ### Other Tables
 
 Side-by-side regression model results from `tbl_merge()`
 
-<img src="man/figures/tbl_merge_ex.png" width="60%">
+<img src="man/figures/tbl_merge_ex.png" width="66%">
 
 Survival Estimates from `tbl_survival()`
 
 <img src="man/figures/tbl_strata_ex1.png" width="31%">
+
+Review even more output options in the [table gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
 
 ## Print Engine
 
@@ -102,7 +109,7 @@ or
     
     options(gtsummary.print_engine = "gt")
 
-Output from `kable` is less full featured compared to summary tables produced with {gt}.  For example, `kable` summary tables do not include indentation, footnotes, and spanning header rows.
+Output from {kable} is less full featured compared to summary tables produced with {gt}.  For example, {kable} summary tables do not include indentation, footnotes, and spanning header rows.
 
 ## Contributing
 

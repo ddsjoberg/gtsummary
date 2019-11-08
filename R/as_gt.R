@@ -36,8 +36,9 @@
 as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
   # making list of commands to include -----------------------------------------
   if (!is.null(omit)) {
-    warn_deprecated(paste0("The 'omit' argument is deprecated. ",
-      "Please use 'include' and 'exclude' arguments."))
+    lifecycle::deprecate_warn("1.2.0",
+                              "gtsummary::as_gt(omit = )",
+                              "as_gt(exclude = )")
     if (is.null(exclude)) exclude <- omit
   }
   if (is.null(include)) include <- names(x$gt_calls)
@@ -50,6 +51,8 @@ as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
 
   # taking each gt function call, concatenating them with %>% separating them
   x$gt_calls[call_names] %>%
+    # adding default gt formatting options
+    union(getOption("gtsummary.as_gt.addl_cmds", default = NULL)) %>%
     # removing NULL elements
     compact() %>%
     glue_collapse(sep = " %>% ") %>%

@@ -11,92 +11,93 @@
 #' @keywords internal
 
 tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
-  # if x is a named list, print depcrecation note and return the input as is
-  if (!is.null(names(x))) {
+  # if NULL provided, return NULL ----------------------------------------------
+  if (is.null(x)) {
+    return(NULL)
+  }
+
+  # converting to list if single element passed --------------------------------
+  if (class(x) == "formula") {
+    x <- list(x)
+  }
+
+  # check class of input -------------------------------------------------------
+  # each element must be a formula or a named element of a list
+  is_formula <- map_lgl(x, ~ class(.x) == "formula")
+  if (is.null(names(x))) has_name <- rep(FALSE, length(x))
+  else has_name <- as.logical(names(x) != "")
+
+  if (!all(is_formula | has_name)) {
     example_text <-
       switch(
         input_type %||% "mixed",
-        "type" = "type = list(vars(age) ~ \"continuous\", all_integer() ~ \"categorical\")",
-        "label" = "label = list(vars(age) ~ \"Age, years\", vars(response) ~ \"Tumor Response\")",
-        "statistic" = "statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\") \nstatistic = list(vars(age) ~ \"{median}\")",
-        "digits" = "digits = list(vars(age) ~ 2)\ndigits = list(all_continuous() ~ 2)",
-        "value" = "value = list(vars(grade) ~ \"III\") \nvalue = list(all_logical() ~ FALSE)",
-        "test" = "test = list(all_continuous() ~ \"t.test\") \ntest = list(vars(age) ~ \"kruskal.test\")",
-        "mixed" = "label = list(vars(age) ~ \"Age, years\") \nstatistic = list(all_continuous() ~ \"{mean} ({sd})\")"
+        "type" = paste("type = list(vars(age) ~ \"continuous\", all_integer() ~ \"categorical\")", collapse = "\n"),
+        "label" = paste("label = list(vars(age) ~ \"Age, years\", vars(response) ~ \"Tumor Response\")", collapse = "\n"),
+        "statistic" = paste("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
+                            "statistic = list(vars(age) ~ \"{median}\")", collapse = "\n"),
+        "digits" = paste("digits = list(vars(age) ~ 2)",
+                         "digits = list(all_continuous() ~ 2)", collapse = "\n"),
+        "value" = paste("value = list(vars(grade) ~ \"III\")",
+                        "value = list(all_logical() ~ FALSE)", collapse = "\n"),
+        "test" = paste("test = list(all_continuous() ~ \"t.test\")",
+                       "test = list(vars(age) ~ \"kruskal.test\")", collapse = "\n"),
+        "mixed" = paste("label = list(vars(age) ~ \"Age, years\")",
+                        "statistic = list(all_continuous() ~ \"{mean} ({sd})\")", collapse = "\n")
       )
 
     stop(glue(
-      "Passing named lists is deprecated. \n",
-      "Update code to pass a list of formulas. \n",
-      "The LHS of the formula selects the variables, and \n",
-      "the RHS are the instructions.  For example, \n\n",
+      "There was a problem with one of the function argument inputs. ",
+      "Review the documentation and update the argument input.",
+      "Below is an example of correct syntax.\n\n",
       "{example_text}"
     ), call. = FALSE)
+  }
+
+  # converting all inputs to named list ----------------------------------------
+  named_list <-
+    imap(
+      x, ~tidyselect_to_list_one(.data = .data, x = .x, x_name = .y,
+                                 .meta_data = .meta_data, input_type = input_type)
+    ) %>%
+    flatten()
+
+
+  # removing duplicates (using the last one listed if variable occurs more than once)
+  tokeep <-
+    names(named_list) %>%
+    rev() %>%
+    negate(duplicated)() %>%
+    rev()
+  named_list[tokeep]
+}
+
+tidyselect_to_list_one <- function(.data, x, x_name, .meta_data = NULL, input_type = NULL) {
+  # if named list item, return unmodified --------------------------------------
+  if (rlang::is_string(x_name) && x_name != "") {
+    x <- list(x)
+    names(x) <- x_name
     return(x)
   }
 
-  # if a single formula is passed, putting it in a list
-  if (class(x) == "formula") x <- list(x)
-
-  # registering names of columns in data
+  # registering names of columns in data ---------------------------------------
   tidyselect::scoped_vars(vars = names(.data))
   scoped_data(.data)
   if (!is.null(.meta_data)) scoped_meta_data(.meta_data)
 
-
-  # number of formulas to work through
-  n <- length(x)
-
-  # if NULL provided, return NULL
-  if (n == 0) {
-    return(NULL)
-  }
-
-  # initializing empty results
-  lhs <- vector("list", n)
-  rhs <- vector("list", n)
-
-  # for each formula extract lhs and rhs
-  for (i in seq_len(n)) {
-    # checking input is a formula
-    if (!rlang::is_formula(x[[i]])) stop("Input must be a formula")
-
-    lhs[[i]] <- rlang::f_lhs(x[[i]]) %>% eval()
-    rhs[[i]] <- rlang::f_rhs(x[[i]]) %>% eval()
-  }
-
-
+  # for each formula extract lhs and rhs ---------------------------------------
+  lhs <- rlang::f_lhs(x) %>% eval()
+  rhs <- rlang::f_rhs(x) %>% eval()
 
   # if tidyselect function returned numeric position, grab character name
-  lhs <- map_if(lhs, is.numeric, ~ names(.data)[.x])
-  # TODO: fix this garbage code for dplyr::vars()
-  # if tidyselect function returned quosure, convert to character
-  # > dplyr::vars(grade) %>% as.character()
-  # [1] "~grade"
-  lhs <- map_if(
-    lhs, ~ class(.x) == "quosures",
-    ~ as.character(.x) %>%
-      # remove ~ from quosure
-      stringr::str_remove(stringr::fixed("~")) %>%
-      # if variable name was wrapped in backticks, remove them
-      {ifelse(
-        startsWith(., "`") && endsWith(., "`"),
-        stringr::str_sub(., 2, -2), .
-      )}
-  )
+  if (is.numeric(lhs)) lhs <- names(.data)[lhs]
+
+  # if varlist supplied in vars() converting to strings
+  if (class(lhs) == "quosures") lhs <- map_chr(lhs, rlang::as_label)
 
   # converting rhs and lhs into a named list
   result <-
-    map2(lhs, rhs, ~ rep(list(.y), length(.x)) %>% rlang::set_names(.x)) %>%
+    map(lhs, ~ list(rhs) %>% rlang::set_names(.x)) %>%
     flatten()
-
-  # removing duplicates (using the last one listed if variable occurs more than once)
-  tokeep <-
-    names(result) %>%
-    rev() %>%
-    negate(duplicated)() %>%
-    rev()
-  result <- result[tokeep]
 
   result
 }

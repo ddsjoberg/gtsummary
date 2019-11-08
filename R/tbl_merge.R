@@ -5,6 +5,8 @@
 #'
 #' @param tbls List of gtsummary objects to merge
 #' @param tab_spanner Character vector specifying the spanning headers.
+#' Must be the same length as `tbls`. The
+#' strings are interpreted with `gt::md`.
 #' Must be same length as `tbls` argument
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
@@ -25,7 +27,7 @@
 #' tbl_merge_ex1 <-
 #'   tbl_merge(
 #'     tbls = list(t1, t2),
-#'     tab_spanner = c("Tumor Response", "Time to Death")
+#'     tab_spanner = c("**Tumor Response**", "**Time to Death**")
 #'   )
 #' \donttest{
 #' # Descriptive statistics alongside univariate regression, with no spanning header
@@ -56,15 +58,20 @@
 #'
 #' \if{html}{\figure{tbl_merge_ex2.png}{options: width=65\%}}
 #'
-tbl_merge <- function(tbls,
-                      tab_spanner = paste0(c("Table "), seq_len(length(tbls)))) {
+tbl_merge <- function(tbls, tab_spanner = NULL) {
   # input checks ---------------------------------------------------------------
+  # if tab spanner is null, default is Table 1, Table 2, etc....
+  if (is.null(tab_spanner)) {
+    tab_spanner <-  paste0(c("**Table "), seq_len(length(tbls)), "**")
+  }
+
   # class of tbls
   if (!"list" %in% class(tbls)) {
     stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
-  # checking all inputs are class tbl_regression, tbl_uvregression, tbl_regression, or tbl_stack
+  # checking all inputs are class tbl_regression, tbl_uvregression,
+  # tbl_regression, tbl_summary, or tbl_stack
   if (!map_chr(tbls, class) %in%
       c("tbl_regression", "tbl_uvregression", "tbl_summary", "tbl_stack") %>% all()) {
     stop(paste("All objects in 'tbls' must be class 'tbl_regression',",
@@ -85,7 +92,7 @@ tbl_merge <- function(tbls,
     tbls,
     ~ class(.x) == "tbl_summary",
     function(x){
-      x$table_header$footnote[startsWith(x$table_header$column, "stat_")][1] =
+      x$table_header$footnote[startsWith(x$table_header$column, "stat_")] =
         x$table_header$footnote[x$table_header$column == "label"][1]
 
       x$table_header$footnote[x$table_header$column == "label"][1] = list(NULL)
@@ -255,7 +262,7 @@ gt_tbl_merge <- quote(list(
   # table spanner
   tab_spanner =
     glue(
-      "gt::tab_spanner(label = '{tab_spanner}', columns = gt::ends_with('_{seq_len(tbls_length)}'))"
+      "gt::tab_spanner(label = gt::md('{tab_spanner}'), columns = gt::ends_with('_{seq_len(tbls_length)}'))"
     ) %>%
     glue_collapse(sep = " %>% ")
 ))

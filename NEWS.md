@@ -1,6 +1,34 @@
 # gtsummary (development version)
 
-* Added `inlude =` and `exclude =` arguments to `tbl_uvregression()` (#240)
+* Users can add an option to their script to append any {gt} calls when a {gtsummary} object is printed: `gtsummary.as_gt.addl_cmds`
+
+* No longer checking outcome variable name for consistency in `tbl_regression()`---only checking independent variable names (#287)
+
+* Added a vignette documenting each global option that can be set in {gtsummary} (#289)
+
+* Added a gallery of tables possible by merging, stacking, and modifying gtsummary arguments (#258)
+
+* `tbl_summary` objects are now stackable with `tbl_stack()` (#255)
+
+* Users may now pass a list of formulas, named lists, or a combination of both (#251)
+
+* Bug fix in `vars()` selection where only first variable listed was being selected (#259)
+
+* The `by = ` column in `tbl_summary()` now has missing variables dropped rather than halting with error (#279)
+
+* Added {lifecycle} badges to mark deprecated and experimental functions (#225)
+
+* `tbl_merge()` now interprets `tab_spanner =` text with `gt::md()` (#253)
+
+* Bug fix where logical variable labels printed as `NA` in `tbl_regression()` (#248)
+
+* Added `as_tibble()` function that converts any gtsummary table to a tibble (#245)
+
+* Improved error messaging for `add_global_p()` (#243)
+
+* The `add_n()` function now reports additional statistics: total N, non-missing N, missing N, and their percentages.  The `missing = ` argument has been deprecated in favor of the `statistic = ` argument. (#237)
+
+* Added `include =` and `exclude =` arguments to `tbl_uvregression()` (#240)
 
 * Added ability to merge `tbl_summary` objects in `tbl_merge()` (#230)
 
