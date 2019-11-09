@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.2.2
 
 * Users can add an option to their script to append any {gt} calls when a {gtsummary} object is printed: `gtsummary.as_gt.addl_cmds`
 
