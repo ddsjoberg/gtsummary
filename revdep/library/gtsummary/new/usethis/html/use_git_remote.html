@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Configure and report Git remotes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_git_remote {usethis}"><tr><td>use_git_remote {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Configure and report Git remotes</h2>
+
+<h3>Description</h3>
+
+<p>Two helpers are available:
+</p>
+
+<ul>
+<li> <p><code>use_git_remote()</code> sets the remote associated with <code>name</code> to <code>url</code>.
+</p>
+</li>
+<li> <p><code>git_remotes()</code> reports the configured remotes, similar to
+<code>git remote -v</code>.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+use_git_remote(name = "origin", url, overwrite = FALSE)
+
+git_remotes()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>A string giving the short name of a remote.</p>
+</td></tr>
+<tr valign="top"><td><code>url</code></td>
+<td>
+<p>A string giving the url of a remote.</p>
+</td></tr>
+<tr valign="top"><td><code>overwrite</code></td>
+<td>
+<p>Logical. Controls whether an existing remote can be
+modified.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Named list of Git remotes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# see current remotes
+git_remotes()
+
+# add new remote named 'foo', a la `git remote add &lt;name&gt; &lt;url&gt;`
+use_git_remote(name = "foo", url = "https://github.com/&lt;OWNER&gt;/&lt;REPO&gt;.git")
+
+# remove existing 'foo' remote, a la `git remote remove &lt;name&gt;`
+use_git_remote(name = "foo", url = NULL, overwrite = TRUE)
+
+# change URL of remote 'foo', a la `git remote set-url &lt;name&gt; &lt;newurl&gt;`
+use_git_remote(
+  name = "foo",
+  url = "https://github.com/&lt;OWNER&gt;/&lt;REPO&gt;.git",
+  overwrite = TRUE
+)
+
+# Scenario: Fix remotes when you cloned someone's repo, but you should
+# have fork-and-cloned (in order to make a pull request).
+
+# Store origin = main repo's URL, e.g., "git@github.com:&lt;OWNER&gt;/&lt;REPO&gt;.git"
+upstream_url &lt;- git_remotes()[["origin"]]
+
+# IN THE BROWSER: fork the main GitHub repo and get your fork's remote URL
+my_url &lt;- "git@github.com:&lt;ME&gt;/&lt;REPO&gt;.git"
+
+# Rotate the remotes
+use_git_remote(name = "origin", url = my_url)
+use_git_remote(name = "upstream", url = upstream_url)
+git_remotes()
+
+# Scenario: Add upstream remote to a repo that you fork-and-cloned, so you
+# can pull upstream changes.
+# Note: If you fork-and-clone via `usethis::create_from_github()`, this is
+# done automatically!
+
+# Get URL of main GitHub repo, probably in the browser
+upstream_url &lt;- "git@github.com:&lt;OWNER&gt;/&lt;REPO&gt;.git"
+use_git_remote(name = "upstream", url = upstream_url)
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

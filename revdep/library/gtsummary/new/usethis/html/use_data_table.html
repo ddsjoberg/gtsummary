@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Prepare for importing data.table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_data_table {usethis}"><tr><td>use_data_table {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Prepare for importing data.table</h2>
+
+<h3>Description</h3>
+
+<p><code>use_data_table</code> facilitates importing <code>data.table</code> by
+handling up-front some common set-up tasks for using it in your package.
+</p>
+<p>This function does two main things:
+</p>
+
+<ol>
+<li><p> Import the entire <code>data.table</code> namespace (with <code>@import</code>).
+</p>
+</li>
+<li><p> Block the usage of <code>data.table</code> as a dependency (<code>DESCRIPTION</code>
+field <code>Depends</code>); <code>data.table</code> should be used as an <em>import</em> or <em>suggested</em>
+package only. See this <a href="https://github.com/Rdatatable/data.table/issues/3076">discussion</a>.
+</p>
+</li></ol>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+use_data_table()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

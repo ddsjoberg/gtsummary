@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Use a usethis-style template</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_template {usethis}"><tr><td>use_template {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Use a usethis-style template</h2>
+
+<h3>Description</h3>
+
+<p>Creates a file from data and a template found in a package. Provides control
+over file name, the addition to <code>.Rbuildignore</code>, and opening the file for
+inspection.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_template(template, save_as = template, data = list(),
+  ignore = FALSE, open = FALSE, package = "usethis")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>template</code></td>
+<td>
+<p>Path to template file relative to <code>templates/</code> directory
+within <code>package</code>; see details.</p>
+</td></tr>
+<tr valign="top"><td><code>save_as</code></td>
+<td>
+<p>Path of file to create, relative to root of active project.
+Defaults to <code>template</code></p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A list of data passed to the template.</p>
+</td></tr>
+<tr valign="top"><td><code>ignore</code></td>
+<td>
+<p>Should the newly created file be added to <code>.Rbuildignore</code>?</p>
+</td></tr>
+<tr valign="top"><td><code>open</code></td>
+<td>
+<p>Open the newly created file for editing? Happens in RStudio, if
+applicable, or via <code><a href="../../utils/html/file.edit.html">utils::file.edit()</a></code> otherwise.</p>
+</td></tr>
+<tr valign="top"><td><code>package</code></td>
+<td>
+<p>Name of the package where the template is found.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This function can be used as the engine for a templating function in other
+packages. The <code>template</code> argument is used along with the <code>package</code> argument
+to derive the path to your template file; it will be expected at
+<code>fs::path_package(package = package, "templates", template)</code>. We use
+<code>fs::path_package()</code> instead of <code>base::system.file()</code> so that path
+construction works even in a development workflow, e.g., works with
+<code>devtools::load_all()</code> or <code>pkgload::load_all()</code>. <em>Note this describes the
+behaviour of <code>fs::path_package()</code> in fs v1.2.7.9001 and higher.</em>
+</p>
+<p>To interpolate your data into the template, supply a list using
+the <code>data</code> argument. Internally, this function uses
+<code><a href="../../whisker/html/whisker.render.html">whisker::whisker.render()</a></code> to combine your template file with your data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A logical vector indicating if file was modified.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+  # Note: running this will write `NEWS.md` to your working directory
+  use_template(
+    template = "NEWS.md",
+    data = list(Package = "acme", Version = "1.2.3"),
+    package = "usethis"
+  )
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

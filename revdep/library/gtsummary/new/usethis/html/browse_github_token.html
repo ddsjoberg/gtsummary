@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create and retrieve a GitHub personal access token</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for browse_github_token {usethis}"><tr><td>browse_github_token {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create and retrieve a GitHub personal access token</h2>
+
+<h3>Description</h3>
+
+<p>A <a href="https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line">personal access token</a>
+(PAT) is needed for git operations via the GitHub API. Two helper functions
+are provided:
+</p>
+
+<ul>
+<li> <p><code>browse_github_token()</code> is synonymous with <code>browse_github_pat()</code>: Both
+open a browser window to the GitHub form to generate a PAT. See below for
+advice on how to store this.
+</p>
+</li>
+<li> <p><code>github_token()</code> retrieves a stored PAT by consulting, in this order:
+</p>
+
+<ul>
+<li> <p><code>GITHUB_PAT</code> environment variable
+</p>
+</li>
+<li> <p><code>GITHUB_TOKEN</code> environment variable
+</p>
+</li>
+<li><p> the empty string <code>""</code>
+</p>
+</li></ul>
+
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+browse_github_token(scopes = c("repo", "gist", "user:email"),
+  description = "R:GITHUB_PAT", host = "https://github.com")
+
+browse_github_pat(scopes = c("repo", "gist", "user:email"),
+  description = "R:GITHUB_PAT", host = "https://github.com")
+
+github_token()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>scopes</code></td>
+<td>
+<p>Character vector of token scopes, pre-selected in the web
+form. Final choices are made in the GitHub form. Read more about GitHub
+API scopes at
+<a href="https://developer.github.com/apps/building-oauth-apps/scopes-for-oauth-apps/">https://developer.github.com/apps/building-oauth-apps/scopes-for-oauth-apps/</a>.</p>
+</td></tr>
+<tr valign="top"><td><code>description</code></td>
+<td>
+<p>Short description or nickname for the token. It helps you
+distinguish various tokens on GitHub.</p>
+</td></tr>
+<tr valign="top"><td><code>host</code></td>
+<td>
+<p>GitHub API host to use. Override with the endpoint-root for your
+GitHub enterprise instance, for example,
+&quot;https://github.hostname.com/api/v3&quot;.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>github_token()</code> returns a string, a GitHub PAT or <code>""</code>.
+</p>
+
+
+<h3></h3>
+
+<p>Get and store a PAT:
+Sign up for a free <a href="https://github.com/">GitHub.com</a> account and sign in.
+Call <code>browse_github_token()</code>. Verify the scopes and click &quot;Generate token&quot;.
+Copy the token right away! A common approach is to store in <code>.Renviron</code> as
+the <code>GITHUB_PAT</code> environment variable. <code><a href="edit.html">edit_r_environ()</a></code> opens this file for
+editing.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../gh/html/gh_whoami.html">gh::gh_whoami()</a></code> for information on an existing token.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+browse_github_token()
+## COPY THE PAT!!!
+## almost certainly to be followed by ...
+edit_r_environ()
+## which helps you store the PAT as an env var
+
+## End(Not run)
+# for safety's sake, just reveal first 4 characters
+substr(github_token(), 1, 4)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

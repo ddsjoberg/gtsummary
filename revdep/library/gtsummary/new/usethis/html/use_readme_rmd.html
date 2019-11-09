@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create README files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_readme_rmd {usethis}"><tr><td>use_readme_rmd {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create README files</h2>
+
+<h3>Description</h3>
+
+<p>Creates skeleton README files with sections for
+</p>
+
+<ul>
+<li><p> a high-level description of the package and its goals
+</p>
+</li>
+<li><p> R code to install from GitHub, if GitHub usage detected
+</p>
+</li>
+<li><p> a basic example
+</p>
+</li></ul>
+
+<p>Use <code>Rmd</code> if you want a rich intermingling of code and data. Use
+<code>md</code> for a basic README. <code>README.Rmd</code> will be automatically
+added to <code>.Rbuildignore</code>. The resulting README is populated with default
+YAML frontmatter and R fenced code blocks (<code>md</code>) or chunks (<code>Rmd</code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_readme_rmd(open = interactive())
+
+use_readme_md(open = interactive())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>open</code></td>
+<td>
+<p>Open the newly created file for editing? Happens in RStudio, if
+applicable, or via <code><a href="../../utils/html/file.edit.html">utils::file.edit()</a></code> otherwise.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>The <a href="https://r-pkgs.org/release.html#important-files">important files section</a> of <a href="https://r-pkgs.org">R Packages</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+use_readme_rmd()
+use_readme_md()
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

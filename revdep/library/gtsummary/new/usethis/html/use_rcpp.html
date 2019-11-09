@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Use C, C++, RcppArmadillo, or RcppEigen</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_rcpp {usethis}"><tr><td>use_rcpp {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Use C, C++, RcppArmadillo, or RcppEigen</h2>
+
+<h3>Description</h3>
+
+<p>Adds infrastructure commonly needed when using compiled code:
+</p>
+
+<ul>
+<li><p> Creates <code>src/</code>
+</p>
+</li>
+<li><p> Adds required packages to <code>DESCRIPTION</code>
+</p>
+</li>
+<li><p> May create an initial placeholder <code>.c</code> or <code>.cpp</code> file
+</p>
+</li>
+<li><p> Creates <code>Makevars</code> and <code>Makevars.win</code> files (<code>use_rcpp_armadillo()</code> only)
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+use_rcpp(name = NULL)
+
+use_rcpp_armadillo(name = NULL)
+
+use_rcpp_eigen(name = NULL)
+
+use_c(name = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>If supplied, creates and opens <code>src/name.{c,cpp}</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>When using compiled code, please note that there must be at least one file
+inside the <code>src/</code> directory prior to building the package. As a result,
+if an empty <code>src/</code> directory is detected, either a <code>.c</code> or <code>.cpp</code> file will
+be added.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>
