@@ -170,12 +170,13 @@
 <p>Checklist for PR reviewer</p>
 <ul>
 <li>[ ] PR branch has pulled the most recent updates from master branch</li>
+<li>[ ] NEWS.md has been updated under the heading “<code># gtsummary (development version)</code>”?</li>
 <li>[ ] <code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> runs with no spelling errors in documentation</li>
 <li>[ ] If a new function was added, was function included in <code>pkgdown.yml</code>
 </li>
-<li>[ ] R CMD Check runs without errors, warnings, and notes</li>
+<li>[ ] Run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site()</a></code>. Check the R console for errors, and review the rendered website.</li>
 <li>[ ] Code coverage is suitable for any new functions/features.</li>
-<li>[ ] NEWS.md has been updated under the heading “<code># gtsummary (development version)</code>”?</li>
+<li>[ ] R CMD Check runs without errors, warnings, and notes</li>
 <li>[ ] When the branch is ready to be merged into master, bump the version number using <code><a href="https://usethis.r-lib.org/reference/use_version.html">usethis::use_version(which = "dev")</a></code>, approve, and merge the PR.</li>
 </ul>
 
