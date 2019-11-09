@@ -26,10 +26,9 @@ These defaults can be modified with global options.
 ### p-values
 
 P-values are reported throughout {gtsummary} tables.
-The default function to style p-values is `style_pvalue()`.
-Large p-values are rounded to one decimal place in `style_pvalue()`.
+The default function to style p-values is `style_pvalue()`, where large p-values are rounded to one decimal place.
 Use the `gtsummary.pvalue_fun` option to change the function that styles p-values.
-To report large p-values rounded to two decimal places rather that one, change the default function to `style_pvalue(x, digits = 2)`.
+For example, to report large p-values rounded to two decimal places rather that one, change the default function to `style_pvalue(x, digits = 2)`.
 
 ```{r}
 options(gtsummary.pvalue_fun = function(x) style_pvalue(x, digits = 2))
