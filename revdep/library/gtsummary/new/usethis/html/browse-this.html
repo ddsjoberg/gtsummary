@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Quickly browse to important package webpages</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for browse-this {usethis}"><tr><td>browse-this {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Quickly browse to important package webpages</h2>
+
+<h3>Description</h3>
+
+<p>These functions take you to various webpages associated with a package and
+return the target URL invisibly. Some URLs are formed from first principles
+and there is no guarantee there will be content at the destination.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+browse_github(package = NULL)
+
+browse_github_issues(package = NULL, number = NULL)
+
+browse_github_pulls(package = NULL, number = NULL)
+
+browse_travis(package = NULL, ext = c("org", "com"))
+
+browse_circleci(package = NULL)
+
+browse_cran(package = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>package</code></td>
+<td>
+<p>Name of package; leave as <code>NULL</code> to use current package</p>
+</td></tr>
+<tr valign="top"><td><code>number</code></td>
+<td>
+<p>For GitHub issues and pull requests. Can be a number or
+<code>"new"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>ext</code></td>
+<td>
+<p>Version of travis to use.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+
+<ul>
+<li> <p><code>browse_github()</code>: Looks for a GitHub URL in the URL field of
+<code>DESCRIPTION</code>.
+</p>
+</li>
+<li> <p><code>browse_github_issues()</code>: Visits the GitHub Issues index or one specific
+issue.
+</p>
+</li>
+<li> <p><code>browse_github_pulls()</code>: Visits the GitHub Pull Request index or one
+specific pull request.
+</p>
+</li>
+<li> <p><code>browse_travis()</code>: Visits the package's page on <a href="https://travis-ci.org">Travis CI</a>.
+</p>
+</li>
+<li> <p><code>browse_circleci()</code>: Visits the package's page on <a href="https://circleci.com">Circle CI</a>
+</p>
+</li>
+<li> <p><code>browse_cran()</code>: Visits the package on CRAN, via the canonical URL.
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+browse_github("gh")
+browse_github_issues("backports")
+browse_github_issues("backports", 1)
+browse_github_pulls("rprojroot")
+browse_github_pulls("rprojroot", 3)
+browse_travis("usethis")
+browse_cran("MASS")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

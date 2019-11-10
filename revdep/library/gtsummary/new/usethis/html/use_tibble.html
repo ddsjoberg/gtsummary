@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Prepare to return a tibble</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_tibble {usethis}"><tr><td>use_tibble {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Prepare to return a tibble</h2>
+
+<h3>Description</h3>
+
+<p>Does minimum setup such that a tibble returned by your package
+is handled using the tibble method for generics like <code>print()</code> or <code>[</code>.
+Presumably you care about this if you've chosen to store and expose an
+object with class <code>tbl_df</code>. Specifically:
+</p>
+
+<ul>
+<li><p> Check that the active package uses roxygen2
+</p>
+</li>
+<li><p> Add the tibble package to &quot;Imports&quot; in <code>DESCRIPTION</code>
+</p>
+</li>
+<li><p> Reveal the roxygen directive necessary to import at least one function
+from tibble.
+</p>
+</li>
+<li><p> Offer support re: where to put this directive. Preferred location is
+in the roxygen snippet produced by <code><a href="use_package_doc.html">use_package_doc()</a></code>.
+</p>
+</li></ul>
+
+<p>This is necessary when your package returns a stored data object
+that has class <code>tbl_df</code>, but the package code does not make direct use of
+functions from the tibble package. If you do nothing, the tibble namespace
+is not necessarily loaded and your tibble may therefore be printed and
+subsetted like a base <code>data.frame</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_tibble()
+</pre>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+use_tibble()
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

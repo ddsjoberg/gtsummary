@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create package data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_data {usethis}"><tr><td>use_data {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create package data</h2>
+
+<h3>Description</h3>
+
+<p><code>use_data()</code> makes it easy to save package data in the correct format.
+I recommend you save scripts that generate package data in <code>data-raw</code>:
+use <code>use_data_raw()</code> to set it up.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_data(..., internal = FALSE, overwrite = FALSE,
+  compress = "bzip2", version = 2)
+
+use_data_raw(name = "DATASET", open = interactive())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Unquoted names of existing objects to save.</p>
+</td></tr>
+<tr valign="top"><td><code>internal</code></td>
+<td>
+<p>If <code>FALSE</code>, saves each object in its own <code>.rda</code>
+file in the <code>data/</code> directory. These data files bypass the usual
+export mechanism and are available whenever the package is loaded
+(or via <code><a href="../../utils/html/data.html">data()</a></code> if <code>LazyData</code> is not true).
+</p>
+<p>If <code>TRUE</code>, stores all objects in a single <code>R/sysdata.rda</code> file.
+Objects in this file follow the usual export rules. Note that this means
+they will be exported if you are using the common <code>exportPattern()</code>
+rule which exports all objects except for those that start with <code>.</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>overwrite</code></td>
+<td>
+<p>By default, <code>use_data()</code> will not overwrite existing
+files. If you really want to do so, set this to <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>compress</code></td>
+<td>
+<p>Choose the type of compression used by <code><a href="../../base/html/save.html">save()</a></code>.
+Should be one of &quot;gzip&quot;, &quot;bzip2&quot;, or &quot;xz&quot;.</p>
+</td></tr>
+<tr valign="top"><td><code>version</code></td>
+<td>
+<p>The serialization format version to use. The default, 2, was
+the default format from R 1.4.0 to 3.5.3. Version 3 became the default from
+R 3.6.0 and can only be read by R versions 3.5.0 and higher.</p>
+</td></tr>
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>Name of the dataset to be prepared for inclusion in the package.</p>
+</td></tr>
+<tr valign="top"><td><code>open</code></td>
+<td>
+<p>Open the newly created file for editing? Happens in RStudio, if
+applicable, or via <code><a href="../../utils/html/file.edit.html">utils::file.edit()</a></code> otherwise.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>The <a href="https://r-pkgs.org/data.html">data chapter</a> of <a href="https://r-pkgs.org">R Packages</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+x &lt;- 1:10
+y &lt;- 1:100
+
+use_data(x, y) # For external use
+use_data(x, y, internal = TRUE) # For internal use
+
+## End(Not run)
+## Not run: 
+use_data_raw("daisy")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

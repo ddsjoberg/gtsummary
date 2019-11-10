@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Write into or over a file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for write-this {usethis}"><tr><td>write-this {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Write into or over a file</h2>
+
+<h3>Description</h3>
+
+<p>Helpers to write into or over a new or pre-existing file. Designed mostly for
+for internal use. File is written with UTF-8 encoding.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+write_union(path, lines, quiet = FALSE)
+
+write_over(path, lines, quiet = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>Path to target file. It is created if it does not exist, but the
+parent directory must exist.</p>
+</td></tr>
+<tr valign="top"><td><code>lines</code></td>
+<td>
+<p>Character vector of lines. For <code>write_union()</code>, these are lines
+to add to the target file, if not already present. For <code>write_over()</code>,
+these are the exact lines desired in the target file.</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>Logical. Whether to message about what is happening.</p>
+</td></tr>
+<tr valign="top"><td><code>contents</code></td>
+<td>
+<p>Character vector of lines.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Logical indicating whether a write occurred, invisibly.
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>write_union</code>: writes lines to a file, taking the union of what's
+already there, if anything, and some new lines. Note, there is no explicit
+promise about the line order. Designed to modify simple config files like
+<code>.Rbuildignore</code> and <code>.gitignore</code>.
+</p>
+</li>
+<li> <p><code>write_over</code>: writes a file with specific lines, creating it if
+necessary or overwriting existing, if proposed contents are not identical
+and user is available to give permission.
+</p>
+</li></ul>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+write_union("a_file", letters[1:3])
+readLines("a_file")
+write_union("a_file", letters[1:5])
+readLines("a_file")
+
+write_over("another_file", letters[1:3])
+readLines("another_file")
+write_over("another_file", letters[1:3])
+
+## Not run: 
+## will error if user isn't present to approve the overwrite
+write_over("another_file", letters[3:1])
+
+## End(Not run)
+
+## clean up
+file.remove("a_file", "another_file")
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -17,7 +17,8 @@ total number of non-missing (or missing) observations
 <h3>Usage</h3>
 
 <pre>
-add_n(x, missing = FALSE, last = FALSE)
+add_n(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
+  last = FALSE, missing = NULL)
 </pre>
 
 
@@ -28,15 +29,50 @@ add_n(x, missing = FALSE, last = FALSE)
 <td>
 <p>Object with class <code>tbl_summary</code> from the <a href="tbl_summary.html">tbl_summary</a> function</p>
 </td></tr>
-<tr valign="top"><td><code>missing</code></td>
+<tr valign="top"><td><code>statistic</code></td>
 <td>
-<p>Logical argument indicating whether to print N (<code>missing = FALSE</code>),
-or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p>
+<p>String indicating the statistic to report. Default is the
+number of non-missing observation for each variable, <code>statistic = "{n}"</code>.
+Other statistics available to report include:
+</p>
+
+<ul>
+<li> <p><code>"{N}"</code> total number of observations,
+</p>
+</li>
+<li> <p><code>"{n}"</code> number of non-missing observations,
+</p>
+</li>
+<li> <p><code>"{n_miss}"</code> number of missing observations,
+</p>
+</li>
+<li> <p><code>"{p}"</code> percent non-missing data,
+</p>
+</li>
+<li> <p><code>"{p_miss}"</code> percent missing data
+The argument uses <a href="../../glue/html/glue.html">glue::glue</a> syntax and multiple statistics may be reported,
+e.g. <code>statistic = "{n} / {N} ({p}%)"</code>
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>col_label</code></td>
+<td>
+<p>String indicating the column label.  Default is <code>"**N**"</code></p>
+</td></tr>
+<tr valign="top"><td><code>footnote</code></td>
+<td>
+<p>Logical argument indicating whether to print a footnote
+clarifying the statistics presented. Default is <code>FALSE</code></p>
 </td></tr>
 <tr valign="top"><td><code>last</code></td>
 <td>
 <p>Logical indicator to include N column last in table.
 Default is <code>FALSE</code>, which will display N column first.</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>DEPRECATED. Logical argument indicating whether to print N
+(<code>missing = FALSE</code>), or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p>
 </td></tr>
 </table>
 
@@ -69,7 +105,7 @@ Default is <code>FALSE</code>, which will display N column first.</p>
 <code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a></code>,
 <code><a href="modify_header.html">modify_header</a></code>,
 <code><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a></code>,
-<code><a href="tbl_summary.html">tbl_summary</a></code>
+<code><a href="tbl_merge.html">tbl_merge</a></code>, <code><a href="tbl_summary.html">tbl_summary</a></code>
 </p>
 
 
@@ -83,5 +119,5 @@ tbl_n_ex &lt;-
   add_n()
 </pre>
 
-<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.0 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.2 <a href="00Index.html">Index</a>]</div>
 </body></html>

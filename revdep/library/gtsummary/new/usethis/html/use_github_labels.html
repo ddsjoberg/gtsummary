@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Manage GitHub issue labels</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_github_labels {usethis}"><tr><td>use_github_labels {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Manage GitHub issue labels</h2>
+
+<h3>Description</h3>
+
+<p><code>use_github_labels()</code> can create new labels, update colours and descriptions,
+and optionally delete GitHub's default labels (if <code>delete_default = TRUE</code>).
+It will never delete labels that have associated issues.
+</p>
+<p><code>use_tidy_labels()</code> calls <code>use_github_labels()</code> with tidyverse conventions
+powered by <code>tidy_labels()</code>, <code>tidy_labels_rename()</code>, <code>tidy_label_colours()</code>
+and <code>tidy_label_descriptions()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_github_labels(repo_spec = github_repo_spec(), labels = character(),
+  rename = character(), colours = character(),
+  descriptions = character(), delete_default = FALSE,
+  auth_token = github_token(), host = NULL)
+
+use_tidy_labels(repo_spec = github_repo_spec(),
+  auth_token = github_token(), host = NULL)
+
+tidy_labels()
+
+tidy_labels_rename()
+
+tidy_label_colours()
+
+tidy_label_descriptions()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>repo_spec</code></td>
+<td>
+<p>Optional repository specification (<code>owner/repo</code>) if you
+don't want to target the current project.</p>
+</td></tr>
+<tr valign="top"><td><code>labels</code></td>
+<td>
+<p>A character vector giving labels to add.</p>
+</td></tr>
+<tr valign="top"><td><code>rename</code></td>
+<td>
+<p>A named vector with names giving old names and values giving
+new names.</p>
+</td></tr>
+<tr valign="top"><td><code>colours, descriptions</code></td>
+<td>
+<p>Named character vectors giving hexadecimal
+colours (like <code>e02a2a</code>) and longer descriptions. The names should match
+label names, and anything unmatched will be left unchanged. If you
+create a new label, and don't supply colours, it will be given a random
+colour.</p>
+</td></tr>
+<tr valign="top"><td><code>delete_default</code></td>
+<td>
+<p>If <code>TRUE</code>, removes GitHub default labels that do
+not appear in the <code>labels</code> vector and that do not have associated issues.</p>
+</td></tr>
+<tr valign="top"><td><code>auth_token</code></td>
+<td>
+<p>GitHub personal access token (PAT).</p>
+</td></tr>
+<tr valign="top"><td><code>host</code></td>
+<td>
+<p>GitHub API host to use. Override with the endpoint-root for your
+GitHub enterprise instance, for example,
+&quot;https://github.hostname.com/api/v3&quot;.</p>
+</td></tr>
+</table>
+
+
+<h3>Label usage</h3>
+
+<p>Labels are used as part of the issue-triage process, designed to minimise the
+time spent re-reading issues. The absence of a label indicates that an issue
+is new, and has yet to be triaged.
+</p>
+
+<ul>
+<li> <p><code>reprex</code> indicates that an issue does not have a minimal reproducible
+example, and that a reply has been sent requesting one from the user.
+</p>
+</li>
+<li> <p><code>bug</code> indicates an unexpected problem or unintended behavior.
+</p>
+</li>
+<li> <p><code>feature</code> indicates a feature request or enhancement.
+</p>
+</li>
+<li> <p><code>docs</code> indicates an issue with the documentation.
+</p>
+</li>
+<li> <p><code>wip</code> indicates that someone is working on it or has promised to.
+</p>
+</li>
+<li> <p><code>good first issue</code> indicates a good issue for first-time contributors.
+</p>
+</li>
+<li> <p><code>help wanted</code> indicates that a maintainer wants help on an issue.
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# typical use in, e.g., a new tidyverse project
+use_github_labels(delete_default = TRUE)
+
+# create labels without changing colours/descriptions
+use_github_labels(
+  labels = c("foofy", "foofier", "foofiest"),
+  colours = NULL,
+  descriptions = NULL
+)
+
+# change descriptions without changing names/colours
+use_github_labels(
+  labels = NULL,
+  colours = NULL,
+  descriptions = c("foofiest" = "the foofiest issue you ever saw")
+)
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: User interface</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ui {usethis}"><tr><td>ui {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>User interface</h2>
+
+<h3>Description</h3>
+
+<p>These functions are used to construct the user interface of usethis. Use
+them in your own package so that your <code>use_</code> functions work the same way
+as usethis.
+</p>
+<p>The <code>ui_</code> functions can be broken down into four main categories:
+</p>
+
+<ul>
+<li><p> block styles: <code>ui_line()</code>, <code>ui_done()</code>, <code>ui_todo()</code>, <code>ui_oops()</code>,
+<code>ui_info()</code>.
+</p>
+</li>
+<li><p> conditions: <code>ui_stop()</code>, <code>ui_warn()</code>.
+</p>
+</li>
+<li><p> questions: <code><a href="ui-questions.html">ui_yeah()</a></code>, <code><a href="ui-questions.html">ui_nope()</a></code>.
+</p>
+</li>
+<li><p> inline styles: <code>ui_field()</code>, <code>ui_value()</code>, <code>ui_path()</code>, <code>ui_code()</code>.
+</p>
+</li></ul>
+
+<p>The question functions <code><a href="ui-questions.html">ui_yeah()</a></code> and <code><a href="ui-questions.html">ui_nope()</a></code> have their own <a href="ui-questions.html">help page</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ui_line(x, .envir = parent.frame())
+
+ui_todo(x, .envir = parent.frame())
+
+ui_done(x, .envir = parent.frame())
+
+ui_oops(x, .envir = parent.frame())
+
+ui_info(x, .envir = parent.frame())
+
+ui_code_block(x, copy = interactive(), .envir = parent.frame())
+
+ui_stop(x, .envir = parent.frame())
+
+ui_warn(x, .envir = parent.frame())
+
+ui_field(x)
+
+ui_value(x)
+
+ui_path(x, base = NULL)
+
+ui_code(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A character vector.
+</p>
+<p>For block styles, conditions, and questions, each element of the
+vector becomes a line, and the result is processed by <code><a href="../../glue/html/glue.html">glue::glue()</a></code>.
+For inline styles, each element of the vector becomes an entry in a
+comma separated list.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Used to ensure that <code><a href="../../glue/html/glue.html">glue::glue()</a></code> gets the correct
+environment. For expert use only.</p>
+</td></tr>
+<tr valign="top"><td><code>copy</code></td>
+<td>
+<p>If <code>TRUE</code>, the session is interactive, and the clipr package
+is installed, will copy the code block to the clipboard.</p>
+</td></tr>
+<tr valign="top"><td><code>base</code></td>
+<td>
+<p>If specified, paths will be displayed relative to this path.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The block styles, conditions, and questions are called for their
+side-effect. The inline styles return a string.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other user interface functions: <code><a href="ui-questions.html">ui-questions</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+new_val &lt;- "oxnard"
+ui_done("{ui_field('name')} set to {ui_value(new_val)}")
+ui_todo("Redocument with {ui_code('devtools::document()')}")
+
+ui_code_block(c(
+  "Line 1",
+  "Line 2",
+  "Line 3"
+))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

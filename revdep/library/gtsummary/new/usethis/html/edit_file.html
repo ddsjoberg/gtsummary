@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Open file for editing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for edit_file {usethis}"><tr><td>edit_file {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Open file for editing</h2>
+
+<h3>Description</h3>
+
+<p>Opens a file for editing in RStudio, if that is the active environment, or
+via <code><a href="../../utils/html/file.edit.html">utils::file.edit()</a></code> otherwise. If the file does not exist, it is
+created. If the parent directory does not exist, it is also created.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+edit_file(path, open = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>Path to target file.</p>
+</td></tr>
+<tr valign="top"><td><code>open</code></td>
+<td>
+<p>If, <code>NULL</code>, the default, will open the file when in an
+interactive environment that is not running tests. Use <code>TRUE</code> or
+<code>FALSE</code> to override the default.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Target path, invisibly.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+edit_file("DESCRIPTION")
+edit_file("~/.gitconfig")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

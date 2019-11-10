@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create or edit R or test files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_r {usethis}"><tr><td>use_r {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create or edit R or test files</h2>
+
+<h3>Description</h3>
+
+<p>This pair of functions makes it easy to create paired R and test files,
+using the convention that the tests for <code>R/foofy.R</code> should live
+in <code>tests/testhat/test-foofy.R</code>. You can use them to create new files
+from scratch by supplying <code>name</code>, or if you use RStudio, you can call
+to create (or navigate to) the paired file based on the currently open
+script.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_r(name = NULL, open = NULL)
+
+use_test(name = NULL, open = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>Either a name without extension, or <code>NULL</code> to create the
+paired file based on currently open file in the script editor. If
+the R file is open, <code>use_test()</code> will create/open the corresponding
+test file; if the test file is open, <code>use_r()</code> will create/open the
+corresponding R file.</p>
+</td></tr>
+<tr valign="top"><td><code>open</code></td>
+<td>
+<p>If, <code>NULL</code>, the default, will open the file when in an
+interactive environment that is not running tests. Use <code>TRUE</code> or
+<code>FALSE</code> to override the default.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>The <a href="https://r-pkgs.org/tests.html">testing</a> and
+<a href="https://r-pkgs.org/r.html">R code</a> chapters of
+<a href="https://r-pkgs.org">R Packages</a>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

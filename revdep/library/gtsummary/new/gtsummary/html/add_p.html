@@ -81,11 +81,11 @@ the row associated with this variable is omitted from the summary table.</p>
 </td></tr>
 <tr valign="top"><td><code>include</code></td>
 <td>
-<p>Names of variables to include in output.</p>
+<p>Character vector of variable names to include from output.</p>
 </td></tr>
 <tr valign="top"><td><code>exclude</code></td>
 <td>
-<p>Names of variables to exclude from output.</p>
+<p>Character vector of variable names to exclude from output.</p>
 </td></tr>
 </table>
 
@@ -114,7 +114,13 @@ as it is for <code>tbl_regression()</code>.
 
 <h3>Example Output</h3>
 
-<p><img src="../help/figures/add_comp_ex1.png" width=60% />
+<p>Example 1
+</p>
+<p><img src="../help/figures/add_p_ex1.png" width=60% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/add_p_ex2.png" width=45% />
 </p>
 
 
@@ -137,31 +143,37 @@ as it is for <code>tbl_regression()</code>.
 <code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a></code>,
 <code><a href="modify_header.html">modify_header</a></code>,
 <code><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a></code>,
-<code><a href="tbl_summary.html">tbl_summary</a></code>
+<code><a href="tbl_merge.html">tbl_merge</a></code>, <code><a href="tbl_summary.html">tbl_summary</a></code>
 </p>
 
 
 <h3>Examples</h3>
 
 <pre>
-add_comp_ex1 &lt;-
+add_p_ex1 &lt;-
   trial %&gt;%
   dplyr::select(age, grade, response, trt) %&gt;%
   tbl_summary(by = trt) %&gt;%
   add_p()
 
 # Conduct a custom McNemar test for response,
-# The custom function must return a single p-value, or NA
-add_p_test.mcnemar &lt;- function(data, variable, by, ...) {
-   stats::mcnemar.test(data[[variable]], data[[by]])$p.value
- }
+# Function must return a named list of the p-value and the
+# test name: list(p = 0.123, test = "McNemar's test")
+# The '...' must be included as input
+# This feature is experimental, and the API may change in the future
+my_mcnemar &lt;- function(data, variable, by, ...) {
+  result &lt;- list()
+  result$p &lt;- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+  result$test &lt;- "McNemar\\'s test"
+  result
+}
 
-trial %&gt;%
-   dplyr::select(age, grade, response, trt) %&gt;%
-   tbl_summary(by = trt) %&gt;%
-   add_p(test = "response" ~ "mcnemar")
+add_p_ex2 &lt;-
+  trial[c("response", "trt")] %&gt;%
+  tbl_summary(by = trt) %&gt;%
+  add_p(test = vars(response) ~ "my_mcnemar")
 
 </pre>
 
-<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.0 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.2 <a href="00Index.html">Index</a>]</div>
 </body></html>

@@ -11,9 +11,9 @@
 
 <p>Assists in patching together more complex tables. <code>tbl_stack()</code> appends two
 or more <code>tbl_regression</code> or <code>tbl_merge</code> objects.
-gt attributes from the first regression object are utilized for output table.
-If combining <code>tbl_stack()</code> and <code>tbl_merge()</code>, merge first then stack, or stack
-first and then merge.
+gt attributes from the first regression object are utilized for output
+table (read: don't stack a <code>tbl_regression</code> object on top of a <code>tbl_summary</code>
+object).
 </p>
 
 
@@ -93,7 +93,7 @@ t1 &lt;-
   glm(response ~ trt, trial, family = binomial) %&gt;%
   tbl_regression(
     exponentiate = TRUE,
-    label = list("trt" ~ "Treatment (unadjusted)")
+    label = list(vars(trt) ~ "Treatment (unadjusted)")
   )
 
 t2 &lt;-
@@ -101,7 +101,7 @@ t2 &lt;-
   tbl_regression(
     include = "trt",
     exponentiate = TRUE,
-    label = list("trt" ~ "Treatment (adjusted)")
+    label = list(vars(trt) ~ "Treatment (adjusted)")
   )
 
 tbl_stack_ex1 &lt;- tbl_stack(list(t1, t2))
@@ -112,7 +112,7 @@ t3 &lt;-
   coxph(Surv(ttdeath, death) ~ trt, trial) %&gt;%
   tbl_regression(
     exponentiate = TRUE,
-    label = list("trt" ~ "Treatment (unadjusted)")
+    label = list(vars(trt) ~ "Treatment (unadjusted)")
   )
 
 t4 &lt;-
@@ -120,7 +120,7 @@ t4 &lt;-
   tbl_regression(
     include = "trt",
     exponentiate = TRUE,
-    label = list("trt" ~ "Treatment (adjusted)")
+    label = list(vars(trt) ~ "Treatment (adjusted)")
   )
 
 
@@ -131,5 +131,5 @@ tbl_stack_ex2 &lt;-
   tbl_stack(list(row1, row2))
 </pre>
 
-<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.0 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.2 <a href="00Index.html">Index</a>]</div>
 </body></html>

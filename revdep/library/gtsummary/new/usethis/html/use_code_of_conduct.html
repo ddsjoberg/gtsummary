@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add a code of conduct</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_code_of_conduct {usethis}"><tr><td>use_code_of_conduct {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add a code of conduct</h2>
+
+<h3>Description</h3>
+
+<p>Adds a <code>CODE_OF_CONDUCT.md</code> file to the active project and lists in
+<code>.Rbuildignore</code>, in the case of a package. The goal of a code of conduct is
+to foster an environment of inclusiveness, and to explicitly discourage
+inappropriate behaviour. The template comes from
+<a href="https://contributor-covenant.org">https://contributor-covenant.org</a>, version 1:
+<a href="https://contributor-covenant.org/version/1/0/0">https://contributor-covenant.org/version/1/0/0</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_code_of_conduct(path = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>Path of the directory to put <code>CODE_OF_CONDUCT.md</code> in, relative to
+the active project. Passed along to <code><a href="use_directory.html">use_directory()</a></code>. Default is to locate
+at top-level, but <code>.github/</code> is also common.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If your package is going to CRAN, the link to the CoC in your README must
+be an absolute link to a rendered website as <code>CODE_OF_CONDUCT.md</code> is not
+included in the package sent to CRAN. <code>use_code_of_conduct()</code> will
+automatically generate this link if you use pkgdown and have set the
+<code>url</code> field in <code>pkgdown.yml</code>; otherwise it'll link to
+<a href="https://contributor-covenant.org/version/1/0/0">https://contributor-covenant.org/version/1/0/0</a>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

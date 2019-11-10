@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add an RMarkdown Template</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_rmarkdown_template {usethis}"><tr><td>use_rmarkdown_template {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add an RMarkdown Template</h2>
+
+<h3>Description</h3>
+
+<p>Adds files and directories necessary to add a custom rmarkdown template to
+RStudio. It creates:
+</p>
+
+<ul>
+<li> <p><code>inst/rmarkdown/templates/{{template_dir}}</code>. Main directory.
+</p>
+</li>
+<li> <p><code>skeleton/skeleton.Rmd</code>. Your template Rmd file.
+</p>
+</li>
+<li> <p><code>template.yml</code> with basic information filled in.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+use_rmarkdown_template(template_name = "Template Name",
+  template_dir = NULL,
+  template_description = "A description of the template",
+  template_create_dir = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>template_name</code></td>
+<td>
+<p>The name as printed in the template menu.</p>
+</td></tr>
+<tr valign="top"><td><code>template_dir</code></td>
+<td>
+<p>Name of the directory the template will live in within
+<code>inst/rmarkdown/templates</code>. If none is provided by the user, it will be
+created from <code>template_name</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>template_description</code></td>
+<td>
+<p>Sets the value of <code>description</code> in
+<code>template.yml</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>template_create_dir</code></td>
+<td>
+<p>Sets the value of <code>create_dir</code> in <code>template.yml</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+use_rmarkdown_template()
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

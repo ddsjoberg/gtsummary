@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Continuous integration setup and badges</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ci {usethis}"><tr><td>ci {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Continuous integration setup and badges</h2>
+
+<h3>Description</h3>
+
+<p>Sets up continuous integration (CI) services for an R package that is
+developed on GitHub. CI services can run <code>R CMD check</code> automatically on
+various platforms, triggered by each push or pull request. These functions
+</p>
+
+<ul>
+<li><p> Add service-specific configuration files and add them to <code>.Rbuildignore</code>.
+</p>
+</li>
+<li><p> Activate a service or give the user a detailed prompt.
+</p>
+</li>
+<li><p> Provide the markdown to insert a badge into README.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+use_travis(browse = interactive(), ext = c("org", "com"))
+
+use_travis_badge(ext = "org")
+
+use_appveyor(browse = interactive())
+
+use_appveyor_badge()
+
+use_gitlab_ci()
+
+use_circleci(browse = interactive(), image = "rocker/verse:latest")
+
+use_circleci_badge()
+
+use_azure_pipelines(browse = interactive())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>browse</code></td>
+<td>
+<p>Open a browser window to enable automatic builds for the
+package.</p>
+</td></tr>
+<tr valign="top"><td><code>ext</code></td>
+<td>
+<p>which travis website to use. default to <code>"org"</code>for
+https://travis-ci.org. Change to <code>"com"</code> for https://travis-ci.com.</p>
+</td></tr>
+<tr valign="top"><td><code>image</code></td>
+<td>
+<p>The Docker image to use for build. Must be available on
+<a href="https://hub.docker.com">DockerHub</a>. The
+<a href="https://hub.docker.com/r/rocker/verse">rocker/verse</a> image includes TeX
+Live, pandoc, and the tidyverse packages. For a minimal image, try
+<a href="https://hub.docker.com/r/rocker/r-ver">rocker/r-ver</a>. To specify a version
+of R, change the tag from <code>latest</code> to the version you want, e.g.
+<code>rocker/r-ver:3.5.3</code>.</p>
+</td></tr>
+</table>
+
+
+<h3><code>use_travis()</code></h3>
+
+<p>Adds a basic <code>.travis.yml</code> to the top-level directory of a package. This is a
+configuration file for the <a href="https://travis-ci.org/">Travis CI</a> continuous
+integration service.
+</p>
+
+
+<h3><code>use_travis_badge()</code></h3>
+
+<p>Only adds the <a href="https://travis-ci.org/">Travis CI</a> badge. Use for a project
+where Travis is already configured.
+</p>
+
+
+<h3><code>use_appveyor()</code></h3>
+
+<p>Adds a basic <code>appveyor.yml</code> to the top-level directory of a package. This is
+a configuration file for the <a href="https://www.appveyor.com">AppVeyor</a> continuous
+integration service for Windows.
+</p>
+
+
+<h3><code>use_appveyor_badge()</code></h3>
+
+<p>Only adds the <a href="https://www.appveyor.com">AppVeyor</a> badge. Use for a project
+where AppVeyor is already configured.
+</p>
+
+
+<h3><code>use_gitlab_ci()</code></h3>
+
+<p>Adds a basic <code>.gitlab-ci.yml</code> to the top-level directory of a package. This is
+a configuration file for the <a href="https://docs.gitlab.com/ee/ci/">GitLab CI/CD</a> continuous
+integration service for GitLab.
+</p>
+
+
+<h3><code>use_circleci()</code></h3>
+
+<p>Adds a basic <code>.circleci/config.yml</code> to the top-level directory of a package. This is a
+configuration file for the <a href="https://circleci.com/">CircleCI</a> continuous
+integration service.
+</p>
+
+
+<h3><code>use_circleci_badge()</code></h3>
+
+<p>Only adds the <a href="https://www.circleci.com">Circle CI</a> badge. Use for a project
+where Circle CI is already configured.
+</p>
+
+
+<h3><code>use_azure_pipelines()</code></h3>
+
+<p>Adds a basic <code>azure-pipelines.yml</code> to the top-level directory of a package. This is
+a configuration file for the <a href="https://azure.microsoft.com/en-us/services/devops/pipelines/">Azure Pipelines</a> continuous
+integration service.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -9,8 +9,10 @@
 
 <h3>Description</h3>
 
-<p>This function uses <a href="../../broom/html/tidy.html">broom::tidy</a> and <a href="../../broom.mixed/html/tidy.html">broom.mixed::tidy</a>
-to perform the initial model formatting. Review the
+<p>This function takes a regression model object and returns a formatted table
+that is publication-ready. The function is highly customizable
+allowing the user to obtain a bespoke summary table of the
+regression model results. Review the
 <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html">tbl_regression vignette</a>
 for detailed examples.
 </p>
@@ -20,8 +22,9 @@ for detailed examples.
 
 <pre>
 tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
-  exclude = NULL, show_yesno = NULL, conf.level = NULL,
-  intercept = FALSE, estimate_fun = NULL, pvalue_fun = NULL)
+  exclude = NULL, show_single_row = NULL, conf.level = NULL,
+  intercept = FALSE, estimate_fun = NULL, pvalue_fun = NULL,
+  show_yesno = NULL)
 </pre>
 
 
@@ -44,18 +47,18 @@ coefficient estimates. Default is <code>FALSE</code>.</p>
 </td></tr>
 <tr valign="top"><td><code>include</code></td>
 <td>
-<p>Names of variables to include in output.</p>
+<p>Character vector of variable names to include from output.</p>
 </td></tr>
 <tr valign="top"><td><code>exclude</code></td>
 <td>
-<p>Names of variables to exclude from output.</p>
+<p>Character vector of variable names to exclude from output.</p>
 </td></tr>
-<tr valign="top"><td><code>show_yesno</code></td>
+<tr valign="top"><td><code>show_single_row</code></td>
 <td>
-<p>By default yes/no categorical variables are printed on a
-single row, when the 'No' category is the reference group.  To print both
-levels in the output table, include the variable name in the show_yesno
-vector, e.g. 'show_yesno = c(&quot;var1&quot;, &quot;var2&quot;)&ldquo;</p>
+<p>By default categorical variables are printed on
+multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+the regression coefficient on a single row, include the variable name here,
+e.g. <code>show_single_row = c("var1", "var2")</code></p>
 </td></tr>
 <tr valign="top"><td><code>conf.level</code></td>
 <td>
@@ -81,6 +84,10 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
 <code>purrr::partial(style_pvalue, digits = 2)</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>show_yesno</code></td>
+<td>
+<p>deprecated</p>
 </td></tr>
 </table>
 
@@ -114,11 +121,10 @@ also be set.
 
 <h3>Note</h3>
 
-<p>The N reported in the <code>tbl_regression()</code> output is the number of observations
+<p>The N reported in the output is the number of observations
 in the data frame <code>model.frame(x)</code>. Depending on the model input, this N
-may represent different quantities. In most cases, it is the total number of
-observations in your model; however, the precise definition of an observation,
-or unit of analysis, may differ across models. Here are some common examples.
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.
 </p>
 
 <ol>
@@ -190,7 +196,13 @@ library(lme4)
 tbl_regression_ex3 &lt;-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %&gt;%
   tbl_regression(exponentiate = TRUE)
+
+# for convenience, you can also pass named lists to any arguments
+# that accept formulas (e.g label, etc.)
+ glm(response ~ age + grade, trial, family = binomial(link = "logit")) %&gt;%
+    tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
+
 </pre>
 
-<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.0 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.2 <a href="00Index.html">Index</a>]</div>
 </body></html>

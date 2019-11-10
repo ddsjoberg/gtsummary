@@ -1,17 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head><title>R: Presentation-Ready Data Summary Tables</title>
+<head><title>R: Presentation-Ready Data Summary and Analytic Result Tables</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
-<h1> Presentation-Ready Data Summary Tables
+<h1> Presentation-Ready Data Summary and Analytic Result Tables
 <img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
 </h1>
 <hr/>
 <div style="text-align: center;">
 <a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
 <a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
-</div><h2>Documentation for package &lsquo;gtsummary&rsquo; version 0.1.0</h2>
+</div><h2>Documentation for package &lsquo;gtsummary&rsquo; version 1.2.1</h2>
 
 <ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
 <li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
@@ -21,136 +21,144 @@
 
 
 <table width="100%">
-<tr><td style="width: 25%;"><a href="pipe.html">%&gt;%</a></td>
-<td>'magrittr' Pipe operator '%&gt;%'</td></tr>
-<tr><td style="width: 25%;"><a href="add_comparison.html">add_comparison</a></td>
-<td>Adds p-values to the output comparing values across groups</td></tr>
-<tr><td style="width: 25%;"><a href="add_global.html">add_global</a></td>
+<tr><td style="width: 25%;"><a href="add_global_p.html">add_global_p</a></td>
 <td>Adds the global p-value for a categorical variables</td></tr>
-<tr><td style="width: 25%;"><a href="add_global.fmt_regression.html">add_global.fmt_regression</a></td>
-<td>Adds the global p-value for a categorical variables in 'fmt_regression' objects</td></tr>
-<tr><td style="width: 25%;"><a href="add_global.fmt_uni_regression.html">add_global.fmt_uni_regression</a></td>
-<td>Adds the global p-value for a categorical variables in 'fmt_uni_regression' objects</td></tr>
+<tr><td style="width: 25%;"><a href="add_global_p.tbl_regression.html">add_global_p.tbl_regression</a></td>
+<td>Adds the global p-value for categorical variables</td></tr>
+<tr><td style="width: 25%;"><a href="add_global_p.tbl_uvregression.html">add_global_p.tbl_uvregression</a></td>
+<td>Adds the global p-value for categorical variables</td></tr>
 <tr><td style="width: 25%;"><a href="add_n.html">add_n</a></td>
-<td>Adds a column with N (or N missing) for each variable</td></tr>
+<td>Add column with N</td></tr>
+<tr><td style="width: 25%;"><a href="add_nevent.html">add_nevent</a></td>
+<td>Add number of events to a regression table</td></tr>
+<tr><td style="width: 25%;"><a href="add_nevent.tbl_regression.html">add_nevent.tbl_regression</a></td>
+<td>Add number of events to a regression table</td></tr>
+<tr><td style="width: 25%;"><a href="add_nevent.tbl_uvregression.html">add_nevent.tbl_uvregression</a></td>
+<td>Add number of events to a regression table</td></tr>
 <tr><td style="width: 25%;"><a href="add_overall.html">add_overall</a></td>
-<td>Adds a column with overall summary statistics to an existing 'fmt_table1' object where descriptive statistics are split by a variable</td></tr>
+<td>Add column with overall summary statistics</td></tr>
+<tr><td style="width: 25%;"><a href="add_p.html">add_p</a></td>
+<td>Adds p-values to summary tables</td></tr>
 <tr><td style="width: 25%;"><a href="add_q.html">add_q</a></td>
-<td>Add a column of q values to objects to account for multiple comparisons</td></tr>
-<tr><td style="width: 25%;"><a href="add_q.fmt_table1.html">add_q.fmt_table1</a></td>
-<td>Add a column of q values to 'fmt_table1' object to account for multiple comparisons in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="add_q.fmt_uni_regression.html">add_q.fmt_uni_regression</a></td>
-<td>Add a column of q values to 'fmt_uni_regression' object to account for multiple comparisons</td></tr>
+<td>Add a column of q values to account for multiple comparisons</td></tr>
+<tr><td style="width: 25%;"><a href="add_q.tbl_summary.html">add_q.tbl_summary</a></td>
+<td>Add a column of q-values to account for multiple comparisons</td></tr>
+<tr><td style="width: 25%;"><a href="add_q.tbl_uvregression.html">add_q.tbl_uvregression</a></td>
+<td>Add a column of q-values to account for multiple comparisons</td></tr>
 <tr><td style="width: 25%;"><a href="add_stat_label.html">add_stat_label</a></td>
-<td>Adds a column showing a label for the summary statistics shown in each row</td></tr>
-<tr><td style="width: 25%;"><a href="as_data_frame.html">as_data_frame</a></td>
-<td>The 'tibble' package's 'as_data_frame' function is an alias for 'tibble::as_tibble'</td></tr>
-<tr><td style="width: 25%;"><a href="as_tibble.fmt_regression.html">as_data_frame.fmt_regression</a></td>
-<td>Convert 'fmt_regression' objects to data frame</td></tr>
-<tr><td style="width: 25%;"><a href="as_tibble.fmt_table1.html">as_data_frame.fmt_table1</a></td>
-<td>Convert 'fmt_table1' objects to data frame</td></tr>
-<tr><td style="width: 25%;"><a href="as_tibble.fmt_uni_regression.html">as_data_frame.fmt_uni_regression</a></td>
-<td>Convert 'fmt_uni_regression' objects to data frame</td></tr>
-<tr><td style="width: 25%;"><a href="as_tibble.html">as_tibble</a></td>
-<td>The 'tibble' package's 'as_tibble' function</td></tr>
-<tr><td style="width: 25%;"><a href="as_tibble.fmt_regression.html">as_tibble.fmt_regression</a></td>
-<td>Convert 'fmt_regression' objects to data frame</td></tr>
-<tr><td style="width: 25%;"><a href="as_tibble.fmt_table1.html">as_tibble.fmt_table1</a></td>
-<td>Convert 'fmt_table1' objects to data frame</td></tr>
-<tr><td style="width: 25%;"><a href="as_tibble.fmt_uni_regression.html">as_tibble.fmt_uni_regression</a></td>
-<td>Convert 'fmt_uni_regression' objects to data frame</td></tr>
-<tr><td style="width: 25%;"><a href="bold_labels.html">bold_labels</a></td>
-<td>Bold variable labels in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_labels.fmt_regression.html">bold_labels.fmt_regression</a></td>
-<td>Bold or unbold variable labels for 'fmt_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_labels.fmt_table1.html">bold_labels.fmt_table1</a></td>
-<td>Bold or unbold variable labels for 'fmt_table1' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_labels.fmt_uni_regression.html">bold_labels.fmt_uni_regression</a></td>
-<td>Bold or unbold variable labels for 'fmt_uni_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_levels.html">bold_levels</a></td>
-<td>Bold variable levels in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_levels.fmt_regression.html">bold_levels.fmt_regression</a></td>
-<td>Bold or unbold variable levels for 'fmt_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_levels.fmt_table1.html">bold_levels.fmt_table1</a></td>
-<td>Bold or unbold variable levels for 'fmt_table1' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_levels.fmt_uni_regression.html">bold_levels.fmt_uni_regression</a></td>
-<td>Bold or unbold variable levels for 'fmt_uni_regression' objects in Rmarkdown</td></tr>
+<td>Add statistic labels column</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_categorical</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_character</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_continuous</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_dichotomous</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_double</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_factor</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_integer</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_logical</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_numeric</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="as_gt.html">as_gt</a></td>
+<td>Convert gtsummary object to a gt_tbl object</td></tr>
+<tr><td style="width: 25%;"><a href="as_kable.html">as_kable</a></td>
+<td>Convert to knitr_kable object</td></tr>
+<tr><td style="width: 25%;"><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></td>
+<td>Bold or Italicize labels or levels in gtsummary tables</td></tr>
+<tr><td style="width: 25%;"><a href="bold_italicize_labels_levels.html">bold_labels</a></td>
+<td>Bold or Italicize labels or levels in gtsummary tables</td></tr>
+<tr><td style="width: 25%;"><a href="bold_italicize_labels_levels.html">bold_levels</a></td>
+<td>Bold or Italicize labels or levels in gtsummary tables</td></tr>
 <tr><td style="width: 25%;"><a href="bold_p.html">bold_p</a></td>
-<td>Bold significant p-values in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_p.fmt_regression.html">bold_p.fmt_regression</a></td>
-<td>Bold or unbold p-values for 'fmt_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_p.fmt_table1.html">bold_p.fmt_table1</a></td>
-<td>Bold or unbold p-values for 'fmt_table1' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="bold_p.fmt_uni_regression.html">bold_p.fmt_uni_regression</a></td>
-<td>Bold or unbold p-values for 'fmt_uni_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="fmt_beta.html">fmt_beta</a></td>
-<td>Round and format regression model coefficients</td></tr>
-<tr><td style="width: 25%;"><a href="fmt_percent.html">fmt_percent</a></td>
-<td>Formats percentages to be displayed in tables or text of report.</td></tr>
-<tr><td style="width: 25%;"><a href="fmt_pvalue.html">fmt_pvalue</a></td>
-<td>Formats p-values to be displayed in tables or text of report.</td></tr>
-<tr><td style="width: 25%;"><a href="fmt_regression.html">fmt_regression</a></td>
-<td>Turn a regression model object into a markdown-ready tibble.</td></tr>
-<tr><td style="width: 25%;"><a href="fmt_table1.html">fmt_table1</a></td>
-<td>Calculates and formats descriptive statistics for Table 1.</td></tr>
-<tr><td style="width: 25%;"><a href="fmt_uni_regression.html">fmt_uni_regression</a></td>
-<td>Creates table of univariate regression results</td></tr>
-<tr><td style="width: 25%;"><a href="indent_key.html">indent_key</a></td>
-<td>Make indices compatible with 'add_indent'</td></tr>
-<tr><td style="width: 25%;"><a href="indent_key.fmt_regression.html">indent_key.fmt_regression</a></td>
-<td>Makes index of factor variables requiring indent from 'fmt_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="indent_key.fmt_table1.html">indent_key.fmt_table1</a></td>
-<td>Makes index of factors requiring indent from 'fmt_table1' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="indent_key.fmt_uni_regression.html">indent_key.fmt_uni_regression</a></td>
-<td>Makes index of factor variables requiring indent from 'fmt_regression' objects in Rmarkdown</td></tr>
+<td>Bold significant p-values or q-values</td></tr>
+<tr><td style="width: 25%;"><a href="bold_p.tbl_regression.html">bold_p.tbl_regression</a></td>
+<td>Bold significant p-values or q-values</td></tr>
+<tr><td style="width: 25%;"><a href="bold_p.tbl_stack.html">bold_p.tbl_stack</a></td>
+<td>Bold significant p-values or q-values</td></tr>
+<tr><td style="width: 25%;"><a href="bold_p.tbl_summary.html">bold_p.tbl_summary</a></td>
+<td>Bold significant p-values or q-values</td></tr>
+<tr><td style="width: 25%;"><a href="bold_p.tbl_uvregression.html">bold_p.tbl_uvregression</a></td>
+<td>Bold significant p-values or q-values</td></tr>
+<tr><td style="width: 25%;"><a href="gtsummary_logo.html">gtsummary_logo</a></td>
+<td>The gtsummary logo, using ASCII or Unicode characters</td></tr>
 <tr><td style="width: 25%;"><a href="inline_text.html">inline_text</a></td>
-<td>Report statistics from 'fmt_table1' and 'fmt_regression' inline in an Rmarkdown document</td></tr>
-<tr><td style="width: 25%;"><a href="inline_text.fmt_regression.html">inline_text.fmt_regression</a></td>
-<td>Report statistics from 'fmt_regression' and 'fmt_uni_regression' inline in an Rmarkdown document</td></tr>
-<tr><td style="width: 25%;"><a href="inline_text.fmt_table1.html">inline_text.fmt_table1</a></td>
-<td>Report statistics from 'fmt_table1' inline in an Rmarkdown document</td></tr>
-<tr><td style="width: 25%;"><a href="inline_text.fmt_regression.html">inline_text.fmt_uni_regression</a></td>
-<td>Report statistics from 'fmt_regression' and 'fmt_uni_regression' inline in an Rmarkdown document</td></tr>
-<tr><td style="width: 25%;"><a href="italicize_labels.html">italicize_labels</a></td>
-<td>Italicize variable labels in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="italicize_labels.fmt_regression.html">italicize_labels.fmt_regression</a></td>
-<td>Italicize or unitalicize labels for 'fmt_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="italicize_labels.fmt_table1.html">italicize_labels.fmt_table1</a></td>
-<td>Italicize or unitalicize labels for 'fmt_table1' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="italicize_labels.fmt_uni_regression.html">italicize_labels.fmt_uni_regression</a></td>
-<td>Italicize or unitalicize labels for 'fmt_uni_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="italicize_levels.html">italicize_levels</a></td>
-<td>Italicize variable levels in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="italicize_levels.fmt_regression.html">italicize_levels.fmt_regression</a></td>
-<td>Italicize or unitalicize levels for 'fmt_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="italicize_levels.fmt_table1.html">italicize_levels.fmt_table1</a></td>
-<td>Italicize or unitalicize levels for 'fmt_table1' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="italicize_levels.fmt_uni_regression.html">italicize_levels.fmt_uni_regression</a></td>
-<td>Italicize or unitalicize levels for 'fmt_uni_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="knit_print.html">knit_print</a></td>
-<td>A custom printing function for Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="knit_print.fmt_regression.html">knit_print.fmt_regression</a></td>
-<td>Print 'fmt_regression' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="knit_print.fmt_table1.html">knit_print.fmt_table1</a></td>
-<td>Print 'fmt_table1' objects in Rmarkdown</td></tr>
-<tr><td style="width: 25%;"><a href="knit_print.fmt_uni_regression.html">knit_print.fmt_uni_regression</a></td>
-<td>Print 'fmt_uni_regression' objects in Rmarkdown</td></tr>
+<td>Report statistics from gtsummary tables inline</td></tr>
+<tr><td style="width: 25%;"><a href="inline_text.tbl_regression.html">inline_text.tbl_regression</a></td>
+<td>Report statistics from regression summary tables inline</td></tr>
+<tr><td style="width: 25%;"><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a></td>
+<td>Report statistics from summary tables inline</td></tr>
+<tr><td style="width: 25%;"><a href="inline_text.tbl_survival.html">inline_text.tbl_survival</a></td>
+<td>Report statistics from survival summary tables inline</td></tr>
+<tr><td style="width: 25%;"><a href="inline_text.tbl_uvregression.html">inline_text.tbl_uvregression</a></td>
+<td>Report statistics from regression summary tables inline</td></tr>
+<tr><td style="width: 25%;"><a href="bold_italicize_labels_levels.html">italicize_labels</a></td>
+<td>Bold or Italicize labels or levels in gtsummary tables</td></tr>
+<tr><td style="width: 25%;"><a href="bold_italicize_labels_levels.html">italicize_levels</a></td>
+<td>Bold or Italicize labels or levels in gtsummary tables</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">knit_print.tbl_merge</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">knit_print.tbl_regression</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">knit_print.tbl_stack</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">knit_print.tbl_summary</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">knit_print.tbl_survival</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">knit_print.tbl_uvregression</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
 <tr><td style="width: 25%;"><a href="modify_header.html">modify_header</a></td>
-<td>Modifies header rows for existing 'fmt_table1', 'fmt_regression', and 'fmt_uni_regression' objects</td></tr>
-<tr><td style="width: 25%;"><a href="modify_header.fmt_regression.html">modify_header.fmt_regression</a></td>
-<td>Modifies header rows for existing 'fmt_regression' objects.</td></tr>
-<tr><td style="width: 25%;"><a href="modify_header.fmt_table1.html">modify_header.fmt_table1</a></td>
-<td>Modifies header rows for existing 'fmt_table1' objects.</td></tr>
-<tr><td style="width: 25%;"><a href="modify_header.fmt_uni_regression.html">modify_header.fmt_uni_regression</a></td>
-<td>Modifies header rows for existing 'fmt_uni_regression' objects.</td></tr>
-<tr><td style="width: 25%;"><a href="print.fmt_regression.html">print.fmt_regression</a></td>
-<td>Print 'fmt_regression' objects</td></tr>
-<tr><td style="width: 25%;"><a href="print.fmt_table1.html">print.fmt_table1</a></td>
-<td>Print 'fmt_table1' objects</td></tr>
-<tr><td style="width: 25%;"><a href="print.fmt_uni_regression.html">print.fmt_uni_regression</a></td>
-<td>Print 'fmt_uni_regression' objects</td></tr>
-<tr><td style="width: 25%;"><a href="row_to_name.html">row_to_name</a></td>
-<td>Renames columns to values in a row of data frame</td></tr>
+<td>Modify column headers in gtsummary tables</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">print.tbl_merge</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">print.tbl_regression</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">print.tbl_stack</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">print.tbl_summary</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">print.tbl_survival</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">print.tbl_uvregression</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="print_gtsummary.html">print_gtsummary</a></td>
+<td>print and knit_print methods for gtsummary objects</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">select_helpers</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="sort_p.tbl_regression.html">sort_p.tbl_regression</a></td>
+<td>Sort variables in table by ascending p-values</td></tr>
+<tr><td style="width: 25%;"><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a></td>
+<td>Sort variables in table by ascending p-values</td></tr>
+<tr><td style="width: 25%;"><a href="sort_p.tbl_uvregression.html">sort_p.tbl_uvregression</a></td>
+<td>Sort variables in table by ascending p-values</td></tr>
+<tr><td style="width: 25%;"><a href="style_percent.html">style_percent</a></td>
+<td>Style percentages to be displayed in tables or text</td></tr>
+<tr><td style="width: 25%;"><a href="style_pvalue.html">style_pvalue</a></td>
+<td>Style p-values to be displayed in tables or text</td></tr>
+<tr><td style="width: 25%;"><a href="style_ratio.html">style_ratio</a></td>
+<td>Implement significant figure-like rounding for ratios</td></tr>
+<tr><td style="width: 25%;"><a href="style_sigfig.html">style_sigfig</a></td>
+<td>Implement significant figure-like rounding</td></tr>
+<tr><td style="width: 25%;"><a href="tbl_merge.html">tbl_merge</a></td>
+<td>Merge two or more gtsummary regression objects</td></tr>
+<tr><td style="width: 25%;"><a href="tbl_regression.html">tbl_regression</a></td>
+<td>Display regression model results in table</td></tr>
+<tr><td style="width: 25%;"><a href="tbl_stack.html">tbl_stack</a></td>
+<td>Stacks two or more gtsummary regression objects</td></tr>
+<tr><td style="width: 25%;"><a href="tbl_summary.html">tbl_summary</a></td>
+<td>Create a table of summary statistics</td></tr>
+<tr><td style="width: 25%;"><a href="tbl_survival.html">tbl_survival</a></td>
+<td>Creates table of univariate summary statistics for time-to-event endpoints</td></tr>
+<tr><td style="width: 25%;"><a href="tbl_survival.survfit.html">tbl_survival.survfit</a></td>
+<td>Creates table of survival probabilities</td></tr>
+<tr><td style="width: 25%;"><a href="tbl_uvregression.html">tbl_uvregression</a></td>
+<td>Display univariate regression model results in table</td></tr>
 <tr><td style="width: 25%;"><a href="trial.html">trial</a></td>
 <td>Results from a simulated trial of Placebo vs Drug</td></tr>
 </table>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Increment package version</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_version {usethis}"><tr><td>use_version {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Increment package version</h2>
+
+<h3>Description</h3>
+
+<p><code>use_version()</code> increments the &quot;Version&quot; field in <code>DESCRIPTION</code>,
+adds a new heading to <code>NEWS.md</code> (if it exists), and commits those changes
+(if package uses Git).
+</p>
+<p><code>use_dev_version()</code> increments to a development version, e.g.
+from 1.0.0 to 1.0.0.9000. If the existing version is already a development
+version with four components, it does nothing. Thin wrapper around
+<code>use_version()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_version(which = NULL)
+
+use_dev_version()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>which</code></td>
+<td>
+<p>A string specifying which level to increment, one of: &quot;major&quot;,
+&quot;minor&quot;, &quot;patch&quot;, &quot;dev&quot;. If <code>NULL</code>, user can choose interactively.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>The <a href="https://r-pkgs.org/description.html#version">version section</a> of <a href="https://r-pkgs.org">R Packages</a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+## for interactive selection, do this:
+use_version()
+
+## request a specific type of increment
+use_version("minor")
+use_dev_version()
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

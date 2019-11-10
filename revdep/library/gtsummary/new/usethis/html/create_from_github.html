@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create a project from a GitHub repo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for create_from_github {usethis}"><tr><td>create_from_github {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a project from a GitHub repo</h2>
+
+<h3>Description</h3>
+
+<p>Creates a new local Git repository from a repository on GitHub. It is highly
+recommended that you pre-configure or pass a GitHub personal access token
+(PAT), which is facilitated by <code><a href="browse_github_token.html">browse_github_token()</a></code>. In particular, a PAT
+is required in order for <code>create_from_github()</code> to do <a href="https://help.github.com/articles/fork-a-repo/">&quot;fork and clone&quot;</a>. It is also required
+by <code><a href="use_github.html">use_github()</a></code>, which connects existing local projects to GitHub.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+create_from_github(repo_spec, destdir = NULL, fork = NA,
+  rstudio = NULL, open = interactive(), protocol = git_protocol(),
+  credentials = NULL, auth_token = github_token(), host = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>repo_spec</code></td>
+<td>
+<p>GitHub repo specification in this form: <code>owner/repo</code>. The
+<code>repo</code> part will be the name of the new local repo.</p>
+</td></tr>
+<tr valign="top"><td><code>destdir</code></td>
+<td>
+<p>The new folder is stored here. If <code>NULL</code>, defaults to user's
+Desktop or some other conspicuous place.</p>
+</td></tr>
+<tr valign="top"><td><code>fork</code></td>
+<td>
+<p>If <code>TRUE</code>, we create and clone a fork. If <code>FALSE</code>, we clone
+<code>repo_spec</code> itself. Will be set to <code>FALSE</code> if no <code>auth_token</code> (a.k.a. PAT)
+is provided or preconfigured. Otherwise, defaults to <code>FALSE</code> if you can
+push to <code>repo_spec</code> and <code>TRUE</code> if you cannot. In the case of a fork, the
+original target repo is added to the local repo as the <code>upstream</code> remote,
+using the preferred <code>protocol</code>. The <code>master</code> branch is set to track
+<code>upstream/master</code> and is immediately pulled, which matters in the case of a
+pre-existing, out-of-date fork.</p>
+</td></tr>
+<tr valign="top"><td><code>rstudio</code></td>
+<td>
+<p>Initiate an <a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">RStudio Project</a>?
+Defaults to <code>TRUE</code> if in an RStudio session and project has no
+pre-existing <code>.Rproj</code> file. Defaults to <code>FALSE</code> otherwise.</p>
+</td></tr>
+<tr valign="top"><td><code>open</code></td>
+<td>
+<p>If <code>TRUE</code>, <a href="proj_activate.html">activates</a> the new project:
+</p>
+
+<ul>
+<li><p> If RStudio desktop, the package is opened in a new session.
+</p>
+</li>
+<li><p> If on RStudio server, the current RStudio project is activated.
+</p>
+</li>
+<li><p> Otherwise, the working directory and active project is changed.
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>protocol</code></td>
+<td>
+<p>Optional. Should be &quot;ssh&quot; or &quot;https&quot;, if specified. Defaults
+to the option <code>usethis.protocol</code> and, if unset, to an interactive choice
+or, in non-interactive sessions, &quot;ssh&quot;. <code>NA</code> triggers the interactive menu.</p>
+</td></tr>
+<tr valign="top"><td><code>credentials</code></td>
+<td>
+<p>A git2r credential object produced with
+<code><a href="../../git2r/html/cred_env.html">git2r::cred_env()</a></code>, <code><a href="../../git2r/html/cred_ssh_key.html">git2r::cred_ssh_key()</a></code>, <code><a href="../../git2r/html/cred_token.html">git2r::cred_token()</a></code>, or
+<code><a href="../../git2r/html/cred_user_pass.html">git2r::cred_user_pass()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>auth_token</code></td>
+<td>
+<p>GitHub personal access token (PAT).</p>
+</td></tr>
+<tr valign="top"><td><code>host</code></td>
+<td>
+<p>GitHub API host to use. Override with the endpoint-root for your
+GitHub enterprise instance, for example,
+&quot;https://github.hostname.com/api/v3&quot;.</p>
+</td></tr>
+</table>
+
+
+<h3>Using SSH Keys on Windows</h3>
+
+<p>If you are a Windows user who connects to GitHub using SSH, as opposed to
+HTTPS, you may need to explicitly specify the paths to your keys and register
+this credential in the current R session. This helps if git2r, which usethis
+uses for Git operations, does not automatically find your keys or handle your
+passphrase.
+</p>
+<p>In the snippet below, do whatever is necessary to make the paths correct,
+e.g., replace <code>&lt;USERNAME&gt;</code> with your Windows username. Omit the <code>passphrase</code>
+part if you don't have one. Replace <code>&lt;OWNER/REPO&gt;</code> with the appropriate
+GitHub specification. You get the idea.</p>
+<pre>creds &lt;- git2r::cred_ssh_key(
+  publickey  = "C:/Users/&lt;USERNAME&gt;/.ssh/id_rsa.pub",
+  privatekey = "C:/Users/&lt;USERNAME&gt;/.ssh/id_rsa",
+  passphrase = character(0)
+)
+use_git_protocol("ssh")
+use_git_credentials(credentials = creds)
+
+create_from_github(
+  repo_spec = "&lt;OWNER/REPO&gt;",
+  ...
+)
+</pre>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="use_github.html">use_github()</a></code> for GitHub setup advice. <code><a href="git_protocol.html">git_protocol()</a></code> and
+<code><a href="git_credentials.html">git_credentials()</a></code> for background on <code>protocol</code> and <code>credentials</code>.
+<code><a href="zip-utils.html">use_course()</a></code> for one-time download of all files in a Git repo, without
+any local or remote Git operations.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+create_from_github("r-lib/usethis")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

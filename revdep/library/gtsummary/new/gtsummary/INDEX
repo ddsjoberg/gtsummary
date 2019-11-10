@@ -14,6 +14,7 @@ add_nevent.tbl_uvregression
                         Add number of events to a regression table
 add_overall             Add column with overall summary statistics
 add_p                   Adds p-values to summary tables
+add_p_                  Standard evaluation version of add_p()
 add_q                   Add a column of q values to account for
                         multiple comparisons
 add_q.tbl_summary       Add a column of q-values to account for
@@ -24,6 +25,7 @@ add_q.tbl_uvregression
 add_stat_label          Add statistic labels column
 as_gt                   Convert gtsummary object to a gt_tbl object
 as_kable                Convert to knitr_kable object
+as_tibble_methods       Convert gtsummary object to tibble
 bold_italicize_labels_levels
                         Bold or Italicize labels or levels in gtsummary
                         tables
@@ -62,10 +64,11 @@ style_pvalue            Style p-values to be displayed in tables or
 style_ratio             Implement significant figure-like rounding for
                         ratios
 style_sigfig            Implement significant figure-like rounding
-tbl_merge               Merge two or more gtsummary regression objects
+tbl_merge               Merge two or more gtsummary objects
 tbl_regression          Display regression model results in table
 tbl_stack               Stacks two or more gtsummary regression objects
 tbl_summary             Create a table of summary statistics
+tbl_summary_            Standard evaluation version of tbl_summary()
 tbl_survival            Creates table of univariate summary statistics
                         for time-to-event endpoints
 tbl_survival.survfit    Creates table of survival probabilities

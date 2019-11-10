@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Use a directory</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for use_directory {usethis}"><tr><td>use_directory {usethis}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Use a directory</h2>
+
+<h3>Description</h3>
+
+<p><code>use_directory()</code> creates a directory (if it does not already exist) in the
+project's top-level directory. This function powers many of the other <code>use_</code>
+functions such as <code><a href="use_data.html">use_data()</a></code> and <code><a href="use_vignette.html">use_vignette()</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+use_directory(path, ignore = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>Path of the directory to create, relative to the project.</p>
+</td></tr>
+<tr valign="top"><td><code>ignore</code></td>
+<td>
+<p>Should the newly created file be added to <code>.Rbuildignore</code>?</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+use_directory("inst")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>usethis</em> version 1.5.1.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

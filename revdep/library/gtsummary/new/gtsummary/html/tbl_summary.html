@@ -20,9 +20,9 @@ for detailed examples.
 
 <pre>
 tbl_summary(data, by = NULL, label = NULL, statistic = NULL,
-  digits = NULL, type = NULL, value = NULL, group = NULL,
-  missing = c("ifany", "always", "no"), missing_text = "Unknown",
-  sort = NULL, percent = c("column", "row", "cell"))
+  digits = NULL, type = NULL, value = NULL, missing = c("ifany",
+  "always", "no"), missing_text = "Unknown", sort = NULL,
+  percent = c("column", "row", "cell"), group = NULL)
 </pre>
 
 
@@ -78,11 +78,6 @@ will default to an appropriate summary type.  See below for details.</p>
 <p>List of formulas specifying the value to display for dichotomous
 variables.  See below for details.</p>
 </td></tr>
-<tr valign="top"><td><code>group</code></td>
-<td>
-<p>DEPRECATED. Previously required to work with the 'group'
-argument in <a href="add_p.html">add_p</a>. No longer required.</p>
-</td></tr>
 <tr valign="top"><td><code>missing</code></td>
 <td>
 <p>Indicates whether to include counts of <code>NA</code> values in the table.
@@ -106,6 +101,10 @@ e.g. <code>sort = list(everything() ~ "frequency")</code></p>
 <td>
 <p>Indicates the type of percentage to return. Must be one of
 <code>"column"</code>, <code>"row"</code>, or <code>"cell"</code>. Default is <code>"column"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>group</code></td>
+<td>
+<p>DEPRECATED. Migrated to <a href="add_p.html">add_p</a></p>
 </td></tr>
 </table>
 
@@ -234,7 +233,7 @@ the <code>value</code> argument, e.g. <code>value = list("varname" ~ "level to s
 <code><a href="bold_p.tbl_summary.html">bold_p.tbl_summary</a></code>,
 <code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a></code>,
 <code><a href="modify_header.html">modify_header</a></code>,
-<code><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a></code>
+<code><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a></code>, <code><a href="tbl_merge.html">tbl_merge</a></code>
 </p>
 
 
@@ -251,11 +250,24 @@ tbl_summary_ex2 &lt;-
   dplyr::select(age, grade, response, trt) %&gt;%
   tbl_summary(
     by = trt,
-    label = list("age" ~ "Patient Age"),
+    label = list(vars(age) ~ "Patient Age"),
     statistic = list(all_continuous() ~ "{mean} ({sd})"),
     digits = list(vars(age) ~ c(0, 1))
   )
+
+# for convenience, you can also pass named lists to any arguments
+# that accept formulas (e.g label, digits, etc.)
+trial %&gt;%
+   dplyr::select(age, grade, response, trt) %&gt;%
+   tbl_summary(
+    by = trt,
+    label = list(age = "Patient Age"),
+    statistic = list(all_continuous() ~ "{mean} ({sd})"),
+    digits = list(vars(age) ~ c(0, 1))
+  )
+
+
 </pre>
 
-<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.0 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.2 <a href="00Index.html">Index</a>]</div>
 </body></html>

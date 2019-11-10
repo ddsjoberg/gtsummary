@@ -10,14 +10,15 @@
 |collate  |English_United States.1252   |
 |ctype    |English_United States.1252   |
 |tz       |America/New_York             |
-|date     |2019-08-13                   |
+|date     |2019-11-09                   |
 
 # Dependencies
 
-|package   |old   |new         |<U+0394>  |
-|:---------|:-----|:-----------|:--|
-|gtsummary |0.1.0 |1.2.0       |*  |
-|tidyr     |NA    |0.8.99.9000 |*  |
+|package   |old   |new        |<U+0394>  |
+|:---------|:-----|:----------|:--|
+|gtsummary |1.2.1 |1.2.2      |*  |
+|Rcpp      |NA    |1.0.2      |*  |
+|usethis   |NA    |1.5.1.9000 |*  |
 
 # Revdeps
 
