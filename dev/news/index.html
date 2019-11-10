@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.1.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.2.9000</span>
       </span>
     </div>
 
@@ -166,30 +166,49 @@
 <h1 class="page-header">
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
+</div>
+    <div id="gtsummary-1-2-2" class="section level1">
+<h1 class="page-header">
+<a href="#gtsummary-1-2-2" class="anchor"></a>gtsummary 1.2.2<small> Unreleased </small>
+</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New Features</h2>
 <ul>
-<li><p>Users can add an option to their script to append any {gt} calls when a {gtsummary} object is printed: <code>gtsummary.as_gt.addl_cmds</code></p></li>
-<li><p>No longer checking outcome variable name for consistency in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>—only checking independent variable names (<a href='https://github.com/ddsjoberg/gtsummary/issues/287'>#287</a>)</p></li>
-<li><p>Added a vignette documenting each global option that can be set in {gtsummary} (<a href='https://github.com/ddsjoberg/gtsummary/issues/289'>#289</a>)</p></li>
-<li><p>Added a gallery of tables possible by merging, stacking, and modifying gtsummary arguments (<a href='https://github.com/ddsjoberg/gtsummary/issues/258'>#258</a>)</p></li>
-<li><p><code>tbl_summary</code> objects are now stackable with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/255'>#255</a>)</p></li>
-<li><p>Users may now pass a list of formulas, named lists, or a combination of both (<a href='https://github.com/ddsjoberg/gtsummary/issues/251'>#251</a>)</p></li>
-<li><p>Bug fix in <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> selection where only first variable listed was being selected (<a href='https://github.com/ddsjoberg/gtsummary/issues/259'>#259</a>)</p></li>
-<li><p>The <code>by =</code> column in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> now has missing variables dropped rather than halting with error (<a href='https://github.com/ddsjoberg/gtsummary/issues/279'>#279</a>)</p></li>
-<li><p>Added {lifecycle} badges to mark deprecated and experimental functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/225'>#225</a>)</p></li>
-<li><p><code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> now interprets <code>tab_spanner =</code> text with <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/253'>#253</a>)</p></li>
-<li><p>Bug fix where logical variable labels printed as <code>NA</code> in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/248'>#248</a>)</p></li>
-<li><p>Added <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> function that converts any gtsummary table to a tibble (<a href='https://github.com/ddsjoberg/gtsummary/issues/245'>#245</a>)</p></li>
-<li><p>Improved error messaging for <code><a href="../reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/243'>#243</a>)</p></li>
+<li><p><code>tbl_summary</code> objects may be stacked and merged with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> and <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/230'>#230</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/255'>#255</a>)</p></li>
 <li><p>The <code><a href="../reference/add_n.html">add_n()</a></code> function now reports additional statistics: total N, non-missing N, missing N, and their percentages. The <code>missing =</code> argument has been deprecated in favor of the <code>statistic =</code> argument. (<a href='https://github.com/ddsjoberg/gtsummary/issues/237'>#237</a>)</p></li>
+<li><p>Users may now pass a list of formulas, named lists, or a combination of both (<a href='https://github.com/ddsjoberg/gtsummary/issues/251'>#251</a>)</p></li>
+<li><p>Users can add an option to their script to append any {gt} calls when a {gtsummary} object is printed: <code>gtsummary.as_gt.addl_cmds</code></p></li>
 <li><p>Added <code>include =</code> and <code>exclude =</code> arguments to <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/240'>#240</a>)</p></li>
-<li><p>Added ability to merge <code>tbl_summary</code> objects in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/230'>#230</a>)</p></li>
 <li><p>Added standard evaluation variants, <code><a href="../reference/tbl_summary_.html">tbl_summary_()</a></code> and <code><a href="../reference/add_p_.html">add_p_()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/223'>#223</a>)</p></li>
-<li><p>Removed <code><a href="https://rdrr.io/pkg/gt/man/cols_merge.html">gt::cols_merge()</a></code> function ahead of the {gt} package PR <a href='https://github.com/ddsjoberg/gtsummary/issues/355'>#355</a> that changes the <code>cols_merge()</code> API (<a href='https://github.com/ddsjoberg/gtsummary/issues/222'>#222</a>)</p></li>
-<li><p>Updated the <code>show_yesno</code> argument to <code>show_single_row</code>. It is now generic and any binary variable can be shown on a single row. (<a href='https://github.com/ddsjoberg/gtsummary/issues/220'>#220</a>)</p></li>
+<li><p>Added <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> function that converts any {gtsummary} table to a tibble (<a href='https://github.com/ddsjoberg/gtsummary/issues/245'>#245</a>)</p></li>
+<li><p>New <code>show_single_row</code> argument in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> allows any binary variable to be printed on a single row. Previous argument <code>show_yesno</code> is now deprecated. (<a href='https://github.com/ddsjoberg/gtsummary/issues/220'>#220</a>)</p></li>
+</ul>
+</div>
+<div id="documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h2>
+<ul>
+<li><p>Added a gallery of tables possible by merging, stacking, and modifying {gtsummary} arguments (<a href='https://github.com/ddsjoberg/gtsummary/issues/258'>#258</a>)</p></li>
+<li><p>Added a vignette documenting each global option that can be set in {gtsummary} (<a href='https://github.com/ddsjoberg/gtsummary/issues/289'>#289</a>)</p></li>
+<li><p>Added {lifecycle} badges to mark deprecated and experimental functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/225'>#225</a>)</p></li>
+</ul>
+</div>
+<div id="other-updates" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-updates" class="anchor"></a>Other Updates</h2>
+<ul>
+<li><p>The <code>by =</code> column in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> now has missing variables dropped rather than halting with error (<a href='https://github.com/ddsjoberg/gtsummary/issues/279'>#279</a>)</p></li>
+<li><p>Bug fix in <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> selection where only first variable listed was being selected (<a href='https://github.com/ddsjoberg/gtsummary/issues/259'>#259</a>)</p></li>
+<li><p>Bug fix where logical variable labels printed as <code>NA</code> in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/248'>#248</a>)</p></li>
+<li><p><code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> now interprets <code>tab_spanner =</code> text with <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/253'>#253</a>)</p></li>
+<li><p>No longer checking outcome variable name for consistency in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>—only checking independent variable names (<a href='https://github.com/ddsjoberg/gtsummary/issues/287'>#287</a>)</p></li>
+<li><p>Improved error messaging for <code><a href="../reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/243'>#243</a>)</p></li>
+<li><p>Removed <code><a href="https://rdrr.io/pkg/gt/man/cols_merge.html">gt::cols_merge()</a></code> function ahead of the {gt} package <a href="https://github.com/rstudio/gt/pull/355">PR 355</a> that changes the <code>cols_merge()</code> API (<a href='https://github.com/ddsjoberg/gtsummary/issues/222'>#222</a>)</p></li>
 <li><p>Updated API for using custom functions to calculate p-values in <code><a href="../reference/add_p.html">add_p()</a></code>. User now may reference a custom function by its name. (<a href='https://github.com/ddsjoberg/gtsummary/issues/226'>#226</a>)</p></li>
 <li><p>Removed legacy support for tidyr version less than 1.0.0 (<a href='https://github.com/ddsjoberg/gtsummary/issues/235'>#235</a>)</p></li>
-<li><p>Improvements to documentation</p></li>
 </ul>
+</div>
 </div>
     <div id="gtsummary-1-2-1" class="section level1">
 <h1 class="page-header">
@@ -290,6 +309,7 @@
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
         <li><a href="#gtsummary-development-version">development version</a></li>
+        <li><a href="#gtsummary-1-2-2">1.2.2</a></li>
         <li><a href="#gtsummary-1-2-1">1.2.1</a></li>
         <li><a href="#gtsummary-1-2-0">1.2.0</a></li>
         <li><a href="#gtsummary-1-1-1">1.1.1</a></li>
