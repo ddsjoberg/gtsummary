@@ -99,7 +99,7 @@ t2 <- tbl_regression(mod1, exponentiate = TRUE)
 
 Side-by-side regression model results from `tbl_merge()`
 
-<img src="man/figures/tbl_merge_ex.png" width="66%">
+<img src="man/figures/tbl_merge_ex1.png" width="66%">
 
 Survival Estimates from `tbl_survival()`
 
