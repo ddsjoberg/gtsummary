@@ -5,16 +5,18 @@
 * win-builder devel, release, oldrel
 
 ## R CMD check results
-> checking CRAN incoming feasibility ... NOTE
   Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
-  
   Suggests or Enhances not in mainstream repositories:
     gt
-
-0 errors √ | 0 warnings √ | 1 note x
+  Package which this enhances but not available for checking: 'gt'
 
 ## Additional Comments
 
+Submission 2 gtsummary v1.2.2:
+Thank you for the review.
+The previously listed NOTE about a potential broken link has been resolved.
+
+Submission 1 gtsummary v1.2.2:
 Thank you for reviewing this update to my package.
 The package lists the gt package in the Enhances field. 
 The gt package is not available on CRAN, and can be installed from GitHub (rstudio/gt). 
