@@ -10,8 +10,11 @@
 #' for detailed examples.
 #'
 #' You may also pass a data frame, the type of regression model, and a single
-#' covariate. Each column of the data frame will serve as the outcome to a
-#' regression model with the repeated covariate.
+#' covariate in the `x=` argument. Each column of the data frame will serve as
+#' the outcome in a univariate regression model. Take care using the `x` argument
+#' that each of the columns in the data frame are appropriate for the same type
+#' of model, e.g. they are all continuous variables appropriate for [lm], or
+#' binary variables appropriate for logistic regression with [glm].
 #'
 #' @inheritSection tbl_regression Setting Defaults
 #' @inheritSection tbl_regression Note
@@ -21,11 +24,12 @@
 #' @param method Regression method (e.g. [lm], [glm], [survival::coxph], and more).
 #' @param y Model outcome (e.g. `y = recurrence` or `y = Surv(time, recur)`).
 #' All other column in `data` will be regressed on `y`.
-#' Specify one and only one or `y` or `x`
+#' Specify one and only one of `y` or `x`
 #' @param x Model covariate (e.g. `x = trt`).
 #' All other columns in `data` will serve as the outcome in a regression model
-#' with `x` as a covariate.
-#' Specify one and only one or `y` or `x`
+#' with `x` as a covariate.  Output table is best when `x` is a continuous or
+#' binary variable displayed on a single row.
+#' Specify one and only one of `y` or `x`
 #' @param formula String of the model formula.
 #' Uses [glue::glue] syntax. Default is `"{y} ~ {x}"`, where `{y}`
 #' is the dependent variable, and `{x}` represents a single covariate. For a
@@ -270,7 +274,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # column headers
   results <- modify_header_internal(
     results,
-    label = "**Characteristic**",
+    label = ifelse(!is.null(y), "**Covariate**", "**Outcome**"),
     estimate = glue("**{estimate_header(model_obj_list[[1]], exponentiate)}**"),
     ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
     p.value = "**p-value**"
