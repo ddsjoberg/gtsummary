@@ -14,17 +14,17 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-# installing gt 
-if (curl::has_internet()) {
-  # adding tmpdir to libPath
-  temp_path <- file.path(tempdir(), "gt_folder")
-  dir.create(temp_path)
-  lib_path <-.libPaths()
-  .libPaths(c(lib_path, temp_path))
-  
-  # installing gt
-  remotes::install_github("rstudio/gt", lib = temp_path)
-}
+# # installing gt 
+# if (curl::has_internet()) {
+#   # adding tmpdir to libPath
+#   temp_path <- file.path(tempdir(), "gt_folder")
+#   dir.create(temp_path)
+#   lib_path <-.libPaths()
+#   .libPaths(c(lib_path, temp_path))
+#   
+#   # installing gt
+#   remotes::install_github("rstudio/gt", lib = temp_path)
+# }
 ```
 
 Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting table using {gtsummary}, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
