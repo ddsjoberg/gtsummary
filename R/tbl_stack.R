@@ -1,12 +1,12 @@
-#' Stacks two or more gtsummary regression objects
+#' Stacks two or more gtsummary objects
 #'
 #' Assists in patching together more complex tables. `tbl_stack()` appends two
-#' or more `tbl_regression` or `tbl_merge` objects.
+#' or more `tbl_regression`, `tbl_summary`, or `tbl_merge` objects.
 #' {gt} attributes from the first regression object are utilized for output
-#' table (read: don't stack a `tbl_regression` object on top of a `tbl_summary`
-#' object).
+#' table.
 #'
-#' @param tbls List of gtsummary regression objects
+#' @param tbls List of gtsummary objects
+#' @family tbl_summary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @seealso [tbl_merge]
