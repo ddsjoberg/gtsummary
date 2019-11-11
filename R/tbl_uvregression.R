@@ -2,14 +2,18 @@
 #'
 #' @description
 #' This function estimates univariate regression models and returns them in
-#' a publication-ready table. The function takes as arguments a data frame,
-#' the type of regression model, and the outcome variable. Each column in the
+#' a publication-ready table.  It can create univariate regression models holding
+#' either a covariate or outcome constant.
+#'
+#' For models holding outcome constant, the function takes as arguments a data frame,
+#' the type of regression model, and the outcome variable `y=`. Each column in the
 #' data frame is regressed on the specified outcome. The `tbl_uvregression`
 #' function arguments are similar to the [tbl_regression] arguments. Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 #' for detailed examples.
 #'
-#' You may also pass a data frame, the type of regression model, and a single
+#' You may alternatively hold a single covariate constant. For this, pass a data
+#' frame, the type of regression model, and a single
 #' covariate in the `x=` argument. Each column of the data frame will serve as
 #' the outcome in a univariate regression model. Take care using the `x` argument
 #' that each of the columns in the data frame are appropriate for the same type
@@ -121,7 +125,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   if (!rlang::quo_is_null(rlang::enquo(y))) y <- y_name
   if (!rlang::quo_is_null(rlang::enquo(x))) x <- x_name
   if (is.null(x) + is.null(y) != 1L) {
-    stop("Specify one, and only one, of `x` and `y`.")
+    stop("Specify one, and only one, of `x` and `y`. This function can
+         create univariate regression models holding either a covariate or outcome
+         constant.")
   }
 
   # checking formula correctly specified ---------------------------------------
