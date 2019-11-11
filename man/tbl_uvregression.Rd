@@ -18,12 +18,13 @@ frame includes the outcome variable(s) and the independent variables.}
 
 \item{y}{Model outcome (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)}).
 All other column in \code{data} will be regressed on \code{y}.
-Specify one and only one or \code{y} or \code{x}}
+Specify one and only one of \code{y} or \code{x}}
 
 \item{x}{Model covariate (e.g. \code{x = trt}).
 All other columns in \code{data} will serve as the outcome in a regression model
-with \code{x} as a covariate.
-Specify one and only one or \code{y} or \code{x}}
+with \code{x} as a covariate.  Output table is best when \code{x} is a continuous or
+binary variable displayed on a single row.
+Specify one and only one of \code{y} or \code{x}}
 
 \item{method.args}{List of additional arguments passed on to the regression
 function defined by \code{method}.}
@@ -79,8 +80,11 @@ function arguments are similar to the \link{tbl_regression} arguments. Review th
 for detailed examples.
 
 You may also pass a data frame, the type of regression model, and a single
-covariate. Each column of the data frame will serve as the outcome to a
-regression model with the repeated covariate.
+covariate in the \code{x=} argument. Each column of the data frame will serve as
+the outcome in a univariate regression model. Take care using the \code{x} argument
+that each of the columns in the data frame are appropriate for the same type
+of model, e.g. they are all continuous variables appropriate for \link{lm}, or
+binary variables appropriate for logistic regression with \link{glm}.
 }
 \section{Example Output}{
 
