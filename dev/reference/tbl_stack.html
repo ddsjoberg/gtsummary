@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Stacks two or more gtsummary regression objects — tbl_stack • gtsummary</title>
+<title>Stacks two or more gtsummary objects — tbl_stack • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,12 +48,11 @@
 
 
 
-<meta property="og:title" content="Stacks two or more gtsummary regression objects — tbl_stack" />
+<meta property="og:title" content="Stacks two or more gtsummary objects — tbl_stack" />
 <meta property="og:description" content="Assists in patching together more complex tables. tbl_stack() appends two
-or more tbl_regression or tbl_merge objects.
+or more tbl_regression, tbl_summary, or tbl_merge objects.
 gt attributes from the first regression object are utilized for output
-table (read: don't stack a tbl_regression object on top of a tbl_summary
-object)." />
+table." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -97,7 +96,7 @@ object)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.2.9001</span>
       </span>
     </div>
 
@@ -163,17 +162,16 @@ object)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Stacks two or more gtsummary regression objects</h1>
+    <h1>Stacks two or more gtsummary objects</h1>
     <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_stack.R'><code>R/tbl_stack.R</code></a></small>
     <div class="hidden name"><code>tbl_stack.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Assists in patching together more complex tables. <code>tbl_stack()</code> appends two
-or more <code>tbl_regression</code> or <code>tbl_merge</code> objects.
+or more <code>tbl_regression</code>, <code>tbl_summary</code>, or <code>tbl_merge</code> objects.
 gt attributes from the first regression object are utilized for output
-table (read: don't stack a <code>tbl_regression</code> object on top of a <code>tbl_summary</code>
-object).</p>
+table.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tbl_stack</span>(<span class='no'>tbls</span>)</pre>
@@ -183,7 +181,7 @@ object).</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>tbls</th>
-      <td><p>List of gtsummary regression objects</p></td>
+      <td><p>List of gtsummary objects</p></td>
     </tr>
     </table>
 
@@ -201,6 +199,16 @@ object).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='tbl_merge.html'>tbl_merge</a></p>
+<p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
+  <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
+  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
+  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
+  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
+  <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
+  <code><a href='modify_header.html'>modify_header</a></code>,
+  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
+  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_summary.html'>tbl_summary</a></code></p>
 <p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
   <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
   <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
