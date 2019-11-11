@@ -4,9 +4,9 @@
 \alias{tbl_uvregression}
 \title{Display univariate regression model results in table}
 \usage{
-tbl_uvregression(data, method, y, method.args = NULL,
-  formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
-  include = NULL, exclude = NULL, hide_n = FALSE,
+tbl_uvregression(data, method, y = NULL, x = NULL,
+  method.args = NULL, formula = "{y} ~ {x}", exponentiate = FALSE,
+  label = NULL, include = NULL, exclude = NULL, hide_n = FALSE,
   show_single_row = NULL, conf.level = NULL, estimate_fun = NULL,
   pvalue_fun = NULL, show_yesno = NULL)
 }
@@ -16,7 +16,14 @@ frame includes the outcome variable(s) and the independent variables.}
 
 \item{method}{Regression method (e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph}, and more).}
 
-\item{y}{Model outcome (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
+\item{y}{Model outcome (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)}).
+All other column in \code{data} will be regressed on \code{y}.
+Specify one and only one or \code{y} or \code{x}}
+
+\item{x}{Model covariate (e.g. \code{x = trt}).
+All other columns in \code{data} will serve as the outcome in a regression model
+with \code{x} as a covariate.
+Specify one and only one or \code{y} or \code{x}}
 
 \item{method.args}{List of additional arguments passed on to the regression
 function defined by \code{method}.}
@@ -70,6 +77,10 @@ data frame is regressed on the specified outcome. The \code{tbl_uvregression}
 function arguments are similar to the \link{tbl_regression} arguments. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 for detailed examples.
+
+You may also pass a data frame, the type of regression model, and a single
+covariate. Each column of the data frame will serve as the outcome to a
+regression model with the repeated covariate.
 }
 \section{Example Output}{
 

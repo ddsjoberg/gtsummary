@@ -17,22 +17,31 @@ test_that("lm: no errors/warnings with standard use", {
 })
 
 test_that("coxph: no errors/warnings with standard use", {
-  expect_error(lung %>%
-    tbl_uvregression(
-      method = coxph,
-      y = Surv(time, status)
-    ), NA)
-  expect_warning(lung %>%
-    tbl_uvregression(
-      method = coxph,
-      y = Surv(time, status)
-    ), NA)
+  expect_error(
+    coxph_uv <-
+      lung %>%
+      tbl_uvregression(
+        method = coxph,
+        y = Surv(time, status)
+      ), NA)
+  expect_warning(
+    lung %>%
+      tbl_uvregression(
+        method = coxph,
+        y = Surv(time, status)
+      ), NA)
+
+  expect_identical(
+    coxph_uv$meta_data$variable,
+    setdiff(names(lung), c("time", "status"))
+  )
 })
 
 
 test_that("glmer: no errors/warnings with standard use", {
   expect_error(
-    mtcars %>%
+    lme4_uv <-
+      mtcars %>%
       dplyr::select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
@@ -54,6 +63,10 @@ test_that("glmer: no errors/warnings with standard use", {
       ), NA
   )
 
+  expect_identical(
+    lme4_uv$meta_data$variable,
+    c("hp", "cyl")
+  )
 
   expect_error(
     mtcars %>%
