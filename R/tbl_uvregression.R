@@ -1,12 +1,24 @@
 #' Display univariate regression model results in table
 #'
+#' @description
 #' This function estimates univariate regression models and returns them in
-#' a publication-ready table. The function takes as arguments a data frame,
-#' the type of regression model, and the outcome variable. Each column in the
+#' a publication-ready table.  It can create univariate regression models holding
+#' either a covariate or outcome constant.
+#'
+#' For models holding outcome constant, the function takes as arguments a data frame,
+#' the type of regression model, and the outcome variable `y=`. Each column in the
 #' data frame is regressed on the specified outcome. The `tbl_uvregression`
 #' function arguments are similar to the [tbl_regression] arguments. Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 #' for detailed examples.
+#'
+#' You may alternatively hold a single covariate constant. For this, pass a data
+#' frame, the type of regression model, and a single
+#' covariate in the `x=` argument. Each column of the data frame will serve as
+#' the outcome in a univariate regression model. Take care using the `x` argument
+#' that each of the columns in the data frame are appropriate for the same type
+#' of model, e.g. they are all continuous variables appropriate for [lm], or
+#' binary variables appropriate for logistic regression with [glm].
 #'
 #' @inheritSection tbl_regression Setting Defaults
 #' @inheritSection tbl_regression Note
@@ -14,7 +26,14 @@
 #' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
 #' @param method Regression method (e.g. [lm], [glm], [survival::coxph], and more).
-#' @param y Model outcome (e.g. `y = recurrence` or `y = Surv(time, recur)`)
+#' @param y Model outcome (e.g. `y = recurrence` or `y = Surv(time, recur)`).
+#' All other column in `data` will be regressed on `y`.
+#' Specify one and only one of `y` or `x`
+#' @param x Model covariate (e.g. `x = trt`).
+#' All other columns in `data` will serve as the outcome in a regression model
+#' with `x` as a covariate.  Output table is best when `x` is a continuous or
+#' binary variable displayed on a single row.
+#' Specify one and only one of `y` or `x`
 #' @param formula String of the model formula.
 #' Uses [glue::glue] syntax. Default is `"{y} ~ {x}"`, where `{y}`
 #' is the dependent variable, and `{x}` represents a single covariate. For a
@@ -71,7 +90,7 @@
 #'
 #' \if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
 
-tbl_uvregression <- function(data, method, y, method.args = NULL,
+tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
                              include = NULL, exclude = NULL,
@@ -101,107 +120,127 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   # updated method and y inputs to be bare, and converting them to strings
   # to be compatible with the rest of the function that assumes character input
   method <- deparse(substitute(method)) %>% as.character()
-  y <- deparse(substitute(y)) %>% as.character()
+  y_name <- deparse(substitute(y)) %>% as.character()
+  x_name <- deparse(substitute(x)) %>% as.character()
+  if (!rlang::quo_is_null(rlang::enquo(y))) y <- y_name
+  if (!rlang::quo_is_null(rlang::enquo(x))) x <- x_name
+  if (is.null(x) + is.null(y) != 1L) {
+    stop("Specify one, and only one, of `x` and `y`. This function can
+         create univariate regression models holding either a covariate or outcome
+         constant.")
+  }
 
-  # checking estimate_fun and pvalue_fun are functions
+  # checking formula correctly specified ---------------------------------------
+  # checking that '{x}' appears on RHS of formula
+  if (word(formula, start = 2L, sep = fixed("~")) %>%
+      str_detect(pattern = fixed("{x}")) == FALSE) {
+    stop("'{x}' must appear on RHS of '~' in formula argument")
+  }
+  # checking that '{y}' appears on LHS of formula
+  if (word(formula, start = 1L, sep = fixed("~")) %>%
+      str_detect(pattern = fixed("{y}")) == FALSE) {
+    stop("'{y}' must appear on LHS of '~' in formula argument")
+  }
+
+  # checking estimate_fun and pvalue_fun are functions -------------------------
   if (!is.function(estimate_fun) | !is.function(pvalue_fun)) {
-    stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
+    stop("Arguments 'estimate_fun' and 'pvalue_fun' must be functions.")
   }
 
-  if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
-
-    # checking input type: must be a list of formulas, or one formula
-    if (!class(label) %in% c("list", "formula")) {
-      stop(glue(
-        "'label' argument must be a list of formulas. ",
-        "LHS of the formula is the variable specification, ",
-        "and the RHS is the label specification: ",
-        "list(vars(stage) ~ \"T Stage\")"
-      ))
-    }
-    if ("list" %in% class(label)) {
-      if (purrr::some(label, negate(rlang::is_bare_formula))) {
-        stop(glue(
-          "'label' argument must be a list of formulas. ",
-          "LHS of the formula is the variable specification, ",
-          "and the RHS is the label specification: ",
-          "list(vars(stage) ~ \"T Stage\")"
-        ))
-      }
-    }
-
-    # all sepcifed labels must be a string of length 1
-    if ("formula" %in% class(label)) label <- list(label)
-    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
-      stop(glue(
-        "The RHS of the formula in the 'label' argument must be a string."
-      ))
-    }
+  # converting tidyselect formula lists to named lists -------------------------
+  label <- tidyselect_to_list(data, label, .meta_data = NULL, input_type = "label")
+  # all sepcifed labels must be a string of length 1
+  if (!every(label, ~ rlang::is_string(.x))) {
+    stop("Each `label` specified must be a string of length 1.")
   }
+
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
-    stop(glue(
-      "'data' input must be a data frame."
-    ))
+    stop("'data' input must be a data frame.")
   }
 
   # will return call, and all object passed to in table1 call
   # the object func_inputs is a list of every object passed to the function
   tbl_uvregression_inputs <- as.list(environment())
+  tbl_uvregression_inputs <-
+    tbl_uvregression_inputs[!names(tbl_uvregression_inputs) %in% c("x_name", "y_name")]
 
-  # checking that '{x}' appears on RHS of formula
-  if (word(formula, start = 2L, sep = fixed("~")) %>%
-    str_detect(pattern = fixed("{x}")) == FALSE) {
-    stop("'{x}' must appear on RHS of '~' in formula argument")
-  }
+  # get all vars not specified -------------------------------------------------
+  all_vars <-
+    names(data) %>%
+    # removing x or y variable
+    setdiff(paste(c(y, x), "~ 1") %>% stats::as.formula() %>% all.vars()) %>%
+    # removing any other variables listed in the formula
+    setdiff(all.vars(stats::as.formula(formula), unique = FALSE)) %>%
+    # removing {y} and {x}
+    setdiff(c("x", "y"))
 
-  # get all x vars -------------------------------------------------------------
-  x_vars <- names(data) %>%
-    setdiff( # removing outcome variable(s)
-      paste0(y, "~1") %>%
-        stats::as.formula() %>%
-        all.vars()
-    ) %>%
-    setdiff( # removing potential variables added to model formula (e.g. random intercepts)
-      all.vars(stats::as.formula(formula)[[3]]) %>% remove_one_x() # the one x removed is the {x}
-    )
-  if (!is.null(include)) x_vars <- intersect(x_vars, include)
-  x_vars <- x_vars %>% setdiff(exclude)
-  if (length(x_vars) == 0) {
+  if (!is.null(include)) all_vars <- intersect(all_vars, include)
+  all_vars <- all_vars %>% setdiff(exclude)
+  if (length(all_vars) == 0) {
     stop("There were no covariates selected.")
   }
 
-  # bulding regression models
-  model_obj_list <-
-    map(
-      x_vars,
-      function(x)
-        do.call(
-          what = method,
-          args = c(
-            list(
-              formula = glue(formula) %>% stats::as.formula(),
-              data = data
-            ),
-            method.args
-          )
-        )
-    )
-  names(model_obj_list) <- x_vars
-
-  # formatting regression models
-  tbl_regression_list <-
-    imap(
-      model_obj_list,
-      ~ tbl_regression(
-        .x,
-        exponentiate = exponentiate,
-        conf.level = conf.level,
-        label = label,
-        show_single_row = intersect(.y, show_single_row)
+  # bulding regression models --------------------------------------------------
+  if (is.null(x)) {
+    model_obj_list <-
+      map(
+        all_vars,
+        function(x)
+          do.call(what = method,
+                  args = c(list(formula = glue(formula) %>% stats::as.formula(),
+                                data = data),
+                           method.args))
       )
-    )
+  }
+  else if (is.null(y)) {
+    model_obj_list <-
+      map(
+        all_vars,
+        function(y)
+          do.call(what = method,
+                  args = c(list(formula = glue(formula) %>% stats::as.formula(),
+                                data = data),
+                           method.args))
+      )
+  }
+  names(model_obj_list) <- all_vars
+
+  # formatting regression models with tbl_regression ---------------------------
+  if (is.null(x)) {
+    tbl_regression_list <-
+      imap(
+        model_obj_list,
+        ~ tbl_regression(
+          .x,
+          exponentiate = exponentiate,
+          conf.level = conf.level,
+          label = label,
+          show_single_row = intersect(.y, show_single_row)
+        )
+      )
+  }
+  else if (is.null(y)) {
+    tbl_regression_list <-
+      imap(
+        model_obj_list,
+        function(tbl, var) {
+          tbl_uv <-
+            tbl_regression(
+              tbl,
+              label = list(label[[var]] %||% attr(data[[var]], "label") %||% var) %>% set_names(x),
+              exponentiate = exponentiate,
+              conf.level = conf.level,
+              include = x,
+              show_single_row = show_single_row
+            )
+          tbl_uv$table_body$variable = var
+          tbl_uv$table_body$var_type = NA_character_
+          tbl_uv
+        }
+      )
+  }
 
   # extracting model tables and stacking
   table_body <-
@@ -241,7 +280,7 @@ tbl_uvregression <- function(data, method, y, method.args = NULL,
   # column headers
   results <- modify_header_internal(
     results,
-    label = "**Characteristic**",
+    label = ifelse(!is.null(y), "**Covariate**", "**Outcome**"),
     estimate = glue("**{estimate_header(model_obj_list[[1]], exponentiate)}**"),
     ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
     p.value = "**p-value**"

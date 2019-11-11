@@ -76,7 +76,8 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{bold_p.tbl_summary}},
   \code{\link{inline_text.tbl_summary}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_summary}}
+  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
+  \code{\link{tbl_summary}}
 
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},

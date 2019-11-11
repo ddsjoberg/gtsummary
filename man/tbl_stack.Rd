@@ -2,22 +2,21 @@
 % Please edit documentation in R/tbl_stack.R
 \name{tbl_stack}
 \alias{tbl_stack}
-\title{Stacks two or more gtsummary regression objects}
+\title{Stacks two or more gtsummary objects}
 \usage{
 tbl_stack(tbls)
 }
 \arguments{
-\item{tbls}{List of gtsummary regression objects}
+\item{tbls}{List of gtsummary objects}
 }
 \value{
 A \code{tbl_stack} object
 }
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
-or more \code{tbl_regression} or \code{tbl_merge} objects.
+or more \code{tbl_regression}, \code{tbl_summary}, or \code{tbl_merge} objects.
 {gt} attributes from the first regression object are utilized for output
-table (read: don't stack a \code{tbl_regression} object on top of a \code{tbl_summary}
-object).
+table.
 }
 \section{Example Output}{
 
@@ -76,6 +75,17 @@ tbl_stack_ex2 <-
 \seealso{
 \link{tbl_merge}
 
+Other tbl_summary tools: \code{\link{add_n}},
+  \code{\link{add_overall}}, \code{\link{add_p}},
+  \code{\link{add_q.tbl_summary}},
+  \code{\link{add_stat_label}},
+  \code{\link{bold_italicize_labels_levels}},
+  \code{\link{bold_p.tbl_summary}},
+  \code{\link{inline_text.tbl_summary}},
+  \code{\link{modify_header}},
+  \code{\link{sort_p.tbl_summary}},
+  \code{\link{tbl_merge}}, \code{\link{tbl_summary}}
+
 Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
   \code{\link{add_nevent.tbl_regression}},
   \code{\link{bold_italicize_labels_levels}},
@@ -101,4 +111,5 @@ Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
 Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
+\concept{tbl_summary tools}
 \concept{tbl_uvregression tools}

@@ -120,38 +120,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
   }
 
-  # label ----------------------------------------------------------------------
-  if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
-
-    # checking input type: must be a list of formulas, or one formula
-    if (!class(label) %in% c("list", "formula")) {
-      stop(glue(
-        "'label' argument must be a list of formulas. ",
-        "LHS of the formula is the variable specification, ",
-        "and the RHS is the label specification: ",
-        "list(vars(stage) ~ \"T Stage\")"
-      ))
-    }
-    if ("list" %in% class(label)) {
-      if (purrr::some(label, negate(rlang::is_bare_formula))) {
-        stop(glue(
-          "'label' argument must be a list of formulas. ",
-          "LHS of the formula is the variable specification, ",
-          "and the RHS is the label specification: ",
-          "list(vars(stage) ~ \"T Stage\")"
-        ))
-      }
-    }
-
-    # all sepcifed labels must be a string of length 1
-    if ("formula" %in% class(label)) label <- list(label)
-    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
-      stop(glue(
-        "The RHS of the formula in the 'label' argument must be a string."
-      ))
-    }
-  }
-
   # converting tidyselect formula lists to named lists
   # extracting model frame
   model_frame <- tryCatch({
@@ -174,6 +142,10 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     stop(e)
   })
   label <- tidyselect_to_list(model_frame, label, input_type = "label")
+  # all sepcifed labels must be a string of length 1
+  if (!every(label, ~ rlang::is_string(.x))) {
+    stop("Each `label` specified must be a string of length 1.")
+  }
 
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
