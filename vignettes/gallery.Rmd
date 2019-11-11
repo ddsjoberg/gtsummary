@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 ```
 
 <!-- Not creating vignette if gt is not installed. -->
-`r if(requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/gallery.html"}`
+`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/gallery.html"}`
 
-```{r exit_early, include = FALSE, eval = requireNamespace("gt")}
+```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
 knitr::knit_exit()
 ```
 
