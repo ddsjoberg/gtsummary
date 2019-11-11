@@ -4,6 +4,8 @@
 
 * Internal updates to the way {gt} is installed during CRAN checks.
 
+* Bug fix when stacking `tbl_summary` objects with calculated p-values.
+
 # gtsummary 1.2.2
 
 ## New Features
