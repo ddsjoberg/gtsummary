@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* `tbl_uvregression()` now accepts an `x=` argument to build univariate regression models where the covariate `x` remains the same while models are built the with remaining variables as the outcome (#294)
+
+* Internal updates to the way {gt} is installed during CRAN checks.
+
 # gtsummary 1.2.2
 
 ## New Features
