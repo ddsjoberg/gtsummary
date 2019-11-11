@@ -19,6 +19,14 @@ knitr::opts_chunk$set(
 )
 ```
 
+<!-- Not creating vignette if gt is not installed. -->
+`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html"}`
+
+```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
+knitr::knit_exit()
+```
+
+<!-- Start of vignette -->
 ## Introduction
 
 This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table. `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and more). If your class of model is not supported , please [request support](https://github.com/ddsjoberg/gtsummary/issues).  In some cases, it is simple to support a new class of model.
@@ -37,18 +45,6 @@ Before going through the tutorial, install {gtsummary} and {gt}.
 ```{r, include=FALSE}
 library(gtsummary)
 library(dplyr)
-
-# installing gt 
-if (curl::has_internet()) {
-  # adding tmpdir to libPath
-  temp_path <- file.path(tempdir(), "gt_folder")
-  dir.create(temp_path)
-  lib_path <-.libPaths()
-  .libPaths(c(lib_path, temp_path))
-  
-  # installing gt
-  remotes::install_github("rstudio/gt", lib = temp_path)
-}
 ```
 
 ```{r, eval=FALSE}

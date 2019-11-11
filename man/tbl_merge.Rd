@@ -100,7 +100,7 @@ Other tbl_summary tools: \code{\link{add_n}},
   \code{\link{inline_text.tbl_summary}},
   \code{\link{modify_header}},
   \code{\link{sort_p.tbl_summary}},
-  \code{\link{tbl_summary}}
+  \code{\link{tbl_stack}}, \code{\link{tbl_summary}}
 }
 \author{
 Daniel D. Sjoberg
