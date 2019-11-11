@@ -96,7 +96,29 @@ test_that("glmer: no errors/warnings with standard use", {
   )
 })
 
-test_that("tbl_regression creates errors with bad inputs", {
+test_that("tbl_uvregression x= argument tests", {
+  expect_error(
+    ux_x <- tbl_uvregression(
+      data = trial[c("age", "marker", "response")],
+      method = lm,
+      label = list(vars(`age`) ~ "PATIENT AGE"),
+      x = response
+    ),
+    NA
+  )
+
+  expect_identical(
+    ux_x$meta_data$label[1],
+    "PATIENT AGE"
+  )
+
+  expect_identical(
+    ux_x$tbl_regression_list$age$model_obj %>% coef(),
+    lm(age ~ response, trial) %>% coef()
+  )
+})
+
+test_that("tbl_uvregression creates errors with bad inputs", {
   expect_error(
     tbl_uvregression(
       data = mtcars,
