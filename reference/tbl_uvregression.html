@@ -50,12 +50,21 @@
 
 <meta property="og:title" content="Display univariate regression model results in table — tbl_uvregression" />
 <meta property="og:description" content="This function estimates univariate regression models and returns them in
-a publication-ready table. The function takes as arguments a data frame,
-the type of regression model, and the outcome variable. Each column in the
+a publication-ready table.  It can create univariate regression models holding
+either a covariate or outcome constant.
+For models holding outcome constant, the function takes as arguments a data frame,
+the type of regression model, and the outcome variable y=. Each column in the
 data frame is regressed on the specified outcome. The tbl_uvregression
 function arguments are similar to the tbl_regression arguments. Review the
 tbl_uvregression vignette
-for detailed examples." />
+for detailed examples.
+You may alternatively hold a single covariate constant. For this, pass a data
+frame, the type of regression model, and a single
+covariate in the x= argument. Each column of the data frame will serve as
+the outcome in a univariate regression model. Take care using the x argument
+that each of the columns in the data frame are appropriate for the same type
+of model, e.g. they are all continuous variables appropriate for lm, or
+binary variables appropriate for logistic regression with glm." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -99,7 +108,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.3</span>
       </span>
     </div>
 
@@ -172,17 +181,26 @@ for detailed examples." />
 
     <div class="ref-description">
     <p>This function estimates univariate regression models and returns them in
-a publication-ready table. The function takes as arguments a data frame,
-the type of regression model, and the outcome variable. Each column in the
+a publication-ready table.  It can create univariate regression models holding
+either a covariate or outcome constant.</p>
+<p>For models holding outcome constant, the function takes as arguments a data frame,
+the type of regression model, and the outcome variable <code>y=</code>. Each column in the
 data frame is regressed on the specified outcome. The <code>tbl_uvregression</code>
 function arguments are similar to the <a href='tbl_regression.html'>tbl_regression</a> arguments. Review the
 <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression'>tbl_uvregression vignette</a>
 for detailed examples.</p>
+<p>You may alternatively hold a single covariate constant. For this, pass a data
+frame, the type of regression model, and a single
+covariate in the <code>x=</code> argument. Each column of the data frame will serve as
+the outcome in a univariate regression model. Take care using the <code>x</code> argument
+that each of the columns in the data frame are appropriate for the same type
+of model, e.g. they are all continuous variables appropriate for <a href='https://rdrr.io/r/stats/lm.html'>lm</a>, or
+binary variables appropriate for logistic regression with <a href='https://rdrr.io/r/stats/glm.html'>glm</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_uvregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='no'>y</span>, <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>tbl_uvregression</span>(<span class='no'>data</span>, <span class='no'>method</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {x}"</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>show_single_row</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
@@ -200,7 +218,17 @@ frame includes the outcome variable(s) and the independent variables.</p></td>
     </tr>
     <tr>
       <th>y</th>
-      <td><p>Model outcome (e.g. <code>y = recurrence</code> or <code>y = Surv(time, recur)</code>)</p></td>
+      <td><p>Model outcome (e.g. <code>y = recurrence</code> or <code>y = Surv(time, recur)</code>).
+All other column in <code>data</code> will be regressed on <code>y</code>.
+Specify one and only one of <code>y</code> or <code>x</code></p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>Model covariate (e.g. <code>x = trt</code>).
+All other columns in <code>data</code> will serve as the outcome in a regression model
+with <code>x</code> as a covariate.  Output table is best when <code>x</code> is a continuous or
+binary variable displayed on a single row.
+Specify one and only one of <code>y</code> or <code>x</code></p></td>
     </tr>
     <tr>
       <th>method.args</th>
@@ -676,7 +704,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt; &lt;div id="txvafbsnay" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"&gt;&lt;table class="gt_table"&gt;
 #&gt;   
 #&gt;   &lt;tr&gt;
-#&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
+#&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"&gt;&lt;strong&gt;Covariate&lt;/strong&gt;&lt;/th&gt;
 #&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;N&lt;/strong&gt;&lt;/th&gt;
 #&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;HR&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;&lt;/th&gt;
 #&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;&lt;/th&gt;
