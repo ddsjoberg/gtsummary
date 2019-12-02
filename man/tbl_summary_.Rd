@@ -4,10 +4,20 @@
 \alias{tbl_summary_}
 \title{Standard evaluation version of tbl_summary()}
 \usage{
-tbl_summary_(data, by = NULL, label = NULL, statistic = NULL,
-  digits = NULL, type = NULL, value = NULL, missing = c("ifany",
-  "always", "no"), missing_text = "Unknown", sort = NULL,
-  percent = c("column", "row", "cell"), group = NULL)
+tbl_summary_(
+  data,
+  by = NULL,
+  label = NULL,
+  statistic = NULL,
+  digits = NULL,
+  type = NULL,
+  value = NULL,
+  missing = c("ifany", "always", "no"),
+  missing_text = "Unknown",
+  sort = NULL,
+  percent = c("column", "row", "cell"),
+  group = NULL
+)
 }
 \arguments{
 \item{data}{A data frame}

@@ -4,8 +4,7 @@
 \alias{add_global_p.tbl_regression}
 \title{Adds the global p-value for categorical variables}
 \usage{
-\method{add_global_p}{tbl_regression}(x, terms = NULL, keep = FALSE,
-  ...)
+\method{add_global_p}{tbl_regression}(x, terms = NULL, keep = FALSE, ...)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_regression} from the
@@ -46,15 +45,17 @@ tbl_lm_global_ex1 <-
   add_global_p()
 }
 \seealso{
-Other tbl_regression tools: \code{\link{add_nevent.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_regression}},
-  \code{\link{bold_p.tbl_stack}},
-  \code{\link{inline_text.tbl_regression}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_regression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
-  \code{\link{tbl_stack}}
+Other tbl_regression tools: 
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_regression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg

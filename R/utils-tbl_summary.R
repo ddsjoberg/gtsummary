@@ -791,6 +791,13 @@ summarize_categorical <- function(data, variable, by, var_label,
       filter(!!parse_expr("row_type != 'missing'"))
   }
 
+  # if there are some by levels that are entriely missing,
+  # making sure columns appear in correct order
+  if (!is.null(by)) {
+    results <- results %>%
+      select(c("row_type", "label", sort(unique(data$by_col))))
+  }
+
   results
 }
 

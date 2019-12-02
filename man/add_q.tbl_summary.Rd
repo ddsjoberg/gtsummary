@@ -4,8 +4,7 @@
 \alias{add_q.tbl_summary}
 \title{Add a column of q-values to account for multiple comparisons}
 \usage{
-\method{add_q}{tbl_summary}(x, method = "fdr",
-  pvalue_fun = x$pvalue_fun, ...)
+\method{add_q}{tbl_summary}(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
 }
 \arguments{
 \item{x}{\code{tbl_summary} object}
@@ -43,16 +42,19 @@ tbl_sum_q_ex <-
   add_q()
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_n}},
-  \code{\link{add_overall}}, \code{\link{add_p}},
-  \code{\link{add_stat_label}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_summary}},
-  \code{\link{inline_text.tbl_summary}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_summary}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
-  \code{\link{tbl_summary}}
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_summary}()},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
 }
 \author{
 Esther Drill, Daniel D. Sjoberg

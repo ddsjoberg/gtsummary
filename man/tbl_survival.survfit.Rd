@@ -4,11 +4,19 @@
 \alias{tbl_survival.survfit}
 \title{Creates table of survival probabilities}
 \usage{
-\method{tbl_survival}{survfit}(x, times = NULL, probs = NULL,
+\method{tbl_survival}{survfit}(
+  x,
+  times = NULL,
+  probs = NULL,
   label = ifelse(is.null(probs), "{time}", "{prob*100}\%"),
-  level_label = "{level}, N = {n}", header_label = NULL,
-  header_estimate = NULL, failure = FALSE, missing = "-",
-  estimate_fun = NULL, ...)
+  level_label = "{level}, N = {n}",
+  header_label = NULL,
+  header_estimate = NULL,
+  failure = FALSE,
+  missing = "-",
+  estimate_fun = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{A survfit object with a no stratification
@@ -107,8 +115,9 @@ tbl_nostrata_ex2 <-
   )
 }
 \seealso{
-Other tbl_survival tools: \code{\link{inline_text.tbl_survival}},
-  \code{\link{modify_header}}
+Other tbl_survival tools: 
+\code{\link{inline_text.tbl_survival}()},
+\code{\link{modify_header}()}
 }
 \author{
 Daniel D. Sjoberg

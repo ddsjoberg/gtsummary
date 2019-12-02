@@ -4,8 +4,14 @@
 \alias{add_p}
 \title{Adds p-values to summary tables}
 \usage{
-add_p(x, test = NULL, pvalue_fun = NULL, group = NULL,
-  include = NULL, exclude = NULL)
+add_p(
+  x,
+  test = NULL,
+  pvalue_fun = NULL,
+  group = NULL,
+  include = NULL,
+  exclude = NULL
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
@@ -90,7 +96,7 @@ add_p_ex1 <-
 my_mcnemar <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
-  result$test <- "McNemar\\\\'s test"
+  result$test <- "McNemar\\'s test"
   result
 }
 \donttest{
@@ -103,17 +109,19 @@ add_p_ex2 <-
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 
-Other tbl_summary tools: \code{\link{add_n}},
-  \code{\link{add_overall}},
-  \code{\link{add_q.tbl_summary}},
-  \code{\link{add_stat_label}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_summary}},
-  \code{\link{inline_text.tbl_summary}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_summary}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
-  \code{\link{tbl_summary}}
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_q.tbl_summary}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_summary}()},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
 }
 \author{
 Emily C. Zabor, Daniel D. Sjoberg
