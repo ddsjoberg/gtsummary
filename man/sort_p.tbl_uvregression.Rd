@@ -38,15 +38,18 @@ tbl_uvglm_sort_p_ex <-
   sort_p()
 }
 \seealso{
-Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
-  \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{add_q.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_stack}},
-  \code{\link{bold_p.tbl_uvregression}},
-  \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{modify_header}}, \code{\link{tbl_merge}},
-  \code{\link{tbl_stack}}, \code{\link{tbl_uvregression}}
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
 }
 \author{
 Karissa Whiting

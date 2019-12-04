@@ -68,40 +68,48 @@ tbl_col_ex2 <-
   )
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_n}},
-  \code{\link{add_overall}}, \code{\link{add_p}},
-  \code{\link{add_q.tbl_summary}},
-  \code{\link{add_stat_label}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_summary}},
-  \code{\link{inline_text.tbl_summary}},
-  \code{\link{sort_p.tbl_summary}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
-  \code{\link{tbl_summary}}
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p}()},
+\code{\link{add_q.tbl_summary}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_summary}()},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{sort_p.tbl_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
 
-Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
-  \code{\link{add_nevent.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_regression}},
-  \code{\link{bold_p.tbl_stack}},
-  \code{\link{inline_text.tbl_regression}},
-  \code{\link{sort_p.tbl_regression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
-  \code{\link{tbl_stack}}
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{sort_p.tbl_regression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
 
-Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
-  \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{add_q.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_stack}},
-  \code{\link{bold_p.tbl_uvregression}},
-  \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
-  \code{\link{tbl_uvregression}}
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{sort_p.tbl_uvregression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
 
-Other tbl_survival tools: \code{\link{inline_text.tbl_survival}},
-  \code{\link{tbl_survival.survfit}}
+Other tbl_survival tools: 
+\code{\link{inline_text.tbl_survival}()},
+\code{\link{tbl_survival.survfit}()}
 }
 \author{
 Daniel D. Sjoberg

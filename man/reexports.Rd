@@ -30,6 +30,6 @@ below to see their documentation.
 
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
 
-  \item{tidyselect}{\code{\link[tidyselect]{starts_with}}, \code{\link[tidyselect]{ends_with}}, \code{\link[tidyselect]{contains}}, \code{\link[tidyselect]{matches}}, \code{\link[tidyselect]{one_of}}, \code{\link[tidyselect]{everything}}, \code{\link[tidyselect]{num_range}}, \code{\link[tidyselect]{last_col}}}
+  \item{tidyselect}{\code{\link[tidyselect]{contains}}, \code{\link[tidyselect]{ends_with}}, \code{\link[tidyselect]{everything}}, \code{\link[tidyselect]{last_col}}, \code{\link[tidyselect]{matches}}, \code{\link[tidyselect]{num_range}}, \code{\link[tidyselect]{one_of}}, \code{\link[tidyselect]{starts_with}}}
 }}
 

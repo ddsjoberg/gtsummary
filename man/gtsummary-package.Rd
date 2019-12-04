@@ -7,7 +7,7 @@
 \title{gtsummary: Presentation-Ready Data Summary and Analytic Result
     Tables}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
 Creates presentation-ready tables summarizing data
     sets, regression models, and more. The code to create the tables is
@@ -30,20 +30,20 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Daniel D. Sjoberg \email{danield.sjoberg@gmail.com} (0000-0003-0862-2018)
+\strong{Maintainer}: Daniel D. Sjoberg \email{danield.sjoberg@gmail.com} (\href{https://orcid.org/0000-0003-0862-2018}{ORCID})
 
 Authors:
 \itemize{
-  \item Margie Hannum (0000-0002-2953-0449)
-  \item Karissa Whiting (0000-0002-4683-1868)
-  \item Emily C. Zabor (0000-0002-1402-4498)
+  \item Margie Hannum (\href{https://orcid.org/0000-0002-2953-0449}{ORCID})
+  \item Karissa Whiting (\href{https://orcid.org/0000-0002-4683-1868}{ORCID})
+  \item Emily C. Zabor (\href{https://orcid.org/0000-0002-1402-4498}{ORCID})
 }
 
 Other contributors:
 \itemize{
-  \item Michael Curry (0000-0002-0261-4044) [contributor]
-  \item Esther Drill (0000-0002-3315-4538) [contributor]
-  \item Jessica Flynn (0000-0001-8310-6684) [contributor]
+  \item Michael Curry (\href{https://orcid.org/0000-0002-0261-4044}{ORCID}) [contributor]
+  \item Esther Drill (\href{https://orcid.org/0000-0002-3315-4538}{ORCID}) [contributor]
+  \item Jessica Flynn (\href{https://orcid.org/0000-0001-8310-6684}{ORCID}) [contributor]
 }
 
 }

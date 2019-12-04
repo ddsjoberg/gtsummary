@@ -4,10 +4,15 @@
 \alias{inline_text.tbl_uvregression}
 \title{Report statistics from regression summary tables inline}
 \usage{
-\method{inline_text}{tbl_uvregression}(x, variable, level = NULL,
+\method{inline_text}{tbl_uvregression}(
+  x,
+  variable,
+  level = NULL,
   pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
-  estimate_fun = x$inputs$estimate_fun, pvalue_fun = function(x)
-  style_pvalue(x, prepend_p = TRUE), ...)
+  estimate_fun = x$inputs$estimate_fun,
+  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  ...
+)
 }
 \arguments{
 \item{x}{Object created from \link{tbl_uvregression}}
@@ -71,15 +76,20 @@ inline_text(inline_text_ex1, variable = "age")
 inline_text(inline_text_ex1, variable = "grade", level = "III")
 }
 \seealso{
-Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
-  \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{add_q.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_stack}},
-  \code{\link{bold_p.tbl_uvregression}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
-  \code{\link{tbl_uvregression}}
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_uvregression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
+}
+\author{
+Daniel D. Sjoberg
 }
 \concept{tbl_uvregression tools}
