@@ -98,7 +98,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9001</span>
       </span>
     </div>
 
@@ -178,10 +178,19 @@ regression model results. Review the
 for detailed examples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_regression</span>(<span class='no'>x</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>show_single_row</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>tbl_regression</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>show_single_row</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -289,15 +298,17 @@ units in your model.  Here are some common exceptions.</p><ol>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>See tbl_regression <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html'>vignette</a> for detailed examples</p>
-<p>Other tbl_regression tools: <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
-  <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
-  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a></code>,
-  <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
-  <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
-  <code><a href='modify_header.html'>modify_header</a></code>,
-  <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code></p></div>
+<p>Other tbl_regression tools: 
+<code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
+<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
+<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a>()</code>,
+<code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
+<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
+<code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a>()</code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
@@ -341,9 +352,12 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   display: table;
 #&gt;   border-collapse: collapse;
 #&gt;   margin-left: auto;
+#&gt;   /* table.margin.left */
 #&gt;   margin-right: auto;
+#&gt;   /* table.margin.right */
 #&gt;   color: #333333;
 #&gt;   font-size: 16px;
+#&gt;   /* table.font.size */
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* table.background.color */
 #&gt;   width: auto;
@@ -366,16 +380,32 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* heading.background.color */
 #&gt;   border-bottom-color: #FFFFFF;
+#&gt;   /* table.background.color */
+#&gt;   border-left-style: hidden;
+#&gt;   /* heading.border.lr.style */
+#&gt;   border-left-width: 1px;
+#&gt;   /* heading.border.lr.width */
+#&gt;   border-left-color: #D3D3D3;
+#&gt;   /* heading.border.lr.color */
+#&gt;   border-right-style: hidden;
+#&gt;   /* heading.border.lr.style */
+#&gt;   border-right-width: 1px;
+#&gt;   /* heading.border.lr.width */
+#&gt;   border-right-color: #D3D3D3;
+#&gt;   /* heading.border.lr.color */
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_title {
 #&gt;   color: #333333;
 #&gt;   font-size: 125%;
 #&gt;   /* heading.title.font.size */
+#&gt;   font-weight: initial;
+#&gt;   /* heading.title.font.weight */
 #&gt;   padding-top: 4px;
 #&gt;   /* heading.top.padding - not yet used */
 #&gt;   padding-bottom: 4px;
 #&gt;   border-bottom-color: #FFFFFF;
+#&gt;   /* table.background.color */
 #&gt;   border-bottom-width: 0;
 #&gt; }
 #&gt; 
@@ -383,10 +413,13 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   color: #333333;
 #&gt;   font-size: 85%;
 #&gt;   /* heading.subtitle.font.size */
+#&gt;   font-weight: initial;
+#&gt;   /* heading.subtitle.font.weight */
 #&gt;   padding-top: 0;
 #&gt;   padding-bottom: 4px;
 #&gt;   /* heading.bottom.padding - not yet used */
 #&gt;   border-top-color: #FFFFFF;
+#&gt;   /* table.background.color */
 #&gt;   border-top-width: 0;
 #&gt; }
 #&gt; 
@@ -407,30 +440,47 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   padding-bottom: 4px;
 #&gt; }
 #&gt; 
+#&gt; #ulbfdpbcyv .gt_col_headings {
+#&gt;   border-top-style: solid;
+#&gt;   /* column_labels.border.top.style */
+#&gt;   border-top-width: 2px;
+#&gt;   /* column_labels.border.top.width */
+#&gt;   border-top-color: #D3D3D3;
+#&gt;   /* column_labels.border.top.color */
+#&gt;   border-bottom-style: solid;
+#&gt;   /* column_labels.border.bottom.style */
+#&gt;   border-bottom-width: 2px;
+#&gt;   /* column_labels.border.bottom.width */
+#&gt;   border-bottom-color: #D3D3D3;
+#&gt;   /* column_labels.border.bottom.color */
+#&gt;   border-left-style: none;
+#&gt;   /* column_labels.border.lr.style */
+#&gt;   border-left-width: 1px;
+#&gt;   /* column_labels.border.lr.width */
+#&gt;   border-left-color: #D3D3D3;
+#&gt;   /* column_labels.border.lr.color */
+#&gt;   border-right-style: none;
+#&gt;   /* column_labels.border.lr.style */
+#&gt;   border-right-width: 1px;
+#&gt;   /* column_labels.border.lr.width */
+#&gt;   border-right-color: #D3D3D3;
+#&gt;   /* column_labels.border.lr.color */
+#&gt; }
+#&gt; 
 #&gt; #ulbfdpbcyv .gt_col_heading {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* column_labels.background.color */
-#&gt;   font-size: 16px;
+#&gt;   font-size: 100%;
 #&gt;   /* column_labels.font.size */
 #&gt;   font-weight: initial;
 #&gt;   /* column_labels.font.weight */
+#&gt;   text-transform: inherit;
+#&gt;   /* column_labels.text_transform */
 #&gt;   vertical-align: middle;
 #&gt;   padding: 5px;
 #&gt;   margin: 10px;
 #&gt;   overflow-x: hidden;
-#&gt; }
-#&gt; 
-#&gt; #ulbfdpbcyv .gt_columns_top_border {
-#&gt;   border-top-style: solid;
-#&gt;   border-top-width: 2px;
-#&gt;   border-top-color: #D3D3D3;
-#&gt; }
-#&gt; 
-#&gt; #ulbfdpbcyv .gt_columns_bottom_border {
-#&gt;   border-bottom-style: solid;
-#&gt;   border-bottom-width: 2px;
-#&gt;   border-bottom-color: #D3D3D3;
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_sep_right {
@@ -443,10 +493,12 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* row_group.background.color */
-#&gt;   font-size: 16px;
+#&gt;   font-size: 100%;
 #&gt;   /* row_group.font.size */
 #&gt;   font-weight: initial;
 #&gt;   /* row_group.font.weight */
+#&gt;   text-transform: inherit;
+#&gt;   /* row_group.text_transform */
 #&gt;   border-top-style: solid;
 #&gt;   /* row_group.border.top.style */
 #&gt;   border-top-width: 2px;
@@ -459,6 +511,18 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* row_group.border.bottom.width */
 #&gt;   border-bottom-color: #D3D3D3;
 #&gt;   /* row_group.border.bottom.color */
+#&gt;   border-left-style: none;
+#&gt;   /* row_group.border.left.style */
+#&gt;   border-left-width: 1px;
+#&gt;   /* row_group.border.left.width */
+#&gt;   border-left-color: #D3D3D3;
+#&gt;   /* row_group.border.left.color */
+#&gt;   border-right-style: none;
+#&gt;   /* row_group.border.right.style */
+#&gt;   border-right-width: 1px;
+#&gt;   /* row_group.border.right.width */
+#&gt;   border-right-color: #D3D3D3;
+#&gt;   /* row_group.border.right.color */
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
@@ -467,7 +531,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* row_group.background.color */
-#&gt;   font-size: 16px;
+#&gt;   font-size: 100%;
 #&gt;   /* row_group.font.size */
 #&gt;   font-weight: initial;
 #&gt;   /* row_group.font.weight */
@@ -488,6 +552,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_striped {
 #&gt;   background-color: #8080800D;
+#&gt;   /* row.striping.background_color */
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_from_md &gt; :first-child {
@@ -500,23 +565,48 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_row {
 #&gt;   padding-top: 8px;
-#&gt;   /* row.padding */
+#&gt;   /* data_row.padding */
 #&gt;   padding-bottom: 8px;
-#&gt;   /* row.padding */
+#&gt;   /* data_row.padding */
 #&gt;   padding-left: 5px;
 #&gt;   padding-right: 5px;
 #&gt;   margin: 10px;
 #&gt;   border-top-style: solid;
+#&gt;   /* table_body.hlines.style */
 #&gt;   border-top-width: 1px;
+#&gt;   /* table_body.hlines.width */
 #&gt;   border-top-color: #D3D3D3;
+#&gt;   /* table_body.hlines.color */
+#&gt;   border-left-style: none;
+#&gt;   /* table_body.vlines.style */
+#&gt;   border-left-width: 1px;
+#&gt;   /* table_body.vlines.width */
+#&gt;   border-left-color: #D3D3D3;
+#&gt;   /* table_body.vlines.color */
+#&gt;   border-right-style: none;
+#&gt;   /* table_body.vlines.style */
+#&gt;   border-right-width: 1px;
+#&gt;   /* table_body.vlines.width */
+#&gt;   border-right-color: #D3D3D3;
+#&gt;   /* table_body.vlines.color */
 #&gt;   vertical-align: middle;
 #&gt;   overflow-x: hidden;
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_stub {
+#&gt;   color: #333333;
+#&gt;   background-color: #FFFFFF;
+#&gt;   /* stub.background.color */
+#&gt;   font-weight: initial;
+#&gt;   /* stub.font.weight */
+#&gt;   text-transform: inherit;
+#&gt;   /* stub.text_transform */
 #&gt;   border-right-style: solid;
+#&gt;   /* stub.border.style */
 #&gt;   border-right-width: 2px;
+#&gt;   /* stub.border.width */
 #&gt;   border-right-color: #D3D3D3;
+#&gt;   /* stub.border.color */
 #&gt;   padding-left: 12px;
 #&gt; }
 #&gt; 
@@ -524,28 +614,14 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   /* summary_row.background.color */
-#&gt;   padding-top: 8px;
-#&gt;   /* summary_row.padding */
-#&gt;   padding-bottom: 8px;
-#&gt;   /* summary_row.padding */
-#&gt;   padding-left: 5px;
-#&gt;   padding-right: 5px;
 #&gt;   text-transform: inherit;
 #&gt;   /* summary_row.text_transform */
-#&gt; }
-#&gt; 
-#&gt; #ulbfdpbcyv .gt_grand_summary_row {
-#&gt;   color: #333333;
-#&gt;   background-color: #FFFFFF;
-#&gt;   /* grand_summary_row.background.color */
 #&gt;   padding-top: 8px;
-#&gt;   /* grand_summary_row.padding */
+#&gt;   /* summary_row.padding */
 #&gt;   padding-bottom: 8px;
-#&gt;   /* grand_summary_row.padding */
+#&gt;   /* summary_row.padding */
 #&gt;   padding-left: 5px;
 #&gt;   padding-right: 5px;
-#&gt;   text-transform: inherit;
-#&gt;   /* grand_summary_row.text_transform */
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_first_summary_row {
@@ -556,8 +632,25 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   padding-left: 5px;
 #&gt;   padding-right: 5px;
 #&gt;   border-top-style: solid;
+#&gt;   /* summary_row.border.style */
 #&gt;   border-top-width: 2px;
+#&gt;   /* summary_row.border.width */
 #&gt;   border-top-color: #D3D3D3;
+#&gt;   /* summary_row.border.color */
+#&gt; }
+#&gt; 
+#&gt; #ulbfdpbcyv .gt_grand_summary_row {
+#&gt;   color: #333333;
+#&gt;   background-color: #FFFFFF;
+#&gt;   /* grand_summary_row.background.color */
+#&gt;   text-transform: inherit;
+#&gt;   /* grand_summary_row.text_transform */
+#&gt;   padding-top: 8px;
+#&gt;   /* grand_summary_row.padding */
+#&gt;   padding-bottom: 8px;
+#&gt;   /* grand_summary_row.padding */
+#&gt;   padding-left: 5px;
+#&gt;   padding-right: 5px;
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_first_grand_summary_row {
@@ -568,8 +661,11 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   padding-left: 5px;
 #&gt;   padding-right: 5px;
 #&gt;   border-top-style: double;
+#&gt;   /* grand_summary_row.border.style */
 #&gt;   border-top-width: 6px;
+#&gt;   /* grand_summary_row.border.width */
 #&gt;   border-top-color: #D3D3D3;
+#&gt;   /* grand_summary_row.border.color */
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_table_body {
@@ -588,44 +684,74 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_footnotes {
-#&gt;   border-top-style: solid;
-#&gt;   /* footnotes.border.top.style */
-#&gt;   border-top-width: 2px;
-#&gt;   /* footnotes.border.top.width */
-#&gt;   border-top-color: #D3D3D3;
-#&gt;   /* footnotes.border.top.color */
+#&gt;   color: #333333;
+#&gt;   background-color: #FFFFFF;
+#&gt;   /* footnotes.background.color */
+#&gt;   border-bottom-style: none;
+#&gt;   /* footnotes.border.bottom.style */
+#&gt;   border-bottom-width: 2px;
+#&gt;   /* footnotes.border.bottom.width */
+#&gt;   border-bottom-color: #D3D3D3;
+#&gt;   /* footnotes.border.bottom.color */
+#&gt;   border-left-style: none;
+#&gt;   /* footnotes.border.lr.color */
+#&gt;   border-left-width: 2px;
+#&gt;   /* footnotes.border.lr.color */
+#&gt;   border-left-color: #D3D3D3;
+#&gt;   /* footnotes.border.lr.color */
+#&gt;   border-right-style: none;
+#&gt;   /* footnotes.border.lr.color */
+#&gt;   border-right-width: 2px;
+#&gt;   /* footnotes.border.lr.color */
+#&gt;   border-right-color: #D3D3D3;
+#&gt;   /* footnotes.border.lr.color */
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_footnote {
-#&gt;   font-size: 90%;
-#&gt;   /* footnote.font.size */
 #&gt;   margin: 0px;
+#&gt;   font-size: 90%;
+#&gt;   /* footnotes.font.size */
 #&gt;   padding: 4px;
-#&gt;   /* footnote.padding */
+#&gt;   /* footnotes.padding */
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_sourcenotes {
-#&gt;   border-top-style: solid;
-#&gt;   /* sourcenotes.border.top.style */
-#&gt;   border-top-width: 2px;
-#&gt;   /* sourcenotes.border.top.width */
-#&gt;   border-top-color: #D3D3D3;
-#&gt;   /* sourcenotes.border.top.color */
+#&gt;   color: #333333;
+#&gt;   background-color: #FFFFFF;
+#&gt;   /* source_notes.background.color */
+#&gt;   border-bottom-style: none;
+#&gt;   /* source_notes.border.bottom.style */
+#&gt;   border-bottom-width: 2px;
+#&gt;   /* source_notes.border.bottom.width */
+#&gt;   border-bottom-color: #D3D3D3;
+#&gt;   /* source_notes.border.bottom.color */
+#&gt;   border-left-style: none;
+#&gt;   /* source_notes.border.lr.style */
+#&gt;   border-left-width: 2px;
+#&gt;   /* source_notes.border.lr.style */
+#&gt;   border-left-color: #D3D3D3;
+#&gt;   /* source_notes.border.lr.style */
+#&gt;   border-right-style: none;
+#&gt;   /* source_notes.border.lr.style */
+#&gt;   border-right-width: 2px;
+#&gt;   /* source_notes.border.lr.style */
+#&gt;   border-right-color: #D3D3D3;
+#&gt;   /* source_notes.border.lr.style */
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_sourcenote {
 #&gt;   font-size: 90%;
-#&gt;   /* sourcenote.font.size */
+#&gt;   /* source_notes.font.size */
 #&gt;   padding: 4px;
-#&gt;   /* sourcenote.padding */
-#&gt; }
-#&gt; 
-#&gt; #ulbfdpbcyv .gt_center {
-#&gt;   text-align: center;
+#&gt;   /* source_notes.padding */
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_left {
 #&gt;   text-align: left;
+#&gt; }
+#&gt; 
+#&gt; #ulbfdpbcyv .gt_center {
+#&gt;   text-align: center;
 #&gt; }
 #&gt; 
 #&gt; #ulbfdpbcyv .gt_right {
@@ -656,13 +782,15 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt; &lt;/style&gt;
 #&gt; &lt;div id="ulbfdpbcyv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"&gt;&lt;table class="gt_table"&gt;
 #&gt;   
-#&gt;   &lt;tr&gt;
-#&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
-#&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;OR&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;&lt;/th&gt;
-#&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;&lt;/th&gt;
-#&gt;     &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;body class="gt_table_body"&gt;
+#&gt;   &lt;thead class="gt_col_headings"&gt;
+#&gt;     &lt;tr&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;OR&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;&lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;&lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;p-value&lt;/strong&gt;&lt;/th&gt;
+#&gt;     &lt;/tr&gt;
+#&gt;   &lt;/thead&gt;
+#&gt;   &lt;tbody class="gt_table_body"&gt;
 #&gt;     &lt;tr&gt;
 #&gt;       &lt;td class="gt_row gt_left"&gt;Patient Age&lt;/td&gt;
 #&gt;       &lt;td class="gt_row gt_center"&gt;1.00&lt;/td&gt;
@@ -693,7 +821,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;       &lt;td class="gt_row gt_center"&gt;0.40, 1.65&lt;/td&gt;
 #&gt;       &lt;td class="gt_row gt_center"&gt;0.6&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
-#&gt;   &lt;/body&gt;
+#&gt;   &lt;/tbody&gt;
 #&gt;   
 #&gt;   &lt;tfoot&gt;
 #&gt;     &lt;tr class="gt_footnotes"&gt;

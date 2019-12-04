@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9001</span>
       </span>
     </div>
 
@@ -168,8 +168,14 @@
     <p>Adds p-values to tables created by <code>tbl_summary</code> by comparing values across groups.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_p</span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>add_p</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -251,17 +257,19 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed examples</p>
-<p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
-  <code><a href='add_overall.html'>add_overall</a></code>,
-  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
-  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
-  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
-  <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a></code>,
-  <code><a href='modify_header.html'>modify_header</a></code>,
-  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code>,
-  <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
+<p>Other tbl_summary tools: 
+<code><a href='add_n.html'>add_n</a>()</code>,
+<code><a href='add_overall.html'>add_overall</a>()</code>,
+<code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a>()</code>,
+<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
+<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a>()</code>,
+<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
+<code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a>()</code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>add_p_ex1</span> <span class='kw'>&lt;-</span>
@@ -278,7 +286,7 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
 <span class='no'>my_mcnemar</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>...</span>) {
   <span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
   <span class='no'>result</span>$<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/mcnemar.test.html'>mcnemar.test</a></span>(<span class='no'>data</span><span class='kw'>[[</span><span class='no'>variable</span>]], <span class='no'>data</span><span class='kw'>[[</span><span class='no'>by</span>]])$<span class='no'>p.value</span>
-  <span class='no'>result</span>$<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='st'>"McNemar\\'s test"</span>
+  <span class='no'>result</span>$<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='st'>"McNemar\'s test"</span>
   <span class='no'>result</span>
 }
 <span class='co'># \donttest{</span>

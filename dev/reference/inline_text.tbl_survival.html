@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9001</span>
       </span>
     </div>
 
@@ -169,9 +169,15 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_survival</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='kw'>strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>prob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{estimate} ({conf.level*100}% CI {ci})"</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>estimate_fun</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(
+  <span class='no'>x</span>,
+  <span class='kw'>strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>prob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{estimate} ({conf.level*100}% CI {ci})"</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>estimate_fun</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -239,8 +245,9 @@ print the table the estimates are extracted from.</p><ul>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_survival tools: <code><a href='modify_header.html'>modify_header</a></code>,
-  <code><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a></code></p></div>
+    <div class='dont-index'><p>Other tbl_survival tools: 
+<code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
