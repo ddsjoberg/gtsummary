@@ -4,11 +4,24 @@
 \alias{tbl_uvregression}
 \title{Display univariate regression model results in table}
 \usage{
-tbl_uvregression(data, method, y = NULL, x = NULL,
-  method.args = NULL, formula = "{y} ~ {x}", exponentiate = FALSE,
-  label = NULL, include = NULL, exclude = NULL, hide_n = FALSE,
-  show_single_row = NULL, conf.level = NULL, estimate_fun = NULL,
-  pvalue_fun = NULL, show_yesno = NULL)
+tbl_uvregression(
+  data,
+  method,
+  y = NULL,
+  x = NULL,
+  method.args = NULL,
+  formula = "{y} ~ {x}",
+  exponentiate = FALSE,
+  label = NULL,
+  include = NULL,
+  exclude = NULL,
+  hide_n = FALSE,
+  show_single_row = NULL,
+  conf.level = NULL,
+  estimate_fun = NULL,
+  pvalue_fun = NULL,
+  show_yesno = NULL
+)
 }
 \arguments{
 \item{data}{Data frame to be used in univariate regression modeling.  Data
@@ -76,7 +89,7 @@ a publication-ready table.  It can create univariate regression models holding
 either a covariate or outcome constant.
 
 For models holding outcome constant, the function takes as arguments a data frame,
-the type of regression model, and the outcome variable \code{y=}. Each column in the
+the type of regression model, and the outcome variable \verb{y=}. Each column in the
 data frame is regressed on the specified outcome. The \code{tbl_uvregression}
 function arguments are similar to the \link{tbl_regression} arguments. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
@@ -84,7 +97,7 @@ for detailed examples.
 
 You may alternatively hold a single covariate constant. For this, pass a data
 frame, the type of regression model, and a single
-covariate in the \code{x=} argument. Each column of the data frame will serve as
+covariate in the \verb{x=} argument. Each column of the data frame will serve as
 the outcome in a univariate regression model. Take care using the \code{x} argument
 that each of the columns in the data frame are appropriate for the same type
 of model, e.g. they are all continuous variables appropriate for \link{lm}, or
@@ -166,16 +179,18 @@ trial \%>\%
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 
-Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
-  \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{add_q.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_stack}},
-  \code{\link{bold_p.tbl_uvregression}},
-  \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}}
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_uvregression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg

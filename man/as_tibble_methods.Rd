@@ -10,23 +10,17 @@
 \alias{as_tibble.tbl_survival}
 \title{Convert gtsummary object to tibble}
 \usage{
-\method{as_tibble}{tbl_summary}(x, include = NULL, exclude = NULL,
-  col_labels = TRUE, ...)
+\method{as_tibble}{tbl_summary}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
 
-\method{as_tibble}{tbl_regression}(x, include = NULL, exclude = NULL,
-  col_labels = TRUE, ...)
+\method{as_tibble}{tbl_regression}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
 
-\method{as_tibble}{tbl_uvregression}(x, include = NULL, exclude = NULL,
-  col_labels = TRUE, ...)
+\method{as_tibble}{tbl_uvregression}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
 
-\method{as_tibble}{tbl_merge}(x, include = NULL, exclude = NULL,
-  col_labels = TRUE, ...)
+\method{as_tibble}{tbl_merge}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
 
-\method{as_tibble}{tbl_stack}(x, include = NULL, exclude = NULL,
-  col_labels = TRUE, ...)
+\method{as_tibble}{tbl_stack}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
 
-\method{as_tibble}{tbl_survival}(x, include = NULL, exclude = NULL,
-  col_labels = TRUE, ...)
+\method{as_tibble}{tbl_survival}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package

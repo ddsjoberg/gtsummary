@@ -4,8 +4,14 @@
 \alias{add_p_}
 \title{Standard evaluation version of add_p()}
 \usage{
-add_p_(x, test = NULL, pvalue_fun = NULL, group = NULL,
-  include = NULL, exclude = NULL)
+add_p_(
+  x,
+  test = NULL,
+  pvalue_fun = NULL,
+  group = NULL,
+  include = NULL,
+  exclude = NULL
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
