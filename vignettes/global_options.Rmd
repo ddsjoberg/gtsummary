@@ -114,7 +114,7 @@ To update the default tests in the `add_p()` function, you can set the following
 
 ```{r, echo=FALSE, eval = TRUE}
 tibble::tribble(
-  ~`Option Name`, ~`Behavior`,
+  ~`Option Name`, ~`Tests Modified`,
   "gtsummary.add_p.test.continuous2",              "continuous variables with 2-level by variable",
   "gtsummary.add_p.test.continuous",               "continuous variables with 3- or more level by variable",
   "gtsummary.add_p.test.categorical",              "categorical/dichotomous variables",
@@ -122,7 +122,7 @@ tibble::tribble(
   "gtsummary.add_p.test.categorical.group2",       "categorical/dichotomous grouped/correlated variables with 2-level by variable",
   "gtsummary.add_p.test.continuous.group2",        "continuous grouped/correlated variables with 2-level by variable"
 ) %>%
-  knitr::kable()
+  gt::gt()
 ```
 
 For example, to use one-way ANOVA for all continuous variables, use the following options:
