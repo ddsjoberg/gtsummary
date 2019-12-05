@@ -1,9 +1,91 @@
+#' determine the appropriate test type given two variables
+#'
+#' @param data input data set
+#' @param var categorical or continuous variable for which a test with \code{by_var} is desired
+#' @param var_summary_type summary_type from meta data
+#' @param by_var categorical variable
+#' @param test list of user defined statistical tests and corresponding variables
+#' @return most appropriate test as text of the test function
+#' @noRd
+#' @keywords internal
+#' @author Daniel D. Sjoberg
+
+assign_test <- function(data, var, var_summary_type, by_var, test, group) {
+  map2_chr(
+    var, var_summary_type,
+    ~ assign_test_one(
+      data = data,
+      var = .x,
+      var_summary_type = .y,
+      by_var = by_var,
+      test = test,
+      group = group
+    )
+  )
+}
+
+assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
+  # if the 'by' variable is null, no tests will be performed
+  if (is.null(by_var)) {
+    return(NA_character_)
+  }
+
+  # if user specifed test to be performed, do that test.
+  if (!is.null(test[[var]])) {
+    return(test[[var]])
+  }
+
+  # if group variable supplied, fit a random effects model
+  if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
+    if (var_summary_type == "continuous")
+      return(getOption("gtsummary.add_p.test.continuous.group2", default = "lme4"))
+    if (var_summary_type %in% c("categorical", "dichotomous"))
+      return(getOption("gtsummary.add_p.test.categorical.group2", default = "lme4"))
+  }
+
+  # unless by_var has >2 levels, then return NA with a message
+  if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
+    message(paste0(var, ": P-value calculation for clustered data when by variables have >2 levels is not currently supported"))
+    return(NA_character_)
+  }
+
+  # for continuous data, default to non-parametric tests
+  if (var_summary_type == "continuous" & length(unique(data[[by_var]])) == 2) {
+    return(getOption("gtsummary.add_p.test.continuous2", default = "wilcox.test"))
+  }
+  if (var_summary_type == "continuous") {
+    return(getOption("gtsummary.add_p.test.continuous", default = "kruskal.test"))
+  }
+
+  # calculate expected counts
+  min_exp <-
+    expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
+    mutate(exp = .data$Var1 * .data$Var2 /
+             sum(table(data[[var]], data[[by_var]]))) %>%
+    pull(exp) %>%
+    min()
+
+  # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
+  if (min_exp >= 5) {
+    return(getOption("gtsummary.add_p.test.categorical", default = "chisq.test"))
+  }
+  return(getOption("gtsummary.add_p.test.categorical.low_count", default = "fisher.test"))
+}
+
+
 # Tests used in add_p
 
 add_p_test_t.test <- function(data, variable, by, ...) {
   result = list()
   result$p <- stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
   result$test <- "t-test"
+  result
+}
+
+add_p_test_aov <- function(data, variable, by, ...) {
+  result = list()
+  result$p <- broom::glance(stats::lm(data[[variable]] ~ as.factor(data[[by]])))$p.value
+  result$test <- "One-way ANOVA"
   result
 }
 
@@ -26,6 +108,13 @@ add_p_test_wilcox.test <- function(data, variable, by, ...) {
 add_p_test_chisq.test <- function(data, variable, by, ...) {
   result = list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result$test <- "chi-square test of independence"
+  result
+}
+
+add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
+  result = list()
+  result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]), correct = FALSE)$p.value
   result$test <- "chi-square test of independence"
   result
 }
@@ -86,9 +175,11 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
     test_func <- switch(
       test,
       t.test = add_p_test_t.test,
+      aov = add_p_test_aov,
       kruskal.test = add_p_test_kruskal.test,
       wilcox.test = add_p_test_wilcox.test,
       chisq.test = add_p_test_chisq.test,
+      chisq.test.no.correct = add_p_test_chisq.test.no.correct,
       fisher.test = add_p_test_fisher.test,
       lme4 = add_p_test_lme4
     ) %||% # if not an internal test, then resolving to function name supplied

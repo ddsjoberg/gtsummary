@@ -108,4 +108,28 @@ In the example below, the font size and cell padding are reduced globally.
 options(gtsummary.as_gt.addl_cmds = "gt::tab_options(table.font.size = 'small', row.padding = gt::px(1))")
 ```
 
+## Default tests in `add_p()`
 
+To update the default tests in the `add_p()` function, you can set the following global options.
+
+```{r, echo=FALSE, eval = TRUE}
+tibble::tribble(
+  ~`Option Name`, ~`Behavior`,
+  "gtsummary.add_p.test.continuous2",              "continuous variables with 2-level by variable",
+  "gtsummary.add_p.test.continuous",               "continuous variables with 3- or more level by variable",
+  "gtsummary.add_p.test.categorical",              "categorical/dichotomous variables",
+  "gtsummary.add_p.test.categorical.low_count",    "categorical/dichotomous variables with minimum expected count <5 in one cell",
+  "gtsummary.add_p.test.categorical.group2",       "categorical/dichotomous grouped/correlated variables with 2-level by variable",
+  "gtsummary.add_p.test.continuous.group2",        "continuous grouped/correlated variables with 2-level by variable"
+) %>%
+  knitr::kable()
+```
+
+For example, to use one-way ANOVA for all continuous variables, use the following options:
+
+```{r}
+options(
+  gtsummary.add_p.test.continuous2 = "aov",
+  gtsummary.add_p.test.continuous = "aov"
+)
+```
