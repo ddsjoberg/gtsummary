@@ -17,9 +17,11 @@
 #' e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 #' Options include
 #' * `"t.test"` for a t-test,
+#' * `"aov"` for a one-way ANOVA test,
 #' * `"wilcox.test"` for a Wilcoxon rank-sum test,
 #' * `"kruskal.test"` for a Kruskal-Wallis rank-sum test,
-#' * `"chisq.test"` for a Chi-squared test of independence,
+#' * `"chisq.test"` for a chi-squared test of independence,
+#' * `"chisq.test.no.correct"` for a chi-squared test of independence without continuity correction,
 #' * `"fisher.test"` for a Fisher's exact test,
 #' * `"lme4"` for a random intercept logistic regression model to account for
 #' clustered data, `lme4::glmer(by ~ variable + (1 | group), family = binomial)`.

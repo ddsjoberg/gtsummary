@@ -21,9 +21,11 @@ e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}
 Options include
 \itemize{
 \item \code{"t.test"} for a t-test,
+\item \code{"aov"} for a one-way ANOVA test,
 \item \code{"wilcox.test"} for a Wilcoxon rank-sum test,
 \item \code{"kruskal.test"} for a Kruskal-Wallis rank-sum test,
-\item \code{"chisq.test"} for a Chi-squared test of independence,
+\item \code{"chisq.test"} for a chi-squared test of independence,
+\item \code{"chisq.test.no.correct"} for a chi-squared test of independence without continuity correction,
 \item \code{"fisher.test"} for a Fisher's exact test,
 \item \code{"lme4"} for a random intercept logistic regression model to account for
 clustered data, \code{lme4::glmer(by ~ variable + (1 | group), family = binomial)}.
