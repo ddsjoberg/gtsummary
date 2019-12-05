@@ -38,9 +38,9 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # if group variable supplied, fit a random effects model
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
     if (var_summary_type == "continuous")
-      return(getOption("gtsummary.add_p.test.continuous.group2", default = "lme4"))
+      return(getOption("gtsummary.add_p.test.continuous.group_by2", default = "lme4"))
     if (var_summary_type %in% c("categorical", "dichotomous"))
-      return(getOption("gtsummary.add_p.test.categorical.group2", default = "lme4"))
+      return(getOption("gtsummary.add_p.test.categorical.group_by2", default = "lme4"))
   }
 
   # unless by_var has >2 levels, then return NA with a message
@@ -51,7 +51,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 
   # for continuous data, default to non-parametric tests
   if (var_summary_type == "continuous" & length(unique(data[[by_var]])) == 2) {
-    return(getOption("gtsummary.add_p.test.continuous2", default = "wilcox.test"))
+    return(getOption("gtsummary.add_p.test.continuous_by2", default = "wilcox.test"))
   }
   if (var_summary_type == "continuous") {
     return(getOption("gtsummary.add_p.test.continuous", default = "kruskal.test"))
