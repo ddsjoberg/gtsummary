@@ -116,10 +116,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">tbl_summary()</a>
+      <a href="../articles/tbl_summary.html">Tutorial: tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">tbl_regression()</a>
+      <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -190,9 +190,11 @@
 e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")</a></code>.
 Options include</p><ul>
 <li><p><code>"t.test"</code> for a t-test,</p></li>
+<li><p><code>"aov"</code> for a one-way ANOVA test,</p></li>
 <li><p><code>"wilcox.test"</code> for a Wilcoxon rank-sum test,</p></li>
 <li><p><code>"kruskal.test"</code> for a Kruskal-Wallis rank-sum test,</p></li>
-<li><p><code>"chisq.test"</code> for a Chi-squared test of independence,</p></li>
+<li><p><code>"chisq.test"</code> for a chi-squared test of independence,</p></li>
+<li><p><code>"chisq.test.no.correct"</code> for a chi-squared test of independence without continuity correction,</p></li>
 <li><p><code>"fisher.test"</code> for a Fisher's exact test,</p></li>
 <li><p><code>"lme4"</code> for a random intercept logistic regression model to account for
 clustered data, <code><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>lme4::glmer(by ~ variable + (1 | group), family = binomial)</a></code>.
