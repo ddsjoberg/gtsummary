@@ -151,6 +151,10 @@ the \code{value} argument, e.g. \code{value = list("varname" ~ "level to show")}
 \if{html}{Example 2}
 
 \if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{tbl_summary_ex3.png}{options: width=45\%}}
 }
 
 \examples{
