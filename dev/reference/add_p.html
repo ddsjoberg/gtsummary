@@ -288,7 +288,7 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
 <span class='no'>my_mcnemar</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>...</span>) {
   <span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
   <span class='no'>result</span>$<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/mcnemar.test.html'>mcnemar.test</a></span>(<span class='no'>data</span><span class='kw'>[[</span><span class='no'>variable</span>]], <span class='no'>data</span><span class='kw'>[[</span><span class='no'>by</span>]])$<span class='no'>p.value</span>
-  <span class='no'>result</span>$<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='st'>"McNemar\'s test"</span>
+  <span class='no'>result</span>$<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='st'>"McNemar\\'s test"</span>
   <span class='no'>result</span>
 }
 <span class='co'># \donttest{</span>
