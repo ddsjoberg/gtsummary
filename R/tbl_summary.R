@@ -123,13 +123,12 @@
 #'
 #' # for convenience, you can also pass named lists to any arguments
 #' # that accept formulas (e.g label, digits, etc.)
-#' trial %>%
-#'    dplyr::select(age, grade, response, trt) %>%
+#' tbl_summary_ex3 <-
+#'   trial %>%
+#'    dplyr::select(age, trt) %>%
 #'    tbl_summary(
 #'     by = trt,
-#'     label = list(age = "Patient Age"),
-#'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
-#'     digits = list(vars(age) ~ c(0, 1))
+#'     label = list(age = "Patient Age")
 #'   )
 #'
 #'
@@ -141,6 +140,10 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{tbl_summary_ex3.png}{options: width=45\%}}
 
 tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
