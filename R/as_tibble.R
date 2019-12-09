@@ -3,7 +3,7 @@
 #' Function converts gtsummary objects tibbles. The formatting stored in
 #' `x$kable_calls` is applied.
 #'
-#' @name as_tibble_methods
+#' @name as_tibbleS3
 #' @param x Object created by a function from the gtsummary package
 #' (e.g. [tbl_summary] or [tbl_regression])
 #' @param include Character vector naming kable commands to include in printing.
@@ -27,7 +27,7 @@
 #' as_tibble(tbl, col_names = FALSE)
 NULL
 
-#' @rdname as_tibble_methods
+#' @rdname as_tibbleS3
 #' @export
 as_tibble.tbl_summary <- function(x, include = NULL, exclude = NULL,
                                   col_labels = TRUE, ...) {
@@ -72,22 +72,22 @@ as_tibble.tbl_summary <- function(x, include = NULL, exclude = NULL,
   tbl
 }
 
-#' @rdname as_tibble_methods
+#' @rdname as_tibbleS3
 #' @export
 as_tibble.tbl_regression <- as_tibble.tbl_summary
 
-#' @rdname as_tibble_methods
+#' @rdname as_tibbleS3
 #' @export
 as_tibble.tbl_uvregression <- as_tibble.tbl_summary
 
-#' @rdname as_tibble_methods
+#' @rdname as_tibbleS3
 #' @export
 as_tibble.tbl_merge <- as_tibble.tbl_summary
 
-#' @rdname as_tibble_methods
+#' @rdname as_tibbleS3
 #' @export
 as_tibble.tbl_stack <- as_tibble.tbl_summary
 
-#' @rdname as_tibble_methods
+#' @rdname as_tibbleS3
 #' @export
 as_tibble.tbl_survival <- as_tibble.tbl_summary

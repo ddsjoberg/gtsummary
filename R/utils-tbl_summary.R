@@ -142,16 +142,6 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
   )
 }
 
-# assign_stat_display("continuous", NULL)
-# assign_stat_display(c("continuous", "dichotomous"), NULL)
-# assign_stat_display(c("continuous", "dichotomous"), stat_display = list(continuous = "{median}"))
-
-# assign_stat_display("continuous", NULL)
-# assign_stat_display("continuous", list(dichotomous = "{n}/{N} ({p}%)"))
-# assign_stat_display("dichotomous", list(dichotomous = "{n}/{N} ({p}%)"))
-
-
-
 #' Assigns summary type (e.g. continuous, categorical, or dichotomous).
 #'
 #' For variables where the summary type was not specified in the function
@@ -202,7 +192,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
 
         # factors and characters are categorical
         .y %in% c("factor", "character") ~
-        "categorical",
+          "categorical",
 
         # numeric variables with fewer than 10 levels will be categorical
         .y %in% c("integer", "numeric") & length(unique(na.omit(data[[.x]]))) < 10
@@ -213,141 +203,6 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
       )
   )
 }
-
-
-# n = 50
-# dta = tibble(
-#   age = rnorm(n) + 35,
-#   female = sample(c(T, F), size = n, replace = T),
-#   male = as.numeric(female),
-#   sex = ifelse(female == T, "Female", "Male"),
-#   country = sample(c("USA", "Canada"), size = n, replace = T),
-#   shoe_size = sample(1:25, size = n, replace = T),
-#   family_size = sample(1:5, size = n, replace = T)
-# )
-# #adding missing values
-# dta = mutate_all(dta, funs( ifelse(runif(n) < 0.25, NA, .)) ) %>%
-#   mutate(
-#     sex = as.factor(sex),
-#     male_fct = ifelse(female == TRUE, "No", "Yes") %>% factor()
-#   )
-# dta
-#
-# # creating base meta data dataframe
-# meta_data =
-#   tibble(
-#     variable = names(dta),
-#     class = map_chr(variable, ~ class(dta[[.x]]))
-#   )
-# meta_data
-#
-# # tesing function's guessing ability
-# meta_data %>%
-#   mutate(
-#     assign_summary_type = assign_summary_type(dta, variable, class, NULL)
-#   )
-#
-#
-# # tesing function's ability when type assigned
-# meta_data %>%
-#   mutate(
-#     assign_summary_type = assign_summary_type(dta, variable, class, list(shoe_size = "categorical"))
-#   )
-
-
-
-#' determine the appropriate test type given two variables
-#'
-#' @param data input data set
-#' @param var categorical or continuous variable for which a test with \code{by_var} is desired
-#' @param var_summary_type summary_type from meta data
-#' @param by_var categorical variable
-#' @param test list of user defined statistical tests and corresponding variables
-#' @return most appropriate test as text of the test function
-#' @noRd
-#' @keywords internal
-#' @author Daniel D. Sjoberg
-
-assign_test <- function(data, var, var_summary_type, by_var, test, group) {
-  map2_chr(
-    var, var_summary_type,
-    ~ assign_test_one(
-      data = data,
-      var = .x,
-      var_summary_type = .y,
-      by_var = by_var,
-      test = test,
-      group = group
-    )
-  )
-}
-
-assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
-  # if the 'by' variable is null, no tests will be performed
-  if (is.null(by_var)) {
-    return(NA_character_)
-  }
-
-  # if user specifed test to be performed, do that test.
-  if (!is.null(test[[var]])) {
-    return(test[[var]])
-  }
-
-  # if user specifed test to be performed for ..continuous.. or
-  # ..categorical.., do that test for that class of variable
-  if (!is.null(test[["..continuous.."]]) & var_summary_type == "continuous") {
-    return(test[["..continuous.."]])
-  }
-  if (!is.null(test[["..categorical.."]]) &
-    var_summary_type %in% c("categorical", "dichotomous")) {
-    return(test[["..categorical.."]])
-  }
-
-  # if group variable supplied, fit a random effects model
-  if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
-    return("lme4")
-  }
-
-  # unless by_var has >2 levels, then return NA with a message
-  if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
-    message(paste0(var, ": P-value calculation for clustered data when by variables have >2 levels is not currently supported"))
-    return(NA_character_)
-  }
-
-  # for continuous data, default to non-parametric tests
-  if (var_summary_type == "continuous" & length(unique(data[[by_var]])) == 2) {
-    return("wilcox.test")
-  }
-  if (var_summary_type == "continuous") {
-    return("kruskal.test")
-  }
-
-  # calculate expected counts
-  min_exp <-
-    expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
-    mutate(exp = .data$Var1 * .data$Var2 /
-      sum(table(data[[var]], data[[by_var]]))) %>%
-    pull(exp) %>%
-    min()
-
-  # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
-  if (min_exp >= 5) {
-    return("chisq.test")
-  }
-  return("fisher.test")
-}
-
-# assign_test(data = mtcars, var = c("hp", "mpg"), var_summary_type = c("continuous","continuous"),
-#             by_var = NULL, test = NULL, group = NULL)
-# assign_test(data = mtcars, var = c("hp", "mpg"), var_summary_type = c("continuous","continuous"),
-#             by_var = "am", test = NULL, group = NULL)
-# assign_test(data = mtcars, var = c("hp", "mpg", "cyl","vs"),
-#             var_summary_type = c("continuous","continuous", "categorical", "dichotomous"),
-#             by_var = "am", test = NULL, group = NULL)
-
-# assign_test(data = mtcars, var = c("hp", "mpg", "cyl","vs"),
-#             var_summary_type = c("continuous","continuous", "categorical", "dichotomous"),
-#             by_var = "gear", test = NULL, group = "am")
 
 
 #' Assigns variable label to display.
@@ -362,6 +217,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 #' e.g. `var_label = list(age = "Age, yrs")`
 #' @return Vector variable labels.
 #' @keywords internal
+#' @noRd
 #' @author Daniel D. Sjoberg
 #' @examples
 #' gtsummary:::assign_var_label(mtcars, names(mtcars), list(hp = "Horsepower"))
@@ -789,6 +645,13 @@ summarize_categorical <- function(data, variable, by, var_label,
     results <-
       results %>%
       filter(!!parse_expr("row_type != 'missing'"))
+  }
+
+  # if there are some by levels that are entriely missing,
+  # making sure columns appear in correct order
+  if (!is.null(by)) {
+    results <- results %>%
+      select(c("row_type", "label", sort(unique(data$by_col))))
   }
 
   results

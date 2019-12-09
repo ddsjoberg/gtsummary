@@ -4,8 +4,7 @@
 \alias{add_q.tbl_uvregression}
 \title{Add a column of q-values to account for multiple comparisons}
 \usage{
-\method{add_q}{tbl_uvregression}(x, method = "fdr",
-  pvalue_fun = x$inputs$pvalue_fun, ...)
+\method{add_q}{tbl_uvregression}(x, method = "fdr", pvalue_fun = x$inputs$pvalue_fun, ...)
 }
 \arguments{
 \item{x}{\code{tbl_uvregression} object}
@@ -45,16 +44,18 @@ tbl_uvr_q_ex <-
   add_q()
 }
 \seealso{
-Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
-  \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_stack}},
-  \code{\link{bold_p.tbl_uvregression}},
-  \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
-  \code{\link{tbl_uvregression}}
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_uvregression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
 }
 \author{
 Esther Drill, Daniel D. Sjoberg

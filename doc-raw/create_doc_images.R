@@ -76,6 +76,16 @@ all_files <-
   # TODO: Figure out why this the code does not work for add_p_test methods
   purrr::discard(~endsWith(., "add_p.Rd"))
 
+# first deleting existing files
+list.files("man/figures") %>%
+  # do not delete README- figures
+  purrr::discard(~startsWith(., "README-")) %>%
+  # delete examples from function docs
+  purrr::keep(~stringr::str_ends(., "_ex[[:digit:]].png") | stringr::str_ends(., "_ex.png")) %>%
+  {paste0("man/figures/", .)} %>%
+  fs::file_delete()
+
+# create example figures
 purrr::walk(all_files, ~ update_table_png(.x))
 
 # Or Run on individual files as needed:

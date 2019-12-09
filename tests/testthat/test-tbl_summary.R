@@ -209,3 +209,24 @@ test_that("tbl_summary-testing tidyselect parsing", {
     c("{n}")
   )
 })
+
+test_that("tbl_summary-order of output columns", {
+  expect_equal(
+    trial %>%
+      dplyr::mutate(
+        grade =
+          dplyr::case_when(grade != "III" ~ grade),
+        grade_str =
+          dplyr::case_when(is.na(grade) ~ "Missing Grade",
+                           grade == "I" ~ "First Grade",
+                           grade == "II" ~ "Second Grade"
+          )
+      ) %>%
+      dplyr::select(grade, grade_str) %>%
+      tbl_summary(by=grade_str) %>%
+      purrr::pluck("table_body") %>%
+      names() %>%
+      {.[startsWith(., "stat_")]},
+    paste0("stat_", 1:3)
+  )
+})

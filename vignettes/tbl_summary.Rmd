@@ -18,6 +18,14 @@ knitr::opts_chunk$set(
 )
 ```
 
+<!-- Not creating vignette if gt is not installed. -->
+`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"}`
+
+```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
+knitr::knit_exit()
+```
+
+<!-- Start of vignette -->
 ## Introduction
 
 This vignette will walk a reader through the `tbl_summary()` function, and the various functions available to modify and make additions to an existing table summary object.
@@ -44,18 +52,6 @@ Before going through the tutorial, install {gtsummary} and {gt}.
 ```{r, include=FALSE}
 library(gtsummary)
 library(dplyr)
-
-# installing gt 
-if (curl::has_internet()) {
-  # adding tmpdir to libPath
-  temp_path <- file.path(tempdir(), "gt_folder")
-  dir.create(temp_path)
-  lib_path <-.libPaths()
-  .libPaths(c(lib_path, temp_path))
-  
-  # installing gt
-  remotes::install_github("rstudio/gt", lib = temp_path)
-}
 ```
 
 ```{r, eval=FALSE}
@@ -67,8 +63,6 @@ library(dplyr)
 ```
 
 - If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
-
-The vignettes hosted on https://cran.r-project.org may not use the {gt} package to print tables.  For examples with {gt}, browse to the {gtsummary} [website](http://www.danieldsjoberg.com/gtsummary/). The  `knitr::kable()` function is used to generate tables when the {gt} package is not available, or if the user requests with `options(gtsummary.print_engine = "kable")`. 
 
 ## Basic Usage
 

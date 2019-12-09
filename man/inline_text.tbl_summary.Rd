@@ -4,9 +4,14 @@
 \alias{inline_text.tbl_summary}
 \title{Report statistics from summary tables inline}
 \usage{
-\method{inline_text}{tbl_summary}(x, variable, level = NULL,
+\method{inline_text}{tbl_summary}(
+  x,
+  variable,
+  level = NULL,
   column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...)
+  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  ...
+)
 }
 \arguments{
 \item{x}{Object created from  \link{tbl_summary}}
@@ -45,15 +50,19 @@ inline_text(t2, variable = "grade", level = "I", column = "Drug")
 inline_text(t2, variable = "grade", column = "p.value")
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_n}},
-  \code{\link{add_overall}}, \code{\link{add_p}},
-  \code{\link{add_q.tbl_summary}},
-  \code{\link{add_stat_label}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_summary}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_summary}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_summary}}
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p}()},
+\code{\link{add_q.tbl_summary}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_summary}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
 }
 \author{
 Daniel D. Sjoberg

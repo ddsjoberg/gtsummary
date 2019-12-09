@@ -4,10 +4,20 @@
 \alias{tbl_summary}
 \title{Create a table of summary statistics}
 \usage{
-tbl_summary(data, by = NULL, label = NULL, statistic = NULL,
-  digits = NULL, type = NULL, value = NULL, missing = c("ifany",
-  "always", "no"), missing_text = "Unknown", sort = NULL,
-  percent = c("column", "row", "cell"), group = NULL)
+tbl_summary(
+  data,
+  by = NULL,
+  label = NULL,
+  statistic = NULL,
+  digits = NULL,
+  type = NULL,
+  value = NULL,
+  missing = c("ifany", "always", "no"),
+  missing_text = "Unknown",
+  sort = NULL,
+  percent = c("column", "row", "cell"),
+  group = NULL
+)
 }
 \arguments{
 \item{data}{A data frame}
@@ -75,7 +85,7 @@ for detailed examples.
 \section{select helpers}{
 
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
-from the \{tidyselect\} package and \{gtsummary\} package are available to
+from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
 modify default behavior for groups of variables.
 For example, by default continuous variables are reported with the median
 and IQR.  To change all continuous variables to mean and standard deviation use
@@ -114,7 +124,7 @@ For continuous variables the following statistics are available to display.
 \item \code{{var}} variance
 \item \code{{min}} minimum
 \item \code{{max}} maximum
-\item \code{{p##}} any integer percentile, where \code{##} is an integer from 0 to 100
+\item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
 \item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
 }
@@ -141,6 +151,10 @@ the \code{value} argument, e.g. \code{value = list("varname" ~ "level to show")}
 \if{html}{Example 2}
 
 \if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{tbl_summary_ex3.png}{options: width=45\%}}
 }
 
 \examples{
@@ -161,13 +175,12 @@ tbl_summary_ex2 <-
 
 # for convenience, you can also pass named lists to any arguments
 # that accept formulas (e.g label, digits, etc.)
-trial \%>\%
-   dplyr::select(age, grade, response, trt) \%>\%
+tbl_summary_ex3 <-
+  trial \%>\%
+   dplyr::select(age, trt) \%>\%
    tbl_summary(
     by = trt,
-    label = list(age = "Patient Age"),
-    statistic = list(all_continuous() ~ "{mean} ({sd})"),
-    digits = list(vars(age) ~ c(0, 1))
+    label = list(age = "Patient Age")
   )
 
 
@@ -175,15 +188,19 @@ trial \%>\%
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 
-Other tbl_summary tools: \code{\link{add_n}},
-  \code{\link{add_overall}}, \code{\link{add_p}},
-  \code{\link{add_q.tbl_summary}},
-  \code{\link{add_stat_label}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_summary}},
-  \code{\link{inline_text.tbl_summary}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_summary}}, \code{\link{tbl_merge}}
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p}()},
+\code{\link{add_q.tbl_summary}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_summary}()},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg

@@ -4,8 +4,14 @@
 \alias{add_p}
 \title{Adds p-values to summary tables}
 \usage{
-add_p(x, test = NULL, pvalue_fun = NULL, group = NULL,
-  include = NULL, exclude = NULL)
+add_p(
+  x,
+  test = NULL,
+  pvalue_fun = NULL,
+  group = NULL,
+  include = NULL,
+  exclude = NULL
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
@@ -15,9 +21,11 @@ e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}
 Options include
 \itemize{
 \item \code{"t.test"} for a t-test,
+\item \code{"aov"} for a one-way ANOVA test,
 \item \code{"wilcox.test"} for a Wilcoxon rank-sum test,
 \item \code{"kruskal.test"} for a Kruskal-Wallis rank-sum test,
-\item \code{"chisq.test"} for a Chi-squared test of independence,
+\item \code{"chisq.test"} for a chi-squared test of independence,
+\item \code{"chisq.test.no.correct"} for a chi-squared test of independence without continuity correction,
 \item \code{"fisher.test"} for a Fisher's exact test,
 \item \code{"lme4"} for a random intercept logistic regression model to account for
 clustered data, \code{lme4::glmer(by ~ variable + (1 | group), family = binomial)}.
@@ -103,16 +111,19 @@ add_p_ex2 <-
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 
-Other tbl_summary tools: \code{\link{add_n}},
-  \code{\link{add_overall}},
-  \code{\link{add_q.tbl_summary}},
-  \code{\link{add_stat_label}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{bold_p.tbl_summary}},
-  \code{\link{inline_text.tbl_summary}},
-  \code{\link{modify_header}},
-  \code{\link{sort_p.tbl_summary}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_summary}}
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_q.tbl_summary}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_summary}()},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
 }
 \author{
 Emily C. Zabor, Daniel D. Sjoberg
