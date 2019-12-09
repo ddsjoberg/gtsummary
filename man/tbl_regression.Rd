@@ -15,7 +15,8 @@ tbl_regression(
   intercept = FALSE,
   estimate_fun = NULL,
   pvalue_fun = NULL,
-  show_yesno = NULL
+  show_yesno = NULL,
+  tidier = NULL
 )
 }
 \arguments{
@@ -54,6 +55,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{show_yesno}{deprecated}
+
+\item{tidier}{specifiy tidier if necessary (e.g. broom::tidy) (default searches
+among broom::tidy and broom::mixed)}
 }
 \value{
 A \code{tbl_regression} object

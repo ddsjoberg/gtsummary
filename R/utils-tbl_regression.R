@@ -22,30 +22,58 @@
 #' @author Daniel D. Sjoberg
 
 # Points function to use mixed vs non-mixed version of broom
-tidy_wrap <- function(x, exponentiate, conf.level) {
+tidy_wrap <- function(x, exponentiate, conf.level, tidier) {
   mixed_classes <- c("lmerMod", "glmerMod", "nlme")
-  if (class(x)[1] %in% mixed_classes) { # can add other classes later. Need exact subclass.
-    tidy_bit <- broom.mixed::tidy(
-      x,
-      exponentiate = exponentiate,
-      conf.level = conf.level, conf.int = T, effects = "fixed"
-    )
+  if(is.null(tidier)) {
+    if (class(x)[1] %in% mixed_classes) { # can add other classes later. Need exact subclass.
+      tidy_bit <- broom.mixed::tidy(
+        x,
+        exponentiate = exponentiate,
+        conf.level = conf.level, conf.int = T, effects = "fixed"
+      )
+    }
+
+    if (!(class(x)[1] %in% mixed_classes)) {
+      tidy_bit <- broom::tidy(
+        x,
+        exponentiate = exponentiate,
+        conf.level = conf.level, conf.int = T
+      )
+    }
+
+    # deleting scale parameters from survreg objects
+    if (class(x)[1] == "survreg") {
+      return(
+        tidy_bit %>%
+          filter(!!parse_expr('term != "Log(scale)"'))
+      )
+    }
   }
 
-  if (!(class(x)[1] %in% mixed_classes)) {
-    tidy_bit <- broom::tidy(
-      x,
-      exponentiate = exponentiate,
-      conf.level = conf.level, conf.int = T
-    )
-  }
+  if(!is.null(tidier)) {
 
-  # deleting scale parameters from survreg objects
-  if (class(x)[1] == "survreg") {
-    return(
-      tidy_bit %>%
-        filter(!!parse_expr('term != "Log(scale)"'))
-    )
+    # check to see if the input is even a tidier?
+    # if they load a library with a special tidier it should show up
+    #tidier_list <- do.call("methods", list(substitute(broom::tidy)))
+    #tidier <- deparse(substitute(tidier)) %>% as.character()
+    # if (!(tidier %in% tidier_list)) {
+    #   stop("Specified `tidier` is not in path. Try loading necessary libraries.")
+    # }
+
+    # technically we might not even need them to specify?? maybe just the below would work
+    # DAN - I'm sure there's a better way to do this part,
+    # this is just a very simple/naive way to get a tidier invoked.
+    # Should we have it read exactly what we have the person input? e.g.
+    # riskybiz.tidy
+
+    # this works for some reason without invoking the package the tidier comes from
+    # I don't get command checks but maybe solaris won't like it :)
+    tidy_bit <- do.call("tidy",
+                        args = list(x, exponentiate = exponentiate,
+                                    conf.level = conf.level, conf.int = T)
+                        # we can optionally add a "tidy.args" argument to the main
+                        # function down the line to allow for additional args?
+                        )
   }
 
   # looks for if p.value column is missing and adds NAs if so

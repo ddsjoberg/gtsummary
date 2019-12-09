@@ -53,6 +53,8 @@
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
 #' @param show_yesno deprecated
+#' @param tidier specifiy tidier if necessary (e.g. broom::tidy) (default searches
+#'  among broom::tidy and broom::mixed)
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
@@ -94,7 +96,7 @@
 tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
                            include = NULL, exclude = NULL,
                            show_single_row = NULL, conf.level = NULL, intercept = FALSE,
-                           estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL) {
+                           estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL, tidier = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
     lifecycle::deprecate_stop("1.2.2", "tbl_regression(show_yesno = )",
@@ -154,7 +156,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # using broom and broom.mixed to tidy up regression results, and
   # then reversing order of data frame
   tidy_model <-
-    tidy_wrap(x, exponentiate, conf.level)
+    tidy_wrap(x, exponentiate, conf.level, tidier)
 
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
