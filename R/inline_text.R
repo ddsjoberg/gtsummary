@@ -34,7 +34,7 @@ inline_text <- function(x, ...) {
 #' t2 <- tbl_summary(trial, by = trt) %>% add_p()
 #'
 #' inline_text(t1, variable = "age")
-#' inline_text(t2, variable = "grade", level = "I", column = "Drug")
+#' inline_text(t2, variable = "grade", level = "I", column = "Drug A")
 #' inline_text(t2, variable = "grade", column = "p.value")
 inline_text.tbl_summary <-
   function(x, variable, level = NULL,
@@ -305,7 +305,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #'   tbl_survival(times = c(12, 24))
 #'
 #' inline_text(surv_table,
-#'   strata = "Drug",
+#'   strata = "Drug A",
 #'   time = 12
 #' )
 inline_text.tbl_survival <-

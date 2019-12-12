@@ -55,7 +55,7 @@ trial[c("trt", "age", "grade")] %>%
   add_n() %>%
   bold_labels() %>%
   as_gt() %>%
-  tab_spanner(columns = starts_with("stat_"), md("**Randomization Group**"))
+  tab_spanner(columns = starts_with("stat_"), md("**Chemotherapy Treatment**"))
 ```
 
 ---
@@ -176,7 +176,7 @@ tbl_reg %>%
   )
 ```
 
-Add descriptive statistics by treatment group to the table above to produce a table often reported for randomized trials.
+Add descriptive statistics by treatment group to the table above to produce a table often reported two group comparisons.
 
 ```{r}
 gt_sum <- 
