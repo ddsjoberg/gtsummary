@@ -70,7 +70,7 @@ surv_table <-
   tbl_survival(times = c(12, 24))
 
 inline_text(surv_table,
-  strata = "Drug",
+  strata = "Drug A",
   time = 12
 )
 }

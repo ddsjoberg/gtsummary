@@ -1,10 +1,10 @@
-# Results from a simulated trial of Placebo vs Drug
+# Results from a cohort study of Drug A vs B
 
 set.seed(8976)
 n <- 200
 trial <-
   tibble::tibble(
-    trt = sample(c("Placebo", "Drug"), n, replace = TRUE),
+    trt = sample(c("Drug A", "Drug B"), n, replace = TRUE),
     age = rnorm(n, mean = 50, sd = 15) %>% as.integer(),
     marker = rgamma(n, 1, 1) %>% round(digits = 3),
     stage = sample(c("T1", "T2", "T3", "T4"), size = n, replace = TRUE) %>% factor(),
@@ -30,7 +30,7 @@ trial <-
   dplyr::select(-dplyr::one_of("response_prob", "ttdeath_true"))
 summary(trial)
 
-attr(trial$trt, "label") <- "Treatment Randomization"
+attr(trial$trt, "label") <- "Chemotherapy Treatment"
 attr(trial$age, "label") <- "Age, yrs"
 attr(trial$marker, "label") <- "Marker Level, ng/mL"
 attr(trial$stage, "label") <- "T Stage"

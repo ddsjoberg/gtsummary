@@ -59,9 +59,12 @@ library(dplyr)
 
 ## Basic Usage
 
-We will use the `trial` data set throughout this example.  This set contains data from `r nrow(trial)` patients randomized to a new drug or placebo.  The outcome is a binary tumor response.  Each variable in the data frame has been assigned an attribute label (i.e. `attr(trial$trt, "label") == "Treatment Randomization")` with the [labelled](http://larmarange.github.io/labelled/) package.
+We will use the `trial` data set throughout this example.
+This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
+The outcome is a binary tumor response.
+Each variable in the data frame has been assigned an attribute label (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the [labelled](http://larmarange.github.io/labelled/) package.
 
-    trt      Treatment Randomization
+    trt      Chemotherapy Treatment
     age      Age, yrs
     marker   Marker Level, ng/mL
     stage    T Stage
