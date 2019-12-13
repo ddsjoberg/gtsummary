@@ -20,7 +20,8 @@ tbl_uvregression(
   conf.level = NULL,
   estimate_fun = NULL,
   pvalue_fun = NULL,
-  show_yesno = NULL
+  show_yesno = NULL,
+  tidy_fun = NULL
 )
 }
 \arguments{
@@ -79,6 +80,11 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{show_yesno}{deprecated}
+
+\item{tidy_fun}{Option to specify a particular tidier (e.g. \code{tidy_fun = riskybiz::tidy})
+with tidy function arguments if needed (e.g. \code{tidy_fun = purrr::partial(riskybiz::tidy, exponentiate = TRUE)})
+Default NULL will will detect model type and use \link[broom:tidy]{broom::tidy} or
+\link[broom.mixed:tidy]{broom.mixed::tidy} tidier if available.}
 }
 \value{
 A \code{tbl_uvregression} object

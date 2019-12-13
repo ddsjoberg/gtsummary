@@ -95,7 +95,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                              exponentiate = FALSE, label = NULL,
                              include = NULL, exclude = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
-                             estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL) {
+                             estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL,
+                             tidy_fun = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
     lifecycle::deprecate_stop("1.2.2", "tbl_uvregression(show_yesno = )",
@@ -217,7 +218,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
           exponentiate = exponentiate,
           conf.level = conf.level,
           label = label,
-          show_single_row = intersect(.y, show_single_row)
+          show_single_row = intersect(.y, show_single_row),
+          tidy_fun = tidy_fun
         )
       )
   }
@@ -233,7 +235,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
               exponentiate = exponentiate,
               conf.level = conf.level,
               include = x,
-              show_single_row = show_single_row
+              show_single_row = show_single_row,
+              tidy_fun = tidy_fun
             )
           tbl_uv$table_body$variable = var
           tbl_uv$table_body$var_type = NA_character_

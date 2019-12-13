@@ -17,14 +17,15 @@
 #' or `broom.mixed::tidy`.
 #' @param conf.level confidence level passed directly to `broom::tidy`
 #' or `broom.mixed::tidy`.
+#' @param tidy_fun tidy function and arguments passed to it
 #' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
 # Points function to use mixed vs non-mixed version of broom
-tidy_wrap <- function(x, exponentiate, conf.level, tidier) {
+tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
   mixed_classes <- c("lmerMod", "glmerMod", "nlme")
-  if(is.null(tidier)) {
+  if(is.null(tidy_fun)) {
     if (class(x)[1] %in% mixed_classes) { # can add other classes later. Need exact subclass.
       tidy_bit <- broom.mixed::tidy(
         x,
@@ -50,30 +51,28 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidier) {
     }
   }
 
-  if(!is.null(tidier)) {
+  # if user specified a tidier use it here.
+  if(!is.null(tidy_fun)) {
+     tryCatch({
+        tidy_bit <- do.call(tidy_fun,
+                            args = list(x, exponentiate = exponentiate,
+                                        conf.level = conf.level, conf.int = T)
+                            )
+     },
+     warning = function(w) {
+       warning(x)
+     },
+     error = function(e) {
+       usethis::ui_oops(paste0(
+         "There was an error calling {usethis::ui_code('tidy_fun')}.\n\n",
+         "Most likely, this is because the argument passed in {usethis::ui_code('tidy_fun = ')} ",
+         "was\nmisspelled, does not exist, is not compatible with your object, \n\n",
+         "or was missing necessary arguments. See error message below. \n\n"
+       ))
+       print(e)
+       stop(e)
+     })
 
-    # check to see if the input is even a tidier?
-    # if they load a library with a special tidier it should show up
-    #tidier_list <- do.call("methods", list(substitute(broom::tidy)))
-    #tidier <- deparse(substitute(tidier)) %>% as.character()
-    # if (!(tidier %in% tidier_list)) {
-    #   stop("Specified `tidier` is not in path. Try loading necessary libraries.")
-    # }
-
-    # technically we might not even need them to specify?? maybe just the below would work
-    # DAN - I'm sure there's a better way to do this part,
-    # this is just a very simple/naive way to get a tidier invoked.
-    # Should we have it read exactly what we have the person input? e.g.
-    # riskybiz.tidy
-
-    # this works for some reason without invoking the package the tidier comes from
-    # I don't get command checks but maybe solaris won't like it :)
-    tidy_bit <- do.call("tidy",
-                        args = list(x, exponentiate = exponentiate,
-                                    conf.level = conf.level, conf.int = T)
-                        # we can optionally add a "tidy.args" argument to the main
-                        # function down the line to allow for additional args?
-                        )
   }
 
   # looks for if p.value column is missing and adds NAs if so
@@ -439,3 +438,11 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
       "estimate", "conf.low", "conf.high", "p.value"
     ))
 }
+
+#' @title Vetted tidy functions
+#'
+#' @description Below is a list of tidy functions that we have vetted for use in gtsummary.
+#'
+#' @name tidy_vetted
+NULL
+
