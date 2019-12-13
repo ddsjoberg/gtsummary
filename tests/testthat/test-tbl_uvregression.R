@@ -16,6 +16,21 @@ test_that("lm: no errors/warnings with standard use", {
     ), NA)
 })
 
+test_that("lm specifying tidy_fun: no errors/warnings with standard use", {
+  expect_error(mtcars %>%
+                 tbl_uvregression(
+                   method = lm,
+                   y = mpg,
+                   tidy_fun = broom::tidy
+                 ), NA)
+  expect_warning(mtcars %>%
+                   tbl_uvregression(
+                     method = lm,
+                     y = mpg,
+                     tidy_fun = broom::tidy
+                   ), NA)
+})
+
 test_that("coxph: no errors/warnings with standard use", {
   expect_error(
     coxph_uv <-
@@ -134,6 +149,15 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       method = coxph,
       y = Surv(time, status),
       estimate_fun = mtcars
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = mtcars,
+      method = coxph,
+      y = Surv(time, status),
+      tidy_fun = mtcars
     ),
     "*"
   )
