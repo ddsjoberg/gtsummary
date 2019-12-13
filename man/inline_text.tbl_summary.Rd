@@ -46,7 +46,7 @@ t1 <- tbl_summary(trial)
 t2 <- tbl_summary(trial, by = trt) \%>\% add_p()
 
 inline_text(t1, variable = "age")
-inline_text(t2, variable = "grade", level = "I", column = "Drug")
+inline_text(t2, variable = "grade", level = "I", column = "Drug A")
 inline_text(t2, variable = "grade", column = "p.value")
 }
 \seealso{
