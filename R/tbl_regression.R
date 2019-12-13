@@ -53,10 +53,8 @@
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
 #' @param show_yesno deprecated
-#' @param tidy_fun Option to specify a particular tidier (e.g. `tidy_fun = riskybiz::tidy`)
-#' with tidy function arguments if needed (e.g. `tidy_fun = purrr::partial(riskybiz::tidy, exponentiate = TRUE)`)
-#' Default NULL will will detect model type and use [broom::tidy] or
-#' [broom.mixed::tidy] tidier if available.
+#' @param tidy_fun Option to specify a particular tidier function if the
+#' model is not a [vetted model][tidy_vetted]. Default it `NULL`
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools

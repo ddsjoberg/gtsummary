@@ -30,7 +30,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
       tidy_bit <- broom.mixed::tidy(
         x,
         exponentiate = exponentiate,
-        conf.level = conf.level, conf.int = T, effects = "fixed"
+        conf.level = conf.level, conf.int = TRUE, effects = "fixed"
       )
     }
 
@@ -38,7 +38,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
       tidy_bit <- broom::tidy(
         x,
         exponentiate = exponentiate,
-        conf.level = conf.level, conf.int = T
+        conf.level = conf.level, conf.int = TRUE
       )
     }
 
@@ -54,10 +54,11 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
   # if user specified a tidier use it here.
   if(!is.null(tidy_fun)) {
      tryCatch({
-        tidy_bit <- do.call(tidy_fun,
-                            args = list(x, exponentiate = exponentiate,
-                                        conf.level = conf.level, conf.int = T)
-                            )
+       tidy_bit <- do.call(
+         tidy_fun,
+         args = list(x, exponentiate = exponentiate,
+                     conf.level = conf.level, conf.int = T)
+       )
      },
      warning = function(w) {
        warning(x)
@@ -439,10 +440,30 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
     ))
 }
 
-#' @title Vetted tidy functions
+#' @title Vetted tidy models
 #'
-#' @description Below is a list of tidy functions that we have vetted for use in gtsummary.
+#' @description Below is a list of models vetted for use
+#' in [tbl_regression] and [tbl_uvregression].  If a model is passed to these
+#' functions and the model is not listed below and  a `tidy()` function is
+#' not specified in the `tidy_fun=` argument, the model object will be passed
+#' to [broom::tidy].
 #'
+#' \itemize{
+#'  \item{[stats::lm]}
+#'  \item{[stats::glm]}
+#'  \item{[survival::coxph]}
+#'  \item{[survival::survreg]}
+#'  \item{[lme4::glmer]}
+#'  \item{[lme4::lmer]}
+#'  \item{[geepack::geeglm]}
+#' }
 #' @name tidy_vetted
+#' @section model support:
+#' If [broom::tidy] or [broom.mixed::tidy] support a class of model not listed
+#' above, please submit a [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues).
+#' The model can be added to the list of vetted models and unit tests will be
+#' put in place to ensure continued support for the model.
 NULL
+
+
 
