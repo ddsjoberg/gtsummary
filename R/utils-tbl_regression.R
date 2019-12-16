@@ -24,7 +24,7 @@
 
 # Points function to use mixed vs non-mixed version of broom
 tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
-  mixed_classes <- c("lmerMod", "glmerMod", "nlme")
+  mixed_classes <- c("lmerMod", "glmerMod")
   if(is.null(tidy_fun)) {
     if (class(x)[1] %in% mixed_classes) { # can add other classes later. Need exact subclass.
       tidy_bit <- broom.mixed::tidy(
