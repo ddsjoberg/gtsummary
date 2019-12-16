@@ -105,8 +105,12 @@ test_that("No errors/warnings when data is labelled using Hmisc", {
 })
 
 test_that("show_single_row errors print", {
-  expect_error(tbl_regression(mod_lm_interaction, show_single_row = "NOT_A_VA"),
-               "*")
-  expect_error(tbl_regression(mod_lm_interaction, show_single_row = "grade"),
-               "*")
+  expect_error(
+    tbl_regression(mod_lm_interaction, show_single_row = "NOT_A_VA"),
+    "*"
+  )
+  expect_error(
+    tbl_regression(mod_lm_interaction, show_single_row = "grade"),
+    "*"
+  )
 })

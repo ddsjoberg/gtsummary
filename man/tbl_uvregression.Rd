@@ -172,13 +172,13 @@ tbl_uv_ex2 <-
 # that accept formulas (e.g label, etc.)
 library(survival)
 trial \%>\%
-   dplyr::select(ttdeath, death, age, grade, response) \%>\%
-   tbl_uvregression(
-     method = coxph,
-     y = Surv(ttdeath, death),
-     label = list(grade = "Grade"),
-     exponentiate = TRUE)
-
+  dplyr::select(ttdeath, death, age, grade, response) \%>\%
+  tbl_uvregression(
+    method = coxph,
+    y = Surv(ttdeath, death),
+    label = list(grade = "Grade"),
+    exponentiate = TRUE
+  )
 }
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples

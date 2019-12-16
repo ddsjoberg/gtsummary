@@ -62,7 +62,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # input checks ---------------------------------------------------------------
   # if tab spanner is null, default is Table 1, Table 2, etc....
   if (is.null(tab_spanner)) {
-    tab_spanner <-  paste0(c("**Table "), seq_len(length(tbls)), "**")
+    tab_spanner <- paste0(c("**Table "), seq_len(length(tbls)), "**")
   }
 
   # class of tbls
@@ -73,9 +73,11 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # checking all inputs are class tbl_regression, tbl_uvregression,
   # tbl_regression, tbl_summary, or tbl_stack
   if (!map_chr(tbls, class) %in%
-      c("tbl_regression", "tbl_uvregression", "tbl_summary", "tbl_stack") %>% all()) {
-    stop(paste("All objects in 'tbls' must be class 'tbl_regression',",
-               "'tbl_uvregression', 'tbl_summary', or 'tbl_stack'"))
+    c("tbl_regression", "tbl_uvregression", "tbl_summary", "tbl_stack") %>% all()) {
+    stop(paste(
+      "All objects in 'tbls' must be class 'tbl_regression',",
+      "'tbl_uvregression', 'tbl_summary', or 'tbl_stack'"
+    ))
   }
 
   # at least two objects must be passed
@@ -89,11 +91,11 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # if previously called bold/italicize_labels/levels, print note to do it again
   style_funs <- c("bold_labels", "bold_levels", "italicize_labels", "italicize_levels")
-  if (purrr::some(tbls, ~names(pluck(.x, "call_list")) %in% style_funs %>% any())) {
+  if (purrr::some(tbls, ~ names(pluck(.x, "call_list")) %in% style_funs %>% any())) {
     message(glue::glue(
-      'Styling functions ',
+      "Styling functions ",
       '{glue::glue("`{style_funs}()`") %>% glue::glue_collapse(sep = ", ", last = ", and ")}',
-      ' need to be re-applied after `tbl_merge()`.'
+      " need to be re-applied after `tbl_merge()`."
     ))
   }
 
@@ -101,11 +103,11 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   tbls <- map_if(
     tbls,
     ~ class(.x) == "tbl_summary",
-    function(x){
-      x$table_header$footnote[startsWith(x$table_header$column, "stat_")] =
+    function(x) {
+      x$table_header$footnote[startsWith(x$table_header$column, "stat_")] <-
         x$table_header$footnote[x$table_header$column == "label"][1]
 
-      x$table_header$footnote[x$table_header$column == "label"][1] = list(NULL)
+      x$table_header$footnote[x$table_header$column == "label"][1] <- list(NULL)
       return(x)
     }
   )
@@ -117,15 +119,15 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     imap(function(x, y) {
       # creating a column that is the variable label
       group_by(x, .data$variable) %>%
-      mutate(
-        var_label = ifelse(.data$row_type == "label", .data$label, NA)
-      ) %>%
-      tidyr::fill(.data$var_label, .direction = "downup") %>%
-      ungroup() %>%
-      rename_at(
-        vars(-c("variable", "row_type", "var_label", "label")),
-        ~ glue("{.}_{y}")
-      )
+        mutate(
+          var_label = ifelse(.data$row_type == "label", .data$label, NA)
+        ) %>%
+        tidyr::fill(.data$var_label, .direction = "downup") %>%
+        ungroup() %>%
+        rename_at(
+          vars(-c("variable", "row_type", "var_label", "label")),
+          ~ glue("{.}_{y}")
+        )
     })
 
   # nesting results within variable
@@ -241,11 +243,13 @@ gt_tbl_merge <- quote(list(
       tbls,
       function(x, y) {
         # returning NULL for non-regression objects
-        if (!class(x) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack"))
+        if (!class(x) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack")) {
           return(NULL)
+        }
         if (class(x) == "tbl_stack" &&
-            !class(x$tbl_regression_list[[1]]) %in% c("tbl_regression", "tbl_uvregression"))
+          !class(x$tbl_regression_list[[1]]) %in% c("tbl_regression", "tbl_uvregression")) {
           return(NULL)
+        }
         # making gt missing code for references
         glue(
           "gt::fmt_missing(",
@@ -255,9 +259,9 @@ gt_tbl_merge <- quote(list(
         )
       }
     ) %>%
-    compact() %>%
-    unlist() %>%
-    glue_collapse_null(),
+      compact() %>%
+      unlist() %>%
+      glue_collapse_null(),
 
   # indenting levels and missing rows
   tab_style_text_indent = glue(
@@ -274,7 +278,7 @@ gt_tbl_merge <- quote(list(
     glue(
       "gt::tab_spanner(label = gt::md('{tab_spanner}'), columns = gt::ends_with('_{seq_len(tbls_length)}'))"
     ) %>%
-    glue_collapse(sep = " %>% ")
+      glue_collapse(sep = " %>% ")
 ))
 
 # kable function calls ------------------------------------------------------------
@@ -292,11 +296,13 @@ kable_tbl_merge <- quote(list(
       tbls,
       function(x, y) {
         # returning NULL for non-regression objects
-        if (!class(x) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack"))
+        if (!class(x) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack")) {
           return(NULL)
+        }
         if (class(x) == "tbl_stack" &&
-            !class(x$tbl_regression_list[[1]]) %in% c("tbl_regression", "tbl_uvregression"))
+          !class(x$tbl_regression_list[[1]]) %in% c("tbl_regression", "tbl_uvregression")) {
           return(NULL)
+        }
         # making mutate missing code for references
         glue(
           "dplyr::mutate_at(dplyr::vars(estimate_{y}, ci_{y}), ",
@@ -304,9 +310,9 @@ kable_tbl_merge <- quote(list(
         )
       }
     ) %>%
-    compact() %>%
-    unlist() %>%
-    glue_collapse_null()
+      compact() %>%
+      unlist() %>%
+      glue_collapse_null()
 ))
 
 

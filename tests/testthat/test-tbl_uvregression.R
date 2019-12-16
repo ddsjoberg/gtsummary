@@ -18,17 +18,17 @@ test_that("lm: no errors/warnings with standard use", {
 
 test_that("lm specifying tidy_fun: no errors/warnings with standard use", {
   expect_error(mtcars %>%
-                 tbl_uvregression(
-                   method = lm,
-                   y = mpg,
-                   tidy_fun = broom::tidy
-                 ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = mpg,
+      tidy_fun = broom::tidy
+    ), NA)
   expect_warning(mtcars %>%
-                   tbl_uvregression(
-                     method = lm,
-                     y = mpg,
-                     tidy_fun = broom::tidy
-                   ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = mpg,
+      tidy_fun = broom::tidy
+    ), NA)
 })
 
 test_that("coxph: no errors/warnings with standard use", {
@@ -38,13 +38,15 @@ test_that("coxph: no errors/warnings with standard use", {
       tbl_uvregression(
         method = coxph,
         y = Surv(time, status)
-      ), NA)
+      ), NA
+  )
   expect_warning(
     lung %>%
       tbl_uvregression(
         method = coxph,
         y = Surv(time, status)
-      ), NA)
+      ), NA
+  )
 
   expect_identical(
     coxph_uv$meta_data$variable,

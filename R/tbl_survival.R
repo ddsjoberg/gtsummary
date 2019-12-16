@@ -155,12 +155,13 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       ) %>%
       # merging in number of events within stratum
       left_join(
-        summary(x) %>% {
-          tibble::tibble(
-            strata = .[["strata"]] %>% as.character(),
-            n.event.strata = .[["n.event"]]
-          )
-        } %>%
+        summary(x) %>%
+          {
+            tibble::tibble(
+              strata = .[["strata"]] %>% as.character(),
+              n.event.strata = .[["n.event"]]
+            )
+          } %>%
           dplyr::group_by(.data$strata) %>%
           dplyr::summarise(
             n.event.strata = sum(.data$n.event.strata)

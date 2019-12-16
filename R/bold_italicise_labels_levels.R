@@ -26,8 +26,10 @@ NULL
 #' @export
 bold_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression",
-                       "tbl_stack", "tbl_merge") %>% all()) {
+  if (!class(x) %in% c(
+    "tbl_summary", "tbl_regression", "tbl_uvregression",
+    "tbl_stack", "tbl_merge"
+  ) %>% all()) {
     stop(paste0(
       "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
       "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
@@ -61,8 +63,10 @@ bold_labels <- function(x) {
 #' @export
 bold_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression",
-                       "tbl_stack", "tbl_merge") %>% all()) {
+  if (!class(x) %in% c(
+    "tbl_summary", "tbl_regression", "tbl_uvregression",
+    "tbl_stack", "tbl_merge"
+  ) %>% all()) {
     stop(paste0(
       "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
       "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
@@ -98,8 +102,10 @@ bold_levels <- function(x) {
 italicize_labels <- function(x) {
   # input checks ---------------------------------------------------------------
   if (!class(x) %in%
-      c("tbl_summary", "tbl_regression", "tbl_uvregression",
-        "tbl_stack", "tbl_merge") %>% all()) {
+    c(
+      "tbl_summary", "tbl_regression", "tbl_uvregression",
+      "tbl_stack", "tbl_merge"
+    ) %>% all()) {
     stop(paste0(
       "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
       "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"

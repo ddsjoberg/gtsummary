@@ -25,7 +25,7 @@
 # Points function to use mixed vs non-mixed version of broom
 tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
   mixed_classes <- c("lmerMod", "glmerMod")
-  if(is.null(tidy_fun)) {
+  if (is.null(tidy_fun)) {
     if (class(x)[1] %in% mixed_classes) { # can add other classes later. Need exact subclass.
       tidy_bit <- broom.mixed::tidy(
         x,
@@ -52,25 +52,28 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
   }
 
   # if user specified a tidier use it here.
-  if(!is.null(tidy_fun)) {
-     tryCatch({
-       tidy_bit <- do.call(
-         tidy_fun,
-         args = list(x, exponentiate = exponentiate,
-                     conf.level = conf.level, conf.int = T)
-       )
-     },
-     error = function(e) {
-       usethis::ui_oops(paste0(
-         "There was an error calling {usethis::ui_code('tidy_fun')}.\n",
-         "Most likely, this is because the argument passed in {usethis::ui_code('tidy_fun = ')} \n",
-         "was\nmisspelled, does not exist, is not compatible with your object, \n",
-         "or was missing necessary arguments. See error message below. \n"
-       ))
-       print(e)
-       stop(e)
-     })
-
+  if (!is.null(tidy_fun)) {
+    tryCatch(
+      {
+        tidy_bit <- do.call(
+          tidy_fun,
+          args = list(x,
+            exponentiate = exponentiate,
+            conf.level = conf.level, conf.int = T
+          )
+        )
+      },
+      error = function(e) {
+        usethis::ui_oops(paste0(
+          "There was an error calling {usethis::ui_code('tidy_fun')}.\n",
+          "Most likely, this is because the argument passed in {usethis::ui_code('tidy_fun = ')} \n",
+          "was\nmisspelled, does not exist, is not compatible with your object, \n",
+          "or was missing necessary arguments. See error message below. \n"
+        ))
+        print(e)
+        stop(e)
+      }
+    )
   }
 
   # looks for if p.value column is missing and adds NAs if so
@@ -98,11 +101,13 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
 
   # add a check on what the model.frame output is and print a message if it's not
   # a data.frame with all vector columns
-  if (!(all("data.frame" %in% class(model_frame) && all(purrr::map_lgl(model_frame, ~rlang::is_vector(.x)))))) {
+  if (!(all("data.frame" %in% class(model_frame) && all(purrr::map_lgl(model_frame, ~ rlang::is_vector(.x)))))) {
     message(paste0(
       "Model input `x` has an unexpected format for `model.frame(x)` \n",
       " which may affect `tbl_regression()` output.\n",
-      "Expected `model.frame` format is a data frame with vector elements."))}
+      "Expected `model.frame` format is a data frame with vector elements."
+    ))
+  }
 
   # all terms in model ---------------------------------------------------------
   # this code looks over the model terms, and extracts a list of each term
@@ -193,14 +198,18 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   # more  var labels -----------------------------------------------------------
   # model.frame() strips variable labels from cox models.  this attempts
   # to grab the labels in another way
-  labels_parent_frame <- tryCatch({
-    stats::model.frame.default(fit) %>%
-      purrr::imap(~ attr(.x, "label"))
-  }, warning = function(w) {
-    NULL
-  }, error = function(e) {
-    NULL
-  })
+  labels_parent_frame <- tryCatch(
+    {
+      stats::model.frame.default(fit) %>%
+        purrr::imap(~ attr(.x, "label"))
+    },
+    warning = function(w) {
+      NULL
+    },
+    error = function(e) {
+      NULL
+    }
+  )
 
   # tidy_long ------------------------------------------------------------------
   # this is one line per term, AND interaction terms have one row per variable in the interaction
@@ -322,12 +331,13 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   # show_single_row check ------------------------------------------------------
   # checking that all variables listed in show_single_row appear in results
   for (i in show_single_row) {
-    if (!i %in% tidy_group$group)
+    if (!i %in% tidy_group$group) {
       stop(glue(
         "'{i}' from argument 'show_single_row' is not a variable ",
         "from the model. Select from:\n",
         "{paste(tidy_group$group %>% setdiff('(Intercept)'), collapse = ', ')}"
       ))
+    }
   }
 
   # check that all variables in show_single_row are dichotomous
@@ -341,11 +351,11 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     ) %>%
     filter(.data$bad_show_single_row == TRUE) %>%
     pull(.data$group)
-  if (length(bad_show_single_row) > 0 ) {
-      stop(glue(
-        "'{paste(bad_show_single_row, collapse = \"', '\")}' from argument ",
-        "'show_single_row' may only be applied to binary variables."
-      ))
+  if (length(bad_show_single_row) > 0) {
+    stop(glue(
+      "'{paste(bad_show_single_row, collapse = \"', '\")}' from argument ",
+      "'show_single_row' may only be applied to binary variables."
+    ))
   }
 
   # final touches to result ----------------------------------------------------
@@ -469,6 +479,3 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
 #' The model can be added to the list of vetted models and unit tests will be
 #' put in place to ensure continued support for the model.
 NULL
-
-
-

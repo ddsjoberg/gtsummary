@@ -41,16 +41,19 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
 
   # defining function to round percentages -------------------------------------
   percent_fun <- getOption("gtsummary.tbl_summary.percent_fun",
-                           default = style_percent)
+    default = style_percent
+  )
 
   # DEPRECATED specifying statistic via missing argument -----------------------
   if (!is.null(missing)) {
-    lifecycle::deprecate_warn("1.2.2",
-                              "gtsummary::add_n(missing = )",
-                              "gtsummary::add_n(statistic = )")
+    lifecycle::deprecate_warn(
+      "1.2.2",
+      "gtsummary::add_n(missing = )",
+      "gtsummary::add_n(statistic = )"
+    )
     if (identical(missing, TRUE)) {
-      statistic = "{n_miss}"
-      col_label = "**N Missing**"
+      statistic <- "{n_miss}"
+      col_label <- "**N Missing**"
     }
   }
 
@@ -101,11 +104,12 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
     x$table_header <-
       x$table_header %>%
       mutate(
-        footnote= map2(
+        footnote = map2(
           .data$column, .data$footnote,
           function(x1, y1) {
-            if (x1 %in% c("n"))
+            if (x1 %in% c("n")) {
               return(c(y1, paste("Statistics presented:", stat_to_label(statistic))))
+            }
             return(y1)
           }
         )
