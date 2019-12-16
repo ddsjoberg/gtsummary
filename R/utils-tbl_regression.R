@@ -98,12 +98,11 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
 
   # add a check on what the model.frame output is and print a message if it's not
   # a data.frame with all vector columns
-  if (all(class(model_frame) == "data.frame" & all(purrr::map_lgl(model_frame, ~is.vector(.x))))) {
-    # carry on that's great
-  } else {usethis::ui_oops(paste0(
-  "Model input {usethis::ui_code('x')} has an unexpected format for {usethis::ui_code('model.frame(x)')} \n",
-  " which may affect {usethis::ui_code('tbl_regression()')} output.\n",
-  "Expected {usethis::ui_code('model.frame')} format is a data frame with vector elements."))}
+  if (!(all("data.frame" %in% class(model_frame) && all(purrr::map_lgl(model_frame, ~rlang::is_vector(.x)))))) {
+    message(paste0(
+      "Model input `x` has an unexpected format for `model.frame(x)` \n",
+      " which may affect `tbl_regression()` output.\n",
+      "Expected `model.frame` format is a data frame with vector elements."))}
 
   # all terms in model ---------------------------------------------------------
   # this code looks over the model terms, and extracts a list of each term
