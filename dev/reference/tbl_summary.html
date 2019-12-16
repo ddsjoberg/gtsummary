@@ -96,7 +96,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9003</span>
       </span>
     </div>
 
@@ -376,8 +376,8 @@ the <code>value</code> argument, e.g. <code>value = list("varname" ~ "level to s
 <span class='co'># that accept formulas (e.g label, digits, etc.)</span>
 <span class='no'>tbl_summary_ex3</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-   <span class='fu'>tbl_summary</span>(
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>tbl_summary</span>(
     <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>,
     <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Patient Age"</span>)
   )</div></pre>

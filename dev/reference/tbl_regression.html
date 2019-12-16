@@ -98,7 +98,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.3.9003</span>
       </span>
     </div>
 
@@ -189,7 +189,8 @@ for detailed examples.</p>
   <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>tidy_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -252,6 +253,11 @@ and return a string that is the rounded/formatted p-value (e.g.
     <tr>
       <th>show_yesno</th>
       <td><p>deprecated</p></td>
+    </tr>
+    <tr>
+      <th>tidy_fun</th>
+      <td><p>Option to specify a particular tidier function if the
+model is not a <a href='tidy_vetted.html'>vetted model</a>. Default it <code>NULL</code></p></td>
     </tr>
     </table>
 
@@ -343,8 +349,8 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt; <span class='message'>  tidy.stanreg   broom</span></div><div class='input'>
 <span class='co'># for convenience, you can also pass named lists to any arguments</span>
 <span class='co'># that accept formulas (e.g label, etc.)</span>
- <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
-    <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Patient Age"</span>))</div><div class='output co'>#&gt; &lt;style&gt;html {
+<span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Patient Age"</span>))</div><div class='output co'>#&gt; &lt;style&gt;html {
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
@@ -837,8 +843,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;       &lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;   &lt;/tfoot&gt;
-#&gt; &lt;/table&gt;&lt;/div&gt;</div><div class='input'>
-</div></pre>
+#&gt; &lt;/table&gt;&lt;/div&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
