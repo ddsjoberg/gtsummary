@@ -61,9 +61,9 @@ add_nevent.tbl_regression <- function(x, ...) {
   else if (
     # GLM or GEE
     (class(x$model_obj)[1] %in% c("glm", "geeglm")) |
-    # lme4 GLM
-    (class(x$model_obj)[1] == "glmerMod" &
-     attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
+      # lme4 GLM
+      (class(x$model_obj)[1] == "glmerMod" &
+        attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
     # checking family (must be binomial)
     if (class(x$model_obj)[1] %in% c("glm", "geeglm")) {
       if (x$model_obj$family$family != "binomial") {
@@ -72,7 +72,7 @@ add_nevent.tbl_regression <- function(x, ...) {
       formula <- x$model_obj$formula %>% stats::as.formula()
     }
     else if (class(x$model_obj)[1] == "glmerMod" &
-             attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
+      attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
       if (x$model_obj@resp$family$family != "binomial") {
         stop("Model type not supported")
       }

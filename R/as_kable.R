@@ -35,11 +35,11 @@ as_kable <- function(x, include = NULL, exclude = NULL, ...) {
     ))
   } else {
     message(glue(
-    "Results printed using 'knitr::kable()' do not support footers \n",
-    "or spanning headers. \n",
-    "Tables styled by the gt package support footers and spanning headers."
-  ))
-}
+      "Results printed using 'knitr::kable()' do not support footers \n",
+      "or spanning headers. \n",
+      "Tables styled by the gt package support footers and spanning headers."
+    ))
+  }
 
 
   # making list of commands to include -----------------------------------------

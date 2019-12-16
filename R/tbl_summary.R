@@ -125,13 +125,11 @@
 #' # that accept formulas (e.g label, digits, etc.)
 #' tbl_summary_ex3 <-
 #'   trial %>%
-#'    dplyr::select(age, trt) %>%
-#'    tbl_summary(
+#'   dplyr::select(age, trt) %>%
+#'   tbl_summary(
 #'     by = trt,
 #'     label = list(age = "Patient Age")
 #'   )
-#'
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -149,7 +147,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
-                        percent = c("column", "row", "cell"),  group = NULL) {
+                        percent = c("column", "row", "cell"), group = NULL) {
 
   # converting bare arguments to string ----------------------------------------
   by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
@@ -170,10 +168,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 #' @inheritParams tbl_summary
 #' @export
 tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
-                        digits = NULL, type = NULL, value = NULL,
-                        missing = c("ifany", "always", "no"),
-                        missing_text = "Unknown", sort = NULL,
-                        percent = c("column", "row", "cell"), group = NULL) {
+                         digits = NULL, type = NULL, value = NULL,
+                         missing = c("ifany", "always", "no"),
+                         missing_text = "Unknown", sort = NULL,
+                         percent = c("column", "row", "cell"), group = NULL) {
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
   percent <- match.arg(percent)
@@ -189,7 +187,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
       "To include these observations, use `forcats::fct_explicit_na()` on `{by}` ",
       "column before passing to `tbl_summary()`."
     ))
-    lbls <- purrr::map(data, ~attr(.x, "label"))
+    lbls <- purrr::map(data, ~ attr(.x, "label"))
     data <- data[!is.na(data[[by]]), ]
 
     # re-applying labels---I think this will NOT be necessary after dplyr 0.9.0
@@ -302,7 +300,10 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
       footnote = map2(
         .data$column, .data$footnote,
         function(x, y) {
-          if (x == "label") return(c(y, footnote_stat_label(meta_data))); return(y)
+          if (x == "label") {
+            return(c(y, footnote_stat_label(meta_data)))
+          }
+          return(y)
         }
       )
     )

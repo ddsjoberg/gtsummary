@@ -53,6 +53,8 @@
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
 #' @param show_yesno deprecated
+#' @param tidy_fun Option to specify a particular tidier function if the
+#' model is not a [vetted model][tidy_vetted]. Default it `NULL`
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
@@ -75,9 +77,8 @@
 #'
 #' # for convenience, you can also pass named lists to any arguments
 #' # that accept formulas (e.g label, etc.)
-#'  glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
-#'     tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
-#'
+#' glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
+#'   tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -94,11 +95,14 @@
 tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
                            include = NULL, exclude = NULL,
                            show_single_row = NULL, conf.level = NULL, intercept = FALSE,
-                           estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL) {
+                           estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL,
+                           tidy_fun = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
-    lifecycle::deprecate_stop("1.2.2", "tbl_regression(show_yesno = )",
-                              "tbl_regression(show_single_row = )")
+    lifecycle::deprecate_stop(
+      "1.2.2", "tbl_regression(show_yesno = )",
+      "tbl_regression(show_single_row = )"
+    )
   }
 
   # setting defaults -----------------------------------------------------------
@@ -122,25 +126,27 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
 
   # converting tidyselect formula lists to named lists
   # extracting model frame
-  model_frame <- tryCatch({
-    stats::model.frame(x)
-  },
-  warning = function(w) {
-    warning(x)
-  },
-  error = function(e) {
-    usethis::ui_oops(paste0(
-      "There was an error calling {usethis::ui_code('stats::model.frame(x)')}.\n\n",
-      "Most likely, this is because the argument passed in {usethis::ui_code('x =')} ",
-      "was\nmisspelled, does not exist, or is not a regression model.\n\n",
-      "Rarely, this error may occur if the model object was created within\na ",
-      "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
-      "{usethis::ui_code('purrr::map()')}, etc.).\n",
-      "Review the GitHub issue linked below for a possible solution."
-    ))
-    usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
-    stop(e)
-  })
+  model_frame <- tryCatch(
+    {
+      stats::model.frame(x)
+    },
+    warning = function(w) {
+      warning(x)
+    },
+    error = function(e) {
+      usethis::ui_oops(paste0(
+        "There was an error calling {usethis::ui_code('stats::model.frame(x)')}.\n\n",
+        "Most likely, this is because the argument passed in {usethis::ui_code('x =')} ",
+        "was\nmisspelled, does not exist, or is not a regression model.\n\n",
+        "Rarely, this error may occur if the model object was created within\na ",
+        "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
+        "{usethis::ui_code('purrr::map()')}, etc.).\n",
+        "Review the GitHub issue linked below for a possible solution."
+      ))
+      usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
+      stop(e)
+    }
+  )
   label <- tidyselect_to_list(model_frame, label, input_type = "label")
   # all sepcifed labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
@@ -154,7 +160,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # using broom and broom.mixed to tidy up regression results, and
   # then reversing order of data frame
   tidy_model <-
-    tidy_wrap(x, exponentiate, conf.level)
+    tidy_wrap(x, exponentiate, conf.level, tidy_fun)
 
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
@@ -211,9 +217,11 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
       footnote_abbrev = map2(
         .data$column, .data$footnote_abbrev,
         function(x1, y1) {
-          if (x1 == "estimate")
+          if (x1 == "estimate") {
             return(c(y1, estimate_header(x, exponentiate) %>% attr("footnote")))
-          else if (x1 == "ci") return(c(y1, "CI = Confidence Interval"))
+          } else if (x1 == "ci") {
+            return(c(y1, "CI = Confidence Interval"))
+          }
           return(y1)
         }
       )
@@ -303,46 +311,47 @@ kable_tbl_regression <- quote(list(
 # identifies headers for common models (logistic, poisson, and PH regression)
 estimate_header <- function(x, exponentiate) {
   # first identify the type ----------------------------------------------------
-  model_type = "generic"
+  model_type <- "generic"
   # GLM and GEE models
   if (class(x)[1] %in% c("glm", "geeglm") &&
-      x$family$family == "binomial" &&
-      x$family$link == "logit")
-    model_type = "logistic"
-  else if (class(x)[1] %in% c("glm", "geeglm") &&
-           x$family$family == "poisson" &&
-           x$family$link == "log")
-    model_type = "poisson"
-  # Cox Models
-  else if (class(x)[1] == "coxph")
-    model_type = "prop_hazard"
-  # LME4 models
+    x$family$family == "binomial" &&
+    x$family$link == "logit") {
+    model_type <- "logistic"
+  } else if (class(x)[1] %in% c("glm", "geeglm") &&
+    x$family$family == "poisson" &&
+    x$family$link == "log") {
+    model_type <- "poisson"
+  } # Cox Models
+  else if (class(x)[1] == "coxph") {
+    model_type <- "prop_hazard"
+  } # LME4 models
   else if (class(x)[1] == "glmerMod" &&
-           attr(class(x), "package") == "lme4" &&
-           x@resp$family$family == "binomial" &&
-           x@resp$family$link == "logit")
-    model_type = "logistic"
-  else if (class(x)[1] == "glmerMod" &&
-           attr(class(x), "package") == "lme4" &&
-           x@resp$family$family == "poisson" &&
-           x@resp$family$link == "log")
-    model_type = "poisson"
+    attr(class(x), "package") == "lme4" &&
+    x@resp$family$family == "binomial" &&
+    x@resp$family$link == "logit") {
+    model_type <- "logistic"
+  } else if (class(x)[1] == "glmerMod" &&
+    attr(class(x), "package") == "lme4" &&
+    x@resp$family$family == "poisson" &&
+    x@resp$family$link == "log") {
+    model_type <- "poisson"
+  }
 
   # assigning header and footer ------------------------------------------------
   if (model_type == "logistic") {
-    header <- ifelse(exponentiate == TRUE ,"OR", "log(OR)")
+    header <- ifelse(exponentiate == TRUE, "OR", "log(OR)")
     attr(header, "footnote") <- "OR = Odds Ratio"
   }
   else if (model_type == "poisson") {
-    header <- ifelse(exponentiate == TRUE ,"IRR", "log(IRR)")
+    header <- ifelse(exponentiate == TRUE, "IRR", "log(IRR)")
     attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
   }
   else if (model_type == "prop_hazard") {
-    header <- ifelse(exponentiate == TRUE ,"HR", "log(HR)")
+    header <- ifelse(exponentiate == TRUE, "HR", "log(HR)")
     attr(header, "footnote") <- "HR = Hazard Ratio"
   }
   else {
-    header <- ifelse(exponentiate == TRUE ,"exp(Beta)", "Beta")
+    header <- ifelse(exponentiate == TRUE, "exp(Beta)", "Beta")
   }
 
   header

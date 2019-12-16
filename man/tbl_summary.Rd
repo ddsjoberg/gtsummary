@@ -177,13 +177,11 @@ tbl_summary_ex2 <-
 # that accept formulas (e.g label, digits, etc.)
 tbl_summary_ex3 <-
   trial \%>\%
-   dplyr::select(age, trt) \%>\%
-   tbl_summary(
+  dplyr::select(age, trt) \%>\%
+  tbl_summary(
     by = trt,
     label = list(age = "Patient Age")
   )
-
-
 }
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples

@@ -15,7 +15,8 @@ tbl_regression(
   intercept = FALSE,
   estimate_fun = NULL,
   pvalue_fun = NULL,
-  show_yesno = NULL
+  show_yesno = NULL,
+  tidy_fun = NULL
 )
 }
 \arguments{
@@ -54,6 +55,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{show_yesno}{deprecated}
+
+\item{tidy_fun}{Option to specify a particular tidier function if the
+model is not a \link[=tidy_vetted]{vetted model}. Default it \code{NULL}}
 }
 \value{
 A \code{tbl_regression} object
@@ -126,9 +130,8 @@ tbl_regression_ex3 <-
 
 # for convenience, you can also pass named lists to any arguments
 # that accept formulas (e.g label, etc.)
- glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
-    tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
-
+glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
+  tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
 }
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples

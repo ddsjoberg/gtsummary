@@ -37,10 +37,12 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 
   # if group variable supplied, fit a random effects model
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
-    if (var_summary_type == "continuous")
+    if (var_summary_type == "continuous") {
       return(getOption("gtsummary.add_p.test.continuous.group_by2", default = "lme4"))
-    if (var_summary_type %in% c("categorical", "dichotomous"))
+    }
+    if (var_summary_type %in% c("categorical", "dichotomous")) {
       return(getOption("gtsummary.add_p.test.categorical.group_by2", default = "lme4"))
+    }
   }
 
   # unless by_var has >2 levels, then return NA with a message
@@ -61,7 +63,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   min_exp <-
     expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
     mutate(exp = .data$Var1 * .data$Var2 /
-             sum(table(data[[var]], data[[by_var]]))) %>%
+      sum(table(data[[var]], data[[by_var]]))) %>%
     pull(exp) %>%
     min()
 
@@ -76,58 +78,59 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 # Tests used in add_p
 
 add_p_test_t.test <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
   result$test <- "t-test"
   result
 }
 
 add_p_test_aov <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- broom::glance(stats::lm(data[[variable]] ~ as.factor(data[[by]])))$p.value
   result$test <- "One-way ANOVA"
   result
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "Kruskal-Wallis test"
   result
 }
 
 add_p_test_wilcox.test <- function(data, variable, by, ...) {
-  result = list()
-  if (length(unique(data[[by]])) > 2)
+  result <- list()
+  if (length(unique(data[[by]])) > 2) {
     stop("Wilcoxon rank-sum test cannot be calculated with more than 2 groups")
+  }
   result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "Wilcoxon rank-sum test"
   result
 }
 
 add_p_test_chisq.test <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "chi-square test of independence"
   result
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]), correct = FALSE)$p.value
   result$test <- "chi-square test of independence"
   result
 }
 
 add_p_test_fisher.test <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "Fisher\\'s exact test"
   result
 }
 
 add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
-  result = list()
+  result <- list()
   # input checks for lme4 tests
   if (data[[by]] %>% unique() %>% length() != 2) {
     # only allowing logistic regression models for now
@@ -148,11 +151,13 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
   # building base and full models
   mod0 <- lme4::glmer(stats::as.formula(formula0),
-                      data = data, family = stats::binomial)
+    data = data, family = stats::binomial
+  )
   mod1 <- lme4::glmer(stats::as.formula(formula1),
-                      data = data, family = stats::binomial)
+    data = data, family = stats::binomial
+  )
 
-  #returning p-value
+  # returning p-value
   result$p <- stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
   result$test <- "random intercept logistic regression"
   result

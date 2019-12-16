@@ -74,13 +74,13 @@
 #' # that accept formulas (e.g label, etc.)
 #' library(survival)
 #' trial %>%
-#'    dplyr::select(ttdeath, death, age, grade, response) %>%
-#'    tbl_uvregression(
-#'      method = coxph,
-#'      y = Surv(ttdeath, death),
-#'      label = list(grade = "Grade"),
-#'      exponentiate = TRUE)
-#'
+#'   dplyr::select(ttdeath, death, age, grade, response) %>%
+#'   tbl_uvregression(
+#'     method = coxph,
+#'     y = Surv(ttdeath, death),
+#'     label = list(grade = "Grade"),
+#'     exponentiate = TRUE
+#'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -95,11 +95,14 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                              exponentiate = FALSE, label = NULL,
                              include = NULL, exclude = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
-                             estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL) {
+                             estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL,
+                             tidy_fun = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
-    lifecycle::deprecate_stop("1.2.2", "tbl_uvregression(show_yesno = )",
-                              "tbl_uvregression(show_single_row = )")
+    lifecycle::deprecate_stop(
+      "1.2.2", "tbl_uvregression(show_yesno = )",
+      "tbl_uvregression(show_single_row = )"
+    )
   }
 
   # setting defaults -----------------------------------------------------------
@@ -133,12 +136,12 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # checking formula correctly specified ---------------------------------------
   # checking that '{x}' appears on RHS of formula
   if (word(formula, start = 2L, sep = fixed("~")) %>%
-      str_detect(pattern = fixed("{x}")) == FALSE) {
+    str_detect(pattern = fixed("{x}")) == FALSE) {
     stop("'{x}' must appear on RHS of '~' in formula argument")
   }
   # checking that '{y}' appears on LHS of formula
   if (word(formula, start = 1L, sep = fixed("~")) %>%
-      str_detect(pattern = fixed("{y}")) == FALSE) {
+    str_detect(pattern = fixed("{y}")) == FALSE) {
     stop("'{y}' must appear on LHS of '~' in formula argument")
   }
 
@@ -187,22 +190,36 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     model_obj_list <-
       map(
         all_vars,
-        function(x)
-          do.call(what = method,
-                  args = c(list(formula = glue(formula) %>% stats::as.formula(),
-                                data = data),
-                           method.args))
+        function(x) {
+          do.call(
+            what = method,
+            args = c(
+              list(
+                formula = glue(formula) %>% stats::as.formula(),
+                data = data
+              ),
+              method.args
+            )
+          )
+        }
       )
   }
   else if (is.null(y)) {
     model_obj_list <-
       map(
         all_vars,
-        function(y)
-          do.call(what = method,
-                  args = c(list(formula = glue(formula) %>% stats::as.formula(),
-                                data = data),
-                           method.args))
+        function(y) {
+          do.call(
+            what = method,
+            args = c(
+              list(
+                formula = glue(formula) %>% stats::as.formula(),
+                data = data
+              ),
+              method.args
+            )
+          )
+        }
       )
   }
   names(model_obj_list) <- all_vars
@@ -217,7 +234,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
           exponentiate = exponentiate,
           conf.level = conf.level,
           label = label,
-          show_single_row = intersect(.y, show_single_row)
+          show_single_row = intersect(.y, show_single_row),
+          tidy_fun = tidy_fun
         )
       )
   }
@@ -233,10 +251,11 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
               exponentiate = exponentiate,
               conf.level = conf.level,
               include = x,
-              show_single_row = show_single_row
+              show_single_row = show_single_row,
+              tidy_fun = tidy_fun
             )
-          tbl_uv$table_body$variable = var
-          tbl_uv$table_body$var_type = NA_character_
+          tbl_uv$table_body$variable <- var
+          tbl_uv$table_body$var_type <- NA_character_
           tbl_uv
         }
       )
@@ -257,7 +276,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   table_header <-
     tibble(column = names(table_body)) %>%
     left_join(tbl_regression_list %>% pluck(1, "table_header"),
-              by = "column")
+      by = "column"
+    )
 
   # creating a meta_data table (this will be used in subsequent functions, eg add_global_p)
   meta_data <-

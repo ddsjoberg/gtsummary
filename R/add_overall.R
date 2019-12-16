@@ -47,9 +47,9 @@ add_overall <- function(x, last = FALSE) {
   # are the same before binding (excluding headers)
   if (!identical(
     x$table_body %>%
-    select(c("row_type", "variable", "label")),
+      select(c("row_type", "variable", "label")),
     overall %>%
-    select(c("row_type", "variable", "label"))
+      select(c("row_type", "variable", "label"))
   )) {
     stop("An error occured in 'add_overall()', cannot merge overall statistics")
   }
