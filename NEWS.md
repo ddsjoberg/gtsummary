@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.2.4
 
 * Bug fix in `as_kable()` where column header did not match statistics presented when certain levels of the `by=` variable are entirely missing in `tbl_summary()` (#304)
 
