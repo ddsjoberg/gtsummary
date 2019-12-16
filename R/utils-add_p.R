@@ -171,37 +171,47 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
   data <- stats::na.omit(data[c(variable, by, group)])
 
   # calculating pvalue
-  tryCatch({
-    test_func <- switch(
-      test,
-      t.test = add_p_test_t.test,
-      aov = add_p_test_aov,
-      kruskal.test = add_p_test_kruskal.test,
-      wilcox.test = add_p_test_wilcox.test,
-      chisq.test = add_p_test_chisq.test,
-      chisq.test.no.correct = add_p_test_chisq.test.no.correct,
-      fisher.test = add_p_test_fisher.test,
-      lme4 = add_p_test_lme4
-    ) %||% # if not an internal test, then resolving to function name supplied
-      test
+  tryCatch(
+    withCallingHandlers(
+      {
+        test_func <- switch(
+          test,
+          t.test = add_p_test_t.test,
+          aov = add_p_test_aov,
+          kruskal.test = add_p_test_kruskal.test,
+          wilcox.test = add_p_test_wilcox.test,
+          chisq.test = add_p_test_chisq.test,
+          chisq.test.no.correct = add_p_test_chisq.test.no.correct,
+          fisher.test = add_p_test_fisher.test,
+          lme4 = add_p_test_lme4
+        ) %||% # if not an internal test, then resolving to function name supplied
+          test
 
-    # initializing to NA
-    pval <- NA_real_
-    pval <- do.call(test_func, list(data = data, variable = variable,
-                                    by = by, group = group, test = test,
-                                    type = type))
-  },
-  # printing warning and errors as message
-  warning = function(w) {
-    message(glue("Warning in 'add_p()' for variable '{variable}' ",
-                 "and test '{test}', p-value omitted:\n", as.character(w)))
-    return(NULL)
-  },
-  error = function(e) {
-    message(glue("Error in 'add_p()' for variable '{variable}' ",
-                 "and test '{test}', p-value omitted:\n", as.character(e)))
-    return(NULL)
-  })
+        # initializing to NA
+        pval <- NA_real_
+        pval <- do.call(test_func, list(
+          data = data, variable = variable,
+          by = by, group = group, test = test,
+          type = type
+        ))
+      },
+      # printing warning and errors as message
+      warning = function(w) {
+        message(glue(
+          "Warning in 'add_p()' for variable '{variable}' ",
+          "and test '{test}':\n ", as.character(w)
+        ))
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(e) {
+      message(glue(
+        "There was an error in 'add_p()' for variable '{variable}' ",
+        "and test '{test}', p-value omitted:\n", as.character(e)
+      ))
+      return(NULL)
+    }
+  )
 
   pval
 }
