@@ -202,7 +202,6 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
           "and test '{test}':\n ", as.character(w)
         ))
         invokeRestart("muffleWarning")
-        return(NULL)
       }
     ),
     error = function(e) {
