@@ -98,7 +98,3 @@ test_that("tbl_merge throws errors", {
   expect_error(tbl_merge(tbls = list(t5)), "*")
   expect_error(tbl_merge(tbls = list(t5, t6), tab_spanner = c("Table")), "*")
 })
-
-
-
-

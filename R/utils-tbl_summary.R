@@ -192,7 +192,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
 
         # factors and characters are categorical
         .y %in% c("factor", "character") ~
-          "categorical",
+        "categorical",
 
         # numeric variables with fewer than 10 levels will be categorical
         .y %in% c("integer", "numeric") & length(unique(na.omit(data[[.x]]))) < 10

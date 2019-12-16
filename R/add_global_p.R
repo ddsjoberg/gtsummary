@@ -21,7 +21,8 @@ add_global_p <- function(x, ...) {
   if (!requireNamespace("car", quietly = TRUE)) {
     stop(paste0(
       "The 'car' package is required for 'add_global_p'.\n",
-      "Install with install.packages('car')"), call. = FALSE)
+      "Install with install.packages('car')"
+    ), call. = FALSE)
   }
   UseMethod("add_global_p")
 }
@@ -85,19 +86,21 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
   }
 
   # calculating global pvalues
-  tryCatch({
-    car_Anova <-
-      x$model_obj %>%
-      car::Anova(type = "III", ...)
-  },
-  error = function(e) {
-    usethis::ui_oops(paste0(
-      "{usethis::ui_code('add_global_p()')} uses ",
-      "{usethis::ui_code('car::Anova()')} to calculate the global p-value,\n",
-      "and the function returned an error while calculating the p-values."
-    ))
-    stop(e)
-  })
+  tryCatch(
+    {
+      car_Anova <-
+        x$model_obj %>%
+        car::Anova(type = "III", ...)
+    },
+    error = function(e) {
+      usethis::ui_oops(paste0(
+        "{usethis::ui_code('add_global_p()')} uses ",
+        "{usethis::ui_code('car::Anova()')} to calculate the global p-value,\n",
+        "and the function returned an error while calculating the p-values."
+      ))
+      stop(e)
+    }
+  )
 
   global_p <-
     car_Anova %>%
@@ -126,7 +129,8 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
       x$table_body %>%
       mutate(
         p.value = if_else(.data$variable %in% terms & .data$row_type == "level",
-                          NA_real_, .data$p.value)
+          NA_real_, .data$p.value
+        )
       )
   }
 
@@ -175,7 +179,8 @@ add_global_p.tbl_uvregression <- function(x, ...) {
     imap_dfr(
       x$tbl_regression_list,
       function(x, y) {
-          tryCatch({
+        tryCatch(
+          {
             car_Anova <-
               do.call(
                 car::Anova,
@@ -190,7 +195,8 @@ add_global_p.tbl_uvregression <- function(x, ...) {
               "for {usethis::ui_value(y)}."
             ))
             stop(e)
-          })
+          }
+        )
 
         car_Anova %>%
           as.data.frame() %>%
