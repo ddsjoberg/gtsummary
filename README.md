@@ -95,15 +95,11 @@ t2 <- tbl_regression(mod1, exponentiate = TRUE)
 
 <img src="man/figures/README-tbl_regression_print-1.png" width="50%">
 
-### Other Tables
+### Side-by-side Regression Models
 
 Side-by-side regression model results from `tbl_merge()`
 
 <img src="man/figures/tbl_merge_ex1.png" width="66%">
-
-Survival Estimates from `tbl_survival()`
-
-<img src="man/figures/tbl_strata_ex1.png" width="31%">
 
 Review even more output options in the [table
 gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
