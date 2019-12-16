@@ -60,15 +60,12 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
                      conf.level = conf.level, conf.int = T)
        )
      },
-     warning = function(w) {
-       warning(x)
-     },
      error = function(e) {
        usethis::ui_oops(paste0(
-         "There was an error calling {usethis::ui_code('tidy_fun')}.\n\n",
-         "Most likely, this is because the argument passed in {usethis::ui_code('tidy_fun = ')} ",
-         "was\nmisspelled, does not exist, is not compatible with your object, \n\n",
-         "or was missing necessary arguments. See error message below. \n\n"
+         "There was an error calling {usethis::ui_code('tidy_fun')}.\n",
+         "Most likely, this is because the argument passed in {usethis::ui_code('tidy_fun = ')} \n",
+         "was\nmisspelled, does not exist, is not compatible with your object, \n",
+         "or was missing necessary arguments. See error message below. \n"
        ))
        print(e)
        stop(e)
