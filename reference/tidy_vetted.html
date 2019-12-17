@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sort variables in table by ascending p-values — sort_p.tbl_summary • gtsummary</title>
+<title>Vetted tidy models — tidy_vetted • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,8 +48,22 @@
 
 
 
-<meta property="og:title" content="Sort variables in table by ascending p-values — sort_p.tbl_summary" />
-<meta property="og:description" content="Sort variables in tables created by tbl_summary by ascending p-values" />
+<meta property="og:title" content="Vetted tidy models — tidy_vetted" />
+<meta property="og:description" content="Below is a list of models vetted for use
+in tbl_regression and tbl_uvregression.  If a model is passed to these
+functions and the model is not listed below and  a tidy() function is
+not specified in the tidy_fun= argument, the model object will be passed
+to broom::tidy.
+
+stats::lm
+stats::glm
+survival::coxph
+survival::survreg
+lme4::glmer
+lme4::lmer
+geepack::geeglm
+
+" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -159,80 +173,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sort variables in table by ascending p-values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/sort_p.R'><code>R/sort_p.R</code></a></small>
-    <div class="hidden name"><code>sort_p.tbl_summary.Rd</code></div>
+    <h1>Vetted tidy models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/utils-tbl_regression.R'><code>R/utils-tbl_regression.R</code></a></small>
+    <div class="hidden name"><code>tidy_vetted.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Sort variables in tables created by <a href='tbl_summary.html'>tbl_summary</a> by ascending p-values</p>
+    <p>Below is a list of models vetted for use
+in <a href='tbl_regression.html'>tbl_regression</a> and <a href='tbl_uvregression.html'>tbl_uvregression</a>.  If a model is passed to these
+functions and the model is not listed below and  a <code>tidy()</code> function is
+not specified in the <code>tidy_fun=</code> argument, the model object will be passed
+to <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a>.</p>
+<ul>
+<li><p><a href='https://rdrr.io/r/stats/lm.html'>stats::lm</a></p></li>
+<li><p><a href='https://rdrr.io/r/stats/glm.html'>stats::glm</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/survival/man/coxph.html'>survival::coxph</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/survival/man/survreg.html'>survival::survreg</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>lme4::glmer</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lme4::lmer</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/geepack/man/geeglm.html'>geepack::geeglm</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
-<span class='fu'><a href='sort_p.html'>sort_p</a></span>(<span class='no'>x</span>, <span class='kw'>q</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>An object created using <code>tbl_summary</code> function</p></td>
-    </tr>
-    <tr>
-      <th>q</th>
-      <td><p>Logical argument. When <code>TRUE</code> will sort by the q-value column
-rather than the p-values</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Not used</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A <code>tbl_summary</code> object</p>
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+    <h2 class="hasAnchor" id="model-support"><a class="anchor" href="#model-support"></a>model support</h2>
 
     
 
-<p><img src='figures/tbl_sum_sort_p_ex.png' width=50% /></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+<p>If <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a> or <a href='https://rdrr.io/pkg/broom.mixed/man/reexports.html'>broom.mixed::tidy</a> support a class of model not listed
+above, please submit a <a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub Issue</a>.
+The model can be added to the list of vetted models and unit tests will be
+put in place to ensure continued support for the model.</p>
 
-    <div class='dont-index'><p>Other tbl_summary tools: 
-<code><a href='add_n.html'>add_n</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.html'>add_p</a>()</code>,
-<code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='modify_header.html'>modify_header</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_sum_sort_p_ex</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='sort_p.html'>sort_p</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#example-output">Example Output</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
+      <li><a href="#model-support">model support</a></li>
     </ul>
 
-    <h2>Author</h2>
-    <p>Karissa Whiting</p>
   </div>
 </div>
 

@@ -94,7 +94,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
       </span>
     </div>
 
@@ -117,10 +117,10 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">tbl_summary()</a>
+      <a href="../articles/tbl_summary.html">Tutorial: tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">tbl_regression()</a>
+      <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -171,8 +171,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
-<span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(<span class='no'>x</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>)</pre>
+<span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(<span class='no'>x</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -216,15 +215,17 @@ Default is <code>FALSE</code></p></td>
 <p><img src='figures/tbl_lm_global_ex1.png' width=50% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_regression tools: <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a></code>,
-  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a></code>,
-  <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a></code>,
-  <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a></code>,
-  <code><a href='modify_header.html'>modify_header</a></code>,
-  <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_regression.html'>tbl_regression</a></code>,
-  <code><a href='tbl_stack.html'>tbl_stack</a></code></p></div>
+    <div class='dont-index'><p>Other tbl_regression tools: 
+<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
+<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a>()</code>,
+<code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
+<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
+<code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a>()</code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_lm_global_ex1</span> <span class='kw'>&lt;-</span>

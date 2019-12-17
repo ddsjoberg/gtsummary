@@ -95,7 +95,7 @@ tbl_summary vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
       </span>
     </div>
 
@@ -118,10 +118,10 @@ tbl_summary vignette" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">tbl_summary()</a>
+      <a href="../articles/tbl_summary.html">Tutorial: tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">tbl_regression()</a>
+      <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -173,9 +173,14 @@ inline reporting in an R markdown document. Detailed examples in the
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>x</span>, <span class='no'>variable</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(
+  <span class='no'>x</span>,
+  <span class='no'>variable</span>,
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>column</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>x</span>$<span class='no'>by</span>), <span class='st'>"stat_0"</span>, <span class='fu'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span>(<span class='st'>"Must specify column"</span>)),
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>...</span>)</pre>
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -218,22 +223,25 @@ and return a string that is the rounded/formatted p-value (e.g.
     <p>A string reporting results from a gtsummary table</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_summary tools: <code><a href='add_n.html'>add_n</a></code>,
-  <code><a href='add_overall.html'>add_overall</a></code>, <code><a href='add_p.html'>add_p</a></code>,
-  <code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a></code>,
-  <code><a href='add_stat_label.html'>add_stat_label</a></code>,
-  <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-  <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a></code>,
-  <code><a href='modify_header.html'>modify_header</a></code>,
-  <code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a></code>,
-  <code><a href='tbl_merge.html'>tbl_merge</a></code>, <code><a href='tbl_stack.html'>tbl_stack</a></code>,
-  <code><a href='tbl_summary.html'>tbl_summary</a></code></p></div>
+    <div class='dont-index'><p>Other tbl_summary tools: 
+<code><a href='add_n.html'>add_n</a>()</code>,
+<code><a href='add_overall.html'>add_overall</a>()</code>,
+<code><a href='add_p.html'>add_p</a>()</code>,
+<code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a>()</code>,
+<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
+<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a>()</code>,
+<code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a>()</code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>)
 <span class='no'>t2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; [1] "46 (37, 57)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"I"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"Drug"</span>)</div><div class='output co'>#&gt; [1] "38 (36%)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"p.value"</span>)</div><div class='output co'>#&gt; [1] "p=0.3"</div></pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; [1] "47 (38, 57)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"I"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"Drug A"</span>)</div><div class='output co'>#&gt; [1] "35 (36%)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"p.value"</span>)</div><div class='output co'>#&gt; [1] "p=0.9"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

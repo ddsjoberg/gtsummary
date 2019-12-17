@@ -96,7 +96,7 @@ formatted summary of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
       </span>
     </div>
 
@@ -119,10 +119,10 @@ formatted summary of the results" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">tbl_summary()</a>
+      <a href="../articles/tbl_summary.html">Tutorial: tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">tbl_regression()</a>
+      <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -175,11 +175,19 @@ formatted summary of the results</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for survfit</span>
-<span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>x</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+<span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
+  <span class='no'>x</span>,
+  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>probs</span>), <span class='st'>"{time}"</span>, <span class='st'>"{prob*100}%"</span>),
-  <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>, <span class='kw'>header_label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>failure</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"-"</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>level_label</span> <span class='kw'>=</span> <span class='st'>"{level}, N = {n}"</span>,
+  <span class='kw'>header_label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>failure</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"-"</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -260,8 +268,8 @@ probabilities, and
 <p>The <code>level_label</code> is used to modify the stratum labels. The default is
 <code>level_label = "{level}, N = {n}"</code>. The quantities in the curly
 brackets evaluate to stratum-specific values.  For example, in the trial
-data set, there is a column called <code>trt</code> with levels 'Drug' and 'Placebo'.
-In this example, <code>{level}</code> would evaluate to either 'Drug' or 'Placebo'
+data set, there is a column called <code>trt</code> with levels 'Drug A' and 'Drug B'.
+In this example, <code>{level}</code> would evaluate to either 'Drug A' or 'Drug B'
 depending on the stratum.  Other quantities available to print are:</p><ul>
 <li><p><code>{level}</code> level of the stratification variable</p></li>
 <li><p><code>{level_label}</code> label of level for the stratification variable</p></li>
@@ -281,8 +289,9 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
 <p><img src='figures/tbl_nostrata_ex2.png' width=40% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_survival tools: <code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a></code>,
-  <code><a href='modify_header.html'>modify_header</a></code></p></div>
+    <div class='dont-index'><p>Other tbl_survival tools: 
+<code><a href='inline_text.tbl_survival.html'>inline_text.tbl_survival</a>()</code>,
+<code><a href='modify_header.html'>modify_header</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)

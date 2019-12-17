@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
       </span>
     </div>
 
@@ -115,10 +115,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">tbl_summary()</a>
+      <a href="../articles/tbl_summary.html">Tutorial: tbl_summary()</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">tbl_regression()</a>
+      <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -162,6 +162,17 @@
       <small>Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="gtsummary-1-2-4" class="section level1">
+<h1 class="page-header">
+<a href="#gtsummary-1-2-4" class="anchor"></a>gtsummary 1.2.4<small> 2019-12-16 </small>
+</h1>
+<ul>
+<li><p>Bug fix in <code><a href="../reference/as_kable.html">as_kable()</a></code> where column header did not match statistics presented when certain levels of the <code>by=</code> variable are entirely missing in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/304'>#304</a>)</p></li>
+<li><p>Updated the trial example dataset <code>"trt"</code> variable to be <code>"Drug A"</code> and <code>"Drug B"</code> instead of <code>"Placebo"</code> and <code>"Drug"</code></p></li>
+<li><p>Improved messaging to users when an error or warning occurs while calculating a p-value in <code><a href="../reference/add_p.html">add_p()</a></code>. Also, p-values are no longer omitted from output when a warning is encountered during their calculation (<a href='https://github.com/ddsjoberg/gtsummary/issues/283'>#283</a>)</p></li>
+<li><p>Added <code>tidy_fun=</code> argument to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> allowing users to pass tidiers that are not in the {broom} and {broom.mixed} packages (<a href='https://github.com/ddsjoberg/gtsummary/issues/247'>#247</a>)</p></li>
+</ul>
+</div>
     <div id="gtsummary-1-2-3" class="section level1">
 <h1 class="page-header">
 <a href="#gtsummary-1-2-3" class="anchor"></a>gtsummary 1.2.3<small> 2019-11-12 </small>
@@ -313,6 +324,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#gtsummary-1-2-4">1.2.4</a></li>
         <li><a href="#gtsummary-1-2-3">1.2.3</a></li>
         <li><a href="#gtsummary-1-2-2">1.2.2</a></li>
         <li><a href="#gtsummary-1-2-1">1.2.1</a></li>
