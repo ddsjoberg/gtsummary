@@ -91,6 +91,43 @@ trial[c("response", "age", "grade")] %>%
 
 ---
 
+Include p-values comparing all groups to a single reference group.
+
+```{r}
+# table summarizing data with no p-values
+t0 <- trial %>%
+  select(grade, age, response) %>%
+  tbl_summary(by = grade, missing = "no") %>%
+  modify_header(stat_by = md("**{level}**"))
+
+# table comparing grade I and II
+t1 <- trial %>%
+  select(grade, age, response) %>%
+  filter(grade %in% c("I", "II")) %>%
+  tbl_summary(by = grade, missing = "no") %>%
+  add_p() %>%
+  modify_header(p.value = md("**I vs. II**"))
+
+# table comparing grade I and II
+t2 <- trial %>%
+  select(grade, age, response) %>%
+  filter(grade %in% c("I", "III")) %>%
+  tbl_summary(by = grade, missing = "no") %>%
+  add_p()  %>%
+  modify_header(p.value = md("**I vs. III**"))
+
+# merging the 3 tables together, and adding additional gt formatting
+tbl_merge(list(t0, t1, t2)) %>%
+  as_gt(exclude = "tab_spanner") %>%
+  # hiding repeated summary columns
+  cols_hide(columns = vars(stat_1_2, stat_2_2, stat_1_3, stat_2_3)) %>%
+  # adding spanning headers for summary stats and pvalues
+  tab_spanner(label = md("**Tumor Grade**"), columns = starts_with("stat_")) %>%
+  tab_spanner(label = md("**p-value**"), columns = starts_with("p.value")) 
+```
+
+---
+
 ## Regression Tables
 
 Include number of observations and the number of events in a univariate regression table.
@@ -193,3 +230,5 @@ tbl_merge(list(gt_sum, tbl_reg))  %>%
   modify_header(estimate_2 = md("**Difference**")) %>%
   as_gt(exclude = "tab_spanner")
 ```
+
+
