@@ -28,3 +28,23 @@ The model can be added to the list of vetted models and unit tests will be
 put in place to ensure continued support for the model.
 }
 
+\section{custom tidiers}{
+
+In some cases you may need to use a custom function to tidy regression model
+results. A user may pass a custom tidier function to \link{tbl_regression} and
+\link{tbl_uvregression} in the \verb{tidy_fun=} argument.  The function passed, however,
+must be a proper tidier.  For example, it must return a tibble that is one
+line per variable in the regression model; it must accept arguments
+\verb{exponentiate=} and \verb{conf.level=} since these arguments will be passed
+to the function internally.  See below for an example where the confidence
+limits are calculated using Wald's method.
+}
+
+\examples{
+my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
+  dplyr::bind_cols(
+    broom::tidy(x, exponentiate = exponentiate, conf.int = FALSE),
+    broom::confint_tidy(x, func = stats::confint.default, conf.level = conf.level)
+  )
+}
+}

@@ -54,7 +54,8 @@
 #'  `purrr::partial(style_pvalue, digits = 2)`).
 #' @param show_yesno deprecated
 #' @param tidy_fun Option to specify a particular tidier function if the
-#' model is not a [vetted model][tidy_vetted]. Default it `NULL`
+#' model is not a [vetted model][tidy_vetted] or you need to implement a
+#' custom method. Default it `NULL`
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
