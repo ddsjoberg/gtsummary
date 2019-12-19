@@ -35,9 +35,10 @@ results. A user may pass a custom tidier function to \link{tbl_regression} and
 \link{tbl_uvregression} in the \verb{tidy_fun=} argument.  The function passed, however,
 must be a proper tidier.  For example, it must return a tibble that is one
 line per variable in the regression model; it must accept arguments
-\verb{exponentiate=} and \verb{conf.level=} since these arguments will be passed
-to the function internally.  See below for an example where the confidence
-limits are calculated using Wald's method.
+\verb{exponentiate=}, \verb{conf.level=}, and \verb{conf.int=} since these arguments will
+be passed to the function internally (we recommend including \code{...} to
+capture any arguments you may not need). See below for an example where the
+confidence limits are calculated using Wald's method.
 }
 
 \examples{

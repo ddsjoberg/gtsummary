@@ -485,9 +485,10 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
 #' [tbl_uvregression] in the `tidy_fun=` argument.  The function passed, however,
 #' must be a proper tidier.  For example, it must return a tibble that is one
 #' line per variable in the regression model; it must accept arguments
-#' `exponentiate=` and `conf.level=` since these arguments will be passed
-#' to the function internally.  See below for an example where the confidence
-#' limits are calculated using Wald's method.
+#' `exponentiate=`, `conf.level=`, and `conf.int=` since these arguments will
+#' be passed to the function internally (we recommend including `...` to
+#' capture any arguments you may not need). See below for an example where the
+#' confidence limits are calculated using Wald's method.
 #' @examples
 #' my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
 #'   dplyr::bind_cols(
