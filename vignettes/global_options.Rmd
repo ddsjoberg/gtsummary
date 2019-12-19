@@ -42,19 +42,13 @@ For example, to report large p-values rounded to two decimal places rather that 
 options(gtsummary.pvalue_fun = function(x) style_pvalue(x, digits = 2))
 ```
 
-or equivalently
- 
-```{r}
-options(gtsummary.pvalue_fun = purrr::partial(style_pvalue, digits = 2))
-``` 
-
 ### percentages
 
 In `tbl_summary()`, the default function for styling percentages is `style_percent()`.
 If you'd like to update the default, for example, because you'd prefer percentages rounded to one decimal place, you may include the `gtsummary.tbl_summary.percent_fun` option.
 
 ```{r}
-options(gtsummary.pvalue_fun = function(x) sprintf(x * 100, fmt='%#.1f'))
+options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(x * 100, fmt='%#.1f'))
 ```
 
 ### survival estimates
