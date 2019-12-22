@@ -282,7 +282,7 @@ gt_tbl_regression <- quote(list(
   tab_style_text_indent = glue(
     "gt::tab_style(",
     "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
-    "locations = gt::cells_data(",
+    "locations = gt::cells_body(",
     "columns = gt::vars(label), ",
     "rows = row_type != 'label'",
     "))"
