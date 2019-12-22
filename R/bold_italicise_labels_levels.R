@@ -40,7 +40,7 @@ bold_labels <- function(x) {
   # adding p-value formatting
   x[["gt_calls"]][["bold_labels"]] <- glue(
     "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "locations = gt::cells_body(columns = gt::vars(label),",
     "rows = row_type == 'label'))"
   )
 
@@ -77,7 +77,7 @@ bold_levels <- function(x) {
   # adding p-value formatting
   x[["gt_calls"]][["bold_levels"]] <- glue(
     "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "locations = gt::cells_body(columns = gt::vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
   )
 
@@ -116,7 +116,7 @@ italicize_labels <- function(x) {
   # adding p-value formatting
   x[["gt_calls"]][["italicize_labels"]] <- glue(
     "gt::tab_style(style = gt::cell_text(style = 'italic'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "locations = gt::cells_body(columns = gt::vars(label),",
     "rows = row_type == 'label'))"
   )
 
@@ -155,7 +155,7 @@ italicize_levels <- function(x) {
   # adding p-value formatting
   x[["gt_calls"]][["italicize_levels"]] <- glue(
     "gt::tab_style(style = gt::cell_text(style = 'italic'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "locations = gt::cells_body(columns = gt::vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
   )
 
