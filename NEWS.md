@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Functions `all_categorical()`, `all_dichotomous()`, and `all_continuous()` may now be used in `tbl_summary()` argument `type=` (#256)
+
+* Updates after the gt package deprecated `gt::cells_data()` in favor of `gt::cells_body()`
+
 # gtsummary 1.2.4
 
 * Bug fix in `as_kable()` where column header did not match statistics presented when certain levels of the `by=` variable are entirely missing in `tbl_summary()` (#304)

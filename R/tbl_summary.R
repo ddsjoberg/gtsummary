@@ -233,7 +233,6 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # converting tidyselect formula lists to named lists -------------------------
-  type <- tidyselect_to_list(data, type, input_type = "type")
   value <- tidyselect_to_list(data, value, input_type = "value")
 
   # creating a table with meta data about each variable ------------------------
@@ -241,14 +240,30 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
     variable = names(data),
     # assigning class, if entire var is NA, then assigning class NA
     class = assign_class(data, .data$variable),
+    # assigning our best guess of the type, the final type is assigned below
+    # we make a guess first, so users may use the gtsummary tidyselect functions for type
     summary_type = assign_summary_type(
-      data, .data$variable, .data$class, type, value
+      data = data, variable = .data$variable, class = .data$class,
+      summary_type = NULL, value = value
     )
   )
   # excluding by variable
   if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
 
+  # prepping type --------------------------------------------------------------
+  # saving guessed types as list, then using the tidyselect to overwrite them if necesary
+  type_guess <- as.list(meta_data$summary_type)
+  names(type_guess) <- meta_data$variable
+  # appending type_guess, and the user-specifed type. user goes second and takes precedent over guess
+  type <- type_guess %>%
+    c(switch(
+      class(type) == "formula" %>% as.character(),
+      "TRUE" = list(type),
+      "FALSE" = type
+    ))
+
   # converting tidyselect formula lists to named lists -------------------------
+  type <- tidyselect_to_list(data, type, .meta_data = meta_data, input_type = "type")
   label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
   statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, input_type = "statistic")
   digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, input_type = "digits")
@@ -258,6 +273,10 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   meta_data <-
     meta_data %>%
     mutate(
+      summary_type = assign_summary_type(
+        data = data, variable = .data$variable, class = .data$class,
+        summary_type = type, value = value
+      ),
       dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
