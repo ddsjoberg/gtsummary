@@ -95,19 +95,21 @@ tidyselect_to_list_one <- function(.data, x, x_name, .meta_data = NULL, input_ty
   }
 
   # registering names of columns in data ---------------------------------------
-  tidyselect::scoped_vars(vars = names(.data))
-  scoped_data(.data)
-  if (!is.null(.meta_data)) scoped_meta_data(.meta_data)
+  # tidyselect::scoped_vars(vars = names(.data))
+  # scoped_data(.data)
+  # if (!is.null(.meta_data)) scoped_meta_data(.meta_data)
 
   # for each formula extract lhs and rhs ---------------------------------------
-  lhs <- rlang::f_lhs(x) %>% eval()
+  lhs <- var_input_to_string(data = .data,
+                             var = !!rlang::f_lhs(x),
+                             meta_data = .meta_data)
   rhs <- rlang::f_rhs(x) %>% eval()
 
-  # if tidyselect function returned numeric position, grab character name
-  if (is.numeric(lhs)) lhs <- names(.data)[lhs]
+  # # if tidyselect function returned numeric position, grab character name
+  # if (is.numeric(lhs)) lhs <- names(.data)[lhs]
 
-  # if varlist supplied in vars() converting to strings
-  if (class(lhs) == "quosures") lhs <- map_chr(lhs, rlang::as_label)
+  # # if varlist supplied in vars() converting to strings
+  # if (class(lhs) == "quosures") lhs <- map_chr(lhs, rlang::as_label)
 
   # converting rhs and lhs into a named list
   result <-
@@ -116,3 +118,37 @@ tidyselect_to_list_one <- function(.data, x, x_name, .meta_data = NULL, input_ty
 
   result
 }
+
+var_input_to_string <- function(data, var, meta_data = NULL) {
+  var <- rlang::enquo(var)
+
+  if (!rlang::quo_is_symbol(var)) {
+    # checking if the passed enquo begins with the vars() function
+    str_fun_name <- rlang::quo_get_expr(var)[[1]] %>% deparse()
+    if (str_fun_name == "vars" || endsWith(str_fun_name, "::vars")) {
+      var_str <- purrr::map(
+        as.list(rlang::quo_get_expr(var))[-1],
+        ~tidyselect_to_string(data, !!.x, meta_data)
+      ) %>%
+        unlist() %>%
+        unique()
+
+      return(var_str)
+    }
+  }
+
+  tidyselect_to_string(data, !!var, meta_data)
+}
+
+# this function handles a single tidyselect function, or bare input
+tidyselect_to_string <- function(data, var, meta_data = NULL) {
+  var <- rlang::enquo(var)
+
+  # scoping data to use gtsummary select functions
+  scoped_data(data)
+  if(!is.null(meta_data)) scoped_meta_data(meta_data)
+
+  # selecting with standard tidyselect functions and bare inputs
+  dplyr::select(data[0, ], !!var) %>% names()
+}
+
