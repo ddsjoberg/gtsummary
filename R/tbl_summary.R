@@ -150,7 +150,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         percent = c("column", "row", "cell"), group = NULL) {
 
   # converting bare arguments to string ----------------------------------------
-  by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
+  by <- var_input_to_string(data = data, var = !!rlang::enquo(by))
 
   # putting arguments in a list to pass to tbl_summary_
   tbl_summary_args <- as.list(environment())

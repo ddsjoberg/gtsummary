@@ -80,7 +80,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
                   group = NULL, include = NULL, exclude = NULL) {
 
   # converting bare arguments to string ----------------------------------------
-  group <- enquo_to_string(rlang::enquo(group), arg_name = "group")
+  group <- var_input_to_string(data = x$inputs$data, var = !!rlang::enquo(group))
 
   # putting arguments in a list to pass to tbl_summary_
   add_p_args <- as.list(environment())

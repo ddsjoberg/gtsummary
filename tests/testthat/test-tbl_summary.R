@@ -118,11 +118,11 @@ test_that("tbl_summary-testing tidyselect parsing", {
           c("grade", "stage") ~ "{n}"
         ),
         label = list(
-          age = "Patient Age", vars(stage) ~ "Patient Stage",
+          age ~ "Patient Age", vars(stage) ~ "Patient Stage",
           vars(`bad grade`) ~ "Crazy Grade"
         ),
-        digits = list(vars(age) ~ c(2, 3), marker = c(2, 3)),
-        value = list(vars(`bad grade`) ~ "III", "stage" ~ "T1"),
+        digits = list(vars(age) ~ c(2, 3), marker ~ c(2, 3)),
+        value = list(`bad grade` = "III", "stage" = "T1"),
         missing = "no"
       ),
     NA
