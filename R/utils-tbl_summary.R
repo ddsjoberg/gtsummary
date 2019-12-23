@@ -166,7 +166,7 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #'   summary_type = NULL, value = NULL
 #' )
 assign_summary_type <- function(data, variable, class, summary_type, value) {
-  map2_chr(
+  type <- map2_chr(
     variable, class,
     ~ summary_type[[.x]] %||%
       case_when(
@@ -202,6 +202,19 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
         TRUE ~ "continuous"
       )
   )
+
+  # checking user did not request a factor or character variable be summarized
+  # as a continuous variable
+  purrr::pwalk(
+    list(type, class, variable),
+    ~ if(..1 == "continuous" && ..2 %in% c("factor", "character"))
+      stop(glue(
+        "Column '{..3}' is class \"{..2}\" and cannot be summarized as a continuous variable."
+      ), call. = FALSE)
+  )
+
+
+  type
 }
 
 
