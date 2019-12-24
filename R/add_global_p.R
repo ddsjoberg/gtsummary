@@ -151,8 +151,7 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' @family tbl_uvregression tools
 #' @examples
 #' tbl_uv_global_ex2 <-
-#'   trial %>%
-#'   dplyr::select(response, trt, age, grade) %>%
+#'   trial[c("response", "trt", "age", "grade")] %>%
 #'   tbl_uvregression(
 #'     method = glm,
 #'     y = response,

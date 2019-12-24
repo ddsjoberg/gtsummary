@@ -35,7 +35,7 @@ t1 <-
   glm(response ~ trt, trial, family = binomial) \%>\%
   tbl_regression(
     exponentiate = TRUE,
-    label = list(vars(trt) ~ "Treatment (unadjusted)")
+    label = list(trt ~ "Treatment (unadjusted)")
   )
 
 t2 <-
@@ -43,7 +43,7 @@ t2 <-
   tbl_regression(
     include = "trt",
     exponentiate = TRUE,
-    label = list(vars(trt) ~ "Treatment (adjusted)")
+    label = list(trt ~ "Treatment (adjusted)")
   )
 
 tbl_stack_ex1 <- tbl_stack(list(t1, t2))
@@ -54,7 +54,7 @@ t3 <-
   coxph(Surv(ttdeath, death) ~ trt, trial) \%>\%
   tbl_regression(
     exponentiate = TRUE,
-    label = list(vars(trt) ~ "Treatment (unadjusted)")
+    label = list(trt ~ "Treatment (unadjusted)")
   )
 
 t4 <-
@@ -62,7 +62,7 @@ t4 <-
   tbl_regression(
     include = "trt",
     exponentiate = TRUE,
-    label = list(vars(trt) ~ "Treatment (adjusted)")
+    label = list(trt ~ "Treatment (adjusted)")
   )
 
 

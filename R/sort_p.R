@@ -23,8 +23,7 @@ sort_p <- function(x, ...) UseMethod("sort_p")
 #' @author Karissa Whiting
 #' @examples
 #' tbl_sum_sort_p_ex <-
-#'   trial %>%
-#'   dplyr::select(age, grade, response, trt) %>%
+#'   trial[c("age", "grade", "response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   sort_p()
@@ -113,8 +112,7 @@ sort_p.tbl_regression <- function(x, ...) {
 #' @author Karissa Whiting
 #' @examples
 #' tbl_uvglm_sort_p_ex <-
-#'   trial %>%
-#'   dplyr::select(age, marker, response, grade) %>%
+#'   trial[c("age", "marker", "response", "grade")] %>%
 #'   tbl_uvregression(
 #'     method = glm,
 #'     y = response,

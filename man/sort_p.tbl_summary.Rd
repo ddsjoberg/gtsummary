@@ -27,8 +27,7 @@ Sort variables in tables created by \link{tbl_summary} by ascending p-values
 
 \examples{
 tbl_sum_sort_p_ex <-
-  trial \%>\%
-  dplyr::select(age, grade, response, trt) \%>\%
+  trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   sort_p()

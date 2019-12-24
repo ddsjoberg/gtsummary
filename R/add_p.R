@@ -45,8 +45,7 @@
 #' @author Emily C. Zabor, Daniel D. Sjoberg
 #' @examples
 #' add_p_ex1 <-
-#'   trial %>%
-#'   dplyr::select(age, grade, response, trt) %>%
+#'   trial[c("age", "grade", "response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p()
 #'
@@ -65,7 +64,7 @@
 #' add_p_ex2 <-
 #'   trial[c("response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
-#'   add_p(test = vars(response) ~ "my_mcnemar")
+#'   add_p(test = response ~ "my_mcnemar")
 #' }
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -80,25 +79,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
                   group = NULL, include = NULL, exclude = NULL) {
 
   # converting bare arguments to string ----------------------------------------
-  group <- var_input_to_string(data = x$inputs$data, var = !!rlang::enquo(group))
-
-  # putting arguments in a list to pass to tbl_summary_
-  add_p_args <- as.list(environment())
-
-  # passing arguments to add_p_
-  do.call(add_p_, add_p_args)
-}
-
-#' Standard evaluation version of add_p()
-#'
-#' The `'group ='` argument can be passed as a string, rather than with non-standard
-#' evaluation as in [add_p]. Review the help file for [add_p] fully documented
-#' options and arguments.
-#'
-#' @inheritParams add_p
-#' @export
-add_p_ <- function(x, test = NULL, pvalue_fun = NULL,
-                   group = NULL, include = NULL, exclude = NULL) {
+  group <- var_input_to_string(data = x$inputs$data, var_input = !!rlang::enquo(group))
 
   # group argument -------------------------------------------------------------
   if (!is.null(group)) {
@@ -143,8 +124,8 @@ add_p_ <- function(x, test = NULL, pvalue_fun = NULL,
   if (!is.null(test)) {
     # checking that all inputs are named
     if ((names(test) %>%
-      purrr::discard(. == "") %>%
-      length()) != length(test)) {
+         purrr::discard(. == "") %>%
+         length()) != length(test)) {
       stop(glue(
         "Each element in 'test' must be named. ",
         "For example, 'test = list(age = \"t.test\", ptstage = \"fisher.test\")'"

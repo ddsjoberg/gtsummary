@@ -85,8 +85,7 @@ as it is for \code{tbl_regression()}.
 
 \examples{
 add_p_ex1 <-
-  trial \%>\%
-  dplyr::select(age, grade, response, trt) \%>\%
+  trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p()
 
@@ -105,7 +104,7 @@ my_mcnemar <- function(data, variable, by, ...) {
 add_p_ex2 <-
   trial[c("response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
-  add_p(test = vars(response) ~ "my_mcnemar")
+  add_p(test = response ~ "my_mcnemar")
 }
 }
 \seealso{

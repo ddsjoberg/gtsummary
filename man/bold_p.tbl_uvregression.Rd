@@ -30,8 +30,7 @@ in \link{tbl_uvregression} tables.
 
 \examples{
 tbl_uvglm_bold_p_ex <-
-  trial \%>\%
-  dplyr::select(age, marker, response, grade) \%>\%
+  trial[c("age", "marker", "response", "grade")] \%>\%
   tbl_uvregression(
     method = glm,
     y = response,

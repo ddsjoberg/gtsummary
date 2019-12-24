@@ -91,7 +91,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
 tidyselect_to_list_one <- function(.data, x, .meta_data = NULL, input_type = NULL) {
   # for each formula extract lhs and rhs ---------------------------------------
   lhs <- var_input_to_string(data = .data,
-                             var = !!rlang::f_lhs(x),
+                             var_input = !!rlang::f_lhs(x),
                              meta_data = .meta_data)
   rhs <- rlang::f_rhs(x) %>% eval()
 
@@ -103,19 +103,19 @@ tidyselect_to_list_one <- function(.data, x, .meta_data = NULL, input_type = NUL
   result
 }
 
-var_input_to_string <- function(data, var, meta_data = NULL) {
-  var <- rlang::enquo(var)
+var_input_to_string <- function(data, var_input, meta_data = NULL) {
+  var_input <- rlang::enquo(var_input)
   # if NULL passed, return NULL
-  if (rlang::quo_is_null(var)) {
+  if (rlang::quo_is_null(var_input)) {
     return(NULL)
   }
 
-  if (!rlang::quo_is_symbol(var)) {
+  if (!rlang::quo_is_symbol(var_input)) {
     # checking if the passed enquo begins with the vars() function
-    str_fun_name <- rlang::quo_get_expr(var)[[1]] %>% deparse()
+    str_fun_name <- rlang::quo_get_expr(var_input)[[1]] %>% deparse()
     if (str_fun_name == "vars" || endsWith(str_fun_name, "::vars")) {
       var_str <- purrr::map(
-        as.list(rlang::quo_get_expr(var))[-1],
+        as.list(rlang::quo_get_expr(var_input))[-1],
         ~tidyselect_to_string(data, !!.x, meta_data)
       ) %>%
         unlist() %>%
@@ -125,11 +125,11 @@ var_input_to_string <- function(data, var, meta_data = NULL) {
     }
   }
 
-  tidyselect_to_string(data, !!var, meta_data)
+  tidyselect_to_string(data, !!var_input, meta_data)
 }
 
 # this function handles a single tidyselect function, or bare input
-# do not call this function directly.
+# do not call this function directly. do not pass a vars()
 tidyselect_to_string <- function(data, var, meta_data = NULL) {
   var <- rlang::enquo(var)
 

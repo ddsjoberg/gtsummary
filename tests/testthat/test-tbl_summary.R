@@ -53,6 +53,26 @@ test_that("tbl_summary value argument works properly", {
   )
 })
 
+test_that("tbl_summary works in character inputs for `by=`", {
+  my_by_variable <- "trt"
+
+  expect_error(
+    tbl_summary(trial, by = my_by_variable),
+    NA
+  )
+  expect_error(
+    tbl_summary(trial, by = "trt"),
+    NA
+  )
+  expect_error(
+    purrr::map(
+      c("trt", "grade", "stage"),
+      ~tbl_summary(trial, by = .x)
+    ),
+    NA
+  )
+})
+
 
 test_that("tbl_summary returns errors with bad inputs", {
   expect_error(
