@@ -129,6 +129,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
          create univariate regression models holding either a covariate or outcome
          constant.")
   }
+  include <- rlang::enquo(include)
+  exclude <- rlang::enquo(exclude)
+  show_single_row <- rlang::enquo(show_single_row)
 
   # checking formula correctly specified ---------------------------------------
   # checking that '{x}' appears on RHS of formula
@@ -176,11 +179,16 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     # removing {y} and {x}
     setdiff(c("x", "y"))
 
+  include <- var_input_to_string(data = vctr_2_tibble(all_vars), var_input = !!include)
+  exclude <- var_input_to_string(data = vctr_2_tibble(all_vars), var_input = !!exclude)
+
   if (!is.null(include)) all_vars <- intersect(all_vars, include)
   all_vars <- all_vars %>% setdiff(exclude)
   if (length(all_vars) == 0) {
     stop("There were no covariates selected.")
   }
+  show_single_row <- var_input_to_string(data = vctr_2_tibble(all_vars),
+                                         var_input = !!show_single_row)
 
   # bulding regression models --------------------------------------------------
   if (is.null(x)) {
