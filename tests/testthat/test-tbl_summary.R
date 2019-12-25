@@ -231,3 +231,13 @@ test_that("tbl_summary-order of output columns", {
     paste0("stat_", 1:3)
   )
 })
+
+test_that("tbl_summary-all_categorical() use with `type=`", {
+  # no variables should be dichotomous
+  expect_true(
+    !"dichotomous" %in%
+      (tbl_summary(trial, type = all_dichotomous() ~ "categorical") %>%
+      purrr::pluck("meta_data") %>%
+      dplyr::pull(summary_type))
+  )
+})
