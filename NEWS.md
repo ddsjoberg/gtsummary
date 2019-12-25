@@ -2,7 +2,7 @@
 
 * Functions `all_categorical()`, `all_dichotomous()`, and `all_continuous()` may now be used in `tbl_summary()` argument `type=` (#256)
 
-* Updates after the gt package deprecated `gt::cells_data()` in favor of `gt::cells_body()`
+* Updates after the gt package deprecated `gt::cells_data()` in favor of `gt::cells_body()`. Check added to `as_gt()` ensuring a version of gt with `gt::cells_body()` in its NAMESPACE
 
 # gtsummary 1.2.4
 
