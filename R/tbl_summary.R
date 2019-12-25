@@ -248,22 +248,26 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
     )
   )
   # excluding by variable
-  if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
+  if (!is.null(by)) meta_data <- filter(meta_data, .data$variable != by)
 
-  # prepping type --------------------------------------------------------------
-  # saving guessed types as list, then using the tidyselect to overwrite them if necesary
-  type_guess <- as.list(meta_data$summary_type)
-  names(type_guess) <- meta_data$variable
-  # appending type_guess, and the user-specifed type. user goes second and takes precedent over guess
-  type <- type_guess %>%
-    c(switch(
-      class(type) == "formula" %>% as.character(),
-      "TRUE" = list(type),
-      "FALSE" = type
-    ))
+  # updating type --------------------------------------------------------------
+  # updating type of user supplied one
+  if (!is.null(type)) {
+    # converting tidyselect formula lists to named lists
+    type <- tidyselect_to_list(data, type, .meta_data = meta_data, input_type = "type")
+
+    # updating meta data object with new types
+    meta_data <-
+      meta_data %>%
+      mutate(
+        summary_type = assign_summary_type(
+          data = data, variable = .data$variable, class = .data$class,
+          summary_type = type, value = value
+        )
+      )
+  }
 
   # converting tidyselect formula lists to named lists -------------------------
-  type <- tidyselect_to_list(data, type, .meta_data = meta_data, input_type = "type")
   label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
   statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, input_type = "statistic")
   digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, input_type = "digits")
@@ -273,10 +277,6 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   meta_data <-
     meta_data %>%
     mutate(
-      summary_type = assign_summary_type(
-        data = data, variable = .data$variable, class = .data$class,
-        summary_type = type, value = value
-      ),
       dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
