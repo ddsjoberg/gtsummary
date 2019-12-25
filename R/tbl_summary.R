@@ -210,7 +210,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # converting tidyselect formula lists to named lists -------------------------
-  type <- tidyselect_to_list(data, type, input_type = "type")
   value <- tidyselect_to_list(data, value, input_type = "value")
 
   # creating a table with meta data about each variable ------------------------
@@ -218,12 +217,32 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     variable = names(data),
     # assigning class, if entire var is NA, then assigning class NA
     class = assign_class(data, .data$variable),
+    # assigning our best guess of the type, the final type is assigned below
+    # we make a guess first, so users may use the gtsummary tidyselect functions for type
     summary_type = assign_summary_type(
-      data, .data$variable, .data$class, type, value
+      data = data, variable = .data$variable, class = .data$class,
+      summary_type = NULL, value = value
     )
   )
   # excluding by variable
-  if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
+  if (!is.null(by)) meta_data <- filter(meta_data, .data$variable != by)
+
+  # updating type --------------------------------------------------------------
+  # updating type of user supplied one
+  if (!is.null(type)) {
+    # converting tidyselect formula lists to named lists
+    type <- tidyselect_to_list(data, type, .meta_data = meta_data, input_type = "type")
+
+    # updating meta data object with new types
+    meta_data <-
+      meta_data %>%
+      mutate(
+        summary_type = assign_summary_type(
+          data = data, variable = .data$variable, class = .data$class,
+          summary_type = type, value = value
+        )
+      )
+  }
 
   # converting tidyselect formula lists to named lists -------------------------
   label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")

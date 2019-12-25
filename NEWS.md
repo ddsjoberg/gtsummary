@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Bug fix when non-standard evaluation arguments were passed in `method.args=` argument of `tbl_uvregression()` (#322)
+
+* Functions `all_categorical()`, `all_dichotomous()`, and `all_continuous()` may now be used in `tbl_summary()` argument `type=` (#256)
+
+* Updates after the gt package deprecated `gt::cells_data()` in favor of `gt::cells_body()`. Check added to `as_gt()` ensuring a version of gt with `gt::cells_body()` in its NAMESPACE
+
 # gtsummary 1.2.4
 
 * Bug fix in `as_kable()` where column header did not match statistics presented when certain levels of the `by=` variable are entirely missing in `tbl_summary()` (#304)

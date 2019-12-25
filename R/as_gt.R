@@ -35,6 +35,17 @@
 
 as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
   # DEPRECATRED notice ---------------------------------------------------------
+  # checking if updated version of gt package is required 2019-12-25 -----------
+  if (!exists("cells_body", asNamespace("gt"))) {
+    usethis::ui_oops(glue(
+      "An updated version of the gt package is required to print table.\n",
+      "To install the most recent version of gt, run"
+    ))
+    usethis::ui_code_block("remotes::install_github(\"rstudio/gt\")")
+    return(invisible())
+  }
+
+  # making list of commands to include -----------------------------------------
   if (!is.null(omit)) {
     lifecycle::deprecate_warn(
       "1.2.0",

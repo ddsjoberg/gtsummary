@@ -10,10 +10,6 @@ test_that("input check", {
     "*"
   )
   expect_error(
-    tbl_summary(trial, type = all_continuous() ~ "continuous"),
-    "*"
-  )
-  expect_error(
     tbl_summary(trial, value = list("Drug")),
     "*"
   )
