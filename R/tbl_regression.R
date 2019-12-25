@@ -121,8 +121,9 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     getOption("gtsummary.conf.level", default = 0.95)
 
   # checking estimate_fun and pvalue_fun are functions
-  if (!is.function(estimate_fun) | !is.function(pvalue_fun)) {
-    stop("Inputs 'estimate_fun' and 'pvalue_fun' must be functions.")
+  if (!purrr::every(list(estimate_fun, pvalue_fun, tidy_fun %||% pvalue_fun), is.function)) {
+    stop("Inputs `estimate_fun`, `pvalue_fun`, `tidy_fun` must be functions.",
+         call. = FALSE)
   }
 
   # converting tidyselect formula lists to named lists
@@ -145,13 +146,13 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
         "Review the GitHub issue linked below for a possible solution."
       ))
       usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
-      stop(e)
+      stop(e, call. = FALSE)
     }
   )
   label <- tidyselect_to_list(model_frame, label, input_type = "label")
   # all sepcifed labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
-    stop("Each `label` specified must be a string of length 1.")
+    stop("Each `label` specified must be a string of length 1.", call. = FALSE)
   }
 
   # will return call, and all object passed to in tbl_regression call
@@ -188,7 +189,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     if (length(include_err) > 0) {
       stop(glue(
         "'include' must be be a subset of '{paste(table_body$variable %>% unique(), collapse = ', ')}'"
-      ))
+      ), call. = FALSE)
     }
   }
   if (is.null(include)) include <- table_body$variable %>% unique()
@@ -283,7 +284,7 @@ gt_tbl_regression <- quote(list(
   tab_style_text_indent = glue(
     "gt::tab_style(",
     "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
-    "locations = gt::cells_data(",
+    "locations = gt::cells_body(",
     "columns = gt::vars(label), ",
     "rows = row_type != 'label'",
     "))"
