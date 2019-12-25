@@ -4,18 +4,28 @@
 \alias{add_global_p.tbl_regression}
 \title{Adds the global p-value for categorical variables}
 \usage{
-\method{add_global_p}{tbl_regression}(x, terms = NULL, keep = FALSE, ...)
+\method{add_global_p}{tbl_regression}(
+  x,
+  include = NULL,
+  exclude = NULL,
+  keep = FALSE,
+  terms = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
-\item{terms}{Character vector of terms for which to add global p-values.  Default
-is \code{NULL} which will add global p-values for all categorical variables}
+\item{include}{Character vector of variable names to include from output.}
+
+\item{exclude}{Character vector of variable names to exclude from output.}
 
 \item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is \code{FALSE}}
+
+\item{terms}{DEPRECATED.  Use \verb{include=} argument instead.}
 
 \item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}}
 }

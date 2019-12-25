@@ -7,9 +7,9 @@
 #'
 #' @param x Object created by a function from the gtsummary package
 #' (e.g. [tbl_summary] or [tbl_regression])
-#' @param include Character vector naming kable commands to include in printing.
+#' @param include Character vector  or tidyselect function naming kable commands to include in printing.
 #' Default is `NULL`, which utilizes all commands in `x$kable_calls`.
-#' @param exclude Character vector naming kable commands to exclude in printing.
+#' @param exclude Character vector  or tidyselect function naming kable commands to exclude in printing.
 #' Default is `NULL`.
 #' @param ... Additional arguments passed to [knitr::kable]
 #' @export
@@ -41,6 +41,11 @@ as_kable <- function(x, include = NULL, exclude = NULL, ...) {
     ))
   }
 
+  # converting to charcter vector ----------------------------------------------
+  include <- var_input_to_string(data = vctr_2_tibble(names(x$kable_calls)),
+                                 var_input = !!rlang::enquo(include))
+  exclude <- var_input_to_string(data = vctr_2_tibble(names(x$kable_calls)),
+                                 var_input = !!rlang::enquo(exclude))
 
   # making list of commands to include -----------------------------------------
   if (is.null(include)) include <- names(x$kable_calls)

@@ -40,11 +40,13 @@ add_global_p <- function(x, ...) {
 #'
 #' @param x Object with class `tbl_regression` from the
 #' [tbl_regression] function
-#' @param terms Character vector of terms for which to add global p-values.  Default
-#' is `NULL` which will add global p-values for all categorical variables
+#' @inheritParams tbl_regression
 #' @param keep Logical argument indicating whether to also retain the individual
 #' p-values in the table output for each level of the categorical variable.
 #' Default is `FALSE`
+#' @param include Character vector or tidyselect function indicating variables to include global p-values
+#' @param exclude Character vector or tidyselect function indicating variables to exclude global p-values
+#' @param terms DEPRECATED.  Use `include=` argument instead.
 #' @param ... Additional arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
@@ -58,15 +60,29 @@ add_global_p <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
 
-add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
+add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
+                                        keep = FALSE, terms = NULL, ...) {
+  # deprecated arguments -------------------------------------------------------
+  if (!is.null(terms)) {
+    lifecycle::deprecate_warn(
+      "1.3.0", "gtsummary::add_global_p.tbl_regression(terms = )",
+      "add_global_p.tbl_regression(include = )"
+    )
+    include <- terms
+  }
+
+  # converting to charcter vector ----------------------------------------------
+  include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
+                                 var_input = !!rlang::enquo(include))
+  exclude <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
+                                 var_input = !!rlang::enquo(exclude))
 
   # fetching categorical variables from model
   model_terms <- x %>%
     pluck("table_body") %>%
-    select(c("var_type", "variable")) %>%
-    filter(!!parse_expr('var_type == "categorical"')) %>%
-    distinct() %>%
-    pull("variable")
+    filter(.data$var_type == "categorical") %>%
+    pull(.data$variable) %>%
+    unique()
 
   # if not terms supplied, getting list of all categorical terms in model
   if (is.null(terms)) terms <- model_terms
@@ -165,13 +181,8 @@ add_global_p.tbl_regression <- function(x, terms = NULL, keep = FALSE, ...) {
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'
 add_global_p.tbl_uvregression <- function(x, ...) {
-
-  # converting the passed ... to a list, OR if nothing passed to NULL
-  if (length(list(...)) == 0) {
-    passed_dots <- NULL
-  } else {
-    passed_dots <- list(...)
-  }
+  # capturing dots in expression
+  dots <- rlang::enexprs(...)
 
   # calculating global pvalues
   global_p <-
@@ -181,10 +192,10 @@ add_global_p.tbl_uvregression <- function(x, ...) {
         tryCatch(
           {
             car_Anova <-
-              do.call(
-                car::Anova,
-                c(list(mod = x[["model_obj"]], type = "III"), passed_dots)
-              )
+              rlang::call2(
+                car::Anova, mod = x[["model_obj"]], type = "III", !!!dots
+              ) %>%
+              rlang::eval_tidy()
           },
           error = function(e) {
             usethis::ui_oops(paste0(
