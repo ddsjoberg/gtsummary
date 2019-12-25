@@ -89,10 +89,6 @@ tbl_stack <- function(tbls) {
     ))
   }
 
-  # at least two objects must be passed
-  tbls_length <- length(tbls)
-  if (tbls_length < 2L) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
-
   # checking if there are multiple input types
   if (map_chr(tbls, class) %>% unique() %>% length() > 1) {
     message("Multiple gtsummary object classes detected. Displayed results default to first input class type.")

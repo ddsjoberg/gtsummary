@@ -5,30 +5,55 @@ library(lme4)
 
 test_that("lm: no errors/warnings with standard use", {
   expect_error(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg
-    ), NA)
+                 tbl_uvregression(
+                   method = lm,
+                   y = mpg
+                 ), NA)
   expect_warning(mtcars %>%
+                   tbl_uvregression(
+                     method = lm,
+                     y = mpg
+                   ), NA)
+})
+
+test_that("geeglm: no errors/warnings with standard use", {
+  expect_error(
     tbl_uvregression(
-      method = lm,
-      y = mpg
+      na.omit(trial),
+      y = age,
+      method = geepack::geeglm,
+      method.args = list(
+        id = response,
+        corstr = "exchangeable"
+      ),
+      exclude = "response"
+    ), NA)
+  expect_warning(
+    tbl_uvregression(
+      na.omit(trial),
+      y = age,
+      method = geepack::geeglm,
+      method.args = list(
+        id = response,
+        corstr = "exchangeable"
+      ),
+      exclude = "response"
     ), NA)
 })
 
 test_that("lm specifying tidy_fun: no errors/warnings with standard use", {
   expect_error(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg,
-      tidy_fun = broom::tidy
-    ), NA)
+                 tbl_uvregression(
+                   method = lm,
+                   y = mpg,
+                   tidy_fun = broom::tidy
+                 ), NA)
   expect_warning(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg,
-      tidy_fun = broom::tidy
-    ), NA)
+                   tbl_uvregression(
+                     method = lm,
+                     y = mpg,
+                     tidy_fun = broom::tidy
+                   ), NA)
 })
 
 test_that("coxph: no errors/warnings with standard use", {
