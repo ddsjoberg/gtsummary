@@ -54,9 +54,9 @@ coefficient estimates. Default is \code{FALSE}.}
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
-\item{include}{Character vector of variable names to include from output.}
+\item{include}{Character vector or tidyselect function indicating variables to include from output.}
 
-\item{exclude}{Character vector of variable names to exclude from output.}
+\item{exclude}{Character vector or tidyselect function indicating variables to exclude from output.}
 
 \item{hide_n}{Hide N column. Default is \code{FALSE}}
 

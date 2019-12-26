@@ -17,9 +17,9 @@
 \item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
-\item{include}{Character vector of variable names to include from output.}
+\item{include}{Character vector or tidyselect function indicating variables to include global p-values}
 
-\item{exclude}{Character vector of variable names to exclude from output.}
+\item{exclude}{Character vector or tidyselect function indicating variables to exclude global p-values}
 
 \item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.

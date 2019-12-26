@@ -26,10 +26,10 @@
 \item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{include}{Character vector naming kable commands to include in printing.
+\item{include}{Character vector or tidyselect function naming kable commands to include in printing.
 Default is \code{NULL}, which utilizes all commands in \code{x$kable_calls}.}
 
-\item{exclude}{Character vector naming kable commands to exclude in printing.
+\item{exclude}{Character vector or tidyselect function naming kable commands to exclude in printing.
 Default is \code{NULL}.}
 
 \item{col_labels}{Logical argument adding column labels to output tibble.
