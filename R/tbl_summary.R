@@ -175,11 +175,11 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # deprecation note about group -----------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(group))) {
-    stop(glue(
-      "Passing the 'group' argument in 'tbl_summary()' is defunct.\n",
-      "Please pass the column in 'add_p()'. For example,\n\n",
-      "tbl_summary() %>% add_p(group = varname)"
-    ))
+    lifecycle::deprecate_stop(
+      "1.2.0",
+      "gtsummary::tbl_summary(group=)",
+      "add_p(group=)"
+    )
   }
 
   # will return call, and all object passed to in tbl_summary call -------------
