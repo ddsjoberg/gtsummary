@@ -68,7 +68,14 @@ test_that("select helpers", {
       all()
   )
 
-
+  stage_variable = "stage"
+  expect_equal(
+    purrr::map_chr(
+      c("trt", "grade", stage_variable),
+      ~tbl_summary(trial, by = .x) %>%
+        purrr::pluck("by")),
+    c("trt", "grade", stage_variable)
+  )
 
   # var_input_to_string(mtcars, select_input = vars(everything(), -mpg)
   expect_error(
