@@ -127,8 +127,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
 
   # converting tidyselect formula lists to named lists
   # extracting model frame
-  model_frame <- tryCatch(
-    {
+  model_frame <- tryCatch({
       stats::model.frame(x)
     },
     warning = function(w) {
@@ -170,15 +169,15 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # converting to character list, using model frame and tidy terms as possible names
   include <- var_input_to_string(
     data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    var_input = !!include
+    select_input = !!include
   )
   exclude <- var_input_to_string(
     data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    var_input = !!exclude
+    select_input = !!exclude
   )
   show_single_row <- var_input_to_string(
     data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    var_input = !!show_single_row
+    select_input = !!show_single_row
   )
 
 

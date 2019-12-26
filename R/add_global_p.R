@@ -40,7 +40,6 @@ add_global_p <- function(x, ...) {
 #'
 #' @param x Object with class `tbl_regression` from the
 #' [tbl_regression] function
-#' @inheritParams tbl_regression
 #' @param keep Logical argument indicating whether to also retain the individual
 #' p-values in the table output for each level of the categorical variable.
 #' Default is `FALSE`
@@ -73,9 +72,9 @@ add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
 
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
-                                 var_input = !!rlang::enquo(include))
+                                 select_input = !!rlang::enquo(include))
   exclude <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
-                                 var_input = !!rlang::enquo(exclude))
+                                 select_input = !!rlang::enquo(exclude))
 
   # fetching categorical variables from model
   model_terms <- x %>%

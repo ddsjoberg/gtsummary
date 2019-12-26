@@ -43,9 +43,9 @@ as_kable <- function(x, include = NULL, exclude = NULL, ...) {
 
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(x$kable_calls)),
-                                 var_input = !!rlang::enquo(include))
+                                 select_input = !!rlang::enquo(include))
   exclude <- var_input_to_string(data = vctr_2_tibble(names(x$kable_calls)),
-                                 var_input = !!rlang::enquo(exclude))
+                                 select_input = !!rlang::enquo(exclude))
 
   # making list of commands to include -----------------------------------------
   if (is.null(include)) include <- names(x$kable_calls)

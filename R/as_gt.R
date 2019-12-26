@@ -56,9 +56,9 @@ as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
   }
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(x$gt_calls)),
-                                 var_input = !!rlang::enquo(include))
+                                 select_input = !!rlang::enquo(include))
   exclude <- var_input_to_string(data = vctr_2_tibble(names(x$gt_calls)),
-                                 var_input = !!rlang::enquo(exclude))
+                                 select_input = !!rlang::enquo(exclude))
 
   if (is.null(include)) include <- names(x$gt_calls)
   # this ensures list is in the same order as names(x$gt_calls)

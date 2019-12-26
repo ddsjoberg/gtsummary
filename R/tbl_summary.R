@@ -147,7 +147,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         percent = c("column", "row", "cell"), group = NULL) {
 
   # converting bare arguments to string ----------------------------------------
-  by <- var_input_to_string(data = data, var_input = !!rlang::enquo(by))
+  by <- var_input_to_string(data = data, select_input = !!rlang::enquo(by))
 
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
