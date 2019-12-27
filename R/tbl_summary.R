@@ -261,7 +261,36 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       digits = continuous_digits_guess(
         data, .data$variable, .data$summary_type, .data$class, digits
       ),
-      sort = assign_sort(.data$variable, .data$summary_type, sort)
+      sort = assign_sort(.data$variable, .data$summary_type, sort),
+      df_stats = pmap(
+        list(summary_type, variable, dichotomous_value, sort, stat_display, digits),
+        function(summary_type, variable, dichotomous_value, sort, stat_display, digits) {
+          switch(
+            summary_type,
+            "continuous" = summarize_continuous2(data = data, variable = variable,
+                                                 by = by, stat_display = stat_display,
+                                                 digits = digits),
+            "categorical" = summarize_categorical2(data = data, variable = variable,
+                                                   by = by,
+                                                   dichotomous_value = dichotomous_value,
+                                                   sort = sort, percent = percent),
+            "dichotomous" = summarize_categorical2(data = data, variable = variable,
+                                                   by = by,
+                                                   dichotomous_value = dichotomous_value,
+                                                   sort = sort, percent = percent)
+          )
+        }
+      ),
+      tbl_stats = pmap(
+        list(.data$summary_type, .data$var_label, .data$stat_display, .data$df_stats),
+        function(summary_type, var_label, stat_display, df_stats) {
+          df_stats_to_tbl(
+            data = data, summary_type = summary_type, by = by,
+            var_label = var_label, stat_display = stat_display,
+            df_stats = df_stats, missing = missing, missing_text = missing_text
+          )
+        }
+      )
     )
 
   # calculating summary statistics ---------------------------------------------
