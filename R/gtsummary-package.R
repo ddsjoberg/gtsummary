@@ -3,10 +3,10 @@
 #' rename_at bind_cols mutate_all mutate_at slice desc
 #' @importFrom purrr map imap map2 pmap map_chr map_dfr map_lgl map_dbl map_if
 #' imap_dfr imap_lgl map2_chr pmap_lgl pmap_chr pmap_dbl compact keep discard
-#' every some pluck flatten negate partial
+#' every some pluck flatten negate partial cross_df
 #' @importFrom tidyr nest unnest complete spread
 #' @importFrom tibble tibble as_tibble
-#' @importFrom rlang .data %||% set_names sym parse_expr
+#' @importFrom rlang .data %||% set_names sym syms parse_expr
 #' @importFrom glue glue as_glue glue_collapse
 #' @keywords internal
 "_PACKAGE"

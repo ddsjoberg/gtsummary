@@ -280,16 +280,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                                                    sort = sort, percent = percent)
           )
         }
-      ),
-      tbl_stats = pmap(
-        list(.data$summary_type, .data$var_label, .data$stat_display, .data$df_stats),
-        function(summary_type, var_label, stat_display, df_stats) {
-          df_stats_to_tbl(
-            data = data, summary_type = summary_type, by = by,
-            var_label = var_label, stat_display = stat_display,
-            df_stats = df_stats, missing = missing, missing_text = missing_text
-          )
-        }
       )
     )
 
@@ -297,29 +287,24 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   table_body <-
     meta_data %>%
     mutate(
-      # creating summary stat table formatted properly
-      stat_table = pmap(
-        list(
-          .data$variable, .data$summary_type, .data$dichotomous_value,
-          .data$var_label, .data$stat_display, .data$digits, .data$class,
-          .data$sort
-        ),
-        ~ calculate_summary_stat(
-          data,
-          variable = ..1, by = get("by"), summary_type = ..2,
-          dichotomous_value = ..3, var_label = ..4, stat_display = ..5,
-          digits = ..6, class = ..7, missing = missing,
-          missing_text = missing_text, sort = ..8,
-          percent = percent
-        )
+      tbl_stats = pmap(
+        list(.data$summary_type, .data$variable, .data$var_label,
+             .data$stat_display, .data$df_stats),
+        function(summary_type, variable, var_label, stat_display, df_stats) {
+          df_stats_to_tbl(
+            data = data, variable = variable, summary_type = summary_type, by = by,
+            var_label = var_label, stat_display = stat_display,
+            df_stats = df_stats, missing = missing, missing_text = missing_text
+          )
+        }
       )
     ) %>%
-    select(c("variable", "summary_type", "stat_table")) %>%
-    unnest(!!sym("stat_table"))
+    pull(.data$tbl_stats) %>%
+    purrr::reduce(bind_rows)
 
   # table of column headers ----------------------------------------------------
   table_header <-
-    tibble(column = names(table_body) %>% setdiff("summary_type")) %>%
+    tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
     mutate(
       footnote = map2(
@@ -337,7 +322,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   results <- list(
     gt_calls = eval(gt_tbl_summary),
     kable_calls = eval(kable_tbl_summary),
-    table_body = table_body %>% select(-.data$summary_type),
+    table_body = table_body,
     table_header = table_header,
     meta_data = meta_data,
     inputs = tbl_summary_inputs,

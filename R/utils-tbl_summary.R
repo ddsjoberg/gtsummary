@@ -1445,7 +1445,7 @@ summarize_continuous2 <- function(data, variable, by, stat_display, digits) {
       cross_df() %>%
       mutate(
         variable = variable,
-        value = map2_dbl(
+        value = purrr::map2_dbl(
           .data$fn, .data$by,
           function(x, y) {
             var_vctr <- filter(data, .data$by == y) %>% pull(.data$variable)
@@ -1471,27 +1471,35 @@ summarize_continuous2 <- function(data, variable, by, stat_display, digits) {
   }
 
   # adding formatting function as attr to summary statistics columns
-  fmt_fun <- rep(digits, length(fns_names_chr)) %>%
+  fmt_fun <- as.list(rep(digits, length(fns_names_chr))) %>%
     set_names(fns_names_chr)
 
-  df_stats <- map(
+  df_stats <- purrr::imap_dfc(
     df_stats,
-    function(x) {
-      if(is.null(fmt_fun[[x]])) return(x)
-      attr(x, "fmt_fun") <-
+    function(column, colname) {
+      if(is.null(fmt_fun[[colname]])) return(column)
+      fmt <- glue("%.{fmt_fun[[colname]]}f")
+      attr(column, "fmt_fun") <- purrr::partial(sprintf, fmt = !!fmt)
+      column
     }
   )
 
-
+  # returning final object
   df_stats
 }
 
-df_stats_to_tbl <- function(data, summary_type, by, var_label, stat_display,
+df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_display,
                             df_stats, missing, missing_text) {
   # continuous and dichotomous with no by variable
   if (summary_type %in% c("continuous", "dichotomous") && is.null(by)) {
     result <-
       df_stats %>%
+      purrr::map_dfc(
+        function(x) {
+          if(is.null(attr(x, "fmt_fun"))) return(x)
+          attr(x, "fmt_fun")(x)
+        }
+      ) %>%
       mutate(
         stat_0 = glue(stat_display) %>% as.character(),
         row_type = "label",
@@ -1503,14 +1511,116 @@ df_stats_to_tbl <- function(data, summary_type, by, var_label, stat_display,
   else if (summary_type %in% c("categorical") && is.null(by)) {
     result <-
       df_stats %>%
+      purrr::map_dfc(
+        function(x) {
+          if(is.null(attr(x, "fmt_fun"))) return(x)
+          attr(x, "fmt_fun")(x)
+        }
+      ) %>%
       mutate(
         stat_0 = glue(stat_display) %>% as.character(),
         row_type = "level",
-        label = .data$variable_levels
+        label = as.character(.data$variable_levels)
       ) %>%
-      select(c(variable, row_type, label, stat_0))
+      select(c(variable, row_type, label, stat_0)) %>%
+      {bind_rows(
+        tibble(variable = variable,
+               row_type = "label",
+               label = var_label),
+        .
+      )}
   }
-  else result <- df_stats
+  # continuous and dichotomous with by variable
+  else if (summary_type %in% c("continuous", "dichotomous") && !is.null(by)) {
+    result <-
+      df_stats %>%
+      purrr::map_dfc(
+        function(x) {
+          if(is.null(attr(x, "fmt_fun"))) return(x)
+          attr(x, "fmt_fun")(x)
+        }
+      ) %>%
+      mutate(
+        statistic = glue(stat_display) %>% as.character(),
+        row_type = "label",
+        label = var_label
+      ) %>%
+      select(c(by, variable, row_type, label, statistic)) %>%
+      left_join(
+        df_by(data, by)[c("by", "by_col")],
+        by = "by"
+      ) %>%
+      arrange(.data$by_col) %>%
+      tidyr::pivot_wider(
+        id_cols = c("variable", "row_type", "label"),
+        names_from = "by_col",
+        values_from = "statistic"
+      )
+  }
+  # categorical with by variable
+  else if (summary_type %in% c("categorical") && !is.null(by)) {
+    result <-
+      df_stats %>%
+      purrr::map_dfc(
+        function(x) {
+          if(is.null(attr(x, "fmt_fun"))) return(x)
+          attr(x, "fmt_fun")(x)
+        }
+      ) %>%
+      mutate(
+        statistic = glue(stat_display) %>% as.character(),
+        row_type = "level",
+        label = as.character(.data$variable_levels)
+      ) %>%
+      select(c(by, variable, row_type, label, statistic)) %>%
+      left_join(
+        df_by(data, by)[c("by", "by_col")],
+        by = "by"
+      ) %>%
+      arrange(.data$by_col) %>%
+      tidyr::pivot_wider(
+        id_cols = c("variable", "row_type", "label"),
+        names_from = "by_col",
+        values_from = "statistic"
+      ) %>%
+      {bind_rows(
+        tibble(variable = variable,
+               row_type = "label",
+               label = var_label),
+        .
+      )}
+  }
+
+  # add rows for missing -------------------------------------------------------
+  if (missing == "always" || (missing == "ifany" & sum(is.na(data[[variable]])) > 0)) {
+    calculate_missing_row(data = data, variable = variable, by = by)
+  }
 
   return(result)
+}
+
+calculate_missing_row <- function(data, variable, by) {
+  if(is.null(by))
+    return(tibble(
+      variable = variable,
+      row_type = "missing",
+      stat_0 = sum(is.na(data[[variable]])) %>% as.character()
+    ))
+
+  data %>%
+    select(c(by, variable)) %>%
+    set_names(c("by", "variable")) %>%
+    group_by(.data$by) %>%
+    nest() %>%
+    mutate(
+      variable = variable,
+      statistic = map_chr(data, ~sum(is.na(.x[["variable"]])))
+    ) %>%
+    select(c("by", "variable", "statistic")) %>%
+    left_join(
+      df_by(data, by)[c("by", "by_col")],
+      by = "by"
+    )
+
+
 }
