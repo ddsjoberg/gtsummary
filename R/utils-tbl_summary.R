@@ -401,50 +401,6 @@ assign_sort <- function(variable, summary_type, sort) {
   )
 }
 
-# assign_sort(variable = c("trt", "grade", "stage", "age"),
-#             summary_type = c("categorical", "categorical", "categorical", "continuous"),
-#             sort = list(..categorical.. = "frequency",
-#                         stage = "alphanumeric"))
-
-
-# stat_name that are accepted
-calculate_single_stat <- function(x, stat_name) {
-  map_dbl(
-    stat_name,
-    function(name) {
-      # calculating percentiles if requested
-      if (name %in% paste0("p", 0:100)) {
-        do.call(
-          "quantile",
-          list(
-            x,
-            probs = as.numeric(gsub("[^0-9\\.]", "", name)) / 100,
-            na.rm = TRUE
-          )
-        )
-      }
-      # calculating summary stats, input MUST be a function name
-      # first argument is x and must take argument 'na.rm = TRUE'
-      else {
-        do.call(name, list(stats::na.omit(x)))
-        # do.call(name, list(x, na.rm = TRUE))
-      }
-    }
-  )
-}
-
-
-# calculate_single_stat(mtcars$mpg, c("p50", "p70"))
-#
-# summarize_continuous(
-#   data = mtcars, variable = "mpg", by = "vs", digits = 0,
-#   var_label = "MPG!", stat_display = "{p30} ({p98})", missing = "no"
-# )
-
-
-
-
-
 
 # function that checks the inputs to \code{\link{tbl_summary}}
 # this should include EVERY input of \code{\link{tbl_summary}} in the same order
@@ -819,36 +775,6 @@ footnote_stat_label <- function(meta_data) {
     paste(collapse = "; ") %>%
     paste0("Statistics presented: ", .)
 }
-
-# the by variable is supplied is a bare, and ocnverted to a string.
-# when a NULL is passed, it is returned as a NULL
-enquo_to_string <- function(by_enquo, arg_name) {
-  # returning NULL if NULL was passed
-  if (rlang::quo_is_null(by_enquo)) {
-    return(NULL)
-  }
-
-  # converting enquo to string
-  by_quo_text <- rlang::quo_text(by_enquo)
-
-  # is user supplied string, then stopping with error
-  if (startsWith(by_quo_text, "\"") && endsWith(by_quo_text, "\"")) {
-    stop(glue(
-      "\nPassing the '{arg_name}' argument as a string is defunct.\n",
-      "Please pass the {arg_name} argument without quotes. For example, \n\n",
-      "foo({arg_name} = varname)"
-    ))
-  }
-
-  # if user passed odd name quoted with back ticks, removing them
-  if (startsWith(by_quo_text, "`") && endsWith(by_quo_text, "`")) {
-    by_quo_text <- stringr::str_sub(by_quo_text, 2, -2)
-  }
-
-  by_quo_text
-}
-
-
 
 summarize_categorical <- function(data, variable, by, dichotomous_value, sort, percent) {
   # grabbing percent formatting function
