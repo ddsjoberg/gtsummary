@@ -45,7 +45,6 @@ tbl_survival <- function(x, ...) {
 #' probabilities, and
 #' `style_sigfig(x, digits = 3)` for time estimates.
 #' @param ... Not used
-#' @importFrom stringr str_split
 #' @family tbl_survival tools
 #' @author Daniel D. Sjoberg
 #' @export

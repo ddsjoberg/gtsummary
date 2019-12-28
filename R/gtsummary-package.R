@@ -6,8 +6,10 @@
 #' every some pluck flatten negate partial cross_df
 #' @importFrom tidyr nest unnest complete spread
 #' @importFrom tibble tibble as_tibble
-#' @importFrom rlang .data %||% set_names sym syms parse_expr
+#' @importFrom rlang .data %||% set_names sym syms parse_expr :=
 #' @importFrom glue glue as_glue glue_collapse
+#' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
+#' str_split str_detect str_remove
 #' @keywords internal
 "_PACKAGE"
 

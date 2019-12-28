@@ -42,7 +42,6 @@
 #' function defined by `method`.
 #' @param hide_n Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
-#' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 #' @family tbl_uvregression tools

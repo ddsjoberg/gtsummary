@@ -244,93 +244,6 @@ assign_var_label <- function(data, variable, var_label) {
 }
 
 
-#' This function takes in the meta data table, and calls the appropriate summarize function.
-#'
-#' @param data Data frame
-#' @param variable Character variable name in \code{data} that will be tabulated
-#' @param by Character variable name in\code{data} that Summary statistics for
-#' \code{variable} are stratified
-#' @param summary_type A list that includes specified summary types.
-#' @param var_label String label
-#' @param dichotomous_value If the output is dichotomous, then this is the value
-#' @param stat_display String that specifies the format of the displayed statistics.
-#' The syntax follows \code{glue::glue()} inputs with n, N, and p as input options.
-#' of the variable that will be displayed.
-#' @param digits integer indicating the number of decimal places to be used.
-#' @param class variable class.  If class is NA, then all values are NA, and no
-#' summary statistics will be calculated.
-#' @param missing whether to include NA values in the table. `missing` controls
-#' if the table includes counts of NA values: the allowed values correspond to
-#' never ("no"), only if the count is positive ("ifany") and even for
-#' zero counts ("always"). Default is "ifany".
-#' @param missing_text String to display for count of missing observations.
-#' @param sort string indicating whether to sort categorical
-#' variables by 'alphanumeric' or 'frequency'
-#' @param percent indicates the type of percentage to return. Must be one of
-#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
-#' @noRd
-#' @keywords internal
-#' @author Daniel D. Sjoberg
-
-calculate_summary_stat <- function(data, variable, by, summary_type,
-                                   dichotomous_value, var_label, stat_display,
-                                   digits, class, missing, missing_text, sort,
-                                   percent) {
-
-  # if class is NA, then do not calculate summary statistics
-  if (is.na(class)) {
-    # empty results table when no by variable
-    if (is.null(by)) {
-      return(
-        tibble(
-          row_type = c("label", "missing"),
-          label = c(var_label, missing_text),
-          stat_0 = c(NA_character_, as.character(nrow(data)))
-        )
-      )
-    }
-    # empty results table when there is a by variable
-    if (!is.null(by)) {
-      stat_col_names <- df_by(data, by)[["by_col"]]
-      return(
-        tibble(
-          row_type = c("label", "missing"),
-          label = c(var_label, missing_text)
-        ) %>%
-          left_join(
-            table(data[[by]]) %>%
-              as.matrix() %>%
-              t() %>%
-              as_tibble() %>%
-              mutate_all(as.character) %>%
-              set_names(stat_col_names) %>%
-              mutate(row_type = "missing")
-          )
-      )
-    }
-  }
-
-  # return data table with continuous summary stats
-  if (summary_type == "continuous") {
-    return(
-      summarize_continuous(
-        data, variable, by, digits,
-        var_label, stat_display, missing, missing_text
-      )
-    )
-  }
-
-  # return data table with categorical or dichotomous summary stats
-  if (summary_type %in% c("categorical", "dichotomous")) {
-    return(
-      summarize_categorical(
-        data, variable, by, var_label, stat_display, dichotomous_value,
-        missing, missing_text, sort, percent
-      )
-    )
-  }
-}
-
 #' Guesses how many digits to use in rounding continuous variables
 #' or summary statistics
 #'
@@ -446,374 +359,6 @@ df_by <- function(data, by) {
 # 2 versicolor    50   150 0.333     2 versicolor stat_2
 # 3 virginica     50   150 0.333     3 virginica  stat_3
 
-
-#' Calculates and formats N's and percentages for categorical and dichotomous data
-#'
-#' @param data Data frame
-#' @param variable Character variable name in `data` that will be tabulated
-#' @param by Character variable name in `data` that Summary statistics for
-#' `variable` are stratified
-#' @param var_label String label
-#' @param stat_display String that specifies the format of the displayed statistics.
-#' The syntax follows \code{\link[glue]{glue}} inputs with n, N, and p as input options.
-#' @param dichotomous_value If the output is dichotomous, then this is the value
-#' of the variable that will be displayed.
-#' @param missing whether to include `NA` values in the table. `missing` controls
-#' if the table includes counts of `NA` values: the allowed values correspond to
-#' never (`"no"`), only if the count is positive (`"ifany"`) and even for
-#' zero counts (`"always"`). Default is `"ifany"`.
-#' @param missing_text String to display for count of missing observations.
-#' @param sort string indicating whether to sort categorical
-#' variables by 'alphanumeric' or 'frequency'
-#' @param percent indicates the type of percentage to return. Must be one of
-#' `"column"`, `"row"`, or `"cell"`. Default is `"column"`
-#' @param percent_fun function to round and format percentages.  Default
-#' is `style_percent()`
-#' @return formatted summary statistics in a tibble.
-#' @noRd
-#' @keywords internal
-#' @author Daniel D. Sjoberg
-
-summarize_categorical <- function(data, variable, by, var_label,
-                                  stat_display, dichotomous_value, missing,
-                                  missing_text, sort, percent) {
-  percent_fun <-
-    getOption("gtsummary.tbl_summary.percent_fun",
-              default = style_percent
-    )
-  if (!rlang::is_function(percent_fun)) {
-    stop(paste0(
-      "'percent_fun' is not a valid function.  Please pass only a function\n",
-      "object. For example, to round percentages to 2 decimal places, \n\n",
-      "'options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(\"%.2f\", 100 * x))'"
-    ))
-  }
-
-  # counting total missing
-  tot_n_miss <- sum(is.na(data[[variable]]))
-
-  # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
-  # when variable has label.  So deleting it.
-  attr(data[[variable]], "label") <- NULL
-  if (!is.null(by)) attr(data[[by]], "label") <- NULL
-  # same thing when the class "labelled" is included when labeled with the Hmisc package
-  class(data[[variable]]) <- setdiff(class(data[[variable]]), "labelled")
-  if (!is.null(by)) {
-    class(data[[by]]) <- setdiff(class(data[[by]]), "labelled")
-  }
-
-  # grouping by var
-  if (!is.null(by)) {
-    data <-
-      data %>%
-      select(c(variable, by)) %>%
-      set_names(c("variable", "by")) %>%
-      left_join(df_by(data, by), by = "by") %>%
-      select(c(variable, "by_col"))
-  }
-  else {
-    data <-
-      data %>%
-      select(c(variable)) %>%
-      set_names(c("variable")) %>%
-      mutate(by_col = "stat_0") %>%
-      select(c(variable, "by_col"))
-  }
-
-  # row or column percents
-  # for column percent, group by 'by_col'
-  # for row percents, group by 'variable'
-  percent_group_by_var <-
-    case_when(
-      percent == "column" ~ "by_col",
-      percent == "row" ~ "variable",
-      percent == "cell" ~ ""
-    )
-
-  # nesting data and changing by variable
-  tab0 <-
-    data %>%
-    stats::na.omit() %>%
-    group_by(!!sym("by_col")) %>%
-    count(!!sym("variable")) %>%
-    ungroup()
-
-  # if there is a dichotomous value supplied, merging it in to ensure it gets counted (when unobserved)
-  if (!is.null(dichotomous_value)) {
-    # making factors character here
-    if (is.factor(tab0$variable)) {
-      tab0 <-
-        tab0 %>%
-        mutate(variable = as.character(variable)) %>%
-        full_join(tibble(variable = as.character(dichotomous_value)), by = "variable")
-    }
-    else {
-      tab0 <-
-        tab0 %>%
-        full_join(tibble(variable = dichotomous_value), by = "variable")
-    }
-  }
-
-  tab <-
-    tab0 %>%
-    complete(!!sym("by_col"), !!sym("variable"), fill = list(n = 0)) %>%
-    stats::na.omit() %>% # this is needed when the dichot value is unobserved in dataset
-    group_by(!!sym("variable")) %>%
-    mutate(var_level_freq = sum(.data$n)) %>%
-    group_by(!!sym(percent_group_by_var)) %>%
-    mutate(
-      N = sum(.data$n),
-      p = percent_fun(.data$n / .data$N),
-      stat = as.character(glue(stat_display))
-    ) %>%
-    select(c("by_col", "var_level_freq", "variable", "stat")) %>%
-    group_by(!!sym("by_col")) %>%
-    spread(!!sym("by_col"), !!sym("stat")) %>%
-    mutate(
-      row_type = "level",
-      label = .data$variable %>% as.character()
-    )
-
-  # if sort == "frequency", then sort data before moving forward
-  if (sort == "frequency") {
-    tab <-
-      tab %>%
-      arrange(desc(.data$var_level_freq))
-  }
-  else if (sort == "alphanumeric") {
-    tab <-
-      tab %>%
-      arrange(.data$variable)
-  }
-
-  # keeping needed vars
-  tab <-
-    tab %>%
-    select(c("variable", "row_type", "label", starts_with("stat_")))
-
-  # number of missing observations
-  missing_count <-
-    data %>%
-    group_by(!!sym("by_col")) %>%
-    nest() %>%
-    mutate(
-      missing_count = map_chr(data, ~ .x[[1]] %>%
-                                is.na() %>%
-                                sum())
-    ) %>%
-    select(c("by_col", "missing_count")) %>%
-    spread(!!sym("by_col"), !!sym("missing_count")) %>%
-    mutate(
-      row_type = "missing",
-      label = missing_text
-    )
-
-  # formatting for dichotomous variables
-  if (!is.null(dichotomous_value)) {
-    results <-
-      tab %>%
-      filter(!!parse_expr("variable == dichotomous_value")) %>%
-      mutate(
-        row_type = "label",
-        label = var_label
-      ) %>%
-      select(-c(variable)) %>%
-      bind_rows(missing_count)
-  }
-  # formatting for categorical variables
-  else {
-    results <-
-      tibble(
-        row_type = "label",
-        label = var_label
-      ) %>%
-      bind_rows(tab %>% select(-c("variable"))) %>%
-      bind_rows(missing_count)
-  }
-
-  # excluding missing row if indicated
-  if (missing == "no" | (missing == "ifany" & tot_n_miss == 0)) {
-    results <-
-      results %>%
-      filter(!!parse_expr("row_type != 'missing'"))
-  }
-
-  # if there are some by levels that are entriely missing,
-  # making sure columns appear in correct order
-  if (!is.null(by)) {
-    results <- results %>%
-      select(c("row_type", "label", sort(unique(data$by_col))))
-  }
-
-  results
-}
-
-# summarize_categorical(
-#   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
-#   stat_display = "{n}/{N} ({p}%)", dichotomous_value = 50, missing = "ifany",
-#   percent = "column"
-# )
-# summarize_categorical(
-#   data = lung, variable = "ph.karno", by = "sex", var_label = "WTF",
-#   stat_display = "{n}/{N} ({p}%)", dichotomous_value = NULL, missing = "ifany",
-#   percent = "column"
-# )
-# summarize_categorical(
-#   data = lung, variable = "ph.karno", by = NULL, var_label = "WTF",
-#   stat_display = "{n}/{N} ({p}%)", dichotomous_value = 50
-# )
-#
-# summarize_categorical(
-#   data = mtcars, variable = "cyl", by = NULL, var_label = "WTF",
-#   stat_display = "{n} ({p}%)", dichotomous_value = NULL
-# )
-#
-# summarize_categorical(
-#   data = mtcars, variable = "cyl", by = "am", var_label = "WTF",
-#   stat_display = "{n} ({p}%)", dichotomous_value = NULL, missing = "ifany",
-#   percent = "column"
-# )
-
-
-
-
-#' Calculates and formats summary statistics for continuous data
-#'
-#' @param data data frame
-#' @param variable Character variable name in `data` that will be tabulated
-#' @param by Character variable name in `data` that Summary statistics for
-#' `variable` are stratified
-#' @param digits vector of integers (or single integer) indicating the number
-#' of decimal places to be used for rounding.
-#' @param var_label string label
-#' @param stat_display String that specifies the format of the displayed statistics.
-#' The syntax follows \code{\link[glue]{glue}} inputs with n, N, and p as input options.
-#' @param missing whether to include `NA` values in the table. `missing` controls
-#' if the table includes counts of `NA` values: the allowed values correspond to
-#' never (`"no"`), only if the count is positive (`"ifany"`) and even for
-#' zero counts (`"always"`). Default is `"ifany"`.
-#' @param missing_text String to display for count of missing observations.
-#' @return formatted summary statistics in a tibble.
-#' @noRd
-#' @keywords internal
-#' @author Daniel D. Sjoberg
-#' @importFrom stringr str_extract_all str_remove_all fixed
-
-summarize_continuous <- function(data, variable, by, digits,
-                                 var_label, stat_display, missing, missing_text) {
-
-  # counting total missing
-  tot_n_miss <- sum(is.na(data[[variable]]))
-
-  # grouping by var
-  if (!is.null(by)) {
-    # left_join throws warning `has different attributes on LHS and RHS of join`
-    # when variable has label.  So deleting it.
-    df_by <- df_by(data, by)
-    attr(df_by[["by"]], "label") <- NULL
-    attr(data[[by]], "label") <- NULL
-
-    data <-
-      data %>%
-      select(c(variable, by)) %>%
-      set_names(c("variable", "by")) %>%
-      left_join(df_by, by = "by") %>%
-      select(c(variable, "by_col"))
-  }
-  else {
-    data <-
-      data %>%
-      select(c(variable)) %>%
-      set_names(c("variable")) %>%
-      mutate(by_col = "stat_0") %>%
-      select(c(variable, "by_col"))
-  }
-
-  # nesting data and changing by variable
-  data <-
-    data %>%
-    group_by(!!sym("by_col")) %>%
-    nest()
-
-  # nesting data and calculating descriptive stats
-  stats <-
-    data %>%
-    mutate(
-      # extracting list of statisitcs that need to be calculated
-      stat_name_list = str_extract_all(stat_display, "\\{.*?\\}") %>%
-        map(str_remove_all, pattern = fixed("}")) %>%
-        map(str_remove_all, pattern = fixed("{")),
-      # calculating statistics
-      stat_result_list = map2(
-        data, .data$stat_name_list,
-        ~ calculate_single_stat(.x[[1]], .y)
-      ),
-      # getting a vector indicating the number of digits to round each requested statistic
-      round_digits = map(.data$stat_result_list, ~ rep(digits, length.out = length(.x))),
-      # rounding each statistic
-      stat_result_list_fmt = map2(
-        .data$stat_result_list, .data$round_digits,
-        ~ map2_chr(.x, .y, function(stat, digit) sprintf(glue("%.{digit}f"), stat))
-      ),
-      # converting stats into a tibble with names as the type of statistic (i.e. mean column is called mean)
-      df_result = map2(
-        .data$stat_name_list, .data$stat_result_list_fmt,
-        ~ .y %>%
-          t() %>%
-          as_tibble(.name_repair = "minimal") %>%
-          set_names(.x)
-      ),
-      # rounding statistics and concatenating results
-      stat = map_chr(
-        .data$df_result,
-        ~ .x %>%
-          mutate(
-            stat = as.character(glue(stat_display))
-          ) %>%
-          pull("stat")
-      )
-    ) %>%
-    select(c("by_col", "stat")) %>%
-    spread(!!sym("by_col"), !!sym("stat")) %>%
-    mutate(
-      row_type = "label",
-      label = var_label
-    ) %>%
-    select(c("row_type", "label", starts_with("stat_")))
-
-  # number of missing observations
-  missing_count <-
-    data %>%
-    mutate(
-      missing_count =
-        map_chr(
-          data,
-          ~ .x[[1]] %>%
-            is.na() %>%
-            sum()
-        )
-    ) %>%
-    select(c("by_col", "missing_count")) %>%
-    spread(!!sym("by_col"), !!sym("missing_count")) %>%
-    mutate(
-      row_type = "missing",
-      label = missing_text
-    )
-
-  # stacking stats and missing row
-  result <-
-    stats %>%
-    bind_rows(missing_count)
-
-  # excluding missing row if indicated
-  if (missing == "no" | (missing == "ifany" & tot_n_miss == 0)) {
-    result <-
-      result %>%
-      filter(!!parse_expr("row_type != 'missing'"))
-  }
-
-  result
-}
 
 #' Assigns categorical variables sort type ("alphanumeric" or "frequency")
 #'
@@ -1305,10 +850,7 @@ enquo_to_string <- function(by_enquo, arg_name) {
 
 
 
-################################################################################
-######################  UPDATE THE SECTION BELOW ###############################
-################################################################################
-summarize_categorical2 <- function(data, variable, by, dichotomous_value, sort, percent) {
+summarize_categorical <- function(data, variable, by, dichotomous_value, sort, percent) {
   # grabbing percent formatting function
   percent_fun <-
     getOption("gtsummary.tbl_summary.percent_fun",
@@ -1366,13 +908,13 @@ summarize_categorical2 <- function(data, variable, by, dichotomous_value, sort, 
   result <- df_tab %>%
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
-      N = sum(n),
-      p = n / N
+      N = sum(.data$n),
+      p = .data$n / .data$N
     ) %>%
     ungroup() %>%
     rename(variable_levels = .data$variable) %>%
     mutate(variable = variable) %>%
-    select(c(by, variable, variable_levels, everything()))
+    select(c(by, variable, "variable_levels", everything()))
 
   if (!is.null(dichotomous_value)) {
     result <- result %>%
@@ -1387,7 +929,7 @@ summarize_categorical2 <- function(data, variable, by, dichotomous_value, sort, 
 }
 
 
-summarize_continuous2 <- function(data, variable, by, stat_display, digits) {
+summarize_continuous <- function(data, variable, by, stat_display, digits) {
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
   # when variable has label.  So deleting it.
@@ -1471,7 +1013,7 @@ summarize_continuous2 <- function(data, variable, by, stat_display, digits) {
   }
 
   # adding formatting function as attr to summary statistics columns
-  fmt_fun <- as.list(rep(digits, length(fns_names_chr))) %>%
+  fmt_fun <- as.list(rep(digits, length.out = length(fns_names_chr))) %>%
     set_names(fns_names_chr)
 
   df_stats <- purrr::imap_dfc(
@@ -1505,7 +1047,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         row_type = "label",
         label = var_label
       ) %>%
-      select(c(variable, row_type, label, stat_0))
+      select(c("variable", "row_type", "label", "stat_0"))
   }
   # categorical with no by variable
   else if (summary_type %in% c("categorical") && is.null(by)) {
@@ -1522,7 +1064,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         row_type = "level",
         label = as.character(.data$variable_levels)
       ) %>%
-      select(c(variable, row_type, label, stat_0)) %>%
+      select(c("variable", "row_type", "label", "stat_0")) %>%
       {bind_rows(
         tibble(variable = variable,
                row_type = "label",
@@ -1545,12 +1087,12 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         row_type = "label",
         label = var_label
       ) %>%
-      select(c(by, variable, row_type, label, statistic)) %>%
+      select(c("by", "variable", "row_type", "label", "statistic")) %>%
       left_join(
-        df_by(data, by)[c("by", "by_col")],
+        df_by(data, by)[c("by", "by_col", "by_id")],
         by = "by"
       ) %>%
-      arrange(.data$by_col) %>%
+      arrange(.data$by_id) %>%
       tidyr::pivot_wider(
         id_cols = c("variable", "row_type", "label"),
         names_from = "by_col",
@@ -1572,12 +1114,12 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         row_type = "level",
         label = as.character(.data$variable_levels)
       ) %>%
-      select(c(by, variable, row_type, label, statistic)) %>%
+      select(c("by", "variable", "row_type", "label", "statistic")) %>%
       left_join(
-        df_by(data, by)[c("by", "by_col")],
+        df_by(data, by)[c("by", "by_col", "by_id")],
         by = "by"
       ) %>%
-      arrange(.data$by_col) %>%
+      arrange(.data$by_id) %>%
       tidyr::pivot_wider(
         id_cols = c("variable", "row_type", "label"),
         names_from = "by_col",
@@ -1593,34 +1135,36 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
 
   # add rows for missing -------------------------------------------------------
   if (missing == "always" || (missing == "ifany" & sum(is.na(data[[variable]])) > 0)) {
-    calculate_missing_row(data = data, variable = variable, by = by)
+    result <-
+      result %>%
+      bind_rows(
+        calculate_missing_row(data = data, variable = variable,
+                              by = by, missing_text = missing_text)
+      )
   }
 
   return(result)
 }
 
-calculate_missing_row <- function(data, variable, by) {
-  if(is.null(by))
-    return(tibble(
-      variable = variable,
-      row_type = "missing",
-      stat_0 = sum(is.na(data[[variable]])) %>% as.character()
-    ))
-
-  data %>%
-    select(c(by, variable)) %>%
-    set_names(c("by", "variable")) %>%
-    group_by(.data$by) %>%
-    nest() %>%
+calculate_missing_row <- function(data, variable, by, missing_text) {
+  # converting variable to TRUE/FALSE for missing
+  data <-
+    data %>%
+    select(c(variable, by)) %>%
     mutate(
-      variable = variable,
-      statistic = map_chr(data, ~sum(is.na(.x[["variable"]])))
-    ) %>%
-    select(c("by", "variable", "statistic")) %>%
-    left_join(
-      df_by(data, by)[c("by", "by_col")],
-      by = "by"
+      !!variable := is.na(.data[[variable]])
     )
 
-
+  # passing the T/F variable throught the functions to format as we do in
+  # the tbl_summary output
+  summarize_categorical(
+    data = data, variable = variable, by = by,
+    dichotomous_value = TRUE, sort = "alphanumeric", percent = "column"
+  ) %>%
+    {df_stats_to_tbl(
+      data = data, variable = variable, summary_type = "dichotomous", by = by,
+      var_label = missing_text, stat_display = "{n}", df_stats = .,
+      missing = "no", missing_text = "Doesn't Matter -- Text should never appear")} %>%
+    # changing row_type to missing
+    mutate(row_type = "missing")
 }

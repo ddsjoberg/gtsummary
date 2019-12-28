@@ -92,7 +92,6 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
 #' @param tidy broom tidy result
 #' @inheritParams tbl_regression
 #' @noRd
-#' @importFrom stringr fixed str_detect
 #' @keywords internal
 
 parse_fit <- function(fit, tidy, label, show_single_row) {

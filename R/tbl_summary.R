@@ -263,18 +263,19 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       ),
       sort = assign_sort(.data$variable, .data$summary_type, sort),
       df_stats = pmap(
-        list(summary_type, variable, dichotomous_value, sort, stat_display, digits),
+        list(.data$summary_type, .data$variable, .data$dichotomous_value,
+             .data$sort, .data$stat_display, .data$digits),
         function(summary_type, variable, dichotomous_value, sort, stat_display, digits) {
           switch(
             summary_type,
-            "continuous" = summarize_continuous2(data = data, variable = variable,
+            "continuous" = summarize_continuous(data = data, variable = variable,
                                                  by = by, stat_display = stat_display,
                                                  digits = digits),
-            "categorical" = summarize_categorical2(data = data, variable = variable,
+            "categorical" = summarize_categorical(data = data, variable = variable,
                                                    by = by,
                                                    dichotomous_value = dichotomous_value,
                                                    sort = sort, percent = percent),
-            "dichotomous" = summarize_categorical2(data = data, variable = variable,
+            "dichotomous" = summarize_categorical(data = data, variable = variable,
                                                    by = by,
                                                    dichotomous_value = dichotomous_value,
                                                    sort = sort, percent = percent)
