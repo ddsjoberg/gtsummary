@@ -8,8 +8,9 @@
   x,
   variable,
   level = NULL,
-  column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  column = NULL,
+  pattern = NULL,
+  pvalue_fun = NULL,
   ...
 )
 }
@@ -23,6 +24,9 @@ Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
 \item{column}{Column name to return from \code{x$table_body}.
 Can also pass the level of a by variable.}
+
+\item{pattern}{pattern of summary statistics to print. Default is pattern
+shown in \code{tbl_summary()} output}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.

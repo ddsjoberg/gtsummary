@@ -23,6 +23,8 @@ inline_text <- function(x, ...) {
 #' Can also specify the 'Unknown' row.  Default is `NULL`
 #' @param column Column name to return from `x$table_body`.
 #' Can also pass the level of a by variable.
+#' @param pattern pattern of summary statistics to print. Default is pattern
+#' shown in `tbl_summary()` output
 #' @inheritParams tbl_regression
 #' @param ... Not used
 #' @family tbl_summary tools
@@ -37,9 +39,30 @@ inline_text <- function(x, ...) {
 #' inline_text(t2, variable = "grade", level = "I", column = "Drug A")
 #' inline_text(t2, variable = "grade", column = "p.value")
 inline_text.tbl_summary <-
-  function(x, variable, level = NULL,
-           column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+  function(x, variable, level = NULL, column = NULL,
+           pattern = NULL, pvalue_fun = NULL, ...) {
+    # checking variable input --------------------------------------------------
+    if (!variable %in% x$meta_data$variable) {
+      stop(paste0(
+        "`variable` argument is invalid. Must be one of\n",
+        glue::glue_collapse(sQuote(x$meta_data$variable), sep = ", ", last = ", or ")
+      ), call. = FALSE)
+    }
+    meta_data <- x$meta_data %>%
+      filter(.data$variable == !!variable)
+
+    # setting defaults ---------------------------------------------------------
+    pattern_arg_null <- is.null(pattern)
+    pattern <- pattern %||% meta_data$stat_display
+    column <- column %||%
+      ifelse(
+        is.null(x$by),
+        "stat_0",
+        stop("Must specify `column` argument.", call. = FALSE)
+      )
+    pvalue_fun <- x$pvalue_fun %||%
+      {function(x) style_pvalue(x, prepend_p = TRUE)}
+
     # checking column ----------------------------------------------------------
     # the follwing code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
@@ -51,14 +74,14 @@ inline_text.tbl_summary <-
       col_lookup_table <-
         col_lookup_table %>%
         bind_rows(
-          x$df_by %>% select(c("by_chr", "by_col")) %>% set_names(c("input", "column_name"))
+          x$df_by[c("by_chr", "by_col")] %>% set_names(c("input", "column_name"))
         )
     }
 
     column <- col_lookup_table %>%
-      filter(!!parse_expr(glue("input == '{column}'"))) %>%
+      filter(.data$input == !!column) %>%
       slice(1) %>%
-      pull("column_name")
+      pull(.data$column_name)
 
     if (length(column) == 0) {
       stop(glue(
@@ -67,19 +90,22 @@ inline_text.tbl_summary <-
       ))
     }
 
-
-
     # select variable ----------------------------------------------------------
-    # grabbing rows matching variable
-    result <-
-      x$table_body %>%
-      filter(!!parse_expr(glue("variable ==  '{variable}'")))
-
-    if (nrow(result) == 0) {
-      stop(glue(
-        "Is the variable name spelled correctly? variable must be one of: ",
-        "{pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
-      ))
+    # if user passed a pattern AND colums is stat_0, stat_1, etc, then replacing
+    # table_body object with rebuilt version using pattern
+    if (pattern_arg_null == FALSE && startsWith(column, "stat_")) {
+      result <-
+        df_stats_to_tbl(
+          data = x$inputs$data, variable = variable,
+          summary_type = meta_data$summary_type, by = x$by,
+          var_label = meta_data$var_label, stat_display = pattern,
+          df_stats = meta_data$df_stats[[1]], missing = "no", missing_text = "Unknown"
+        )
+    }
+    else {
+      result <-
+        x$table_body %>%
+        filter(.data$variable == !!variable)
     }
 
     # select variable level ----------------------------------------------------
@@ -87,20 +113,20 @@ inline_text.tbl_summary <-
       result <- result %>% slice(1)
     }
     else {
-      # if the length of this is 0, there are no levels to select.  Should we print an error here?
+      # if the length of this is 0, there are no levels to select.
       levels_obs <- result %>%
-        filter(!!parse_expr('row_type != "label"')) %>%
-        pull("label")
+        filter(.data$row_type != "label") %>%
+        pull(.data$label)
       result <-
         result %>%
-        filter(!!parse_expr(glue("label ==  '{level}'")))
+        filter(.data$label == !!level)
     }
 
     if (nrow(result) == 0) {
       stop(glue(
-        "Is the variable level spelled correctly? level must be one of: ",
-        "{levels_obs %>% paste(collapse = ', ')}"
-      ))
+        "Is the variable level spelled correctly? `level` must be one of\n",
+        "{paste(sQuote(levels_obs), collapse = ', ')}"
+      ), call. = FALSE)
     }
 
     # select column ------------------------------------------------------------
