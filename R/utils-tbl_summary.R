@@ -482,26 +482,26 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
   # label ----------------------------------------------------------------------
   if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
-
-    # checking input type: must be a list of formulas, or one formula
-    if (!class(label) %in% c("list", "formula")) {
-      stop(glue(
-        "'label' argument must be a list of formulas. ",
-        "LHS of the formula is the variable specification, ",
-        "and the RHS is the label specification: ",
-        "list(vars(stage) ~ \"T Stage\")"
-      ))
-    }
-    if ("list" %in% class(label)) {
-      if (purrr::some(label, negate(rlang::is_bare_formula))) {
-        stop(glue(
-          "'label' argument must be a list of formulas. ",
-          "LHS of the formula is the variable specification, ",
-          "and the RHS is the label specification: ",
-          "list(vars(stage) ~ \"T Stage\")"
-        ), call. = FALSE)
-      }
-    }
+#
+#     # checking input type: must be a list of formulas, or one formula
+#     if (!class(label) %in% c("list", "formula")) {
+#       stop(glue(
+#         "'label' argument must be a list of formulas. ",
+#         "LHS of the formula is the variable specification, ",
+#         "and the RHS is the label specification: ",
+#         "list(stage ~ \"T Stage\", age ~ \"Age\")"
+#       ))
+#     }
+#     if ("list" %in% class(label)) {
+#       if (purrr::some(label, negate(rlang::is_bare_formula))) {
+#         stop(glue(
+#           "'label' argument must be a list of formulas. ",
+#           "LHS of the formula is the variable specification, ",
+#           "and the RHS is the label specification: ",
+#           "list(stage ~ \"T Stage\", age ~ \"Age\")"
+#         ), call. = FALSE)
+#       }
+#     }
 
     # all sepcifed labels must be a string of length 1
     if ("formula" %in% class(label)) label <- list(label)

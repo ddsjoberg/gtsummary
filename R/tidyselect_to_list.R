@@ -38,34 +38,37 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
   if (!all(is_formula)) {
     example_text <-
       switch(
-        arg_name %||% "mixed",
-        "type" = paste("type = list(vars(age) ~ \"continuous\", all_integer() ~ \"categorical\")", collapse = "\n"),
-        "label" = paste("label = list(vars(age) ~ \"Age, years\", vars(response) ~ \"Tumor Response\")", collapse = "\n"),
-        "statistic" = paste("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
-          "statistic = list(vars(age) ~ \"{median}\")",
-          collapse = "\n"
-        ),
-        "digits" = paste("digits = list(vars(age) ~ 2)",
-          "digits = list(all_continuous() ~ 2)",
-          collapse = "\n"
-        ),
-        "value" = paste("value = list(vars(grade) ~ \"III\")",
-          "value = list(all_logical() ~ FALSE)",
-          collapse = "\n"
-        ),
-        "test" = paste("test = list(all_continuous() ~ \"t.test\")",
-          "test = list(vars(age) ~ \"kruskal.test\")",
-          collapse = "\n"
-        ),
-        "mixed" = paste("label = list(vars(age) ~ \"Age, years\")",
-          "statistic = list(all_continuous() ~ \"{mean} ({sd})\")",
-          collapse = "\n"
-        )
-      )
+        arg_name %||% "not_specified",
+        "type" = paste("type = list(age ~ \"continuous\", all_integer() ~ \"categorical\")",
+                       collapse = "\n"),
+        "label" = paste("label = list(age ~ \"Age, years\", response ~ \"Tumor Response\")",
+                        collapse = "\n"),
+        "statistic" = paste(c("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
+                              "statistic = list(age ~ \"{median}\")"),
+                            collapse = "\n"),
+        "digits" = paste(c("digits = list(age ~ 2)",
+                           "digits = list(all_continuous() ~ 2)"),
+                         collapse = "\n"),
+        "value" = paste(c("value = list(grade ~ \"III\")",
+                          "value = list(all_logical() ~ FALSE)"),
+                        collapse = "\n"),
+        "test" = paste(c("test = list(all_continuous() ~ \"t.test\")",
+                         "test = list(age ~ \"kruskal.test\")"),
+                       collapse = "\n")
+      ) %||%
+      paste(c("label = list(age ~ \"Age, years\")",
+              "statistic = list(all_continuous() ~ \"{mean} ({sd})\")",
+              "type = list(vars(response, death) ~ \"categorical\")"),
+            collapse = "\n")
 
+    # printing error for argument input
+    error_text <- ifelse(
+      !is.null(arg_name),
+      glue("There was a problem with the `{arg_name}=` argument input. "),
+      glue("There was a problem with one of the function argument inputs. ")
+    )
     stop(glue(
-      "There was a problem with one of the function argument inputs. ",
-      "Review the documentation and update the argument input.",
+      "{error_text}",
       "Below is an example of correct syntax.\n\n",
       "{example_text}"
     ), call. = FALSE)
