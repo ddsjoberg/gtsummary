@@ -234,16 +234,11 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
       # matching the variable name to each term in the model
       variable = map_chr(
         .data$term_split,
-        ~ term_match %>%
+        ~ stats::na.omit(term_match) %>%
           filter(.data$term == .x) %>%
           pull(.data$variable) %>%
-          {ifelse(length(.) == 0, .x, .)}
-          # dplyr::coalesce(.x)
-          # {
-          #   ifelse(.x == "(Intercept)", NA, .)
-          # }
-      ),
-      # variable = dplyr::coalesce(variable, term_split)
+          {ifelse(length(.) == 0, .x, .)} # for unmatched terms, using term as variable
+      )
     )
 
   # adding variable labels -----------------------------------------------------
