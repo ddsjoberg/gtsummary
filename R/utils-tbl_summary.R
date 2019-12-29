@@ -24,7 +24,9 @@ assign_class <- function(data, variable) {
   # checking all columns returned a class
   class_error <- map_lgl(classes_return, ~ identical(.x, character(0)))
   if (any(class_error)) {
-    stop(glue("Class of variable '{paste(variable[class_error], collapse = ', ')}' not supported"))
+    stop(glue(
+      "Class of variable '{paste(variable[class_error], collapse = ', ')}' not supported"
+    ), call. = FALSE)
   }
 
   # if column is all missing, return class NA
@@ -99,7 +101,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
     "'{variable}' is dichotomous, but I was unable to determine the ",
     "level to display. Use the 'value = list({variable} = <level>)' argument ",
     "to specify level."
-  ))
+  ), call. = FALSE)
 }
 
 # assign_dichotomous_value_one(mtcars, "am", "dichotomous", "double", NULL)
@@ -396,31 +398,16 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
-    stop("'data' input must be a data frame.")
+    stop("'data' input must be a data frame.", call. = FALSE)
   }
 
   # cannot be empty data frame
   if (nrow(data) == 0L) {
-    stop("Expecting 'data' to have at least 1 row.")
+    stop("Expecting 'data' to have at least 1 row.", call. = FALSE)
   }
 
   # by -------------------------------------------------------------------------
-  # by is a variable in data
-  if (!is.null(by)) {
-    if (!(by %in% names(data))) {
-      stop(glue("'{by}' not a column in 'data'."))
-    }
-
-    # by levels cannot be missing
-    if (sum(is.na(data[[by]])) > 0) {
-      stop("'by' variable cannot have missing values.")
-    }
-
-    # by must be charactst of length 1
-    if (!is.character(by) | length(by) > 1) {
-      stop("'by' must be a character vector of length 1.")
-    }
-  }
+  # no checks for by argument
 
   # type -----------------------------------------------------------------------
   if (!is.null(type) & is.null(names(type))) { # checking names for deprecated named list input
@@ -432,7 +419,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "LHS of the formula is the variable specification, ",
         "and the RHS is the type specification: ",
         "list(vars(age, marker) ~ \"continuous\")"
-      ))
+      ), call. = FALSE)
     }
     if ("list" %in% class(type)) {
       if (some(type, negate(rlang::is_bare_formula))) {
@@ -441,7 +428,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
           "LHS of the formula is the variable specification, ",
           "and the RHS is the type specification: ",
           "list(vars(age, marker) ~ \"continuous\")"
-        ))
+        ), call. = FALSE)
       }
     }
 
@@ -452,7 +439,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
       stop(glue(
         "The RHS of the formula in the 'type'  argument must of one and only one of ",
         "\"continuous\", \"categorical\", or \"dichotomous\""
-      ))
+      ), call. = FALSE)
     }
   }
 
@@ -466,7 +453,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "LHS of the formula is the variable specification, ",
         "and the RHS is the value specification: ",
         "list(vars(stage) ~ \"T1\")"
-      ))
+      ), call. = FALSE)
     }
     if ("list" %in% class(value)) {
       if (some(value, negate(rlang::is_bare_formula))) {
@@ -475,7 +462,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
           "LHS of the formula is the variable specification, ",
           "and the RHS is the value specification: ",
           "list(vars(stage) ~ \"T1\")"
-        ))
+        ), call. = FALSE)
       }
     }
 
@@ -489,7 +476,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
       stop(glue(
         "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
         "cannot be used in the 'value' argument."
-      ))
+      ), call. = FALSE)
     }
   }
 
@@ -512,7 +499,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
           "LHS of the formula is the variable specification, ",
           "and the RHS is the label specification: ",
           "list(vars(stage) ~ \"T Stage\")"
-        ))
+        ), call. = FALSE)
       }
     }
 
@@ -521,7 +508,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
     if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
         "The RHS of the formula in the 'label' argument must be a string."
-      ))
+      ), call. = FALSE)
     }
   }
 
@@ -535,7 +522,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "LHS of the formula is the variable specification, ",
         "and the RHS is the statistic specification: ",
         "list(all_categorical() ~ \"{n} / {N}\")"
-      ))
+      ), call. = FALSE)
     }
     if ("list" %in% class(statistic)) {
       if (some(statistic, negate(rlang::is_bare_formula))) {
@@ -544,7 +531,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
           "LHS of the formula is the variable specification, ",
           "and the RHS is the statistic specification: ",
           "list(all_categorical() ~ \"{n} / {N}\")"
-        ))
+        ), call. = FALSE)
       }
     }
 
@@ -553,7 +540,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
     if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
         "The RHS of the formula in the 'statistic' argument must be a string."
-      ))
+      ), call. = FALSE)
     }
   }
 
@@ -567,7 +554,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "LHS of the formula is the variable specification, ",
         "and the RHS is the digits specification: ",
         "list(vars(age, marker) ~ 1)"
-      ))
+      ), call. = FALSE)
     }
     if ("list" %in% class(digits)) {
       if (some(digits, negate(rlang::is_bare_formula))) {
@@ -576,7 +563,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
           "LHS of the formula is the variable specification, ",
           "and the RHS is the digits specification: ",
           "list(vars(age, marker) ~ 1)"
-        ))
+        ), call. = FALSE)
       }
     }
 
@@ -593,12 +580,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
   # missing_text ---------------------------------------------------------------
   # input must be character
-  if (!"character" %in% class(missing_text)) {
-    stop("Argument 'missing_text' must be a character string.")
-  }
-  # checking the length is one
-  if (length(missing_text) != 1) {
-    stop("Argument 'missing_text' must be a character string of length 1.")
+  if (!rlang::is_string(missing_text)) {
+    stop("Argument 'missing_text' must be a character string of length 1.", call. = FALSE)
   }
 
   # sort -----------------------------------------------------------------------
@@ -611,7 +594,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "LHS of the formula is the variable specification, ",
         "and the RHS is the sort specification: ",
         "list(vars(age, marker) ~ 1)"
-      ))
+      ), call. = FALSE)
     }
     if ("list" %in% class(sort)) {
       if (some(sort, negate(rlang::is_bare_formula))) {
@@ -620,7 +603,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
           "LHS of the formula is the variable specification, ",
           "and the RHS is the sort specification: ",
           "list(vars(stage, marker) ~ \"frequency\")"
-        ))
+        ), call. = FALSE)
       }
     }
 
@@ -631,7 +614,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
       stop(glue(
         "The RHS of the formula in the 'sort' argument must of one and only one of ",
         "\"frequency\" or \"alphanumeric\""
-      ))
+      ), call. = FALSE)
     }
   }
 }
@@ -767,7 +750,7 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
       "'percent_fun' is not a valid function.  Please pass only a function\n",
       "object. For example, to round percentages to 2 decimal places, \n\n",
       "'options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(\"%.2f\", 100 * x))'"
-    ))
+    ), call. = FALSE)
   }
 
   # stripping attributes/classes that cause issues -----------------------------

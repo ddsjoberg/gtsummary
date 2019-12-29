@@ -90,7 +90,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   if (!is.null(group)) {
     # checking group is in the data frame
     if (!group %in% x$meta_data$variable) {
-      stop(glue("'{group}' is not a column name in the input data frame."))
+      stop(glue("'{group}' is not a column name in the input data frame."), call. = FALSE)
     }
     # dropping group variable from table_body and meta_data
     x$table_body <- x$table_body %>% filter(.data$variable != group)
@@ -106,17 +106,17 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
       "'pvalue_fun' is not a valid function.  Please pass only a function\n",
       "object. For example,\n\n",
       "'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
-    ))
+    ), call. = FALSE)
   }
 
   # checking that input is class tbl_summary
-  if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
+  if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'", call. = FALSE)
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(paste0(
       "Cannot add comparison when no 'by' variable ",
       "in original tbl_summary() call"
-    ))
+    ), call. = FALSE)
   }
 
   # test -----------------------------------------------------------------------
@@ -134,13 +134,13 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
       stop(glue(
         "Each element in 'test' must be named. ",
         "For example, 'test = list(age = \"t.test\", ptstage = \"fisher.test\")'"
-      ))
+      ), call. = FALSE)
     }
   }
 
   # checking pvalue_fun are functions
   if (!is.function(pvalue_fun)) {
-    stop("Input 'pvalue_fun' must be a function.")
+    stop("Input 'pvalue_fun' must be a function.", call. = FALSE)
   }
 
   # Getting p-values only for included variables

@@ -70,8 +70,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
           "was\nmisspelled, does not exist, is not compatible with your object, \n",
           "or was missing necessary arguments. See error message below. \n"
         ))
-        print(e)
-        stop(e)
+        stop(as.character(e), call. = FALSE)
       }
     )
   }
@@ -350,18 +349,6 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
       )
     )
 
-  # show_single_row check ------------------------------------------------------
-  # checking that all variables listed in show_single_row appear in results
-  for (i in show_single_row) {
-    if (!i %in% tidy_group$group) {
-      stop(glue(
-        "'{i}' from argument 'show_single_row' is not a variable ",
-        "from the model. Select from:\n",
-        "{paste(tidy_group$group %>% setdiff('(Intercept)'), collapse = ', ')}"
-      ))
-    }
-  }
-
   # check that all variables in show_single_row are dichotomous
   bad_show_single_row <-
     tidy_group %>%
@@ -377,7 +364,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     stop(glue(
       "'{paste(bad_show_single_row, collapse = \"', '\")}' from argument ",
       "'show_single_row' may only be applied to binary variables."
-    ))
+    ), call. = FALSE)
   }
 
   # final touches to result ----------------------------------------------------

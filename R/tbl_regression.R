@@ -141,7 +141,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
         "Review the GitHub issue linked below for a possible solution."
       ))
       usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
-      stop(e, call. = FALSE)
+      stop(as.character(e), call. = FALSE)
     }
   )
 
@@ -281,7 +281,7 @@ gt_tbl_regression <- quote(list(
 ))
 
 
-# kable function calls ------------------------------------------------------------
+# kable function calls ---------------------------------------------------------
 # quoting returns an expression to be evaluated later
 kable_tbl_regression <- quote(list(
   # first call to the gt function
