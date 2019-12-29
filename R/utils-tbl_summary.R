@@ -272,9 +272,9 @@ continuous_digits_guess_one <- function(data,
                                         summary_type,
                                         class,
                                         digits = NULL) {
-  # if class is NA (meaning all values are NA), returning NA
+  # if class is NA (meaning all values are NA), returning 0
   if (is.na(class)) {
-    return(NA)
+    return(0)
   }
 
   # if the variable is not continuous type, return NA
@@ -327,6 +327,7 @@ continuous_digits_guess_one <- function(data,
 #' @author Daniel D. Sjoberg
 
 df_by <- function(data, by) {
+  if (is.null(by)) return(NULL)
   result <-
     data %>%
     select(c(by)) %>%
@@ -800,13 +801,25 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
   if (!is.null(by)) class(data[[by]]) <- setdiff(class(data[[by]]), "labelled")
 
   # tabulating data ------------------------------------------------------------
+  df_by <- df_by(data, by)
   variable_by_chr <- c("variable", switch(!is.null(by), "by"))
+  data <- data %>%
+    select(c(variable, by)) %>%
+    # renaming variables to c("variable", "by") (if there is a by variable)
+    set_names(variable_by_chr)
+
+  # cannot summarize categorical variable when variable is all NA
+  if (is.null(dichotomous_value) && nrow(data) == sum(is.na(data$variable))) {
+    stop(glue(
+      "Column `{variable}` cannot be summarized as a 'categorical' variable ",
+      "because it is missing for all rows. The missing data may be included ",
+      "with type 'dichotomous'."
+    ), call. = FALSE)
+  }
+
   df_tab <-
     data %>%
-    select(c(variable, by)) %>%
     stats::na.omit() %>%
-    # renaming variables to c("variable", "by") (if there is a by variable)
-    set_names(variable_by_chr) %>%
     mutate(
       variable = factor(variable) %>%
         forcats::fct_expand(as.character(dichotomous_value)) %>%
@@ -814,13 +827,16 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
                 "alphanumeric" = .,
                 "frequency" = forcats::fct_infreq(.))}
     ) %>%
-    count(!!!syms(variable_by_chr)) %>%
+    {suppressWarnings(count(., !!!syms(variable_by_chr)))} %>%
     # if there is a by variable, merging in all levels
     {switch(
       !is.null(by),
       full_join(.,
-                df_by(data, by)[c("by")],
-                by = "by")[c("by", "variable", "n")]) %||% .} %>%
+                list(by = df_by$by,
+                     variable = factor(attr(.$variable, "levels"),
+                                       levels = attr(.$variable, "levels"))) %>%
+                  purrr::cross_df(),
+                by = c("by", "variable"))[c("by", "variable", "n")]) %||% .} %>%
     tidyr::complete(!!!syms(variable_by_chr), fill = list(n = 0))
 
   # calculating percent
@@ -837,14 +853,16 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
       N = sum(.data$n),
       p = .data$n / .data$N
     ) %>%
+    # if the Big N is 0, there is no denom so making n and percent NA
+    mutate_at(vars(.data$n, .data$p), ~ifelse(.data$N == 0, NA, .)) %>%
     ungroup() %>%
     rename(variable_levels = .data$variable) %>%
-    mutate(variable = variable) %>%
+    mutate(variable = !!variable) %>%
     select(c(by, variable, "variable_levels", everything()))
 
   if (!is.null(dichotomous_value)) {
     result <- result %>%
-      filter(.data$variable_levels == dichotomous_value) %>%
+      filter(.data$variable_levels == !!dichotomous_value) %>%
       select(-.data$variable_levels)
   }
 
@@ -896,6 +914,7 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
 
   # prepping data set
   variable_by_chr <- c("variable", switch(!is.null(by), "by"))
+  df_by <- df_by(data, by)
   data <-
     data %>%
     select(c(variable, by)) %>%
@@ -908,7 +927,7 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
     df_stats <-
       list(
         fn = fns_names_chr,
-        by = df_by(data, by)$by
+        by = df_by$by
       ) %>%
       cross_df() %>%
       mutate(
@@ -1023,7 +1042,8 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         id_cols = c("variable", "row_type", "label"),
         names_from = "by_col",
         values_from = "statistic"
-      )
+      ) %>%
+      select(c("variable", "row_type", "label", df_by(data, by)[["by_col"]]))
   }
   # categorical with by variable
   else if (summary_type %in% c("categorical") && !is.null(by)) {
@@ -1056,7 +1076,8 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
                row_type = "label",
                label = var_label),
         .
-      )}
+      )} %>%
+      select(c("variable", "row_type", "label", df_by(data, by)[["by_col"]]))
   }
 
   # add rows for missing -------------------------------------------------------

@@ -330,17 +330,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     N = nrow(data),
     call_list = list(tbl_summary = match.call())
   )
-
-  if (!is.null(by)) {
-    results[["by"]] <- by
-    results[["df_by"]] <- df_by(data, by)
-
-    # if there are 10 or more by levels, they are sorted incorrectly...fixing order
-    stat_var_sort <- results[["df_by"]]$by_col
-    results[["table_body"]] <-
-      results[["table_body"]] %>%
-      select(-stat_var_sort, stat_var_sort)
-  }
+  results$by <- by
+  results$df_by <- df_by(data, by)
 
   # assigning a class of tbl_summary (for special printing in Rmarkdown)
   class(results) <- "tbl_summary"
@@ -349,13 +340,11 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   if (is.null(by)) {
     results <- modify_header_internal(results,
                                       stat_0 = "**N = {N}**",
-                                      label = "**Characteristic**"
-    )
+                                      label = "**Characteristic**")
   } else {
     results <- modify_header_internal(results,
                                       stat_by = "**{level}**, N = {n}",
-                                      label = "**Characteristic**"
-    )
+                                      label = "**Characteristic**")
   }
 
   # writing additional gt and kable calls with data from table_header
