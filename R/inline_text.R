@@ -134,13 +134,6 @@ inline_text.tbl_summary <-
         filter(.data$label == !!level)
     }
 
-    if (nrow(result) == 0) {
-      stop(glue(
-        "Is the variable level spelled correctly? `level` must be one of\n",
-        "{paste(sQuote(levels_obs), collapse = ', ')}"
-      ), call. = FALSE)
-    }
-
     # select column ------------------------------------------------------------
     result <- result %>% pull(column)
 
@@ -204,6 +197,10 @@ inline_text.tbl_regression <-
            pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
            estimate_fun = x$inputs$estimate_fun,
            pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+    # setting quos -------------------------------------------------------------
+    variable <- rlang::enquo(variable)
+    level <- rlang::enquo(level)
+
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
@@ -211,43 +208,38 @@ inline_text.tbl_regression <-
     x$table_body <-
       left_join(
         x$table_body %>% select(-n_vars),
-        x$table_body %>% filter(!!parse_expr('row_type == "label"')) %>% select(c("variable", n_vars)) %>% distinct(),
+        x$table_body %>% filter(.data$row_type == "label") %>% select(c("variable", n_vars)) %>% distinct(),
         by = "variable"
       )
 
     # select variable ----------------------------------------------------------
+    variable <-
+      var_input_to_string(
+        data = vctr_2_tibble(unique(x$table_body$variable)), arg_name = "variable",
+        select_single = TRUE, select_input = !!variable
+      )
+
     # grabbing rows matching variable
     filter_expr <-
       result <-
       x$table_body %>%
-      filter(!!parse_expr(glue("variable ==  '{variable}'")))
-
-    if (nrow(result) == 0) {
-      stop(glue(
-        "Is the variable name spelled correctly? variable must be one of: ",
-        "{pluck(x, 'meta_data', 'variable') %>% paste(collapse = ', ')}"
-      ))
-    }
+      filter(.data$variable ==  !!variable)
 
     # select variable level ----------------------------------------------------
-    if (is.null(level)) {
+    if (rlang::quo_is_null(level)) {
       result <- result %>% slice(1)
     }
     else {
-      # if the length of this is 0, there are no levels to select.  Should we print an error here?
-      levels_obs <- result %>%
-        filter(!!parse_expr('row_type != "label"')) %>%
-        pull("label")
+      level <-
+        var_input_to_string(
+          data = vctr_2_tibble(filter(result, .data$row_type != "label") %>%
+                                 pull(.data$label)),
+          arg_name = "level", select_single = TRUE, select_input = !!level
+        )
+
       result <-
         result %>%
-        filter(!!parse_expr(glue("label ==  '{level}'")))
-    }
-
-    if (nrow(result) == 0) {
-      stop(glue(
-        "Is the variable level spelled correctly? level must be one of: ",
-        "{levels_obs %>% paste(collapse = ', ')}"
-      ))
+        filter(.data$label == !!level)
     }
 
     # calculating statistic ----------------------------------------------------
@@ -352,7 +344,7 @@ inline_text.tbl_survival <-
            estimate_fun = x$estimate_fun,
            ...) {
 
-    # input checks ---------------------------------------------------------------
+    # input checks -------------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
       stop("One and only one of 'time' and 'prob' must be specified.")
     }

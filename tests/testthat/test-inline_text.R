@@ -111,12 +111,12 @@ test_that("inline_text.regression", {
 test_that("inline_text.regression -  expect errors", {
   expect_error(
     inline_text(test_inline3, variable = "stage", level = "Tsdfgsdfg1"),
-    "Is the variable level spelled correctly.*"
+    "*"
   )
 
   expect_error(
     inline_text(test_inline3, variable = "st55age"),
-    "Is the variable name spelled correctly.*"
+    "*"
   )
 })
 
