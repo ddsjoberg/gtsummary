@@ -131,11 +131,9 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
       ~ case_when(
         .y == "continuous" ~
           stat_display[[.x]] %||%
-          stat_display[["..continuous.."]] %||%
           "{median} ({p25}, {p75})",
         .y %in% c("categorical", "dichotomous") ~
           stat_display[[.x]] %||%
-          stat_display[["..categorical.."]] %||%
           "{n} ({p}%)"
       )
     )
@@ -287,12 +285,6 @@ continuous_digits_guess_one <- function(data,
     return(digits[[variable]])
   }
 
-  # if the number of digits is specified for a all continuous variables,
-  # return specified number
-  if (!is.null(digits[["..continuous.."]])) {
-    return(digits[["..continuous.."]])
-  }
-
   # if class is integer, then round everythng to nearest integer
   if (class == "integer") {
     return(0)
@@ -366,9 +358,6 @@ df_by <- function(data, by) {
 #' @param variable variable name
 #' @param summary_type the type of variable ("continuous", "categorical", "dichotomous")
 #' @param sort named list indicating the type of sorting to perform. Default is NULL.
-#' The names of the list elements are variable names or '..categorical..' for assigning
-#' all variables of that type.  If both a variable name and '..categorical..' are
-#' specified, the variable name takes precedent
 #' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
@@ -389,11 +378,6 @@ assign_sort <- function(variable, summary_type, sort) {
       # if variable was specified, then use that
       if (!is.null(sort[[variable]])) {
         return(sort[[variable]])
-      }
-
-      # if the sort list has ..categorical.. name, then use that for all categorical variables
-      if (!is.null(sort[["..categorical.."]])) {
-        return(sort[["..categorical.."]])
       }
 
       # otherwise, return "alphanumeric"
@@ -418,11 +402,6 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   # cannot be empty data frame
   if (nrow(data) == 0L) {
     stop("Expecting 'data' to have at least 1 row.")
-  }
-
-  # cannot include variables named ..continuous.. or ..categorical..
-  if (c("..continuous..", "..categorical..") %in% names(data) %>% any()) {
-    stop("Column names '..continuous..' and '..categorical..' are not allowed.")
   }
 
   # by -------------------------------------------------------------------------
