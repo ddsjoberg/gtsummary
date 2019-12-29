@@ -79,9 +79,12 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
                   group = NULL, include = NULL, exclude = NULL) {
 
   # converting bare arguments to string ----------------------------------------
-  group <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(group))
-  include <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(include))
-  exclude <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(exclude))
+  group <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(group),
+                               arg_name = "by", select_single = TRUE)
+  include <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(include),
+                                 arg_name = "by")
+  exclude <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(exclude),
+                                 arg_name = "by")
 
   # group argument -------------------------------------------------------------
   if (!is.null(group)) {
@@ -120,7 +123,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   # parsing into a named list
   test <- tidyselect_to_list(
     x$inputs$data, test,
-    .meta_data = x$meta_data, input_type = "test"
+    .meta_data = x$meta_data, arg_name = "test"
   )
 
   if (!is.null(test)) {

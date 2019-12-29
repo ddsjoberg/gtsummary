@@ -68,7 +68,7 @@ test_that("inline_text.tbl_summary: with by", {
 test_that("inline_text.tbl_summary: with by -  expect errors", {
   expect_error(
     inline_text(test_inline2, variable = "age", column = "Pla5cebo"),
-    "No column selected.*"
+    "*"
   )
   expect_error(
     inline_text(test_inline2, variable = "stage", level = "Tsdfgsdfg1", column = "Drug B"),

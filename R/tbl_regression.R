@@ -147,7 +147,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
       stop(e, call. = FALSE)
     }
   )
-  label <- tidyselect_to_list(model_frame, label, input_type = "label")
+  label <- tidyselect_to_list(model_frame, label, arg_name = "label")
   include <- rlang::enquo(include)
   exclude <- rlang::enquo(exclude)
   show_single_row <- rlang::enquo(show_single_row)

@@ -39,27 +39,35 @@ inline_text <- function(x, ...) {
 #' inline_text(t2, variable = "grade", level = "I", column = "Drug A")
 #' inline_text(t2, variable = "grade", column = "p.value")
 inline_text.tbl_summary <-
-  function(x, variable, level = NULL, column = NULL,
+  function(x, variable, column = NULL, level = NULL,
            pattern = NULL, pvalue_fun = NULL, ...) {
+    # create rlang::enquo() inputs ---------------------------------------------
+    variable <- rlang::enquo(variable)
+    column <- rlang::enquo(column)
+    level <- rlang::enquo(level)
+
     # checking variable input --------------------------------------------------
-    if (!variable %in% x$meta_data$variable) {
-      stop(paste0(
-        "`variable` argument is invalid. Must be one of\n",
-        glue::glue_collapse(sQuote(x$meta_data$variable), sep = ", ", last = ", or ")
-      ), call. = FALSE)
-    }
+    variable <-
+      var_input_to_string(
+        data = vctr_2_tibble(x$meta_data$variable), arg_name = "variable",
+        select_single = TRUE, select_input = !!variable
+      )
+
+    # selecting variable rwo from meta_data
     meta_data <- x$meta_data %>%
       filter(.data$variable == !!variable)
 
     # setting defaults ---------------------------------------------------------
     pattern_arg_null <- is.null(pattern)
     pattern <- pattern %||% meta_data$stat_display
-    column <- column %||%
-      ifelse(
-        is.null(x$by),
-        "stat_0",
-        stop("Must specify `column` argument.", call. = FALSE)
-      )
+    # selecting default column, if column is NULL
+    if (rlang::quo_is_null(column) && is.null(x$by)) {
+      column <- rlang::quo("stat_0")
+    }
+    else if (rlang::quo_is_null(column) && !is.null(x$by)) {
+      stop("Must specify `column` argument.", call. = FALSE)
+    }
+
     pvalue_fun <- x$pvalue_fun %||%
       {function(x) style_pvalue(x, prepend_p = TRUE)}
 
@@ -78,20 +86,21 @@ inline_text.tbl_summary <-
         )
     }
 
+    # selecting proper column name
+    column <-
+      var_input_to_string(
+        data = vctr_2_tibble(col_lookup_table$input), arg_name = "column",
+        select_single = TRUE, select_input = !!column
+      )
+
     column <- col_lookup_table %>%
       filter(.data$input == !!column) %>%
       slice(1) %>%
       pull(.data$column_name)
 
-    if (length(column) == 0) {
-      stop(glue(
-        "No column selected.  Must be one of: ",
-        "{paste(col_lookup_table$input, collapse = ', ')}"
-      ))
-    }
 
-    # select variable ----------------------------------------------------------
-    # if user passed a pattern AND colums is stat_0, stat_1, etc, then replacing
+    # select value from table --------------------------------------------------
+    # if user passed a pattern AND column is stat_0, stat_1, etc, then replacing
     # table_body object with rebuilt version using pattern
     if (pattern_arg_null == FALSE && startsWith(column, "stat_")) {
       result <-
@@ -109,14 +118,17 @@ inline_text.tbl_summary <-
     }
 
     # select variable level ----------------------------------------------------
-    if (is.null(level)) {
+    if (rlang::quo_is_null(level)) {
       result <- result %>% slice(1)
     }
     else {
-      # if the length of this is 0, there are no levels to select.
-      levels_obs <- result %>%
-        filter(.data$row_type != "label") %>%
-        pull(.data$label)
+      level <-
+        var_input_to_string(
+          data = vctr_2_tibble(filter(result, .data$row_type != "label") %>%
+                                 pull(.data$label)),
+          arg_name = "level", select_single = TRUE, select_input = !!level
+        )
+
       result <-
         result %>%
         filter(.data$label == !!level)

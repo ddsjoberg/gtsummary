@@ -147,7 +147,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         percent = c("column", "row", "cell"), group = NULL) {
 
   # converting bare arguments to string ----------------------------------------
-  by <- var_input_to_string(data = data, select_input = !!rlang::enquo(by))
+  by <- var_input_to_string(data = data, select_input = !!rlang::enquo(by),
+                            arg_name = "by", select_single = TRUE)
 
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
@@ -210,7 +211,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # converting tidyselect formula lists to named lists -------------------------
-  value <- tidyselect_to_list(data, value, input_type = "value")
+  value <- tidyselect_to_list(data, value, arg_name = "value")
 
   # creating a table with meta data about each variable ------------------------
   meta_data <- tibble(
@@ -231,7 +232,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # updating type of user supplied one
   if (!is.null(type)) {
     # converting tidyselect formula lists to named lists
-    type <- tidyselect_to_list(data, type, .meta_data = meta_data, input_type = "type")
+    type <- tidyselect_to_list(data, type, .meta_data = meta_data, arg_name = "type")
 
     # updating meta data object with new types
     meta_data <-
@@ -245,9 +246,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   }
 
   # converting tidyselect formula lists to named lists -------------------------
-  label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
-  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, input_type = "statistic")
-  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, input_type = "digits")
+  label <- tidyselect_to_list(data, label, .meta_data = meta_data, arg_name = "label")
+  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, arg_name = "statistic")
+  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, arg_name = "digits")
   sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
 
   # assigning variable characteristics -----------------------------------------

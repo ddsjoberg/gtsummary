@@ -7,8 +7,8 @@
 \method{inline_text}{tbl_summary}(
   x,
   variable,
-  level = NULL,
   column = NULL,
+  level = NULL,
   pattern = NULL,
   pvalue_fun = NULL,
   ...
@@ -19,11 +19,11 @@
 
 \item{variable}{Variable name of statistic to present}
 
-\item{level}{Level of the variable to display for categorical variables.
-Can also specify the 'Unknown' row.  Default is \code{NULL}}
-
 \item{column}{Column name to return from \code{x$table_body}.
 Can also pass the level of a by variable.}
+
+\item{level}{Level of the variable to display for categorical variables.
+Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
 \item{pattern}{pattern of summary statistics to print. Default is pattern
 shown in \code{tbl_summary()} output}

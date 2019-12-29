@@ -6,11 +6,14 @@
 #' @param .data data with variables to select from
 #' @param x list of tidyselect formulas
 #' @param .meta_data meta data from tbl_summary. Default is NULL
-#' @param input_type indicates type of example to print in deprecation note
+#' @param arg_name name of argument where selector is called
+#' (aids in error messaging). Default is NULL
+#' @param select_single Logical indicating if only a single column can be selected
 #' @noRd
 #' @keywords internal
 
-tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
+tidyselect_to_list <- function(.data, x, .meta_data = NULL,
+                               arg_name = NULL, select_single = FALSE) {
   # if NULL provided, return NULL ----------------------------------------------
   if (is.null(x)) {
     return(NULL)
@@ -35,7 +38,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
   if (!all(is_formula)) {
     example_text <-
       switch(
-        input_type %||% "mixed",
+        arg_name %||% "mixed",
         "type" = paste("type = list(vars(age) ~ \"continuous\", all_integer() ~ \"categorical\")", collapse = "\n"),
         "label" = paste("label = list(vars(age) ~ \"Age, years\", vars(response) ~ \"Tumor Response\")", collapse = "\n"),
         "statistic" = paste("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
@@ -76,7 +79,8 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
         # for each formula extract lhs and rhs ---------------------------------
         lhs <- var_input_to_string(data = .data, # convert lhs selectors to character
                                    select_input = !!rlang::f_lhs(x),
-                                   meta_data = .meta_data)
+                                   meta_data = .meta_data, arg_name = arg_name,
+                                   select_single = select_single)
         rhs <- rlang::f_rhs(x) %>% eval()
 
         # converting rhs and lhs into a named list
@@ -118,8 +122,9 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
 #' var_input_to_string(mtcars, select_input = c("hp", "mpg"))
 #' var_input_to_string(mtcars, select_input = c(hp, mpg))
 #' var_input_to_string(mtcars, select_input = NULL)
-#' var_input_to_string(mtcars, select_input = vars(everything(), -mpg)
-var_input_to_string <- function(data, meta_data = NULL, select_input) {
+#' var_input_to_string(mtcars, select_input = vars(everything(), -mpg))
+var_input_to_string <- function(data, meta_data = NULL, arg_name = NULL,
+                                select_single = FALSE, select_input) {
   select_input <- rlang::enquo(select_input)
   # if NULL passed, return NULL
   if (rlang::quo_is_null(select_input)) {
@@ -134,24 +139,47 @@ var_input_to_string <- function(data, meta_data = NULL, select_input) {
       identical(eval(select_input_list[[1]]), dplyr::vars)) # and function is dplyr::vars
   {
     # first item of the list is vars(), removing and passing to tidyselect_to_string()
-    return(tidyselect_to_string(data, meta_data, !!!select_input_list[-1]))
+    return(tidyselect_to_string(...data... = data, ...meta_data... = meta_data,
+                                arg_name = arg_name, select_single = select_single,
+                                !!!select_input_list[-1]))
   }
 
-  tidyselect_to_string(data, meta_data, !!select_input)
+  tidyselect_to_string(...data... = data, ...meta_data... = meta_data,
+                       arg_name = arg_name, select_single = select_single,
+                       !!select_input)
 }
 
 # this function handles a single tidyselect function, or bare input
 # do not call this function directly. do not pass a vars()
-tidyselect_to_string <- function(...data..., ...meta_data... = NULL, ...) {
+tidyselect_to_string <- function(...data..., ...meta_data... = NULL,
+                                 arg_name = NULL, select_single = FALSE, ...) {
   dots_enquo <- rlang::enquos(...)
 
   # scoping data to use gtsummary select functions
   scoped_data(...data...)
   if(!is.null(...meta_data...)) scoped_meta_data(...meta_data...)
 
-  # selecting with standard tidyselect functions and bare inputs
-  rlang::call2(dplyr::select, .data = ...data...[0, ], !!!dots_enquo) %>%
-    rlang::eval_tidy() %>%
-    colnames()
+  tryCatch({
+    result <- rlang::call2(dplyr::select, .data = ...data...[0, ], !!!dots_enquo) %>%
+      rlang::eval_tidy() %>%
+      colnames()
+  },
+  error = function(e) {
+    if (!is.null(arg_name))
+      error_msg <- glue("Error in `{arg_name}=` argument input. Select from ",
+                        "{paste(sQuote(names(...data...)), collapse = ', ')}")
+    else error_msg <- as.character(e)
+    stop(error_msg, call. = FALSE)
+  })
+
+  # assuring only a single column is selected
+  if (select_single == TRUE && length(result) != 1) {
+    stop(glue(
+      "Error in `{arg_name}=` argument input--select only a single column. ",
+      "The following columns were selected, ",
+      "{paste(sQuote(result), collapse = ', ')}"
+    ), call. = FALSE)
+  }
+  result
 }
 
