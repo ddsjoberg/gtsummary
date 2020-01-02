@@ -77,28 +77,22 @@ add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
                                  select_input = !!rlang::enquo(exclude))
 
   # fetching categorical variables from model
-  model_terms <- x %>%
+  if (is.null(include))
+    include <- x %>%
     pluck("table_body") %>%
-    filter(.data$var_type == "categorical") %>%
+    filter(.data$var_type %in% c("categorical", "interaction")) %>%
     pull(.data$variable) %>%
     unique()
 
-  # if not terms supplied, getting list of all categorical terms in model
-  if (is.null(terms)) terms <- model_terms
+  include <- include %>% setdiff(exclude)
+
 
   # if no terms are provided, stop and return x
-  if (length(terms) == 0) {
+  if (length(include) == 0) {
     message("No terms were selected, and no global p-values added to table")
     return(x)
   }
 
-  # check that terms selected appear in model.
-  if (!all(terms %in% model_terms)) {
-    stop(glue(
-      "Terms selected are not categorical terms from model: ",
-      "{paste(terms[!(terms %in% model_terms)], collpase = ', ')}"
-    ))
-  }
 
   # calculating global pvalues
   tryCatch(
@@ -121,7 +115,7 @@ add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
     car_Anova %>%
     as.data.frame() %>%
     tibble::rownames_to_column(var = "variable") %>%
-    filter(!!parse_expr("variable %in% terms")) %>%
+    filter(.data$variable %in% !!include) %>%
     select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
     set_names(c("variable", "p.value_global")) %>%
     mutate(row_type = "label")
@@ -143,7 +137,7 @@ add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
     x$table_body <-
       x$table_body %>%
       mutate(
-        p.value = if_else(.data$variable %in% terms & .data$row_type == "level",
+        p.value = if_else(.data$variable %in% !!include & .data$row_type == "level",
           NA_real_, .data$p.value
         )
       )
