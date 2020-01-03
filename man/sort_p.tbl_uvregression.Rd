@@ -27,8 +27,7 @@ Sort variables in tables created by \link{tbl_uvregression} by ascending p-value
 
 \examples{
 tbl_uvglm_sort_p_ex <-
-  trial \%>\%
-  dplyr::select(age, marker, response, grade) \%>\%
+  trial[c("age", "marker", "response", "grade")] \%>\%
   tbl_uvregression(
     method = glm,
     y = response,

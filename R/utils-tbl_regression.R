@@ -455,6 +455,20 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
     ))
 }
 
+#' Takes a vector and transforms to data frame with those column names
+#'
+#' This will be used for tidyselect to used those functions to select from
+#' the vector
+#' @noRd
+#' @keywords internal
+vctr_2_tibble <- function(x) {
+  n <- length(x)
+  matrix(ncol = n) %>%
+    tibble::as_tibble(.name_repair = "minimal") %>%
+    rlang::set_names(x) %>%
+    dplyr::slice(0)
+}
+
 #' @title Vetted tidy models
 #'
 #' @description Below is a list of models vetted for use

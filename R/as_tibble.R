@@ -6,9 +6,9 @@
 #' @name as_tibbleS3
 #' @param x Object created by a function from the gtsummary package
 #' (e.g. [tbl_summary] or [tbl_regression])
-#' @param include Character vector naming kable commands to include in printing.
+#' @param include Character vector or tidyselect function naming kable commands to include in printing.
 #' Default is `NULL`, which utilizes all commands in `x$kable_calls`.
-#' @param exclude Character vector naming kable commands to exclude in printing.
+#' @param exclude Character vector or tidyselect function naming kable commands to exclude in printing.
 #' Default is `NULL`.
 #' @param col_labels Logical argument adding column labels to output tibble.
 #' Default is `TRUE`.
@@ -31,13 +31,18 @@ NULL
 #' @export
 as_tibble.tbl_summary <- function(x, include = NULL, exclude = NULL,
                                   col_labels = TRUE, ...) {
-  # Printing message that spannign headers and footnotes will be lost
+  # Printing message that spanning headers and footnotes will be lost
   message(glue(
     "Results printed using 'knitr::kable()' do not support footers \n",
     "or spanning headers. \n",
     "Tables styled by the gt package support footers and spanning headers."
   ))
 
+  # converting to charcter vector ----------------------------------------------
+  include <- var_input_to_string(data = vctr_2_tibble(names(x$kable_calls)),
+                                 select_input = !!rlang::enquo(include))
+  exclude <- var_input_to_string(data = vctr_2_tibble(names(x$kable_calls)),
+                                 select_input = !!rlang::enquo(exclude))
 
   # making list of commands to include -----------------------------------------
   if (is.null(include)) include <- names(x$kable_calls)

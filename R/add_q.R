@@ -25,8 +25,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @return A `tbl_summary` object
 #' @examples
 #' tbl_sum_q_ex <-
-#'   trial %>%
-#'   dplyr::select(trt, age, grade, response) %>%
+#'   trial[c("trt", "age", "grade", "response")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   add_q()
@@ -118,8 +117,7 @@ add_q.tbl_summary <- function(x, method = "fdr",
 #' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uvr_q_ex <-
-#'   trial %>%
-#'   dplyr::select(age, marker, grade, response) %>%
+#'   trial[c("age", "marker", "grade", "response")] %>%
 #'   tbl_uvregression(
 #'     method = lm,
 #'     y = age

@@ -30,8 +30,7 @@ in \link{tbl_summary} tables.
 
 \examples{
 tbl_sum_bold_p_ex <-
-  trial \%>\%
-  dplyr::select(age, grade, response, trt) \%>\%
+  trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   bold_p()

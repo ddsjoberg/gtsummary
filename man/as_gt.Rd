@@ -10,10 +10,10 @@ as_gt(x, include = NULL, exclude = NULL, omit = NULL)
 \item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{include}{Character vector naming gt commands to include in printing.
+\item{include}{Character vector or tidyselect function naming gt commands to include in printing.
 Default is \code{NULL}, which utilizes all commands in \code{x$gt_calls}.}
 
-\item{exclude}{Character vector naming gt commands to exclude in printing.
+\item{exclude}{Character vector or tidyselect function naming gt commands to exclude in printing.
 Default is \code{NULL}.}
 
 \item{omit}{DEPRECATED. Argument is synonymous with \code{exclude}

@@ -35,8 +35,7 @@ Adjustments to are p-values are performed with \link[stats:p.adjust]{stats::p.ad
 
 \examples{
 tbl_sum_q_ex <-
-  trial \%>\%
-  dplyr::select(trt, age, grade, response) \%>\%
+  trial[c("trt", "age", "grade", "response")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   add_q()

@@ -43,8 +43,7 @@ Bold or Italicize labels or levels in gtsummary tables
 
 \examples{
 tbl_bold_ital_ex <-
-  trial \%>\%
-  dplyr::select(trt, age, grade) \%>\%
+  trial[c("trt", "age", "grade")] \%>\%
   tbl_summary() \%>\%
   bold_labels() \%>\%
   bold_levels() \%>\%

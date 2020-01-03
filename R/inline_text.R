@@ -242,8 +242,7 @@ inline_text.tbl_regression <-
 #' @return A string reporting results from a gtsummary table
 #' @examples
 #' inline_text_ex1 <-
-#'   trial %>%
-#'   dplyr::select(response, age, grade) %>%
+#'   trial[c("response", "age", "grade")] %>%
 #'   tbl_uvregression(
 #'     method = glm,
 #'     method.args = list(family = binomial),

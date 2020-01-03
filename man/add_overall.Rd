@@ -26,8 +26,7 @@ created by \code{tbl_summary}.
 
 \examples{
 tbl_overall_ex <-
-  trial \%>\%
-  dplyr::select(age, response, grade, trt) \%>\%
+  trial[c("age", "response", "grade", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_overall()
 }

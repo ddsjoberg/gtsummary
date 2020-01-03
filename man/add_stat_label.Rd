@@ -23,8 +23,7 @@ each variable in the \link{tbl_summary} table.
 
 \examples{
 tbl_stat_ex <-
-  trial \%>\%
-  dplyr::select(trt, age, grade, response) \%>\%
+  trial[c("trt", "age", "grade", "response")] \%>\%
   tbl_summary() \%>\%
   add_stat_label()
 }

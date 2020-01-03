@@ -141,8 +141,7 @@ add_nevent.tbl_regression <- function(x, ...) {
 #' @return A `tbl_uvregression` object
 #' @examples
 #' tbl_uv_nevent_ex <-
-#'   trial %>%
-#'   dplyr::select(response, trt, age, grade) %>%
+#'   trial[c("response", "trt", "age", "grade")] %>%
 #'   tbl_uvregression(
 #'     method = glm,
 #'     y = response,

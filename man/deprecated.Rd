@@ -10,6 +10,8 @@
 \alias{tab_style_italicize_levels}
 \alias{tab_style_italicize_labels}
 \alias{tab_style_bold_levels}
+\alias{tbl_summary_}
+\alias{add_p_}
 \alias{fmt_uni_regression}
 \alias{fmt_table1}
 \alias{fmt_regression}
@@ -32,6 +34,10 @@ tab_style_italicize_levels(...)
 tab_style_italicize_labels(...)
 
 tab_style_bold_levels(...)
+
+tbl_summary_(...)
+
+add_p_(...)
 
 fmt_uni_regression(...)
 

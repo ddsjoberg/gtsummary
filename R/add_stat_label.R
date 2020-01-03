@@ -10,8 +10,7 @@
 #' @return A `tbl_summary` object
 #' @examples
 #' tbl_stat_ex <-
-#'   trial %>%
-#'   dplyr::select(trt, age, grade, response) %>%
+#'   trial[c("trt", "age", "grade", "response")] %>%
 #'   tbl_summary() %>%
 #'   add_stat_label()
 #' @section Example Output:

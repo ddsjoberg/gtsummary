@@ -34,8 +34,7 @@ Adjustments to are p-values are performed with \link[stats:p.adjust]{stats::p.ad
 
 \examples{
 tbl_uvr_q_ex <-
-  trial \%>\%
-  dplyr::select(age, marker, grade, response) \%>\%
+  trial[c("age", "marker", "grade", "response")] \%>\%
   tbl_uvregression(
     method = lm,
     y = age

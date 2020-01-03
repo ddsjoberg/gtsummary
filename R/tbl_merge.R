@@ -32,13 +32,12 @@
 #' \donttest{
 #' # Descriptive statistics alongside univariate regression, with no spanning header
 #' t3 <-
-#'   trial %>%
-#'   dplyr::select(age, grade, response) %>%
+#'   trial[c("age", "grade", "response")] %>%
 #'   tbl_summary(missing = "no") %>%
 #'   add_n()
 #' t4 <-
 #'   tbl_uvregression(
-#'     trial %>% dplyr::select(ttdeath, death, age, grade, response),
+#'     trial[c("ttdeath", "death", "age", "grade", "response")],
 #'     method = coxph,
 #'     y = Surv(ttdeath, death),
 #'     exponentiate = TRUE,

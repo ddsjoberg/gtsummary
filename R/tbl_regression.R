@@ -33,8 +33,8 @@
 #' coefficient estimates. Default is `FALSE`.
 #' @param label List of formulas specifying variables labels,
 #' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`
-#' @param include Character vector of variable names to include from output.
-#' @param exclude Character vector of variable names to exclude from output.
+#' @param include Character vector or tidyselect function indicating variables to include from output.
+#' @param exclude Character vector or tidyselect function indicating variables to exclude from output.
 #' @param conf.level Must be strictly greater than 0 and less than 1.
 #' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept Logical argument indicating whether to include the intercept
@@ -127,8 +127,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
 
   # converting tidyselect formula lists to named lists
   # extracting model frame
-  model_frame <- tryCatch(
-    {
+  model_frame <- tryCatch({
       stats::model.frame(x)
     },
     warning = function(w) {
@@ -149,6 +148,10 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     }
   )
   label <- tidyselect_to_list(model_frame, label, input_type = "label")
+  include <- rlang::enquo(include)
+  exclude <- rlang::enquo(exclude)
+  show_single_row <- rlang::enquo(show_single_row)
+
   # all sepcifed labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
     stop("Each `label` specified must be a string of length 1.", call. = FALSE)
@@ -162,6 +165,21 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # then reversing order of data frame
   tidy_model <-
     tidy_wrap(x, exponentiate, conf.level, tidy_fun)
+
+  # converting to character list, using model frame and tidy terms as possible names
+  include <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!include
+  )
+  exclude <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!exclude
+  )
+  show_single_row <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!show_single_row
+  )
+
 
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with

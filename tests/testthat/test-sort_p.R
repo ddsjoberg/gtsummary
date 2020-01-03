@@ -10,7 +10,7 @@ test_that("no errors/warnings with standard use after tbl_summary() and add_p()"
 })
 
 
-test_that("no errors/warnings with standard use after tbl_regression() and add_p()", {
+test_that("no errors/warnings with standard use after tbl_regression() and add_global_p()", {
   regress1 <- glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
     tbl_regression(exponentiate = TRUE) %>%
     add_global_p()
@@ -19,7 +19,7 @@ test_that("no errors/warnings with standard use after tbl_regression() and add_p
   expect_warning(sort_p(regress1), NA)
 })
 
-test_that("no errors/warnings with standard use after tbl_regression() and add_p()", {
+test_that("no errors/warnings with standard use after tbl_regression() and add_global_p()", {
   regress2 <-
     tbl_uvregression(
       trial %>% dplyr::select(response, age, grade),

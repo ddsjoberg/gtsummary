@@ -50,9 +50,9 @@ used calculate p-values with correlated data (e.g. when the test argument
 is \code{"lme4"}). Default is \code{NULL}.  If specified,
 the row associated with this variable is omitted from the summary table.}
 
-\item{include}{Character vector of variable names to include from output.}
+\item{include}{Character vector or tidyselect function indicating variables to include from output.}
 
-\item{exclude}{Character vector of variable names to exclude from output.}
+\item{exclude}{Character vector or tidyselect function indicating variables to exclude from output.}
 }
 \value{
 A \code{tbl_summary} object
@@ -85,8 +85,7 @@ as it is for \code{tbl_regression()}.
 
 \examples{
 add_p_ex1 <-
-  trial \%>\%
-  dplyr::select(age, grade, response, trt) \%>\%
+  trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p()
 
@@ -105,7 +104,7 @@ my_mcnemar <- function(data, variable, by, ...) {
 add_p_ex2 <-
   trial[c("response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
-  add_p(test = vars(response) ~ "my_mcnemar")
+  add_p(test = response ~ "my_mcnemar")
 }
 }
 \seealso{

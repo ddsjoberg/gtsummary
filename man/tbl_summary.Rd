@@ -159,25 +159,22 @@ the \code{value} argument, e.g. \code{value = list("varname" ~ "level to show")}
 
 \examples{
 tbl_summary_ex1 <-
-  trial \%>\%
-  dplyr::select(age, grade, response) \%>\%
+  trial[c("age", "grade", "response")] \%>\%
   tbl_summary()
 
 tbl_summary_ex2 <-
-  trial \%>\%
-  dplyr::select(age, grade, response, trt) \%>\%
+  trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(
     by = trt,
-    label = list(vars(age) ~ "Patient Age"),
+    label = list(age ~ "Patient Age"),
     statistic = list(all_continuous() ~ "{mean} ({sd})"),
-    digits = list(vars(age) ~ c(0, 1))
+    digits = list(age ~ c(0, 1))
   )
 
 # for convenience, you can also pass named lists to any arguments
 # that accept formulas (e.g label, digits, etc.)
 tbl_summary_ex3 <-
-  trial \%>\%
-  dplyr::select(age, trt) \%>\%
+  trial[c("age", "trt")] \%>\%
   tbl_summary(
     by = trt,
     label = list(age = "Patient Age")
