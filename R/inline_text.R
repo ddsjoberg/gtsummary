@@ -34,12 +34,12 @@ inline_text <- function(x, ...) {
 #' t2 <- tbl_summary(trial, by = trt) %>% add_p()
 #'
 #' inline_text(t1, variable = "age")
-#' inline_text(t2, variable = "grade", level = "I", column = "Drug")
+#' inline_text(t2, variable = "grade", level = "I", column = "Drug A")
 #' inline_text(t2, variable = "grade", column = "p.value")
 inline_text.tbl_summary <-
   function(x, variable, level = NULL,
-             column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-             pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+           column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
+           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # checking column ----------------------------------------------------------
     # the follwing code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
@@ -163,9 +163,9 @@ inline_text.tbl_summary <-
 #' inline_text(inline_text_ex1, variable = "grade", level = "III")
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
-             pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
-             estimate_fun = x$inputs$estimate_fun,
-             pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+           pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
+           estimate_fun = x$inputs$estimate_fun,
+           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
@@ -305,15 +305,15 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #'   tbl_survival(times = c(12, 24))
 #'
 #' inline_text(surv_table,
-#'   strata = "Drug",
+#'   strata = "Drug A",
 #'   time = 12
 #' )
 inline_text.tbl_survival <-
   function(x, strata = NULL,
-             time = NULL, prob = NULL,
-             pattern = "{estimate} ({conf.level*100}% CI {ci})",
-             estimate_fun = x$estimate_fun,
-             ...) {
+           time = NULL, prob = NULL,
+           pattern = "{estimate} ({conf.level*100}% CI {ci})",
+           estimate_fun = x$estimate_fun,
+           ...) {
 
     # input checks ---------------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {

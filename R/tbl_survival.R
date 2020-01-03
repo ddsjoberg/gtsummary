@@ -69,8 +69,8 @@ tbl_survival <- function(x, ...) {
 #' The `level_label` is used to modify the stratum labels. The default is
 #' \code{level_label = "{level}, N = {n}"}. The quantities in the curly
 #' brackets evaluate to stratum-specific values.  For example, in the trial
-#' data set, there is a column called `trt` with levels 'Drug' and 'Placebo'.
-#' In this example, `{level}` would evaluate to either 'Drug' or 'Placebo'
+#' data set, there is a column called `trt` with levels 'Drug A' and 'Drug B'.
+#' In this example, `{level}` would evaluate to either 'Drug A' or 'Drug B'
 #' depending on the stratum.  Other quantities available to print are:
 #' \itemize{
 #'   \item `{level}` level of the stratification variable
@@ -155,12 +155,13 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       ) %>%
       # merging in number of events within stratum
       left_join(
-        summary(x) %>% {
-          tibble::tibble(
-            strata = .[["strata"]] %>% as.character(),
-            n.event.strata = .[["n.event"]]
-          )
-        } %>%
+        summary(x) %>%
+          {
+            tibble::tibble(
+              strata = .[["strata"]] %>% as.character(),
+              n.event.strata = .[["n.event"]]
+            )
+          } %>%
           dplyr::group_by(.data$strata) %>%
           dplyr::summarise(
             n.event.strata = sum(.data$n.event.strata)

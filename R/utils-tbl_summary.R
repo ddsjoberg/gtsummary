@@ -31,7 +31,7 @@ assign_class <- function(data, variable) {
   map2_chr(
     variable, classes_return,
     ~ ifelse(data[[.x]] %>% is.na() %>% all(),
-      NA_character_, .y
+             NA_character_, .y
     )
   )
 }
@@ -130,11 +130,11 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
       variable, summary_type,
       ~ case_when(
         .y == "continuous" ~
-        stat_display[[.x]] %||%
+          stat_display[[.x]] %||%
           stat_display[["..continuous.."]] %||%
           "{median} ({p25}, {p75})",
         .y %in% c("categorical", "dichotomous") ~
-        stat_display[[.x]] %||%
+          stat_display[[.x]] %||%
           stat_display[["..categorical.."]] %||%
           "{n} ({p}%)"
       )
@@ -166,7 +166,7 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #'   summary_type = NULL, value = NULL
 #' )
 assign_summary_type <- function(data, variable, class, summary_type, value) {
-  map2_chr(
+  type <- map2_chr(
     variable, class,
     ~ summary_type[[.x]] %||%
       case_when(
@@ -202,6 +202,19 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
         TRUE ~ "continuous"
       )
   )
+
+  # checking user did not request a factor or character variable be summarized
+  # as a continuous variable
+  purrr::pwalk(
+    list(type, class, variable),
+    ~ if(..1 == "continuous" && ..2 %in% c("factor", "character"))
+      stop(glue(
+        "Column '{..3}' is class \"{..2}\" and cannot be summarized as a continuous variable."
+      ), call. = FALSE)
+  )
+
+
+  type
 }
 
 
@@ -488,7 +501,7 @@ summarize_categorical <- function(data, variable, by, var_label,
                                   missing_text, sort, percent) {
   percent_fun <-
     getOption("gtsummary.tbl_summary.percent_fun",
-      default = style_percent
+              default = style_percent
     )
   if (!rlang::is_function(percent_fun)) {
     stop(paste0(
@@ -607,8 +620,8 @@ summarize_categorical <- function(data, variable, by, var_label,
     nest() %>%
     mutate(
       missing_count = map_chr(data, ~ .x[[1]] %>%
-        is.na() %>%
-        sum())
+                                is.na() %>%
+                                sum())
     ) %>%
     select(c("by_col", "missing_count")) %>%
     spread(!!sym("by_col"), !!sym("missing_count")) %>%
@@ -976,23 +989,10 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
     # all sepcifed types are continuous, categorical, or dichotomous
     if ("formula" %in% class(type)) type <- list(type)
     if (!every(type, ~ eval(rlang::f_rhs(.x)) %in% c("continuous", "categorical", "dichotomous")) |
-      !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+        !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
         "The RHS of the formula in the 'type'  argument must of one and only one of ",
         "\"continuous\", \"categorical\", or \"dichotomous\""
-      ))
-    }
-
-    # functions all_continuous, all_categorical, and all_dichotomous cannot be used for type
-    if (some(
-      type,
-      ~ deparse(.x) %>% # converts a formula to a string
-        stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
-        any()
-    )) {
-      stop(glue(
-        "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
-        "cannot be used in the 'type' argument."
       ))
     }
   }
@@ -1024,8 +1024,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
     if (some(
       value,
       ~ deparse(.x) %>% # converts a formula to a string
-        stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
-        any()
+      stringr::str_detect(c("all_continuous()", "all_categorical()", "all_dichotomous()")) %>%
+      any()
     )) {
       stop(glue(
         "Select functions all_continuous(), all_categorical(), all_dichotomous() ",
@@ -1168,7 +1168,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
     # all sepcifed types are frequency or alphanumeric
     if ("formula" %in% class(sort)) sort <- list(sort)
     if (!every(sort, ~ eval(rlang::f_rhs(.x)) %in% c("frequency", "alphanumeric")) |
-      !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+        !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
         "The RHS of the formula in the 'sort' argument must of one and only one of ",
         "\"frequency\" or \"alphanumeric\""

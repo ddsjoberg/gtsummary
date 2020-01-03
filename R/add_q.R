@@ -77,7 +77,12 @@ add_q.tbl_summary <- function(x, method = "fdr",
     table_header_fmt(q.value = "x$qvalue_fun") %>%
     mutate(footnote = map2(
       .data$column, .data$footnote,
-      function(x, y) {if (x == "q.value") return(c(y, footnote_text)); return(y)}
+      function(x, y) {
+        if (x == "q.value") {
+          return(c(y, footnote_text))
+        }
+        return(y)
+      }
     ))
 
   # adding  column header
@@ -170,7 +175,12 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     table_header_fmt(q.value = "x$qvalue_fun") %>%
     mutate(footnote = map2(
       .data$column, .data$footnote,
-      function(x, y) {if (x == "q.value") return(c(y, footnote_text)); return(y)}
+      function(x, y) {
+        if (x == "q.value") {
+          return(c(y, footnote_text))
+        }
+        return(y)
+      }
     ))
 
   x <- modify_header_internal(x, q.value = "**q-value**")

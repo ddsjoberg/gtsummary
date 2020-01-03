@@ -26,8 +26,10 @@ NULL
 #' @export
 bold_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression",
-                       "tbl_stack", "tbl_merge") %>% all()) {
+  if (!class(x) %in% c(
+    "tbl_summary", "tbl_regression", "tbl_uvregression",
+    "tbl_stack", "tbl_merge"
+  ) %>% all()) {
     stop(paste0(
       "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
       "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
@@ -38,7 +40,7 @@ bold_labels <- function(x) {
   # adding p-value formatting
   x[["gt_calls"]][["bold_labels"]] <- glue(
     "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "locations = gt::cells_body(columns = gt::vars(label),",
     "rows = row_type == 'label'))"
   )
 
@@ -61,8 +63,10 @@ bold_labels <- function(x) {
 #' @export
 bold_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c("tbl_summary", "tbl_regression", "tbl_uvregression",
-                       "tbl_stack", "tbl_merge") %>% all()) {
+  if (!class(x) %in% c(
+    "tbl_summary", "tbl_regression", "tbl_uvregression",
+    "tbl_stack", "tbl_merge"
+  ) %>% all()) {
     stop(paste0(
       "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
       "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
@@ -73,7 +77,7 @@ bold_levels <- function(x) {
   # adding p-value formatting
   x[["gt_calls"]][["bold_levels"]] <- glue(
     "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "locations = gt::cells_body(columns = gt::vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
   )
 
@@ -98,8 +102,10 @@ bold_levels <- function(x) {
 italicize_labels <- function(x) {
   # input checks ---------------------------------------------------------------
   if (!class(x) %in%
-      c("tbl_summary", "tbl_regression", "tbl_uvregression",
-        "tbl_stack", "tbl_merge") %>% all()) {
+    c(
+      "tbl_summary", "tbl_regression", "tbl_uvregression",
+      "tbl_stack", "tbl_merge"
+    ) %>% all()) {
     stop(paste0(
       "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
       "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
@@ -110,7 +116,7 @@ italicize_labels <- function(x) {
   # adding p-value formatting
   x[["gt_calls"]][["italicize_labels"]] <- glue(
     "gt::tab_style(style = gt::cell_text(style = 'italic'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "locations = gt::cells_body(columns = gt::vars(label),",
     "rows = row_type == 'label'))"
   )
 
@@ -149,7 +155,7 @@ italicize_levels <- function(x) {
   # adding p-value formatting
   x[["gt_calls"]][["italicize_levels"]] <- glue(
     "gt::tab_style(style = gt::cell_text(style = 'italic'), ",
-    "locations = gt::cells_data(columns = gt::vars(label),",
+    "locations = gt::cells_body(columns = gt::vars(label),",
     "rows = row_type %in% c('level', 'missing')))"
   )
 

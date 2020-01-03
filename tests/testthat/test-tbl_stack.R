@@ -45,12 +45,6 @@ test_that("Stacking tbl_regression objects", {
     "*"
   )
 
-  # must pass more than 1 item
-  expect_error(
-    tbl_stack(list(t1)),
-    "*"
-  )
-
   # must pass acceptable objects
   expect_error(
     tbl_stack(list(mtcars)),
@@ -66,8 +60,12 @@ test_that("Stacking tbl_merge objects", {
 })
 
 test_that("Stacking tbl_summary objects", {
-  yy <- tbl_summary(trial, by = response) %>% add_p() %>% add_q()
-  tt <- tbl_summary(trial, by = trt) %>% add_p() %>% add_q()
+  yy <- tbl_summary(trial, by = response) %>%
+    add_p() %>%
+    add_q()
+  tt <- tbl_summary(trial, by = trt) %>%
+    add_p() %>%
+    add_q()
 
   expect_error(
     zz <- tbl_stack(list(yy, tt)),

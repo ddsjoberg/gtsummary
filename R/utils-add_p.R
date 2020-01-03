@@ -37,10 +37,12 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 
   # if group variable supplied, fit a random effects model
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
-    if (var_summary_type == "continuous")
+    if (var_summary_type == "continuous") {
       return(getOption("gtsummary.add_p.test.continuous.group_by2", default = "lme4"))
-    if (var_summary_type %in% c("categorical", "dichotomous"))
+    }
+    if (var_summary_type %in% c("categorical", "dichotomous")) {
       return(getOption("gtsummary.add_p.test.categorical.group_by2", default = "lme4"))
+    }
   }
 
   # unless by_var has >2 levels, then return NA with a message
@@ -61,7 +63,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   min_exp <-
     expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
     mutate(exp = .data$Var1 * .data$Var2 /
-             sum(table(data[[var]], data[[by_var]]))) %>%
+      sum(table(data[[var]], data[[by_var]]))) %>%
     pull(exp) %>%
     min()
 
@@ -76,58 +78,59 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 # Tests used in add_p
 
 add_p_test_t.test <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
   result$test <- "t-test"
   result
 }
 
 add_p_test_aov <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- broom::glance(stats::lm(data[[variable]] ~ as.factor(data[[by]])))$p.value
   result$test <- "One-way ANOVA"
   result
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "Kruskal-Wallis test"
   result
 }
 
 add_p_test_wilcox.test <- function(data, variable, by, ...) {
-  result = list()
-  if (length(unique(data[[by]])) > 2)
+  result <- list()
+  if (length(unique(data[[by]])) > 2) {
     stop("Wilcoxon rank-sum test cannot be calculated with more than 2 groups")
+  }
   result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "Wilcoxon rank-sum test"
   result
 }
 
 add_p_test_chisq.test <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "chi-square test of independence"
   result
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]), correct = FALSE)$p.value
   result$test <- "chi-square test of independence"
   result
 }
 
 add_p_test_fisher.test <- function(data, variable, by, ...) {
-  result = list()
+  result <- list()
   result$p <- stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
   result$test <- "Fisher\\'s exact test"
   result
 }
 
 add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
-  result = list()
+  result <- list()
   # input checks for lme4 tests
   if (data[[by]] %>% unique() %>% length() != 2) {
     # only allowing logistic regression models for now
@@ -148,11 +151,13 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
   # building base and full models
   mod0 <- lme4::glmer(stats::as.formula(formula0),
-                      data = data, family = stats::binomial)
+    data = data, family = stats::binomial
+  )
   mod1 <- lme4::glmer(stats::as.formula(formula1),
-                      data = data, family = stats::binomial)
+    data = data, family = stats::binomial
+  )
 
-  #returning p-value
+  # returning p-value
   result$p <- stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
   result$test <- "random intercept logistic regression"
   result
@@ -171,37 +176,47 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
   data <- stats::na.omit(data[c(variable, by, group)])
 
   # calculating pvalue
-  tryCatch({
-    test_func <- switch(
-      test,
-      t.test = add_p_test_t.test,
-      aov = add_p_test_aov,
-      kruskal.test = add_p_test_kruskal.test,
-      wilcox.test = add_p_test_wilcox.test,
-      chisq.test = add_p_test_chisq.test,
-      chisq.test.no.correct = add_p_test_chisq.test.no.correct,
-      fisher.test = add_p_test_fisher.test,
-      lme4 = add_p_test_lme4
-    ) %||% # if not an internal test, then resolving to function name supplied
-      test
+  tryCatch(
+    withCallingHandlers(
+      {
+        test_func <- switch(
+          test,
+          t.test = add_p_test_t.test,
+          aov = add_p_test_aov,
+          kruskal.test = add_p_test_kruskal.test,
+          wilcox.test = add_p_test_wilcox.test,
+          chisq.test = add_p_test_chisq.test,
+          chisq.test.no.correct = add_p_test_chisq.test.no.correct,
+          fisher.test = add_p_test_fisher.test,
+          lme4 = add_p_test_lme4
+        ) %||% # if not an internal test, then resolving to function name supplied
+          test
 
-    # initializing to NA
-    pval <- NA_real_
-    pval <- do.call(test_func, list(data = data, variable = variable,
-                                    by = by, group = group, test = test,
-                                    type = type))
-  },
-  # printing warning and errors as message
-  warning = function(w) {
-    message(glue("Warning in 'add_p()' for variable '{variable}' ",
-                 "and test '{test}', p-value omitted:\n", as.character(w)))
-    return(NULL)
-  },
-  error = function(e) {
-    message(glue("Error in 'add_p()' for variable '{variable}' ",
-                 "and test '{test}', p-value omitted:\n", as.character(e)))
-    return(NULL)
-  })
+        # initializing to NA
+        pval <- NA_real_
+        pval <- do.call(test_func, list(
+          data = data, variable = variable,
+          by = by, group = group, test = test,
+          type = type
+        ))
+      },
+      # printing warning and errors as message
+      warning = function(w) {
+        message(glue(
+          "Warning in 'add_p()' for variable '{variable}' ",
+          "and test '{test}':\n ", as.character(w)
+        ))
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(e) {
+      message(glue(
+        "There was an error in 'add_p()' for variable '{variable}' ",
+        "and test '{test}', p-value omitted:\n", as.character(e)
+      ))
+      return(NULL)
+    }
+  )
 
   pval
 }

@@ -102,7 +102,7 @@ table_header_to_gt_fmt <- function(table_header) {
       col_label_code =
         glue(
           "gt::tab_style(style = gt::cell_text(weight = 'bold'), ",
-          "locations = gt::cells_data(columns = gt::vars({column}), ",
+          "locations = gt::cells_body(columns = gt::vars({column}), ",
           "rows = {column} <= {bold}))"
         )
     ) %>%
@@ -145,7 +145,7 @@ table_header_to_gt_tab_footnote <- function(table_header) {
     table_header %>%
     unnest("footnote_abbrev")
 
-  if (nrow(footnote_abbrev) > 0)
+  if (nrow(footnote_abbrev) > 0) {
     tab_footnote_abbrev <- glue(
       "gt::tab_footnote(",
       "footnote = '{paste(unique(footnote_abbrev$footnote_abbrev), collapse = \", \")}', ",
@@ -153,6 +153,7 @@ table_header_to_gt_tab_footnote <- function(table_header) {
       "columns = gt::vars({paste(unique(footnote_abbrev$column), collapse = \", \")}))",
       ")"
     )
+  }
 
   # convert footnotes into gt footnote code
   footnote <-

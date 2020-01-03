@@ -113,10 +113,14 @@ test_that("tbl_summary-testing tidyselect parsing", {
         data = trial2,
         by = `bad trt`,
         type = vars(response, death) ~ "categorical",
-        statistic = list(all_continuous() ~ "{min} {max}",
-                         c("grade", "stage") ~ "{n}"),
-        label = list(age = "Patient Age", vars(stage) ~ "Patient Stage",
-                     vars(`bad grade`) ~ "Crazy Grade"),
+        statistic = list(
+          all_continuous() ~ "{min} {max}",
+          c("grade", "stage") ~ "{n}"
+        ),
+        label = list(
+          age = "Patient Age", vars(stage) ~ "Patient Stage",
+          vars(`bad grade`) ~ "Crazy Grade"
+        ),
         digits = list(vars(age) ~ c(2, 3), marker = c(2, 3)),
         value = list(vars(`bad grade`) ~ "III", "stage" ~ "T1"),
         missing = "no"
@@ -128,8 +132,7 @@ test_that("tbl_summary-testing tidyselect parsing", {
   expect_equal(
     big_test$table_body %>%
       dplyr::filter(.data$row_type %in% c("missing")) %>%
-      nrow()
-    ,
+      nrow(),
     0
   )
 
@@ -138,8 +141,7 @@ test_that("tbl_summary-testing tidyselect parsing", {
     big_test$meta_data %>%
       dplyr::filter(.data$variable %in% c("bad grade", "stage")) %>%
       dplyr::pull(.data$summary_type) %>%
-      unique()
-    ,
+      unique(),
     "dichotomous"
   )
 
@@ -147,8 +149,7 @@ test_that("tbl_summary-testing tidyselect parsing", {
     big_test$meta_data %>%
       dplyr::filter(.data$variable %in% c("bad grade", "stage")) %>%
       dplyr::pull(.data$dichotomous_value) %>%
-      purrr::every(purrr::negate(is.null))
-    ,
+      purrr::every(purrr::negate(is.null)),
     TRUE
   )
 
@@ -160,8 +161,7 @@ test_that("tbl_summary-testing tidyselect parsing", {
       stringr::word(1) %>%
       stringr::word(2, sep = stringr::fixed(".")) %>%
       nchar() %>%
-      unique()
-    ,
+      unique(),
     2
   )
 
@@ -172,8 +172,7 @@ test_that("tbl_summary-testing tidyselect parsing", {
       word(2) %>%
       word(2, sep = fixed(".")) %>%
       nchar() %>%
-      unique()
-    ,
+      unique(),
     3
   )
 
@@ -217,16 +216,28 @@ test_that("tbl_summary-order of output columns", {
         grade =
           dplyr::case_when(grade != "III" ~ grade),
         grade_str =
-          dplyr::case_when(is.na(grade) ~ "Missing Grade",
-                           grade == "I" ~ "First Grade",
-                           grade == "II" ~ "Second Grade"
+          dplyr::case_when(
+            is.na(grade) ~ "Missing Grade",
+            grade == "I" ~ "First Grade",
+            grade == "II" ~ "Second Grade"
           )
       ) %>%
       dplyr::select(grade, grade_str) %>%
-      tbl_summary(by=grade_str) %>%
+      tbl_summary(by = grade_str) %>%
       purrr::pluck("table_body") %>%
-      names() %>%
-      {.[startsWith(., "stat_")]},
+      names() %>% {
+        .[startsWith(., "stat_")]
+      },
     paste0("stat_", 1:3)
+  )
+})
+
+test_that("tbl_summary-all_categorical() use with `type=`", {
+  # no variables should be dichotomous
+  expect_true(
+    !"dichotomous" %in%
+      (tbl_summary(trial, type = all_dichotomous() ~ "categorical") %>%
+      purrr::pluck("meta_data") %>%
+      dplyr::pull(summary_type))
   )
 })

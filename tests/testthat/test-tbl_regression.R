@@ -38,6 +38,11 @@ test_that("lm: no errors/warnings with standard use", {
   expect_warning(tbl_regression(mod_lm), NA)
 })
 
+test_that("lm with tidyfun: no errors/warnings with standard use", {
+  expect_error(tbl_regression(mod_lm, tidy_fun = broom::tidy), NA)
+  expect_warning(tbl_regression(mod_lm, tidy_fun = broom::tidy), NA)
+})
+
 
 test_that("survreg: no errors/warnings with standard use", {
   expect_error(tbl_regression(mod_survreg), NA)
@@ -68,6 +73,10 @@ test_that("tbl_regression creates errors when non-function in input", {
     tbl_regression(mod_lm_interaction, estimate_fun = mtcars),
     "*"
   )
+  expect_error(
+    tbl_regression(mod_lm_interaction, tidy_fun = mtcars),
+    "*"
+  )
 })
 
 test_that("tbl_regression creates errors when inputs are wrong", {
@@ -96,8 +105,12 @@ test_that("No errors/warnings when data is labelled using Hmisc", {
 })
 
 test_that("show_single_row errors print", {
-  expect_error(tbl_regression(mod_lm_interaction, show_single_row = "NOT_A_VA"),
-               "*")
-  expect_error(tbl_regression(mod_lm_interaction, show_single_row = "grade"),
-               "*")
+  expect_error(
+    tbl_regression(mod_lm_interaction, show_single_row = "NOT_A_VA"),
+    "*"
+  )
+  expect_error(
+    tbl_regression(mod_lm_interaction, show_single_row = "grade"),
+    "*"
+  )
 })

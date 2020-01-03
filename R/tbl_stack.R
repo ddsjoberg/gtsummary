@@ -72,24 +72,22 @@ tbl_stack <- function(tbls) {
   }
 
   # checking all inputs are class tbl_uvregression, tbl_regression, tbl_summary, or tbl_merge
-  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_uvregression",
-                                   "tbl_summary", "tbl_merge") %>% any()) {
+  if (!map_chr(tbls, class) %in% c(
+    "tbl_regression", "tbl_uvregression",
+    "tbl_summary", "tbl_merge"
+  ) %>% any()) {
     stop("All objects in 'tbls' must be class 'tbl_regression',
          'tbl_uvregression', 'tbl_summary', or 'tbl_merge'")
   }
 
   # printing message if stacking tbl_summary and regression object
   if ("tbl_summary" %in% map_chr(tbls, class) &&
-      any(c("tbl_regression", "tbl_uvregression") %in% map_chr(tbls, class))) {
+    any(c("tbl_regression", "tbl_uvregression") %in% map_chr(tbls, class))) {
     message(paste(
       "You are stacking a gtsummary regression table and a summary table,",
       "which is not recommended. Consider revising the format of your table."
     ))
   }
-
-  # at least two objects must be passed
-  tbls_length <- length(tbls)
-  if (tbls_length < 2L) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
 
   # checking if there are multiple input types
   if (map_chr(tbls, class) %>% unique() %>% length() > 1) {

@@ -125,13 +125,11 @@
 #' # that accept formulas (e.g label, digits, etc.)
 #' tbl_summary_ex3 <-
 #'   trial %>%
-#'    dplyr::select(age, trt) %>%
-#'    tbl_summary(
+#'   dplyr::select(age, trt) %>%
+#'   tbl_summary(
 #'     by = trt,
 #'     label = list(age = "Patient Age")
 #'   )
-#'
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -149,7 +147,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
-                        percent = c("column", "row", "cell"),  group = NULL) {
+                        percent = c("column", "row", "cell"), group = NULL) {
 
   # converting bare arguments to string ----------------------------------------
   by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
@@ -170,10 +168,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 #' @inheritParams tbl_summary
 #' @export
 tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
-                        digits = NULL, type = NULL, value = NULL,
-                        missing = c("ifany", "always", "no"),
-                        missing_text = "Unknown", sort = NULL,
-                        percent = c("column", "row", "cell"), group = NULL) {
+                         digits = NULL, type = NULL, value = NULL,
+                         missing = c("ifany", "always", "no"),
+                         missing_text = "Unknown", sort = NULL,
+                         percent = c("column", "row", "cell"), group = NULL) {
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
   percent <- match.arg(percent)
@@ -189,7 +187,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
       "To include these observations, use `forcats::fct_explicit_na()` on `{by}` ",
       "column before passing to `tbl_summary()`."
     ))
-    lbls <- purrr::map(data, ~attr(.x, "label"))
+    lbls <- purrr::map(data, ~ attr(.x, "label"))
     data <- data[!is.na(data[[by]]), ]
 
     # re-applying labels---I think this will NOT be necessary after dplyr 0.9.0
@@ -235,7 +233,6 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # converting tidyselect formula lists to named lists -------------------------
-  type <- tidyselect_to_list(data, type, input_type = "type")
   value <- tidyselect_to_list(data, value, input_type = "value")
 
   # creating a table with meta data about each variable ------------------------
@@ -243,12 +240,32 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
     variable = names(data),
     # assigning class, if entire var is NA, then assigning class NA
     class = assign_class(data, .data$variable),
+    # assigning our best guess of the type, the final type is assigned below
+    # we make a guess first, so users may use the gtsummary tidyselect functions for type
     summary_type = assign_summary_type(
-      data, .data$variable, .data$class, type, value
+      data = data, variable = .data$variable, class = .data$class,
+      summary_type = NULL, value = value
     )
   )
   # excluding by variable
-  if (!is.null(by)) meta_data <- meta_data %>% filter(!!parse_expr("variable != by"))
+  if (!is.null(by)) meta_data <- filter(meta_data, .data$variable != by)
+
+  # updating type --------------------------------------------------------------
+  # updating type of user supplied one
+  if (!is.null(type)) {
+    # converting tidyselect formula lists to named lists
+    type <- tidyselect_to_list(data, type, .meta_data = meta_data, input_type = "type")
+
+    # updating meta data object with new types
+    meta_data <-
+      meta_data %>%
+      mutate(
+        summary_type = assign_summary_type(
+          data = data, variable = .data$variable, class = .data$class,
+          summary_type = type, value = value
+        )
+      )
+  }
 
   # converting tidyselect formula lists to named lists -------------------------
   label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
@@ -302,7 +319,10 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
       footnote = map2(
         .data$column, .data$footnote,
         function(x, y) {
-          if (x == "label") return(c(y, footnote_stat_label(meta_data))); return(y)
+          if (x == "label") {
+            return(c(y, footnote_stat_label(meta_data)))
+          }
+          return(y)
         }
       )
     )
@@ -371,7 +391,7 @@ gt_tbl_summary <- quote(list(
   tab_style_text_indent = glue(
     "gt::tab_style(",
     "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
-    "locations = gt::cells_data(",
+    "locations = gt::cells_body(",
     "columns = gt::vars(label),",
     "rows = row_type != 'label'",
     "))"
