@@ -36,8 +36,7 @@ accessible via the \link{inline_text} function for printing in a report.
 
 \examples{
 tbl_uv_nevent_ex <-
-  trial \%>\%
-  dplyr::select(response, trt, age, grade) \%>\%
+  trial[c("response", "trt", "age", "grade")] \%>\%
   tbl_uvregression(
     method = glm,
     y = response,
