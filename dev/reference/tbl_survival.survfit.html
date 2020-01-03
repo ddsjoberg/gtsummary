@@ -297,14 +297,16 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
 <span class='no'>tbl_strata_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit1</span>,
+  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
+    <span class='no'>fit1</span>,
     <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
     <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"{time} Months"</span>
   )
 
 <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
 <span class='no'>tbl_nostrata_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(<span class='no'>fit2</span>,
+  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
+    <span class='no'>fit2</span>,
     <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
     <span class='kw'>header_estimate</span> <span class='kw'>=</span> <span class='st'>"**Months**"</span>
   )</div></pre>

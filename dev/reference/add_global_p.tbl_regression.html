@@ -171,7 +171,14 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
-<span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(<span class='no'>x</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(
+  <span class='no'>x</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -182,15 +189,22 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
 <a href='tbl_regression.html'>tbl_regression</a> function</p></td>
     </tr>
     <tr>
-      <th>terms</th>
-      <td><p>Character vector of terms for which to add global p-values.  Default
-is <code>NULL</code> which will add global p-values for all categorical variables</p></td>
+      <th>include</th>
+      <td><p>Character vector or tidyselect function indicating variables to include global p-values</p></td>
+    </tr>
+    <tr>
+      <th>exclude</th>
+      <td><p>Character vector or tidyselect function indicating variables to exclude global p-values</p></td>
     </tr>
     <tr>
       <th>keep</th>
       <td><p>Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>terms</th>
+      <td><p>DEPRECATED.  Use <code>include=</code> argument instead.</p></td>
     </tr>
     <tr>
       <th>...</th>

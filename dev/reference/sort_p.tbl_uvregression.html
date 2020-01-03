@@ -214,8 +214,7 @@ rather than the p-values</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_uvglm_sort_p_ex</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>marker</span>, <span class='no'>response</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
+  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"marker"</span>, <span class='st'>"response"</span>, <span class='st'>"grade"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,

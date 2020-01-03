@@ -268,11 +268,11 @@ e.g. <code><a href='https://rdrr.io/r/base/list.html'>list("age" ~ "Age, yrs", "
     </tr>
     <tr>
       <th>include</th>
-      <td><p>Character vector of variable names to include from output.</p></td>
+      <td><p>Character vector or tidyselect function indicating variables to include from output.</p></td>
     </tr>
     <tr>
       <th>exclude</th>
-      <td><p>Character vector of variable names to exclude from output.</p></td>
+      <td><p>Character vector or tidyselect function indicating variables to exclude from output.</p></td>
     </tr>
     <tr>
       <th>hide_n</th>
@@ -373,7 +373,7 @@ units in your model.  Here are some common exceptions.</p><ol>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_uv_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
-    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>),
+    <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"response"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)],
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
     <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
@@ -384,10 +384,9 @@ units in your model.  Here are some common exceptions.</p><ol>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>tbl_uv_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
-    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>),
+    <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ttdeath"</span>, <span class='st'>"death"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)],
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>grade</span>) ~ <span class='st'>"Grade"</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
     <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
   )
@@ -395,12 +394,10 @@ units in your model.  Here are some common exceptions.</p><ol>
 <span class='co'># for convenience, you can also pass named lists to any arguments</span>
 <span class='co'># that accept formulas (e.g label, etc.)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
-<span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ttdeath"</span>, <span class='st'>"death"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_uvregression</span>(
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )</div><div class='output co'>#&gt; &lt;style&gt;html {
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
