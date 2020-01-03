@@ -23,8 +23,8 @@ inline_text <- function(x, ...) {
 #' Can also specify the 'Unknown' row.  Default is `NULL`
 #' @param column Column name to return from `x$table_body`.
 #' Can also pass the level of a by variable.
-#' @param pattern pattern of summary statistics to print. Default is pattern
-#' shown in `tbl_summary()` output
+#' @param pattern String indicating the statistics to return.
+#' Uses glue::glue formatting. Default is pattern shown in `tbl_summary()` output
 #' @inheritParams tbl_regression
 #' @param ... Not used
 #' @family tbl_summary tools
@@ -36,7 +36,8 @@ inline_text <- function(x, ...) {
 #' t2 <- tbl_summary(trial, by = trt) %>% add_p()
 #'
 #' inline_text(t1, variable = "age")
-#' inline_text(t2, variable = "grade", level = "I", column = "Drug A")
+#' inline_text(t2, variable = "grade", level = "I", column = "Drug A",
+#' pattern = "{n}/{N} ({p})%")
 #' inline_text(t2, variable = "grade", column = "p.value")
 inline_text.tbl_summary <-
   function(x, variable, column = NULL, level = NULL,
