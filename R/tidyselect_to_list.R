@@ -84,6 +84,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
                                    select_input = !!rlang::f_lhs(x),
                                    meta_data = .meta_data, arg_name = arg_name,
                                    select_single = select_single)
+
         rhs <- rlang::f_rhs(x) %>% eval()
 
         # converting rhs and lhs into a named list
@@ -128,6 +129,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
 #' var_input_to_string(mtcars, select_input = vars(everything(), -mpg))
 var_input_to_string <- function(data, meta_data = NULL, arg_name = NULL,
                                 select_single = FALSE, select_input) {
+
   select_input <- rlang::enquo(select_input)
   # if NULL passed, return NULL
   if (rlang::quo_is_null(select_input)) {
@@ -156,6 +158,7 @@ var_input_to_string <- function(data, meta_data = NULL, arg_name = NULL,
 # do not call this function directly. do not pass a vars()
 tidyselect_to_string <- function(...data..., ...meta_data... = NULL,
                                  arg_name = NULL, select_single = FALSE, ...) {
+
   dots_enquo <- rlang::enquos(...)
 
   # scoping data to use gtsummary select functions

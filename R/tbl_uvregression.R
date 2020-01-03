@@ -137,6 +137,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
          create univariate regression models holding either a covariate or outcome
          constant.", call. = FALSE)
   }
+
   include <- var_input_to_string(data = data, select_input = !!rlang::enquo(include),
                                  arg_name = "include")
   exclude <- var_input_to_string(data = data, select_input = !!rlang::enquo(exclude),

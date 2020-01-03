@@ -158,6 +158,21 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   tidy_model <-
     tidy_wrap(x, exponentiate, conf.level, tidy_fun)
 
+  # converting to character list, using model frame and tidy terms as possible names
+  include <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!include
+  )
+  exclude <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!exclude
+  )
+  show_single_row <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!show_single_row
+  )
+
+
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
   # rows for reference groups, and headers for

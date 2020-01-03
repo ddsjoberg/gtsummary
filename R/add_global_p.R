@@ -87,6 +87,7 @@ add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
   include <- include %>% setdiff(exclude)
 
 
+
   # if no terms are provided, stop and return x
   if (length(include) == 0) {
     message("No terms were selected, and no global p-values added to table")
