@@ -45,12 +45,6 @@ test_that("Stacking tbl_regression objects", {
     "*"
   )
 
-  # must pass more than 1 item
-  expect_error(
-    tbl_stack(list(t1)),
-    "*"
-  )
-
   # must pass acceptable objects
   expect_error(
     tbl_stack(list(mtcars)),

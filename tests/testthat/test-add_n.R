@@ -31,9 +31,3 @@ test_that("no errors/warnings with standard use", {
   ), NA)
 })
 
-
-test_that("testing deprecated missing argument", {
-  expect_warning(t1 %>% add_n(missing = TRUE), "*")
-  expect_error(t1 %>% add_n(missing = TRUE), NA)
-  expect_error(t2 %>% add_n(missing = TRUE), NA)
-})

@@ -119,48 +119,62 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     conf.level %||%
     getOption("gtsummary.conf.level", default = 0.95)
 
-  # bare to string -------------------------------------------------------------
+  # bare to string/enexpr ------------------------------------------------------
   # updated method and y inputs to be bare, and converting them to strings
   # to be compatible with the rest of the function that assumes character input
-  method <- deparse(substitute(method)) %>% as.character()
-  y_name <- deparse(substitute(y)) %>% as.character()
-  x_name <- deparse(substitute(x)) %>% as.character()
-  if (!rlang::quo_is_null(rlang::enquo(y))) y <- y_name
-  if (!rlang::quo_is_null(rlang::enquo(x))) x <- x_name
+  method <- rlang::enexpr(method)
+  method.args <- rlang::enexpr(method.args)
+  # converting to string, or keeping as NULL
+  x <- switch(
+    rlang::quo_is_null(rlang::enquo(x)) %>% as.character(),
+    "TRUE" = NULL,
+    "FALSE" = rlang::expr_text(rlang::enexpr(x))
+  )
+  y <- switch(
+    rlang::quo_is_null(rlang::enquo(y)) %>% as.character(),
+    "TRUE" = NULL,
+    "FALSE" = rlang::expr_text(rlang::enexpr(y))
+  )
+
   if (is.null(x) + is.null(y) != 1L) {
     stop("Specify one, and only one, of `x` and `y`. This function can
          create univariate regression models holding either a covariate or outcome
-         constant.")
+         constant.", call. = FALSE)
   }
 
   # checking formula correctly specified ---------------------------------------
+  if (!rlang::is_string(formula)) {
+    stop('`formula` must be passed as a string, e.g. `formula = "{y} ~ {x}"`',
+         call. = FALSE)
+  }
   # checking that '{x}' appears on RHS of formula
   if (word(formula, start = 2L, sep = fixed("~")) %>%
     str_detect(pattern = fixed("{x}")) == FALSE) {
-    stop("'{x}' must appear on RHS of '~' in formula argument")
+    stop("'{x}' must appear on RHS of '~' in formula argument", call. = FALSE)
   }
   # checking that '{y}' appears on LHS of formula
   if (word(formula, start = 1L, sep = fixed("~")) %>%
     str_detect(pattern = fixed("{y}")) == FALSE) {
-    stop("'{y}' must appear on LHS of '~' in formula argument")
+    stop("'{y}' must appear on LHS of '~' in formula argument", call. = FALSE)
   }
 
   # checking estimate_fun and pvalue_fun are functions -------------------------
   if (!is.function(estimate_fun) | !is.function(pvalue_fun)) {
-    stop("Arguments 'estimate_fun' and 'pvalue_fun' must be functions.")
+    stop("Arguments 'estimate_fun' and 'pvalue_fun' must be functions.",
+         call. = FALSE)
   }
 
   # converting tidyselect formula lists to named lists -------------------------
   label <- tidyselect_to_list(data, label, .meta_data = NULL, input_type = "label")
   # all sepcifed labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
-    stop("Each `label` specified must be a string of length 1.")
+    stop("Each `label` specified must be a string of length 1.", call. = FALSE)
   }
 
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
-    stop("'data' input must be a data frame.")
+    stop("`data` argument must be a data frame.", call. = FALSE)
   }
 
   # will return call, and all object passed to in table1 call
@@ -182,143 +196,105 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   if (!is.null(include)) all_vars <- intersect(all_vars, include)
   all_vars <- all_vars %>% setdiff(exclude)
   if (length(all_vars) == 0) {
-    stop("There were no covariates selected.")
+    stop("There were no covariates selected.", call. = FALSE)
   }
 
   # bulding regression models --------------------------------------------------
-  if (is.null(x)) {
-    model_obj_list <-
-      map(
-        all_vars,
-        function(x) {
-          do.call(
-            what = method,
-            args = c(
-              list(
-                formula = glue(formula) %>% stats::as.formula(),
-                data = data
-              ),
-              method.args
-            )
-          )
-        }
+  df_model <-
+    tibble(vars = all_vars) %>%
+    set_names(ifelse(!is.null(y), "x", "y")) %>%
+    mutate(
+      formula_chr = glue(formula),
+      model = map(
+        .data$formula_chr,
+        ~list(method, formula = as.formula(.x), data = data) %>%
+          c(as.list(method.args)[-1]) %>%
+          as.call() %>%
+          eval()
       )
-  }
-  else if (is.null(y)) {
-    model_obj_list <-
-      map(
-        all_vars,
-        function(y) {
-          do.call(
-            what = method,
-            args = c(
-              list(
-                formula = glue(formula) %>% stats::as.formula(),
-                data = data
-              ),
-              method.args
-            )
-          )
-        }
-      )
-  }
-  names(model_obj_list) <- all_vars
+    )
 
-  # formatting regression models with tbl_regression ---------------------------
-  if (is.null(x)) {
-    tbl_regression_list <-
-      imap(
-        model_obj_list,
-        ~ tbl_regression(
-          .x,
-          exponentiate = exponentiate,
-          conf.level = conf.level,
-          label = label,
-          show_single_row = intersect(.y, show_single_row),
-          tidy_fun = tidy_fun
+  # convert model to tbl_regression object -------------------------------------
+  if (!is.null(y)) {
+    df_model <-
+      df_model %>%
+      mutate(
+        tbl = map2(
+          .data$model, .data$x,
+          ~tbl_regression(
+            .x,
+            exponentiate = exponentiate,
+            conf.level = conf.level,
+            label = label,
+            show_single_row = intersect(.y, show_single_row),
+            tidy_fun = tidy_fun
+          )
         )
       )
   }
-  else if (is.null(y)) {
-    tbl_regression_list <-
-      imap(
-        model_obj_list,
-        function(tbl, var) {
-          tbl_uv <-
-            tbl_regression(
-              tbl,
-              label = list(label[[var]] %||% attr(data[[var]], "label") %||% var) %>% set_names(x),
-              exponentiate = exponentiate,
-              conf.level = conf.level,
-              include = x,
-              show_single_row = show_single_row,
-              tidy_fun = tidy_fun
-            )
-          tbl_uv$table_body$variable <- var
-          tbl_uv$table_body$var_type <- NA_character_
-          tbl_uv
-        }
+  if (!is.null(x)) {
+    df_model <-
+      df_model %>%
+      mutate(
+        tbl = map2(
+          .data$model, .data$y,
+          function(model, y) {
+            tbl_uv <-
+              tbl_regression(
+                model,
+                label = list(label[[y]] %||% attr(data[[y]], "label") %||% y) %>% set_names(x),
+                exponentiate = exponentiate,
+                conf.level = conf.level,
+                include = x,
+                show_single_row = show_single_row,
+                tidy_fun = tidy_fun
+              )
+            tbl_uv$table_body$variable <- y
+            tbl_uv$table_body$var_type <- NA_character_
+            tbl_uv
+          }
+        )
       )
   }
 
-  # extracting model tables and stacking
-  table_body <-
-    map_dfr(
-      tbl_regression_list,
-      ~ .x %>% pluck("table_body")
-    ) %>%
-    mutate(
-      N = if_else(.data$row_type == "label", .data$N, NA_integer_)
-    )
-
-  # column labels
-  # table of column headers
-  table_header <-
-    tibble(column = names(table_body)) %>%
-    left_join(tbl_regression_list %>% pluck(1, "table_header"),
-      by = "column"
-    )
-
-  # creating a meta_data table (this will be used in subsequent functions, eg add_global_p)
-  meta_data <-
-    table_body %>%
-    filter(!!parse_expr('row_type == "label"')) %>%
-    select(c("variable", "var_type", "label", "N"))
-
-  # returning named list of results
-  results <- list(
-    inputs = tbl_uvregression_inputs,
-    tbl_regression_list = tbl_regression_list,
-    meta_data = meta_data,
-    table_body = table_body,
-    table_header = table_header,
-    call_list = list(tbl_uvregression = match.call()),
-    gt_calls = eval(gt_tbl_uvregression),
-    kable_calls = eval(kable_tbl_uvregression)
-  )
-
-  # column headers
-  results <- modify_header_internal(
-    results,
-    label = ifelse(!is.null(y), "**Covariate**", "**Outcome**"),
-    estimate = glue("**{estimate_header(model_obj_list[[1]], exponentiate)}**"),
-    ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
-    p.value = "**p-value**"
-  )
-
-  # unhiding N column and assigning label, if requested
+  # adding N to table ----------------------------------------------------------
   if (hide_n == FALSE) {
-    results <- modify_header_internal(
-      results,
-      N = "**N**",
-    )
+    df_model <-
+      df_model %>%
+      mutate(
+        tbl = map(
+          .data$tbl,
+          function(tbl) {
+            tbl <- modify_header(tbl, N = "**N**")
+            # only display N on label row
+            tbl$table_body$N <- ifelse(tbl$table_body$row_type == "label",
+                                       tbl$table_body$N, NA)
+            tbl
+          }
+        )
+      )
   }
 
-  # writing additional gt and kable calls with data from table_header
-  results <- update_calls_from_table_header(results)
-
+  # stacking results to return -------------------------------------------------
+  results <- tbl_stack(df_model$tbl)
   class(results) <- "tbl_uvregression"
-  results
+
+  # creating a meta_data table -------------------------------------------------
+  # (this will be used in subsequent functions, eg add_global_p)
+  results$meta_data <-
+    results$table_body %>%
+    filter(.data$row_type == "label") %>%
+    select(c("variable", "var_type", "label", "N"))
+
+  # exporting results ----------------------------------------------------------
+  results$tbl_regression_list <- df_model$tbl
+  names(results$tbl_regression_list) <- all_vars
+
+  results$call_list = list(tbl_uvregression = match.call())
+  results$gt_calls = eval(gt_tbl_uvregression)
+  results$kable_calls = eval(kable_tbl_uvregression)
+
+  update_calls_from_table_header(results)
 }
 
 
@@ -372,13 +348,3 @@ kable_tbl_uvregression <- quote(list(
   )
 ))
 
-
-# helper function to remove one value of "x" from a vector
-remove_one_x <- function(v) {
-  index_remove <-
-    (v == "x") %>%
-    which() %>%
-    min()
-
-  v[-index_remove]
-}
