@@ -24,7 +24,7 @@ inline_text <- function(x, ...) {
 #' @param column Column name to return from `x$table_body`.
 #' Can also pass the level of a by variable.
 #' @param pattern String indicating the statistics to return.
-#' Uses glue::glue formatting. Default is pattern shown in `tbl_summary()` output
+#' Uses [glue::glue] formatting. Default is pattern shown in `tbl_summary()` output
 #' @inheritParams tbl_regression
 #' @param ... Not used
 #' @family tbl_summary tools

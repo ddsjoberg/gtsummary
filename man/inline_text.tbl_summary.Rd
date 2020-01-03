@@ -26,7 +26,7 @@ Can also pass the level of a by variable.}
 Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
 \item{pattern}{String indicating the statistics to return.
-Uses glue::glue formatting. Default is pattern shown in \code{tbl_summary()} output}
+Uses \link[glue:glue]{glue::glue} formatting. Default is pattern shown in \code{tbl_summary()} output}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.
