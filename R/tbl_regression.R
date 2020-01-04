@@ -33,8 +33,8 @@
 #' coefficient estimates. Default is `FALSE`.
 #' @param label List of formulas specifying variables labels,
 #' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`
-#' @param include Character vector of variable names to include from output.
-#' @param exclude Character vector of variable names to exclude from output.
+#' @param include Character vector or tidyselect function indicating variables to include from output.
+#' @param exclude Character vector or tidyselect function indicating variables to exclude from output.
 #' @param conf.level Must be strictly greater than 0 and less than 1.
 #' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept Logical argument indicating whether to include the intercept
@@ -128,12 +128,8 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
 
   # converting tidyselect formula lists to named lists
   # extracting model frame
-  model_frame <- tryCatch(
-    {
+  model_frame <- tryCatch({
       stats::model.frame(x)
-    },
-    warning = function(w) {
-      warning(x)
     },
     error = function(e) {
       usethis::ui_oops(paste0(
@@ -146,14 +142,13 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
         "Review the GitHub issue linked below for a possible solution."
       ))
       usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
-      stop(e, call. = FALSE)
+      stop(as.character(e), call. = FALSE)
     }
   )
-  label <- tidyselect_to_list(model_frame, label, input_type = "label")
-  # all sepcifed labels must be a string of length 1
-  if (!every(label, ~ rlang::is_string(.x))) {
-    stop("Each `label` specified must be a string of length 1.", call. = FALSE)
-  }
+
+  include <- rlang::enquo(include)
+  exclude <- rlang::enquo(exclude)
+  show_single_row <- rlang::enquo(show_single_row)
 
   # will return call, and all object passed to in tbl_regression call
   # the object func_inputs is a list of every object passed to the function
@@ -164,12 +159,27 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   tidy_model <-
     tidy_wrap(x, exponentiate, conf.level, tidy_fun)
 
+  # converting to character list, using model frame and tidy terms as possible names
+  include <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!include
+  )
+  exclude <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!exclude
+  )
+  show_single_row <- var_input_to_string(
+    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
+    select_input = !!show_single_row
+  )
+
+
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
   # rows for reference groups, and headers for
   # categorical variables
   table_body <-
-    parse_fit(x, tidy_model, label, show_single_row) %>%
+    parse_fit(x, tidy_model, label, !!show_single_row) %>%
     # adding character CI
     mutate(
       ci = if_else(
@@ -182,16 +192,11 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     select(-.data$p.value, .data$p.value)
 
   # including and excluding variables/intercept indicated
-  # Note, include = names(stats::model.frame(mod_nlme))
-  # has an error for nlme because it is "reStruct"
-  if (!is.null(include)) {
-    include_err <- include %>% setdiff(table_body$variable %>% unique())
-    if (length(include_err) > 0) {
-      stop(glue(
-        "'include' must be be a subset of '{paste(table_body$variable %>% unique(), collapse = ', ')}'"
-      ), call. = FALSE)
-    }
-  }
+  include <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
+                                 arg_name = "include", select_input = !!include)
+  exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
+                                 arg_name = "exclude", select_input = !!exclude)
+
   if (is.null(include)) include <- table_body$variable %>% unique()
   if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
   include <- include %>% setdiff(exclude)
@@ -202,7 +207,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     filter(.data$variable %in% include)
 
   # model N
-  n <- stats::model.frame(x) %>% nrow()
+  n <- nrow(model_frame)
 
   # table of column headers
   table_header <-
@@ -292,7 +297,7 @@ gt_tbl_regression <- quote(list(
 ))
 
 
-# kable function calls ------------------------------------------------------------
+# kable function calls ---------------------------------------------------------
 # quoting returns an expression to be evaluated later
 kable_tbl_regression <- quote(list(
   # first call to the gt function

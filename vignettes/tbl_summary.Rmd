@@ -153,7 +153,7 @@ The {gt} package is packed with many great functions for modifying table output-
 
 To use the {gt} package functions with {gtsummary} tables, the summary table must first be converted into a `gt` object.  To this end, use the `as_gt()` function after modifications have been completed with {gtsummary} functions.
 
-```
+```{r, eval = FALSE}
 trial %>%
   tbl_summary(by = trt, missing = "no") %>%
   add_n() %>%
@@ -181,15 +181,15 @@ trial2 %>%
   tbl_summary(
     by = trt,
     # change variable labels
-    label = list(vars(marker) ~ "Marker, ng/mL",
-                 vars(stage) ~ "Clinical T Stage"),
+    label = list(marker ~ "Marker, ng/mL",
+                 stage ~ "Clinical T Stage"),
     # change statistics printed in table
     statistic = list(all_continuous() ~ "{mean} ({sd})",
                      all_categorical() ~ "{n} / {N} ({p}%)"),
     digits = list("marker" ~ c(1, 2))
   ) %>%
   # add p-values, report t-test, round large pvalues to two decimal place
-  add_p(test = list(vars(marker) ~ "t.test"),
+  add_p(test = list(marker ~ "t.test"),
                  pvalue_fun = function(x) style_pvalue(x, digits = 2)) %>%
   # add statistic labels
   add_stat_label() %>%
@@ -235,7 +235,7 @@ trial %>%
   dplyr::select(trt, response, age, stage, marker, grade) %>%
   tbl_summary(
     by = trt,
-    type = list(c("response", "grade") ~ "categorical"), # select by variables in a vector
+    type = list(vars(response, grade) ~ "categorical"), # select by variables in a vector
     statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{p}%") # select by summary type/attribute
   ) %>%
   add_p(test = list(contains("response") ~ "fisher.test", # select using functions in tidyselect

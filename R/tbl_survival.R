@@ -45,7 +45,6 @@ tbl_survival <- function(x, ...) {
 #' probabilities, and
 #' `style_sigfig(x, digits = 3)` for time estimates.
 #' @param ... Not used
-#' @importFrom stringr str_split
 #' @family tbl_survival tools
 #' @author Daniel D. Sjoberg
 #' @export
@@ -54,14 +53,16 @@ tbl_survival <- function(x, ...) {
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 #' tbl_strata_ex1 <-
-#'   tbl_survival(fit1,
+#'   tbl_survival(
+#'     fit1,
 #'     times = c(12, 24),
 #'     label = "{time} Months"
 #'   )
 #'
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' tbl_nostrata_ex2 <-
-#'   tbl_survival(fit2,
+#'   tbl_survival(
+#'     fit2,
 #'     probs = c(0.1, 0.2),
 #'     header_estimate = "**Months**"
 #'   )

@@ -70,8 +70,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
           "was\nmisspelled, does not exist, is not compatible with your object, \n",
           "or was missing necessary arguments. See error message below. \n"
         ))
-        print(e)
-        stop(e)
+        stop(as.character(e), call. = FALSE)
       }
     )
   }
@@ -92,10 +91,12 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
 #' @param tidy broom tidy result
 #' @inheritParams tbl_regression
 #' @noRd
-#' @importFrom stringr fixed str_detect
 #' @keywords internal
 
 parse_fit <- function(fit, tidy, label, show_single_row) {
+  # enquos ---------------------------------------------------------------------
+  show_single_row <- rlang::enquo(show_single_row)
+
   # extracting model frame
   model_frame <- stats::model.frame(fit)
 
@@ -198,8 +199,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   # more  var labels -----------------------------------------------------------
   # model.frame() strips variable labels from cox models.  this attempts
   # to grab the labels in another way
-  labels_parent_frame <- tryCatch(
-    {
+  labels_parent_frame <- tryCatch({
       stats::model.frame.default(fit) %>%
         purrr::imap(~ attr(.x, "label"))
     },
@@ -234,23 +234,34 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
       # matching the variable name to each term in the model
       variable = map_chr(
         .data$term_split,
-        ~ term_match %>%
+        ~ stats::na.omit(term_match) %>%
           filter(.data$term == .x) %>%
           pull(.data$variable) %>%
-          {
-            ifelse(.x == "(Intercept)", NA, .)
-          }
-      ),
+          {ifelse(length(.) == 0, .x, .)} # for unmatched terms, using term as variable
+      )
+    )
+
+  # adding variable labels -----------------------------------------------------
+  label <- tidyselect_to_list(.data = vctr_2_tibble(unique(tidy_long$variable)),
+                              x = label, arg_name = "label")
+  # # all sepcifed labels must be a string of length 1
+  if (!every(label, ~ rlang::is_string(.x))) {
+    stop("Each `label` specified must be a string of length 1.", call. = FALSE)
+  }
+
+  tidy_long_lbl <-
+    tidy_long %>%
+    mutate(
       # variable labels
       variable_lbl = map_chr(
         .data$variable,
         ~ label[[.x]] %||% attr(model_frame[[.x]], "label") %||%
           labels_parent_frame[[.x]] %||% .x
       ),
-      variable_lbl = ifelse(is.na(.data$variable_lbl) & .data$term == "(Intercept)",
-        "(Intercept)",
-        .data$variable_lbl
-      ),
+      # variable_lbl = ifelse(is.na(.data$variable_lbl) & .data$term == "(Intercept)",
+      #   "(Intercept)",
+      #   .data$variable_lbl
+      # ),
       # indicating whether each variable is categorical or continuous
       variable_type = map_chr(
         .data$variable,
@@ -276,14 +287,14 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   # tidy_term ------------------------------------------------------------------
   # one line per term in the model
   tidy_term <-
-    tidy_long %>%
+    tidy_long_lbl %>%
     group_by(.data$term_id, .data$term) %>%
     mutate(
       # indicating whether obs is an interaction term or not
       interaction = n() > 1,
       # groups are terms that belong to the same variable (or interaction set)
       group = .data$variable %>% paste(collapse = ":"),
-      group = ifelse(.data$term == "(Intercept)" & is.na(.data$variable), "(Intercept)", .data$group),
+      # group = ifelse(.data$term == "(Intercept)" & is.na(.data$variable), "(Intercept)", .data$group),
       # the collpase only comes into play when there are interactions present
       group_lbl = .data$variable_lbl %>% paste(collapse = " * "),
       level_lbl = .data$level %>% paste(collapse = " * "),
@@ -295,6 +306,11 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     distinct()
 
   # tidy_group -----------------------------------------------------------------
+  show_single_row <-
+    var_input_to_string(data = vctr_2_tibble(unique(tidy_term$group)),
+                        arg_name = "show_single_row",
+                        select_input = !!show_single_row)
+
   # groups are terms that belong to the same variable (or interaction set)
   tidy_group <-
     tidy_term %>%
@@ -328,18 +344,6 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
       )
     )
 
-  # show_single_row check ------------------------------------------------------
-  # checking that all variables listed in show_single_row appear in results
-  for (i in show_single_row) {
-    if (!i %in% tidy_group$group) {
-      stop(glue(
-        "'{i}' from argument 'show_single_row' is not a variable ",
-        "from the model. Select from:\n",
-        "{paste(tidy_group$group %>% setdiff('(Intercept)'), collapse = ', ')}"
-      ))
-    }
-  }
-
   # check that all variables in show_single_row are dichotomous
   bad_show_single_row <-
     tidy_group %>%
@@ -355,7 +359,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     stop(glue(
       "'{paste(bad_show_single_row, collapse = \"', '\")}' from argument ",
       "'show_single_row' may only be applied to binary variables."
-    ))
+    ), call. = FALSE)
   }
 
   # final touches to result ----------------------------------------------------
@@ -453,6 +457,20 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
       "variable", "var_type", "row_ref", "row_type", "label", "N",
       "estimate", "conf.low", "conf.high", "p.value"
     ))
+}
+
+#' Takes a vector and transforms to data frame with those column names
+#'
+#' This will be used for tidyselect to used those functions to select from
+#' the vector
+#' @noRd
+#' @keywords internal
+vctr_2_tibble <- function(x) {
+  n <- length(x)
+  matrix(ncol = n) %>%
+    tibble::as_tibble(.name_repair = "minimal") %>%
+    rlang::set_names(x) %>%
+    dplyr::slice(0)
 }
 
 #' @title Vetted tidy models

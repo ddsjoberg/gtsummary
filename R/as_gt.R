@@ -12,9 +12,9 @@
 #'
 #' @param x Object created by a function from the gtsummary package
 #' (e.g. [tbl_summary] or [tbl_regression])
-#' @param include Character vector naming gt commands to include in printing.
+#' @param include Character vector or tidyselect function naming gt commands to include in printing.
 #' Default is `NULL`, which utilizes all commands in `x$gt_calls`.
-#' @param exclude Character vector naming gt commands to exclude in printing.
+#' @param exclude Character vector or tidyselect function naming gt commands to exclude in printing.
 #' Default is `NULL`.
 #' @param omit DEPRECATED. Argument is synonymous with `exclude`
 #' vector of named gt commands to omit. Default is `NULL`
@@ -34,6 +34,7 @@
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
 
 as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
+  # DEPRECATRED notice ---------------------------------------------------------
   # checking if updated version of gt package is required 2019-12-25 -----------
   if (!exists("cells_body", asNamespace("gt"))) {
     usethis::ui_oops(glue(
@@ -51,8 +52,14 @@ as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
       "gtsummary::as_gt(omit = )",
       "as_gt(exclude = )"
     )
-    if (is.null(exclude)) exclude <- omit
+    exclude <- omit
   }
+  # converting to charcter vector ----------------------------------------------
+  include <- var_input_to_string(data = vctr_2_tibble(names(x$gt_calls)),
+                                 select_input = !!rlang::enquo(include))
+  exclude <- var_input_to_string(data = vctr_2_tibble(names(x$gt_calls)),
+                                 select_input = !!rlang::enquo(exclude))
+
   if (is.null(include)) include <- names(x$gt_calls)
   # this ensures list is in the same order as names(x$gt_calls)
   include <- names(x$gt_calls) %>% intersect(include)

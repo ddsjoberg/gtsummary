@@ -54,9 +54,9 @@ coefficient estimates. Default is \code{FALSE}.}
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 
-\item{include}{Character vector of variable names to include from output.}
+\item{include}{Character vector or tidyselect function indicating variables to include from output.}
 
-\item{exclude}{Character vector of variable names to exclude from output.}
+\item{exclude}{Character vector or tidyselect function indicating variables to exclude from output.}
 
 \item{hide_n}{Hide N column. Default is \code{FALSE}}
 
@@ -150,7 +150,7 @@ This list is not exhaustive, and care should be taken for each number reported.
 \examples{
 tbl_uv_ex1 <-
   tbl_uvregression(
-    trial \%>\% dplyr::select(response, age, grade),
+    trial[c("response", "age", "grade")],
     method = glm,
     y = response,
     method.args = list(family = binomial),
@@ -161,10 +161,9 @@ tbl_uv_ex1 <-
 library(survival)
 tbl_uv_ex2 <-
   tbl_uvregression(
-    trial \%>\% dplyr::select(ttdeath, death, age, grade, response),
+    trial[c("ttdeath", "death", "age", "grade", "response")],
     method = coxph,
     y = Surv(ttdeath, death),
-    label = list(vars(grade) ~ "Grade"),
     exponentiate = TRUE,
     pvalue_fun = function(x) style_pvalue(x, digits = 2)
   )
@@ -172,12 +171,10 @@ tbl_uv_ex2 <-
 # for convenience, you can also pass named lists to any arguments
 # that accept formulas (e.g label, etc.)
 library(survival)
-trial \%>\%
-  dplyr::select(ttdeath, death, age, grade, response) \%>\%
+trial[c("ttdeath", "death", "age", "grade", "response")] \%>\%
   tbl_uvregression(
     method = coxph,
     y = Surv(ttdeath, death),
-    label = list(grade = "Grade"),
     exponentiate = TRUE
   )
 }
