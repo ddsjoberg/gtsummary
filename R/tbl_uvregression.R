@@ -42,7 +42,6 @@
 #' function defined by `method`.
 #' @param hide_n Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
-#' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 #' @family tbl_uvregression tools
@@ -138,9 +137,14 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
          create univariate regression models holding either a covariate or outcome
          constant.", call. = FALSE)
   }
-  include <- var_input_to_string(data = data, select_input = !!rlang::enquo(include))
-  exclude <- var_input_to_string(data = data, select_input = !!rlang::enquo(exclude))
-  show_single_row <- var_input_to_string(data = data, select_input = !!rlang::enquo(show_single_row))
+
+  include <- var_input_to_string(data = data, select_input = !!rlang::enquo(include),
+                                 arg_name = "include")
+  exclude <- var_input_to_string(data = data, select_input = !!rlang::enquo(exclude),
+                                 arg_name = "exclude")
+  show_single_row <- var_input_to_string(data = data,
+                                         select_input = !!rlang::enquo(show_single_row),
+                                         arg_name = "show_single_row")
 
   # checking formula correctly specified ---------------------------------------
   if (!rlang::is_string(formula)) {
@@ -165,7 +169,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   }
 
   # converting tidyselect formula lists to named lists -------------------------
-  label <- tidyselect_to_list(data, label, .meta_data = NULL, input_type = "label")
+  label <- tidyselect_to_list(data, label, .meta_data = NULL, arg_name = "label")
   # all sepcifed labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
     stop("Each `label` specified must be a string of length 1.", call. = FALSE)
