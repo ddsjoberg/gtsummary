@@ -114,3 +114,14 @@ test_that("show_single_row errors print", {
     "*"
   )
 })
+
+
+test_that("All labels print with cubic splines", {
+  spline_fun <- Hmisc::rcspline.eval
+  rsc_mod <- lm(age ~ spline_fun(marker, inclx = TRUE) + response, trial)
+
+  expect_equal(
+    tbl_regression(rsc_mod) %>% purrr::pluck("table_body", "label") %>% {sum(is.na(.))},
+    0
+  )
+})
