@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9003</span>
       </span>
     </div>
 
@@ -167,6 +167,25 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<p>Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers. When passing a single variable, the <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> function wrapper is no longer required. <a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> age <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> <span class="st">"age"</span> <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"age"</span>, <span class="st">"trt"</span>) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(age, trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(age, trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/tidyselect/man/select_helpers.html">everything</a></span>(), <span class="op">-</span>age, <span class="op">-</span>trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">age_column =<span class="st"> "age"</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> age_column <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(age_column) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"trt"</span>, <span class="st">"grade"</span>), <span class="op">~</span><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">by =</span> .x))</a></code></pre></div>
+</li>
+<li><p>New <code>pattern=</code> argument in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code>. Previously, we could only grab the entire cell from a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with <code><a href="../reference/inline_text.html">inline_text()</a></code>, and now we can get any single statistic reported <a href='https://github.com/ddsjoberg/gtsummary/issues/254'>#254</a></p></li>
+<li><p>Cubic spline terms are now accurately matched to a variable name/term <a href='https://github.com/ddsjoberg/gtsummary/issues/312'>#312</a></p></li>
+<li><p>Improved error messaging in <code>tidyselect_to_list()</code> <a href='https://github.com/ddsjoberg/gtsummary/issues/300'>#300</a></p></li>
+<li><p>Functions <code><a href="../reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="../reference/deprecated.html">add_p_()</a></code> have been deprecated because the <code>by=</code> and <code>group=</code> arguments now accept strings <a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a></p></li>
 <li><p>Bug fix when non-standard evaluation arguments were passed in <code>method.args=</code> argument of <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/322'>#322</a>)</p></li>
 <li><p>Functions <code><a href="../reference/select_helpers.html">all_categorical()</a></code>, <code><a href="../reference/select_helpers.html">all_dichotomous()</a></code>, and <code><a href="../reference/select_helpers.html">all_continuous()</a></code> may now be used in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> argument <code>type=</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/256'>#256</a>)</p></li>
 <li><p>Updates after the gt package deprecated <code><a href="https://rdrr.io/pkg/gt/man/cells_data.html">gt::cells_data()</a></code> in favor of <code><a href="https://rdrr.io/pkg/gt/man/cells_body.html">gt::cells_body()</a></code>. Check added to <code><a href="../reference/as_gt.html">as_gt()</a></code> ensuring a version of gt with <code><a href="https://rdrr.io/pkg/gt/man/cells_body.html">gt::cells_body()</a></code> in its NAMESPACE</p></li>
@@ -178,7 +197,7 @@
 </h1>
 <ul>
 <li><p>Bug fix in <code><a href="../reference/as_kable.html">as_kable()</a></code> where column header did not match statistics presented when certain levels of the <code>by=</code> variable are entirely missing in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/304'>#304</a>)</p></li>
-<li><p>Updated the trial example dataset <code>"trt"</code> variable to be <code>"Drug A"</code> and <code>"Drug B"</code> instead of <code>"Placebo"</code> and <code>"Drug"</code></p></li>
+<li><p>Updated the trial example data set <code>"trt"</code> variable to be <code>"Drug A"</code> and <code>"Drug B"</code> instead of <code>"Placebo"</code> and <code>"Drug"</code></p></li>
 <li><p>Improved messaging to users when an error or warning occurs while calculating a p-value in <code><a href="../reference/add_p.html">add_p()</a></code>. Also, p-values are no longer omitted from output when a warning is encountered during their calculation (<a href='https://github.com/ddsjoberg/gtsummary/issues/283'>#283</a>)</p></li>
 <li><p>Added <code>tidy_fun=</code> argument to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> allowing users to pass tidiers that are not in the {broom} and {broom.mixed} packages (<a href='https://github.com/ddsjoberg/gtsummary/issues/247'>#247</a>)</p></li>
 </ul>
@@ -260,11 +279,11 @@
 <li><p>The function <code><a href="../reference/as_gt.html">as_gt()</a></code> now has <code>include =</code> and <code>exclude =</code> arguments</p></li>
 <li><p>Updated some function names to be the same as they were in the first version</p></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">    <span class="kw"><a href="../reference/bold_p.html">bold_p</a></span>()            &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_p</a></span>()  </a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span>()       &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_labels</a></span>()  </a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span>()       &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_levels</a></span>()  </a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span>()  </a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span>()  </a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">    <span class="kw"><a href="../reference/bold_p.html">bold_p</a></span>()            &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_p</a></span>()  </a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span>()       &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_labels</a></span>()  </a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span>()       &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_bold_levels</a></span>()  </a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span>()  </a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">    <span class="kw"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span>()  </a></code></pre></div>
 <ul>
 <li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is now defunct.</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (<a href='https://github.com/ddsjoberg/gtsummary/issues/175'>#175</a>)</p></li>
@@ -307,19 +326,19 @@
 <div id="updated-function-names" class="section level3">
 <h3 class="hasAnchor">
 <a href="#updated-function-names" class="anchor"></a>Updated Function Names</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">    <span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>()       &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_table1</a></span>()  </a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">    <span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>()    &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_regression</a></span>()  </a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">    <span class="kw"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_uni_regression</a></span>()  </a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="kw"><a href="../reference/style_pvalue.html">style_pvalue</a></span>()      &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_pvalue</a></span>()  </a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">    style_percent       &lt;-<span class="st">  </span><span class="kw">fmt_percent</span>()  </a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">    style_ratio         &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_beta</a></span>()  </a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">    <span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>()       &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_table1</a></span>()  </a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">    <span class="kw"><a href="../reference/tbl_regression.html">tbl_regression</a></span>()    &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_regression</a></span>()  </a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="kw"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span>()  &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_uni_regression</a></span>()  </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">    <span class="kw"><a href="../reference/style_pvalue.html">style_pvalue</a></span>()      &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_pvalue</a></span>()  </a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">    style_percent       &lt;-<span class="st">  </span><span class="kw">fmt_percent</span>()  </a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    style_ratio         &lt;-<span class="st">  </span><span class="kw"><a href="../reference/deprecated.html">fmt_beta</a></span>()  </a></code></pre></div>
 </div>
 <div id="new-functions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-functions" class="anchor"></a>New Functions</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">    <span class="kw"><a href="../reference/tbl_survival.html">tbl_survival</a></span>()          <span class="kw"><a href="../reference/as_gt.html">as_gt</a></span>()  </a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">    <span class="kw"><a href="../reference/tbl_merge.html">tbl_merge</a></span>()             <span class="kw"><a href="../reference/style_sigfig.html">style_sigfig</a></span>()  </a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="kw"><a href="../reference/add_nevent.html">add_nevent</a></span>()            <span class="kw"><a href="../reference/gtsummary_logo.html">gtsummary_logo</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">    <span class="kw"><a href="../reference/tbl_survival.html">tbl_survival</a></span>()          <span class="kw"><a href="../reference/as_gt.html">as_gt</a></span>()  </a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">    <span class="kw"><a href="../reference/tbl_merge.html">tbl_merge</a></span>()             <span class="kw"><a href="../reference/style_sigfig.html">style_sigfig</a></span>()  </a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="kw"><a href="../reference/add_nevent.html">add_nevent</a></span>()            <span class="kw"><a href="../reference/gtsummary_logo.html">gtsummary_logo</a></span>()</a></code></pre></div>
 </div>
 </div>
     <div id="gtsummary-0-1-0" class="section level1">
