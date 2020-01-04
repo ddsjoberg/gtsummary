@@ -166,9 +166,14 @@ tidyselect_to_string <- function(...data..., ...meta_data... = NULL,
   if(!is.null(...meta_data...)) scoped_meta_data(...meta_data...)
 
   tryCatch({
-    result <- rlang::call2(dplyr::select, .data = ...data...[0, ], !!!dots_enquo) %>%
+    result <-
+      rlang::call2(dplyr::select, .data = ...data...[0, ], !!!dots_enquo) %>%
       rlang::eval_tidy() %>%
       colnames()
+
+    # if `!!!dots_enquo` resolves to a NULL object, the above call will return
+    # `character(0)`. If this occurs, return a NULL object
+    if (identical(result, character(0))) return(NULL)
   },
   error = function(e) {
     if (!is.null(arg_name))
