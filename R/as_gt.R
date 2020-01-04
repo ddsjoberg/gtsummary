@@ -41,7 +41,7 @@ as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
       "An updated version of the gt package is required to print table.\n",
       "To install the most recent version of gt, run"
     ))
-    usethis::ui_code_block("remotes::install_github(\"rstudio/gt\")")
+    usethis::ui_code_block('remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)')
     return(invisible())
   }
 

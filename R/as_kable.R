@@ -28,7 +28,7 @@ as_kable <- function(x, include = NULL, exclude = NULL, ...) {
       "Results will be printed using 'knitr::kable()' and do not \n",
       "support footers or spanning headers. \n",
       "For tables styled by the gt package, use the installation code below.\n",
-      "'remotes::install_github(\"rstudio/gt\")'\n\n",
+      "'remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)'\n\n",
       "If you prefer to always use 'knitr::kable()', add the option\n",
       "'options(gtsummary.print_engine = \"kable\")' to your script\n",
       "or in a user- or project-level startup file, '.Rprofile'."
