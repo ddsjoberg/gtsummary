@@ -232,4 +232,13 @@ test_that("tbl_uvregression creates errors with bad inputs", {
     ),
     "*"
   )
+  expect_error(
+    tbl_uvregression(
+      data = lung,
+      method = lm,
+      y = age,
+      x = marker
+    ),
+    "*"
+  )
 })

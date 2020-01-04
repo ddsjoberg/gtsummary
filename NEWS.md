@@ -1,5 +1,30 @@
 # gtsummary (development version)
 
+* Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. #250
+
+    ```r
+    tbl_summary(trial, label = age ~ "NEW LABEL"))
+    tbl_summary(trial, label = "age" ~ "NEW LABEL"))
+    tbl_summary(trial, label = c("age", "trt") ~ "NEW LABEL"))
+    tbl_summary(trial, label = c(age, trt) ~ "NEW LABEL"))
+    tbl_summary(trial, label = vars(age, trt) ~ "NEW LABEL"))
+    tbl_summary(trial, label = vars(everything(), -age, -trt) ~ "NEW LABEL"))
+    
+    age_column = "age"
+    tbl_summary(trial, label = age_column ~ "NEW LABEL"))
+    tbl_summary(trial, label = vars(age_column) ~ "NEW LABEL")
+    
+    purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))
+    ```
+
+* New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported #254
+
+* Cubic spline terms are now accurately matched to a variable name/term #312
+
+* Improved error messaging in `tidyselect_to_list()` #300
+
+* Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings #250
+
 * Bug fix when non-standard evaluation arguments were passed in `method.args=` argument of `tbl_uvregression()` (#322)
 
 * Functions `all_categorical()`, `all_dichotomous()`, and `all_continuous()` may now be used in `tbl_summary()` argument `type=` (#256)
@@ -10,7 +35,7 @@
 
 * Bug fix in `as_kable()` where column header did not match statistics presented when certain levels of the `by=` variable are entirely missing in `tbl_summary()` (#304)
 
-* Updated the trial example dataset `"trt"` variable to be `"Drug A"` and `"Drug B"` instead of `"Placebo"` and `"Drug"`
+* Updated the trial example data set `"trt"` variable to be `"Drug A"` and `"Drug B"` instead of `"Placebo"` and `"Drug"`
 
 * Improved messaging to users when an error or warning occurs while calculating a p-value in `add_p()`.  Also, p-values are no longer omitted from output when a warning is encountered during their calculation (#283) 
 

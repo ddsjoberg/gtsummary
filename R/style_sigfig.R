@@ -13,7 +13,6 @@
 #' @param x Numeric vector
 #' @param digits Integer specifying the minimum number of significant
 #' digits to display
-#' @importFrom stringr str_starts str_remove
 #' @export
 #' @return A character vector of styled numbers
 #' @author Daniel D. Sjoberg

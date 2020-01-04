@@ -26,6 +26,15 @@ test_that("inline_text.tbl_summary: no by", {
     inline_text(test_inline1, variable = "stage", level = "T1"),
     NA
   )
+
+  expect_equal(
+    inline_text(test_inline1, variable = "stage", level = "T1", pattern = "{p}%"),
+    "26%"
+  )
+  expect_equal(
+    inline_text(test_inline1, variable = "age", pattern = "The median is {median}"),
+    "The median is 47"
+  )
 })
 
 test_that("inline_text.tbl_summary: with by", {
@@ -59,16 +68,16 @@ test_that("inline_text.tbl_summary: with by", {
 test_that("inline_text.tbl_summary: with by -  expect errors", {
   expect_error(
     inline_text(test_inline2, variable = "age", column = "Pla5cebo"),
-    "No column selected.*"
+    "*"
   )
   expect_error(
     inline_text(test_inline2, variable = "stage", level = "Tsdfgsdfg1", column = "Drug B"),
-    "Is the variable level spelled correctly.*"
+    "*"
   )
 
   expect_error(
     inline_text(test_inline2, variable = "st55age", level = "T1", column = "Drug B"),
-    "Is the variable name spelled correctly.*"
+    "*"
   )
 })
 
@@ -102,12 +111,12 @@ test_that("inline_text.regression", {
 test_that("inline_text.regression -  expect errors", {
   expect_error(
     inline_text(test_inline3, variable = "stage", level = "Tsdfgsdfg1"),
-    "Is the variable level spelled correctly.*"
+    "*"
   )
 
   expect_error(
     inline_text(test_inline3, variable = "st55age"),
-    "Is the variable name spelled correctly.*"
+    "*"
   )
 })
 

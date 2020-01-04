@@ -6,11 +6,14 @@
 #' @param .data data with variables to select from
 #' @param x list of tidyselect formulas
 #' @param .meta_data meta data from tbl_summary. Default is NULL
-#' @param input_type indicates type of example to print in deprecation note
+#' @param arg_name name of argument where selector is called
+#' (aids in error messaging). Default is NULL
+#' @param select_single Logical indicating if only a single column can be selected
 #' @noRd
 #' @keywords internal
 
-tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
+tidyselect_to_list <- function(.data, x, .meta_data = NULL,
+                               arg_name = NULL, select_single = FALSE) {
   # if NULL provided, return NULL ----------------------------------------------
   if (is.null(x)) {
     return(NULL)
@@ -35,34 +38,37 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
   if (!all(is_formula)) {
     example_text <-
       switch(
-        input_type %||% "mixed",
-        "type" = paste("type = list(vars(age) ~ \"continuous\", all_integer() ~ \"categorical\")", collapse = "\n"),
-        "label" = paste("label = list(vars(age) ~ \"Age, years\", vars(response) ~ \"Tumor Response\")", collapse = "\n"),
-        "statistic" = paste("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
-          "statistic = list(vars(age) ~ \"{median}\")",
-          collapse = "\n"
-        ),
-        "digits" = paste("digits = list(vars(age) ~ 2)",
-          "digits = list(all_continuous() ~ 2)",
-          collapse = "\n"
-        ),
-        "value" = paste("value = list(vars(grade) ~ \"III\")",
-          "value = list(all_logical() ~ FALSE)",
-          collapse = "\n"
-        ),
-        "test" = paste("test = list(all_continuous() ~ \"t.test\")",
-          "test = list(vars(age) ~ \"kruskal.test\")",
-          collapse = "\n"
-        ),
-        "mixed" = paste("label = list(vars(age) ~ \"Age, years\")",
-          "statistic = list(all_continuous() ~ \"{mean} ({sd})\")",
-          collapse = "\n"
-        )
-      )
+        arg_name %||% "not_specified",
+        "type" = paste("type = list(age ~ \"continuous\", all_integer() ~ \"categorical\")",
+                       collapse = "\n"),
+        "label" = paste("label = list(age ~ \"Age, years\", response ~ \"Tumor Response\")",
+                        collapse = "\n"),
+        "statistic" = paste(c("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
+                              "statistic = list(age ~ \"{median}\")"),
+                            collapse = "\n"),
+        "digits" = paste(c("digits = list(age ~ 2)",
+                           "digits = list(all_continuous() ~ 2)"),
+                         collapse = "\n"),
+        "value" = paste(c("value = list(grade ~ \"III\")",
+                          "value = list(all_logical() ~ FALSE)"),
+                        collapse = "\n"),
+        "test" = paste(c("test = list(all_continuous() ~ \"t.test\")",
+                         "test = list(age ~ \"kruskal.test\")"),
+                       collapse = "\n")
+      ) %||%
+      paste(c("label = list(age ~ \"Age, years\")",
+              "statistic = list(all_continuous() ~ \"{mean} ({sd})\")",
+              "type = list(vars(response, death) ~ \"categorical\")"),
+            collapse = "\n")
 
+    # printing error for argument input
+    error_text <- ifelse(
+      !is.null(arg_name),
+      glue("There was a problem with the `{arg_name}=` argument input. "),
+      glue("There was a problem with one of the function argument inputs. ")
+    )
     stop(glue(
-      "There was a problem with one of the function argument inputs. ",
-      "Review the documentation and update the argument input.",
+      "{error_text}",
       "Below is an example of correct syntax.\n\n",
       "{example_text}"
     ), call. = FALSE)
@@ -76,7 +82,9 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
         # for each formula extract lhs and rhs ---------------------------------
         lhs <- var_input_to_string(data = .data, # convert lhs selectors to character
                                    select_input = !!rlang::f_lhs(x),
-                                   meta_data = .meta_data)
+                                   meta_data = .meta_data, arg_name = arg_name,
+                                   select_single = select_single)
+
         rhs <- rlang::f_rhs(x) %>% eval()
 
         # converting rhs and lhs into a named list
@@ -118,8 +126,10 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL, input_type = NULL) {
 #' var_input_to_string(mtcars, select_input = c("hp", "mpg"))
 #' var_input_to_string(mtcars, select_input = c(hp, mpg))
 #' var_input_to_string(mtcars, select_input = NULL)
-#' var_input_to_string(mtcars, select_input = vars(everything(), -mpg)
-var_input_to_string <- function(data, meta_data = NULL, select_input) {
+#' var_input_to_string(mtcars, select_input = vars(everything(), -mpg))
+var_input_to_string <- function(data, meta_data = NULL, arg_name = NULL,
+                                select_single = FALSE, select_input) {
+
   select_input <- rlang::enquo(select_input)
   # if NULL passed, return NULL
   if (rlang::quo_is_null(select_input)) {
@@ -134,24 +144,53 @@ var_input_to_string <- function(data, meta_data = NULL, select_input) {
       identical(eval(select_input_list[[1]]), dplyr::vars)) # and function is dplyr::vars
   {
     # first item of the list is vars(), removing and passing to tidyselect_to_string()
-    return(tidyselect_to_string(data, meta_data, !!!select_input_list[-1]))
+    return(tidyselect_to_string(...data... = data, ...meta_data... = meta_data,
+                                arg_name = arg_name, select_single = select_single,
+                                !!!select_input_list[-1]))
   }
 
-  tidyselect_to_string(data, meta_data, !!select_input)
+  tidyselect_to_string(...data... = data, ...meta_data... = meta_data,
+                       arg_name = arg_name, select_single = select_single,
+                       !!select_input)
 }
 
 # this function handles a single tidyselect function, or bare input
 # do not call this function directly. do not pass a vars()
-tidyselect_to_string <- function(...data..., ...meta_data... = NULL, ...) {
+tidyselect_to_string <- function(...data..., ...meta_data... = NULL,
+                                 arg_name = NULL, select_single = FALSE, ...) {
+
   dots_enquo <- rlang::enquos(...)
 
   # scoping data to use gtsummary select functions
   scoped_data(...data...)
   if(!is.null(...meta_data...)) scoped_meta_data(...meta_data...)
 
-  # selecting with standard tidyselect functions and bare inputs
-  rlang::call2(dplyr::select, .data = ...data...[0, ], !!!dots_enquo) %>%
-    rlang::eval_tidy() %>%
-    colnames()
+  tryCatch({
+    result <-
+      rlang::call2(dplyr::select, .data = ...data...[0, ], !!!dots_enquo) %>%
+      rlang::eval_tidy() %>%
+      colnames()
+
+    # if `!!!dots_enquo` resolves to a NULL object, the above call will return
+    # `character(0)`. If this occurs, return a NULL object
+    if (identical(result, character(0))) return(NULL)
+  },
+  error = function(e) {
+    if (!is.null(arg_name))
+      error_msg <- glue("Error in `{arg_name}=` argument input. Select from ",
+                        "{paste(sQuote(names(...data...)), collapse = ', ')}")
+    else error_msg <- as.character(e)
+    stop(error_msg, call. = FALSE)
+  })
+
+  # assuring only a single column is selected
+  if (select_single == TRUE && length(result) != 1) {
+    stop(glue(
+      "Error in `{arg_name}=` argument input--select only a single column. ",
+      "The following columns were selected, ",
+      "{paste(sQuote(result), collapse = ', ')}"
+    ), call. = FALSE)
+  }
+  result
 }
 

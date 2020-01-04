@@ -119,6 +119,10 @@ test_that("tbl_summary returns errors with bad inputs", {
     tbl_summary(trial, sort = list("grade" ~ "frequ55555ency")),
     "*"
   )
+  expect_error(
+    tbl_summary(trial, by = c("trt", "grade")),
+    "*"
+  )
 })
 
 
