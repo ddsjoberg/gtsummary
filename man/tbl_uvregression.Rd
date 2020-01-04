@@ -83,7 +83,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 
 \item{tidy_fun}{Option to specify a particular tidier function if the
 model is not a \link[=tidy_vetted]{vetted model} or you need to implement a
-custom method. Default it \code{NULL}}
+custom method. Default is \code{NULL}}
 }
 \value{
 A \code{tbl_uvregression} object
