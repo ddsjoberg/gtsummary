@@ -19,7 +19,7 @@
 
 * New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported #254
 
-* Cubic spline terms are now accuraetly matched to a variable name/term #312
+* Cubic spline terms are now accurately matched to a variable name/term #312
 
 * Improved error messaging in `tidyselect_to_list()` #300
 
@@ -35,7 +35,7 @@
 
 * Bug fix in `as_kable()` where column header did not match statistics presented when certain levels of the `by=` variable are entirely missing in `tbl_summary()` (#304)
 
-* Updated the trial example dataset `"trt"` variable to be `"Drug A"` and `"Drug B"` instead of `"Placebo"` and `"Drug"`
+* Updated the trial example data set `"trt"` variable to be `"Drug A"` and `"Drug B"` instead of `"Placebo"` and `"Drug"`
 
 * Improved messaging to users when an error or warning occurs while calculating a p-value in `add_p()`.  Also, p-values are no longer omitted from output when a warning is encountered during their calculation (#283) 
 
