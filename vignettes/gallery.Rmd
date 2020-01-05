@@ -105,7 +105,7 @@ t2 <- trial %>%
 
 # merging the 3 tables together, and adding additional gt formatting
 tbl_merge(list(t0, t1, t2)) %>%
-  as_gt(exclude = "tab_spanner") %>%
+  as_gt(include = -tab_spanner) %>%
   # hiding repeated summary columns
   cols_hide(columns = vars(stat_1_2, stat_2_2, stat_1_3, stat_2_3)) %>%
   # adding spanning headers for summary stats and pvalues
@@ -171,7 +171,7 @@ gt_eventn <-
 tbl_merge(list(gt_eventn, gt_model)) %>%
   bold_labels() %>%
   italicize_levels() %>%
-  as_gt(exclude = "tab_spanner")
+  as_gt(include = -tab_spanner)
 ```
 
 ---
@@ -215,7 +215,7 @@ gt_sum <-
 
 tbl_merge(list(gt_sum, tbl_reg))  %>%
   modify_header(estimate_2 = md("**Difference**")) %>%
-  as_gt(exclude = "tab_spanner")
+  as_gt(include = -tab_spanner)
 ```
 
 ---
