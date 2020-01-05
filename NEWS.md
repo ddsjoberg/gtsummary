@@ -19,6 +19,8 @@
 
 * New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported #254
 
+* For each release of gtsummary, we now can make reference to the version of gt our release coincides with. The commit SHA for gt is now saved in an object called `gt_sha`, and the version of gt can be installed with `remotes::install_github("rstudio/gt", ref = gt_sha)` (#329)
+
 * Cubic spline terms are now accurately matched to a variable name/term #312
 
 * Improved error messaging in `tidyselect_to_list()` #300
