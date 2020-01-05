@@ -7,10 +7,11 @@
 #'
 #' @param x Object created by a function from the gtsummary package
 #' (e.g. [tbl_summary] or [tbl_regression])
-#' @param include Character vector  or tidyselect function naming kable commands to include in printing.
-#' Default is `NULL`, which utilizes all commands in `x$kable_calls`.
-#' @param exclude Character vector  or tidyselect function naming kable commands to exclude in printing.
-#' Default is `NULL`.
+#' @param include Commands to include in output. Input may be a vector of
+#' quoted or unquoted names. tidyselect and gtsummary select helper
+#' functions are also accepted.
+#' Default is `NULL`, which includes all commands in `x$kable_calls`.
+#' @param exclude DEPRECATED
 #' @param ... Additional arguments passed to [knitr::kable]
 #' @export
 #' @return A `knitr_kable` object
@@ -39,6 +40,20 @@ as_kable <- function(x, include = NULL, exclude = NULL, ...) {
       "or spanning headers. \n",
       "Tables styled by the gt package support footers and spanning headers."
     ))
+  }
+
+  # DEPRECATION notes ----------------------------------------------------------
+  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
+    lifecycle::deprecate_warn(
+      "1.2.5",
+      "gtsummary::as_kable(exclude = )",
+      "as_kable(include = )",
+      details = paste0(
+        "The `include` argument accepts quoted and unquoted expressions similar\n",
+        "`dplyr::select()`. To exclude commands, use the minus sign.\n",
+        "For example, `include = -cols_hide`"
+      )
+    )
   }
 
   # converting to charcter vector ----------------------------------------------

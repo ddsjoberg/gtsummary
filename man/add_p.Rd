@@ -45,14 +45,16 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{group}{Column name of an ID or grouping variable. The column can be
-used calculate p-values with correlated data (e.g. when the test argument
-is \code{"lme4"}). Default is \code{NULL}.  If specified,
+\item{group}{Column name (unquoted or quoted) of an ID or grouping variable.
+The column can be used calculate p-values with correlated data (e.g. when
+the test argument is \code{"lme4"}). Default is \code{NULL}.  If specified,
 the row associated with this variable is omitted from the summary table.}
 
-\item{include}{Character vector or tidyselect function indicating variables to include from output.}
+\item{include}{Variables to include in output. Input may be a vector of
+quoted or unquoted variable names. tidyselect and gtsummary select helper
+functions are also accepted. Default is \code{NULL}, which prints all variables.}
 
-\item{exclude}{Character vector or tidyselect function indicating variables to exclude from output.}
+\item{exclude}{DEPRECATED}
 }
 \value{
 A \code{tbl_summary} object

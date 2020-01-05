@@ -4,22 +4,13 @@
 \alias{add_global_p.tbl_regression}
 \title{Adds the global p-value for categorical variables}
 \usage{
-\method{add_global_p}{tbl_regression}(
-  x,
-  include = NULL,
-  exclude = NULL,
-  keep = FALSE,
-  terms = NULL,
-  ...
-)
+\method{add_global_p}{tbl_regression}(x, include = NULL, keep = FALSE, terms = NULL, ...)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
 \item{include}{Character vector or tidyselect function indicating variables to include global p-values}
-
-\item{exclude}{Character vector or tidyselect function indicating variables to exclude global p-values}
 
 \item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.

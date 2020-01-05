@@ -7,7 +7,7 @@
 #' @section Note:
 #' If a needed class of model is not supported by
 #' [car::Anova], please create an
-#' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
+#' [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object
 #' @param ... Further arguments passed to or from other methods.
@@ -43,8 +43,11 @@ add_global_p <- function(x, ...) {
 #' @param keep Logical argument indicating whether to also retain the individual
 #' p-values in the table output for each level of the categorical variable.
 #' Default is `FALSE`
+#' @param include Variables to calculate global p-value for. Input may be a vector of
+#' quoted or unquoted variable names. tidyselect and gtsummary select helper
+#' functions are also accepted. Default is `NULL`, which adds global p-values
+#' for all categorical and interaction terms.
 #' @param include Character vector or tidyselect function indicating variables to include global p-values
-#' @param exclude Character vector or tidyselect function indicating variables to exclude global p-values
 #' @param terms DEPRECATED.  Use `include=` argument instead.
 #' @param ... Additional arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
@@ -59,7 +62,7 @@ add_global_p <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
 
-add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
+add_global_p.tbl_regression <- function(x, include = NULL,
                                         keep = FALSE, terms = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(terms)) {
@@ -73,8 +76,6 @@ add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
                                  select_input = !!rlang::enquo(include))
-  exclude <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
-                                 select_input = !!rlang::enquo(exclude))
 
   # fetching categorical variables from model
   if (is.null(include))
@@ -83,10 +84,6 @@ add_global_p.tbl_regression <- function(x, include = NULL, exclude = NULL,
     filter(.data$var_type %in% c("categorical", "interaction")) %>%
     pull(.data$variable) %>%
     unique()
-
-  include <- include %>% setdiff(exclude)
-
-
 
   # if no terms are provided, stop and return x
   if (length(include) == 0) {
