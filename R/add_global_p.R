@@ -47,7 +47,8 @@ add_global_p <- function(x, ...) {
 #' quoted or unquoted variable names. tidyselect and gtsummary select helper
 #' functions are also accepted. Default is `NULL`, which adds global p-values
 #' for all categorical and interaction terms.
-#' @param include Character vector or tidyselect function indicating variables to include global p-values
+#' @param include Character vector or tidyselect function indicating
+#' variables to include global p-values
 #' @param terms DEPRECATED.  Use `include=` argument instead.
 #' @param ... Additional arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
@@ -62,7 +63,8 @@ add_global_p <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
 
-add_global_p.tbl_regression <- function(x, include = NULL,
+add_global_p.tbl_regression <- function(x,
+                                        include = x$table_body$variable[x$table_body$var_type %in% c("categorical", "interaction")],
                                         keep = FALSE, terms = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(terms)) {
@@ -77,20 +79,11 @@ add_global_p.tbl_regression <- function(x, include = NULL,
   include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
                                  select_input = !!rlang::enquo(include))
 
-  # fetching categorical variables from model
-  if (is.null(include))
-    include <- x %>%
-    pluck("table_body") %>%
-    filter(.data$var_type %in% c("categorical", "interaction")) %>%
-    pull(.data$variable) %>%
-    unique()
-
   # if no terms are provided, stop and return x
   if (length(include) == 0) {
     message("No terms were selected, and no global p-values added to table")
     return(x)
   }
-
 
   # calculating global pvalues
   tryCatch(

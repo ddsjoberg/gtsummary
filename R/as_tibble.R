@@ -24,7 +24,7 @@ NULL
 
 #' @rdname as_tibbleS3
 #' @export
-as_tibble.tbl_summary <- function(x, include = NULL, col_labels = TRUE,
+as_tibble.tbl_summary <- function(x, include = everything(), col_labels = TRUE,
                                   exclude = NULL,  ...) {
   # Printing message that spanning headers and footnotes will be lost
   message(glue(
@@ -54,13 +54,12 @@ as_tibble.tbl_summary <- function(x, include = NULL, col_labels = TRUE,
                                  select_input = !!rlang::enquo(exclude))
 
   # making list of commands to include -----------------------------------------
-  if (is.null(include)) include <- names(x$kable_calls)
   # this ensures list is in the same order as names(x$kable_calls)
   include <- names(x$kable_calls) %>% intersect(include)
 
   # user cannot exclude the first 'kable' command
-  call_names <- include %>% setdiff(exclude)
-  call_names <- "kable" %>% union(call_names)
+  include <- include %>% setdiff(exclude)
+  include <- "kable" %>% union(include)
 
   # saving vector of column labels
   column_labels <-
@@ -70,7 +69,7 @@ as_tibble.tbl_summary <- function(x, include = NULL, col_labels = TRUE,
 
   # taking each kable function call, concatenating them with %>% separating them
   tbl <-
-    x$kable_calls[call_names] %>%
+    x$kable_calls[include] %>%
     # removing NULL elements
     compact() %>%
     glue_collapse(sep = " %>% ") %>%

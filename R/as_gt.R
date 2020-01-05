@@ -15,7 +15,7 @@
 #' @param include Commands to include in output. Input may be a vector of
 #' quoted or unquoted names. tidyselect and gtsummary select helper
 #' functions are also accepted.
-#' Default is `NULL`, which includes all commands in `x$gt_calls`.
+#' Default is `everything()`, which includes all commands in `x$gt_calls`.
 #' @param exclude DEPRECATED.
 #' @param omit DEPRECATED.
 #' vector of named gt commands to omit. Default is `NULL`
@@ -34,7 +34,7 @@
 #'
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
 
-as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
+as_gt <- function(x, include = everything(), exclude = NULL, omit = NULL) {
   # DEPRECATRED notice ---------------------------------------------------------
   # checking if updated version of gt package is required 2019-12-25 -----------
   if (!exists("cells_body", asNamespace("gt"))) {
@@ -80,16 +80,15 @@ as_gt <- function(x, include = NULL, exclude = NULL, omit = NULL) {
   exclude <- var_input_to_string(data = vctr_2_tibble(names(x$gt_calls)),
                                  select_input = !!rlang::enquo(exclude))
 
-  if (is.null(include)) include <- names(x$gt_calls)
   # this ensures list is in the same order as names(x$gt_calls)
   include <- names(x$gt_calls) %>% intersect(include)
 
   # user cannot omit the first 'gt' command
-  call_names <- include %>% setdiff(exclude)
-  call_names <- "gt" %>% union(call_names)
+  include <- include %>% setdiff(exclude)
+  include <- "gt" %>% union(include)
 
   # taking each gt function call, concatenating them with %>% separating them
-  x$gt_calls[call_names] %>%
+  x$gt_calls[include] %>%
     # adding default gt formatting options
     union(getOption("gtsummary.as_gt.addl_cmds", default = NULL)) %>%
     # removing NULL elements

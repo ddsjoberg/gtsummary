@@ -34,8 +34,8 @@
 #' @param label List of formulas specifying variables labels,
 #' e.g. `list(age ~ "Age, yrs", stage ~ "Path T Stage")`
 #' @param include Variables to include in output. Input may be a vector of
-#' quoted or unquoted variable names. tidyselect and gtsummary select helper
-#' functions are also accepted. Default is `NULL`, which prints all variables.
+#' quoted variable names, unquoted variable names, or tidyselect select helper
+#' functions. Default is `everything()`.
 #' @param conf.level Must be strictly greater than 0 and less than 1.
 #' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept Logical argument indicating whether to include the intercept
@@ -96,7 +96,7 @@
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 
 tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
-                           include = NULL, show_single_row = NULL,
+                           include = everything(), show_single_row = NULL,
                            conf.level = NULL, intercept = FALSE,
                            estimate_fun = NULL, pvalue_fun = NULL,
                            tidy_fun = NULL,
@@ -175,21 +175,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   tidy_model <-
     tidy_wrap(x, exponentiate, conf.level, tidy_fun)
 
-  # converting to character list, using model frame and tidy terms as possible names
-  include <- var_input_to_string(
-    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    select_input = !!include
-  )
-  exclude <- var_input_to_string(
-    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    select_input = !!exclude
-  )
-  show_single_row <- var_input_to_string(
-    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    select_input = !!show_single_row
-  )
-
-
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
   # rows for reference groups, and headers for
@@ -213,7 +198,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
                                  arg_name = "exclude", select_input = !!exclude)
 
-  if (is.null(include)) include <- table_body$variable %>% unique()
   if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
   include <- include %>% setdiff(exclude)
 

@@ -9,7 +9,7 @@ add_p(
   test = NULL,
   pvalue_fun = NULL,
   group = NULL,
-  include = NULL,
+  include = everything(),
   exclude = NULL
 )
 }
@@ -51,8 +51,8 @@ the test argument is \code{"lme4"}). Default is \code{NULL}.  If specified,
 the row associated with this variable is omitted from the summary table.}
 
 \item{include}{Variables to include in output. Input may be a vector of
-quoted or unquoted variable names. tidyselect and gtsummary select helper
-functions are also accepted. Default is \code{NULL}, which prints all variables.}
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is \code{everything()}.}
 
 \item{exclude}{DEPRECATED}
 }

@@ -13,7 +13,7 @@ tbl_uvregression(
   formula = "{y} ~ {x}",
   exponentiate = FALSE,
   label = NULL,
-  include = NULL,
+  include = everything(),
   exclude = NULL,
   hide_n = FALSE,
   show_single_row = NULL,
@@ -55,8 +55,8 @@ coefficient estimates. Default is \code{FALSE}.}
 e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}}
 
 \item{include}{Variables to include in output. Input may be a vector of
-quoted or unquoted variable names. tidyselect and gtsummary select helper
-functions are also accepted. Default is \code{NULL}, which prints all variables.}
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is \code{everything()}.}
 
 \item{exclude}{DEPRECATED}
 

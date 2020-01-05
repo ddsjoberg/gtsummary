@@ -10,7 +10,7 @@
 #' @param include Commands to include in output. Input may be a vector of
 #' quoted or unquoted names. tidyselect and gtsummary select helper
 #' functions are also accepted.
-#' Default is `NULL`, which includes all commands in `x$kable_calls`.
+#' Default is `everything()`, which includes all commands in `x$kable_calls`.
 #' @param exclude DEPRECATED
 #' @param ... Additional arguments passed to [knitr::kable]
 #' @export
@@ -21,7 +21,8 @@
 #' trial %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_kable()
-as_kable <- function(x, include = NULL, exclude = NULL, ...) {
+
+as_kable <- function(x, include = everything(), exclude = NULL, ...) {
   # print message about kable limitations
   # printing message about downloading gt package
   if (is.null(getOption("gtsummary.print_engine"))) {
@@ -63,13 +64,12 @@ as_kable <- function(x, include = NULL, exclude = NULL, ...) {
                                  select_input = !!rlang::enquo(exclude))
 
   # making list of commands to include -----------------------------------------
-  if (is.null(include)) include <- names(x$kable_calls)
   # this ensures list is in the same order as names(x$kable_calls)
   include <- names(x$kable_calls) %>% intersect(include)
 
   # user cannot exclude the first 'kable' command
-  call_names <- include %>% setdiff(exclude)
-  call_names <- "kable" %>% union(call_names)
+  include <- include %>% setdiff(exclude)
+  include <- "kable" %>% union(include)
 
   # saving vector of column labels
   col_labels <-
@@ -78,7 +78,7 @@ as_kable <- function(x, include = NULL, exclude = NULL, ...) {
     pull(.data$label)
 
   # taking each kable function call, concatenating them with %>% separating them
-  x$kable_calls[call_names] %>%
+  x$kable_calls[include] %>%
     # removing NULL elements
     compact() %>%
     glue_collapse(sep = " %>% ") %>%

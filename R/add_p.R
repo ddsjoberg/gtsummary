@@ -76,7 +76,7 @@
 #' \if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
-                  group = NULL, include = NULL, exclude = NULL) {
+                  group = NULL, include = everything(), exclude = NULL) {
 
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
@@ -158,7 +158,6 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   }
 
   # Getting p-values only for included variables
-  if (is.null(include)) include <- x$table_body$variable %>% unique()
   include <- include %>% setdiff(exclude)
 
 

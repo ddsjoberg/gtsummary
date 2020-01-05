@@ -4,7 +4,7 @@
 \alias{as_kable}
 \title{Convert to knitr_kable object}
 \usage{
-as_kable(x, include = NULL, exclude = NULL, ...)
+as_kable(x, include = everything(), exclude = NULL, ...)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -13,7 +13,7 @@ as_kable(x, include = NULL, exclude = NULL, ...)
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is \code{NULL}, which includes all commands in \code{x$kable_calls}.}
+Default is \code{everything()}, which includes all commands in \code{x$kable_calls}.}
 
 \item{exclude}{DEPRECATED}
 

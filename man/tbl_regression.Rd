@@ -8,7 +8,7 @@ tbl_regression(
   x,
   label = NULL,
   exponentiate = FALSE,
-  include = NULL,
+  include = everything(),
   show_single_row = NULL,
   conf.level = NULL,
   intercept = FALSE,
@@ -29,8 +29,8 @@ e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}}
 coefficient estimates. Default is \code{FALSE}.}
 
 \item{include}{Variables to include in output. Input may be a vector of
-quoted or unquoted variable names. tidyselect and gtsummary select helper
-functions are also accepted. Default is \code{NULL}, which prints all variables.}
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is \code{everything()}.}
 
 \item{show_single_row}{By default categorical variables are printed on
 multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
