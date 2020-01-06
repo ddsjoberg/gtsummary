@@ -25,19 +25,6 @@ knitr::knit_exit()
 <!-- Start of vignette -->
 Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting table using {gtsummary}, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
 
-```{r, echo=FALSE, comment=""}
-if (!requireNamespace("gt", quietly = TRUE)) {
-  usethis::ui_oops(paste(
-    "The gt package is required to build the gtsummary gallery,",
-    "and was not available\non this platform during the",
-    "package building process. To view the gallery,",
-    "visit the package website.\n\n",
-    "{usethis::ui_path('http://www.danieldsjoberg.com/gtsummary/')}"
-  ))
-  knitr::knit_exit()
-}
-```
-
 ```{r setup, message = FALSE}
 library(gtsummary); library(gt); library(survival)
 library(dplyr); library(stringr); library(purrr); library(forcats)
@@ -67,7 +54,7 @@ trial[!is.na(trial$response), c("response", "age", "grade")] %>%
   tbl_summary(
     by = response, 
     missing = "no",
-    label = list(vars(age) ~ "Patient Age", vars(grade) ~ "Tumor Grade")
+    label = list(age ~ "Patient Age", grade ~ "Tumor Grade")
   ) %>%
   add_p(pvalue_fun = partial(style_pvalue, digits = 2)) %>%
   add_q()
@@ -85,7 +72,7 @@ trial[c("response", "age", "grade")] %>%
   ) %>%
   tbl_summary(
     by = response, 
-    label = list(vars(age) ~ "Patient Age", vars(grade) ~ "Tumor Grade")
+    label = list(age ~ "Patient Age", grade ~ "Tumor Grade")
   )  
 ```
 
@@ -231,4 +218,19 @@ tbl_merge(list(gt_sum, tbl_reg))  %>%
   as_gt(exclude = "tab_spanner")
 ```
 
+---
 
+Implement a custom tidier to report Wald confidence intervals.
+The Wald confidence intervals are calculated by passing the appropriate `confint()` function to `broom::confint_tidy()`.
+
+```{r}
+my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
+  dplyr::bind_cols(
+    broom::tidy(x, exponentiate = exponentiate, conf.int = FALSE),
+    broom::confint_tidy(x, func = stats::confint.default, conf.level = conf.level)
+  )
+}
+
+lm(age ~ grade + marker, trial) %>%
+  tbl_regression(tidy_fun = my_tidy)
+```

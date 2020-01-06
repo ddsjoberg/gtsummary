@@ -26,8 +26,7 @@ This function uses \link[car:Anova]{car::Anova} with argument
 
 \examples{
 tbl_uv_global_ex2 <-
-  trial \%>\%
-  dplyr::select(response, trt, age, grade) \%>\%
+  trial[c("response", "trt", "age", "grade")] \%>\%
   tbl_uvregression(
     method = glm,
     y = response,

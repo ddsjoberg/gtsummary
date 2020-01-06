@@ -107,25 +107,22 @@
 #' @author Daniel D. Sjoberg
 #' @examples
 #' tbl_summary_ex1 <-
-#'   trial %>%
-#'   dplyr::select(age, grade, response) %>%
+#'   trial[c("age", "grade", "response")] %>%
 #'   tbl_summary()
 #'
 #' tbl_summary_ex2 <-
-#'   trial %>%
-#'   dplyr::select(age, grade, response, trt) %>%
+#'   trial[c("age", "grade", "response", "trt")] %>%
 #'   tbl_summary(
 #'     by = trt,
-#'     label = list(vars(age) ~ "Patient Age"),
+#'     label = list(age ~ "Patient Age"),
 #'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
-#'     digits = list(vars(age) ~ c(0, 1))
+#'     digits = list(age ~ c(0, 1))
 #'   )
 #'
 #' # for convenience, you can also pass named lists to any arguments
 #' # that accept formulas (e.g label, digits, etc.)
 #' tbl_summary_ex3 <-
-#'   trial %>%
-#'   dplyr::select(age, trt) %>%
+#'   trial[c("age", "trt")] %>%
 #'   tbl_summary(
 #'     by = trt,
 #'     label = list(age = "Patient Age")
@@ -150,28 +147,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         percent = c("column", "row", "cell"), group = NULL) {
 
   # converting bare arguments to string ----------------------------------------
-  by <- enquo_to_string(rlang::enquo(by), arg_name = "by")
+  by <- var_input_to_string(data = data, select_input = !!rlang::enquo(by),
+                            arg_name = "by", select_single = TRUE)
 
-  # putting arguments in a list to pass to tbl_summary_
-  tbl_summary_args <- as.list(environment())
-
-  # passing arguments to tbl_summary_
-  do.call(tbl_summary_, tbl_summary_args)
-}
-
-#' Standard evaluation version of tbl_summary()
-#'
-#' The `'by ='` argument can be passed as a string, rather than with non-standard
-#' evaluation as in [tbl_summary]. Review the help file for [tbl_summary] fully
-#' documented options and arguments.
-#'
-#' @inheritParams tbl_summary
-#' @export
-tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
-                         digits = NULL, type = NULL, value = NULL,
-                         missing = c("ifany", "always", "no"),
-                         missing_text = "Unknown", sort = NULL,
-                         percent = c("column", "row", "cell"), group = NULL) {
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
   percent <- match.arg(percent)
@@ -198,11 +176,11 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # deprecation note about group -----------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(group))) {
-    stop(glue(
-      "Passing the 'group' argument in 'tbl_summary()' is defunct.\n",
-      "Please pass the column in 'add_p()'. For example,\n\n",
-      "tbl_summary() %>% add_p(group = varname)"
-    ))
+    lifecycle::deprecate_stop(
+      "1.2.0",
+      "gtsummary::tbl_summary(group=)",
+      "add_p(group=)"
+    )
   }
 
   # will return call, and all object passed to in tbl_summary call -------------
@@ -233,7 +211,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # converting tidyselect formula lists to named lists -------------------------
-  value <- tidyselect_to_list(data, value, input_type = "value")
+  value <- tidyselect_to_list(data, value, arg_name = "value")
 
   # creating a table with meta data about each variable ------------------------
   meta_data <- tibble(
@@ -254,7 +232,7 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   # updating type of user supplied one
   if (!is.null(type)) {
     # converting tidyselect formula lists to named lists
-    type <- tidyselect_to_list(data, type, .meta_data = meta_data, input_type = "type")
+    type <- tidyselect_to_list(data, type, .meta_data = meta_data, arg_name = "type")
 
     # updating meta data object with new types
     meta_data <-
@@ -268,9 +246,9 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   }
 
   # converting tidyselect formula lists to named lists -------------------------
-  label <- tidyselect_to_list(data, label, .meta_data = meta_data, input_type = "label")
-  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, input_type = "statistic")
-  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, input_type = "digits")
+  label <- tidyselect_to_list(data, label, .meta_data = meta_data, arg_name = "label")
+  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, arg_name = "statistic")
+  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, arg_name = "digits")
   sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
 
   # assigning variable characteristics -----------------------------------------
@@ -284,36 +262,51 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
       digits = continuous_digits_guess(
         data, .data$variable, .data$summary_type, .data$class, digits
       ),
-      sort = assign_sort(.data$variable, .data$summary_type, sort)
+      sort = assign_sort(.data$variable, .data$summary_type, sort),
+      df_stats = pmap(
+        list(.data$summary_type, .data$variable, .data$dichotomous_value,
+             .data$sort, .data$stat_display, .data$digits),
+        function(summary_type, variable, dichotomous_value, sort, stat_display, digits) {
+          switch(
+            summary_type,
+            "continuous" = summarize_continuous(data = data, variable = variable,
+                                                 by = by, stat_display = stat_display,
+                                                 digits = digits),
+            "categorical" = summarize_categorical(data = data, variable = variable,
+                                                   by = by,
+                                                   dichotomous_value = dichotomous_value,
+                                                   sort = sort, percent = percent),
+            "dichotomous" = summarize_categorical(data = data, variable = variable,
+                                                   by = by,
+                                                   dichotomous_value = dichotomous_value,
+                                                   sort = sort, percent = percent)
+          )
+        }
+      )
     )
 
   # calculating summary statistics ---------------------------------------------
   table_body <-
     meta_data %>%
     mutate(
-      # creating summary stat table formatted properly
-      stat_table = pmap(
-        list(
-          .data$variable, .data$summary_type, .data$dichotomous_value,
-          .data$var_label, .data$stat_display, .data$digits, .data$class,
-          .data$sort
-        ),
-        ~ calculate_summary_stat(
-          data,
-          variable = ..1, by = get("by"), summary_type = ..2,
-          dichotomous_value = ..3, var_label = ..4, stat_display = ..5,
-          digits = ..6, class = ..7, missing = missing,
-          missing_text = missing_text, sort = ..8,
-          percent = percent
-        )
+      tbl_stats = pmap(
+        list(.data$summary_type, .data$variable, .data$var_label,
+             .data$stat_display, .data$df_stats),
+        function(summary_type, variable, var_label, stat_display, df_stats) {
+          df_stats_to_tbl(
+            data = data, variable = variable, summary_type = summary_type, by = by,
+            var_label = var_label, stat_display = stat_display,
+            df_stats = df_stats, missing = missing, missing_text = missing_text
+          )
+        }
       )
     ) %>%
-    select(c("variable", "summary_type", "stat_table")) %>%
-    unnest(!!sym("stat_table"))
+    pull(.data$tbl_stats) %>%
+    purrr::reduce(bind_rows)
 
   # table of column headers ----------------------------------------------------
   table_header <-
-    tibble(column = names(table_body) %>% setdiff("summary_type")) %>%
+    tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
     mutate(
       footnote = map2(
@@ -331,24 +324,15 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   results <- list(
     gt_calls = eval(gt_tbl_summary),
     kable_calls = eval(kable_tbl_summary),
-    table_body = table_body %>% select(-.data$summary_type),
+    table_body = table_body,
     table_header = table_header,
     meta_data = meta_data,
     inputs = tbl_summary_inputs,
     N = nrow(data),
     call_list = list(tbl_summary = match.call())
   )
-
-  if (!is.null(by)) {
-    results[["by"]] <- by
-    results[["df_by"]] <- df_by(data, by)
-
-    # if there are 10 or more by levels, they are sorted incorrectly...fixing order
-    stat_var_sort <- results[["df_by"]]$by_col
-    results[["table_body"]] <-
-      results[["table_body"]] %>%
-      select(-stat_var_sort, stat_var_sort)
-  }
+  results$by <- by
+  results$df_by <- df_by(data, by)
 
   # assigning a class of tbl_summary (for special printing in Rmarkdown)
   class(results) <- "tbl_summary"
@@ -356,14 +340,12 @@ tbl_summary_ <- function(data, by = NULL, label = NULL, statistic = NULL,
   # adding headers
   if (is.null(by)) {
     results <- modify_header_internal(results,
-      stat_0 = "**N = {N}**",
-      label = "**Characteristic**"
-    )
+                                      stat_0 = "**N = {N}**",
+                                      label = "**Characteristic**")
   } else {
     results <- modify_header_internal(results,
-      stat_by = "**{level}**, N = {n}",
-      label = "**Characteristic**"
-    )
+                                      stat_by = "**{level}**, N = {n}",
+                                      label = "**Characteristic**")
   }
 
   # writing additional gt and kable calls with data from table_header

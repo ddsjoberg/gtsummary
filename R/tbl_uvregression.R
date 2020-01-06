@@ -42,7 +42,6 @@
 #' function defined by `method`.
 #' @param hide_n Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
-#' @importFrom stringr word str_detect fixed
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 #' @family tbl_uvregression tools
@@ -51,7 +50,7 @@
 #' @examples
 #' tbl_uv_ex1 <-
 #'   tbl_uvregression(
-#'     trial %>% dplyr::select(response, age, grade),
+#'     trial[c("response", "age", "grade")],
 #'     method = glm,
 #'     y = response,
 #'     method.args = list(family = binomial),
@@ -62,10 +61,9 @@
 #' library(survival)
 #' tbl_uv_ex2 <-
 #'   tbl_uvregression(
-#'     trial %>% dplyr::select(ttdeath, death, age, grade, response),
+#'     trial[c("ttdeath", "death", "age", "grade", "response")],
 #'     method = coxph,
 #'     y = Surv(ttdeath, death),
-#'     label = list(vars(grade) ~ "Grade"),
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )
@@ -73,12 +71,10 @@
 #' # for convenience, you can also pass named lists to any arguments
 #' # that accept formulas (e.g label, etc.)
 #' library(survival)
-#' trial %>%
-#'   dplyr::select(ttdeath, death, age, grade, response) %>%
+#' trial[c("ttdeath", "death", "age", "grade", "response")] %>%
 #'   tbl_uvregression(
 #'     method = coxph,
 #'     y = Surv(ttdeath, death),
-#'     label = list(grade = "Grade"),
 #'     exponentiate = TRUE
 #'   )
 #' @section Example Output:
@@ -142,6 +138,14 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
          constant.", call. = FALSE)
   }
 
+  include <- var_input_to_string(data = data, select_input = !!rlang::enquo(include),
+                                 arg_name = "include")
+  exclude <- var_input_to_string(data = data, select_input = !!rlang::enquo(exclude),
+                                 arg_name = "exclude")
+  show_single_row <- var_input_to_string(data = data,
+                                         select_input = !!rlang::enquo(show_single_row),
+                                         arg_name = "show_single_row")
+
   # checking formula correctly specified ---------------------------------------
   if (!rlang::is_string(formula)) {
     stop('`formula` must be passed as a string, e.g. `formula = "{y} ~ {x}"`',
@@ -165,7 +169,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   }
 
   # converting tidyselect formula lists to named lists -------------------------
-  label <- tidyselect_to_list(data, label, .meta_data = NULL, input_type = "label")
+  label <- tidyselect_to_list(data, label, .meta_data = NULL, arg_name = "label")
   # all sepcifed labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
     stop("Each `label` specified must be a string of length 1.", call. = FALSE)

@@ -28,9 +28,9 @@ e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
 \item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{include}{Character vector of variable names to include from output.}
+\item{include}{Character vector or tidyselect function indicating variables to include from output.}
 
-\item{exclude}{Character vector of variable names to exclude from output.}
+\item{exclude}{Character vector or tidyselect function indicating variables to exclude from output.}
 
 \item{show_single_row}{By default categorical variables are printed on
 multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
@@ -57,7 +57,8 @@ and return a string that is the rounded/formatted p-value (e.g.
 \item{show_yesno}{deprecated}
 
 \item{tidy_fun}{Option to specify a particular tidier function if the
-model is not a \link[=tidy_vetted]{vetted model}. Default it \code{NULL}}
+model is not a \link[=tidy_vetted]{vetted model} or you need to implement a
+custom method. Default is \code{NULL}}
 }
 \value{
 A \code{tbl_regression} object

@@ -27,8 +27,7 @@
 #' @return A `tbl_summary` object
 #' @examples
 #' tbl_n_ex <-
-#'   trial %>%
-#'   dplyr::select(trt, age, grade, response) %>%
+#'   trial[c("trt", "age", "grade", "response")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_n()
 #' @section Example Output:

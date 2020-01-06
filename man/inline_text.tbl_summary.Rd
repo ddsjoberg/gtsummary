@@ -7,9 +7,10 @@
 \method{inline_text}{tbl_summary}(
   x,
   variable,
+  column = NULL,
   level = NULL,
-  column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  pattern = NULL,
+  pvalue_fun = NULL,
   ...
 )
 }
@@ -18,11 +19,14 @@
 
 \item{variable}{Variable name of statistic to present}
 
+\item{column}{Column name to return from \code{x$table_body}.
+Can also pass the level of a by variable.}
+
 \item{level}{Level of the variable to display for categorical variables.
 Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
-\item{column}{Column name to return from \code{x$table_body}.
-Can also pass the level of a by variable.}
+\item{pattern}{String indicating the statistics to return.
+Uses \link[glue:glue]{glue::glue} formatting. Default is pattern shown in \code{tbl_summary()} output}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.
@@ -46,7 +50,8 @@ t1 <- tbl_summary(trial)
 t2 <- tbl_summary(trial, by = trt) \%>\% add_p()
 
 inline_text(t1, variable = "age")
-inline_text(t2, variable = "grade", level = "I", column = "Drug A")
+inline_text(t2, variable = "grade", level = "I", column = "Drug A",
+pattern = "{n}/{N} ({p})\%")
 inline_text(t2, variable = "grade", column = "p.value")
 }
 \seealso{
