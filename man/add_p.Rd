@@ -46,7 +46,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{group}{Column name (unquoted or quoted) of an ID or grouping variable.
-The column can be used calculate to p-values with correlated data (e.g. when
+The column can be used to calculate p-values with correlated data (e.g. when
 the test argument is \code{"lme4"}). Default is \code{NULL}.  If specified,
 the row associated with this variable is omitted from the summary table.}
 
