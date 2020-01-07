@@ -108,7 +108,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       "tbl_uvregression(include = )",
       details = paste0(
         "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "`dplyr::select()`. To exclude variable, use the minus sign.\n",
+        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
         "For example, `include = -c(age, stage)`"
       )
     )

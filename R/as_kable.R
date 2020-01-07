@@ -51,7 +51,7 @@ as_kable <- function(x, include = everything(), exclude = NULL, ...) {
       "as_kable(include = )",
       details = paste0(
         "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "`dplyr::select()`. To exclude commands, use the minus sign.\n",
+        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
         "For example, `include = -cols_hide`"
       )
     )

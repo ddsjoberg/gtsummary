@@ -35,7 +35,7 @@
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
 
 as_gt <- function(x, include = everything(), exclude = NULL, omit = NULL) {
-  # DEPRECATRED notice ---------------------------------------------------------
+  # DEPRECATED notice ---------------------------------------------------------
   # checking if updated version of gt package is required 2019-12-25 -----------
   if (!exists("cells_body", asNamespace("gt"))) {
     usethis::ui_oops(glue(
@@ -54,7 +54,7 @@ as_gt <- function(x, include = everything(), exclude = NULL, omit = NULL) {
       "as_gt(include = )",
       details = paste0(
         "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "`dplyr::select()`. To exclude commands, use the minus sign.\n",
+        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
         "For example, `include = -tab_spanner`"
       )
     )
@@ -67,7 +67,7 @@ as_gt <- function(x, include = everything(), exclude = NULL, omit = NULL) {
       "as_gt(include = )",
       details = paste0(
         "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "`dplyr::select()`. To exclude commands, use the minus sign.\n",
+        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
         "For example, `include = -tab_spanner`"
       )
     )

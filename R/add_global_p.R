@@ -6,7 +6,7 @@
 #'
 #' @section Note:
 #' If a needed class of model is not supported by
-#' [car::Anova], please create an
+#' [car::Anova], please create a
 #' [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object
@@ -34,8 +34,8 @@ add_global_p <- function(x, ...) {
 #'
 #' @section Note:
 #' If a needed class of model is not supported by
-#' [car::Anova], please create an
-#' [issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
+#' [car::Anova], please create a
+#' [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues) to request support.
 #'
 #'
 #' @param x Object with class `tbl_regression` from the
@@ -47,8 +47,6 @@ add_global_p <- function(x, ...) {
 #' quoted or unquoted variable names. tidyselect and gtsummary select helper
 #' functions are also accepted. Default is `NULL`, which adds global p-values
 #' for all categorical and interaction terms.
-#' @param include Character vector or tidyselect function indicating
-#' variables to include global p-values
 #' @param terms DEPRECATED.  Use `include=` argument instead.
 #' @param ... Additional arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
