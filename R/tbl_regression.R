@@ -116,7 +116,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
       "tbl_regression(include = )",
       details = paste0(
         "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "`dplyr::select()`. To exclude variable, use the minus sign.\n",
+        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
         "For example, `include = -c(age, stage)`"
       )
     )

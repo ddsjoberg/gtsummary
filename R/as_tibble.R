@@ -41,7 +41,7 @@ as_tibble.tbl_summary <- function(x, include = everything(), col_labels = TRUE,
       "as_tibble(include = )",
       details = paste0(
         "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "`dplyr::select()`. To exclude commands, use the minus sign.\n",
+        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
         "For example, `include = -cols_hide`"
       )
     )

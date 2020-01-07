@@ -33,7 +33,7 @@
 #' A custom test function can be added for all or some variables. See below for
 #' an example.
 #' @param group Column name (unquoted or quoted) of an ID or grouping variable.
-#' The column can be used calculate p-values with correlated data (e.g. when
+#' The column can be used calculate to p-values with correlated data (e.g. when
 #' the test argument is `"lme4"`). Default is `NULL`.  If specified,
 #' the row associated with this variable is omitted from the summary table.
 #' @inheritParams tbl_regression
@@ -86,7 +86,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
       "add_p(include = )",
       details = paste0(
         "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "`dplyr::select()`. To exclude variable, use the minus sign.\n",
+        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
         "For example, `include = -c(age, stage)`"
       )
     )
