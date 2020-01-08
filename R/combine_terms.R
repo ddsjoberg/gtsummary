@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' modify_anova_ex1 <-
+#' combine_terms_ex1 <-
 #'   # fit model with nonlinear terms for marker
 #'   lm(
 #'     age ~ marker + I(marker^2) + grade,
@@ -16,20 +16,24 @@
 #'   ) %>%
 #'   tbl_regression(label = grade ~ "Grade") %>%
 #'   # collapse non-linear terms to a single row in output using anova
-#'   modify_anova(
+#'   combine_terms(
 #'     formula_update = . ~ . - marker - I(marker^2),
 #'     label = "Marker (non-linear terms)"
 #'   )
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
 
-modify_anova <- function(x, formula_update, label = NULL) {
+combine_terms <- function(x, formula_update, label = NULL) {
   # checking input -------------------------------------------------------------
-  if (!"tbl_regression" %in% class(x)) {
+  if (!is(x, "tbl_regression")) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)
   }
 
   if (names(x$call_list) != "tbl_regression") {
     stop(paste(
-      "Call `modify_anova()` directly after `tbl_regression()`,",
+      "Call `combine_terms()` directly after `tbl_regression()`,",
       "prior to any other related functions."
     ), call. = FALSE)
   }
@@ -46,7 +50,7 @@ modify_anova <- function(x, formula_update, label = NULL) {
     error = function(e) {
       usethis::ui_oops(paste(
         "There was error  calculating the p-value in the",
-        "{usethis::ui_code('anova()')} function.\n",
+        "{usethis::ui_code('anova()')} function (error printed below).\n",
         "There are two common causes for an error during the calculation:\n",
         "1. The model type is not supported by {usethis::ui_code('anova()')}.\n",
         "2. The number of observations used to estimate the full and reduced",
@@ -64,6 +68,7 @@ modify_anova <- function(x, formula_update, label = NULL) {
   new_model_tbl <- as.call(call_aslist) %>% eval()
 
   # updating original tbl object -----------------------------------------------
+  # replacing the combined rows with a single row
   table_body <-
     x$table_body %>%
     left_join(
@@ -99,7 +104,7 @@ modify_anova <- function(x, formula_update, label = NULL) {
     select(-collapse_row)
 
   # returning updated tbl object -----------------------------------------------
-  x$call_list <- c(x$call_list, list(modify_anova = match.call()))
+  x$call_list <- c(x$call_list, list(combine_terms = match.call()))
 
   x
 }

@@ -89,7 +89,7 @@ list.files("man/figures") %>%
 purrr::walk(all_files, ~ update_table_png(.x))
 
 # Or Run on individual files as needed:
-# update_table_png(here::here("man", "add_p.Rd"))
+# update_table_png(here::here("man", "modify_anova.Rd"))
 
 # TODO: Figure out why this the code does not work for add_p_test methods
 add_p_ex1 <-
