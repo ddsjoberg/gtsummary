@@ -77,8 +77,8 @@ combine_terms <- function(x, formula_update, label = NULL) {
     error = function(e) {
       err_msg <-
         paste(
-          "There was error  calculating the p-value in the",
-          "'anova()' function (error printed below).\n",
+          "There was error calculating the p-value in the",
+          "'anova()' function.\n",
           "There are two common causes for an error during the calculation:\n",
           "1. The model type is not supported by 'anova()'.\n",
           "2. The number of observations used to estimate the full and reduced",
