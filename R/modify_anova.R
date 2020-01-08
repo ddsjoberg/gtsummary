@@ -82,8 +82,7 @@ modify_anova <- function(x, formula_update, label = NULL) {
               ~ifelse(.data$collapse_row == TRUE, NA, .)) %>%
     mutate(
       p.value = ifelse(.data$collapse_row == TRUE, !!anova_p, .data$p.value),
-      row_type = ifelse(.data$collapse_row == TRUE, "level", .data$row_type),
-      row_ref = ifelse(.data$collapse_row == TRUE, TRUE, .data$row_ref)
+      row_type = ifelse(.data$collapse_row == TRUE, "label", .data$row_type)
     ) %>%
     ungroup()
 
