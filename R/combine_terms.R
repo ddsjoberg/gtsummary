@@ -1,33 +1,61 @@
-#' Combine terms
+#' Combine terms in a regression model
+#'
+#' The function combines terms from a regression model, and replaces the terms
+#' with a single row in the output table.  The p-value is calculated using
+#' [stats::anova()].
 #'
 #' @param x a `tbl_regregression` object
-#' @param formula_update formula update passed to the [stats::update]
+#' @param formula_update formula update passed to the [stats::update].
+#' This updated formula is used to construct a reduced model, and is
+#' subsequently passed to [stats::anova()] to calculate the p-value for the
+#' group of removed terms.  See the [stats::update] help file for proper syntax.
 #' function's `formula.=` argument
+#' @param label Option string argument labeling the combined rows
 #'
 #' @return `tbl_regression` object
 #' @export
 #'
 #' @examples
-#' combine_terms_ex1 <-
 #'   # fit model with nonlinear terms for marker
-#'   lm(
+#'   nlmod1 <- lm(
 #'     age ~ marker + I(marker^2) + grade,
 #'     trial[c("age", "marker", "grade")] %>% na.omit() # keep complete cases only!
-#'   ) %>%
-#'   tbl_regression(label = grade ~ "Grade") %>%
-#'   # collapse non-linear terms to a single row in output using anova
-#'   combine_terms(
-#'     formula_update = . ~ . - marker - I(marker^2),
-#'     label = "Marker (non-linear terms)"
 #'   )
+#'
+#'   combine_terms_ex1 <-
+#'     tbl_regression(nlmod1, label = grade ~ "Grade") %>%
+#'     # collapse non-linear terms to a single row in output using anova
+#'     combine_terms(
+#'       formula_update = . ~ . - marker - I(marker^2),
+#'       label = "Marker (non-linear terms)"
+#'     )
+#'
+#'   # Example with Cubic Splines
+#'   library(Hmisc)
+#'   mod2 <- lm(
+#'     age ~ rcspline.eval(marker, inclx = TRUE) + grade,
+#'     trial[c("age", "marker", "grade")] %>% na.omit() # keep complete cases only!
+#'   )
+#'
+#'   combine_terms_ex2 <-
+#'     tbl_regression(mod2, label = grade ~ "Grade") %>%
+#'     combine_terms(
+#'       formula_update = . ~ . -rcspline.eval(marker, inclx = TRUE),
+#'       label = "Marker (non-linear terms)"
+#'     )
+#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
 #' \if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{combine_terms_ex2.png}{options: width=45\%}}
 
 combine_terms <- function(x, formula_update, label = NULL) {
   # checking input -------------------------------------------------------------
-  if (!is(x, "tbl_regression")) {
+  if (!methods::is(x, "tbl_regression")) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)
   }
 
@@ -35,6 +63,12 @@ combine_terms <- function(x, formula_update, label = NULL) {
     stop(paste(
       "Call `combine_terms()` directly after `tbl_regression()`,",
       "prior to any other related functions."
+    ), call. = FALSE)
+  }
+
+  if(!is.null(label) && !rlang::is_string(label)) {
+    stop(paste(
+      "`label` argument must be a string of length one."
     ), call. = FALSE)
   }
 
@@ -83,6 +117,7 @@ combine_terms <- function(x, formula_update, label = NULL) {
     group_by(.data$collapse_row) %>%
     filter(.data$collapse_row == FALSE |
              (dplyr::row_number() == 1 & .data$collapse_row == TRUE)) %>%
+    # updating column values for collapsed rows
     mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high, .data$ci),
               ~ifelse(.data$collapse_row == TRUE, NA, .)) %>%
     mutate(
@@ -101,7 +136,7 @@ combine_terms <- function(x, formula_update, label = NULL) {
   # writing over the table_body in x -------------------------------------------
   x$table_body <-
     table_body %>%
-    select(-collapse_row)
+    select(-.data$collapse_row)
 
   # returning updated tbl object -----------------------------------------------
   x$call_list <- c(x$call_list, list(combine_terms = match.call()))
