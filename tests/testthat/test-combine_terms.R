@@ -41,6 +41,15 @@ test_that("combine_terms works without error", {
   expect_equal(
     nrow(tbl2$table_body), 6
   )
+
+  # works after add_global_p()
+  expect_error(
+    lm(age ~ marker + I(marker^2) + stage, na.omit(trial)) %>%
+      tbl_regression() %>%
+      add_global_p() %>%
+      combine_terms(formula = . ~ . -marker - I(marker^2)),
+    "*"
+  )
 })
 
 test_that("error catching working properly", {
@@ -48,6 +57,13 @@ test_that("error catching working properly", {
     lm(age ~ marker + stage, trial) %>%
       tbl_regression() %>%
       combine_terms(formula = . ~ . -marker),
+    "*"
+  )
+
+  expect_error(
+    lm(age ~ marker + stage, trial) %>%
+      tbl_regression() %>%
+      combine_terms(formula = . ~ . -marker, label = c("marker", "marker2")),
     "*"
   )
 })

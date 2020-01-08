@@ -59,13 +59,6 @@ combine_terms <- function(x, formula_update, label = NULL) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)
   }
 
-  if (names(x$call_list) != "tbl_regression") {
-    stop(paste(
-      "Call `combine_terms()` directly after `tbl_regression()`,",
-      "prior to any other related functions."
-    ), call. = FALSE)
-  }
-
   if(!is.null(label) && !rlang::is_string(label)) {
     stop(paste(
       "`label` argument must be a string of length one."
