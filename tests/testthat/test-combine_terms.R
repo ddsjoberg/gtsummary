@@ -43,4 +43,12 @@ test_that("combine_terms works without error", {
   )
 })
 
+test_that("error catching working properly", {
+  expect_error(
+    lm(age ~ marker + stage) %>%
+      tbl_regression() %>%
+      combine_terms(formula = . ~ . -marker),
+    "*"
+  )
+})
 
