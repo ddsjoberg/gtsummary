@@ -48,7 +48,7 @@ test_that("combine_terms works without error", {
       tbl_regression() %>%
       add_global_p() %>%
       combine_terms(formula = . ~ . -marker - I(marker^2)),
-    "*"
+    NA
   )
 })
 

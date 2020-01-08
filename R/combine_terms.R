@@ -75,15 +75,17 @@ combine_terms <- function(x, formula_update, label = NULL) {
       slice(n()) %>%
       pull()},
     error = function(e) {
-      usethis::ui_oops(paste(
-        "There was error  calculating the p-value in the",
-        "{usethis::ui_code('anova()')} function (error printed below).\n",
-        "There are two common causes for an error during the calculation:\n",
-        "1. The model type is not supported by {usethis::ui_code('anova()')}.\n",
-        "2. The number of observations used to estimate the full and reduced",
-        "models is different."
-      ))
-      stop(as.character(e), call. = FALSE)
+      err_msg <-
+        paste(
+          "There was error  calculating the p-value in the",
+          "'anova()' function (error printed below).\n",
+          "There are two common causes for an error during the calculation:\n",
+          "1. The model type is not supported by 'anova()'.\n",
+          "2. The number of observations used to estimate the full and reduced",
+          "models is different.\n\n",
+          as.character(e)
+        )
+      stop(err_msg, call. = FALSE)
     })
 
   # tbl'ing the new model object -----------------------------------------------
