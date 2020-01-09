@@ -27,46 +27,65 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
   mixed_classes <- c("lmerMod", "glmerMod")
   if (is.null(tidy_fun)) {
     if (class(x)[1] %in% mixed_classes) { # can add other classes later. Need exact subclass.
-      tidy_bit <- broom.mixed::tidy(
+      tryCatch({
+        tidy_bit <- broom.mixed::tidy(
         x,
         exponentiate = exponentiate,
         conf.level = conf.level, conf.int = TRUE, effects = "fixed"
       )
+      },
+      error = function(e) {
+        usethis::ui_oops(paste0(
+          "There was an error calling {usethis::ui_code('broom.mixed::tidy(x, conf.int = TRUE, effects = \"fixed\")')},\n",
+          "which is required for gtsummary to print the model summary.\n",
+          "See error message below. \n"
+        ))
+        stop(as.character(e), call. = FALSE)
+      }
+      )
     }
 
     if (!(class(x)[1] %in% mixed_classes)) {
-      tidy_bit <- broom::tidy(
+      tryCatch({
+        tidy_bit <- broom::tidy(
         x,
         exponentiate = exponentiate,
         conf.level = conf.level, conf.int = TRUE
+      )
+      },
+      error = function(e) {
+        usethis::ui_oops(paste0(
+          "There was an error calling {usethis::ui_code('broom::tidy(x, conf.int = TRUE)')},\n",
+          "which is required for gtsummary to print the model summary.\n",
+          "See error message below. \n"
+        ))
+        stop(as.character(e), call. = FALSE)
+      }
       )
     }
 
     # deleting scale parameters from survreg objects
     if (class(x)[1] == "survreg") {
-      return(
-        tidy_bit %>%
-          filter(!!parse_expr('term != "Log(scale)"'))
-      )
+      tidy_bit %>%
+        filter(!!parse_expr('term != "Log(scale)"'))
     }
   }
 
   # if user specified a tidier use it here.
   if (!is.null(tidy_fun)) {
-    tryCatch(
-      {
+    tryCatch({
         tidy_bit <- do.call(
           tidy_fun,
           args = list(x,
             exponentiate = exponentiate,
-            conf.level = conf.level, conf.int = T
+            conf.level = conf.level, conf.int = TRUE
           )
         )
       },
       error = function(e) {
         usethis::ui_oops(paste0(
           "There was an error calling {usethis::ui_code('tidy_fun')}.\n",
-          "Most likely, this is because the argument passed in {usethis::ui_code('tidy_fun = ')} \n",
+          "Most likely, this is because the argument passed in {usethis::ui_code('tidy_fun=')} \n",
           "was\nmisspelled, does not exist, is not compatible with your object, \n",
           "or was missing necessary arguments. See error message below. \n"
         ))
