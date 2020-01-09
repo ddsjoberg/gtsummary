@@ -71,7 +71,7 @@ combine_terms <- function(x, formula_update, label = NULL) {
     anova_p <-
       stats::anova(x$model_obj, new_model_obj) %>%
       as_tibble() %>%
-      select(starts_with("Pr(>")) %>%
+      select(starts_with("Pr(>"),  starts_with("P(>")) %>%
       slice(n()) %>%
       pull()},
     error = function(e) {

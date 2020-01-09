@@ -50,6 +50,18 @@ test_that("combine_terms works without error", {
       combine_terms(formula = . ~ . -marker - I(marker^2)),
     NA
   )
+
+  # Confirm Cox model works
+  expect_error(
+    survival::coxph(survival::Surv(ttdeath, death) ~ grade + rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0),
+                    data = na.omit(trial)) %>%
+      tbl_regression() %>%
+      combine_terms(
+        formula_update = . ~ . -rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
+      ),
+    NA
+  )
+
 })
 
 test_that("error catching working properly", {
