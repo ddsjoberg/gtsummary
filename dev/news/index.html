@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9004</span>
       </span>
     </div>
 
@@ -167,6 +167,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>In the regression modeling functions <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, the users are presented an informative error message when the tidier fails (e.g. <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy()</a></code>) alerting them to the location of the error so they may address the issue (<a href='https://github.com/ddsjoberg/gtsummary/issues/337'>#337</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/338'>#338</a>)</p></li>
 <li>
 <p>Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers. When passing a single variable, the <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> function wrapper is no longer required. <a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(trial, <span class="dt">label =</span> age <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></a>
