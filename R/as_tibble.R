@@ -4,12 +4,7 @@
 #' `x$kable_calls` is applied.
 #'
 #' @name as_tibbleS3
-#' @param x Object created by a function from the gtsummary package
-#' (e.g. [tbl_summary] or [tbl_regression])
-#' @param include Character vector or tidyselect function naming kable commands to include in printing.
-#' Default is `NULL`, which utilizes all commands in `x$kable_calls`.
-#' @param exclude Character vector or tidyselect function naming kable commands to exclude in printing.
-#' Default is `NULL`.
+#' @inheritParams as_kable
 #' @param col_labels Logical argument adding column labels to output tibble.
 #' Default is `TRUE`.
 #' @param ... Not used
@@ -29,14 +24,28 @@ NULL
 
 #' @rdname as_tibbleS3
 #' @export
-as_tibble.tbl_summary <- function(x, include = NULL, exclude = NULL,
-                                  col_labels = TRUE, ...) {
+as_tibble.tbl_summary <- function(x, include = everything(), col_labels = TRUE,
+                                  exclude = NULL,  ...) {
   # Printing message that spanning headers and footnotes will be lost
   message(glue(
     "Results printed using 'knitr::kable()' do not support footers \n",
     "or spanning headers. \n",
     "Tables styled by the gt package support footers and spanning headers."
   ))
+
+  # DEPRECATION notes ----------------------------------------------------------
+  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
+    lifecycle::deprecate_warn(
+      "1.2.5",
+      "gtsummary::as_tibble(exclude = )",
+      "as_tibble(include = )",
+      details = paste0(
+        "The `include` argument accepts quoted and unquoted expressions similar\n",
+        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
+        "For example, `include = -cols_hide`"
+      )
+    )
+  }
 
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(x$kable_calls)),
@@ -45,13 +54,12 @@ as_tibble.tbl_summary <- function(x, include = NULL, exclude = NULL,
                                  select_input = !!rlang::enquo(exclude))
 
   # making list of commands to include -----------------------------------------
-  if (is.null(include)) include <- names(x$kable_calls)
   # this ensures list is in the same order as names(x$kable_calls)
   include <- names(x$kable_calls) %>% intersect(include)
 
   # user cannot exclude the first 'kable' command
-  call_names <- include %>% setdiff(exclude)
-  call_names <- "kable" %>% union(call_names)
+  include <- include %>% setdiff(exclude)
+  include <- "kable" %>% union(include)
 
   # saving vector of column labels
   column_labels <-
@@ -61,7 +69,7 @@ as_tibble.tbl_summary <- function(x, include = NULL, exclude = NULL,
 
   # taking each kable function call, concatenating them with %>% separating them
   tbl <-
-    x$kable_calls[call_names] %>%
+    x$kable_calls[include] %>%
     # removing NULL elements
     compact() %>%
     glue_collapse(sep = " %>% ") %>%

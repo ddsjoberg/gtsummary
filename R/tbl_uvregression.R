@@ -89,7 +89,7 @@
 tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NULL,
                              formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
-                             include = NULL, exclude = NULL,
+                             include = everything(), exclude = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL,
                              tidy_fun = NULL) {
@@ -98,6 +98,19 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     lifecycle::deprecate_stop(
       "1.2.2", "tbl_uvregression(show_yesno = )",
       "tbl_uvregression(show_single_row = )"
+    )
+  }
+
+  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
+    lifecycle::deprecate_warn(
+      "1.2.5",
+      "gtsummary::tbl_uvregression(exclude = )",
+      "tbl_uvregression(include = )",
+      details = paste0(
+        "The `include` argument accepts quoted and unquoted expressions similar\n",
+        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
+        "For example, `include = -c(age, stage)`"
+      )
     )
   }
 
