@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The data summary function `add_p()` uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large datasets. (#341) 
+
 * In the regression modeling functions `tbl_regression()` and `tbl_uvregression()`, the users are presented an informative error message when the tidier fails (e.g. `broom::tidy()`) alerting them to the location of the error so they may address the issue (#337, #338)
 
 * Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. #250
