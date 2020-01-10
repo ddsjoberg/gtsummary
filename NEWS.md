@@ -20,14 +20,15 @@
     
     purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))
     ```
+* After the input updates in #250, the `exclude=` argument appearing in `add_p()`, `tbl_regression()`, `tbl_uvregression()`, `as_gt()`, `as_kable()`, and `as_tibble()` was redundant.  The `exclude=` argument is now deprecated (#331)
 
-* New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported #254
+* New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported (#254)
 
-* Cubic spline terms are now accurately matched to a variable name/term #312
+* Cubic spline terms are now accurately matched to a variable name/term (#312)
 
-* Improved error messaging in `tidyselect_to_list()` #300
+* Improved error messaging in `tidyselect_to_list()` (#300)
 
-* Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings #250
+* Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings (#250)
 
 * Bug fix when non-standard evaluation arguments were passed in `method.args=` argument of `tbl_uvregression()` (#322)
 
