@@ -1,6 +1,7 @@
-- What changes are proposed in this pull request?
+**What changes are proposed in this pull request?**
 
-- If there is an GitHub issue associated with this pull request, please provide link.
+
+**If there is an GitHub issue associated with this pull request, please provide link.**
 
 
 --------------------------------------------------------------------------------

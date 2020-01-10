@@ -32,9 +32,9 @@
 #' for categorical variables with any expected cell count <5.
 #' A custom test function can be added for all or some variables. See below for
 #' an example.
-#' @param group Column name of an ID or grouping variable. The column can be
-#' used calculate p-values with correlated data (e.g. when the test argument
-#' is `"lme4"`). Default is `NULL`.  If specified,
+#' @param group Column name (unquoted or quoted) of an ID or grouping variable.
+#' The column can be used to calculate p-values with correlated data (e.g. when
+#' the test argument is `"lme4"`). Default is `NULL`.  If specified,
 #' the row associated with this variable is omitted from the summary table.
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
@@ -76,7 +76,21 @@
 #' \if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
-                  group = NULL, include = NULL, exclude = NULL) {
+                  group = NULL, include = everything(), exclude = NULL) {
+
+  # DEPRECATION notes ----------------------------------------------------------
+  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
+    lifecycle::deprecate_warn(
+      "1.2.5",
+      "gtsummary::add_p(exclude = )",
+      "add_p(include = )",
+      details = paste0(
+        "The `include` argument accepts quoted and unquoted expressions similar\n",
+        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
+        "For example, `include = -c(age, stage)`"
+      )
+    )
+  }
 
   # converting bare arguments to string ----------------------------------------
   group <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(group),
@@ -144,7 +158,6 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   }
 
   # Getting p-values only for included variables
-  if (is.null(include)) include <- x$table_body$variable %>% unique()
   include <- include %>% setdiff(exclude)
 
 

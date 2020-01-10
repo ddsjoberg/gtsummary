@@ -32,17 +32,18 @@
 #' @param exponentiate Logical indicating whether to exponentiate the
 #' coefficient estimates. Default is `FALSE`.
 #' @param label List of formulas specifying variables labels,
-#' e.g. `list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")`
-#' @param include Character vector or tidyselect function indicating variables to include from output.
-#' @param exclude Character vector or tidyselect function indicating variables to exclude from output.
+#' e.g. `list(age ~ "Age, yrs", stage ~ "Path T Stage")`
+#' @param include Variables to include in output. Input may be a vector of
+#' quoted variable names, unquoted variable names, or tidyselect select helper
+#' functions. Default is `everything()`.
 #' @param conf.level Must be strictly greater than 0 and less than 1.
 #' Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param intercept Logical argument indicating whether to include the intercept
 #' in the output.  Default is `FALSE`
 #' @param show_single_row By default categorical variables are printed on
 #' multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
-#' the regression coefficient on a single row, include the variable name here,
-#' e.g. `show_single_row = c("var1", "var2")`
+#' the regression coefficient on a single row, include the variable name(s)
+#' here--quoted and unquoted variable name accepted.
 #' @param estimate_fun Function to round and format coefficient estimates.
 #' Default is [style_sigfig] when the coefficients are not transformed, and
 #' [style_ratio] when the coefficients have been exponentiated.
@@ -52,10 +53,11 @@
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
-#' @param show_yesno deprecated
 #' @param tidy_fun Option to specify a particular tidier function if the
 #' model is not a [vetted model][tidy_vetted] or you need to implement a
 #' custom method. Default is `NULL`
+#' @param exclude DEPRECATED
+#' @param show_yesno DEPRECATED
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
@@ -94,15 +96,29 @@
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 
 tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
-                           include = NULL, exclude = NULL,
-                           show_single_row = NULL, conf.level = NULL, intercept = FALSE,
-                           estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL,
-                           tidy_fun = NULL) {
+                           include = everything(), show_single_row = NULL,
+                           conf.level = NULL, intercept = FALSE,
+                           estimate_fun = NULL, pvalue_fun = NULL,
+                           tidy_fun = NULL,
+                           show_yesno = NULL, exclude = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
     lifecycle::deprecate_stop(
       "1.2.2", "tbl_regression(show_yesno = )",
       "tbl_regression(show_single_row = )"
+    )
+  }
+
+  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
+    lifecycle::deprecate_warn(
+      "1.2.5",
+      "gtsummary::tbl_regression(exclude = )",
+      "tbl_regression(include = )",
+      details = paste0(
+        "The `include` argument accepts quoted and unquoted expressions similar\n",
+        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
+        "For example, `include = -c(age, stage)`"
+      )
     )
   }
 
@@ -159,21 +175,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   tidy_model <-
     tidy_wrap(x, exponentiate, conf.level, tidy_fun)
 
-  # converting to character list, using model frame and tidy terms as possible names
-  include <- var_input_to_string(
-    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    select_input = !!include
-  )
-  exclude <- var_input_to_string(
-    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    select_input = !!exclude
-  )
-  show_single_row <- var_input_to_string(
-    data = vctr_2_tibble(c(names(model_frame), tidy_model$term) %>% unique()),
-    select_input = !!show_single_row
-  )
-
-
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
   # rows for reference groups, and headers for
@@ -197,7 +198,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
                                  arg_name = "exclude", select_input = !!exclude)
 
-  if (is.null(include)) include <- table_body$variable %>% unique()
   if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
   include <- include %>% setdiff(exclude)
 

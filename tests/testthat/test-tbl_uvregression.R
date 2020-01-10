@@ -26,7 +26,7 @@ test_that("geeglm: no errors/warnings with standard use", {
         id = response,
         corstr = "exchangeable"
       ),
-      exclude = "response"
+      include = -response
     ), NA)
   expect_warning(
     tbl_uvregression(
@@ -37,7 +37,7 @@ test_that("geeglm: no errors/warnings with standard use", {
         id = response,
         corstr = "exchangeable"
       ),
-      exclude = "response"
+      include = -response
     ), NA)
 })
 
@@ -121,7 +121,6 @@ test_that("glmer: no errors/warnings with standard use", {
         label = "cyl" ~ "No. Cylinders",
         hide_n = TRUE,
         include = c("am", "gear", "hp", "cyl"),
-        exclude = c("hp")
       ), NA
   )
   expect_warning(
@@ -133,7 +132,6 @@ test_that("glmer: no errors/warnings with standard use", {
         formula = "{y} ~ {x} + (1 | gear)",
         method.args = list(family = binomial),
         include = c("am", "gear", "hp", "cyl"),
-        exclude = c("hp")
       ), NA
   )
 })

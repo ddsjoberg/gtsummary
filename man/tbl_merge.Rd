@@ -62,7 +62,7 @@ t4 <-
   )
 tbl_merge_ex2 <-
   tbl_merge(tbls = list(t3, t4)) \%>\%
-  as_gt(exclude = "tab_spanner") \%>\%
+  as_gt(include = -tab_spanner) \%>\%
   gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
 }
 }

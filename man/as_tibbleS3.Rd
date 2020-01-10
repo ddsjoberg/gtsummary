@@ -10,30 +10,31 @@
 \alias{as_tibble.tbl_survival}
 \title{Convert gtsummary object to tibble}
 \usage{
-\method{as_tibble}{tbl_summary}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
+\method{as_tibble}{tbl_summary}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
 
-\method{as_tibble}{tbl_regression}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
+\method{as_tibble}{tbl_regression}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
 
-\method{as_tibble}{tbl_uvregression}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
+\method{as_tibble}{tbl_uvregression}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
 
-\method{as_tibble}{tbl_merge}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
+\method{as_tibble}{tbl_merge}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
 
-\method{as_tibble}{tbl_stack}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
+\method{as_tibble}{tbl_stack}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
 
-\method{as_tibble}{tbl_survival}(x, include = NULL, exclude = NULL, col_labels = TRUE, ...)
+\method{as_tibble}{tbl_survival}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{include}{Character vector or tidyselect function naming kable commands to include in printing.
-Default is \code{NULL}, which utilizes all commands in \code{x$kable_calls}.}
-
-\item{exclude}{Character vector or tidyselect function naming kable commands to exclude in printing.
-Default is \code{NULL}.}
+\item{include}{Commands to include in output. Input may be a vector of
+quoted or unquoted names. tidyselect and gtsummary select helper
+functions are also accepted.
+Default is \code{everything()}, which includes all commands in \code{x$kable_calls}.}
 
 \item{col_labels}{Logical argument adding column labels to output tibble.
 Default is \code{TRUE}.}
+
+\item{exclude}{DEPRECATED}
 
 \item{...}{Not used}
 }

@@ -6,8 +6,8 @@
 \usage{
 \method{add_global_p}{tbl_regression}(
   x,
-  include = NULL,
-  exclude = NULL,
+  include = x$table_body$variable[x$table_body$var_type \%in\% c("categorical",
+    "interaction")],
   keep = FALSE,
   terms = NULL,
   ...
@@ -17,9 +17,10 @@
 \item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
-\item{include}{Character vector or tidyselect function indicating variables to include global p-values}
-
-\item{exclude}{Character vector or tidyselect function indicating variables to exclude global p-values}
+\item{include}{Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. tidyselect and gtsummary select helper
+functions are also accepted. Default is \code{NULL}, which adds global p-values
+for all categorical and interaction terms.}
 
 \item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
@@ -39,8 +40,8 @@ This function uses \link[car:Anova]{car::Anova} with argument
 \section{Note}{
 
 If a needed class of model is not supported by
-\link[car:Anova]{car::Anova}, please create an
-\href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
+\link[car:Anova]{car::Anova}, please create a
+\href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub Issue} to request support.
 }
 
 \section{Example Output}{

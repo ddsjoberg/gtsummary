@@ -31,8 +31,22 @@ test_that("add_p works well", {
     tbl_summary(mtcars, by = am) %>%
       add_p(test = list(
         vars(mpg) ~ "t.test",
-        vars(hp) ~ "kruskal.test"
+        disp ~ "aov",
+        cyl ~ "chisq.test.no.correct"
       )),
     NA
+  )
+})
+
+test_that("add_p defaults to clustered data with `group=` arg", {
+  expect_error(
+    add_p_lme4 <-
+      tbl_summary(trial[c("trt","death","age", "stage")], by = death) %>%
+      add_p(group = trt),
+    NA
+  )
+  expect_equal(
+    add_p_lme4$meta_data$stat_test,
+    c("lme4", "lme4")
   )
 })

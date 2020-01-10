@@ -22,15 +22,15 @@ tbl_summary(
 \arguments{
 \item{data}{A data frame}
 
-\item{by}{A column name in data.
+\item{by}{A column name (quoted or unquoted) in \code{data}.
 Summary statistics will be calculated separately for each level of the \code{by}
 variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
 are calculated using all observations.}
 
 \item{label}{List of formulas specifying variables labels,
-e.g. \code{list(vars(age) ~ "Age, yrs", vars(ptstage) ~ "Path T Stage")}.  If a
-variable's label is not specified here, the
-function will take the label attribute (\code{attr(data$age, "label")}).  If
+e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}.  If a
+variable's label is not specified here, the label attribute
+(\code{attr(data$age, "label")}) is used.  If
 attribute label is \code{NULL}, the variable name will be used.}
 
 \item{statistic}{List of formulas specifying types of summary statistics to
@@ -44,11 +44,11 @@ places to round continuous summary statistics. If not specified,
 When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
-to 1 decimal place, and the SD to 2 use \code{digits = list("age" ~ c(1, 2))}.}
+to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}.}
 
 \item{type}{List of formulas specifying variable types. Accepted values
 are \code{c("continuous", "categorical", "dichotomous")},
-e.g. \code{type = list(starts_with(age) ~ "continuous", "female" ~ "dichotomous")}.
+e.g. \code{type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")}.
 If type not specified for a variable, the function
 will default to an appropriate summary type.  See below for details.}
 
@@ -104,7 +104,7 @@ of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \c
 
 The statistic argument specifies the statistics presented in the table. The
 input is a list of formulas that specify the statistics to report. For example,
-\code{statistic = list("age" ~ "{mean} ({sd})")} would report the mean and
+\code{statistic = list(age ~ "{mean} ({sd})")} would report the mean and
 standard deviation for age; \code{statistic = list(all_continuous() ~ "{mean} ({sd})")}
 would report the mean and standard deviation for all continuous variables.
 A statistic name that appears between curly brackets
@@ -137,9 +137,9 @@ tbl_summary will do its best to guess the type.  Dichotomous variables
 are categorical variables that are displayed on a single row in the
 output table, rather than one row per level of the variable.
 Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
-and the TRUE, 1, and yes rows
-will be displayed.  Otherwise, the value to display must be specified in
-the \code{value} argument, e.g. \code{value = list("varname" ~ "level to show")}
+and the TRUE, 1, and yes rows are displayed.
+Otherwise, the value to display must be specified in
+the \code{value} argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 
 \section{Example Output}{

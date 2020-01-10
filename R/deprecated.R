@@ -72,14 +72,14 @@ tab_style_bold_levels <- function(...) {
 #' @rdname deprecated
 #' @export
 tbl_summary_ <- function(...) {
-  lifecycle::deprecate_warn("1.3.0", "gtsummary::tbl_summary_()", "tbl_summary()")
+  lifecycle::deprecate_warn("1.2.5", "gtsummary::tbl_summary_()", "tbl_summary()")
   tbl_summary(...)
 }
 
 #' @rdname deprecated
 #' @export
 add_p_ <- function(...) {
-  lifecycle::deprecate_warn("1.3.0", "gtsummary::add_p_()", "add_p()")
+  lifecycle::deprecate_warn("1.2.5", "gtsummary::add_p_()", "add_p()")
   add_p(...)
 }
 
