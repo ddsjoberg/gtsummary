@@ -94,7 +94,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9005</span>
       </span>
     </div>
 
@@ -173,8 +173,8 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
 <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(
   <span class='no'>x</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>table_body</span>$<span class='no'>variable</span>[<span class='no'>x</span>$<span class='no'>table_body</span>$<span class='no'>var_type</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"categorical"</span>,
+    <span class='st'>"interaction"</span>)],
   <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>
@@ -190,11 +190,10 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     </tr>
     <tr>
       <th>include</th>
-      <td><p>Character vector or tidyselect function indicating variables to include global p-values</p></td>
-    </tr>
-    <tr>
-      <th>exclude</th>
-      <td><p>Character vector or tidyselect function indicating variables to exclude global p-values</p></td>
+      <td><p>Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. tidyselect and gtsummary select helper
+functions are also accepted. Default is <code>NULL</code>, which adds global p-values
+for all categorical and interaction terms.</p></td>
     </tr>
     <tr>
       <th>keep</th>
@@ -220,8 +219,8 @@ Default is <code>FALSE</code></p></td>
     
 
 <p>If a needed class of model is not supported by
-<a href='https://rdrr.io/pkg/car/man/Anova.html'>car::Anova</a>, please create an
-<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.</p>
+<a href='https://rdrr.io/pkg/car/man/Anova.html'>car::Anova</a>, please create a
+<a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub Issue</a> to request support.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     

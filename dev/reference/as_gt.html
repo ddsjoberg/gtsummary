@@ -101,7 +101,7 @@ for detailed examples in the 'Advanced Customization' section." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9005</span>
       </span>
     </div>
 
@@ -184,7 +184,7 @@ or
 for detailed examples in the 'Advanced Customization' section.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_gt</span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>as_gt</span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/tidyselect/man/select_helpers.html'>everything</a></span>(), <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -196,17 +196,18 @@ for detailed examples in the 'Advanced Customization' section.</p>
     </tr>
     <tr>
       <th>include</th>
-      <td><p>Character vector or tidyselect function naming gt commands to include in printing.
-Default is <code>NULL</code>, which utilizes all commands in <code>x$gt_calls</code>.</p></td>
+      <td><p>Commands to include in output. Input may be a vector of
+quoted or unquoted names. tidyselect and gtsummary select helper
+functions are also accepted.
+Default is <code><a href='https://rdrr.io/pkg/tidyselect/man/select_helpers.html'>everything()</a></code>, which includes all commands in <code>x$gt_calls</code>.</p></td>
     </tr>
     <tr>
       <th>exclude</th>
-      <td><p>Character vector or tidyselect function naming gt commands to exclude in printing.
-Default is <code>NULL</code>.</p></td>
+      <td><p>DEPRECATED.</p></td>
     </tr>
     <tr>
       <th>omit</th>
-      <td><p>DEPRECATED. Argument is synonymous with <code>exclude</code>
+      <td><p>DEPRECATED.
 vector of named gt commands to omit. Default is <code>NULL</code></p></td>
     </tr>
     </table>
