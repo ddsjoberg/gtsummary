@@ -28,6 +28,8 @@ knitr::knit_exit()
 <!-- Start of vignette -->
 ## Introduction
 
+The `tbl_summary()` function calculates **descriptive statistics** for continuous, categorical, and dichotomous variables in **R**, and presents the results in a **beautiful, customizable summary table** perfect for creating tables ready for publication (for example, Table 1 or demographic tables).
+
 This vignette will walk a reader through the `tbl_summary()` function, and the various functions available to modify and make additions to an existing table summary object.
 
 To start, a quick note on the {magrittr} package's pipe function, `%>%`.  By default the pipe operator puts whatever is on the left hand side of `%>%` into the first argument of the function on the right hand side.  The pipe function can be used to make the code relating to `tbl_summary()` easier to use, but it is *not* required.  Here are a few examples of how `%>%` translates into typical R notation.
@@ -64,13 +66,15 @@ library(dplyr)
 
 - If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
 
-## Basic Usage
+## Example data set
 
-We'll be using the `trial` data set throughout this example.
-This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
-The outcome is a binary tumor response.  Each variable in the data frame has been assigned an attribute label (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the [labelled](http://larmarange.github.io/labelled/) package.
-These labels are displayed in the output table by default.
-A data frame without labels will print variable names.
+We'll be using the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set throughout this example.
+
+* This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
+The outcome is a binary tumor response.  
+
+* Each variable in the data frame has been assigned an **attribute label** (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the **[labelled](http://larmarange.github.io/labelled/)** package, which we highly recommend using. These labels are displayed in the {gtsummary} output table by default. *(Using {gtsummary} on a data frame without labels will simply print variable names, or there is an option to add labels later.)*
+
 
     trt      Chemotherapy Treatment
     age      Age, yrs
@@ -81,25 +85,44 @@ A data frame without labels will print variable names.
     death    Patient Died
     ttdeath  Years from Treatment to Death/Censor
 
+
+* Our example dataset has a mix of continuous, binary (0/1), and categorical variables, some with missing data (NA). 
+
 ```{r, message=FALSE}
-# printing trial data
-head(trial) %>% knitr::kable()
+head(trial)
 ```
 
-The default output from `tbl_summary()` is meant to be publication ready.  Let's start by creating a table of summary statistics from the `trial` data set.  The `tbl_summary()` can take, at minimum, a data set as the only input, and returns descriptive statistics for each column in the data frame.
+For brevity in the tutorial, let's keep a subset of the variables from the trial data set.
 
-For brevity, keeping a subset of the variables in the trial data set.
-
-```{r, message=FALSE}
+```{r}
 trial2 =
   trial %>%
   select(trt, marker, stage)
+```
 
+## Basic Usage
+
+The default output from `tbl_summary()` is meant to be **publication ready**. 
+
+Let's start by creating a table of summary statistics from the `trial` data set.  The `tbl_summary()` function can take, at minimum, a data frame as the only input, and returns descriptive statistics for each column in the data frame.
+
+
+```{r, message=FALSE}
 tbl_summary(trial2)
 ```
 
-This is a great table, but for this study data the summary statistics should be split by treatment group.
-To compare two or more groups, include `add_p()` with the function call.
+Note the sensible defaults with this basic usage (that can be customized later):
+
+* *Variable types are automatically detected so that appropriate descriptive statistics are calculated.*
+
+* *Label attributes from the dataset are automatically printed.*
+
+* *Missing values are listed as "Unknown" in the table.*
+
+* *Variable levels are indented and footnotes are added if printed using [{gt}](https://gt.rstudio.com/). (more on print engine options [here](http://www.danieldsjoberg.com/gtsummary/articles/global_options.html#printing))*
+
+This is a great basic table, but for this study data the summary statistics should be split by treatment group, which can be done by using the `by = ` argument.
+To compare two or more groups, include [`add_p()`](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html) with the function call, which detects variable type and uses an appropriate test.
 
 ```{r}
 tbl_summary(trial2, by = trt) %>% add_p()
@@ -114,7 +137,7 @@ There are four primary ways to customize the output of the summary table.
 1. Modify summary table appearance with the {gtsummary} functions
 1. Modify table appearance with {gt} package functions
 
-### Modifying function arguments
+### Modifying `tbl_summary()` function arguments
 
 The `tbl_summary()` function includes many input options for modifying the appearance.
 
@@ -126,7 +149,7 @@ The `tbl_summary()` function includes many input options for modifying the appea
     sort        change the sorting of categorical levels by frequency
     percent     print column, row, or cell percentages
 
-### Functions to add information
+### {gtsummary} functions to add information
 
 The {gtsummary} package has built-in functions for adding to results from `tbl_summary()`.  The following functions add columns and/or information to the summary table.
 
@@ -179,6 +202,7 @@ The code below calculates the standard table with summary statistics split by tr
 trial2 %>%
   # build base summary table
   tbl_summary(
+    # split table by treatment variable
     by = trt,
     # change variable labels
     label = list(marker ~ "Marker, ng/mL",
@@ -216,7 +240,7 @@ The set of select helper function includes the functions in the {tidyselect} pac
 
 1. Functions to select groups of variables based on their display type in `tbl_summary()`  
 
-1. List variables in a vector, e.g. `"age"` or `c("age", "stage")`
+1. List variables in a vector, e.g. `age`, `"age"` or `c("age", "stage")`. Variables can be quoted or unquoted.
 
 | {tidyselect}                                                                                                                 | attribute                                                                                            | summary type                                                 | character vector             |
 |------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|------------------------------|
@@ -244,12 +268,12 @@ trial %>%
 
 ## Report Results Inline {#inline_text}
 
-Reproducible reports are an import part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
+Reproducible reports are an important part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with [`inline_text()`](http://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html).
 
 First create a basic summary table.
 
 ```{r}
-tab1 = tbl_summary(trial2, by = trt)
+tab1 <- tbl_summary(trial2, by = trt)
 tab1
 ```
 

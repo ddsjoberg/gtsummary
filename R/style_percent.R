@@ -5,6 +5,8 @@
 #' Default is `FALSE`.
 #' @export
 #' @return A character vector of styled percentages
+#' @family style tools
+#' @seealso See Table Gallery \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{vignette} for example
 #' @author Daniel D. Sjoberg
 #' @examples
 #' percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
