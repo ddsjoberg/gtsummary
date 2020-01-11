@@ -1,3 +1,18 @@
+#' gt package git commit SHA
+#'
+#' This is the git commit SHA for the gt package associated with the current
+#' release of the gtsummary package. Because the gt package is currently under
+#' development, breaking changes are more likely to be introduced. This git
+#' commit SHA references a version of the gt package compatible with the
+#' current release of gtsummary. Use the SHA to install the appropriate version
+#' of the gt package tested for compatibility with gtsummary.
+#' @examples
+#' gtsummary::gt_sha
+#'
+#' # install gt version compatible with gtsummary release
+#' # remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
+"gt_sha"
+
 #' Results from a simulated study of two chemotherapy agents: Drug A and Drug B
 #'
 #' A dataset containing the baseline characteristics of 200 patients

@@ -56,9 +56,14 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
 
   # calculate expected counts
   min_exp <-
-    expand.grid(table(data[[var]]), table(data[[by_var]])) %>%
-    mutate(exp = .data$Var1 * .data$Var2 /
-      sum(table(data[[var]], data[[by_var]]))) %>%
+    expand.grid(
+      table(data[[var]]) / sum(!is.na(data[[var]])),
+      table(data[[by_var]]) / sum(!is.na(data[[by_var]]))
+    ) %>%
+    mutate(
+      exp = .data$Var1 * .data$Var2 *
+        sum(!is.na(data[[var]]) & !is.na(data[[by_var]]))
+    ) %>%
     pull(exp) %>%
     min()
 
