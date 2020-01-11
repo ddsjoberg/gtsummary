@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9006</span>
       </span>
     </div>
 
@@ -185,7 +185,8 @@
 </li>
 <li><p>After the input updates in <a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>, the <code>exclude=</code> argument appearing in <code><a href="../reference/add_p.html">add_p()</a></code>, <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>, <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> was redundant. The <code>exclude=</code> argument is now deprecated (<a href='https://github.com/ddsjoberg/gtsummary/issues/331'>#331</a>)</p></li>
 <li><p>New <code>pattern=</code> argument in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code>. Previously, we could only grab the entire cell from a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with <code><a href="../reference/inline_text.html">inline_text()</a></code>, and now we can get any single statistic reported (<a href='https://github.com/ddsjoberg/gtsummary/issues/254'>#254</a>)</p></li>
-<li><p>Cubic spline terms are now accurately matched to a variable name/term (<a href='https://github.com/ddsjoberg/gtsummary/issues/312'>#312</a>)</p></li>
+<li><p>For each release of gtsummary, we now can make reference to the version of gt our release coincides with. The commit SHA for gt is now saved in an object called <code>gt_sha</code>, and the version of gt can be installed with <code><a href="https://rdrr.io/pkg/remotes/man/install_github.html">remotes::install_github("rstudio/gt", ref = gt_sha)</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/329'>#329</a>)</p></li>
+<li><p>Cubic spline terms are now accurately matched to a variable name/term <a href='https://github.com/ddsjoberg/gtsummary/issues/312'>#312</a></p></li>
 <li><p>Improved error messaging in <code>tidyselect_to_list()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/300'>#300</a>)</p></li>
 <li><p>Functions <code><a href="../reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="../reference/deprecated.html">add_p_()</a></code> have been deprecated because the <code>by=</code> and <code>group=</code> arguments now accept strings (<a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>)</p></li>
 <li><p>Bug fix when non-standard evaluation arguments were passed in <code>method.args=</code> argument of <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/322'>#322</a>)</p></li>
