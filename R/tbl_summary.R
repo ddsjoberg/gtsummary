@@ -6,18 +6,18 @@
 #' for detailed examples.
 #'
 #' @param data A data frame
-#' @param by A column name in data.
+#' @param by A column name (quoted or unquoted) in `data`.
 #' Summary statistics will be calculated separately for each level of the `by`
 #' variable (e.g. `by = trt`). If `NULL`, summary statistics
 #' are calculated using all observations.
 #' @param label List of formulas specifying variables labels,
-#' e.g. `list(vars(age) ~ "Age, yrs", vars(ptstage) ~ "Path T Stage")`.  If a
-#' variable's label is not specified here, the
-#' function will take the label attribute (`attr(data$age, "label")`).  If
+#' e.g. `list(age ~ "Age, yrs", stage ~ "Path T Stage")`.  If a
+#' variable's label is not specified here, the label attribute
+#' (`attr(data$age, "label")`) is used.  If
 #' attribute label is `NULL`, the variable name will be used.
 #' @param type List of formulas specifying variable types. Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
-#' e.g. `type = list(starts_with(age) ~ "continuous", "female" ~ "dichotomous")`.
+#' e.g. `type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")`.
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type.  See below for details.
 #' @param value List of formulas specifying the value to display for dichotomous
@@ -32,7 +32,7 @@
 #' When multiple statistics are displayed for a single variable, supply a vector
 #' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
-#' to 1 decimal place, and the SD to 2 use `digits = list("age" ~ c(1, 2))`.
+#' to 1 decimal place, and the SD to 2 use `digits = list(age ~ c(1, 2))`.
 #' @param missing Indicates whether to include counts of `NA` values in the table.
 #' Allowed values are `"no"` (never display NA values),
 #' `"ifany"` (only display if any NA values), and `"always"`
@@ -66,7 +66,7 @@
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
 #' input is a list of formulas that specify the statistics to report. For example,
-#' `statistic = list("age" ~ "{mean} ({sd})")` would report the mean and
+#' `statistic = list(age ~ "{mean} ({sd})")` would report the mean and
 #' standard deviation for age; `statistic = list(all_continuous() ~ "{mean} ({sd})")`
 #' would report the mean and standard deviation for all continuous variables.
 #'  A statistic name that appears between curly brackets
@@ -97,9 +97,9 @@
 #' are categorical variables that are displayed on a single row in the
 #' output table, rather than one row per level of the variable.
 #' Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
-#' and the TRUE, 1, and yes rows
-#' will be displayed.  Otherwise, the value to display must be specified in
-#' the `value` argument, e.g. `value = list("varname" ~ "level to show")`
+#' and the TRUE, 1, and yes rows are displayed.
+#' Otherwise, the value to display must be specified in
+#' the `value` argument, e.g. `value = list(varname ~ "level to show")`
 #' @export
 #' @return A `tbl_summary` object
 #' @family tbl_summary tools

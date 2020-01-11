@@ -56,7 +56,7 @@ library(dplyr)
 
 ```{r, eval=FALSE}
 install.packages("gtsummary")
-remotes::install_github("rstudio/gt")
+remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
 
 library(gtsummary)
 library(dplyr)
@@ -302,7 +302,7 @@ After the `as_gt()` function is run, additional formatting may be added to the t
 
 ```{r as_gt2, eval=FALSE}
 tbl_summary(trial2, by = trt) %>%
-  as_gt(exclude = "tab_footnote") %>%
+  as_gt(include = -tab_footnote) %>%
   gt::tab_spanner(label = gt::md("**Treatment Group**"),
                   columns = gt::starts_with("stat_"))
 ```
@@ -311,7 +311,7 @@ tbl_summary(trial2, by = trt) %>%
 # this code chunk only works if gt is installed
 if (requireNamespace("gt", quietly = TRUE)) {
   tbl_summary(trial2, by = trt) %>%
-    as_gt(exclude = "tab_footnote") %>%
+    as_gt(include = -tab_footnote) %>%
     gt::tab_spanner(label = gt::md("**Treatment Group**"),
                     columns = gt::starts_with("stat_"))
 }

@@ -25,11 +25,6 @@ assign_test <- function(data, var, var_summary_type, by_var, test, group) {
 }
 
 assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
-  # if the 'by' variable is null, no tests will be performed
-  if (is.null(by_var)) {
-    return(NA_character_)
-  }
-
   # if user specifed test to be performed, do that test.
   if (!is.null(test[[var]])) {
     return(test[[var]])
