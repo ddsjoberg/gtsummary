@@ -58,7 +58,7 @@ tables. You can install {gtsummary} and {gt} with the following code.
     
     ``` r
     install.packages("remotes")
-    remotes::install_github("rstudio/gt")
+    remotes::install_github("rstudio/gt", gtsummary::gt_sha)
     ```
 
 Install the development version of {gtsummary} with:
@@ -143,5 +143,6 @@ thank you to all contributors\!
 [@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
-[@sammo3182](https://github.com/sammo3182), and
+[@sammo3182](https://github.com/sammo3182),
+[@slobaugh](https://github.com/slobaugh), and
 [@zabore](https://github.com/zabore)
