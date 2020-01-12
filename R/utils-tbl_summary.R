@@ -189,16 +189,11 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
         ~ "dichotomous",
 
         # factors and characters are categorical
-        .y %in% c("factor", "character") ~
-          "categorical",
+        .y %in% c("factor", "character") ~ "categorical",
 
         # numeric variables with fewer than 10 levels will be categorical
-        .y %in% c("integer", "numeric") & length(unique(na.omit(data[[.x]]))) < 10
+        .y %in% c("integer", "numeric", "difftime") & length(unique(na.omit(data[[.x]]))) < 10
         ~ "categorical",
-
-        # difftime are continuous
-        .y %in% "difftime" ~
-          "continuous",
 
         # everything else is assigned to continuous
         TRUE ~ "continuous"
