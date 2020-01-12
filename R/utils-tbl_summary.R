@@ -11,9 +11,7 @@
 #' @noRd
 #' @author Daniel D. Sjoberg
 
-assign_class <- function(data, variable) {
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer")
-
+assign_class <- function(data, variable, classes_expected) {
   # extracing the base R class
   classes_return <-
     map(
@@ -197,6 +195,10 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
         # numeric variables with fewer than 10 levels will be categorical
         .y %in% c("integer", "numeric") & length(unique(na.omit(data[[.x]]))) < 10
         ~ "categorical",
+
+        # difftime are continuous
+        .y %in% "difftime" ~
+          "continuous",
 
         # everything else is assigned to continuous
         TRUE ~ "continuous"
@@ -404,6 +406,11 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   # cannot be empty data frame
   if (nrow(data) == 0L) {
     stop("Expecting 'data' to have at least 1 row.", call. = FALSE)
+  }
+
+  # must have at least one column
+  if (ncol(data) == 0L) {
+    stop("Expecting 'data' to have at least 1 column", call. = FALSE)
   }
 
   # by -------------------------------------------------------------------------

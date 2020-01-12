@@ -261,7 +261,20 @@ test_that("tbl_summary-all_categorical() use with `type=`", {
   expect_true(
     !"dichotomous" %in%
       (tbl_summary(trial, type = all_dichotomous() ~ "categorical") %>%
-      purrr::pluck("meta_data") %>%
-      dplyr::pull(summary_type))
+         purrr::pluck("meta_data") %>%
+         dplyr::pull(summary_type))
+  )
+})
+
+
+test_that("tbl_summary-difftime does not cause error", {
+
+  expect_error(
+    gt::sp500 %>%
+      dplyr::mutate(
+        date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
+      ) %>%
+      tbl_summary(),
+    NA
   )
 })
