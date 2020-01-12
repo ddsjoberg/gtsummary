@@ -188,19 +188,17 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs <- as.list(environment())
 
   # removing variables with unsupported variable types from data ---------------
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer")
+  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
   var_to_remove <-
     map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
     discard(. == TRUE) %>%
     names()
-  data <- data %>% dplyr::select(-var_to_remove)
+  data <- dplyr::select(data, -var_to_remove)
   if (length(var_to_remove) > 0) {
-    var_to_remove_quoted <- paste0("'", var_to_remove, "'")
-    classes_expected_quoted <- paste0("'", classes_expected, "'")
     message(glue(
-      "Column(s) {glue_collapse(var_to_remove_quoted, sep = ', ', last = ', and ')} ",
-      "omitted from output. ",
-      "Expecting class {glue_collapse(classes_expected_quoted, sep = ', ', last = ', or ')}."
+      "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",
+      "omitted from output.\n",
+      "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
     ))
   }
 
@@ -217,7 +215,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   meta_data <- tibble(
     variable = names(data),
     # assigning class, if entire var is NA, then assigning class NA
-    class = assign_class(data, .data$variable),
+    class = assign_class(data, .data$variable, classes_expected),
     # assigning our best guess of the type, the final type is assigned below
     # we make a guess first, so users may use the gtsummary tidyselect functions for type
     summary_type = assign_summary_type(

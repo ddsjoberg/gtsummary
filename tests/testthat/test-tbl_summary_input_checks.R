@@ -41,4 +41,8 @@ test_that("input check", {
     tbl_summary(trial, sort = TRUE),
     "*"
   )
+  expect_error(
+    tbl_summary(trial %>% select(-everything())),
+    "*"
+  )
 })
