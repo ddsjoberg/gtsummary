@@ -270,8 +270,9 @@ test_that("tbl_summary-all_categorical() use with `type=`", {
 test_that("tbl_summary-difftime does not cause error", {
 
   expect_error(
-    gt::sp500 %>%
+    dplyr::storms %>%
       dplyr::mutate(
+        date = ISOdate(year, month, day),
         date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
       ) %>%
       tbl_summary(),
