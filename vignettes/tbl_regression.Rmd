@@ -1,6 +1,9 @@
 ---
 title: "Tutorial: tbl_regression"
+<<<<<<< HEAD
 author: "Daniel D. Sjoberg"
+=======
+>>>>>>> pr/25
 date: "Last Updated: January 13, 2020"
 output: rmarkdown::html_vignette
 vignette: >
@@ -53,7 +56,7 @@ library(dplyr)
 
 ```{r, eval=FALSE}
 install.packages("gtsummary")
-remotes::install_github("rstudio/gt")
+remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
 
 library(gtsummary)
 library(dplyr)
@@ -266,14 +269,14 @@ If the user does not want a specific {gt} function to run, any {gt} call can be 
 
 ```{r as_gt2, eval=FALSE}
 tbl_regression(m1, exponentiate = TRUE) %>%
-  as_gt(exclude = "tab_footnote")
+  as_gt(include = -tab_footnote)
 ```
 
 ```{r as_gt1, echo=FALSE}
 # this code chunk only works if gt is installed
 if (requireNamespace("gt", quietly = TRUE)) {
   tbl_regression(m1, exponentiate = TRUE) %>%
-    as_gt(exclude = "tab_footnote")
+    as_gt(include = -tab_footnote)
 }
 ```
 

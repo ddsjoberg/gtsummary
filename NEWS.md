@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* `tbl_summary()` will now summarize columns of class `difftime` (#343)
+
+* The data summary function `add_p()` uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large datasets. (#341) 
+
 * In the regression modeling functions `tbl_regression()` and `tbl_uvregression()`, the users are presented an informative error message when the tidier fails (e.g. `broom::tidy()`) alerting them to the location of the error so they may address the issue (#337, #338)
 
 * Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. #250
@@ -18,14 +22,17 @@
     
     purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))
     ```
+* After the input updates in #250, the `exclude=` argument appearing in `add_p()`, `tbl_regression()`, `tbl_uvregression()`, `as_gt()`, `as_kable()`, and `as_tibble()` was redundant.  The `exclude=` argument is now deprecated (#331)
 
-* New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported #254
+* New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported (#254)
+
+* For each release of gtsummary, we now can make reference to the version of gt our release coincides with. The commit SHA for gt is now saved in an object called `gt_sha`, and the version of gt can be installed with `remotes::install_github("rstudio/gt", ref = gt_sha)` (#329)
 
 * Cubic spline terms are now accurately matched to a variable name/term #312
 
-* Improved error messaging in `tidyselect_to_list()` #300
+* Improved error messaging in `tidyselect_to_list()` (#300)
 
-* Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings #250
+* Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings (#250)
 
 * Bug fix when non-standard evaluation arguments were passed in `method.args=` argument of `tbl_uvregression()` (#322)
 

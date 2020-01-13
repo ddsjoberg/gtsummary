@@ -19,8 +19,8 @@ Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 \section{Note}{
 
 If a needed class of model is not supported by
-\link[car:Anova]{car::Anova}, please create an
-\href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
+\link[car:Anova]{car::Anova}, please create a
+\href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub Issue} to request support.
 }
 
 \seealso{
