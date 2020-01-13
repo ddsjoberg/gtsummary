@@ -75,32 +75,13 @@ The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ``` r
 library(gtsummary)
-# make dataset with a few variables to summarize
-trial2 <- trial %>% dplyr::select(trt, age, grade, response)
-
-# summarize the data with our package
-t1 <- tbl_summary(trial2)
+t1 <-
+  tbl_summary(
+    data = trial[c("trt", "age", "grade", "response")],
+    by = trt
+  ) %>%
+  add_p() 
 ```
-
-<img src="man/figures/README-tbl_summary_print_simple-1.png" width="30%" />
-
-There are many customization options to add information (like comparing
-groups) and format results.
-
-``` r
-t2 <- tbl_summary(
-  trial2,
-  by = trt, # split table by group
-  missing = "no" # don't list missing data separately
-) %>%
-  # add information
-  add_p() %>% # test if there's difference between groups
-  add_n() %>% # add number without missing data per variable
-  # format results
-  bold_labels()
-```
-
-<img src="man/figures/README-tbl_summary_print_extra-1.png" width="60%" />
 
 <img src="man/figures/README-tbl_summary_print-1.png" width="66%">
 
@@ -108,33 +89,16 @@ t2 <- tbl_summary(
 
 ``` r
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
-
-t3 <- tbl_regression(mod1, exponentiate = TRUE)
+t2 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-<img src="man/figures/README-tbl_regression_print-1a.png" width="40%" />
+<img src="man/figures/README-tbl_regression_print-1.png" width="50%">
 
 ### Side-by-side Regression Models
 
 Side-by-side regression model results from `tbl_merge()`
 
-``` r
-library(survival)
-
-# build survival model table
-t4 <-
-  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
-  tbl_regression(exponentiate = TRUE)
-
-# merge tables 
-tbl_merge_ex1 <-
-  tbl_merge(
-    tbls = list(t3, t4),
-    tab_spanner = c("**Tumor Response**", "**Time to Death**")
-  )
-```
-
-<img src="man/figures/README-tbl_merge_ex1.png" width="60%" />
+<img src="man/figures/tbl_merge_ex1.png" width="66%">
 
 Review even more output options in the [table
 gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
