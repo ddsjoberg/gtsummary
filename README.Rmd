@@ -24,11 +24,11 @@ knitr::opts_chunk$set(
 
 ## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
 
-The {gtsummary} package provides an elegant, flexible, concise way to create publication-ready and reproducible analytical and summary tables using the **R** programming language.  The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities to present results.
+The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the **R** programming language.  The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.
 
-* [Summarize **data frames or tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) easily. Perfect for creating a **Table 1** in **R**, comparing group demographics, and more. Detects continuous, categorical, and binary variables, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.
+* [Summarize **data frames or tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) easily. Perfect for creating a **Table 1** in **R**, comparing group **demographics**, and more. Automatically detects continuous, categorical, and binary variables, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.
 
-* [Summarize **regression models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). 
+* [Summarize **regression models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) in R and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard Ratio). 
 
 * [**Customize gtsummary tables**](http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions) using a growing list of formatting/styling functions. **[Bold](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** labels, **[italicize](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** levels, **[add p-value](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html)** to summary tables, **[style](http://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)** the statistics however you choose, **[merge](http://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)** or **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)** tables to present results side by side... there are so many possibilities to reproducibly create the table of your dreams! 
 
@@ -43,7 +43,7 @@ Check out the examples below, review the [vignettes](http://www.danieldsjoberg.c
 
 ## Installation
 
-The {gtsummary} package was written as a companion to the {gt} package from RStudio, and it is recommended to install both {gt} and {gtsummary}.  The {gt} package is not automatically installed. If {gt} is not installed, `knitr::kable()` will be used to produce the summary tables.  You can install {gtsummary} and {gt} with the following code.  
+The {gtsummary} package was written as a companion to the [{gt}](https://gt.rstudio.com/) package from RStudio, and it is recommended to install both {gt} and {gtsummary}.  The {gt} package is not automatically installed. If {gt} is not installed, `knitr::kable()` will be used to produce the summary tables.  You can install {gtsummary} and {gt} with the following code.  
 
 1. Install {gtsummary}
 
@@ -66,9 +66,11 @@ remotes::install_github("ddsjoberg/gtsummary")
 
 ## Examples
 
-The {gtsummary} vignettes/tutorials contain detailed examples.  
+The {gtsummary} [vignettes/tutorials](http://www.danieldsjoberg.com/gtsummary/articles/) contain detailed examples.  
 
 ### Summary Table
+
+Use [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) to summarize a data frame. 
 
 ```{r t1, include = TRUE}
 library(gtsummary)
@@ -77,6 +79,9 @@ trial2 <- trial %>% dplyr::select(trt, age, grade, response)
 
 # summarize the data with our package
 t1 <- tbl_summary(trial2)
+```
+```{r eval = FALSE}
+t1
 ```
 
 ```{r tbl_summary_print_simple, include = FALSE}
@@ -94,7 +99,7 @@ if (pkgdown::in_pkgdown()) {
 } 
 ```
 
-There are many customization options to add information (like comparing groups) and format results. 
+There are many **customization options** to **add information** (like comparing groups) and **format results**(like bold labels) in your table. See the [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
 
 ```{r t2, include = TRUE}
 t2 <- tbl_summary(
@@ -102,12 +107,13 @@ t2 <- tbl_summary(
   by = trt, # split table by group
   missing = "no" # don't list missing data separately
 ) %>%
-  # add information
+  add_n() %>% # add column with total number of non-missing observations
   add_p() %>% # test if there's difference between groups
-  add_n() %>% # add number without missing data per variable
-  # format results
-  bold_labels()
+  bold_labels() 
 
+```
+```{r eval = FALSE}
+t2
 ```
 
 ```{r tbl_summary_print_extra, include = FALSE}
@@ -125,10 +131,15 @@ if (pkgdown::in_pkgdown()) {
 
 ### Regression Models
 
+Use [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) to easily and beautifully display regression model results in a table. See the [tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) for customization options.
+
 ```{r regress, include = TRUE}
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
 t3 <- tbl_regression(mod1, exponentiate = TRUE)
+```
+```{r eval = FALSE}
+t3
 ```
 
 ```{r tbl_regression_printa, include = FALSE}
@@ -142,14 +153,13 @@ if (pkgdown::in_pkgdown()) {
 } else {
   knitr::include_graphics("man/figures/README-tbl_regression_printa-1.png")
 } 
-
 ```
 
 
 
 ### Side-by-side Regression Models
 
-Side-by-side regression model results from `tbl_merge()`
+You can also present side-by-side regression model results using `tbl_merge()`
 
 ```{r}
 library(survival)
@@ -166,6 +176,9 @@ tbl_merge_ex1 <-
     tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
 
+```
+```{r eval = FALSE}
+tbl_merge_ex1
 ```
 
 ```{r tbl_merge_ex1, include = FALSE}
