@@ -18,27 +18,60 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 
 ## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
 
-The {gtsummary} package provides an elegant and flexible way to create
-publication-ready and reproducible analytical tables. The tables
-summarize data sets, regression models, and more. The code is concise
-and the tables are highly customizable. Data frames can be summarized
-with any function, e.g. mean(), median(), even user-written functions.
-Regression models are summarized and include the reference rows for
-categorical variables. Common regression models, such as logistic
-regression and Cox proportional hazards regression, are automatically
-identified and the tables are pre-filled with appropriate column headers
-(i.e. Odds Ratio, and Hazard Ratio). The package uses
-[{broom}](https://broom.tidyverse.org/) to perform initial tidying of
-the regression models, which means there is broad support for many types
-of regression models.
+The {gtsummary} package provides an elegant, flexible, concise way to
+create publication-ready and reproducible analytical and summary tables
+using the **R** programming language. The {gtsummary} package summarizes
+data sets, regression models, and more, using sensible defaults with
+highly customizable capabilities to present results.
 
-{gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
-each table to be tailored to your preferences. If you label your data
-(which I recommend\!), the labels will be used in the table output. With
-{gtsummary} and [{labelled}](http://larmarange.github.io/labelled/)
-data, you get beautifully formatted, ready-to-share tables in a single
-line of code\! Check out the examples below, and review the vignettes
-for a detailed exploration of the output options.
+  - [Summarize **data frames or
+    tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
+    easily. Perfect for creating a **Table 1** in **R**, comparing group
+    demographics, and more. Detects continuous, categorical, and binary
+    variables, calculates appropriate descriptive statistics, and also
+    includes amount of missingness in each variable.
+
+  - [Summarize **regression
+    models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
+    and include reference rows for categorical variables. Common
+    regression models, such as logistic regression and Cox proportional
+    hazards regression, are automatically identified and the tables are
+    pre-filled with appropriate column headers (i.e. Odds Ratio, and
+    Hazard Ratio).
+
+  - [**Customize gtsummary
+    tables**](http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions)
+    using a growing list of formatting/styling functions.
+    **[Bold](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+    labels,
+    **[italicize](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+    levels, **[add
+    p-value](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html)**
+    to summary tables,
+    **[style](http://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)**
+    the statistics however you choose,
+    **[merge](http://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)**
+    or
+    **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
+    tables to present results side by side… there are so many
+    possibilities to reproducibly create the table of your dreams\!
+
+  - **[Report statistics
+    inline](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text)**
+    from summary tables and regression summary tables in **Rmarkdown**.
+    Make your reports completely reproducible\!
+
+By leveraging [{broom}](https://broom.tidyverse.org/),
+[{gt}](https://gt.rstudio.com/), and
+[{labelled}](http://larmarange.github.io/labelled/) packages,
+{gtsummary} creates beautifully formatted, ready-to-share summary and
+result tables in a single line of R code\!
+
+Check out the examples below, review the
+[vignettes](http://www.danieldsjoberg.com/gtsummary/articles/) for a
+detailed exploration of the output options, and view the
+[gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html)
+for various customization examples.
 
 ## Installation
 
@@ -75,30 +108,64 @@ The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ``` r
 library(gtsummary)
-t1 <-
-  tbl_summary(
-    data = trial[c("trt", "age", "grade", "response")],
-    by = trt
-  ) %>%
-  add_p() 
+# make dataset with a few variables to summarize
+trial2 <- trial %>% dplyr::select(trt, age, grade, response)
+
+# summarize the data with our package
+t1 <- tbl_summary(trial2)
 ```
 
-<img src="man/figures/README-tbl_summary_print-1.png" width="66%">
+<img src="man/figures/README-tbl_summary_print_simple-1.png" width="30%" />
+
+There are many customization options to add information (like comparing
+groups) and format results.
+
+``` r
+t2 <- tbl_summary(
+  trial2,
+  by = trt, # split table by group
+  missing = "no" # don't list missing data separately
+) %>%
+  # add information
+  add_p() %>% # test if there's difference between groups
+  add_n() %>% # add number without missing data per variable
+  # format results
+  bold_labels()
+```
+
+<img src="man/figures/README-tbl_summary_print_extra-1.png" width="60%" />
 
 ### Regression Models
 
 ``` r
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
-t2 <- tbl_regression(mod1, exponentiate = TRUE)
+
+t3 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-<img src="man/figures/README-tbl_regression_print-1.png" width="50%">
+<img src="man/figures/README-tbl_regression_printa-1.png" width="40%" />
 
 ### Side-by-side Regression Models
 
 Side-by-side regression model results from `tbl_merge()`
 
-<img src="man/figures/tbl_merge_ex1.png" width="66%">
+``` r
+library(survival)
+
+# build survival model table
+t4 <-
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+  tbl_regression(exponentiate = TRUE)
+
+# merge tables 
+tbl_merge_ex1 <-
+  tbl_merge(
+    tbls = list(t3, t4),
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
+  )
+```
+
+<img src="man/figures/README-tbl_merge_ex1-1.png" width="60%" />
 
 Review even more output options in the [table
 gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
