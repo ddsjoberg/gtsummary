@@ -58,7 +58,7 @@ tables. You can install {gtsummary} and {gt} with the following code.
     
     ``` r
     install.packages("remotes")
-    remotes::install_github("rstudio/gt", gtsummary::gt_sha)
+    remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
     ```
 
 Install the development version of {gtsummary} with:
@@ -75,13 +75,32 @@ The {gtsummary} vignettes/tutorials contain detailed examples.
 
 ``` r
 library(gtsummary)
-t1 <-
-  tbl_summary(
-    data = trial[c("trt", "age", "grade", "response")],
-    by = trt
-  ) %>%
-  add_p() 
+# make dataset with a few variables to summarize
+trial2 <- trial %>% dplyr::select(trt, age, grade, response)
+
+# summarize the data with our package
+t1 <- tbl_summary(trial2)
 ```
+
+<img src="man/figures/README-tbl_summary_print_simple-1.png" width="30%" />
+
+There are many customization options to add information (like comparing
+groups) and format results.
+
+``` r
+t2 <- tbl_summary(
+  trial2,
+  by = trt, # split table by group
+  missing = "no" # don't list missing data separately
+) %>%
+  # add information
+  add_p() %>% # test if there's difference between groups
+  add_n() %>% # add number without missing data per variable
+  # format results
+  bold_labels()
+```
+
+<img src="man/figures/README-tbl_summary_print_extra-1.png" width="60%" />
 
 <img src="man/figures/README-tbl_summary_print-1.png" width="66%">
 
@@ -90,16 +109,32 @@ t1 <-
 ``` r
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
-t2 <- tbl_regression(mod1, exponentiate = TRUE)
+t3 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-<img src="man/figures/README-tbl_regression_print-1.png" width="50%">
+<img src="man/figures/README-tbl_regression_print-1a.png" width="40%" />
 
 ### Side-by-side Regression Models
 
 Side-by-side regression model results from `tbl_merge()`
 
-<img src="man/figures/tbl_merge_ex1.png" width="66%">
+``` r
+library(survival)
+
+# build survival model table
+t4 <-
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+  tbl_regression(exponentiate = TRUE)
+
+# merge tables 
+tbl_merge_ex1 <-
+  tbl_merge(
+    tbls = list(t3, t4),
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
+  )
+```
+
+<img src="man/figures/README-tbl_merge_ex1.png" width="60%" />
 
 Review even more output options in the [table
 gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
@@ -131,18 +166,4 @@ Code of
 Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms. A big
 thank you to all contributors\!  
-[@ablack3](https://github.com/ablack3),
-[@ahinton-mmc](https://github.com/ahinton-mmc),
-[@ddsjoberg](https://github.com/ddsjoberg),
-[@emilyvertosick](https://github.com/emilyvertosick),
-[@jeanmanguy](https://github.com/jeanmanguy),
-[@jennybc](https://github.com/jennybc),
-[@jflynn264](https://github.com/jflynn264),
-[@jwilliman](https://github.com/jwilliman),
-[@karissawhiting](https://github.com/karissawhiting),
-[@ltin1214](https://github.com/ltin1214),
-[@margarethannum](https://github.com/margarethannum),
-[@michaelcurry1123](https://github.com/michaelcurry1123),
-[@sammo3182](https://github.com/sammo3182),
-[@slobaugh](https://github.com/slobaugh), and
-[@zabore](https://github.com/zabore)
+[@margarethannum](https://github.com/margarethannum)
