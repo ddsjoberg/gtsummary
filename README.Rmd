@@ -72,16 +72,18 @@ The {gtsummary} [vignettes/tutorials](http://www.danieldsjoberg.com/gtsummary/ar
 
 Use [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) to summarize a data frame. 
 
+<img src = "man/figures/tbl_summary_demo3.gif" alt = "animated" width = "60%">
+
 ```{r t1, include = TRUE}
 library(gtsummary)
 # make dataset with a few variables to summarize
 trial2 <- trial %>% dplyr::select(trt, age, grade, response)
 
 # summarize the data with our package
-t1 <- tbl_summary(trial2)
+table1 <- tbl_summary(trial2)
 ```
 ```{r eval = FALSE}
-t1
+table1
 ```
 
 ```{r tbl_summary_print_simple, include = FALSE}
@@ -93,7 +95,7 @@ gt::gtsave(as_gt(t1), file = file.path(tempdir(), "temp.png"))
 ```{r out.width = "30%", echo = FALSE}
 # Have to do this workaround since the README needs markdown format for GitHub page but a different format for the website.
 if (pkgdown::in_pkgdown()) {
-  t1
+  table1
 } else {
   knitr::include_graphics("man/figures/README-tbl_summary_print_simple-1.png")
 } 
@@ -102,7 +104,7 @@ if (pkgdown::in_pkgdown()) {
 There are many **customization options** to **add information** (like comparing groups) and **format results**(like bold labels) in your table. See the [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
 
 ```{r t2, include = TRUE}
-t2 <- tbl_summary(
+table2 <- tbl_summary(
   trial2,
   by = trt, # split table by group
   missing = "no" # don't list missing data separately
@@ -113,17 +115,17 @@ t2 <- tbl_summary(
 
 ```
 ```{r eval = FALSE}
-t2
+table2
 ```
 
 ```{r tbl_summary_print_extra, include = FALSE}
-gt::gtsave(as_gt(t2), file = file.path(tempdir(), "temp.png"))
+gt::gtsave(as_gt(table2), file = file.path(tempdir(), "temp.png"))
 ```
 
 
 ```{r out.width = "60%", echo = FALSE}
 if (pkgdown::in_pkgdown()) {
-  t2
+  table2
 } else {
   knitr::include_graphics("man/figures/README-tbl_summary_print_extra-1.png")
 }
@@ -133,23 +135,26 @@ if (pkgdown::in_pkgdown()) {
 
 Use [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) to easily and beautifully display regression model results in a table. See the [tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) for customization options.
 
+<img src = "man/figures/tbl_regression_demo2.gif" alt = "animated" width = "60%">
+
+
 ```{r regress, include = TRUE}
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
-t3 <- tbl_regression(mod1, exponentiate = TRUE)
+t1 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 ```{r eval = FALSE}
-t3
+t1
 ```
 
 ```{r tbl_regression_printa, include = FALSE}
-gt::gtsave(as_gt(t3), file = file.path(tempdir(), "temp.png"))
+gt::gtsave(as_gt(t1), file = file.path(tempdir(), "temp.png"))
 ```
 
 
 ```{r out.width = "40%", echo = FALSE}
 if (pkgdown::in_pkgdown()) {
-  t3
+  t1
 } else {
   knitr::include_graphics("man/figures/README-tbl_regression_printa-1.png")
 } 
@@ -165,14 +170,14 @@ You can also present side-by-side regression model results using `tbl_merge()`
 library(survival)
 
 # build survival model table
-t4 <-
+t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
   tbl_regression(exponentiate = TRUE)
 
 # merge tables 
 tbl_merge_ex1 <-
   tbl_merge(
-    tbls = list(t3, t4),
+    tbls = list(t1, t2),
     tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
 

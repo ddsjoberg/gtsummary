@@ -114,6 +114,8 @@ Use
 [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 to summarize a data frame.
 
+<img src = "man/figures/tbl_summary_demo3.gif" alt = "animated" width = "60%">
+
 ``` r
 library(gtsummary)
 # make dataset with a few variables to summarize
@@ -160,6 +162,8 @@ to easily and beautifully display regression model results in a table.
 See the
 [tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
 for customization options.
+
+<img src = "man/figures/tbl_regression_demo2.gif" alt = "animated" width = "60%">
 
 ``` r
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
