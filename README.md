@@ -129,10 +129,11 @@ t1
 
 <img src="man/figures/README-tbl_summary_print_simple-1.png" width="30%" />
 
-There are many customization options to add information (like comparing
-groups) and format results (like bold labels). See the
+There are many **customization options** to **add information** (like
+comparing groups) and **format results**(like bold labels) in your
+table. See the
 [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
-tutorial for many more options.
+tutorial for many more options, or below for one example.
 
 ``` r
 t2 <- tbl_summary(
@@ -140,11 +141,9 @@ t2 <- tbl_summary(
   by = trt, # split table by group
   missing = "no" # don't list missing data separately
 ) %>%
-  # add information
-  add_p() %>% # test if there's difference between groups
   add_n() %>% # add column with total number of non-missing observations
-  # format results
-  bold_labels()
+  add_p() %>% # test if there's difference between groups
+  bold_labels() 
 ```
 
 ``` r
