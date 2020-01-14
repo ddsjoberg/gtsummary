@@ -104,10 +104,6 @@ remotes::install_github("ddsjoberg/gtsummary")
 
 ## Examples
 
-The {gtsummary}
-[vignettes/tutorials](http://www.danieldsjoberg.com/gtsummary/articles/)
-contain detailed examples.
-
 ### Summary Table
 
 Use
@@ -116,17 +112,19 @@ to summarize a data frame.
 
 <img src = "man/figures/tbl_summary_demo3.gif" alt = "animated" width = "60%">
 
+Example basic table:
+
 ``` r
 library(gtsummary)
 # make dataset with a few variables to summarize
 trial2 <- trial %>% dplyr::select(trt, age, grade, response)
 
 # summarize the data with our package
-t1 <- tbl_summary(trial2)
+table1 <- tbl_summary(trial2)
 ```
 
 ``` r
-t1
+table1
 ```
 
 <img src="man/figures/README-tbl_summary_print_simple-1.png" width="30%" />
@@ -138,7 +136,7 @@ table. See the
 tutorial for many more options, or below for one example.
 
 ``` r
-t2 <- tbl_summary(
+table2 <- tbl_summary(
   trial2,
   by = trt, # split table by group
   missing = "no" # don't list missing data separately
@@ -149,7 +147,7 @@ t2 <- tbl_summary(
 ```
 
 ``` r
-t2
+table2
 ```
 
 <img src="man/figures/README-tbl_summary_print_extra-1.png" width="60%" />
@@ -168,11 +166,11 @@ for customization options.
 ``` r
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
-t3 <- tbl_regression(mod1, exponentiate = TRUE)
+t1 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
 ``` r
-t3
+t1
 ```
 
 <img src="man/figures/README-tbl_regression_printa-1.png" width="40%" />
@@ -186,14 +184,14 @@ You can also present side-by-side regression model results using
 library(survival)
 
 # build survival model table
-t4 <-
+t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
   tbl_regression(exponentiate = TRUE)
 
 # merge tables 
 tbl_merge_ex1 <-
   tbl_merge(
-    tbls = list(t3, t4),
+    tbls = list(t1, t2),
     tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
 ```

@@ -66,15 +66,15 @@ remotes::install_github("ddsjoberg/gtsummary")
 
 ## Examples
 
-The {gtsummary} [vignettes/tutorials](http://www.danieldsjoberg.com/gtsummary/articles/) contain detailed examples.  
-
 ### Summary Table
 
 Use [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) to summarize a data frame. 
 
 <img src = "man/figures/tbl_summary_demo3.gif" alt = "animated" width = "60%">
 
-```{r t1, include = TRUE}
+Example basic table:
+
+```{r table1, include = TRUE}
 library(gtsummary)
 # make dataset with a few variables to summarize
 trial2 <- trial %>% dplyr::select(trt, age, grade, response)
@@ -88,7 +88,7 @@ table1
 
 ```{r tbl_summary_print_simple, include = FALSE}
 # Had to manually save images in temp file, not sure if better way.
-gt::gtsave(as_gt(t1), file = file.path(tempdir(), "temp.png"))
+gt::gtsave(as_gt(table1), file = file.path(tempdir(), "temp.png"))
 ```
 
 
@@ -103,7 +103,7 @@ if (pkgdown::in_pkgdown()) {
 
 There are many **customization options** to **add information** (like comparing groups) and **format results**(like bold labels) in your table. See the [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
 
-```{r t2, include = TRUE}
+```{r table2, include = TRUE}
 table2 <- tbl_summary(
   trial2,
   by = trt, # split table by group
