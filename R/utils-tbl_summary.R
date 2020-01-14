@@ -172,6 +172,14 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
         .y %in% c("factor") & setequal(attr(data[[.x]], "levels"), c("NO", "YES")) ~
           "dichotomous",
 
+        # character variables that are "No" and "Yes" only, will be dichotomous
+        .y %in% c("character") & setequal(na.omit(data[[.x]]), c("No", "Yes")) ~
+          "dichotomous",
+        .y %in% c("character") & setequal(na.omit(data[[.x]]), c("no", "yes")) ~
+          "dichotomous",
+        .y %in% c("character") & setequal(na.omit(data[[.x]]), c("NO", "YES")) ~
+          "dichotomous",
+
         # factors and characters are categorical (except when all missing)
         .y == "character" & nrow(data) == sum(is.na(data[[.x]])) ~ "dichotomous",
         .y %in% c("factor", "character") ~ "categorical",
