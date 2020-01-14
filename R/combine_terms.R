@@ -4,45 +4,61 @@
 #' with a single row in the output table.  The p-value is calculated using
 #' [stats::anova()].
 #'
-#' @param x a `tbl_regregression` object
+#' @param x a `tbl_regression` object
 #' @param formula_update formula update passed to the [stats::update].
 #' This updated formula is used to construct a reduced model, and is
 #' subsequently passed to [stats::anova()] to calculate the p-value for the
 #' group of removed terms.  See the [stats::update] help file for proper syntax.
 #' function's `formula.=` argument
 #' @param label Option string argument labeling the combined rows
+#' @param ... Additional arguments passed to [stats::anova]
 #'
 #' @return `tbl_regression` object
 #' @export
 #'
 #' @examples
-#'   # fit model with nonlinear terms for marker
-#'   nlmod1 <- lm(
-#'     age ~ marker + I(marker^2) + grade,
-#'     trial[c("age", "marker", "grade")] %>% na.omit() # keep complete cases only!
+#' # fit model with nonlinear terms for marker
+#' nlmod1 <- lm(
+#'   age ~ marker + I(marker^2) + grade,
+#'   trial[c("age", "marker", "grade")] %>% na.omit() # keep complete cases only!
+#' )
+#'
+#' combine_terms_ex1 <-
+#'   tbl_regression(nlmod1, label = grade ~ "Grade") %>%
+#'   # collapse non-linear terms to a single row in output using anova
+#'   combine_terms(
+#'     formula_update = . ~ . - marker - I(marker^2),
+#'     label = "Marker (non-linear terms)"
 #'   )
 #'
-#'   combine_terms_ex1 <-
-#'     tbl_regression(nlmod1, label = grade ~ "Grade") %>%
-#'     # collapse non-linear terms to a single row in output using anova
-#'     combine_terms(
-#'       formula_update = . ~ . - marker - I(marker^2),
-#'       label = "Marker (non-linear terms)"
-#'     )
+#' # Example with Cubic Splines
+#' library(Hmisc)
+#' mod2 <- lm(
+#'   age ~ rcspline.eval(marker, inclx = TRUE) + grade,
+#'   trial[c("age", "marker", "grade")] %>% na.omit() # keep complete cases only!
+#' )
 #'
-#'   # Example with Cubic Splines
-#'   library(Hmisc)
-#'   mod2 <- lm(
-#'     age ~ rcspline.eval(marker, inclx = TRUE) + grade,
-#'     trial[c("age", "marker", "grade")] %>% na.omit() # keep complete cases only!
+#' combine_terms_ex2 <-
+#'   tbl_regression(mod2, label = grade ~ "Grade") %>%
+#'   combine_terms(
+#'     formula_update = . ~ . -rcspline.eval(marker, inclx = TRUE),
+#'     label = "Marker (non-linear terms)"
 #'   )
 #'
-#'   combine_terms_ex2 <-
-#'     tbl_regression(mod2, label = grade ~ "Grade") %>%
-#'     combine_terms(
-#'       formula_update = . ~ . -rcspline.eval(marker, inclx = TRUE),
-#'       label = "Marker (non-linear terms)"
-#'     )
+#' # Logistic Regression Example, LRT p-value
+#' combine_terms_ex3 <-
+#'   glm(
+#'     response ~ marker + I(marker^2) + grade,
+#'     trial[c("response", "marker", "grade")] %>% na.omit(), # keep complete cases only!
+#'     family = binomial
+#'   ) %>%
+#'   tbl_regression(label = grade ~ "Grade", exponentiate = TRUE) %>%
+#'   # collapse non-linear terms to a single row in output using anova
+#'   combine_terms(
+#'     formula_update = . ~ . - marker - I(marker^2),
+#'     label = "Marker (non-linear terms)",
+#'     test = "LRT"
+#'   )
 #'
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -52,8 +68,12 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{combine_terms_ex2.png}{options: width=45\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{combine_terms_ex3.png}{options: width=45\%}}
 
-combine_terms <- function(x, formula_update, label = NULL) {
+combine_terms <- function(x, formula_update, label = NULL, ...) {
   # checking input -------------------------------------------------------------
   if (!methods::is(x, "tbl_regression")) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)
@@ -68,12 +88,8 @@ combine_terms <- function(x, formula_update, label = NULL) {
   # creating updated model object ----------------------------------------------
   new_model_obj <- stats::update(x$model_obj, formula. = formula_update)
   tryCatch({
-    anova_p <-
-      stats::anova(x$model_obj, new_model_obj) %>%
-      as_tibble() %>%
-      select(starts_with("Pr(>"),  starts_with("P(>")) %>%
-      slice(n()) %>%
-      pull()},
+    anova <- stats::anova(x$model_obj, new_model_obj, ...)
+    },
     error = function(e) {
       err_msg <-
         paste(
@@ -87,6 +103,22 @@ combine_terms <- function(x, formula_update, label = NULL) {
         )
       stop(err_msg, call. = FALSE)
     })
+  # extracting p-value from anova object ---------------------------------------
+  df_anova <- as_tibble(anova) %>%
+    select(starts_with("Pr(>"),  starts_with("P(>"))
+  # if not column was selected, print error
+  if (ncol(df_anova) == 0) {
+    stop(paste(
+      "The output from `anova()` did not contain a p-value.\n",
+      "A common source of this error is not specifying the `test=` argument.\n",
+      "For example, to get the LRT p-value for a logistic regression estimated with `glm()`,\n",
+      "include the argument `test = \"LRT\"` in the `combine_terms()` call."
+    ), call. = FALSE)
+  }
+
+  anova_p <- df_anova %>%
+    slice(n()) %>%
+    pull()
 
   # tbl'ing the new model object -----------------------------------------------
   # getting call from original tbl_regression call, and updating with new model object

@@ -4,10 +4,10 @@
 \alias{combine_terms}
 \title{Combine terms in a regression model}
 \usage{
-combine_terms(x, formula_update, label = NULL)
+combine_terms(x, formula_update, label = NULL, ...)
 }
 \arguments{
-\item{x}{a \code{tbl_regregression} object}
+\item{x}{a \code{tbl_regression} object}
 
 \item{formula_update}{formula update passed to the \link[stats:update]{stats::update}.
 This updated formula is used to construct a reduced model, and is
@@ -16,6 +16,8 @@ group of removed terms.  See the \link[stats:update]{stats::update} help file fo
 function's \verb{formula.=} argument}
 
 \item{label}{Option string argument labeling the combined rows}
+
+\item{...}{Additional arguments passed to \link[stats:anova]{stats::anova}}
 }
 \value{
 \code{tbl_regression} object
@@ -34,35 +36,54 @@ with a single row in the output table.  The p-value is calculated using
 \if{html}{Example 2}
 
 \if{html}{\figure{combine_terms_ex2.png}{options: width=45\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{combine_terms_ex3.png}{options: width=45\%}}
 }
 
 \examples{
-  # fit model with nonlinear terms for marker
-  nlmod1 <- lm(
-    age ~ marker + I(marker^2) + grade,
-    trial[c("age", "marker", "grade")] \%>\% na.omit() # keep complete cases only!
+# fit model with nonlinear terms for marker
+nlmod1 <- lm(
+  age ~ marker + I(marker^2) + grade,
+  trial[c("age", "marker", "grade")] \%>\% na.omit() # keep complete cases only!
+)
+
+combine_terms_ex1 <-
+  tbl_regression(nlmod1, label = grade ~ "Grade") \%>\%
+  # collapse non-linear terms to a single row in output using anova
+  combine_terms(
+    formula_update = . ~ . - marker - I(marker^2),
+    label = "Marker (non-linear terms)"
   )
 
-  combine_terms_ex1 <-
-    tbl_regression(nlmod1, label = grade ~ "Grade") \%>\%
-    # collapse non-linear terms to a single row in output using anova
-    combine_terms(
-      formula_update = . ~ . - marker - I(marker^2),
-      label = "Marker (non-linear terms)"
-    )
+# Example with Cubic Splines
+library(Hmisc)
+mod2 <- lm(
+  age ~ rcspline.eval(marker, inclx = TRUE) + grade,
+  trial[c("age", "marker", "grade")] \%>\% na.omit() # keep complete cases only!
+)
 
-  # Example with Cubic Splines
-  library(Hmisc)
-  mod2 <- lm(
-    age ~ rcspline.eval(marker, inclx = TRUE) + grade,
-    trial[c("age", "marker", "grade")] \%>\% na.omit() # keep complete cases only!
+combine_terms_ex2 <-
+  tbl_regression(mod2, label = grade ~ "Grade") \%>\%
+  combine_terms(
+    formula_update = . ~ . -rcspline.eval(marker, inclx = TRUE),
+    label = "Marker (non-linear terms)"
   )
 
-  combine_terms_ex2 <-
-    tbl_regression(mod2, label = grade ~ "Grade") \%>\%
-    combine_terms(
-      formula_update = . ~ . -rcspline.eval(marker, inclx = TRUE),
-      label = "Marker (non-linear terms)"
-    )
+# Logistic Regression Example, LRT p-value
+combine_terms_ex3 <-
+  glm(
+    response ~ marker + I(marker^2) + grade,
+    trial[c("response", "marker", "grade")] \%>\% na.omit(), # keep complete cases only!
+    family = binomial
+  ) \%>\%
+  tbl_regression(label = grade ~ "Grade", exponentiate = TRUE) \%>\%
+  # collapse non-linear terms to a single row in output using anova
+  combine_terms(
+    formula_update = . ~ . - marker - I(marker^2),
+    label = "Marker (non-linear terms)",
+    test = "LRT"
+  )
 
 }
