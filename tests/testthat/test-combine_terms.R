@@ -51,6 +51,27 @@ test_that("combine_terms works without error", {
     NA
   )
 
+  # Confirm logistic regression model works (test option must be specified)
+  expect_error(
+    glm(response ~ age + marker + sp2marker + sp3marker,
+        data = trial %>%
+          left_join(
+            rcspline.eval(trial$marker, nk = 4, inclx = TRUE, norm = 0) %>%
+              as_tibble(.name_repair = "unique") %>%
+              set_names("marker", "sp2marker", "sp3marker") %>%
+              unique(),
+            by = c("marker")
+          ) %>%
+          filter(complete.cases(.) == TRUE),
+        family = "binomial") %>%
+      tbl_regression(exponentiate = TRUE) %>%
+      combine_terms(
+        formula_update = . ~ . -marker -sp2marker -sp3marker,
+        test = "LRT"
+      ),
+    NA
+  )
+
   # Confirm Cox model works
   expect_error(
     survival::coxph(survival::Surv(ttdeath, death) ~ grade + rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0),
@@ -58,6 +79,41 @@ test_that("combine_terms works without error", {
       tbl_regression() %>%
       combine_terms(
         formula_update = . ~ . -rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
+      ),
+    NA
+  )
+
+  # Confirm survreg model works
+  expect_error(
+    survival::survreg(survival::Surv(ttdeath, death) ~ grade + rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0),
+                      data = na.omit(trial)) %>%
+      tbl_regression() %>%
+      combine_terms(
+        formula_update = . ~ . -rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
+      ),
+    NA
+  )
+
+  # Confirm GEE model works (as long as selected terms are not the only terms in model)
+  # GEE does not work for comparison with null model
+  expect_error(
+    geepack::geeglm(
+      as.formula("weight ~ Diet + Time + sp2Time + sp3Time"),
+      data = ChickWeight %>%
+        left_join(
+          Hmisc::rcspline.eval(ChickWeight$Time, nk = 4, inclx = TRUE, norm = 0) %>%
+            as_tibble(.name_repair = "unique") %>%
+            set_names("Time", "sp2Time", "sp3Time") %>%
+            unique(),
+          by = c("Time")
+        ),
+      family = gaussian,
+      id = Chick,
+      corstr = "exchangeable"
+    ) %>%
+      tbl_regression() %>%
+      combine_terms(
+        formula_update = . ~ . -Time -sp2Time -sp3Time
       ),
     NA
   )
