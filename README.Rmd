@@ -26,9 +26,9 @@ knitr::opts_chunk$set(
 
 The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the **R** programming language.  The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.
 
-* [Summarize **data frames or tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) easily. Perfect for creating a **Table 1** in **R**, comparing group **demographics**, and more. Automatically detects continuous, categorical, and binary variables, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.
+* [**Summarize data frames or tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) easily in **R**. Perfect for presenting descriptive statistics, comparing group **demographics** (e.g creating a **Table 1** for medical journals),  and more. Automatically detects continuous, categorical, and dichotomous variables in your data set, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.
 
-* [Summarize **regression models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) in R and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard Ratio). 
+* [**Summarize regression models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) in R and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard Ratio). 
 
 * [**Customize gtsummary tables**](http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions) using a growing list of formatting/styling functions. **[Bold](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** labels, **[italicize](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** levels, **[add p-value](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html)** to summary tables, **[style](http://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)** the statistics however you choose, **[merge](http://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)** or **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)** tables to present results side by side... there are so many possibilities to reproducibly create the table of your dreams! 
 
@@ -70,7 +70,7 @@ remotes::install_github("ddsjoberg/gtsummary")
 
 Use [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) to summarize a data frame. 
 
-<img src = "man/figures/tbl_summary_demo3.gif" alt = "animated" width = "60%">
+<img src = "man/figures/tbl_summary_demo4.gif" alt = "animated" width = "100%">
 
 Example basic table:
 
@@ -81,9 +81,6 @@ trial2 <- trial %>% dplyr::select(trt, age, grade, response)
 
 # summarize the data with our package
 table1 <- tbl_summary(trial2)
-```
-```{r eval = FALSE}
-table1
 ```
 
 ```{r tbl_summary_print_simple, include = FALSE}
@@ -101,7 +98,7 @@ if (pkgdown::in_pkgdown()) {
 } 
 ```
 
-There are many **customization options** to **add information** (like comparing groups) and **format results**(like bold labels) in your table. See the [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
+There are many **customization options** to **add information** (like comparing groups) and **format results** (like bold labels) in your table. See the [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
 
 ```{r table2, include = TRUE}
 table2 <- tbl_summary(
@@ -113,9 +110,6 @@ table2 <- tbl_summary(
   add_p() %>% # test if there's difference between groups
   bold_labels() 
 
-```
-```{r eval = FALSE}
-table2
 ```
 
 ```{r tbl_summary_print_extra, include = FALSE}
@@ -135,16 +129,12 @@ if (pkgdown::in_pkgdown()) {
 
 Use [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) to easily and beautifully display regression model results in a table. See the [tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) for customization options.
 
-<img src = "man/figures/tbl_regression_demo2.gif" alt = "animated" width = "60%">
 
 
 ```{r regress, include = TRUE}
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
 t1 <- tbl_regression(mod1, exponentiate = TRUE)
-```
-```{r eval = FALSE}
-t1
 ```
 
 ```{r tbl_regression_printa, include = FALSE}
@@ -181,9 +171,6 @@ tbl_merge_ex1 <-
     tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
 
-```
-```{r eval = FALSE}
-tbl_merge_ex1
 ```
 
 ```{r tbl_merge_ex1, include = FALSE}

@@ -41,7 +41,7 @@
 #' @param intercept Logical argument indicating whether to include the intercept
 #' in the output.  Default is `FALSE`
 #' @param show_single_row By default categorical variables are printed on
-#' multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+#' multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
 #' the regression coefficient on a single row, include the variable name(s)
 #' here--quoted and unquoted variable name accepted.
 #' @param estimate_fun Function to round and format coefficient estimates.

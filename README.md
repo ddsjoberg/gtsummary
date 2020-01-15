@@ -24,15 +24,16 @@ programming language. The {gtsummary} package summarizes data sets,
 regression models, and more, using sensible defaults with highly
 customizable capabilities.
 
-  - [Summarize **data frames or
+  - [**Summarize data frames or
     tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
-    easily. Perfect for creating a **Table 1** in **R**, comparing group
-    **demographics**, and more. Automatically detects continuous,
-    categorical, and binary variables, calculates appropriate
-    descriptive statistics, and also includes amount of missingness in
-    each variable.
+    easily in **R**. Perfect for presenting descriptive statistics,
+    comparing group **demographics** (e.g creating a **Table 1** for
+    medical journals), and more. Automatically detects continuous,
+    categorical, and dichotomous variables in your data set, calculates
+    appropriate descriptive statistics, and also includes amount of
+    missingness in each variable.
 
-  - [Summarize **regression
+  - [**Summarize regression
     models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
     in R and include reference rows for categorical variables. Common
     regression models, such as logistic regression and Cox proportional
@@ -110,7 +111,7 @@ Use
 [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 to summarize a data frame.
 
-<img src = "man/figures/tbl_summary_demo3.gif" alt = "animated" width = "60%">
+<img src = "man/figures/tbl_summary_demo4.gif" alt = "animated" width = "100%">
 
 Example basic table:
 
@@ -123,14 +124,10 @@ trial2 <- trial %>% dplyr::select(trt, age, grade, response)
 table1 <- tbl_summary(trial2)
 ```
 
-``` r
-table1
-```
-
 <img src="man/figures/README-tbl_summary_print_simple-1.png" width="30%" />
 
 There are many **customization options** to **add information** (like
-comparing groups) and **format results**(like bold labels) in your
+comparing groups) and **format results** (like bold labels) in your
 table. See the
 [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
 tutorial for many more options, or below for one example.
@@ -146,10 +143,6 @@ table2 <- tbl_summary(
   bold_labels() 
 ```
 
-``` r
-table2
-```
-
 <img src="man/figures/README-tbl_summary_print_extra-1.png" width="60%" />
 
 ### Regression Models
@@ -161,16 +154,10 @@ See the
 [tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
 for customization options.
 
-<img src = "man/figures/tbl_regression_demo2.gif" alt = "animated" width = "60%">
-
 ``` r
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
 t1 <- tbl_regression(mod1, exponentiate = TRUE)
-```
-
-``` r
-t1
 ```
 
 <img src="man/figures/README-tbl_regression_printa-1.png" width="40%" />
@@ -194,10 +181,6 @@ tbl_merge_ex1 <-
     tbls = list(t1, t2),
     tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
-```
-
-``` r
-tbl_merge_ex1
 ```
 
 <img src="man/figures/README-tbl_merge_ex1-1.png" width="60%" />

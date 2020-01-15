@@ -70,22 +70,21 @@ library(dplyr)
 We'll be using the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set throughout this example.
 
 * This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
-The outcome is a binary tumor response.  
+The outcomes are tumor response and death.  
 
-* Each variable in the data frame has been assigned an **attribute label** (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the **[labelled](http://larmarange.github.io/labelled/)** package, which we highly recommend using. These labels are displayed in the {gtsummary} output table by default. *(Using {gtsummary} on a data frame without labels will simply print variable names, or there is an option to add labels later.)*
-
-
-    trt      Chemotherapy Treatment
-    age      Age, yrs
-    marker   Marker Level, ng/mL
-    stage    T Stage
-    grade    Grade
-    response Tumor Response
-    death    Patient Died
-    ttdeath  Years from Treatment to Death/Censor
+* Each variable in the data frame has been assigned an **attribute label** (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the **[labelled](http://larmarange.github.io/labelled/)** package, which we highly recommend using. These labels are displayed in the {gtsummary} output table by default. Using {gtsummary} on a data frame without labels will simply print variable names, or there is an option to add labels later.  
 
 
-* Our example dataset has a mix of continuous, binary (0/1), and categorical variables, some with missing data (NA). 
+        trt      Chemotherapy Treatment
+        age      Age, yrs
+        marker   Marker Level, ng/mL
+        stage    T Stage
+        grade    Grade
+        response Tumor Response
+        death    Patient Died
+        ttdeath  Years from Treatment to Death/Censor  
+
+* Our example dataset has a mix of continuous, dichotomous (0/1), and categorical variables, some with missing data (NA). 
 
 ```{r, message=FALSE}
 head(trial)
@@ -112,15 +111,15 @@ tbl_summary(trial2)
 
 Note the sensible defaults with this basic usage (that can be customized later):
 
-* *Variable types are automatically detected so that appropriate descriptive statistics are calculated.*
+* **Variable types** are automatically detected so that appropriate descriptive statistics are calculated.
 
-* *Label attributes from the dataset are automatically printed.*
+* **Label attributes** from the dataset are automatically printed.
 
-* *Missing values are listed as "Unknown" in the table.*
+* **Missing values** are listed as "Unknown" in the table.
 
-* *Variable levels are indented and footnotes are added if printed using [{gt}](https://gt.rstudio.com/). (more on print engine options [here](http://www.danieldsjoberg.com/gtsummary/articles/global_options.html#printing))*
+* Variable levels are **indented** and **footnotes** are added if printed using [{gt}](https://gt.rstudio.com/). (can alternatively be printed using `knitr::kable()`; see options [here](http://www.danieldsjoberg.com/gtsummary/articles/global_options.html#printing))
 
-This is a great basic table, but for this study data the summary statistics should be split by treatment group, which can be done by using the `by = ` argument.
+This is a great basic table, but for this study data the summary statistics should be **split by treatment group**, which can be done by using the **`by = `** argument.
 To compare two or more groups, include [`add_p()`](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html) with the function call, which detects variable type and uses an appropriate test.
 
 ```{r}
