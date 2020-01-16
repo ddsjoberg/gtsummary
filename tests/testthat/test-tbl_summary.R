@@ -343,4 +343,19 @@ test_that("tbl_summary-all missing data does not cause error", {
       select(starts_with("stat_")),
     tibble(stat_1 = c("NA (NA, NA)", "NA (NA, NA)"), stat_2 = stat_1)
   )
+
+  # unobserved factor level
+  expect_error(
+    missing_fct_by <-
+      trial %>%
+      mutate(response2 = factor(response) %>% forcats::fct_explicit_na()) %>%
+      filter(!is.na(response)) %>%
+      tbl_summary(by = response2),
+    NA
+  )
+
+  expect_equal(
+    missing_fct_by$table_body %>% select(starts_with("stat_")) %>% names(),
+    c("stat_1", "stat_2", "stat_3")
+  )
 })

@@ -314,14 +314,19 @@ continuous_digits_guess_one <- function(data,
 
 df_by <- function(data, by) {
   if (is.null(by)) return(NULL)
+
+  if ("factor" %in% class(data[[by]]))
+    result <- tibble(by = attr(data[[by]], "levels") %>%
+                       factor(x = ., levels= ., labels = .))
+  else result <- data %>% select(by) %>% dplyr::distinct() %>% set_names("by")
+
   result <-
-    data %>%
-    select(c(by)) %>%
-    set_names("by") %>%
-    count(!!sym("by")) %>%
-    mutate(N = sum(.data$n), p = .data$n / .data$N) %>%
+    result %>%
     arrange(!!sym("by")) %>%
     mutate(
+      n = purrr::map_int(.data$by, ~ sum(data[[!!by]] == .x)),
+      N = sum(.data$n),
+      p = .data$n / .data$N,
       by_id = 1:n(), # 'by' variable ID
       by_chr = as.character(.data$by), # Character version of 'by' variable
       by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
@@ -331,20 +336,6 @@ df_by <- function(data, by) {
   attr(result$by, "label") <- NULL
   result
 }
-# > df_by(mtcars, "am")
-# # A tibble: 2 x 7
-#      by     n     N     p by_id by_chr by_col
-#   <dbl> <int> <int> <dbl> <int> <chr>  <chr>
-# 1     0    19    32 0.594     1 0      stat_1
-# 2     1    13    32 0.406     2 1      stat_2
-
-# > df_by(iris, "Species")
-# # A tibble: 3 x 7
-#   by             n     N     p by_id by_chr     by_col
-#   <fct>      <int> <int> <dbl> <int> <chr>      <chr>
-# 1 setosa        50   150 0.333     1 setosa     stat_1
-# 2 versicolor    50   150 0.333     2 versicolor stat_2
-# 3 virginica     50   150 0.333     3 virginica  stat_3
 
 
 #' Assigns categorical variables sort type ("alphanumeric" or "frequency")
