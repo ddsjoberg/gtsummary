@@ -16,6 +16,11 @@ sudo: false
 cache: packages
 warnings_are_errors: false
 
+# installing old version of latticeExtra that does not depend on R 3.6
+before_install:
+  - Rscript -e 'install.packages("remotes")'
+  - Rscript -e 'remotes::install_version("latticeExtra", version = "0.6-28", repos = "http://cran.us.r-project.org")'
+
 r_github_packages:
   - rstudio/gt
 
