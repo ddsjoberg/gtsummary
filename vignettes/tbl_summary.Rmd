@@ -318,9 +318,12 @@ tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% head(n = 5)
 
 The {gt} functions are called in the order they appear, always beginning with the `gt()` function.
 
-If the user does not want a specific {gt} function to run (i.e. would like to change default printing), any {gt} call can be excluded in the `as_gt()` function by specifying the `exclude` argument.  For example, the `tbl_summary()` call creates many named {gt} function calls: *`r tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any of these can be excluded.  In the example below, the default footnote will be excluded from the output.
+If the user does not want a specific {gt} function to run (i.e. would like to change default printing), any {gt} call can be excluded in the `as_gt()` function.
+For example, the `tbl_summary()` call creates many named {gt} function calls: *`r tbl_summary(trial2) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.
+Any of these can be excluded.  In the example below, the default footnote will be excluded from the output.
 
-After the `as_gt()` function is run, additional formatting may be added to the table using {gt} formatting functions. In the example below, a spanning header for the `by = ` variable is included with the {gt} function `tab_spanner()`.
+After the `as_gt()` function is run, additional formatting may be added to the table using {gt} formatting functions.
+In the example below, a spanning header for the `by = ` variable is included with the {gt} function `tab_spanner()`.
 
 ```{r as_gt2, eval=FALSE}
 tbl_summary(trial2, by = trt) %>%
