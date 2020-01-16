@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9009</span>
       </span>
     </div>
 
@@ -167,6 +167,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>New function <code><a href="../reference/combine_terms.html">combine_terms()</a></code> allows users to combine multiple independent variables in a regression model into a single line after <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>. The single line does not report regression coefficients, rather a single p-value from the <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> function. (<a href='https://github.com/ddsjoberg/gtsummary/issues/310'>#310</a>)</p></li>
 <li><p><code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> will now summarize columns of class <code>difftime</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/343'>#343</a>)</p></li>
 <li><p>The data summary function <code><a href="../reference/add_p.html">add_p()</a></code> uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large datasets. (<a href='https://github.com/ddsjoberg/gtsummary/issues/341'>#341</a>)</p></li>
 <li><p>In the regression modeling functions <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, the users are presented an informative error message when the tidier fails (e.g. <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy()</a></code>) alerting them to the location of the error so they may address the issue (<a href='https://github.com/ddsjoberg/gtsummary/issues/337'>#337</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/338'>#338</a>)</p></li>
