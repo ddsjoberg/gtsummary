@@ -66,8 +66,8 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
 
     # deleting scale parameters from survreg objects
     if (class(x)[1] == "survreg") {
-      tidy_bit %>%
-        filter(!!parse_expr('term != "Log(scale)"'))
+      tidy_bit <- tidy_bit %>%
+        filter(.data$term != "Log(scale)")
     }
   }
 
