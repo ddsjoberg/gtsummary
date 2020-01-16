@@ -215,4 +215,19 @@ Code of
 Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms. A big
 thank you to all contributors\!  
-[@margarethannum](https://github.com/margarethannum)
+[@ablack3](https://github.com/ablack3),
+[@ahinton-mmc](https://github.com/ahinton-mmc),
+[@ddsjoberg](https://github.com/ddsjoberg),
+[@emilyvertosick](https://github.com/emilyvertosick),
+[@jeanmanguy](https://github.com/jeanmanguy),
+[@jennybc](https://github.com/jennybc),
+[@jflynn264](https://github.com/jflynn264),
+[@jwilliman](https://github.com/jwilliman),
+[@karissawhiting](https://github.com/karissawhiting),
+[@ltin1214](https://github.com/ltin1214),
+[@margarethannum](https://github.com/margarethannum),
+[@michaelcurry1123](https://github.com/michaelcurry1123),
+[@oranwutang](https://github.com/oranwutang),
+[@sammo3182](https://github.com/sammo3182),
+[@slobaugh](https://github.com/slobaugh), and
+[@zabore](https://github.com/zabore)
