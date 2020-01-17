@@ -146,6 +146,26 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #'   summary_type = NULL, value = NULL
 #' )
 assign_summary_type <- function(data, variable, class, summary_type, value) {
+  # checking if user requested type = "categorical" for variable that is all missing
+  if (!is.null(summary_type)) {
+    summary_type <- purrr::imap(
+      summary_type,
+      function(.x, .y) {
+        categorical_missing <-
+          .x == "categorical" &&
+          length(data[[.y]]) == sum(is.na(data[[.y]])) &&
+          !"factor" %in% class(data[[.y]]) # factor can be summarized with categorical
+        if(categorical_missing == FALSE) return(.x)
+        message(glue(
+          "Variable '{.y}' is all `NA` and cannot be summarized as 'categorical'.\n",
+          "Using `{.y} ~ \"dichotomous\"` instead."
+        ))
+        return("dichotomous")
+      }
+    )
+  }
+
+  # assigning types ------------------------------------------------------------
   type <- map2_chr(
     variable, class,
     ~ summary_type[[.x]] %||%
