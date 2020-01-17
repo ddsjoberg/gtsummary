@@ -18,13 +18,14 @@ Creates presentation-ready tables summarizing data
     regression and Cox proportional hazards regression, are automatically
     identified and the tables are pre-filled with appropriate column
     headers. The package is enhanced when the 'gt' package is installed.
-    Use this code to install: 'remotes::install_github("rstudio/gt")'.
+    Use this code to install: 
+    'remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)'.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/ddsjoberg/gtsummary}
   \item \url{http://www.danieldsjoberg.com/gtsummary/}
+  \item \url{https://github.com/ddsjoberg/gtsummary}
   \item Report bugs at \url{https://github.com/ddsjoberg/gtsummary/issues}
 }
 
