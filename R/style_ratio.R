@@ -13,6 +13,8 @@
 #' Default is `digits = 2`.
 #' @export
 #' @return A character vector of styled ratios
+#' @family style tools
+#' See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for example
 #' @seealso [style_sigfig]
 #' @author Daniel D. Sjoberg
 #' @examples

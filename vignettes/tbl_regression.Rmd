@@ -1,7 +1,6 @@
 ---
 title: "Tutorial: tbl_regression"
-author: "Daniel D. Sjoberg"
-date: "Last Updated: November 29, 2018"
+date: "Last Updated: January 13, 2020"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEncoding{UTF-8}
@@ -29,9 +28,15 @@ knitr::knit_exit()
 <!-- Start of vignette -->
 ## Introduction
 
-This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table. `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and more). If your class of model is not supported , please [request support](https://github.com/ddsjoberg/gtsummary/issues).  In some cases, it is simple to support a new class of model.
+The [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready. It is a simple way to summarize and present your analysis results using **R**! Like [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.html), `tbl_regression()` creates highly customizable analytic tables with sensible defaults. 
 
-To start, a quick note on the {magrittr} package's pipe function, `%>%`.  By default the pipe operator puts whatever is on the left hand side of `%>%` into the first argument of the function on the right hand side.  The pipe function can be used to make the code relating to `tbl_regression()` easier to use, but it is *not* required.  Here are a few examples of how `%>%` translates into typical R notation.
+This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table. 
+
+<img src = "../man/figures/tbl_mvregression_demo.gif" alt = "animated" width = "100%">
+
+*Behind the scenes:* `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and more are [vetted tidy models](http://www.danieldsjoberg.com/gtsummary/reference/tidy_vetted.html) that are known to work with our package). It is also possible to specify your own function to tidy the model results if needed.  
+
+To start, a quick note on the {magrittr} package's **pipe function**, **`%>%`**.  By default the pipe operator puts whatever is on the left hand side of `%>%` into the first argument of the function on the right hand side.  The pipe function can be used to make the code relating to `tbl_regression()` easier to use, but it is *not* required.  Here are a few examples of how `%>%` translates into typical R notation.
 
     x %>% f() is equivalent to f(x)
     x %>% f(y) is equivalent to f(x, y)
@@ -57,31 +62,66 @@ library(dplyr)
 
 - If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
 
+## Example data set
+
+In this vignette we'll be using the [**`trial`**](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set which is included in the {gtsummary package}.
+
+* This data set contains information from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
+
+* The outcomes are tumor response and death.  
+
+* Each variable in the data frame has been assigned an **attribute label** (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the **[labelled](http://larmarange.github.io/labelled/)** package, which we highly recommend using. These labels are displayed in the {gtsummary} output table by default. Using {gtsummary} on a data frame without labels will simply print variable names, or there is an option to add labels later.
+
+
+
+
+        trt      Chemotherapy Treatment
+        age      Age, yrs
+        marker   Marker Level, ng/mL
+        stage    T Stage
+        grade    Grade
+        response Tumor Response
+        death    Patient Died
+        ttdeath  Years from Treatment to Death/Censor
+        
+    
+
 ## Basic Usage
 
-We will use the `trial` data set throughout this example.
-This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
-The outcome is a binary tumor response.
-Each variable in the data frame has been assigned an attribute label (i.e. `attr(trial$trt, "label") == "Chemotherapy Treatment")` with the [labelled](http://larmarange.github.io/labelled/) package.
+The default output from `tbl_regression()` is meant to be publication ready.  
 
-    trt      Chemotherapy Treatment
-    age      Age, yrs
-    marker   Marker Level, ng/mL
-    stage    T Stage
-    grade    Grade
-    response Tumor Response
-
-The default output from `tbl_regression()` is meant to be publication ready.  Let's start by creating a regression model table from the `trial` data set included in the {gtsummary} package.  We will predict tumor response using age, stage, and grade using a logistic regression model.  
-
+* Let's start by creating a **logistic regression model** to **predict tumor response** using the variables age, stage, and grade from the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set. 
 ```{r, message=FALSE}
 # build logistic regression model
 m1 = glm(response ~ age + stage + grade, trial, family = binomial(link = "logit"))
 
-# format results into data frame
+# view raw model results
+summary(m1)$coefficients
+
+```
+
+* We will then a **regression model table** to summarize and present these results in just one line of code from {gtsummary}. 
+
+```{r, message=FALSE}
+# format results
 tbl_regression(m1, exponentiate = TRUE)
 ```
 
-Because the variables in the data set were [labelled](http://larmarange.github.io/labelled/), the labels were carried through into the {gtsummary} output table.  Had the data not been labelled, the default is to display the variable name.  The model was recognized as logistic regression with coefficients exponentiated, so the header displayed "OR" for odds ratio. The correct reference group has also been added to the table.
+  
+
+Note the sensible defaults with this basic usage (that can be customized later):
+
+* The model was recognized as logistic regression with coefficients exponentiated, so the **header displayed "OR"** for odds ratio. 
+
+* **Variable types** are automatically detected and **reference rows** are created for categorical variables.
+
+* **Model estimates** and **confidence intervals** are **rounded** and nicely formatted.
+
+* P-values above 0.9 are presented as ">0.9" and below 0.001 are presented as "<0.001". Non-significant p-values are only rounded to one decimal, while those close to or below the significance threshold (default 0.05) have additional decimal places by default.
+
+* Because the variables in the data set were [labelled](http://larmarange.github.io/labelled/), the **labels were carried through** into the {gtsummary} output table.  Had the data not been labelled, the default is to display the variable name.
+
+* Variable levels are **indented** and **footnotes** are added if printed using [{gt}](https://gt.rstudio.com/). (can alternatively be printed using `knitr::kable()`; see options [here](http://www.danieldsjoberg.com/gtsummary/articles/global_options.html#printing))
 
 ## Customize Output
 
@@ -99,13 +139,14 @@ The `tbl_regression()` function includes many input options for modifying the ap
     label         modify the variable labels printed in the table.  
     exponentiate  exponentiate model coefficients.  
     include       names of variables to include in output. Default is all variables.  
-    show_yesno    show both levels of yes/no variables. Default prints on single row.  
+    show_single_row    By default, categorical variables are printed on multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print the regression coefficient on a single row, include the variable name(s) here. 
     conf.level    confidence level of confidence interval.  
     intercept     logical argument indicates whether to include the intercept in output.  
     estimate_fun  function to round and format coefficient estimates.  
     pvalue_fun    function to round and format p-values.  
+    tidy_fun      function to specify/customize tidier function
 
-### Functions to add information
+### {gtsummary} functions to add information
 
 The {gtsummary} package has built-in functions for adding to results from `tbl_regression()`.  The following functions add columns and/or information to the regression table.
 
@@ -137,12 +178,12 @@ m1 %>%
 ### Example
 
 There are formatting options available, such as adding bold and italics to text.  In the example below,  
-- Variable labels are bold  
-- Levels of categorical levels are italicized  
-- Global p-values for T Stage and Grade are reported
-- P-values less than 0.10 are bold  
-- Large p-values are rounded to two decimal places  
-- Coefficients are exponentiated to give odds ratios  
+- Variable labels are **bold**  
+- Levels of categorical levels are *italicized*  
+- **Global p-values** for T Stage and Grade are reported
+- P-values less than 0.10 are **bold** 
+- Large p-values are rounded to **two decimal places**  
+- Coefficients are **exponentiated** to give odds ratios  
 - Odds ratios are rounded to 2 or 3 significant figures
 
 ```{r, message=FALSE}
@@ -159,43 +200,6 @@ m1 %>%
   italicize_levels()
 ```
 
-##  Report Results Inline {#inline_text}
-
-Reproducible reports are an important part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with `inline_text()`.
-
-Let's first create a regression model table.
-
-```{r}
-tbl_m1 <- tbl_regression(m1, exponentiate = TRUE)
-tbl_m1
-```
-
-To report the result for `age`, use the following commands inline.
-
-> `` `r
-inline_text(tbl_m1, variable = "age")` `` 
-
-Here's how the line will appear in your report.
-
-> `r inline_text(tbl_m1, variable = "age")`
-
-It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows `glue::glue()` format with referenced R objects being inserted between curly brackets.  The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.  You have access the to following fields within the `pattern` argument.
-
-    {estimate}   primary estimate (e.g. model coefficient, odds ratio)
-    {conf.low}   lower limit of confidence interval
-    {conf.high}  upper limit of confidence interval
-    {p.value}    p-value
-    {conf.level} confidence level of interval
-    {N}          number of observations
-
-> Age was not significantly associated with tumor response `` `r
-inline_text(tbl_m1, variable = "age", pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")` ``.
-
-> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = "age", pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`.
-
-If you're printing results from a categorical variable, include the `level` argument, e.g. `inline_text(tbl_m1, variable = "stage", level = "T3")` resolves to "`r inline_text(tbl_m1, variable = "stage", level = "T3")`".  
-
-The `inline_text` function has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`estimate_fun`).  These default to the same rounding performed in the table, but can be modified when reporting inline.
 
 ## Advanced Customization {#advanced}
 
@@ -223,7 +227,9 @@ tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% head(n = 5)
 
 The {gt} functions are called in the order they appear, always beginning with the `gt()` function.
 
-If the user does not want a specific {gt} function to run, any {gt} call can be excluded in the `as_gt()` function by specifying the `exclude` argument.  For example, the `tbl_regression()` call creates many named {gt} function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.  Any one of these can be excluded.  In this example, the default footnote will be excluded from the output.
+If the user does not want a specific {gt} function to run, any {gt} call can be excluded in the `as_gt()` function.
+For example, the `tbl_regression()` call creates many named {gt} function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.
+Any one of these can be excluded.  In this example, the default footnote will be excluded from the output.
 
 ```{r as_gt2, eval=FALSE}
 tbl_regression(m1, exponentiate = TRUE) %>%
@@ -241,6 +247,8 @@ if (requireNamespace("gt", quietly = TRUE)) {
 ## Univariate Regression {#tbl_uvregression}
 
 The `tbl_uvregression()` produces a table of univariate regression results.  The function is a wrapper for `tbl_regression()`, and as a result, accepts nearly identical function arguments.  The function's results can be modified in similar ways to `tbl_regression()` and the results reported inline similarly to `tbl_regression()`.
+
+<img src = "../man/figures/tbl_mvregression_demo.gif" alt = "animated" width = "100%">
 
 ```{r tbl_uvregression}
 trial %>%

@@ -22,4 +22,4 @@ gtsummary::gt_sha
 # install gt version compatible with gtsummary release
 # remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
 }
-\keyword{datasets}
+\keyword{internal}

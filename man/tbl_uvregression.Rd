@@ -37,7 +37,7 @@ Specify one and only one of \code{y} or \code{x}}
 \item{x}{Model covariate (e.g. \code{x = trt}).
 All other columns in \code{data} will serve as the outcome in a regression model
 with \code{x} as a covariate.  Output table is best when \code{x} is a continuous or
-binary variable displayed on a single row.
+dichotomous variable displayed on a single row.
 Specify one and only one of \code{y} or \code{x}}
 
 \item{method.args}{List of additional arguments passed on to the regression
@@ -63,7 +63,7 @@ functions. Default is \code{everything()}.}
 \item{hide_n}{Hide N column. Default is \code{FALSE}}
 
 \item{show_single_row}{By default categorical variables are printed on
-multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
 the regression coefficient on a single row, include the variable name(s)
 here--quoted and unquoted variable name accepted.}
 
@@ -108,7 +108,7 @@ covariate in the \verb{x=} argument. Each column of the data frame will serve as
 the outcome in a univariate regression model. Take care using the \code{x} argument
 that each of the columns in the data frame are appropriate for the same type
 of model, e.g. they are all continuous variables appropriate for \link{lm}, or
-binary variables appropriate for logistic regression with \link{glm}.
+dichotomous variables appropriate for logistic regression with \link{glm}.
 }
 \section{Example Output}{
 

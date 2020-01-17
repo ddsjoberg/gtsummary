@@ -377,7 +377,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   if (length(bad_show_single_row) > 0) {
     stop(glue(
       "'{paste(bad_show_single_row, collapse = \"', '\")}' from argument ",
-      "'show_single_row' may only be applied to binary variables."
+      "'show_single_row' may only be applied to dichotomous variables."
     ), call. = FALSE)
   }
 

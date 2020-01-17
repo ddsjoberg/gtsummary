@@ -23,6 +23,14 @@ percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
 style_percent(percent_vals)
 style_percent(percent_vals, symbol = TRUE)
 }
+\seealso{
+See Table Gallery \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{vignette} for example
+
+Other style tools: 
+\code{\link{style_pvalue}()},
+\code{\link{style_sigfig}()}
+}
 \author{
 Daniel D. Sjoberg
 }
+\concept{style tools}
