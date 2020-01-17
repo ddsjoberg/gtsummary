@@ -306,14 +306,14 @@ test_that("tbl_summary-all missing data does not cause error", {
     all_missing_no_by$table_body %>%
       filter(variable == "fct", row_type == "level") %>%
       pull(stat_0),
-    c("NA (NA%)", "NA (NA%)", "NA (NA%)")
+    c("0 (NA%)", "0 (NA%)", "0 (NA%)")
   )
 
   expect_equal(
     all_missing_no_by$table_body %>%
       filter(variable %in% c("lgl", "chr"), row_type == "label") %>%
       pull(stat_0),
-    c("NA (NA%)", "NA (NA%)")
+    c("0 (NA%)", "0 (NA%)")
   )
 
   expect_equal(
@@ -327,14 +327,14 @@ test_that("tbl_summary-all missing data does not cause error", {
     all_missing_by$table_body %>%
       filter(variable == "fct", row_type == "level") %>%
       select(starts_with("stat_")),
-    tibble(stat_1 = c("NA (NA%)", "NA (NA%)", "NA (NA%)"), stat_2 = stat_1)
+    tibble(stat_1 = c("0 (NA%)", "0 (NA%)", "0 (NA%)"), stat_2 = stat_1)
   )
 
   expect_equal(
     all_missing_by$table_body %>%
       filter(variable %in% c("lgl", "chr"), row_type == "label") %>%
       select(starts_with("stat_")),
-    tibble(stat_1 = c("NA (NA%)", "NA (NA%)"), stat_2 = stat_1)
+    tibble(stat_1 = c("0 (NA%)", "0 (NA%)"), stat_2 = stat_1)
   )
 
   expect_equal(

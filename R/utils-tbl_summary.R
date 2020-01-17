@@ -786,7 +786,7 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
   # calculating percent
   group_by_percent <- switch(
     percent,
-    "cell" = variable_by_chr,
+    "cell" = "",
     "column" = ifelse(!is.null(by), "by", ""),
     "row" = "variable"
   )
@@ -795,10 +795,9 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
       N = sum(.data$n),
-      p = .data$n / .data$N
+      # if the Big N is 0, there is no denom so making percent NA
+      p = ifelse(.data$N == 0, NA, .data$n / .data$N)
     ) %>%
-    # if the Big N is 0, there is no denom so making n and percent NA
-    mutate_at(vars(.data$n, .data$p), ~ifelse(.data$N == 0, NA, .)) %>%
     ungroup() %>%
     rename(variable_levels = .data$variable) %>%
     mutate(variable = !!variable) %>%
