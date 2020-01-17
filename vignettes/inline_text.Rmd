@@ -65,7 +65,7 @@ trial2 =
 ```
 
 
-## Report Results Inline from `tbl_summary()` tables {#inline_text_tbl_summary}
+## Inline Results from tbl_summary() {#inline_text_tbl_summary}
 
 First create a basic summary table using [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) (review [`tbl_summary()` vignette](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) for detailed overview of this function if needed).
 
@@ -77,23 +77,23 @@ tab1
 To report the median (IQR) of the marker levels in each group, use the following commands inline.
 
 > The median (IQR) marker level in the Drug A and Drug B groups are `` `r
-inline_text(tab1, variable = "marker", column = "Drug A")` `` and `` `r
-inline_text(tab1, variable = "marker", column = "Drug B")` ``, respectively.
+inline_text(tab1, variable = marker, column = "Drug A")` `` and `` `r
+inline_text(tab1, variable = marker, column = "Drug B")` ``, respectively.
 
 Here's how the line will appear in your report.
 
-> The median (IQR) marker level in the Drug A and Drug B groups are `r inline_text(tab1, variable = "marker", column = "Drug A")` and `r inline_text(tab1, variable = "marker", column = "Drug B")`, respectively.
+> The median (IQR) marker level in the Drug A and Drug B groups are `r inline_text(tab1, variable = marker, column = "Drug A")` and `r inline_text(tab1, variable = marker, column = "Drug B")`, respectively.
 
 If you display a statistic from a categorical variable, include the `level` argument.
 
 
 > `` `r
-inline_text(tab1, variable = "stage", level = "T1", column = "Drug B")` `` resolves to "`r inline_text(tab1, variable = "stage", level = "T1", column = "Drug B")`"
+inline_text(tab1, variable = stage, level = "T1", column = "Drug B")` `` resolves to "`r inline_text(tab1, variable = stage, level = "T1", column = "Drug B")`"
 
 
 
 
-##  Report Results Inline from `tbl_regression()` tables {#inline_text_tbl_regression}
+## Inline Results from tbl_regression() {#inline_text_tbl_regression}
 
 Similar syntax is used to report results from [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html), [`tbl_uvregression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.html), and [`tbl_survival()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_survival.survfit.html) tables. Refer to the [`tbl_regression()` vignette](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) if you need detailed guidance on using these functions. 
 
@@ -101,7 +101,7 @@ Let's first create a regression model.
 
 ```{r}
 # build logistic regression model
-m1 = glm(response ~ age + stage + grade, trial, family = binomial(link = "logit"))
+m1 = glm(response ~ age + stage, trial, family = binomial(link = "logit"))
 
 ```
 
@@ -114,11 +114,11 @@ tbl_m1
 To report the result for `age`, use the following commands inline.
 
 > `` `r
-inline_text(tbl_m1, variable = "age")` `` 
+inline_text(tbl_m1, variable = age)` `` 
 
 Here's how the line will appear in your report.
 
-> `r inline_text(tbl_m1, variable = "age")`
+> `r inline_text(tbl_m1, variable = age)`
 
 It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows `glue::glue()` format with referenced R objects being inserted between curly brackets.  The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.  You have access the to following fields within the `pattern` argument.
 
@@ -130,11 +130,11 @@ It is reasonable that you'll need to modify the text.  To do this, use the `patt
     {N}          number of observations
 
 > Age was not significantly associated with tumor response `` `r
-inline_text(tbl_m1, variable = "age", pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")` ``.
+inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")` ``.
 
-> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = "age", pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`.
+> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`.
 
-If you're printing results from a categorical variable, include the `level` argument, e.g. `inline_text(tbl_m1, variable = "stage", level = "T3")` resolves to "`r inline_text(tbl_m1, variable = "stage", level = "T3")`".  
+If you're printing results from a categorical variable, include the `level` argument, e.g. `inline_text(tbl_m1, variable = stage, level = "T3")` resolves to "`r inline_text(tbl_m1, variable = stage, level = "T3")`".  
 
 The `inline_text` function has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`estimate_fun`).  These default to the same rounding performed in the table, but can be modified when reporting inline.
 
