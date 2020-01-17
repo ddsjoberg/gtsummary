@@ -95,7 +95,7 @@ For brevity in the tutorial, let's keep a subset of the variables from the trial
 ```{r}
 trial2 =
   trial %>%
-  select(trt, marker, stage)
+  dplyr::select(trt, marker, stage)
 ```
 
 ## Basic Usage
@@ -264,33 +264,6 @@ trial %>%
                     all_continuous() ~ "t.test"))
 ```
 
-## Report Results Inline {#inline_text}
-
-Reproducible reports are an important part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with [`inline_text()`](http://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html).
-
-First create a basic summary table.
-
-```{r}
-tab1 <- tbl_summary(trial2, by = trt)
-tab1
-```
-
-To report the median (IQR) of the marker levels in each group, use the following commands inline.
-
-> The median (IQR) marker level in the Drug A and Drug B groups are `` `r
-inline_text(tab1, variable = "marker", column = "Drug A")` `` and `` `r
-inline_text(tab1, variable = "marker", column = "Drug B")` ``, respectively.
-
-Here's how the line will appear in your report.
-
-> The median (IQR) marker level in the Drug A and Drug B groups are `r inline_text(tab1, variable = "marker", column = "Drug A")` and `r inline_text(tab1, variable = "marker", column = "Drug B")`, respectively.
-
-If you display a statistic from a categorical variable, include the `level` argument.  
-
-> `` `r
-inline_text(tab1, variable = "stage", level = "T1", column = "Drug B")` `` resolves to "`r inline_text(tab1, variable = "stage", level = "T1", column = "Drug B")`"
-
-For more detail about inline code, review to the  [RStudio documentation page](https://rmarkdown.rstudio.com/lesson-4.html).
 
 ## Advanced Customization {#advanced}
 

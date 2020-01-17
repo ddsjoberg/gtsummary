@@ -28,7 +28,7 @@ knitr::knit_exit()
 <!-- Start of vignette -->
 ## Introduction
 
-The [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready. It is a simple way to reproducibly summarize and present your analysis results using **R**! Like [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.html), `tbl_regression()` creates highly customizable analytic tables with sensible defaults. 
+The [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready. It is a simple way to summarize and present your analysis results using **R**! Like [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_summary.html), `tbl_regression()` creates highly customizable analytic tables with sensible defaults. 
 
 This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table. 
 
@@ -200,43 +200,6 @@ m1 %>%
   italicize_levels()
 ```
 
-##  Report Results Inline {#inline_text}
-
-Reproducible reports are an important part of good practices.  We often need to report the results from a table in the text of an R markdown report.  Inline reporting has been made simple with [`inline_text()`](http://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html).
-
-Let's first create a regression model table.
-
-```{r}
-tbl_m1 <- tbl_regression(m1, exponentiate = TRUE)
-tbl_m1
-```
-
-To report the result for `age`, use the following commands inline.
-
-> `` `r
-inline_text(tbl_m1, variable = "age")` `` 
-
-Here's how the line will appear in your report.
-
-> `r inline_text(tbl_m1, variable = "age")`
-
-It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows `glue::glue()` format with referenced R objects being inserted between curly brackets.  The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.  You have access the to following fields within the `pattern` argument.
-
-    {estimate}   primary estimate (e.g. model coefficient, odds ratio)
-    {conf.low}   lower limit of confidence interval
-    {conf.high}  upper limit of confidence interval
-    {p.value}    p-value
-    {conf.level} confidence level of interval
-    {N}          number of observations
-
-> Age was not significantly associated with tumor response `` `r
-inline_text(tbl_m1, variable = "age", pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")` ``.
-
-> Age was not significantly associated with tumor response `r inline_text(tbl_m1, variable = "age", pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`.
-
-If you're printing results from a categorical variable, include the `level` argument, e.g. `inline_text(tbl_m1, variable = "stage", level = "T3")` resolves to "`r inline_text(tbl_m1, variable = "stage", level = "T3")`".  
-
-The `inline_text` function has arguments for rounding the p-value (`pvalue_fun`) and the coefficients and confidence interval (`estimate_fun`).  These default to the same rounding performed in the table, but can be modified when reporting inline.
 
 ## Advanced Customization {#advanced}
 

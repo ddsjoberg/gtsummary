@@ -257,7 +257,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # writing additional gt and kable calls with data from table_header
   results <- update_calls_from_table_header(results)
 
-  # assigning a class of tbl_regression (for special printing in Rmarkdown)
+  # assigning a class of tbl_regression (for special printing in R markdown)
   class(results) <- "tbl_regression"
 
   results
