@@ -37,3 +37,5 @@ c(
 \author{
 Daniel D. Sjoberg
 }
+\concept{style tools
+See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for example}
