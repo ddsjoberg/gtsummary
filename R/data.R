@@ -6,6 +6,7 @@
 #' commit SHA references a version of the gt package compatible with the
 #' current release of gtsummary. Use the SHA to install the appropriate version
 #' of the gt package tested for compatibility with gtsummary.
+#' @keywords internal
 #' @examples
 #' gtsummary::gt_sha
 #'
