@@ -18,7 +18,7 @@
 #' the outcome in a univariate regression model. Take care using the `x` argument
 #' that each of the columns in the data frame are appropriate for the same type
 #' of model, e.g. they are all continuous variables appropriate for [lm], or
-#' binary variables appropriate for logistic regression with [glm].
+#' dichotomous variables appropriate for logistic regression with [glm].
 #'
 #' @inheritSection tbl_regression Setting Defaults
 #' @inheritSection tbl_regression Note
@@ -32,7 +32,7 @@
 #' @param x Model covariate (e.g. `x = trt`).
 #' All other columns in `data` will serve as the outcome in a regression model
 #' with `x` as a covariate.  Output table is best when `x` is a continuous or
-#' binary variable displayed on a single row.
+#' dichotomous variable displayed on a single row.
 #' Specify one and only one of `y` or `x`
 #' @param formula String of the model formula.
 #' Uses [glue::glue] syntax. Default is `"{y} ~ {x}"`, where `{y}`

@@ -42,6 +42,12 @@
 
 * Updates after the gt package deprecated `gt::cells_data()` in favor of `gt::cells_body()`. Check added to `as_gt()` ensuring a version of gt with `gt::cells_body()` in its NAMESPACE
 
+* Updated documentation and README to improve readability, added more cross-linking across pages, added search terms to help users find our package, and added gif demonstrations. (#340)
+
+* README images now build differently for website vs GitHub markdown to accommodate different output formats.
+
+* Created "style" family of functions.
+
 # gtsummary 1.2.4
 
 * Bug fix in `as_kable()` where column header did not match statistics presented when certain levels of the `by=` variable are entirely missing in `tbl_summary()` (#304)

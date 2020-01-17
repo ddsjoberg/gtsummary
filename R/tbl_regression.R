@@ -41,7 +41,7 @@
 #' @param intercept Logical argument indicating whether to include the intercept
 #' in the output.  Default is `FALSE`
 #' @param show_single_row By default categorical variables are printed on
-#' multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+#' multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
 #' the regression coefficient on a single row, include the variable name(s)
 #' here--quoted and unquoted variable name accepted.
 #' @param estimate_fun Function to round and format coefficient estimates.
@@ -257,7 +257,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # writing additional gt and kable calls with data from table_header
   results <- update_calls_from_table_header(results)
 
-  # assigning a class of tbl_regression (for special printing in Rmarkdown)
+  # assigning a class of tbl_regression (for special printing in R markdown)
   class(results) <- "tbl_regression"
 
   results

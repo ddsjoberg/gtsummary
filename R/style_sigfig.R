@@ -15,6 +15,7 @@
 #' digits to display
 #' @export
 #' @return A character vector of styled numbers
+#' @family style tools
 #' @author Daniel D. Sjoberg
 #' @examples
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345, NA, -0.001) %>%
