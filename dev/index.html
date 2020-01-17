@@ -30,8 +30,8 @@
     regression and Cox proportional hazards regression, are automatically
     identified and the tables are pre-filled with appropriate column
     headers. The package is enhanced when the gt package is installed.
-    Use this code to install: 
-    remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha).'>
+    Use this code to install: remotes::install_github("rstudio/gt", ref =
+    gtsummary::gt_sha).'>
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png">
 <meta name="twitter:card" content="summary">
 <meta name="robots" content="noindex">
@@ -59,7 +59,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9010</span>
       </span>
     </div>
 
@@ -86,6 +86,9 @@
     </li>
     <li>
       <a href="articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="articles/gallery.html">Table Gallery</a>
@@ -130,13 +133,20 @@
 <h2 class="hasAnchor">
 <a href="#gtsummary" class="anchor"></a>gtsummary <a href="https://github.com/ddsjoberg/gtsummary"><img src="reference/figures/logo.png" align="right" height="120"></a>
 </h2>
-<p>The {gtsummary} package provides an elegant and flexible way to create publication-ready and reproducible analytical tables. The tables summarize data sets, regression models, and more. The code is concise and the tables are highly customizable. Data frames can be summarized with any function, e.g. mean(), median(), even user-written functions. Regression models are summarized and include the reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio, and Hazard Ratio). The package uses <a href="https://broom.tidyverse.org/">{broom}</a> to perform initial tidying of the regression models, which means there is broad support for many types of regression models.</p>
-<p>{gtsummary} uses the <a href="https://gt.rstudio.com/">{gt}</a> package enabling each table to be tailored to your preferences. If you label your data (which I recommend!), the labels will be used in the table output. With {gtsummary} and <a href="http://larmarange.github.io/labelled/">{labelled}</a> data, you get beautifully formatted, ready-to-share tables in a single line of code! Check out the examples below, and review the vignettes for a detailed exploration of the output options.</p>
+<p>The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the <strong>R</strong> programming language. The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.</p>
+<ul>
+<li><p><a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><strong>Summarize data frames or tibbles</strong></a> easily in <strong>R</strong>. Perfect for presenting descriptive statistics, comparing group <strong>demographics</strong> (e.g creating a <strong>Table 1</strong> for medical journals), and more. Automatically detects continuous, categorical, and dichotomous variables in your data set, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.</p></li>
+<li><p><a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html"><strong>Summarize regression models</strong></a> in R and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard Ratio).</p></li>
+<li><p><a href="http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions"><strong>Customize gtsummary tables</strong></a> using a growing list of formatting/styling functions. <strong><a href="http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html">Bold</a></strong> labels, <strong><a href="http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html">italicize</a></strong> levels, <strong><a href="http://www.danieldsjoberg.com/gtsummary/reference/add_p.html">add p-value</a></strong> to summary tables, <strong><a href="http://www.danieldsjoberg.com/gtsummary/reference/style_percent.html">style</a></strong> the statistics however you choose, <strong><a href="http://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html">merge</a></strong> or <strong><a href="http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html">stack</a></strong> tables to present results side by side… there are so many possibilities to reproducibly create the table of your dreams!</p></li>
+<li><p><strong><a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text">Report statistics inline</a></strong> from summary tables and regression summary tables in <strong>Rmarkdown</strong>. Make your reports completely reproducible!</p></li>
+</ul>
+<p>By leveraging <a href="https://broom.tidyverse.org/">{broom}</a>, <a href="https://gt.rstudio.com/">{gt}</a>, and <a href="http://larmarange.github.io/labelled/">{labelled}</a> packages, {gtsummary} creates beautifully formatted, ready-to-share summary and result tables in a single line of R code!</p>
+<p>Check out the examples below, review the <a href="http://www.danieldsjoberg.com/gtsummary/articles/">vignettes</a> for a detailed exploration of the output options, and view the <a href="http://www.danieldsjoberg.com/gtsummary/articles/gallery.html">gallery</a> for various customization examples.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The {gtsummary} package was written as a companion to the {gt} package from RStudio, and it is recommended to install both {gt} and {gtsummary}. The {gt} package is not automatically installed. If {gt} is not installed, <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> will be used to produce the summary tables. You can install {gtsummary} and {gt} with the following code.</p>
+<p>The {gtsummary} package was written as a companion to the <a href="https://gt.rstudio.com/">{gt}</a> package from RStudio, and it is recommended to install both {gt} and {gtsummary}. The {gt} package is not automatically installed. If {gt} is not installed, <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> will be used to produce the summary tables. You can install {gtsummary} and {gt} with the following code.</p>
 <ol>
 <li>
 <p>Install {gtsummary}</p>
@@ -145,7 +155,7 @@
 <li>
 <p>Install {gt} from GitHub (recommended)</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"rstudio/gt"</span>, gtsummary<span class="op">::</span>gt_sha)</a></code></pre></div>
+<a class="sourceLine" id="cb2-2" data-line-number="2">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"rstudio/gt"</span>, <span class="dt">ref =</span> gtsummary<span class="op">::</span>gt_sha)</a></code></pre></div>
 </li>
 </ol>
 <p>Install the development version of {gtsummary} with:</p>
@@ -154,32 +164,57 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<p>The {gtsummary} vignettes/tutorials contain detailed examples.</p>
 <div id="summary-table" class="section level3">
 <h3 class="hasAnchor">
 <a href="#summary-table" class="anchor"></a>Summary Table</h3>
+<p>Use <a href="http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html"><code><a href="reference/tbl_summary.html">tbl_summary()</a></code></a> to summarize a data frame.</p>
+<p><img src="reference/figures/tbl_summary_demo4.gif" alt="animated" width="100%"></p>
+<p>Example basic table:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gtsummary)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">t1 &lt;-</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="dt">data =</span> trial[<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"trt"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"response"</span>)],</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="dt">by =</span> trt</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="reference/add_p.html">add_p</a></span>() </a></code></pre></div>
-<p><img src="reference/figures/README-tbl_summary_print-1.png" width="66%"></p>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co"># make dataset with a few variables to summarize</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">trial2 &lt;-<span class="st"> </span>trial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(trt, age, grade, response)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co"># summarize the data with our package</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">table1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(trial2)</a></code></pre></div>
+<p><img src="reference/figures/README-tbl_summary_print_simple-1.png" width="30%"></p>
+<p>There are many <strong>customization options</strong> to <strong>add information</strong> (like comparing groups) and <strong>format results</strong> (like bold labels) in your table. See the <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><code><a href="reference/tbl_summary.html">tbl_summary()</a></code></a> tutorial for many more options, or below for one example.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">table2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tbl_summary.html">tbl_summary</a></span>(</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  trial2,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="dt">by =</span> trt, <span class="co"># split table by group</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="dt">missing =</span> <span class="st">"no"</span> <span class="co"># don't list missing data separately</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="reference/add_n.html">add_n</a></span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># add column with total number of non-missing observations</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="reference/add_p.html">add_p</a></span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># test if there's difference between groups</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="reference/bold_italicize_labels_levels.html">bold_labels</a></span>() </a></code></pre></div>
+<p><img src="reference/figures/README-tbl_summary_print_extra-1.png" width="60%"></p>
 </div>
 <div id="regression-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#regression-models" class="anchor"></a>Regression Models</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">mod1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(response <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>grade, trial, <span class="dt">family =</span> binomial)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">t2 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="reference/figures/README-tbl_regression_print-1.png" width="50%"></p>
+<p>Use <a href="http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html"><code><a href="reference/tbl_regression.html">tbl_regression()</a></code></a> to easily and beautifully display regression model results in a table. See the <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html">tutorial</a> for customization options.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">mod1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(response <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>grade, trial, <span class="dt">family =</span> binomial)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">t1 &lt;-<span class="st"> </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(mod1, <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="reference/figures/README-tbl_regression_printa-1.png" width="40%"></p>
 </div>
 <div id="side-by-side-regression-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#side-by-side-regression-models" class="anchor"></a>Side-by-side Regression Models</h3>
-<p>Side-by-side regression model results from <code><a href="reference/tbl_merge.html">tbl_merge()</a></code></p>
-<p><img src="reference/figures/tbl_merge_ex1.png" width="66%"></p>
+<p>You can also present side-by-side regression model results using <code><a href="reference/tbl_merge.html">tbl_merge()</a></code></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(survival)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co"># build survival model table</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">t2 &lt;-</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span>(ttdeath, death) <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>grade <span class="op">+</span><span class="st"> </span>age, trial) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co"># merge tables </span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">tbl_merge_ex1 &lt;-</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="reference/tbl_merge.html">tbl_merge</a></span>(</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">    <span class="dt">tbls =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(t1, t2),</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">    <span class="dt">tab_spanner =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span>)</a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">  )</a></code></pre></div>
+<p><img src="reference/figures/README-tbl_merge_ex1-1.png" width="60%"></p>
 <p>Review even more output options in the <a href="http://www.danieldsjoberg.com/gtsummary/articles/gallery.html">table gallery</a>.</p>
 </div>
 </div>
@@ -187,15 +222,15 @@
 <h2 class="hasAnchor">
 <a href="#print-engine" class="anchor"></a>Print Engine</h2>
 <p>{gtsummary} uses the {gt} package to print all summary tables. In addition to supporting {gt}, the {gtsummary} package works well with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. This is particularly useful when outputting documents to Microsoft Word. If the {gt} package is not installed, {gtsummary} will fall back to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. To explicitly set the printing engine, set the option in the script or in the user- or project R profile, <code>.Rprofile</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"kable"</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"kable"</span>) </a></code></pre></div>
 <p>or</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"gt"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"gt"</span>)</a></code></pre></div>
 <p>Output from {kable} is less full featured compared to summary tables produced with {gt}. For example, {kable} summary tables do not include indentation, footnotes, and spanning header rows.</p>
 </div>
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Please note that the {gtsummary} project is released with a <a href="http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/jeanmanguy">@jeanmanguy</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/jwilliman">@jwilliman</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/ltin1214">@ltin1214</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, <a href="https://github.com/slobaugh">@slobaugh</a>, and <a href="https://github.com/zabore">@zabore</a></p>
+<p>Please note that the {gtsummary} project is released with a <a href="http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/jeanmanguy">@jeanmanguy</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/jwilliman">@jwilliman</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/ltin1214">@ltin1214</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/oranwutang">@oranwutang</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, <a href="https://github.com/slobaugh">@slobaugh</a>, and <a href="https://github.com/zabore">@zabore</a></p>
 </div>
 
   </div>
