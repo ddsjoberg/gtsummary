@@ -302,6 +302,12 @@ test_that("tbl_summary-all missing data does not cause error", {
     NA
   )
 
+  # making categorical, variables that cannot be summarized as categorical
+  expect_error(
+    tbl_summary(df_missing, by = my_by_var, type = vars(int, dbl) ~ "categorical"),
+    NA
+  )
+
   expect_equal(
     all_missing_no_by$table_body %>%
       filter(variable == "fct", row_type == "level") %>%
