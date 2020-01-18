@@ -157,7 +157,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
           !"factor" %in% class(data[[.y]]) # factor can be summarized with categorical
         if(categorical_missing == FALSE) return(.x)
         message(glue(
-          "Variable '{.y}' is all `NA` and cannot be summarized as 'categorical'.\n",
+          "Variable '{.y}' is `NA` for all observations and cannot be summarized as 'categorical'.\n",
           "Using `{.y} ~ \"dichotomous\"` instead."
         ))
         return("dichotomous")
