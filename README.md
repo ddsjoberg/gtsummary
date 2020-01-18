@@ -56,11 +56,11 @@ customizable capabilities.
     or
     **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
     tables to present results side by side… there are so many
-    possibilities to reproducibly create the table of your dreams\!
+    possibilities to create the table of your dreams\!
 
   - **[Report statistics
     inline](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text)**
-    from summary tables and regression summary tables in **Rmarkdown**.
+    from summary tables and regression summary tables in **R markdown**.
     Make your reports completely reproducible\!
 
 By leveraging [{broom}](https://broom.tidyverse.org/),
