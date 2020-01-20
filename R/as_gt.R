@@ -1,6 +1,6 @@
 #' Convert gtsummary object to a gt_tbl object
 #'
-#' @description Function converts gtsummary objects to a gt_tbl objects.
+#' @description Function converts a gtsummary object to a gt_tbl object.
 #' Function is used in the background when the results are printed or knit.
 #' A user can use this function if they wish to add customized formatting
 #' available via the [gt package](https://gt.rstudio.com/index.html).
@@ -20,7 +20,6 @@
 #' Default is `everything()`, which includes all commands in `x$gt_calls`.
 #' @param exclude DEPRECATED.
 #' @param omit DEPRECATED.
-#' vector of named gt commands to omit. Default is `NULL`
 #' @export
 #' @return A `gt_tbl` object
 #' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survival]
