@@ -23,7 +23,7 @@ tbl_cross <- function(data,
                       col = NULL,
                       statistic = "{n}",
                       label = NULL,
-                      missing = c("always", "no"),
+                      missing = c("ifany", "always", "no"),
                       percent = c("none", "column", "row", "cell")) {
 
 
@@ -61,18 +61,30 @@ tbl_cross <- function(data,
 
   # omit or factorize NAs   ---------------
 
-  if(missing == "no") {
+  if (missing == "no") {
 
-    message(glue::glue(
-      "{sum(complete.cases(data) == FALSE)} observations with missing data have been removed. "))
-
-    data <- data %>%
-      complete.cases()
-
-  } else {
+    if(sum(complete.cases(data) == FALSE) > 0) {
+      message(glue::glue(
+        "{sum(complete.cases(data) == FALSE)} observations with missing data have been removed. "))
+    }
 
     data <- data %>%
-      mutate_all(~forcats::fct_explicit_na(as.factor(.x), na_level = "Missing"))
+      na.omit()
+
+  } else if (missing == "ifany") {
+
+    data <- data %>%
+      mutate_all(~fct_explicit_na(.x, "Unknown"))
+
+  } else if (missing == "always") {
+
+    data <- data %>%
+      mutate_all( ~case_when(
+        is.na(.x) ~ "Unknown",
+        TRUE ~ as.character(.x)
+      )) %>%
+      mutate_all( ~fct_expand(.x, "Unknown"))
+
 
   }
 
@@ -86,13 +98,14 @@ tbl_cross <- function(data,
   col_label <- labels[[col]]
   if(is.null(col_label)) col_label <- col
 
-  print(labels)
+
   x <- data %>%
     tbl_summary(by = col,
                 statistic = list(row = statistic,
                                  Total = statistic),
                 type = list(row = "categorical",
                             Total = "dichotomous"),
+                missing = missing,
                 label = list(
                   row = labels[[row]],
                   Total = "Total"
@@ -127,7 +140,8 @@ tbl_cross <- function(data,
 
 }
 
-# r <- tbl_cross(trial, row = response, col = trt, missing = "always")
+#r <- tbl_cross(trial, row = response, col = trt, missing = "always")
+r <- tbl_cross(trial, row = grade, col = trt, missing = "always")
 # r$gt_calls
-# r
+r
 
