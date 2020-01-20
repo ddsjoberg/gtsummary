@@ -9,7 +9,7 @@
   variable,
   level = NULL,
   pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
-  estimate_fun = x$inputs$estimate_fun,
+  estimate_fun = x$fmt_fun$estimate,
   pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
   ...
 )
@@ -44,7 +44,7 @@ A string reporting results from a gtsummary table
 Extracts and returns statistics from a table created by the \code{tbl_uvregression}
 function for inline reporting in an R markdown document.
 Detailed examples in the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \section{pattern argument}{
 
@@ -71,8 +71,8 @@ inline_text_ex1 <-
     exponentiate = TRUE
   )
 
-inline_text(inline_text_ex1, variable = "age")
-inline_text(inline_text_ex1, variable = "grade", level = "III")
+inline_text(inline_text_ex1, variable = age)
+inline_text(inline_text_ex1, variable = grade, level = "III")
 }
 \seealso{
 Other tbl_uvregression tools: 

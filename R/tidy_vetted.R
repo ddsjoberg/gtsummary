@@ -16,6 +16,7 @@
 #'  \item{[geepack::geeglm]}
 #' }
 #' @name tidy_vetted
+#' @keywords internal
 #' @section model support:
 #' If [broom::tidy] or [broom.mixed::tidy] support a class of model not listed
 #' above, please submit a [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues).

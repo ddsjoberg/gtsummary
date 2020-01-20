@@ -18,7 +18,7 @@
 #' the outcome in a univariate regression model. Take care using the `x` argument
 #' that each of the columns in the data frame are appropriate for the same type
 #' of model, e.g. they are all continuous variables appropriate for [lm], or
-#' binary variables appropriate for logistic regression with [glm].
+#' dichotomous variables appropriate for logistic regression with [glm].
 #'
 #' @inheritSection tbl_regression Setting Defaults
 #' @inheritSection tbl_regression Note
@@ -32,7 +32,7 @@
 #' @param x Model covariate (e.g. `x = trt`).
 #' All other columns in `data` will serve as the outcome in a regression model
 #' with `x` as a covariate.  Output table is best when `x` is a continuous or
-#' binary variable displayed on a single row.
+#' dichotomous variable displayed on a single row.
 #' Specify one and only one of `y` or `x`
 #' @param formula String of the model formula.
 #' Uses [glue::glue] syntax. Default is `"{y} ~ {x}"`, where `{y}`
@@ -294,6 +294,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
 
   # stacking results to return -------------------------------------------------
   results <- tbl_stack(df_model$tbl)
+  names(results$tbls) <- all_vars
   class(results) <- "tbl_uvregression"
 
   # creating a meta_data table -------------------------------------------------
@@ -304,64 +305,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     select(c("variable", "var_type", "label", "N"))
 
   # exporting results ----------------------------------------------------------
-  results$tbl_regression_list <- df_model$tbl
-  names(results$tbl_regression_list) <- all_vars
-
+  results$inputs <- tbl_uvregression_inputs
   results$call_list = list(tbl_uvregression = match.call())
-  results$gt_calls = eval(gt_tbl_uvregression)
-  results$kable_calls = eval(kable_tbl_uvregression)
 
-  update_calls_from_table_header(results)
+  results
 }
-
-
-# gt function calls ------------------------------------------------------------
-# quoting returns an expression to be evaluated later
-gt_tbl_uvregression <- quote(list(
-  # first call to the gt function
-  gt = "gt::gt(data = x$table_body)" %>%
-    glue(),
-
-  # label column indented and left just
-  cols_align = glue(
-    "gt::cols_align(align = 'center') %>% ",
-    "gt::cols_align(align = 'left', columns = gt::vars(label))"
-  ),
-
-  # NAs do not show in table
-  fmt_missing =
-    "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
-      glue(),
-
-  # Show "---" for reference groups
-  fmt_missing_ref =
-    "gt::fmt_missing(columns = gt::vars(estimate, ci), rows = row_ref == TRUE, missing_text = '---')" %>%
-      glue(),
-
-  # indenting levels and missing rows
-  tab_style_text_indent = glue(
-    "gt::tab_style(",
-    "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
-    "locations = gt::cells_body(",
-    "columns = gt::vars(label), ",
-    "rows = row_type != 'label'",
-    "))"
-  )
-))
-
-# kable function calls ------------------------------------------------------------
-# quoting returns an expression to be evaluated later
-kable_tbl_uvregression <- quote(list(
-  # first call to the gt function
-  kable = glue("x$table_body"),
-
-  #  placeholder, so the formatting calls are performed other calls below
-  fmt = NULL,
-
-  # Show "---" for reference groups
-  fmt_missing_ref = glue(
-    "dplyr::mutate_at(dplyr::vars(estimate, conf.low), ",
-    "~ dplyr::case_when(row_ref == TRUE ~ '---', TRUE ~ .))"
-  )
-))
 

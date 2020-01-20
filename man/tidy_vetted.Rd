@@ -52,3 +52,4 @@ my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
 lm(age ~ grade + response, trial) \%>\%
   my_tidy()
 }
+\keyword{internal}

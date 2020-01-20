@@ -1,14 +1,18 @@
 # gtsummary (development version)
 
+* Infrastructure update to the way styling/formatting functions are returned.  Styling functions are now returned as a column in the `.$table_header` tibble.  The update simplifies handling of these styling functions in `tbl_merge()` and `tbl_stack()`. (#298, #299)
+
+* Bug fix for `tbl_summary()` when variables were all NA (#344)
+
 * New function `combine_terms()` allows users to combine multiple independent variables in a regression model into a single line after `tbl_regression()`.  The single line does not report regression coefficients, rather a single p-value from the `anova()` function. (#310)
 
 * `tbl_summary()` will now summarize columns of class `difftime` (#343)
 
-* The data summary function `add_p()` uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large datasets. (#341) 
+* The data summary function `add_p()` uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large data sets. (#341) 
 
 * In the regression modeling functions `tbl_regression()` and `tbl_uvregression()`, the users are presented an informative error message when the tidier fails (e.g. `broom::tidy()`) alerting them to the location of the error so they may address the issue (#337, #338)
 
-* Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. #250
+* Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. (#250)
 
     ```r
     tbl_summary(trial, label = age ~ "NEW LABEL"))
@@ -30,7 +34,7 @@
 
 * For each release of gtsummary, we now can make reference to the version of gt our release coincides with. The commit SHA for gt is now saved in an object called `gt_sha`, and the version of gt can be installed with `remotes::install_github("rstudio/gt", ref = gt_sha)` (#329)
 
-* Cubic spline terms are now accurately matched to a variable name/term #312
+* Cubic spline terms are now accurately matched to a variable name/term (#312)
 
 * Improved error messaging in `tidyselect_to_list()` (#300)
 
@@ -41,6 +45,12 @@
 * Functions `all_categorical()`, `all_dichotomous()`, and `all_continuous()` may now be used in `tbl_summary()` argument `type=` (#256)
 
 * Updates after the gt package deprecated `gt::cells_data()` in favor of `gt::cells_body()`. Check added to `as_gt()` ensuring a version of gt with `gt::cells_body()` in its NAMESPACE
+
+* Updated documentation and README to improve readability, added more cross-linking across pages, added search terms to help users find our package, and added gif demonstrations. (#340)
+
+* README images now build differently for website vs GitHub markdown to accommodate different output formats.
+
+* Created "style" family of functions.
 
 # gtsummary 1.2.4
 

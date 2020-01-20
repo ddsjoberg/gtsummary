@@ -154,14 +154,13 @@ add_nevent.tbl_regression <- function(x, ...) {
 add_nevent.tbl_uvregression <- function(x, ...) {
 
   # adding nevent to each tbl_regression object
-  x$tbl_regression_list <-
-    x$tbl_regression_list %>%
+  x$tbls <- x$tbls %>%
     map(add_nevent.tbl_regression)
 
   # extracting nevent from each individual table and adding
   # it to the overall $table_body
   table_nevent <-
-    x$tbl_regression_list %>%
+    x$tbls %>%
     map_dfr(
       ~ pluck(.x, "table_body") %>%
         select(c("variable", "var_type", "row_type", "label", "nevent")) %>%
