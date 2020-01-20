@@ -211,14 +211,13 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
     )
 
   x$table_body <- table_body
-  x$pvalue_fun <- pvalue_fun
   x$meta_data <- meta_data
 
   x$table_header <-
     tibble(column = names(table_body)) %>%
     left_join(x$table_header, by = "column") %>%
     table_header_fill_missing() %>%
-    table_header_fmt(p.value = "x$pvalue_fun") %>%
+    table_header_fmt_fun(p.value = pvalue_fun) %>%
     mutate(footnote = map2(
       .data$column, .data$footnote,
       function(x, y) {
@@ -234,7 +233,6 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
 
   # updating gt and kable calls with data from table_header
   x <- update_calls_from_table_header(x)
-
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
 
