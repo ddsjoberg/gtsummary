@@ -4,7 +4,7 @@
 \alias{add_q.tbl_summary}
 \title{Add a column of q-values to account for multiple comparisons}
 \usage{
-\method{add_q}{tbl_summary}(x, method = "fdr", pvalue_fun = x$pvalue_fun, ...)
+\method{add_q}{tbl_summary}(x, method = "fdr", pvalue_fun = x$fmt_fun$p.value, ...)
 }
 \arguments{
 \item{x}{\code{tbl_summary} object}

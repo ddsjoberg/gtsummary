@@ -35,13 +35,13 @@ inline_text <- function(x, ...) {
 #' t1 <- tbl_summary(trial)
 #' t2 <- tbl_summary(trial, by = trt) %>% add_p()
 #'
-#' inline_text(t1, variable = "age")
-#' inline_text(t2, variable = "grade", level = "I", column = "Drug A",
+#' inline_text(t1, variable = age)
+#' inline_text(t2, variable = grade, level = "I", column = "Drug A",
 #' pattern = "{n}/{N} ({p})%")
-#' inline_text(t2, variable = "grade", column = "p.value")
+#' inline_text(t2, variable = grade, column = "p.value")
 inline_text.tbl_summary <-
-  function(x, variable, column = NULL, level = NULL,
-           pattern = NULL, pvalue_fun = NULL, ...) {
+  function(x, variable, column = NULL, level = NULL, pattern = NULL,
+           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # create rlang::enquo() inputs ---------------------------------------------
     variable <- rlang::enquo(variable)
     column <- rlang::enquo(column)
@@ -68,9 +68,6 @@ inline_text.tbl_summary <-
     else if (rlang::quo_is_null(column) && !is.null(x$by)) {
       stop("Must specify `column` argument.", call. = FALSE)
     }
-
-    pvalue_fun <- x$pvalue_fun %||%
-      {function(x) style_pvalue(x, prepend_p = TRUE)}
 
     # checking column ----------------------------------------------------------
     # the follwing code converts the column input to a column name in x$table_body
@@ -191,12 +188,12 @@ inline_text.tbl_summary <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
 #'
-#' inline_text(inline_text_ex1, variable = "age")
-#' inline_text(inline_text_ex1, variable = "grade", level = "III")
+#' inline_text(inline_text_ex1, variable = age)
+#' inline_text(inline_text_ex1, variable = grade, level = "III")
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
-           estimate_fun = x$inputs$estimate_fun,
+           estimate_fun = x$fmt_fun$estimate,
            pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # setting quos -------------------------------------------------------------
     variable <- rlang::enquo(variable)
@@ -281,8 +278,8 @@ inline_text.tbl_regression <-
 #'     exponentiate = TRUE
 #'   )
 #'
-#' inline_text(inline_text_ex1, variable = "age")
-#' inline_text(inline_text_ex1, variable = "grade", level = "III")
+#' inline_text(inline_text_ex1, variable = age)
+#' inline_text(inline_text_ex1, variable = grade, level = "III")
 inline_text.tbl_uvregression <- inline_text.tbl_regression
 
 
@@ -342,7 +339,7 @@ inline_text.tbl_survival <-
   function(x, strata = NULL,
            time = NULL, prob = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {ci})",
-           estimate_fun = x$estimate_fun,
+           estimate_fun = x$fmt_fun$estimate,
            ...) {
 
     # input checks -------------------------------------------------------------

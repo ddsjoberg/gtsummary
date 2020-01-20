@@ -4,7 +4,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.org/ddsjoberg/gtsummary)
+status](https://travis-ci.com/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.com/ddsjoberg/gtsummary)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage
@@ -56,11 +56,11 @@ customizable capabilities.
     or
     **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
     tables to present results side by side… there are so many
-    possibilities to reproducibly create the table of your dreams\!
+    possibilities to create the table of your dreams\!
 
   - **[Report statistics
     inline](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text)**
-    from summary tables and regression summary tables in **Rmarkdown**.
+    from summary tables and regression summary tables in **R markdown**.
     Make your reports completely reproducible\!
 
 By leveraging [{broom}](https://broom.tidyverse.org/),
