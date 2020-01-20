@@ -176,7 +176,7 @@ bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
 bold_p.tbl_stack <- function(x, ...) {
 
   # assigning the class to be the same as the first stacked object
-  class(x) <- class(x$tbl_regression_list[[1]])
+  class(x) <- class(x$tbls[[1]])
 
   bold_p(x, ...)
 }

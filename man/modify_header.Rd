@@ -88,6 +88,7 @@ Other tbl_regression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{bold_p.tbl_regression}()},
 \code{\link{bold_p.tbl_stack}()},
+\code{\link{combine_terms}()},
 \code{\link{inline_text.tbl_regression}()},
 \code{\link{sort_p.tbl_regression}()},
 \code{\link{tbl_merge}()},

@@ -98,19 +98,6 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     ))
   }
 
-  # for tbl_summary, moving footnote above label column to the first stat_* column
-  tbls <- map_if(
-    tbls,
-    ~ class(.x) == "tbl_summary",
-    function(x) {
-      x$table_header$footnote[startsWith(x$table_header$column, "stat_")] <-
-        x$table_header$footnote[x$table_header$column == "label"][1]
-
-      x$table_header$footnote[x$table_header$column == "label"][1] <- list(NULL)
-      return(x)
-    }
-  )
-
   # merging tables -------------------------------------------------------------
   # nesting data by variable (one line per variable), and renaming columns with number suffix
   nested_table <- tbls %>%
@@ -178,8 +165,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
       tbls,
       ~ pluck(.x, "table_header") %>%
         mutate(
-          column = paste0(.data$column, "_", .y),
-          fmt = stringr::str_replace(fmt, stringr::fixed("x$"), paste0("x$tbls[[", .y, "]]$"))
+          column = paste0(.data$column, "_", .y)
         )
     ) %>%
     # using the identifying columns from first passed object
@@ -204,9 +190,6 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     table_body = table_body,
     table_header = table_header,
     tbls = tbls,
-    estimate_funs = map(tbl_inputs(tbls), pluck("estimate_fun")),
-    pvalue_funs = map(tbl_inputs(tbls), pluck("pvalue_fun")),
-    qvalue_funs = map(tbls, pluck("qvalue_fun")),
     call_list = list(tbl_merge = match.call()),
     gt_calls = eval(gt_tbl_merge),
     kable_calls = eval(kable_tbl_merge)
@@ -246,7 +229,7 @@ gt_tbl_merge <- quote(list(
           return(NULL)
         }
         if (class(x) == "tbl_stack" &&
-          !class(x$tbl_regression_list[[1]]) %in% c("tbl_regression", "tbl_uvregression")) {
+          !class(x$tbls[[1]]) %in% c("tbl_regression", "tbl_uvregression")) {
           return(NULL)
         }
         # making gt missing code for references
@@ -299,7 +282,7 @@ kable_tbl_merge <- quote(list(
           return(NULL)
         }
         if (class(x) == "tbl_stack" &&
-          !class(x$tbl_regression_list[[1]]) %in% c("tbl_regression", "tbl_uvregression")) {
+          !class(x$tbls[[1]]) %in% c("tbl_regression", "tbl_uvregression")) {
           return(NULL)
         }
         # making mutate missing code for references
@@ -326,7 +309,7 @@ tbl_inputs <- function(tbl) {
         return(pluck(tbl, "inputs"))
       }
       if (class(tbl) == "tbl_uvregression") {
-        return(pluck(tbl, "tbl_regression_list", 1, "inputs"))
+        return(pluck(tbl, "tbls", 1, "inputs"))
       }
     }
   )

@@ -169,7 +169,7 @@ add_global_p.tbl_uvregression <- function(x, ...) {
   # calculating global pvalues
   global_p <-
     imap_dfr(
-      x$tbl_regression_list,
+      x$tbls,
       function(x, y) {
         tryCatch(
           {

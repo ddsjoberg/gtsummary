@@ -23,6 +23,7 @@ function's \verb{formula.=} argument}
 \code{tbl_regression} object
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 The function combines terms from a regression model, and replaces the terms
 with a single row in the output table.  The p-value is calculated using
 \code{\link[stats:anova]{stats::anova()}}.
@@ -87,3 +88,21 @@ combine_terms_ex3 <-
   )
 
 }
+\seealso{
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_regression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
+}
+\author{
+Daniel D. Sjoberg
+}
+\concept{tbl_regression tools}

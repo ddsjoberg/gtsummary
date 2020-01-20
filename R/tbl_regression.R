@@ -213,11 +213,11 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   table_header <-
     tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
-    table_header_fmt(
-      p.value = "x$inputs$pvalue_fun",
-      estimate = "x$inputs$estimate_fun",
-      conf.low = "x$inputs$estimate_fun",
-      conf.high = "x$inputs$estimate_fun"
+    table_header_fmt_fun(
+      p.value = pvalue_fun,
+      estimate = estimate_fun,
+      conf.low = estimate_fun,
+      conf.high = estimate_fun
     ) %>%
     # adding footnotes to table_header tibble
     mutate(

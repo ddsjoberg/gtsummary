@@ -9,7 +9,7 @@
   variable,
   level = NULL,
   pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
-  estimate_fun = x$inputs$estimate_fun,
+  estimate_fun = x$fmt_fun$estimate,
   pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
   ...
 )
@@ -66,8 +66,8 @@ inline_text_ex1 <-
   glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE)
 
-inline_text(inline_text_ex1, variable = "age")
-inline_text(inline_text_ex1, variable = "grade", level = "III")
+inline_text(inline_text_ex1, variable = age)
+inline_text(inline_text_ex1, variable = grade, level = "III")
 }
 \seealso{
 Other tbl_regression tools: 
@@ -76,6 +76,7 @@ Other tbl_regression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{bold_p.tbl_regression}()},
 \code{\link{bold_p.tbl_stack}()},
+\code{\link{combine_terms}()},
 \code{\link{modify_header}()},
 \code{\link{sort_p.tbl_regression}()},
 \code{\link{tbl_merge}()},
