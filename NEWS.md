@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix for `tbl_summary()` when variables were all NA (#344)
+
 * New function `combine_terms()` allows users to combine multiple independent variables in a regression model into a single line after `tbl_regression()`.  The single line does not report regression coefficients, rather a single p-value from the `anova()` function. (#310)
 
 * `tbl_summary()` will now summarize columns of class `difftime` (#343)
