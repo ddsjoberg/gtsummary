@@ -40,8 +40,8 @@ inline_text <- function(x, ...) {
 #' pattern = "{n}/{N} ({p})%")
 #' inline_text(t2, variable = grade, column = "p.value")
 inline_text.tbl_summary <-
-  function(x, variable, column = NULL, level = NULL,
-           pattern = NULL, pvalue_fun = x$fmt_fun$p.value, ...) {
+  function(x, variable, column = NULL, level = NULL, pattern = NULL,
+           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
     # create rlang::enquo() inputs ---------------------------------------------
     variable <- rlang::enquo(variable)
     column <- rlang::enquo(column)

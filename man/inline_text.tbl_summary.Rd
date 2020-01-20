@@ -10,7 +10,7 @@
   column = NULL,
   level = NULL,
   pattern = NULL,
-  pvalue_fun = x$fmt_fun$p.value,
+  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
   ...
 )
 }
