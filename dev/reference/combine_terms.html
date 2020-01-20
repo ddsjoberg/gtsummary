@@ -49,7 +49,9 @@
 
 
 <meta property="og:title" content="Combine terms in a regression model — combine_terms" />
-<meta property="og:description" content="The function combines terms from a regression model, and replaces the terms
+<meta property="og:description" content="
+
+The function combines terms from a regression model, and replaces the terms
 with a single row in the output table.  The p-value is calculated using
 stats::anova()." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
@@ -95,7 +97,7 @@ stats::anova()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9012</span>
       </span>
     </div>
 
@@ -170,7 +172,9 @@ stats::anova()." />
     </div>
 
     <div class="ref-description">
-    <p>The function combines terms from a regression model, and replaces the terms
+    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+
+The function combines terms from a regression model, and replaces the terms
 with a single row in the output table.  The p-value is calculated using
 <code><a href='https://rdrr.io/r/stats/anova.html'>stats::anova()</a></code>.</p>
     </div>
@@ -215,6 +219,20 @@ function's <code>formula.=</code> argument</p></td>
 <p><img src='figures/combine_terms_ex2.png' width=45% /></p>
 <p>Example 3</p>
 <p><img src='figures/combine_terms_ex3.png' width=45% /></p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other tbl_regression tools: 
+<code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
+<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
+<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a>()</code>,
+<code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
+<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
+<code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a>()</code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># fit model with nonlinear terms for marker</span>
@@ -268,9 +286,12 @@ function's <code>formula.=</code> argument</p></td>
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#example-output">Example Output</a></li>
+      <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
+    <h2>Author</h2>
+    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 

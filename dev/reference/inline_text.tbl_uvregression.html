@@ -96,7 +96,7 @@ inline_text vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9012</span>
       </span>
     </div>
 
@@ -183,7 +183,7 @@ Detailed examples in the
   <span class='no'>variable</span>,
   <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>inputs</span>$<span class='no'>estimate_fun</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>fmt_fun</span>$<span class='no'>estimate</span>,
   <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
   <span class='no'>...</span>
 )</pre>
@@ -272,7 +272,7 @@ print the table the estimates are extracted from.</p><ul>
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; 1.02 (95% CI 1.00, 1.04; p=0.10)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"III"</span>)</div><div class='output co'>#&gt; 1.10 (95% CI 0.52, 2.29; p=0.8)</div></pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>age</span>)</div><div class='output co'>#&gt; 1.02 (95% CI 1.00, 1.04; p=0.10)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>grade</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"III"</span>)</div><div class='output co'>#&gt; 1.10 (95% CI 0.52, 2.29; p=0.8)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

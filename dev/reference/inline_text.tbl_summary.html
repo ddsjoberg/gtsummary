@@ -95,7 +95,7 @@ inline_text vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9012</span>
       </span>
     </div>
 
@@ -182,7 +182,7 @@ inline reporting in an R markdown document. Detailed examples in the
   <span class='kw'>column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
   <span class='no'>...</span>
 )</pre>
 
@@ -250,8 +250,8 @@ and return a string that is the rounded/formatted p-value (e.g.
     <pre class="examples"><div class='input'><span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>)
 <span class='no'>t2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"age"</span>)</div><div class='output co'>#&gt; [1] "47 (38, 57)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"I"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"Drug A"</span>,
-<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{n}/{N} ({p})%"</span>)</div><div class='output co'>#&gt; [1] "35/98 (36)%"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='st'>"grade"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"p.value"</span>)</div><div class='output co'>#&gt; [1] "0.9"</div></pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>age</span>)</div><div class='output co'>#&gt; [1] "47 (38, 57)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>grade</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"I"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"Drug A"</span>,
+<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{n}/{N} ({p})%"</span>)</div><div class='output co'>#&gt; [1] "35/98 (36)%"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>grade</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"p.value"</span>)</div><div class='output co'>#&gt; [1] "p=0.9"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
