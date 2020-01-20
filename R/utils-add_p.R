@@ -54,6 +54,10 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
     return(getOption("gtsummary.add_p.test.continuous", default = "kruskal.test"))
   }
 
+  # if all obs are missing, assigning chisq
+  if (length(data[[var]]) == sum(is.na(data[[var]])))
+    return(getOption("gtsummary.add_p.test.categorical", default = "chisq.test"))
+
   # calculate expected counts
   min_exp <-
     expand.grid(

@@ -262,20 +262,20 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       ),
       sort = assign_sort(.data$variable, .data$summary_type, sort),
       df_stats = pmap(
-        list(.data$summary_type, .data$variable, .data$dichotomous_value,
+        list(.data$summary_type, .data$variable, .data$class, .data$dichotomous_value,
              .data$sort, .data$stat_display, .data$digits),
-        function(summary_type, variable, dichotomous_value, sort, stat_display, digits) {
+        function(summary_type, variable, class, dichotomous_value, sort, stat_display, digits) {
           switch(
             summary_type,
             "continuous" = summarize_continuous(data = data, variable = variable,
                                                  by = by, stat_display = stat_display,
                                                  digits = digits),
             "categorical" = summarize_categorical(data = data, variable = variable,
-                                                   by = by,
+                                                   by = by, class = class,
                                                    dichotomous_value = dichotomous_value,
                                                    sort = sort, percent = percent),
             "dichotomous" = summarize_categorical(data = data, variable = variable,
-                                                   by = by,
+                                                   by = by, class = class,
                                                    dichotomous_value = dichotomous_value,
                                                    sort = sort, percent = percent)
           )
@@ -288,8 +288,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     meta_data %>%
     mutate(
       tbl_stats = pmap(
-        list(.data$summary_type, .data$variable, .data$var_label,
-             .data$stat_display, .data$df_stats),
+        list(.data$summary_type, .data$variable,
+             .data$var_label, .data$stat_display, .data$df_stats),
         function(summary_type, variable, var_label, stat_display, df_stats) {
           df_stats_to_tbl(
             data = data, variable = variable, summary_type = summary_type, by = by,
