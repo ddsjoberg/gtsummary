@@ -54,31 +54,6 @@ table_header_fill_missing <- function(table_header) {
   table_header
 }
 
-# this functions modfies table_header with the formatting function
-table_header_fmt <- function(table_header, ...) {
-  # saving passed_dots arguments as a named list
-  passed_dots <- list(...)
-
-  # ordering the names to be the same as in table_header
-  names_ordered <- table_header$column %>% intersect(names(passed_dots))
-  passed_dots <- passed_dots[names_ordered]
-
-
-  table_header_update <-
-    tibble(
-      column = table_header$column %>% intersect(names(passed_dots)),
-      fmt = passed_dots %>% unlist()
-    )
-
-  # updating table_header
-  table_header[
-    table_header$column %in% table_header_update$column, # selecting rows
-    c("column", "fmt") # selecting columns
-    ] <- table_header_update[c("column", "fmt")]
-
-  table_header
-}
-
 table_header_fmt_fun <- function(table_header, ...) {
   # saving passed_dots arguments as a named list
   passed_dots <- list(...)
