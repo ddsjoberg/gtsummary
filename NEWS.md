@@ -2,6 +2,8 @@
 
 * Infrastructure update to the way styling/formatting functions are returned.  Styling functions are now returned as a column in the `.$table_header` tibble.  The update simplifies handling of these styling functions in `tbl_merge()` and `tbl_stack()`. (#298, #299)
 
+* Bug fix for `tbl_summary()` when variables were all NA (#344)
+
 * New function `combine_terms()` allows users to combine multiple independent variables in a regression model into a single line after `tbl_regression()`.  The single line does not report regression coefficients, rather a single p-value from the `anova()` function. (#310)
 
 * `tbl_summary()` will now summarize columns of class `difftime` (#343)
