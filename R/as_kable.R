@@ -1,9 +1,16 @@
 #' Convert to knitr_kable object
 #'
-#' Function converts gtsummary objects to a knitr_kable objects.  This function
-#' is used in the background when the results are printed or knit.  A user can
+#' @description Function converts gtsummary objects to a knitr_kable objects.
+#' This function is used in the background when the results are printed or knit.  A user can
 #' use this function if they wish to add customized formatting available
 #' via [knitr::kable].
+#'
+#' @description Output from kable is less full featured compared to summary tables
+#' produced with gt. For example, kable summary tables do not
+#' include indentation, footnotes, and spanning header rows.
+#' To use these features, install gt with
+#' `remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)`.
+#'
 #'
 #' @param x Object created by a function from the gtsummary package
 #' (e.g. [tbl_summary] or [tbl_regression])
@@ -30,7 +37,10 @@ as_kable <- function(x, include = everything(), exclude = NULL, ...) {
       !is.null(as.list(rlang::caller_env())$print_engine)) {
     rlang::inform(glue(
       "Results will be printed using `knitr::kable()` and do not \n",
-      "support footers or spanning headers. \n\n",
+      "support footers, spanning headers, or indentation. \n",
+      "Tip: To better distinguish variable labels and level labels when \n",
+      "indenting is not supported, try `gtsummary::bold_labels()` \n",
+      "or `gtsummary::italicize_levels()`. \n\n",
       "For tables styled by the gt package, use the installation code below.\n",
       "`remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`\n\n",
       "If you prefer to always use `knitr::kable()`, add the option\n",
