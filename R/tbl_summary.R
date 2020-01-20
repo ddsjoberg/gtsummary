@@ -310,7 +310,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       footnote = map2(
         .data$column, .data$footnote,
         function(x, y) {
-          if (x == "label") {
+          if (startsWith(x, "stat_")) {
             return(c(y, footnote_stat_label(meta_data)))
           }
           return(y)

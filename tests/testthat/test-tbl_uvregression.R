@@ -153,7 +153,7 @@ test_that("tbl_uvregression x= argument tests", {
   )
 
   expect_identical(
-    ux_x$tbl_regression_list$age$model_obj %>% coef(),
+    ux_x$tbls$age$model_obj %>% coef(),
     lm(age ~ response, trial) %>% coef()
   )
 })

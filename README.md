@@ -4,7 +4,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.org/ddsjoberg/gtsummary)
+status](https://travis-ci.com/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.com/ddsjoberg/gtsummary)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage
