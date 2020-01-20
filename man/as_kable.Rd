@@ -28,11 +28,16 @@ This function is used in the background when the results are printed or knit.  A
 use this function if they wish to add customized formatting available
 via \link[knitr:kable]{knitr::kable}.
 
-Output from kable is less full featured compared to summary tables
-produced with gt. For example, kable summary tables do not
+Output from \link[knitr:kable]{knitr::kable} is less full featured compared to summary tables
+produced with \href{https://gt.rstudio.com/index.html}{gt}. For example, kable summary tables do not
 include indentation, footnotes, and spanning header rows.
-To use these features, install gt with
+To use these features, install \href{https://gt.rstudio.com/index.html}{gt} with
 \code{remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)}.
+}
+\details{
+Tip: To better distinguish variable labels and level labels when
+indenting is not supported, try \code{gtsummary::bold_labels()} or
+\code{gtsummary::italicize_levels()}.
 }
 \examples{
 trial \%>\%
