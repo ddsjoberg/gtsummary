@@ -28,7 +28,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
   if (is.null(tidy_fun)) {
     if (class(x)[1] %in% mixed_classes) { # can add other classes later. Need exact subclass.
       tryCatch({
-        tidy_bit <- broom.mixed::tidy(
+        tidy_bit <- broom::tidy(
         x,
         exponentiate = exponentiate,
         conf.level = conf.level, conf.int = TRUE, effects = "fixed"
@@ -36,7 +36,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
       },
       error = function(e) {
         usethis::ui_oops(paste0(
-          "There was an error calling {usethis::ui_code('broom.mixed::tidy(x, conf.int = TRUE, effects = \"fixed\")')},\n",
+          "There was an error calling {usethis::ui_code('broom::tidy(x, conf.int = TRUE, effects = \"fixed\")')},\n",
           "which is required for gtsummary to print the model summary.\n",
           "See error message below. \n"
         ))
