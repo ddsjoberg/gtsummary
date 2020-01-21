@@ -18,18 +18,6 @@ print.tbl_summary <- function(x, ...) {
       "gt", "kable"
     )
 
-  # printing message about downloading gt package
-  if (is.null(getOption("gtsummary.print_engine")) && print_engine == "kable") {
-    message(glue(
-      "Results will be printed using 'knitr::kable()'.\n",
-      "For tables styled by the gt package, use the installation code below.\n",
-      "'remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)'\n\n",
-      "If you prefer to always use 'knitr::kable()', add the option\n",
-      "'options(gtsummary.print_engine = \"kable\")' to your script\n",
-      "or in a user- or project-level startup file, '.Rprofile'."
-    ))
-  }
-
   # printing results
   if (print_engine == "gt") {
     return(as_gt(x) %>% print())
@@ -53,8 +41,6 @@ knit_print.tbl_summary <- function(x, ...) {
       requireNamespace("gt", quietly = TRUE),
       "gt", "kable"
     )
-
-
 
   # don't use word_document with gt engine
   if (print_engine == "gt" && "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
