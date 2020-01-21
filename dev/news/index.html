@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9012</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9013</span>
       </span>
     </div>
 
@@ -170,6 +170,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Improved messaging for users who use <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> to print gtsummary tables, and users who have not yet installed the {gt} package (<a href='https://github.com/ddsjoberg/gtsummary/issues/347'>#347</a>)</p></li>
 <li><p>Infrastructure update to the way styling/formatting functions are returned. Styling functions are now returned as a column in the <code>.$table_header</code> tibble. The update simplifies handling of these styling functions in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> and <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/298'>#298</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/299'>#299</a>)</p></li>
 <li><p>Bug fix for <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when variables were all NA (<a href='https://github.com/ddsjoberg/gtsummary/issues/344'>#344</a>)</p></li>
 <li><p>New function <code><a href="../reference/combine_terms.html">combine_terms()</a></code> allows users to combine multiple independent variables in a regression model into a single line after <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>. The single line does not report regression coefficients, rather a single p-value from the <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> function. (<a href='https://github.com/ddsjoberg/gtsummary/issues/310'>#310</a>)</p></li>
