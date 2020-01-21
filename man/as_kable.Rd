@@ -23,14 +23,25 @@ Default is \code{everything()}, which includes all commands in \code{x$kable_cal
 A \code{knitr_kable} object
 }
 \description{
-Function converts gtsummary objects to a knitr_kable objects.  This function
-is used in the background when the results are printed or knit.  A user can
-use this function if they wish to add customized formatting available
-via \link[knitr:kable]{knitr::kable}.
+Function converts a gtsummary object to a knitr_kable object.
+This function is used in the background when the results are printed or knit.
+A user can use this function if they wish to add customized formatting
+available via \link[knitr:kable]{knitr::kable}.
+
+Output from \link[knitr:kable]{knitr::kable} is less full featured compared to
+summary tables produced with \href{https://gt.rstudio.com/index.html}{gt}.
+For example, kable summary tables do not include indentation, footnotes,
+or spanning header rows. To use these features, install gt with
+\code{remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)}.
+}
+\details{
+Tip: To better distinguish variable labels and level labels when
+indenting is not supported, try \code{\link[=bold_labels]{bold_labels()}} or \code{\link[=italicize_levels]{italicize_levels()}}.
 }
 \examples{
 trial \%>\%
   tbl_summary(by = trt) \%>\%
+  bold_labels() \%>\%
   as_kable()
 }
 \seealso{

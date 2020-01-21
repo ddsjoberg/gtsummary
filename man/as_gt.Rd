@@ -17,17 +17,18 @@ Default is \code{everything()}, which includes all commands in \code{x$gt_calls}
 
 \item{exclude}{DEPRECATED.}
 
-\item{omit}{DEPRECATED.
-vector of named gt commands to omit. Default is \code{NULL}}
+\item{omit}{DEPRECATED.}
 }
 \value{
 A \code{gt_tbl} object
 }
 \description{
-Function converts gtsummary objects to a gt_tbl objects.
+Function converts a gtsummary object to a gt_tbl object.
 Function is used in the background when the results are printed or knit.
 A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
+You can install gt with \code{remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)}.
+
 Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
 or
