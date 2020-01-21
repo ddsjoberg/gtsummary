@@ -170,7 +170,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())
 
-  # using broom and broom.mixed to tidy up regression results, and
+  # using broom to tidy up regression results, and
   # then reversing order of data frame
   tidy_model <-
     tidy_wrap(x, exponentiate, conf.level, tidy_fun)

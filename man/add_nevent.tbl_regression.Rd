@@ -21,14 +21,11 @@ model types include GLMs with binomial distribution family (e.g.
 \link[stats:glm]{stats::glm}, \link[lme4:glmer]{lme4::glmer}, and
 \link[geepack:geeglm]{geepack::geeglm}) and Cox
 Proportion Hazards regression models (\link[survival:coxph]{survival::coxph}).
-}
-\section{Reporting Event N}{
 
 The number of events is added to the internal \code{.$table_body} tibble,
 and not printed in the default output table (similar to N). The number
 of events is accessible via the \link{inline_text} function for printing in a report.
 }
-
 \section{Example Output}{
 
 \if{html}{\figure{tbl_reg_nevent_ex.png}{options: width=50\%}}

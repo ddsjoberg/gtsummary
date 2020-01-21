@@ -9,17 +9,24 @@ jobs:
       provider: script
       script: Rscript -e 'pkgdown::deploy_site_github()'
       skip_cleanup: true
-  - r: oldrel
   - r: devel
+  - r: oldrel
+  - r: 3.4
+  - r: 3.3
 
 sudo: false
 cache: packages
 warnings_are_errors: false
 
-# installing old version of latticeExtra that does not depend on R 3.6
+# installing old version of packges with lower min R versions
 before_install:
   - Rscript -e 'install.packages("remotes")'
-  - Rscript -e 'remotes::install_version("latticeExtra", version = "0.6-28", repos = "http://cran.us.r-project.org")'
+            -e 'remotes::install_version("latticeExtra", version = "0.6-28", repos = "http://cran.us.r-project.org")'
+            -e 'remotes::install_version("openxlsx", version = "3.0.0", repos = "http://cran.us.r-project.org")'
+            -e 'r_version <- paste0(R.Version()$major, ".", substr(R.Version()$minor, 1, 1))'
+            -e 'if (r_version %in% c("3.3", "3.4")) remotes::install_version("geepack", version = "1.2-1", repos = "http://cran.us.r-project.org")'
+            -e 'if (r_version %in% c("3.3", "3.4")) remotes::install_version("car", version = "3.0-2", repos = "http://cran.us.r-project.org")'
+            -e 'if (r_version %in% c("3.3")) remotes::install_version("survival", version = "2.44-1.1", repos = "http://cran.us.r-project.org")'
 
 r_github_packages:
   - rstudio/gt
