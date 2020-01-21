@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9013</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9014</span>
       </span>
     </div>
 
@@ -170,6 +170,8 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Lowered minimum required version of R to v3.3 (<a href='https://github.com/ddsjoberg/gtsummary/issues/356'>#356</a>)</p></li>
+<li><p>Removed {broom.mixed} dependency as the {broom} package contained all necessary tidiers (<a href='https://github.com/ddsjoberg/gtsummary/issues/354'>#354</a>)</p></li>
 <li><p>Improved messaging for users who use <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> to print gtsummary tables, and users who have not yet installed the {gt} package (<a href='https://github.com/ddsjoberg/gtsummary/issues/347'>#347</a>)</p></li>
 <li><p>Infrastructure update to the way styling/formatting functions are returned. Styling functions are now returned as a column in the <code>.$table_header</code> tibble. The update simplifies handling of these styling functions in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> and <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/298'>#298</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/299'>#299</a>)</p></li>
 <li><p>Bug fix for <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when variables were all NA (<a href='https://github.com/ddsjoberg/gtsummary/issues/344'>#344</a>)</p></li>
