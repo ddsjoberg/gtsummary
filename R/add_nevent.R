@@ -18,6 +18,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 
 #' Add number of events to a regression table
 #'
+#' @description
 #' This function adds a column of the number of events to tables created with
 #' [tbl_regression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
@@ -25,7 +26,6 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' [geepack::geeglm]) and Cox
 #' Proportion Hazards regression models ([survival::coxph]).
 #'
-#' @section Reporting Event N:
 #' The number of events is added to the internal `.$table_body` tibble,
 #' and not printed in the default output table (similar to N). The number
 #' of events is accessible via the [inline_text] function for printing in a report.
