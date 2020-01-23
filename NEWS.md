@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Lowered minimum required version of R to v3.3 (#356)
+
+* Removed {broom.mixed} dependency as the {broom} package contained all necessary tidiers (#354)
+
+* Improved messaging for users who use `knitr::kable()` to print gtsummary tables, and users who have not yet installed the {gt} package (#347)
+
 * Infrastructure update to the way styling/formatting functions are returned.  Styling functions are now returned as a column in the `.$table_header` tibble.  The update simplifies handling of these styling functions in `tbl_merge()` and `tbl_stack()`. (#298, #299)
 
 * Bug fix for `tbl_summary()` when variables were all NA (#344)
