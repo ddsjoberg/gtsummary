@@ -228,23 +228,31 @@ Each of the modification functions have additional options outlined in their res
 
 ## Select Helpers {#select_helpers}
 
-The {gtsummary} package includes a set of functions meant to help the user specify function arguments for groups of variables.  For example, if all continuous variables will be summarized in `tbl_summary()` as minimum and maximum, the `all_continuous()` function can be used: `statistic = all_continuous() ~ "{min} to {max}"`
+The {gtsummary} package accepts all select helpers available throughout the tidyverse (think anything you can use with the `dplyr::select()` function can be used with {gtsummary}).
+This means you have flexibility in the way you select variables.
+For example, if you want to show age and the marker levels to one decimal place, you can pass `digits = c(age, marker) ~ 1` to `tbl_summary()`.
+Because the inputs to `dplyr::select()` are flexible, you could also pass the column names quoted: `digits = c("age", "marker") ~ 1`.
+The functions also accept [{tidyselect} helpers](https://tidyselect.r-lib.org/reference/select_helpers.html), such as `starts_with()`, `contains()`, and `everything()`.
 
-The set of select helper function includes the functions in the {tidyselect} package (used throughout the tidyverse), and functions specific to {gtsummary}. There are four types of select helpers.  
+While the selectors available in the tidyverse are wonderful, there are some additional selectors specific to {gtsummary} that have been added to the package that allow you to select a variable by its type of class.
+For example, if all continuous variables will be summarized in `tbl_summary()` as minimum and maximum, the `all_continuous()` function can be used: `statistic = all_continuous() ~ "{min} to {max}"`.
 
-1. Functions in the {tidyselect} package used throughout the tidyverse, including `vars()` from the {dplyr} package.  
+1. Summary type 
 
-1. Functions to select groups of variables based on their attributes like class or type.  
+    ```{r, eval=FALSE}
+    all_continuous()      all_categorical()      all_dichotomous()
+    ```
 
-1. Functions to select groups of variables based on their display type in `tbl_summary()`  
+1. Vector class or type selectors
 
-1. List variables in a vector, e.g. `age`, `"age"` or `c("age", "stage")`. Variables can be quoted or unquoted.
+    ```{r, eval=FALSE}
+    all_numeric()         all_integer()          all_logical() 
+    all_factor()          all_character()        all_double()
+    ```
 
-| {tidyselect}                                                                                                                 | attribute                                                                                            | summary type                                                 | character vector             |
-|------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|------------------------------|
-| `starts_with()`, `ends_with()`, `contains()`, `matches()`, `one_of()`, `everything()`, `num_range()`, `last_col()`, `vars()` | `all_numeric()`, `all_integer()`, `all_logical()`, `all_factor()`, `all_character()`, `all_double()` | `all_continuous()`, `all_categorical()`, `all_dichotomous()` | `"age"` or `c("age", "stage")` |
-
-The select helpers are primarily used in `tbl_summary()` and its related functions, e.g. `add_p()`.  We'll review a few examples illustrating their use.
+While using compound selectors, you may need to utilize the `vars()` function.
+In {gtsummary}, the `vars(...)` function passes all arguments to `dplyr::select(...)`.
+For example, to select all variables in the trial data except `"stage"`, use `vars(everything(), -stage)`.
 
 ### Examples
 
@@ -257,8 +265,9 @@ trial %>%
   dplyr::select(trt, response, age, stage, marker, grade) %>%
   tbl_summary(
     by = trt,
-    type = list(vars(response, grade) ~ "categorical"), # select by variables in a vector
-    statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{p}%") # select by summary type/attribute
+    type = list(c(response, grade) ~ "categorical"), # select by variables in c()
+    statistic = list(all_continuous() ~ "{mean} ({sd})", 
+                     all_categorical() ~ "{p}%") # select by summary type
   ) %>%
   add_p(test = list(contains("response") ~ "fisher.test", # select using functions in tidyselect
                     all_continuous() ~ "t.test"))
