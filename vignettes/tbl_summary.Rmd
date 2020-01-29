@@ -228,7 +228,7 @@ Each of the modification functions have additional options outlined in their res
 
 ## Select Helpers {#select_helpers}
 
-The {gtsummary} package accepts all select helpers available throughout the tidyverse (think anything you can use with the `dplyr::select()` function can be used with {gtsummary}).
+The {gtsummary} package accepts all select helpers available throughout the tidyverse (e.g. anything you can use with the `dplyr::select()` function can be used with {gtsummary}).
 This means you have flexibility in the way you select variables.
 For example, if you want to show age and the marker levels to one decimal place, you can pass `digits = c(age, marker) ~ 1` to `tbl_summary()`.
 Because the inputs to `dplyr::select()` are flexible, you could also pass the column names quoted: `digits = c("age", "marker") ~ 1`.
