@@ -220,21 +220,22 @@ Each of the modification functions have additional options outlined in their res
 
 ## Select Helpers {#select_helpers}
 
-The {gtsummary} package accepts all select helpers available throughout the tidyverse (e.g. anything you can use with the `dplyr::select()` function can be used with {gtsummary}).
-This means you have flexibility in the way you select variables for summaries, how they are displayed in the table, and other customization options.
-For example, if you want to show age and the marker levels to one decimal place, you can pass `digits = c(age, marker) ~ 1` to `tbl_summary()`.
-The selecting input is flexible, and you may also pass quoted column names: `digits = c("age", "marker") ~ 1`.
-{gtsummary} also utilizes [{tidyselect} helpers](https://tidyselect.r-lib.org/reference/select_helpers.html), such as `starts_with()`, `contains()`, and `everything()`.
+There is flexibility in how you select variables for {gtsummary} arguments, which allows for many customization opportunities! For example, if you want to show age and the marker levels to one decimal place in `tbl_summary()`, you can pass `digits = c(age, marker) ~ 1`. The selecting input is flexible, and you may also pass quoted column names.
 
-While the selectors available in the tidyverse are wonderful, there are some additional selectors specific to {gtsummary} that have been included in the package.
+Going beyond typing out specific variables in your dataset, you can use: 
 
-1. **Summary type** There are three types of summary types in {gtsummary}, and you may use the type to select columns.  This is useful, for example, when you wish to report the mean and standard deviation for all continuous variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
+1. All [**{tidyselect} helpers**](https://tidyselect.r-lib.org/reference/select_helpers.html) available throughout the tidyverse, such as `starts_with()`, `contains()`, and `everything()` (i.e. anything you can use with the `dplyr::select()` function can be used with {gtsummary}).
+
+
+1. Additional [**{gtsummary} selectors**](http://www.danieldsjoberg.com/gtsummary/reference/select_helpers.html) that are included in the package to supplement tidyselect functions.
+
+    + **Summary type** There are three types of summary types in {gtsummary}, and you may use the type to select columns.  This is useful, for example, when you wish to report the mean and standard deviation for all continuous variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
 
     ```{r, eval=FALSE}
     all_continuous()      all_categorical()      all_dichotomous()
     ```
 
-1. **Vector class or type** Select columns based on their class or type.
+    + **Vector class or type** Select columns based on their class or type.
 
     ```{r, eval=FALSE}
     all_numeric()         all_integer()          all_logical() 
@@ -245,7 +246,7 @@ Most variable selecting can be accomplished in a single R object (e.g. `c(age, s
 However, you may need more complex compound select structure, which cannot be represented by a single object.
 For example, if you want to select all columns except `"stage"`, you'll need to utilize the `vars(...)` function.
 When the `vars(...)` function is used, all arguments from `vars()` are passed directly to `dplyr::select()`.
-`vars(everything(), -stage)` is be the `dplyr` equivelent of `select(everything(), -stage)`.
+`vars(everything(), -stage)` is be the `dplyr` equivalent of `select(everything(), -stage)`.
 
 ### Examples
 
