@@ -38,10 +38,11 @@
 tbl_cross <- function(data,
                       row = NULL,
                       col = NULL,
-                      statistic = "{n}",
+                      percent = c("none", "column", "row", "cell"),
+                      statistic = ifelse(percent == "none", "{n}", "{n} ({p}%)"),
                       label = NULL,
                       missing = c("ifany", "always", "no"),
-                      percent = c("none", "column", "row", "cell")) {
+                      ) {
   row <- var_input_to_string(
     data = data,
     select_input = !!rlang::enquo(row),
@@ -164,16 +165,12 @@ tbl_cross <- function(data,
 
   # gt function calls ------------------------------------------------------------
   # quoting returns an expression to be evaluated later
-  x$gt_calls[["cross_tab_spanner"]] <-
+  x$gt_calls[["tab_spanner"]] <-
     glue(
-      "gt::tab_spanner(.,",
+      "gt::tab_spanner(",
       "label = gt::md('**{labels[[col]]}**'), ",
-      "columns = contains('stat_'))"
-    )
-
-  x$gt_calls[["cross_tab_spanner_total"]] <-
-    glue(
-      "gt::tab_spanner(., label = gt::md('**Total**'), ",
+      "columns = contains('stat_')) %>%",
+      "gt::tab_spanner(label = gt::md('**Total**'), ",
       "columns = vars(stat_0))"
     )
 
