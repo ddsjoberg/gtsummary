@@ -246,7 +246,7 @@ Most variable selecting can be accomplished in a single R object (e.g. `c(age, s
 However, you may need more complex compound select structure, which cannot be represented by a single object.
 For example, if you want to select all columns except `"stage"`, you'll need to utilize the `vars(...)` function.
 When the `vars(...)` function is used, all arguments from `vars()` are passed directly to `dplyr::select()`.
-`vars(everything(), -stage)` is be the `dplyr` equivalent of `select(everything(), -stage)`.
+`vars(everything(), -stage)` is the `dplyr` equivalent of `select(everything(), -stage)`.
 
 ### Examples
 
