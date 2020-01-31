@@ -17,14 +17,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-<!-- Not creating vignette if gt is not installed. -->
-`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"}`
-
-```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
-knitr::knit_exit()
-```
-
-<!-- Start of vignette -->
 ## Introduction
 
 The `tbl_summary()` function calculates **descriptive statistics** for continuous, categorical, and dichotomous variables in **R**, and presents the results in a **beautiful, customizable summary table** perfect for creating tables ready for publication (for example, Table 1 or demographic tables).
@@ -229,30 +221,31 @@ Each of the modification functions have additional options outlined in their res
 ## Select Helpers {#select_helpers}
 
 The {gtsummary} package accepts all select helpers available throughout the tidyverse (e.g. anything you can use with the `dplyr::select()` function can be used with {gtsummary}).
-This means you have flexibility in the way you select variables.
+This means you have flexibility in the way you select variables for summaries, how they are displayed in the table, and other customization options.
 For example, if you want to show age and the marker levels to one decimal place, you can pass `digits = c(age, marker) ~ 1` to `tbl_summary()`.
-Because the inputs to `dplyr::select()` are flexible, you could also pass the column names quoted: `digits = c("age", "marker") ~ 1`.
-The functions also accept [{tidyselect} helpers](https://tidyselect.r-lib.org/reference/select_helpers.html), such as `starts_with()`, `contains()`, and `everything()`.
+The selecting input is flexible, and you may also pass quoted column names: `digits = c("age", "marker") ~ 1`.
+{gtsummary} also utilizes [{tidyselect} helpers](https://tidyselect.r-lib.org/reference/select_helpers.html), such as `starts_with()`, `contains()`, and `everything()`.
 
-While the selectors available in the tidyverse are wonderful, there are some additional selectors specific to {gtsummary} that have been added to the package that allow you to select a variable by its type of class.
-For example, if all continuous variables will be summarized in `tbl_summary()` as minimum and maximum, the `all_continuous()` function can be used: `statistic = all_continuous() ~ "{min} to {max}"`.
+While the selectors available in the tidyverse are wonderful, there are some additional selectors specific to {gtsummary} that have been included in the package.
 
-1. Summary type 
+1. **Summary type** There are three types of summary types in {gtsummary}, and you may use the type to select columns.  This is useful, for example, when you wish to report the mean and standard deviation for all continuous variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
 
     ```{r, eval=FALSE}
     all_continuous()      all_categorical()      all_dichotomous()
     ```
 
-1. Vector class or type selectors
+1. **Vector class or type** Select columns based on their class or type.
 
     ```{r, eval=FALSE}
     all_numeric()         all_integer()          all_logical() 
     all_factor()          all_character()        all_double()
     ```
 
-While using compound selectors, you may need to utilize the `vars()` function.
-In {gtsummary}, the `vars(...)` function passes all arguments to `dplyr::select(...)`.
-For example, to select all variables in the trial data except `"stage"`, use `vars(everything(), -stage)`.
+Most variable selecting can be accomplished in a single R object (e.g. `c(age, stage)`).
+However, you may need more complex compound select structure, which cannot be represented by a single object.
+For example, if you want to select all columns except `"stage"`, you'll need to utilize the `vars(...)` function.
+When the `vars(...)` function is used, all arguments from `vars()` are passed directly to `dplyr::select()`.
+`vars(everything(), -stage)` is be the `dplyr` equivelent of `select(everything(), -stage)`.
 
 ### Examples
 
