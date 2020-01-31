@@ -58,7 +58,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
       ) %||%
       paste(c("label = list(age ~ \"Age, years\")",
               "statistic = list(all_continuous() ~ \"{mean} ({sd})\")",
-              "type = list(vars(response, death) ~ \"categorical\")"),
+              "type = list(c(response, death) ~ \"categorical\")"),
             collapse = "\n")
 
     # printing error for argument input
