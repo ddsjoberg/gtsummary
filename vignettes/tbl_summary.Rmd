@@ -231,16 +231,16 @@ Going beyond typing out specific variables in your dataset, you can use:
 
     + **Summary type** There are three types of summary types in {gtsummary}, and you may use the type to select columns.  This is useful, for example, when you wish to report the mean and standard deviation for all continuous variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
 
-    ```{r, eval=FALSE}
-    all_continuous()      all_categorical()      all_dichotomous()
-    ```
+      ```{r, eval=FALSE}
+      all_continuous()      all_categorical()      all_dichotomous()
+      ```
 
     + **Vector class or type** Select columns based on their class or type.
 
-    ```{r, eval=FALSE}
-    all_numeric()         all_integer()          all_logical() 
-    all_factor()          all_character()        all_double()
-    ```
+      ```{r, eval=FALSE}
+      all_numeric()         all_integer()          all_logical() 
+      all_factor()          all_character()        all_double()
+      ```
 
 Most variable selecting can be accomplished in a single R object (e.g. `c(age, stage)`).
 However, you may need more complex compound select structure, which cannot be represented by a single object.
