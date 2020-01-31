@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Removed deprecated `fmt*_()` and `cols_label_summary()` functions (#365)
+
 * Lowered minimum required version of R to v3.3 (#356)
 
 * Removed {broom.mixed} dependency as the {broom} package contained all necessary tidiers (#354)
