@@ -69,12 +69,12 @@ tbl_cross <- function(data,
     col_str <- names(data[, 2])
   }
 
-  row_str <- row_str %||% names(select(data, -all_of(col_str)))[1]
-  col_str <- col_str %||% names(select(data, -all_of(row_str)))[1]
+  row_str <- row_str %||% names(select(data, -tidyselect::all_of(col_str)))[1]
+  col_str <- col_str %||% names(select(data, -tidyselect::all_of(row_str)))[1]
 
   # create new dummy col for tabulating column totals in cross table
   data <- data %>%
-    dplyr::select(all_of(c(row_str, col_str))) %>%
+    dplyr::select(tidyselect::all_of(c(row_str, col_str))) %>%
     mutate(Total = 1)
 
   # get col label (for tab spanner)--------------------------------------------
@@ -108,7 +108,7 @@ tbl_cross <- function(data,
     )
 
   if (missing == "no") {
-    data <- na.omit(data)
+    data <- stats::na.omit(data)
 
     message(glue(
       "{sum(is.na(data))} observations missing data have been removed."
