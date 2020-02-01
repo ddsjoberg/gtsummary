@@ -11,10 +11,12 @@
 \alias{ends_with}
 \alias{contains}
 \alias{matches}
-\alias{one_of}
-\alias{everything}
 \alias{num_range}
+\alias{all_of}
+\alias{any_of}
+\alias{everything}
 \alias{last_col}
+\alias{one_of}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -30,6 +32,6 @@ below to see their documentation.
 
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
 
-  \item{tidyselect}{\code{\link[tidyselect]{contains}}, \code{\link[tidyselect]{ends_with}}, \code{\link[tidyselect]{everything}}, \code{\link[tidyselect]{last_col}}, \code{\link[tidyselect]{matches}}, \code{\link[tidyselect]{num_range}}, \code{\link[tidyselect]{one_of}}, \code{\link[tidyselect]{starts_with}}}
+  \item{tidyselect}{\code{\link[tidyselect]{all_of}}, \code{\link[tidyselect]{any_of}}, \code{\link[tidyselect]{contains}}, \code{\link[tidyselect]{ends_with}}, \code{\link[tidyselect]{everything}}, \code{\link[tidyselect]{last_col}}, \code{\link[tidyselect]{matches}}, \code{\link[tidyselect]{num_range}}, \code{\link[tidyselect]{one_of}}, \code{\link[tidyselect]{starts_with}}}
 }}
 
