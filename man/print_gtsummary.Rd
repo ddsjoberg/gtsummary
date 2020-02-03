@@ -14,6 +14,8 @@
 \alias{knit_print.tbl_merge}
 \alias{print.tbl_stack}
 \alias{knit_print.tbl_stack}
+\alias{print.tbl_cross}
+\alias{knit_print.tbl_cross}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
 \method{print}{tbl_summary}(x, ...)
@@ -39,6 +41,10 @@
 \method{print}{tbl_stack}(x, ...)
 
 \method{knit_print}{tbl_stack}(x, ...)
+
+\method{print}{tbl_cross}(x, ...)
+
+\method{knit_print}{tbl_cross}(x, ...)
 }
 \arguments{
 \item{x}{An object created using gtsummary functions}

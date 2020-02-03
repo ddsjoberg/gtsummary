@@ -1,5 +1,6 @@
 #' Create a cross table of summary statistics
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Wrapper for [tbl_summary] to cross tabulate two variables
 #'
 #' @param data A data frame
@@ -7,27 +8,16 @@
 #' of cross table
 #' @param col A column name (quoted or unquoted) in data to be used for rows
 #' of cross table
-#' @param label List of formulas specifying row and column variables labels,
-#' e.g. `list(response ~ "Drug Response", stage ~ "Path T Stage")`. If a
-#' variable's label is not specified here, the label attribute
-#' (`attr(data$age, "label")`) is used.  If
-#' attribute label is `NULL`, the variable name will be used.
 #' @param statistic A statistic name in curly brackets to
 #' be replaced with the numeric statistic (see glue::glue).
 #' The default is `{n}`. If percent argument is `"column"`, `"row"`, or `"cell"`,
 #' default is `{n} ({p}%)`.
-#' @param percent Indicates the type of percentage to return if using the.
-#' `{p}` statistic. Must be one of
-#' `"column"`, `"row"`, or `"cell"`. Default is `"column"` when `{p}` is
-#' specified as `statistic`.
-#' @param missing Indicates whether to include counts of `NA` values in the table.
-#' Allowed values are `"no"` (never display NA values),
-#' `"ifany"` (only display if any NA values), and `"always"`
-#' (includes NA count row for all variables). Default is `"ifany"`.
-#' @family tbl_summary tools
+#' @inheritParams tbl_summary
+#'
+#' @family `tbl_summary`
 #' @author Karissa Whiting
 #' @export
-#' @return A `tbl_summary` object
+#' @return A `tbl_cross` object
 #' @examples
 #' tbl_cross_ex <-
 #'   trial[c("response", "trt")] %>%
@@ -44,17 +34,17 @@ tbl_cross <- function(data,
                       percent = c("none", "column", "row", "cell"),
                       missing = c("ifany", "always", "no"),
                       missing_text = "Unknown") {
-  row_str <- var_input_to_string(
+  row <- var_input_to_string(
     data = data,
     select_input = !!rlang::enquo(row),
-    arg_name = "row_str",
+    arg_name = "row",
     select_single = TRUE
   )
 
-  col_str <- var_input_to_string(
+  col <- var_input_to_string(
     data = data,
     select_input = !!rlang::enquo(col),
-    arg_name = "col_str",
+    arg_name = "col",
     select_single = TRUE
   )
 
@@ -62,42 +52,41 @@ tbl_cross <- function(data,
   missing <- match.arg(missing)
   percent <- match.arg(percent)
 
+  tbl_cross_inputs <- as.list(environment())
 
-  # if no x and y provided, default to first two col_strumns of data -----------
-  if (is.null(row_str) & is.null(col_str)) {
-    row_str <- names(data[, 1])
-    col_str <- names(data[, 2])
+  # if no col AND no row provided, default to first two columns of data --------
+  if (is.null(row) & is.null(col)) {
+    row <- names(data[, 1])
+    col <- names(data[, 2])
   }
 
-  row_str <- row_str %||% names(select(data, -tidyselect::all_of(col_str)))[1]
-  col_str <- col_str %||% names(select(data, -tidyselect::all_of(row_str)))[1]
+  # if only one of col/row provided, error
+  if(sum(is.null(row), is.null(col)) > 0) {
+    stop("Please specify which columns to use for both `col` and `row` arguments",
+         call. = FALSE)
+  }
 
   # create new dummy col for tabulating column totals in cross table
   data <- data %>%
-    dplyr::select(tidyselect::all_of(c(row_str, col_str))) %>%
-    mutate(Total = 1)
+     mutate(..total.. = 1)
 
-  # get col label (for tab spanner)--------------------------------------------
-  label <- tidyselect_to_list(data, label) %||% NULL
+  # get labels --------------------------------------------
+  label <- tidyselect_to_list(data, label)
+  new_label <-  list()
 
-  col_label <- label[[col_str]] %||%
-    attr(data[[col_str]], "label") %||% col_str
+  new_label[[row]] <- label[[row]] %||% attr(data[[row]], "label") %||% row
+  new_label[[col]] <- label[[col]] %||% attr(data[[col]], "label") %||% col
+  new_label[["..total.."]] <- "Total"
 
   # statistic argument ---------------------------------------------------------
-
   # if no user-defined stat, default to {n} if percent is "none"
   statistic <- statistic %||% ifelse(percent == "none", "{n}", "{n} ({p}%)")
-  statistic_list <- rep(statistic, 3) %>%
-    as.list() %>%
-    set_names(names(data))
 
   # omit missing data, or factorize missing level ------------------------------
-  lbls <- purrr::map(data, ~ attr(.x, "label"))
-
   data <- data %>%
-    mutate_at(vars(row_str, col_str), ~ as.factor(.x)) %>%
+    mutate_at(vars(row, col), as.factor) %>%
     mutate_at(
-      vars(row_str, col_str),
+      vars(row, col),
       ~ switch(
         missing,
         "no" = .,
@@ -111,23 +100,18 @@ tbl_cross <- function(data,
     data <- stats::na.omit(data)
 
     message(glue(
-      "{sum(is.na(data))} observations missing data have been removed."
+      "{sum(is.na(data))} observations with missing data have been removed."
     ))
   }
 
-  # re-applying labels
-  for (i in names(lbls)) {
-    attr(data[[i]], "label") <- lbls[[i]]
-  }
-
-
   # create main table ----------------------------------------------------------
   x <- data %>%
+    select(row, col, ..total..) %>%
     tbl_summary(
-      by = col_str,
-      statistic = statistic_list,
-      percent = switch((percent == "none") + 1, percent, NULL),
-      label = label,
+      by = col,
+      statistic = stats::as.formula(glue::glue("everything() ~ '{statistic}'")),
+      percent = switch(percent != "none", percent),
+      label = new_label,
       missing_text = missing_text
     ) %>%
     add_overall(last = TRUE) %>%
@@ -137,27 +121,36 @@ tbl_cross <- function(data,
       stat_0 = " "
     )
 
-  footnote_text <- footnote_stat_label(x$meta_data)
+  # get text for gt source note
+  source_note_text <- footnote_stat_label(x$meta_data)
+
+  # clear existing tbl_summary footnote
+  x$table_header$footnote <- list(NULL)
+  x <- update_calls_from_table_header(x)
+
+  # update inputs and call list in return
+  x[["call_list"]] <- list(tbl_cross = match.call())
+  x[["inputs"]] <- tbl_cross_inputs
+
+  class(x) <- c("tbl_cross")
 
   # gt function calls ------------------------------------------------------------
   # quoting returns an expression to be evaluated later
   x$gt_calls[["tab_spanner"]] <-
     glue(
       "gt::tab_spanner(",
-      "label = gt::md('**{col_label}**'), ",
+      "label = gt::md('**{new_label[[col]]}**'), ",
       "columns = contains('stat_')) %>%",
       "gt::tab_spanner(label = gt::md('**Total**'), ",
       "columns = vars(stat_0))"
     )
 
-  x$gt_calls[["tab_footnote"]] <-
+  x$gt_calls[["tab_source_note"]] <-
     glue(
-      "gt::tab_footnote(footnote = '{footnote_text}', ",
-      "locations = ",
-      "gt::cells_column_labels(columns = gt::vars(label)))"
+      "gt::tab_source_note(source_note = '{source_note_text}') "
     )
 
-  return(x)
-}
+  x
 
+}
 

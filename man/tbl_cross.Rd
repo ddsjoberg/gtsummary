@@ -24,8 +24,8 @@ of cross table}
 \item{col}{A column name (quoted or unquoted) in data to be used for rows
 of cross table}
 
-\item{label}{List of formulas specifying row and column variables labels,
-e.g. \code{list(response ~ "Drug Response", stage ~ "Path T Stage")}. If a
+\item{label}{List of formulas specifying variables labels,
+e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}.  If a
 variable's label is not specified here, the label attribute
 (\code{attr(data$age, "label")}) is used.  If
 attribute label is \code{NULL}, the variable name will be used.}
@@ -35,20 +35,22 @@ be replaced with the numeric statistic (see glue::glue).
 The default is \code{{n}}. If percent argument is \code{"column"}, \code{"row"}, or \code{"cell"},
 default is \verb{\{n\} (\{p\}\%)}.}
 
-\item{percent}{Indicates the type of percentage to return if using the.
-\code{{p}} statistic. Must be one of
-\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"} when \code{{p}} is
-specified as \code{statistic}.}
+\item{percent}{Indicates the type of percentage to return. Must be one of
+\code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}.}
 
 \item{missing}{Indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),
 \code{"ifany"} (only display if any NA values), and \code{"always"}
 (includes NA count row for all variables). Default is \code{"ifany"}.}
+
+\item{missing_text}{String to display for count of missing observations.
+Default is \code{"Unknown"}.}
 }
 \value{
-A \code{tbl_summary} object
+A \code{tbl_cross} object
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Wrapper for \link{tbl_summary} to cross tabulate two variables
 }
 \section{Example Output}{
@@ -62,23 +64,7 @@ tbl_cross_ex <-
   tbl_cross(row = trt, col = response)
 
 }
-\seealso{
-Other tbl_summary tools: 
-\code{\link{add_n}()},
-\code{\link{add_overall}()},
-\code{\link{add_p}()},
-\code{\link{add_q.tbl_summary}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{bold_p.tbl_summary}()},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{modify_header}()},
-\code{\link{sort_p.tbl_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_summary}()}
-}
 \author{
 Karissa Whiting
 }
-\concept{tbl_summary tools}
+\concept{\code{tbl_summary}}
