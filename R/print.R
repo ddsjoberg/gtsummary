@@ -4,12 +4,12 @@
 #' @param x An object created using gtsummary functions
 #' @param ... Not used
 #' @author Daniel D. Sjoberg
-#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression]
+#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_merge] [tbl_stack]
 NULL
 
 #' @rdname print_gtsummary
 #' @export
-print.tbl_summary <- function(x, ...) {
+print.gtsummary <- function(x, ...) {
   # select print engine
   print_engine <-
     getOption("gtsummary.print_engine") %||%
@@ -33,7 +33,7 @@ print.tbl_summary <- function(x, ...) {
 
 #' @rdname print_gtsummary
 #' @export
-knit_print.tbl_summary <- function(x, ...) {
+knit_print.gtsummary <- function(x, ...) {
   # select print engine
   print_engine <-
     getOption("gtsummary.print_engine") %||%
@@ -68,42 +68,3 @@ knit_print.tbl_summary <- function(x, ...) {
   }
 }
 
-#' @rdname print_gtsummary
-#' @export
-print.tbl_regression <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_regression <- knit_print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-print.tbl_uvregression <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_uvregression <- knit_print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-print.tbl_survival <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_survival <- knit_print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-print.tbl_merge <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_merge <- knit_print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-print.tbl_stack <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_stack <- knit_print.tbl_summary
