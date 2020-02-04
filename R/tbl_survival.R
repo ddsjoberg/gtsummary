@@ -253,7 +253,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   result <- update_calls_from_table_header(result)
 
   # returning results
-  class(result) <- "tbl_survival"
+  class(result) <- c("tbl_survival", "gtsummary")
   result
 }
 

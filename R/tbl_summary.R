@@ -333,7 +333,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   results$df_by <- df_by(data, by)
 
   # assigning a class of tbl_summary (for special printing in Rmarkdown)
-  class(results) <- "tbl_summary"
+  class(results) <- c("tbl_summary", "gtsummary")
 
   # adding headers
   if (is.null(by)) {

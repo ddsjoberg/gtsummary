@@ -71,7 +71,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # checking all inputs are class tbl_regression, tbl_uvregression,
   # tbl_regression, tbl_summary, or tbl_stack
-  if (!map_chr(tbls, class) %in%
+  if (!map_chr(tbls, ~class(.x)[1]) %in%
     c("tbl_regression", "tbl_uvregression", "tbl_summary", "tbl_stack") %>% all()) {
     stop(paste(
       "All objects in 'tbls' must be class 'tbl_regression',",
@@ -198,7 +198,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # writing additional gt and kable calls with data from table_header
   results <- update_calls_from_table_header(results)
 
-  class(results) <- "tbl_merge"
+  class(results) <- c("tbl_merge", "gtsummary")
   results
 }
 

@@ -2,43 +2,13 @@
 % Please edit documentation in R/print.R
 \name{print_gtsummary}
 \alias{print_gtsummary}
-\alias{print.tbl_summary}
-\alias{knit_print.tbl_summary}
-\alias{print.tbl_regression}
-\alias{knit_print.tbl_regression}
-\alias{print.tbl_uvregression}
-\alias{knit_print.tbl_uvregression}
-\alias{print.tbl_survival}
-\alias{knit_print.tbl_survival}
-\alias{print.tbl_merge}
-\alias{knit_print.tbl_merge}
-\alias{print.tbl_stack}
-\alias{knit_print.tbl_stack}
+\alias{print.gtsummary}
+\alias{knit_print.gtsummary}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
-\method{print}{tbl_summary}(x, ...)
+\method{print}{gtsummary}(x, ...)
 
-\method{knit_print}{tbl_summary}(x, ...)
-
-\method{print}{tbl_regression}(x, ...)
-
-\method{knit_print}{tbl_regression}(x, ...)
-
-\method{print}{tbl_uvregression}(x, ...)
-
-\method{knit_print}{tbl_uvregression}(x, ...)
-
-\method{print}{tbl_survival}(x, ...)
-
-\method{knit_print}{tbl_survival}(x, ...)
-
-\method{print}{tbl_merge}(x, ...)
-
-\method{knit_print}{tbl_merge}(x, ...)
-
-\method{print}{tbl_stack}(x, ...)
-
-\method{knit_print}{tbl_stack}(x, ...)
+\method{knit_print}{gtsummary}(x, ...)
 }
 \arguments{
 \item{x}{An object created using gtsummary functions}
@@ -49,7 +19,7 @@
 print and knit_print methods for gtsummary objects
 }
 \seealso{
-\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
+\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_merge} \link{tbl_stack}
 }
 \author{
 Daniel D. Sjoberg
