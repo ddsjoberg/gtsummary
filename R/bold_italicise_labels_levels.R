@@ -25,7 +25,7 @@ NULL
 #' @export
 bold_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c(
+  if (!class(x)[1] %in% c(
     "tbl_summary", "tbl_regression", "tbl_uvregression",
     "tbl_stack", "tbl_merge"
   ) %>% all()) {
@@ -62,7 +62,7 @@ bold_labels <- function(x) {
 #' @export
 bold_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c(
+  if (!class(x)[1] %in% c(
     "tbl_summary", "tbl_regression", "tbl_uvregression",
     "tbl_stack", "tbl_merge"
   ) %>% all()) {
@@ -100,7 +100,7 @@ bold_levels <- function(x) {
 #' @export
 italicize_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in%
+  if (!class(x)[1] %in%
     c(
       "tbl_summary", "tbl_regression", "tbl_uvregression",
       "tbl_stack", "tbl_merge"
@@ -139,7 +139,7 @@ italicize_labels <- function(x) {
 #' @export
 italicize_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x) %in% c(
+  if (!class(x)[1] %in% c(
     "tbl_summary", "tbl_regression", "tbl_uvregression",
     "tbl_stack", "tbl_merge", "tbl_stack", "tbl_merge"
   ) %>% all()
