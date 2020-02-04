@@ -47,7 +47,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 
 add_nevent.tbl_regression <- function(x, ...) {
   # if model is a cox model, adding number of events as well
-  if (class(x$model_obj)[1] == "coxph") {
+  if (inherits(x$model_obj, "coxph")) {
     x$nevent <- x$model_obj %>%
       survival::coxph.detail() %>%
       pluck("nevent") %>%
@@ -60,18 +60,18 @@ add_nevent.tbl_regression <- function(x, ...) {
   # generalized linear models, and GEE GLMs
   else if (
     # GLM or GEE
-    (class(x$model_obj)[1] %in% c("glm", "geeglm")) |
+    (inherits(x$model_obj, c("glm", "geeglm"))) |
       # lme4 GLM
-      (class(x$model_obj)[1] == "glmerMod" &
+      (inherits(x$model_obj, c("glmerMod"))  &
         attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
     # checking family (must be binomial)
-    if (class(x$model_obj)[1] %in% c("glm", "geeglm")) {
+    if (inherits(x$model_obj, c("glm", "geeglm"))) {
       if (x$model_obj$family$family != "binomial") {
         stop("Model type not supported")
       }
       formula <- x$model_obj$formula %>% stats::as.formula()
     }
-    else if (class(x$model_obj)[1] == "glmerMod" &
+    else if (inherits(x$model_obj, "glmerMod") &
       attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
       if (x$model_obj@resp$family$family != "binomial") {
         stop("Model type not supported")

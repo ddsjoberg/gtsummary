@@ -258,7 +258,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   results <- update_calls_from_table_header(results)
 
   # assigning a class of tbl_regression (for special printing in R markdown)
-  class(results) <- "tbl_regression"
+  class(results) <- c("tbl_regression", "gtsummary")
 
   results
 }
@@ -320,24 +320,24 @@ estimate_header <- function(x, exponentiate) {
   # first identify the type ----------------------------------------------------
   model_type <- "generic"
   # GLM and GEE models
-  if (class(x)[1] %in% c("glm", "geeglm") &&
+  if (inherits(x, c("glm", "geeglm")) &&
     x$family$family == "binomial" &&
     x$family$link == "logit") {
     model_type <- "logistic"
-  } else if (class(x)[1] %in% c("glm", "geeglm") &&
+  } else if (inherits(x, c("glm", "geeglm")) &&
     x$family$family == "poisson" &&
     x$family$link == "log") {
     model_type <- "poisson"
   } # Cox Models
-  else if (class(x)[1] == "coxph") {
+  else if (inherits(x, "coxph")) {
     model_type <- "prop_hazard"
   } # LME4 models
-  else if (class(x)[1] == "glmerMod" &&
+  else if (inherits(x, "glmerMod") &&
     attr(class(x), "package") == "lme4" &&
     x@resp$family$family == "binomial" &&
     x@resp$family$link == "logit") {
     model_type <- "logistic"
-  } else if (class(x)[1] == "glmerMod" &&
+  } else if (inherits(x, "glmerMod") &&
     attr(class(x), "package") == "lme4" &&
     x@resp$family$family == "poisson" &&
     x@resp$family$link == "log") {
