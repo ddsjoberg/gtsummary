@@ -20,7 +20,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
   }
 
   # converting to list if single element passed --------------------------------
-  if (class(x) == "formula") {
+  if (inherits(x, "formula")) {
     x <- list(x)
   }
 
@@ -33,7 +33,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
 
   # check class of input -------------------------------------------------------
   # each element must be a formula
-  is_formula <- map_lgl(x, ~ class(.x) == "formula")
+  is_formula <- map_lgl(x, ~ inherits(.x, "formula"))
 
   if (!all(is_formula)) {
     example_text <-
