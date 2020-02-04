@@ -67,7 +67,7 @@
 tbl_stack <- function(tbls) {
   # input checks ---------------------------------------------------------------
   # class of tbls
-  if (!"list" %in% class(tbls)) {
+  if (!inherits(tbls, "list")) {
     stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
