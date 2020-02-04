@@ -335,7 +335,7 @@ continuous_digits_guess_one <- function(data,
 df_by <- function(data, by) {
   if (is.null(by)) return(NULL)
 
-  if ("factor" %in% class(data[[by]]))
+  if (inherits(data[[by]], "factor"))
     result <- tibble(by = attr(data[[by]], "levels") %>%
                        factor(x = ., levels= ., labels = .))
   else result <- data %>% select(by) %>% dplyr::distinct() %>% set_names("by")
@@ -421,7 +421,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   if (!is.null(type) & is.null(names(type))) { # checking names for deprecated named list input
 
     # checking input type: must be a list of formulas, or one formula
-    if (!class(type) %in% c("list", "formula")) {
+    if (!inherits(type, c("list", "formula"))) {
       stop(glue(
         "'type' argument must be a list of formulas. ",
         "LHS of the formula is the variable specification, ",
@@ -429,7 +429,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "list(vars(age, marker) ~ \"continuous\")"
       ), call. = FALSE)
     }
-    if ("list" %in% class(type)) {
+    if (inherits(type, "list")) {
       if (some(type, negate(rlang::is_bare_formula))) {
         stop(glue(
           "'type' argument must be a list of formulas. ",
@@ -441,7 +441,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
     }
 
     # all sepcifed types are continuous, categorical, or dichotomous
-    if ("formula" %in% class(type)) type <- list(type)
+    if (inherits(type, "formula")) type <- list(type)
     if (!every(type, ~ eval(rlang::f_rhs(.x)) %in% c("continuous", "categorical", "dichotomous")) |
         !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
@@ -455,7 +455,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   if (!is.null(value) & is.null(names(value))) { # checking names for deprecated named list input
 
     # checking input type: must be a list of formulas, or one formula
-    if (!class(value) %in% c("list", "formula")) {
+    if (!inherits(value, c("list", "formula"))) {
       stop(glue(
         "'value' argument must be a list of formulas. ",
         "LHS of the formula is the variable specification, ",
@@ -463,7 +463,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "list(vars(stage) ~ \"T1\")"
       ), call. = FALSE)
     }
-    if ("list" %in% class(value)) {
+    if (inherits(value, "list")) {
       if (some(value, negate(rlang::is_bare_formula))) {
         stop(glue(
           "'value' argument must be a list of formulas. ",
@@ -490,29 +490,9 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
   # label ----------------------------------------------------------------------
   if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
-#
-#     # checking input type: must be a list of formulas, or one formula
-#     if (!class(label) %in% c("list", "formula")) {
-#       stop(glue(
-#         "'label' argument must be a list of formulas. ",
-#         "LHS of the formula is the variable specification, ",
-#         "and the RHS is the label specification: ",
-#         "list(stage ~ \"T Stage\", age ~ \"Age\")"
-#       ))
-#     }
-#     if ("list" %in% class(label)) {
-#       if (purrr::some(label, negate(rlang::is_bare_formula))) {
-#         stop(glue(
-#           "'label' argument must be a list of formulas. ",
-#           "LHS of the formula is the variable specification, ",
-#           "and the RHS is the label specification: ",
-#           "list(stage ~ \"T Stage\", age ~ \"Age\")"
-#         ), call. = FALSE)
-#       }
-#     }
 
     # all sepcifed labels must be a string of length 1
-    if ("formula" %in% class(label)) label <- list(label)
+    if (inherits(label, "formula")) label <- list(label)
     if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
         "The RHS of the formula in the 'label' argument must be a string."
@@ -524,7 +504,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   if (!is.null(statistic) & is.null(names(statistic))) { # checking names for deprecated named list input
 
     # checking input type: must be a list of formulas, or one formula
-    if (!class(statistic) %in% c("list", "formula")) {
+    if (!inherits(statistic, c("list", "formula"))) {
       stop(glue(
         "'statistic' argument must be a list of formulas. ",
         "LHS of the formula is the variable specification, ",
@@ -532,7 +512,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "list(all_categorical() ~ \"{n} / {N}\")"
       ), call. = FALSE)
     }
-    if ("list" %in% class(statistic)) {
+    if (inherits(statistic, "list")) {
       if (some(statistic, negate(rlang::is_bare_formula))) {
         stop(glue(
           "'statistic' argument must be a list of formulas. ",
@@ -544,7 +524,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
     }
 
     # all sepcifed statistics must be a string of length 1
-    if ("formula" %in% class(statistic)) statistic <- list(statistic)
+    if (inherits(statistic, "formula")) statistic <- list(statistic)
     if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
         "The RHS of the formula in the 'statistic' argument must be a string."
@@ -556,7 +536,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   if (!is.null(digits) & is.null(names(digits))) { # checking names for deprecated named list input
 
     # checking input type: must be a list of formulas, or one formula
-    if (!class(digits) %in% c("list", "formula")) {
+    if (!inherits(digits, c("list", "formula"))) {
       stop(glue(
         "'digits' argument must be a list of formulas. ",
         "LHS of the formula is the variable specification, ",
@@ -564,7 +544,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "list(vars(age, marker) ~ 1)"
       ), call. = FALSE)
     }
-    if ("list" %in% class(digits)) {
+    if (inherits(digits, "list")) {
       if (some(digits, negate(rlang::is_bare_formula))) {
         stop(glue(
           "'digits' argument must be a list of formulas. ",
@@ -574,16 +554,6 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         ), call. = FALSE)
       }
     }
-
-    # # specified digits must be a non-negative integer
-    # digits_value_not_valid <-
-    #   setdiff(digits %>% unlist() %>% unique(), 0:100)
-    # if (length(digits_value_not_valid) > 0) {
-    #   stop(glue(
-    #     "'digits' values must be non-negative integers. ",
-    #     "'{paste0(digits_value_not_valid, collapse = ', ')}' not valid input."
-    #   ))
-    # }
   }
 
   # missing_text ---------------------------------------------------------------
@@ -596,7 +566,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   if (!is.null(sort) & is.null(names(sort))) { # checking names for deprecated named list input
 
     # checking input type: must be a list of formulas, or one formula
-    if (!class(sort) %in% c("list", "formula")) {
+    if (!inherits(sort, c("list", "formula"))) {
       stop(glue(
         "'sort' argument must be a list of formulas. ",
         "LHS of the formula is the variable specification, ",
@@ -604,7 +574,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
         "list(vars(age, marker) ~ 1)"
       ), call. = FALSE)
     }
-    if ("list" %in% class(sort)) {
+    if (inherits(sort, "list")) {
       if (some(sort, negate(rlang::is_bare_formula))) {
         stop(glue(
           "'sort' argument must be a list of formulas. ",
@@ -616,7 +586,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
     }
 
     # all sepcifed types are frequency or alphanumeric
-    if ("formula" %in% class(sort)) sort <- list(sort)
+    if (inherits(sort, "formula")) sort <- list(sort)
     if (!every(sort, ~ eval(rlang::f_rhs(.x)) %in% c("frequency", "alphanumeric")) |
         !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(

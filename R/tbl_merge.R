@@ -65,7 +65,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   }
 
   # class of tbls
-  if (!"list" %in% class(tbls)) {
+  if (!inherits(tbls, "list")) {
     stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
@@ -225,11 +225,11 @@ gt_tbl_merge <- quote(list(
       tbls,
       function(x, y) {
         # returning NULL for non-regression objects
-        if (!class(x) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack")) {
+        if (!inherits(x, c("tbl_regression", "tbl_uvregression", "tbl_stack"))) {
           return(NULL)
         }
-        if (class(x) == "tbl_stack" &&
-          !class(x$tbls[[1]]) %in% c("tbl_regression", "tbl_uvregression")) {
+        if (inherits(x, "tbl_stack") &&
+          !inherits(x$tbls[[1]], c("tbl_regression", "tbl_uvregression"))) {
           return(NULL)
         }
         # making gt missing code for references
@@ -278,11 +278,11 @@ kable_tbl_merge <- quote(list(
       tbls,
       function(x, y) {
         # returning NULL for non-regression objects
-        if (!class(x) %in% c("tbl_regression", "tbl_uvregression", "tbl_stack")) {
+        if (!inherits(x, c("tbl_regression", "tbl_uvregression", "tbl_stack"))) {
           return(NULL)
         }
-        if (class(x) == "tbl_stack" &&
-          !class(x$tbls[[1]]) %in% c("tbl_regression", "tbl_uvregression")) {
+        if (inherits(x, "tbl_stack") &&
+            !inherits(x$tbls[[1]], c("tbl_regression", "tbl_uvregression"))) {
           return(NULL)
         }
         # making mutate missing code for references
@@ -305,10 +305,10 @@ tbl_inputs <- function(tbl) {
   map(
     tbl,
     function(tbl) {
-      if (class(tbl) %in% c("tbl_regression", "tbl_stack", "tbl_summary")) {
+      if (inherits(tbl, c("tbl_regression", "tbl_uvregression", "tbl_stack"))) {
         return(pluck(tbl, "inputs"))
       }
-      if (class(tbl) == "tbl_uvregression") {
+      if (inherits(tbl, "tbl_uvregression")) {
         return(pluck(tbl, "tbls", 1, "inputs"))
       }
     }

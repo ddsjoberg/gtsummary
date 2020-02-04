@@ -20,7 +20,7 @@
 #'
 add_overall <- function(x, last = FALSE) {
   # checking that input is class tbl_summary
-  if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
+  if (!inherits(x, "tbl_summary")) stop("`x` must be class 'tbl_summary'", call. = FALSE)
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(

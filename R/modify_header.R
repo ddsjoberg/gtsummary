@@ -79,7 +79,7 @@ modify_header_internal <- function(x, stat_by = NULL, ...,
   text_interpret <- match.arg(text_interpret)
 
   # checking whether input is consistent with by variables
-  if (!is.null(stat_by) && class(x) == "tbl_summary" && is.null(x$by)) {
+  if (!is.null(stat_by) && inherits(x, "tbl_summary") && is.null(x$by)) {
     stop("'stat_by' argument can only be applied to a 'tbl_summary' object that includes a 'by' argument.")
   }
 

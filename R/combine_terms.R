@@ -77,7 +77,7 @@
 
 combine_terms <- function(x, formula_update, label = NULL, ...) {
   # checking input -------------------------------------------------------------
-  if (!methods::is(x, "tbl_regression")) {
+  if (!inherits(x, "tbl_regression")) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)
   }
 

@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated class detection to use `inherits()`
+
 * Removed deprecated `fmt*_()` and `cols_label_summary()` functions (#365)
 
 * Lowered minimum required version of R to v3.3 (#356)
