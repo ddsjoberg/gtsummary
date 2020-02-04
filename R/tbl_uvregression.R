@@ -295,7 +295,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # stacking results to return -------------------------------------------------
   results <- tbl_stack(df_model$tbl)
   names(results$tbls) <- all_vars
-  class(results) <- "tbl_uvregression"
+  class(results) <- c("tbl_uvregression", "gtsummary")
 
   # creating a meta_data table -------------------------------------------------
   # (this will be used in subsequent functions, eg add_global_p)
