@@ -24,7 +24,7 @@ NULL
 
 #' @rdname as_tibbleS3
 #' @export
-as_tibble.tbl_summary <- function(x, include = everything(), col_labels = TRUE,
+as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                   exclude = NULL,  ...) {
   # Printing message that spanning headers and footnotes will be lost
   message(glue(
@@ -84,23 +84,3 @@ as_tibble.tbl_summary <- function(x, include = everything(), col_labels = TRUE,
 
   tbl
 }
-
-#' @rdname as_tibbleS3
-#' @export
-as_tibble.tbl_regression <- as_tibble.tbl_summary
-
-#' @rdname as_tibbleS3
-#' @export
-as_tibble.tbl_uvregression <- as_tibble.tbl_summary
-
-#' @rdname as_tibbleS3
-#' @export
-as_tibble.tbl_merge <- as_tibble.tbl_summary
-
-#' @rdname as_tibbleS3
-#' @export
-as_tibble.tbl_stack <- as_tibble.tbl_summary
-
-#' @rdname as_tibbleS3
-#' @export
-as_tibble.tbl_survival <- as_tibble.tbl_summary

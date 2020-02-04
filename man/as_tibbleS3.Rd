@@ -2,25 +2,10 @@
 % Please edit documentation in R/as_tibble.R
 \name{as_tibbleS3}
 \alias{as_tibbleS3}
-\alias{as_tibble.tbl_summary}
-\alias{as_tibble.tbl_regression}
-\alias{as_tibble.tbl_uvregression}
-\alias{as_tibble.tbl_merge}
-\alias{as_tibble.tbl_stack}
-\alias{as_tibble.tbl_survival}
+\alias{as_tibble.gtsummary}
 \title{Convert gtsummary object to tibble}
 \usage{
-\method{as_tibble}{tbl_summary}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
-
-\method{as_tibble}{tbl_regression}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
-
-\method{as_tibble}{tbl_uvregression}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
-
-\method{as_tibble}{tbl_merge}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
-
-\method{as_tibble}{tbl_stack}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
-
-\method{as_tibble}{tbl_survival}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
+\method{as_tibble}{gtsummary}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package

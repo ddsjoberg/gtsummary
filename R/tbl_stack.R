@@ -72,7 +72,7 @@ tbl_stack <- function(tbls) {
   }
 
   # checking all inputs are class tbl_uvregression, tbl_regression, tbl_summary, or tbl_merge
-  if (!map_chr(tbls, class) %in% c(
+  if (!map_chr(tbls, ~class(.x)[1]) %in% c(
     "tbl_regression", "tbl_uvregression",
     "tbl_summary", "tbl_merge"
   ) %>% any()) {
@@ -81,8 +81,8 @@ tbl_stack <- function(tbls) {
   }
 
   # printing message if stacking tbl_summary and regression object
-  if ("tbl_summary" %in% map_chr(tbls, class) &&
-    any(c("tbl_regression", "tbl_uvregression") %in% map_chr(tbls, class))) {
+  if ("tbl_summary" %in% map_chr(tbls, ~class(.x)[1]) &&
+    any(c("tbl_regression", "tbl_uvregression") %in% map_chr(tbls, ~class(.x)[1]))) {
     message(paste(
       "You are stacking a gtsummary regression table and a summary table,",
       "which is not recommended. Consider revising the format of your table."
@@ -90,7 +90,7 @@ tbl_stack <- function(tbls) {
   }
 
   # checking if there are multiple input types
-  if (map_chr(tbls, class) %>% unique() %>% length() > 1) {
+  if (map_chr(tbls, ~class(.x)[1]) %>% unique() %>% length() > 1) {
     message("Multiple gtsummary object classes detected. Displayed results default to first input class type.")
   }
 
@@ -116,6 +116,6 @@ tbl_stack <- function(tbls) {
   results$call_list <- list(tbl_stack = match.call())
   results$tbls <- tbls
 
-  class(results) <- "tbl_stack"
+  class(results) <- c("tbl_stack", "gtsummary")
   results
 }
