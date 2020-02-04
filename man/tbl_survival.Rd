@@ -12,7 +12,9 @@ tbl_survival(x, ...)
 \item{...}{Additional arguments passed to other methods}
 }
 \description{
-Creates table of univariate summary statistics for time-to-event endpoints
+\Sexpr[results=rd, stage=render]{lifecycle::badge("questioning")}
+Questioning whether gtsummary is the place for our univariate survival
+functions to live. This may be exported to another package in the future.
 }
 \seealso{
 \link{tbl_survival.survfit}
