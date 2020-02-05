@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Updated class detection to use `inherits()`
+* Improve error messaging in `tbl_uvregression()` for arguments `x` and `y`, and updated to allow flexible tidyselect inputs (#249)
+
+* Updated class detection to use `inherits()`, and added secondary class of `"gtsummary"` to all objects. This allows users to create their own cobbled/custom  gtsummary objects while utilizing the gtsummary print functions (#249)
 
 * Removed deprecated `fmt*_()` and `cols_label_summary()` functions (#365)
 
