@@ -133,22 +133,34 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # to be compatible with the rest of the function that assumes character input
   method <- rlang::enexpr(method)
   method.args <- rlang::enexpr(method.args)
-  # converting to string, or keeping as NULL
-  x <- switch(
-    rlang::quo_is_null(rlang::enquo(x)) %>% as.character(),
-    "TRUE" = NULL,
-    "FALSE" = rlang::expr_text(rlang::enexpr(x))
-  )
-  y <- switch(
-    rlang::quo_is_null(rlang::enquo(y)) %>% as.character(),
-    "TRUE" = NULL,
-    "FALSE" = rlang::expr_text(rlang::enexpr(y))
-  )
 
+  # converting to string, or keeping as NULL.  Using the standard
+  # variable selector, but users may also pass `Surv(ttdeath, death)`,
+  # which is not a column header, rather a function.  In that case,
+  # converting the bare input to a string.
+  x <- rlang::enexpr(x)
+  y <- rlang::enexpr(y)
+  x <-
+    tryCatch({
+      var_input_to_string(data = data, select_input = !!x, arg_name = "x")
+    }, error = function(e) {
+      rlang::expr_text(x)
+    })
+  y <-
+    tryCatch({
+      var_input_to_string(data = data, select_input = !!y, arg_name = "y")
+    }, error = function(e) {
+      rlang::expr_text(y)
+    })
+
+  # checking selections of x and y
   if (is.null(x) + is.null(y) != 1L) {
     stop("Specify one, and only one, of `x` and `y`. This function can
          create univariate regression models holding either a covariate or outcome
          constant.", call. = FALSE)
+  }
+  if ((!is.null(x) && length(x) != 1) | (!is.null(y) && length(y) != 1)) {
+    stop("Select only a single column in argument `x=` or `y=`.", call. = FALSE)
   }
 
   include <- var_input_to_string(data = data, select_input = !!rlang::enquo(include),
