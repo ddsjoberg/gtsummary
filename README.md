@@ -111,7 +111,7 @@ Use
 [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 to summarize a data frame.
 
-<img src = "man/figures/tbl_summary_demo4.gif" alt = "animated" width = "100%">
+<img src = "man/figures/tbl_summary_demo1.gif" alt = "animated" width = "100%">
 
 Example basic table:
 
