@@ -93,12 +93,15 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   }
 
   # converting bare arguments to string ----------------------------------------
-  group <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(group),
-                               arg_name = "by", select_single = TRUE)
-  include <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(include),
-                                 arg_name = "by")
-  exclude <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(exclude),
-                                 arg_name = "by")
+  group <- var_input_to_string(data = x$inputs$data,
+                               select_input = !!rlang::enquo(group),
+                               arg_name = "group", select_single = TRUE)
+  include <- var_input_to_string(data = x$inputs$data,
+                                 select_input = !!rlang::enquo(include),
+                                 arg_name = "include")
+  exclude <- var_input_to_string(data = x$inputs$data,
+                                 select_input = !!rlang::enquo(exclude),
+                                 arg_name = "exclude")
 
   # group argument -------------------------------------------------------------
   if (!is.null(group)) {
