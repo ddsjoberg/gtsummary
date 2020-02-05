@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9016</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.4.9017</span>
       </span>
     </div>
 
@@ -170,7 +170,8 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>Updated class detection to use <code><a href="https://rdrr.io/r/base/class.html">inherits()</a></code></p></li>
+<li><p>Improve error messaging in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> for arguments <code>x</code> and <code>y</code>, and updated to allow flexible tidyselect inputs (<a href='https://github.com/ddsjoberg/gtsummary/issues/249'>#249</a>)</p></li>
+<li><p>Updated class detection to use <code><a href="https://rdrr.io/r/base/class.html">inherits()</a></code>, and added secondary class of <code>"gtsummary"</code> to all objects. This allows users to create their own cobbled/custom gtsummary objects while utilizing the gtsummary print functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/249'>#249</a>)</p></li>
 <li><p>Removed deprecated <code>fmt*_()</code> and <code>cols_label_summary()</code> functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/365'>#365</a>)</p></li>
 <li><p>Lowered minimum required version of R to v3.3 (<a href='https://github.com/ddsjoberg/gtsummary/issues/356'>#356</a>)</p></li>
 <li><p>Removed {broom.mixed} dependency as the {broom} package contained all necessary tidiers (<a href='https://github.com/ddsjoberg/gtsummary/issues/354'>#354</a>)</p></li>
