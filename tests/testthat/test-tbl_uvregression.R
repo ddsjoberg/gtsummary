@@ -9,6 +9,17 @@ test_that("lm: no errors/warnings with standard use", {
                    method = lm,
                    y = mpg
                  ), NA)
+  expect_error(mtcars %>%
+                 tbl_uvregression(
+                   method = lm,
+                   y = "mpg"
+                 ), NA)
+  mpg_var <- "mpg"
+  expect_error(mtcars %>%
+                 tbl_uvregression(
+                   method = lm,
+                   y = mpg_var
+                 ), NA)
   expect_warning(mtcars %>%
                    tbl_uvregression(
                      method = lm,
@@ -236,6 +247,14 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       method = lm,
       y = age,
       x = marker
+    ),
+    "*"
+  )
+  expect_error(
+    tbl_uvregression(
+      data = lung,
+      method = lm,
+      y = c(age, sex)
     ),
     "*"
   )
