@@ -14,12 +14,6 @@ test_that("lm: no errors/warnings with standard use", {
                    method = lm,
                    y = "mpg"
                  ), NA)
-  mpg_var <- "mpg"
-  expect_error(mtcars %>%
-                 tbl_uvregression(
-                   method = lm,
-                   y = mpg_var
-                 ), NA)
   expect_warning(mtcars %>%
                    tbl_uvregression(
                      method = lm,
