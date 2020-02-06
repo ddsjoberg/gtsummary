@@ -14,11 +14,17 @@ knitr::opts_chunk$set(
 )
 ```
 
+This vignette is meant for those who wish to contribute to gtsummary, or users who wish to gain an understanding of the inner-workings of a gtsummary object so they can more easily modify them to suit their own needs.
+If you are a typical user, please refer to the [gtsummary website](http://www.danieldsjoberg.com/gtsummary/) to an introduction on how to use the package's functions and tutorials on advanced use.
+
+## Introduction
+
 Every {gtsummary} object has a few characteristics common among all objects.
 Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.
 
 ```{r setup, message=FALSE}
-library(gtsummary); library(purrr); library(dplyr); library(tibble)
+library(gtsummary)
+library(purrr); library(dplyr); library(tibble)
 
 tbl_regression_ex <-
   lm(age ~ grade + marker, trial) %>%
