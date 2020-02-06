@@ -14,8 +14,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette is meant for those who wish to contribute to gtsummary, or users who wish to gain an understanding of the inner-workings of a gtsummary object so they can more easily modify them to suit their own needs.
-If this does not describe you, please refer to the [gtsummary website](http://www.danieldsjoberg.com/gtsummary/) to an introduction on how to use the package's functions and tutorials on advanced use.
+This vignette is meant for those who wish to contribute to {gtsummary}, or users who wish to gain an understanding of the inner-workings of a {gtsummary} object so they may more easily modify them to suit your own needs.
+If this does not describe you, please refer to the [{gtsummary} website](http://www.danieldsjoberg.com/gtsummary/) to an introduction on how to use the package's functions and tutorials on advanced use.
 
 ## Introduction
 
@@ -50,6 +50,7 @@ Every {gtsummary} object is a list comprising of, at minimum, these elements:
 
 The `.$table_body` object is the data frame that will ultimately be printed as the output.
 The table must include columns `"label"`, `"row_type"`, and `"variable"`.
+The `"label"` column is printed, and the other two are hidden from the final output.
 
 ```{r}
 tbl_summary_ex$table_body
@@ -83,7 +84,7 @@ tbl_regression_ex$table_header
 
 #### gt_calls
 
-The `.$gt_calls` object is a list of {gt} calls saved as strings (this may be updated later to be expressions).
+The `.$gt_calls` object is a list of {gt} calls saved as strings (this may be updated to be expressions at some point).
 Every {gt} is referred to with the double colon, `::`.
 The calls are executed in the order they appear in the list, and always begin with the `gt::gt()` call.
 
@@ -178,4 +179,4 @@ print.gtsummary <- function(x) {
 
 ```
 
-The `as_gt()` and `as_kable()` function execute the calls saved in `.$gt_calls` and `.$kable_calls`, respectively, converting the object from gtsummary to the specified type.
+The `as_gt()` and `as_kable()` function execute the calls saved in `.$gt_calls` and `.$kable_calls`, respectively, converting the object from {gtsummary} to the specified type.
