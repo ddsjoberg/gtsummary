@@ -12,17 +12,20 @@ tbl_cross(
   statistic = NULL,
   percent = c("none", "column", "row", "cell"),
   missing = c("ifany", "always", "no"),
-  missing_text = "Unknown"
+  missing_text = "Unknown",
+  add_p = FALSE,
+  test = NULL,
+  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE)
 )
 }
 \arguments{
 \item{data}{A data frame}
 
 \item{row}{A column name (quoted or unquoted) in data to be used for columns
-of cross table}
+of cross table.}
 
 \item{col}{A column name (quoted or unquoted) in data to be used for rows
-of cross table}
+of cross table.}
 
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}.  If a
@@ -30,7 +33,7 @@ variable's label is not specified here, the label attribute
 (\code{attr(data$age, "label")}) is used.  If
 attribute label is \code{NULL}, the variable name will be used.}
 
-\item{statistic}{A statistic name in curly brackets to
+\item{statistic}{A string with the statistic name in curly brackets to
 be replaced with the numeric statistic (see glue::glue).
 The default is \code{{n}}. If percent argument is \code{"column"}, \code{"row"}, or \code{"cell"},
 default is \verb{\{n\} (\{p\}\%)}.}
@@ -45,6 +48,20 @@ Allowed values are \code{"no"} (never display NA values),
 
 \item{missing_text}{String to display for count of missing observations.
 Default is \code{"Unknown"}.}
+
+\item{add_p}{Logical value indicating whether to add p-value to compare
+\code{col} and \code{row} variables. Default is \code{FALSE}.}
+
+\item{test}{A string specifying statistical test to perform. Default is
+"\code{chisq.test}" when expected cell counts >=5 and and "\code{fisher.test}" when
+expected cell counts <5.}
+
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+\code{purrr::partial(style_pvalue, digits = 2)}).}
 }
 \value{
 A \code{tbl_cross} object
@@ -67,4 +84,3 @@ tbl_cross_ex <-
 \author{
 Karissa Whiting
 }
-\concept{\code{tbl_summary}}
