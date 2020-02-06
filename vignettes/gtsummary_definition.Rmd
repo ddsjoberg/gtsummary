@@ -1,0 +1,182 @@
+---
+title: "Definition of a {gtsummary} Object"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gtsummary_definition}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette is meant for those who wish to contribute to {gtsummary}, or users who wish to gain an understanding of the inner-workings of a {gtsummary} object so they may more easily modify them to suit your own needs.
+If this does not describe you, please refer to the [{gtsummary} website](http://www.danieldsjoberg.com/gtsummary/) to an introduction on how to use the package's functions and tutorials on advanced use.
+
+## Introduction
+
+Every {gtsummary} object has a few characteristics common among all objects.
+Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.
+
+```{r setup, message=FALSE}
+library(gtsummary)
+library(purrr); library(dplyr); library(tibble)
+
+tbl_regression_ex <-
+  lm(age ~ grade + marker, trial) %>%
+  tbl_regression() %>%
+  bold_p(t = 0.5) 
+
+tbl_summary_ex <-
+  trial %>%
+  select(trt, age, grade, response) %>%
+  tbl_summary(by = trt)
+```
+
+## Structure of a {gtsummary} object
+
+Every {gtsummary} object is a list comprising of, at minimum, these elements:
+
+```r
+.$table_body       .$gt_calls          .$fmt_fun
+.$table_header     .$kable_calls     
+```
+
+#### table_body
+
+The `.$table_body` object is the data frame that will ultimately be printed as the output.
+The table must include columns `"label"`, `"row_type"`, and `"variable"`.
+The `"label"` column is printed, and the other two are hidden from the final output.
+
+```{r}
+tbl_summary_ex$table_body
+```
+
+#### table_header
+
+The `.$table_header` object is a data frame containing information about each of the columns in `.$table_body` (one row per column in `.$table_body`).
+The table header has the following columns:
+
+```{r, echo=FALSE}
+tribble(
+  ~Column, ~Description,
+  "column", "Column name from table_body",
+  "label", "Label that will be displayed (if column is displayed in output)",
+  "hide", "Logical indicating whether the column is hidden in the output",
+  "text_interpret", "the {gt} function that is used to interpret the column label",
+  "fmt_fun", "If the column needs to be formatted, this list column contains the function that performs the formatting.  Note, this is the function object; not the character name of a function.",
+  "bold", "For columns that bold row conditionally, the column includes the threshold to bold below.  The most common use for this is to bold p-value below a threshold.",
+  "footnote_abbrev", "Lists the abbreviation footnotes for a table.  All abbreviation footnotes are collated into a single footnote.  For example, 'OR = Odds Ratio' and 'CI = Confidence Interval' appear in a single footnote.",
+  "footnote", "Lists the footnotes that will appear for each column.  Duplicates abbreviations will appear once."
+) %>%
+  gt::gt() %>%
+  gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1))
+
+```
+
+```{r} 
+tbl_regression_ex$table_header
+```
+
+#### gt_calls
+
+The `.$gt_calls` object is a list of {gt} calls saved as strings (this may be updated to be expressions at some point).
+Every {gt} is referred to with the double colon, `::`.
+The calls are executed in the order they appear in the list, and always begin with the `gt::gt()` call.
+
+```{r}
+tbl_regression_ex$gt_calls
+```
+
+
+#### kable_calls
+
+The `.$kable_calls` object is a list of data frame manipulation calls saved as strings (this may be updated later to be expressions).
+The calls are executed in the order they appear in the list.
+
+```{r}
+tbl_regression_ex$kable_calls
+```
+
+#### fmt_fun
+
+`.$fmt_fun` is a named list.  If formatting functions are applied to a column in `.$table_body`, the formatting function is saved in the list.
+The names of the list are the names of the columns of `.$table_body`.
+For example, the `"p.value"` column is often styled with `style_pvalue()`.
+In this case `.$fmt_fun$p.value =  style_pvalue`.  
+The list is generated from `.$table_header`.
+
+```{r}
+tbl_regression_ex$fmt_fun %>% names()
+```
+
+## Constructing a {gtsummary} object
+
+#### table_body
+
+When constructing a {gtsummary} object, the author will begin with the `.$table_body` object.
+Recall the `.$table_body` data frame must include columns `"label"`, `"row_type"`, and `"variable"`.
+Of these columns, only the `"label"` column will be printed with the final results.
+The `"row_type"` column typically will control whether or not the label column is indented.
+The `"variable"` is often used in the `inline_text()` family of functions to select the rows to print in the body of an R markdown document.
+
+```{r}
+tbl_regression_ex %>%
+  pluck("table_body") %>%
+  select(variable, row_type, label)
+```
+
+The other columns in `.$table_body` are created by the user and are likely printed in the output.
+Formatting instructions for these columns is stored in `.$table_header`.
+
+### table_header
+
+The `.$table_header` has one row for every column in `.$table_body` containing instructions how to format each column, the column headers, and more.
+There are a few internal {gtsummary} functions to assist in constructing and modifying a `.$table_header` data frame.
+
+First is the `table_header_fill_missing()` function.
+This function ensures `.$table_header` contains a row for every column of `.$table_body`.
+If a column does not exist, it is populated with appropriate default values.
+
+```{r}
+gtsummary:::table_header_fill_missing(
+  table_header = tibble(column = names(tbl_regression_ex$table_body))) 
+```
+
+The `modify_header_internal()` is useful for assigning column headers.
+The function accepts a complete {gtsummary} object as its input, and returns an updated version where the column labels have been added to `.$table_header`.
+The function also switches the default `.$table_header$hide` from `TRUE` to `FALSE`, resulting in column with labels being printed.
+
+Lastly, any time the `.$table_header` object is modified, it is critical the author also runs `update_calls_from_table_header()`.
+This function uses the information in `.$table_header` to update the gt and kable calls.
+
+#### gt and kable calls
+
+Each {gtsummary} object must return calls for printing with either the gt package or the knit::kable function.
+A function author will write a basis of calls, for example, the the first gt call is always `gt::gt()`.
+After the basics are covered, more complex calls will be added via `update_calls_from_table_header()`.
+If the new function you're writing is a cobbled together {gtsummary} object (for example, using `tbl_merge()` or `tbl_stack()`) the basic calls should already be covered.
+
+## Printing a {gtsummary} object
+
+All {gtsummary} objects are printed with `print.gtsummary()`.
+Within the print function the {gtsummary} object is converted to either a gt object or a knitr::kable object depending on the chosen print engine.
+While the actual print function is slightly more involved it is basically this:
+
+```{r, eval = FALSE}
+print.gtsummary <- function(x) {
+  if (getOption("gtsummary.print_engine") == "gt") {
+    return(as_gt(x) %>% print())
+  }
+  else if (getOption("gtsummary.print_engine") == "kable") {
+    return(as_kable(x) %>% print())
+  }
+}
+
+```
+
+The `as_gt()` and `as_kable()` function execute the calls saved in `.$gt_calls` and `.$kable_calls`, respectively, converting the object from {gtsummary} to the specified type.
