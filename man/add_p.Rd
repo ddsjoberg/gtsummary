@@ -82,7 +82,7 @@ as it is for \code{tbl_regression()}.
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
+\if{html}{\figure{add_p_ex2.png}{options: width=60\%}}
 }
 
 \examples{
