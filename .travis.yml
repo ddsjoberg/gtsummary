@@ -26,7 +26,7 @@ before_install:
             -e 'r_version <- paste0(R.Version()$major, ".", substr(R.Version()$minor, 1, 1))'
             -e 'if (r_version %in% c("3.3", "3.4")) remotes::install_version("geepack", version = "1.2-1", repos = "http://cran.us.r-project.org")'
             -e 'if (r_version %in% c("3.3", "3.4")) remotes::install_version("car", version = "3.0-2", repos = "http://cran.us.r-project.org")'
-            -e 'if (r_version %in% c("3.3")) remotes::install_version("survival", version = "2.44-1.1", repos = "http://cran.us.r-project.org")'
+            -e 'if (r_version %in% c("3.3")) remotes::install_version("survival", version = "2.40-1", repos = "http://cran.us.r-project.org")'
 
 r_github_packages:
   - rstudio/gt
