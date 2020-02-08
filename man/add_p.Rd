@@ -82,7 +82,7 @@ as it is for \code{tbl_regression()}.
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
+\if{html}{\figure{add_p_ex2.png}{options: width=60\%}}
 }
 
 \examples{
@@ -102,12 +102,11 @@ my_mcnemar <- function(data, variable, by, ...) {
   result$test <- "McNemar\\\\'s test"
   result
 }
-\donttest{
+
 add_p_ex2 <-
   trial[c("response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p(test = response ~ "my_mcnemar")
-}
 }
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples

@@ -46,7 +46,7 @@ tbl_merge_ex1 <-
     tbls = list(t1, t2),
     tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
-\donttest{
+
 # Descriptive statistics alongside univariate regression, with no spanning header
 t3 <-
   trial[c("age", "grade", "response")] \%>\%
@@ -64,7 +64,6 @@ tbl_merge_ex2 <-
   tbl_merge(tbls = list(t3, t4)) \%>\%
   as_gt(include = -tab_spanner) \%>\%
   gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
-}
 }
 \seealso{
 \link{tbl_stack}

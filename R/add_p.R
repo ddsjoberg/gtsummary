@@ -60,12 +60,11 @@
 #'   result$test <- "McNemar\\'s test"
 #'   result
 #' }
-#' \donttest{
+#'
 #' add_p_ex2 <-
 #'   trial[c("response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p(test = response ~ "my_mcnemar")
-#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -73,7 +72,7 @@
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
+#' \if{html}{\figure{add_p_ex2.png}{options: width=60\%}}
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
                   group = NULL, include = everything(), exclude = NULL) {
