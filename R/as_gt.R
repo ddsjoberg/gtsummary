@@ -25,12 +25,13 @@
 #' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survival]
 #' @author Daniel D. Sjoberg
 #' @examples
-#' \donttest{
+#' # Requires the gt package
+#' # remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
+#' library(gt)
 #' as_gt_ex <-
 #'   trial[c("trt", "age", "response", "grade")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_gt()
-#' }
 #' @section Example Output:
 #'
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
