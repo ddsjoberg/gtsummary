@@ -9,13 +9,14 @@ init:
 
   matrix:
     - R_VERSION: release
+    - R_VERSION: oldrel
     - R_VERSION: devel
 
 install:
   ps: Bootstrap
 
-cache:
-  - C:\RLibrary
+#cache:
+#  - C:\RLibrary
 
 environment:
   NOT_CRAN: true
