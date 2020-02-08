@@ -257,7 +257,7 @@ Must be same length as <code>tbls</code> argument</p></td>
     <span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>),
     <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"**Tumor Response**"</span>, <span class='st'>"**Time to Death**"</span>)
   )
-<span class='co'># \donttest{</span>
+
 <span class='co'># Descriptive statistics alongside univariate regression, with no spanning header</span>
 <span class='no'>t3</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
@@ -274,8 +274,7 @@ Must be same length as <code>tbls</code> argument</p></td>
 <span class='no'>tbl_merge_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_merge</span>(<span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t3</span>, <span class='no'>t4</span>)) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='as_gt.html'>as_gt</a></span>(<span class='kw'>include</span> <span class='kw'>=</span> -<span class='no'>tab_spanner</span>) <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/cols_label.html'>cols_label</a></span>(<span class='kw'>stat_0_1</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>"**Summary Statistics**"</span>))
-<span class='co'># }</span></div></pre>
+  <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/cols_label.html'>cols_label</a></span>(<span class='kw'>stat_0_1</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>"**Summary Statistics**"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

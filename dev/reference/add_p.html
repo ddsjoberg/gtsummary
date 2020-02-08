@@ -260,7 +260,7 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
 <p>Example 1</p>
 <p><img src='figures/add_p_ex1.png' width=60% /></p>
 <p>Example 2</p>
-<p><img src='figures/add_p_ex2.png' width=45% /></p>
+<p><img src='figures/add_p_ex2.png' width=60% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed examples</p>
@@ -295,13 +295,12 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
   <span class='no'>result</span>$<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='st'>"McNemar\\'s test"</span>
   <span class='no'>result</span>
 }
-<span class='co'># \donttest{</span>
+
 <span class='no'>add_p_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"response"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>add_p</span>(<span class='kw'>test</span> <span class='kw'>=</span> <span class='no'>response</span> ~ <span class='st'>"my_mcnemar"</span>)</div><div class='output co'>#&gt; <span class='message'>There was an error in 'add_p()' for variable 'response' and test 'my_mcnemar', p-value omitted:</span>
-#&gt; <span class='message'>Error in my_mcnemar(data = structure(list(response = c(0L, 1L, 0L, 1L, : could not find function "my_mcnemar"</span></div><div class='input'># }
-</div></pre>
+#&gt; <span class='message'>Error in my_mcnemar(data = structure(list(response = c(0L, 1L, 0L, 1L, : could not find function "my_mcnemar"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

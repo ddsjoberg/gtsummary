@@ -251,7 +251,9 @@ function's <code>formula.=</code> argument</p></td>
 
 <span class='co'># Example with Cubic Splines</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>Hmisc</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: lattice</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Formula</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘Hmisc’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'>Attaching package: ‘Hmisc’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:gt’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    html</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    format.pval, units</span></div><div class='input'><span class='no'>mod2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(
   <span class='no'>age</span> ~ <span class='fu'><a href='https://rdrr.io/pkg/Hmisc/man/rcspline.eval.html'>rcspline.eval</a></span>(<span class='no'>marker</span>, <span class='kw'>inclx</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) + <span class='no'>grade</span>,
