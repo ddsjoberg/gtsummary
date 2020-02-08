@@ -9,7 +9,6 @@ init:
 
   matrix:
     - R_VERSION: release
-    - R_VERSION: oldrel
     - R_VERSION: devel
 
 install:
@@ -19,8 +18,8 @@ before_build:
   - Rscript -e 'install.packages("remotes")'
             -e 'remotes::install_github("rstudio/gt")'
 
-cache:
-  - C:\RLibrary
+#cache:
+#  - C:\RLibrary
 
 environment:
   NOT_CRAN: true
