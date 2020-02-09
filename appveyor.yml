@@ -14,6 +14,10 @@ init:
 install:
   ps: Bootstrap
 
+before_build:
+  - Rscript -e 'install.packages("remotes")'
+            -e 'remotes::install_github("rstudio/gt")'
+
 cache:
   - C:\RLibrary
 
