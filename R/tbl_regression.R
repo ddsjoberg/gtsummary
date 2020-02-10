@@ -142,7 +142,15 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
          call. = FALSE)
   }
 
-  # converting tidyselect formula lists to named lists
+  include <- rlang::enquo(include)
+  exclude <- rlang::enquo(exclude)
+  show_single_row <- rlang::enquo(show_single_row)
+
+  # will return call, and all object passed to in tbl_regression call
+  # the object func_inputs is a list of every object passed to the function
+  func_inputs <- as.list(environment())
+
+    # converting tidyselect formula lists to named lists
   # extracting model frame
   model_frame <- tryCatch({
       stats::model.frame(x)
@@ -161,14 +169,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
       stop(as.character(e), call. = FALSE)
     }
   )
-
-  include <- rlang::enquo(include)
-  exclude <- rlang::enquo(exclude)
-  show_single_row <- rlang::enquo(show_single_row)
-
-  # will return call, and all object passed to in tbl_regression call
-  # the object func_inputs is a list of every object passed to the function
-  func_inputs <- as.list(environment())
 
   # using broom to tidy up regression results, and
   # then reversing order of data frame
