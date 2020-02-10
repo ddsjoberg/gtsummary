@@ -1,4 +1,4 @@
-# gtsummary 1.2.5
+# gtsummary (development version)
 
 ## Documentation
 
@@ -13,8 +13,6 @@
 * Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings (#250)
 
 ## Syntax
-
-* Updated `tbl_uvregression()` to allow flexible tidyselect inputs and improved error messaging for arguments `x` and `y` (#249)
 
 * Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. (#250)
 
@@ -32,6 +30,8 @@
     
     purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))
     ```
+* Updated `tbl_uvregression()` to allow flexible tidyselect inputs and improved error messaging for arguments `x` and `y` (#249)
+
 * After the input updates in #250, the `exclude=` argument appearing in `add_p()`, `tbl_regression()`, `tbl_uvregression()`, `as_gt()`, `as_kable()`, and `as_tibble()` was redundant.  The `exclude=` argument is now deprecated. Use `include=` instead, with tidyselect syntax. (#331)
 
 * Functions `all_categorical()`, `all_dichotomous()`, and `all_continuous()` may now be used in `tbl_summary()` argument `type=` (#256)
