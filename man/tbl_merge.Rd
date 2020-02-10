@@ -60,10 +60,12 @@ t4 <-
     exponentiate = TRUE,
     hide_n = TRUE
   )
+\donttest{
 tbl_merge_ex2 <-
   tbl_merge(tbls = list(t3, t4)) \%>\%
   as_gt(include = -tab_spanner) \%>\%
   gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
+}
 }
 \seealso{
 \link{tbl_stack}

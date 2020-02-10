@@ -27,11 +27,12 @@
 #' @examples
 #' # Requires the gt package
 #' # remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
-#' library(gt)
+#' \donttest{
 #' as_gt_ex <-
 #'   trial[c("trt", "age", "response", "grade")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_gt()
+#' }
 #' @section Example Output:
 #'
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
