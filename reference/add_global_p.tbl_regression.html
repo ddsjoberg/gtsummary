@@ -94,7 +94,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -121,6 +121,9 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     </li>
     <li>
       <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -171,7 +174,14 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
-<span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(<span class='no'>x</span>, <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(
+  <span class='no'>x</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>table_body</span>$<span class='no'>variable</span>[<span class='no'>x</span>$<span class='no'>table_body</span>$<span class='no'>var_type</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"categorical"</span>,
+    <span class='st'>"interaction"</span>)],
+  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -182,15 +192,21 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
 <a href='tbl_regression.html'>tbl_regression</a> function</p></td>
     </tr>
     <tr>
-      <th>terms</th>
-      <td><p>Character vector of terms for which to add global p-values.  Default
-is <code>NULL</code> which will add global p-values for all categorical variables</p></td>
+      <th>include</th>
+      <td><p>Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. tidyselect and gtsummary select helper
+functions are also accepted. Default is <code>NULL</code>, which adds global p-values
+for all categorical and interaction terms.</p></td>
     </tr>
     <tr>
       <th>keep</th>
       <td><p>Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>terms</th>
+      <td><p>DEPRECATED.  Use <code>include=</code> argument instead.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -206,8 +222,8 @@ Default is <code>FALSE</code></p></td>
     
 
 <p>If a needed class of model is not supported by
-<a href='https://rdrr.io/pkg/car/man/Anova.html'>car::Anova</a>, please create an
-<a href='https://github.com/ddsjoberg/gtsummary/issues'>issue</a> to request support.</p>
+<a href='https://rdrr.io/pkg/car/man/Anova.html'>car::Anova</a>, please create a
+<a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub Issue</a> to request support.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -220,6 +236,7 @@ Default is <code>FALSE</code></p></td>
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a>()</code>,
 <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
+<code><a href='combine_terms.html'>combine_terms</a>()</code>,
 <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
 <code><a href='modify_header.html'>modify_header</a>()</code>,
 <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a>()</code>,

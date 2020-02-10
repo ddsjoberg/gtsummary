@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     </li>
     <li>
       <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -175,7 +178,7 @@
   <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>prob</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{estimate} ({conf.level*100}% CI {ci})"</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>estimate_fun</span>,
+  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>fmt_fun</span>$<span class='no'>estimate</span>,
   <span class='no'>...</span>
 )</pre>
 

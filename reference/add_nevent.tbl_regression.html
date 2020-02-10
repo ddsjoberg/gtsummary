@@ -54,7 +54,10 @@ tbl_regression.  Supported
 model types include GLMs with binomial distribution family (e.g.
 stats::glm, lme4::glmer, and
 geepack::geeglm) and Cox
-Proportion Hazards regression models (survival::coxph)." />
+Proportion Hazards regression models (survival::coxph).
+The number of events is added to the internal .$table_body tibble,
+and not printed in the default output table (similar to N). The number
+of events is accessible via the inline_text function for printing in a report." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -98,7 +101,7 @@ Proportion Hazards regression models (survival::coxph)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -125,6 +128,9 @@ Proportion Hazards regression models (survival::coxph)." />
     </li>
     <li>
       <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -176,6 +182,9 @@ model types include GLMs with binomial distribution family (e.g.
 <a href='https://rdrr.io/r/stats/glm.html'>stats::glm</a>, <a href='https://rdrr.io/pkg/lme4/man/glmer.html'>lme4::glmer</a>, and
 <a href='https://rdrr.io/pkg/geepack/man/geeglm.html'>geepack::geeglm</a>) and Cox
 Proportion Hazards regression models (<a href='https://rdrr.io/pkg/survival/man/coxph.html'>survival::coxph</a>).</p>
+<p>The number of events is added to the internal <code>.$table_body</code> tibble,
+and not printed in the default output table (similar to N). The number
+of events is accessible via the <a href='inline_text.html'>inline_text</a> function for printing in a report.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
@@ -197,13 +206,6 @@ Proportion Hazards regression models (<a href='https://rdrr.io/pkg/survival/man/
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>tbl_regression</code> object</p>
-    <h2 class="hasAnchor" id="reporting-event-n"><a class="anchor" href="#reporting-event-n"></a>Reporting Event N</h2>
-
-    
-
-<p>The number of events is added to the internal <code>.$table_body</code> tibble,
-and not printed in the default output table (similar to N). The number
-of events is accessible via the <a href='inline_text.html'>inline_text</a> function for printing in a report.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -216,6 +218,7 @@ of events is accessible via the <a href='inline_text.html'>inline_text</a> funct
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a>()</code>,
 <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
+<code><a href='combine_terms.html'>combine_terms</a>()</code>,
 <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
 <code><a href='modify_header.html'>modify_header</a>()</code>,
 <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a>()</code>,
@@ -234,7 +237,6 @@ of events is accessible via the <a href='inline_text.html'>inline_text</a> funct
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#reporting-event-n">Reporting Event N</a></li>
       <li><a href="#example-output">Example Output</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>

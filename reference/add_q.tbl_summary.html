@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     </li>
     <li>
       <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -169,7 +172,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
-<span class='fu'><a href='add_q.html'>add_q</a></span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"fdr"</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>pvalue_fun</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='add_q.html'>add_q</a></span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"fdr"</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>fmt_fun</span>$<span class='no'>p.value</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -225,8 +228,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_sum_q_ex</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"trt"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_q.html'>add_q</a></span>()</div></pre>

@@ -64,7 +64,7 @@ covariate in the x= argument. Each column of the data frame will serve as
 the outcome in a univariate regression model. Take care using the x argument
 that each of the columns in the data frame are appropriate for the same type
 of model, e.g. they are all continuous variables appropriate for lm, or
-binary variables appropriate for logistic regression with glm." />
+dichotomous variables appropriate for logistic regression with glm." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -108,7 +108,7 @@ binary variables appropriate for logistic regression with glm." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -135,6 +135,9 @@ binary variables appropriate for logistic regression with glm." />
     </li>
     <li>
       <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -195,7 +198,7 @@ covariate in the <code>x=</code> argument. Each column of the data frame will se
 the outcome in a univariate regression model. Take care using the <code>x</code> argument
 that each of the columns in the data frame are appropriate for the same type
 of model, e.g. they are all continuous variables appropriate for <a href='https://rdrr.io/r/stats/lm.html'>lm</a>, or
-binary variables appropriate for logistic regression with <a href='https://rdrr.io/r/stats/glm.html'>glm</a>.</p>
+dichotomous variables appropriate for logistic regression with <a href='https://rdrr.io/r/stats/glm.html'>glm</a>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tbl_uvregression</span>(
@@ -207,7 +210,7 @@ binary variables appropriate for logistic regression with <a href='https://rdrr.
   <span class='kw'>formula</span> <span class='kw'>=</span> <span class='st'>"{y} ~ {x}"</span>,
   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything</a></span>(),
   <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>show_single_row</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -241,7 +244,7 @@ Specify one and only one of <code>y</code> or <code>x</code></p></td>
       <td><p>Model covariate (e.g. <code>x = trt</code>).
 All other columns in <code>data</code> will serve as the outcome in a regression model
 with <code>x</code> as a covariate.  Output table is best when <code>x</code> is a continuous or
-binary variable displayed on a single row.
+dichotomous variable displayed on a single row.
 Specify one and only one of <code>y</code> or <code>x</code></p></td>
     </tr>
     <tr>
@@ -264,15 +267,17 @@ coefficient estimates. Default is <code>FALSE</code>.</p></td>
     <tr>
       <th>label</th>
       <td><p>List of formulas specifying variables labels,
-e.g. <code><a href='https://rdrr.io/r/base/list.html'>list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")</a></code></p></td>
+e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(age ~ "Age, yrs", stage ~ "Path T Stage")</a></code></p></td>
     </tr>
     <tr>
       <th>include</th>
-      <td><p>Character vector of variable names to include from output.</p></td>
+      <td><p>Variables to include in output. Input may be a vector of
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is <code><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything()</a></code>.</p></td>
     </tr>
     <tr>
       <th>exclude</th>
-      <td><p>Character vector of variable names to exclude from output.</p></td>
+      <td><p>DEPRECATED</p></td>
     </tr>
     <tr>
       <th>hide_n</th>
@@ -281,9 +286,9 @@ e.g. <code><a href='https://rdrr.io/r/base/list.html'>list("age" ~ "Age, yrs", "
     <tr>
       <th>show_single_row</th>
       <td><p>By default categorical variables are printed on
-multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
-the regression coefficient on a single row, include the variable name here,
-e.g. <code>show_single_row = c("var1", "var2")</code></p></td>
+multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
+the regression coefficient on a single row, include the variable name(s)
+here--quoted and unquoted variable name accepted.</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
@@ -307,12 +312,13 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     <tr>
       <th>show_yesno</th>
-      <td><p>deprecated</p></td>
+      <td><p>DEPRECATED</p></td>
     </tr>
     <tr>
       <th>tidy_fun</th>
       <td><p>Option to specify a particular tidier function if the
-model is not a <a href='tidy_vetted.html'>vetted model</a>. Default it <code>NULL</code></p></td>
+model is not a <a href='tidy_vetted.html'>vetted model</a> or you need to implement a
+custom method. Default is <code>NULL</code></p></td>
     </tr>
     </table>
 
@@ -373,7 +379,7 @@ units in your model.  Here are some common exceptions.</p><ol>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_uv_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
-    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>response</span>, <span class='no'>age</span>, <span class='no'>grade</span>),
+    <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"response"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)],
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>response</span>,
     <span class='kw'>method.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>),
@@ -384,10 +390,9 @@ units in your model.  Here are some common exceptions.</p><ol>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>tbl_uv_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
-    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>),
+    <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ttdeath"</span>, <span class='st'>"death"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)],
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>grade</span>) ~ <span class='st'>"Grade"</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
     <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>)
   )
@@ -395,12 +400,10 @@ units in your model.  Here are some common exceptions.</p><ol>
 <span class='co'># for convenience, you can also pass named lists to any arguments</span>
 <span class='co'># that accept formulas (e.g label, etc.)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
-<span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+<span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ttdeath"</span>, <span class='st'>"death"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_uvregression</span>(
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>grade</span> <span class='kw'>=</span> <span class='st'>"Grade"</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )</div><div class='output co'>#&gt; &lt;style&gt;html {
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
@@ -531,7 +534,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   /* column_labels.background.color */
 #&gt;   font-size: 100%;
 #&gt;   /* column_labels.font.size */
-#&gt;   font-weight: initial;
+#&gt;   font-weight: normal;
 #&gt;   /* column_labels.font.weight */
 #&gt;   text-transform: inherit;
 #&gt;   /* column_labels.text_transform */
@@ -842,7 +845,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   
 #&gt;   &lt;thead class="gt_col_headings"&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"&gt;&lt;strong&gt;Covariate&lt;/strong&gt;&lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"&gt;&lt;strong&gt;Characteristic&lt;/strong&gt;&lt;/th&gt;
 #&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;N&lt;/strong&gt;&lt;/th&gt;
 #&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;HR&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;&lt;/th&gt;
 #&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;&lt;strong&gt;95% CI&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;&lt;/th&gt;

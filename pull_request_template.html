@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -119,6 +119,9 @@
     </li>
     <li>
       <a href="articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="articles/gallery.html">Table Gallery</a>
@@ -162,20 +165,20 @@
     </div>
 
 
-<ul>
-<li><p>What changes are proposed in this pull request?</p></li>
-<li><p>If there is an GitHub issue associated with this pull request, please provide link.</p></li>
-</ul>
+<p><strong>What changes are proposed in this pull request?</strong></p>
+<p><strong>If there is an GitHub issue associated with this pull request, please provide link.</strong></p>
 <hr>
 <p>Checklist for PR reviewer</p>
 <ul>
 <li>[ ] PR branch has pulled the most recent updates from master branch</li>
 <li>[ ] NEWS.md has been updated under the heading “<code># gtsummary (development version)</code>”?</li>
 <li>[ ] <code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> runs with no spelling errors in documentation</li>
-<li>[ ] If a new function was added, was function included in <code>pkgdown.yml</code>
+<li>[ ] If a new function was added, function included in <code>pkgdown.yml</code>
 </li>
+<li>[ ] If a bug was fixed, a unit test was added for the bug check</li>
 <li>[ ] Run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site()</a></code>. Check the R console for errors, and review the rendered website.</li>
 <li>[ ] Code coverage is suitable for any new functions/features.</li>
+<li>[ ] Update <code>gt_sha</code> in <code>data-raw/gt_sha.R</code> AND run the file.</li>
 <li>[ ] R CMD Check runs without errors, warnings, and notes</li>
 <li>[ ] When the branch is ready to be merged into master, increment the version number using <code><a href="https://usethis.r-lib.org/reference/use_version.html">usethis::use_version(which = "dev")</a></code>, run <code>codemetar::write_codemeta()</code>, approve, and merge the PR.</li>
 </ul>

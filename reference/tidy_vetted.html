@@ -107,7 +107,7 @@ geepack::geeglm
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -134,6 +134,9 @@ geepack::geeglm
     </li>
     <li>
       <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -174,7 +177,7 @@ geepack::geeglm
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Vetted tidy models</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/utils-tbl_regression.R'><code>R/utils-tbl_regression.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tidy_vetted.R'><code>R/tidy_vetted.R</code></a></small>
     <div class="hidden name"><code>tidy_vetted.Rd</code></div>
     </div>
 
@@ -202,16 +205,45 @@ to <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a>.</p>
 
     
 
-<p>If <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a> or <a href='https://rdrr.io/pkg/broom.mixed/man/reexports.html'>broom.mixed::tidy</a> support a class of model not listed
+<p>If <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a> supports a class of model not listed
 above, please submit a <a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub Issue</a>.
 The model can be added to the list of vetted models and unit tests will be
 put in place to ensure continued support for the model.</p>
+    <h2 class="hasAnchor" id="custom-tidiers"><a class="anchor" href="#custom-tidiers"></a>custom tidiers</h2>
 
+    
+
+<p>In some cases you may need to use a custom function to tidy regression model
+results. A user may pass a custom tidier function to <a href='tbl_regression.html'>tbl_regression</a> and
+<a href='tbl_uvregression.html'>tbl_uvregression</a> in the <code>tidy_fun=</code> argument.  The function passed, however,
+must be a proper tidier.  For example, it must return a tibble that is one
+line per variable in the regression model; it must accept arguments
+<code>exponentiate=</code>, <code>conf.level=</code>, and <code>conf.int=</code> since these arguments will
+be passed to the function internally (we recommend including <code>...</code> to
+capture any arguments you may not need). See below for an example where the
+confidence limits are calculated using Wald's method.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>my_tidy</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>exponentiate</span> <span class='kw'>=</span>  <span class='fl'>FALSE</span>, <span class='no'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>) {
+  <span class='no'>tidy</span> <span class='kw'>&lt;-</span>
+    <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span>(
+      <span class='kw pkg'>broom</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/broom/man/reexports.html'>tidy</a></span>(<span class='no'>x</span>, <span class='kw'>conf.int</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
+      <span class='kw pkg'>broom</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/broom/man/confint_tidy.html'>confint_tidy</a></span>(<span class='no'>x</span>, <span class='kw'>func</span> <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/stats/confint.html'>confint.default</a></span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='no'>conf.level</span>)
+    )
+  <span class='co'># exponentiating, if requested</span>
+  <span class='kw'>if</span> (<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>)
+    <span class='no'>tidy</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>estimate</span>, <span class='no'>conf.low</span>, <span class='no'>conf.high</span>), <span class='no'>exp</span>)
+}
+
+<span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>age</span> ~ <span class='no'>grade</span> + <span class='no'>response</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>my_tidy</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#model-support">model support</a></li>
+      <li><a href="#custom-tidiers">custom tidiers</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

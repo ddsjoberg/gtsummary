@@ -94,7 +94,7 @@ or tbl_summary objects and adds appropriate spanning headers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -121,6 +121,9 @@ or tbl_summary objects and adds appropriate spanning headers." />
     </li>
     <li>
       <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -208,6 +211,7 @@ Must be same length as <code>tbls</code> argument</p></td>
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a>()</code>,
 <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
+<code><a href='combine_terms.html'>combine_terms</a>()</code>,
 <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
 <code><a href='modify_header.html'>modify_header</a>()</code>,
 <code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a>()</code>,
@@ -253,24 +257,24 @@ Must be same length as <code>tbls</code> argument</p></td>
     <span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>),
     <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"**Tumor Response**"</span>, <span class='st'>"**Time to Death**"</span>)
   )
-<span class='co'># \donttest{</span>
+
 <span class='co'># Descriptive statistics alongside univariate regression, with no spanning header</span>
 <span class='no'>t3</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
+  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"no"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_n.html'>add_n</a></span>()
 <span class='no'>t4</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
-    <span class='no'>trial</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>),
+    <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ttdeath"</span>, <span class='st'>"death"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)],
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
     <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
     <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )
+<span class='co'># \donttest{</span>
 <span class='no'>tbl_merge_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_merge</span>(<span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t3</span>, <span class='no'>t4</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='as_gt.html'>as_gt</a></span>(<span class='kw'>exclude</span> <span class='kw'>=</span> <span class='st'>"tab_spanner"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='as_gt.html'>as_gt</a></span>(<span class='kw'>include</span> <span class='kw'>=</span> -<span class='no'>tab_spanner</span>) <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/cols_label.html'>cols_label</a></span>(<span class='kw'>stat_0_1</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>"**Summary Statistics**"</span>))
 <span class='co'># }</span></div></pre>
   </div>

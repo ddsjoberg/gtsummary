@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
       </span>
     </div>
 
@@ -119,6 +119,9 @@
     </li>
     <li>
       <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+    </li>
+    <li>
+      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
     </li>
     <li>
       <a href="../articles/gallery.html">Table Gallery</a>
@@ -212,12 +215,6 @@
           <p><code><a href="add_q.tbl_summary.html">add_q(<i>&lt;tbl_summary&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add a column of q-values to account for multiple comparisons</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tbl_survival.survfit.html">tbl_survival(<i>&lt;survfit&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Creates table of survival probabilities</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -244,6 +241,12 @@
           <p><code><a href="add_nevent.tbl_regression.html">add_nevent(<i>&lt;tbl_regression&gt;</i>)</a></code> </p>
         </td>
         <td><p>Add number of events to a regression table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="combine_terms.html">combine_terms()</a></code> </p>
+        </td>
+        <td><p>Combine terms in a regression model</p></td>
       </tr><tr>
         
         <td>
@@ -401,7 +404,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="as_tibbleS3.html">as_tibble(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="as_tibbleS3.html">as_tibble(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="as_tibbleS3.html">as_tibble(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="as_tibbleS3.html">as_tibble(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="as_tibbleS3.html">as_tibble(<i>&lt;tbl_stack&gt;</i>)</a></code> <code><a href="as_tibbleS3.html">as_tibble(<i>&lt;tbl_survival&gt;</i>)</a></code> </p>
+          <p><code><a href="as_tibbleS3.html">as_tibble(<i>&lt;gtsummary&gt;</i>)</a></code> </p>
         </td>
         <td><p>Convert gtsummary object to tibble</p></td>
       </tr><tr>
@@ -441,13 +444,19 @@
       <tr>
         
         <td>
+          <p><code><a href="tbl_survival.survfit.html">tbl_survival(<i>&lt;survfit&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Creates table of survival probabilities</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="gtsummary_logo.html">gtsummary_logo()</a></code> </p>
         </td>
         <td><p>The gtsummary logo, using ASCII or Unicode characters</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="print_gtsummary.html">print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_summary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_regression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_uvregression&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_survival&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_merge&gt;</i>)</a></code> <code><a href="print_gtsummary.html">print(<i>&lt;tbl_stack&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;tbl_stack&gt;</i>)</a></code> </p>
+          <p><code><a href="print_gtsummary.html">print(<i>&lt;gtsummary&gt;</i>)</a></code> <code><a href="print_gtsummary.html">knit_print(<i>&lt;gtsummary&gt;</i>)</a></code> </p>
         </td>
         <td><p>print and knit_print methods for gtsummary objects</p></td>
       </tr>
@@ -516,26 +525,6 @@ multiple comparisons</p></td>
         </td>
         <td><p>Creates table of univariate summary statistics for time-to-event endpoints</p></td>
       </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-standard-evaluation-variants" class="hasAnchor"><a href="#section-standard-evaluation-variants" class="anchor"></a>Standard Evaluation Variants</h2>
-          <p class="section-desc"><p>Some functions utilize non-standard evaluation. These variants use standard evaluation</p></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="tbl_summary_.html">tbl_summary_()</a></code> </p>
-        </td>
-        <td><p>Standard evaluation version of tbl_summary()</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_p_.html">add_p_()</a></code> </p>
-        </td>
-        <td><p>Standard evaluation version of add_p()</p></td>
-      </tr>
     </tbody>
     </table>
   </div>
@@ -551,7 +540,6 @@ multiple comparisons</p></td>
       <li><a href="#section-misc-functions">Misc. Functions</a></li>
       <li><a href="#section-example-datasets">Example Datasets</a></li>
       <li><a href="#section-s-generics">S3 Generics</a></li>
-      <li><a href="#section-standard-evaluation-variants">Standard Evaluation Variants</a></li>
     </ul>
   </div>
 </div>
