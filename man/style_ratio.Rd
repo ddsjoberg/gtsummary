@@ -32,10 +32,12 @@ c(
   style_ratio()
 }
 \seealso{
-\link{style_sigfig}
+Other style tools: 
+\code{\link{style_percent}()},
+\code{\link{style_pvalue}()},
+\code{\link{style_sigfig}()}
 }
 \author{
 Daniel D. Sjoberg
 }
-\concept{style tools
-See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for example}
+\concept{style tools}

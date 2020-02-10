@@ -28,6 +28,7 @@ See Table Gallery \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery
 
 Other style tools: 
 \code{\link{style_pvalue}()},
+\code{\link{style_ratio}()},
 \code{\link{style_sigfig}()}
 }
 \author{

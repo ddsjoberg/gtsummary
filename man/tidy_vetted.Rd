@@ -22,7 +22,7 @@ to \link[broom:tidy]{broom::tidy}.
 }
 \section{model support}{
 
-If \link[broom:tidy]{broom::tidy} or \link[broom.mixed:tidy]{broom.mixed::tidy} support a class of model not listed
+If \link[broom:tidy]{broom::tidy} supports a class of model not listed
 above, please submit a \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub Issue}.
 The model can be added to the list of vetted models and unit tests will be
 put in place to ensure continued support for the model.

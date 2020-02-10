@@ -34,6 +34,7 @@ See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summa
 
 Other style tools: 
 \code{\link{style_percent}()},
+\code{\link{style_ratio}()},
 \code{\link{style_sigfig}()}
 }
 \author{
