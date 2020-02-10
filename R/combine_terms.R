@@ -124,11 +124,11 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
 
   # tbl'ing the new model object -----------------------------------------------
   # getting call from original tbl_regression call, and updating with new model object
-  call_aslist <- x$call_list$tbl_regression %>% as.list()
+  call_aslist <- x$inputs
   # replacing model with updated model in call
   call_aslist$x <- new_model_obj
   # running tbl_regression with new model
-  new_model_tbl <- as.call(call_aslist) %>% eval()
+  new_model_tbl <- do.call(tbl_regression, call_aslist)
 
   # updating original tbl object -----------------------------------------------
   # replacing the combined rows with a single row

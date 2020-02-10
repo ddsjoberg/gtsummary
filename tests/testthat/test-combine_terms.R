@@ -132,3 +132,17 @@ test_that("error catching working properly", {
   )
 })
 
+# Confirm map/apply situation works
+expect_error(
+  tibble(outcome = "marker", exp = FALSE, test = "F") %>%
+    mutate(
+      mod = purrr::map(outcome,
+                       ~glm(formula = paste0(.x, " ~ age + stage") %>% as.formula(),
+                            data = trial, family = gaussian)),
+      tbl = purrr::map2(mod, exp, ~tbl_regression(.x, exponentiate = .y)),
+      tbl2 = purrr::map2(
+        tbl, test, ~combine_terms(..1, formula_update = . ~ . - stage, test = ..2)
+      )
+    ),
+  NA
+)
