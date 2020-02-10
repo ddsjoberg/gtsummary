@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert gtsummary object to tibble</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for as_tibbleS3 {gtsummary}"><tr><td>as_tibbleS3 {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert gtsummary object to tibble</h2>
+
+<h3>Description</h3>
+
+<p>Function converts gtsummary objects tibbles. The formatting stored in
+<code>x$kable_calls</code> is applied.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'gtsummary'
+as_tibble(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object created by a function from the gtsummary package
+(e.g. <a href="tbl_summary.html">tbl_summary</a> or <a href="tbl_regression.html">tbl_regression</a>)</p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>Commands to include in output. Input may be a vector of
+quoted or unquoted names. tidyselect and gtsummary select helper
+functions are also accepted.
+Default is <code>everything()</code>, which includes all commands in <code>x$kable_calls</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>col_labels</code></td>
+<td>
+<p>Logical argument adding column labels to output tibble.
+Default is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>exclude</code></td>
+<td>
+<p>DEPRECATED</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Not used</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a <a href="../../tibble/html/tibble-package.html">tibble</a>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="tbl_summary.html">tbl_summary</a> <a href="tbl_regression.html">tbl_regression</a> <a href="tbl_uvregression.html">tbl_uvregression</a> <a href="tbl_survival.html">tbl_survival</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+tbl &lt;-
+  trial %&gt;%
+  tbl_summary(by = trt)
+
+as_tibble(tbl)
+
+# without column labels
+as_tibble(tbl, col_names = FALSE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.4.9017 <a href="00Index.html">Index</a>]</div>
+</body></html>

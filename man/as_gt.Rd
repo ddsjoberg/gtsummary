@@ -44,11 +44,12 @@ for detailed examples in the 'Advanced Customization' section.
 \examples{
 # Requires the gt package
 # remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
-library(gt)
+\donttest{
 as_gt_ex <-
   trial[c("trt", "age", "response", "grade")] \%>\%
   tbl_summary(by = trt) \%>\%
   as_gt()
+}
 }
 \seealso{
 \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_survival}

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Bold or Italicize labels or levels in gtsummary tables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for bold_italicize_labels_levels {gtsummary}"><tr><td>bold_italicize_labels_levels {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Bold or Italicize labels or levels in gtsummary tables</h2>
+
+<h3>Description</h3>
+
+<p>Bold or Italicize labels or levels in gtsummary tables
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+bold_labels(x)
+
+bold_levels(x)
+
+italicize_labels(x)
+
+italicize_levels(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object created using gtsummary functions</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Functions return the same class of gtsummary object supplied
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>bold_labels</code>: Bold labels in gtsummary tables
+</p>
+</li>
+<li> <p><code>bold_levels</code>: Bold levels in gtsummary tables
+</p>
+</li>
+<li> <p><code>italicize_labels</code>: Italicize labels in gtsummary tables
+</p>
+</li>
+<li> <p><code>italicize_levels</code>: Italicize levels in gtsummary tables
+</p>
+</li></ul>
+
+
+<h3>Example Output</h3>
+
+<p><img src="../help/figures/tbl_bold_ital_ex.png" width=50% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_summary tools: 
+<code><a href="add_n.html">add_n</a>()</code>,
+<code><a href="add_overall.html">add_overall</a>()</code>,
+<code><a href="add_p.html">add_p</a>()</code>,
+<code><a href="add_q.tbl_summary.html">add_q.tbl_summary</a>()</code>,
+<code><a href="add_stat_label.html">add_stat_label</a>()</code>,
+<code><a href="bold_p.tbl_summary.html">bold_p.tbl_summary</a>()</code>,
+<code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a>()</code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="tbl_summary.html">tbl_summary</a>()</code>
+</p>
+<p>Other tbl_regression tools: 
+<code><a href="add_global_p.tbl_regression.html">add_global_p.tbl_regression</a>()</code>,
+<code><a href="add_nevent.tbl_regression.html">add_nevent.tbl_regression</a>()</code>,
+<code><a href="bold_p.tbl_regression.html">bold_p.tbl_regression</a>()</code>,
+<code><a href="bold_p.tbl_stack.html">bold_p.tbl_stack</a>()</code>,
+<code><a href="combine_terms.html">combine_terms</a>()</code>,
+<code><a href="inline_text.tbl_regression.html">inline_text.tbl_regression</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_regression.html">sort_p.tbl_regression</a>()</code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_regression.html">tbl_regression</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>
+</p>
+<p>Other tbl_uvregression tools: 
+<code><a href="add_global_p.tbl_uvregression.html">add_global_p.tbl_uvregression</a>()</code>,
+<code><a href="add_nevent.tbl_uvregression.html">add_nevent.tbl_uvregression</a>()</code>,
+<code><a href="add_q.tbl_uvregression.html">add_q.tbl_uvregression</a>()</code>,
+<code><a href="bold_p.tbl_stack.html">bold_p.tbl_stack</a>()</code>,
+<code><a href="bold_p.tbl_uvregression.html">bold_p.tbl_uvregression</a>()</code>,
+<code><a href="inline_text.tbl_uvregression.html">inline_text.tbl_uvregression</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_uvregression.html">sort_p.tbl_uvregression</a>()</code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="tbl_uvregression.html">tbl_uvregression</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+tbl_bold_ital_ex &lt;-
+  trial[c("trt", "age", "grade")] %&gt;%
+  tbl_summary() %&gt;%
+  bold_labels() %&gt;%
+  bold_levels() %&gt;%
+  italicize_labels() %&gt;%
+  italicize_levels()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.4.9017 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -73,9 +73,7 @@ tribble(
   "footnote_abbrev", "Lists the abbreviation footnotes for a table.  All abbreviation footnotes are collated into a single footnote.  For example, 'OR = Odds Ratio' and 'CI = Confidence Interval' appear in a single footnote.",
   "footnote", "Lists the footnotes that will appear for each column.  Duplicates abbreviations will appear once."
 ) %>%
-  gt::gt() %>%
-  gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1))
-
+  knitr::kable() 
 ```
 
 ```{r} 
