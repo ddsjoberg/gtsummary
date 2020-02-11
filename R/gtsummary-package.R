@@ -25,6 +25,7 @@ release_questions <- function() {
   c(
     "Have you updated the gt_sha object with the most recent gt commit SHA?",
     "Have you updated the drat repo with the most up to date version of gt, including source and binary package builds?",
-    "Have you updated all the gt help file images?"
+    "Have you updated all the gt help file images?",
+    "Is the size of the build less than 5MB?"
   )
 }
