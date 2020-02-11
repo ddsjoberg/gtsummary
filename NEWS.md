@@ -1,3 +1,7 @@
+# gtsummary 1.2.6
+
+* Added support for `broom.mix::tidy()` model tidying.
+
 # gtsummary 1.2.5
 
 ## Documentation

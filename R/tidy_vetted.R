@@ -4,7 +4,7 @@
 #' in [tbl_regression] and [tbl_uvregression].  If a model is passed to these
 #' functions and the model is not listed below and  a `tidy()` function is
 #' not specified in the `tidy_fun=` argument, the model object will be passed
-#' to [broom::tidy].
+#' to [broom::tidy] or [broom.mixed::tidy].
 #'
 #' \itemize{
 #'  \item{[stats::lm]}
@@ -18,9 +18,9 @@
 #' @name tidy_vetted
 #' @keywords internal
 #' @section model support:
-#' If [broom::tidy] supports a class of model not listed
+#' If [broom::tidy] or [broom.mixed::tidy] supports a class of model not listed
 #' above, please submit a [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues).
-#' The model can be added to the list of vetted models and unit tests will be
+#' The model can be added to the list of vetted models. Unit tests will be
 #' put in place to ensure continued support for the model.
 #'
 #' @section custom tidiers:
