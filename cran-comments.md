@@ -20,6 +20,10 @@ Availability using Additional_repositories specification:
 
 ## Additional Comments
 
+*Submission 2020-02-12*
+Apologies for the large size of the first submission. I inadvertently included some large files in the package build.  Erroneous files have been removed.  Thank you for your time.
+
+*Submission 2020-02-11*
 The notes from R CMD Check regarding possibly mis-spelled words in DESCRIPTION are ok, and the words should remain as they appear.
 
 The note about the gt package is expected and has appeared in every previous CRAN release.
