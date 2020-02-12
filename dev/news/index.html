@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.5.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.5.9001</span>
       </span>
     </div>
 
@@ -169,10 +169,13 @@
 <h1 class="page-header">
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
+<ul>
+<li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://rdrr.io/pkg/broom.mixed/man/reexports.html">broom.mixed::tidy()</a></code> rather than <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy()</a></code> resolved issue.</li>
+</ul>
 </div>
     <div id="gtsummary-1-2-5" class="section level1">
 <h1 class="page-header">
-<a href="#gtsummary-1-2-5" class="anchor"></a>gtsummary 1.2.5<small> Unreleased </small>
+<a href="#gtsummary-1-2-5" class="anchor"></a>gtsummary 1.2.5<small> 2020-02-11 </small>
 </h1>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
