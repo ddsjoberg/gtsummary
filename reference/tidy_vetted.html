@@ -53,7 +53,7 @@
 in tbl_regression and tbl_uvregression.  If a model is passed to these
 functions and the model is not listed below and  a tidy() function is
 not specified in the tidy_fun= argument, the model object will be passed
-to broom::tidy.
+to broom::tidy or broom.mixed::tidy.
 
 stats::lm
 stats::glm
@@ -107,7 +107,7 @@ geepack::geeglm
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.6</span>
       </span>
     </div>
 
@@ -186,7 +186,7 @@ geepack::geeglm
 in <a href='tbl_regression.html'>tbl_regression</a> and <a href='tbl_uvregression.html'>tbl_uvregression</a>.  If a model is passed to these
 functions and the model is not listed below and  a <code>tidy()</code> function is
 not specified in the <code>tidy_fun=</code> argument, the model object will be passed
-to <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a>.</p>
+to <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a> or <a href='https://rdrr.io/pkg/broom.mixed/man/reexports.html'>broom.mixed::tidy</a>.</p>
 <ul>
 <li><p><a href='https://rdrr.io/r/stats/lm.html'>stats::lm</a></p></li>
 <li><p><a href='https://rdrr.io/r/stats/glm.html'>stats::glm</a></p></li>
@@ -205,9 +205,9 @@ to <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a>.</p>
 
     
 
-<p>If <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a> supports a class of model not listed
+<p>If <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a> or <a href='https://rdrr.io/pkg/broom.mixed/man/reexports.html'>broom.mixed::tidy</a> supports a class of model not listed
 above, please submit a <a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub Issue</a>.
-The model can be added to the list of vetted models and unit tests will be
+The model can be added to the list of vetted models. Unit tests will be
 put in place to ensure continued support for the model.</p>
     <h2 class="hasAnchor" id="custom-tidiers"><a class="anchor" href="#custom-tidiers"></a>custom tidiers</h2>
 
