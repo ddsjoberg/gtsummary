@@ -15,4 +15,6 @@
 
 ## Additional Comments
 
-Apologies for the submission so shortly after the last release: an important bug fix didn't make into the released version. Thank you for your time! Much appreciated!
+Apologies for this submission so shortly after the last release: an important bug fix didn't make into the last release. Thank you for your time! Much appreciated!
+
+The note about the gt package not in a mainstream repo is expected and has appeared in all previous releases.
