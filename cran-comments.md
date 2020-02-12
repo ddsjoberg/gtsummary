@@ -8,8 +8,6 @@
 > checking CRAN incoming feasibility ... NOTE
   Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
   
-  Days since last update: 0
-  
   Suggests or Enhances not in mainstream repositories:
     gt
   Availability using Additional_repositories specification:
@@ -17,4 +15,4 @@
 
 ## Additional Comments
 
-Apologies for the submission so shortly after the last release: an important bug fix didn't make into the released version. Thank you for your time!
+Apologies for the submission so shortly after the last release: an important bug fix didn't make into the released version. Thank you for your time! Much appreciated!
