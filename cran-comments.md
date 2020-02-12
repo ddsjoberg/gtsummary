@@ -5,18 +5,15 @@
 * win-builder oldrel, release, devel
 
 ## R CMD check results
-Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
-
-Possibly mis-spelled words in DESCRIPTION:
-  github (46:49)
-  gtsummary (47:5)
-  rstudio (46:57)
-  sha (47:19)
-
-Suggests or Enhances not in mainstream repositories:
-  gt
-Availability using Additional_repositories specification:
-  gt   yes   http://ddsjoberg.github.io/drat
+> checking CRAN incoming feasibility ... NOTE
+  Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
+  
+  Days since last update: 0
+  
+  Suggests or Enhances not in mainstream repositories:
+    gt
+  Availability using Additional_repositories specification:
+    gt   yes   http://ddsjoberg.github.io/drat
 
 ## Additional Comments
 
