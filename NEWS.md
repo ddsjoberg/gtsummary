@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix for random effects regression model where coefficients were not exponentiated when requested.  Using `broom.mixed::tidy()` rather than `broom::tidy()` resolved issue.
+
 # gtsummary 1.2.5
 
 ## Documentation
