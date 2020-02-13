@@ -7,12 +7,15 @@
 \method{sort_p}{tbl_regression}(x, ...)
 }
 \arguments{
-\item{x}{an object created using \code{tbl_regression} function}
+\item{x}{An object created using \code{tbl_regression} function}
 
-\item{...}{not used}
+\item{...}{Not used}
+}
+\value{
+A \code{tbl_regression} object
 }
 \description{
-Sort variables in tables created by \code{\link{tbl_regression}} by ascending p-values
+Sort variables in tables created by \link{tbl_regression} by ascending p-values
 }
 \section{Example Output}{
 
@@ -26,13 +29,18 @@ tbl_lm_sort_p_ex <-
   sort_p()
 }
 \seealso{
-Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
-  \code{\link{add_nevent.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
-  \code{\link{tbl_stack}}
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Karissa Whiting

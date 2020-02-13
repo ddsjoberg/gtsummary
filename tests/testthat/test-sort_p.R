@@ -2,7 +2,7 @@ context("test-sort_p")
 
 test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
   table1 <- trial %>%
-    tbl_summary(by = "trt") %>%
+    tbl_summary(by = trt) %>%
     add_p()
 
   expect_error(sort_p(table1), NA)
@@ -10,7 +10,7 @@ test_that("no errors/warnings with standard use after tbl_summary() and add_p()"
 })
 
 
-test_that("no errors/warnings with standard use after tbl_regression() and add_p()", {
+test_that("no errors/warnings with standard use after tbl_regression() and add_global_p()", {
   regress1 <- glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
     tbl_regression(exponentiate = TRUE) %>%
     add_global_p()
@@ -19,7 +19,7 @@ test_that("no errors/warnings with standard use after tbl_regression() and add_p
   expect_warning(sort_p(regress1), NA)
 })
 
-test_that("no errors/warnings with standard use after tbl_regression() and add_p()", {
+test_that("no errors/warnings with standard use after tbl_regression() and add_global_p()", {
   regress2 <-
     tbl_uvregression(
       trial %>% dplyr::select(response, age, grade),
@@ -36,7 +36,7 @@ test_that("no errors/warnings with standard use after tbl_regression() and add_p
 
 
 test_that("expect error if no p value in table 1", {
-  table1 <- trial %>% tbl_summary(by = "trt")
+  table1 <- trial %>% tbl_summary(by = trt)
 
   expect_error(
     sort_p(table1),
@@ -48,7 +48,8 @@ test_that("expect error if no p value in table 1", {
 })
 
 test_that("expect error if q = TRUE and no q values in table 1", {
-  table1 <- trial %>% tbl_summary(by = "trt") %>%
+  table1 <- trial %>%
+    tbl_summary(by = trt) %>%
     add_p()
 
   expect_error(
@@ -59,4 +60,3 @@ test_that("expect error if q = TRUE and no q values in table 1", {
     fixed = TRUE
   )
 })
-

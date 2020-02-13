@@ -4,23 +4,29 @@
 \alias{inline_text.tbl_regression}
 \title{Report statistics from regression summary tables inline}
 \usage{
-\method{inline_text}{tbl_regression}(x, variable, level = NULL,
+\method{inline_text}{tbl_regression}(
+  x,
+  variable,
+  level = NULL,
   pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
-  estimate_fun = x$inputs$estimate_fun, pvalue_fun = function(x)
-  style_pvalue(x, prepend_p = TRUE), ...)
+  estimate_fun = x$fmt_fun$estimate,
+  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  ...
+)
 }
 \arguments{
-\item{x}{object created from  \link{tbl_regression}}
+\item{x}{Object created from  \link{tbl_regression}}
 
-\item{variable}{variable name of statistic to present}
+\item{variable}{Variable name of statistics to present}
 
-\item{level}{level of the variable to display for categorical variables.
+\item{level}{Level of the variable to display for categorical variables.
 Default is \code{NULL}, returning the top row in the table for the variable.}
 
-\item{pattern}{statistics to return.  Uses \link[glue:glue]{glue::glue} formatting.
-Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.  All columns from
-\code{x$table_body} are available to print as well as the confidence level (conf.level).
-Uses \link[glue:glue]{glue::glue} formatting. See below for details.}
+\item{pattern}{String indicating the statistics to return.
+Uses \link[glue:glue]{glue::glue} formatting.
+Default is \code{"{estimate} ({conf.level }\% CI  {conf.low}, {conf.high}; {p.value})"}.
+All columns from \code{x$table_body} are available to print as well as the
+confidence level (conf.level). See below for details.}
 
 \item{estimate_fun}{function to style model coefficient estimates.
 Columns 'estimate', 'conf.low', and 'conf.high' are formatted.
@@ -29,13 +35,16 @@ Default is \code{x$inputs$estimate_fun}}
 \item{pvalue_fun}{function to style p-values and/or q-values.
 Default is \code{function(x) style_pvalue(x, prepend_p = TRUE)}}
 
-\item{...}{not used}
+\item{...}{Not used}
+}
+\value{
+A string reporting results from a gtsummary table
 }
 \description{
 Takes an object with class \code{tbl_regression}, and the
-location of the statistic to report and returns the statistic for reporting
+location of the statistic to report and returns statistics for reporting
 inline in an R markdown document.  Detailed examples in the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#inline_text}{tbl_regression vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \section{pattern argument}{
 
@@ -57,17 +66,22 @@ inline_text_ex1 <-
   glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE)
 
-inline_text(inline_text_ex1, variable = "age")
-inline_text(inline_text_ex1, variable = "grade", level = "III")
+inline_text(inline_text_ex1, variable = age)
+inline_text(inline_text_ex1, variable = grade, level = "III")
 }
 \seealso{
-Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
-  \code{\link{add_nevent.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
-  \code{\link{tbl_stack}}
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{combine_terms}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_regression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg

@@ -1,17 +1,12 @@
 context("test-tbl_summary_input_checks")
 
 test_that("input check", {
-
   expect_error(
     tbl_summary(trial, type = list("age" ~ "cont555inuous")),
     "*"
   )
   expect_error(
     tbl_summary(trial, type = list("cont555inuous")),
-    "*"
-  )
-  expect_error(
-    tbl_summary(trial, type = all_continuous() ~ "continuous"),
     "*"
   )
   expect_error(
@@ -46,5 +41,8 @@ test_that("input check", {
     tbl_summary(trial, sort = TRUE),
     "*"
   )
-
+  expect_error(
+    tbl_summary(trial %>% select(-everything())),
+    "*"
+  )
 })

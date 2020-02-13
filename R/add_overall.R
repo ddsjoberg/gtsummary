@@ -3,32 +3,35 @@
 #' Adds a column with overall summary statistics to tables
 #' created by `tbl_summary`.
 #'
-#' @param x object with class `tbl_summary` from the [tbl_summary] function
-#' @param last logical indicator to display overall column last in table.
+#' @param x Object with class `tbl_summary` from the [tbl_summary] function
+#' @param last Logical indicator to display overall column last in table.
 #' Default is `FALSE`, which will display overall column first.
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_summary` object
 #' @examples
 #' tbl_overall_ex <-
-#'   trial %>%
-#'   dplyr::select(age, response, grade, trt) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   trial[c("age", "response", "grade", "trt")] %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_overall()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
 #'
 add_overall <- function(x, last = FALSE) {
   # checking that input is class tbl_summary
-  if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
+  if (!inherits(x, "tbl_summary")) stop("`x` must be class 'tbl_summary'", call. = FALSE)
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
-    stop("Cannot add Overall column when no 'by' variable in original tbl_summary")
+    stop(
+      "Cannot add Overall column when no 'by' variable in original tbl_summary"
+    )
   }
 
   x_copy <- x
 
-  # removing 'by' variable from data (so it won't show up in the overall tbl_summary)
+  # removing 'by' variable from data
+  # (so it won't show up in the overall tbl_summary)
   x_copy$inputs[["data"]] <- x$inputs[["data"]] %>% select(-c(x[["by"]]))
 
   # replacing the function call by variable to NULL to get results overall
@@ -39,7 +42,8 @@ add_overall <- function(x, last = FALSE) {
     do.call(tbl_summary, x_copy$inputs) %>%
     pluck("table_body")
 
-  # checking the original tbl_summary and the added overall, are the same before binding (excluding headers)
+  # checking the original tbl_summary and the added overall,
+  # are the same before binding (excluding headers)
   if (!identical(
     x$table_body %>%
       select(c("row_type", "variable", "label")),
@@ -49,7 +53,7 @@ add_overall <- function(x, last = FALSE) {
     stop("An error occured in 'add_overall()', cannot merge overall statistics")
   }
 
-  # adding overall stat to the table1 data frame
+  # adding overall stat to the table_body data frame
   if (last == FALSE) {
     x$table_body <-
       bind_cols(
@@ -65,11 +69,16 @@ add_overall <- function(x, last = FALSE) {
       )
   }
 
-  # adding indicator to output that add_overall was run on this data
-  x$call_list <- c(x$call_list, list(add_overall = match.call()))
+  x$table_header <-
+    tibble(column = names(x$table_body)) %>%
+    left_join(x$table_header, by = "column") %>%
+    table_header_fill_missing()
 
   # adding header
-  x <- cols_label_summary(x, stat_overall = md("**Overall**, N = {N}"))
+  x <- modify_header_internal(x, stat_0 = "**Overall**, N = {N}")
+
+  # updating gt and kable calls with data from table_header
+  x <- update_calls_from_table_header(x)
 
   x
 }

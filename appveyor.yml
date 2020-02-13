@@ -7,22 +7,28 @@ init:
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
 
+  matrix:
+    - R_VERSION: release
+    - R_VERSION: devel
+
 install:
   ps: Bootstrap
 
-# Adapt as necessary starting from here
+before_build:
+  - Rscript -e 'install.packages("remotes")'
+            -e 'remotes::install_github("rstudio/gt")'
+
+cache:
+  - C:\RLibrary
 
 environment:
-  global:
-    USE_RTOOLS: true
+  NOT_CRAN: true
+  # env vars that may need to be set, at least temporarily, from time to time
+  # see https://github.com/krlmlr/r-appveyor#readme for details
+  # USE_RTOOLS: true
+  # R_REMOTES_STANDALONE: true
 
-  matrix:
-    - R_VERSION: release
-      arch: x64
-      GCC_PATH: mingw_64
-    - R_VERSION: devel
-      R_ARCH: x64
-      GCC_PATH: mingw_64
+# Adapt as necessary starting from here
 
 build_script:
   - travis-tool.sh install_deps

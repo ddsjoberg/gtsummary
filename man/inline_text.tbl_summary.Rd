@@ -4,53 +4,70 @@
 \alias{inline_text.tbl_summary}
 \title{Report statistics from summary tables inline}
 \usage{
-\method{inline_text}{tbl_summary}(x, variable, level = NULL,
-  column = ifelse(is.null(x$by), "stat_0", stop("Must specify column")),
-  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...)
+\method{inline_text}{tbl_summary}(
+  x,
+  variable,
+  column = NULL,
+  level = NULL,
+  pattern = NULL,
+  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  ...
+)
 }
 \arguments{
-\item{x}{object created from  \link{tbl_summary}}
+\item{x}{Object created from  \link{tbl_summary}}
 
-\item{variable}{variable name of statistic to present}
+\item{variable}{Variable name of statistic to present}
 
-\item{level}{level of the variable to display for categorical variables.
-Can also specify the 'Unknown' row.  Default is \code{NULL}}
-
-\item{column}{column name to return from \code{x$table_body}.
+\item{column}{Column name to return from \code{x$table_body}.
 Can also pass the level of a by variable.}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+\item{level}{Level of the variable to display for categorical variables.
+Can also specify the 'Unknown' row.  Default is \code{NULL}}
+
+\item{pattern}{String indicating the statistics to return.
+Uses \link[glue:glue]{glue::glue} formatting. Default is pattern shown in \code{tbl_summary()} output}
+
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{...}{not used}
+\item{...}{Not used}
+}
+\value{
+A string reporting results from a gtsummary table
 }
 \description{
 Extracts and returns statistics from a \code{tbl_summary} object for
 inline reporting in an R markdown document. Detailed examples in the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text}{tbl_summary vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \examples{
 t1 <- tbl_summary(trial)
-t2 <- tbl_summary(trial, by = "trt") \%>\% add_p()
+t2 <- tbl_summary(trial, by = trt) \%>\% add_p()
 
-inline_text(t1, variable = "age")
-inline_text(t2, variable = "grade", level = "I", column = "Drug")
-inline_text(t2, variable = "grade", column = "p.value")
+inline_text(t1, variable = age)
+inline_text(t2, variable = grade, level = "I", column = "Drug A",
+pattern = "{n}/{N} ({p})\%")
+inline_text(t2, variable = grade, column = "p.value")
 }
 \seealso{
-Other tbl_summary tools: \code{\link{add_n}},
-  \code{\link{add_overall}}, \code{\link{add_p}},
-  \code{\link{add_q.tbl_summary}},
-  \code{\link{add_stat_label}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{cols_label_summary}},
-  \code{\link{sort_p.tbl_summary}},
-  \code{\link{tab_style_bold_p.tbl_summary}},
-  \code{\link{tbl_summary}}
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p}()},
+\code{\link{add_q.tbl_summary}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_summary}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
 }
 \author{
 Daniel D. Sjoberg

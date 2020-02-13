@@ -7,9 +7,10 @@
 #' are available throughout the package.
 #' @name select_helpers
 #' @rdname select_helpers
-#' @param dichotomous logical indicating whether to include dichotomous variables.
+#' @param dichotomous Logical indicating whether to include dichotomous variables.
 #' Default is `TRUE`
 #' @export
+#' @return A character vector of column names selected
 all_numeric <- function() {
   which(data_env$numeric)
 }
@@ -93,6 +94,7 @@ scoped_data <- function(.data) {
 
 # registering meta data information
 scoped_meta_data <- function(.meta_data) {
-  meta_data_env$summary_type <- .meta_data$summary_type %>% set_names(.meta_data$variable)
+  meta_data_env$summary_type <-
+    .meta_data$summary_type %>%
+    set_names(.meta_data$variable)
 }
-

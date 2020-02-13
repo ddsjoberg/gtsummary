@@ -1,11 +1,14 @@
 #' Style p-values to be displayed in tables or text
 #'
-#' @param x numeric vector of p-values.
-#' @param digits number of digits large p-values are rounded. Must be 1 or 2.
+#' @param x Numeric vector of p-values.
+#' @param digits Number of digits large p-values are rounded. Must be 1 or 2.
 #' Default is 1.
-#' @param prepend_p logical. Should 'p=' be prepended to formatted p-value. Default is FALSE
-#' @return Formatted p-values
+#' @param prepend_p Logical. Should 'p=' be prepended to formatted p-value.
+#' Default is `FALSE`
 #' @export
+#' @return A character vector of styled p-values
+#' @family style tools
+#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
 #' @author Daniel D. Sjoberg
 #' @examples
 #' pvals <- c(
@@ -30,7 +33,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
   }
 
   # rounding large pvalues to 1 digit
-  if (digits == 1) {
+  else if (digits == 1) {
     p_fmt <-
       case_when(
         x > 1 ~ NA_character_,
@@ -41,6 +44,9 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE) {
         x >= 0.001 ~ sprintf("%.3f", x),
         x < 0.001 ~ "<0.001"
       )
+  }
+  else {
+    stop("'digits' argument must be 1 or 2.")
   }
 
   # prepending a p = in front of value

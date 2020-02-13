@@ -7,16 +7,19 @@
 style_sigfig(x, digits = 2)
 }
 \arguments{
-\item{x}{numeric vector}
+\item{x}{Numeric vector}
 
-\item{digits}{integer specifying the minimum number of significant
+\item{digits}{Integer specifying the minimum number of significant
 digits to display}
+}
+\value{
+A character vector of styled numbers
 }
 \description{
 Converts a numeric argument into a string that has been rounded to a
 significant figure-like number. Scientific notation output
 is avoided, however, and additional significant figures may be displayed for
-numbers large numbers.  For example, if the number of significant digits
+large numbers.  For example, if the number of significant digits
 requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).
 }
 \details{
@@ -28,6 +31,13 @@ and to the nearest integer when \code{abs(x) >= 10}.
 c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345, NA, -0.001) \%>\%
   style_sigfig()
 }
+\seealso{
+Other style tools: 
+\code{\link{style_percent}()},
+\code{\link{style_pvalue}()},
+\code{\link{style_ratio}()}
+}
 \author{
 Daniel D. Sjoberg
 }
+\concept{style tools}

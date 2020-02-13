@@ -4,15 +4,36 @@
 \alias{deprecated}
 \alias{add_comparison}
 \alias{add_global}
+\alias{tab_style_bold_p}
+\alias{tab_style_bold_labels}
+\alias{tab_style_italicize_levels}
+\alias{tab_style_italicize_labels}
+\alias{tab_style_bold_levels}
+\alias{tbl_summary_}
+\alias{add_p_}
 \title{Deprecated functions}
 \usage{
 add_comparison(...)
 
 add_global(...)
+
+tab_style_bold_p(...)
+
+tab_style_bold_labels(...)
+
+tab_style_italicize_levels(...)
+
+tab_style_italicize_labels(...)
+
+tab_style_bold_levels(...)
+
+tbl_summary_(...)
+
+add_p_(...)
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
 Some functions have been deprecated and are no longer being actively
-supported. Please use these functions instead:
-\link{add_p}, \link{add_global_p}.
+supported.
 }
 \keyword{internal}

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add column with N</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_n {gtsummary}"><tr><td>add_n {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add column with N</h2>
+
+<h3>Description</h3>
+
+<p>For each variable in a <code>tbl_summary</code> table, the <code>add_n</code> function adds a column with the
+total number of non-missing (or missing) observations
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+add_n(
+  x,
+  statistic = "{n}",
+  col_label = "**N**",
+  footnote = FALSE,
+  last = FALSE,
+  missing = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object with class <code>tbl_summary</code> from the <a href="tbl_summary.html">tbl_summary</a> function</p>
+</td></tr>
+<tr valign="top"><td><code>statistic</code></td>
+<td>
+<p>String indicating the statistic to report. Default is the
+number of non-missing observation for each variable, <code>statistic = "{n}"</code>.
+Other statistics available to report include:
+</p>
+
+<ul>
+<li> <p><code>"{N}"</code> total number of observations,
+</p>
+</li>
+<li> <p><code>"{n}"</code> number of non-missing observations,
+</p>
+</li>
+<li> <p><code>"{n_miss}"</code> number of missing observations,
+</p>
+</li>
+<li> <p><code>"{p}"</code> percent non-missing data,
+</p>
+</li>
+<li> <p><code>"{p_miss}"</code> percent missing data
+The argument uses <a href="../../glue/html/glue.html">glue::glue</a> syntax and multiple statistics may be reported,
+e.g. <code>statistic = "{n} / {N} ({p}%)"</code>
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>col_label</code></td>
+<td>
+<p>String indicating the column label.  Default is <code>"**N**"</code></p>
+</td></tr>
+<tr valign="top"><td><code>footnote</code></td>
+<td>
+<p>Logical argument indicating whether to print a footnote
+clarifying the statistics presented. Default is <code>FALSE</code></p>
+</td></tr>
+<tr valign="top"><td><code>last</code></td>
+<td>
+<p>Logical indicator to include N column last in table.
+Default is <code>FALSE</code>, which will display N column first.</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>DEPRECATED. Logical argument indicating whether to print N
+(<code>missing = FALSE</code>), or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>tbl_summary</code> object
+</p>
+
+
+<h3>Example Output</h3>
+
+<p><img src="../help/figures/tbl_n_ex.png" width=50% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_summary tools: 
+<code><a href="add_overall.html">add_overall</a>()</code>,
+<code><a href="add_p.html">add_p</a>()</code>,
+<code><a href="add_q.tbl_summary.html">add_q.tbl_summary</a>()</code>,
+<code><a href="add_stat_label.html">add_stat_label</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="bold_p.tbl_summary.html">bold_p.tbl_summary</a>()</code>,
+<code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a>()</code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="tbl_summary.html">tbl_summary</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+tbl_n_ex &lt;-
+  trial[c("trt", "age", "grade", "response")] %&gt;%
+  tbl_summary(by = trt) %&gt;%
+  add_n()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.4.9017 <a href="00Index.html">Index</a>]</div>
+</body></html>

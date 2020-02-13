@@ -9,12 +9,16 @@
 \arguments{
 \item{x}{an object created using \code{tbl_uvregression} function}
 
-\item{q}{logical argument. When TRUE will sort by the q-value column rather than the p-values}
+\item{q}{logical argument. When \code{TRUE} will sort by the q-value column
+rather than the p-values}
 
-\item{...}{not used}
+\item{...}{Not used}
+}
+\value{
+A \code{tbl_uvregression} object
 }
 \description{
-Sort variables in tables created by \code{\link{tbl_uvregression}} by ascending p-values
+Sort variables in tables created by \link{tbl_uvregression} by ascending p-values
 }
 \section{Example Output}{
 
@@ -23,8 +27,7 @@ Sort variables in tables created by \code{\link{tbl_uvregression}} by ascending 
 
 \examples{
 tbl_uvglm_sort_p_ex <-
-  trial \%>\%
-  dplyr::select(age, marker, response, grade) \%>\%
+  trial[c("age", "marker", "response", "grade")] \%>\%
   tbl_uvregression(
     method = glm,
     y = response,
@@ -34,14 +37,18 @@ tbl_uvglm_sort_p_ex <-
   sort_p()
 }
 \seealso{
-Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
-  \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{add_q.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
-  \code{\link{tbl_uvregression}}
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
 }
 \author{
 Karissa Whiting

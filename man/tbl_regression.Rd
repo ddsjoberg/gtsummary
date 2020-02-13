@@ -4,60 +4,94 @@
 \alias{tbl_regression}
 \title{Display regression model results in table}
 \usage{
-tbl_regression(x, label = NULL, exponentiate = FALSE, include = NULL,
-  exclude = NULL, show_yesno = NULL, conf.level = 0.95,
-  intercept = FALSE, estimate_fun = ifelse(exponentiate == TRUE,
-  style_ratio, style_sigfig), pvalue_fun = style_pvalue)
+tbl_regression(
+  x,
+  label = NULL,
+  exponentiate = FALSE,
+  include = everything(),
+  show_single_row = NULL,
+  conf.level = NULL,
+  intercept = FALSE,
+  estimate_fun = NULL,
+  pvalue_fun = NULL,
+  tidy_fun = NULL,
+  show_yesno = NULL,
+  exclude = NULL
+)
 }
 \arguments{
-\item{x}{regression model object}
+\item{x}{Regression model object}
 
-\item{label}{list of formulas specifying variables labels,
-e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
+\item{label}{List of formulas specifying variables labels,
+e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}}
 
-\item{exponentiate}{logical indicating whether or not to exponentiate the
+\item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{include}{names of variables to include in output.}
+\item{include}{Variables to include in output. Input may be a vector of
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is \code{everything()}.}
 
-\item{exclude}{names of variables to exclude from output.}
+\item{show_single_row}{By default categorical variables are printed on
+multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
+the regression coefficient on a single row, include the variable name(s)
+here--quoted and unquoted variable name accepted.}
 
-\item{show_yesno}{By default yes/no categorical variables are printed on a
-single row, when the 'No' category is the reference group.  To print both
-levels in the output table, include the variable name in the show_yesno
-vector, e.g. `show_yesno = c("var1", "var2")``}
-
-\item{conf.level}{must be strictly greater than 0 and less than 1.
+\item{conf.level}{Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{intercept}{logical argument indicating whether to include the intercept
+\item{intercept}{Logical argument indicating whether to include the intercept
 in the output.  Default is \code{FALSE}}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.
+\item{estimate_fun}{Function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
+
+\item{tidy_fun}{Option to specify a particular tidier function if the
+model is not a \link[=tidy_vetted]{vetted model} or you need to implement a
+custom method. Default is \code{NULL}}
+
+\item{show_yesno}{DEPRECATED}
+
+\item{exclude}{DEPRECATED}
+}
+\value{
+A \code{tbl_regression} object
 }
 \description{
-This function uses \href{https://broom.tidyverse.org/reference/brms_tidiers.html}{broom::tidy} and
-\href{https://github.com/bbolker/broom.mixed}{broom.mixed::tidy}
-to perform the initial model formatting. Review the
+This function takes a regression model object and returns a formatted table
+that is publication-ready. The function is highly customizable
+allowing the user to obtain a bespoke summary table of the
+regression model results. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 for detailed examples.
 }
+\section{Setting Defaults}{
+
+If you prefer to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set.
+\itemize{
+\item \code{options(gtsummary.pvalue_fun = new_function)}
+\item \code{options(gtsummary.tbl_regression.estimate_fun = new_function)}
+\item \code{options(gtsummary.conf.level = 0.90)}
+}
+}
+
 \section{Note}{
 
-The N reported in the \code{tbl_regression()} output is the number of observations
+The N reported in the output is the number of observations
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
-may represent different quantities. In most cases, it is the total number of
-observations in your model; however, the precise definition of an observation,
-or unit of analysis, may differ across models. Here are some common examples.
+may represent different quantities. In most cases, it is the number of people or
+units in your model.  Here are some common exceptions.
 \enumerate{
 \item Survival regression models including time dependent covariates.
 \item Random- or mixed-effects regression models with clustered data.
@@ -96,17 +130,27 @@ library(lme4)
 tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
+
+# for convenience, you can also pass named lists to any arguments
+# that accept formulas (e.g label, etc.)
+glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
+  tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
 }
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 
-Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
-  \code{\link{add_nevent.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_regression}},
-  \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}}
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_regression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg

@@ -9,23 +9,23 @@
 \arguments{
 \item{x}{\code{tbl_regression} object}
 
-\item{...}{not used}
+\item{...}{Not used}
+}
+\value{
+A \code{tbl_regression} object
 }
 \description{
 This function adds a column of the number of events to tables created with
-\link{tbl_regression} or \link{tbl_uvregression}.  Supported
+\link{tbl_regression}.  Supported
 model types include GLMs with binomial distribution family (e.g.
 \link[stats:glm]{stats::glm}, \link[lme4:glmer]{lme4::glmer}, and
 \link[geepack:geeglm]{geepack::geeglm}) and Cox
 Proportion Hazards regression models (\link[survival:coxph]{survival::coxph}).
-}
-\section{Reporting Event N}{
 
 The number of events is added to the internal \code{.$table_body} tibble,
 and not printed in the default output table (similar to N). The number
 of events is accessible via the \link{inline_text} function for printing in a report.
 }
-
 \section{Example Output}{
 
 \if{html}{\figure{tbl_reg_nevent_ex.png}{options: width=50\%}}
@@ -38,13 +38,18 @@ tbl_reg_nevent_ex <-
   add_nevent()
 }
 \seealso{
-Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_regression}},
-  \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
-  \code{\link{tbl_stack}}
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_regression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg

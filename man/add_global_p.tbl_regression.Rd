@@ -4,21 +4,34 @@
 \alias{add_global_p.tbl_regression}
 \title{Adds the global p-value for categorical variables}
 \usage{
-\method{add_global_p}{tbl_regression}(x, terms = NULL, keep = FALSE,
-  ...)
+\method{add_global_p}{tbl_regression}(
+  x,
+  include = x$table_body$variable[x$table_body$var_type \%in\% c("categorical",
+    "interaction")],
+  keep = FALSE,
+  terms = NULL,
+  ...
+)
 }
 \arguments{
-\item{x}{object with class \code{tbl_regression} from the
+\item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
-\item{terms}{Character vector of terms for which to add global p-values.  Default
-is \code{NULL} which will add global p-values for all categorical variables}
+\item{include}{Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. tidyselect and gtsummary select helper
+functions are also accepted. Default is \code{NULL}, which adds global p-values
+for all categorical and interaction terms.}
 
-\item{keep}{logical argument indicating whether to also retain the individual
+\item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is \code{FALSE}}
 
-\item{...}{arguments to be passed to \link[car:Anova]{car::Anova}}
+\item{terms}{DEPRECATED.  Use \verb{include=} argument instead.}
+
+\item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}}
+}
+\value{
+A \code{tbl_regression} object
 }
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument
@@ -27,8 +40,8 @@ This function uses \link[car:Anova]{car::Anova} with argument
 \section{Note}{
 
 If a needed class of model is not supported by
-\link[car:Anova]{car::Anova}, please create an
-\href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
+\link[car:Anova]{car::Anova}, please create a
+\href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub Issue} to request support.
 }
 
 \section{Example Output}{
@@ -43,13 +56,18 @@ tbl_lm_global_ex1 <-
   add_global_p()
 }
 \seealso{
-Other tbl_regression tools: \code{\link{add_nevent.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_regression}},
-  \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_regression}},
-  \code{\link{tbl_stack}}
+Other tbl_regression tools: 
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_regression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg

@@ -2,65 +2,117 @@
 % Please edit documentation in R/tbl_merge.R
 \name{tbl_merge}
 \alias{tbl_merge}
-\title{Merge two or more gtsummary regression objects}
+\title{Merge two or more gtsummary objects}
 \usage{
-tbl_merge(tbls, tab_spanner = paste0(c("Model "), 1:length(tbls)))
+tbl_merge(tbls, tab_spanner = NULL)
 }
 \arguments{
-\item{tbls}{list of gtsummary regression objects}
+\item{tbls}{List of gtsummary objects to merge}
 
-\item{tab_spanner}{Spanning headers. Character vector with same length as \code{tbls}}
+\item{tab_spanner}{Character vector specifying the spanning headers.
+Must be the same length as \code{tbls}. The
+strings are interpreted with \code{gt::md}.
+Must be same length as \code{tbls} argument}
+}
+\value{
+A \code{tbl_merge} object
 }
 \description{
-Merges two or more \code{tbl_regression} or \code{tbl_uvregression} objects and adds appropriate spanning headers.
+Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_stack},
+or \code{tbl_summary} objects and adds appropriate spanning headers.
 }
 \section{Example Output}{
 
-\if{html}{\figure{tbl_merge_ex.png}{options: width=50\%}}
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_merge_ex1.png}{options: width=70\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_merge_ex2.png}{options: width=65\%}}
 }
 
 \examples{
+# Side-by-side Regression Models
 library(survival)
 t1 <-
   glm(response ~ trt + grade + age, trial, family = binomial) \%>\%
-  tbl_regression(
-    label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
-    exponentiate = TRUE
-  )
+  tbl_regression(exponentiate = TRUE)
 t2 <-
   coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) \%>\%
-  tbl_regression(
-    label = list("trt" ~ "Treatment", "grade" ~ "Grade", "age" ~ "Age"),
-    exponentiate = TRUE
-  )
-tbl_merge_ex <-
+  tbl_regression(exponentiate = TRUE)
+tbl_merge_ex1 <-
   tbl_merge(
     tbls = list(t1, t2),
-    tab_spanner = c("Tumor Response", "Time to Death")
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
   )
+
+# Descriptive statistics alongside univariate regression, with no spanning header
+t3 <-
+  trial[c("age", "grade", "response")] \%>\%
+  tbl_summary(missing = "no") \%>\%
+  add_n()
+t4 <-
+  tbl_uvregression(
+    trial[c("ttdeath", "death", "age", "grade", "response")],
+    method = coxph,
+    y = Surv(ttdeath, death),
+    exponentiate = TRUE,
+    hide_n = TRUE
+  )
+\donttest{
+tbl_merge_ex2 <-
+  tbl_merge(tbls = list(t3, t4)) \%>\%
+  as_gt(include = -tab_spanner) \%>\%
+  gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
+}
 }
 \seealso{
 \link{tbl_stack}
 
-Other tbl_regression tools: \code{\link{add_global_p.tbl_regression}},
-  \code{\link{add_nevent.tbl_regression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_regression}},
-  \code{\link{sort_p.tbl_regression}},
-  \code{\link{tab_style_bold_p.tbl_regression}},
-  \code{\link{tbl_regression}}, \code{\link{tbl_stack}}
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_regression}()},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_regression}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
 
-Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
-  \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{add_q.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_stack}}, \code{\link{tbl_uvregression}}
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_uvregression}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
+
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p}()},
+\code{\link{add_q.tbl_summary}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_summary}()},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_summary}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
+\concept{tbl_summary tools}
 \concept{tbl_uvregression tools}

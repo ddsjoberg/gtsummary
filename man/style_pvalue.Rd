@@ -7,15 +7,16 @@
 style_pvalue(x, digits = 1, prepend_p = FALSE)
 }
 \arguments{
-\item{x}{numeric vector of p-values.}
+\item{x}{Numeric vector of p-values.}
 
-\item{digits}{number of digits large p-values are rounded. Must be 1 or 2.
+\item{digits}{Number of digits large p-values are rounded. Must be 1 or 2.
 Default is 1.}
 
-\item{prepend_p}{logical. Should 'p=' be prepended to formatted p-value. Default is FALSE}
+\item{prepend_p}{Logical. Should 'p=' be prepended to formatted p-value.
+Default is \code{FALSE}}
 }
 \value{
-Formatted p-values
+A character vector of styled p-values
 }
 \description{
 Style p-values to be displayed in tables or text
@@ -28,6 +29,15 @@ pvals <- c(
 style_pvalue(pvals)
 style_pvalue(pvals, digits = 2, prepend_p = TRUE)
 }
+\seealso{
+See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
+
+Other style tools: 
+\code{\link{style_percent}()},
+\code{\link{style_ratio}()},
+\code{\link{style_sigfig}()}
+}
 \author{
 Daniel D. Sjoberg
 }
+\concept{style tools}

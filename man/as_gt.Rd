@@ -2,24 +2,37 @@
 % Please edit documentation in R/as_gt.R
 \name{as_gt}
 \alias{as_gt}
-\title{Convert to gt_tbl object}
+\title{Convert gtsummary object to a gt_tbl object}
 \usage{
-as_gt(x, omit = NULL)
+as_gt(x, include = everything(), exclude = NULL, omit = NULL)
 }
 \arguments{
-\item{x}{object created by a function from the gtsummary package
-(e.g. \code{\link{tbl_summary}} or \code{\link{tbl_regression}})}
+\item{x}{Object created by a function from the gtsummary package
+(e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{omit}{vector of gt commands to omit. Default is \code{NULL}}
+\item{include}{Commands to include in output. Input may be a vector of
+quoted or unquoted names. tidyselect and gtsummary select helper
+functions are also accepted.
+Default is \code{everything()}, which includes all commands in \code{x$gt_calls}.}
+
+\item{exclude}{DEPRECATED.}
+
+\item{omit}{DEPRECATED.}
+}
+\value{
+A \code{gt_tbl} object
 }
 \description{
-Function converts object to a gt_tbl object.  This function is used in the
-background when the results are printed or knit.  A user can use this function
-if they wish to add customized formatting available via the
-\href{https://gt.rstudio.com/index.html}{gt package}.  Review the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+Function converts a gtsummary object to a gt_tbl object.
+Function is used in the background when the results are printed or knit.
+A user can use this function if they wish to add customized formatting
+available via the \href{https://gt.rstudio.com/index.html}{gt package}.
+You can install gt with \code{remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)}.
+
+Review the
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
 or
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
 for detailed examples in the 'Advanced Customization' section.
 }
 \section{Example Output}{
@@ -29,13 +42,17 @@ for detailed examples in the 'Advanced Customization' section.
 }
 
 \examples{
+# Requires the gt package
+# remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
+\donttest{
 as_gt_ex <-
-  trial \%>\%
-  tbl_summary(by = "trt") \%>\%
+  trial[c("trt", "age", "response", "grade")] \%>\%
+  tbl_summary(by = trt) \%>\%
   as_gt()
 }
+}
 \seealso{
-\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression}
+\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_survival}
 }
 \author{
 Daniel D. Sjoberg

@@ -7,11 +7,14 @@
 style_ratio(x, digits = 2)
 }
 \arguments{
-\item{x}{numeric vector}
+\item{x}{Numeric vector}
 
-\item{digits}{integer specifying the number of significant
+\item{digits}{Integer specifying the number of significant
 digits to display for numbers below 1. Numbers larger than 1 will be be \code{digits + 1}.
 Default is \code{digits = 2}.}
+}
+\value{
+A character vector of styled ratios
 }
 \description{
 When reporting ratios, such as relative risk or an odds ratio, we'll often
@@ -29,8 +32,12 @@ c(
   style_ratio()
 }
 \seealso{
-\code{\link{style_sigfig}}
+Other style tools: 
+\code{\link{style_percent}()},
+\code{\link{style_pvalue}()},
+\code{\link{style_sigfig}()}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{style tools}

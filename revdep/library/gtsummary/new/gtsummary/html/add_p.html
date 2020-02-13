@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Adds p-values to summary tables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_p {gtsummary}"><tr><td>add_p {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Adds p-values to summary tables</h2>
+
+<h3>Description</h3>
+
+<p>Adds p-values to tables created by <code>tbl_summary</code> by comparing values across groups.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+add_p(
+  x,
+  test = NULL,
+  pvalue_fun = NULL,
+  group = NULL,
+  include = everything(),
+  exclude = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object with class <code>tbl_summary</code> from the <a href="tbl_summary.html">tbl_summary</a> function</p>
+</td></tr>
+<tr valign="top"><td><code>test</code></td>
+<td>
+<p>List of formulas specifying statistical tests to perform,
+e.g. <code>list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")</code>.
+Options include
+</p>
+
+<ul>
+<li> <p><code>"t.test"</code> for a t-test,
+</p>
+</li>
+<li> <p><code>"aov"</code> for a one-way ANOVA test,
+</p>
+</li>
+<li> <p><code>"wilcox.test"</code> for a Wilcoxon rank-sum test,
+</p>
+</li>
+<li> <p><code>"kruskal.test"</code> for a Kruskal-Wallis rank-sum test,
+</p>
+</li>
+<li> <p><code>"chisq.test"</code> for a chi-squared test of independence,
+</p>
+</li>
+<li> <p><code>"chisq.test.no.correct"</code> for a chi-squared test of independence without continuity correction,
+</p>
+</li>
+<li> <p><code>"fisher.test"</code> for a Fisher's exact test,
+</p>
+</li>
+<li> <p><code>"lme4"</code> for a random intercept logistic regression model to account for
+clustered data, <code>lme4::glmer(by ~ variable + (1 | group), family = binomial)</code>.
+The <code>by</code> argument must be binary for this option.
+</p>
+</li></ul>
+
+<p>Tests default to <code>"kruskal.test"</code> for continuous variables, <code>"chisq.test"</code> for
+categorical variables with all expected cell counts &gt;=5, and <code>"fisher.test"</code>
+for categorical variables with any expected cell count &lt;5.
+A custom test function can be added for all or some variables. See below for
+an example.</p>
+</td></tr>
+<tr valign="top"><td><code>pvalue_fun</code></td>
+<td>
+<p>Function to round and format p-values.
+Default is <a href="style_pvalue.html">style_pvalue</a>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code>purrr::partial(style_pvalue, digits = 2)</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>group</code></td>
+<td>
+<p>Column name (unquoted or quoted) of an ID or grouping variable.
+The column can be used to calculate p-values with correlated data (e.g. when
+the test argument is <code>"lme4"</code>). Default is <code>NULL</code>.  If specified,
+the row associated with this variable is omitted from the summary table.</p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>Variables to include in output. Input may be a vector of
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is <code>everything()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>exclude</code></td>
+<td>
+<p>DEPRECATED</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>tbl_summary</code> object
+</p>
+
+
+<h3>Setting Defaults</h3>
+
+<p>If you like to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set. Please note the default option for the estimate is the same
+as it is for <code>tbl_regression()</code>.
+</p>
+
+<ul>
+<li> <p><code>options(gtsummary.pvalue_fun = new_function)</code>
+</p>
+</li></ul>
+
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/add_p_ex1.png" width=60% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/add_p_ex2.png" width=60% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Emily C. Zabor, Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>See tbl_summary <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html">vignette</a> for detailed examples
+</p>
+<p>Other tbl_summary tools: 
+<code><a href="add_n.html">add_n</a>()</code>,
+<code><a href="add_overall.html">add_overall</a>()</code>,
+<code><a href="add_q.tbl_summary.html">add_q.tbl_summary</a>()</code>,
+<code><a href="add_stat_label.html">add_stat_label</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="bold_p.tbl_summary.html">bold_p.tbl_summary</a>()</code>,
+<code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a>()</code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="tbl_summary.html">tbl_summary</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+add_p_ex1 &lt;-
+  trial[c("age", "grade", "response", "trt")] %&gt;%
+  tbl_summary(by = trt) %&gt;%
+  add_p()
+
+# Conduct a custom McNemar test for response,
+# Function must return a named list of the p-value and the
+# test name: list(p = 0.123, test = "McNemar's test")
+# The '...' must be included as input
+# This feature is experimental, and the API may change in the future
+my_mcnemar &lt;- function(data, variable, by, ...) {
+  result &lt;- list()
+  result$p &lt;- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+  result$test &lt;- "McNemar\\'s test"
+  result
+}
+
+add_p_ex2 &lt;-
+  trial[c("response", "trt")] %&gt;%
+  tbl_summary(by = trt) %&gt;%
+  add_p(test = response ~ "my_mcnemar")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.4.9017 <a href="00Index.html">Index</a>]</div>
+</body></html>

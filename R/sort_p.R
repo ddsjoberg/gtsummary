@@ -1,36 +1,35 @@
-
 #' Sort variables in table by ascending p-values
 #'
 #' Sort tables created by gtsummary by p-values
 #'
-#' @param x an object created using gtsummary functions
-#' @param ... further arguments passed to other methods.
+#' @param x An object created using gtsummary functions
+#' @param ... Additional arguments passed to other methods.
 #' @author Karissa Whiting
-#' @seealso \code{\link{sort_p.tbl_summary}},
-#' \code{\link{sort_p.tbl_regression}},
-#' \code{\link{sort_p.tbl_uvregression}}
+#' @seealso [sort_p.tbl_summary], [sort_p.tbl_regression],
+#' [sort_p.tbl_uvregression]
 #' @export
 #' @keywords internal
 sort_p <- function(x, ...) UseMethod("sort_p")
 
 #' Sort variables in table by ascending p-values
 #'
-#' Sort variables in tables created by \code{\link{tbl_summary}} by ascending p-values
+#' Sort variables in tables created by [tbl_summary] by ascending p-values
 #'
-#' @param x an object created using `tbl_summary` function
-#' @param q logical argument. When TRUE will sort by the q-value column rather than the p-values
-#' @param ... not used
+#' @param x An object created using `tbl_summary` function
+#' @param q Logical argument. When `TRUE` will sort by the q-value column
+#' rather than the p-values
+#' @param ... Not used
 #' @family tbl_summary tools
 #' @author Karissa Whiting
 #' @examples
 #' tbl_sum_sort_p_ex <-
-#'   trial %>%
-#'   dplyr::select(age, grade, response, trt) %>%
-#'   tbl_summary(by = "trt") %>%
+#'   trial[c("age", "grade", "response", "trt")] %>%
+#'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   sort_p()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_sort_p_ex.png}{options: width=50\%}}
+#' @return A `tbl_summary` object
 #' @export
 sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 
@@ -43,10 +42,10 @@ sort_p.tbl_summary <- function(x, q = FALSE, ...) {
     stop("Before you sort by q-values, run add_q() to calculate the q-values")
   }
 
-  sort_var <-  "p.value"
+  sort_var <- "p.value"
   if (q == TRUE) sort_var <- "q.value"
 
-  table_body <-  x$table_body %>%
+  table_body <- x$table_body %>%
     group_by(.data$variable) %>%
     mutate(sort_col = min(.data[[sort_var]], na.rm = TRUE))
 
@@ -63,15 +62,14 @@ sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 
   # returning tbl_summary object
   return(x)
-
 }
 
 #' Sort variables in table by ascending p-values
 #'
-#' Sort variables in tables created by \code{\link{tbl_regression}} by ascending p-values
+#' Sort variables in tables created by [tbl_regression] by ascending p-values
 #'
-#' @param x an object created using `tbl_regression` function
-#' @param ... not used
+#' @param x An object created using `tbl_regression` function
+#' @param ... Not used
 #' @family tbl_regression tools
 #' @author Karissa Whiting
 #' @examples
@@ -82,11 +80,9 @@ sort_p.tbl_summary <- function(x, q = FALSE, ...) {
 #' @section Example Output:
 #' \if{html}{\figure{tbl_lm_sort_p_ex.png}{options: width=50\%}}
 #' @export
-#'
+#' @return A `tbl_regression` object
 
 sort_p.tbl_regression <- function(x, ...) {
-
-
   table_body <- x$table_body %>%
     group_by(.data$variable) %>%
     mutate(sort_col = min(.data$p.value, na.rm = TRUE)) %>%
@@ -102,22 +98,21 @@ sort_p.tbl_regression <- function(x, ...) {
 
   # returning tbl_summary object
   return(x)
-
 }
 
 #' Sort variables in table by ascending p-values
 #'
-#' Sort variables in tables created by \code{\link{tbl_uvregression}} by ascending p-values
+#' Sort variables in tables created by [tbl_uvregression] by ascending p-values
 #'
 #' @param x an object created using `tbl_uvregression` function
-#' @param q logical argument. When TRUE will sort by the q-value column rather than the p-values
-#' @param ... not used
+#' @param q logical argument. When `TRUE` will sort by the q-value column
+#' rather than the p-values
+#' @param ... Not used
 #' @family tbl_uvregression tools
 #' @author Karissa Whiting
 #' @examples
 #' tbl_uvglm_sort_p_ex <-
-#'   trial %>%
-#'   dplyr::select(age, marker, response, grade) %>%
+#'   trial[c("age", "marker", "response", "grade")] %>%
 #'   tbl_uvregression(
 #'     method = glm,
 #'     y = response,
@@ -128,7 +123,7 @@ sort_p.tbl_regression <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uvglm_sort_p_ex.png}{options: width=50\%}}
 #' @export
-#'
+#' @return A `tbl_uvregression` object
 
 sort_p.tbl_uvregression <- function(x, q = FALSE, ...) {
 
@@ -137,10 +132,10 @@ sort_p.tbl_uvregression <- function(x, q = FALSE, ...) {
     stop("Before you sort by q-values, run add_q() to calculate the q-values")
   }
 
-  sort_var <-  "p.value"
+  sort_var <- "p.value"
   if (q == TRUE) sort_var <- "q.value"
 
-  table_body <-  x$table_body %>%
+  table_body <- x$table_body %>%
     group_by(.data$variable) %>%
     mutate(sort_col = min(.data[[sort_var]], na.rm = TRUE))
 
@@ -157,5 +152,4 @@ sort_p.tbl_uvregression <- function(x, q = FALSE, ...) {
 
   # returning tbl_uvregression object
   return(x)
-
 }

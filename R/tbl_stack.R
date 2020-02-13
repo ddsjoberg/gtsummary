@@ -1,28 +1,34 @@
-#' Stacks two or more gtsummary regression objects
+#' Stacks two or more gtsummary objects
 #'
 #' Assists in patching together more complex tables. `tbl_stack()` appends two
-#' or more `tbl_regression` or `tbl_merge` objects.
-#' {gt} attributes from the first regression object are utilized for output table.
-#' If combining `tbl_stack()` and `tbl_merge()`, merge first then stack.
+#' or more `tbl_regression`, `tbl_summary`, or `tbl_merge` objects.
+#' {gt} attributes from the first regression object are utilized for output
+#' table.
 #'
-#' @param tbls list of gtsummary regression objects
+#' @param tbls List of gtsummary objects
+#' @family tbl_summary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @seealso [tbl_merge]
 #' @author Daniel D. Sjoberg
 #' @export
+#' @return A `tbl_stack` object
 #' @examples
 #' # Example 1 - stacking two tbl_regression objects
 #' t1 <-
 #'   glm(response ~ trt, trial, family = binomial) %>%
-#'   tbl_regression(exponentiate = TRUE,
-#'                  label = list("trt" ~ "Treatment (unadjusted)"))
+#'   tbl_regression(
+#'     exponentiate = TRUE,
+#'     label = list(trt ~ "Treatment (unadjusted)")
+#'   )
 #'
 #' t2 <-
 #'   glm(response ~ trt + grade + stage + marker, trial, family = binomial) %>%
-#'   tbl_regression(include = "trt",
-#'                  exponentiate = TRUE,
-#'                  label = list("trt" ~ "Treatment (adjusted)"))
+#'   tbl_regression(
+#'     include = "trt",
+#'     exponentiate = TRUE,
+#'     label = list(trt ~ "Treatment (adjusted)")
+#'   )
 #'
 #' tbl_stack_ex1 <- tbl_stack(list(t1, t2))
 #'
@@ -30,24 +36,25 @@
 #' library(survival)
 #' t3 <-
 #'   coxph(Surv(ttdeath, death) ~ trt, trial) %>%
-#'   tbl_regression(exponentiate = TRUE,
-#'                  label = list("trt" ~ "Treatment (unadjusted)"))
+#'   tbl_regression(
+#'     exponentiate = TRUE,
+#'     label = list(trt ~ "Treatment (unadjusted)")
+#'   )
 #'
 #' t4 <-
 #'   coxph(Surv(ttdeath, death) ~ trt + grade + stage + marker, trial) %>%
-#'   tbl_regression(include = "trt",
-#'                  exponentiate = TRUE,
-#'                  label = list("trt" ~ "Treatment (adjusted)"))
+#'   tbl_regression(
+#'     include = "trt",
+#'     exponentiate = TRUE,
+#'     label = list(trt ~ "Treatment (adjusted)")
+#'   )
 #'
 #'
 #' # first merging, then stacking
 #' row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 #' row2 <- tbl_merge(list(t2, t4))
 #' tbl_stack_ex2 <-
-#'   tbl_stack(list(row1, row2)) %>%
-#'   as_gt() %>%
-#'   tab_footnote(footnote = "Adjusted for cancer grade, state, and marker level.",
-#'                locations = cells_data(columns = "label", rows = 4))
+#'   tbl_stack(list(row1, row2))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -60,32 +67,55 @@
 tbl_stack <- function(tbls) {
   # input checks ---------------------------------------------------------------
   # class of tbls
-  if (!"list" %in% class(tbls)) {
-    stop("Expecting 'tbls' to be a list, e.g. tbls = list(tbl1, tbl2)")
+  if (!inherits(tbls, "list")) {
+    stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
-  # checking all inputs are class tbl_regression or tbl_merge
-  if (!map_chr(tbls, class) %in% c("tbl_regression", "tbl_merge") %>% any()) {
-    stop("All objects in 'tbls' must be class 'tbl_regression' or 'tbl_uvregression'")
+  # checking all inputs are class tbl_uvregression, tbl_regression, tbl_summary, or tbl_merge
+  if (!map_chr(tbls, ~class(.x)[1]) %in% c(
+    "tbl_regression", "tbl_uvregression",
+    "tbl_summary", "tbl_merge"
+  ) %>% any()) {
+    stop("All objects in 'tbls' must be class 'tbl_regression',
+         'tbl_uvregression', 'tbl_summary', or 'tbl_merge'")
   }
 
-  # at least two objects must be passed
-  tbls_length <- length(tbls)
-  if (tbls_length < 2L) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
+  # printing message if stacking tbl_summary and regression object
+  if ("tbl_summary" %in% map_chr(tbls, ~class(.x)[1]) &&
+    any(c("tbl_regression", "tbl_uvregression") %in% map_chr(tbls, ~class(.x)[1]))) {
+    message(paste(
+      "You are stacking a gtsummary regression table and a summary table,",
+      "which is not recommended. Consider revising the format of your table."
+    ))
+  }
+
+  # checking if there are multiple input types
+  if (map_chr(tbls, ~class(.x)[1]) %>% unique() %>% length() > 1) {
+    message("Multiple gtsummary object classes detected. Displayed results default to first input class type.")
+  }
+
+  # will return call, and all arguments passed to tbl_stack
+  func_inputs <- as.list(environment())
 
   # stacking tables ------------------------------------------------------------
-  results <- tbls[[1]][names(tbls[[1]]) %>% intersect(c("inputs", "gt_calls", "estimate_funs", "pvalue_funs", "qvalue_funs"))]
-
+  # the table_body and call_list will be updated with the tbl_stack values
+  results <- tbls[[1]][c("gt_calls", "kable_calls")]
   results$table_body <-
-    map_dfr(
-      tbls,
-      ~ pluck(.x, "table_body")
-    )
+    map_dfr(tbls, ~pluck(.x, "table_body"))
+
+  results$table_header <-
+    map_dfr(tbls, ~pluck(.x, "table_header")) %>%
+    group_by(.data$column) %>%
+    filter(dplyr::row_number() == 1) %>%
+    ungroup()
+
+  # writing additional gt and kable calls with data from table_header
+  results <- update_calls_from_table_header(results)
 
   # returning results ----------------------------------------------------------
   results$call_list <- list(tbl_stack = match.call())
-  results$tbl_regression_list = tbls
+  results$tbls <- tbls
 
-  class(results) <- "tbl_stack"
-  return(results)
+  class(results) <- c("tbl_stack", "gtsummary")
+  results
 }

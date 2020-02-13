@@ -7,22 +7,18 @@
 \method{add_global_p}{tbl_uvregression}(x, ...)
 }
 \arguments{
-\item{x}{object with class \code{tbl_uvregression} from the
+\item{x}{Object with class \code{tbl_uvregression} from the
 \link{tbl_uvregression} function}
 
-\item{...}{arguments to be passed to \link[car:Anova]{car::Anova}.}
+\item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}.}
+}
+\value{
+A \code{tbl_uvregression} object
 }
 \description{
 This function uses \link[car:Anova]{car::Anova} with argument
 \code{type = "III"} to calculate global p-values for categorical variables.
 }
-\section{Note}{
-
-If a needed class of model is not supported by
-\link[car:Anova]{car::Anova}, please create an
-\href{https://github.com/ddsjoberg/gtsummary/issues}{issue} to request support.
-}
-
 \section{Example Output}{
 
 \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
@@ -30,8 +26,7 @@ If a needed class of model is not supported by
 
 \examples{
 tbl_uv_global_ex2 <-
-  trial \%>\%
-  dplyr::select(response, trt, age, grade) \%>\%
+  trial[c("response", "trt", "age", "grade")] \%>\%
   tbl_uvregression(
     method = glm,
     y = response,
@@ -41,14 +36,18 @@ tbl_uv_global_ex2 <-
   add_global_p()
 }
 \seealso{
-Other tbl_uvregression tools: \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{add_q.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}},
-  \code{\link{tbl_uvregression}}
+Other tbl_uvregression tools: 
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_uvregression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
 }
 \author{
 Daniel D. Sjoberg

@@ -4,65 +4,139 @@
 \alias{tbl_uvregression}
 \title{Display univariate regression model results in table}
 \usage{
-tbl_uvregression(data, method, y, method.args = NULL,
-  formula = "{y} ~ {x}", exponentiate = FALSE, label = NULL,
-  hide_n = FALSE, show_yesno = NULL, conf.level = 0.95,
-  estimate_fun = ifelse(exponentiate == TRUE, style_ratio, style_sigfig),
-  pvalue_fun = style_pvalue)
+tbl_uvregression(
+  data,
+  method,
+  y = NULL,
+  x = NULL,
+  method.args = NULL,
+  formula = "{y} ~ {x}",
+  exponentiate = FALSE,
+  label = NULL,
+  include = everything(),
+  exclude = NULL,
+  hide_n = FALSE,
+  show_single_row = NULL,
+  conf.level = NULL,
+  estimate_fun = NULL,
+  pvalue_fun = NULL,
+  show_yesno = NULL,
+  tidy_fun = NULL
+)
 }
 \arguments{
-\item{data}{data frame to be used in univariate regression modeling.  Data
+\item{data}{Data frame to be used in univariate regression modeling.  Data
 frame includes the outcome variable(s) and the independent variables.}
 
-\item{method}{regression method (e.g. \code{\link[stats]{lm}},
-\code{\link[stats]{glm}}, \code{\link[survival]{coxph}}, and more).}
+\item{method}{Regression method (e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph}, and more).}
 
-\item{y}{model outcome as a string (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)})}
+\item{y}{Model outcome (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)}).
+All other column in \code{data} will be regressed on \code{y}.
+Specify one and only one of \code{y} or \code{x}}
 
-\item{method.args}{list of additional arguments passed on to the regression
+\item{x}{Model covariate (e.g. \code{x = trt}).
+All other columns in \code{data} will serve as the outcome in a regression model
+with \code{x} as a covariate.  Output table is best when \code{x} is a continuous or
+dichotomous variable displayed on a single row.
+Specify one and only one of \code{y} or \code{x}}
+
+\item{method.args}{List of additional arguments passed on to the regression
 function defined by \code{method}.}
 
-\item{formula}{string that becomes the model formula.
-Uses \code{\link[glue]{glue}} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
+\item{formula}{String of the model formula.
+Uses \link[glue:glue]{glue::glue} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
 is the dependent variable, and \code{{x}} represents a single covariate. For a
-random intercept, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
+random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
-\item{exponentiate}{logical indicating whether or not to exponentiate the
+\item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
-\item{label}{list of formulas specifying variables labels,
-e.g. \code{list("age" ~ "Age, yrs", "ptstage" ~ "Path T Stage")}}
+\item{label}{List of formulas specifying variables labels,
+e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}}
 
-\item{hide_n}{hide N column. Default is \code{FALSE}}
+\item{include}{Variables to include in output. Input may be a vector of
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is \code{everything()}.}
 
-\item{show_yesno}{By default yes/no categorical variables are printed on a
-single row, when the 'No' category is the reference group.  To print both
-levels in the output table, include the variable name in the show_yesno
-vector, e.g. `show_yesno = c("var1", "var2")``}
+\item{exclude}{DEPRECATED}
 
-\item{conf.level}{must be strictly greater than 0 and less than 1.
+\item{hide_n}{Hide N column. Default is \code{FALSE}}
+
+\item{show_single_row}{By default categorical variables are printed on
+multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
+the regression coefficient on a single row, include the variable name(s)
+here--quoted and unquoted variable name accepted.}
+
+\item{conf.level}{Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{estimate_fun}{function to round and format beta coefficient estimates.
+\item{estimate_fun}{Function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
 
-\item{pvalue_fun}{function to round and format p-values.
-Default is \code{\link{style_pvalue}}.
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
+
+\item{show_yesno}{DEPRECATED}
+
+\item{tidy_fun}{Option to specify a particular tidier function if the
+model is not a \link[=tidy_vetted]{vetted model} or you need to implement a
+custom method. Default is \code{NULL}}
+}
+\value{
+A \code{tbl_uvregression} object
 }
 \description{
-The \code{tbl_uvregression} function arguments are similar to the \link{tbl_regression}
-arguments. Review the
+This function estimates univariate regression models and returns them in
+a publication-ready table.  It can create univariate regression models holding
+either a covariate or outcome constant.
+
+For models holding outcome constant, the function takes as arguments a data frame,
+the type of regression model, and the outcome variable \verb{y=}. Each column in the
+data frame is regressed on the specified outcome. The \code{tbl_uvregression}
+function arguments are similar to the \link{tbl_regression} arguments. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 for detailed examples.
+
+You may alternatively hold a single covariate constant. For this, pass a data
+frame, the type of regression model, and a single
+covariate in the \verb{x=} argument. Each column of the data frame will serve as
+the outcome in a univariate regression model. Take care using the \code{x} argument
+that each of the columns in the data frame are appropriate for the same type
+of model, e.g. they are all continuous variables appropriate for \link{lm}, or
+dichotomous variables appropriate for logistic regression with \link{glm}.
 }
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
+}
+
+\section{Setting Defaults}{
+
+If you prefer to consistently use a different function to format p-values or
+estimates, you can set options in the script or in the user- or
+project-level startup file, '.Rprofile'.  The default confidence level can
+also be set.
+\itemize{
+\item \code{options(gtsummary.pvalue_fun = new_function)}
+\item \code{options(gtsummary.tbl_regression.estimate_fun = new_function)}
+\item \code{options(gtsummary.conf.level = 0.90)}
+}
+}
+
 \section{Note}{
 
-The N reported in the \code{tbl_uvregression()} output is the number of observations
+The N reported in the output is the number of observations
 in the data frame \code{model.frame(x)}. Depending on the model input, this N
 may represent different quantities. In most cases, it is the number of people or
 units in your model.  Here are some common exceptions.
@@ -75,21 +149,10 @@ units in your model.  Here are some common exceptions.
 This list is not exhaustive, and care should be taken for each number reported.
 }
 
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
-
-\if{html}{Example 2}
-
-\if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
-}
-
 \examples{
 tbl_uv_ex1 <-
   tbl_uvregression(
-    trial \%>\% dplyr::select(response, age, grade),
+    trial[c("response", "age", "grade")],
     method = glm,
     y = response,
     method.args = list(family = binomial),
@@ -100,25 +163,38 @@ tbl_uv_ex1 <-
 library(survival)
 tbl_uv_ex2 <-
   tbl_uvregression(
-    trial \%>\% dplyr::select(ttdeath, death, age, grade, response),
+    trial[c("ttdeath", "death", "age", "grade", "response")],
     method = coxph,
     y = Surv(ttdeath, death),
-    label = list("grade" ~ "Grade"),
     exponentiate = TRUE,
     pvalue_fun = function(x) style_pvalue(x, digits = 2)
+  )
+
+# for convenience, you can also pass named lists to any arguments
+# that accept formulas (e.g label, etc.)
+library(survival)
+trial[c("ttdeath", "death", "age", "grade", "response")] \%>\%
+  tbl_uvregression(
+    method = coxph,
+    y = Surv(ttdeath, death),
+    exponentiate = TRUE
   )
 }
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 
-Other tbl_uvregression tools: \code{\link{add_global_p.tbl_uvregression}},
-  \code{\link{add_nevent.tbl_uvregression}},
-  \code{\link{add_q.tbl_uvregression}},
-  \code{\link{bold_italicize_labels_levels}},
-  \code{\link{inline_text.tbl_uvregression}},
-  \code{\link{sort_p.tbl_uvregression}},
-  \code{\link{tab_style_bold_p.tbl_uvregression}},
-  \code{\link{tbl_merge}}, \code{\link{tbl_stack}}
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{bold_p.tbl_stack}()},
+\code{\link{bold_p.tbl_uvregression}()},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{sort_p.tbl_uvregression}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg
