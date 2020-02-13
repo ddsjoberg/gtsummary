@@ -237,7 +237,7 @@ calculate_pvalue <- function(data, variable, by, test, type, group, include) {
 }
 
 # add_p_method_escape_char
-add_p_method_string_replace <- function(string_in) {
+add_p_method_escape_char <- function(string_in) {
   if(is.null(string_in)) {
     return(NULL)
   }
