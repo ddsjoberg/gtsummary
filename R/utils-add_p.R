@@ -129,7 +129,7 @@ add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
 add_p_test_fisher.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
-  result$test <- "Fisher\\'s exact test"
+  result$test <- "Fisher's exact test"
   result
 }
 
@@ -234,4 +234,16 @@ calculate_pvalue <- function(data, variable, by, test, type, group, include) {
       group = group, test = ..3, include = include, type = ..4
     )
   )
+}
+
+# add_p_method_escape_char
+add_p_method_string_replace <- function(string_in) {
+  if(is.null(string_in)) {
+    return(NULL)
+  }
+
+  string_out <- string_in %>%
+    str_replace_all(fixed("'"), fixed("\\'")) %>%
+    str_replace_all(fixed('"'), fixed('\\"'))
+  return(string_out)
 }

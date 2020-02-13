@@ -50,3 +50,32 @@ test_that("add_p defaults to clustered data with `group=` arg", {
     c("lme4", "lme4")
   )
 })
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Define function for unit test involving the method footnote when using
+# custom p-value in add_p
+my_mcnemar <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+  result$test <- paste0("McNemar's test",' "this is my method"')
+  result
+}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+test_that("add_p custom p-value method footnote does not require double escape chars for quotes" {
+  expect_error(
+    trial[c("response", "trt")] %>%
+      tbl_summary(by = trt) %>%
+      add_p(test = response ~ "my_mcnemar"),
+    NA
+  )
+})
+
+
+
+
+
+
+
+
+
