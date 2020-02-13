@@ -41,7 +41,7 @@
 #' @param intercept Logical argument indicating whether to include the intercept
 #' in the output.  Default is `FALSE`
 #' @param show_single_row By default categorical variables are printed on
-#' multiple rows.  If a variable is binary (e.g. Yes/No) and you wish to print
+#' multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
 #' the regression coefficient on a single row, include the variable name(s)
 #' here--quoted and unquoted variable name accepted.
 #' @param estimate_fun Function to round and format coefficient estimates.
@@ -142,7 +142,15 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
          call. = FALSE)
   }
 
-  # converting tidyselect formula lists to named lists
+  include <- rlang::enquo(include)
+  exclude <- rlang::enquo(exclude)
+  show_single_row <- rlang::enquo(show_single_row)
+
+  # will return call, and all object passed to in tbl_regression call
+  # the object func_inputs is a list of every object passed to the function
+  func_inputs <- as.list(environment())
+
+    # converting tidyselect formula lists to named lists
   # extracting model frame
   model_frame <- tryCatch({
       stats::model.frame(x)
@@ -162,15 +170,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     }
   )
 
-  include <- rlang::enquo(include)
-  exclude <- rlang::enquo(exclude)
-  show_single_row <- rlang::enquo(show_single_row)
-
-  # will return call, and all object passed to in tbl_regression call
-  # the object func_inputs is a list of every object passed to the function
-  func_inputs <- as.list(environment())
-
-  # using broom and broom.mixed to tidy up regression results, and
+  # using broom to tidy up regression results, and
   # then reversing order of data frame
   tidy_model <-
     tidy_wrap(x, exponentiate, conf.level, tidy_fun)
@@ -213,11 +213,11 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   table_header <-
     tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
-    table_header_fmt(
-      p.value = "x$inputs$pvalue_fun",
-      estimate = "x$inputs$estimate_fun",
-      conf.low = "x$inputs$estimate_fun",
-      conf.high = "x$inputs$estimate_fun"
+    table_header_fmt_fun(
+      p.value = pvalue_fun,
+      estimate = estimate_fun,
+      conf.low = estimate_fun,
+      conf.high = estimate_fun
     ) %>%
     # adding footnotes to table_header tibble
     mutate(
@@ -257,8 +257,8 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # writing additional gt and kable calls with data from table_header
   results <- update_calls_from_table_header(results)
 
-  # assigning a class of tbl_regression (for special printing in Rmarkdown)
-  class(results) <- "tbl_regression"
+  # assigning a class of tbl_regression (for special printing in R markdown)
+  class(results) <- c("tbl_regression", "gtsummary")
 
   results
 }
@@ -320,24 +320,24 @@ estimate_header <- function(x, exponentiate) {
   # first identify the type ----------------------------------------------------
   model_type <- "generic"
   # GLM and GEE models
-  if (class(x)[1] %in% c("glm", "geeglm") &&
+  if (inherits(x, c("glm", "geeglm")) &&
     x$family$family == "binomial" &&
     x$family$link == "logit") {
     model_type <- "logistic"
-  } else if (class(x)[1] %in% c("glm", "geeglm") &&
+  } else if (inherits(x, c("glm", "geeglm")) &&
     x$family$family == "poisson" &&
     x$family$link == "log") {
     model_type <- "poisson"
   } # Cox Models
-  else if (class(x)[1] == "coxph") {
+  else if (inherits(x, "coxph")) {
     model_type <- "prop_hazard"
   } # LME4 models
-  else if (class(x)[1] == "glmerMod" &&
+  else if (inherits(x, "glmerMod") &&
     attr(class(x), "package") == "lme4" &&
     x@resp$family$family == "binomial" &&
     x@resp$family$link == "logit") {
     model_type <- "logistic"
-  } else if (class(x)[1] == "glmerMod" &&
+  } else if (inherits(x, "glmerMod") &&
     attr(class(x), "package") == "lme4" &&
     x@resp$family$family == "poisson" &&
     x@resp$family$link == "log") {

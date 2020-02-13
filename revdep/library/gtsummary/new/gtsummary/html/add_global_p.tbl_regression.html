@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Adds the global p-value for categorical variables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_global_p.tbl_regression {gtsummary}"><tr><td>add_global_p.tbl_regression {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Adds the global p-value for categorical variables</h2>
+
+<h3>Description</h3>
+
+<p>This function uses <a href="../../car/html/Anova.html">car::Anova</a> with argument
+<code>type = "III"</code> to calculate global p-values for categorical variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'tbl_regression'
+add_global_p(
+  x,
+  include = x$table_body$variable[x$table_body$var_type %in% c("categorical",
+    "interaction")],
+  keep = FALSE,
+  terms = NULL,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object with class <code>tbl_regression</code> from the
+<a href="tbl_regression.html">tbl_regression</a> function</p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. tidyselect and gtsummary select helper
+functions are also accepted. Default is <code>NULL</code>, which adds global p-values
+for all categorical and interaction terms.</p>
+</td></tr>
+<tr valign="top"><td><code>keep</code></td>
+<td>
+<p>Logical argument indicating whether to also retain the individual
+p-values in the table output for each level of the categorical variable.
+Default is <code>FALSE</code></p>
+</td></tr>
+<tr valign="top"><td><code>terms</code></td>
+<td>
+<p>DEPRECATED.  Use <code style="white-space: pre;">include=</code> argument instead.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to <a href="../../car/html/Anova.html">car::Anova</a></p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>tbl_regression</code> object
+</p>
+
+
+<h3>Note</h3>
+
+<p>If a needed class of model is not supported by
+<a href="../../car/html/Anova.html">car::Anova</a>, please create a
+<a href="https://github.com/ddsjoberg/gtsummary/issues">GitHub Issue</a> to request support.
+</p>
+
+
+<h3>Example Output</h3>
+
+<p><img src="../help/figures/tbl_lm_global_ex1.png" width=50% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_regression tools: 
+<code><a href="add_nevent.tbl_regression.html">add_nevent.tbl_regression</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="bold_p.tbl_regression.html">bold_p.tbl_regression</a>()</code>,
+<code><a href="bold_p.tbl_stack.html">bold_p.tbl_stack</a>()</code>,
+<code><a href="combine_terms.html">combine_terms</a>()</code>,
+<code><a href="inline_text.tbl_regression.html">inline_text.tbl_regression</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_regression.html">sort_p.tbl_regression</a>()</code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_regression.html">tbl_regression</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+tbl_lm_global_ex1 &lt;-
+  lm(marker ~ age + grade, trial) %&gt;%
+  tbl_regression() %&gt;%
+  add_global_p()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.4.9017 <a href="00Index.html">Index</a>]</div>
+</body></html>

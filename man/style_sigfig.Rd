@@ -31,6 +31,13 @@ and to the nearest integer when \code{abs(x) >= 10}.
 c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345, NA, -0.001) \%>\%
   style_sigfig()
 }
+\seealso{
+Other style tools: 
+\code{\link{style_percent}()},
+\code{\link{style_pvalue}()},
+\code{\link{style_ratio}()}
+}
 \author{
 Daniel D. Sjoberg
 }
+\concept{style tools}

@@ -4,12 +4,12 @@
 #' @param x An object created using gtsummary functions
 #' @param ... Not used
 #' @author Daniel D. Sjoberg
-#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression]
+#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_merge] [tbl_stack]
 NULL
 
 #' @rdname print_gtsummary
 #' @export
-print.tbl_summary <- function(x, ...) {
+print.gtsummary <- function(x, ...) {
   # select print engine
   print_engine <-
     getOption("gtsummary.print_engine") %||%
@@ -17,18 +17,6 @@ print.tbl_summary <- function(x, ...) {
       requireNamespace("gt", quietly = TRUE),
       "gt", "kable"
     )
-
-  # printing message about downloading gt package
-  if (is.null(getOption("gtsummary.print_engine")) && print_engine == "kable") {
-    message(glue(
-      "Results will be printed using 'knitr::kable()'.\n",
-      "For tables styled by the gt package, use the installation code below.\n",
-      "'remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)'\n\n",
-      "If you prefer to always use 'knitr::kable()', add the option\n",
-      "'options(gtsummary.print_engine = \"kable\")' to your script\n",
-      "or in a user- or project-level startup file, '.Rprofile'."
-    ))
-  }
 
   # printing results
   if (print_engine == "gt") {
@@ -45,7 +33,7 @@ print.tbl_summary <- function(x, ...) {
 
 #' @rdname print_gtsummary
 #' @export
-knit_print.tbl_summary <- function(x, ...) {
+knit_print.gtsummary <- function(x, ...) {
   # select print engine
   print_engine <-
     getOption("gtsummary.print_engine") %||%
@@ -53,8 +41,6 @@ knit_print.tbl_summary <- function(x, ...) {
       requireNamespace("gt", quietly = TRUE),
       "gt", "kable"
     )
-
-
 
   # don't use word_document with gt engine
   if (print_engine == "gt" && "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
@@ -82,42 +68,3 @@ knit_print.tbl_summary <- function(x, ...) {
   }
 }
 
-#' @rdname print_gtsummary
-#' @export
-print.tbl_regression <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_regression <- knit_print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-print.tbl_uvregression <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_uvregression <- knit_print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-print.tbl_survival <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_survival <- knit_print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-print.tbl_merge <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_merge <- knit_print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-print.tbl_stack <- print.tbl_summary
-
-#' @rdname print_gtsummary
-#' @export
-knit_print.tbl_stack <- knit_print.tbl_summary

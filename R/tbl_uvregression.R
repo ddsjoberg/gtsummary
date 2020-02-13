@@ -18,7 +18,7 @@
 #' the outcome in a univariate regression model. Take care using the `x` argument
 #' that each of the columns in the data frame are appropriate for the same type
 #' of model, e.g. they are all continuous variables appropriate for [lm], or
-#' binary variables appropriate for logistic regression with [glm].
+#' dichotomous variables appropriate for logistic regression with [glm].
 #'
 #' @inheritSection tbl_regression Setting Defaults
 #' @inheritSection tbl_regression Note
@@ -32,7 +32,7 @@
 #' @param x Model covariate (e.g. `x = trt`).
 #' All other columns in `data` will serve as the outcome in a regression model
 #' with `x` as a covariate.  Output table is best when `x` is a continuous or
-#' binary variable displayed on a single row.
+#' dichotomous variable displayed on a single row.
 #' Specify one and only one of `y` or `x`
 #' @param formula String of the model formula.
 #' Uses [glue::glue] syntax. Default is `"{y} ~ {x}"`, where `{y}`
@@ -133,22 +133,34 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # to be compatible with the rest of the function that assumes character input
   method <- rlang::enexpr(method)
   method.args <- rlang::enexpr(method.args)
-  # converting to string, or keeping as NULL
-  x <- switch(
-    rlang::quo_is_null(rlang::enquo(x)) %>% as.character(),
-    "TRUE" = NULL,
-    "FALSE" = rlang::expr_text(rlang::enexpr(x))
-  )
-  y <- switch(
-    rlang::quo_is_null(rlang::enquo(y)) %>% as.character(),
-    "TRUE" = NULL,
-    "FALSE" = rlang::expr_text(rlang::enexpr(y))
-  )
 
+  # converting to string, or keeping as NULL.  Using the standard
+  # variable selector, but users may also pass `Surv(ttdeath, death)`,
+  # which is not a column header, rather a function.  In that case,
+  # converting the bare input to a string.
+  x <- rlang::enexpr(x)
+  y <- rlang::enexpr(y)
+  x <-
+    tryCatch({
+      var_input_to_string(data = data, select_input = !!x, arg_name = "x")
+    }, error = function(e) {
+      rlang::expr_text(x)
+    })
+  y <-
+    tryCatch({
+      var_input_to_string(data = data, select_input = !!y, arg_name = "y")
+    }, error = function(e) {
+      rlang::expr_text(y)
+    })
+
+  # checking selections of x and y
   if (is.null(x) + is.null(y) != 1L) {
     stop("Specify one, and only one, of `x` and `y`. This function can
          create univariate regression models holding either a covariate or outcome
          constant.", call. = FALSE)
+  }
+  if ((!is.null(x) && length(x) != 1) | (!is.null(y) && length(y) != 1)) {
+    stop("Select only a single column in argument `x=` or `y=`.", call. = FALSE)
   }
 
   include <- var_input_to_string(data = data, select_input = !!rlang::enquo(include),
@@ -294,7 +306,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
 
   # stacking results to return -------------------------------------------------
   results <- tbl_stack(df_model$tbl)
-  class(results) <- "tbl_uvregression"
+  names(results$tbls) <- all_vars
+  class(results) <- c("tbl_uvregression", "gtsummary")
 
   # creating a meta_data table -------------------------------------------------
   # (this will be used in subsequent functions, eg add_global_p)
@@ -304,64 +317,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     select(c("variable", "var_type", "label", "N"))
 
   # exporting results ----------------------------------------------------------
-  results$tbl_regression_list <- df_model$tbl
-  names(results$tbl_regression_list) <- all_vars
-
+  results$inputs <- tbl_uvregression_inputs
   results$call_list = list(tbl_uvregression = match.call())
-  results$gt_calls = eval(gt_tbl_uvregression)
-  results$kable_calls = eval(kable_tbl_uvregression)
 
-  update_calls_from_table_header(results)
+  results
 }
-
-
-# gt function calls ------------------------------------------------------------
-# quoting returns an expression to be evaluated later
-gt_tbl_uvregression <- quote(list(
-  # first call to the gt function
-  gt = "gt::gt(data = x$table_body)" %>%
-    glue(),
-
-  # label column indented and left just
-  cols_align = glue(
-    "gt::cols_align(align = 'center') %>% ",
-    "gt::cols_align(align = 'left', columns = gt::vars(label))"
-  ),
-
-  # NAs do not show in table
-  fmt_missing =
-    "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
-      glue(),
-
-  # Show "---" for reference groups
-  fmt_missing_ref =
-    "gt::fmt_missing(columns = gt::vars(estimate, ci), rows = row_ref == TRUE, missing_text = '---')" %>%
-      glue(),
-
-  # indenting levels and missing rows
-  tab_style_text_indent = glue(
-    "gt::tab_style(",
-    "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
-    "locations = gt::cells_body(",
-    "columns = gt::vars(label), ",
-    "rows = row_type != 'label'",
-    "))"
-  )
-))
-
-# kable function calls ------------------------------------------------------------
-# quoting returns an expression to be evaluated later
-kable_tbl_uvregression <- quote(list(
-  # first call to the gt function
-  kable = glue("x$table_body"),
-
-  #  placeholder, so the formatting calls are performed other calls below
-  fmt = NULL,
-
-  # Show "---" for reference groups
-  fmt_missing_ref = glue(
-    "dplyr::mutate_at(dplyr::vars(estimate, conf.low), ",
-    "~ dplyr::case_when(row_ref == TRUE ~ '---', TRUE ~ .))"
-  )
-))
 

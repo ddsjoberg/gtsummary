@@ -13,7 +13,7 @@
 #' Default is `digits = 2`.
 #' @export
 #' @return A character vector of styled ratios
-#' @seealso [style_sigfig]
+#' @family style tools
 #' @author Daniel D. Sjoberg
 #' @examples
 #' c(

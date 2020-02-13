@@ -18,6 +18,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 
 #' Add number of events to a regression table
 #'
+#' @description
 #' This function adds a column of the number of events to tables created with
 #' [tbl_regression].  Supported
 #' model types include GLMs with binomial distribution family (e.g.
@@ -25,7 +26,6 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' [geepack::geeglm]) and Cox
 #' Proportion Hazards regression models ([survival::coxph]).
 #'
-#' @section Reporting Event N:
 #' The number of events is added to the internal `.$table_body` tibble,
 #' and not printed in the default output table (similar to N). The number
 #' of events is accessible via the [inline_text] function for printing in a report.
@@ -47,7 +47,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 
 add_nevent.tbl_regression <- function(x, ...) {
   # if model is a cox model, adding number of events as well
-  if (class(x$model_obj)[1] == "coxph") {
+  if (inherits(x$model_obj, "coxph")) {
     x$nevent <- x$model_obj %>%
       survival::coxph.detail() %>%
       pluck("nevent") %>%
@@ -60,18 +60,18 @@ add_nevent.tbl_regression <- function(x, ...) {
   # generalized linear models, and GEE GLMs
   else if (
     # GLM or GEE
-    (class(x$model_obj)[1] %in% c("glm", "geeglm")) |
+    (inherits(x$model_obj, c("glm", "geeglm"))) |
       # lme4 GLM
-      (class(x$model_obj)[1] == "glmerMod" &
+      (inherits(x$model_obj, c("glmerMod"))  &
         attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
     # checking family (must be binomial)
-    if (class(x$model_obj)[1] %in% c("glm", "geeglm")) {
+    if (inherits(x$model_obj, c("glm", "geeglm"))) {
       if (x$model_obj$family$family != "binomial") {
         stop("Model type not supported")
       }
       formula <- x$model_obj$formula %>% stats::as.formula()
     }
-    else if (class(x$model_obj)[1] == "glmerMod" &
+    else if (inherits(x$model_obj, "glmerMod") &
       attr(class(x$model_obj), "package") %||% "NULL" == "lme4") {
       if (x$model_obj@resp$family$family != "binomial") {
         stop("Model type not supported")
@@ -154,14 +154,13 @@ add_nevent.tbl_regression <- function(x, ...) {
 add_nevent.tbl_uvregression <- function(x, ...) {
 
   # adding nevent to each tbl_regression object
-  x$tbl_regression_list <-
-    x$tbl_regression_list %>%
+  x$tbls <- x$tbls %>%
     map(add_nevent.tbl_regression)
 
   # extracting nevent from each individual table and adding
   # it to the overall $table_body
   table_nevent <-
-    x$tbl_regression_list %>%
+    x$tbls %>%
     map_dfr(
       ~ pluck(.x, "table_body") %>%
         select(c("variable", "var_type", "row_type", "label", "nevent")) %>%

@@ -1,5 +1,9 @@
 #' Creates table of univariate summary statistics for time-to-event endpoints
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("questioning")}
+#' Questioning whether gtsummary is the place for our univariate survival
+#' functions to live. This may be exported to another package in the future.
+#'
 #' @param x A survfit object
 #' @param ... Additional arguments passed to other methods
 #' @seealso [tbl_survival.survfit]
@@ -10,7 +14,9 @@ tbl_survival <- function(x, ...) {
 
 #' Creates table of survival probabilities
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("questioning")}
+#' Questioning whether gtsummary is the place for our univariate survival
+#' functions to live. This may be exported to another package in the future.
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'
@@ -220,9 +226,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   table_header <-
     tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
-    table_header_fmt(
-      estimate = "x$estimate_fun"
-    )
+    table_header_fmt_fun(estimate = estimate_fun)
 
   # creating object to return
   result <- list()
@@ -230,7 +234,6 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   result[["table_header"]] <- table_header
   result[["table_long"]] <- table_long
   result[["survfit"]] <- x
-  result[["estimate_fun"]] <- estimate_fun
   result[["call_list"]] <- list(tbl_survival = match.call())
   result[["gt_calls"]] <- eval(tbl_survival_gt_calls)
   result[["kable_calls"]] <- eval(tbl_survival_kable_calls)
@@ -256,7 +259,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   result <- update_calls_from_table_header(result)
 
   # returning results
-  class(result) <- "tbl_survival"
+  class(result) <- c("tbl_survival", "gtsummary")
   result
 }
 

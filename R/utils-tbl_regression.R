@@ -1,11 +1,11 @@
 #' Tidies regression object based on class
 #'
 #' The `tidy_wrap()` function has two primary functions.  First, using either
-#' `broom::tidy` or `broom.mixed::tidy` (depending on model input class)
+#' `broom::tidy`
 #' the regression model object is converted into a data frame. It then adjusts the
 #' output for use in the rest of \code{\link{tbl_regression}}.
 #'
-#' The output of `broom::tidy` or `broom.mixed::tidy` will often include additional information
+#' The output of `broom::tidy` will often include additional information
 #' that will not be included in a printed table from `tbl_regression()`
 #' (e.g. scale parameters, random effects, etc.).  This
 #' simple helper function deletes extraneous rows from the output.
@@ -14,9 +14,7 @@
 #'
 #' @param x regression model object
 #' @param exponentiate logical argument passed directly to `broom::tidy`
-#' or `broom.mixed::tidy`.
 #' @param conf.level confidence level passed directly to `broom::tidy`
-#' or `broom.mixed::tidy`.
 #' @param tidy_fun tidy function and arguments passed to it
 #' @noRd
 #' @keywords internal
@@ -26,7 +24,7 @@
 tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
   mixed_classes <- c("lmerMod", "glmerMod")
   if (is.null(tidy_fun)) {
-    if (class(x)[1] %in% mixed_classes) { # can add other classes later. Need exact subclass.
+    if (inherits(x, mixed_classes)) { # can add other classes later. Need exact subclass.
       tryCatch({
         tidy_bit <- broom.mixed::tidy(
         x,
@@ -45,7 +43,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
       )
     }
 
-    if (!(class(x)[1] %in% mixed_classes)) {
+    if (!inherits(x, mixed_classes)) {
       tryCatch({
         tidy_bit <- broom::tidy(
         x,
@@ -65,7 +63,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
     }
 
     # deleting scale parameters from survreg objects
-    if (class(x)[1] == "survreg") {
+    if (inherits(x, "survreg")) {
       tidy_bit <- tidy_bit %>%
         filter(.data$term != "Log(scale)")
     }
@@ -121,7 +119,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
 
   # add a check on what the model.frame output is and print a message if it's not
   # a data.frame with all vector columns
-  if (!(all("data.frame" %in% class(model_frame) && all(purrr::map_lgl(model_frame, ~ rlang::is_vector(.x)))))) {
+  if (!(all(inherits(model_frame, "data.frame") && all(purrr::map_lgl(model_frame, ~ rlang::is_vector(.x)))))) {
     message(paste0(
       "Model input `x` has an unexpected format for `model.frame(x)` \n",
       " which may affect `tbl_regression()` output.\n",
@@ -377,7 +375,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   if (length(bad_show_single_row) > 0) {
     stop(glue(
       "'{paste(bad_show_single_row, collapse = \"', '\")}' from argument ",
-      "'show_single_row' may only be applied to binary variables."
+      "'show_single_row' may only be applied to dichotomous variables."
     ), call. = FALSE)
   }
 

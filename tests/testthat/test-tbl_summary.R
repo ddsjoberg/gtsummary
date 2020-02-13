@@ -279,3 +279,89 @@ test_that("tbl_summary-difftime does not cause error", {
     NA
   )
 })
+
+
+test_that("tbl_summary-all missing data does not cause error", {
+  df_missing <-
+    tibble(
+      my_by_var = c(1,1,2,2),
+      fct = rep(NA, 4) %>% factor(levels = c("lion", "tiger", "bear")),
+      lgl = NA,
+      chr = NA_character_,
+      int = NA_integer_,
+      dbl = NA_real_
+    )
+
+  expect_error(
+    all_missing_no_by <- tbl_summary(df_missing %>% dplyr::select(-my_by_var)),
+    NA
+  )
+
+  expect_error(
+    all_missing_by <- tbl_summary(df_missing, by = my_by_var),
+    NA
+  )
+
+  # making categorical, variables that cannot be summarized as categorical
+  expect_error(
+    tbl_summary(df_missing, by = my_by_var, type = vars(int, dbl) ~ "categorical"),
+    NA
+  )
+
+  expect_equal(
+    all_missing_no_by$table_body %>%
+      filter(variable == "fct", row_type == "level") %>%
+      pull(stat_0),
+    c("0 (NA%)", "0 (NA%)", "0 (NA%)")
+  )
+
+  expect_equal(
+    all_missing_no_by$table_body %>%
+      filter(variable %in% c("lgl", "chr"), row_type == "label") %>%
+      pull(stat_0),
+    c("0 (NA%)", "0 (NA%)")
+  )
+
+  expect_equal(
+    all_missing_no_by$table_body %>%
+      filter(variable %in% c("int", "dbl"), row_type == "label") %>%
+      pull(stat_0),
+    c("NA (NA, NA)", "NA (NA, NA)")
+  )
+
+  expect_equal(
+    all_missing_by$table_body %>%
+      filter(variable == "fct", row_type == "level") %>%
+      select(starts_with("stat_")),
+    tibble(stat_1 = c("0 (NA%)", "0 (NA%)", "0 (NA%)"), stat_2 = stat_1)
+  )
+
+  expect_equal(
+    all_missing_by$table_body %>%
+      filter(variable %in% c("lgl", "chr"), row_type == "label") %>%
+      select(starts_with("stat_")),
+    tibble(stat_1 = c("0 (NA%)", "0 (NA%)"), stat_2 = stat_1)
+  )
+
+  expect_equal(
+    all_missing_by$table_body %>%
+      filter(variable %in% c("int", "dbl"), row_type == "label") %>%
+      select(starts_with("stat_")),
+    tibble(stat_1 = c("NA (NA, NA)", "NA (NA, NA)"), stat_2 = stat_1)
+  )
+
+  # unobserved factor level
+  expect_error(
+    missing_fct_by <-
+      trial %>%
+      mutate(response2 = factor(response) %>% forcats::fct_explicit_na()) %>%
+      filter(!is.na(response)) %>%
+      tbl_summary(by = response2),
+    NA
+  )
+
+  expect_equal(
+    missing_fct_by$table_body %>% select(starts_with("stat_")) %>% names(),
+    c("stat_1", "stat_2", "stat_3")
+  )
+})

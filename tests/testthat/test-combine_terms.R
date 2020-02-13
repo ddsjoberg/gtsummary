@@ -55,12 +55,10 @@ test_that("combine_terms works without error", {
   expect_error(
     glm(response ~ age + marker + sp2marker + sp3marker,
         data = trial %>%
-          left_join(
-            rcspline.eval(trial$marker, nk = 4, inclx = TRUE, norm = 0) %>%
-              as_tibble(.name_repair = "unique") %>%
-              set_names("marker", "sp2marker", "sp3marker") %>%
-              unique(),
-            by = c("marker")
+          bind_cols(
+            rcspline.eval(.$marker, nk = 4, inclx = TRUE, norm = 0) %>%
+              as.data.frame() %>%
+              set_names("marker", "sp2marker", "sp3marker")
           ) %>%
           filter(complete.cases(.) == TRUE),
         family = "binomial") %>%
@@ -100,12 +98,10 @@ test_that("combine_terms works without error", {
     geepack::geeglm(
       as.formula("weight ~ Diet + Time + sp2Time + sp3Time"),
       data = ChickWeight %>%
-        left_join(
-          Hmisc::rcspline.eval(ChickWeight$Time, nk = 4, inclx = TRUE, norm = 0) %>%
-            as_tibble(.name_repair = "unique") %>%
-            set_names("Time", "sp2Time", "sp3Time") %>%
-            unique(),
-          by = c("Time")
+        bind_cols(
+          Hmisc::rcspline.eval(.$Time, nk = 4, inclx = TRUE, norm = 0) %>%
+            as.data.frame() %>%
+            set_names("Time", "sp2Time", "sp3Time")
         ),
       family = gaussian,
       id = Chick,
@@ -136,3 +132,17 @@ test_that("error catching working properly", {
   )
 })
 
+# Confirm map/apply situation works
+expect_error(
+  tibble(outcome = "marker", exp = FALSE, test = "F") %>%
+    mutate(
+      mod = purrr::map(outcome,
+                       ~glm(formula = paste0(.x, " ~ age + stage") %>% as.formula(),
+                            data = trial, family = gaussian)),
+      tbl = purrr::map2(mod, exp, ~tbl_regression(.x, exponentiate = .y)),
+      tbl2 = purrr::map2(
+        tbl, test, ~combine_terms(..1, formula_update = . ~ . - stage, test = ..2)
+      )
+    ),
+  NA
+)

@@ -1,14 +1,24 @@
-# gtsummary (development version)
+# gtsummary 1.2.6
 
-* New function `combine_terms()` allows users to combine multiple independent variables in a regression model into a single line after `tbl_regression()`.  The single line does not report regression coefficients, rather a single p-value from the `anova()` function. (#310)
+* Bug fix for random effects regression model where coefficients were not exponentiated when requested.  Using `broom.mixed::tidy()` rather than `broom::tidy()` resolved issue.
 
-* `tbl_summary()` will now summarize columns of class `difftime` (#343)
+# gtsummary 1.2.5
 
-* The data summary function `add_p()` uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large datasets. (#341) 
+## Documentation
 
-* In the regression modeling functions `tbl_regression()` and `tbl_uvregression()`, the users are presented an informative error message when the tidier fails (e.g. `broom::tidy()`) alerting them to the location of the error so they may address the issue (#337, #338)
+* Updated documentation and README to improve readability, added more cross-linking across pages, added search terms to help users find our package, and added gif demonstrations (#340)
 
-* Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. #250
+* README images now build differently for website vs GitHub markdown to accommodate different output formats
+
+## Breaking changes
+
+* Removed deprecated `fmt*_()` and `cols_label_summary()` functions (#365)
+
+* Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings (#250)
+
+## Syntax
+
+* Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. (#250)
 
     ```r
     tbl_summary(trial, label = age ~ "NEW LABEL"))
@@ -24,23 +34,50 @@
     
     purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))
     ```
-* After the input updates in #250, the `exclude=` argument appearing in `add_p()`, `tbl_regression()`, `tbl_uvregression()`, `as_gt()`, `as_kable()`, and `as_tibble()` was redundant.  The `exclude=` argument is now deprecated (#331)
+* Updated `tbl_uvregression()` to allow flexible tidyselect inputs and improved error messaging for arguments `x` and `y` (#249)
 
-* New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported (#254)
-
-* For each release of gtsummary, we now can make reference to the version of gt our release coincides with. The commit SHA for gt is now saved in an object called `gt_sha`, and the version of gt can be installed with `remotes::install_github("rstudio/gt", ref = gt_sha)` (#329)
-
-* Cubic spline terms are now accurately matched to a variable name/term #312
-
-* Improved error messaging in `tidyselect_to_list()` (#300)
-
-* Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings (#250)
-
-* Bug fix when non-standard evaluation arguments were passed in `method.args=` argument of `tbl_uvregression()` (#322)
+* After the input updates in #250, the `exclude=` argument appearing in `add_p()`, `tbl_regression()`, `tbl_uvregression()`, `as_gt()`, `as_kable()`, and `as_tibble()` was redundant.  The `exclude=` argument is now deprecated. Use `include=` instead, with tidyselect syntax. (#331)
 
 * Functions `all_categorical()`, `all_dichotomous()`, and `all_continuous()` may now be used in `tbl_summary()` argument `type=` (#256)
 
+## User-facing improvements
+
+* New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported (#254)
+
+* Improved messaging for users who use `knitr::kable()` to print gtsummary tables, and users who have not yet installed the {gt} package (#347)
+
+* New function `combine_terms()` allows users to combine multiple independent variables in a regression model into a single line after `tbl_regression()`.  The single line does not report regression coefficients, rather a single p-value from the `anova()` function. (#310)
+
+* In the regression modeling functions `tbl_regression()` and `tbl_uvregression()`, the users are presented an informative error message when the tidier fails (e.g. `broom::tidy()`) alerting them to the location of the error so they may address the issue (#337, #338)
+
+* For each release of gtsummary, we now can make reference to the version of gt our release coincides with. The commit SHA for gt is now saved in an object called `gt_sha`, and the version of gt can be installed with `remotes::install_github("rstudio/gt", ref = gt_sha)` (#329)
+
+* Created "style" family of functions
+
+* Improved error messaging in `tidyselect_to_list()` (#300)
+
+## Other features and fixes
+
+* Updated class detection to use `inherits()`, and added secondary class of `"gtsummary"` to all objects. This allows users to create their own cobbled/custom  gtsummary objects while utilizing the gtsummary print functions (#249)
+
+* `tbl_summary()` will now summarize columns of class `difftime` (#343)
+
+* Infrastructure update to the way styling/formatting functions are returned.  Styling functions are now returned as a column in the `.$table_header` tibble.  The update simplifies handling of these styling functions in `tbl_merge()` and `tbl_stack()`. (#298, #299)
+
+* Bug fix for `tbl_summary()` when variables were all NA (#344)
+
+* The data summary function `add_p()` now uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large data sets. (#341) 
+
+* Cubic spline terms are now accurately matched to a variable name/term (#312)
+
+* Bug fix when non-standard evaluation arguments were passed in `method.args=` argument of `tbl_uvregression()` (#322)
+
 * Updates after the gt package deprecated `gt::cells_data()` in favor of `gt::cells_body()`. Check added to `as_gt()` ensuring a version of gt with `gt::cells_body()` in its NAMESPACE
+
+* Lowered minimum required version of R to v3.4 (#356)
+
+* Removed {broom.mixed} dependency as the {broom} package contained all necessary tidiers (#354)
+
 
 # gtsummary 1.2.4
 

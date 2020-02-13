@@ -1,0 +1,99 @@
+---
+title: "gtsummary output checks"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(gtsummary)
+library(survival)
+library(lme4)
+
+options(gtsummary.as_gt.addl_cmds = "gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1))")
+```
+
+Build models, then do tbl_regression and examine results. Do quick visual check against `broom::tidy()`.  
+
+### Linear Model
+```{r}
+# 
+mod_lm <- lm(hp ~ am, data = mtcars)
+tbl_regression(mod_lm)
+
+broom::tidy(mod_lm, conf.int = TRUE)
+```
+
+### Survival Model
+```{r}
+
+mod_survreg <- survreg(Surv(time, status) ~ age + ph.ecog, data = lung)
+tbl_regression(mod_survreg)
+broom::tidy(mod_survreg, conf.int = TRUE)
+```
+
+### Logistic Model
+```{r}
+mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
+tbl_regression(mod_logistic, exponentiate = TRUE)
+broom::tidy(mod_logistic, exponentiate = TRUE, conf.int = TRUE)
+```
+
+### Poisson Model
+```{r}
+mod_poisson <- glm(count ~ age + trt,
+  trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
+  family = poisson
+)
+tbl_regression(mod_poisson, exponentiate = TRUE)
+broom::tidy(mod_poisson, exponentiate = TRUE, conf.int = TRUE)
+```
+
+### Linear Mixed Model
+```{r}
+mod_lmer <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+tbl_regression(mod_lmer)
+broom.mixed::tidy(mod_lmer)
+```
+
+### Generalized Linear Mixed Model
+```{r}
+mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
+
+tbl_regression(mod_glmer, exponentiate = TRUE)
+broom.mixed::tidy(mod_glmer, exponentiate = TRUE, conf.int = TRUE)
+
+tbl_lme4 <- tbl_regression(mod_glmer, exponentiate = TRUE,
+                               conf.level = 0.90)
+
+a <- coef(mod_glmer)[[1]] %>% {.[1, 2:ncol(.)]} %>% purrr::map_dbl(exp) 
+
+b <- tbl_lme4$table_body %>% 
+  dplyr::pull(estimate) %>% 
+  na.omit()
+
+all.equal(unname(a), as.vector(b))
+
+```
+
+### Linear Model with Interaction
+```{r}
+
+mod_lm_interaction <- lm(age ~ trt * grade * response, data = trial)
+tbl_regression(mod_lm_interaction)
+broom::tidy(mod_lm_interaction, conf.int = TRUE)
+```
+
+### Cox PH with Hmisc Labels
+```{r}
+
+lung2 <- lung
+Hmisc::label(lung2$sex) <- "Gender"
+Hmisc::label(lung2$age) <- "AGE"
+cox_hmisclbl <- coxph(Surv(time, status) ~ age + sex, data = lung2)
+tbl_regression(cox_hmisclbl, exponentiate = TRUE)
+broom::tidy(cox_hmisclbl, exponentiate = TRUE, conf.int = TRUE)
+```
+
+
+

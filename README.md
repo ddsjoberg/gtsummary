@@ -4,7 +4,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.org/ddsjoberg/gtsummary)
+status](https://travis-ci.com/ddsjoberg/gtsummary.svg?branch=master)](https://travis-ci.com/ddsjoberg/gtsummary)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/ddsjoberg/gtsummary?branch=master&svg=true)](https://ci.appveyor.com/project/ddsjoberg/gtsummary)
 [![Coverage
@@ -19,34 +19,70 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 ## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
 
 The {gtsummary} package provides an elegant and flexible way to create
-publication-ready and reproducible analytical tables. The tables
-summarize data sets, regression models, and more. The code is concise
-and the tables are highly customizable. Data frames can be summarized
-with any function, e.g. mean(), median(), even user-written functions.
-Regression models are summarized and include the reference rows for
-categorical variables. Common regression models, such as logistic
-regression and Cox proportional hazards regression, are automatically
-identified and the tables are pre-filled with appropriate column headers
-(i.e. Odds Ratio, and Hazard Ratio). The package uses
-[{broom}](https://broom.tidyverse.org/) to perform initial tidying of
-the regression models, which means there is broad support for many types
-of regression models.
+publication-ready analytical and summary tables using the **R**
+programming language. The {gtsummary} package summarizes data sets,
+regression models, and more, using sensible defaults with highly
+customizable capabilities.
 
-{gtsummary} uses the [{gt}](https://gt.rstudio.com/) package enabling
-each table to be tailored to your preferences. If you label your data
-(which I recommend\!), the labels will be used in the table output. With
-{gtsummary} and [{labelled}](http://larmarange.github.io/labelled/)
-data, you get beautifully formatted, ready-to-share tables in a single
-line of code\! Check out the examples below, and review the vignettes
-for a detailed exploration of the output options.
+  - [**Summarize data frames or
+    tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
+    easily in **R**. Perfect for presenting descriptive statistics,
+    comparing group **demographics** (e.g creating a **Table 1** for
+    medical journals), and more. Automatically detects continuous,
+    categorical, and dichotomous variables in your data set, calculates
+    appropriate descriptive statistics, and also includes amount of
+    missingness in each variable.
+
+  - [**Summarize regression
+    models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
+    in R and include reference rows for categorical variables. Common
+    regression models, such as logistic regression and Cox proportional
+    hazards regression, are automatically identified and the tables are
+    pre-filled with appropriate column headers (i.e. Odds Ratio and
+    Hazard Ratio).
+
+  - [**Customize gtsummary
+    tables**](http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions)
+    using a growing list of formatting/styling functions.
+    **[Bold](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+    labels,
+    **[italicize](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+    levels, **[add
+    p-value](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html)**
+    to summary tables,
+    **[style](http://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)**
+    the statistics however you choose,
+    **[merge](http://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)**
+    or
+    **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
+    tables to present results side by side… there are so many
+    possibilities to create the table of your dreams\!
+
+  - **[Report statistics
+    inline](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text)**
+    from summary tables and regression summary tables in **R markdown**.
+    Make your reports completely reproducible\!
+
+By leveraging [{broom}](https://broom.tidyverse.org/),
+[{gt}](https://gt.rstudio.com/), and
+[{labelled}](http://larmarange.github.io/labelled/) packages,
+{gtsummary} creates beautifully formatted, ready-to-share summary and
+result tables in a single line of R code\!
+
+Check out the examples below, review the
+[vignettes](http://www.danieldsjoberg.com/gtsummary/articles/) for a
+detailed exploration of the output options, and view the
+[gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html)
+for various customization examples.
 
 ## Installation
 
-The {gtsummary} package was written as a companion to the {gt} package
-from RStudio, and it is recommended to install both {gt} and
-{gtsummary}. The {gt} package is not automatically installed. If {gt} is
-not installed, `knitr::kable()` will be used to produce the summary
-tables. You can install {gtsummary} and {gt} with the following code.
+The {gtsummary} package was written as a companion to the
+[{gt}](https://gt.rstudio.com/) package from RStudio, and it is
+recommended to install both {gt} and {gtsummary}. The {gt} package is
+not automatically installed. If {gt} is not installed, `knitr::kable()`
+will be used to produce the summary tables. You can install {gtsummary}
+and {gt} with the following code.
 
 1.  Install {gtsummary}
     
@@ -58,7 +94,7 @@ tables. You can install {gtsummary} and {gt} with the following code.
     
     ``` r
     install.packages("remotes")
-    remotes::install_github("rstudio/gt", gtsummary::gt_sha)
+    remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
     ```
 
 Install the development version of {gtsummary} with:
@@ -69,37 +105,85 @@ remotes::install_github("ddsjoberg/gtsummary")
 
 ## Examples
 
-The {gtsummary} vignettes/tutorials contain detailed examples.
-
 ### Summary Table
+
+Use
+[`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
+to summarize a data frame.
+
+<img src = "man/figures/tbl_summary_demo1.gif" alt = "animated" width = "100%">
+
+Example basic table:
 
 ``` r
 library(gtsummary)
-t1 <-
-  tbl_summary(
-    data = trial[c("trt", "age", "grade", "response")],
-    by = trt
-  ) %>%
-  add_p() 
+# make dataset with a few variables to summarize
+trial2 <- trial %>% dplyr::select(trt, age, grade, response)
+
+# summarize the data with our package
+table1 <- tbl_summary(trial2)
 ```
 
-<img src="man/figures/README-tbl_summary_print-1.png" width="66%">
+<img src="man/figures/README-tbl_summary_print_simple-1.png" width="30%" />
+
+There are many **customization options** to **add information** (like
+comparing groups) and **format results** (like bold labels) in your
+table. See the
+[`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
+tutorial for many more options, or below for one example.
+
+``` r
+table2 <- tbl_summary(
+  trial2,
+  by = trt, # split table by group
+  missing = "no" # don't list missing data separately
+) %>%
+  add_n() %>% # add column with total number of non-missing observations
+  add_p() %>% # test if there's difference between groups
+  bold_labels() 
+```
+
+<img src="man/figures/README-tbl_summary_print_extra-1.png" width="60%" />
 
 ### Regression Models
+
+Use
+[`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html)
+to easily and beautifully display regression model results in a table.
+See the
+[tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
+for customization options.
 
 ``` r
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
-t2 <- tbl_regression(mod1, exponentiate = TRUE)
+t1 <- tbl_regression(mod1, exponentiate = TRUE)
 ```
 
-<img src="man/figures/README-tbl_regression_print-1.png" width="50%">
+<img src="man/figures/README-tbl_regression_printa-1.png" width="40%" />
 
 ### Side-by-side Regression Models
 
-Side-by-side regression model results from `tbl_merge()`
+You can also present side-by-side regression model results using
+`tbl_merge()`
 
-<img src="man/figures/tbl_merge_ex1.png" width="66%">
+``` r
+library(survival)
+
+# build survival model table
+t2 <-
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+  tbl_regression(exponentiate = TRUE)
+
+# merge tables 
+tbl_merge_ex1 <-
+  tbl_merge(
+    tbls = list(t1, t2),
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
+  )
+```
+
+<img src="man/figures/README-tbl_merge_ex1-1.png" width="60%" />
 
 Review even more output options in the [table
 gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
@@ -143,6 +227,7 @@ thank you to all contributors\!
 [@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
+[@oranwutang](https://github.com/oranwutang),
 [@sammo3182](https://github.com/sammo3182),
 [@slobaugh](https://github.com/slobaugh), and
 [@zabore](https://github.com/zabore)

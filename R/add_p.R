@@ -60,12 +60,11 @@
 #'   result$test <- "McNemar\\'s test"
 #'   result
 #' }
-#' \donttest{
+#'
 #' add_p_ex2 <-
 #'   trial[c("response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p(test = response ~ "my_mcnemar")
-#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -73,7 +72,7 @@
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_p_ex2.png}{options: width=45\%}}
+#' \if{html}{\figure{add_p_ex2.png}{options: width=60\%}}
 
 add_p <- function(x, test = NULL, pvalue_fun = NULL,
                   group = NULL, include = everything(), exclude = NULL) {
@@ -93,12 +92,15 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   }
 
   # converting bare arguments to string ----------------------------------------
-  group <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(group),
-                               arg_name = "by", select_single = TRUE)
-  include <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(include),
-                                 arg_name = "by")
-  exclude <- var_input_to_string(data = x$inputs$data, select_input = !!rlang::enquo(exclude),
-                                 arg_name = "by")
+  group <- var_input_to_string(data = x$inputs$data,
+                               select_input = !!rlang::enquo(group),
+                               arg_name = "group", select_single = TRUE)
+  include <- var_input_to_string(data = x$inputs$data,
+                                 select_input = !!rlang::enquo(include),
+                                 arg_name = "include")
+  exclude <- var_input_to_string(data = x$inputs$data,
+                                 select_input = !!rlang::enquo(exclude),
+                                 arg_name = "exclude")
 
   # group argument -------------------------------------------------------------
   if (!is.null(group)) {
@@ -124,7 +126,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
   }
 
   # checking that input is class tbl_summary
-  if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'", call. = FALSE)
+  if (!inherits(x, "tbl_summary")) stop("`x` must be class 'tbl_summary'", call. = FALSE)
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(paste0(
@@ -211,14 +213,13 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
     )
 
   x$table_body <- table_body
-  x$pvalue_fun <- pvalue_fun
   x$meta_data <- meta_data
 
   x$table_header <-
     tibble(column = names(table_body)) %>%
     left_join(x$table_header, by = "column") %>%
     table_header_fill_missing() %>%
-    table_header_fmt(p.value = "x$pvalue_fun") %>%
+    table_header_fmt_fun(p.value = pvalue_fun) %>%
     mutate(footnote = map2(
       .data$column, .data$footnote,
       function(x, y) {
@@ -234,7 +235,6 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
 
   # updating gt and kable calls with data from table_header
   x <- update_calls_from_table_header(x)
-
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
 

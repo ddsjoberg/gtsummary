@@ -4,7 +4,7 @@
 #' in [tbl_regression] and [tbl_uvregression].  If a model is passed to these
 #' functions and the model is not listed below and  a `tidy()` function is
 #' not specified in the `tidy_fun=` argument, the model object will be passed
-#' to [broom::tidy].
+#' to [broom::tidy] or [broom.mixed::tidy].
 #'
 #' \itemize{
 #'  \item{[stats::lm]}
@@ -16,10 +16,11 @@
 #'  \item{[geepack::geeglm]}
 #' }
 #' @name tidy_vetted
+#' @keywords internal
 #' @section model support:
-#' If [broom::tidy] or [broom.mixed::tidy] support a class of model not listed
+#' If [broom::tidy] or [broom.mixed::tidy] supports a class of model not listed
 #' above, please submit a [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues).
-#' The model can be added to the list of vetted models and unit tests will be
+#' The model can be added to the list of vetted models. Unit tests will be
 #' put in place to ensure continued support for the model.
 #'
 #' @section custom tidiers:
@@ -34,10 +35,14 @@
 #' confidence limits are calculated using Wald's method.
 #' @examples
 #' my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
-#'   dplyr::bind_cols(
-#'     broom::tidy(x, exponentiate = exponentiate, conf.int = FALSE),
-#'     broom::confint_tidy(x, func = stats::confint.default, conf.level = conf.level)
-#'   )
+#'   tidy <-
+#'     dplyr::bind_cols(
+#'       broom::tidy(x, conf.int = FALSE),
+#'       broom::confint_tidy(x, func = stats::confint.default, conf.level = conf.level)
+#'     )
+#'   # exponentiating, if requested
+#'   if (exponentiate == TRUE)
+#'     tidy <- dplyr::mutate_at(vars(estimate, conf.low, conf.high), exp)
 #' }
 #'
 #' lm(age ~ grade + response, trial) %>%

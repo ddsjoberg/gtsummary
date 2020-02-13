@@ -36,7 +36,7 @@
 add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
                   last = FALSE, missing = NULL) {
   # checking that input is class tbl_summary
-  if (class(x) != "tbl_summary") stop("x must be class 'tbl_summary'")
+  if (!inherits(x, "tbl_summary")) stop("`x` must be class 'tbl_summary'")
 
   # defining function to round percentages -------------------------------------
   percent_fun <- getOption("gtsummary.tbl_summary.percent_fun",

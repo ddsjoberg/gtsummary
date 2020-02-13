@@ -21,9 +21,9 @@ table_header_fill_missing <- function(table_header) {
     table_header$text_interpret <- "gt::md"
   }
 
-  # fmt ------------------------------------------------------------------------
-  if (!"fmt" %in% names(table_header)) {
-    table_header$fmt <- NA_character_
+  # fmt_fun --------------------------------------------------------------------
+  if (!"fmt_fun" %in% names(table_header)) {
+    table_header$fmt_fun <- list(NULL)
   }
 
   # bold -----------------------------------------------------------------------
@@ -54,8 +54,7 @@ table_header_fill_missing <- function(table_header) {
   table_header
 }
 
-# this functions modfies table_header with the formatting function
-table_header_fmt <- function(table_header, ...) {
+table_header_fmt_fun <- function(table_header, ...) {
   # saving passed_dots arguments as a named list
   passed_dots <- list(...)
 
@@ -63,22 +62,21 @@ table_header_fmt <- function(table_header, ...) {
   names_ordered <- table_header$column %>% intersect(names(passed_dots))
   passed_dots <- passed_dots[names_ordered]
 
-
+  # browser()
   table_header_update <-
     tibble(
       column = table_header$column %>% intersect(names(passed_dots)),
-      fmt = passed_dots %>% unlist()
+      fmt_fun = passed_dots
     )
 
   # updating table_header
   table_header[
     table_header$column %in% table_header_update$column, # selecting rows
-    c("column", "fmt") # selecting columns
-  ] <- table_header_update[c("column", "fmt")]
+    c("column", "fmt_fun") # selecting columns
+  ] <- table_header_update[c("column", "fmt_fun")]
 
   table_header
 }
-
 
 # creating gt calls from table_header ------------------------------------------
 # gt table_header to gt fmt and bolding code
@@ -87,10 +85,10 @@ table_header_to_gt_fmt <- function(table_header) {
   # saving gt::fmt code in list
   fmt_code_vct <-
     table_header %>%
-    filter(!is.na(.data$fmt)) %>%
+    filter(map_lgl(.data$fmt_fun, ~!is.null(.x))) %>%
     mutate(
       col_label_code =
-        glue("gt::fmt(columns = gt::vars({column}), rows = !is.na({column}), fns = {fmt})")
+        glue("gt::fmt(columns = gt::vars({column}), rows = !is.na({column}), fns = x$fmt_fun${column})")
     ) %>%
     pull("col_label_code")
 
@@ -210,14 +208,14 @@ table_header_to_kable_cols_hide <- function(table_header) {
 table_header_to_kable_fmt <- function(table_header) {
   code_vct <-
     table_header %>%
-    filter(!is.na(.data$fmt)) %>%
+    filter(map_lgl(.data$fmt_fun, ~!is.null(.x))) %>%
     mutate(
       col_code = case_when(
-        is.na(bold) ~ glue("dplyr::mutate({column} = {fmt}({column}))"),
+        is.na(bold) ~ glue("dplyr::mutate({column} = x$fmt_fun${column}({column}))"),
         TRUE ~ glue(
           "dplyr::mutate({column} = dplyr::case_when(",
-          "{column} <= {bold} ~ paste0('__', {fmt}({column}), '__'), ",
-          "TRUE ~ {fmt}({column})",
+          "{column} <= {bold} ~ paste0('__', x$fmt_fun${column}({column}), '__'), ",
+          "TRUE ~ x$fmt_fun${column}({column})",
           "))"
         )
       )
@@ -236,28 +234,25 @@ table_header_to_kable_fmt <- function(table_header) {
 # function takes in a tbl object, and updates the
 # gt function calls from the x$table_header
 update_calls_from_table_header <- function(x) {
+  # updating fmt_fun -----------------------------------------------------------
+  x$fmt_fun <-
+    x$table_header$fmt_fun %>%
+    set_names(x$table_header$column) %>%
+    compact()
 
-  # gt calls
-  x$gt_calls[["cols_hide"]] <-
-    glue("{table_header_to_gt_cols_hide(x$table_header)}")
+  # gt calls -------------------------------------------------------------------
+  x$gt_calls[["cols_hide"]] <- table_header_to_gt_cols_hide(x$table_header)
 
-  x$gt_calls[["cols_label"]] <-
-    glue("{table_header_to_gt_cols_label(x$table_header)}")
+  x$gt_calls[["cols_label"]] <- table_header_to_gt_cols_label(x$table_header)
 
-  x$gt_calls[["fmt"]] <-
-    glue("{table_header_to_gt_fmt(x$table_header)}")
+  x$gt_calls[["fmt"]] <- table_header_to_gt_fmt(x$table_header)
 
-  x$gt_calls[["tab_footnote"]] <-
-    glue("{table_header_to_gt_tab_footnote(x$table_header)}")
+  x$gt_calls[["tab_footnote"]] <- table_header_to_gt_tab_footnote(x$table_header)
 
+  # kable calls ----------------------------------------------------------------
+  x$kable_calls[["cols_hide"]] <- table_header_to_kable_cols_hide(x$table_header)
 
-  # kable calls
-  x$kable_calls[["cols_hide"]] <-
-    glue("{table_header_to_kable_cols_hide(x$table_header)}")
-
-  x$kable_calls[["fmt"]] <-
-    glue("{table_header_to_kable_fmt(x$table_header)}")
-
+  x$kable_calls[["fmt"]] <- table_header_to_kable_fmt(x$table_header)
 
   # moving the hide code to the last call
   cols_hide_loc <- which("cols_hide" == names(x$kable_calls))

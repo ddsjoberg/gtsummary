@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Merge two or more gtsummary objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tbl_merge {gtsummary}"><tr><td>tbl_merge {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Merge two or more gtsummary objects</h2>
+
+<h3>Description</h3>
+
+<p>Merges two or more <code>tbl_regression</code>, <code>tbl_uvregression</code>, <code>tbl_stack</code>,
+or <code>tbl_summary</code> objects and adds appropriate spanning headers.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tbl_merge(tbls, tab_spanner = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>tbls</code></td>
+<td>
+<p>List of gtsummary objects to merge</p>
+</td></tr>
+<tr valign="top"><td><code>tab_spanner</code></td>
+<td>
+<p>Character vector specifying the spanning headers.
+Must be the same length as <code>tbls</code>. The
+strings are interpreted with <code>gt::md</code>.
+Must be same length as <code>tbls</code> argument</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>tbl_merge</code> object
+</p>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/tbl_merge_ex1.png" width=70% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/tbl_merge_ex2.png" width=65% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="tbl_stack.html">tbl_stack</a>
+</p>
+<p>Other tbl_regression tools: 
+<code><a href="add_global_p.tbl_regression.html">add_global_p.tbl_regression</a>()</code>,
+<code><a href="add_nevent.tbl_regression.html">add_nevent.tbl_regression</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="bold_p.tbl_regression.html">bold_p.tbl_regression</a>()</code>,
+<code><a href="bold_p.tbl_stack.html">bold_p.tbl_stack</a>()</code>,
+<code><a href="combine_terms.html">combine_terms</a>()</code>,
+<code><a href="inline_text.tbl_regression.html">inline_text.tbl_regression</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_regression.html">sort_p.tbl_regression</a>()</code>,
+<code><a href="tbl_regression.html">tbl_regression</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>
+</p>
+<p>Other tbl_uvregression tools: 
+<code><a href="add_global_p.tbl_uvregression.html">add_global_p.tbl_uvregression</a>()</code>,
+<code><a href="add_nevent.tbl_uvregression.html">add_nevent.tbl_uvregression</a>()</code>,
+<code><a href="add_q.tbl_uvregression.html">add_q.tbl_uvregression</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="bold_p.tbl_stack.html">bold_p.tbl_stack</a>()</code>,
+<code><a href="bold_p.tbl_uvregression.html">bold_p.tbl_uvregression</a>()</code>,
+<code><a href="inline_text.tbl_uvregression.html">inline_text.tbl_uvregression</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_uvregression.html">sort_p.tbl_uvregression</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="tbl_uvregression.html">tbl_uvregression</a>()</code>
+</p>
+<p>Other tbl_summary tools: 
+<code><a href="add_n.html">add_n</a>()</code>,
+<code><a href="add_overall.html">add_overall</a>()</code>,
+<code><a href="add_p.html">add_p</a>()</code>,
+<code><a href="add_q.tbl_summary.html">add_q.tbl_summary</a>()</code>,
+<code><a href="add_stat_label.html">add_stat_label</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="bold_p.tbl_summary.html">bold_p.tbl_summary</a>()</code>,
+<code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a>()</code>,
+<code><a href="modify_header.html">modify_header</a>()</code>,
+<code><a href="sort_p.tbl_summary.html">sort_p.tbl_summary</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="tbl_summary.html">tbl_summary</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Side-by-side Regression Models
+library(survival)
+t1 &lt;-
+  glm(response ~ trt + grade + age, trial, family = binomial) %&gt;%
+  tbl_regression(exponentiate = TRUE)
+t2 &lt;-
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %&gt;%
+  tbl_regression(exponentiate = TRUE)
+tbl_merge_ex1 &lt;-
+  tbl_merge(
+    tbls = list(t1, t2),
+    tab_spanner = c("**Tumor Response**", "**Time to Death**")
+  )
+
+# Descriptive statistics alongside univariate regression, with no spanning header
+t3 &lt;-
+  trial[c("age", "grade", "response")] %&gt;%
+  tbl_summary(missing = "no") %&gt;%
+  add_n()
+t4 &lt;-
+  tbl_uvregression(
+    trial[c("ttdeath", "death", "age", "grade", "response")],
+    method = coxph,
+    y = Surv(ttdeath, death),
+    exponentiate = TRUE,
+    hide_n = TRUE
+  )
+tbl_merge_ex2 &lt;-
+  tbl_merge(tbls = list(t3, t4)) %&gt;%
+  as_gt(include = -tab_spanner) %&gt;%
+  gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.4.9017 <a href="00Index.html">Index</a>]</div>
+</body></html>

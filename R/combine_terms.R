@@ -1,5 +1,6 @@
 #' Combine terms in a regression model
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' The function combines terms from a regression model, and replaces the terms
 #' with a single row in the output table.  The p-value is calculated using
 #' [stats::anova()].
@@ -12,7 +13,8 @@
 #' function's `formula.=` argument
 #' @param label Option string argument labeling the combined rows
 #' @param ... Additional arguments passed to [stats::anova]
-#'
+#' @author Daniel D. Sjoberg
+#' @family tbl_regression tools
 #' @return `tbl_regression` object
 #' @export
 #'
@@ -75,7 +77,7 @@
 
 combine_terms <- function(x, formula_update, label = NULL, ...) {
   # checking input -------------------------------------------------------------
-  if (!methods::is(x, "tbl_regression")) {
+  if (!inherits(x, "tbl_regression")) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)
   }
 
@@ -122,11 +124,11 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
 
   # tbl'ing the new model object -----------------------------------------------
   # getting call from original tbl_regression call, and updating with new model object
-  call_aslist <- x$call_list$tbl_regression %>% as.list()
+  call_aslist <- x$inputs
   # replacing model with updated model in call
   call_aslist$x <- new_model_obj
   # running tbl_regression with new model
-  new_model_tbl <- as.call(call_aslist) %>% eval()
+  new_model_tbl <- do.call(tbl_regression, call_aslist)
 
   # updating original tbl object -----------------------------------------------
   # replacing the combined rows with a single row
