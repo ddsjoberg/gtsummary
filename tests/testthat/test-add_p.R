@@ -50,3 +50,12 @@ test_that("add_p defaults to clustered data with `group=` arg", {
     c("lme4", "lme4")
   )
 })
+
+
+
+
+
+
+
+
+

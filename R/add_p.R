@@ -57,7 +57,7 @@
 #' my_mcnemar <- function(data, variable, by, ...) {
 #'   result <- list()
 #'   result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
-#'   result$test <- "McNemar\\'s test"
+#'   result$test <- "McNemar's test"
 #'   result
 #' }
 #'
@@ -193,7 +193,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
       ),
       stat_test_lbl = map_chr(
         .data$test_result,
-        ~ pluck(.x, "test") %||% NA_character_
+        ~ add_p_method_escape_char(pluck(.x, "test")) %||% NA_character_
       )
     ) %>%
     select(-.data$test_result)
