@@ -243,7 +243,7 @@ add_p_method_escape_char <- function(string_in) {
   }
 
   string_out <- string_in %>%
-    str_replace_all(fixed("'"), fixed("\\'")) %>%
-    str_replace_all(fixed('"'), fixed('\\"'))
+    stringr::str_replace_all(fixed("'"), fixed("\\'")) %>%
+    stringr::str_replace_all(fixed('"'), fixed('\\"'))
   return(string_out)
 }
