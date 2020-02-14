@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 1.2.6
 
 * Update add_p() custom p-value description to NOT require double escape characters for quotes (#361)
