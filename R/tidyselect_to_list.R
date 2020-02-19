@@ -167,7 +167,7 @@ tidyselect_to_string <- function(...data..., ...meta_data... = NULL,
 
   tryCatch({
     result <-
-      rlang::call2(dplyr::select, .data = ...data...[0, ], !!!dots_enquo) %>%
+      rlang::call2(dplyr::select, .data = ...data...[0, , drop = FALSE], !!!dots_enquo) %>%
       rlang::eval_tidy() %>%
       colnames()
 
