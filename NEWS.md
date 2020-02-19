@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix when data frame passed to `tbl_summary()` with a single column (#389)
+
 * Update add_p() custom p-value description to NOT require double escape characters for quotes (#361)
 
 # gtsummary 1.2.6
