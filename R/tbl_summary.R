@@ -155,6 +155,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   percent <- match.arg(percent)
 
   # ungrouping data ------------------------------------------------------------
+  tbl_summary_data_checks(data)
   data <- data %>% ungroup()
 
   # deleting obs with missing by values ----------------------------------------

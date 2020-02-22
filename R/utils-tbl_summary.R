@@ -395,9 +395,7 @@ assign_sort <- function(variable, summary_type, sort) {
 # function that checks the inputs to \code{\link{tbl_summary}}
 # this should include EVERY input of \code{\link{tbl_summary}} in the same order
 # copy and paste them from \code{\link{tbl_summary}}
-
-tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
-                                     digits, missing, missing_text, sort) {
+tbl_summary_data_checks <- function(data) {
   # data -----------------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data)) {
@@ -413,6 +411,12 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   if (ncol(data) == 0L) {
     stop("Expecting 'data' to have at least 1 column", call. = FALSE)
   }
+}
+
+tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
+                                     digits, missing, missing_text, sort) {
+  # data -----------------------------------------------------------------------
+  tbl_summary_data_checks(data)
 
   # by -------------------------------------------------------------------------
   # no checks for by argument
