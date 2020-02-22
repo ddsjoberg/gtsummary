@@ -365,3 +365,13 @@ test_that("tbl_summary-all missing data does not cause error", {
     c("stat_1", "stat_2", "stat_3")
   )
 })
+
+
+test_that("tbl_summary-no error when *data frame* with single column passed", {
+  expect_error(
+    trial["trt"] %>%
+      as.data.frame() %>%
+      tbl_summary(label = trt ~ "TREATMENT GROUP"),
+    NA
+  )
+})
