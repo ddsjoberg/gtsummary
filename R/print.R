@@ -62,7 +62,8 @@ knit_print.gtsummary <- function(x, ...) {
         "Table will be printed with `knitr::kable()`, which is less featured than {gt}.\n",
         "To print table with the {gt} package, convert {gtsummary} object to {gt} with `as_gt()`\n",
         "  or include `options(gtsummary.print_engine = \"gt\")` at the top of your script.\n",
-        "For more information on {gtsummary} in R markdown, review vignette.\n",
+        "For more information on {gtsummary} in R markdown, review vignette link below.\n",
+        "  http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html",
         "To supress this message include, `message = FALSE` in the code chunk header."
       )
     )
@@ -77,7 +78,8 @@ knit_print.gtsummary <- function(x, ...) {
         "The {gtsummary} package was built to print tables with the {gt} package.\n",
         "Output 'word_document' is not suported by the {gt} package.\n",
         "Table will be printed with `knitr::kable()`, which is less featured than {gt}.\n",
-        "For more information on {gtsummary} in R markdown, review vignette.\n",
+        "For more information on {gtsummary} in R markdown, review vignette link below.\n",
+        "  http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html",
         "To supress this message include, `message = FALSE` in the code chunk header."
       )
     )
