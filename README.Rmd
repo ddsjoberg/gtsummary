@@ -189,18 +189,6 @@ if (pkgdown::in_pkgdown()) {
 
 Review even more output options in the [table gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
 
-## Print Engine
-
-{gtsummary} uses the {gt} package to print all summary tables.  In addition to supporting {gt}, the {gtsummary} package works well with `knitr::kable()`.  This is particularly useful when outputting documents to Microsoft Word.  If the {gt} package is not installed, {gtsummary} will fall back to `knitr::kable()`.  To explicitly set the printing engine, set the option in the script or in the user- or project R profile, `.Rprofile`.
-
-    options(gtsummary.print_engine = "kable") 
-    
-or
-    
-    options(gtsummary.print_engine = "gt")
-
-Output from {kable} is less full featured compared to summary tables produced with {gt}.  For example, {kable} summary tables do not include indentation, footnotes, and spanning header rows.
-
 ## Contributing
 
 Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!  
