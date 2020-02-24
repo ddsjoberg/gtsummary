@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Bug fix when data frame passed to `tbl_summary()` with a single column (#389)
+
+* Update add_p() custom p-value description to NOT require double escape characters for quotes (#361)
+
 # gtsummary 1.2.6
 
 * Bug fix for random effects regression model where coefficients were not exponentiated when requested.  Using `broom.mixed::tidy()` rather than `broom::tidy()` resolved issue.
