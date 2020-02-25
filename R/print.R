@@ -16,13 +16,16 @@ print.gtsummary <- function(x, ...) {
   # print message about installing gt if not installed, and table would have been printed with gt
   if (is.null(print_engine) && !requireNamespace("gt", quietly = TRUE)) {
     rlang::inform(glue(
-      "Results will be printed using `knitr::kable()` and do not \n",
-      "support footnotes, spanning headers, or indentation. \n\n",
-      "For tables styled by the gt package, use the installation code below.\n",
+      "The {gt} package is not installed and the table will be printed using\n",
+      "`knitr::kable()`, which prints a simpler table compared to {gt}.\n",
+      "For example, `knitr::kable()` does not support footnotes,/n",
+      "spanning headers, or indentation.\n\n",
+
+      "For tables styled by the {gt} package, use the installation code below.\n",
       "`remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`\n\n",
+
       "If you prefer to always use `knitr::kable()`, add the option\n",
-      "`options(gtsummary.print_engine = \"kable\")` to your script\n",
-      "or in a user- or project-level startup file, '.Rprofile'."
+      "`options(gtsummary.print_engine = \"kable\")` to your script."
     ))
     print_engine <- "kable"
   }
@@ -57,12 +60,12 @@ knit_print.gtsummary <- function(x, ...) {
   else if (is.null(print_engine) && knitr::is_latex_output() == TRUE) {
     rlang::inform(
       message = paste0(
-        "The {gtsummary} package was built to print tables with the {gt} package.\n",
+        "The {gtsummary} package was written to print tables with the {gt} package.\n",
         "Output to PDF is in development by the {gt} package.\n",
         "Table will be printed with `knitr::kable()`, which is less featured than {gt}.\n",
         "To print table with the {gt} package, convert {gtsummary} object to {gt} with `as_gt()`\n",
         "  or include `options(gtsummary.print_engine = \"gt\")` at the top of your script.\n",
-        "For more information on {gtsummary} in R markdown, review vignette link below.\n",
+        "For more information on {gtsummary} in R markdown, review the vignette via the link below.\n",
         "  http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html",
         "To supress this message include, `message = FALSE` in the code chunk header."
       )
@@ -75,10 +78,10 @@ knit_print.gtsummary <- function(x, ...) {
            "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
     rlang::inform(
       message = paste0(
-        "The {gtsummary} package was built to print tables with the {gt} package.\n",
+        "The {gtsummary} package was written to print tables with the {gt} package.\n",
         "Output 'word_document' is not suported by the {gt} package.\n",
         "Table will be printed with `knitr::kable()`, which is less featured than {gt}.\n",
-        "For more information on {gtsummary} in R markdown, review vignette link below.\n",
+        "For more information on {gtsummary} in R markdown, review the vignette via the link below.\n",
         "  http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html",
         "To supress this message include, `message = FALSE` in the code chunk header."
       )
@@ -91,9 +94,11 @@ knit_print.gtsummary <- function(x, ...) {
            "rtf_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
     rlang::inform(
       message = paste0(
-        "The {gtsummary} package was built to print tables with the {gt} package.\n",
-        "Output 'rtf_document' is in development by the {gt} package, and tables may contain malformed elements.\n",
-        "For more information on {gtsummary} in R markdown, review vignette.\n",
+        "The {gtsummary} package was written to print tables with the {gt} package.\n",
+        "Output 'rtf_document' is in development by the {gt} package, and tables may\n",
+        "  contain malformed elements or may not print at all.\n",
+        "For more information on {gtsummary} in R markdown, review the vignette via the link below.\n",
+        "  http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html",
         "To supress this message include, `message = FALSE` in the code chunk header."
       )
     )
@@ -107,13 +112,16 @@ knit_print.gtsummary <- function(x, ...) {
   # print message about installing gt if not installed, and table would have been printed with gt
   if (print_engine == "gt" && !requireNamespace("gt", quietly = TRUE)) {
     rlang::inform(glue(
-      "Results will be printed using `knitr::kable()` and do not \n",
-      "support footnotes, spanning headers, or indentation. \n\n",
-      "For tables styled by the gt package, use the installation code below.\n",
+      "The {gt} package is not installed and the table will be printed using\n",
+      "`knitr::kable()`, which prints a simpler table compared to {gt}.\n",
+      "For example, `knitr::kable()` does not support footnotes,/n",
+      "spanning headers, or indentation.\n\n",
+
+      "For tables styled by the {gt} package, use the installation code below.\n",
       "`remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`\n\n",
+
       "If you prefer to always use `knitr::kable()`, add the option\n",
-      "`options(gtsummary.print_engine = \"kable\")` to your script\n",
-      "or in a user- or project-level startup file, '.Rprofile'."
+      "`options(gtsummary.print_engine = \"kable\")` to your script."
     ))
     print_engine <- "kable"
   }
