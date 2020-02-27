@@ -2,19 +2,34 @@
 # When adding a new "vetted model", copy paste the below list and
 # add appropriate section of unit tests to cover the below.
 
-# 1.  Runs as expected without errors, warnings, messages (standard usage)
-# 2.  Runs as expected without errors, warnings, messages (edge cases specific
-#     to the model type, such as using cubic splines, interaction terms, different outcome types)
-# 3.  Check labels
-# 4.  Check that numbers in model match the table_body of tbl_regression object
-# 5.  Check Exponentiating works
-# 6.  add_nevent and check that it works appropriately
-# 7.  add_n returns appropriate number for model
-# 8.  Model works with tbl_uvregression()
-# 9.  Model works with add_global_p()
-# 10. Model works with combine_terms()
+# 1.  Runs as expected with standard use
+#       - without errors, warnings, messages
+#       - numbers in table are correct
+#       - labels are correct
+# 2.  If applicable, runs as expected with logit and log link
+#       - without errors, warnings, messages
+#       - numbers in table are correct
+# 3.  Interaction terms are correctly printed in output table
+#       - without errors, warnings, messages
+#       - numbers in table are correct
+#       - interaction labels are correct
+# 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
+#       - without errors, warnings, messages
+#       - numbers in table are correct
+# 5.  tbl_uvregression() works as expected
+#       - without errors, warnings, messages
+#       - works with add_global_p(), add_nevent()
+
+# stats::lm()           DONE
+# stats::glm()
+# survival::survreg()
+# survival::coxph()
+# lme4::lmer()
+# lme4::glmer()
+# geepack::geeglm()
 
 context("test-vetted_models")
+library(dplyr)
 library(survival)
 library(lme4)
 set.seed(23433)
@@ -30,37 +45,212 @@ coefs_in_gt <- function(x) {
 
 # lm() -------------------------------------------------------------------------
 test_that("vetted_models lm()", {
-  # 1. Runs as expected without errors, warnings, messages (basic usage)
   # build model
-  mod_lm <- lm(hp ~ am+ disp + as.factor(cyl), data = mtcars)
-  coefs <- data.frame(betas = coef(mod_lm)[-1])
-  # check standard usage
+  mod_lm <- lm(hp ~ am + disp + as.factor(cyl), data = mtcars)
+
+  # 1.  Runs as expected with standard use
+  #       - without errors, warnings, messages
   expect_error(tbl_lm <- tbl_regression(mod_lm), NA)
   expect_warning(tbl_regression(mod_lm), NA)
-  # check that tbl_regression object output matches model output
+
+  #       - numbers in table are correct
   expect_equivalent(
-    coefs$betas,
+    coef(mod_lm)[-1],
     coefs_in_gt(tbl_lm)
   )
 
-  # 2.  Runs as expected without errors, warnings, messages (edge cases specific
-  #     to the model type, such as using cubic splines, interaction terms, different outcome types)
-  expect_error(tbl_regression(mod_lm, tidy_fun = broom::tidy), NA)
-  expect_warning(tbl_regression(mod_lm, tidy_fun = broom::tidy), NA)
-
-  # 3. check labels
-  mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
-  tbl_logistic <- tbl_regression(mod_logistic)
-  #Check labels match
+  #       - labels are correct
   expect_equivalent(
-    tbl_logistic$table_body$label[tbl_logistic$table_body$row_type == "label"], as.character(map(trial %>% select(age, stage), ~attr(.x,"label"))))
+    tbl_lm$table_body %>%
+    filter(row_type == "label") %>%
+    pull(label),
+    c("am", "disp", "as.factor(cyl)")
+  )
 
-  #Update labels and check if new labels match
-  mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
-  tbl_logistic <- tbl_regression(mod_logistic, list(stage ~ "Path Stage"))
-  #Check labels match
+  # 2.  If applicable, runs as expected with logit and log link
+  # NOT APPLICABLE
+
+  # 3.  Interaction terms are correctly printed in output table
+  mod_lm2 <- lm(hp ~ disp + as.factor(cyl) * am, data = mtcars)
+  #       - without errors, warnings, messages
+  expect_error(tbl_lm2 <- tbl_regression(mod_lm2), NA)
+  expect_warning(tbl_regression(mod_lm2), NA)
+
+  #       - numbers in table are correct
   expect_equivalent(
-    tbl_logistic$table_body$label[tbl_logistic$table_body$row_type == "label"], c("Age, yrs" ,  "Path Stage"))
+    coef(mod_lm2)[-1],
+    coefs_in_gt(tbl_lm2)
+  )
+
+  #       - interaction labels are correct
+  expect_equivalent(
+    tbl_lm2$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("disp", "as.factor(cyl)", "am", "as.factor(cyl) * am")
+  )
+  expect_equivalent(
+    tbl_lm2$table_body %>%
+      filter(var_type == "interaction") %>%
+      pull(label),
+    c("as.factor(cyl) * am", "6 * am", "8 * am")
+  )
+
+  # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
+  #       - without errors, warnings, messages
+  expect_error(tbl_lm3 <- tbl_lm2 %>%
+                 add_global_p(include =  everything()), NA)
+  expect_warning(tbl_lm3, NA)
+  expect_error(tbl_lm2 %>%
+                 combine_terms(formula_update = . ~ . - disp), NA)
+  expect_warning(tbl_lm3, NA)
+
+  #       - numbers in table are correct
+  expect_equivalent(
+    tbl_lm3$table_body %>%
+      pull(p.value) %>%
+      na.omit(),
+    car::Anova(mod_lm2, type = "III") %>%
+      as.data.frame() %>%
+      slice(-1) %>% # removing intercept
+      pull(`Pr(>F)`) %>%
+      na.omit()
+  )
+
+  # 5.  tbl_uvregression() works as expected
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_lmuv <- tbl_uvregression(
+      trial,
+      y = age,
+      method = lm
+    ),
+    NA
+  )
+  expect_warning(
+    tbl_lmuv,
+    NA
+  )
+  #       - works with add_global_p()
+  expect_error(
+    tbl_lmuv <- tbl_uvregression(
+      trial,
+      y = age,
+      method = lm
+    ) %>%
+      add_global_p(),
+    NA
+  )
+})
+
+# glm() ------------------------------------------------------------------------
+test_that("vetted_models glm()", {
+  # build model
+  mod_glm <- glm(response ~ age + trt + grade, data = trial, family = binomial)
+
+  # 1.  Runs as expected with standard use
+  #       - without errors, warnings, messages
+  expect_error(tbl_glm <- tbl_regression(mod_glm), NA)
+  expect_warning(tbl_regression(mod_glm), NA)
+
+  #       - numbers in table are correct
+  expect_equivalent(
+    coef(mod_glm)[-1],
+    coefs_in_gt(tbl_glm)
+  )
+
+  #       - labels are correct
+  expect_equivalent(
+    tbl_glm$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+  )
+
+  # 2.  If applicable, runs as expected with logit and log link
+  expect_equivalent(
+    exp(coef(mod_glm)[-1]),
+    tbl_regression(mod_glm, exponentiate = TRUE) %>%
+      coefs_in_gt()
+  )
+
+  # 3.  Interaction terms are correctly printed in output table
+  mod_glm2 <- glm(response ~ age + trt * grade, data = trial, family = binomial)
+  #       - without errors, warnings, messages
+  expect_error(tbl_glm2 <- tbl_regression(mod_glm2), NA)
+  expect_warning(tbl_regression(mod_glm2), NA)
+
+  #       - numbers in table are correct
+  expect_equivalent(
+    coef(mod_glm2)[-1],
+    coefs_in_gt(tbl_glm2)
+  )
+
+  #       - interaction labels are correct
+  expect_equivalent(
+    tbl_glm2$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+  )
+  expect_equivalent(
+    tbl_glm2$table_body %>%
+      filter(var_type == "interaction") %>%
+      pull(label),
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III" )
+  )
+
+  # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
+  #       - without errors, warnings, messages
+  expect_error(tbl_glm3 <- tbl_glm2 %>%
+                 add_global_p(include = everything()), NA)
+  expect_warning(tbl_glm3, NA)
+  expect_error(tbl_glm %>%
+                 combine_terms(formula_update = . ~ . - trt,
+                               test = "LRT") %>%
+                 add_nevent(), NA)
+  expect_warning(tbl_glm %>%
+                   combine_terms(formula_update = . ~ . - trt,
+                                 test = "LRT") %>%
+                   add_nevent(), NA)
+
+  #       - numbers in table are correct
+  expect_equivalent(
+    tbl_glm3$table_body %>%
+      pull(p.value) %>%
+      na.omit(),
+    car::Anova(mod_glm2, type = "III") %>%
+      as.data.frame() %>%
+      pull(`Pr(>Chisq)`) %>%
+      na.omit()
+  )
+
+  # 5.  tbl_uvregression() works as expected
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_glmuv <- tbl_uvregression(
+      trial,
+      y = age,
+      method = glm
+    ),
+    NA
+  )
+  expect_warning(
+    tbl_glmuv,
+    NA
+  )
+  #       - works with add_global_p(), add_nevent()
+  expect_error(
+    tbl_glmuv <- tbl_uvregression(
+      trial,
+      y = response,
+      method = glm,
+      method.args = list(family = binomial)
+    ) %>%
+      add_global_p() %>%
+      add_nevent(),
+    NA
+  )
 })
 
 
@@ -80,64 +270,6 @@ test_that("vetted_models survreg()", {
   )
 })
 
-# glm() ------------------------------------------------------------------------
-test_that("vetted_models glm()", {
-  # 1. Runs as expected without errors, warnings, messages (basic usage)
-  # build model
-  mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
-  coefs <- data.frame(betas = coef(mod_logistic)[-1])
-  # check standard usage
-  expect_error(tbl_logistic <- tbl_regression(mod_logistic), NA)
-  expect_warning(tbl_regression(mod_logistic), NA)
-  # check that tbl_regression object output matches model output
-  expect_equivalent(
-    coefs$betas,
-    coefs_in_gt(tbl_logistic)
-  )
-
-  # build model
-  mod_poisson <- glm(count ~ age + trt,
-                     trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
-                     family = poisson
-  )
-  coefs <- data.frame(betas = coef(mod_poisson)[-1])
-  # check standard usage
-  expect_error(tbl_poisson <- tbl_regression(mod_poisson), NA)
-  expect_warning(tbl_regression(mod_poisson), NA)
-  # check that tbl_regression object output matches model output
-  expect_equivalent(
-    coefs$betas,
-    coefs_in_gt(tbl_poisson)
-  )
-
-  # 5. Check Exponentiating works (for applicable models)
-  mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
-  coefs <- data.frame(betas = coef(mod_logistic)[-1])
-  tbl_logistic <- tbl_regression(mod_logistic, exponentiate = TRUE)
-  # check that tbl_regression object output matches model output
-  expect_equivalent(
-    exp(coefs$betas),
-    coefs_in_gt(tbl_logistic))
-
-  #glm poisson
-  mod_poisson <- glm(count ~ age + trt,
-                     trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
-                     family = poisson)
-  coefs <- data.frame(betas = coef(mod_poisson)[-1])
-  tbl_pois <- tbl_regression(mod_poisson, exponentiate = TRUE)
-  # check that tbl_regression object output matches model output
-  expect_equivalent(
-    exp(coefs$betas),
-    coefs_in_gt(tbl_pois))
-
-  # 6. add_nevent and check that it works appropriately
-  #glm logistic
-  mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
-  tbl_logistic <- tbl_regression(mod_logistic, exponentiate = TRUE) %>%
-    add_nevent()
-  # check that tbl_regression object output matches model output
-  expect_equivalent(table(mod_logistic$y)[2],tbl_logistic$nevent)
-})
 
 # lmer() -----------------------------------------------------------------------
 test_that("vetted_models lmer()", {
