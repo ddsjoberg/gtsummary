@@ -117,7 +117,7 @@ add_global_p.tbl_regression <- function(x,
       by = c("row_type", "variable")
     ) %>%
     mutate(
-      p.value = coalesce(.data$p.value, .data$p.value_global)
+      p.value = coalesce(.data$p.value_global, .data$p.value)
     ) %>%
     select(-c("p.value_global"))
 
