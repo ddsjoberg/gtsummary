@@ -21,9 +21,9 @@
 #       - works with add_global_p(), add_nevent()
 
 # stats::lm()           DONE
-# stats::glm()
-# survival::survreg()
-# survival::coxph()
+# stats::glm()          DONE
+# survival::survreg()   DONE
+# survival::coxph()     DONE
 # lme4::lmer()
 # lme4::glmer()
 # geepack::geeglm()
@@ -256,20 +256,262 @@ test_that("vetted_models glm()", {
 
 # survreg() --------------------------------------------------------------------
 test_that("vetted_models survreg()", {
-  # 1. Runs as expected without errors, warnings, messages (basic usage)
-  # build model
-  mod_survreg <- survreg(Surv(time, status) ~ age + ph.ecog, data = lung)
-  coefs <- data.frame(betas = coef(mod_survreg)[-1])
-  # check standard usage
-  expect_error(tbl_surv <- tbl_regression(mod_survreg), NA)
-  expect_warning(tbl_regression(mod_survreg), NA)
-  # check that tbl_regression object output matches model output
+  # building models to check
+  mod_survreg_lin <- survreg(Surv(ttdeath, death) ~ age + trt + grade, data = trial)
+  mod_survreg_int <- survreg(Surv(ttdeath, death) ~ age + trt * grade, data = trial)
+  # 1.  Runs as expected with standard use
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_survreg_lin <- tbl_regression(mod_survreg_lin), NA
+  )
+  expect_warning(
+    tbl_survreg_lin, NA
+  )
+  expect_error(
+    tbl_survreg_int <- tbl_regression(mod_survreg_int), NA
+  )
+  expect_warning(
+    tbl_survreg_int, NA
+  )
+  #       - numbers in table are correct
   expect_equivalent(
-    coefs$betas,
-    coefs_in_gt(tbl_surv)
+    coef(mod_survreg_lin)[-1],
+    coefs_in_gt(tbl_survreg_lin)
+  )
+  expect_equivalent(
+    coef(mod_survreg_int)[-1],
+    coefs_in_gt(tbl_survreg_int)
+  )
+  expect_equivalent(
+    coef(mod_survreg_lin),
+    coefs_in_gt(tbl_regression(mod_survreg_lin, intercept = TRUE))
+  )
+  expect_equivalent(
+    coef(mod_survreg_int),
+    coefs_in_gt(tbl_regression(mod_survreg_int, intercept = TRUE))
+  )
+  #       - labels are correct
+  expect_equivalent(
+    tbl_survreg_lin$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+  )
+  expect_equivalent(
+    tbl_survreg_int$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+  )
+  # 2.  If applicable, runs as expected with logit and log link (NOT APPLICABLE)
+  # 3.  Interaction terms are correctly printed in output table
+  #       - interaction labels are correct
+  expect_equivalent(
+    tbl_survreg_int$table_body %>%
+      filter(var_type == "interaction") %>%
+      pull(label),
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III")
+  )
+  # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms()
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_survreg_lin2 <- tbl_survreg_lin %>% add_global_p(include = everything()), NA
+  )
+  expect_error(
+    tbl_survreg_int2 <- tbl_survreg_int %>% add_global_p(include = everything()), NA
+  )
+  expect_warning(
+    tbl_survreg_lin2, NA
+  )
+  expect_warning(
+    tbl_survreg_int2, NA
+  )
+  expect_error(
+    tbl_survreg_lin3 <- tbl_survreg_lin %>% combine_terms(. ~ . - trt), NA
+  )
+  expect_warning(
+    tbl_survreg_lin3, NA
+  )
+  #       - numbers in table are correct
+  expect_equivalent(
+    tbl_survreg_lin2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_survreg_lin, type = "III") %>%
+      as.data.frame() %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    tbl_survreg_int2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_survreg_int, type = "III") %>%
+      as.data.frame() %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    tbl_survreg_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
+    car::Anova(mod_survreg_lin, type = "III") %>%
+      as.data.frame() %>%
+      tibble::rownames_to_column() %>%
+      filter(rowname == "trt") %>%
+      pull(`Pr(>Chisq)`)
+  )
+  # 5.  tbl_uvregression() works as expected
+  #       - without errors, warnings, messages
+  #       - works with add_global_p(), add_nevent()
+  expect_error(
+    trial %>%
+      tbl_uvregression(
+        y = Surv(ttdeath, death),
+        method = survreg
+      ) %>%
+      add_global_p(),
+    NA
+  )
+  expect_warning(
+    trial %>%
+    tbl_uvregression(
+      y = Surv(ttdeath, death),
+      method = survreg
+    ) %>%
+    add_global_p(),
+    NA
   )
 })
 
+# coxph() --------------------------------------------------------------------
+test_that("vetted_models coxph()", {
+  # building models to check
+  mod_coxph_lin <- coxph(Surv(ttdeath, death) ~ age + trt + grade, data = trial)
+  mod_coxph_int <- coxph(Surv(ttdeath, death) ~ age + trt * grade, data = trial)
+  # 1.  Runs as expected with standard use
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_coxph_lin <- tbl_regression(mod_coxph_lin), NA
+  )
+  expect_warning(
+    tbl_coxph_lin, NA
+  )
+  expect_error(
+    tbl_coxph_int <- tbl_regression(mod_coxph_int), NA
+  )
+  expect_warning(
+    tbl_coxph_int, NA
+  )
+  #       - numbers in table are correct
+  expect_equivalent(
+    coef(mod_coxph_lin),
+    coefs_in_gt(tbl_coxph_lin)
+  )
+  expect_equivalent(
+    coef(mod_coxph_int),
+    coefs_in_gt(tbl_coxph_int)
+  )
+
+  #       - labels are correct
+  expect_equivalent(
+    tbl_coxph_lin$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+  )
+  expect_equivalent(
+    tbl_coxph_int$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+  )
+  # 2.  If applicable, runs as expected with logit and log link (NOT APPLICABLE)
+  # 3.  Interaction terms are correctly printed in output table
+  #       - interaction labels are correct
+  expect_equivalent(
+    tbl_coxph_int$table_body %>%
+      filter(var_type == "interaction") %>%
+      pull(label),
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III")
+  )
+  # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_coxph_lin2 <- tbl_coxph_lin %>% add_global_p(include = everything()), NA
+  )
+  expect_error(
+    tbl_coxph_int2 <- tbl_coxph_int %>% add_global_p(include = everything()), NA
+  )
+  expect_warning(
+    tbl_coxph_lin2, NA
+  )
+  expect_warning(
+    tbl_coxph_int2, NA
+  )
+  expect_error(
+    tbl_coxph_lin3 <- tbl_coxph_lin %>% combine_terms(. ~ . - trt), NA
+  )
+  expect_warning(
+    tbl_coxph_lin3, NA
+  )
+  expect_error(
+    tbl_coxph_lin4 <- tbl_coxph_lin %>% add_nevent(), NA
+  )
+  expect_warning(
+    tbl_coxph_lin4, NA
+  )
+  #       - numbers in table are correct
+  expect_equivalent(
+    tbl_coxph_lin2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_coxph_lin, type = "III") %>%
+      as.data.frame() %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    tbl_coxph_int2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_coxph_int, type = "III") %>%
+      as.data.frame() %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    tbl_coxph_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
+    car::Anova(mod_coxph_lin, type = "III") %>%
+      as.data.frame() %>%
+      tibble::rownames_to_column() %>%
+      filter(rowname == "trt") %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    trial %>% select(death, age, trt, grade) %>% na.omit() %>% pull(death) %>% sum(),
+    tbl_coxph_lin4$table_body %>% slice(1) %>% pull(nevent)
+  )
+  # 5.  tbl_uvregression() works as expected
+  #       - without errors, warnings, messages
+  #       - works with add_global_p(), add_nevent()
+  expect_error(
+    trial %>%
+      tbl_uvregression(
+        y = Surv(ttdeath, death),
+        method = coxph
+      ) %>%
+      add_global_p(),
+    NA
+  )
+  expect_warning(
+    trial %>%
+      tbl_uvregression(
+        y = Surv(ttdeath, death),
+        method = coxph
+      ) %>%
+      add_global_p(),
+    NA
+  )
+})
 
 # lmer() -----------------------------------------------------------------------
 test_that("vetted_models lmer()", {
@@ -320,23 +562,3 @@ test_that("vetted_models glmer()", {
 })
 
 
-# coxph() ----------------------------------------------------------------------
-test_that("vetted_models coxph()", {
-  # 5. Check Exponentiating works (for applicable models)
-  # coxph
-  mod_surv <- coxph(Surv(time, status) ~ age + ph.ecog, data = lung)
-  coefs <- data.frame(betas = coef(mod_surv))
-  tbl_surv <- tbl_regression(mod_surv, exponentiate = TRUE)
-  # check that tbl_regression object output matches model output
-  expect_equivalent(
-    exp(coefs$betas),
-    coefs_in_gt(tbl_surv))
-
-  # coxph
-  mod_surv <- coxph(Surv(time, status) ~ age + ph.ecog, data = lung)
-  tbl_surv <- tbl_regression(mod_surv, exponentiate = TRUE) %>%
-    add_nevent()
-  # check that add_nevents matches output events
-  expect_equivalent(
-    mod_surv$nevent, tbl_surv$nevent)
-})
