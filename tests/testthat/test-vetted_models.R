@@ -18,13 +18,13 @@
 #       - numbers in table are correct
 # 5.  tbl_uvregression() works as expected
 #       - without errors, warnings, messages
-#       - works with add_global_p(), add_nevent()
+#       - works with add_global_p(), add_nevent(), add_q()
 
 # stats::lm()           DONE
 # stats::glm()          DONE
 # survival::survreg()   DONE
 # survival::coxph()     DONE
-# lme4::lmer()
+# lme4::lmer()          DONE
 # lme4::glmer()
 # geepack::geeglm()
 
@@ -131,14 +131,15 @@ test_that("vetted_models lm()", {
     tbl_lmuv,
     NA
   )
-  #       - works with add_global_p()
+  #       - works with add_global_p(), add_q()
   expect_error(
     tbl_lmuv <- tbl_uvregression(
       trial,
       y = age,
       method = lm
     ) %>%
-      add_global_p(),
+      add_global_p() %>%
+      add_q(),
     NA
   )
 })
@@ -239,7 +240,7 @@ test_that("vetted_models glm()", {
     tbl_glmuv,
     NA
   )
-  #       - works with add_global_p(), add_nevent()
+  #       - works with add_global_p(), add_nevent(), add_q()
   expect_error(
     tbl_glmuv <- tbl_uvregression(
       trial,
@@ -248,7 +249,8 @@ test_that("vetted_models glm()", {
       method.args = list(family = binomial)
     ) %>%
       add_global_p() %>%
-      add_nevent(),
+      add_nevent() %>%
+      add_q(),
     NA
   )
 })
@@ -368,16 +370,18 @@ test_that("vetted_models survreg()", {
         y = Surv(ttdeath, death),
         method = survreg
       ) %>%
-      add_global_p(),
+      add_global_p() %>%
+      add_q(),
     NA
   )
   expect_warning(
     trial %>%
-    tbl_uvregression(
-      y = Surv(ttdeath, death),
-      method = survreg
-    ) %>%
-    add_global_p(),
+      tbl_uvregression(
+        y = Surv(ttdeath, death),
+        method = survreg
+      ) %>%
+      add_global_p() %>%
+      add_q(),
     NA
   )
 })
@@ -499,7 +503,8 @@ test_that("vetted_models coxph()", {
         y = Surv(ttdeath, death),
         method = coxph
       ) %>%
-      add_global_p(),
+      add_global_p() %>%
+      add_q(),
     NA
   )
   expect_warning(
@@ -508,23 +513,145 @@ test_that("vetted_models coxph()", {
         y = Surv(ttdeath, death),
         method = coxph
       ) %>%
-      add_global_p(),
+      add_nevent() %>%
+      add_global_p() %>%
+      add_q(),
     NA
   )
 })
 
-# lmer() -----------------------------------------------------------------------
+# lmer() --------------------------------------------------------------------
 test_that("vetted_models lmer()", {
-  # build model
-  mod_lmer <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-  coefs <- data.frame(betas = fixef(mod_lmer)[-1])
-  # check standard usage
-  expect_error(tbl_lmer <- tbl_regression(mod_lmer), NA)
-  expect_warning(tbl_regression(mod_lmer), NA)
-  # check that tbl_regression object output matches model output
+  # building models to check
+  mod_lmer_lin <- lmer(marker ~ age + trt + grade + (1 | response), data = trial)
+  mod_lmer_int <- lmer(marker ~ age + trt * grade + (1 | response), data = trial)
+  # 1.  Runs as expected with standard use
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_lmer_lin <- tbl_regression(mod_lmer_lin), NA
+  )
+  expect_warning(
+    tbl_lmer_lin, NA
+  )
+  expect_error(
+    tbl_lmer_int <- tbl_regression(mod_lmer_int), NA
+  )
+  expect_warning(
+    tbl_lmer_int, NA
+  )
+  #       - numbers in table are correct
   expect_equivalent(
-    coefs$betas,
-    coefs_in_gt(tbl_lmer)
+    summary(mod_lmer_lin)$coefficients[-1, 1],
+    coefs_in_gt(tbl_lmer_lin)
+  )
+  expect_equivalent(
+    summary(mod_lmer_int)$coefficients[-1, 1],
+    coefs_in_gt(tbl_lmer_int)
+  )
+  expect_equivalent(
+    summary(mod_lmer_lin)$coefficients[, 1],
+    coefs_in_gt(tbl_regression(mod_lmer_lin, intercept = TRUE))
+  )
+  expect_equivalent(
+    summary(mod_lmer_int)$coefficients[, 1],
+    coefs_in_gt(tbl_regression(mod_lmer_int, intercept = TRUE))
+  )
+  #       - labels are correct
+  expect_equivalent(
+    tbl_lmer_lin$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "trt", "Grade")
+  )
+  expect_equivalent(
+    tbl_lmer_int$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "trt", "Grade", "trt * Grade")
+  )
+  # 2.  If applicable, runs as expected with logit and log link (NOT APPLICABLE)
+  # 3.  Interaction terms are correctly printed in output table
+  #       - interaction labels are correct
+  expect_equivalent(
+    tbl_lmer_int$table_body %>%
+      filter(var_type == "interaction") %>%
+      pull(label),
+    c("trt * Grade", "Drug B * II", "Drug B * III")
+  )
+  # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms()
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_lmer_lin2 <- tbl_lmer_lin %>% add_global_p(include = everything()), NA
+  )
+  expect_error(
+    tbl_lmer_int2 <- tbl_lmer_int %>% add_global_p(include = everything()), NA
+  )
+  expect_warning(
+    tbl_lmer_lin2, NA
+  )
+  expect_warning(
+    tbl_lmer_int2, NA
+  )
+  expect_error(
+    tbl_lmer_lin3 <- tbl_lmer_lin %>% combine_terms(. ~ . - trt), NA
+  )
+  expect_warning(
+    tbl_lmer_lin3, NA
+  )
+  #       - numbers in table are correct
+  expect_equivalent(
+    tbl_lmer_lin2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_lmer_lin, type = "III") %>%
+      as.data.frame() %>%
+      slice(-1) %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    tbl_lmer_int2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_lmer_int, type = "III") %>%
+      as.data.frame() %>%
+      slice(-1) %>%
+      pull(`Pr(>Chisq)`)
+  )
+  # See Issue #406
+  # expect_equivalent(
+  #   tbl_lmer_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
+  #   car::Anova(mod_lmer_lin, type = "III") %>%
+  #     as.data.frame() %>%
+  #     tibble::rownames_to_column() %>%
+  #     filter(rowname == "trt") %>%
+  #     pull(`Pr(>Chisq)`)
+  # )
+  # 5.  tbl_uvregression() works as expected
+  #       - without errors, warnings, messages
+  #       - works with add_global_p(), add_nevent(), add_q()
+  expect_error(
+    trial %>%
+      tbl_uvregression(
+        y = marker,
+        method = lmer,
+        formula = "{y} ~ {x} + (1 | response)"
+      ) %>%
+      add_global_p() %>%
+      add_q(),
+    NA
+  )
+  expect_warning(
+    trial %>%
+      tbl_uvregression(
+        y = marker,
+        method = lmer,
+        formula = "{y} ~ {x} + (1 | response)"
+      ) %>%
+      add_global_p() %>%
+      add_q(),
+    NA
   )
 })
 
@@ -561,4 +688,7 @@ test_that("vetted_models glmer()", {
     coefs_in_gt(tbl_glmer))
 })
 
+# geeglm() ---------------------------------------------------------------------
+test_that("vetted_models geeglm()", {
 
+})
