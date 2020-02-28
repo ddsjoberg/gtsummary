@@ -25,7 +25,7 @@
 # survival::survreg()   DONE
 # survival::coxph()     DONE
 # lme4::lmer()          DONE
-# lme4::glmer()
+# lme4::glmer()         DONE
 # geepack::geeglm()
 
 context("test-vetted_models")
