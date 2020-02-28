@@ -428,7 +428,12 @@ test_that("vetted_models coxph()", {
       pull(label),
     c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
-  # 2.  If applicable, runs as expected with logit and log link (NOT APPLICABLE)
+  # 2.  If applicable, runs as expected with logit and log link
+  expect_equivalent(
+    coef(mod_coxph_lin) %>% exp(),
+    coefs_in_gt(mod_coxph_lin %>% tbl_regression(exponentiate = TRUE))
+  )
+
   # 3.  Interaction terms are correctly printed in output table
   #       - interaction labels are correct
   expect_equivalent(
@@ -655,37 +660,148 @@ test_that("vetted_models lmer()", {
   )
 })
 
-# glmer() ----------------------------------------------------------------------
+# glmer() --------------------------------------------------------------------
 test_that("vetted_models glmer()", {
-  # build model
-  mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
-  coefs <- data.frame(betas = fixef(mod_glmer)[-1])
-  # check standard usage
-  expect_error(tbl_glmer <- tbl_regression(mod_glmer), NA)
-  expect_warning(tbl_regression(mod_glmer), NA)
-  # check that tbl_regression object output matches model output
+  # building models to check
+  mod_glmer_lin <- glmer(response ~ age + trt + grade + (1 | death),
+                         data = trial, family = binomial)
+  mod_glmer_int <- glmer(response ~ age + trt * grade + (1 | death),
+                         data = trial, family = binomial)
+  # 1.  Runs as expected with standard use
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_glmer_lin <- tbl_regression(mod_glmer_lin), NA
+  )
+  expect_warning(
+    tbl_glmer_lin, NA
+  )
+  expect_error(
+    tbl_glmer_int <- tbl_regression(mod_glmer_int), NA
+  )
+  expect_warning(
+    tbl_glmer_int, NA
+  )
+  #       - numbers in table are correct
   expect_equivalent(
-    coefs$betas,
-    coefs_in_gt(tbl_glmer)
+    summary(mod_glmer_lin)$coefficients[-1, 1],
+    coefs_in_gt(tbl_glmer_lin)
+  )
+  expect_equivalent(
+    summary(mod_glmer_int)$coefficients[-1, 1],
+    coefs_in_gt(tbl_glmer_int)
+  )
+  expect_equivalent(
+    summary(mod_glmer_lin)$coefficients[, 1],
+    coefs_in_gt(tbl_regression(mod_glmer_lin, intercept = TRUE))
+  )
+  expect_equivalent(
+    summary(mod_glmer_int)$coefficients[, 1],
+    coefs_in_gt(tbl_regression(mod_glmer_int, intercept = TRUE))
+  )
+  #       - labels are correct
+  expect_equivalent(
+    tbl_glmer_lin$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "trt", "Grade")
+  )
+  expect_equivalent(
+    tbl_glmer_int$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "trt", "Grade", "trt * Grade")
+  )
+  # 2.  If applicable, runs as expected with logit and log link
+  expect_equivalent(
+    summary(mod_glmer_lin)$coefficients[-1, 1] %>% exp(),
+    coefs_in_gt(mod_glmer_lin %>% tbl_regression(exponentiate = TRUE))
   )
 
-  # 6. add_nevent and check that it works appropriately
-  #glmer
-  mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
-  tbl_glmer <- tbl_regression(mod_glmer, exponentiate = TRUE) %>%
-    add_nevent()
-  # check that tbl_regression object output matches model output
-  expect_equivalent(table(mod_glmer@resp$y)[2], tbl_glmer$nevent)
-
-  # 5. Check Exponentiating works (for applicable models)
-  #glmer
-  mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
-  coefs <- data.frame(betas = fixef(mod_glmer)[-1])
-  tbl_glmer <- tbl_regression(mod_glmer, exponentiate = TRUE)
-  # check that tbl_regression object output matches model output
+  # 3.  Interaction terms are correctly printed in output table
+  #       - interaction labels are correct
   expect_equivalent(
-    exp(coefs$betas),
-    coefs_in_gt(tbl_glmer))
+    tbl_glmer_int$table_body %>%
+      filter(var_type == "interaction") %>%
+      pull(label),
+    c("trt * Grade", "Drug B * II", "Drug B * III")
+  )
+  # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms()
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_glmer_lin2 <- tbl_glmer_lin %>% add_global_p(include = everything()), NA
+  )
+  expect_error(
+    tbl_glmer_int2 <- tbl_glmer_int %>% add_global_p(include = everything()), NA
+  )
+  expect_warning(
+    tbl_glmer_lin2, NA
+  )
+  expect_warning(
+    tbl_glmer_int2, NA
+  )
+  expect_error(
+    tbl_glmer_lin3 <- tbl_glmer_lin %>% combine_terms(. ~ . - trt), NA
+  )
+  expect_warning(
+    tbl_glmer_lin3, NA
+  )
+  #       - numbers in table are correct
+  expect_equivalent(
+    tbl_glmer_lin2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_glmer_lin, type = "III") %>%
+      as.data.frame() %>%
+      slice(-1) %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    tbl_glmer_int2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_glmer_int, type = "III") %>%
+      as.data.frame() %>%
+      slice(-1) %>%
+      pull(`Pr(>Chisq)`)
+  )
+  # See Issue #406
+  # expect_equivalent(
+  #   tbl_glmer_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
+  #   car::Anova(mod_glmer_lin, type = "III") %>%
+  #     as.data.frame() %>%
+  #     tibble::rownames_to_column() %>%
+  #     filter(rowname == "trt") %>%
+  #     pull(`Pr(>Chisq)`)
+  # )
+  # 5.  tbl_uvregression() works as expected
+  #       - without errors, warnings, messages
+  #       - works with add_global_p(), add_nevent(), add_q()
+  expect_error(
+    trial %>%
+      tbl_uvregression(
+        y = response,
+        method = glmer,
+        formula = "{y} ~ {x} + (1 | death)",
+        method.args = list(family = binomial)
+      ) %>%
+      add_global_p() %>%
+      add_q(),
+    NA
+  )
+  expect_warning(
+    trial %>%
+      tbl_uvregression(
+        y = response,
+        method = glmer,
+        formula = "{y} ~ {x} + (1 | death)",
+        method.args = list(family = binomial)
+      ) %>%
+      add_global_p() %>%
+      add_q(),
+    NA
+  )
 })
 
 # geeglm() ---------------------------------------------------------------------
