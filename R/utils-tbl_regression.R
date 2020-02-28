@@ -94,7 +94,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
 
   # looks for if p.value column is missing and adds NAs if so
   missed <- base::setdiff("p.value", names(tidy_bit))
-  tidy_bit[missed] <- NA
+  tidy_bit[missed] <- NA_real_
 
   # otherwise returning original output
   return(tidy_bit)
