@@ -398,7 +398,13 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     )
 
   # returning final formatted tibble of results
-  map_dfr(result$table, ~.x)
+  df_result <- map_dfr(result$table, ~.x)
+
+  # need to attach the label and show_single_row evaluated lists to save out later
+  attr(df_result, "label") <- label
+  attr(df_result, "show_single_row") <- show_single_row
+
+  df_result
 }
 
 #' Adds refernce rows, and header rows for categorical and interaction variables

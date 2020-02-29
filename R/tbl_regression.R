@@ -178,9 +178,10 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
   # rows for reference groups, and headers for
+  parse_fit <- parse_fit(x, tidy_model, label, !!show_single_row)
   # categorical variables
   table_body <-
-    parse_fit(x, tidy_model, label, !!show_single_row) %>%
+    parse_fit %>%
     # adding character CI
     mutate(
       ci = if_else(
@@ -233,6 +234,12 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
         }
       )
     )
+
+  # saving the evaluated lists (named lists) as the function inputs
+  func_inputs$include <- include
+  func_inputs$exclude <- NULL # making this NULL since it's deprecated
+  func_inputs$label <- attr(parse_fit, "label")
+  func_inputs$show_single_row <- attr(parse_fit, "show_single_row")
 
   results <- list(
     table_body = table_body,
