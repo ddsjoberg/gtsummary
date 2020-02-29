@@ -123,12 +123,21 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
     pull()
 
   # tbl'ing the new model object -----------------------------------------------
-  # getting call from original tbl_regression call, and updating with new model object
-  call_aslist <- x$inputs
-  # replacing model with updated model in call
-  call_aslist$x <- new_model_obj
-  # running tbl_regression with new model
-  new_model_tbl <- do.call(tbl_regression, call_aslist)
+  new_model_tbl <-
+    rlang::call2(
+      "tbl_regression",
+      x = new_model_obj, # updated model object
+      label = x$inputs$label,
+      exponentiate = x$inputs$exponentiate,
+      include = rlang::expr(intersect(any_of(!!x$inputs$include), everything())),
+      show_single_row = rlang::expr(intersect(any_of(!!x$inputs$show_single_row), everything())),
+      conf.level = x$inputs$conf.level,
+      intercept = x$inputs$intercept,
+      estimate_fun = x$inputs$estimate_fun,
+      pvalue_fun = x$inputs$pvalue_fun,
+      tidy_fun = x$inputs$tidy_fun
+    ) %>%
+    eval()
 
   # updating original tbl object -----------------------------------------------
   # replacing the combined rows with a single row
