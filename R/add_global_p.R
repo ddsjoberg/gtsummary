@@ -83,6 +83,14 @@ add_global_p.tbl_regression <- function(x,
     return(x)
   }
 
+  # vetted model geeglm not supported here.
+  if (inherits(x$inputs$x, "geeglm")) {
+    rlang::abort(paste(
+      "Model class `geeglm` not supported by `car::Anova()`,",
+      "and function could not calculate requested p-value."
+    ))
+  }
+
   # calculating global pvalues
   tryCatch(
     {
