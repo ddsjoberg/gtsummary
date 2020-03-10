@@ -15,8 +15,8 @@ library(survival)
 
 ## gtsummary tables
 
-Table created with gtsummary can be integrated into R markdown documents, by including the gtsummary code in an R markdown chunk.
-The {gtsummary} packages was written to be a companion to the [{gt} package](https://gt.rstudio.com/) from RStudio, and {gtsummary} tables are printed using {gt} when possible.
+Tables created with {gtsummary} can be integrated into R markdown documents.
+The {gtsummary} package was written to be a companion to the [{gt} package](https://gt.rstudio.com/) from RStudio, and {gtsummary} tables are printed using {gt} when possible.
 Currently, {gt} supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
 
 ```{r example}
@@ -27,7 +27,7 @@ patient_characteristics <-
 patient_characteristics
 ```
 
-With HTML ouput, you can include complex tables with footnotes and spanning table headers.
+With HTML ouput, you can include complex tables with footnotes, indendtation, and spanning table headers.
 
 ```{r}
 # Side-by-side Regression Models
@@ -53,4 +53,4 @@ Any number/statistic from a {gtsummary} table can be reported inline in a R mark
 
 > Among patients who received Drug A, `r inline_text(patient_characteristics, variable = grade, level = "III", column = "Drug A")` had grade III tumors.
 
-For detailed examples using functions from {gtsummary}, visit the [package website](http://www.danieldsjoberg.com/gtsummary/).
+For detailed examples using functions from {gtsummary}, visit the [{gtsummary} website](http://www.danieldsjoberg.com/gtsummary/).
