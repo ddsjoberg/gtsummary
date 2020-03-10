@@ -14,7 +14,7 @@ print.gtsummary <- function(x, ...) {
   print_engine <- getOption("gtsummary.print_engine")
 
   # print message about installing gt if not installed, and table would have been printed with gt
-  if (is.null(print_engine) && !requireNamespace("gt", quietly = TRUE)) {
+  if ((is.null(print_engine) | print_engine == "gt") && !requireNamespace("gt", quietly = TRUE)) {
     rlang::inform(glue(
       "The {gt} package is not installed and the table will be printed using\n",
       "`knitr::kable()`, which prints a simpler table compared to {gt}.\n",
@@ -60,12 +60,8 @@ knit_print.gtsummary <- function(x, ...) {
   else if (is.null(print_engine) && knitr::is_latex_output() == TRUE) {
     rlang::inform(
       message = paste0(
-        "The {gtsummary} package was written to print tables with the {gt} package.\n",
-        "Output to PDF is in development by the {gt} package. Table will be printed\n",
-        "with `knitr::kable()`, which is less featured than {gt}.\n",
-        "To print table with the {gt} package, convert {gtsummary} object to {gt} with `as_gt()`\n",
-        "or include `options(gtsummary.print_engine = \"gt\")` at the top of your script.\n",
-        "For more information on {gtsummary} in R markdown, review the vignette (link below).\n",
+        "Table will be printed with `knitr::kable()`, which is less featured than {gt}.\n",
+        "For more information on {gtsummary} in R markdown, review the vignette (link below).",
         "http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html \n\n",
         "To supress this message include, `message = FALSE` in the code chunk header."
       )
@@ -78,7 +74,6 @@ knit_print.gtsummary <- function(x, ...) {
            "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
     rlang::inform(
       message = paste0(
-        "The {gtsummary} package was written to print tables with the {gt} package.\n",
         "Output 'word_document' is not suported by the {gt} package. Table will be\n",
         "printed with `knitr::kable()`, which is less featured than {gt}.\n",
         "For more information on {gtsummary} in R markdown, review the vignette (link below).\n",
@@ -94,7 +89,6 @@ knit_print.gtsummary <- function(x, ...) {
            "rtf_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
     rlang::inform(
       message = paste0(
-        "The {gtsummary} package was written to print tables with the {gt} package.\n",
         "Output 'rtf_document' is in development by the {gt} package, and tables may\n",
         "contain malformed elements or may not print at all.\n",
         "For more information on {gtsummary} in R markdown, review the vignette (link below).\n",

@@ -21,16 +21,17 @@ Currently, {gt} supports **HTML** output, with **LaTeX** and **RTF** planned for
 ### R Markdown Output Types
 
 - `html_document`
-  - Fully supported by {gtsummary} and is the recommended output type.
+  - HTML output is ully supported by {gtsummary} and is the recommended output type.
 - `pdf_document`
-  - PDF for {gt} is currently under development, and {gtsummary} output will be printed with the `knitr::kable()`. function.
+  - PDF for {gt} is currently under development, and {gtsummary} output will be printed with the `knitr::kable()` function.
   - You can force printing with {gt} by including `options(gtsummary.print_engine = "gt")` at the top of your script, or a converting a {gtsummary} object to {gt} with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`. 
-  - If you print PDF output with {gt} you may get a gorgeous table, but you may also get an error or a malformed table.
+  - If you print to PDF using {gt} you may get a gorgeous table, but you may also get an error or a malformed table.
 - `rtf_document`
-  - You may print to Microsoft Word via RTF. You may get a gorgeous table, but you may also get an error or a malformed table. 
-  - Output for `kintr::kable()` is not supported in RTF.
+  - You may print to Microsoft Word via RTF; however, RTF output is under development in the {gt} package. You may get a gorgeous table, but you may also get an error or a malformed table. 
+  - `kintr::kable()` does not support RTF output.
+  - To avoid any messaging about RTF format being under development, include `options(gtsummary.print_engine = "gt")` at the top of your script, or convert {gtsummary} objects to {gt} with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`. 
 - `word_document`
-  - If the specified output is `word_document`, `kintr::kable()` will be used to print the table. 
+  - If the specified output is `word_document`, `knitr::kable()` will be used to print the table. 
   - {gt} does not support word document output.
 
 When a table is printed with `kintr::kable()` the resulting table is less full featured compared to a table printed with {gt}.
