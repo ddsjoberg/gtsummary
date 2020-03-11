@@ -10,6 +10,7 @@
 #'  \item{[stats::lm]}
 #'  \item{[stats::glm]}
 #'  \item{[survival::coxph]}
+#'  \item{[survival::clogit]}
 #'  \item{[survival::survreg]}
 #'  \item{[lme4::glmer]}
 #'  \item{[lme4::lmer]}

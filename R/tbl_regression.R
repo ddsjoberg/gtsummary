@@ -331,6 +331,8 @@ estimate_header <- function(x, exponentiate) {
     x$family$family == "binomial" &&
     x$family$link == "logit") {
     model_type <- "logistic"
+  } else if (inherits(x, "clogit")) {
+    model_type <- "logistic"
   } else if (inherits(x, c("glm", "geeglm")) &&
     x$family$family == "poisson" &&
     x$family$link == "log") {

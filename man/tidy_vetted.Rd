@@ -14,6 +14,7 @@ to \link[broom:tidy]{broom::tidy} or \link[broom.mixed:tidy]{broom.mixed::tidy}.
 \item{\link[stats:lm]{stats::lm}}
 \item{\link[stats:glm]{stats::glm}}
 \item{\link[survival:coxph]{survival::coxph}}
+\item{\link[survival:clogit]{survival::clogit}}
 \item{\link[survival:survreg]{survival::survreg}}
 \item{\link[lme4:glmer]{lme4::glmer}}
 \item{\link[lme4:lmer]{lme4::lmer}}
