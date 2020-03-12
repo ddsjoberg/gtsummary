@@ -34,6 +34,7 @@ context("test-vetted_models")
 library(dplyr)
 library(survival)
 set.seed(23433)
+r_version <- paste0(R.Version()$major, ".", R.Version()$minor)
 
 # function to pull estimates from tbl_regression object
 # input gt object, output vector of coefficients
@@ -1034,55 +1035,63 @@ test_that("vetted_models clogit()", {
   )
   # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
   #       - without errors, warnings, messages
-  expect_error(
-    tbl_clogit_lin2 <- tbl_clogit_lin %>% add_global_p(include = everything(), test = "Wald"), NA
-  )
-  expect_error(
-    tbl_clogit_int2 <- tbl_clogit_int %>% add_global_p(include = everything(), test = "Wald"), NA
-  )
-  expect_warning(
-    tbl_clogit_lin2, NA
-  )
-  expect_warning(
-    tbl_clogit_int2, NA
-  )
-  expect_error(
-    tbl_clogit_lin3 <- tbl_clogit_lin %>% combine_terms(. ~ . - trt, test = "Wald"), NA
-  )
-  expect_warning(
-    tbl_clogit_lin3, NA
-  )
+  # clogit models fail in car::Anova on old versions
+  if (r_version >= "3.5.0") {
+    expect_error(
+      tbl_clogit_lin2 <- tbl_clogit_lin %>% add_global_p(include = everything(), test = "Wald"), NA
+    )
+    expect_error(
+      tbl_clogit_int2 <- tbl_clogit_int %>% add_global_p(include = everything(), test = "Wald"), NA
+    )
+    expect_warning(
+      tbl_clogit_lin2, NA
+    )
+    expect_warning(
+      tbl_clogit_int2, NA
+    )
+    expect_error(
+      tbl_clogit_lin3 <- tbl_clogit_lin %>% combine_terms(. ~ . - trt, test = "Wald"), NA
+    )
+    expect_warning(
+      tbl_clogit_lin3, NA
+    )
+  }
+
   expect_error(
     tbl_clogit_lin4 <- tbl_clogit_lin %>% add_nevent(), "*"
   )
   #       - numbers in table are correct
-  expect_equivalent(
-    tbl_clogit_lin2$table_body %>%
-      pull(p.value) %>%
-      na.omit() %>%
-      as.vector(),
-    car::Anova(mod_clogit_lin, type = "III", test = "Wald") %>%
-      as.data.frame() %>%
-      pull(`Pr(>Chisq)`)
-  )
-  expect_equivalent(
-    tbl_clogit_int2$table_body %>%
-      pull(p.value) %>%
-      na.omit() %>%
-      as.vector(),
-    car::Anova(mod_clogit_int, type = "III", test = "Wald") %>%
-      as.data.frame() %>%
-      pull(`Pr(>Chisq)`)
-  )
-  # anova() and car::Anova() do not match
-  # expect_equivalent(
-  #   tbl_clogit_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
-  #   car::Anova(mod_clogit_lin, type = "III", test = "Wald") %>%
-  #     as.data.frame() %>%
-  #     tibble::rownames_to_column() %>%
-  #     filter(rowname == "trt") %>%
-  #     pull(`Pr(>Chisq)`)
-  # )
+  # clogit models fail in car::Anova on old versions
+  if (r_version >= "3.5.0") {
+    expect_equivalent(
+      tbl_clogit_lin2$table_body %>%
+        pull(p.value) %>%
+        na.omit() %>%
+        as.vector(),
+      car::Anova(mod_clogit_lin, type = "III", test = "Wald") %>%
+        as.data.frame() %>%
+        pull(`Pr(>Chisq)`)
+    )
+    expect_equivalent(
+      tbl_clogit_int2$table_body %>%
+        pull(p.value) %>%
+        na.omit() %>%
+        as.vector(),
+      car::Anova(mod_clogit_int, type = "III", test = "Wald") %>%
+        as.data.frame() %>%
+        pull(`Pr(>Chisq)`)
+    )
+    # anova() and car::Anova() do not match
+    # expect_equivalent(
+    #   tbl_clogit_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
+    #   car::Anova(mod_clogit_lin, type = "III", test = "Wald") %>%
+    #     as.data.frame() %>%
+    #     tibble::rownames_to_column() %>%
+    #     filter(rowname == "trt") %>%
+    #     pull(`Pr(>Chisq)`)
+    # )
+  }
+
   # 5.  tbl_uvregression() works as expected
   #       - without errors, warnings, messages
   #       - works with add_global_p(), add_nevent()
