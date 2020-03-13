@@ -108,7 +108,7 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
   # extracting p-value from anova object ---------------------------------------
   df_anova <- as_tibble(anova) %>%
     select(starts_with("Pr(>"),  starts_with("P(>"))
-  # if not column was selected, print error
+  # if no column was selected, print error
   if (ncol(df_anova) == 0) {
     stop(paste(
       "The output from `anova()` did not contain a p-value.\n",
@@ -121,6 +121,11 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
   anova_p <- df_anova %>%
     slice(n()) %>%
     pull()
+
+  # if no p-value returned in p-value column
+  if (is.na(anova_p)) {
+    stop("The output from `anova()` did not contain a p-value.", call. = FALSE)
+  }
 
   # tbl'ing the new model object -----------------------------------------------
   new_model_tbl <-
