@@ -130,6 +130,21 @@ test_that("error catching working properly", {
       combine_terms(formula = . ~ . -marker, label = c("marker", "marker2")),
     "*"
   )
+
+  # there is no pvalue returned by anova in this model
+  expect_error(
+    lm(mpg ~ disp + am * factor(cyl), data = mtcars) %>%
+      tbl_regression() %>%
+      combine_terms(. ~ . - am),
+    "*"
+  )
+
+  expect_error(
+    glm(am ~ disp + factor(cyl), data = mtcars, family = binomial) %>%
+      tbl_regression() %>%
+      combine_terms(. ~ . - disp),
+    "*"
+  )
 })
 
 # Confirm map/apply situation works
