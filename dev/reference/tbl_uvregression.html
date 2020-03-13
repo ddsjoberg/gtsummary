@@ -108,7 +108,7 @@ dichotomous variables appropriate for logistic regression with glm." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9003</span>
       </span>
     </div>
 
@@ -255,7 +255,7 @@ function defined by <code>method</code>.</p></td>
     <tr>
       <th>formula</th>
       <td><p>String of the model formula.
-Uses <a href='https://rdrr.io/pkg/glue/man/glue.html'>glue::glue</a> syntax. Default is <code>"{y} ~ {x}"</code>, where <code>{y}</code>
+Uses <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> syntax. Default is <code>"{y} ~ {x}"</code>, where <code>{y}</code>
 is the dependent variable, and <code>{x}</code> represents a single covariate. For a
 random intercept model, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</code>.</p></td>
     </tr>
@@ -421,18 +421,25 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   border-top-style: solid;
 #&gt;   border-top-width: 2px;
 #&gt;   border-top-color: #A8A8A8;
+#&gt;   border-right-style: none;
+#&gt;   border-right-width: 2px;
+#&gt;   border-right-color: #D3D3D3;
 #&gt;   border-bottom-style: solid;
 #&gt;   border-bottom-width: 2px;
 #&gt;   border-bottom-color: #A8A8A8;
+#&gt;   border-left-style: none;
+#&gt;   border-left-width: 2px;
+#&gt;   border-left-color: #D3D3D3;
 #&gt; }
 #&gt; 
 #&gt; #eexombwkke .gt_heading {
 #&gt;   background-color: #FFFFFF;
+#&gt;   text-align: center;
 #&gt;   border-bottom-color: #FFFFFF;
-#&gt;   border-left-style: hidden;
+#&gt;   border-left-style: none;
 #&gt;   border-left-width: 1px;
 #&gt;   border-left-color: #D3D3D3;
-#&gt;   border-right-style: hidden;
+#&gt;   border-right-style: none;
 #&gt;   border-right-width: 1px;
 #&gt;   border-right-color: #D3D3D3;
 #&gt; }
@@ -484,6 +491,12 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;   font-size: 100%;
 #&gt;   font-weight: normal;
 #&gt;   text-transform: inherit;
+#&gt;   border-left-style: none;
+#&gt;   border-left-width: 1px;
+#&gt;   border-left-color: #D3D3D3;
+#&gt;   border-right-style: none;
+#&gt;   border-right-width: 1px;
+#&gt;   border-right-color: #D3D3D3;
 #&gt;   vertical-align: bottom;
 #&gt;   padding-top: 5px;
 #&gt;   padding-bottom: 6px;
@@ -595,6 +608,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt; #eexombwkke .gt_stub {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
+#&gt;   font-size: 100%;
 #&gt;   font-weight: initial;
 #&gt;   text-transform: inherit;
 #&gt;   border-right-style: solid;
@@ -745,11 +759,11 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;       &lt;td class="gt_row gt_center"&gt;0.3&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left gt_striped"&gt;Grade&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;200&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;Grade&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;200&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
 #&gt;       &lt;td class="gt_row gt_left" style="text-align: left; text-indent: 10px;"&gt;I&lt;/td&gt;
@@ -759,11 +773,11 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;       &lt;td class="gt_row gt_center"&gt;&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left gt_striped" style="text-align: left; text-indent: 10px;"&gt;II&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;1.28&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;0.80, 2.05&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;0.3&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left" style="text-align: left; text-indent: 10px;"&gt;II&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;1.28&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;0.80, 2.05&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;0.3&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
 #&gt;       &lt;td class="gt_row gt_left" style="text-align: left; text-indent: 10px;"&gt;III&lt;/td&gt;
@@ -773,11 +787,11 @@ units in your model.  Here are some common exceptions.</p><ol>
 #&gt;       &lt;td class="gt_row gt_center"&gt;0.024&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left gt_striped"&gt;Tumor Response&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;193&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;0.50&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;0.31, 0.78&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_center gt_striped"&gt;0.003&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;Tumor Response&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;193&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;0.50&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;0.31, 0.78&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_center"&gt;0.003&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;   &lt;/tbody&gt;
 #&gt;   

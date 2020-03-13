@@ -98,7 +98,7 @@ formatted summary of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9003</span>
       </span>
     </div>
 
@@ -217,7 +217,7 @@ specifying the survival quantiles to return</p></td>
     <tr>
       <th>label</th>
       <td><p>String defining the label shown for the time or prob column.
-Default is <code>"{time}"</code> or <code>"{prob*100}%"</code>.  The input uses <a href='https://rdrr.io/pkg/glue/man/glue.html'>glue::glue</a> notation to
+Default is <code>"{time}"</code> or <code>"{prob*100}%"</code>.  The input uses <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> notation to
 convert the string into a label.  A common label may be <code>"{time} Months"</code>, which
 would resolve to "6 Months" or "12 Months" depending on specified <code>times</code>.</p></td>
     </tr>
@@ -225,7 +225,7 @@ would resolve to "6 Months" or "12 Months" depending on specified <code>times</c
       <th>level_label</th>
       <td><p>Used when survival results are stratified.
 It is a string defining the label shown.  The input uses
-<a href='https://rdrr.io/pkg/glue/man/glue.html'>glue::glue</a> notation to convert the string into a label.
+<a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> notation to convert the string into a label.
 The default is <code>"{level}, N = {n}"</code>.  Other information available to
 call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, <code>'{n.event.strata}'</code>, and
 <code>'{strata}'</code>. See below for details.</p></td>
