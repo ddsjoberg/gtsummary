@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Removed class checking for each type gtsummary table type, and made `tbl_stack()`, `tbl_merge()`, `bold_labels()` (and friends) generic and now check for class gtsummary (#373)
+
 * Bug fix when data frame passed to `tbl_summary()` with a single column (#389)
 
 * Update add_p() custom p-value description to NOT require double escape characters for quotes (#361)
