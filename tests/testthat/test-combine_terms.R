@@ -56,9 +56,9 @@ test_that("combine_terms works without error", {
     glm(response ~ age + marker + sp2marker + sp3marker,
         data = trial %>%
           bind_cols(
-            rcspline.eval(.$marker, nk = 4, inclx = TRUE, norm = 0) %>%
+            rcspline.eval(.$marker, nk = 4, inclx = FALSE, norm = 0) %>%
               as.data.frame() %>%
-              set_names("marker", "sp2marker", "sp3marker")
+              set_names("sp2marker", "sp3marker")
           ) %>%
           filter(complete.cases(.) == TRUE),
         family = "binomial") %>%
@@ -99,9 +99,9 @@ test_that("combine_terms works without error", {
       as.formula("weight ~ Diet + Time + sp2Time + sp3Time"),
       data = ChickWeight %>%
         bind_cols(
-          Hmisc::rcspline.eval(.$Time, nk = 4, inclx = TRUE, norm = 0) %>%
+          Hmisc::rcspline.eval(.$Time, nk = 4, inclx = FALSE, norm = 0) %>%
             as.data.frame() %>%
-            set_names("Time", "sp2Time", "sp3Time")
+            set_names("sp2Time", "sp3Time")
         ),
       family = gaussian,
       id = Chick,

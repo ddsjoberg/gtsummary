@@ -25,14 +25,8 @@ NULL
 #' @export
 bold_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x)[1] %in% c(
-    "tbl_summary", "tbl_regression", "tbl_uvregression",
-    "tbl_stack", "tbl_merge"
-  ) %>% all()) {
-    stop(paste0(
-      "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
-      "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
-    ))
+  if (!inherits(x, "gtsummary")) {
+    stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
   }
 
   # bold labels ----------------------------------------------------------------
@@ -62,14 +56,8 @@ bold_labels <- function(x) {
 #' @export
 bold_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x)[1] %in% c(
-    "tbl_summary", "tbl_regression", "tbl_uvregression",
-    "tbl_stack", "tbl_merge"
-  ) %>% all()) {
-    stop(paste0(
-      "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
-      "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
-    ))
+  if (!inherits(x, "gtsummary")) {
+    stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
   }
 
   # bold levels ----------------------------------------------------------------
@@ -100,15 +88,8 @@ bold_levels <- function(x) {
 #' @export
 italicize_labels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x)[1] %in%
-    c(
-      "tbl_summary", "tbl_regression", "tbl_uvregression",
-      "tbl_stack", "tbl_merge"
-    ) %>% all()) {
-    stop(paste0(
-      "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
-      "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
-    ))
+  if (!inherits(x, "gtsummary")) {
+    stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
   }
 
   # italicize labels -----------------------------------------------------------
@@ -139,15 +120,8 @@ italicize_labels <- function(x) {
 #' @export
 italicize_levels <- function(x) {
   # input checks ---------------------------------------------------------------
-  if (!class(x)[1] %in% c(
-    "tbl_summary", "tbl_regression", "tbl_uvregression",
-    "tbl_stack", "tbl_merge", "tbl_stack", "tbl_merge"
-  ) %>% all()
-  ) {
-    stop(paste0(
-      "Class of 'x' must be 'tbl_summary', 'tbl_regression', ",
-      "'tbl_uvregression', 'tbl_stack', or 'tbl_merge'"
-    ))
+  if (!inherits(x, "gtsummary")) {
+    stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
   }
 
   # italicize levels -----------------------------------------------------------

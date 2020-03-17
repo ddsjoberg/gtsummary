@@ -70,14 +70,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
   }
 
-  # checking all inputs are class tbl_regression, tbl_uvregression,
-  # tbl_regression, tbl_summary, or tbl_stack
-  if (!map_chr(tbls, ~class(.x)[1]) %in%
-    c("tbl_regression", "tbl_uvregression", "tbl_summary", "tbl_stack") %>% all()) {
-    stop(paste(
-      "All objects in 'tbls' must be class 'tbl_regression',",
-      "'tbl_uvregression', 'tbl_summary', or 'tbl_stack'"
-    ))
+  # checking all inputs are class gtsummary
+  if (!purrr::every(tbls, ~inherits(.x, "gtsummary"))) {
+    stop("All objects in 'tbls' must be class 'gtsummary'", call. = FALSE)
   }
 
   # at least two objects must be passed
@@ -102,10 +97,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # merging tables -------------------------------------------------------------
   # nesting data by variable (one line per variable), and renaming columns with number suffix
   nested_table <- tbls %>%
-    map("table_body") %>%
     imap(function(x, y) {
       # creating a column that is the variable label
-      group_by(x, .data$variable) %>%
+      group_by(x$table_body, .data$variable) %>%
         mutate(
           var_label = ifelse(.data$row_type == "label", .data$label, NA)
         ) %>%
