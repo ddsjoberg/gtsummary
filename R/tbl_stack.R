@@ -76,11 +76,6 @@ tbl_stack <- function(tbls) {
     stop("All objects in 'tbls' must be class 'gtsummary'", call. = FALSE)
   }
 
-  # checking if there are multiple input types
-  if (map_chr(tbls, ~class(.x)[1]) %>% unique() %>% length() > 1) {
-    message("Multiple gtsummary object classes detected. Displayed results default to first input class type.")
-  }
-
   # will return call, and all arguments passed to tbl_stack
   func_inputs <- as.list(environment())
 
