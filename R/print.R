@@ -52,7 +52,7 @@ knit_print.gtsummary <- function(x, ...) {
       "Install {gt} with `remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`",
       "As {gt} package is not installed, table was printed using `knitr::kable()`. Details at",
       "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
-      "To supress this message, include `message = FALSE` in code chunk header.",
+      "To suppress this message, include `message = FALSE` in code chunk header.",
       sep = "\n"
     ))
     print_engine <- "kable"
@@ -68,7 +68,7 @@ knit_print.gtsummary <- function(x, ...) {
     rlang::inform(paste(
         "Table will be printed with `knitr::kable()`. Details at",
         "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
-        "To supress this message, include `message = FALSE` in code chunk header.",
+        "To suppress this message, include `message = FALSE` in code chunk header.",
         sep = "\n"
     ))
     print_engine <- "kable"
@@ -80,7 +80,7 @@ knit_print.gtsummary <- function(x, ...) {
     rlang::inform(paste(
       "Table will be printed with `knitr::kable()`. Details at",
       "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
-      "To supress this message, include `message = FALSE` in the code chunk header.",
+      "To suppress this message, include `message = FALSE` in the code chunk header.",
       sep = "\n"
     ))
     print_engine <- "kable"
@@ -92,7 +92,7 @@ knit_print.gtsummary <- function(x, ...) {
     rlang::inform(paste(
         "Output 'rtf_document' is in development by the {gt} package. Details at",
         "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html \n\n",
-        "To supress this message, include `message = FALSE` in the code chunk header.",
+        "To suppress this message, include `message = FALSE` in the code chunk header.",
         sep = "\n"
       ))
     print_engine <- "gt"
