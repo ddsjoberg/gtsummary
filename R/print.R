@@ -17,7 +17,7 @@ print.gtsummary <- function(x, ...) {
   if ((is.null(print_engine) | print_engine == "gt") && !requireNamespace("gt", quietly = TRUE)) {
     rlang::inform(paste(
       "Install {gt} with `remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`",
-      "As {gt} package is not installed, table was printed using `knitr::kable()`. Details at",
+      "As {gt} package is not installed, table was printed using `knitr::kable()`. Learn more at",
       "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
       sep = "\n"
     ))
@@ -50,7 +50,7 @@ knit_print.gtsummary <- function(x, ...) {
   if ((is.null(print_engine) | print_engine == "gt") && !requireNamespace("gt", quietly = TRUE)) {
     rlang::inform(paste(
       "Install {gt} with `remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`",
-      "As {gt} package is not installed, table was printed using `knitr::kable()`. Details at",
+      "As {gt} package is not installed, table was printed using `knitr::kable()`. Learn more at",
       "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
       "To suppress this message, include `message = FALSE` in code chunk header.",
       sep = "\n"
@@ -66,7 +66,7 @@ knit_print.gtsummary <- function(x, ...) {
   # PDF uses kable as default printer (is_latex_output catches pdf_document and beamer...maybe more?)
   else if (is.null(print_engine) && knitr::is_latex_output() == TRUE) {
     rlang::inform(paste(
-        "Table will be printed with `knitr::kable()`. Details at",
+        "Table printed with `knitr::kable()`, not {gt}. Learn why at",
         "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
         "To suppress this message, include `message = FALSE` in code chunk header.",
         sep = "\n"
@@ -78,7 +78,7 @@ knit_print.gtsummary <- function(x, ...) {
   else if ((is.null(print_engine) | print_engine == "gt") &&
            "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
     rlang::inform(paste(
-      "Table will be printed with `knitr::kable()`. Details at",
+      "Table printed with `knitr::kable()`, not {gt}. Learn why at",
       "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
       "To suppress this message, include `message = FALSE` in the code chunk header.",
       sep = "\n"
@@ -90,7 +90,7 @@ knit_print.gtsummary <- function(x, ...) {
   else if ((is.null(print_engine) | print_engine == "gt") &&
            "rtf_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
     rlang::inform(paste(
-        "Output 'rtf_document' is in development by the {gt} package. Details at",
+        "Output 'rtf_document' is in development by the {gt} package. Learn more at",
         "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html \n\n",
         "To suppress this message, include `message = FALSE` in the code chunk header.",
         sep = "\n"
