@@ -15,18 +15,13 @@ print.gtsummary <- function(x, ...) {
 
   # print message about installing gt if not installed, and table would have been printed with gt
   if ((is.null(print_engine) | print_engine == "gt") && !requireNamespace("gt", quietly = TRUE)) {
-    rlang::inform(glue(
-      "The {gt} package is not installed and the table will be printed using\n",
-      "`knitr::kable()`, which prints a simpler table compared to {gt}.\n",
-      "For example, `knitr::kable()` does not support footnotes,\n",
-      "spanning headers, or indentation.\n\n",
-
-      "For tables styled by the {gt} package, use the installation code below.\n",
-      "`remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`\n\n",
-
-      "If you prefer to always use `knitr::kable()`, add the option\n",
-      "`options(gtsummary.print_engine = \"kable\")` to your script."
+    rlang::inform(paste(
+      "Install {gt} with `remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`",
+      "As {gt} package is not installed, table was printed using `knitr::kable()`. Details at",
+      "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
+      sep = "\n"
     ))
+
     print_engine <- "kable"
   }
   else if (is.null(print_engine)) print_engine <- "gt"
@@ -51,74 +46,60 @@ knit_print.gtsummary <- function(x, ...) {
   # select print engine
   print_engine <- getOption("gtsummary.print_engine")
 
+  # print message about installing gt if not installed, and table would have been printed with gt
+  if ((is.null(print_engine) | print_engine == "gt") && !requireNamespace("gt", quietly = TRUE)) {
+    rlang::inform(paste(
+      "Install {gt} with `remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`",
+      "As {gt} package is not installed, table was printed using `knitr::kable()`. Details at",
+      "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
+      "To supress this message, include `message = FALSE` in code chunk header.",
+      sep = "\n"
+    ))
+    print_engine <- "kable"
+  }
+
   # gt is the default printer for html output
-  if (is.null(print_engine) && knitr::is_html_output() == TRUE) {
+  else if (is.null(print_engine) && knitr::is_html_output() == TRUE) {
     print_engine <- "gt"
   }
 
-  # PDF uses kable as default printer (is_latex_output catches pdf_document and beamer output...maybe more?)
+  # PDF uses kable as default printer (is_latex_output catches pdf_document and beamer...maybe more?)
   else if (is.null(print_engine) && knitr::is_latex_output() == TRUE) {
-    rlang::inform(
-      message = paste0(
-        "Table will be printed with `knitr::kable()`, which is less featured than {gt}.\n",
-        "For more information on {gtsummary} in R markdown, review the vignette (link below).",
-        "http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html \n\n",
-        "To supress this message include, `message = FALSE` in the code chunk header."
-      )
-    )
+    rlang::inform(paste(
+        "Table will be printed with `knitr::kable()`. Details at",
+        "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
+        "To supress this message, include `message = FALSE` in code chunk header.",
+        sep = "\n"
+    ))
     print_engine <- "kable"
   }
 
   # don't use word_document with gt engine
   else if ((is.null(print_engine) | print_engine == "gt") &&
            "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
-    rlang::inform(
-      message = paste0(
-        "Output 'word_document' is not suported by the {gt} package. Table will be\n",
-        "printed with `knitr::kable()`, which is less featured than {gt}.\n",
-        "For more information on {gtsummary} in R markdown, review the vignette (link below).\n",
-        "http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html \n\n",
-        "To supress this message include, `message = FALSE` in the code chunk header."
-      )
-    )
+    rlang::inform(paste(
+      "Table will be printed with `knitr::kable()`. Details at",
+      "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
+      "To supress this message, include `message = FALSE` in the code chunk header.",
+      sep = "\n"
+    ))
     print_engine <- "kable"
   }
 
   # RTF warning when using gt
   else if ((is.null(print_engine) | print_engine == "gt") &&
            "rtf_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
-    rlang::inform(
-      message = paste0(
-        "Output 'rtf_document' is in development by the {gt} package, and tables may\n",
-        "contain malformed elements or may not print at all.\n",
-        "For more information on {gtsummary} in R markdown, review the vignette (link below).\n",
-        "http://www.danieldsjoberg.com/gtsummary/dev/articles/gtsummary_with_rmarkdown.html \n\n",
-        "To supress this message include, `message = FALSE` in the code chunk header."
-      )
-    )
+    rlang::inform(paste(
+        "Output 'rtf_document' is in development by the {gt} package. Details at",
+        "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html \n\n",
+        "To supress this message, include `message = FALSE` in the code chunk header.",
+        sep = "\n"
+      ))
     print_engine <- "gt"
   }
 
   # all other types (if any), will attempt to print with gt
   else if (is.null(print_engine)) print_engine <- "gt"
-
-  # need to install gt? --------------------------------------------------------
-  # print message about installing gt if not installed, and table would have been printed with gt
-  if (print_engine == "gt" && !requireNamespace("gt", quietly = TRUE)) {
-    rlang::inform(paste0(
-      "The {gt} package is not installed and the table will be printed using\n",
-      "`knitr::kable()`, which prints a simpler table compared to {gt}.\n",
-      "For example, `knitr::kable()` does not support footnotes,\n",
-      "spanning headers, or indentation.\n\n",
-
-      "For tables styled by the {gt} package, use the installation code below.\n",
-      "`remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`\n\n",
-
-      "If you prefer to always use `knitr::kable()`, add the option\n",
-      "`options(gtsummary.print_engine = \"kable\")` to your script."
-    ))
-    print_engine <- "kable"
-  }
 
   # printing results
   if (print_engine == "gt") {

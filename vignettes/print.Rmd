@@ -1,5 +1,5 @@
 ---
-title: "gtsummary + R markdown"
+title: "gtsummary printing"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{gtsummary_with_rmarkdown}
@@ -14,14 +14,25 @@ knitr::opts_chunk$set(
 )
 ```
 
+The {gtsummary} package was written to be a companion to the [{gt}](https://gt.rstudio.com/) package from RStudio, and {gtsummary} tables are printed using {gt} when possible.
+Install the {gt} package with the following command.
+
+``` r
+# install.packages("remotes")
+remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
+```
+
+If the {gt} package is not installed, tables will be printed with the `knitr::kable()` function.
+Tables printed with `knitr::kable()` are less full featured than those printed with {gt}.
+For example, they do not support spanning headers, footnotes, indentation, and more.
+
+## gtsummary + R Markdown
+
 Tables printed with {gtsummary} can be seamlessly integrated into R markdown documents.
-The {gtsummary} package was written to be a companion to the [{gt} package](https://gt.rstudio.com/) from RStudio, and {gtsummary} tables are printed using {gt} when possible.
 Currently, {gt} supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
 
-### R Markdown Output Types
-
 - `html_document`
-  - HTML output is ully supported by {gtsummary} and is the recommended output type.
+  - HTML output is fully supported by {gtsummary} and is the recommended output type.
 - `pdf_document`
   - PDF for {gt} is currently under development, and {gtsummary} output will be printed with the `knitr::kable()` function.
   - You can force printing with {gt} by including `options(gtsummary.print_engine = "gt")` at the top of your script, or a converting a {gtsummary} object to {gt} with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`. 
