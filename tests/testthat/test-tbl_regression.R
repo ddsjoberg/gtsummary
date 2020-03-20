@@ -143,3 +143,5 @@ test_that("Testing lme4 results", {
     tbl_lme4$table_body %>% pull(estimate) %>% discard(is.na)
   )
 })
+
+

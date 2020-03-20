@@ -4,7 +4,8 @@
 \name{trial}
 \alias{trial}
 \title{Results from a simulated study of two chemotherapy agents: Drug A and Drug B}
-\format{A data frame with 200 rows--one row per patient
+\format{
+A data frame with 200 rows--one row per patient
 \describe{
 \item{trt}{Chemotherapy Treatment}
 \item{age}{Age, yrs}
@@ -14,7 +15,8 @@
 \item{response}{Tumor Response}
 \item{death}{Patient Died}
 \item{ttdeath}{Months to Death/Censor}
-}}
+}
+}
 \usage{
 trial
 }
