@@ -6,7 +6,7 @@
 
 * Update add_p() custom p-value description to NOT require double escape characters for quotes (#361)
 
-* Created strucutre and enumerated list unit tests each vetted model must pass, and added the tests (#383)
+* Created structure and enumerated list of unit tests each vetted model must pass, and added the tests (#383)
 
 # gtsummary 1.2.6
 
