@@ -54,7 +54,7 @@
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
 #' @param tidy_fun Option to specify a particular tidier function if the
-#' model is not a [vetted model][tidy_vetted] or you need to implement a
+#' model is not a [vetted model][vetted_models] or you need to implement a
 #' custom method. Default is `NULL`
 #' @param exclude DEPRECATED
 #' @param show_yesno DEPRECATED

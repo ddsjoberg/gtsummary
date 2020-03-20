@@ -16,7 +16,7 @@
 #'  \item{[lme4::lmer]}
 #'  \item{[geepack::geeglm]}
 #' }
-#' @name tidy_vetted
+#' @name vetted_models
 #' @keywords internal
 #' @section model support:
 #' If [broom::tidy] or [broom.mixed::tidy] supports a class of model not listed
