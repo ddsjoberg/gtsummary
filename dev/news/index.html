@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9006</span>
       </span>
     </div>
 
@@ -115,19 +115,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">Tutorial: tbl_summary()</a>
+      <a href="../articles/tbl_summary.html">tbl_summary() tutorial</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+      <a href="../articles/tbl_regression.html">tbl_regression() tutorial</a>
     </li>
     <li>
-      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
+      <a href="../articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">Table Gallery</a>
+      <a href="../articles/print.html">gtsummary + gt</a>
     </li>
     <li>
-      <a href="../articles/global_options.html">Global Options</a>
+      <a href="../articles/gallery.html">table gallery</a>
+    </li>
+    <li>
+      <a href="../articles/global_options.html">global options</a>
     </li>
   </ul>
 </li>
@@ -170,6 +173,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Updated the default printing for {gtsummary} objects. {gt} is the deafult printer for the R console and for R markdown documents with HTML output. PDF and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (<a href='https://github.com/ddsjoberg/gtsummary/issues/395'>#395</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/396'>#396</a>)</p></li>
 <li><p>Removed class checking for each type gtsummary table type, and made <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>, <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code> (and friends) generic and now check for class gtsummary (<a href='https://github.com/ddsjoberg/gtsummary/issues/373'>#373</a>)</p></li>
 <li><p>Bug fix when data frame passed to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with a single column (<a href='https://github.com/ddsjoberg/gtsummary/issues/389'>#389</a>)</p></li>
 <li><p>Update add_p() custom p-value description to NOT require double escape characters for quotes (<a href='https://github.com/ddsjoberg/gtsummary/issues/361'>#361</a>)</p></li>

@@ -59,7 +59,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9006</span>
       </span>
     </div>
 
@@ -82,19 +82,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/tbl_summary.html">Tutorial: tbl_summary()</a>
+      <a href="articles/tbl_summary.html">tbl_summary() tutorial</a>
     </li>
     <li>
-      <a href="articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+      <a href="articles/tbl_regression.html">tbl_regression() tutorial</a>
     </li>
     <li>
-      <a href="articles/inline_text.html">Tutorial: inline_text()</a>
+      <a href="articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="articles/gallery.html">Table Gallery</a>
+      <a href="articles/print.html">gtsummary + gt</a>
     </li>
     <li>
-      <a href="articles/global_options.html">Global Options</a>
+      <a href="articles/gallery.html">table gallery</a>
+    </li>
+    <li>
+      <a href="articles/global_options.html">global options</a>
     </li>
   </ul>
 </li>
@@ -202,35 +205,27 @@
 <a href="#side-by-side-regression-models" class="anchor"></a>Side-by-side Regression Models</h3>
 <p>You can also present side-by-side regression model results using <code><a href="reference/tbl_merge.html">tbl_merge()</a></code></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(survival)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co"># build survival model table</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">t2 &lt;-</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span>(ttdeath, death) <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>grade <span class="op">+</span><span class="st"> </span>age, trial) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co"># merge tables </span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">tbl_merge_ex1 &lt;-</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="reference/tbl_merge.html">tbl_merge</a></span>(</a>
-<a class="sourceLine" id="cb7-11" data-line-number="11">    <span class="dt">tbls =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(t1, t2),</a>
-<a class="sourceLine" id="cb7-12" data-line-number="12">    <span class="dt">tab_spanner =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span>)</a>
-<a class="sourceLine" id="cb7-13" data-line-number="13">  )</a></code></pre></div>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; Warning: package 'survival' was built under R version 3.6.3</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co"># build survival model table</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">t2 &lt;-</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span>(ttdeath, death) <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>grade <span class="op">+</span><span class="st"> </span>age, trial) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="reference/tbl_regression.html">tbl_regression</a></span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co"># merge tables </span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">tbl_merge_ex1 &lt;-</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="reference/tbl_merge.html">tbl_merge</a></span>(</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">    <span class="dt">tbls =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(t1, t2),</a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">    <span class="dt">tab_spanner =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span>)</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14">  )</a></code></pre></div>
 <p><img src="reference/figures/README-tbl_merge_ex1-1.png" width="60%"></p>
 <p>Review even more output options in the <a href="http://www.danieldsjoberg.com/gtsummary/articles/gallery.html">table gallery</a>.</p>
 </div>
 </div>
-<div id="print-engine" class="section level2">
-<h2 class="hasAnchor">
-<a href="#print-engine" class="anchor"></a>Print Engine</h2>
-<p>{gtsummary} uses the {gt} package to print all summary tables. In addition to supporting {gt}, the {gtsummary} package works well with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. This is particularly useful when outputting documents to Microsoft Word. If the {gt} package is not installed, {gtsummary} will fall back to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. To explicitly set the printing engine, set the option in the script or in the user- or project R profile, <code>.Rprofile</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"kable"</span>) </a></code></pre></div>
-<p>or</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gtsummary.print_engine =</span> <span class="st">"gt"</span>)</a></code></pre></div>
-<p>Output from {kable} is less full featured compared to summary tables produced with {gt}. For example, {kable} summary tables do not include indentation, footnotes, and spanning header rows.</p>
-</div>
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Please note that the {gtsummary} project is released with a <a href="http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/jeanmanguy">@jeanmanguy</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/jwilliman">@jwilliman</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/ltin1214">@ltin1214</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/oranwutang">@oranwutang</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, <a href="https://github.com/slobaugh">@slobaugh</a>, and <a href="https://github.com/zabore">@zabore</a></p>
+<p>Please note that the {gtsummary} project is released with a <a href="http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/davidkane9">@davidkane9</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/jeanmanguy">@jeanmanguy</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/jwilliman">@jwilliman</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/leejasme">@leejasme</a>, <a href="https://github.com/ltin1214">@ltin1214</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/MyKo101">@MyKo101</a>, <a href="https://github.com/oranwutang">@oranwutang</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, <a href="https://github.com/slobaugh">@slobaugh</a>, and <a href="https://github.com/zabore">@zabore</a></p>
 </div>
 
   </div>
