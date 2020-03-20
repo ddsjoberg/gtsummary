@@ -10,12 +10,13 @@
 #'  \item{[stats::lm]}
 #'  \item{[stats::glm]}
 #'  \item{[survival::coxph]}
+#'  \item{[survival::clogit]}
 #'  \item{[survival::survreg]}
 #'  \item{[lme4::glmer]}
 #'  \item{[lme4::lmer]}
 #'  \item{[geepack::geeglm]}
 #' }
-#' @name tidy_vetted
+#' @name vetted_models
 #' @keywords internal
 #' @section model support:
 #' If [broom::tidy] or [broom.mixed::tidy] supports a class of model not listed

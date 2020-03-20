@@ -55,7 +55,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{tidy_fun}{Option to specify a particular tidier function if the
-model is not a \link[=tidy_vetted]{vetted model} or you need to implement a
+model is not a \link[=vetted_models]{vetted model} or you need to implement a
 custom method. Default is \code{NULL}}
 
 \item{show_yesno}{DEPRECATED}

@@ -94,7 +94,7 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
 
   # looks for if p.value column is missing and adds NAs if so
   missed <- base::setdiff("p.value", names(tidy_bit))
-  tidy_bit[missed] <- NA
+  tidy_bit[missed] <- NA_real_
 
   # otherwise returning original output
   return(tidy_bit)
@@ -398,7 +398,13 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     )
 
   # returning final formatted tibble of results
-  map_dfr(result$table, ~.x)
+  df_result <- map_dfr(result$table, ~.x)
+
+  # need to attach the label and show_single_row evaluated lists to save out later
+  attr(df_result, "label") <- label
+  attr(df_result, "show_single_row") <- show_single_row
+
+  df_result
 }
 
 #' Adds refernce rows, and header rows for categorical and interaction variables
