@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 The {gtsummary} package was written to be a companion to the [{gt}](https://gt.rstudio.com/) package from RStudio, and {gtsummary} tables are printed using {gt} when possible.
-Install the {gt} package with the following command.
+Install the {gt} package with the following lines of code.
 
 ``` r
 # install.packages("remotes")
@@ -32,10 +32,10 @@ Tables printed with {gtsummary} can be seamlessly integrated into R markdown doc
 Currently, {gt} supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
 
 - `html_document`
-  - HTML output is fully supported by {gtsummary} and is the recommended output type.
+  - HTML output is fully supported by {gt} and is the recommended output type when using {gtsummary}.
 - `pdf_document`
-  - PDF for {gt} is currently under development, and {gtsummary} output will be printed with the `knitr::kable()` function.
-  - You can force printing with {gt} by including `options(gtsummary.print_engine = "gt")` at the top of your script, or a converting a {gtsummary} object to {gt} with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`. 
+  - PDF output using {gt} is currently under development, and {gtsummary} output will be printed with the `knitr::kable()` function.
+  - You can force printing with {gt} by including `options(gtsummary.print_engine = "gt")` at the top of your script, or by converting a {gtsummary} object to {gt} with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`. 
   - If you print to PDF using {gt} you may get a gorgeous table, but you may also get an error or a malformed table.
 - `rtf_document`
   - You may print to Microsoft Word via RTF; however, RTF output is under development in the {gt} package. You may get a gorgeous table, but you may also get an error or a malformed table. 
