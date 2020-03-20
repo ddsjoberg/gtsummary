@@ -54,7 +54,7 @@
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
 #' @param tidy_fun Option to specify a particular tidier function if the
-#' model is not a [vetted model][tidy_vetted] or you need to implement a
+#' model is not a [vetted model][vetted_models] or you need to implement a
 #' custom method. Default is `NULL`
 #' @param exclude DEPRECATED
 #' @param show_yesno DEPRECATED
@@ -178,9 +178,10 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
   # rows for reference groups, and headers for
+  parse_fit <- parse_fit(x, tidy_model, label, !!show_single_row)
   # categorical variables
   table_body <-
-    parse_fit(x, tidy_model, label, !!show_single_row) %>%
+    parse_fit %>%
     # adding character CI
     mutate(
       ci = if_else(
@@ -233,6 +234,12 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
         }
       )
     )
+
+  # saving the evaluated lists (named lists) as the function inputs
+  func_inputs$include <- include
+  func_inputs$exclude <- NULL # making this NULL since it's deprecated
+  func_inputs$label <- attr(parse_fit, "label")
+  func_inputs$show_single_row <- attr(parse_fit, "show_single_row")
 
   results <- list(
     table_body = table_body,
@@ -323,6 +330,8 @@ estimate_header <- function(x, exponentiate) {
   if (inherits(x, c("glm", "geeglm")) &&
     x$family$family == "binomial" &&
     x$family$link == "logit") {
+    model_type <- "logistic"
+  } else if (inherits(x, "clogit")) {
     model_type <- "logistic"
   } else if (inherits(x, c("glm", "geeglm")) &&
     x$family$family == "poisson" &&
