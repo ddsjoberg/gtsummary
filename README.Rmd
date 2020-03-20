@@ -88,7 +88,6 @@ table1 <- tbl_summary(trial2)
 gt::gtsave(as_gt(table1), file = file.path(tempdir(), "temp.png"))
 ```
 
-
 ```{r out.width = "30%", echo = FALSE}
 # Have to do this workaround since the README needs markdown format for GitHub page but a different format for the website.
 if (pkgdown::in_pkgdown()) {
@@ -129,8 +128,6 @@ if (pkgdown::in_pkgdown()) {
 
 Use [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) to easily and beautifully display regression model results in a table. See the [tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) for customization options.
 
-
-
 ```{r regress, include = TRUE}
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
 
@@ -149,8 +146,6 @@ if (pkgdown::in_pkgdown()) {
   knitr::include_graphics("man/figures/README-tbl_regression_printa-1.png")
 } 
 ```
-
-
 
 ### Side-by-side Regression Models
 
@@ -184,22 +179,9 @@ if (pkgdown::in_pkgdown()) {
 } else {
   knitr::include_graphics("man/figures/README-tbl_merge_ex1-1.png")
 } 
-
 ```
 
 Review even more output options in the [table gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
-
-## Print Engine
-
-{gtsummary} uses the {gt} package to print all summary tables.  In addition to supporting {gt}, the {gtsummary} package works well with `knitr::kable()`.  This is particularly useful when outputting documents to Microsoft Word.  If the {gt} package is not installed, {gtsummary} will fall back to `knitr::kable()`.  To explicitly set the printing engine, set the option in the script or in the user- or project R profile, `.Rprofile`.
-
-    options(gtsummary.print_engine = "kable") 
-    
-or
-    
-    options(gtsummary.print_engine = "gt")
-
-Output from {kable} is less full featured compared to summary tables produced with {gt}.  For example, {kable} summary tables do not include indentation, footnotes, and spanning header rows.
 
 ## Contributing
 
