@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>print and knit_print methods for gtsummary objects — print_gtsummary • gtsummary</title>
+<title>Vetted tidy models — vetted_models • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,8 +48,23 @@
 
 
 
-<meta property="og:title" content="print and knit_print methods for gtsummary objects — print_gtsummary" />
-<meta property="og:description" content="print and knit_print methods for gtsummary objects" />
+<meta property="og:title" content="Vetted tidy models — vetted_models" />
+<meta property="og:description" content="Below is a list of models vetted for use
+in tbl_regression and tbl_uvregression.  If a model is passed to these
+functions and the model is not listed below and  a tidy() function is
+not specified in the tidy_fun= argument, the model object will be passed
+to broom::tidy or broom.mixed::tidy.
+
+stats::lm
+stats::glm
+survival::coxph
+survival::clogit
+survival::survreg
+lme4::glmer
+lme4::lmer
+geepack::geeglm
+
+" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -162,48 +177,77 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>print and knit_print methods for gtsummary objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/print.R'><code>R/print.R</code></a></small>
-    <div class="hidden name"><code>print_gtsummary.Rd</code></div>
+    <h1>Vetted tidy models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/vetted_models.R'><code>R/vetted_models.R</code></a></small>
+    <div class="hidden name"><code>vetted_models.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>print and knit_print methods for gtsummary objects</p>
+    <p>Below is a list of models vetted for use
+in <a href='tbl_regression.html'>tbl_regression</a> and <a href='tbl_uvregression.html'>tbl_uvregression</a>.  If a model is passed to these
+functions and the model is not listed below and  a <code>tidy()</code> function is
+not specified in the <code>tidy_fun=</code> argument, the model object will be passed
+to <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a> or <a href='https://rdrr.io/pkg/broom.mixed/man/reexports.html'>broom.mixed::tidy</a>.</p>
+<ul>
+<li><p><a href='https://rdrr.io/r/stats/lm.html'>stats::lm</a></p></li>
+<li><p><a href='https://rdrr.io/r/stats/glm.html'>stats::glm</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/survival/man/coxph.html'>survival::coxph</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/survival/man/clogit.html'>survival::clogit</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/survival/man/survreg.html'>survival::survreg</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>lme4::glmer</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lme4::lmer</a></p></li>
+<li><p><a href='https://rdrr.io/pkg/geepack/man/geeglm.html'>geepack::geeglm</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for gtsummary</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for gtsummary</span>
-<span class='fu'><a href='https://rdrr.io/pkg/knitr/man/knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>An object created using gtsummary functions</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Not used</p></td>
-    </tr>
-    </table>
+    <h2 class="hasAnchor" id="model-support"><a class="anchor" href="#model-support"></a>model support</h2>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    
 
-    <div class='dont-index'><p><a href='tbl_summary.html'>tbl_summary</a> <a href='tbl_regression.html'>tbl_regression</a> <a href='tbl_uvregression.html'>tbl_uvregression</a> <a href='tbl_merge.html'>tbl_merge</a> <a href='tbl_stack.html'>tbl_stack</a></p></div>
+<p>If <a href='https://rdrr.io/pkg/broom/man/reexports.html'>broom::tidy</a> or <a href='https://rdrr.io/pkg/broom.mixed/man/reexports.html'>broom.mixed::tidy</a> supports a class of model not listed
+above, please submit a <a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub Issue</a>.
+The model can be added to the list of vetted models. Unit tests will be
+put in place to ensure continued support for the model.</p>
+    <h2 class="hasAnchor" id="custom-tidiers"><a class="anchor" href="#custom-tidiers"></a>custom tidiers</h2>
 
+    
+
+<p>In some cases you may need to use a custom function to tidy regression model
+results. A user may pass a custom tidier function to <a href='tbl_regression.html'>tbl_regression</a> and
+<a href='tbl_uvregression.html'>tbl_uvregression</a> in the <code>tidy_fun=</code> argument.  The function passed, however,
+must be a proper tidier.  For example, it must return a tibble that is one
+line per variable in the regression model; it must accept arguments
+<code>exponentiate=</code>, <code>conf.level=</code>, and <code>conf.int=</code> since these arguments will
+be passed to the function internally (we recommend including <code>...</code> to
+capture any arguments you may not need). See below for an example where the
+confidence limits are calculated using Wald's method.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>my_tidy</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>exponentiate</span> <span class='kw'>=</span>  <span class='fl'>FALSE</span>, <span class='no'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>) {
+  <span class='no'>tidy</span> <span class='kw'>&lt;-</span>
+    <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span>(
+      <span class='kw pkg'>broom</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/broom/man/reexports.html'>tidy</a></span>(<span class='no'>x</span>, <span class='kw'>conf.int</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
+      <span class='kw pkg'>broom</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/broom/man/confint_tidy.html'>confint_tidy</a></span>(<span class='no'>x</span>, <span class='kw'>func</span> <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/stats/confint.html'>confint.default</a></span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='no'>conf.level</span>)
+    )
+  <span class='co'># exponentiating, if requested</span>
+  <span class='kw'>if</span> (<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>)
+    <span class='no'>tidy</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>estimate</span>, <span class='no'>conf.low</span>, <span class='no'>conf.high</span>), <span class='no'>exp</span>)
+}
+
+<span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>age</span> ~ <span class='no'>grade</span> + <span class='no'>response</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>my_tidy</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#model-support">model support</a></li>
+      <li><a href="#custom-tidiers">custom tidiers</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
   </div>
 </div>
 
