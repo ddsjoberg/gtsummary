@@ -1,0 +1,56 @@
+---
+title: "gtsummary + R Markdown"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, message=FALSE}
+library(gtsummary)
+library(tidyverse)
+library(survival)
+```
+
+## gtsummary tables
+
+Tables created with {gtsummary} can be integrated into R markdown documents.
+The {gtsummary} package was written to be a companion to the [{gt} package](https://gt.rstudio.com/) from RStudio, and {gtsummary} tables are printed using {gt} when possible.
+Currently, {gt} supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
+
+```{r example}
+patient_characteristics <-
+  trial %>%
+  select(trt, age, grade, response) %>%
+  tbl_summary(by = trt)  
+patient_characteristics
+```
+
+With HTML ouput, you can include complex tables with footnotes, indendtation, and spanning table headers.
+
+```{r}
+# Side-by-side Regression Models
+# logistic regresssion model
+t1 <-
+  glm(response ~ trt + grade + age, trial, family = binomial) %>%
+  tbl_regression(exponentiate = TRUE)
+# time to death Cox model
+t2 <-
+  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+  tbl_regression(exponentiate = TRUE)
+
+# printing merged table
+tbl_merge(
+  tbls = list(t1, t2),
+  tab_spanner = c("**Tumor Response**", "**Time to Death**")
+)
+```
+
+## inline reporting
+
+Any number/statistic from a {gtsummary} table can be reported inline in a R markdown document using the `inline_text()` function.  See example below:
+
+> Among patients who received Drug A, `r inline_text(patient_characteristics, variable = grade, level = "III", column = "Drug A")` had grade III tumors.
+
+For detailed examples using functions from {gtsummary}, visit the [{gtsummary} website](http://www.danieldsjoberg.com/gtsummary/).

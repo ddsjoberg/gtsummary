@@ -33,22 +33,6 @@
 #'   as_kable()
 
 as_kable <- function(x, include = everything(), exclude = NULL, ...) {
-  # checking if `as_kable()` was a default or user requested
-  # 1. User didn't set a print engine for kable
-  # 2. caller_env has an object called `print_engine`, which comes from print()
-  if (is.null(getOption("gtsummary.print_engine")) &&
-      !is.null(as.list(rlang::caller_env())$print_engine)) {
-    rlang::inform(glue(
-      "Results will be printed using `knitr::kable()` and do not \n",
-      "support footnotes, spanning headers, or indentation. \n\n",
-      "For tables styled by the gt package, use the installation code below.\n",
-      "`remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`\n\n",
-      "If you prefer to always use `knitr::kable()`, add the option\n",
-      "`options(gtsummary.print_engine = \"kable\")` to your script\n",
-      "or in a user- or project-level startup file, '.Rprofile'."
-    ))
-  }
-
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(

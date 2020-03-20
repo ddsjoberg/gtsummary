@@ -169,6 +169,7 @@ You can also present side-by-side regression model results using
 
 ``` r
 library(survival)
+#> Warning: package 'survival' was built under R version 3.6.3
 
 # build survival model table
 t2 <-
@@ -188,26 +189,6 @@ tbl_merge_ex1 <-
 Review even more output options in the [table
 gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).
 
-## Print Engine
-
-{gtsummary} uses the {gt} package to print all summary tables. In
-addition to supporting {gt}, the {gtsummary} package works well with
-`knitr::kable()`. This is particularly useful when outputting documents
-to Microsoft Word. If the {gt} package is not installed, {gtsummary}
-will fall back to `knitr::kable()`. To explicitly set the printing
-engine, set the option in the script or in the user- or project R
-profile, `.Rprofile`.
-
-    options(gtsummary.print_engine = "kable") 
-
-or
-
-    options(gtsummary.print_engine = "gt")
-
-Output from {kable} is less full featured compared to summary tables
-produced with {gt}. For example, {kable} summary tables do not include
-indentation, footnotes, and spanning header rows.
-
 ## Contributing
 
 Please note that the {gtsummary} project is released with a [Contributor
@@ -217,6 +198,7 @@ By contributing to this project, you agree to abide by its terms. A big
 thank you to all contributors\!  
 [@ablack3](https://github.com/ablack3),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
+[@davidkane9](https://github.com/davidkane9),
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@emilyvertosick](https://github.com/emilyvertosick),
 [@jeanmanguy](https://github.com/jeanmanguy),
@@ -224,9 +206,11 @@ thank you to all contributors\!
 [@jflynn264](https://github.com/jflynn264),
 [@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
+[@leejasme](https://github.com/leejasme),
 [@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
+[@MyKo101](https://github.com/MyKo101),
 [@oranwutang](https://github.com/oranwutang),
 [@sammo3182](https://github.com/sammo3182),
 [@slobaugh](https://github.com/slobaugh), and
