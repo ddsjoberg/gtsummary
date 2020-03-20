@@ -4,7 +4,9 @@
 \name{gt_sha}
 \alias{gt_sha}
 \title{gt package git commit SHA}
-\format{An object of class \code{character} of length 1.}
+\format{
+An object of class \code{character} of length 1.
+}
 \usage{
 gt_sha
 }
