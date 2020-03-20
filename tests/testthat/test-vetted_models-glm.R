@@ -25,112 +25,166 @@ context("test-vetted_models-glm")
 library(dplyr)
 
 # glm() ------------------------------------------------------------------------
-  test_that("vetted_models glm()", {
-    # build model
-    mod_glm <- glm(response ~ age + trt + grade, data = trial, family = binomial)
+test_that("vetted_models glm()", {
+  # building models to check
+  mod_glm_lin <- glm(marker ~ age + trt + grade,
+                     data = trial)
+  mod_glm_int <- glm(marker ~ age + trt * grade,
+                     data = trial)
+  mod_glm_log <- glm(response ~ age + trt + grade,
+                     data = trial, family = binomial)
+  # 1.  Runs as expected with standard use
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_glm_lin <- tbl_regression(mod_glm_lin,
+                                  label = list(age ~ "Age, yrs",
+                                               trt ~ "Chemotherapy Treatment",
+                                               grade ~ "Grade")), NA
+  )
+  expect_warning(
+    tbl_glm_lin, NA
+  )
+  expect_error(
+    tbl_glm_int <- tbl_regression(mod_glm_int,
+                                  label = list(age ~ "Age, yrs",
+                                               trt ~ "Chemotherapy Treatment",
+                                               grade ~ "Grade")), NA
+  )
+  expect_warning(
+    tbl_glm_int, NA
+  )
+  expect_error(
+    tbl_glm_log <- tbl_regression(mod_glm_log,
+                                  label = list(age ~ "Age, yrs",
+                                               trt ~ "Chemotherapy Treatment",
+                                               grade ~ "Grade")), NA
+  )
+  expect_warning(
+    tbl_glm_log, NA
+  )
+  #       - numbers in table are correct
+  expect_equivalent(
+    coef(mod_glm_lin)[-1],
+    coefs_in_gt(tbl_glm_lin)
+  )
+  expect_equivalent(
+    coef(mod_glm_int)[-1],
+    coefs_in_gt(tbl_glm_int)
+  )
+  expect_equivalent(
+    coef(mod_glm_log)[-1],
+    coefs_in_gt(tbl_glm_log)
+  )
 
-    # 1.  Runs as expected with standard use
-    #       - without errors, warnings, messages
-    expect_error(tbl_glm <- tbl_regression(mod_glm), NA)
-    expect_warning(tbl_regression(mod_glm), NA)
+  #       - labels are correct
+  expect_equivalent(
+    tbl_glm_lin$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+  )
+  expect_equivalent(
+    tbl_glm_int$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+  )
+  expect_equivalent(
+    tbl_glm_log$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+  )
+  # 2.  If applicable, runs as expected with logit and log link
+  expect_equivalent(
+    coef(mod_glm_log)[-1] %>% exp(),
+    coefs_in_gt(mod_glm_log %>% tbl_regression(exponentiate = TRUE))
+  )
 
-    #       - numbers in table are correct
-    expect_equivalent(
-      coef(mod_glm)[-1],
-      coefs_in_gt(tbl_glm)
-    )
-
-    #       - labels are correct
-    expect_equivalent(
-      tbl_glm$table_body %>%
-        filter(row_type == "label") %>%
-        pull(label),
-      c("Age, yrs", "Chemotherapy Treatment", "Grade")
-    )
-
-    # 2.  If applicable, runs as expected with logit and log link
-    expect_equivalent(
-      exp(coef(mod_glm)[-1]),
-      tbl_regression(mod_glm, exponentiate = TRUE) %>%
-        coefs_in_gt()
-    )
-
-    # 3.  Interaction terms are correctly printed in output table
-    mod_glm2 <- glm(response ~ age + trt * grade, data = trial, family = binomial)
-    #       - without errors, warnings, messages
-    expect_error(tbl_glm2 <- tbl_regression(mod_glm2), NA)
-    expect_warning(tbl_regression(mod_glm2), NA)
-
-    #       - numbers in table are correct
-    expect_equivalent(
-      coef(mod_glm2)[-1],
-      coefs_in_gt(tbl_glm2)
-    )
-
-    #       - interaction labels are correct
-    expect_equivalent(
-      tbl_glm2$table_body %>%
-        filter(row_type == "label") %>%
-        pull(label),
-      c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
-    )
-    expect_equivalent(
-      tbl_glm2$table_body %>%
-        filter(var_type == "interaction") %>%
-        pull(label),
-      c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III" )
-    )
-
-    # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
-    #       - without errors, warnings, messages
-    expect_error(tbl_glm3 <- tbl_glm2 %>%
-                   add_global_p(include = everything()), NA)
-    expect_warning(tbl_glm3, NA)
-    expect_error(tbl_glm %>%
-                   combine_terms(formula_update = . ~ . - trt,
-                                 test = "LRT") %>%
-                   add_nevent(), NA)
-    expect_warning(tbl_glm %>%
-                     combine_terms(formula_update = . ~ . - trt,
-                                   test = "LRT") %>%
-                     add_nevent(), NA)
-
-    #       - numbers in table are correct
-    expect_equivalent(
-      tbl_glm3$table_body %>%
-        pull(p.value) %>%
-        na.omit(),
-      car::Anova(mod_glm2, type = "III") %>%
-        as.data.frame() %>%
-        pull(`Pr(>Chisq)`) %>%
-        na.omit()
-    )
-
-    # 5.  tbl_uvregression() works as expected
-    #       - without errors, warnings, messages
-    expect_error(
-      tbl_glmuv <- tbl_uvregression(
-        trial,
-        y = age,
-        method = glm
-      ),
-      NA
-    )
-    expect_warning(
-      tbl_glmuv,
-      NA
-    )
-    #       - works with add_global_p(), add_nevent(), add_q()
-    expect_error(
-      tbl_glmuv <- tbl_uvregression(
-        trial,
+  # 3.  Interaction terms are correctly printed in output table
+  #       - interaction labels are correct
+  expect_equivalent(
+    tbl_glm_int$table_body %>%
+      filter(var_type == "interaction") %>%
+      pull(label),
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III")
+  )
+  # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
+  #       - without errors, warnings, messages
+  expect_error(
+    tbl_glm_lin2 <- tbl_glm_lin %>% add_global_p(include = everything()), NA
+  )
+  expect_error(
+    tbl_glm_int2 <- tbl_glm_int %>% add_global_p(include = everything()), NA
+  )
+  expect_error(
+    tbl_glm_log2 <- tbl_glm_log %>% add_global_p(include = everything()), NA
+  )
+  expect_warning(
+    tbl_glm_lin2, NA
+  )
+  expect_warning(
+    tbl_glm_int2, NA
+  )
+  expect_warning(
+    tbl_glm_log2, NA
+  )
+  expect_error(
+    tbl_glm_log3 <- tbl_glm_log %>% combine_terms(. ~ . - trt, test = "LRT"), NA
+  )
+  expect_warning(
+    tbl_glm_log3, NA
+  )
+  expect_error(
+    tbl_glm_log4 <- tbl_glm_lin %>% add_nevent(), "*"
+  )
+  #       - numbers in table are correct
+  expect_equivalent(
+    tbl_glm_lin2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_glm_lin, type = "III") %>%
+      as.data.frame() %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    tbl_glm_int2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_glm_int, type = "III") %>%
+      as.data.frame() %>%
+      pull(`Pr(>Chisq)`)
+  )
+  expect_equivalent(
+    tbl_glm_log3$table_body %>% filter(variable == "trt") %>% pull(p.value),
+    update(mod_glm_log, formula. = . ~ . - trt) %>%
+      {anova(mod_glm_log, ., test = "LRT")} %>%
+      as.data.frame() %>%
+      slice(n()) %>%
+      pull(`Pr(>Chi)`)
+  )
+  # 5.  tbl_uvregression() works as expected
+  #       - without errors, warnings, messages
+  #       - works with add_global_p(), add_nevent()
+  expect_error(
+    na.omit(trial) %>%
+      tbl_uvregression(
         y = response,
         method = glm,
-        method.args = list(family = binomial)
-      ) %>%
-        add_global_p() %>%
-        add_nevent() %>%
-        add_q(),
-      NA
-    )
-  })
+        method.args = list(family = binomial),
+      ),
+    NA
+  )
+  expect_warning(
+    na.omit(trial) %>%
+      tbl_uvregression(
+        y = response,
+        method = glm,
+        method.args = list(family = binomial),
+      ),
+    NA
+  )
+})
+

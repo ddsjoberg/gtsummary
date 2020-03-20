@@ -23,104 +23,123 @@
 context("test-vetted_models-lm")
 library(dplyr)
 
-
-# lm() -------------------------------------------------------------------------
+# lm() ------------------------------------------------------------------------
 test_that("vetted_models lm()", {
-  # build model
-  mod_lm <- lm(hp ~ am + disp + as.factor(cyl), data = mtcars)
+  # building models to check
+  mod_lm_lin <- lm(marker ~ age + trt + grade,
+                     data = trial)
+  mod_lm_int <- lm(marker ~ age + trt * grade,
+                     data = trial)
 
   # 1.  Runs as expected with standard use
   #       - without errors, warnings, messages
-  expect_error(tbl_lm <- tbl_regression(mod_lm), NA)
-  expect_warning(tbl_regression(mod_lm), NA)
-
+  expect_error(
+    tbl_lm_lin <- tbl_regression(mod_lm_lin,
+                                  label = list(age ~ "Age, yrs",
+                                               trt ~ "Chemotherapy Treatment",
+                                               grade ~ "Grade")), NA
+  )
+  expect_warning(
+    tbl_lm_lin, NA
+  )
+  expect_error(
+    tbl_lm_int <- tbl_regression(mod_lm_int,
+                                  label = list(age ~ "Age, yrs",
+                                               trt ~ "Chemotherapy Treatment",
+                                               grade ~ "Grade")), NA
+  )
+  expect_warning(
+    tbl_lm_int, NA
+  )
   #       - numbers in table are correct
   expect_equivalent(
-    coef(mod_lm)[-1],
-    coefs_in_gt(tbl_lm)
+    coef(mod_lm_lin)[-1],
+    coefs_in_gt(tbl_lm_lin)
+  )
+  expect_equivalent(
+    coef(mod_lm_int)[-1],
+    coefs_in_gt(tbl_lm_int)
   )
 
   #       - labels are correct
   expect_equivalent(
-    tbl_lm$table_body %>%
+    tbl_lm_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("am", "disp", "as.factor(cyl)")
+    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+  )
+  expect_equivalent(
+    tbl_lm_int$table_body %>%
+      filter(row_type == "label") %>%
+      pull(label),
+    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
 
   # 2.  If applicable, runs as expected with logit and log link
-  # NOT APPLICABLE
 
   # 3.  Interaction terms are correctly printed in output table
-  mod_lm2 <- lm(hp ~ disp + as.factor(cyl) * am, data = mtcars)
-  #       - without errors, warnings, messages
-  expect_error(tbl_lm2 <- tbl_regression(mod_lm2), NA)
-  expect_warning(tbl_regression(mod_lm2), NA)
-
-  #       - numbers in table are correct
-  expect_equivalent(
-    coef(mod_lm2)[-1],
-    coefs_in_gt(tbl_lm2)
-  )
-
   #       - interaction labels are correct
   expect_equivalent(
-    tbl_lm2$table_body %>%
-      filter(row_type == "label") %>%
-      pull(label),
-    c("disp", "as.factor(cyl)", "am", "as.factor(cyl) * am")
-  )
-  expect_equivalent(
-    tbl_lm2$table_body %>%
+    tbl_lm_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
-    c("as.factor(cyl) * am", "6 * am", "8 * am")
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III")
   )
-
   # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
   #       - without errors, warnings, messages
-  expect_error(tbl_lm3 <- tbl_lm2 %>%
-                 add_global_p(include =  everything()), NA)
-  expect_warning(tbl_lm3, NA)
-  expect_error(tbl_lm2 %>%
-                 combine_terms(formula_update = . ~ . - disp), NA)
-  expect_warning(tbl_lm3, NA)
+  # lm() does not work with car::Anova()!  update this after #409 issue complete?
+  expect_error(
+    tbl_lm_lin2 <- tbl_lm_lin %>% add_global_p(include = everything()), NA
+  )
+  expect_error(
+    tbl_lm_int2 <- tbl_lm_int %>% add_global_p(include = everything()), NA
+  )
+  expect_warning(
+    tbl_lm_lin2, NA
+  )
+  expect_warning(
+    tbl_lm_int2, NA
+  )
 
   #       - numbers in table are correct
   expect_equivalent(
-    tbl_lm3$table_body %>%
+    tbl_lm_lin2$table_body %>%
       pull(p.value) %>%
-      na.omit(),
-    car::Anova(mod_lm2, type = "III") %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_lm_lin, type = "III") %>%
       as.data.frame() %>%
-      slice(-1) %>% # removing intercept
-      pull(`Pr(>F)`) %>%
-      na.omit()
+      filter(!rownames(.) %in% c("Residuals", "(Intercept)")) %>%
+      pull(`Pr(>F)`)
+  )
+  expect_equivalent(
+    tbl_lm_int2$table_body %>%
+      pull(p.value) %>%
+      na.omit() %>%
+      as.vector(),
+    car::Anova(mod_lm_int, type = "III") %>%
+      as.data.frame() %>%
+      filter(!rownames(.) %in% c("Residuals", "(Intercept)")) %>%
+      pull(`Pr(>F)`)
   )
 
   # 5.  tbl_uvregression() works as expected
   #       - without errors, warnings, messages
+  #       - works with add_global_p(), add_nevent()
   expect_error(
-    tbl_lmuv <- tbl_uvregression(
-      trial,
-      y = age,
-      method = lm
-    ),
+    na.omit(trial) %>%
+      tbl_uvregression(
+        y = response,
+        method = lm
+      ),
     NA
   )
   expect_warning(
-    tbl_lmuv,
-    NA
-  )
-  #       - works with add_global_p(), add_q()
-  expect_error(
-    tbl_lmuv <- tbl_uvregression(
-      trial,
-      y = age,
-      method = lm
-    ) %>%
-      add_global_p() %>%
-      add_q(),
+    na.omit(trial) %>%
+      tbl_uvregression(
+        y = response,
+        method = lm
+      ),
     NA
   )
 })
