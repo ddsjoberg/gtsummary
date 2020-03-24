@@ -32,8 +32,7 @@ add_q <- function(x, ...) UseMethod("add_q")
 #' @section Example Output:
 #' \if{html}{\figure{tbl_sum_q_ex.png}{options: width=50\%}}
 
-add_q.tbl_summary <- function(x, method = "fdr",
-                              pvalue_fun = x$fmt_fun$p.value, ...) {
+add_q.tbl_summary <- function(x, method = "fdr", pvalue_fun = NULL, ...) {
 
   # This adjusts p-values for multiple testing. Default method is fdr.
   if (!("add_p" %in% names(x$call_list))) {
@@ -41,6 +40,15 @@ add_q.tbl_summary <- function(x, method = "fdr",
       "There are no p-values yet. You need to use the function add_p(), ",
       "after tbl_summary() and before add_q()"
     ))
+  }
+
+  # setting default formatting function if note supplied
+  if (is.null(pvalue_fun)) {
+    pvalue_fun <-
+      x$table_header %>%
+      filter(.data$column == "p.value") %>%
+      pull("fmt_fun") %>%
+      pluck(1)
   }
 
   # checking pvalue_fun are functions
@@ -75,21 +83,14 @@ add_q.tbl_summary <- function(x, method = "fdr",
     table_header_fill_missing() %>%
     # table_header_fmt(q.value = "x$qvalue_fun") %>%
     table_header_fmt_fun(q.value = pvalue_fun) %>%
-    mutate(footnote = map2(
-      .data$column, .data$footnote,
-      function(x, y) {
-        if (x == "q.value") {
-          return(c(y, footnote_text))
-        }
-        return(y)
-      }
-    ))
+    mutate(
+      footnote = ifelse(.data$column == "q.value",
+                        footnote_text,
+                        .data$footnote)
+    )
 
   # adding  column header
   x <- modify_header_internal(x, q.value = "**q-value**")
-
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
 
   # keep track of what functions have been called
   x$call_list <- c(x$call_list, list(add_q = match.call()))
@@ -128,7 +129,7 @@ add_q.tbl_summary <- function(x, method = "fdr",
 #' \if{html}{\figure{tbl_uvr_q_ex.png}{options: width=50\%}}
 
 add_q.tbl_uvregression <- function(x, method = "fdr",
-                                   pvalue_fun = x$fmt_fun$p.value, ...) {
+                                   pvalue_fun = NULL, ...) {
 
   # This adjusts p-values for multiple testing but only when the
   # global approach is used. Default method is fdr.
@@ -137,6 +138,15 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
       "You need global p-values first. Use the function add_global_p() after ",
       "tbl_uvregression() and before add_q()"
     ))
+  }
+
+  # setting default formatting function if note supplied
+  if (is.null(pvalue_fun)) {
+    pvalue_fun <-
+      x$table_header %>%
+      filter(.data$column == "p.value") %>%
+      pull("fmt_fun") %>%
+      pluck(1)
   }
 
   # checking pvalue_fun are functions
@@ -172,20 +182,13 @@ add_q.tbl_uvregression <- function(x, method = "fdr",
     table_header_fill_missing() %>%
     # table_header_fmt(q.value = "x$qvalue_fun") %>%
     table_header_fmt_fun(q.value = pvalue_fun) %>%
-    mutate(footnote = map2(
-      .data$column, .data$footnote,
-      function(x, y) {
-        if (x == "q.value") {
-          return(c(y, footnote_text))
-        }
-        return(y)
-      }
-    ))
+    mutate(
+      footnote = ifelse(.data$column == "q.value",
+                        footnote_text,
+                        .data$footnote)
+    )
 
   x <- modify_header_internal(x, q.value = "**q-value**")
-
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
 
   x$call_list <- c(x$call_list, list(add_q = match.call()))
 

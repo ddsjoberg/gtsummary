@@ -199,6 +199,14 @@ inline_text.tbl_regression <-
     variable <- rlang::enquo(variable)
     level <- rlang::enquo(level)
 
+    # setting defaults ---------------------------------------------------------
+    if (is.null(estimate_fun)) estimate_fun <-
+      x$table_header %>%
+      dplyr::filter(startsWith(.data$column, "estimate")) %>%
+      dplyr::slice(1) %>%
+      dplyr::pull("fmt_fun") %>%
+      purrr::pluck(1)
+
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
@@ -339,8 +347,14 @@ inline_text.tbl_survival <-
   function(x, strata = NULL,
            time = NULL, prob = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {ci})",
-           estimate_fun = x$fmt_fun$estimate,
+           estimate_fun = NULL,
            ...) {
+
+    # setting defaults ---------------------------------------------------------
+    if (is.null(estimate_fun)) estimate_fun <- x$table_header %>%
+        filter(.data$column == "estimate") %>%
+        pull("fmt_fun") %>%
+        purrr::pluck(1)
 
     # input checks -------------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {

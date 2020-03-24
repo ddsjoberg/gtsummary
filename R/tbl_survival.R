@@ -212,12 +212,12 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       )
     ) %>%
     select(starts_with("level_label"), c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
-  table_body <- table_long
+  table_body <- table_long %>% mutate(row_type = "label")
 
   cols_hide_list <-
     c(
       "prob", "time", "strata", "n.risk", "n.event", "n", "n.event.tot",
-      "n.event.strata", "variable", "level", "conf.low", "conf.high"
+      "n.event.strata", "variable", "level", "conf.low", "conf.high", "row_type"
     ) %>%
     intersect(names(table_body)) %>%
     paste(collapse = ", ")
@@ -226,17 +226,24 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   table_header <-
     tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
-    table_header_fmt_fun(estimate = estimate_fun)
+    table_header_fmt_fun(estimate = estimate_fun) %>%
+    mutate(
+      footnote_abbrev = case_when(
+        .data$column == "ci" ~ "CI = Confidence Interval",
+        TRUE ~ .data$footnote_abbrev
+      )
+    )
 
   # creating object to return
+  level_label <- intersect("level_label", names(table_body)) %>% list() %>% compact()
   result <- list()
-  result[["table_body"]] <- table_body
+  result[["table_body"]] <- table_body %>% group_by(!!!syms(level_label))
   result[["table_header"]] <- table_header
   result[["table_long"]] <- table_long
   result[["survfit"]] <- x
   result[["call_list"]] <- list(tbl_survival = match.call())
-  result[["gt_calls"]] <- eval(tbl_survival_gt_calls)
-  result[["kable_calls"]] <- eval(tbl_survival_kable_calls)
+  # result[["gt_calls"]] <- eval(tbl_survival_gt_calls)
+  # result[["kable_calls"]] <- eval(tbl_survival_kable_calls)
 
   # specifying labels
   result <-
@@ -255,8 +262,8 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       )
   }
 
-  # writing additional gt and kable calls with data from table_header
-  result <- update_calls_from_table_header(result)
+  # # writing additional gt and kable calls with data from table_header
+  # result <- update_calls_from_table_header(result)
 
   # returning results
   class(result) <- c("tbl_survival", "gtsummary")
@@ -362,54 +369,3 @@ surv_quantile <- function(x, probs) {
       conf.high = .data$upper
     )
 }
-
-
-tbl_survival_gt_calls <- quote(list(
-  # first call to gt
-  gt = glue("gt::gt(data = x$table_body, groupname_col = 'level_label')"),
-
-  # centering columns except time
-  cols_align = glue(
-    "gt::cols_align(align = 'center') %>% ",
-    "gt::cols_align(align = 'left', columns = gt::vars(label))"
-  ),
-
-  # formatting missing columns for estimates
-  fmt_missing =
-    glue("gt::fmt_missing(columns = gt::vars(estimate, ci), rows = NULL, missing_text = '---')"),
-
-  # adding CI footnote
-  footnote_abbreviation =
-    glue(
-      "gt::tab_footnote(footnote = 'CI = Confidence Interval',",
-      "locations = gt::cells_column_labels(columns = gt::vars(ci)))"
-    ),
-
-  # hding conf.high (in the other objects the ci is created with cols_merge, but not in tbl_survival so we need this additional call)
-  cols_hide_conf.high =
-    "gt::cols_hide(columns = gt::vars(conf.high))"
-))
-
-
-tbl_survival_kable_calls <- quote(list(
-  # first call to gt
-  kable = glue("x$table_body"),
-
-  #  placeholder, so the formatting calls are performed other calls below
-  fmt = NULL,
-
-  # if strata is present, then only keeping first row
-  strata = switch(
-    "level_label" %in% names(table_body) + 1,
-    NULL,
-    glue(
-      "dplyr::group_by(level) %>% ",
-      "dplyr::mutate(level_label = ifelse(dplyr::row_number() == 1, level_label, NA)) %>% ",
-      "dplyr::ungroup()"
-    )
-  ),
-
-  # formatting missing columns for estimates
-  fmt_missing =
-    glue("dplyr::mutate_at(dplyr::vars(estimate, ci), ~ ifelse(is.na(.), '---', .))")
-))
