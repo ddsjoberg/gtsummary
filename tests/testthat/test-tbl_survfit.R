@@ -10,6 +10,14 @@ test_that("no errors/warnings with stratified variable", {
     ),
     NA
   )
+  expect_error(
+    tbl_survfit(
+      s1,
+      times = c(12, 24),
+      failure = TRUE
+    ),
+    NA
+  )
   expect_warning(
     tbl_survfit(
       s1,

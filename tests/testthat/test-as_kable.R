@@ -5,6 +5,11 @@ test_that("tbl_summary", {
   expect_warning(tbl_summary(trial) %>% as_kable(), NA)
 })
 
+test_that("tbl_summary", {
+  expect_error(tbl_summary(trial) %>% as_kable(return_calls = TRUE), NA)
+  expect_warning(tbl_summary(trial) %>% as_kable(return_calls = TRUE), NA)
+})
+
 test_that("tbl_regression", {
   expect_error(lm(marker ~ age, trial) %>% tbl_regression() %>% as_kable(), NA)
   expect_warning(lm(marker ~ age, trial) %>% tbl_regression() %>% as_kable(), NA)
