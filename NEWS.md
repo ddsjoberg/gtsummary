@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Updated the default printing for {gtsummary} objects. {gt} is the deafult printer for the R console and for R markdown documents with HTML output.  PDF and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (#395, #396)
+* Updated the default printing for {gtsummary} objects. {gt} is the default printer for the R console and for R markdown documents with HTML output.  PDF and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (#395, #396)
 
 * Removed class checking for each type gtsummary table type, and made `tbl_stack()`, `tbl_merge()`, `bold_labels()` (and friends) generic and now check for class gtsummary (#373)
 
