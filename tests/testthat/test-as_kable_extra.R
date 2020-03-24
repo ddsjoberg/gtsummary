@@ -27,3 +27,22 @@ test_that("tbl_survival", {
   expect_error(tbl_survival(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
   expect_warning(tbl_survival(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
 })
+
+test_that("tbl_merge", {
+  library(survival)
+  t1 <-
+    glm(response ~ trt + grade + age, trial, family = binomial) %>%
+    tbl_regression(exponentiate = TRUE)
+  t2 <-
+    coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+    tbl_regression(exponentiate = TRUE)
+  tbl_merge_ex1 <-
+    tbl_merge(
+      tbls = list(t1, t2),
+      tab_spanner = c("**Tumor Response**", "**Time to Death**")
+    )
+
+  expect_error(tbl_merge_ex1 %>% as_kable_extra(), NA)
+  expect_warning(tbl_merge_ex1 %>% as_kable_extra(), NA)
+
+})
