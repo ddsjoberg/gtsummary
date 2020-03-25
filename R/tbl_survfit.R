@@ -57,7 +57,6 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
                         statistic = "{estimate} ({conf.low}, {conf.high})",
                         label = NULL, label_header = NULL, estimate_fun = NULL,
                         missing = "--", conf.level = 0.95, failure = FALSE) {
-  # TODO: Check results for survival quantiles (particularly at observed times)
 
   # input checks ---------------------------------------------------------------
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
@@ -146,10 +145,13 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
 }
 
 
+# calcualtes and prepares survival quantile estimates for tbl
 survfit_prob <- function(x, probs, label_header, conf.level) {
 
   strata <- intersect("strata", names(broom::tidy(x, conf.level = conf.level))) %>%
     list() %>% compact()
+
+  # calculating survival quantiles, and adding estimates to pretty tbl
   df_stat <- imap_dfr(
     probs,
     ~stats::quantile(x, probs = .x) %>%
@@ -161,6 +163,7 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
         col_name = paste("stat", .y, sep = "_")
       )
   ) %>%
+    # creating labels
     mutate(
       variable = switch(length(.env$strata) == 0, "..overall..") %||%
         stringr::word(strata, start = 1L, sep = "="),
@@ -178,7 +181,7 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
 }
 
 
-
+# calcualtes and prepares n-year survival estimates for tbl
 survfit_time <- function(x, times, label_header, conf.level, failure) {
   tidy <- broom::tidy(x, conf.level = conf.level)
   strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
