@@ -147,45 +147,20 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
 
 
 survfit_prob <- function(x, probs, label_header, conf.level) {
-  tidy <- broom::tidy(x, conf.level = conf.level)
-  strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
 
-  # adding time 0 to data frame
-  tidy <-
-    tidy %>%
-    select(any_of(c("time", "estimate", "conf.high", "conf.low", "strata"))) %>%
-    bind_rows(
-      group_by(., !!!syms(strata)) %>%
-        slice(1) %>%
-        mutate(time = 0, estimate = 1, conf.low = 1, conf.high = 1)
-    ) %>%
-    ungroup() %>%
-    tidyr::pivot_longer(cols = c(.data$estimate, .data$conf.low, .data$conf.high),
-                        names_to = "estimate_type", values_to = "prob")
-
-  # getting requested estimates
-  df_stat <-
-    tidy %>%
-    # adding in
-    full_join(
-      select(tidy, .data$estimate_type, !!!syms(strata)) %>%
-        distinct()  %>%
-        mutate(
-          prob = list(.env$probs),
-          col_name = list(paste("stat", seq_len(length(.env$probs)), sep = "_"))
-        ) %>%
-        unnest(cols = c(.data$prob, .data$col_name)),
-      by = unlist(c(strata, "estimate_type", "prob"))
-    ) %>%
-    select(!!!syms(strata), .data$estimate_type, .data$prob, everything()) %>%
-    arrange(!!!syms(strata), .data$estimate_type, desc(.data$prob)) %>%
-    group_by(!!!syms(strata), .data$estimate_type) %>%
-    mutate_at(
-      vars(.data$time),
-      ~ifelse(is.na(.) & dplyr::row_number() != n(),
-              dplyr::lag(., n = 1), .)
-    ) %>%
-    filter(.data$prob %in% .env$probs) %>%
+  strata <- intersect("strata", names(broom::tidy(x, conf.level = conf.level))) %>%
+    list() %>% compact()
+  df_stat <- imap_dfr(
+    probs,
+    ~stats::quantile(x, probs = .x) %>%
+      as.data.frame() %>%
+      tibble::rownames_to_column() %>%
+      set_names(c("strata", "estimate", "conf.low", "conf.high")) %>%
+      mutate(
+        prob = .x,
+        col_name = paste("stat", .y, sep = "_")
+      )
+  ) %>%
     mutate(
       variable = switch(length(.env$strata) == 0, "..overall..") %||%
         stringr::word(strata, start = 1L, sep = "="),
@@ -194,14 +169,10 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
       col_label = .env$label_header %||%
         "**{style_percent(prob, symbol = TRUE)} Centile**" %>%
         glue() %>% as.character()
-    ) %>%
-    tidyr::pivot_wider(
-      id_cols = any_of(c("variable", "label", "strata", "col_name", "col_label", "prob")),
-      names_from = c(.data$estimate_type),
-      values_from = .data$time
-    ) %>%
-    select(any_of(c("variable", "label", "strata", "col_name", "col_label")), everything()) %>%
-    ungroup()
+    )
+
+  # removing strata column if there are no stratum in survfit
+  if (length(strata) == 0) df_stat <- select(df_stat, -.data$strata)
 
   df_stat
 }
