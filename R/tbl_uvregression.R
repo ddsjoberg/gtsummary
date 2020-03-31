@@ -67,16 +67,6 @@
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )
-#'
-#' # for convenience, you can also pass named lists to any arguments
-#' # that accept formulas (e.g label, etc.)
-#' library(survival)
-#' trial[c("ttdeath", "death", "age", "grade", "response")] %>%
-#'   tbl_uvregression(
-#'     method = coxph,
-#'     y = Surv(ttdeath, death),
-#'     exponentiate = TRUE
-#'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
