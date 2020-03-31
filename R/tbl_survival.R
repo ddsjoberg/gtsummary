@@ -14,7 +14,7 @@ tbl_survival <- function(x, ...) {
 
 #' Creates table of survival probabilities
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("questioning")}
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("soft-deprecated")}
 #' Questioning whether gtsummary is the place for our univariate survival
 #' functions to live. This may be exported to another package in the future.
 #' Function takes a `survfit` object as an argument, and provides a
@@ -106,6 +106,9 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  missing = "-",
                                  estimate_fun = NULL,
                                  ...) {
+  # deprecated -----------------------------------------------------------------
+  lifecycle::deprecate_soft("1.3.0", "gtsummary::tbl_survival()", "tbl_survfit()")
+
   # setting defaults -----------------------------------------------------------
   estimate_fun <-
     estimate_fun %||%
