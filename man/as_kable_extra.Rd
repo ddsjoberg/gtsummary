@@ -24,6 +24,7 @@ as a list of expressions.}
 A {kableExtra} object
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Function converts a gtsummary object to a knitr_kable + kableExtra object.
 A user can use this function if they wish to add customized formatting
 available via \link[knitr:kable]{knitr::kable} and {kableExtra}. Note that {gtsummary}

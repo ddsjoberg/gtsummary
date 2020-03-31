@@ -1,6 +1,7 @@
 #' Convert to knitr_kable + kableExtra object
 #'
-#' @description Function converts a gtsummary object to a knitr_kable + kableExtra object.
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' Function converts a gtsummary object to a knitr_kable + kableExtra object.
 #' A user can use this function if they wish to add customized formatting
 #' available via [knitr::kable] and {kableExtra}. Note that {gtsummary}
 #' uses the standard markdown `**` to bold headers, and they may need to be
@@ -17,7 +18,15 @@
 #'   as_kable_extra()
 
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE, ...) {
-  # creating list of kableExtra calls --------------------------------------------------
+  # must have kableExtra package installed to use this function ----------------
+  if (!requireNamespace("kableExtra", quietly = TRUE)) {
+    stop(paste0(
+      "The 'kableExtra' package is required for 'as_kable_extra'.\n",
+      "Install with install.packages('kableExtra')"
+    ), call. = FALSE)
+  }
+
+  # creating list of kableExtra calls ------------------------------------------
   kable_extra_calls <- table_header_to_kable_extra_calls(x = x, ...)
   if (return_calls == TRUE) return(kable_extra_calls)
 
