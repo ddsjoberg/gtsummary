@@ -20,12 +20,12 @@ test_that("tbl_uvregression", {
   expect_warning(trial %>% tbl_uvregression(method = lm, y = age) %>% as_kable_extra(), NA)
 })
 
-test_that("tbl_survival", {
+test_that("tbl_survfit", {
   library(survival)
   fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 
-  expect_error(tbl_survival(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
-  expect_warning(tbl_survival(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
+  expect_error(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
+  expect_warning(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
 })
 
 test_that("tbl_merge", {
