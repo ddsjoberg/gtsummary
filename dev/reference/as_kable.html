@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -42,7 +46,7 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
@@ -56,10 +60,8 @@ available via knitr::kable.
 Output from knitr::kable is less full featured compared to
 summary tables produced with gt.
 For example, kable summary tables do not include indentation, footnotes,
-or spanning header rows. To use these features, install gt with
-remotes::install_github(&quot;rstudio/gt&quot;, ref = gtsummary::gt_sha)." />
+or spanning header rows." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 <meta name="robots" content="noindex">
@@ -87,7 +89,7 @@ remotes::install_github(&quot;rstudio/gt&quot;, ref = gtsummary::gt_sha)." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -101,7 +103,7 @@ remotes::install_github(&quot;rstudio/gt&quot;, ref = gtsummary::gt_sha)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9008</span>
       </span>
     </div>
 
@@ -186,11 +188,10 @@ available via <a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable</a
 <p>Output from <a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable</a> is less full featured compared to
 summary tables produced with <a href='https://gt.rstudio.com/index.html'>gt</a>.
 For example, kable summary tables do not include indentation, footnotes,
-or spanning header rows. To use these features, install gt with
-<code><a href='https://remotes.r-lib.org/reference/install_github.html'>remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)</a></code>.</p>
+or spanning header rows.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_kable</span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything</a></span>(), <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>as_kable</span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything</a></span>(), <span class='kw'>return_calls</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -206,6 +207,11 @@ or spanning header rows. To use these features, install gt with
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is <code><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything()</a></code>, which includes all commands in <code>x$kable_calls</code>.</p></td>
+    </tr>
+    <tr>
+      <th>return_calls</th>
+      <td><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
+as a list of expressions.</p></td>
     </tr>
     <tr>
       <th>exclude</th>
@@ -237,35 +243,27 @@ indenting is not supported, try <code><a href='bold_italicize_labels_levels.html
 #&gt; |**Characteristic**         |**Drug A**, N = 98 |**Drug B**, N = 102 |
 #&gt; |:--------------------------|:------------------|:-------------------|
 #&gt; |__Age, yrs__               |46 (37, 59)        |48 (39, 56)         |
-#&gt; |Unknown                    |7                  |4                   |
+#&gt; |__Unknown__                |7                  |4                   |
 #&gt; |__Marker Level, ng/mL__    |0.84 (0.24, 1.57)  |0.52 (0.19, 1.20)   |
-#&gt; |Unknown                    |6                  |4                   |
+#&gt; |__Unknown__                |6                  |4                   |
 #&gt; |__T Stage__                |                   |                    |
-#&gt; |T1                         |28 (29%)           |25 (25%)            |
-#&gt; |T2                         |25 (26%)           |29 (28%)            |
-#&gt; |T3                         |22 (22%)           |21 (21%)            |
-#&gt; |T4                         |23 (23%)           |27 (26%)            |
+#&gt; |__T1__                     |28 (29%)           |25 (25%)            |
+#&gt; |__T2__                     |25 (26%)           |29 (28%)            |
+#&gt; |__T3__                     |22 (22%)           |21 (21%)            |
+#&gt; |__T4__                     |23 (23%)           |27 (26%)            |
 #&gt; |__Grade__                  |                   |                    |
-#&gt; |I                          |35 (36%)           |33 (32%)            |
-#&gt; |II                         |32 (33%)           |36 (35%)            |
-#&gt; |III                        |31 (32%)           |33 (32%)            |
+#&gt; |__I__                      |35 (36%)           |33 (32%)            |
+#&gt; |__II__                     |32 (33%)           |36 (35%)            |
+#&gt; |__III__                    |31 (32%)           |33 (32%)            |
 #&gt; |__Tumor Response__         |28 (29%)           |33 (34%)            |
-#&gt; |Unknown                    |3                  |4                   |
+#&gt; |__Unknown__                |3                  |4                   |
 #&gt; |__Patient Died__           |52 (53%)           |60 (59%)            |
 #&gt; |__Months to Death/Censor__ |23.5 (17.4, 24.0)  |21.2 (14.6, 24.0)   |</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -276,7 +274,7 @@ indenting is not supported, try <code><a href='bold_italicize_labels_levels.html
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
 </div>
 
       </footer>
