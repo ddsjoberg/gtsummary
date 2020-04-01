@@ -64,7 +64,7 @@ jobs:
           sudo -s eval "$sysreqs"
 
       - name: Install historical dependencies
-        run: Rscript -e "r_version <- paste0(R.Version()$major, '.', substr(R.Version()$minor, 1, 1))"
+        run: Rscript -e "r_version <- strsplit(version[['version.string']], split=' ')[[1]][3]"
                      -e "print(r_version)"
 
       - name: Install dependencies
