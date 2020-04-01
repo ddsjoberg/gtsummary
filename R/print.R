@@ -53,8 +53,8 @@ knit_print.gtsummary <- function(x, ...) {
   }
 
   # don't use word_document with gt engine
-  else if ((is.null(print_engine) | print_engine == "gt") &&
-           "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
+  else if (identical(print_engine %||% "gt", "gt") &&
+           ("docx" %in% knitr::opts_knit$get('rmarkdown.pandoc.to'))) {
     rlang::inform(paste(
       "Table printed with `knitr::kable()`, not {gt}. Learn why at",
       "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
@@ -65,8 +65,10 @@ knit_print.gtsummary <- function(x, ...) {
   }
 
   # RTF warning when using gt
-  else if ((is.null(print_engine) | print_engine == "gt") &&
-           "rtf_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
+  else if (identical(print_engine %||% "gt", "gt") &&
+           "rtf" %in% knitr::opts_knit$get('rmarkdown.pandoc.to')) {
+  # else if ((is.null(print_engine) | print_engine == "gt") &&
+  #          ("rtf" %in% knitr::opts_knit$get('rmarkdown.pandoc.to'))) {
     rlang::inform(paste(
         "Output 'rtf_document' is in development by the {gt} package. Learn more at",
         "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html \n\n",
