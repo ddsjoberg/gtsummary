@@ -8,8 +8,7 @@
 #' @description Output from [knitr::kable] is less full featured compared to
 #' summary tables produced with [gt](https://gt.rstudio.com/index.html).
 #' For example, kable summary tables do not include indentation, footnotes,
-#' or spanning header rows. To use these features, install gt with
-#' `remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)`.
+#' or spanning header rows.
 #'
 #' @details Tip: To better distinguish variable labels and level labels when
 #' indenting is not supported, try [bold_labels()] or [italicize_levels()].

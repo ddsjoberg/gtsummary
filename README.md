@@ -78,24 +78,12 @@ for various customization examples.
 ## Installation
 
 The {gtsummary} package was written as a companion to the
-[{gt}](https://gt.rstudio.com/) package from RStudio, and it is
-recommended to install both {gt} and {gtsummary}. The {gt} package is
-not automatically installed. If {gt} is not installed, `knitr::kable()`
-will be used to produce the summary tables. You can install {gtsummary}
-and {gt} with the following code.
+[{gt}](https://gt.rstudio.com/) package from RStudio. You can install
+{gtsummary} with the following code.
 
-1.  Install {gtsummary}
-    
-    ``` r
-    install.packages("gtsummary")
-    ```
-
-2.  Install {gt} from GitHub (recommended)
-    
-    ``` r
-    install.packages("remotes")
-    remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
-    ```
+``` r
+install.packages("gtsummary")
+```
 
 Install the development version of {gtsummary} with:
 
@@ -169,7 +157,6 @@ You can also present side-by-side regression model results using
 
 ``` r
 library(survival)
-#> Warning: package 'survival' was built under R version 3.6.3
 
 # build survival model table
 t2 <-
@@ -212,6 +199,7 @@ thank you to all contributors\!
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@MyKo101](https://github.com/MyKo101),
 [@oranwutang](https://github.com/oranwutang),
+[@ryzhu75](https://github.com/ryzhu75),
 [@sammo3182](https://github.com/sammo3182),
 [@slobaugh](https://github.com/slobaugh), and
 [@zabore](https://github.com/zabore)
