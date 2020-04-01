@@ -19,3 +19,4 @@ functions to live. This may be exported to another package in the future.
 \seealso{
 \link{tbl_survival.survfit}
 }
+\keyword{internal}

@@ -193,7 +193,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
       ),
       stat_test_lbl = map_chr(
         .data$test_result,
-        ~ add_p_method_escape_char(pluck(.x, "test")) %||% NA_character_
+        ~ pluck(.x, "test") %||% NA_character_
       )
     ) %>%
     select(-.data$test_result)
@@ -220,21 +220,14 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
     left_join(x$table_header, by = "column") %>%
     table_header_fill_missing() %>%
     table_header_fmt_fun(p.value = pvalue_fun) %>%
-    mutate(footnote = map2(
-      .data$column, .data$footnote,
-      function(x, y) {
-        if (x == "p.value") {
-          return(c(y, footnote_add_p(meta_data)))
-        }
-        return(y)
-      }
-    ))
+    mutate(
+      footnote = ifelse(.data$column == "p.value",
+                        footnote_add_p(meta_data),
+                        .data$footnote)
+    )
 
   # updating header
   x <- modify_header_internal(x, p.value = "**p-value**")
-
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
 

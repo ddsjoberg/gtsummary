@@ -111,9 +111,6 @@ add_nevent.tbl_regression <- function(x, ...) {
     left_join(x$table_header, by = "column") %>%
     table_header_fill_missing()
 
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
-
   x$call_list <- c(x$call_list, list(add_nevent = match.call()))
 
   x
@@ -186,8 +183,6 @@ add_nevent.tbl_uvregression <- function(x, ...) {
     table_header_fill_missing()
   x <- modify_header_internal(x, nevent = "**Event N**")
 
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
 
   x
 }

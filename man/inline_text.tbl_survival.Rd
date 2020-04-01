@@ -10,7 +10,7 @@
   time = NULL,
   prob = NULL,
   pattern = "{estimate} ({conf.level*100}\% CI {ci})",
-  estimate_fun = x$fmt_fun$estimate,
+  estimate_fun = NULL,
   ...
 )
 }
@@ -83,3 +83,4 @@ Other tbl_survival tools:
 Karissa Whiting
 }
 \concept{tbl_survival tools}
+\keyword{internal}
