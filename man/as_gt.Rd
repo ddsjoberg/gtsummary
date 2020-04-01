@@ -4,7 +4,13 @@
 \alias{as_gt}
 \title{Convert gtsummary object to a gt_tbl object}
 \usage{
-as_gt(x, include = everything(), exclude = NULL, omit = NULL)
+as_gt(
+  x,
+  include = everything(),
+  return_calls = FALSE,
+  exclude = NULL,
+  omit = NULL
+)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -14,6 +20,9 @@ as_gt(x, include = everything(), exclude = NULL, omit = NULL)
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is \code{everything()}, which includes all commands in \code{x$gt_calls}.}
+
+\item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
+as a list of expressions.}
 
 \item{exclude}{DEPRECATED.}
 

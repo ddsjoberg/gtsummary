@@ -65,9 +65,8 @@ probabilities, and
 A \code{tbl_survival} object
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("questioning")}
-Questioning whether gtsummary is the place for our univariate survival
-functions to live. This may be exported to another package in the future.
+\Sexpr[results=rd, stage=render]{lifecycle::badge("soft-deprecated")}
+Please use \link{tbl_survfit}.
 Function takes a \code{survfit} object as an argument, and provides a
 formatted summary of the results
 }
@@ -127,3 +126,4 @@ Other tbl_survival tools:
 Daniel D. Sjoberg
 }
 \concept{tbl_survival tools}
+\keyword{internal}

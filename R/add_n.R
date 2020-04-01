@@ -103,15 +103,9 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
     x$table_header <-
       x$table_header %>%
       mutate(
-        footnote = map2(
-          .data$column, .data$footnote,
-          function(x1, y1) {
-            if (x1 %in% c("n")) {
-              return(c(y1, paste("Statistics presented:", stat_to_label(statistic))))
-            }
-            return(y1)
-          }
-        )
+        footnote = ifelse(.data$column == "n",
+                          paste("Statistics presented:", stat_to_label(statistic)),
+                          .data$footnote)
       )
   }
 
@@ -123,9 +117,6 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
   else {
     x <- modify_header_internal(x, n = col_label)
   }
-
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
 
   # adding indicator to output that add_n was run on this data
   x$call_list <- c(x$call_list, list(add_n = match.call()))

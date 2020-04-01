@@ -4,7 +4,7 @@
 \alias{add_q.tbl_summary}
 \title{Add a column of q-values to account for multiple comparisons}
 \usage{
-\method{add_q}{tbl_summary}(x, method = "fdr", pvalue_fun = x$fmt_fun$p.value, ...)
+\method{add_q}{tbl_summary}(x, method = "fdr", pvalue_fun = NULL, ...)
 }
 \arguments{
 \item{x}{\code{tbl_summary} object}
@@ -49,6 +49,7 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{bold_p.tbl_summary}()},
 \code{\link{inline_text.tbl_summary}()},
+\code{\link{inline_text.tbl_survfit}()},
 \code{\link{modify_header}()},
 \code{\link{sort_p.tbl_summary}()},
 \code{\link{tbl_merge}()},

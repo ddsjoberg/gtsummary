@@ -78,8 +78,5 @@ add_overall <- function(x, last = FALSE) {
   # adding header
   x <- modify_header_internal(x, stat_0 = "**Overall**, N = {N}")
 
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
-
   x
 }

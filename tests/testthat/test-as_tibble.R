@@ -16,6 +16,8 @@ t3 <-
 test_that("as_tibble works with standard use", {
   expect_error(as_tibble(t1), NA)
   expect_warning(as_tibble(t1), NA)
+  expect_error(as_tibble(t1, return_calls = TRUE), NA)
+  expect_warning(as_tibble(t1, return_calls = TRUE), NA)
   expect_error(as_tibble(t2), NA)
   expect_warning(as_tibble(t2), NA)
   expect_error(as_tibble(t3), NA)

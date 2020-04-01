@@ -5,7 +5,14 @@
 \alias{as_tibble.gtsummary}
 \title{Convert gtsummary object to tibble}
 \usage{
-\method{as_tibble}{gtsummary}(x, include = everything(), col_labels = TRUE, exclude = NULL, ...)
+\method{as_tibble}{gtsummary}(
+  x,
+  include = everything(),
+  col_labels = TRUE,
+  return_calls = FALSE,
+  exclude = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -18,6 +25,9 @@ Default is \code{everything()}, which includes all commands in \code{x$kable_cal
 
 \item{col_labels}{Logical argument adding column labels to output tibble.
 Default is \code{TRUE}.}
+
+\item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
+as a list of expressions.}
 
 \item{exclude}{DEPRECATED}
 

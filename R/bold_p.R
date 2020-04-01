@@ -48,17 +48,15 @@ bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 
   # storing column names and gt_call name
   col_name <- ifelse(q == FALSE, "p.value", "q.value")
-  fun_name <- ifelse(q == FALSE, "pvalue_fun", "qvalue_fun")
 
   # modifying table_header with bold threshold
-  x$table_header$bold <-
-    ifelse(
-      x$table_header$column == col_name,
-      t, x$table_header$bold
-    )
-
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
+  x$table_header$bold <- case_when(
+    x$table_header$column == col_name & is.na(x$table_header$bold) ~
+      glue("{col_name} <= {t}") %>% as.character(),
+    x$table_header$column == col_name & !is.na(x$table_header$bold) ~
+      paste(x$table_header$bold, glue("{col_name} <= {t}"), sep = " | "),
+    TRUE ~ x$table_header$bold
+  )
 
   x$call_list <- c(x$call_list, list(bold_p = match.call()))
 
@@ -87,14 +85,14 @@ bold_p.tbl_summary <- function(x, t = 0.05, q = FALSE, ...) {
 bold_p.tbl_regression <- function(x, t = 0.05, ...) {
 
   # modifying table_header with bold threshold
-  x$table_header$bold <-
-    ifelse(
-      x$table_header$column == "p.value",
-      t, x$table_header$bold
-    )
-
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
+  col_name = "p.value"
+  x$table_header$bold <- case_when(
+    x$table_header$column == col_name & is.na(x$table_header$bold) ~
+      glue("{col_name} <= {t}") %>% as.character(),
+    x$table_header$column == col_name & !is.na(x$table_header$bold) ~
+      paste(x$table_header$bold, glue("{col_name} <= {t}"), sep = " | "),
+    TRUE ~ x$table_header$bold
+  )
 
   x$call_list <- c(x$call_list, list(bold_p = match.call()))
 
@@ -133,17 +131,15 @@ bold_p.tbl_uvregression <- function(x, t = 0.05, q = FALSE, ...) {
   }
 
   col_name <- ifelse(q == FALSE, "p.value", "q.value")
-  fun_name <- ifelse(q == FALSE, "pvalue_fun", "qvalue_fun")
 
   # modifying table_header with bold threshold
-  x$table_header$bold <-
-    ifelse(
-      x$table_header$column == col_name,
-      t, x$table_header$bold
-    )
-
-  # updating gt and kable calls with data from table_header
-  x <- update_calls_from_table_header(x)
+  x$table_header$bold <- case_when(
+    x$table_header$column == col_name & is.na(x$table_header$bold) ~
+      glue("{col_name} <= {t}") %>% as.character(),
+    x$table_header$column == col_name & !is.na(x$table_header$bold) ~
+      paste(x$table_header$bold, glue("{col_name} <= {t}"), sep = " | "),
+    TRUE ~ x$table_header$bold
+  )
 
   x$call_list <- c(x$call_list, list(bold_p = match.call()))
 

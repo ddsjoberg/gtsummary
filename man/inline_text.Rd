@@ -19,7 +19,7 @@ Report statistics from gtsummary tables inline
 }
 \seealso{
 \link{inline_text.tbl_summary}, \link{inline_text.tbl_regression},
-\link{inline_text.tbl_uvregression}, \link{inline_text.tbl_survival}
+\link{inline_text.tbl_uvregression}, \link{inline_text.tbl_survfit}
 }
 \author{
 Daniel D. Sjoberg

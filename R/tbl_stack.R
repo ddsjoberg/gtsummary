@@ -81,7 +81,7 @@ tbl_stack <- function(tbls) {
 
   # stacking tables ------------------------------------------------------------
   # the table_body and call_list will be updated with the tbl_stack values
-  results <- tbls[[1]][c("gt_calls", "kable_calls")]
+  results <- list()
   results$table_body <-
     map_dfr(tbls, ~pluck(.x, "table_body"))
 
@@ -90,9 +90,6 @@ tbl_stack <- function(tbls) {
     group_by(.data$column) %>%
     filter(dplyr::row_number() == 1) %>%
     ungroup()
-
-  # writing additional gt and kable calls with data from table_header
-  results <- update_calls_from_table_header(results)
 
   # returning results ----------------------------------------------------------
   results$call_list <- list(tbl_stack = match.call())

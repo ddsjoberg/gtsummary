@@ -4,7 +4,7 @@
 \alias{as_kable}
 \title{Convert to knitr_kable object}
 \usage{
-as_kable(x, include = everything(), exclude = NULL, ...)
+as_kable(x, include = everything(), return_calls = FALSE, exclude = NULL, ...)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -14,6 +14,9 @@ as_kable(x, include = everything(), exclude = NULL, ...)
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is \code{everything()}, which includes all commands in \code{x$kable_calls}.}
+
+\item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
+as a list of expressions.}
 
 \item{exclude}{DEPRECATED}
 

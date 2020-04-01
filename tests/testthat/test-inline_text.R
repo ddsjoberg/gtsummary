@@ -189,3 +189,44 @@ test_that("inline_text.tbl_survival - no strata", {
     "Ignoring strata =*"
   )
 })
+
+# inline_text.tbl_survfit tests  --------------
+fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
+
+tbl1 <- tbl_survfit(
+  fit1,
+  times = c(12, 24),
+  label = "Treatment",
+  label_header = "**{time} Month**"
+)
+
+tbl2 <- tbl_survfit(
+  fit2,
+  probs = 0.5
+)
+
+inline_text(tbl1, column = "24", level = "Drug A")
+inline_text(tbl2)
+
+test_that("inline_text.tbl_survfit", {
+  expect_error(
+    inline_text(tbl1, column = "24", level = "Drug A"),
+    NA
+  )
+  expect_warning(
+    inline_text(tbl1, column = "24", level = "Drug A"),
+    NA
+  )
+
+  expect_error(
+    inline_text(tbl2),
+    NA
+  )
+  expect_warning(
+    inline_text(tbl2),
+    NA
+  )
+
+})
+

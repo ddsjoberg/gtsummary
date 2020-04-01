@@ -218,20 +218,18 @@ These are the additional data stored in the `tbl_regression()` output list.
     model_obj    the model object passed to `tbl_regression`  
     call_list    named list of each function called on the `tbl_regression` object  
     inputs       inputs from the `tbl_regression()` function call  
-    gt_calls     named list of {gt} function calls  
-    kable_calls  named list of function calls to be applied before knitr::kable()  
 
-`gt_calls` is a named list of saved {gt} function calls.  The {gt} calls are run when the object is printed to the console or in an R markdown document. Here's an example of the first few calls saved with `tbl_regression()`:
+When a {gtsummary} object is printed, it is first converted to a {gt} object with `as_gt()` via a sequence of {gt} commands executed on `x$table_body`.
+Here's an example of the first few calls saved with `tbl_rregression()`:
 
 ```{r}
-tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% head(n = 5)
+tbl_regression(m1) %>% as_gt(return_calls = TRUE) %>% head(n = 3)
 ```
 
-The {gt} functions are called in the order they appear, always beginning with the `gt()` function.
+The {gt} functions are called in the order they appear, always beginning with the `gt::gt()` function.
 
-If the user does not want a specific {gt} function to run, any {gt} call can be excluded in the `as_gt()` function.
-For example, the `tbl_regression()` call creates many named {gt} function calls: *`r tbl_regression(m1) %>% purrr::pluck("gt_calls") %>% names() %>% paste(collapse = ", ")`*.
-Any one of these can be excluded.  In this example, the default footnote will be excluded from the output.
+If the user does not want a specific {gt} function to run, any {gt} call can be included or excluded in the `as_gt()` function.
+In this example, the default footnote will be excluded from the output.
 
 ```{r as_gt2, eval=FALSE}
 tbl_regression(m1, exponentiate = TRUE) %>%
