@@ -4,7 +4,6 @@
 #' Function is used in the background when the results are printed or knit.
 #' A user can use this function if they wish to add customized formatting
 #' available via the [gt package](https://gt.rstudio.com/index.html).
-#' You can install gt with `remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)`.
 #'
 #' @description Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
@@ -27,30 +26,15 @@
 #' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survival]
 #' @author Daniel D. Sjoberg
 #' @examples
-#' # Requires the gt package
-#' # remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
-#' \donttest{
 #' as_gt_ex <-
 #'   trial[c("trt", "age", "response", "grade")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_gt()
-#' }
 #' @section Example Output:
 #'
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
 
 as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NULL, omit = NULL) {
-  # DEPRECATED notice ---------------------------------------------------------
-  # checking if updated version of gt package is required 2019-12-25 -----------
-  if (!exists("cells_body", asNamespace("gt"))) {
-    usethis::ui_oops(glue(
-      "An updated version of the gt package is required to print table.\n",
-      "To install the most recent version of gt, run"
-    ))
-    usethis::ui_code_block('remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)')
-    return(invisible())
-  }
-
   # making list of commands to include -----------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(

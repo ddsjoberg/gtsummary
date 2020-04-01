@@ -36,7 +36,6 @@ Function converts a gtsummary object to a gt_tbl object.
 Function is used in the background when the results are printed or knit.
 A user can use this function if they wish to add customized formatting
 available via the \href{https://gt.rstudio.com/index.html}{gt package}.
-You can install gt with \code{remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)}.
 
 Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
@@ -51,14 +50,10 @@ for detailed examples in the 'Advanced Customization' section.
 }
 
 \examples{
-# Requires the gt package
-# remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
-\donttest{
 as_gt_ex <-
   trial[c("trt", "age", "response", "grade")] \%>\%
   tbl_summary(by = trt) \%>\%
   as_gt()
-}
 }
 \seealso{
 \link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_survival}

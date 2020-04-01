@@ -43,9 +43,7 @@ Description: Creates presentation-ready tables summarizing data
     categorical variables. Common regression models, such as logistic
     regression and Cox proportional hazards regression, are automatically
     identified and the tables are pre-filled with appropriate column
-    headers. The package is enhanced when the 'gt' package is installed.
-    Use this code to install: 'remotes::install_github("rstudio/gt", ref =
-    gtsummary::gt_sha)'.
+    headers. 
 License: MIT + file LICENSE
 URL: https://github.com/ddsjoberg/gtsummary,
     http://www.danieldsjoberg.com/gtsummary/
@@ -59,6 +57,7 @@ Imports:
     dplyr (>= 0.8.3),
     forcats (>= 0.4.0),
     glue (>= 1.3.1),
+    gt (>= 0.2.0.5),
     knitr (>= 1.26),
     lifecycle (>= 0.1.0),
     magrittr (>= 1.5),
@@ -74,7 +73,6 @@ Suggests:
     car,
     covr,
     geepack,
-    gt,
     Hmisc,
     kableExtra,
     lme4,
@@ -86,7 +84,6 @@ VignetteBuilder:
     knitr
 RdMacros: 
     lifecycle
-Additional_repositories: http://ddsjoberg.github.io/drat
 Encoding: UTF-8
 Language: en-US
 LazyData: true
