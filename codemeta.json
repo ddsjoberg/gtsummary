@@ -5,19 +5,19 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "gtsummary",
-  "description": "Creates presentation-ready tables summarizing data\n    sets, regression models, and more. The code to create the tables is\n    concise and highly customizable. Data frames can be summarized with\n    any function, e.g. mean(), median(), even user-written functions.\n    Regression models are summarized and include the reference rows for\n    categorical variables. Common regression models, such as logistic\n    regression and Cox proportional hazards regression, are automatically\n    identified and the tables are pre-filled with appropriate column\n    headers. The package is enhanced when the 'gt' package is installed.\n    Use this code to install: 'remotes::install_github(\"rstudio/gt\", ref =\n    gtsummary::gt_sha)'.",
+  "description": "Creates presentation-ready tables summarizing data\n    sets, regression models, and more. The code to create the tables is\n    concise and highly customizable. Data frames can be summarized with\n    any function, e.g. mean(), median(), even user-written functions.\n    Regression models are summarized and include the reference rows for\n    categorical variables. Common regression models, such as logistic\n    regression and Cox proportional hazards regression, are automatically\n    identified and the tables are pre-filled with appropriate column\n    headers. ",
   "name": "gtsummary: Presentation-Ready Data Summary and Analytic Result\n    Tables",
   "codeRepository": "https://github.com/ddsjoberg/gtsummary",
   "issueTracker": "https://github.com/ddsjoberg/gtsummary/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.2.6.9006",
+  "version": "1.2.6.9008",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.2",
+    "version": "3.6.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.2 (2019-12-12)",
+  "runtimePlatform": "R version 3.6.3 (2020-02-29)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -126,11 +126,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "gt",
-      "name": "gt"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "Hmisc",
       "name": "Hmisc",
       "provider": {
@@ -140,6 +135,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=Hmisc"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "kableExtra",
+      "name": "kableExtra",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=kableExtra"
     },
     {
       "@type": "SoftwareApplication",
@@ -290,6 +297,19 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "gt",
+      "name": "gt",
+      "version": ">= 0.2.0.5",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=gt"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "knitr",
       "name": "knitr",
       "version": ">= 1.26",
@@ -433,7 +453,7 @@
   ],
   "releaseNotes": "https://github.com/ddsjoberg/gtsummary/blob/master/NEWS.md",
   "readme": "https://github.com/ddsjoberg/gtsummary/blob/master/README.md",
-  "fileSize": "2776.244KB",
+  "fileSize": "3191.887KB",
   "contIntegration": [
     "https://travis-ci.org/ddsjoberg/gtsummary",
     "https://ci.appveyor.com/project/ddsjoberg/gtsummary",

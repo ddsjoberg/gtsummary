@@ -82,24 +82,12 @@ for various customization examples.
 ## Installation
 
 The {gtsummary} package was written as a companion to the
-[{gt}](https://gt.rstudio.com/) package from RStudio, and it is
-recommended to install both {gt} and {gtsummary}. The {gt} package is
-not automatically installed. If {gt} is not installed, `knitr::kable()`
-will be used to produce the summary tables. You can install {gtsummary}
-and {gt} with the following code.
+[{gt}](https://gt.rstudio.com/) package from RStudio. You can install
+{gtsummary} with the following code.
 
-1.  Install {gtsummary}
-    
-    ``` r
-    install.packages("gtsummary")
-    ```
-
-2.  Install {gt} from GitHub (recommended)
-    
-    ``` r
-    install.packages("remotes")
-    remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
-    ```
+``` r
+install.packages("gtsummary")
+```
 
 Install the development version of {gtsummary} with:
 
