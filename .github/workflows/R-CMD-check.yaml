@@ -69,6 +69,7 @@ jobs:
                      -e "if (r_version < '3.5') remotes::install_version('geepack', version = '1.2-1', repos = 'https://cran.rstudio.com/')"
                      -e "if (r_version < '3.5') remotes::install_version('car', version = '3.0-2', repos = 'https://cran.rstudio.com/')"
                      -e "if (r_version < '3.6') remotes::install_version('latticeExtra', version = '0.6-28', repos = 'https://cran.rstudio.com/')"
+                     -e "if (r_version < '3.6') remotes::install_version('pbkrtest', version = '0.4-7', repos = 'https://cran.rstudio.com/')"
 
       - name: Install dependencies
         run: |
