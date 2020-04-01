@@ -83,3 +83,4 @@ Other tbl_survival tools:
 Karissa Whiting
 }
 \concept{tbl_survival tools}
+\keyword{internal}

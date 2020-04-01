@@ -77,6 +77,7 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{bold_p.tbl_summary}()},
 \code{\link{inline_text.tbl_summary}()},
+\code{\link{inline_text.tbl_survfit}()},
 \code{\link{sort_p.tbl_summary}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},

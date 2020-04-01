@@ -86,6 +86,10 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
       times = partial(style_percent, symbol = TRUE)
     )
 
+  # will return call, and all object passed to in tbl_summary call -------------
+  # the object func_inputs is a list of every object passed to the function
+  tbl_survfit_inputs <- as.list(environment())
+
   # calculating estimates ------------------------------------------------------
   if (estimate_type == "times")
     df_stats <- survfit_time(x, times = times, label_header = label_header,
@@ -129,6 +133,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   results <- list(
     table_body = table_body,
     table_header = table_header,
+    inputs = tbl_survfit_inputs,
     call_list = list(tbl_survfit = match.call())
   )
 

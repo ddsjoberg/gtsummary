@@ -5,7 +5,7 @@
 #' @return A string reporting results from a gtsummary table
 #' @author Daniel D. Sjoberg
 #' @seealso [inline_text.tbl_summary], [inline_text.tbl_regression],
-#' [inline_text.tbl_uvregression], [inline_text.tbl_survival]
+#' [inline_text.tbl_uvregression], [inline_text.tbl_survfit]
 #' @export
 inline_text <- function(x, ...) {
   UseMethod("inline_text")
@@ -333,6 +333,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @family tbl_survival tools
 #' @return A string reporting results from a gtsummary table
 #' @export
+#' @keywords internal
 #' @examples
 #' library(survival)
 #' surv_table <-
@@ -439,6 +440,136 @@ inline_text.tbl_survival <-
         stat = glue(pattern)
       ) %>%
       pull("stat")
+
+    result
+  }
+
+
+#' Report statistics from survfit tables inline
+#'
+#' Extracts and returns statistics from a `tbl_survfit` object for
+#' inline reporting in an R markdown document. Detailed examples in the
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+#'
+#' @param x Object created from  [tbl_survfit]
+#' @param variable Variable name of statistic to present. Default it first
+#' variable in table.
+#' @param level Level of the variable to display for categorical variables.
+#' Can also specify the 'Unknown' row.  Default is `NULL`
+#' @param column Column name to return from `x$table_body`.
+#' Can also pass the level of a by variable.
+#' @inheritParams tbl_regression
+#' @param ... tbl_survfit used
+#' @family tbl_summary tools
+#' @author Daniel D. Sjoberg
+#' @export
+#' @return A string reporting results from a gtsummary table
+#' @examples
+#' library(survival)
+#' # fit survfit
+#' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+#' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
+#'
+#' # sumarize survfit objects
+#' tbl1 <- tbl_survfit(
+#'   fit1,
+#'   times = c(12, 24),
+#'   label = "Treatment",
+#'   label_header = "**{time} Month**"
+#' )
+#'
+#' tbl2 <- tbl_survfit(
+#'   fit2,
+#'   probs = 0.5,
+#'   label_header = "**Median Survival**"
+#' )
+#'
+#' # report results inline
+#' inline_text(tbl1, column = "24", level = "Drug A")
+#' inline_text(tbl2)
+inline_text.tbl_survfit <-
+  function(x, variable = NULL, column = NULL, level = NULL,
+           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+    # create rlang::enquo() inputs ---------------------------------------------
+    variable <- rlang::enquo(variable)
+    column <- rlang::enquo(column)
+    level <- rlang::enquo(level)
+
+    # setting defaults ---------------------------------------------------------
+    # selecting default variable, if variable is NULL
+    if (rlang::quo_is_null(variable)) {
+      variable <- x$table_body$variable[1]
+    }
+
+    # selecting default column, if column is NULL
+    if (rlang::quo_is_null(column)) {
+      column <- "stat_1"
+    }
+
+    # checking variable input --------------------------------------------------
+    variable <-
+      var_input_to_string(
+        data = vctr_2_tibble(unique(x$table_body$variable)), arg_name = "variable",
+        select_single = TRUE, select_input = !!variable
+      )
+
+    # checking column ----------------------------------------------------------
+    # the follwing code converts the column input to a column name in x$table_body
+    col_lookup_table <-
+      tibble(
+        input = names(x$table_body),
+        column_name = names(x$table_body)
+      ) %>%
+      bind_rows(
+        tibble(
+          input = as.character(x$inputs$probs %||% x$inputs$times),
+          column_name = select(x$table_body, starts_with("stat_")) %>% names(),
+        )
+      )
+
+    # selecting proper column name
+    column <-
+      var_input_to_string(
+        data = vctr_2_tibble(col_lookup_table$input), arg_name = "column",
+        select_single = TRUE, select_input = !!column
+      )
+
+    column <- col_lookup_table %>%
+      filter(.data$input == !!column) %>%
+      slice(1) %>%
+      pull(.data$column_name)
+
+
+    # select value from table --------------------------------------------------
+    result <-
+      x$table_body %>%
+      filter(.data$variable == !!variable)
+
+
+    # select variable level ----------------------------------------------------
+    if (rlang::quo_is_null(level)) {
+      result <- result %>% slice(1)
+    }
+    else {
+      level <-
+        var_input_to_string(
+          data = vctr_2_tibble(filter(result, .data$row_type != "label") %>%
+                                 pull(.data$label)),
+          arg_name = "level", select_single = TRUE, select_input = !!level
+        )
+
+      result <-
+        result %>%
+        filter(.data$label == !!level)
+    }
+
+    # select column ------------------------------------------------------------
+    result <- result %>% pull(column)
+
+    # return statistic ---------------------------------------------------------
+    if (column %in% c("p.value", "q.value")) {
+      return(pvalue_fun(result))
+    }
 
     result
   }
