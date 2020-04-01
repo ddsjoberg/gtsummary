@@ -4,7 +4,7 @@
 
 *  The function `as_kable_extra()` was added for printing to HTML with functions from {kableExtra} (#394)
 
-* New function `tbl_survfit()` was added.  This function will replace `tbl_survival()`, which is now soft deprecated (#280)
+* New functions `tbl_survfit()` and `inline_text.tbl_survfit()` were added.  These replace `tbl_survival()`, which is now soft deprecated (#280)
 
 * Updated the default printing for {gtsummary} objects. {gt} is the default printer for the R console and for R markdown documents with HTML output.  PDF and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (#395, #396)
 
