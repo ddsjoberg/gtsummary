@@ -65,6 +65,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+          r_version <- paste0(R.Version()$major, ".", substr(R.Version()$minor, 1, 1))
+          if (r_version %in% c("3.4")) remotes::install_version("geepack", version = "1.2-1", repos = "https://cran.rstudio.com/")
+          if (r_version %in% c("3.4")) remotes::install_version("car", version = "3.0-2", repos = "https://cran.rstudio.com/")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
