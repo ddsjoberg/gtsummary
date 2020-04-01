@@ -42,20 +42,10 @@ Here's how this translates into the use of `tbl_summary()`.
 
 Before going through the tutorial, install {gtsummary} and {gt}.
 
-```{r, include=FALSE}
+```{r}
 library(gtsummary)
 library(dplyr)
 ```
-
-```{r, eval=FALSE}
-install.packages("gtsummary")
-remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
-
-library(gtsummary)
-library(dplyr)
-```
-
-- If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
 
 ## Example data set
 
@@ -299,21 +289,11 @@ In the example below, the default footnote will be excluded from the output.
 After the `as_gt()` function is run, additional formatting may be added to the table using {gt} formatting functions.
 In the example below, a spanning header for the `by=` variable is included with the {gt} function `tab_spanner()`.
 
-```{r as_gt2, eval=FALSE}
+```{r as_gt2}
 tbl_summary(trial2, by = trt) %>%
   as_gt(include = -tab_footnote) %>%
   gt::tab_spanner(label = gt::md("**Treatment Group**"),
                   columns = gt::starts_with("stat_"))
-```
-
-```{r as_gt1, echo=FALSE}
-# this code chunk only works if gt is installed
-if (requireNamespace("gt", quietly = TRUE)) {
-  tbl_summary(trial2, by = trt) %>%
-    as_gt(include = -tab_footnote) %>%
-    gt::tab_spanner(label = gt::md("**Treatment Group**"),
-                    columns = gt::starts_with("stat_"))
-}
 ```
 
 ## Setting Default Options {#options}

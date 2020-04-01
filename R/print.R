@@ -13,18 +13,8 @@ print.gtsummary <- function(x, ...) {
   # select print engine
   print_engine <- getOption("gtsummary.print_engine")
 
-  # print message about installing gt if not installed, and table would have been printed with gt
-  if ((is.null(print_engine) | print_engine == "gt") && !requireNamespace("gt", quietly = TRUE)) {
-    rlang::inform(paste(
-      "Install {gt} with `remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`",
-      "As {gt} package is not installed, table was printed using `knitr::kable()`. Learn more at",
-      "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
-      sep = "\n"
-    ))
-
-    print_engine <- "kable"
-  }
-  else if (is.null(print_engine)) print_engine <- "gt"
+  # default printer is gt
+  if (is.null(print_engine)) print_engine <- "gt"
 
   # printing results
   if (print_engine == "gt") {
@@ -46,20 +36,8 @@ knit_print.gtsummary <- function(x, ...) {
   # select print engine
   print_engine <- getOption("gtsummary.print_engine")
 
-  # print message about installing gt if not installed, and table would have been printed with gt
-  if ((is.null(print_engine) | print_engine == "gt") && !requireNamespace("gt", quietly = TRUE)) {
-    rlang::inform(paste(
-      "Install {gt} with `remotes::install_github(\"rstudio/gt\", ref = gtsummary::gt_sha)`",
-      "As {gt} package is not installed, table was printed using `knitr::kable()`. Learn more at",
-      "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
-      "To suppress this message, include `message = FALSE` in code chunk header.",
-      sep = "\n"
-    ))
-    print_engine <- "kable"
-  }
-
   # gt is the default printer for html output
-  else if (is.null(print_engine) && knitr::is_html_output() == TRUE) {
+  if (is.null(print_engine) && knitr::is_html_output() == TRUE) {
     print_engine <- "gt"
   }
 
@@ -75,8 +53,8 @@ knit_print.gtsummary <- function(x, ...) {
   }
 
   # don't use word_document with gt engine
-  else if ((is.null(print_engine) | print_engine == "gt") &&
-           "word_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
+  else if (identical(print_engine %||% "gt", "gt") &&
+           "docx" %in% knitr::opts_knit$get('rmarkdown.pandoc.to')) {
     rlang::inform(paste(
       "Table printed with `knitr::kable()`, not {gt}. Learn why at",
       "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html",
@@ -87,8 +65,8 @@ knit_print.gtsummary <- function(x, ...) {
   }
 
   # RTF warning when using gt
-  else if ((is.null(print_engine) | print_engine == "gt") &&
-           "rtf_document" %in% rmarkdown::all_output_formats(knitr::current_input())) {
+  else if (identical(print_engine %||% "gt", "gt") &&
+           "rtf" %in% knitr::opts_knit$get('rmarkdown.pandoc.to')) {
     rlang::inform(paste(
         "Output 'rtf_document' is in development by the {gt} package. Learn more at",
         "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html \n\n",

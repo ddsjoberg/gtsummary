@@ -16,14 +16,6 @@ knitr::opts_chunk$set(
 library(gtsummary)
 ```
 
-<!-- Not creating vignette if gt is not installed. -->
-`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/global_options.html"}`
-
-```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
-knitr::knit_exit()
-```
-
-<!-- Start of vignette -->
 There are various global options that can be set for {gtsummary}.
 Here we review a complete list of options available to users.
 

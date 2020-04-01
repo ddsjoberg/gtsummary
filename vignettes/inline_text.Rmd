@@ -16,14 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-<!-- Not creating vignette if gt is not installed. -->
-`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"}`
-
-```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
-knitr::knit_exit()
-```
-
-<!-- Start of vignette -->
 ## Introduction
 
 **Reproducible reports** are an important part of good practices.  We often need to report the **results from a table** in the text of an R markdown report.  **Inline reporting** has been made simple with [`inline_text()`](http://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html). The `inline_text()` function reports statistics from gtsummary tables inline in an [R markdown](https://rmarkdown.rstudio.com/lesson-1.html) report.
@@ -34,20 +26,10 @@ This vignette will walk a reader through the `inline_text()` function, and the v
 
 Before going through the tutorial, install {gtsummary} and {gt}.
 
-```{r, include=FALSE}
+```{r}
 library(gtsummary)
 library(dplyr)
 ```
-
-```{r, eval=FALSE}
-install.packages("gtsummary")
-remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)
-
-library(gtsummary)
-library(dplyr)
-```
-
-- If you experience issues installing {gt} on Windows, install [Rtools from CRAN](https://cran.r-project.org/bin/windows/Rtools/), restart R, and attempt installation again.
 
 ## Example data set
 

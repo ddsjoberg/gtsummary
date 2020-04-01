@@ -15,14 +15,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-<!-- Not creating vignette if gt is not installed. -->
-`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/gallery.html"}`
-
-```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
-knitr::knit_exit()
-```
-
-<!-- Start of vignette -->
 Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting table using {gtsummary}, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
 
 ```{r setup, message = FALSE}
