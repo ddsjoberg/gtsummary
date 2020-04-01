@@ -67,8 +67,6 @@ knit_print.gtsummary <- function(x, ...) {
   # RTF warning when using gt
   else if (identical(print_engine %||% "gt", "gt") &&
            "rtf" %in% knitr::opts_knit$get('rmarkdown.pandoc.to')) {
-  # else if ((is.null(print_engine) | print_engine == "gt") &&
-  #          ("rtf" %in% knitr::opts_knit$get('rmarkdown.pandoc.to'))) {
     rlang::inform(paste(
         "Output 'rtf_document' is in development by the {gt} package. Learn more at",
         "http://www.danieldsjoberg.com/gtsummary/dev/articles/print.html \n\n",
