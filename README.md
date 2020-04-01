@@ -14,6 +14,10 @@ status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.
 [![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Codecov test
+coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/gh/ddsjoberg/gtsummary?branch=master)
+[![R build
+status](https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions)
 <!-- badges: end -->
 
 ## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
@@ -169,7 +173,6 @@ You can also present side-by-side regression model results using
 
 ``` r
 library(survival)
-#> Warning: package 'survival' was built under R version 3.6.3
 
 # build survival model table
 t2 <-
@@ -212,6 +215,7 @@ thank you to all contributors\!
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@MyKo101](https://github.com/MyKo101),
 [@oranwutang](https://github.com/oranwutang),
+[@ryzhu75](https://github.com/ryzhu75),
 [@sammo3182](https://github.com/sammo3182),
 [@slobaugh](https://github.com/slobaugh), and
 [@zabore](https://github.com/zabore)
