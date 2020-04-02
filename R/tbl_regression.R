@@ -235,16 +235,15 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   table_header <- table_header %>%
     # adding footnotes to table_header tibble
     mutate(
-      footnote_abbrev = map2(
-        .data$column, .data$footnote_abbrev,
-        function(x1, y1) {
-          if (x1 == "estimate") {
-            return(c(y1, estimate_header(x, exponentiate) %>% attr("footnote")))
-          } else if (x1 == "ci") {
-            return(c(y1, "CI = Confidence Interval"))
-          }
-          return(y1)
-        }
+      footnote_abbrev = case_when(
+        .data$column == "estimate" ~
+          estimate_header(x, exponentiate) %>% attr("footnote") %||% NA_character_,
+        .data$column == "ci" ~ "CI = Confidence Interval",
+        TRUE ~ .data$footnote_abbrev
+      ),
+      missing_emdash = case_when(
+        .data$column %in% c("estimate", "ci") ~ "row_ref == TRUE",
+        TRUE ~ .data$missing_emdash
       )
     )
 
@@ -260,9 +259,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     n = n,
     model_obj = x,
     inputs = func_inputs,
-    call_list = list(tbl_regression = match.call()),
-    gt_calls = eval(gt_tbl_regression),
-    kable_calls = eval(kable_tbl_regression)
+    call_list = list(tbl_regression = match.call())
   )
 
   # setting column headers
@@ -282,66 +279,11 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     )
   }
 
-  # writing additional gt and kable calls with data from table_header
-  results <- update_calls_from_table_header(results)
-
   # assigning a class of tbl_regression (for special printing in R markdown)
   class(results) <- c("tbl_regression", "gtsummary")
 
   results
 }
-
-# gt function calls ------------------------------------------------------------
-# quoting returns an expression to be evaluated later
-gt_tbl_regression <- quote(list(
-  # first call to the gt function
-  gt = "gt::gt(data = x$table_body)" %>%
-    glue(),
-
-  # label column indented and left just
-  cols_align = glue(
-    "gt::cols_align(align = 'center') %>% ",
-    "gt::cols_align(align = 'left', columns = gt::vars(label))"
-  ),
-
-  # NAs do not show in table
-  fmt_missing = "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
-    glue(),
-
-  # Show "---" for reference groups
-  fmt_missing_ref =
-    "gt::fmt_missing(columns = gt::vars(estimate, ci), rows = row_ref == TRUE, missing_text = '---')" %>%
-      glue(),
-
-  # indenting levels and missing rows
-  tab_style_text_indent = glue(
-    "gt::tab_style(",
-    "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
-    "locations = gt::cells_body(",
-    "columns = gt::vars(label), ",
-    "rows = row_type != 'label'",
-    "))"
-  )
-))
-
-
-# kable function calls ---------------------------------------------------------
-# quoting returns an expression to be evaluated later
-kable_tbl_regression <- quote(list(
-  # first call to the gt function
-  kable = glue("x$table_body"),
-
-  #  placeholder, so the formatting calls are performed other calls below
-  fmt = NULL,
-
-  # Show "---" for reference groups
-  fmt_missing_ref = glue(
-    "dplyr::mutate_at(dplyr::vars(estimate, conf.low), ",
-    "~ dplyr::case_when(row_ref == TRUE ~ '---', TRUE ~ .))"
-  )
-))
-
-
 
 # identifies headers for common models (logistic, poisson, and PH regression)
 estimate_header <- function(x, exponentiate) {

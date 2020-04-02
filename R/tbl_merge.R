@@ -159,21 +159,28 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     imap_dfr(
       tbls,
       ~ pluck(.x, "table_header") %>%
+        # updating code with new variable names
+        mutate_at(
+          vars(.data$missing_emdash, .data$indent, .data$bold, .data$italic),
+          function(x) tbl_merge_update_chr_code(code = x, names = names(.x$table_body), n = .y)
+        ) %>%
+        # updading column names to include the index
         mutate(
-          column = paste0(.data$column, "_", .y)
+          column = ifelse(
+            .data$column %in% c("label", "variable", "row_type"),
+            .data$column,
+            paste(.data$column, .y, sep = "_")
+          ),
+          spanning_header = ifelse(
+            !.data$column %in% c("label", "variable", "row_type"),
+            tab_spanner[.y],
+            .data$spanning_header
+          )
         )
     ) %>%
-    # using the identifying columns from first passed object
-    mutate(
-      column = case_when(
-        .data$column == "label_1" ~ "label",
-        .data$column == "variable_1" ~ "variable",
-        .data$column == "row_type_1" ~ "row_type",
-        TRUE ~ .data$column
-      )
-    ) %>%
-    # deleting labels from subsequent merged tables (i >= 2)
-    filter(!startsWith(.data$column, "label_"))
+    group_by(.data$column) %>%
+    filter(dplyr::row_number() == 1) %>%
+    ungroup()
 
   table_header <-
     tibble(column = names(table_body)) %>%
@@ -185,114 +192,12 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     table_body = table_body,
     table_header = table_header,
     tbls = tbls,
-    call_list = list(tbl_merge = match.call()),
-    gt_calls = eval(gt_tbl_merge),
-    kable_calls = eval(kable_tbl_merge)
+    call_list = list(tbl_merge = match.call())
   )
-
-  # writing additional gt and kable calls with data from table_header
-  results <- update_calls_from_table_header(results)
 
   class(results) <- c("tbl_merge", "gtsummary")
   results
 }
-
-# gt function calls ------------------------------------------------------------
-# quoting returns an expression to be evaluated later
-gt_tbl_merge <- quote(list(
-  # first call to the gt function
-  gt = "gt::gt(data = x$table_body)" %>%
-    glue(),
-
-  # label column indented and left just
-  cols_align = glue(
-    "gt::cols_align(align = 'center') %>% ",
-    "gt::cols_align(align = 'left', columns = vars(label))"
-  ),
-
-  # NAs do not show in table
-  fmt_missing = "gt::fmt_missing(columns = gt::everything(), missing_text = '')" %>%
-    glue(),
-
-  # Show "---" for reference groups
-  fmt_missing_ref =
-    imap(
-      tbls,
-      function(x, y) {
-        # returning NULL for non-regression objects
-        if (!inherits(x, c("tbl_regression", "tbl_uvregression", "tbl_stack"))) {
-          return(NULL)
-        }
-        if (inherits(x, "tbl_stack") &&
-          !inherits(x$tbls[[1]], c("tbl_regression", "tbl_uvregression"))) {
-          return(NULL)
-        }
-        # making gt missing code for references
-        glue(
-          "gt::fmt_missing(",
-          "columns = gt::vars({paste(c('estimate', 'ci'), y, sep = '_', collapse = ', ')}), ",
-          "rows = (variable %in% c('{paste(unique(x$table_body$variable), collapse = \"', '\")}') & ",
-          "row_type == 'level' & row_ref_{y} == TRUE), missing_text = '---')"
-        )
-      }
-    ) %>%
-      compact() %>%
-      unlist() %>%
-      glue_collapse_null(),
-
-  # indenting levels and missing rows
-  tab_style_text_indent = glue(
-    "gt::tab_style(",
-    "style = gt::cell_text(indent = gt::px(10), align = 'left'),",
-    "locations = gt::cells_body(",
-    "columns = gt::vars(label),",
-    "rows = row_type != 'label'",
-    "))"
-  ),
-
-  # table spanner
-  tab_spanner =
-    glue(
-      "gt::tab_spanner(label = gt::md('{tab_spanner}'), columns = gt::ends_with('_{seq_len(tbls_length)}'))"
-    ) %>%
-      glue_collapse(sep = " %>% ")
-))
-
-# kable function calls ------------------------------------------------------------
-# quoting returns an expression to be evaluated later
-kable_tbl_merge <- quote(list(
-  # first call to the gt function
-  kable = glue("x$table_body"),
-
-  #  placeholder, so the formatting calls are performed other calls below
-  fmt = NULL,
-
-  # Show "---" for reference groups
-  fmt_missing_ref =
-    imap(
-      tbls,
-      function(x, y) {
-        # returning NULL for non-regression objects
-        if (!inherits(x, c("tbl_regression", "tbl_uvregression", "tbl_stack"))) {
-          return(NULL)
-        }
-        if (inherits(x, "tbl_stack") &&
-            !inherits(x$tbls[[1]], c("tbl_regression", "tbl_uvregression"))) {
-          return(NULL)
-        }
-        # making mutate missing code for references
-        glue(
-          "dplyr::mutate_at(dplyr::vars(estimate_{y}, ci_{y}), ",
-          "~ dplyr::case_when(row_ref_{y} == TRUE ~ '---', TRUE ~ .))"
-        )
-      }
-    ) %>%
-      compact() %>%
-      unlist() %>%
-      glue_collapse_null()
-))
-
-
 
 # this function grabs the inputs from each of the input models
 # for univariate tbls, taking the inputs from the first model
@@ -316,4 +221,32 @@ glue_collapse_null <- function(x, sep = " %>% ") {
     return(NULL)
   }
   glue_collapse(x, sep)
+}
+
+
+# this function names a chr code string, variable names, and the merge number,
+# and returns teh updated code string with updated variable names
+# > tbl_merge_update_chr_code("longvarname == 'label' & varname == TRUE",
+#                             +                           c("varname", "longvarname"), 2)
+# [1] "longvarname_2 == 'label' & varname_2 == TRUE"
+tbl_merge_update_chr_code <- function(code, names, n) {
+  new_names <- ifelse(
+    names %in% c("label", "variable", "row_type"),
+    names, paste(names, n, sep = "_")
+  )
+
+  code %>%
+    map_chr(
+      function(code) {
+        if (is.na(code)) return(code)
+        stringr::str_split_fixed(code, pattern = " ", n = Inf) %>%
+        as.vector() %>%
+        purrr::map_chr(function(x) {
+          lgl_match <- names %in% x
+          if (!any(lgl_match)) return(x)
+          new_names[lgl_match]
+        }) %>%
+        paste(collapse = " ")
+      }
+    )
 }

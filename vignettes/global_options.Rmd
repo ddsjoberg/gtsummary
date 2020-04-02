@@ -13,16 +13,9 @@ knitr::opts_chunk$set(
   eval = FALSE,
   comment = "#>"
 )
+library(gtsummary)
 ```
 
-<!-- Not creating vignette if gt is not installed. -->
-`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/global_options.html"}`
-
-```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
-knitr::knit_exit()
-```
-
-<!-- Start of vignette -->
 There are various global options that can be set for {gtsummary}.
 Here we review a complete list of options available to users.
 
@@ -80,14 +73,9 @@ For example, {gt} summary tables can include indentation, footnotes, and spannin
 
 Tables created with the [{gt}](https://gt.rstudio.com/) package are incredibly customizable.
 You can set an option to apply additional {gt} formatting to all {gtsummary} tables.
-Every table returned from {gtsummary} contains a list of {gt} calls that are applied when printed.  For example, here are the first few associated with a `tbl_summary()` table.
+Every table returned from {gtsummary} maybe converted to a {gt} object with `as_gt()`.
 
-```{r, eval = TRUE}
-library(gtsummary)
-tbl_summary(trial)$gt_calls %>% head(n = 4)
-```
-
-You may append additional [{gt} calls](https://gt.rstudio.com/reference/index.html) to this list using the `gtsummary.as_gt.addl_cmds` option---with the following caveats:
+You may append additional [{gt} calls](https://gt.rstudio.com/reference/index.html) the `gtsummary.as_gt.addl_cmds` option---with the following caveats:
 
 1. Only include {gt} functions you want to apply to *all* tables. For example, a {gt} function that changes the font size would be appropriate. A table-specific header may not.
 

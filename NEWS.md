@@ -1,6 +1,14 @@
 # gtsummary (development version)
 
-* Updated the default printing for {gtsummary} objects. {gt} is the deafult printer for the R console and for R markdown documents with HTML output.  PDF and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (#395, #396)
+* The {gt} package is now released on CRAN, and we've updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation, and code.  For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (#420)
+
+* Each gtsummary object has an associated `.$table_header`. The code needed to print a table with either gt or kable was previously a mix of information stored in the `table_header`, and code manually added to the `gt_calls` or `kable_calls` object. Now, all the information needed to print a table is stored in `table_header`. This has the advantage that any updates to the printing will now require an update to `table_header` only, and we no longer need to update the tibble, kable and gt calls. (#412, #414)
+
+*  The function `as_kable_extra()` was added for printing to HTML with functions from {kableExtra} (#394)
+
+* New functions `tbl_survfit()` and `inline_text.tbl_survfit()` were added.  These replace `tbl_survival()`, which is now soft deprecated (#280)
+
+* Updated the default printing for {gtsummary} objects. {gt} is the default printer for the R console and for R markdown documents with HTML output.  PDF and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (#395, #396)
 
 * Removed class checking for each type gtsummary table type, and made `tbl_stack()`, `tbl_merge()`, `bold_labels()` (and friends) generic and now check for class gtsummary (#373)
 

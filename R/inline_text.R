@@ -5,7 +5,7 @@
 #' @return A string reporting results from a gtsummary table
 #' @author Daniel D. Sjoberg
 #' @seealso [inline_text.tbl_summary], [inline_text.tbl_regression],
-#' [inline_text.tbl_uvregression], [inline_text.tbl_survival]
+#' [inline_text.tbl_uvregression], [inline_text.tbl_survfit]
 #' @export
 inline_text <- function(x, ...) {
   UseMethod("inline_text")
@@ -199,6 +199,14 @@ inline_text.tbl_regression <-
     variable <- rlang::enquo(variable)
     level <- rlang::enquo(level)
 
+    # setting defaults ---------------------------------------------------------
+    if (is.null(estimate_fun)) estimate_fun <-
+      x$table_header %>%
+      dplyr::filter(startsWith(.data$column, "estimate")) %>%
+      dplyr::slice(1) %>%
+      dplyr::pull("fmt_fun") %>%
+      purrr::pluck(1)
+
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
     # getting N on every row of the table
@@ -325,6 +333,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @family tbl_survival tools
 #' @return A string reporting results from a gtsummary table
 #' @export
+#' @keywords internal
 #' @examples
 #' library(survival)
 #' surv_table <-
@@ -339,8 +348,14 @@ inline_text.tbl_survival <-
   function(x, strata = NULL,
            time = NULL, prob = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {ci})",
-           estimate_fun = x$fmt_fun$estimate,
+           estimate_fun = NULL,
            ...) {
+
+    # setting defaults ---------------------------------------------------------
+    if (is.null(estimate_fun)) estimate_fun <- x$table_header %>%
+        filter(.data$column == "estimate") %>%
+        pull("fmt_fun") %>%
+        purrr::pluck(1)
 
     # input checks -------------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
@@ -427,4 +442,131 @@ inline_text.tbl_survival <-
       pull("stat")
 
     result
+  }
+
+
+#' Report statistics from survfit tables inline
+#'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' Extracts and returns statistics from a `tbl_survfit` object for
+#' inline reporting in an R markdown document. Detailed examples in the
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+#'
+#' @param x Object created from  [tbl_survfit]
+#' @param time time for which to return survival probabilities.
+#' @param prob probability with values in (0,1)
+#' @param level Level of the variable to display for categorical variables.
+#' Can also specify the 'Unknown' row.  Default is `NULL`
+#' @inheritParams tbl_regression
+#' @param ... tbl_survfit used
+#' @family tbl_summary tools
+#' @author Daniel D. Sjoberg
+#' @export
+#' @return A string reporting results from a gtsummary table
+#' @examples
+#' library(survival)
+#' # fit survfit
+#' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+#' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
+#'
+#' # sumarize survfit objects
+#' tbl1 <- tbl_survfit(
+#'   fit1,
+#'   times = c(12, 24),
+#'   label = "Treatment",
+#'   label_header = "**{time} Month**"
+#' )
+#'
+#' tbl2 <- tbl_survfit(
+#'   fit2,
+#'   probs = 0.5,
+#'   label_header = "**Median Survival**"
+#' )
+#'
+#' # report results inline
+#' inline_text(tbl1, time = 24, level = "Drug B")
+#' inline_text(tbl2, prob = 0.5)
+inline_text.tbl_survfit <-
+  function(x, time = NULL, prob = NULL, level = NULL,
+           estimate_fun = NULL,
+           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+    # checking inputs ----------------------------------------------------------
+    if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
+      stop("One and only one of `time=` and `prob=` must be specified.", call. = FALSE)
+    }
+
+    if(!is.null(prob) & !"prob" %in% names(x$table_stats)) {
+      stop("`prob=` was specified, but `x` does not contain survival quantiles.", call. = FALSE)
+    }
+
+    if(!is.null(time) & !"time" %in% names(x$table_stats)) {
+      stop("`time=` was specified, but `x` does not contain survival time estimates.", call. = FALSE)
+    }
+
+    # estimate_fun -------------------------------------------------------------
+    if (is.null(estimate_fun)) estimate_fun <- x$inputs$estimate_fun
+
+    # selecting level ----------------------------------------------------------
+    level <- rlang::enquo(level)
+
+    # selecting default column, if column is NULL
+    if (rlang::quo_is_null(level)) {
+      level <- x$table_stats$label[1]
+    }
+
+    # selecting proper column name
+    level <-
+      var_input_to_string(
+        data = vctr_2_tibble(unique(x$table_stats$label)), arg_name = "level",
+        select_single = TRUE, select_input = !!level
+      )
+
+    # prob and time ------------------------------------------------------------
+    if("time" %in% names(x$table_stat)){
+      if(!is.null(time) && length(intersect(time, x$table_stat$time)) == 0) {
+        stop(glue("`time=` must be one of ",
+                  "{paste(sQuote(unique(x$table_stat$time)), collapse = ', ')}"),
+             call. = FALSE)
+      }
+      if(!is.null(time))
+        table_stats <-
+          filter(x$table_stat, .data$time %in% .env$time, .data$label == .env$level)
+      else
+        table_stats <-
+          filter(x$table_stat, .data$label == .env$level)
+    }
+    if("prob" %in% names(x$table_stat)) {
+      if(!is.null(prob) && length(intersect(prob, x$table_stat$prob)) == 0) {
+        stop(glue("`prob=` must be one of ",
+                  "{paste(sQuote(unique(x$table_stat$prob)), collapse = ', ')}"),
+             call. = FALSE)
+      }
+      if(!is.null(prob))
+        table_stats <-
+          filter(x$table_stat, .data$prob %in% .env$prob, .data$label == .env$level)
+      else
+        table_stats <-
+          filter(x$table_stat, .data$label == .env$level)
+    }
+
+    # pattern ------------------------------------------------------------------
+    # applying formatting
+    result <-
+      table_stats %>%
+      mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high),
+                ~estimate_fun(.) %>% as.character() %>% coalesce(x$inputs$missing))
+
+
+    # applying p-value if column exists
+    if ("p.value" %in% names(result)){
+      result <- result %>%
+        mutate_at(vars(.data$p.value), ~p.value_fun(.))
+    }
+
+    # returning formatted statistic
+    result %>%
+      mutate(
+        statistic = glue("{estimate} ({conf.low}, {conf.high})")
+      ) %>%
+      pull(.data$statistic)
   }

@@ -15,14 +15,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-<!-- Not creating vignette if gt is not installed. -->
-`r if(!requireNamespace("gt")){"The system this vignette was built on did not have the required {gt} package installed. Please visit the package website for the full vignette. http://www.danieldsjoberg.com/gtsummary/articles/gallery.html"}`
-
-```{r exit_early, include = FALSE, eval = !requireNamespace("gt")}
-knitr::knit_exit()
-```
-
-<!-- Start of vignette -->
 Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting table using {gtsummary}, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
 
 ```{r setup, message = FALSE}
@@ -107,7 +99,7 @@ t2 <- trial %>%
 tbl_merge(list(t0, t1, t2)) %>%
   as_gt(include = -tab_spanner) %>%
   # hiding repeated summary columns
-  cols_hide(columns = vars(stat_1_2, stat_2_2, stat_1_3, stat_2_3)) %>%
+  cols_hide(columns = vars(stat_1_2, stat_2_2, stat_3_2, stat_1_3, stat_2_3, stat_3_3)) %>%
   # adding spanning headers for summary stats and pvalues
   tab_spanner(label = md("**Tumor Grade**"), columns = starts_with("stat_")) %>%
   tab_spanner(label = md("**p-value**"), columns = starts_with("p.value")) 
