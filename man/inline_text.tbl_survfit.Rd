@@ -6,9 +6,10 @@
 \usage{
 \method{inline_text}{tbl_survfit}(
   x,
-  variable = NULL,
-  column = NULL,
+  time = NULL,
+  prob = NULL,
   level = NULL,
+  estimate_fun = NULL,
   pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
   ...
 )
@@ -16,14 +17,16 @@
 \arguments{
 \item{x}{Object created from  \link{tbl_survfit}}
 
-\item{variable}{Variable name of statistic to present. Default it first
-variable in table.}
+\item{time}{time for which to return survival probabilities.}
 
-\item{column}{Column name to return from \code{x$table_body}.
-Can also pass the level of a by variable.}
+\item{prob}{probability with values in (0,1)}
 
 \item{level}{Level of the variable to display for categorical variables.
 Can also specify the 'Unknown' row.  Default is \code{NULL}}
+
+\item{estimate_fun}{Function to round and format coefficient estimates.
+Default is \link{style_sigfig} when the coefficients are not transformed, and
+\link{style_ratio} when the coefficients have been exponentiated.}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.
@@ -38,6 +41,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 A string reporting results from a gtsummary table
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Extracts and returns statistics from a \code{tbl_survfit} object for
 inline reporting in an R markdown document. Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
@@ -63,8 +67,8 @@ tbl2 <- tbl_survfit(
 )
 
 # report results inline
-inline_text(tbl1, column = "24", level = "Drug A")
-inline_text(tbl2)
+inline_text(tbl1, time = 24, level = "Drug B")
+inline_text(tbl2, prob = 0.5)
 }
 \seealso{
 Other tbl_summary tools: 

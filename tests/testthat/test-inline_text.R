@@ -206,25 +206,22 @@ tbl2 <- tbl_survfit(
   probs = 0.5
 )
 
-inline_text(tbl1, column = "24", level = "Drug A")
-inline_text(tbl2)
-
 test_that("inline_text.tbl_survfit", {
   expect_error(
-    inline_text(tbl1, column = "24", level = "Drug A"),
+    inline_text(tbl1, time = 24, level = "Drug A"),
     NA
   )
   expect_warning(
-    inline_text(tbl1, column = "24", level = "Drug A"),
+    inline_text(tbl1, time = 24, level = "Drug A"),
     NA
   )
 
   expect_error(
-    inline_text(tbl2),
+    inline_text(tbl2, prob = 0.5),
     NA
   )
   expect_warning(
-    inline_text(tbl2),
+    inline_text(tbl2, prob = 0.5),
     NA
   )
 
