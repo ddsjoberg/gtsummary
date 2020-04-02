@@ -133,6 +133,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   results <- list(
     table_body = table_body,
     table_header = table_header,
+    table_stats = df_stats,
     inputs = tbl_survfit_inputs,
     call_list = list(tbl_survfit = match.call())
   )
