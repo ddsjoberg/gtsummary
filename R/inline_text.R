@@ -447,17 +447,16 @@ inline_text.tbl_survival <-
 
 #' Report statistics from survfit tables inline
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Extracts and returns statistics from a `tbl_survfit` object for
 #' inline reporting in an R markdown document. Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 #'
 #' @param x Object created from  [tbl_survfit]
-#' @param variable Variable name of statistic to present. Default it first
-#' variable in table.
+#' @param time time for which to return survival probabilities.
+#' @param prob probability with values in (0,1)
 #' @param level Level of the variable to display for categorical variables.
 #' Can also specify the 'Unknown' row.  Default is `NULL`
-#' @param column Column name to return from `x$table_body`.
-#' Can also pass the level of a by variable.
 #' @inheritParams tbl_regression
 #' @param ... tbl_survfit used
 #' @family tbl_summary tools
@@ -485,91 +484,89 @@ inline_text.tbl_survival <-
 #' )
 #'
 #' # report results inline
-#' inline_text(tbl1, column = "24", level = "Drug A")
-#' inline_text(tbl2)
+#' inline_text(tbl1, time = 24, level = "Drug B")
+#' inline_text(tbl2, prob = 0.5)
 inline_text.tbl_survfit <-
-  function(x, variable = NULL, column = NULL, level = NULL,
+  function(x, time = NULL, prob = NULL, level = NULL,
+           estimate_fun = NULL,
            pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
-    # create rlang::enquo() inputs ---------------------------------------------
-    variable <- rlang::enquo(variable)
-    column <- rlang::enquo(column)
+    # checking inputs ----------------------------------------------------------
+    if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
+      stop("One and only one of `time=` and `prob=` must be specified.", call. = FALSE)
+    }
+
+    if(!is.null(prob) & !"prob" %in% names(x$table_stats)) {
+      stop("`prob=` was specified, but `x` does not contain survival quantiles.", call. = FALSE)
+    }
+
+    if(!is.null(time) & !"time" %in% names(x$table_stats)) {
+      stop("`time=` was specified, but `x` does not contain survival time estimates.", call. = FALSE)
+    }
+
+    # estimate_fun -------------------------------------------------------------
+    if (is.null(estimate_fun)) estimate_fun <- x$inputs$estimate_fun
+
+    # selecting level ----------------------------------------------------------
     level <- rlang::enquo(level)
 
-    # setting defaults ---------------------------------------------------------
-    # selecting default variable, if variable is NULL
-    if (rlang::quo_is_null(variable)) {
-      variable <- x$table_body$variable[1]
-    }
-
     # selecting default column, if column is NULL
-    if (rlang::quo_is_null(column)) {
-      column <- "stat_1"
+    if (rlang::quo_is_null(level)) {
+      level <- x$table_stats$label[1]
     }
-
-    # checking variable input --------------------------------------------------
-    variable <-
-      var_input_to_string(
-        data = vctr_2_tibble(unique(x$table_body$variable)), arg_name = "variable",
-        select_single = TRUE, select_input = !!variable
-      )
-
-    # checking column ----------------------------------------------------------
-    # the follwing code converts the column input to a column name in x$table_body
-    col_lookup_table <-
-      tibble(
-        input = names(x$table_body),
-        column_name = names(x$table_body)
-      ) %>%
-      bind_rows(
-        tibble(
-          input = as.character(x$inputs$probs %||% x$inputs$times),
-          column_name = select(x$table_body, starts_with("stat_")) %>% names(),
-        )
-      )
 
     # selecting proper column name
-    column <-
+    level <-
       var_input_to_string(
-        data = vctr_2_tibble(col_lookup_table$input), arg_name = "column",
-        select_single = TRUE, select_input = !!column
+        data = vctr_2_tibble(unique(x$table_stats$label)), arg_name = "level",
+        select_single = TRUE, select_input = !!level
       )
 
-    column <- col_lookup_table %>%
-      filter(.data$input == !!column) %>%
-      slice(1) %>%
-      pull(.data$column_name)
+    # prob and time ------------------------------------------------------------
+    if("time" %in% names(x$table_stat)){
+      if(!is.null(time) && length(intersect(time, x$table_stat$time)) == 0) {
+        stop(glue("`time=` must be one of ",
+                  "{paste(sQuote(unique(x$table_stat$time)), collapse = ', ')}"),
+             call. = FALSE)
+      }
+      if(!is.null(time))
+        table_stats <-
+          filter(x$table_stat, .data$time %in% .env$time, .data$label == .env$level)
+      else
+        table_stats <-
+          filter(x$table_stat, .data$label == .env$level)
+    }
+    if("prob" %in% names(x$table_stat)) {
+      if(!is.null(prob) && length(intersect(prob, x$table_stat$prob)) == 0) {
+        stop(glue("`prob=` must be one of ",
+                  "{paste(sQuote(unique(x$table_stat$prob)), collapse = ', ')}"),
+             call. = FALSE)
+      }
+      if(!is.null(prob))
+        table_stats <-
+          filter(x$table_stat, .data$prob %in% .env$prob, .data$label == .env$level)
+      else
+        table_stats <-
+          filter(x$table_stat, .data$label == .env$level)
+    }
 
-
-    # select value from table --------------------------------------------------
+    # pattern ------------------------------------------------------------------
+    # applying formatting
     result <-
-      x$table_body %>%
-      filter(.data$variable == !!variable)
+      table_stats %>%
+      mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high),
+                ~estimate_fun(.) %>% as.character() %>% coalesce(x$inputs$missing))
 
 
-    # select variable level ----------------------------------------------------
-    if (rlang::quo_is_null(level)) {
-      result <- result %>% slice(1)
-    }
-    else {
-      level <-
-        var_input_to_string(
-          data = vctr_2_tibble(filter(result, .data$row_type != "label") %>%
-                                 pull(.data$label)),
-          arg_name = "level", select_single = TRUE, select_input = !!level
-        )
-
-      result <-
-        result %>%
-        filter(.data$label == !!level)
+    # applying p-value if column exists
+    if ("p.value" %in% names(result)){
+      result <- result %>%
+        mutate_at(vars(.data$p.value), ~p.value_fun(.))
     }
 
-    # select column ------------------------------------------------------------
-    result <- result %>% pull(column)
-
-    # return statistic ---------------------------------------------------------
-    if (column %in% c("p.value", "q.value")) {
-      return(pvalue_fun(result))
-    }
-
-    result
+    # returning formatted statistic
+    result %>%
+      mutate(
+        statistic = glue("{estimate} ({conf.low}, {conf.high})")
+      ) %>%
+      pull(.data$statistic)
   }
