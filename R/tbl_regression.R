@@ -180,6 +180,10 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # rows for reference groups, and headers for
   table_body <- parse_fit(x, tidy_model, label, !!show_single_row)
 
+  # saving evaluated `label`, and `show_single_row`
+  func_inputs$label <- attr(table_body, "label")
+  func_inputs$show_single_row <- attr(table_body, "show_single_row")
+
   # adding character CI
   if (all(c("conf.low", "conf.high") %in% names(table_body))) {
     table_body <-
@@ -223,10 +227,11 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     table_header_fmt_fun(estimate = estimate_fun)
 
   if ("p.value" %in% names(table_body)) {
-    table_header <- table_header_fmt_fun(p.value = pvalue_fun)
+    table_header <- table_header_fmt_fun(table_header, p.value = pvalue_fun)
   }
   if (all(c("conf.low", "conf.high") %in% names(table_body))) {
     table_header <- table_header_fmt_fun(
+      table_header,
       conf.low = estimate_fun,
       conf.high = estimate_fun
     )
@@ -250,8 +255,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # saving the evaluated lists (named lists) as the function inputs
   func_inputs$include <- include
   func_inputs$exclude <- NULL # making this NULL since it's deprecated
-  func_inputs$label <- attr(parse_fit, "label")
-  func_inputs$show_single_row <- attr(parse_fit, "show_single_row")
 
   results <- list(
     table_body = table_body,
