@@ -156,7 +156,7 @@ gt_eventn <-
   select(stage, grade) %>%
   tbl_summary(
     statistic = all_categorical() ~ "{n}",
-    label = list(vars(stage) ~ "T Stage", vars(grade) ~ "Grade")
+    label = list(stage ~ "T Stage", grade ~ "Grade")
   ) %>%
   modify_header(stat_0 = md("**Event N**"))
 
