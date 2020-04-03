@@ -145,6 +145,21 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
     eval()
 
   # updating original tbl object -----------------------------------------------
+  # adding p-value column, if it is not already there
+  if (!"p.value" %in% names(x$table_body)) {
+    # adding p.value to table_body
+    x$table_body <- mutate(x$table_body, p.value = NA_real_)
+    # adding to table_header
+    x$table_header <-
+      tibble(column = names(x$table_body)) %>%
+      left_join(x$table_header, by = "column") %>%
+      table_header_fill_missing() %>%
+      table_header_fmt_fun(
+        p.value = x$inputs$pvalue_fun %||%
+          getOption("gtsummary.pvalue_fun", default = style_pvalue)
+      )
+    x <- modify_header_internal(x, p.value = "**p-value**")
+  }
   # replacing the combined rows with a single row
   table_body <-
     x$table_body %>%

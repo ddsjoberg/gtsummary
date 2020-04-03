@@ -39,7 +39,7 @@ line per variable in the regression model; it must accept arguments
 \verb{exponentiate=}, \verb{conf.level=}, and \verb{conf.int=} since these arguments will
 be passed to the function internally (we recommend including \code{...} to
 capture any arguments you may not need). See below for an example where the
-confidence limits are calculated using Wald's method.
+confidence limits for a linear regression model are calculated using Wald's method.
 }
 
 \examples{

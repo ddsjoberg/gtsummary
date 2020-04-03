@@ -92,10 +92,6 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
     )
   }
 
-  # looks for if p.value column is missing and adds NAs if so
-  missed <- base::setdiff("p.value", names(tidy_bit))
-  tidy_bit[missed] <- NA_real_
-
   # otherwise returning original output
   return(tidy_bit)
 }
@@ -213,7 +209,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     ))
   }
 
-  # more  var labels -----------------------------------------------------------
+  # more var labels -----------------------------------------------------------
   # model.frame() strips variable labels from cox models.  this attempts
   # to grab the labels in another way
   labels_parent_frame <- tryCatch({
@@ -471,15 +467,17 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
   }
 
   # keeping necessary vars and renaming
+  # vars to keep (in order)
+  cols_to_keep <-
+    c("variable", "var_type", "row_ref", "row_type", "label", "N",
+    "estimate", "conf.low", "conf.high", "p.value") %>%
+    intersect(c(names(result), "N", "var_type"))
   result %>%
     mutate(
       N = nrow(model_frame),
       var_type = var_type
     ) %>%
-    select(c(
-      "variable", "var_type", "row_ref", "row_type", "label", "N",
-      "estimate", "conf.low", "conf.high", "p.value"
-    ))
+    select(all_of(cols_to_keep))
 }
 
 #' Takes a vector and transforms to data frame with those column names

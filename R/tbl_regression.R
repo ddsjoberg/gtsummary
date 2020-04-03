@@ -178,20 +178,30 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # parsing the terms from model and variable names
   # outputing a tibble of the parsed model with
   # rows for reference groups, and headers for
-  parse_fit <- parse_fit(x, tidy_model, label, !!show_single_row)
-  # categorical variables
-  table_body <-
-    parse_fit %>%
-    # adding character CI
-    mutate(
-      ci = if_else(
-        !is.na(.data$conf.low),
-        paste0(estimate_fun(.data$conf.low), ", ", estimate_fun(.data$conf.high)),
-        NA_character_
+  table_body <- parse_fit(x, tidy_model, label, !!show_single_row)
+
+  # saving evaluated `label`, and `show_single_row`
+  func_inputs$label <- attr(table_body, "label")
+  func_inputs$show_single_row <- attr(table_body, "show_single_row")
+
+  # adding character CI
+  if (all(c("conf.low", "conf.high") %in% names(table_body))) {
+    table_body <-
+      table_body %>%
+      # adding character CI
+      mutate(
+        ci = if_else(
+          !is.na(.data$conf.low),
+          paste0(estimate_fun(.data$conf.low), ", ", estimate_fun(.data$conf.high)),
+          NA_character_
+        )
       )
-    ) %>%
-    # moving pvalue col to end of df
-    select(-.data$p.value, .data$p.value)
+  }
+
+  # moving pvalue col to end of df
+  if ("p.value" %in% names(table_body)) {
+    table_body <- select(table_body, -.data$p.value, .data$p.value)
+  }
 
   # including and excluding variables/intercept indicated
   include <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
@@ -214,12 +224,20 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   table_header <-
     tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
-    table_header_fmt_fun(
-      p.value = pvalue_fun,
-      estimate = estimate_fun,
+    table_header_fmt_fun(estimate = estimate_fun)
+
+  if ("p.value" %in% names(table_body)) {
+    table_header <- table_header_fmt_fun(table_header, p.value = pvalue_fun)
+  }
+  if (all(c("conf.low", "conf.high") %in% names(table_body))) {
+    table_header <- table_header_fmt_fun(
+      table_header,
       conf.low = estimate_fun,
       conf.high = estimate_fun
-    ) %>%
+    )
+  }
+
+  table_header <- table_header %>%
     # adding footnotes to table_header tibble
     mutate(
       footnote_abbrev = case_when(
@@ -237,8 +255,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # saving the evaluated lists (named lists) as the function inputs
   func_inputs$include <- include
   func_inputs$exclude <- NULL # making this NULL since it's deprecated
-  func_inputs$label <- attr(parse_fit, "label")
-  func_inputs$show_single_row <- attr(parse_fit, "show_single_row")
 
   results <- list(
     table_body = table_body,
@@ -253,10 +269,18 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   results <- modify_header_internal(
     results,
     label = "**Characteristic**",
-    estimate = glue("**{estimate_header(x, exponentiate)}**"),
-    ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**"),
-    p.value = "**p-value**"
+    estimate = glue("**{estimate_header(x, exponentiate)}**")
   )
+  if ("p.value" %in% names(table_body)) {
+    results <- modify_header_internal(
+      results, p.value = "**p-value**"
+    )
+  }
+  if (all(c("conf.low", "conf.high") %in% names(table_body))) {
+    results <- modify_header_internal(
+      results, ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**")
+    )
+  }
 
   # assigning a class of tbl_regression (for special printing in R markdown)
   class(results) <- c("tbl_regression", "gtsummary")
