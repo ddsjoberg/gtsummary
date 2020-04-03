@@ -154,11 +154,17 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     unnest("table") %>%
     select(.data$label, everything())
 
-  # stacking all table_header dfs together and renaming
+  # stacking all table_header dfs together and renaming ------------------------
   table_header <-
     imap_dfr(
       tbls,
       ~ pluck(.x, "table_header") %>%
+        # tidying the code in these columns (giving it space to breathe),
+        # that is can be properly pasred in the next step
+        mutate_at(
+          vars(.data$missing_emdash, .data$indent, .data$bold, .data$italic),
+          ~map_chr(., function(t) ifelse(is.na(t), t, rlang::parse_expr(t) %>% rlang::expr_deparse()))
+        ) %>%
         # updating code with new variable names
         mutate_at(
           vars(.data$missing_emdash, .data$indent, .data$bold, .data$italic),
@@ -198,31 +204,6 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   class(results) <- c("tbl_merge", "gtsummary")
   results
 }
-
-# this function grabs the inputs from each of the input models
-# for univariate tbls, taking the inputs from the first model
-tbl_inputs <- function(tbl) {
-  map(
-    tbl,
-    function(tbl) {
-      if (inherits(tbl, c("tbl_regression", "tbl_uvregression", "tbl_stack"))) {
-        return(pluck(tbl, "inputs"))
-      }
-      if (inherits(tbl, "tbl_uvregression")) {
-        return(pluck(tbl, "tbls", 1, "inputs"))
-      }
-    }
-  )
-}
-
-# this function is glue_collapse, but returns NULL is passed nothing
-glue_collapse_null <- function(x, sep = " %>% ") {
-  if (length(x) == 0) {
-    return(NULL)
-  }
-  glue_collapse(x, sep)
-}
-
 
 # this function names a chr code string, variable names, and the merge number,
 # and returns teh updated code string with updated variable names
