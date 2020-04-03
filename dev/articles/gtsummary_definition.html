@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9009</span>
       </span>
     </div>
 
@@ -309,7 +309,7 @@
 <h2 class="hasAnchor">
 <a href="#printing-a-gtsummary-object" class="anchor"></a>Printing a {gtsummary} object</h2>
 <p>All {gtsummary} objects are printed with <code><a href="../reference/print_gtsummary.html">print.gtsummary()</a></code>. But before a {gtsummary} object is printed, it is converted to a {gt} object using <code><a href="../reference/as_gt.html">as_gt()</a></code>. This function takes the {gtsummary} object as its sole input, and uses the information in <code>.$table_header</code> to construct a list of {gt} calls that will be executed on <code>.$table_body</code>. After the {gtsummary} object is converted to {gt}, it is then printed as any other {gt} object.</p>
-<p>If {gt} is not installed, the package defaults to printing with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> utilizing the <code><a href="../reference/as_kable.html">as_kable()</a></code> function.</p>
+<p>In some cases, the package defaults to printing with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> utilizing the <code><a href="../reference/as_kable.html">as_kable()</a></code> function.</p>
 <p>While the actual print function is slightly more involved, it is basically this:</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">print.gtsummary</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
   <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span>(<span class="st">"gtsummary.print_engine"</span>) <span class="kw">==</span> <span class="st">"gt"</span>) {
