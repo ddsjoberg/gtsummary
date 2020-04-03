@@ -33,7 +33,7 @@
 #' `exponentiate=`, `conf.level=`, and `conf.int=` since these arguments will
 #' be passed to the function internally (we recommend including `...` to
 #' capture any arguments you may not need). See below for an example where the
-#' confidence limits are calculated using Wald's method.
+#' confidence limits for a linear regression model are calculated using Wald's method.
 #' @examples
 #' my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
 #'   tidy <-

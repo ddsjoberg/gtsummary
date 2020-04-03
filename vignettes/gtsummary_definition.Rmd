@@ -133,7 +133,7 @@ But before a {gtsummary} object is printed, it is converted to a {gt} object usi
 This function takes the {gtsummary} object as its sole input, and uses the information in `.$table_header` to construct a list of {gt} calls that will be executed on `.$table_body`.
 After the {gtsummary} object is converted to {gt}, it is then printed as any other {gt} object.
 
-If {gt} is not installed, the package defaults to printing with `knitr::kable()` utilizing the `as_kable()` function.
+In some cases, the package defaults to printing with `knitr::kable()` utilizing the `as_kable()` function.
 
 While the actual print function is slightly more involved, it is basically this:
 
