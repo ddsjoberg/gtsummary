@@ -595,7 +595,7 @@ inline_text.tbl_survfit <-
 #' inline_text(tbl_cross, col_level = "p.value")
 
 inline_text.tbl_cross <-
-  function(x, row_level = NULL, col_level = NULL, pattern = NULL,
+  function(x, col_level, row_level = NULL, pattern = NULL,
            pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
 
     # converting row_level to a string

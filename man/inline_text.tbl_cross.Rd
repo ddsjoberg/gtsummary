@@ -6,8 +6,8 @@
 \usage{
 \method{inline_text}{tbl_cross}(
   x,
+  col_level,
   row_level = NULL,
-  col_level = NULL,
   pattern = NULL,
   pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
   ...
@@ -16,11 +16,11 @@
 \arguments{
 \item{x}{a \code{tbl_cross} object}
 
-\item{row_level}{Level of the row variable to display.
-Can also specify the 'Unknown' row. Default is \code{NULL}}
-
 \item{col_level}{Level of the column variable to display.
 Can also specify "\code{p.value}" for the p-value and "\code{stat_0}" for Total column.}
+
+\item{row_level}{Level of the row variable to display.
+Can also specify the 'Unknown' row. Default is \code{NULL}}
 
 \item{pattern}{String indicating the statistics to return.
 Uses \link[glue:glue]{glue::glue} formatting. Default is pattern shown in \code{tbl_summary()} output}

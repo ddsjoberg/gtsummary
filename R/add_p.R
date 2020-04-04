@@ -262,7 +262,7 @@ footnote_add_p <- function(meta_data) {
 #' Default is [style_pvalue], except when `source_note = TRUE` when the
 #' default is `style_pvalue(x, prepend_p = TRUE)`
 #' @param source_note Logical value indicating whether to show p-value
-#' in the {gt} table source notes rather than a column.
+#' in the \{gt\} table source notes rather than a column.
 #' @param test A string specifying statistical test to perform. Default is
 #' "`chisq.test`" when expected cell counts >=5 and and "`fisher.test`" when
 #' expected cell counts <5.

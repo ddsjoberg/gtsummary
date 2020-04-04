@@ -18,7 +18,7 @@ Default is \link{style_pvalue}, except when \code{source_note = TRUE} when the
 default is \code{style_pvalue(x, prepend_p = TRUE)}}
 
 \item{source_note}{Logical value indicating whether to show p-value
-in the table source notes rather than a column.}
+in the \{gt\} table source notes rather than a column.}
 
 \item{...}{Not used}
 }
