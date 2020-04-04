@@ -182,7 +182,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
         data = x$inputs$data,
         var = .data$variable,
         var_summary_type = .data$summary_type,
-        by_var = x$inputs$by,
+        by_var = x$by,
         test = test,
         group = group
       ),
@@ -190,7 +190,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       test_result = calculate_pvalue(
         data = x$inputs$data,
         variable = .data$variable,
-        by = x$inputs$by,
+        by = x$by,
         test = .data$stat_test,
         type = .data$summary_type,
         group = group,
@@ -284,12 +284,8 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
   input_test <- switch(!is.null(test),
                        rlang::expr(everything() ~ !!test))
 
-  # create make x look like a tbl_summary
-  x$inputs$by <- x$inputs$col
-
   # running add_p to add thep-value to the output
   x <- expr(add_p.tbl_summary(x, test = !!input_test)) %>% eval()
-  x$inputs$by <- NULL
 
   # updating footnote
   test_name <- x$meta_data$stat_test_lbl %>% discard(is.na)
