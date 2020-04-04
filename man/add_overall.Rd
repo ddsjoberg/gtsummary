@@ -33,7 +33,7 @@ tbl_overall_ex <-
 \seealso{
 Other tbl_summary tools: 
 \code{\link{add_n}()},
-\code{\link{add_p}()},
+\code{\link{add_p.tbl_summary}()},
 \code{\link{add_q.tbl_summary}()},
 \code{\link{add_stat_label}()},
 \code{\link{bold_italicize_labels_levels}},

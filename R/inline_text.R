@@ -54,7 +54,7 @@ inline_text.tbl_summary <-
         select_single = TRUE, select_input = !!variable
       )
 
-    # selecting variable rwo from meta_data
+    # selecting variable row from meta_data
     meta_data <- x$meta_data %>%
       filter(.data$variable == !!variable)
 
@@ -569,4 +569,54 @@ inline_text.tbl_survfit <-
         statistic = glue("{estimate} ({conf.low}, {conf.high})")
       ) %>%
       pull(.data$statistic)
+  }
+
+
+#' Report statistics from cross table inline
+#'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' @param x a `tbl_cross` object
+#' @param row_level Level of the row variable to display.
+#' Can also specify the 'Unknown' row. Default is `NULL`
+#' @param col_level Level of the column variable to display.
+#' Can also specify "`p.value`" for the p-value and "`stat_0`" for Total column.
+#' @inheritParams inline_text.tbl_summary
+#'
+#' @return A string reporting results from a gtsummary table
+#' @family tbl_cross tools
+#' @export
+#' @examples
+#' tbl_cross <-
+#'   tbl_cross(trial, row = trt, col = response) %>%
+#'   add_p()
+#'
+#' inline_text(tbl_cross, row_level = "Drug A", col_level = "1")
+#' inline_text(tbl_cross, row_level = "Total", col_level = "1")
+#' inline_text(tbl_cross, col_level = "p.value")
+
+inline_text.tbl_cross <-
+  function(x, row_level = NULL, col_level = NULL, pattern = NULL,
+           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+
+    # converting row_level to a string
+    row_level <- var_input_to_string(
+      data = vctr_2_tibble(unique(x$table_body$label[-1])),
+      select_input = {{ row_level }},
+      arg_name = "row_level", select_single = TRUE
+    )
+
+    # assessing if user selected total row
+    if (!is.null(row_level) && row_level == "Total" && "..total.." %in% x$meta_data$variable) {
+      variable <- "..total.."
+      row_level <- NULL
+    }
+    else variable <- x$inputs$row
+
+    # evaluating inline_text for tbl_summary
+    expr(
+      inline_text.tbl_summary(x, variable = !!variable, level = !!row_level,
+                              column = {{ col_level }}, pattern = !!pattern,
+                              pvalue_fun = !!pvalue_fun)
+    ) %>%
+      eval()
   }

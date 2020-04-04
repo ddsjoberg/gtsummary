@@ -31,7 +31,7 @@ tbl_stat_ex <-
 Other tbl_summary tools: 
 \code{\link{add_n}()},
 \code{\link{add_overall}()},
-\code{\link{add_p}()},
+\code{\link{add_p.tbl_summary}()},
 \code{\link{add_q.tbl_summary}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{bold_p.tbl_summary}()},
