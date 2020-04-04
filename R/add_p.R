@@ -273,10 +273,18 @@ footnote_add_p <- function(meta_data) {
 #' add_p_cross_ex1 <-
 #'   trial %>%
 #'   tbl_cross(row = stage, col = trt) %>%
+#'   add_p()
+#'
+#' add_p_cross_ex2 <-
+#'   trial %>%
+#'   tbl_cross(row = stage, col = trt) %>%
 #'   add_p(source_note = TRUE)
 #'
-#' @section Example Output:
-#' \if{html}{\figure{add_p_cross_ex1.png}{options: width=50\%}}
+#' @section Example 1 Output:
+#' \if{html}{\figure{add_p_cross_ex1.png}{options: width=70\%}}
+#'
+#' @section Example 2 Output:
+#' \if{html}{\figure{add_p_cross_ex2.png}{options: width=60\%}}
 add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                             source_note = FALSE, ...) {
 

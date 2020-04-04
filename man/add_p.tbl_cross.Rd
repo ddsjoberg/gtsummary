@@ -25,13 +25,23 @@ in the \{gt\} table source notes rather than a column.}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 }
-\section{Example Output}{
+\section{Example 1 Output}{
 
-\if{html}{\figure{add_p_cross_ex1.png}{options: width=50\%}}
+\if{html}{\figure{add_p_cross_ex1.png}{options: width=70\%}}
+}
+
+\section{Example 2 Output}{
+
+\if{html}{\figure{add_p_cross_ex2.png}{options: width=60\%}}
 }
 
 \examples{
 add_p_cross_ex1 <-
+  trial \%>\%
+  tbl_cross(row = stage, col = trt) \%>\%
+  add_p()
+
+add_p_cross_ex2 <-
   trial \%>\%
   tbl_cross(row = stage, col = trt) \%>\%
   add_p(source_note = TRUE)
