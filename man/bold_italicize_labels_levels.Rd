@@ -55,7 +55,7 @@ Other tbl_summary tools:
 \code{\link{add_n}()},
 \code{\link{add_overall}()},
 \code{\link{add_p}()},
-\code{\link{add_q.tbl_summary}()},
+\code{\link{add_q}()},
 \code{\link{add_stat_label}()},
 \code{\link{bold_p.tbl_summary}()},
 \code{\link{inline_text.tbl_summary}()},
@@ -69,6 +69,7 @@ Other tbl_summary tools:
 Other tbl_regression tools: 
 \code{\link{add_global_p.tbl_regression}()},
 \code{\link{add_nevent.tbl_regression}()},
+\code{\link{add_q}()},
 \code{\link{bold_p.tbl_regression}()},
 \code{\link{bold_p.tbl_stack}()},
 \code{\link{combine_terms}()},
@@ -82,7 +83,7 @@ Other tbl_regression tools:
 Other tbl_uvregression tools: 
 \code{\link{add_global_p.tbl_uvregression}()},
 \code{\link{add_nevent.tbl_uvregression}()},
-\code{\link{add_q.tbl_uvregression}()},
+\code{\link{add_q}()},
 \code{\link{bold_p.tbl_stack}()},
 \code{\link{bold_p.tbl_uvregression}()},
 \code{\link{inline_text.tbl_uvregression}()},
