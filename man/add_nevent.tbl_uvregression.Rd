@@ -47,7 +47,7 @@ tbl_uv_nevent_ex <-
 \seealso{
 Other tbl_uvregression tools: 
 \code{\link{add_global_p.tbl_uvregression}()},
-\code{\link{add_q.tbl_uvregression}()},
+\code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{bold_p.tbl_stack}()},
 \code{\link{bold_p.tbl_uvregression}()},
