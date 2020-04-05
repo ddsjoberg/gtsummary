@@ -5,21 +5,92 @@
 \title{Add a column of q values to account for
 multiple comparisons}
 \usage{
-add_q(x, ...)
+add_q(x, method = "fdr", pvalue_fun = NULL)
 }
 \arguments{
-\item{x}{\code{tbl_summary} or \code{tbl_uvregression} object}
+\item{x}{a \code{gtsummary} object}
 
-\item{...}{Additional arguments passed to other methods.}
+\item{method}{String indicating method to be used for p-value
+adjustment. Methods from
+\link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = "fdr"}.}
+
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+\code{purrr::partial(style_pvalue, digits = 2)}).}
 }
 \description{
-Add a column of q values to account for
-multiple comparisons
+Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust}.
+}
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_sum_q_ex1.png}{options: width=65\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_uv_q_ex2.png}{options: width=60\%}}
+}
+
+\examples{
+tbl_sum_q_ex1 <-
+  trial[c("trt", "age", "grade", "response")] \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_p() \%>\%
+  add_q()
+
+tbl_uv_q_ex2 <-
+  trial[c("trt", "age", "grade", "response")] \%>\%
+  tbl_uvregression(
+    y = response,
+    method = glm,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  ) \%>\%
+    add_global_p() \%>\%
+    add_q()
 }
 \seealso{
-\code{\link{add_q.tbl_summary}}, \code{\link{add_q.tbl_uvregression}},
-\code{\link{tbl_summary}}, \code{\link{tbl_uvregression}}
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{inline_text.tbl_survfit}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
+
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
+
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
 }
 \author{
 Esther Drill, Daniel D. Sjoberg
 }
+\concept{tbl_regression tools}
+\concept{tbl_summary tools}
+\concept{tbl_uvregression tools}

@@ -4,21 +4,39 @@
 \alias{sort_p}
 \title{Sort variables in table by ascending p-values}
 \usage{
-sort_p(x, ...)
+sort_p(x, q = FALSE)
 }
 \arguments{
 \item{x}{An object created using gtsummary functions}
 
-\item{...}{Additional arguments passed to other methods.}
+\item{q}{Logical argument. When \code{TRUE} will sort by the q-value column}
 }
 \description{
 Sort tables created by gtsummary by p-values
 }
-\seealso{
-\link{sort_p.tbl_summary}, \link{sort_p.tbl_regression},
-\link{sort_p.tbl_uvregression}
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_sum_sort_p_ex.png}{options: width=50\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_lm_sort_p_ex.png}{options: width=50\%}}
+}
+
+\examples{
+tbl_sum_sort_p_ex <-
+  trial[c("age", "grade", "response", "trt")] \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_p() \%>\%
+  sort_p()
+
+tbl_lm_sort_p_ex <-
+  glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
+  tbl_regression(exponentiate = TRUE) \%>\%
+  sort_p()
 }
 \author{
 Karissa Whiting
 }
-\keyword{internal}

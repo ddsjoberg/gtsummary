@@ -47,70 +47,64 @@ navbar:
     href: https://github.com/ddsjoberg/gtsummary
 
 reference:
-  - title: "Data Summary Functions"
-    desc: >
-      Functions for creating and modifying data summary tables
-    contents:
+  - title: "Data Summary Tables"
+  - subtitle: Standard Summary Tables
+  - contents:
       - tbl_summary
       - add_p
       - add_overall
       - add_n
       - add_stat_label
-      - add_q.tbl_summary
+  - subtitle: Time-to-event Summary Tables
+  - contents:
+      - tbl_survfit
 
-  - title: "Regression Model Functions"
-    desc: >
-      Functions for formatting regression model results
-    contents:
+  - title: "Regression Model Summary Tables"
+  - contents:
       - tbl_regression
-      - add_global_p.tbl_regression
-      - add_nevent.tbl_regression
-      - combine_terms
       - tbl_uvregression
+      - add_global_p.tbl_regression
       - add_global_p.tbl_uvregression
+      - add_nevent.tbl_regression
       - add_nevent.tbl_uvregression
-      - add_q.tbl_uvregression
+      - combine_terms
 
   - title: "Inline Reporting"
-    desc: >
-      Functions for reporting table results inline in Rmarkdown
-    contents:
+  - contents:
       - inline_text.tbl_summary
       - inline_text.tbl_regression
       - inline_text.tbl_uvregression
       - inline_text.tbl_survfit
 
-  - title: "General Formatting/Styling Functions"
-    desc: >
-      Functions for modifying table ascetics
-    contents:
+  - title: Other Functions
+  - subtitle: Stack or Merge Summary Tables
+  - contents:
       - tbl_merge
       - tbl_stack
+  - subtitle: Style/Update Summary Tables
+  - contents:
       - modify_header
-      - style_percent
-      - style_pvalue
-      - style_sigfig
-      - style_ratio
       - bold_labels
       - bold_levels
       - italicize_labels
       - italicize_levels
-      - bold_p.tbl_summary
-      - sort_p.tbl_summary
-      - bold_p.tbl_regression
-      - sort_p.tbl_regression
-      - bold_p.tbl_uvregression
-      - sort_p.tbl_uvregression
-      - bold_p.tbl_stack
-      - as_tibbleS3
-      - as_kable
-      - as_kable_extra
+      - bold_p
+      - sort_p
+      - add_q
+  - subtitle: Format/Style Numeric Vectors
+  - contents:
+      - style_percent
+      - style_pvalue
+      - style_sigfig
+      - style_ratio
+  - subtitle: Conversion Functions
+  - contents:
       - as_gt
-
-  - title: "Select Helpers"
-    desc: >
-      Functions to select groups of variables
-    contents:
+      - as_kable
+      - as_tibble.gtsummary
+      - as_kable_extra
+  - subtitle: Select Helpers
+  - contents:
       - all_continuous
       - all_categorical
       - all_dichotomous
@@ -120,31 +114,6 @@ reference:
       - all_double
       - all_logical
       - all_factor
-
-  - title: "Misc. Functions"
-    desc: >
-      R console and Rmarkdown print defaults
-    contents:
-      - tbl_survfit
-      - gtsummary_logo
-      - starts_with("print")
-      - starts_with("knit_print")
-
-  - title: "Example Datasets"
-    desc: >
-      Simulated data to illustrate package use
-    contents:
+  - subtitle: Data
+  - contents:
       - trial
-
-  - title: "S3 Generics"
-    desc: >
-      S3 generic functions
-    contents:
-      - add_global_p
-      - add_nevent
-      - add_q
-      - inline_text
-      - bold_p
-      - sort_p
-      - tbl_survival
-
