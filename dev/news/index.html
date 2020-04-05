@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9010</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>The <code><a href="../reference/add_q.html">add_q()</a></code> function is now general and may be applied to any {gtsummary} object with a p-value column (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>)</p></li>
 <li><p>In <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> we previously printed the estimate, confidence interval, and p-value for all models. But some models donât have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if <code>tidy()</code> returns a <code>"p.value"</code> column. Similarly, the confidence interval is printed if <code>tidy()</code> returns <code>"conf.low"</code> and <code>"conf.high"</code> columns. (<a href='https://github.com/ddsjoberg/gtsummary/issues/391'>#391</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/404'>#404</a>)</p></li>
 <li><p>The {gt} package is now released on CRAN, and weâve updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation, and code. For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/420'>#420</a>)</p></li>
 <li><p>Each gtsummary object has an associated <code>.$table_header</code>. The code needed to print a table with either gt or kable was previously a mix of information stored in the <code>table_header</code>, and code manually added to the <code>gt_calls</code> or <code>kable_calls</code> object. Now, all the information needed to print a table is stored in <code>table_header</code>. This has the advantage that any updates to the printing will now require an update to <code>table_header</code> only, and we no longer need to update the tibble, kable and gt calls. (<a href='https://github.com/ddsjoberg/gtsummary/issues/412'>#412</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/414'>#414</a>)</p></li>

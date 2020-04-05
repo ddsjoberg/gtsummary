@@ -97,7 +97,7 @@ or tbl_summary objects and adds appropriate spanning headers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9010</span>
       </span>
     </div>
 
@@ -214,6 +214,7 @@ Must be same length as <code>tbls</code> argument</p></td>
 <p>Other tbl_regression tools: 
 <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
 <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a>()</code>,
 <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
@@ -226,7 +227,7 @@ Must be same length as <code>tbls</code> argument</p></td>
 <p>Other tbl_uvregression tools: 
 <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
 <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
-<code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
 <code><a href='bold_p.tbl_uvregression.html'>bold_p.tbl_uvregression</a>()</code>,
@@ -239,7 +240,7 @@ Must be same length as <code>tbls</code> argument</p></td>
 <code><a href='add_n.html'>add_n</a>()</code>,
 <code><a href='add_overall.html'>add_overall</a>()</code>,
 <code><a href='add_p.html'>add_p</a>()</code>,
-<code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a>()</code>,
@@ -278,12 +279,11 @@ Must be same length as <code>tbls</code> argument</p></td>
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
     <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )
-<span class='co'># \donttest{</span>
+
 <span class='no'>tbl_merge_ex2</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_merge</span>(<span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t3</span>, <span class='no'>t4</span>)) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='as_gt.html'>as_gt</a></span>(<span class='kw'>include</span> <span class='kw'>=</span> -<span class='no'>tab_spanner</span>) <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/cols_label.html'>cols_label</a></span>(<span class='kw'>stat_0_1</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>"**Summary Statistics**"</span>))
-<span class='co'># }</span></div></pre>
+  <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/cols_label.html'>cols_label</a></span>(<span class='kw'>stat_0_1</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>"**Summary Statistics**"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
