@@ -3,13 +3,12 @@
 #' Function converts gtsummary objects tibbles. The formatting stored in
 #' `x$kable_calls` is applied.
 #'
-#' @name as_tibbleS3
 #' @inheritParams as_kable
 #' @param col_labels Logical argument adding column labels to output tibble.
 #' Default is `TRUE`.
 #' @param ... Not used
 #' @return a [tibble][tibble::tibble-package]
-#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survival]
+#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survfit]
 #' @author Daniel D. Sjoberg
 #' @examples
 #' tbl <-
@@ -20,9 +19,6 @@
 #'
 #' # without column labels
 #' as_tibble(tbl, col_names = FALSE)
-NULL
-
-#' @rdname as_tibbleS3
 #' @export
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                   return_calls = FALSE, exclude = NULL,  ...) {
