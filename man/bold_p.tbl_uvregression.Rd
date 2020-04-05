@@ -43,7 +43,7 @@ tbl_uvglm_bold_p_ex <-
 Other tbl_uvregression tools: 
 \code{\link{add_global_p.tbl_uvregression}()},
 \code{\link{add_nevent.tbl_uvregression}()},
-\code{\link{add_q.tbl_uvregression}()},
+\code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{bold_p.tbl_stack}()},
 \code{\link{inline_text.tbl_uvregression}()},

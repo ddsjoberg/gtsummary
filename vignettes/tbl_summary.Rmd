@@ -232,12 +232,6 @@ Going beyond typing out specific variables in your dataset, you can use:
       all_factor()          all_character()        all_double()
       ```
 
-Most variable selecting can be accomplished in a single R object (e.g. `c(age, stage)`).
-However, you may need more complex compound select structure, which cannot be represented by a single object.
-For example, if you want to select all columns except `"stage"`, you'll need to utilize the `vars(...)` function.
-When the `vars(...)` function is used, all arguments from `vars()` are passed directly to `dplyr::select()`.
-`vars(everything(), -stage)` is the `dplyr` equivalent of `select(everything(), -stage)`.
-
 ### Examples
 
 In the example below, we report the mean and standard deviation for continuous variables, and percent for all categorical.  We'll report t-tests rather than Wilcoxon rank-sum test for continuous variables, and report Fisher's exact test for response.
