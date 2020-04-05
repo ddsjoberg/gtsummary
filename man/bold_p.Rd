@@ -4,21 +4,42 @@
 \alias{bold_p}
 \title{Bold significant p-values or q-values}
 \usage{
-bold_p(x, ...)
+bold_p(x, t = 0.05, q = FALSE)
 }
 \arguments{
 \item{x}{Object created using gtsummary functions}
 
-\item{...}{Additional arguments passed to other methods.}
+\item{t}{Threshold below which values will be bold. Default is 0.05.}
+
+\item{q}{Logical argument. When TRUE will bold the q-value column rather
+than the p-values. Default is \code{FALSE}.}
 }
 \description{
 Bold values below a chosen threshold (e.g. <0.05)
-in gtsummary tables.
+in a gtsummary tables.
 }
-\seealso{
-\code{\link{bold_p.tbl_summary}},
-\code{\link{bold_p.tbl_regression}},
-\code{\link{bold_p.tbl_uvregression}}
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_sum_bold_p_ex.png}{options: width=60\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
+}
+
+\examples{
+tbl_sum_bold_p_ex <-
+  trial[c("age", "grade", "response", "trt")] \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_p() \%>\%
+  bold_p(t = 0.65)
+
+tbl_lm_bold_p_ex <-
+  glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
+  tbl_regression(exponentiate = TRUE) \%>\%
+  bold_p(t = 0.65)
 }
 \author{
 Daniel D. Sjoberg, Esther Drill
