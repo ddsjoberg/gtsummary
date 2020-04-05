@@ -1,4 +1,6 @@
-# gtsummary (development version)
+# gtsummary (development version)   
+
+* The `bold_p()` function is now general and may be applied to any {gtsummary} object with a p-value or q-value column (#429)
 
 * The `add_q()` function is now general and may be applied to any {gtsummary} object with a p-value column (#434)
 
