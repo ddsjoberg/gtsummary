@@ -50,8 +50,13 @@ as_tibble(tbl)
 as_tibble(tbl, col_names = FALSE)
 }
 \seealso{
-\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_survfit}
+Other gtsummary output types: 
+\code{\link{as_flextable}()},
+\code{\link{as_gt}()},
+\code{\link{as_kable_extra}()},
+\code{\link{as_kable}()}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{gtsummary output types}
