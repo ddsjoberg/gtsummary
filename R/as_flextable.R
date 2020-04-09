@@ -163,7 +163,7 @@ table_header_to_flextable_calls <- function(x, ...) {
     nest() %>%
     ungroup() %>%
     mutate(footnote = paste(.data$footnote_abbrev, collapse = ", ")) %>%
-    unnest(cols = data) %>%
+    unnest(cols = .data$data) %>%
     select(-.data$footnote_abbrev) %>%
     group_by(.data$footnote) %>%
     nest() %>%
