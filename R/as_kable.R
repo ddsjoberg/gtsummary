@@ -24,7 +24,7 @@
 #' @param ... Additional arguments passed to [knitr::kable]
 #' @export
 #' @return A `knitr_kable` object
-#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survival]
+#' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
 #' trial %>%

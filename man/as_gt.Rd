@@ -19,7 +19,7 @@ as_gt(
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is \code{everything()}, which includes all commands in \code{x$gt_calls}.}
+Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
@@ -56,8 +56,13 @@ as_gt_ex <-
   as_gt()
 }
 \seealso{
-\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_survival}
+Other gtsummary output types: 
+\code{\link{as_flextable}()},
+\code{\link{as_kable_extra}()},
+\code{\link{as_kable}()},
+\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{gtsummary output types}

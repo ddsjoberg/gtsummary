@@ -4,7 +4,13 @@
 \alias{as_kable_extra}
 \title{Convert to knitr_kable + kableExtra object}
 \usage{
-as_kable_extra(x, include = everything(), return_calls = FALSE, ...)
+as_kable_extra(
+  x,
+  include = everything(),
+  return_calls = FALSE,
+  strip_md_bold = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -17,6 +23,10 @@ Default is \code{everything()}, which includes all commands in \code{x$kable_cal
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
+
+\item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
+bold weight) in column labels and spanning headers are removed.
+Default is TRUE}
 
 \item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }
@@ -37,8 +47,13 @@ trial \%>\%
   as_kable_extra()
 }
 \seealso{
-\link{as_gt} \link{as_kable} \link{as_tibble}
+Other gtsummary output types: 
+\code{\link{as_flextable}()},
+\code{\link{as_gt}()},
+\code{\link{as_kable}()},
+\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{gtsummary output types}

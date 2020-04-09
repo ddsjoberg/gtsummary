@@ -47,8 +47,13 @@ trial \%>\%
   as_kable()
 }
 \seealso{
-\link{tbl_summary} \link{tbl_regression} \link{tbl_uvregression} \link{tbl_survival}
+Other gtsummary output types: 
+\code{\link{as_flextable}()},
+\code{\link{as_gt}()},
+\code{\link{as_kable_extra}()},
+\code{\link{as_tibble.gtsummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{gtsummary output types}

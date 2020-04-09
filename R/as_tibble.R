@@ -8,7 +8,7 @@
 #' Default is `TRUE`.
 #' @param ... Not used
 #' @return a [tibble][tibble::tibble-package]
-#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survfit]
+#' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
 #' tbl <-
