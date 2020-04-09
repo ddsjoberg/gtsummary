@@ -42,7 +42,7 @@ jobs:
 
       - name: Install freetype on macOS
         if: runner.os == 'macOS'
-        run: brew reinstall freetype
+        run: brew install pkg-config
 
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
