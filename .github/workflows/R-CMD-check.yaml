@@ -44,6 +44,10 @@ jobs:
         if: runner.os == 'macOS'
         run: brew cask install xquartz
 
+      - name: Install freetype on macOS
+        if: runner.os == 'macOS'
+        run: brew install freetype
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
