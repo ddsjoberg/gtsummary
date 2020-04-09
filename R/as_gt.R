@@ -16,14 +16,14 @@
 #' @param include Commands to include in output. Input may be a vector of
 #' quoted or unquoted names. tidyselect and gtsummary select helper
 #' functions are also accepted.
-#' Default is `everything()`, which includes all commands in `x$gt_calls`.
+#' Default is `everything()`.
 #' @param return_calls Logical. Default is `FALSE`. If `TRUE`, the calls are returned
 #' as a list of expressions.
 #' @param exclude DEPRECATED.
 #' @param omit DEPRECATED.
 #' @export
 #' @return A `gt_tbl` object
-#' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_survival]
+#' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
 #' as_gt_ex <-

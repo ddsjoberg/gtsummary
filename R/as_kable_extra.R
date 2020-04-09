@@ -8,22 +8,38 @@
 #' changed manually with kableExtra output.
 #'
 #' @inheritParams as_kable
+#' @inheritParams as_flextable
 #' @export
 #' @return A {kableExtra} object
-#' @seealso [as_gt] [as_kable] [as_tibble]
+#' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
 #' trial %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_kable_extra()
 
-as_kable_extra <- function(x, include = everything(), return_calls = FALSE, ...) {
+as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
+                           strip_md_bold = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
   if (!requireNamespace("kableExtra", quietly = TRUE)) {
     stop(paste0(
       "The 'kableExtra' package is required for 'as_kable_extra'.\n",
       "Install with install.packages('kableExtra')"
     ), call. = FALSE)
+  }
+
+  # stripping markdown asterisk ------------------------------------------------
+  if (strip_md_bold == TRUE) {
+    x$table_header <-
+      x$table_header %>%
+      mutate(
+        label = str_replace_all(
+          .data$label, pattern = fixed("**"), replacement = fixed("")
+        ),
+        spanning_header = str_replace_all(
+          .data$spanning_header, pattern = fixed("**"), replacement = fixed("")
+        )
+      )
   }
 
   # creating list of kableExtra calls ------------------------------------------
