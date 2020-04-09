@@ -40,13 +40,13 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
+      - name: Install freetype on macOS
+        if: runner.os == 'macOS'
+        run: brew install freetype
+
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
         run: brew cask install xquartz
-
-      - name: Install freetype on macOS
-        if: runner.os == 'macOS'
-        run: brew cask install freetype
 
       - name: Query dependencies
         run: |
