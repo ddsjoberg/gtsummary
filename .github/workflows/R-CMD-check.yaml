@@ -46,7 +46,7 @@ jobs:
 
       - name: Install freetype on macOS
         if: runner.os == 'macOS'
-        run: brew install freetype
+        run: brew cask install freetype2
 
       - name: Query dependencies
         run: |
