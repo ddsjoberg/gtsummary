@@ -9,7 +9,7 @@
 #' @importFrom rlang .data .env %||% set_names sym syms parse_expr expr exprs call2 :=
 #' @importFrom glue glue as_glue glue_collapse
 #' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
-#' str_split str_detect str_remove
+#' str_split str_detect str_remove str_replace_all
 #' @keywords internal
 "_PACKAGE"
 
