@@ -18,14 +18,14 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '3.6'}
+##          - {os: windows-latest, r: '3.6'}
           - {os: macOS-latest, r: '3.6'}
 #          - {os: macOS-latest, r: 'devel'}
 #          - {os: ubuntu-16.04, r: '3.2', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
 #          - {os: ubuntu-16.04, r: '3.3', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.4', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.5', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.6', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+##          - {os: ubuntu-16.04, r: '3.4', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+##          - {os: ubuntu-16.04, r: '3.5', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+##          - {os: ubuntu-16.04, r: '3.6', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -42,7 +42,7 @@ jobs:
 
       - name: Install freetype on macOS
         if: runner.os == 'macOS'
-        run: brew install freetype
+        run: brew reinstall freetype
 
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
@@ -76,7 +76,6 @@ jobs:
         run: Rscript -e "r_version <- strsplit(version[['version.string']], split=' ')[[1]][3]"
                      -e "print(r_version)"
                      -e "install.packages('systemfonts', type = 'source', repos = 'https://cran.rstudio.com/')"
-                     -e "install.packages('gdtools', type = 'source', repos = 'https://cran.rstudio.com/')"
                      -e "if (r_version < '3.6') remotes::install_version('latticeExtra', version = '0.6-28', repos = 'https://cran.rstudio.com/')"
                      -e "if (r_version < '3.6') remotes::install_version('pbkrtest', version = '0.4-7', repos = 'https://cran.rstudio.com/')"
                      -e "if (r_version < '3.5') remotes::install_version('geepack', version = '1.2-1', repos = 'https://cran.rstudio.com/')"
