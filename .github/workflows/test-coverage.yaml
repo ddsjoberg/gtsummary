@@ -53,8 +53,9 @@ jobs:
           install.packages(c("remotes"))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("covr")
+          remotes::install_cran("fs")
         shell: Rscript {0}
 
       - name: Test coverage
-        run: covr::codecov()
+        run: covr::codecov(path = fs::path_package("gtsummary"))
         shell: Rscript {0}
