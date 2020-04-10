@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_gt.R
 \name{as_gt}
 \alias{as_gt}
-\title{Convert gtsummary object to a gt_tbl object}
+\title{Convert gtsummary object to a gt object}
 \usage{
 as_gt(
   x,

@@ -1,4 +1,4 @@
-#' Results from a simulated study of two chemotherapy agents: Drug A and Drug B
+#' Results from a simulated study of two chemotherapy agents
 #'
 #' A dataset containing the baseline characteristics of 200 patients
 #' who received Drug A or Drug B.  Dataset also contains the outcome of

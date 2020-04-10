@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_kable.R
 \name{as_kable}
 \alias{as_kable}
-\title{Convert to knitr_kable object}
+\title{Convert gtsummary object to a kable object}
 \usage{
 as_kable(x, include = everything(), return_calls = FALSE, exclude = NULL, ...)
 }

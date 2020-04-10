@@ -1,4 +1,4 @@
-#' Add a column of q values to account for
+#' Add a column of q-values to account for
 #' multiple comparisons
 #'
 #' Adjustments to p-values are performed with [stats::p.adjust].

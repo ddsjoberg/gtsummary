@@ -3,7 +3,7 @@
 \docType{data}
 \name{trial}
 \alias{trial}
-\title{Results from a simulated study of two chemotherapy agents: Drug A and Drug B}
+\title{Results from a simulated study of two chemotherapy agents}
 \format{
 A data frame with 200 rows--one row per patient
 \describe{

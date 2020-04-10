@@ -1,4 +1,4 @@
-#' Convert to knitr_kable object
+#' Convert gtsummary object to a kable object
 #'
 #' @description Function converts a gtsummary object to a knitr_kable object.
 #' This function is used in the background when the results are printed or knit.
