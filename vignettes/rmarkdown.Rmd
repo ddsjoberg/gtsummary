@@ -23,17 +23,19 @@ Therefore, we have made it possible to print {gtsummary} tables with various eng
 
 Here's a summary of the various R Markdown output types and the print engines that support them.
 
+<!-- Printing table of output types. -->
 ```{r, echo=FALSE, warning=FALSE}
-path <- "img"
 
+# list of all the icons used in table
 path_figure <- list(
-  file.path(path, "icons8-smiling-100.png"),
-  file.path(path, "icons8-neutral-100.png"),
-  file.path(path, "icons8-disappointed-100.png"),
-  file.path(path, "icons8-no-entry-100.png"),
-  file.path(path, "icons8-under-construction-100.png")
+  "img/icons8-smiling-100.png",
+  "img/icons8-neutral-100.png",
+  "img/icons8-disappointed-100.png",
+  "img/icons8-no-entry-100.png",
+  "img/icons8-under-construction-100.png"
 )
 
+# making table with gt
 list(
   printer = c("gt", "kable", "flextable", "kableExtra", "tibble"),
   output = c("HTML", "PDF", "RTF", "Word")
@@ -104,10 +106,12 @@ list(
       )
     }
   ) %>%
-  cols_width(vars(HTML, PDF, RTF, Word) ~ px(60))
-
+  cols_width(vars(HTML, PDF, RTF, Word) ~ px(60),
+             vars(link) ~ px(110),
+             vars(link, fns) ~ px(140))
 ```
 
+<!-- Printing key for table of output types. -->
 ```{r, echo=FALSE}
 tibble::tibble(
   figure = 1:5,
@@ -116,7 +120,7 @@ tibble::tibble(
     "Formatted output, but missing indentation, footnotes, spanning headers",
     "No formatted output",
     "Output not supported",
-    "Under construction"
+    "Under development"
   )
 ) %>%
   gt() %>%
@@ -160,12 +164,11 @@ tibble::tibble(
           "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
           "**PDF** output is under development in the **{gt}** package.",
           "You may get a gorgeous table, but you may also get an error or a malformed table."),
-    paste("**{gt}** is the default print engine; however, **RTF** output is under",
-          "development in the **{gt}** package. You may get a gorgeous table, but",
-          "you may also get an error or a malformed table.",
-          "To avoid any messaging about RTF format being under development,",
-          "convert a {gtsummary} object to **{gt}** with `as_gt()`,",
-          "e.g. `tbl_summary(trial) %>% as_gt()`."),
+    paste("**kable** is the default print engine for **RTF** output.",
+          "You may force printing with **{gt}** by converting a **{gtsummary}**",
+          "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
+          "**RTF** output is under development in the **{gt}** package.",
+          "You may get a gorgeous table, but you may also get an error or a malformed table."),
     paste("**kable** is the default print engine for **Word** output,",
           "as **{gt}** does not support **Word**.")
   )
@@ -175,7 +178,6 @@ tibble::tibble(
   cols_label(output = md("**Output Type**"), desc = "") %>%
   tab_options(table.font.size = 'small')
 ```
-
 
 When a table is printed with `kintr::kable()` the resulting table is less full featured compared to a table printed with {gt}.
 For example, the table will not contain footnotes, spanning headers, or row indentation.
@@ -187,8 +189,7 @@ To open the example file, run the following command in the R console.
 
 ```{r, eval = FALSE}
 library(gtsummary)
-file.path(system.file(package = "gtsummary"), 
-          "rmarkdown_example/gtsummary_rmarkdown_html.Rmd") %>%
+system.file(package = "gtsummary") %>%
+  file.path("rmarkdown_example/gtsummary_rmarkdown_html.Rmd") %>%
   file.edit()
 ```
-
