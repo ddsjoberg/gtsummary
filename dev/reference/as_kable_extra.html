@@ -102,7 +102,7 @@ changed manually with kableExtra output." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9011</span>
       </span>
     </div>
 
@@ -189,7 +189,13 @@ uses the standard markdown <code>**</code> to bold headers, and they may need to
 changed manually with kableExtra output.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_kable_extra</span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything</a></span>(), <span class='kw'>return_calls</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>as_kable_extra</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything</a></span>(),
+  <span class='kw'>return_calls</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>strip_md_bold</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -212,6 +218,12 @@ Default is <code><a href='https://tidyselect.r-lib.org/reference/select_helpers.
 as a list of expressions.</p></td>
     </tr>
     <tr>
+      <th>strip_md_bold</th>
+      <td><p>When TRUE, all double asterisk (markdown language for
+bold weight) in column labels and spanning headers are removed.
+Default is TRUE</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Additional arguments passed to <a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable</a></p></td>
     </tr>
@@ -222,7 +234,11 @@ as a list of expressions.</p></td>
     <p>A kableExtra object</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='as_gt.html'>as_gt</a> <a href='as_kable.html'>as_kable</a> <a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></p></div>
+    <div class='dont-index'><p>Other gtsummary output types: 
+<code><a href='as_flextable.html'>as_flextable</a>()</code>,
+<code><a href='as_gt.html'>as_gt</a>()</code>,
+<code><a href='as_kable.html'>as_kable</a>()</code>,
+<code><a href='as_tibble.gtsummary.html'>as_tibble.gtsummary</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>trial</span> <span class='kw'>%&gt;%</span>
@@ -230,9 +246,9 @@ as a list of expressions.</p></td>
   <span class='fu'>as_kable_extra</span>()</div><div class='output co'>#&gt; &lt;table&gt;
 #&gt;  &lt;thead&gt;
 #&gt;   &lt;tr&gt;
-#&gt;    &lt;th style="text-align:left;"&gt; **Characteristic** &lt;/th&gt;
-#&gt;    &lt;th style="text-align:left;"&gt; **Drug A**, N = 98 &lt;/th&gt;
-#&gt;    &lt;th style="text-align:left;"&gt; **Drug B**, N = 102 &lt;/th&gt;
+#&gt;    &lt;th style="text-align:left;"&gt; Characteristic &lt;/th&gt;
+#&gt;    &lt;th style="text-align:left;"&gt; Drug A, N = 98 &lt;/th&gt;
+#&gt;    &lt;th style="text-align:left;"&gt; Drug B, N = 102 &lt;/th&gt;
 #&gt;   &lt;/tr&gt;
 #&gt;  &lt;/thead&gt;
 #&gt; &lt;tbody&gt;
@@ -340,7 +356,7 @@ as a list of expressions.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
