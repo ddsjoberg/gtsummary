@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_q.R
 \name{add_q}
 \alias{add_q}
-\title{Add a column of q values to account for
+\title{Add a column of q-values to account for
 multiple comparisons}
 \usage{
 add_q(x, method = "fdr", pvalue_fun = NULL)

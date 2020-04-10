@@ -1,4 +1,4 @@
-#' Convert gtsummary object to a gt_tbl object
+#' Convert gtsummary object to a gt object
 #'
 #' @description Function converts a gtsummary object to a gt_tbl object.
 #' Function is used in the background when the results are printed or knit.
