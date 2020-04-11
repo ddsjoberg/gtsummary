@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_flextable.R
 \name{as_flextable}
 \alias{as_flextable}
-\title{Convert gtsummary table to flextable}
+\title{Convert gtsummary object to a flextable object}
 \usage{
 as_flextable(
   x,
@@ -37,6 +37,9 @@ A user can use this function if they wish to add customized formatting
 available via the flextable functions. The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
 does not support Word.
+}
+\details{
+Use the \code{\link[flextable:width]{flextable::width()}} function for detailed control over column width.
 }
 \examples{
 trial \%>\%
