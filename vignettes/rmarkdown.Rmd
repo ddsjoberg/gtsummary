@@ -5,6 +5,8 @@ vignette: >
   %\VignetteIndexEntry{gtsummary_with_rmarkdown}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -15,9 +17,9 @@ knitr::opts_chunk$set(
 library(gt)
 ```
 
-The {gtsummary} package was written to be a companion to the {gt} package from RStudio.
-But not all output types are supported by the {gt} package.
-Therefore, we have made it possible to print {gtsummary} tables with various engines.
+The **{gtsummary}** package was written to be a companion to the **{gt}** package from RStudio.
+But not all output types are supported by the **{gt}** package.
+Therefore, we have made it possible to print **{gtsummary}** tables with various engines.
 
 ## Output Types
 
@@ -149,23 +151,31 @@ tibble::tibble(
   tab_options(table.font.size = 'x-small', data_row.padding = px(3))
 ```
 
+Any **{gtsummary}** table can be converted to one of the types in the table above.
+For example, the code below prints a **{gtsummary}** table as a **kable** table, instead of the default **{gt}** table.
+
+```{r, eval=FALSE}
+tbl_summary(trial) %>%
+  as_kable()
+```
+
 ## Default Printer
 
-Tables printed with {gtsummary} can be seamlessly integrated into R markdown documents.
-Currently, {gt} supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
+Tables printed with **{gtsummary}** can be seamlessly integrated into R markdown documents.
+Currently, **{gt}** supports **HTML** output, with **LaTeX** and **RTF** planned for the future.
+The table below summarizes the default print engine utilized for **{gtsummary}** tables for various R Markdown output formats.
 
 ```{r, echo = FALSE}
 tibble::tibble(
   output = c("**HTML**", "**PDF**", "**RTF**", "**Word**"),
+  default_printer = c("**{gt}**", "**kable**", "**kable**", "**kable**"),
   desc = c(
-    "**{gt}** is the default print engine for **HTML** output.",
-    paste("**kable** is the default print engine for **PDF** output.",
-          "You may force printing with **{gt}** by converting a **{gtsummary}**",
+    "**{gt}** output is fully supported with **HTML** output.",
+    paste("You may force printing with **{gt}** by converting a **{gtsummary}**",
           "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
           "**PDF** output is under development in the **{gt}** package.",
           "You may get a gorgeous table, but you may also get an error or a malformed table."),
-    paste("**kable** is the default print engine for **RTF** output.",
-          "You may force printing with **{gt}** by converting a **{gtsummary}**",
+    paste("You may force printing with **{gt}** by converting a **{gtsummary}**",
           "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
           "**RTF** output is under development in the **{gt}** package.",
           "You may get a gorgeous table, but you may also get an error or a malformed table."),
@@ -175,16 +185,18 @@ tibble::tibble(
 ) %>%
   gt() %>%
   fmt_markdown(columns = everything()) %>%
-  cols_label(output = md("**Output Type**"), desc = "") %>%
+  cols_label(output = md("**Output Type**"), 
+             default_printer = md("**Default Engine**"), 
+             desc = md("**Details**")) %>%
   tab_options(table.font.size = 'small')
 ```
 
-When a table is printed with `kintr::kable()` the resulting table is less full featured compared to a table printed with {gt}.
+When a table is printed with `kintr::kable()` the resulting table is less full featured compared to a table printed with **{gt}**.
 For example, the table will not contain footnotes, spanning headers, or row indentation.
 
 ## Example R Markdown Report
 
-An example R markdown report using {gtsummary} has been included with the package.
+An example R markdown report using **{gtsummary}** has been included with the package.
 To open the example file, run the following command in the R console.
 
 ```{r, eval = FALSE}
