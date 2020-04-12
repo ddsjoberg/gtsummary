@@ -11,6 +11,47 @@
 #' Default is `TRUE`
 #' @export
 #' @return A character vector of column names selected
+#' @examples
+#' select_ex1 <-
+#'   trial %>%
+#'   dplyr::select(age, response, grade) %>%
+#'   tbl_summary(
+#'     statistic = all_continuous() ~ "{mean} ({sd})",
+#'     type = all_dichotomous() ~ "categorical"
+#'   )
+all_continuous <- function() {
+  meta_data_env$summary_type %>%
+    keep(meta_data_env$summary_type == "continuous") %>%
+    names()
+}
+
+#' @rdname select_helpers
+#' @export
+all_categorical <- function(dichotomous = TRUE) {
+  # return variable names if dochotomous included
+  if (dichotomous) {
+    x <-
+      keep(meta_data_env$summary_type, ~ . %in% c("categorical", "dichotomous")) %>%
+      names()
+    return(x)
+  }
+
+  # return variable names if dochotomous NOT included
+  meta_data_env$summary_type %>%
+    keep(meta_data_env$summary_type == "categorical") %>%
+    names()
+}
+
+#' @rdname select_helpers
+#' @export
+all_dichotomous <- function() {
+  meta_data_env$summary_type %>%
+    keep(meta_data_env$summary_type == "dichotomous") %>%
+    names()
+}
+
+#' @rdname select_helpers
+#' @export
 all_numeric <- function() {
   which(data_env$numeric)
 }
@@ -43,39 +84,6 @@ all_logical <- function() {
 #' @export
 all_factor <- function() {
   which(data_env$factor)
-}
-
-#' @rdname select_helpers
-#' @export
-all_continuous <- function() {
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type == "continuous") %>%
-    names()
-}
-
-#' @rdname select_helpers
-#' @export
-all_categorical <- function(dichotomous = TRUE) {
-  # return variable names if dochotomous included
-  if (dichotomous) {
-    x <-
-      keep(meta_data_env$summary_type, ~ . %in% c("categorical", "dichotomous")) %>%
-      names()
-    return(x)
-  }
-
-  # return variable names if dochotomous NOT included
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type == "categorical") %>%
-    names()
-}
-
-#' @rdname select_helpers
-#' @export
-all_dichotomous <- function() {
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type == "dichotomous") %>%
-    names()
 }
 
 # setting environments

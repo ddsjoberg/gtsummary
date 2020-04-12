@@ -2,17 +2,23 @@
 % Please edit documentation in R/select_helpers.R
 \name{select_helpers}
 \alias{select_helpers}
+\alias{all_continuous}
+\alias{all_categorical}
+\alias{all_dichotomous}
 \alias{all_numeric}
 \alias{all_character}
 \alias{all_integer}
 \alias{all_double}
 \alias{all_logical}
 \alias{all_factor}
-\alias{all_continuous}
-\alias{all_categorical}
-\alias{all_dichotomous}
 \title{Select helper functions}
 \usage{
+all_continuous()
+
+all_categorical(dichotomous = TRUE)
+
+all_dichotomous()
+
 all_numeric()
 
 all_character()
@@ -24,12 +30,6 @@ all_double()
 all_logical()
 
 all_factor()
-
-all_continuous()
-
-all_categorical(dichotomous = TRUE)
-
-all_dichotomous()
 }
 \arguments{
 \item{dichotomous}{Logical indicating whether to include dichotomous variables.
@@ -44,4 +44,13 @@ columns of data frames. \code{all_continuous()}, \code{all_categorical()}, and
 \code{all_dichotomous()} may only be used with \code{tbl_summary()}, where each variable
 has been classified into one of these three groups. All other helpers
 are available throughout the package.
+}
+\examples{
+select_ex1 <-
+  trial \%>\%
+  dplyr::select(age, response, grade) \%>\%
+  tbl_summary(
+    statistic = all_continuous() ~ "{mean} ({sd})",
+    type = all_dichotomous() ~ "categorical"
+  )
 }
