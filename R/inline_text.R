@@ -616,9 +616,39 @@ inline_text.tbl_cross <-
     else variable <- x$inputs$row
 
     # col_level ----------------------------------------------------------------
-    if (col_level == x$inputs$margin_text) col_level <- "stat_0"
+    col_lookup_table <-
+      tibble(
+        input = names(x$table_body),
+        column_name = names(x$table_body)
+      ) %>%
+      bind_rows(
+        x$df_by[c("by_chr", "by_col")] %>% set_names(c("input", "column_name"))
+      )
 
-    # evaluating inline_text for tbl_summary
+    if ("stat_0" %in% names(x$table_body)) {
+      col_lookup_table <-
+        col_lookup_table %>%
+        bind_rows(
+          tibble(
+            input = x$inputs$margin_text,
+            column_name = "stat_0"
+          )
+        )
+    }
+
+    # selecting proper column name
+    col_level <-
+      var_input_to_string(
+        data = vctr_2_tibble(col_lookup_table$input), arg_name = "col_level",
+        select_single = TRUE, select_input = {{ col_level }}
+      )
+
+    col_level <- col_lookup_table %>%
+      filter(.data$input == col_level) %>%
+      slice(1) %>%
+      pull(.data$column_name)
+
+    # evaluating inline_text for tbl_summary -----------------------------------
     expr(
       inline_text.tbl_summary(x, variable = !!variable, level = !!row_level,
                               column = {{ col_level }}, pattern = !!pattern,
