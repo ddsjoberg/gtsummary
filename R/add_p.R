@@ -257,15 +257,16 @@ footnote_add_p <- function(meta_data) {
 #' Adds p-value to crosstab table
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-#' @inheritParams add_p.tbl_summary
+#' @param x Object with class `tbl_cross` from the [tbl_cross] function
 #' @param pvalue_fun Function to round and format p-value.
 #' Default is [style_pvalue], except when `source_note = TRUE` when the
 #' default is `style_pvalue(x, prepend_p = TRUE)`
 #' @param source_note Logical value indicating whether to show p-value
 #' in the \{gt\} table source notes rather than a column.
 #' @param test A string specifying statistical test to perform. Default is
-#' "`chisq.test`" when expected cell counts >=5 and and "`fisher.test`" when
+#' "`chisq.test`" when expected cell counts >=5 and "`fisher.test`" when
 #' expected cell counts <5.
+#' @inheritParams add_p.tbl_summary
 #' @family tbl_cross tools
 #' @author Karissa Whiting
 #' @export
@@ -292,7 +293,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
   input_test <- switch(!is.null(test),
                        rlang::expr(everything() ~ !!test))
 
-  # running add_p to add thep-value to the output
+  # running add_p to add the p-value to the output
   x <- expr(add_p.tbl_summary(x, test = !!input_test)) %>% eval()
 
   # updating footnote

@@ -81,6 +81,6 @@ Other tbl_cross tools:
 \code{\link{inline_text.tbl_cross}()}
 }
 \author{
-Karissa Whiting
+Karissa Whiting, Daniel D. Sjoberg
 }
 \concept{tbl_cross tools}

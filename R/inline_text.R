@@ -580,6 +580,8 @@ inline_text.tbl_survfit <-
 #' Can also specify the 'Unknown' row. Default is `NULL`
 #' @param col_level Level of the column variable to display.
 #' Can also specify "`p.value`" for the p-value and "`stat_0`" for Total column.
+#' @param pattern String indicating the statistics to return.
+#' Uses [glue::glue] formatting. Default is pattern shown in `tbl_cross()` output
 #' @inheritParams inline_text.tbl_summary
 #'
 #' @return A string reporting results from a gtsummary table

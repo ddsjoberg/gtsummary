@@ -7,10 +7,10 @@
 \method{add_p}{tbl_cross}(x, test = NULL, pvalue_fun = NULL, source_note = FALSE, ...)
 }
 \arguments{
-\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
+\item{x}{Object with class \code{tbl_cross} from the \link{tbl_cross} function}
 
 \item{test}{A string specifying statistical test to perform. Default is
-"\code{chisq.test}" when expected cell counts >=5 and and "\code{fisher.test}" when
+"\code{chisq.test}" when expected cell counts >=5 and "\code{fisher.test}" when
 expected cell counts <5.}
 
 \item{pvalue_fun}{Function to round and format p-value.

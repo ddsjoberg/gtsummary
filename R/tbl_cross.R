@@ -18,7 +18,7 @@
 #' @inheritParams tbl_summary
 #'
 #' @family tbl_cross tools
-#' @author Karissa Whiting
+#' @author Karissa Whiting, Daniel D. Sjoberg
 #' @export
 #' @return A `tbl_cross` object
 #' @examples
