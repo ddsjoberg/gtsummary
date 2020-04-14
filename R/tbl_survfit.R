@@ -15,7 +15,7 @@
 #' @param label string specifying variable or overall label. Default is
 #' stratifying variable name or `"Overall"` when no stratifying variable present
 #' @param label_header string specifying column labels above statistics. Default
-#' is `"{prob} Centile"` for survival centiles, and `"Time {time}"` for n-year
+#' is `"{prob} Percentile"` for survival percentiles, and `"Time {time}"` for n-year
 #' survival estimates
 #' @param estimate_fun function to format the Kaplan-Meier estimates. Default
 #' is [style_percent] for survival probabilities and [style_sigfig] for
@@ -176,7 +176,7 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
       label = switch(length(.env$strata) == 0, "Overall") %||%
         stringr::word(strata, start = 2L, sep = "="),
       col_label = .env$label_header %||%
-        "**{style_percent(prob, symbol = TRUE)} Centile**" %>%
+        "**{style_percent(prob, symbol = TRUE)} Percentile**" %>%
         glue() %>% as.character()
     )
 
