@@ -34,7 +34,7 @@ Default is \code{"{estimate} ({conf.low}, {conf.high})"}}
 stratifying variable name or \code{"Overall"} when no stratifying variable present}
 
 \item{label_header}{string specifying column labels above statistics. Default
-is \code{"{prob} Centile"} for survival centiles, and \code{"Time {time}"} for n-year
+is \code{"{prob} Percentile"} for survival percentiles, and \code{"Time {time}"} for n-year
 survival estimates}
 
 \item{estimate_fun}{function to format the Kaplan-Meier estimates. Default
