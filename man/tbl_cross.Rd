@@ -12,7 +12,8 @@ tbl_cross(
   statistic = NULL,
   percent = c("none", "column", "row", "cell"),
   missing = c("ifany", "always", "no"),
-  missing_text = "Unknown"
+  missing_text = "Unknown",
+  margin_text = "Total"
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ Allowed values are \code{"no"} (never display NA values),
 
 \item{missing_text}{String to display for count of missing observations.
 Default is \code{"Unknown"}.}
+
+\item{margin_text}{Text to display for margin totals. Default is \code{"Total"}}
 }
 \value{
 A \code{tbl_cross} object

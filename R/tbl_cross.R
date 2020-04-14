@@ -15,6 +15,7 @@
 #' @param percent Indicates the type of percentage to return.
 #' Must be one of "none", "column", "row", or "cell". Default is "cell" when
 #' `{N}` or `{p}` is used in statistic.
+#' @param margin_text Text to display for margin totals. Default is `"Total"`
 #' @inheritParams tbl_summary
 #'
 #' @family tbl_cross tools
@@ -44,7 +45,8 @@ tbl_cross <- function(data,
                       statistic = NULL,
                       percent = c("none", "column", "row", "cell"),
                       missing = c("ifany", "always", "no"),
-                      missing_text = "Unknown") {
+                      missing_text = "Unknown",
+                      margin_text = "Total") {
 
   # checking data input --------------------------------------------------------
   if (!is.data.frame(data) || nrow(data) == 0 || ncol(data) < 2) {
@@ -98,7 +100,7 @@ tbl_cross <- function(data,
 
   new_label[[row]] <- label[[row]] %||% attr(data[[row]], "label") %||% row
   new_label[[col]] <- label[[col]] %||% attr(data[[col]], "label") %||% col
-  new_label[["..total.."]] <- "Total"
+  new_label[["..total.."]] <- margin_text
 
   # statistic argument ---------------------------------------------------------
 
@@ -143,7 +145,7 @@ tbl_cross <- function(data,
     bold_labels() %>%
     modify_header(
       stat_by = "{level}",
-      stat_0 = "**Total**"
+      stat_0 = paste0("**", margin_text, "**")
     )
 
   # clear all existing footnotes

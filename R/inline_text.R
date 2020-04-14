@@ -600,19 +600,23 @@ inline_text.tbl_cross <-
   function(x, col_level, row_level = NULL, pattern = NULL,
            pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
 
+    # row_level ----------------------------------------------------------------
     # converting row_level to a string
     row_level <- var_input_to_string(
-      data = vctr_2_tibble(unique(x$table_body$label[-1])),
+      data = vctr_2_tibble(unique(x$table_body$label)),
       select_input = {{ row_level }},
       arg_name = "row_level", select_single = TRUE
     )
 
     # assessing if user selected total row
-    if (!is.null(row_level) && row_level == "Total" && "..total.." %in% x$meta_data$variable) {
+    if (!is.null(row_level) && row_level == x$inputs$margin_text && "..total.." %in% x$meta_data$variable) {
       variable <- "..total.."
       row_level <- NULL
     }
     else variable <- x$inputs$row
+
+    # col_level ----------------------------------------------------------------
+    if (col_level == x$inputs$margin_text) col_level <- "stat_0"
 
     # evaluating inline_text for tbl_summary
     expr(
