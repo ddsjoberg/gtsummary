@@ -61,7 +61,7 @@ formatted summary table of the results
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_survfit_ex2.png}{options: width=40\%}}
+\if{html}{\figure{tbl_survfit_ex2.png}{options: width=27\%}}
 }
 
 \examples{

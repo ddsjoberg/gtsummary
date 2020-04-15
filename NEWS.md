@@ -2,13 +2,9 @@
 
 ### New Functions
 
-* Introducing `tbl_cross()`! Easily construct cross tabulations of two variables.
-
-<img src='man/figures/tbl_cross_ex1.png' width = "30%" />
+* Introducing `tbl_cross()`, `add_p.tbl_cross()`, and `inline_text.tbl_cross()`! Easily construct cross tabulations of two variables.
 
 * Introducing `tbl_survfit()` and `inline_text.tbl_survfit()`!  These will eventually replace `tbl_survival()`, which will no longer be encouraged. The new functions follow the structural guidelines of a {gtsummary} object and can be merged and stacked with any over {gtsummary} object (#280)
-
-<img src='man/figures/tbl_survfit_ex1.png' width = "30%" />
 
 * Introducing `as_flextable()`! The function converts gtsummary objects to {flextable} objects, which is a great option when using R markdown with Microsoft Word output. {flextable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output.
 
@@ -16,7 +12,7 @@
 
 ### User-facing Updates
 
-* Updated the default printing for {gtsummary} objects. {gt} is the default printer for the R console and for R markdown documents with HTML output.  PDF, RTF, and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (#395, #396)
+* Updated default print engine for {gtsummary} objects. {gt} is the default printer for the R console and R markdown documents with HTML output.  PDF, RTF, and Word output default to using {kable} with a note referring users to a new vignette explaining why {gt} was not used. (#395, #396)
 
 * Updated `add_p()` custom p-value description to NOT require double escape characters for quotation marks (#361)
 
@@ -28,7 +24,7 @@
 
 * The {gt} package is now released on CRAN, and we've updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation and code.  For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (#420)
 
-* Several functions have been general, and may now be applied to any {gtsummary}-like object. Functions updated are `add_q()`, `bold_p()`, `sort_p()`, `tbl_merge()`, `tbl_stack()`, `bold_labels()`, `bold_levels()`, `italicize_labels()`, and `italicize_levels()`. (#434, #429, #373)
+* Several functions have been made general, and may now be applied to any {gtsummary}-like object. Functions updated are `add_q()`, `bold_p()`, `sort_p()`, `tbl_merge()`, `tbl_stack()`, `bold_labels()`, `bold_levels()`, `italicize_labels()`, and `italicize_levels()`. (#434, #429, #373)
 
 * In `tbl_regression()` we previously printed the estimate, confidence interval, and p-value for all models. But some models don't have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if `tidy()` returns a `"p.value"` column.  Similarly, the confidence interval is printed if `tidy()` returns `"conf.low"` and `"conf.high"` columns. (#391, #404)
 

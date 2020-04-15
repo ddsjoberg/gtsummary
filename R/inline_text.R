@@ -575,6 +575,9 @@ inline_text.tbl_survfit <-
 #' Report statistics from cross table inline
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' Extracts and returns statistics from a `tbl_cross` object for
+#' inline reporting in an R markdown document. Detailed examples in the
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 #' @param x a `tbl_cross` object
 #' @param row_level Level of the row variable to display.
 #' Can also specify the 'Unknown' row. Default is `NULL`

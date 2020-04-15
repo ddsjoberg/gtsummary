@@ -57,12 +57,13 @@ A \code{tbl_cross} object
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 The function creates a cross table of two categorical variables.
 }
-\section{Example 1 Output}{
+\section{Example Output}{
+
+\if{html}{Example 1}
 
 \if{html}{\figure{tbl_cross_ex1.png}{options: width=50\%}}
-}
 
-\section{Example 2 Output}{
+\if{html}{Example 2}
 
 \if{html}{\figure{tbl_cross_ex2.png}{options: width=50\%}}
 }

@@ -257,6 +257,8 @@ footnote_add_p <- function(meta_data) {
 #' Adds p-value to crosstab table
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' Calculate and add a p-value comparing the two variables in the cross table.
+#'
 #' @param x Object with class `tbl_cross` from the [tbl_cross] function
 #' @param pvalue_fun Function to round and format p-value.
 #' Default is [style_pvalue], except when `source_note = TRUE` when the
@@ -281,11 +283,14 @@ footnote_add_p <- function(meta_data) {
 #'   tbl_cross(row = stage, col = trt) %>%
 #'   add_p(source_note = TRUE)
 #'
-#' @section Example 1 Output:
-#' \if{html}{\figure{add_p_cross_ex1.png}{options: width=70\%}}
+#' @section Example Output:
+#' \if{html}{Example 1}
 #'
-#' @section Example 2 Output:
-#' \if{html}{\figure{add_p_cross_ex2.png}{options: width=60\%}}
+#' \if{html}{\figure{add_p_cross_ex1.png}{options: width=50\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
 add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                             source_note = FALSE, ...) {
 
