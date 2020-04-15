@@ -1,4 +1,4 @@
-test_that("select helpers", {
+test_that("test-select helpers", {
   expect_equal(
     var_input_to_string(mtcars, select_input = vars(hp, mpg)),
     dplyr::select(mtcars, hp, mpg) %>% colnames()

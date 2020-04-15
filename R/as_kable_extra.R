@@ -8,13 +8,14 @@
 #' changed manually with kableExtra output.
 #'
 #' @inheritParams as_kable
-#' @inheritParams as_flextable
+#' @inheritParams as_flextable.gtsummary
 #' @export
 #' @return A {kableExtra} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' trial %>%
+#' tbl <-
+#'   trial %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_kable_extra()
 

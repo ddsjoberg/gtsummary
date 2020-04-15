@@ -2,18 +2,24 @@
 % Please edit documentation in R/as_flextable.R
 \name{as_flextable}
 \alias{as_flextable}
+\alias{as_flextable.gtsummary}
 \title{Convert gtsummary object to a flextable object}
 \usage{
-as_flextable(
+as_flextable(x, ...)
+
+\method{as_flextable}{gtsummary}(
   x,
   include = everything(),
   return_calls = FALSE,
-  strip_md_bold = TRUE
+  strip_md_bold = TRUE,
+  ...
 )
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
+
+\item{...}{Not used}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -38,9 +44,28 @@ available via the flextable functions. The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
 does not support Word.
 }
-\details{
-Use the \code{\link[flextable:width]{flextable::width()}} function for detailed control over column width.
+\section{Details}{
+
+The \code{as_flextable()} takes the data frame that will be printed and converts
+it to a flextable and formats the table with the following flextable functions.
+\enumerate{
+\item \code{\link[flextable:flextable]{flextable::flextable()}}
+\item \code{\link[flextable:set_header_labels]{flextable::set_header_labels()}} to set column labels
+\item \code{\link[flextable:add_header_row]{flextable::add_header_row()}}, if applicable, to set spanning column header
+\item \code{\link[flextable:align]{flextable::align()}} to set column alignment
+\item \code{\link[flextable:padding]{flextable::padding()}} to indent variable levels
+\item \code{\link[flextable:autofit]{flextable::autofit()}} to estimate the column widths
+\item \code{\link[flextable:footnote]{flextable::footnote()}} to add table footnotes and source notes
+\item \code{\link[flextable:bold]{flextable::bold()}} to bold cells in data frame
+\item \code{\link[flextable:italic]{flextable::italic()}} to italicize cells in data frame
 }
+
+Any one of these commands may be omitted using the \verb{include=} argument.
+
+Pro tip: Use the \code{\link[flextable:width]{flextable::width()}} function for exacting control over
+column width after calling \code{\link[=as_flextable]{as_flextable()}}.
+}
+
 \examples{
 trial \%>\%
   dplyr::select(trt, age, grade) \%>\%
