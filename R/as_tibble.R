@@ -1,4 +1,4 @@
-#' Convert gtsummary object to tibble
+#' Convert gtsummary object to a tibble
 #'
 #' Function converts gtsummary objects tibbles. The formatting stored in
 #' `x$kable_calls` is applied.
@@ -10,16 +10,17 @@
 #' @return a [tibble][tibble::tibble-package]
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
+#' @export
 #' @examples
 #' tbl <-
 #'   trial %>%
+#'   dplyr::select(trt, age, grade, response) %>%
 #'   tbl_summary(by = trt)
 #'
 #' as_tibble(tbl)
 #'
 #' # without column labels
-#' as_tibble(tbl, col_names = FALSE)
-#' @export
+#' as_tibble(tbl, col_labels = FALSE)
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                   return_calls = FALSE, exclude = NULL,  ...) {
   # DEPRECATION notes ----------------------------------------------------------
@@ -103,7 +104,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
     map(
       seq_len(nrow(df_tab_style_bold)),
       ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_bold$column[[.x]])),
-                       ~ifelse(is.na(.), NA, paste0("__", ., "__"))))
+                       ~ifelse(!!parse_expr(df_tab_style_bold$bold[[.x]]), paste0("__", ., "__"), .)))
     )
 
   # tab_style_italic -------------------------------------------------------------
@@ -114,7 +115,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
     map(
       seq_len(nrow(df_tab_style_italic)),
       ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_italic$column[[.x]])),
-                       ~ifelse(is.na(.), NA, paste0("__", ., "__"))))
+                       ~ifelse(!!parse_expr(df_tab_style_italic$italic[[.x]]), paste0("_", ., "_"), .)))
     )
 
   # cols_hide ------------------------------------------------------------------

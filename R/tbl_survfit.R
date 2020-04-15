@@ -51,7 +51,7 @@
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_survfit_ex2.png}{options: width=40\%}}
+#' \if{html}{\figure{tbl_survfit_ex2.png}{options: width=27\%}}
 
 tbl_survfit <- function(x, times = NULL, probs = NULL,
                         statistic = "{estimate} ({conf.low}, {conf.high})",

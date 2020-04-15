@@ -24,15 +24,17 @@ in the \{gt\} table source notes rather than a column.}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+Calculate and add a p-value comparing the two variables in the cross table.
 }
-\section{Example 1 Output}{
+\section{Example Output}{
 
-\if{html}{\figure{add_p_cross_ex1.png}{options: width=70\%}}
-}
+\if{html}{Example 1}
 
-\section{Example 2 Output}{
+\if{html}{\figure{add_p_cross_ex1.png}{options: width=50\%}}
 
-\if{html}{\figure{add_p_cross_ex2.png}{options: width=60\%}}
+\if{html}{Example 2}
+
+\if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
 }
 
 \examples{

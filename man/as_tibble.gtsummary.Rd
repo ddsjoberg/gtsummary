@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_tibble.R
 \name{as_tibble.gtsummary}
 \alias{as_tibble.gtsummary}
-\title{Convert gtsummary object to tibble}
+\title{Convert gtsummary object to a tibble}
 \usage{
 \method{as_tibble}{gtsummary}(
   x,
@@ -42,12 +42,13 @@ Function converts gtsummary objects tibbles. The formatting stored in
 \examples{
 tbl <-
   trial \%>\%
+  dplyr::select(trt, age, grade, response) \%>\%
   tbl_summary(by = trt)
 
 as_tibble(tbl)
 
 # without column labels
-as_tibble(tbl, col_names = FALSE)
+as_tibble(tbl, col_labels = FALSE)
 }
 \seealso{
 Other gtsummary output types: 
