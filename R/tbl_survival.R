@@ -1,8 +1,9 @@
 #' Creates table of univariate summary statistics for time-to-event endpoints
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("questioning")}
-#' Questioning whether gtsummary is the place for our univariate survival
-#' functions to live. This may be exported to another package in the future.
+#' Please use [tbl_survfit].
+#' Function takes a `survfit` object as an argument, and provides a
+#' formatted summary of the results
 #'
 #' @param x A survfit object
 #' @param ... Additional arguments passed to other methods
