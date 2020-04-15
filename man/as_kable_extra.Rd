@@ -42,7 +42,8 @@ uses the standard markdown \verb{**} to bold headers, and they may need to be
 changed manually with kableExtra output.
 }
 \examples{
-trial \%>\%
+tbl <-
+  trial \%>\%
   tbl_summary(by = trt) \%>\%
   as_kable_extra()
 }

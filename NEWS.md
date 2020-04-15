@@ -1,32 +1,40 @@
 # gtsummary (development version)
 
-* New function added, `tbl_cross()`, that provides cross tabulations of two variables.
+### New Functions
 
-* New function added, `as_flextable()`! The function converts gtsummary objects to flextable objects, and is a good option when using R markdown with Microsoft Word output as flextable support indentation, footnotes, and spanning headers.
+* Introducing `tbl_cross()`! Easily construct cross tabulations of two variables.
 
-* The `bold_p()` and `sort_p()` functions are now general and may be applied to any {gtsummary} object with a p-value or q-value column (#429)
+<img src='man/figures/tbl_cross_ex1.png' width = "30%" />
 
-* The `add_q()` function is now general and may be applied to any {gtsummary} object with a p-value column (#434)
+* Introducing `tbl_survfit()` and `inline_text.tbl_survfit()`!  These will eventually replace `tbl_survival()`, which will no longer be encouraged. The new functions follow the structural guidelines of a {gtsummary} object and can be merged and stacked with any over {gtsummary} object (#280)
 
-* In `tbl_regression()` we previously printed the estimate, confidence interval, and p-value for all models. But some models don't have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if `tidy()` returns a `"p.value"` column.  Similarly, the confidence interval is printed if `tidy()` returns `"conf.low"` and `"conf.high"` columns. (#391, #404)
+<img src='man/figures/tbl_survfit_ex1.png' width = "30%" />
 
-* The {gt} package is now released on CRAN, and we've updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation, and code.  For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (#420)
+* Introducing `as_flextable()`! The function converts gtsummary objects to {flextable} objects, which is a great option when using R markdown with Microsoft Word output. {flextable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output.
+
+*  Introducing `as_kable_extra()`! The function converts gtsummary objects to {kableExtra} objects. {kableExtra} supports indentation, footnotes, and spanning headers with HTML and PDF output. (#394)
+
+### User-facing Updates
+
+* Updated the default printing for {gtsummary} objects. {gt} is the default printer for the R console and for R markdown documents with HTML output.  PDF, RTF, and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (#395, #396)
+
+* Updated `add_p()` custom p-value description to NOT require double escape characters for quotation marks (#361)
+
+* Created structure and enumerated list of unit tests each vetted model must pass, and added the tests (#383)
+
+### Internal Updates
 
 * Each gtsummary object has an associated `.$table_header`. The code needed to print a table with either gt or kable was previously a mix of information stored in the `table_header`, and code manually added to the `gt_calls` or `kable_calls` object. Now, all the information needed to print a table is stored in `table_header`. This has the advantage that any updates to the printing will now require an update to `table_header` only, and we no longer need to update the tibble, kable and gt calls. (#412, #414)
 
-*  The function `as_kable_extra()` was added for printing to HTML with functions from {kableExtra} (#394)
+* The {gt} package is now released on CRAN, and we've updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation and code.  For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (#420)
 
-* New functions `tbl_survfit()` and `inline_text.tbl_survfit()` were added.  These replace `tbl_survival()`, which is now soft deprecated (#280)
+* Several functions have been general, and may now be applied to any {gtsummary}-like object. Functions updated are `add_q()`, `bold_p()`, `sort_p()`, `tbl_merge()`, `tbl_stack()`, `bold_labels()`, `bold_levels()`, `italicize_labels()`, and `italicize_levels()`. (#434, #429, #373)
 
-* Updated the default printing for {gtsummary} objects. {gt} is the default printer for the R console and for R markdown documents with HTML output.  PDF and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (#395, #396)
+* In `tbl_regression()` we previously printed the estimate, confidence interval, and p-value for all models. But some models don't have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if `tidy()` returns a `"p.value"` column.  Similarly, the confidence interval is printed if `tidy()` returns `"conf.low"` and `"conf.high"` columns. (#391, #404)
 
-* Removed class checking for each type gtsummary table type, and made `tbl_stack()`, `tbl_merge()`, `bold_labels()` (and friends) generic and now check for class gtsummary (#373)
+### Bug Fixes
 
 * Bug fix when data frame passed to `tbl_summary()` with a single column (#389)
-
-* Update add_p() custom p-value description to NOT require double escape characters for quotes (#361)
-
-* Created structure and enumerated list of unit tests each vetted model must pass, and added the tests (#383)
 
 # gtsummary 1.2.6
 
@@ -34,19 +42,19 @@
 
 # gtsummary 1.2.5
 
-## Documentation
+### Documentation
 
 * Updated documentation and README to improve readability, added more cross-linking across pages, added search terms to help users find our package, and added gif demonstrations (#340)
 
 * README images now build differently for website vs GitHub markdown to accommodate different output formats
 
-## Breaking changes
+### Breaking changes
 
 * Removed deprecated `fmt*_()` and `cols_label_summary()` functions (#365)
 
 * Functions `tbl_summary_()` and `add_p_()` have been deprecated because the `by=` and `group=` arguments now accept strings (#250)
 
-## Syntax
+### Syntax
 
 * Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers.  When passing a single variable, the `vars()` function wrapper is no longer required. (#250)
 
@@ -70,7 +78,7 @@
 
 * Functions `all_categorical()`, `all_dichotomous()`, and `all_continuous()` may now be used in `tbl_summary()` argument `type=` (#256)
 
-## User-facing improvements
+### User-facing improvements
 
 * New `pattern=` argument in `inline_text.tbl_summary()`.  Previously, we could only grab the entire cell from a `tbl_summary()` with `inline_text()`, and now we can get any single statistic reported (#254)
 
@@ -86,7 +94,7 @@
 
 * Improved error messaging in `tidyselect_to_list()` (#300)
 
-## Other features and fixes
+### Other features and fixes
 
 * Updated class detection to use `inherits()`, and added secondary class of `"gtsummary"` to all objects. This allows users to create their own cobbled/custom  gtsummary objects while utilizing the gtsummary print functions (#249)
 
