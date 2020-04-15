@@ -8,6 +8,11 @@ magrittr::`%>%`
 #' @importFrom tibble as_tibble
 tibble::as_tibble
 
+# flextable --------------------------------------------------------------------
+#' @export
+#' @importFrom flextable as_flextable
+flextable::as_flextable
+
 # knitr ------------------------------------------------------------------------
 #' @export
 #' @importFrom knitr knit_print

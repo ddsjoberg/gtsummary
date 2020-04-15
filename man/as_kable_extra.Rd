@@ -42,13 +42,14 @@ uses the standard markdown \verb{**} to bold headers, and they may need to be
 changed manually with kableExtra output.
 }
 \examples{
-trial \%>\%
+tbl <-
+  trial \%>\%
   tbl_summary(by = trt) \%>\%
   as_kable_extra()
 }
 \seealso{
 Other gtsummary output types: 
-\code{\link{as_flextable}()},
+\code{\link{as_flextable.gtsummary}()},
 \code{\link{as_gt}()},
 \code{\link{as_kable}()},
 \code{\link{as_tibble.gtsummary}()}
