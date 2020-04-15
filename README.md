@@ -182,10 +182,10 @@ the **{gt}** package. Therefore, we have made it possible to print
 **{gtsummary}** tables with various engines.
 
 Review the **[gtsummary + R
-Markdown](http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html)**
+Markdown](http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
 vignette for details.
 
-<a href="http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html">
+<a href="http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
 <img src="man/figures/gt_output_formats.PNG" width="55%" /> </a>
 
 ## Contributing
@@ -200,6 +200,7 @@ thank you to all contributors\!
 [@davidkane9](https://github.com/davidkane9),
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@emilyvertosick](https://github.com/emilyvertosick),
+[@GuiMarthe](https://github.com/GuiMarthe),
 [@jeanmanguy](https://github.com/jeanmanguy),
 [@jennybc](https://github.com/jennybc),
 [@jflynn264](https://github.com/jflynn264),

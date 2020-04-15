@@ -1,8 +1,9 @@
 ## Test environments
-* local Windows 10 R installation, R 3.6.2
-* Ubuntu 16.04.6 LTS 16.04 (on travis-ci), 3.4, oldrel, release, devel
-* Windows Server 2012 R2 x64 (on appveyor), release, devel
-* win-builder oldrel, release, devel
+* Windows 10 (local), R 3.6.3
+* Ubuntu 16.04.6 LTS (on github actions), 3.4, 3.5, 3.6
+* Windows Server 2019 (on github actions), 3.6
+* macOS (on github actions), 3.6
+* win-builder release, devel
 
 ## R CMD check results
 > checking CRAN incoming feasibility ... NOTE
