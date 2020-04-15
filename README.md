@@ -176,8 +176,6 @@ gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
 
 ## gtsummary + R Markdown
 
-<!-- This is copied from the rmarkdwon.Rmd vignette. May need to be updated periodically -->
-
 The **{gtsummary}** package was written to be a companion to the
 **{gt}** package from RStudio. But not all output types are supported by
 the **{gt}** package. Therefore, we have made it possible to print
@@ -186,11 +184,6 @@ the **{gt}** package. Therefore, we have made it possible to print
 Review the **[gtsummary + R
 Markdown](http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html)**
 vignette for details.
-
-<img src = "man/figures/tbl_summary_demo1.gif" alt = "animated" width = "100%">
-
-<a href="http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html">
-<img src="man/figures/gt_output_formats.png"> </a>
 
 <a href="http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html">
 <img src="man/figures/gt_output_formats.PNG" width="60%" /> </a>
