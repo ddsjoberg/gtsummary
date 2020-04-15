@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9012</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9013</span>
       </span>
     </div>
 
@@ -175,22 +175,48 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
+<div id="new-functions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-functions" class="anchor"></a>New Functions</h3>
 <ul>
-<li><p>New function added, <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code>, that provides cross tabulations of two variables.</p></li>
-<li><p>New function added, <code><a href="../reference/as_flextable.html">as_flextable()</a></code>! The function converts gtsummary objects to flextable objects, and is a good option when using R markdown with Microsoft Word output as flextable support indentation, footnotes, and spanning headers.</p></li>
-<li><p>The <code><a href="../reference/bold_p.html">bold_p()</a></code> and <code><a href="../reference/sort_p.html">sort_p()</a></code> functions are now general and may be applied to any {gtsummary} object with a p-value or q-value column (<a href='https://github.com/ddsjoberg/gtsummary/issues/429'>#429</a>)</p></li>
-<li><p>The <code><a href="../reference/add_q.html">add_q()</a></code> function is now general and may be applied to any {gtsummary} object with a p-value column (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>)</p></li>
-<li><p>In <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> we previously printed the estimate, confidence interval, and p-value for all models. But some models don’t have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if <code>tidy()</code> returns a <code>"p.value"</code> column. Similarly, the confidence interval is printed if <code>tidy()</code> returns <code>"conf.low"</code> and <code>"conf.high"</code> columns. (<a href='https://github.com/ddsjoberg/gtsummary/issues/391'>#391</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/404'>#404</a>)</p></li>
-<li><p>The {gt} package is now released on CRAN, and we’ve updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation, and code. For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/420'>#420</a>)</p></li>
-<li><p>Each gtsummary object has an associated <code>.$table_header</code>. The code needed to print a table with either gt or kable was previously a mix of information stored in the <code>table_header</code>, and code manually added to the <code>gt_calls</code> or <code>kable_calls</code> object. Now, all the information needed to print a table is stored in <code>table_header</code>. This has the advantage that any updates to the printing will now require an update to <code>table_header</code> only, and we no longer need to update the tibble, kable and gt calls. (<a href='https://github.com/ddsjoberg/gtsummary/issues/412'>#412</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/414'>#414</a>)</p></li>
-<li><p>The function <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> was added for printing to HTML with functions from {kableExtra} (<a href='https://github.com/ddsjoberg/gtsummary/issues/394'>#394</a>)</p></li>
-<li><p>New functions <code><a href="../reference/tbl_survfit.html">tbl_survfit()</a></code> and <code><a href="../reference/inline_text.tbl_survfit.html">inline_text.tbl_survfit()</a></code> were added. These replace <code><a href="../reference/tbl_survival.html">tbl_survival()</a></code>, which is now soft deprecated (<a href='https://github.com/ddsjoberg/gtsummary/issues/280'>#280</a>)</p></li>
-<li><p>Updated the default printing for {gtsummary} objects. {gt} is the default printer for the R console and for R markdown documents with HTML output. PDF and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (<a href='https://github.com/ddsjoberg/gtsummary/issues/395'>#395</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/396'>#396</a>)</p></li>
-<li><p>Removed class checking for each type gtsummary table type, and made <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>, <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code> (and friends) generic and now check for class gtsummary (<a href='https://github.com/ddsjoberg/gtsummary/issues/373'>#373</a>)</p></li>
-<li><p>Bug fix when data frame passed to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with a single column (<a href='https://github.com/ddsjoberg/gtsummary/issues/389'>#389</a>)</p></li>
-<li><p>Update add_p() custom p-value description to NOT require double escape characters for quotes (<a href='https://github.com/ddsjoberg/gtsummary/issues/361'>#361</a>)</p></li>
+<li>Introducing <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code>! Easily construct cross tabulations of two variables.</li>
+</ul>
+<p><img src="man/figures/tbl_cross_ex1.png" width="30%"></p>
+<ul>
+<li>Introducing <code><a href="../reference/tbl_survfit.html">tbl_survfit()</a></code> and <code><a href="../reference/inline_text.tbl_survfit.html">inline_text.tbl_survfit()</a></code>! These will eventually replace <code><a href="../reference/tbl_survival.html">tbl_survival()</a></code>, which will no longer be encouraged. The new functions follow the structural guidelines of a {gtsummary} object and can be merged and stacked with any over {gtsummary} object (<a href='https://github.com/ddsjoberg/gtsummary/issues/280'>#280</a>)</li>
+</ul>
+<p><img src="man/figures/tbl_survfit_ex1.png" width="30%"></p>
+<ul>
+<li><p>Introducing <code><a href="../reference/as_flextable.html">as_flextable()</a></code>! The function converts gtsummary objects to {flextable} objects, which is a great option when using R markdown with Microsoft Word output. {flextable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output.</p></li>
+<li><p>Introducing <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code>! The function converts gtsummary objects to {kableExtra} objects. {kableExtra} supports indentation, footnotes, and spanning headers with HTML and PDF output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/394'>#394</a>)</p></li>
+</ul>
+</div>
+<div id="user-facing-updates" class="section level3">
+<h3 class="hasAnchor">
+<a href="#user-facing-updates" class="anchor"></a>User-facing Updates</h3>
+<ul>
+<li><p>Updated the default printing for {gtsummary} objects. {gt} is the default printer for the R console and for R markdown documents with HTML output. PDF, RTF, and Word output default to using {kable} with a note referring users to a vignette explaining why {gt} was not used. (<a href='https://github.com/ddsjoberg/gtsummary/issues/395'>#395</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/396'>#396</a>)</p></li>
+<li><p>Updated <code><a href="../reference/add_p.html">add_p()</a></code> custom p-value description to NOT require double escape characters for quotation marks (<a href='https://github.com/ddsjoberg/gtsummary/issues/361'>#361</a>)</p></li>
 <li><p>Created structure and enumerated list of unit tests each vetted model must pass, and added the tests (<a href='https://github.com/ddsjoberg/gtsummary/issues/383'>#383</a>)</p></li>
 </ul>
+</div>
+<div id="internal-updates" class="section level3">
+<h3 class="hasAnchor">
+<a href="#internal-updates" class="anchor"></a>Internal Updates</h3>
+<ul>
+<li><p>Each gtsummary object has an associated <code>.$table_header</code>. The code needed to print a table with either gt or kable was previously a mix of information stored in the <code>table_header</code>, and code manually added to the <code>gt_calls</code> or <code>kable_calls</code> object. Now, all the information needed to print a table is stored in <code>table_header</code>. This has the advantage that any updates to the printing will now require an update to <code>table_header</code> only, and we no longer need to update the tibble, kable and gt calls. (<a href='https://github.com/ddsjoberg/gtsummary/issues/412'>#412</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/414'>#414</a>)</p></li>
+<li><p>The {gt} package is now released on CRAN, and we’ve updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation and code. For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/420'>#420</a>)</p></li>
+<li><p>Several functions have been general, and may now be applied to any {gtsummary}-like object. Functions updated are <code><a href="../reference/add_q.html">add_q()</a></code>, <code><a href="../reference/bold_p.html">bold_p()</a></code>, <code><a href="../reference/sort_p.html">sort_p()</a></code>, <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>, <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, and <code><a href="../reference/bold_italicize_labels_levels.html">italicize_levels()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/429'>#429</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/373'>#373</a>)</p></li>
+<li><p>In <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> we previously printed the estimate, confidence interval, and p-value for all models. But some models don’t have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if <code>tidy()</code> returns a <code>"p.value"</code> column. Similarly, the confidence interval is printed if <code>tidy()</code> returns <code>"conf.low"</code> and <code>"conf.high"</code> columns. (<a href='https://github.com/ddsjoberg/gtsummary/issues/391'>#391</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/404'>#404</a>)</p></li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
+<ul>
+<li>Bug fix when data frame passed to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with a single column (<a href='https://github.com/ddsjoberg/gtsummary/issues/389'>#389</a>)</li>
+</ul>
+</div>
 </div>
     <div id="gtsummary-126" class="section level1">
 <h1 class="page-header" data-toc-text="1.2.6">
@@ -204,25 +230,25 @@
 <h1 class="page-header" data-toc-text="1.2.5">
 <a href="#gtsummary-125" class="anchor"></a>gtsummary 1.2.5<small> 2020-02-11 </small>
 </h1>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<div id="documentation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h3>
 <ul>
 <li><p>Updated documentation and README to improve readability, added more cross-linking across pages, added search terms to help users find our package, and added gif demonstrations (<a href='https://github.com/ddsjoberg/gtsummary/issues/340'>#340</a>)</p></li>
 <li><p>README images now build differently for website vs GitHub markdown to accommodate different output formats</p></li>
 </ul>
 </div>
-<div id="breaking-changes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<div id="breaking-changes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
 <ul>
 <li><p>Removed deprecated <code>fmt*_()</code> and <code>cols_label_summary()</code> functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/365'>#365</a>)</p></li>
 <li><p>Functions <code><a href="../reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="../reference/deprecated.html">add_p_()</a></code> have been deprecated because the <code>by=</code> and <code>group=</code> arguments now accept strings (<a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>)</p></li>
 </ul>
 </div>
-<div id="syntax" class="section level2">
-<h2 class="hasAnchor">
-<a href="#syntax" class="anchor"></a>Syntax</h2>
+<div id="syntax" class="section level3">
+<h3 class="hasAnchor">
+<a href="#syntax" class="anchor"></a>Syntax</h3>
 <ul>
 <li>
 <p>Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers. When passing a single variable, the <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> function wrapper is no longer required. (<a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>)</p>
@@ -244,9 +270,9 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <li><p>Functions <code><a href="../reference/select_helpers.html">all_categorical()</a></code>, <code><a href="../reference/select_helpers.html">all_dichotomous()</a></code>, and <code><a href="../reference/select_helpers.html">all_continuous()</a></code> may now be used in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> argument <code>type=</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/256'>#256</a>)</p></li>
 </ul>
 </div>
-<div id="user-facing-improvements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#user-facing-improvements" class="anchor"></a>User-facing improvements</h2>
+<div id="user-facing-improvements" class="section level3">
+<h3 class="hasAnchor">
+<a href="#user-facing-improvements" class="anchor"></a>User-facing improvements</h3>
 <ul>
 <li><p>New <code>pattern=</code> argument in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code>. Previously, we could only grab the entire cell from a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with <code><a href="../reference/inline_text.html">inline_text()</a></code>, and now we can get any single statistic reported (<a href='https://github.com/ddsjoberg/gtsummary/issues/254'>#254</a>)</p></li>
 <li><p>Improved messaging for users who use <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> to print gtsummary tables, and users who have not yet installed the {gt} package (<a href='https://github.com/ddsjoberg/gtsummary/issues/347'>#347</a>)</p></li>
@@ -257,9 +283,9 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <li><p>Improved error messaging in <code>tidyselect_to_list()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/300'>#300</a>)</p></li>
 </ul>
 </div>
-<div id="other-features-and-fixes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#other-features-and-fixes" class="anchor"></a>Other features and fixes</h2>
+<div id="other-features-and-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#other-features-and-fixes" class="anchor"></a>Other features and fixes</h3>
 <ul>
 <li><p>Updated class detection to use <code><a href="https://rdrr.io/r/base/class.html">inherits()</a></code>, and added secondary class of <code>"gtsummary"</code> to all objects. This allows users to create their own cobbled/custom gtsummary objects while utilizing the gtsummary print functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/249'>#249</a>)</p></li>
 <li><p><code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> will now summarize columns of class <code>difftime</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/343'>#343</a>)</p></li>
@@ -416,9 +442,9 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
     <span class="no">style_percent</span>       <span class="kw">&lt;-</span>  <span class="fu">fmt_percent</span>()
     <span class="no">style_ratio</span>         <span class="kw">&lt;-</span>  <span class="fu">fmt_beta</span>()</pre></div>
 </div>
-<div id="new-functions" class="section level3">
+<div id="new-functions-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New Functions</h3>
+<a href="#new-functions-1" class="anchor"></a>New Functions</h3>
 <div class="sourceCode" id="cb4"><pre class="r">    tbl_survival()          as_gt()  
     tbl_merge()             style_sigfig()  
     add_nevent()            gtsummary_logo()</pre></div>

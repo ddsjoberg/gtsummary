@@ -102,7 +102,7 @@ does not support Word." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9012</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.2.6.9013</span>
       </span>
     </div>
 
@@ -189,11 +189,15 @@ useful when combined with R markdown with Word output, since the gt package
 does not support Word.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_flextable</span>(
+    <pre class="usage"><span class='fu'>as_flextable</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for gtsummary</span>
+<span class='fu'>as_flextable</span>(
   <span class='no'>x</span>,
   <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything</a></span>(),
   <span class='kw'>return_calls</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>strip_md_bold</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>strip_md_bold</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -203,6 +207,10 @@ does not support Word.</p>
       <th>x</th>
       <td><p>Object created by a function from the gtsummary package
 (e.g. <a href='tbl_summary.html'>tbl_summary</a> or <a href='tbl_regression.html'>tbl_regression</a>)</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Not used</p></td>
     </tr>
     <tr>
       <th>include</th>
@@ -229,7 +237,24 @@ Default is TRUE</p></td>
     <p>A flextable object</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Use the <code><a href='https://rdrr.io/pkg/flextable/man/width.html'>flextable::width()</a></code> function for detailed control over column width.</p>
+    
+
+<p>The <code>as_flextable()</code> takes the data frame that will be printed and converts
+it to a flextable and formats the table with the following flextable functions.</p><ol>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/flextable.html'>flextable::flextable()</a></code></p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/set_header_labels.html'>flextable::set_header_labels()</a></code> to set column labels</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/add_header_row.html'>flextable::add_header_row()</a></code>, if applicable, to set spanning column header</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/align.html'>flextable::align()</a></code> to set column alignment</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/padding.html'>flextable::padding()</a></code> to indent variable levels</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/autofit.html'>flextable::autofit()</a></code> to estimate the column widths</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/footnote.html'>flextable::footnote()</a></code> to add table footnotes and source notes</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/bold.html'>flextable::bold()</a></code> to bold cells in data frame</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/italic.html'>flextable::italic()</a></code> to italicize cells in data frame</p></li>
+</ol>
+
+<p>Any one of these commands may be omitted using the <code>include=</code> argument.</p>
+<p>Pro tip: Use the <code><a href='https://rdrr.io/pkg/flextable/man/width.html'>flextable::width()</a></code> function for exacting control over
+column width after calling <code>as_flextable()</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other gtsummary output types: 
