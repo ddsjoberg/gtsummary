@@ -65,6 +65,10 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
 
   # creating list of gt calls --------------------------------------------------
   gt_calls <- table_header_to_gt_calls(x = x)
+  # adding other calls from x$list_output$source_note
+  if (!is.null(x$list_output$source_note)) {
+    gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!x$list_output$source_note))
+  }
   if (return_calls == TRUE) return(gt_calls)
 
   # converting to charcter vector ----------------------------------------------

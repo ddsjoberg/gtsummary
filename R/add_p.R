@@ -1,3 +1,14 @@
+#' Adds p-values to gtsummary table
+#'
+#' @param x Object created from a gtsummary function
+#' @param ... Additional arguments passed to other methods.
+#' @author Daniel D. Sjoberg
+#' @seealso [add_p.tbl_summary], [add_p.tbl_cross]
+#' @export
+add_p <- function(x, ...) {
+  UseMethod("add_p")
+}
+
 #' Adds p-values to summary tables
 #'
 #' Adds p-values to tables created by `tbl_summary` by comparing values across groups.
@@ -36,6 +47,7 @@
 #' The column can be used to calculate p-values with correlated data (e.g. when
 #' the test argument is `"lme4"`). Default is `NULL`.  If specified,
 #' the row associated with this variable is omitted from the summary table.
+#' @param ... Not used
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
@@ -74,8 +86,8 @@
 #'
 #' \if{html}{\figure{add_p_ex2.png}{options: width=60\%}}
 
-add_p <- function(x, test = NULL, pvalue_fun = NULL,
-                  group = NULL, include = everything(), exclude = NULL) {
+add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
+                  group = NULL, include = everything(), exclude = NULL, ...) {
 
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
@@ -125,10 +137,8 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
     ), call. = FALSE)
   }
 
-  # checking that input is class tbl_summary
-  if (!inherits(x, "tbl_summary")) stop("`x` must be class 'tbl_summary'", call. = FALSE)
   # checking that input x has a by var
-  if (is.null(x$inputs[["by"]])) {
+  if (is.null(x$df_by)) {
     stop(paste0(
       "Cannot add comparison when no 'by' variable ",
       "in original tbl_summary() call"
@@ -172,7 +182,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
         data = x$inputs$data,
         var = .data$variable,
         var_summary_type = .data$summary_type,
-        by_var = x$inputs$by,
+        by_var = x$by,
         test = test,
         group = group
       ),
@@ -180,7 +190,7 @@ add_p <- function(x, test = NULL, pvalue_fun = NULL,
       test_result = calculate_pvalue(
         data = x$inputs$data,
         variable = .data$variable,
-        by = x$inputs$by,
+        by = x$by,
         test = .data$stat_test,
         type = .data$summary_type,
         group = group,
@@ -241,4 +251,79 @@ footnote_add_p <- function(meta_data) {
     unique() %>%
     paste(collapse = "; ") %>%
     paste0("Statistical tests performed: ", .)
+}
+
+
+#' Adds p-value to crosstab table
+#'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' @param x Object with class `tbl_cross` from the [tbl_cross] function
+#' @param pvalue_fun Function to round and format p-value.
+#' Default is [style_pvalue], except when `source_note = TRUE` when the
+#' default is `style_pvalue(x, prepend_p = TRUE)`
+#' @param source_note Logical value indicating whether to show p-value
+#' in the \{gt\} table source notes rather than a column.
+#' @param test A string specifying statistical test to perform. Default is
+#' "`chisq.test`" when expected cell counts >=5 and "`fisher.test`" when
+#' expected cell counts <5.
+#' @inheritParams add_p.tbl_summary
+#' @family tbl_cross tools
+#' @author Karissa Whiting
+#' @export
+#' @examples
+#' add_p_cross_ex1 <-
+#'   trial %>%
+#'   tbl_cross(row = stage, col = trt) %>%
+#'   add_p()
+#'
+#' add_p_cross_ex2 <-
+#'   trial %>%
+#'   tbl_cross(row = stage, col = trt) %>%
+#'   add_p(source_note = TRUE)
+#'
+#' @section Example 1 Output:
+#' \if{html}{\figure{add_p_cross_ex1.png}{options: width=70\%}}
+#'
+#' @section Example 2 Output:
+#' \if{html}{\figure{add_p_cross_ex2.png}{options: width=60\%}}
+add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
+                            source_note = FALSE, ...) {
+
+  # adding test name if supplied (NULL otherwise)
+  input_test <- switch(!is.null(test),
+                       rlang::expr(everything() ~ !!test))
+
+  # running add_p to add the p-value to the output
+  x <- expr(add_p.tbl_summary(x, test = !!input_test)) %>% eval()
+
+  # updating footnote
+  test_name <- x$meta_data$stat_test_lbl %>% discard(is.na)
+  x$table_header <-
+    x$table_header %>%
+    mutate(
+      footnote = ifelse(.data$column == "p.value",
+                        test_name, .data$footnote)
+    )
+
+
+  if (source_note == TRUE) {
+    #  report p-value as a source_note
+    # hiding p-value from output
+    x$table_header <-
+      x$table_header %>%
+      mutate(
+        hide = ifelse(.data$column == "p.value", TRUE, .data$hide),
+        footnote = ifelse(.data$column == "p.value", NA_character_, .data$footnote),
+      )
+
+    # adding source note
+    if(is.null(pvalue_fun)) pvalue_fun <- function(x) style_pvalue(x, prepend_p = TRUE)
+
+    x$list_output$source_note <-
+      paste(test_name, pvalue_fun(discard(x$meta_data$p.value, is.na)), sep = ", ")
+  }
+
+  # return tbl_cross
+  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
+  x
 }
