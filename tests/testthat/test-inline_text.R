@@ -227,3 +227,24 @@ test_that("inline_text.tbl_survfit", {
 
 })
 
+# inline_text.tbl_cross tests --------------
+test_that("inline_text.tbl_cross", {
+  tbl_cross <-
+    tbl_cross(trial, row = trt, col = response) %>%
+    add_p()
+
+  expect_equal(
+    inline_text(tbl_cross, row_level = "Drug A", col_level = "1"),
+    "28"
+  )
+  expect_equal(
+    inline_text(tbl_cross, row_level = "Total", col_level = "1"),
+    "61"
+  )
+  expect_equal(
+    inline_text(tbl_cross, col_level = "p.value"),
+    "p=0.6"
+  )
+})
+
+

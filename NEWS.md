@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* New function added, `tbl_cross()`, that provides cross tabulations of two variables.
+
 * New function added, `as_flextable()`! The function converts gtsummary objects to flextable objects, and is a good option when using R markdown with Microsoft Word output as flextable support indentation, footnotes, and spanning headers.
 
 * The `bold_p()` and `sort_p()` functions are now general and may be applied to any {gtsummary} object with a p-value or q-value column (#429)
