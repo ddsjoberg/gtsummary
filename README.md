@@ -186,7 +186,7 @@ Markdown](http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html)**
 vignette for details.
 
 <a href="http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html">
-<img src="man/figures/gt_output_formats.PNG" width="60%" /> </a>
+<img src="man/figures/gt_output_formats.PNG" width="42%" /> </a>
 
 ## Contributing
 
