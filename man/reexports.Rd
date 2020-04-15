@@ -5,7 +5,6 @@
 \alias{reexports}
 \alias{\%>\%}
 \alias{as_tibble}
-\alias{as_flextable}
 \alias{knit_print}
 \alias{vars}
 \alias{starts_with}
@@ -26,8 +25,6 @@ below to see their documentation.
 
 \describe{
   \item{dplyr}{\code{\link[dplyr]{vars}}}
-
-  \item{flextable}{\code{\link[flextable]{as_flextable}}}
 
   \item{knitr}{\code{\link[knitr]{knit_print}}}
 

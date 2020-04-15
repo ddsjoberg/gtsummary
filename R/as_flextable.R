@@ -20,12 +20,16 @@
 #' 1. [flextable::bold()] to bold cells in data frame
 #' 1. [flextable::italic()] to italicize cells in data frame
 #'
+#' Any one of these commands may be omitted using the `include=` argument.
+#'
 #' Pro tip: Use the [flextable::width()] function for exacting control over
 #' column width after calling [as_flextable()].
 #' @inheritParams as_gt
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for
 #' bold weight) in column labels and spanning headers are removed.
 #' Default is TRUE
+#' @param ... Not used
+#' @name as_flextable
 #' @export
 #' @return A {flextable} object
 #' @family gtsummary output types
@@ -36,9 +40,14 @@
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   as_flextable()
+as_flextable <- function(x, ...) {
+  UseMethod("as_flextable")
+}
 
+#' @rdname as_flextable
+#' @export
 as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = TRUE) {
+                         strip_md_bold = TRUE, ...) {
   # must have flextable package installed to use this function -----------------
   if (!requireNamespace("flextable", quietly = TRUE)) {
     stop(paste0(
