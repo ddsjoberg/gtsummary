@@ -32,7 +32,7 @@
 
 * Bug fix when data frame passed to `tbl_summary()` with a single column (#389)
 
-* In `tbl_summary()` passing an ordered factor in the `by=` argument no longer causes as error.
+* In `tbl_summary()` passing an ordered factor in the `by=` argument no longer causes as error. (#453)
 
 # gtsummary 1.2.6
 
