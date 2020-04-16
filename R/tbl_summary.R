@@ -158,6 +158,11 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_data_checks(data)
   data <- data %>% ungroup()
 
+  # removing orderered class from factor by variables --------------------------
+  if (!is.null(by) && inherits(data[[by]], "ordered") && inherits(data[[by]], "factor")) {
+    data[[by]] <- factor(data[[by]], ordered = FALSE)
+  }
+
   # deleting obs with missing by values ----------------------------------------
   # saving variable labels
   if (!is.null(by) && sum(is.na(data[[by]])) > 0) {
