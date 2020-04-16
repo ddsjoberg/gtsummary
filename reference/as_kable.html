@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert to knitr_kable object — as_kable • gtsummary</title>
+<title>Convert gtsummary object to a kable object — as_kable • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -42,13 +46,13 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
 
-<meta property="og:title" content="Convert to knitr_kable object — as_kable" />
+<meta property="og:title" content="Convert gtsummary object to a kable object — as_kable" />
 <meta property="og:description" content="Function converts a gtsummary object to a knitr_kable object.
 This function is used in the background when the results are printed or knit.
 A user can use this function if they wish to add customized formatting
@@ -56,10 +60,8 @@ available via knitr::kable.
 Output from knitr::kable is less full featured compared to
 summary tables produced with gt.
 For example, kable summary tables do not include indentation, footnotes,
-or spanning header rows. To use these features, install gt with
-remotes::install_github(&quot;rstudio/gt&quot;, ref = gtsummary::gt_sha)." />
+or spanning header rows." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -87,7 +89,7 @@ remotes::install_github(&quot;rstudio/gt&quot;, ref = gtsummary::gt_sha)." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -101,7 +103,7 @@ remotes::install_github(&quot;rstudio/gt&quot;, ref = gtsummary::gt_sha)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
       </span>
     </div>
 
@@ -124,19 +126,22 @@ remotes::install_github(&quot;rstudio/gt&quot;, ref = gtsummary::gt_sha)." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">Tutorial: tbl_summary()</a>
+      <a href="../articles/tbl_summary.html">tbl_summary() tutorial</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+      <a href="../articles/tbl_regression.html">tbl_regression() tutorial</a>
     </li>
     <li>
-      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
+      <a href="../articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">Table Gallery</a>
+      <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
     </li>
     <li>
-      <a href="../articles/global_options.html">Global Options</a>
+      <a href="../articles/gallery.html">table gallery</a>
+    </li>
+    <li>
+      <a href="../articles/global_options.html">global options</a>
     </li>
   </ul>
 </li>
@@ -170,7 +175,7 @@ remotes::install_github(&quot;rstudio/gt&quot;, ref = gtsummary::gt_sha)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert to knitr_kable object</h1>
+    <h1>Convert gtsummary object to a kable object</h1>
     <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/as_kable.R'><code>R/as_kable.R</code></a></small>
     <div class="hidden name"><code>as_kable.Rd</code></div>
     </div>
@@ -183,11 +188,10 @@ available via <a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable</a
 <p>Output from <a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable</a> is less full featured compared to
 summary tables produced with <a href='https://gt.rstudio.com/index.html'>gt</a>.
 For example, kable summary tables do not include indentation, footnotes,
-or spanning header rows. To use these features, install gt with
-<code><a href='https://remotes.r-lib.org/reference/install_github.html'>remotes::install_github("rstudio/gt", ref = gtsummary::gt_sha)</a></code>.</p>
+or spanning header rows.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_kable</span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything</a></span>(), <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>as_kable</span>(<span class='no'>x</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything</a></span>(), <span class='kw'>return_calls</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,6 +207,11 @@ or spanning header rows. To use these features, install gt with
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is <code><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>everything()</a></code>, which includes all commands in <code>x$kable_calls</code>.</p></td>
+    </tr>
+    <tr>
+      <th>return_calls</th>
+      <td><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
+as a list of expressions.</p></td>
     </tr>
     <tr>
       <th>exclude</th>
@@ -223,7 +232,11 @@ Default is <code><a href='https://tidyselect.r-lib.org/reference/select_helpers.
 indenting is not supported, try <code><a href='bold_italicize_labels_levels.html'>bold_labels()</a></code> or <code><a href='bold_italicize_labels_levels.html'>italicize_levels()</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='tbl_summary.html'>tbl_summary</a> <a href='tbl_regression.html'>tbl_regression</a> <a href='tbl_uvregression.html'>tbl_uvregression</a> <a href='tbl_survival.html'>tbl_survival</a></p></div>
+    <div class='dont-index'><p>Other gtsummary output types: 
+<code><a href='as_flextable.html'>as_flextable</a>()</code>,
+<code><a href='as_gt.html'>as_gt</a>()</code>,
+<code><a href='as_kable_extra.html'>as_kable_extra</a>()</code>,
+<code><a href='as_tibble.gtsummary.html'>as_tibble.gtsummary</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>trial</span> <span class='kw'>%&gt;%</span>
@@ -251,18 +264,10 @@ indenting is not supported, try <code><a href='bold_italicize_labels_levels.html
 #&gt; |__Patient Died__           |52 (53%)           |60 (59%)            |
 #&gt; |__Months to Death/Censor__ |23.5 (17.4, 24.0)  |21.2 (14.6, 24.0)   |</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -273,7 +278,7 @@ indenting is not supported, try <code><a href='bold_italicize_labels_levels.html
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

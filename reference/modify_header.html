@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -42,7 +46,7 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
@@ -53,7 +57,6 @@
 e.g. the N can be dynamically included by wrapping it in curly brackets
 (following glue::glue syntax)." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -81,7 +84,7 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -95,7 +98,7 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
       </span>
     </div>
 
@@ -118,19 +121,22 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tbl_summary.html">Tutorial: tbl_summary()</a>
+      <a href="../articles/tbl_summary.html">tbl_summary() tutorial</a>
     </li>
     <li>
-      <a href="../articles/tbl_regression.html">Tutorial: tbl_regression()</a>
+      <a href="../articles/tbl_regression.html">tbl_regression() tutorial</a>
     </li>
     <li>
-      <a href="../articles/inline_text.html">Tutorial: inline_text()</a>
+      <a href="../articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">Table Gallery</a>
+      <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
     </li>
     <li>
-      <a href="../articles/global_options.html">Global Options</a>
+      <a href="../articles/gallery.html">table gallery</a>
+    </li>
+    <li>
+      <a href="../articles/global_options.html">global options</a>
     </li>
   </ul>
 </li>
@@ -172,7 +178,7 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
     <div class="ref-description">
     <p>Column labels can be modified to include calculated statistics;
 e.g. the N can be dynamically included by wrapping it in curly brackets
-(following <a href='https://rdrr.io/pkg/glue/man/glue.html'>glue::glue</a> syntax).</p>
+(following <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> syntax).</p>
     </div>
 
     <pre class="usage"><span class='fu'>modify_header</span>(<span class='no'>x</span>, <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>text_interpret</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"md"</span>, <span class='st'>"html"</span>))</pre>
@@ -197,7 +203,7 @@ headers:</p><ul>
 <li><p><code>"fisher.test"</code> for a Fisher's exact test,</p></li>
 </ul>
 
-<p>Syntax follows <a href='https://rdrr.io/pkg/glue/man/glue.html'>glue::glue</a>,
+<p>Syntax follows <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a>,
 e.g. <code>stat_by = "**{level}**, N = {n} ({style_percent(p)\%})"</code>.
 The <code>by</code> argument from the parent <code><a href='tbl_summary.html'>tbl_summary()</a></code> cannot be <code>NULL</code>.</p></td>
     </tr>
@@ -233,37 +239,31 @@ is not gt.</p></td>
     <div class='dont-index'><p>Other tbl_summary tools: 
 <code><a href='add_n.html'>add_n</a>()</code>,
 <code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.html'>add_p</a>()</code>,
-<code><a href='add_q.tbl_summary.html'>add_q.tbl_summary</a>()</code>,
+<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='bold_p.tbl_summary.html'>bold_p.tbl_summary</a>()</code>,
 <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='sort_p.tbl_summary.html'>sort_p.tbl_summary</a>()</code>,
+<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
 <code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
 <p>Other tbl_regression tools: 
 <code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
 <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='bold_p.tbl_regression.html'>bold_p.tbl_regression</a>()</code>,
-<code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
 <code><a href='combine_terms.html'>combine_terms</a>()</code>,
 <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
-<code><a href='sort_p.tbl_regression.html'>sort_p.tbl_regression</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p>
 <p>Other tbl_uvregression tools: 
 <code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
 <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
-<code><a href='add_q.tbl_uvregression.html'>add_q.tbl_uvregression</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='bold_p.tbl_stack.html'>bold_p.tbl_stack</a>()</code>,
-<code><a href='bold_p.tbl_uvregression.html'>bold_p.tbl_uvregression</a>()</code>,
 <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
-<code><a href='sort_p.tbl_uvregression.html'>sort_p.tbl_uvregression</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
 <code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p>
@@ -284,18 +284,10 @@ is not gt.</p></td>
     <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='st'>"**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</span>
   )</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#example-output">Example Output</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Daniel D. Sjoberg</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -306,7 +298,7 @@ is not gt.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
