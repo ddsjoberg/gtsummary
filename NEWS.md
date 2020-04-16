@@ -32,6 +32,8 @@
 
 * Bug fix when data frame passed to `tbl_summary()` with a single column (#389)
 
+* In `tbl_summary()` passing an ordered factor in the `by=` argument no longer causes as error. (#453)
+
 # gtsummary 1.2.6
 
 * Bug fix for random effects regression model where coefficients were not exponentiated when requested.  Using `broom.mixed::tidy()` rather than `broom::tidy()` resolved issue.

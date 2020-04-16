@@ -375,3 +375,13 @@ test_that("tbl_summary-no error when *data frame* with single column passed", {
     NA
   )
 })
+
+
+test_that("tbl_summary-no error when by variable is ordered factor", {
+  expect_error(
+    trial %>%
+      dplyr::mutate(grade = as.ordered(grade)) %>%
+      tbl_summary(by=grade),
+    NA
+  )
+})
