@@ -6,8 +6,7 @@
 * win-builder release, devel
 
 ## R CMD check results
-> * checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
+Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
 
 ## Additional Comments
 
