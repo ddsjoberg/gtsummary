@@ -4,9 +4,9 @@
 
 * Introducing `tbl_cross()`, `add_p.tbl_cross()`, and `inline_text.tbl_cross()`! Easily construct cross tabulations of two variables.
 
-* Introducing `tbl_survfit()` and `inline_text.tbl_survfit()`!  These will eventually replace `tbl_survival()`, which will no longer be encouraged. The new functions follow the structural guidelines of a {gtsummary} object and can be merged and stacked with any over {gtsummary} object (#280)
+* Introducing `tbl_survfit()` and `inline_text.tbl_survfit()`!  These will eventually replace `tbl_survival()`, which will no longer be encouraged. The new functions follow the structural guidelines of a {gtsummary} object and can be merged and stacked with any other {gtsummary} object (#280)
 
-* Introducing `as_flextable()`! The function converts gtsummary objects to {flextable} objects, which is a great option when using R markdown with Microsoft Word output. {flextable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output.
+* Introducing `as_flextable()`! The function converts gtsummary objects to {flextable} objects. {flextable} is a great option when using R markdown with Microsoft Word output. {flextable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output.
 
 *  Introducing `as_kable_extra()`! The function converts gtsummary objects to {kableExtra} objects. {kableExtra} supports indentation, footnotes, and spanning headers with HTML and PDF output. (#394)
 
