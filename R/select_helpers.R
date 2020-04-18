@@ -19,6 +19,8 @@
 #'     statistic = all_continuous() ~ "{mean} ({sd})",
 #'     type = all_dichotomous() ~ "categorical"
 #'   )
+
+# THE ENVIRONMENTS ARE CREATED IN `utils-gtsummary_core.R`
 all_continuous <- function() {
   meta_data_env$summary_type %>%
     keep(meta_data_env$summary_type == "continuous") %>%
@@ -86,23 +88,4 @@ all_factor <- function() {
   which(data_env$factor)
 }
 
-# setting environments
-data_env <- rlang::new_environment()
-meta_data_env <- rlang::new_environment()
 
-# registering data information
-scoped_data <- function(.data) {
-  data_env$numeric <- map_lgl(.data, is.numeric)
-  data_env$character <- map_lgl(.data, is.character)
-  data_env$integer <- map_lgl(.data, is.integer)
-  data_env$double <- map_lgl(.data, is.double)
-  data_env$logical <- map_lgl(.data, is.logical)
-  data_env$factor <- map_lgl(.data, is.factor)
-}
-
-# registering meta data information
-scoped_meta_data <- function(.meta_data) {
-  meta_data_env$summary_type <-
-    .meta_data$summary_type %>%
-    set_names(.meta_data$variable)
-}
