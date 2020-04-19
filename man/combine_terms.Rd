@@ -59,7 +59,7 @@ combine_terms_ex1 <-
   )
 
 # Example with Cubic Splines
-library(Hmisc)
+library(Hmisc, quietly = TRUE, warn.conflicts = FALSE)
 mod2 <- lm(
   age ~ rcspline.eval(marker, inclx = TRUE) + grade,
   trial[c("age", "marker", "grade")] \%>\% na.omit() # keep complete cases only!
