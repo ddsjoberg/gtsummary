@@ -8,7 +8,6 @@
   x,
   col_level,
   row_level = NULL,
-  pattern = NULL,
   pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
   ...
 )
@@ -21,9 +20,6 @@ Can also specify "\code{p.value}" for the p-value and "\code{stat_0}" for Total 
 
 \item{row_level}{Level of the row variable to display.
 Can also specify the 'Unknown' row. Default is \code{NULL}}
-
-\item{pattern}{String indicating the statistics to return.
-Uses \link[glue:glue]{glue::glue} formatting. Default is pattern shown in \code{tbl_cross()} output}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.

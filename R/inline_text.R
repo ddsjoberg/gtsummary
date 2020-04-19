@@ -583,8 +583,6 @@ inline_text.tbl_survfit <-
 #' Can also specify the 'Unknown' row. Default is `NULL`
 #' @param col_level Level of the column variable to display.
 #' Can also specify "`p.value`" for the p-value and "`stat_0`" for Total column.
-#' @param pattern String indicating the statistics to return.
-#' Uses [glue::glue] formatting. Default is pattern shown in `tbl_cross()` output
 #' @inheritParams inline_text.tbl_summary
 #'
 #' @return A string reporting results from a gtsummary table
@@ -600,7 +598,7 @@ inline_text.tbl_survfit <-
 #' inline_text(tbl_cross, col_level = "p.value")
 
 inline_text.tbl_cross <-
-  function(x, col_level, row_level = NULL, pattern = NULL,
+  function(x, col_level, row_level = NULL,
            pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
 
     # row_level ----------------------------------------------------------------
@@ -654,8 +652,7 @@ inline_text.tbl_cross <-
     # evaluating inline_text for tbl_summary -----------------------------------
     expr(
       inline_text.tbl_summary(x, variable = !!variable, level = !!row_level,
-                              column = {{ col_level }}, pattern = !!pattern,
-                              pvalue_fun = !!pvalue_fun)
+                              column = {{ col_level }}, pvalue_fun = !!pvalue_fun)
     ) %>%
       eval()
   }
