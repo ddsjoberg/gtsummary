@@ -37,7 +37,30 @@ The following fields are available to set:
 
 \subsection{Function Settings}{
 \subsection{\code{tbl_summary()}}{
-\subsection{Set Default Function Arguments}{
+\itemize{
+\item \code{fn:tbl_summary-attr:percent_fun} default function for styling percentages
+\item \code{fn:tbl_summary-attr:label} label to display, e.g. \code{"{var_label}, {stat_label}"}
+\item \code{fn:tbl_summary-attr:show_stat_footnote} logical indicating whether to show the statistic label footnote
+}
+}
+
+\subsection{\code{add_p.tbl_summary()}}{
+\itemize{
+\item \code{fn:add_p-attr:test.continuous_by2} default test for continuous variables with 2-level by variable
+\item \code{fn:add_p-attr:test.continuous}	default test for continuous variables with 3- or more level by variable
+\item \code{fn:add_p-attr:test.categorical}	default test for categorical/dichotomous variables
+\item \code{fn:add_p-attr:test.categorical.low_count}	default test for categorical/dichotomous variables with minimum expected count <5 in one cell
+\item \code{fn:add_p-attr:test.categorical.group_by2}	default test for categorical/dichotomous grouped/correlated variables with 2-level by variable
+\item \code{fn:add_p-attr:test.continuous.group_by2}	default test for continuous grouped/correlated variables with 2-level by variable
+}
+}
+
+}
+
+\subsection{Function Arguments}{
+
+Set defaults for function arguments
+\subsection{\code{tbl_summary()}}{
 \itemize{
 \item \code{fn:tbl_summary-arg:label}
 \item \code{fn:tbl_summary-arg:statistic}
@@ -51,17 +74,7 @@ The following fields are available to set:
 }
 }
 
-\subsection{Other Settings}{
-\itemize{
-\item \code{fn:tbl_summary-attr:percent_fun} default function for styling percentages
-\item \code{fn:tbl_summary-attr:label} label to display, e.g. \code{"{var_label}, {stat_label}"}
-}
-}
-
-}
-
 \subsection{\code{add_p.tbl_summary()}}{
-\subsection{Set Default Function Arguments}{
 \itemize{
 \item \code{fn:add_p.tbl_summary-arg:test}
 \item \code{fn:add_p.tbl_summary-arg:pvalue_fun}
@@ -69,27 +82,11 @@ The following fields are available to set:
 }
 }
 
-\subsection{Other Settings}{
-\itemize{
-\item \code{fn:add_p-attr:test.continuous_by2} default test for continuous variables with 2-level by variable
-\item \code{fn:add_p-attr:test.continuous}	default test for continuous variables with 3- or more level by variable
-\item \code{fn:add_p-attr:test.categorical}	default test for categorical/dichotomous variables
-\item \code{fn:add_p-attr:test.categorical.low_count}	default test for categorical/dichotomous variables with minimum expected count <5 in one cell
-\item \code{fn:add_p-attr:test.categorical.group_by2}	default test for categorical/dichotomous grouped/correlated variables with 2-level by variable
-\item \code{fn:add_p-attr:test.continuous.group_by2}	default test for continuous grouped/correlated variables with 2-level by variable
-}
-}
-
-}
-
 \subsection{\code{add_q()}}{
-\subsection{Set Default Function Arguments}{
 \itemize{
 \item \code{fn:add_q-arg:method}
 \item \code{fn:add_q-arg:pvalue_fun}
 }
-}
-
 }
 
 }

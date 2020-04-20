@@ -18,7 +18,19 @@
 #'
 #' ## Function Settings
 #' ### `tbl_summary()`
-#' #### Set Default Function Arguments
+#' - `fn:tbl_summary-attr:percent_fun` default function for styling percentages
+#' - `fn:tbl_summary-attr:label` label to display, e.g. `"{var_label}, {stat_label}"`
+#' - `fn:tbl_summary-attr:show_stat_footnote` logical indicating whether to show the statistic label footnote
+#' ### `add_p.tbl_summary()`
+#' - `fn:add_p-attr:test.continuous_by2` default test for continuous variables with 2-level by variable
+#' - `fn:add_p-attr:test.continuous`	default test for continuous variables with 3- or more level by variable
+#' - `fn:add_p-attr:test.categorical`	default test for categorical/dichotomous variables
+#' - `fn:add_p-attr:test.categorical.low_count`	default test for categorical/dichotomous variables with minimum expected count <5 in one cell
+#' - `fn:add_p-attr:test.categorical.group_by2`	default test for categorical/dichotomous grouped/correlated variables with 2-level by variable
+#' - `fn:add_p-attr:test.continuous.group_by2`	default test for continuous grouped/correlated variables with 2-level by variable
+#' ## Function Arguments
+#' Set defaults for function arguments
+#' ### `tbl_summary()`
 #' - `fn:tbl_summary-arg:label`
 #' - `fn:tbl_summary-arg:statistic`
 #' - `fn:tbl_summary-arg:digits`
@@ -28,23 +40,11 @@
 #' - `fn:tbl_summary-arg:missing_text`
 #' - `fn:tbl_summary-arg:percent`
 #' - `fn:tbl_summary-arg:sort`
-#' #### Other Settings
-#' - `fn:tbl_summary-attr:percent_fun` default function for styling percentages
-#' - `fn:tbl_summary-attr:label` label to display, e.g. `"{var_label}, {stat_label}"`
 #' ### `add_p.tbl_summary()`
-#' #### Set Default Function Arguments
 #' - `fn:add_p.tbl_summary-arg:test`
 #' - `fn:add_p.tbl_summary-arg:pvalue_fun`
 #' - `fn:add_p.tbl_summary-arg:group`
-#' #### Other Settings
-#' - `fn:add_p-attr:test.continuous_by2` default test for continuous variables with 2-level by variable
-#' - `fn:add_p-attr:test.continuous`	default test for continuous variables with 3- or more level by variable
-#' - `fn:add_p-attr:test.categorical`	default test for categorical/dichotomous variables
-#' - `fn:add_p-attr:test.categorical.low_count`	default test for categorical/dichotomous variables with minimum expected count <5 in one cell
-#' - `fn:add_p-attr:test.categorical.group_by2`	default test for categorical/dichotomous grouped/correlated variables with 2-level by variable
-#' - `fn:add_p-attr:test.continuous.group_by2`	default test for continuous grouped/correlated variables with 2-level by variable
 #' ### `add_q()`
-#' #### Set Default Function Arguments
 #' - `fn:add_q-arg:method`
 #' - `fn:add_q-arg:pvalue_fun`
 #' @param x A named list defining a gtsummary theme. See details below.
@@ -98,6 +98,7 @@ gtsummary_theme_jama <- function() {
   list(
     theme_name = "JAMA",
     "fn:tbl_summary-attr:label" = "{var_label}, {stat_label}",
+    "fn:tbl_summary-attr:show_stat_footnote" = FALSE,
     "fn:tbl_summary-arg:statistic" = list(
       all_continuous() ~ "{median} ({p25} - {p75})",
       all_categorical() ~ "{n} ({p})"
@@ -146,6 +147,7 @@ df_theme_elements <-
     "fn:tbl_summary-arg:sort",
     "fn:tbl_summary-attr:percent_fun",
     "fn:tbl_summary-attr:label",
+    "fn:tbl_summary-attr:show_stat_footnote",
     # add_p.tbl_summary
     "fn:add_p.tbl_summary-arg:test",
     "fn:add_p.tbl_summary-arg:pvalue_fun",
