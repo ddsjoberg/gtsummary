@@ -278,7 +278,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
       stat_label = stat_label_match(.data$stat_display),
-      label_display = glue(.env$display_label),
+      label_display = glue(.env$display_label) %>% as.character(),
       digits = continuous_digits_guess(
         data, .data$variable, .data$summary_type, .data$class, digits
       ),
@@ -329,9 +329,11 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
     mutate(
-      # adding footnote of statistics on display (unless the stat is in the var label)
+      # adding footnote of statistics on display (unless theme indicates a no print)
       footnote = ifelse(
-        startsWith(.data$column, "stat_") & !str_detect(display_label, pattern = fixed("{stat_label}")),
+        startsWith(.data$column, "stat_") &
+          (is.null(get_theme_element("fn:tbl_summary-attr:show_stat_footnote")) ||
+             get_theme_element("fn:tbl_summary-attr:show_stat_footnote") == TRUE),
         footnote_stat_label(meta_data),
         .data$footnote
       )
