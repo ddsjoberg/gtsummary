@@ -38,6 +38,7 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{tbl_uv_q_ex2.png}{options: width=60\%}}
+
 add_q <- function(x, method = "fdr", pvalue_fun = NULL) {
   # checking inputs ------------------------------------------------------------
   # checking class of x
@@ -50,6 +51,12 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL) {
     stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
          call. = FALSE)
   }
+
+  # setting defaults from gtsummary theme --------------------------------------
+  pvalue_fun <-
+    pvalue_fun %||%
+    get_theme_element("fn:add_q-arg:pvalue_fun") %||%
+    get_theme_element("pkg:pvalue_fun")
 
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-

@@ -103,6 +103,14 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     )
   }
 
+  # setting defaults from gtsummary theme --------------------------------------
+  test <- test %||% get_theme_element("fn:add_p.tbl_summary-arg:test")
+  pvalue_fun <-
+    pvalue_fun %||%
+    get_theme_element("fn:add_p.tbl_summary-arg:pvalue_fun") %||%
+    get_theme_element("pkg:pvalue_fun")
+
+
   # converting bare arguments to string ----------------------------------------
   group <- var_input_to_string(data = x$inputs$data,
                                select_input = !!rlang::enquo(group),
