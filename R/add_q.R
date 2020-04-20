@@ -55,13 +55,11 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL) {
   # setting defaults from gtsummary theme --------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
+    # defaults from theme
     get_theme_element("fn:add_q-arg:pvalue_fun") %||%
-    get_theme_element("pkg:pvalue_fun")
-
-  # setting defaults -----------------------------------------------------------
-  pvalue_fun <-
-    pvalue_fun %||%
-    filter(x$table_header, .data$column == "p.value") %>% pull(.data$fmt_fun) %>% pluck(1)
+    get_theme_element("fn:pvalue_fun") %||%
+    # default from p-value formatting function
+    (filter(x$table_header, .data$column == "p.value") %>% pull(.data$fmt_fun) %>% pluck(1))
 
   # checking pvalue_fun are functions
   if (!is.function(pvalue_fun)) {

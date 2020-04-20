@@ -108,7 +108,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   pvalue_fun <-
     pvalue_fun %||%
     get_theme_element("fn:add_p.tbl_summary-arg:pvalue_fun") %||%
-    get_theme_element("pkg:pvalue_fun")
+    get_theme_element("fn:pvalue_fun")
 
 
   # converting bare arguments to string ----------------------------------------

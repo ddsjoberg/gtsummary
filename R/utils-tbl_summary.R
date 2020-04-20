@@ -725,7 +725,7 @@ footnote_stat_label <- function(meta_data) {
 summarize_categorical <- function(data, variable, by, class, dichotomous_value, sort, percent) {
   # grabbing percent formatting function
   percent_fun <-
-    get_theme_element("fn:tbl_summary-attr:percent_fun") %||%
+    get_theme_element("fn:tbl_summary-fn:percent_fun") %||%
     getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
   if (!rlang::is_function(percent_fun)) {
     stop(paste0(

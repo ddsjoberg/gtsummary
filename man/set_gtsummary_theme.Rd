@@ -4,6 +4,7 @@
 \alias{set_gtsummary_theme}
 \alias{gtsummary_theme_reset}
 \alias{gtsummary_theme_jama}
+\alias{gtsummary_theme_compact}
 \title{Set a gtsummary theme}
 \usage{
 set_gtsummary_theme(x)
@@ -11,6 +12,8 @@ set_gtsummary_theme(x)
 gtsummary_theme_reset()
 
 gtsummary_theme_jama()
+
+gtsummary_theme_compact()
 }
 \arguments{
 \item{x}{A named list defining a gtsummary theme. See details below.}
@@ -24,23 +27,31 @@ the British Journal of Urology International. Use this function to change
 the default reporting style to match another journal, or even your own
 personal style!
 }
+\section{Themes}{
+
+\itemize{
+\item \code{gtsummary_theme_jama()} set theme to align with the JAMA reporting guidelines
+\item \code{gtsummary_theme_compact()} table printed with gt will be more compact with smaller font size and reduced cell padding
+}
+}
+
 \section{Details}{
 
 
 The following fields are available to set:
 \subsection{Package-wide Settings}{
 \itemize{
-\item \code{pkg:print_engine} default print engine
-\item \code{pkg:pvalue_fun} default p-value formatting function
+\item \code{str:print_engine} default print engine
+\item \code{fn:pvalue_fun} default p-value formatting function
 }
 }
 
 \subsection{Function Settings}{
 \subsection{\code{tbl_summary()}}{
 \itemize{
-\item \code{fn:tbl_summary-attr:percent_fun} default function for styling percentages
-\item \code{fn:tbl_summary-attr:label} label to display, e.g. \code{"{var_label}, {stat_label}"}
-\item \code{fn:tbl_summary-attr:show_stat_footnote} logical indicating whether to show the statistic label footnote
+\item \code{fn:tbl_summary-fn:percent_fun} default function for styling percentages
+\item \code{fn:tbl_summary-str:label} label to display, e.g. \code{"{var_label}, {stat_label}"}
+\item \code{fn:tbl_summary-lgl:show_stat_footnote} logical indicating whether to show the statistic label footnote
 }
 }
 
@@ -52,6 +63,12 @@ The following fields are available to set:
 \item \code{fn:add_p-attr:test.categorical.low_count}	default test for categorical/dichotomous variables with minimum expected count <5 in one cell
 \item \code{fn:add_p-attr:test.categorical.group_by2}	default test for categorical/dichotomous grouped/correlated variables with 2-level by variable
 \item \code{fn:add_p-attr:test.continuous.group_by2}	default test for continuous grouped/correlated variables with 2-level by variable
+}
+}
+
+\subsection{\code{as_gt()}}{
+\itemize{
+\item \code{fn:as_gt-expr:addl_cmds} expression of gt commands to append to the calls in \code{as_gt()}
 }
 }
 
@@ -90,6 +107,13 @@ Set defaults for function arguments
 }
 
 }
+}
+
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
 }
 
 \examples{
