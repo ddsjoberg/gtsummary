@@ -145,3 +145,29 @@ test_that("Testing lme4 results", {
 })
 
 
+test_that("Interaction modifications", {
+  # no error with interaction
+  expect_error(
+    tbl_i <- lm(age ~ factor(response) * marker, trial) %>%
+      tbl_regression(
+        show_single_row = `factor(response):marker`,
+        label = `factor(response):marker` ~ "Interaction"
+      ),
+    NA
+  )
+
+  # checking modifications to table
+  expect_equal(
+    dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
+      dplyr::pull(label),
+    "Interaction"
+  )
+
+  expect_equal(
+    dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
+      nrow(),
+    1L
+  )
+})
+
+
