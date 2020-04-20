@@ -269,6 +269,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
 
   # assigning variable characteristics -----------------------------------------
+  # label to display
+  display_label <- get_theme_element("fn:tbl_summary-attr:label") %||% "{var_label}"
   meta_data <-
     meta_data %>%
     mutate(
@@ -276,6 +278,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
       stat_label = stat_label_match(.data$stat_display),
+      label_display = glue(.env$display_label),
       digits = continuous_digits_guess(
         data, .data$variable, .data$summary_type, .data$class, digits
       ),
@@ -308,7 +311,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     mutate(
       tbl_stats = pmap(
         list(.data$summary_type, .data$variable,
-             .data$var_label, .data$stat_display, .data$df_stats),
+             .data$label_display, .data$stat_display, .data$df_stats),
         function(summary_type, variable, var_label, stat_display, df_stats) {
           df_stats_to_tbl(
             data = data, variable = variable, summary_type = summary_type, by = by,
@@ -326,9 +329,12 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
     mutate(
-      footnote = ifelse(startsWith(.data$column, "stat_"),
-                        footnote_stat_label(meta_data),
-                        .data$footnote)
+      # adding footnote of statistics on display (unless the stat is in the var label)
+      footnote = ifelse(
+        startsWith(.data$column, "stat_") & !str_detect(display_label, pattern = fixed("{stat_label}")),
+        footnote_stat_label(meta_data),
+        .data$footnote
+      )
     )
 
   # returning all results in a list --------------------------------------------
