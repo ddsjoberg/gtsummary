@@ -1,6 +1,12 @@
 #' Set a gtsummary theme
 #'
 #' Use this function to set preferences for the display of gtsummary tables.
+#' The default formatting and styling throughout the gtsummary package are
+#' taken from the published reporting guidelines of the top four urology
+#' journals: European Urology, The Journal of Urology, Urology and
+#' the British Journal of Urology International. Use this function to change
+#' the default reporting style to match another journal, or even your own
+#' personal style!
 #'
 #' @section Details:
 #'
@@ -24,6 +30,7 @@
 #' - `fn:tbl_summary-arg:sort`
 #' #### Other Settings
 #' - `fn:tbl_summary-attr:percent_fun` default function for styling percentages
+#' - `fn:tbl_summary-attr:label` label to display, e.g. `"{var_label}, {stat_label}"`
 #' ### `add_p.tbl_summary()`
 #' #### Set Default Function Arguments
 #' - `fn:add_p.tbl_summary-arg:test`
@@ -70,21 +77,19 @@ set_gtsummary_theme <- function(x) {
   }
 
   # adding theme elements to environment ---------------------------------------
-  if (!exists("env_gtsummary_theme", mode = "environment")) {
-    # this is like the super-assignment, assigning a level up
-    assign("env_gtsummary_theme", rlang::new_environment(), pos = 1)
-  }
   rlang::env_bind(.env = env_gtsummary_theme, !!!x)
 }
+
+env_gtsummary_theme <- rlang::new_environment()
 
 #' @name set_gtsummary_theme
 #' @export
 gtsummary_theme_reset <- function() {
   # deleting theme environment if it exists
-  if (exists("env_gtsummary_theme", mode = "environment")) {
+  rm(list = ls(envir = env_gtsummary_theme),
+     envir = env_gtsummary_theme)
 
-  }
-  print("NEED TO WRITE THIS FUNCTION!")
+  invisible()
 }
 
 #' @name set_gtsummary_theme
@@ -92,6 +97,7 @@ gtsummary_theme_reset <- function() {
 gtsummary_theme_jama <- function() {
   list(
     theme_name = "JAMA",
+    "fn:tbl_summary-attr:label" = "{var_label}, {stat_label}",
     "fn:tbl_summary-arg:statistic" = list(
       all_continuous() ~ "{median} ({p25} - {p75})",
       all_categorical() ~ "{n} ({p})"
@@ -109,11 +115,6 @@ get_theme_element <- function(x, default = NULL) {
     stop("`x=` is not a proper gtsummary theme element.", call. = FALSE)
   }
 
-  # if theme environment does not exist, return `default`
-  if (!exists("env_gtsummary_theme", mode = "environment")) {
-    return(default)
-  }
-
   # returning theme element
   env_gtsummary_theme[[x]] %||% default
 }
@@ -127,6 +128,7 @@ quoted_list <- function(x) {
 df_theme_elements <-
   tibble::tribble(
     ~name,
+    "theme_name",
     # package level themes
     "pkg:print_engine",
     "pkg:pvalue_fun",
@@ -143,6 +145,7 @@ df_theme_elements <-
     "fn:tbl_summary-arg:percent",
     "fn:tbl_summary-arg:sort",
     "fn:tbl_summary-attr:percent_fun",
+    "fn:tbl_summary-attr:label",
     # add_p.tbl_summary
     "fn:add_p.tbl_summary-arg:test",
     "fn:add_p.tbl_summary-arg:pvalue_fun",

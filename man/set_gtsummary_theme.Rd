@@ -17,6 +17,12 @@ gtsummary_theme_jama()
 }
 \description{
 Use this function to set preferences for the display of gtsummary tables.
+The default formatting and styling throughout the gtsummary package are
+taken from the published reporting guidelines of the top four urology
+journals: European Urology, The Journal of Urology, Urology and
+the British Journal of Urology International. Use this function to change
+the default reporting style to match another journal, or even your own
+personal style!
 }
 \section{Details}{
 
@@ -48,6 +54,7 @@ The following fields are available to set:
 \subsection{Other Settings}{
 \itemize{
 \item \code{fn:tbl_summary-attr:percent_fun} default function for styling percentages
+\item \code{fn:tbl_summary-attr:label} label to display, e.g. \code{"{var_label}, {stat_label}"}
 }
 }
 
