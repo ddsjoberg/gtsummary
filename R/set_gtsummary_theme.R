@@ -11,8 +11,9 @@
 #' @section Themes:
 #'- `gtsummary_theme_jama()` set theme to align with the JAMA reporting guidelines
 #'- `gtsummary_theme_compact()` table printed with gt will be more compact with smaller font size and reduced cell padding
-#' @section Details:
 #'
+#' Use `gtsummary_theme_reset()` to restore the default settings.
+#' @section Details:
 #' The following fields are available to set:
 #'
 #' ## Package-wide Settings
@@ -25,12 +26,12 @@
 #' - `fn:tbl_summary-str:label` label to display, e.g. `"{var_label}, {stat_label}"`
 #' - `fn:tbl_summary-lgl:show_stat_footnote` logical indicating whether to show the statistic label footnote
 #' ### `add_p.tbl_summary()`
-#' - `fn:add_p-attr:test.continuous_by2` default test for continuous variables with 2-level by variable
-#' - `fn:add_p-attr:test.continuous`	default test for continuous variables with 3- or more level by variable
+#' - `fn:add_p-attr:test.continuous_by2` default test for continuous variables with a 2-level by variable
+#' - `fn:add_p-attr:test.continuous`	default test for continuous variables with a 3- or more level by variable
 #' - `fn:add_p-attr:test.categorical`	default test for categorical/dichotomous variables
-#' - `fn:add_p-attr:test.categorical.low_count`	default test for categorical/dichotomous variables with minimum expected count <5 in one cell
-#' - `fn:add_p-attr:test.categorical.group_by2`	default test for categorical/dichotomous grouped/correlated variables with 2-level by variable
-#' - `fn:add_p-attr:test.continuous.group_by2`	default test for continuous grouped/correlated variables with 2-level by variable
+#' - `fn:add_p-attr:test.categorical.low_count`	default test for categorical/dichotomous variables with minimum expected count <5
+#' - `fn:add_p-attr:test.categorical.group_by2`	default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable
+#' - `fn:add_p-attr:test.continuous.group_by2`	default test for continuous grouped/correlated variables with a 2-level by variable
 #' ### `as_gt()`
 #' - `fn:as_gt-expr:addl_cmds` expression of gt commands to append to the calls in `as_gt()`
 #' ## Function Arguments

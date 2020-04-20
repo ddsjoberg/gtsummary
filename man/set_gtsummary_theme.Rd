@@ -57,12 +57,12 @@ The following fields are available to set:
 
 \subsection{\code{add_p.tbl_summary()}}{
 \itemize{
-\item \code{fn:add_p-attr:test.continuous_by2} default test for continuous variables with 2-level by variable
-\item \code{fn:add_p-attr:test.continuous}	default test for continuous variables with 3- or more level by variable
+\item \code{fn:add_p-attr:test.continuous_by2} default test for continuous variables with a 2-level by variable
+\item \code{fn:add_p-attr:test.continuous}	default test for continuous variables with a 3- or more level by variable
 \item \code{fn:add_p-attr:test.categorical}	default test for categorical/dichotomous variables
-\item \code{fn:add_p-attr:test.categorical.low_count}	default test for categorical/dichotomous variables with minimum expected count <5 in one cell
-\item \code{fn:add_p-attr:test.categorical.group_by2}	default test for categorical/dichotomous grouped/correlated variables with 2-level by variable
-\item \code{fn:add_p-attr:test.continuous.group_by2}	default test for continuous grouped/correlated variables with 2-level by variable
+\item \code{fn:add_p-attr:test.categorical.low_count}	default test for categorical/dichotomous variables with minimum expected count <5
+\item \code{fn:add_p-attr:test.categorical.group_by2}	default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable
+\item \code{fn:add_p-attr:test.continuous.group_by2}	default test for continuous grouped/correlated variables with a 2-level by variable
 }
 }
 
