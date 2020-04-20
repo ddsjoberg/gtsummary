@@ -255,9 +255,15 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
     )
 
   # adding variable labels -----------------------------------------------------
-  label <- tidyselect_to_list(.data = vctr_2_tibble(unique(tidy_long$variable)),
-                              x = label, arg_name = "label")
-  # # all sepcifed labels must be a string of length 1
+  # this adds the interaction term to the possible variable list
+  varlist2 <- group_by(tidy_long, .data$term) %>%
+    mutate(variable2 = paste(.data$variable, collapse = ":")) %>%
+    pull(.data$variable2)
+  label <- tidyselect_to_list(
+    .data = vctr_2_tibble(unique(c(tidy_long$variable, varlist2))),
+    x = label, arg_name = "label"
+  )
+  # all sepcifed labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
     stop("Each `label` specified must be a string of length 1.", call. = FALSE)
   }
@@ -271,10 +277,6 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
         ~ label[[.x]] %||% attr(model_frame[[.x]], "label") %||%
           labels_parent_frame[[.x]] %||% .x
       ),
-      # variable_lbl = ifelse(is.na(.data$variable_lbl) & .data$term == "(Intercept)",
-      #   "(Intercept)",
-      #   .data$variable_lbl
-      # ),
       # indicating whether each variable is categorical or continuous
       variable_type = map_chr(
         .data$variable,
@@ -307,9 +309,9 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
       interaction = n() > 1,
       # groups are terms that belong to the same variable (or interaction set)
       group = .data$variable %>% paste(collapse = ":"),
-      # group = ifelse(.data$term == "(Intercept)" & is.na(.data$variable), "(Intercept)", .data$group),
       # the collpase only comes into play when there are interactions present
       group_lbl = .data$variable_lbl %>% paste(collapse = " * "),
+      group_lbl = map2_chr(.data$group, .data$group_lbl, ~label[[.x]] %||% .y), # this applies labels directly to interacton terms (they default to `var1 * var2`)
       level_lbl = .data$level %>% paste(collapse = " * "),
       # types are continuous, categorical, and interaction
       var_type = ifelse(.data$interaction, "interaction", .data$variable_type),
@@ -345,7 +347,9 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
           }
           # display on single line of it a numeric-numeric interaction
           if (var_type == "interaction") {
-            if (nrow(data) > 1) {
+            if (group %in% show_single_row) {
+              return(TRUE)
+            } else if (nrow(data) > 1) {
               return(FALSE)
             } else if (group_lbl == data$level_lbl) {
               return(TRUE)
