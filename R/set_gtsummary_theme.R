@@ -8,19 +8,22 @@
 #' the default reporting style to match another journal, or even your own
 #' personal style!
 #'
+#' @section Themes:
+#'- `gtsummary_theme_jama()` set theme to align with the JAMA reporting guidelines
+#'- `gtsummary_theme_compact()` table printed with gt will be more compact with smaller font size and reduced cell padding
 #' @section Details:
 #'
 #' The following fields are available to set:
 #'
 #' ## Package-wide Settings
-#' - `pkg:print_engine` default print engine
-#' - `pkg:pvalue_fun` default p-value formatting function
+#' - `str:print_engine` default print engine
+#' - `fn:pvalue_fun` default p-value formatting function
 #'
 #' ## Function Settings
 #' ### `tbl_summary()`
-#' - `fn:tbl_summary-attr:percent_fun` default function for styling percentages
-#' - `fn:tbl_summary-attr:label` label to display, e.g. `"{var_label}, {stat_label}"`
-#' - `fn:tbl_summary-attr:show_stat_footnote` logical indicating whether to show the statistic label footnote
+#' - `fn:tbl_summary-fn:percent_fun` default function for styling percentages
+#' - `fn:tbl_summary-str:label` label to display, e.g. `"{var_label}, {stat_label}"`
+#' - `fn:tbl_summary-lgl:show_stat_footnote` logical indicating whether to show the statistic label footnote
 #' ### `add_p.tbl_summary()`
 #' - `fn:add_p-attr:test.continuous_by2` default test for continuous variables with 2-level by variable
 #' - `fn:add_p-attr:test.continuous`	default test for continuous variables with 3- or more level by variable
@@ -28,6 +31,8 @@
 #' - `fn:add_p-attr:test.categorical.low_count`	default test for categorical/dichotomous variables with minimum expected count <5 in one cell
 #' - `fn:add_p-attr:test.categorical.group_by2`	default test for categorical/dichotomous grouped/correlated variables with 2-level by variable
 #' - `fn:add_p-attr:test.continuous.group_by2`	default test for continuous grouped/correlated variables with 2-level by variable
+#' ### `as_gt()`
+#' - `fn:as_gt-expr:addl_cmds` expression of gt commands to append to the calls in `as_gt()`
 #' ## Function Arguments
 #' Set defaults for function arguments
 #' ### `tbl_summary()`
@@ -61,6 +66,10 @@
 #'
 #' # reset gtsummary theme
 #' gtsummary_theme_reset()
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
 
 set_gtsummary_theme <- function(x) {
   # checking the input is a named list -----------------------------------------
@@ -97,16 +106,24 @@ gtsummary_theme_reset <- function() {
 gtsummary_theme_jama <- function() {
   list(
     theme_name = "JAMA",
-    "fn:tbl_summary-attr:label" = "{var_label}, {stat_label}",
-    "fn:tbl_summary-attr:show_stat_footnote" = FALSE,
+    "fn:tbl_summary-str:label" = "{var_label}, {stat_label}",
+    "fn:tbl_summary-lgl:show_stat_footnote" = FALSE,
     "fn:tbl_summary-arg:statistic" = list(
       all_continuous() ~ "{median} ({p25} - {p75})",
       all_categorical() ~ "{n} ({p})"
     ),
-    "pkg:pvalue_fun" = function(x) style_pvalue(x, digits = 2)
+    "fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2)
   )
 }
 
+#' @name set_gtsummary_theme
+#' @export
+gtsummary_theme_compact <- function(){
+  list(
+    "fn:as_gt-expr:addl_cmds" =
+      expr(gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1)))
+  )
+}
 
 # this function grabs a gtsummary theme element if it exists
 # otherwise returns the default value
@@ -131,10 +148,10 @@ df_theme_elements <-
     ~name,
     "theme_name",
     # package level themes
-    "pkg:print_engine",
-    "pkg:pvalue_fun",
+    "str:print_engine",
+    "fn:pvalue_fun",
     # as_gt
-    "fn:as_gt-attr:addl_cmds", # must be an expression, but should it be a string to make it easier for users?
+    "fn:as_gt-expr:addl_cmds", # must be an expression, but should it be a string to make it easier for users?
     # tbl_summary
     "fn:tbl_summary-arg:label",
     "fn:tbl_summary-arg:statistic",
@@ -145,9 +162,9 @@ df_theme_elements <-
     "fn:tbl_summary-arg:missing_text",
     "fn:tbl_summary-arg:percent",
     "fn:tbl_summary-arg:sort",
-    "fn:tbl_summary-attr:percent_fun",
-    "fn:tbl_summary-attr:label",
-    "fn:tbl_summary-attr:show_stat_footnote",
+    "fn:tbl_summary-fn:percent_fun",
+    "fn:tbl_summary-str:label",
+    "fn:tbl_summary-lgl:show_stat_footnote",
     # add_p.tbl_summary
     "fn:add_p.tbl_summary-arg:test",
     "fn:add_p.tbl_summary-arg:pvalue_fun",

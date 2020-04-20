@@ -88,7 +88,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
   gt_calls[include] %>%
     # adding default gt formatting options
     c(parse_expr(getOption("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
-    c(get_theme_element("fn:as_gt-attr:addl_cmds")) %>%
+    c(get_theme_element("fn:as_gt-expr:addl_cmds")) %>%
     # removing NULL elements
     unlist() %>%
     compact() %>%

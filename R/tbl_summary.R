@@ -270,7 +270,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # assigning variable characteristics -----------------------------------------
   # label to display
-  display_label <- get_theme_element("fn:tbl_summary-attr:label") %||% "{var_label}"
+  display_label <- get_theme_element("fn:tbl_summary-str:label") %||% "{var_label}"
   meta_data <-
     meta_data %>%
     mutate(
@@ -332,8 +332,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       # adding footnote of statistics on display (unless theme indicates a no print)
       footnote = ifelse(
         startsWith(.data$column, "stat_") &
-          (is.null(get_theme_element("fn:tbl_summary-attr:show_stat_footnote")) ||
-             get_theme_element("fn:tbl_summary-attr:show_stat_footnote") == TRUE),
+          (is.null(get_theme_element("fn:tbl_summary-lgl:show_stat_footnote")) ||
+             get_theme_element("fn:tbl_summary-lgl:show_stat_footnote") == TRUE),
         footnote_stat_label(meta_data),
         .data$footnote
       )
