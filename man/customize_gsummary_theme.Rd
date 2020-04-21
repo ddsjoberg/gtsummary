@@ -123,7 +123,7 @@ custom_theme_ex1 <-
   add_p()
 
 # reset gtsummary theme
-gtsummary_theme_reset()
+gtsummary_reset_theme()
 
 }
 \keyword{internal}
