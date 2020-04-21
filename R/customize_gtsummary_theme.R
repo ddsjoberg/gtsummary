@@ -28,7 +28,7 @@
 #'   add_p()
 #'
 #' # reset gtsummary theme
-#' gtsummary_theme_reset()
+#' gtsummary_reset_theme()
 #'
 #' @section Theme Elements:
 #' The following fields are available to set:
