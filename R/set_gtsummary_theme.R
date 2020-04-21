@@ -9,50 +9,14 @@
 #' personal style!
 #'
 #' @section Themes:
-#'- `gtsummary_theme_jama()` set theme to align with the JAMA reporting guidelines
-#'- `gtsummary_theme_compact()` table printed with gt will be more compact with smaller font size and reduced cell padding
+#' - `gtsummary_theme_jama()` set theme to align with the JAMA reporting guidelines
+#' - `gtsummary_theme_compact()` table printed with gt will be more compact with smaller font size and reduced cell padding
 #'
-#' Use `gtsummary_theme_reset()` to restore the default settings.
+#' Use `gtsummary_reset_theme()` to restore the default settings
+#'
+#' Review the [customizing gtsummary themes][customize_gsummary_theme] help file,
+#' for details on creating your own themes.
 #' @section Details:
-#' The following fields are available to set:
-#'
-#' ## Package-wide Settings
-#' - `str:print_engine` default print engine
-#' - `fn:pvalue_fun` default p-value formatting function
-#'
-#' ## Function Settings
-#' ### `tbl_summary()`
-#' - `fn:tbl_summary-fn:percent_fun` default function for styling percentages
-#' - `fn:tbl_summary-str:label` label to display, e.g. `"{var_label}, {stat_label}"`
-#' - `fn:tbl_summary-lgl:show_stat_footnote` logical indicating whether to show the statistic label footnote
-#' ### `add_p.tbl_summary()`
-#' - `fn:add_p-attr:test.continuous_by2` default test for continuous variables with a 2-level by variable
-#' - `fn:add_p-attr:test.continuous`	default test for continuous variables with a 3- or more level by variable
-#' - `fn:add_p-attr:test.categorical`	default test for categorical/dichotomous variables
-#' - `fn:add_p-attr:test.categorical.low_count`	default test for categorical/dichotomous variables with minimum expected count <5
-#' - `fn:add_p-attr:test.categorical.group_by2`	default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable
-#' - `fn:add_p-attr:test.continuous.group_by2`	default test for continuous grouped/correlated variables with a 2-level by variable
-#' ### `as_gt()`
-#' - `fn:as_gt-expr:addl_cmds` expression of gt commands to append to the calls in `as_gt()`
-#' ## Function Arguments
-#' Set defaults for function arguments
-#' ### `tbl_summary()`
-#' - `fn:tbl_summary-arg:label`
-#' - `fn:tbl_summary-arg:statistic`
-#' - `fn:tbl_summary-arg:digits`
-#' - `fn:tbl_summary-arg:type`
-#' - `fn:tbl_summary-arg:value`
-#' - `fn:tbl_summary-arg:missing`
-#' - `fn:tbl_summary-arg:missing_text`
-#' - `fn:tbl_summary-arg:percent`
-#' - `fn:tbl_summary-arg:sort`
-#' ### `add_p.tbl_summary()`
-#' - `fn:add_p.tbl_summary-arg:test`
-#' - `fn:add_p.tbl_summary-arg:pvalue_fun`
-#' - `fn:add_p.tbl_summary-arg:group`
-#' ### `add_q()`
-#' - `fn:add_q-arg:method`
-#' - `fn:add_q-arg:pvalue_fun`
 #' @param x A named list defining a gtsummary theme. See details below.
 #' @name set_gtsummary_theme
 #' @export
@@ -66,7 +30,7 @@
 #'   tbl_summary(by = trt)
 #'
 #' # reset gtsummary theme
-#' gtsummary_theme_reset()
+#' gtsummary_reset_theme()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -94,7 +58,7 @@ env_gtsummary_theme <- rlang::new_environment()
 
 #' @name set_gtsummary_theme
 #' @export
-gtsummary_theme_reset <- function() {
+gtsummary_reset_theme <- function() {
   # deleting theme environment if it exists
   rm(list = ls(envir = env_gtsummary_theme),
      envir = env_gtsummary_theme)
@@ -146,36 +110,36 @@ quoted_list <- function(x) {
 # tibble of all possible theme options
 df_theme_elements <-
   tibble::tribble(
-    ~name,
-    "theme_name",
+    ~name, ~argument, ~desc,
+    "theme_name", FALSE, "optional name of theme",
     # package level themes
-    "str:print_engine",
-    "fn:pvalue_fun",
+    "str:print_engine", FALSE, "string indicating the default print engine",
+    "fn:pvalue_fun", FALSE, "function to style p-values throughout package",
     # as_gt
-    "fn:as_gt-expr:addl_cmds", # must be an expression, but should it be a string to make it easier for users?
+    "fn:as_gt-expr:addl_cmds", FALSE,  "expression of {gt} commands appended to the end of each `as_gt()` call", # must be an expression, but should it be a string to make it easier for users?
     # tbl_summary
-    "fn:tbl_summary-arg:label",
-    "fn:tbl_summary-arg:statistic",
-    "fn:tbl_summary-arg:digits",
-    "fn:tbl_summary-arg:type",
-    "fn:tbl_summary-arg:value",
-    "fn:tbl_summary-arg:missing",
-    "fn:tbl_summary-arg:missing_text",
-    "fn:tbl_summary-arg:percent",
-    "fn:tbl_summary-arg:sort",
-    "fn:tbl_summary-fn:percent_fun",
-    "fn:tbl_summary-str:label",
-    "fn:tbl_summary-lgl:show_stat_footnote",
+    "fn:tbl_summary-arg:label", TRUE, NA_character_,
+    "fn:tbl_summary-arg:statistic", TRUE, NA_character_,
+    "fn:tbl_summary-arg:digits", TRUE, NA_character_,
+    "fn:tbl_summary-arg:type", TRUE, NA_character_,
+    "fn:tbl_summary-arg:value", TRUE, NA_character_,
+    "fn:tbl_summary-arg:missing", TRUE, NA_character_,
+    "fn:tbl_summary-arg:missing_text", TRUE, NA_character_,
+    "fn:tbl_summary-arg:percent", TRUE, NA_character_,
+    "fn:tbl_summary-arg:sort", TRUE, NA_character_,
+    "fn:tbl_summary-fn:percent_fun", FALSE, "function to style percentages",
+    "fn:tbl_summary-str:label", FALSE, "glue string defining the final label displayed. any column in `.$meta_data` may be used.",
+    "fn:tbl_summary-lgl:show_stat_footnote", FALSE, "logical indicating whether to show footnote of displayed statistics",
     # add_p.tbl_summary
-    "fn:add_p.tbl_summary-arg:test",
-    "fn:add_p.tbl_summary-arg:pvalue_fun",
-    "fn:add_p-attr:test.continuous_by2",
-    "fn:add_p-attr:test.continuous",
-    "fn:add_p-attr:test.categorical",
-    "fn:add_p-attr:test.categorical.low_count",
-    "fn:add_p-attr:test.categorical.group_by2",
-    "fn:add_p-attr:test.continuous.group_by2",
+    "fn:add_p.tbl_summary-arg:test", TRUE, NA_character_,
+    "fn:add_p.tbl_summary-arg:pvalue_fun", TRUE, NA_character_,
+    "fn:add_p-attr:test.continuous_by2", FALSE, "default test for continuous variables with a 2-level by variable",
+    "fn:add_p-attr:test.continuous", FALSE, "default test for continuous variables with a 3- or more level by variable",
+    "fn:add_p-attr:test.categorical", FALSE, "default test for categorical/dichotomous variables",
+    "fn:add_p-attr:test.categorical.low_count", FALSE, "default test for categorical/dichotomous variables with minimum expected count <5",
+    "fn:add_p-attr:test.categorical.group_by2", FALSE, "default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable",
+    "fn:add_p-attr:test.continuous.group_by2", FALSE, "default test for continuous grouped/correlated variables with a 2-level by variable",
     # add_q
-    "fn:add_q-arg:method",
-    "fn:add_q-arg:pvalue_fun"
+    "fn:add_q-arg:method", TRUE, NA_character_,
+    "fn:add_q-arg:pvalue_fun", TRUE, NA_character_
   )

@@ -2,14 +2,14 @@
 % Please edit documentation in R/set_gtsummary_theme.R
 \name{set_gtsummary_theme}
 \alias{set_gtsummary_theme}
-\alias{gtsummary_theme_reset}
+\alias{gtsummary_reset_theme}
 \alias{gtsummary_theme_jama}
 \alias{gtsummary_theme_compact}
 \title{Set a gtsummary theme}
 \usage{
 set_gtsummary_theme(x)
 
-gtsummary_theme_reset()
+gtsummary_reset_theme()
 
 gtsummary_theme_jama()
 
@@ -33,80 +33,15 @@ personal style!
 \item \code{gtsummary_theme_jama()} set theme to align with the JAMA reporting guidelines
 \item \code{gtsummary_theme_compact()} table printed with gt will be more compact with smaller font size and reduced cell padding
 }
+
+Use \code{gtsummary_reset_theme()} to restore the default settings
+
+Review the \link[=customize_gsummary_theme]{customizing gtsummary themes} help file,
+for details on creating your own themes.
 }
 
 \section{Details}{
 
-
-The following fields are available to set:
-\subsection{Package-wide Settings}{
-\itemize{
-\item \code{str:print_engine} default print engine
-\item \code{fn:pvalue_fun} default p-value formatting function
-}
-}
-
-\subsection{Function Settings}{
-\subsection{\code{tbl_summary()}}{
-\itemize{
-\item \code{fn:tbl_summary-fn:percent_fun} default function for styling percentages
-\item \code{fn:tbl_summary-str:label} label to display, e.g. \code{"{var_label}, {stat_label}"}
-\item \code{fn:tbl_summary-lgl:show_stat_footnote} logical indicating whether to show the statistic label footnote
-}
-}
-
-\subsection{\code{add_p.tbl_summary()}}{
-\itemize{
-\item \code{fn:add_p-attr:test.continuous_by2} default test for continuous variables with a 2-level by variable
-\item \code{fn:add_p-attr:test.continuous}	default test for continuous variables with a 3- or more level by variable
-\item \code{fn:add_p-attr:test.categorical}	default test for categorical/dichotomous variables
-\item \code{fn:add_p-attr:test.categorical.low_count}	default test for categorical/dichotomous variables with minimum expected count <5
-\item \code{fn:add_p-attr:test.categorical.group_by2}	default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable
-\item \code{fn:add_p-attr:test.continuous.group_by2}	default test for continuous grouped/correlated variables with a 2-level by variable
-}
-}
-
-\subsection{\code{as_gt()}}{
-\itemize{
-\item \code{fn:as_gt-expr:addl_cmds} expression of gt commands to append to the calls in \code{as_gt()}
-}
-}
-
-}
-
-\subsection{Function Arguments}{
-
-Set defaults for function arguments
-\subsection{\code{tbl_summary()}}{
-\itemize{
-\item \code{fn:tbl_summary-arg:label}
-\item \code{fn:tbl_summary-arg:statistic}
-\item \code{fn:tbl_summary-arg:digits}
-\item \code{fn:tbl_summary-arg:type}
-\item \code{fn:tbl_summary-arg:value}
-\item \code{fn:tbl_summary-arg:missing}
-\item \code{fn:tbl_summary-arg:missing_text}
-\item \code{fn:tbl_summary-arg:percent}
-\item \code{fn:tbl_summary-arg:sort}
-}
-}
-
-\subsection{\code{add_p.tbl_summary()}}{
-\itemize{
-\item \code{fn:add_p.tbl_summary-arg:test}
-\item \code{fn:add_p.tbl_summary-arg:pvalue_fun}
-\item \code{fn:add_p.tbl_summary-arg:group}
-}
-}
-
-\subsection{\code{add_q()}}{
-\itemize{
-\item \code{fn:add_q-arg:method}
-\item \code{fn:add_q-arg:pvalue_fun}
-}
-}
-
-}
 }
 
 \section{Example Output}{
@@ -126,5 +61,5 @@ set_gtsummary_theme_ex1 <-
   tbl_summary(by = trt)
 
 # reset gtsummary theme
-gtsummary_theme_reset()
+gtsummary_reset_theme()
 }
