@@ -56,6 +56,7 @@ set_gtsummary_theme <- function(x) {
 
 env_gtsummary_theme <- rlang::new_environment()
 
+# ------------------------------------------------------------------------------
 #' @name set_gtsummary_theme
 #' @export
 gtsummary_reset_theme <- function() {
@@ -66,30 +67,32 @@ gtsummary_reset_theme <- function() {
   invisible()
 }
 
+# ------------------------------------------------------------------------------
 #' @name set_gtsummary_theme
 #' @export
 gtsummary_theme_jama <- function() {
   list(
-    theme_name = "JAMA",
-    "fn:tbl_summary-str:label" = "{var_label}, {stat_label}",
-    "fn:tbl_summary-lgl:show_stat_footnote" = FALSE,
-    "fn:tbl_summary-arg:statistic" = list(
-      all_continuous() ~ "{median} ({p25} - {p75})",
-      all_categorical() ~ "{n} ({p})"
-    ),
-    "fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2)
+    "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
+    "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+    "pkgwide-str:theme_name" = "JAMA",
+    "tbl_summary-str:label" = "{var_label}, {stat_label}",
+    "tbl_summary-lgl:show_stat_footnote" = FALSE,
+    "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
+    "tbl_summary-str:categorical_stat" = "{n} ({p})"
   )
 }
 
+# ------------------------------------------------------------------------------
 #' @name set_gtsummary_theme
 #' @export
 gtsummary_theme_compact <- function(){
   list(
-    "fn:as_gt-expr:addl_cmds" =
+    "as_gt-expr:addl_cmds" =
       expr(gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1)))
   )
 }
 
+# ------------------------------------------------------------------------------
 # this function grabs a gtsummary theme element if it exists
 # otherwise returns the default value
 get_theme_element <- function(x, default = NULL) {
@@ -108,38 +111,45 @@ quoted_list <- function(x) {
 }
 
 # tibble of all possible theme options
+# THIS DATA FRAME IS SAVED IN "data-raw/gtsummary_themes/gtsummary_theme_elements.csv"
+# OPEN THE FILE, COPY THE CELLS, USE THE datapasta PACKAGE TO PASTE AS TRIBBLE HERE
 df_theme_elements <-
   tibble::tribble(
-    ~name, ~argument, ~desc,
-    "theme_name", FALSE, "optional name of theme",
-    # package level themes
-    "str:print_engine", FALSE, "string indicating the default print engine",
-    "fn:pvalue_fun", FALSE, "function to style p-values throughout package",
-    # as_gt
-    "fn:as_gt-expr:addl_cmds", FALSE,  "expression of {gt} commands appended to the end of each `as_gt()` call", # must be an expression, but should it be a string to make it easier for users?
-    # tbl_summary
-    "fn:tbl_summary-arg:label", TRUE, NA_character_,
-    "fn:tbl_summary-arg:statistic", TRUE, NA_character_,
-    "fn:tbl_summary-arg:digits", TRUE, NA_character_,
-    "fn:tbl_summary-arg:type", TRUE, NA_character_,
-    "fn:tbl_summary-arg:value", TRUE, NA_character_,
-    "fn:tbl_summary-arg:missing", TRUE, NA_character_,
-    "fn:tbl_summary-arg:missing_text", TRUE, NA_character_,
-    "fn:tbl_summary-arg:percent", TRUE, NA_character_,
-    "fn:tbl_summary-arg:sort", TRUE, NA_character_,
-    "fn:tbl_summary-fn:percent_fun", FALSE, "function to style percentages",
-    "fn:tbl_summary-str:label", FALSE, "glue string defining the final label displayed. any column in `.$meta_data` may be used.",
-    "fn:tbl_summary-lgl:show_stat_footnote", FALSE, "logical indicating whether to show footnote of displayed statistics",
-    # add_p.tbl_summary
-    "fn:add_p.tbl_summary-arg:test", TRUE, NA_character_,
-    "fn:add_p.tbl_summary-arg:pvalue_fun", TRUE, NA_character_,
-    "fn:add_p-attr:test.continuous_by2", FALSE, "default test for continuous variables with a 2-level by variable",
-    "fn:add_p-attr:test.continuous", FALSE, "default test for continuous variables with a 3- or more level by variable",
-    "fn:add_p-attr:test.categorical", FALSE, "default test for categorical/dichotomous variables",
-    "fn:add_p-attr:test.categorical.low_count", FALSE, "default test for categorical/dichotomous variables with minimum expected count <5",
-    "fn:add_p-attr:test.categorical.group_by2", FALSE, "default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable",
-    "fn:add_p-attr:test.continuous.group_by2", FALSE, "default test for continuous grouped/correlated variables with a 2-level by variable",
-    # add_q
-    "fn:add_q-arg:method", TRUE, NA_character_,
-    "fn:add_q-arg:pvalue_fun", TRUE, NA_character_
-  )
+                    ~fn,                                               ~name, ~argument,                                                                                                       ~desc,
+              "pkgwide",                            "pkgwide-str:theme_name",     FALSE,                                                                                    "optional name of theme",
+              "pkgwide",                          "pkgwide-str:print_engine",     FALSE,                                                                "string indicating the default print engine",
+              "pkgwide",                             "pkgwide-fn:pvalue_fun",     FALSE,                                                             "function to style p-values throughout package",
+              "pkgwide",                      "pkgwide-fn:prependpvalue_fun",     FALSE, "function to style p-values throughout package that include a \"p\" prefix, e.g. \"p<0.001\" or \"p=0.12\"",
+                "as_gt",                              "as_gt-expr:addl_cmds",     FALSE,                                    "expression of {gt} commands appended to the end of each `as_gt()` call",
+          "tbl_summary",                             "tbl_summary-arg:label",      TRUE,                                                                                                          NA,
+          "tbl_summary",                         "tbl_summary-arg:statistic",      TRUE,                                                                                                          NA,
+          "tbl_summary",                            "tbl_summary-arg:digits",      TRUE,                                                                                                          NA,
+          "tbl_summary",                              "tbl_summary-arg:type",      TRUE,                                                                                                          NA,
+          "tbl_summary",                             "tbl_summary-arg:value",      TRUE,                                                                                                          NA,
+          "tbl_summary",                           "tbl_summary-arg:missing",      TRUE,                                                                                                          NA,
+          "tbl_summary",                      "tbl_summary-arg:missing_text",      TRUE,                                                                                                          NA,
+          "tbl_summary",                           "tbl_summary-arg:percent",      TRUE,                                                                                                          NA,
+          "tbl_summary",                              "tbl_summary-arg:sort",      TRUE,                                                                                                          NA,
+          "tbl_summary",                        "tbl_summary-fn:percent_fun",     FALSE,                                                                             "function to style percentages",
+          "tbl_summary",                             "tbl_summary-str:label",     FALSE,                  "glue string defining the final label displayed. any column in `.$meta_data` may be used.",
+          "tbl_summary",                "tbl_summary-lgl:show_stat_footnote",     FALSE,                                       "logical indicating whether to show footnote of displayed statistics",
+          "tbl_summary",                   "tbl_summary-str:continuous_stat",     FALSE,                                 "glue string defining the default continuous summary statistics to display",
+          "tbl_summary",                  "tbl_summary-str:categorical_stat",     FALSE,                "glue string defining the default categorical and dichotomous summary statistics to display",
+    "add_p.tbl_summary",                        "add_p.tbl_summary-arg:test",      TRUE,                                                                                                          NA,
+    "add_p.tbl_summary",                  "add_p.tbl_summary-arg:pvalue_fun",      TRUE,                                                                                                          NA,
+    "add_p.tbl_summary",        "add_p.tbl_summary-attr:test.continuous_by2",     FALSE,                                          "default test for continuous variables with a 2-level by variable",
+    "add_p.tbl_summary",            "add_p.tbl_summary-attr:test.continuous",     FALSE,                                 "default test for continuous variables with a 3- or more level by variable",
+    "add_p.tbl_summary",           "add_p.tbl_summary-attr:test.categorical",     FALSE,                                                        "default test for categorical/dichotomous variables",
+    "add_p.tbl_summary", "add_p.tbl_summary-attr:test.categorical.low_count",     FALSE,                         "default test for categorical/dichotomous variables with minimum expected count <5",
+    "add_p.tbl_summary", "add_p.tbl_summary-attr:test.categorical.group_by2",     FALSE,          "default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable",
+    "add_p.tbl_summary",  "add_p.tbl_summary-attr:test.continuous.group_by2",     FALSE,                       "default test for continuous grouped/correlated variables with a 2-level by variable",
+                "add_q",                                  "add_q-arg:method",      TRUE,                                                                                                          NA,
+                "add_q",                              "add_q-arg:pvalue_fun",      TRUE,                                                                                                          NA,
+      "add_p.tbl_cross",                          "add_p.tbl_cross-arg:test",      TRUE,                                                                                                          NA,
+      "add_p.tbl_cross",                    "add_p.tbl_cross-arg:pvalue_fun",      TRUE,                                                                                                          NA,
+          "tbl_survfit",                         "tbl_survfit-arg:statistic",      TRUE,                                                                                                          NA,
+       "tbl_regression",                     "tbl_regression-arg:conf.level",      TRUE,                                                                                                          NA,
+       "tbl_regression",                   "tbl_regression-arg:estimate_fun",      TRUE,                                                                                                          NA,
+       "tbl_regression",                     "tbl_regression-arg:pvalue_fun",      TRUE,                                                                                                          NA,
+       "tbl_regression",                       "tbl_regression-arg:tidy_fun",      TRUE,                                                                                                          NA
+    )
