@@ -34,13 +34,13 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
     if (var_summary_type == "continuous") {
       return(
-        get_theme_element("fn:add_p-attr:test.continuous_by2") %||%
+        get_theme_element("add_p.tbl_summary-attr:test.continuous_by2") %||%
           getOption("gtsummary.add_p.test.continuous.group_by2", default = "lme4")
       )
     }
     if (var_summary_type %in% c("categorical", "dichotomous")) {
       return(
-        get_theme_element("fn:add_p-attr:test.categorical.group_by2") %||%
+        get_theme_element("add_p.tbl_summary-attr:test.categorical.group_by2") %||%
           getOption("gtsummary.add_p.test.categorical.group_by2", default = "lme4")
       )
     }
@@ -55,13 +55,13 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # for continuous data, default to non-parametric tests
   if (var_summary_type == "continuous" & length(unique(data[[by_var]])) == 2) {
     return(
-      get_theme_element("fn:add_p-attr:test.continuous.group_by2") %||%
+      get_theme_element("add_p.tbl_summary-attr:test.continuous.group_by2") %||%
         getOption("gtsummary.add_p.test.continuous_by2", default = "wilcox.test")
     )
   }
   if (var_summary_type == "continuous") {
     return(
-      get_theme_element("fn:add_p-attr:test.continuous") %||%
+      get_theme_element("add_p.tbl_summary-attr:test.continuous") %||%
         getOption("gtsummary.add_p.test.continuous", default = "kruskal.test")
     )
   }
@@ -69,7 +69,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # if all obs are missing, assigning chisq
   if (length(data[[var]]) == sum(is.na(data[[var]])))
     return(
-      get_theme_element("fn:add_p-attr:test.categorical") %||%
+      get_theme_element("add_p.tbl_summary-attr:test.categorical") %||%
         getOption("gtsummary.add_p.test.categorical", default = "chisq.test")
     )
 
@@ -89,12 +89,12 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group) {
   # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
   if (min_exp >= 5) {
     return(
-      get_theme_element("fn:add_p-attr:test.categorical") %||%
+      get_theme_element("add_p.tbl_summary-attr:test.categorical") %||%
         getOption("gtsummary.add_p.test.categorical", default = "chisq.test")
     )
   }
   return(
-    get_theme_element("fn:add_p-attr:test.categorical.low_count") %||%
+    get_theme_element("add_p.tbl_summary-attr:test.categorical.low_count") %||%
       getOption("gtsummary.add_p.test.categorical.low_count", default = "fisher.test")
   )
 }

@@ -57,6 +57,11 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
                         statistic = "{estimate} ({conf.low}, {conf.high})",
                         label = NULL, label_header = NULL, estimate_fun = NULL,
                         missing = "--", conf.level = 0.95, failure = FALSE) {
+  # setting defaults -----------------------------------------------------------
+  statistic <-
+    statistic %||%
+    get_theme_element("tbl_survfit-arg:statistic") %||%
+    "{estimate} ({conf.low}, {conf.high})"
 
   # input checks ---------------------------------------------------------------
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {

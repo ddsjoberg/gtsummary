@@ -8,14 +8,14 @@
 #' @examples
 #' # create custom theme
 #' my_theme <- list(
-#'   theme_name = "My Template",
-#'   "fn:tbl_summary-str:label" = "{var_label}, {stat_label}",
-#'   "fn:tbl_summary-lgl:show_stat_footnote" = FALSE,
-#'   "fn:tbl_summary-arg:statistic" = list(
+#'   "pkgwide-str:theme_name" = "My Template",
+#'   "tbl_summary-str:label" = "{var_label}, {stat_label}",
+#'   "tbl_summary-lgl:show_stat_footnote" = FALSE,
+#'   "tbl_summary-arg:statistic" = list(
 #'     all_continuous() ~ "{median} ({p25} - {p75})",
 #'     all_categorical() ~ "{n} ({p})"
 #'   ),
-#'   "fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2)
+#'   "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2)
 #' )
 #'
 #' # setting the theme
@@ -31,54 +31,39 @@
 #' gtsummary_reset_theme()
 #'
 #' @section Theme Elements:
+#'
 #' The following fields are available to set:
-#'
-#' ## Package-wide Settings
-#' - `str:print_engine` default print engine
-#' - `fn:pvalue_fun` default p-value formatting function
-#'
-#' ## Function Settings
-#' ### `tbl_summary()`
-#' - `fn:tbl_summary-fn:percent_fun` default function for styling percentages
-#' - `fn:tbl_summary-str:label` label to display, e.g. `"{var_label}, {stat_label}"`
-#' - `fn:tbl_summary-lgl:show_stat_footnote` logical indicating whether to show the statistic label footnote
-#' ### `add_p.tbl_summary()`
-#' - `fn:add_p-attr:test.continuous_by2` default test for continuous variables with a 2-level by variable
-#' - `fn:add_p-attr:test.continuous`	default test for continuous variables with a 3- or more level by variable
-#' - `fn:add_p-attr:test.categorical`	default test for categorical/dichotomous variables
-#' - `fn:add_p-attr:test.categorical.low_count`	default test for categorical/dichotomous variables with minimum expected count <5
-#' - `fn:add_p-attr:test.categorical.group_by2`	default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable
-#' - `fn:add_p-attr:test.continuous.group_by2`	default test for continuous grouped/correlated variables with a 2-level by variable
-#' ### `as_gt()`
-#' - `fn:as_gt-expr:addl_cmds` expression of gt commands to append to the calls in `as_gt()`
+#' ## Function Elements
+#' The following are system defaults that can be modified.
+#' ### `Package-wide`
+#' - `pkgwide-str:theme_name` optional name of theme
+#' - `pkgwide-str:print_engine` string indicating the default print engine
+#' - `pkgwide-fn:pvalue_fun` function to style p-values throughout package
+#' - `pkgwide-fn:prependpvalue_fun` function to style p-values throughout package that include a "p" prefix, e.g. "p<0.001" or "p=0.12"
+#' ### `as_gt`
+#' - `as_gt-expr:addl_cmds` expression of {gt} commands appended to the end of each `as_gt()` call
+#' ### `tbl_summary`
+#' - `tbl_summary-fn:percent_fun` function to style percentages
+#' - `tbl_summary-str:label` glue string defining the final label displayed. any column in `.$meta_data` may be used.
+#' - `tbl_summary-lgl:show_stat_footnote` logical indicating whether to show footnote of displayed statistics
+#' - `tbl_summary-str:continuous_stat` glue string defining the default continuous summary statistics to display
+#' - `tbl_summary-str:categorical_stat` glue string defining the default categorical and dichotomous summary statistics to display
+#' ### `add_p.tbl_summary`
+#' - `add_p.tbl_summary-attr:test.continuous_by2` default test for continuous variables with a 2-level by variable
+#' - `add_p.tbl_summary-attr:test.continuous` default test for continuous variables with a 3- or more level by variable
+#' - `add_p.tbl_summary-attr:test.categorical` default test for categorical/dichotomous variables
+#' - `add_p.tbl_summary-attr:test.categorical.low_count` default test for categorical/dichotomous variables with minimum expected count <5
+#' - `add_p.tbl_summary-attr:test.categorical.group_by2` default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable
+#' - `add_p.tbl_summary-attr:test.continuous.group_by2` default test for continuous grouped/correlated variables with a 2-level by variable#' ## Function Arguments
 #' ## Function Arguments
 #' Set defaults for function arguments
-#' ### `tbl_summary()`
-#' - `fn:tbl_summary-arg:label`
-#' - `fn:tbl_summary-arg:statistic`
-#' - `fn:tbl_summary-arg:digits`
-#' - `fn:tbl_summary-arg:type`
-#' - `fn:tbl_summary-arg:value`
-#' - `fn:tbl_summary-arg:missing`
-#' - `fn:tbl_summary-arg:missing_text`
-#' - `fn:tbl_summary-arg:percent`
-#' - `fn:tbl_summary-arg:sort`
-#' ### `add_p.tbl_summary()`
-#' - `fn:add_p.tbl_summary-arg:test`
-#' - `fn:add_p.tbl_summary-arg:pvalue_fun`
-#' - `fn:add_p.tbl_summary-arg:group`
-#' ### `add_q()`
-#' - `fn:add_q-arg:method`
-#' - `fn:add_q-arg:pvalue_fun`
+#' - **`add_p.tbl_cross()`**: `add_p.tbl_cross-arg:test`, `add_p.tbl_cross-arg:pvalue_fun`
+#' - **`add_p.tbl_summary()`**: `add_p.tbl_summary-arg:test`, `add_p.tbl_summary-arg:pvalue_fun`
+#' - **`add_q()`**: `add_q-arg:method`, `add_q-arg:pvalue_fun`
+#' - **`tbl_regression()`**: `tbl_regression-arg:conf.level`, `tbl_regression-arg:estimate_fun`, `tbl_regression-arg:pvalue_fun`, `tbl_regression-arg:tidy_fun`
+#' - **`tbl_summary()`**: `tbl_summary-arg:label`, `tbl_summary-arg:statistic`, `tbl_summary-arg:digits`, `tbl_summary-arg:type`, `tbl_summary-arg:value`, `tbl_summary-arg:missing`, `tbl_summary-arg:missing_text`, `tbl_summary-arg:percent`, `tbl_summary-arg:sort`
+#' - **`tbl_survfit()`**: `tbl_survfit-arg:statistic`
 #'
-#' ### Test
-#'
-#' ```{r, echo = FALSE, results = 'asis'}
-#' options(knitr.kable.na = '')
-#' head(df_theme_elements) %>%
-#'   dplyr::mutate(name = glue("`{name}`")) %>%
-#'   knitr::kable(col.names = c("", "", ""))
-#' ```
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -86,29 +71,12 @@
 NULL
 
 # # The code below creates the markdown text to copy above
-# # the argument lines
-# df_theme_elements %>%
-#   dplyr::filter(argument == TRUE) %>%
-#   dplyr::mutate(
-#     fn = word(name, sep = "-") %>%
-#       word(2, sep = ":")
-#   ) %>%
-#   dplyr::group_nest(fn) %>%
-#   dplyr::mutate(
-#     vec_names = purrr::map_chr(.data$data, ~paste0("`", .x$name, "`", collapse = ", ")),
-#     final = glue::glue("#' - **`{fn}()`**: {vec_names}")
-#   ) %>%
-#   dplyr::pull(final) %>%
-#   purrr::walk(~cat(.x, "\n"))
-#
 # # by function lines
 # df_by_function <-
 #   df_theme_elements %>%
 #   dplyr::filter(argument == FALSE) %>%
 #   dplyr::mutate(
-#     fn = ifelse(stringr::str_starts(name, pattern = "fn:") & stringr::str_detect(name, "-"),
-#                 word(name, sep = "-") %>% word(2, sep = ":"),
-#                 "Package-wide"),
+#     fn = ifelse(fn == "pkgwide", "Package-wide", fn),
 #     names_line = paste0("- `", name,"` ", desc)
 #   ) %>%
 #   dplyr::select(fn, names_line) %>%
@@ -121,7 +89,16 @@ NULL
 #     cat("#' ", df_by_function$data[[i]]$names_line[j], "\n", sep = "")
 #   }
 # }
-# purrr::walk2(df_by_function$fn, df_by_function$data,
-#              ~cat("#' ### `", .x, "`", "\n",
-#                   "- `", .y$, sep = ""))
+#
+# # the argument lines
+# df_theme_elements %>%
+#   dplyr::filter(argument == TRUE) %>%
+#   dplyr::group_nest(fn) %>%
+#   dplyr::mutate(
+#     vec_names = purrr::map_chr(.data$data, ~paste0("`", .x$name, "`", collapse = ", ")),
+#     final = glue::glue("#' - **`{fn}()`**: {vec_names}")
+#   ) %>%
+#   dplyr::pull(final) %>%
+#   purrr::walk(~cat(.x, "\n"))
+
 

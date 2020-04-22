@@ -10,37 +10,44 @@ of at least one of the following theme elements. Example below.
 }
 \section{Theme Elements}{
 
+
 The following fields are available to set:
-\subsection{Package-wide Settings}{
+\subsection{Function Elements}{
+
+The following are system defaults that can be modified.
+\subsection{\code{Package-wide}}{
 \itemize{
-\item \code{str:print_engine} default print engine
-\item \code{fn:pvalue_fun} default p-value formatting function
+\item \code{pkgwide-str:theme_name} optional name of theme
+\item \code{pkgwide-str:print_engine} string indicating the default print engine
+\item \code{pkgwide-fn:pvalue_fun} function to style p-values throughout package
+\item \code{pkgwide-fn:prependpvalue_fun} function to style p-values throughout package that include a "p" prefix, e.g. "p<0.001" or "p=0.12"
 }
 }
 
-\subsection{Function Settings}{
-\subsection{\code{tbl_summary()}}{
+\subsection{\code{as_gt}}{
 \itemize{
-\item \code{fn:tbl_summary-fn:percent_fun} default function for styling percentages
-\item \code{fn:tbl_summary-str:label} label to display, e.g. \code{"{var_label}, {stat_label}"}
-\item \code{fn:tbl_summary-lgl:show_stat_footnote} logical indicating whether to show the statistic label footnote
+\item \code{as_gt-expr:addl_cmds} expression of {gt} commands appended to the end of each \code{as_gt()} call
 }
 }
 
-\subsection{\code{add_p.tbl_summary()}}{
+\subsection{\code{tbl_summary}}{
 \itemize{
-\item \code{fn:add_p-attr:test.continuous_by2} default test for continuous variables with a 2-level by variable
-\item \code{fn:add_p-attr:test.continuous}	default test for continuous variables with a 3- or more level by variable
-\item \code{fn:add_p-attr:test.categorical}	default test for categorical/dichotomous variables
-\item \code{fn:add_p-attr:test.categorical.low_count}	default test for categorical/dichotomous variables with minimum expected count <5
-\item \code{fn:add_p-attr:test.categorical.group_by2}	default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable
-\item \code{fn:add_p-attr:test.continuous.group_by2}	default test for continuous grouped/correlated variables with a 2-level by variable
+\item \code{tbl_summary-fn:percent_fun} function to style percentages
+\item \code{tbl_summary-str:label} glue string defining the final label displayed. any column in \code{.$meta_data} may be used.
+\item \code{tbl_summary-lgl:show_stat_footnote} logical indicating whether to show footnote of displayed statistics
+\item \code{tbl_summary-str:continuous_stat} glue string defining the default continuous summary statistics to display
+\item \code{tbl_summary-str:categorical_stat} glue string defining the default categorical and dichotomous summary statistics to display
 }
 }
 
-\subsection{\code{as_gt()}}{
+\subsection{\code{add_p.tbl_summary}}{
 \itemize{
-\item \code{fn:as_gt-expr:addl_cmds} expression of gt commands to append to the calls in \code{as_gt()}
+\item \code{add_p.tbl_summary-attr:test.continuous_by2} default test for continuous variables with a 2-level by variable
+\item \code{add_p.tbl_summary-attr:test.continuous} default test for continuous variables with a 3- or more level by variable
+\item \code{add_p.tbl_summary-attr:test.categorical} default test for categorical/dichotomous variables
+\item \code{add_p.tbl_summary-attr:test.categorical.low_count} default test for categorical/dichotomous variables with minimum expected count <5
+\item \code{add_p.tbl_summary-attr:test.categorical.group_by2} default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable
+\item \code{add_p.tbl_summary-attr:test.continuous.group_by2} default test for continuous grouped/correlated variables with a 2-level by variable#' ## Function Arguments
 }
 }
 
@@ -49,47 +56,14 @@ The following fields are available to set:
 \subsection{Function Arguments}{
 
 Set defaults for function arguments
-\subsection{\code{tbl_summary()}}{
 \itemize{
-\item \code{fn:tbl_summary-arg:label}
-\item \code{fn:tbl_summary-arg:statistic}
-\item \code{fn:tbl_summary-arg:digits}
-\item \code{fn:tbl_summary-arg:type}
-\item \code{fn:tbl_summary-arg:value}
-\item \code{fn:tbl_summary-arg:missing}
-\item \code{fn:tbl_summary-arg:missing_text}
-\item \code{fn:tbl_summary-arg:percent}
-\item \code{fn:tbl_summary-arg:sort}
+\item \strong{\code{add_p.tbl_cross()}}: \code{add_p.tbl_cross-arg:test}, \code{add_p.tbl_cross-arg:pvalue_fun}
+\item \strong{\code{add_p.tbl_summary()}}: \code{add_p.tbl_summary-arg:test}, \code{add_p.tbl_summary-arg:pvalue_fun}
+\item \strong{\code{add_q()}}: \code{add_q-arg:method}, \code{add_q-arg:pvalue_fun}
+\item \strong{\code{tbl_regression()}}: \code{tbl_regression-arg:conf.level}, \code{tbl_regression-arg:estimate_fun}, \code{tbl_regression-arg:pvalue_fun}, \code{tbl_regression-arg:tidy_fun}
+\item \strong{\code{tbl_summary()}}: \code{tbl_summary-arg:label}, \code{tbl_summary-arg:statistic}, \code{tbl_summary-arg:digits}, \code{tbl_summary-arg:type}, \code{tbl_summary-arg:value}, \code{tbl_summary-arg:missing}, \code{tbl_summary-arg:missing_text}, \code{tbl_summary-arg:percent}, \code{tbl_summary-arg:sort}
+\item \strong{\code{tbl_survfit()}}: \code{tbl_survfit-arg:statistic}
 }
-}
-
-\subsection{\code{add_p.tbl_summary()}}{
-\itemize{
-\item \code{fn:add_p.tbl_summary-arg:test}
-\item \code{fn:add_p.tbl_summary-arg:pvalue_fun}
-\item \code{fn:add_p.tbl_summary-arg:group}
-}
-}
-
-\subsection{\code{add_q()}}{
-\itemize{
-\item \code{fn:add_q-arg:method}
-\item \code{fn:add_q-arg:pvalue_fun}
-}
-}
-
-\subsection{Test}{\tabular{lll}{
-    \tab  \tab  \cr
-   \code{theme_name} \tab FALSE \tab optional name of theme \cr
-   \code{str:print_engine} \tab FALSE \tab string indicating the default print engine \cr
-   \code{fn:pvalue_fun} \tab FALSE \tab function to style p-values throughout package \cr
-   \code{fn:as_gt-expr:addl_cmds} \tab FALSE \tab expression of {gt} commands appended to the end of each \code{as_gt()} call \cr
-   \code{fn:tbl_summary-arg:label} \tab TRUE \tab NA \cr
-   \code{fn:tbl_summary-arg:statistic} \tab TRUE \tab NA \cr
-}
-
-}
-
 }
 }
 
@@ -103,14 +77,14 @@ Set defaults for function arguments
 \examples{
 # create custom theme
 my_theme <- list(
-  theme_name = "My Template",
-  "fn:tbl_summary-str:label" = "{var_label}, {stat_label}",
-  "fn:tbl_summary-lgl:show_stat_footnote" = FALSE,
-  "fn:tbl_summary-arg:statistic" = list(
+  "pkgwide-str:theme_name" = "My Template",
+  "tbl_summary-str:label" = "{var_label}, {stat_label}",
+  "tbl_summary-lgl:show_stat_footnote" = FALSE,
+  "tbl_summary-arg:statistic" = list(
     all_continuous() ~ "{median} ({p25} - {p75})",
     all_categorical() ~ "{n} ({p})"
   ),
-  "fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2)
+  "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2)
 )
 
 # setting the theme

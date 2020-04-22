@@ -146,17 +146,17 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         percent = NULL, group = NULL) {
 
   # setting defaults from gtsummary theme --------------------------------------
-  label <- label %||% get_theme_element("fn:tbl_summary-arg:label")
-  statistic <- statistic %||% get_theme_element("fn:tbl_summary-arg:statistic")
-  digits <- digits %||% get_theme_element("fn:tbl_summary-arg:digits")
-  type <- type %||% get_theme_element("fn:tbl_summary-arg:type")
-  value <- value %||% get_theme_element("fn:tbl_summary-arg:value")
-  missing <- missing %||% get_theme_element("fn:tbl_summary-arg:missing",
+  label <- label %||% get_theme_element("tbl_summary-arg:label")
+  statistic <- statistic %||% get_theme_element("tbl_summary-arg:statistic")
+  digits <- digits %||% get_theme_element("tbl_summary-arg:digits")
+  type <- type %||% get_theme_element("tbl_summary-arg:type")
+  value <- value %||% get_theme_element("tbl_summary-arg:value")
+  missing <- missing %||% get_theme_element("tbl_summary-arg:missing",
                                             default = "ifany")
-  missing_text <- missing_text %||% get_theme_element("fn:tbl_summary-arg:missing_text",
+  missing_text <- missing_text %||% get_theme_element("tbl_summary-arg:missing_text",
                                                       default = "Unknown")
-  sort <- sort %||% get_theme_element("fn:tbl_summary-arg:sort")
-  percent <- percent %||% get_theme_element("fn:tbl_summary-arg:percent",
+  sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
+  percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
                                             default = "column")
 
   # converting bare arguments to string ----------------------------------------
@@ -270,7 +270,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # assigning variable characteristics -----------------------------------------
   # label to display
-  display_label <- get_theme_element("fn:tbl_summary-str:label") %||% "{var_label}"
+  display_label <- get_theme_element("tbl_summary-str:label") %||% "{var_label}"
   meta_data <-
     meta_data %>%
     mutate(
@@ -332,8 +332,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       # adding footnote of statistics on display (unless theme indicates a no print)
       footnote = ifelse(
         startsWith(.data$column, "stat_") &
-          (is.null(get_theme_element("fn:tbl_summary-lgl:show_stat_footnote")) ||
-             get_theme_element("fn:tbl_summary-lgl:show_stat_footnote") == TRUE),
+          (is.null(get_theme_element("tbl_summary-lgl:show_stat_footnote")) ||
+             get_theme_element("tbl_summary-lgl:show_stat_footnote") == TRUE),
         footnote_stat_label(meta_data),
         .data$footnote
       )
