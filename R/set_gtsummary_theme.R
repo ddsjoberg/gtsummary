@@ -9,8 +9,14 @@
 #' personal style.
 #'
 #' @section Themes:
-#' - `gtsummary_theme_jama()` set theme to align with the JAMA reporting guidelines
-#' - `gtsummary_theme_compact()` table printed with gt will be more compact with smaller font size and reduced cell padding
+#' - `gtsummary_theme_jama()`
+#'   - set theme to align with the JAMA reporting guidelines
+#'   - large p-values are rounded to two decimal places
+#'   - in `tbl_summary()` the statistic reported appears on the variable label row
+#'   - in `tbl_summary()` the IQR is separated with a dash, rather than comma
+#'   - in `tbl_summary()` the percent symbol is not reported next to percentages
+#' - `gtsummary_theme_compact()`
+#'   - table printed with gt will be more compact with smaller font size and reduced cell padding
 #'
 #' Use `gtsummary_reset_theme()` to restore the default settings
 #'
