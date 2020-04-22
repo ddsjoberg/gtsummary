@@ -16,7 +16,8 @@ gtsummary_theme_jama()
 gtsummary_theme_compact()
 }
 \arguments{
-\item{x}{A named list defining a gtsummary theme. See details below.}
+\item{x}{A gtsummary theme function, e.g. \code{gtsummary_theme_jama()}, or a
+named list defining a gtsummary theme. See details below.}
 }
 \description{
 Use this function to set preferences for the display of gtsummary tables.
@@ -24,8 +25,8 @@ The default formatting and styling throughout the gtsummary package are
 taken from the published reporting guidelines of the top four urology
 journals: European Urology, The Journal of Urology, Urology and
 the British Journal of Urology International. Use this function to change
-the default reporting style to match another journal, or even your own
-personal style!
+the default reporting style to match another journal, or your own
+personal style.
 }
 \section{Themes}{
 
@@ -36,29 +37,28 @@ personal style!
 
 Use \code{gtsummary_reset_theme()} to restore the default settings
 
-Review the \link[=customize_gsummary_theme]{customizing gtsummary themes} help file,
-for details on creating your own themes.
-}
-
-\section{Details}{
-
+Review the \link[=customize_gsummary_theme]{customizing gtsummary themes} help file
+to create your own theme.
 }
 
 \section{Example Output}{
 
 \if{html}{Example 1}
 
-\if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
+\if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=70\%}}
 }
 
 \examples{
 # Setting JAMA theme for gtsummary
 set_gtsummary_theme(gtsummary_theme_jama())
+# Themes can be combined by including more than one
+set_gtsummary_theme(gtsummary_theme_compact())
 
 set_gtsummary_theme_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, trt) \%>\%
-  tbl_summary(by = trt)
+  tbl_summary(by = trt) \%>\%
+  as_gt()
 
 # reset gtsummary theme
 gtsummary_reset_theme()

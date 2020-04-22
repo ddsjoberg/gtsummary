@@ -5,8 +5,8 @@
 #' taken from the published reporting guidelines of the top four urology
 #' journals: European Urology, The Journal of Urology, Urology and
 #' the British Journal of Urology International. Use this function to change
-#' the default reporting style to match another journal, or even your own
-#' personal style!
+#' the default reporting style to match another journal, or your own
+#' personal style.
 #'
 #' @section Themes:
 #' - `gtsummary_theme_jama()` set theme to align with the JAMA reporting guidelines
@@ -14,27 +14,30 @@
 #'
 #' Use `gtsummary_reset_theme()` to restore the default settings
 #'
-#' Review the [customizing gtsummary themes][customize_gsummary_theme] help file,
-#' for details on creating your own themes.
-#' @section Details:
-#' @param x A named list defining a gtsummary theme. See details below.
+#' Review the [customizing gtsummary themes][customize_gsummary_theme] help file
+#' to create your own theme.
+#' @param x A gtsummary theme function, e.g. `gtsummary_theme_jama()`, or a
+#' named list defining a gtsummary theme. See details below.
 #' @name set_gtsummary_theme
 #' @export
 #' @examples
 #' # Setting JAMA theme for gtsummary
 #' set_gtsummary_theme(gtsummary_theme_jama())
+#' # Themes can be combined by including more than one
+#' set_gtsummary_theme(gtsummary_theme_compact())
 #'
 #' set_gtsummary_theme_ex1 <-
 #'   trial %>%
 #'   dplyr::select(age, grade, trt) %>%
-#'   tbl_summary(by = trt)
+#'   tbl_summary(by = trt) %>%
+#'   as_gt()
 #'
 #' # reset gtsummary theme
 #' gtsummary_reset_theme()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
+#' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=70\%}}
 
 set_gtsummary_theme <- function(x) {
   # checking the input is a named list -----------------------------------------
