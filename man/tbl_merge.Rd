@@ -51,7 +51,8 @@ tbl_merge_ex1 <-
 t3 <-
   trial[c("age", "grade", "response")] \%>\%
   tbl_summary(missing = "no") \%>\%
-  add_n()
+  add_n \%>\%
+  modify_header(stat_0 = "**Summary Statistics**")
 t4 <-
   tbl_uvregression(
     trial[c("ttdeath", "death", "age", "grade", "response")],
@@ -63,8 +64,7 @@ t4 <-
 
 tbl_merge_ex2 <-
   tbl_merge(tbls = list(t3, t4)) \%>\%
-  as_gt(include = -tab_spanner) \%>\%
-  gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
+  modify_spanning_header(everything() ~ NA_character_)
 
 }
 \seealso{

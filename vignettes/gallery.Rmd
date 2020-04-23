@@ -3,8 +3,10 @@ title: "Table Gallery"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Table Gallery}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -33,8 +35,7 @@ trial[c("trt", "age", "grade")] %>%
   modify_header(stat_by = md("**{level}** N =  {n} ({style_percent(p)}%)")) %>%
   add_n() %>%
   bold_labels() %>%
-  as_gt() %>%
-  tab_spanner(columns = starts_with("stat_"), md("**Chemotherapy Treatment**"))
+  modify_spanning_header(starts_with("stat_") ~ "**Chemotherapy Treatment**")
 ```
 
 ---
@@ -97,12 +98,41 @@ t2 <- trial %>%
 
 # merging the 3 tables together, and adding additional gt formatting
 tbl_merge(list(t0, t1, t2)) %>%
+  modify_spanning_header(
+    list(
+      starts_with("stat_") ~ "**Tumor Grade**",
+      starts_with("p.value") ~ "**p-value**"
+    )
+  ) %>%
   as_gt(include = -tab_spanner) %>%
   # hiding repeated summary columns
-  cols_hide(columns = vars(stat_1_2, stat_2_2, stat_3_2, stat_1_3, stat_2_3, stat_3_3)) %>%
-  # adding spanning headers for summary stats and pvalues
-  tab_spanner(label = md("**Tumor Grade**"), columns = starts_with("stat_")) %>%
-  tab_spanner(label = md("**p-value**"), columns = starts_with("p.value")) 
+  cols_hide(columns = vars(stat_1_2, stat_2_2, stat_3_2, stat_1_3, stat_2_3, stat_3_3))
+```
+
+---
+
+Addiing additional statistics as additional columns.
+
+```{r}
+# define function for lower and upper bounds of the mean CI
+ll <- function(x) t.test(x)$conf.int[1]
+ul <- function(x) t.test(x)$conf.int[2]
+
+t1 <-
+  trial %>%
+  select(age, marker) %>%
+  tbl_summary(statistic = all_continuous() ~ "{mean} ({sd})", missing = "no") %>%
+  modify_header(stat_0 = "**Mean (SD)**")
+
+t2 <-
+  trial %>%
+  select(age, marker) %>%
+  tbl_summary(statistic = all_continuous() ~ "{ll}, {ul}", missing = "no") %>%
+  modify_header(stat_0 = "**95% CI for Mean**")
+
+tbl_merge(list(t1, t2)) %>%
+  modify_footnote(everything() ~ NA_character_) %>%
+  modify_spanning_header(everything() ~ NA_character_)
 ```
 
 ---
@@ -163,7 +193,7 @@ gt_eventn <-
 tbl_merge(list(gt_eventn, gt_model)) %>%
   bold_labels() %>%
   italicize_levels() %>%
-  as_gt(include = -tab_spanner)
+  modify_spanning_header(everything() ~ NA_character_)
 ```
 
 ---
@@ -185,11 +215,7 @@ tbl_reg <-
   ) 
 
 tbl_reg %>%
-  as_gt() %>%
-  tab_footnote(
-    footnote = "Values larger than 0 indicate larger values in the Drug group.", 
-    locations = cells_column_labels(columns = vars(estimate))
-  )
+  modify_footnote(estimate ~ "Values larger than 0 indicate larger values in the Drug group.")
 ```
 
 Add descriptive statistics by treatment group to the table above to produce a table often reported two group comparisons.
@@ -207,7 +233,7 @@ gt_sum <-
 
 tbl_merge(list(gt_sum, tbl_reg))  %>%
   modify_header(estimate_2 = md("**Difference**")) %>%
-  as_gt(include = -tab_spanner)
+  modify_spanning_header(everything() ~ NA_character_)
 ```
 
 ---

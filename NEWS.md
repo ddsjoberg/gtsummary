@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* New functions `modify_footnote()` and `modify_spanning_header()` give users control over table footnotes and spanning headers. (#464)
+
 * Updated handling for interaction terms in `tbl_regression()`. Interaction terms may now be specified in the `show_single_row=` and `label=` arguments. (#451, #452)
 
 * Updated the gtsummary core script, `utils-gtsummary_core.R`, to refer to all non-base R functions with the `pkg::` prefix, so other packages that copy the file don't need to import the same functions as {gtsummary} in the NAMESPACE. Now they just need to depend on the same packages. (#454)
@@ -141,7 +143,7 @@
 
 # gtsummary 1.2.2
 
-## New Features
+### New Features
 
 * `tbl_summary` objects may be stacked and merged with `tbl_stack()` and `tbl_merge()` (#230, #255)
 
@@ -159,7 +161,7 @@
 
 * New `show_single_row` argument in `tbl_regression()` and `tbl_uvregression()` allows any binary variable to be printed on a single row.  Previous argument `show_yesno` is now deprecated. (#220)
 
-## Documentation 
+### Documentation 
 
 * Added a gallery of tables possible by merging, stacking, and modifying {gtsummary} arguments (#258)
 
@@ -167,7 +169,7 @@
 
 * Added {lifecycle} badges to mark deprecated and experimental functions (#225)
 
-## Other Updates
+### Other Updates
 
 * The `by = ` column in `tbl_summary()` now has missing variables dropped rather than halting with error (#279)
 
