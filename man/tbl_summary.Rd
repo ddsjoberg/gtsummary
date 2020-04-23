@@ -183,7 +183,7 @@ tbl_summary_ex3 <-
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed tutorial
 
-See \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{table gallery} for additional examples
+See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 
 Other tbl_summary tools: 
 \code{\link{add_n}()},
