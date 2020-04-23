@@ -37,7 +37,7 @@ modify_spanning_header <- function(x, update) {
     unlist() %>%
     tibble::enframe(name = "column", value = "spanning_header") %>%
     # performing inner join to put the edits in the same order as x$table_header
-    {inner_join(
+    {dplyr::inner_join(
       x$table_header %>% select(.data$column),
       .,
       by = "column"

@@ -67,7 +67,7 @@ modify_footnote <- function(x, update, abbreviation = FALSE) {
     unlist() %>%
     tibble::enframe(name = "column", value = footnote_column_name) %>%
     # performing inner join to put the edits in the same order as x$table_header
-    {inner_join(
+    {dplyr::inner_join(
       x$table_header %>% select(.data$column),
       .,
       by = "column"
