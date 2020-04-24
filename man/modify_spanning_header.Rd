@@ -37,3 +37,47 @@ spanning_header_ex1 <-
   tbl_summary(by = trt) \%>\%
   modify_spanning_header(starts_with("stat_") ~ "**Randomization Assignment**")
 }
+\seealso{
+Other tbl_summary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_summary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{inline_text.tbl_survfit}()},
+\code{\link{modify_footnote}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
+
+Other tbl_regression tools: 
+\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{add_q}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_footnote}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
+
+Other tbl_uvregression tools: 
+\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_footnote}()},
+\code{\link{modify_header}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
+}
+\concept{tbl_regression tools}
+\concept{tbl_summary tools}
+\concept{tbl_uvregression tools}

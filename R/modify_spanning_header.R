@@ -10,6 +10,9 @@
 #'
 #'
 #' @return gtsummary object
+#' @family tbl_summary tools
+#' @family tbl_regression tools
+#' @family tbl_uvregression tools
 #' @export
 #' @examples
 #' # add header above summary statistics

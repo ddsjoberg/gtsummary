@@ -11,6 +11,9 @@
 #' Abbreviation footnotes are handled differently. See examples below.
 #'
 #' @return gtsummary object
+#' @family tbl_summary tools
+#' @family tbl_regression tools
+#' @family tbl_uvregression tools
 #' @export
 #' @examples
 #' tbl_summary <-
@@ -19,7 +22,7 @@
 #'   tbl_summary(by = trt)
 #'
 #' # update footnote
-#' footnote_ex1 <-
+#' modify_footnote_ex1 <-
 #'   tbl_summary %>%
 #'   modify_footnote(
 #'     update = starts_with("stat_") ~
@@ -27,27 +30,27 @@
 #'   )
 #'
 #' # deleting all footnote
-#' footnote_ex2 <-
+#' modify_footnote_ex2 <-
 #'   tbl_summary %>%
 #'   modify_footnote(update = everything() ~ NA)
 #'
 #' # updating the footnote abbreviation for CI
-#' footnote_ex3 <-
+#' modify_footnote_ex3 <-
 #'   glm(response ~ age + grade, trial, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE)
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{footnote_ex1.png}{options: width=60\%}}
+#' \if{html}{\figure{modify_footnote_ex1.png}{options: width=60\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{footnote_ex2.png}{options: width=55\%}}
+#' \if{html}{\figure{modify_footnote_ex2.png}{options: width=55\%}}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{footnote_ex3.png}{options: width=45\%}}
+#' \if{html}{\figure{modify_footnote_ex3.png}{options: width=45\%}}
 
 modify_footnote <- function(x, update, abbreviation = FALSE) {
   # checking inputs ------------------------------------------------------------
