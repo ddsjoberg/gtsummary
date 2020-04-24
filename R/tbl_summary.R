@@ -17,9 +17,9 @@
 #' attribute label is `NULL`, the variable name will be used.
 #' @param type List of formulas specifying variable types. Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
-#' e.g. `type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")`.
+#' e.g. `type = list(age ~ "continuous", female ~ "dichotomous")`.
 #' If type not specified for a variable, the function
-#' will default to an appropriate summary type.  See below for details.
+#' will default to an appropriate summary type. See below for details.
 #' @param value List of formulas specifying the value to display for dichotomous
 #' variables.  See below for details.
 #' @param statistic List of formulas specifying types of summary statistics to
@@ -141,8 +141,8 @@
 #'
 #' \if{html}{\figure{tbl_summary_ex3.png}{options: width=45\%}}
 
-tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
-                        digits = NULL, type = NULL, value = NULL,
+tbl_summary <- function(data, by = NULL, type = NULL, label = NULL,
+                        statistic = NULL, digits = NULL, value = NULL,
                         missing = c("ifany", "always", "no"),
                         missing_text = "Unknown", sort = NULL,
                         percent = c("column", "row", "cell"), group = NULL) {

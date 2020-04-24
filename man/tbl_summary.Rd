@@ -7,10 +7,10 @@
 tbl_summary(
   data,
   by = NULL,
+  type = NULL,
   label = NULL,
   statistic = NULL,
   digits = NULL,
-  type = NULL,
   value = NULL,
   missing = c("ifany", "always", "no"),
   missing_text = "Unknown",
@@ -26,6 +26,12 @@ tbl_summary(
 Summary statistics will be calculated separately for each level of the \code{by}
 variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
 are calculated using all observations.}
+
+\item{type}{List of formulas specifying variable types. Accepted values
+are \code{c("continuous", "categorical", "dichotomous")},
+e.g. \code{type = list(age ~ "continuous", female ~ "dichotomous")}.
+If type not specified for a variable, the function
+will default to an appropriate summary type. See below for details.}
 
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}.  If a
@@ -45,12 +51,6 @@ When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
 to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}.}
-
-\item{type}{List of formulas specifying variable types. Accepted values
-are \code{c("continuous", "categorical", "dichotomous")},
-e.g. \code{type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")}.
-If type not specified for a variable, the function
-will default to an appropriate summary type.  See below for details.}
 
 \item{value}{List of formulas specifying the value to display for dichotomous
 variables.  See below for details.}
