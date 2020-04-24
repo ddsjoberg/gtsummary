@@ -36,7 +36,7 @@
 #' @author Daniel D. Sjoberg
 #' @examples
 #' trial %>%
-#'   dplyr::select(trt, age, grade) %>%
+#'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   as_flextable()

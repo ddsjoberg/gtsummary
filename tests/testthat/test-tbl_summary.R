@@ -246,7 +246,7 @@ test_that("tbl_summary-order of output columns", {
             grade == "II" ~ "Second Grade"
           )
       ) %>%
-      dplyr::select(grade, grade_str) %>%
+      select(grade, grade_str) %>%
       tbl_summary(by = grade_str) %>%
       purrr::pluck("table_body") %>%
       names() %>% {
@@ -293,7 +293,7 @@ test_that("tbl_summary-all missing data does not cause error", {
     )
 
   expect_error(
-    all_missing_no_by <- tbl_summary(df_missing %>% dplyr::select(-my_by_var)),
+    all_missing_no_by <- tbl_summary(df_missing %>% select(-my_by_var)),
     NA
   )
 

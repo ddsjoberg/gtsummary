@@ -14,7 +14,7 @@ update. The LHS selects the variables
 whose footnote will be updated, and the RHS is the new footnote. For example,
 \code{update = stat_0 ~ "New footnote!"} or
 \code{update = starts_with("stat_") ~ "New footnote!"}. To delete the footnote,
-update the text to \code{NA_character_}}
+update the text to \code{NA_character_}. Columns from \code{x$table_body} may be selected.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.
 Abbreviation footnotes are handled differently. See examples below.}
@@ -43,7 +43,7 @@ Update gtsummary table footnote
 \examples{
 tbl_summary <-
   trial \%>\%
-  dplyr::select(trt, age, grade) \%>\%
+  select(trt, age, grade) \%>\%
   tbl_summary(by = trt)
 
 # update footnote

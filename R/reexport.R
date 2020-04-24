@@ -18,6 +18,10 @@ knitr::knit_print
 #' @export
 dplyr::vars
 
+#' @importFrom dplyr select
+#' @export
+dplyr::select
+
 # tidyselect -------------------------------------------------------------------
 #' @importFrom tidyselect starts_with
 #' @export

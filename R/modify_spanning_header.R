@@ -4,8 +4,10 @@
 #' @param update list of formulas or a single formula specifying the update.
 #' The LHS selects the variables
 #' whose spanning header will be updated, and the RHS is the new spanning header.
-#' For example, `update = starts_with("stat_") ~ "New spanning header!"`. To
-#' remove all spanning headers, use `update = everything() ~ NA_character_`
+#' For example, `update = starts_with("stat_") ~ "New spanning header!"`.
+#' Columns from `x$table_body` may be selected.
+#' To remove all spanning headers, use `update = everything() ~ NA_character_`.
+#'
 #'
 #' @return gtsummary object
 #' @export
@@ -13,7 +15,7 @@
 #' # add header above summary statistics
 #' spanning_header_ex1 <-
 #'   trial %>%
-#'   dplyr::select(trt, age, grade) %>%
+#'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   modify_spanning_header(starts_with("stat_") ~ "**Randomization Assignment**")
 #' @section Example Output:
@@ -28,7 +30,7 @@ modify_spanning_header <- function(x, update) {
   }
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- tidyselect_to_list(x$table_body, update, arg_name = "update")
+  update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
 
   # updating footnote ----------------------------------------------------------
   # convert named list to a tibble
@@ -36,6 +38,8 @@ modify_spanning_header <- function(x, update) {
     update %>%
     unlist() %>%
     tibble::enframe(name = "column", value = "spanning_header") %>%
+    # ensuring the column is a character
+    mutate_at(vars(.data$spanning_header), as.character) %>%
     # performing inner join to put the edits in the same order as x$table_header
     {dplyr::inner_join(
       x$table_header %>% select(.data$column),

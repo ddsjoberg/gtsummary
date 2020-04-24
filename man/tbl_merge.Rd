@@ -52,7 +52,7 @@ t3 <-
   trial[c("age", "grade", "response")] \%>\%
   tbl_summary(missing = "no") \%>\%
   add_n \%>\%
-  modify_header(stat_0 = "**Summary Statistics**")
+  modify_header(stat_0 ~ "**Summary Statistics**")
 t4 <-
   tbl_uvregression(
     trial[c("ttdeath", "death", "age", "grade", "response")],

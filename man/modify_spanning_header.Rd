@@ -12,8 +12,9 @@ modify_spanning_header(x, update)
 \item{update}{list of formulas or a single formula specifying the update.
 The LHS selects the variables
 whose spanning header will be updated, and the RHS is the new spanning header.
-For example, \code{update = starts_with("stat_") ~ "New spanning header!"}. To
-remove all spanning headers, use \code{update = everything() ~ NA_character_}}
+For example, \code{update = starts_with("stat_") ~ "New spanning header!"}.
+Columns from \code{x$table_body} may be selected.
+To remove all spanning headers, use \code{update = everything() ~ NA_character_}.}
 }
 \value{
 gtsummary object
@@ -32,7 +33,7 @@ Update gtsummary table spanning header
 # add header above summary statistics
 spanning_header_ex1 <-
   trial \%>\%
-  dplyr::select(trt, age, grade) \%>\%
+  select(trt, age, grade) \%>\%
   tbl_summary(by = trt) \%>\%
   modify_spanning_header(starts_with("stat_") ~ "**Randomization Assignment**")
 }

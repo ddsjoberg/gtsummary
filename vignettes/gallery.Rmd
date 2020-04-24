@@ -32,7 +32,7 @@ Add a spanning header over the group columns for increased clarity, and modify c
 ```{r}
 trial[c("trt", "age", "grade")] %>%
   tbl_summary(by = trt, missing = "no") %>%
-  modify_header(stat_by = md("**{level}** N =  {n} ({style_percent(p)}%)")) %>%
+  modify_header(stat_by = "**{level}** N =  {n} ({style_percent(p)}%)") %>%
   add_n() %>%
   bold_labels() %>%
   modify_spanning_header(starts_with("stat_") ~ "**Chemotherapy Treatment**")
@@ -86,7 +86,7 @@ t1 <- trial %>%
   filter(grade %in% c("I", "II")) %>%
   tbl_summary(by = grade, missing = "no") %>%
   add_p() %>%
-  modify_header(p.value = md("**I vs. II**"))
+  modify_header(p.value ~ md("**I vs. II**"))
 
 # table comparing grade I and II
 t2 <- trial %>%
@@ -94,7 +94,7 @@ t2 <- trial %>%
   filter(grade %in% c("I", "III")) %>%
   tbl_summary(by = grade, missing = "no") %>%
   add_p()  %>%
-  modify_header(p.value = md("**I vs. III**"))
+  modify_header(p.value ~ md("**I vs. III**"))
 
 # merging the 3 tables together, and adding additional gt formatting
 tbl_merge(list(t0, t1, t2)) %>%
@@ -122,13 +122,13 @@ t1 <-
   trial %>%
   select(age, marker) %>%
   tbl_summary(statistic = all_continuous() ~ "{mean} ({sd})", missing = "no") %>%
-  modify_header(stat_0 = "**Mean (SD)**")
+  modify_header(stat_0 ~ "**Mean (SD)**")
 
 t2 <-
   trial %>%
   select(age, marker) %>%
   tbl_summary(statistic = all_continuous() ~ "{ll}, {ul}", missing = "no") %>%
-  modify_header(stat_0 = "**95% CI for Mean**")
+  modify_header(stat_0 ~ "**95% CI for Mean**")
 
 tbl_merge(list(t1, t2)) %>%
   modify_footnote(everything() ~ NA_character_) %>%
@@ -188,7 +188,7 @@ gt_eventn <-
     statistic = all_categorical() ~ "{n}",
     label = list(stage ~ "T Stage", grade ~ "Grade")
   ) %>%
-  modify_header(stat_0 = md("**Event N**"))
+  modify_header(stat_0 ~ "**Event N**")
 
 tbl_merge(list(gt_eventn, gt_model)) %>%
   bold_labels() %>%
@@ -209,10 +209,10 @@ tbl_reg <-
     show_single_row = "trt",
     hide_n = TRUE
   ) %>%
-  modify_header(
-    label = md("**Model Outcome**"),
-    estimate = md("**Treatment Coef.**")
-  ) 
+  modify_header(list(
+    label ~"**Model Outcome**",
+    estimate ~ "**Treatment Coef.**"
+  )) 
 
 tbl_reg %>%
   modify_footnote(estimate ~ "Values larger than 0 indicate larger values in the Drug group.")
@@ -232,7 +232,7 @@ gt_sum <-
 
 
 tbl_merge(list(gt_sum, tbl_reg))  %>%
-  modify_header(estimate_2 = md("**Difference**")) %>%
+  modify_header(estimate_2 ~ "**Difference**") %>%
   modify_spanning_header(everything() ~ NA_character_)
 ```
 

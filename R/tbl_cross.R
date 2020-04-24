@@ -147,12 +147,11 @@ tbl_cross <- function(data,
     add_overall(last = TRUE) %>%
     bold_labels() %>%
     modify_header(
-      stat_by = "{level}",
-      stat_0 = paste0("**", margin_text, "**")
-    )
+      update = list(stat_0 = paste0("**", margin_text, "**")),
+      stat_by = "{level}"
+    ) %>%
+    modify_footnote(everything() ~ NA_character_)
 
-  # clear all existing footnotes
-  x$table_header$footnote <- NA
 
   # add spanning header
   x$table_header <-

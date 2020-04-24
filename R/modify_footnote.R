@@ -6,7 +6,7 @@
 #' whose footnote will be updated, and the RHS is the new footnote. For example,
 #' `update = stat_0 ~ "New footnote!"` or
 #' `update = starts_with("stat_") ~ "New footnote!"`. To delete the footnote,
-#' update the text to `NA_character_`
+#' update the text to `NA_character_`. Columns from `x$table_body` may be selected.
 #' @param abbreviation Logical indicating if an abbreviation is being updated.
 #' Abbreviation footnotes are handled differently. See examples below.
 #'
@@ -15,7 +15,7 @@
 #' @examples
 #' tbl_summary <-
 #'   trial %>%
-#'   dplyr::select(trt, age, grade) %>%
+#'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt)
 #'
 #' # update footnote
@@ -56,7 +56,7 @@ modify_footnote <- function(x, update, abbreviation = FALSE) {
   }
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- tidyselect_to_list(x$table_body, update, arg_name = "update")
+  update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
 
   # updating footnote ----------------------------------------------------------
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
@@ -66,6 +66,8 @@ modify_footnote <- function(x, update, abbreviation = FALSE) {
     update %>%
     unlist() %>%
     tibble::enframe(name = "column", value = footnote_column_name) %>%
+    # ensuring the column is a character
+    mutate_at(vars(any_of(footnote_column_name)), as.character) %>%
     # performing inner join to put the edits in the same order as x$table_header
     {dplyr::inner_join(
       x$table_header %>% select(.data$column),
