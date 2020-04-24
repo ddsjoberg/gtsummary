@@ -14,7 +14,7 @@ The LHS selects the variables
 whose spanning header will be updated, and the RHS is the new spanning header.
 For example, \code{update = starts_with("stat_") ~ "New spanning header!"}.
 Columns from \code{x$table_body} may be selected.
-To remove all spanning headers, use \code{update = everything() ~ NA_character_}.}
+To remove all spanning headers, use \code{update = everything() ~ NA}.}
 }
 \value{
 gtsummary object

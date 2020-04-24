@@ -6,7 +6,7 @@
 #' whose spanning header will be updated, and the RHS is the new spanning header.
 #' For example, `update = starts_with("stat_") ~ "New spanning header!"`.
 #' Columns from `x$table_body` may be selected.
-#' To remove all spanning headers, use `update = everything() ~ NA_character_`.
+#' To remove all spanning headers, use `update = everything() ~ NA`.
 #'
 #'
 #' @return gtsummary object
@@ -52,6 +52,7 @@ modify_spanning_header <- function(x, update) {
   x$table_header[rows, c("column", "spanning_header")] <-
     table_header_update
 
-  # return updated gtsummary object
+  # return updated gtsummary object --------------------------------------------
+  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
   x
 }

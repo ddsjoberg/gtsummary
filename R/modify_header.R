@@ -54,7 +54,8 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
   # the dots were indicated as deprecated on 4.23.2020
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- tidyselect_to_list(x$table_body, update, arg_name = "update") %>%
+  update <-
+    tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update") %>%
     # adding the ... to the update list
     c(list(...))
 

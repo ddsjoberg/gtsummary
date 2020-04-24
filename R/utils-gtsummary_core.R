@@ -1,7 +1,7 @@
 # THIS FILE CONTAINS A FEW SCRIPTS THAT ASSIST IN SETTING UP A GENERAL
 # GTSUMMARY OBJECT. IF YOU'RE CREATING A GTSUMMARY-LIKE FUNCTION, YOU'LL
 # WANT TO GRAB A COPY OF THIS FILE AND PLACE IT IN YOUR PACKAGE.
-# LAST UPDATED: 2020-04-18
+# LAST UPDATED: 2020-04-23
 
 # table_header_fill_missing -----------------------------------------------------
 #' Function fills out table_header when there are missing columns
@@ -322,7 +322,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
                                    arg_name = arg_name,
                                    select_single = select_single)
 
-        rhs <- rlang::f_rhs(x) %>% eval()
+        rhs <- rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
 
         # converting rhs and lhs into a named list
         purrr::map(lhs, ~ list(rhs) %>% rlang::set_names(.x)) %>%

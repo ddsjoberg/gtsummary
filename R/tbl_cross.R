@@ -147,27 +147,19 @@ tbl_cross <- function(data,
     add_overall(last = TRUE) %>%
     bold_labels() %>%
     modify_header(
-      update = list(stat_0 = paste0("**", margin_text, "**")),
+      update = list(stat_0 ~ paste0("**", margin_text, "**")),
       stat_by = "{level}"
     ) %>%
-    modify_footnote(everything() ~ NA_character_)
-
-
-  # add spanning header
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      spanning_header = ifelse(startsWith(.data$column, "stat_") & .data$column != "stat_0",
-                               paste0("**", new_label[[col]], "**"),
-                               .data$spanning_header)
+    modify_footnote(everything() ~ NA_character_) %>%
+    modify_spanning_header(
+      c(starts_with("stat_"), -any_of("stat_0")) ~ paste0("**", new_label[[col]], "**")
     )
 
+  # returning results ----------------------------------------------------------
   # update inputs and call list in return
   x[["call_list"]] <- list(tbl_cross = match.call())
   x[["inputs"]] <- tbl_cross_inputs
 
   class(x) <- c("tbl_cross", "tbl_summary", "gtsummary")
-
-  # returning results ----------------------------------------------------------
   x
 }

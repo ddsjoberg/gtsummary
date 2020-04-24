@@ -6,7 +6,7 @@
 #' whose footnote will be updated, and the RHS is the new footnote. For example,
 #' `update = stat_0 ~ "New footnote!"` or
 #' `update = starts_with("stat_") ~ "New footnote!"`. To delete the footnote,
-#' update the text to `NA_character_`. Columns from `x$table_body` may be selected.
+#' update the text to `NA`. Columns from `x$table_body` may be selected.
 #' @param abbreviation Logical indicating if an abbreviation is being updated.
 #' Abbreviation footnotes are handled differently. See examples below.
 #'
@@ -80,7 +80,8 @@ modify_footnote <- function(x, update, abbreviation = FALSE) {
   x$table_header[rows, c("column", footnote_column_name)] <-
     table_header_update
 
-  # return updated gtsummary object
+  # return updated gtsummary object --------------------------------------------
+  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
   x
 }
 
