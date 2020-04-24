@@ -33,15 +33,15 @@ personal style.
 \itemize{
 \item \code{gtsummary_theme_jama()}
 \itemize{
-\item set theme to align with the JAMA reporting guidelines
+\item sets theme to align with the JAMA reporting guidelines
 \item large p-values are rounded to two decimal places
 \item in \code{tbl_summary()} the statistic reported appears on the variable label row
 \item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
-\item in \code{tbl_summary()} the percent symbol is not reported next to percentages
+\item in \code{tbl_summary()} the percent symbol is not printed next to percentages
 }
 \item \code{gtsummary_theme_compact()}
 \itemize{
-\item table printed with gt will be more compact with smaller font size and reduced cell padding
+\item tables printed with gt will be compact with smaller font size and reduced cell padding
 }
 }
 

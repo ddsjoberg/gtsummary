@@ -10,13 +10,13 @@
 #'
 #' @section Themes:
 #' - `gtsummary_theme_jama()`
-#'   - set theme to align with the JAMA reporting guidelines
+#'   - sets theme to align with the JAMA reporting guidelines
 #'   - large p-values are rounded to two decimal places
 #'   - in `tbl_summary()` the statistic reported appears on the variable label row
 #'   - in `tbl_summary()` the IQR is separated with a dash, rather than comma
-#'   - in `tbl_summary()` the percent symbol is not reported next to percentages
+#'   - in `tbl_summary()` the percent symbol is not printed next to percentages
 #' - `gtsummary_theme_compact()`
-#'   - table printed with gt will be more compact with smaller font size and reduced cell padding
+#'   - tables printed with gt will be compact with smaller font size and reduced cell padding
 #'
 #' Use `gtsummary_reset_theme()` to restore the default settings
 #'
@@ -63,7 +63,39 @@ set_gtsummary_theme <- function(x) {
   rlang::env_bind(.env = env_gtsummary_theme, !!!x)
 }
 
+# initializing new env where all gtsummary theme elements are saved
 env_gtsummary_theme <- rlang::new_environment()
+
+# converts a character vector into a quotes list separated by a comma, eg 'a', 'b'
+quoted_list <- function(x) {
+  paste(sQuote(x), collapse = ", ")
+}
+
+# ------------------------------------------------------------------------------
+# this function grabs a gtsummary theme element if it exists
+# otherwise returns the default value
+get_theme_element <- function(x, default = NULL, eval = TRUE) {
+  # checking input
+  if (!x %in% df_theme_elements$name) {
+    stop("`x=` is not a proper gtsummary theme element.", call. = FALSE)
+  }
+
+  # returning theme element
+  # the theme element is evaluated in the caller env so it may conditionally
+  # set a default depending on other objects only known at the time it is called
+  if (eval == TRUE)
+    return(
+      rlang::eval_tidy(
+        env_gtsummary_theme[[x]],
+        env = rlang::caller_env()
+      ) %||% default
+    )
+
+  # if eval is FALSE, then returning the unevaluated theme element
+  env_gtsummary_theme[[x]] %||% default
+}
+
+
 
 # ------------------------------------------------------------------------------
 #' @name set_gtsummary_theme
@@ -101,23 +133,7 @@ gtsummary_theme_compact <- function(){
   )
 }
 
-# ------------------------------------------------------------------------------
-# this function grabs a gtsummary theme element if it exists
-# otherwise returns the default value
-get_theme_element <- function(x, default = NULL) {
-  # checking input
-  if (!x %in% df_theme_elements$name) {
-    stop("`x=` is not a proper gtsummary theme element.", call. = FALSE)
-  }
 
-  # returning theme element
-  env_gtsummary_theme[[x]] %||% default
-}
-
-# converts a character vector into a quotes list separated by a comma, eg 'a', 'b'
-quoted_list <- function(x) {
-  paste(sQuote(x), collapse = ", ")
-}
 
 # tibble of all possible theme options
 # THIS DATA FRAME IS SAVED IN "data-raw/gtsummary_themes/gtsummary_theme_elements.csv"
