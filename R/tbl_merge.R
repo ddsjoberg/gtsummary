@@ -160,7 +160,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           vars(.data$missing_emdash, .data$indent, .data$bold, .data$italic),
           function(x) tbl_merge_update_chr_code(code = x, names = names(.x$table_body), n = .y)
         ) %>%
-        # updading column names to include the index
+        # updating column names to include the index
         mutate(
           column = ifelse(
             .data$column %in% c("label", "variable", "row_type"),
@@ -196,9 +196,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 }
 
 # this function names a chr code string, variable names, and the merge number,
-# and returns teh updated code string with updated variable names
+# and returns the updated code string with updated variable names
 # > tbl_merge_update_chr_code("longvarname == 'label' & varname == TRUE",
-#                             +                           c("varname", "longvarname"), 2)
+#                             c("varname", "longvarname"), 2)
 # [1] "longvarname_2 == 'label' & varname_2 == TRUE"
 tbl_merge_update_chr_code <- function(code, names, n) {
   new_names <- ifelse(
