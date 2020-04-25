@@ -116,8 +116,6 @@ gtsummary_theme_jama <- function() {
     "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
     "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
     "pkgwide-str:theme_name" = "JAMA",
-    "tbl_summary-str:label" = "{var_label}, {stat_label}",
-    "tbl_summary-lgl:show_stat_footnote" = FALSE,
     "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
     "tbl_summary-str:categorical_stat" = "{n} ({p})"
   )

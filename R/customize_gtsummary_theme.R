@@ -9,8 +9,6 @@
 #' # create custom theme
 #' my_theme <- list(
 #'   "pkgwide-str:theme_name" = "My Template",
-#'   "tbl_summary-str:label" = "{var_label}, {stat_label}",
-#'   "tbl_summary-lgl:show_stat_footnote" = FALSE,
 #'   "tbl_summary-arg:statistic" = list(
 #'     all_continuous() ~ "{median} ({p25} - {p75})",
 #'     all_categorical() ~ "{n} ({p})"
