@@ -2,30 +2,55 @@
 % Please edit documentation in R/add_stat_label.R
 \name{add_stat_label}
 \alias{add_stat_label}
-\title{Add statistic labels column}
+\title{Add statistic labels}
 \usage{
-add_stat_label(x)
+add_stat_label(x, location = NULL, label = NULL)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
+
+\item{location}{location where statistic label will be included.
+\code{"column"} (default) adds a column with the statistic label, and
+\code{"row"} to add the statistic label to the variable label.}
+
+\item{label}{a list of formulas or a single formula updating the statistic
+label, e.g. \code{label = all_categorical() ~ "No. (\%)"}}
 }
 \value{
 A \code{tbl_summary} object
 }
 \description{
-Adds a column with labels describing the summary statistics presented for
+Adds labels describing the summary statistics presented for
 each variable in the \link{tbl_summary} table.
 }
 \section{Example Output}{
 
-\if{html}{\figure{tbl_stat_ex.png}{options: width=50\%}}
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_stat_label_ex1.png}{options: width=60\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_stat_label_ex2.png}{options: width=60\%}}
 }
 
 \examples{
-tbl_stat_ex <-
-  trial[c("trt", "age", "grade", "response")] \%>\%
-  tbl_summary() \%>\%
+tbl_stat_label_ex1 <-
+  trial \%>\%
+  dplyr::select(trt, age, grade, response) \%>\%
+  tbl_summary(by = trt) \%>\%
   add_stat_label()
+
+# update stat label and put it on the variable label row
+tbl_stat_label_ex2 <-
+  trial \%>\%
+  dplyr::select(trt, age, grade, response) \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_stat_label(
+    location = "row",
+    label = list(all_categorical() ~ "no. (\%)",
+                 all_continuous() ~ "med. (iqr)")
+  )
 }
 \seealso{
 Other tbl_summary tools: 
