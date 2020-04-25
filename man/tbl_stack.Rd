@@ -4,10 +4,13 @@
 \alias{tbl_stack}
 \title{Stacks two or more gtsummary objects}
 \usage{
-tbl_stack(tbls)
+tbl_stack(tbls, group_header = NULL)
 }
 \arguments{
 \item{tbls}{List of gtsummary objects}
+
+\item{group_header}{Character vector with table headers where length matches
+the length of \verb{tbls=}}
 }
 \value{
 A \code{tbl_stack} object
@@ -70,7 +73,7 @@ t4 <-
 row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 row2 <- tbl_merge(list(t2, t4))
 tbl_stack_ex2 <-
-  tbl_stack(list(row1, row2))
+  tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
 }
 \seealso{
 \link{tbl_merge}

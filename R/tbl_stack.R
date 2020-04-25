@@ -6,6 +6,8 @@
 #' table.
 #'
 #' @param tbls List of gtsummary objects
+#' @param group_header Character vector with table headers where length matches
+#' the length of `tbls=`
 #' @family tbl_summary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
@@ -54,7 +56,7 @@
 #' row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 #' row2 <- tbl_merge(list(t2, t4))
 #' tbl_stack_ex2 <-
-#'   tbl_stack(list(row1, row2))
+#'   tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -64,7 +66,7 @@
 #'
 #' \if{html}{\figure{tbl_stack_ex2.png}{options: width=80\%}}
 
-tbl_stack <- function(tbls) {
+tbl_stack <- function(tbls, group_header = NULL) {
   # input checks ---------------------------------------------------------------
   # class of tbls
   if (!inherits(tbls, "list")) {
@@ -76,20 +78,38 @@ tbl_stack <- function(tbls) {
     stop("All objects in 'tbls' must be class 'gtsummary'", call. = FALSE)
   }
 
+  # if group_header specified, then it must be a vector of same length tbls ----
+  if (!is.null(group_header) && length(tbls) != length(group_header)) {
+    stop("The length of `tbls=` and `group_header=` must match.", call. = FALSE)
+  }
+
   # will return call, and all arguments passed to tbl_stack
   func_inputs <- as.list(environment())
 
   # stacking tables ------------------------------------------------------------
   # the table_body and call_list will be updated with the tbl_stack values
   results <- list()
-  results$table_body <-
-    map_dfr(tbls, ~pluck(.x, "table_body"))
+  if (is.null(group_header)) {
+    results$table_body <-
+      map_dfr(tbls, ~pluck(.x, "table_body"))
+  }
+  else if (!is.null(group_header)) {
+    results$table_body <-
+      imap_dfr(tbls, ~pluck(.x, "table_body") %>% mutate(groupname_col = group_header[.y])) %>%
+      group_by(.data$groupname_col)
+  }
+
 
   results$table_header <-
     map_dfr(tbls, ~pluck(.x, "table_header")) %>%
     group_by(.data$column) %>%
     filter(dplyr::row_number() == 1) %>%
     ungroup()
+
+  results$table_header <-
+    tibble(column = names(results$table_body)) %>%
+    left_join(results$table_header, by = "column") %>%
+    table_header_fill_missing()
 
   # returning results ----------------------------------------------------------
   results$call_list <- list(tbl_stack = match.call())

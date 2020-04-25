@@ -74,7 +74,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   # tibble ---------------------------------------------------------------------
   tibble_calls[["tibble"]] <- expr(x$table_body)
 
-  # ungroup (this is just here for temp support of tbl_survival) ---------------
+  # ungroup --------------------------------------------------------------------
   group_var <- select(x$table_body, dplyr::group_cols()) %>% names()
   if (length(group_var) > 0) {
     tibble_calls[["ungroup"]] <- list(
