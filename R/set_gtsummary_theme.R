@@ -14,6 +14,7 @@
 #'   - large p-values are rounded to two decimal places
 #'   - in `tbl_summary()` the IQR is separated with a dash, rather than comma
 #'   - in `tbl_summary()` the percent symbol is not printed next to percentages
+#'   - in `add_stat_label()` the label is added to the variable label row
 #' - `gtsummary_theme_compact()`
 #'   - tables printed with gt will be compact with smaller font size and reduced cell padding
 #'
@@ -35,6 +36,7 @@
 #'   trial %>%
 #'   dplyr::select(age, grade, trt) %>%
 #'   tbl_summary(by = trt) %>%
+#'   add_stat_label() %>%
 #'   as_gt()
 #'
 #' # reset gtsummary theme
@@ -80,18 +82,13 @@ get_theme_element <- function(x, default = NULL, eval = TRUE) {
   }
 
   # returning theme element
+  # if eval is FALSE, then returning the unevaluated theme element
+  if (eval == FALSE)
+    return(env_gtsummary_theme[[x]] %||% default)
+
   # the theme element is evaluated in the caller env so it may conditionally
   # set a default depending on other objects only known at the time it is called
-  if (eval == TRUE)
-    return(
-      rlang::eval_tidy(
-        env_gtsummary_theme[[x]],
-        env = rlang::caller_env()
-      ) %||% default
-    )
-
-  # if eval is FALSE, then returning the unevaluated theme element
-  env_gtsummary_theme[[x]] %||% default
+  rlang::eval_tidy(env_gtsummary_theme[[x]], env = rlang::caller_env()) %||% default
 }
 
 
@@ -115,6 +112,7 @@ gtsummary_theme_jama <- function() {
     "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
     "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
     "pkgwide-str:theme_name" = "JAMA",
+    "add_stat_label-arg:location" = "row",
     "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
     "tbl_summary-str:categorical_stat" = "{n} ({p})"
   )
@@ -163,6 +161,7 @@ df_theme_elements <-
     "add_p.tbl_summary", "add_p.tbl_summary-attr:test.categorical.low_count",     FALSE,                         "default test for categorical/dichotomous variables with minimum expected count <5",
     "add_p.tbl_summary", "add_p.tbl_summary-attr:test.categorical.group_by2",     FALSE,          "default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable",
     "add_p.tbl_summary",  "add_p.tbl_summary-attr:test.continuous.group_by2",     FALSE,                       "default test for continuous grouped/correlated variables with a 2-level by variable",
+       "add_stat_label",                       "add_stat_label-arg:location",      TRUE,                                                                                                          NA,
                 "add_q",                                  "add_q-arg:method",      TRUE,                                                                                                          NA,
                 "add_q",                              "add_q-arg:pvalue_fun",      TRUE,                                                                                                          NA,
       "add_p.tbl_cross",                          "add_p.tbl_cross-arg:test",      TRUE,                                                                                                          NA,

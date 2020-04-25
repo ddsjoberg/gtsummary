@@ -37,6 +37,7 @@ personal style.
 \item large p-values are rounded to two decimal places
 \item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
 \item in \code{tbl_summary()} the percent symbol is not printed next to percentages
+\item in \code{add_stat_label()} the label is added to the variable label row
 }
 \item \code{gtsummary_theme_compact()}
 \itemize{
@@ -67,6 +68,7 @@ set_gtsummary_theme_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, trt) \%>\%
   tbl_summary(by = trt) \%>\%
+  add_stat_label() \%>\%
   as_gt()
 
 # reset gtsummary theme
