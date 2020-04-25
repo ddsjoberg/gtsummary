@@ -35,7 +35,7 @@ row2 <- tbl_merge(list(t2, t4))
 
 test_that("Stacking tbl_regression objects", {
   expect_error(
-    tbl_stack(list(t1, t2)),
+    tbl_stack(list(t1, t2), group_header = c("Group 1", "Group 2")),
     NA
   )
 
