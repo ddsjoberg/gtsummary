@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* `add_stat_label()` function updated with `location=` and `label=` arguments to change the location of the statistic labels and to modify the text of the labels. (#467)
+
+* `tbl_stack()` function added the `group_header=` argument that groups the stacked tables and adds a horizontal header row between them. (#468)
+
 * Updated handling for interaction terms in `tbl_regression()`. Interaction terms may now be specified in the `show_single_row=` and `label=` arguments. (#451, #452)
 
 * Updated the gtsummary core script, `utils-gtsummary_core.R`, to refer to all non-base R functions with the `pkg::` prefix, so other packages that copy the file don't need to import the same functions as {gtsummary} in the NAMESPACE. Now they just need to depend on the same packages. (#454)
