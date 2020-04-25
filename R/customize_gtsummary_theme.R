@@ -44,8 +44,6 @@
 #' - `as_gt-expr:addl_cmds` expression of {gt} commands appended to the end of each `as_gt()` call
 #' ### `tbl_summary`
 #' - `tbl_summary-fn:percent_fun` function to style percentages
-#' - `tbl_summary-str:label` glue string defining the final label displayed. any column in `.$meta_data` may be used.
-#' - `tbl_summary-lgl:show_stat_footnote` logical indicating whether to show footnote of displayed statistics
 #' - `tbl_summary-str:continuous_stat` glue string defining the default continuous summary statistics to display
 #' - `tbl_summary-str:categorical_stat` glue string defining the default categorical and dichotomous summary statistics to display
 #' ### `add_p.tbl_summary`
