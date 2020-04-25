@@ -35,7 +35,6 @@ personal style.
 \itemize{
 \item sets theme to align with the JAMA reporting guidelines
 \item large p-values are rounded to two decimal places
-\item in \code{tbl_summary()} the statistic reported appears on the variable label row
 \item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
 \item in \code{tbl_summary()} the percent symbol is not printed next to percentages
 }

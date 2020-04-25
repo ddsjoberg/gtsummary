@@ -12,7 +12,6 @@
 #' - `gtsummary_theme_jama()`
 #'   - sets theme to align with the JAMA reporting guidelines
 #'   - large p-values are rounded to two decimal places
-#'   - in `tbl_summary()` the statistic reported appears on the variable label row
 #'   - in `tbl_summary()` the IQR is separated with a dash, rather than comma
 #'   - in `tbl_summary()` the percent symbol is not printed next to percentages
 #' - `gtsummary_theme_compact()`
