@@ -57,6 +57,7 @@ Set defaults for function arguments
 \itemize{
 \item \strong{\code{add_p.tbl_cross()}}: \code{add_p.tbl_cross-arg:test}, \code{add_p.tbl_cross-arg:pvalue_fun}
 \item \strong{\code{add_p.tbl_summary()}}: \code{add_p.tbl_summary-arg:test}, \code{add_p.tbl_summary-arg:pvalue_fun}
+\item \strong{\code{add_stat_label()}}: \code{add_stat_label-arg:location}
 \item \strong{\code{add_q()}}: \code{add_q-arg:method}, \code{add_q-arg:pvalue_fun}
 \item \strong{\code{tbl_regression()}}: \code{tbl_regression-arg:conf.level}, \code{tbl_regression-arg:estimate_fun}, \code{tbl_regression-arg:pvalue_fun}, \code{tbl_regression-arg:tidy_fun}
 \item \strong{\code{tbl_summary()}}: \code{tbl_summary-arg:label}, \code{tbl_summary-arg:statistic}, \code{tbl_summary-arg:digits}, \code{tbl_summary-arg:type}, \code{tbl_summary-arg:value}, \code{tbl_summary-arg:missing}, \code{tbl_summary-arg:missing_text}, \code{tbl_summary-arg:percent}, \code{tbl_summary-arg:sort}

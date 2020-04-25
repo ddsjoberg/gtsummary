@@ -55,6 +55,7 @@
 #' Set defaults for function arguments
 #' - **`add_p.tbl_cross()`**: `add_p.tbl_cross-arg:test`, `add_p.tbl_cross-arg:pvalue_fun`
 #' - **`add_p.tbl_summary()`**: `add_p.tbl_summary-arg:test`, `add_p.tbl_summary-arg:pvalue_fun`
+#' - **`add_stat_label()`**: `add_stat_label-arg:location`
 #' - **`add_q()`**: `add_q-arg:method`, `add_q-arg:pvalue_fun`
 #' - **`tbl_regression()`**: `tbl_regression-arg:conf.level`, `tbl_regression-arg:estimate_fun`, `tbl_regression-arg:pvalue_fun`, `tbl_regression-arg:tidy_fun`
 #' - **`tbl_summary()`**: `tbl_summary-arg:label`, `tbl_summary-arg:statistic`, `tbl_summary-arg:digits`, `tbl_summary-arg:type`, `tbl_summary-arg:value`, `tbl_summary-arg:missing`, `tbl_summary-arg:missing_text`, `tbl_summary-arg:percent`, `tbl_summary-arg:sort`

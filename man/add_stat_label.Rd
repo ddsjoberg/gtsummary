@@ -11,7 +11,7 @@ add_stat_label(x, location = NULL, label = NULL)
 
 \item{location}{location where statistic label will be included.
 \code{"column"} (default) adds a column with the statistic label, and
-\code{"row"} to add the statistic label to the variable label.}
+\code{"row"} to add the statistic label to the variable label row.}
 
 \item{label}{a list of formulas or a single formula updating the statistic
 label, e.g. \code{label = all_categorical() ~ "No. (\%)"}}

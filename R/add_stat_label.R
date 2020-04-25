@@ -6,7 +6,7 @@
 #' @param x Object with class `tbl_summary` from the [tbl_summary] function
 #' @param location location where statistic label will be included.
 #' `"column"` (default) adds a column with the statistic label, and
-#' `"row"` to add the statistic label to the variable label.
+#' `"row"` to add the statistic label to the variable label row.
 #' @param label a list of formulas or a single formula updating the statistic
 #' label, e.g. `label = all_categorical() ~ "No. (%)"`
 #' @family tbl_summary tools
@@ -40,10 +40,15 @@
 #' \if{html}{\figure{tbl_stat_label_ex2.png}{options: width=60\%}}
 #'
 add_stat_label <- function(x, location = NULL, label = NULL) {
+  # checking inputs ------------------------------------------------------------
+  if (!inherits(x, "tbl_summary")) {
+    stop("`x=` must be class `tbl_summary`", call. = FALSE)
+  }
+
   # setting defaults -----------------------------------------------------------
   location <-
-    location %>%
-    # ADD THEME ELEMENT HERE
+    location %||%
+    get_theme_element("add_stat_label-arg:location") %>%
     match.arg(choices = c("column", "row"))
 
   # adding some meta data only needed for merging (i.e. the row_type)
