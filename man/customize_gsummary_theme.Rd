@@ -33,8 +33,6 @@ The following are system defaults that can be modified.
 \subsection{\code{tbl_summary}}{
 \itemize{
 \item \code{tbl_summary-fn:percent_fun} function to style percentages
-\item \code{tbl_summary-str:label} glue string defining the final label displayed. any column in \code{.$meta_data} may be used.
-\item \code{tbl_summary-lgl:show_stat_footnote} logical indicating whether to show footnote of displayed statistics
 \item \code{tbl_summary-str:continuous_stat} glue string defining the default continuous summary statistics to display
 \item \code{tbl_summary-str:categorical_stat} glue string defining the default categorical and dichotomous summary statistics to display
 }
