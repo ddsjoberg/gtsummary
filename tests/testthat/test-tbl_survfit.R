@@ -1,8 +1,8 @@
 context("test-tbl_survfit")
 library(survival)
 
+s1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 test_that("no errors/warnings with stratified variable", {
-  s1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
   expect_error(
     tbl_survfit(
       s1,
@@ -14,7 +14,7 @@ test_that("no errors/warnings with stratified variable", {
     tbl_survfit(
       s1,
       times = c(12, 24),
-      failure = TRUE
+      reverse = TRUE
     ),
     NA
   )
@@ -43,8 +43,8 @@ test_that("no errors/warnings with stratified variable", {
   )
 })
 
+s2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 test_that("no errors/warnings with no stratified variable", {
-  s2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
   expect_error(
     tbl_survfit(
       s2,
@@ -74,5 +74,63 @@ test_that("no errors/warnings with no stratified variable", {
       estimate_fun = partial(style_sigfig, digits = 4)
     ),
     NA
+  )
+})
+
+
+test_that("expecting errors/messaging", {
+  expect_message(
+    tbl_survfit(
+      s2,
+      probs = c(0.2, 0.4),
+      reverse = TRUE,
+      estimate_fun = partial(style_sigfig, digits = 4)
+    ),
+    "*"
+  )
+
+  expect_error(
+    tbl_survfit(
+      s2,
+      probs = c(0.2, 0.4),
+      statistic = style_percent,
+      estimate_fun = partial(style_sigfig, digits = 4)
+    ),
+    "*"
+  )
+
+  expect_error(
+    tbl_survfit(
+      s2,
+      probs = c(0.2, 0.4),
+      times = c(12, 24),
+      estimate_fun = partial(style_sigfig, digits = 4)
+    ),
+    "*"
+  )
+})
+
+
+
+# Competing Events Example --------
+# adding a competing event for death (cancer vs other causes)
+trial2 <- trial %>%
+  dplyr::mutate(
+    death_cr = dplyr::case_when(
+      death == 0 ~ "censor",
+      runif(n()) < 0.5 ~ "death from cancer",
+      TRUE ~ "death other causes"
+    ) %>% factor()
+  )
+cr_1 <- survfit(Surv(ttdeath, death_cr) ~ 1, data = trial2)
+cr_2 <- survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2)
+
+test_that("no errors/warnings with competing events", {
+
+  expect_error(
+    tbl_survfit(cr_1, times = c(12, 24)), NA
+  )
+  expect_error(
+    tbl_survfit(cr_2, times = c(12, 24), label = "Tumor Grade"), NA
   )
 })
