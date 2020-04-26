@@ -103,6 +103,14 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     )
   }
 
+  # setting defaults from gtsummary theme --------------------------------------
+  test <- test %||% get_theme_element("add_p.tbl_summary-arg:test")
+  pvalue_fun <-
+    pvalue_fun %||%
+    get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
+    get_theme_element("pkgwide-fn:pvalue_fun")
+
+
   # converting bare arguments to string ----------------------------------------
   group <- var_input_to_string(data = x$inputs$data,
                                select_input = !!rlang::enquo(group),
@@ -293,6 +301,19 @@ footnote_add_p <- function(meta_data) {
 #' \if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
 add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                             source_note = FALSE, ...) {
+  # setting defaults -----------------------------------------------------------
+  test <- test %||% get_theme_element("add_p.tbl_cross-arg:test")
+  if (source_note == FALSE)
+    pvalue_fun <-
+      pvalue_fun %||%
+      getOption("gtsummary.pvalue_fun", default = style_pvalue)  %||%
+      get_theme_element("add_p.tbl_cross-arg:pvalue_fun") %||%
+      get_theme_element("pkgwide-fn:pvalue_fun")
+  else
+    pvalue_fun <-
+      pvalue_fun %||%
+      get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
+      (function(x) style_pvalue(x, prepend_p = TRUE))
 
   # adding test name if supplied (NULL otherwise)
   input_test <- switch(!is.null(test),
@@ -320,9 +341,6 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
         hide = ifelse(.data$column == "p.value", TRUE, .data$hide),
         footnote = ifelse(.data$column == "p.value", NA_character_, .data$footnote),
       )
-
-    # adding source note
-    if(is.null(pvalue_fun)) pvalue_fun <- function(x) style_pvalue(x, prepend_p = TRUE)
 
     x$list_output$source_note <-
       paste(test_name, pvalue_fun(discard(x$meta_data$p.value, is.na)), sep = ", ")

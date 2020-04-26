@@ -10,7 +10,7 @@
   level = NULL,
   pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
   estimate_fun = x$fmt_fun$estimate,
-  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  pvalue_fun = NULL,
   ...
 )
 }
