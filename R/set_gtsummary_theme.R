@@ -151,6 +151,7 @@ df_theme_elements <-
           "tbl_summary",                           "tbl_summary-arg:percent",      TRUE,                                                                                                          NA,
           "tbl_summary",                              "tbl_summary-arg:sort",      TRUE,                                                                                                          NA,
           "tbl_summary",                        "tbl_summary-fn:percent_fun",     FALSE,                                                                             "function to style percentages",
+          "tbl_summary",                              "tbl_summary-fn:N_fun",     FALSE,                                                                                "function to style integers",
           "tbl_summary",                   "tbl_summary-str:continuous_stat",     FALSE,                                 "glue string defining the default continuous summary statistics to display",
           "tbl_summary",                  "tbl_summary-str:categorical_stat",     FALSE,                "glue string defining the default categorical and dichotomous summary statistics to display",
     "add_p.tbl_summary",                        "add_p.tbl_summary-arg:test",      TRUE,                                                                                                          NA,

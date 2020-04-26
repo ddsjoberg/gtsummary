@@ -663,7 +663,14 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       "{n}", "n",
       "{N}", "N",
       "{p}%", "%",
-      "{p}", "%"
+      "{p_miss}%", "% missing",
+      "{p_nonmiss}%", "% not missing",
+      "{p}", "%",
+      "{p_miss}", "% missing",
+      "{p_nonmiss}", "% not missing",
+      "{N_miss}", "N missing",
+      "{N_nonmiss}", "N",
+      "{N_obs}", "no. obs."
     ) %>%
     # adding in quartiles
     bind_rows(

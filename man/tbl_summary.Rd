@@ -127,6 +127,10 @@ For continuous variables the following statistics are available to display.
 \item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
 \item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
+
+For both categorical and continuous variables, statistics on the number of
+missing and non-missing observations and their proportions are available to print.
+\code{{N_obs}}, \code{{N_miss}}, \code{{N_nonmiss}}, \code{{p_miss}}, \code{{p_nonmiss}}
 }
 
 \section{type argument}{

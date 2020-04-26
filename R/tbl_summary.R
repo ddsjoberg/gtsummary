@@ -90,6 +90,10 @@
 #'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }
 #'
+#' For both categorical and continuous variables, statistics on the number of
+#' missing and non-missing observations and their proportions are available to print.
+#' `{N_obs}`, `{N_miss}`, `{N_nonmiss}`, `{p_miss}`, `{p_nonmiss}`
+#'
 #' @section type argument:
 #' tbl_summary displays summary statistics for three types of data:
 #' continuous, categorical, and dichotomous. If the type is not specified,
