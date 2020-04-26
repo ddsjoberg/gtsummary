@@ -732,13 +732,10 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
   percent_fun <-
     get_theme_element("tbl_summary-fn:percent_fun") %||%
     getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
-  if (!rlang::is_function(percent_fun)) {
-    stop(paste0(
-      "'percent_fun' is not a valid function.  Please pass only a function\n",
-      "object. For example, to round percentages to 2 decimal places, \n\n",
-      "'options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(\"%.2f\", 100 * x))'"
-    ), call. = FALSE)
-  }
+
+  N_fun <-
+    get_theme_element("tbl_summary-fn:N_fun",
+                      default = function(x) sprintf("%.0f", x))
 
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
@@ -810,8 +807,8 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
 
   # adding percent_fun as attr to p column
   attr(result$p, "fmt_fun") <- percent_fun
-  attr(result$N, "fmt_fun") <- function(x) sprintf('%.0f', x)
-  attr(result$n, "fmt_fun") <- function(x) sprintf('%.0f', x)
+  attr(result$N, "fmt_fun") <- N_fun
+  attr(result$n, "fmt_fun") <- N_fun
 
   result
 }
