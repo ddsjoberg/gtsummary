@@ -928,107 +928,61 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
 # df_stats_to_tbl --------------------------------------------------------------
 df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_display,
                             df_stats, missing, missing_text) {
-  # continuous and dichotomous with no by variable
-  if (summary_type %in% c("continuous", "dichotomous") && is.null(by)) {
-    result <-
-      df_stats %>%
-      purrr::map_dfc(
-        function(x) {
-          if(is.null(attr(x, "fmt_fun"))) return(x)
-          attr(x, "fmt_fun")(x)
-        }
-      ) %>%
-      mutate(
-        stat_0 = glue(stat_display) %>% as.character(),
-        row_type = "label",
-        label = var_label
-      ) %>%
-      select(c("variable", "row_type", "label", "stat_0"))
+
+  # styling the statistics -----------------------------------------------------
+  for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels")))) {
+    df_stats[[v]] <- df_stats[[v]] %>% attr(df_stats[[v]], "fmt_fun")()
   }
-  # categorical with no by variable
-  else if (summary_type %in% c("categorical") && is.null(by)) {
-    result <-
+
+  # creating the statistic to report in the table cel
+  df_stats <-
+    df_stats %>%
+    mutate(statistic = glue(stat_display) %>% as.character()) %>%
+    select(any_of(c("by", "variable", "variable_levels", "statistic")))
+
+  # reshaping table to wide ----------------------------------------------------
+  if (!is.null(by)) {
+    df_stats_wide <-
       df_stats %>%
-      purrr::map_dfc(
-        function(x) {
-          if(is.null(attr(x, "fmt_fun"))) return(x)
-          attr(x, "fmt_fun")(x)
-        }
-      ) %>%
+      # merging in new column header names
+      left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
+      tidyr::pivot_wider(id_cols = any_of(c("variable", "variable_levels")),
+                         names_from = "by_col",
+                         values_from = "statistic")
+  }
+  else {
+    df_stats_wide <-
+      df_stats %>%
+      rename(stat_0 = .data$statistic) %>%
+      select(any_of(c("variable", "variable_levels", "stat_0")))
+  }
+
+  # setting up structure for table_header
+  if (summary_type == "categorical") {
+    result <-
+      df_stats_wide %>%
       mutate(
-        stat_0 = glue(stat_display) %>% as.character(),
         row_type = "level",
         label = as.character(.data$variable_levels)
       ) %>%
-      select(c("variable", "row_type", "label", "stat_0")) %>%
-      {bind_rows(
-        tibble(variable = variable,
-               row_type = "label",
-               label = var_label),
-        .
-      )}
-  }
-  # continuous and dichotomous with by variable
-  else if (summary_type %in% c("continuous", "dichotomous") && !is.null(by)) {
+      select(-.data$variable_levels)
+
+    # adding label row
     result <-
-      df_stats %>%
-      purrr::map_dfc(
-        function(x) {
-          if(is.null(attr(x, "fmt_fun"))) return(x)
-          attr(x, "fmt_fun")(x)
-        }
-      ) %>%
-      mutate(
-        statistic = glue(stat_display) %>% as.character(),
+      tibble(
+        variable = variable,
         row_type = "label",
         label = var_label
       ) %>%
-      select(c("by", "variable", "row_type", "label", "statistic")) %>%
-      left_join(
-        df_by(data, by)[c("by", "by_col", "by_id")],
-        by = "by"
-      ) %>%
-      arrange(.data$by_id) %>%
-      tidyr::pivot_wider(
-        id_cols = c("variable", "row_type", "label"),
-        names_from = "by_col",
-        values_from = "statistic"
-      ) %>%
-      select(c("variable", "row_type", "label", df_by(data, by)[["by_col"]]))
+      bind_rows(result)
   }
-  # categorical with by variable
-  else if (summary_type %in% c("categorical") && !is.null(by)) {
+  else if (summary_type %in% c("continuous", "dichotomous")) {
     result <-
-      df_stats %>%
-      purrr::map_dfc(
-        function(x) {
-          if(is.null(attr(x, "fmt_fun"))) return(x)
-          attr(x, "fmt_fun")(x)
-        }
-      ) %>%
+      df_stats_wide %>%
       mutate(
-        statistic = glue(stat_display) %>% as.character(),
-        row_type = "level",
-        label = as.character(.data$variable_levels)
-      ) %>%
-      select(c("by", "variable", "row_type", "label", "statistic")) %>%
-      left_join(
-        df_by(data, by)[c("by", "by_col", "by_id")],
-        by = "by"
-      ) %>%
-      arrange(.data$by_id) %>%
-      tidyr::pivot_wider(
-        id_cols = c("variable", "row_type", "label"),
-        names_from = "by_col",
-        values_from = "statistic"
-      ) %>%
-      {bind_rows(
-        tibble(variable = variable,
-               row_type = "label",
-               label = var_label),
-        .
-      )} %>%
-      select(c("variable", "row_type", "label", df_by(data, by)[["by_col"]]))
+        row_type = "label",
+        label = var_label
+      )
   }
 
   # add rows for missing -------------------------------------------------------
@@ -1041,7 +995,10 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
       )
   }
 
-  return(result)
+  # returning final object formatted for table_body ----------------------------
+  # selecting stat_* cols (in the correct order)
+  stat_vars <- switch(!is.null(by), df_by(data, by)$by_col) %||% "stat_0"
+  result %>% select(all_of(c("variable", "row_type", "label", stat_vars)))
 }
 
 # calculate_missing_row --------------------------------------------------------
