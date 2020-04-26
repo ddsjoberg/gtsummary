@@ -934,7 +934,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
     df_stats[[v]] <- df_stats[[v]] %>% attr(df_stats[[v]], "fmt_fun")()
   }
 
-  # creating the statistic to report in the table cel
+  # creating the statistic to report in the table cell
   df_stats <-
     df_stats %>%
     mutate(statistic = glue(stat_display) %>% as.character()) %>%
@@ -957,8 +957,9 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
       select(any_of(c("variable", "variable_levels", "stat_0")))
   }
 
-  # setting up structure for table_header
+  # setting up structure for table_body
   if (summary_type == "categorical") {
+    # adding a label row for categorical variables
     result <-
       df_stats_wide %>%
       mutate(
