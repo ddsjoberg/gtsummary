@@ -646,6 +646,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 #   stat_display = NULL, digits = NULL, pvalue_fun = NULL
 # )
 
+# stat_label_match -------------------------------------------------------------
 # provide a vector of stat_display and get labels back i.e. {mean} ({sd}) gives Mean (SD)
 stat_label_match <- function(stat_display, iqr = TRUE) {
   labels <-
@@ -704,6 +705,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
   stat_display
 }
 
+# footnote_stat_label ----------------------------------------------------------
 # stat_label footnote maker
 footnote_stat_label <- function(meta_data) {
   meta_data %>%
@@ -721,6 +723,7 @@ footnote_stat_label <- function(meta_data) {
     paste0("Statistics presented: ", .)
 }
 
+# summarize_categorical --------------------------------------------------------
 summarize_categorical <- function(data, variable, by, class, dichotomous_value, sort, percent) {
   # grabbing percent formatting function
   percent_fun <-
@@ -759,7 +762,7 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
       variable = switch(class, factor = .data$variable) %||% factor(.data$variable),
       # adding dichotomous level (in case it is unobserved)
       variable = forcats::fct_expand(.data$variable, as.character(dichotomous_value)),
-      # re-leveling by alphanumeric order or frequency
+      # # re-leveling by alphanumeric order or frequency
       variable = switch(sort,
                         "alphanumeric" = .data$variable,
                         "frequency" = forcats::fct_infreq(.data$variable))
@@ -805,11 +808,13 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
 
   # adding percent_fun as attr to p column
   attr(result$p, "fmt_fun") <- percent_fun
+  attr(result$N, "fmt_fun") <- function(x) sprintf('%.0f', x)
+  attr(result$n, "fmt_fun") <- function(x) sprintf('%.0f', x)
 
   result
 }
 
-
+# summarize_continuous ---------------------------------------------------------
 summarize_continuous <- function(data, variable, by, stat_display, digits) {
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
@@ -825,7 +830,9 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
     str_extract_all(stat_display, "\\{.*?\\}") %>%
     map(str_remove_all, pattern = fixed("}")) %>%
     map(str_remove_all, pattern = fixed("{")) %>%
-    unlist()
+    unlist() %>%
+    # removing elements protected as other items
+    setdiff(c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs"))
 
   # defining shortcut quantile functions, if needed
   if (any(fns_names_chr %in% paste0("p", 0:100))) {
@@ -912,6 +919,7 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
   df_stats
 }
 
+# df_stats_to_tbl --------------------------------------------------------------
 df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_display,
                             df_stats, missing, missing_text) {
   # continuous and dichotomous with no by variable
@@ -1030,6 +1038,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
   return(result)
 }
 
+# calculate_missing_row --------------------------------------------------------
 calculate_missing_row <- function(data, variable, by, missing_text) {
   # converting variable to TRUE/FALSE for missing
   data <-
@@ -1051,4 +1060,46 @@ calculate_missing_row <- function(data, variable, by, missing_text) {
       missing = "no", missing_text = "Doesn't Matter -- Text should never appear")} %>%
     # changing row_type to missing
     mutate(row_type = "missing")
+}
+
+# df_stats_fun -----------------------------------------------------------------
+# this function creates df_stats in the tbl_summary meta data table
+# and includes the number of missing values
+df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
+                         stat_display, digits, data, by, percent) {
+  # first table are the standard stats
+  t1 <- switch(
+    summary_type,
+    "continuous" = summarize_continuous(data = data, variable = variable,
+                                        by = by, stat_display = stat_display,
+                                        digits = digits),
+    "categorical" = summarize_categorical(data = data, variable = variable,
+                                          by = by, class = class,
+                                          dichotomous_value = dichotomous_value,
+                                          sort = sort, percent = percent),
+    "dichotomous" = summarize_categorical(data = data, variable = variable,
+                                          by = by, class = class,
+                                          dichotomous_value = dichotomous_value,
+                                          sort = sort, percent = percent)
+  )
+
+  # adding the N_obs and N_missing, etc
+  t2 <- summarize_categorical(data = mutate_at(data, vars(all_of(variable)), is.na),
+                              variable = variable,
+                              by = by, class = "logical",
+                              dichotomous_value = TRUE,
+                              sort = "alphanumeric", percent = percent) %>%
+    rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
+    mutate(N_nonmiss = .data$N_obs - .data$N_miss,
+           p_nonmiss = 1 - p_miss)
+
+  # returning table will all stats
+  merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
+  return <- left_join(t1, t2, by = merge_vars)
+
+  # setting fmt_fun for percents and integers
+  attr(return$p_nonmiss, "fmt_fun") <- attr(return$p_miss, "fmt_fun")
+  attr(return$N_nonmiss, "fmt_fun") <- attr(return$N_miss, "fmt_fun")
+
+  return
 }
