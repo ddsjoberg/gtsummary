@@ -113,9 +113,11 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
       ~ case_when(
         .y == "continuous" ~
           stat_display[[.x]] %||%
+          get_theme_element("tbl_summary-str:continuous_stat") %||%
           "{median} ({p25}, {p75})",
         .y %in% c("categorical", "dichotomous") ~
           stat_display[[.x]] %||%
+          get_theme_element("tbl_summary-str:categorical_stat") %||%
           "{n} ({p}%)"
       )
     )
@@ -686,7 +688,8 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       bind_rows(
         tibble::tribble(
           ~stat, ~label,
-          "{p25}, {p75}", "IQR"
+          "{p25}, {p75}", "IQR",
+          "{p25} - {p75}", "IQR"
         ),
         labels
       )
@@ -727,9 +730,8 @@ footnote_stat_label <- function(meta_data) {
 summarize_categorical <- function(data, variable, by, class, dichotomous_value, sort, percent) {
   # grabbing percent formatting function
   percent_fun <-
-    getOption("gtsummary.tbl_summary.percent_fun",
-              default = style_percent
-    )
+    get_theme_element("tbl_summary-fn:percent_fun") %||%
+    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
   if (!rlang::is_function(percent_fun)) {
     stop(paste0(
       "'percent_fun' is not a valid function.  Please pass only a function\n",
