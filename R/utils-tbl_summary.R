@@ -1055,7 +1055,7 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
                               sort = "alphanumeric", percent = percent) %>%
     rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
     mutate(N_nonmiss = .data$N_obs - .data$N_miss,
-           p_nonmiss = 1 - p_miss)
+           p_nonmiss = 1 - .data$p_miss)
 
   # returning table will all stats
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
