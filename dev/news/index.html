@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9004</span>
       </span>
     </div>
 
@@ -176,6 +176,14 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<p>Handling of passed custom p-value functions in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> has been improved with more careful handling of the environments from which the functions were passed. Other related updates were also made:</p>
+<ul>
+<li>Users may pass their custom p-value function as a quoted string or bare.</li>
+<li>The basic functions for calculating p-values, such as <code><a href="https://rdrr.io/r/stats/t.test.html">t.test()</a></code> can now be passed directly e.g. <code>test = age ~ t.test</code>. We now perform a check match check for functions passed. If it is passed, we replace it with our internal version that returns the p-value and assigns the test name.</li>
+<li>If a user passes a custom function, and it’s not the proper form (i.e. a named list return object) AND the function returns a single numeric value, we assume that is the p-value and it’s added to the gtsummary table.</li>
+</ul>
+</li>
 <li><p><code><a href="../reference/add_stat_label.html">add_stat_label()</a></code> function updated with <code>location=</code> and <code>label=</code> arguments to change the location of the statistic labels and to modify the text of the labels. (<a href='https://github.com/ddsjoberg/gtsummary/issues/467'>#467</a>)</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> function added the <code>group_header=</code> argument that groups the stacked tables and adds a horizontal header row between them. (<a href='https://github.com/ddsjoberg/gtsummary/issues/468'>#468</a>)</p></li>
 <li><p>Updated handling for interaction terms in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>. Interaction terms may now be specified in the <code>show_single_row=</code> and <code>label=</code> arguments. (<a href='https://github.com/ddsjoberg/gtsummary/issues/451'>#451</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/452'>#452</a>)</p></li>
