@@ -322,7 +322,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
                                    arg_name = arg_name,
                                    select_single = select_single)
 
-        rhs <- rlang::f_rhs(x) %>% eval()
+        rhs <- rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
 
         # converting rhs and lhs into a named list
         purrr::map(lhs, ~ list(rhs) %>% rlang::set_names(.x)) %>%

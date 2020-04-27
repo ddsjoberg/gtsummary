@@ -152,18 +152,6 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     .meta_data = x$meta_data, arg_name = "test"
   )
 
-  if (!is.null(test)) {
-    # checking that all inputs are named
-    if ((names(test) %>%
-         purrr::discard(. == "") %>%
-         length()) != length(test)) {
-      stop(glue(
-        "Each element in 'test' must be named. ",
-        "For example, 'test = list(age = \"t.test\", ptstage = \"fisher.test\")'"
-      ), call. = FALSE)
-    }
-  }
-
   # checking pvalue_fun are functions
   if (!is.function(pvalue_fun)) {
     stop("Input 'pvalue_fun' must be a function.", call. = FALSE)
@@ -172,6 +160,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   # Getting p-values only for included variables
   include <- include %>% setdiff(exclude)
 
+  # caller_env for add_p
+  caller_env <- rlang::caller_env()
 
   # getting the test name and pvalue
   meta_data <-
@@ -184,7 +174,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
         var_summary_type = .data$summary_type,
         by_var = x$by,
         test = test,
-        group = group
+        group = group,
+        env = caller_env
       ),
       # calculating pvalue
       test_result = calculate_pvalue(
@@ -199,7 +190,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       # grabbing p-value and test label from test_result
       p.value = map_dbl(
         .data$test_result,
-        ~ pluck(.x, "p") %||% NA_real_
+        ~ pluck(.x, "p") %||% switch(is.numeric(.x), .x[1]) %||% NA_real_
       ),
       stat_test_lbl = map_chr(
         .data$test_result,
