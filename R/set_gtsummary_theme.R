@@ -170,5 +170,6 @@ df_theme_elements <-
        "tbl_regression",                     "tbl_regression-arg:conf.level",      TRUE,                                                                                                          NA,
        "tbl_regression",                   "tbl_regression-arg:estimate_fun",      TRUE,                                                                                                          NA,
        "tbl_regression",                     "tbl_regression-arg:pvalue_fun",      TRUE,                                                                                                          NA,
-       "tbl_regression",                       "tbl_regression-arg:tidy_fun",      TRUE,                                                                                                          NA
+       "tbl_regression",                       "tbl_regression-arg:tidy_fun",      TRUE,                                                                                                          NA,
+       "tbl_regression",                    "tbl_regression-str:coef_header",     FALSE,                                    "String setting the default term for the beta coefficient column header"
     )
