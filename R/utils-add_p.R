@@ -81,12 +81,14 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
     if (var_summary_type == "continuous") {
       test_func <-
+        get_theme_element("add_p.tbl_summary-attr:test.continuous.group_by2") %||%
         getOption("gtsummary.add_p.test.continuous.group_by2", default = "lme4") %>%
         test_match_to_fn()
       return(test_func)
     }
     if (var_summary_type %in% c("categorical", "dichotomous")) {
       test_func <-
+        get_theme_element("add_p.tbl_summary-attr:test.categorical.group_by2") %||%
         getOption("gtsummary.add_p.test.categorical.group_by2", default = "lme4") %>%
         test_match_to_fn()
       return(test_func)
@@ -102,12 +104,14 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
   # for continuous data, default to non-parametric tests
   if (var_summary_type == "continuous" & length(unique(data[[by_var]])) == 2) {
     test_func <-
+      get_theme_element("add_p.tbl_summary-attr:test.continuous_by2") %||%
       getOption("gtsummary.add_p.test.continuous_by2", default = "wilcox.test") %>%
       test_match_to_fn()
     return(test_func)
   }
   if (var_summary_type == "continuous") {
     test_func <-
+      get_theme_element("add_p.tbl_summary-attr:test.continuous") %||%
       getOption("gtsummary.add_p.test.continuous", default = "kruskal.test") %>%
       test_match_to_fn()
     return(test_func)
@@ -116,6 +120,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
   # if all obs are missing, assigning chisq
   if (length(data[[var]]) == sum(is.na(data[[var]]))) {
     test_func <-
+      get_theme_element("add_p.tbl_summary-attr:test.categorical") %||%
       getOption("gtsummary.add_p.test.categorical", default = "chisq.test") %>%
       test_match_to_fn()
     return(test_func)
@@ -137,11 +142,13 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
   # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
   if (min_exp >= 5) {
     test_func <-
+      get_theme_element("add_p.tbl_summary-attr:test.categorical") %||%
       getOption("gtsummary.add_p.test.categorical", default = "chisq.test") %>%
       test_match_to_fn()
     return(test_func)
   }
   test_func <-
+    get_theme_element("add_p.tbl_summary-attr:test.categorical.low_count") %||%
     getOption("gtsummary.add_p.test.categorical.low_count", default = "fisher.test") %>%
     test_match_to_fn()
   return(test_func)

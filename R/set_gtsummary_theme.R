@@ -78,7 +78,7 @@ quoted_list <- function(x) {
 get_theme_element <- function(x, default = NULL, eval = TRUE) {
   # checking input
   if (!x %in% df_theme_elements$name) {
-    stop("`x=` is not a proper gtsummary theme element.", call. = FALSE)
+    stop(glue("`x = '{x}'` is not a proper gtsummary theme element."), call. = FALSE)
   }
 
   # returning theme element
