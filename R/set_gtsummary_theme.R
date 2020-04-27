@@ -18,7 +18,7 @@
 #' - `gtsummary_theme_compact()`
 #'   - tables printed with gt will be compact with smaller font size and reduced cell padding
 #'
-#' Use `gtsummary_reset_theme()` to restore the default settings
+#' Use `reset_gtsummary_theme()` to restore the default settings
 #'
 #' Review the [customizing gtsummary themes][customize_gsummary_theme] help file
 #' to create your own theme.
@@ -40,7 +40,7 @@
 #'   as_gt()
 #'
 #' # reset gtsummary theme
-#' gtsummary_reset_theme()
+#' reset_gtsummary_theme()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -96,7 +96,7 @@ get_theme_element <- function(x, default = NULL, eval = TRUE) {
 # ------------------------------------------------------------------------------
 #' @name set_gtsummary_theme
 #' @export
-gtsummary_reset_theme <- function() {
+reset_gtsummary_theme <- function() {
   # deleting theme environment if it exists
   rm(list = ls(envir = env_gtsummary_theme),
      envir = env_gtsummary_theme)

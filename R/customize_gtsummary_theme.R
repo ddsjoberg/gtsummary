@@ -26,7 +26,7 @@
 #'   add_p()
 #'
 #' # reset gtsummary theme
-#' gtsummary_reset_theme()
+#' reset_gtsummary_theme()
 #'
 #' @section Theme Elements:
 #'

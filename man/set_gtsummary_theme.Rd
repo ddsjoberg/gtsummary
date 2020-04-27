@@ -2,14 +2,14 @@
 % Please edit documentation in R/set_gtsummary_theme.R
 \name{set_gtsummary_theme}
 \alias{set_gtsummary_theme}
-\alias{gtsummary_reset_theme}
+\alias{reset_gtsummary_theme}
 \alias{gtsummary_theme_jama}
 \alias{gtsummary_theme_compact}
 \title{Set a gtsummary theme}
 \usage{
 set_gtsummary_theme(x)
 
-gtsummary_reset_theme()
+reset_gtsummary_theme()
 
 gtsummary_theme_jama()
 
@@ -45,7 +45,7 @@ personal style.
 }
 }
 
-Use \code{gtsummary_reset_theme()} to restore the default settings
+Use \code{reset_gtsummary_theme()} to restore the default settings
 
 Review the \link[=customize_gsummary_theme]{customizing gtsummary themes} help file
 to create your own theme.
@@ -72,5 +72,5 @@ set_gtsummary_theme_ex1 <-
   as_gt()
 
 # reset gtsummary theme
-gtsummary_reset_theme()
+reset_gtsummary_theme()
 }
