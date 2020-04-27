@@ -62,6 +62,11 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL) {
   }
 
   # perform multiple comparisons -----------------------------------------------
+  expr_p.adjust <-
+    rlang::expr(stats::p.adjust(x$table_body$p.value, method = !!method)) %>%
+    deparse()
+  rlang::inform(glue("Adjusting p-values with\n`{expr_p.adjust}`"))
+
   x$table_body$q.value <- x$table_body$p.value %>% stats::p.adjust(method = method)
 
   # update table_header --------------------------------------------------------

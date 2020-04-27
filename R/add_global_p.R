@@ -94,6 +94,11 @@ add_global_p.tbl_regression <- function(x,
   # calculating global pvalues
   tryCatch(
     {
+      expr_car <-
+        rlang::expr(car::Anova(x$model_obj, type = "III", !!!list(...))) %>%
+        deparse()
+      rlang::inform(glue("Global p-values calculated with\n  `{expr_car}`"))
+
       car_Anova <-
         x$model_obj %>%
         car::Anova(type = "III", ...)
@@ -191,6 +196,11 @@ add_global_p.tbl_uvregression <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
   # calculating global pvalues
+  expr_car <-
+    rlang::expr(car::Anova(mod = x$model_obj, type = "III", !!!list(...))) %>%
+    deparse()
+  rlang::inform(glue("Global p-values calculated with\n  `{expr_car}`"))
+
   global_p <-
     imap_dfr(
       x$tbls,

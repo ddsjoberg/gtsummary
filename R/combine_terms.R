@@ -88,9 +88,19 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
   }
 
   # creating updated model object ----------------------------------------------
-  new_model_obj <- stats::update(x$model_obj, formula. = formula_update)
+  expr_update <-
+    rlang::expr(stats::update(x$model_obj, formula. = !!formula_update)) %>%
+    deparse()
+  rlang::inform(glue("Creating a reduced model with\n  `reduced_model <- {expr_update}`"))
+  reduced_model <- stats::update(x$model_obj, formula. = formula_update)
   tryCatch({
-    anova <- stats::anova(x$model_obj, new_model_obj, ...)
+    expr_anova <-
+      rlang::expr(stats::anova(x$model_obj, reduced_model, !!!list(...))) %>%
+      deparse()
+    rlang::inform(glue("Calculating p-value comparing full and reduced models with\n",
+                       "  `{expr_anova}`"))
+
+    anova <- stats::anova(x$model_obj, reduced_model, ...)
     },
     error = function(e) {
       err_msg <-
@@ -131,7 +141,7 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
   new_model_tbl <-
     rlang::call2(
       "tbl_regression",
-      x = new_model_obj, # updated model object
+      x = reduced_model, # updated model object
       label = x$inputs$label,
       exponentiate = x$inputs$exponentiate,
       include = rlang::expr(intersect(any_of(!!x$inputs$include), everything())),
