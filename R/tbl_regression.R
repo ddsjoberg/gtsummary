@@ -340,10 +340,10 @@ estimate_header <- function(x, exponentiate) {
     attr(header, "footnote") <- "HR = Hazard Ratio"
   }
   else {
-    header_text <- get_theme_element("tbl_regression-str:coef_header") %||% "Beta"
-    header <- ifelse(exponentiate == TRUE,
-                     glue("exp({header_text})"),
-                     header_text) %>% as.character()
+    header <-
+      get_theme_element("tbl_regression-str:coef_header") %||%
+      ifelse(exponentiate == TRUE, "exp(Beta)", "Beta") %>%
+      as.character()
   }
 
   header

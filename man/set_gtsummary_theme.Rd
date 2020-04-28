@@ -3,20 +3,20 @@
 \name{set_gtsummary_theme}
 \alias{set_gtsummary_theme}
 \alias{reset_gtsummary_theme}
-\alias{gtsummary_theme_jama}
-\alias{gtsummary_theme_compact}
+\alias{theme_gtsummary_jama}
+\alias{theme_gtsummary_compact}
 \title{Set a gtsummary theme}
 \usage{
 set_gtsummary_theme(x)
 
 reset_gtsummary_theme()
 
-gtsummary_theme_jama()
+theme_gtsummary_jama()
 
-gtsummary_theme_compact()
+theme_gtsummary_compact()
 }
 \arguments{
-\item{x}{A gtsummary theme function, e.g. \code{gtsummary_theme_jama()}, or a
+\item{x}{A gtsummary theme function, e.g. \code{theme_gtsummary_jama()}, or a
 named list defining a gtsummary theme. See details below.}
 }
 \description{
@@ -31,7 +31,7 @@ personal style.
 \section{Themes}{
 
 \itemize{
-\item \code{gtsummary_theme_jama()}
+\item \code{theme_gtsummary_jama()}
 \itemize{
 \item sets theme to align with the JAMA reporting guidelines
 \item large p-values are rounded to two decimal places
@@ -39,7 +39,7 @@ personal style.
 \item in \code{tbl_summary()} the percent symbol is not printed next to percentages
 \item in \code{add_stat_label()} the label is added to the variable label row
 }
-\item \code{gtsummary_theme_compact()}
+\item \code{theme_gtsummary_compact()}
 \itemize{
 \item tables printed with gt will be compact with smaller font size and reduced cell padding
 }
@@ -60,9 +60,9 @@ to create your own theme.
 
 \examples{
 # Setting JAMA theme for gtsummary
-set_gtsummary_theme(gtsummary_theme_jama())
+set_gtsummary_theme(theme_gtsummary_jama())
 # Themes can be combined by including more than one
-set_gtsummary_theme(gtsummary_theme_compact())
+set_gtsummary_theme(theme_gtsummary_compact())
 
 set_gtsummary_theme_ex1 <-
   trial \%>\%

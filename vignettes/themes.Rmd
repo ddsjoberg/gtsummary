@@ -1,0 +1,165 @@
+---
+title: "{gtsummary} themes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{themes}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+df_theme_elements <-
+  tibble::as_tibble(read.csv("data/gtsummary_theme_elements.csv"))
+
+# df_theme_elements <- tibble::as_tibble(read.csv(here::here("vignettes/data/gtsummary_theme_elements.csv")))
+  
+```
+
+It's possible to set themes it gtsummary.
+The themes control many aspects of how a table is printed.
+Function defaults can be controlled with themes, as well as other aspects that are not modifiable with function arguments.
+
+The {gtsummary} comes with a few themes, and we welcome user-contributed themes as well!
+Our focus is tables that are ready for publication and encourage themes that assist in that process; for example, the `theme_gtsummary_jama()` theme sets defaults that align with the published guidelines from the *Journal of the American Medical Association*---*JAMA*.
+The defaults in {gtsummary} were written to align with the reporting guidelines for *European Urology*, *The Journal of Urology*, *Urology*, and the *British Journal of Urology International*.
+
+## Setting Themes
+
+To set a theme, use the `set_gtsummary_theme()` function.
+Themes must be set before you create the {gtsummary} tables.
+Let's take a look at the default table, comparing data between treatment groups.
+
+```{r, message=FALSE}
+library(gtsummary); library(gt); library(dplyr)
+
+trial %>%
+  select(trt, age, grade) %>%
+  tbl_summary(by = trt) %>%
+  add_p() %>%
+  add_stat_label() %>%
+  as_gt() %>%
+  tab_header("Default Theme")
+```
+
+Now, the same code with the JAMA theme.
+
+```{r, message=FALSE}
+# setting the JAMA theme
+set_gtsummary_theme(theme_gtsummary_jama())
+```
+
+```{r, message=FALSE, echo=FALSE}
+trial %>%
+  select(trt, age, grade) %>%
+  tbl_summary(by = trt) %>%
+  add_p() %>%
+  add_stat_label() %>%
+  as_gt() %>%
+  tab_header("JAMA Theme")
+```
+
+By setting the theme, we were able to change the default formatting for the p-value, add a dash between the 25th and 75th percentiles, and add the statistic labels to the variable label rows.
+
+Themes can be stacked as well.
+In the example below, the JAMA theme and the compact theme (reduces font size and padding) are stacked.
+
+```{r, message=FALSE}
+# setting the JAMA theme
+set_gtsummary_theme(theme_gtsummary_jama())
+set_gtsummary_theme(theme_gtsummary_compact())
+```
+
+```{r, message=FALSE, echo=FALSE}
+trial %>%
+  select(trt, age, grade) %>%
+  tbl_summary(by = trt) %>%
+  add_p() %>%
+  add_stat_label() %>%
+  as_gt() %>%
+  tab_header("JAMA + Compact Theme")
+  
+```
+
+Clear all previously set themes using the `reset_gtsummary_theme()`
+
+```{r}
+reset_gtsummary_theme()
+```
+
+## Writing Themes
+
+### Theme Structure
+
+There are many parts of a {gtsummary} table that may be controlled with theme elements.
+To construct a personalized theme, create a named list of at least one theme element.
+Here's an example of a theme that modifies the function that styles p-values, changes the default location of the statiistic label in `add_stat_label()`, and updates the default statistics reported in `tbl_summary()`.
+
+```{r}
+my_theme <-   
+  list(
+    "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
+    "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+    "add_stat_label-arg:location" = "row",
+    "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
+    "tbl_summary-str:categorical_stat" = "{n} ({p})"
+  )
+```
+
+Once you create the theme, you can set it just like one of the included themes.
+
+```{r, eval=FALSE}
+set_gtsummary_theme(my_theme)
+```
+
+### Theme Elements
+
+Each theme element follows a naming structure: `"<function name>-<input type>:<description>"`.
+The function name is the function the change applies to, the input type specifies class or type of the theme element, and the description is brief text characterizing the theme element.
+
+Theme elements fall into two categories. 
+The first is modifying internal behavior of the functions that is not directly controllable by function arguments.
+
+```{r, echo=FALSE}
+df_theme_elements %>%
+  filter(argument == FALSE) %>%
+  select(-argument) %>%
+  mutate(name = glue::glue("`{name}`"),
+         example = glue::glue("`{example}`")) %>%
+  group_by(fn) %>%
+  gt() %>%
+  cols_align(columns = everything(), align = "left") %>%
+  cols_label(name = "Theme Element", desc = "Description",
+             example = "Example") %>%
+  fmt_markdown(columns = vars(name, example)) %>%
+  tab_options(table.font.size = 'small',
+                  data_row.padding = gt::px(1),
+                  row_group.padding = gt::px(1))
+
+```
+
+The second type of theme elements set function argument defaults.
+The values of these theme elements must align with the functions' accepted input for the argument.
+
+```{r, echo=FALSE}
+df_theme_elements %>%
+  filter(argument == TRUE) %>%
+  select(fn, name) %>%
+  group_by(fn) %>%
+  mutate(arg_list = paste0("`", name, "`", collapse = ", ")) %>%
+  select(fn, arg_list) %>%
+  distinct() %>%
+  gt() %>%
+  cols_label(arg_list = "Theme Element") %>%
+  fmt_markdown(columns = vars(arg_list)) %>%
+  tab_options(table.font.size = 'small',
+                  data_row.padding = gt::px(1),
+                  row_group.padding = gt::px(1))
+```
+
+
