@@ -47,8 +47,8 @@ personal style.
 
 Use \code{reset_gtsummary_theme()} to restore the default settings
 
-Review the \link[=customize_gsummary_theme]{customizing gtsummary themes} help file
-to create your own theme.
+Review the \href{http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html}{themes vignette}
+to create your own themes.
 }
 
 \section{Example Output}{
