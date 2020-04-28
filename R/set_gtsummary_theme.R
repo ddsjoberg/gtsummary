@@ -91,8 +91,6 @@ get_theme_element <- function(x, default = NULL, eval = TRUE) {
   rlang::eval_tidy(env_gtsummary_theme[[x]], env = rlang::caller_env()) %||% default
 }
 
-
-
 # ------------------------------------------------------------------------------
 #' @name set_gtsummary_theme
 #' @export

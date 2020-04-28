@@ -98,14 +98,13 @@ reset_gtsummary_theme()
 
 There are many parts of a {gtsummary} table that may be controlled with theme elements.
 To construct a personalized theme, create a named list of at least one theme element.
-Here's an example of a theme that modifies the function that styles p-values, changes the default location of the statiistic label in `add_stat_label()`, and updates the default statistics reported in `tbl_summary()`.
+Here's an example of a theme that modifies the function that styles p-values and updates the default statistics reported in `tbl_summary()`.
 
 ```{r}
 my_theme <-   
   list(
     "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
     "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
-    "add_stat_label-arg:location" = "row",
     "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
     "tbl_summary-str:categorical_stat" = "{n} ({p})"
   )
@@ -161,5 +160,3 @@ df_theme_elements %>%
                   data_row.padding = gt::px(1),
                   row_group.padding = gt::px(1))
 ```
-
-
