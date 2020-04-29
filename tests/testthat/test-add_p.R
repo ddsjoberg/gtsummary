@@ -11,6 +11,27 @@ test_that("add_p creates output without error/warning", {
   )
 
   expect_error(
+    trial %>%
+      tbl_summary(by = trt) %>%
+      add_p(),
+    NA
+  )
+
+  expect_warning(
+    trial %>%
+      tbl_summary(by = trt) %>%
+      add_p(),
+    NA
+  )
+
+  expect_message(
+    trial %>%
+      tbl_summary(by = trt) %>%
+      add_p(),
+    NA
+  )
+
+  expect_error(
     tbl_summary(trial, by = trt) %>%
       add_p(test = everything() ~ "lme4", group = response),
     NA
@@ -36,22 +57,42 @@ test_that("add_p works well", {
       )),
     NA
   )
-})
 
-test_that("add_p defaults to clustered data with `group=` arg", {
   expect_error(
-    add_p_lme4 <-
-      tbl_summary(trial[c("trt","death","age", "stage")], by = death) %>%
-      add_p(group = trt),
+    tbl_summary(mtcars, by = am) %>%
+      add_p(test = list(
+        vars(mpg) ~ t.test,
+        disp ~ aov
+      )),
     NA
   )
-  expect_equal(
-    add_p_lme4$meta_data$stat_test,
-    c("lme4", "lme4")
+})
+
+test_that("add_p with custom p-value function", {
+  my_mcnemar <- function(data, variable, by, ...) {
+    result <- list()
+    result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+    result$test <- "McNemar's test"
+    result
+  }
+
+  expect_error(
+    trial[c("response", "trt")] %>%
+      tbl_summary(by = trt) %>%
+      add_p(test = response ~ "my_mcnemar"),
+    NA
+  )
+
+  expect_error(
+    trial[c("response", "trt")] %>%
+      tbl_summary(by = trt) %>%
+      add_p(test = response ~ my_mcnemar),
+    NA
   )
 })
 
 
+# test-add_p.tbl_cross----------------------------------------------------------
 context("test-add_p.tbl_cross")
 
 test_that("add_p.tbl_cross", {
