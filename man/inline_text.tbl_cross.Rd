@@ -8,7 +8,7 @@
   x,
   col_level,
   row_level = NULL,
-  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  pvalue_fun = NULL,
   ...
 )
 }

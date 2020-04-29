@@ -41,7 +41,13 @@ inline_text <- function(x, ...) {
 #' inline_text(t2, variable = grade, column = "p.value")
 inline_text.tbl_summary <-
   function(x, variable, column = NULL, level = NULL, pattern = NULL,
-           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+           pvalue_fun = NULL, ...) {
+    # setting defaults ---------------------------------------------------------
+    pvalue_fun <-
+      pvalue_fun %||%
+      get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
+      (function(x) style_pvalue(x, prepend_p = TRUE))
+
     # create rlang::enquo() inputs ---------------------------------------------
     variable <- rlang::enquo(variable)
     column <- rlang::enquo(column)
@@ -194,7 +200,13 @@ inline_text.tbl_regression <-
   function(x, variable, level = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
            estimate_fun = x$fmt_fun$estimate,
-           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+           pvalue_fun = NULL, ...) {
+    # setting defaults ---------------------------------------------------------
+    pvalue_fun <-
+      pvalue_fun %||%
+      get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
+      (function(x) style_pvalue(x, prepend_p = TRUE))
+
     # setting quos -------------------------------------------------------------
     variable <- rlang::enquo(variable)
     level <- rlang::enquo(level)
@@ -384,8 +396,6 @@ inline_text.tbl_survival <-
         mutate(fixed_var = prob)
     }
 
-
-
     # select strata ------------------------------------------------------------
     # if multiple strata exist in tbl_survival, grab rows matching specified strata
     if ("strata" %in% names(x$table_long)) {
@@ -488,8 +498,15 @@ inline_text.tbl_survival <-
 #' inline_text(tbl2, prob = 0.5)
 inline_text.tbl_survfit <-
   function(x, time = NULL, prob = NULL, level = NULL,
-           estimate_fun = NULL,
-           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+           estimate_fun = NULL, pvalue_fun = NULL, ...) {
+    # setting defaults ---------------------------------------------------------
+    pvalue_fun <-
+      pvalue_fun %||%
+      get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
+      (function(x) style_pvalue(x, prepend_p = TRUE))
+
+    if (is.null(estimate_fun)) estimate_fun <- x$inputs$estimate_fun
+
     # checking inputs ----------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
       stop("One and only one of `time=` and `prob=` must be specified.", call. = FALSE)
@@ -502,9 +519,6 @@ inline_text.tbl_survfit <-
     if(!is.null(time) & !"time" %in% names(x$table_stats)) {
       stop("`time=` was specified, but `x` does not contain survival time estimates.", call. = FALSE)
     }
-
-    # estimate_fun -------------------------------------------------------------
-    if (is.null(estimate_fun)) estimate_fun <- x$inputs$estimate_fun
 
     # selecting level ----------------------------------------------------------
     level <- rlang::enquo(level)
@@ -598,8 +612,14 @@ inline_text.tbl_survfit <-
 #' inline_text(tbl_cross, col_level = "p.value")
 
 inline_text.tbl_cross <-
-  function(x, col_level, row_level = NULL,
-           pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE), ...) {
+  function(x, col_level, row_level = NULL, 
+           pvalue_fun = NULL, ...) {
+
+    # setting defaults ---------------------------------------------------------
+    pvalue_fun <-
+      pvalue_fun %||%
+      get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
+      (function(x) style_pvalue(x, prepend_p = TRUE))
 
     # row_level ----------------------------------------------------------------
     # converting row_level to a string
