@@ -5,8 +5,8 @@
 #'
 #' @param x Object with class `tbl_summary` from the [tbl_summary] function
 #' @param location location where statistic label will be included.
-#' `"column"` (default) adds a column with the statistic label, and
-#' `"row"` to add the statistic label to the variable label.
+#'  `"row"` (the default) to add the statistic label to the variable label row,
+#'  and `"column"` adds a column with the statistic label.
 #' @param label a list of formulas or a single formula updating the statistic
 #' label, e.g. `label = all_categorical() ~ "No. (%)"`
 #' @family tbl_summary tools
@@ -14,41 +14,66 @@
 #' @export
 #' @return A `tbl_summary` object
 #' @examples
-#' tbl_stat_label_ex1 <-
-#'   trial %>%
+#' tbl <- trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_stat_label()
+#'   tbl_summary(by = trt)
 #'
-#' # update stat label and put it on the variable label row
-#' tbl_stat_label_ex2 <-
-#'   trial %>%
-#'   dplyr::select(trt, age, grade, response) %>%
-#'   tbl_summary(by = trt) %>%
+#' # Example 1 ----------------------------------
+#' # Add statistic presented to the variable label row
+#' add_stat_label_ex1 <-
+#'   tbl %>%
 #'   add_stat_label(
-#'     location = "row",
-#'     label = list(all_categorical() ~ "no. (%)",
-#'                  all_continuous() ~ "med. (iqr)")
+#'     # update default statistic label for continuous variables
+#'     label = all_continuous() ~ "med. (iqr)"
 #'   )
+#'
+#' # Example 2 ----------------------------------
+#' add_stat_label_ex2 <-
+#'   tbl %>%
+#'   add_stat_label(
+#'     # add a new column with statistic labels
+#'     location = "column"
+#'   )
+#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_stat_label_ex1.png}{options: width=60\%}}
+#' \if{html}{\figure{add_stat_label_ex1.png}{options: width=60\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_stat_label_ex2.png}{options: width=60\%}}
-#'
-add_stat_label <- function(x, location = NULL, label = NULL) {
-  # setting defaults -----------------------------------------------------------
-  location <-
-    location %>%
-    # ADD THEME ELEMENT HERE
-    match.arg(choices = c("column", "row"))
+#' \if{html}{\figure{add_stat_label_ex2.png}{options: width=60\%}}
 
-  # adding some meta data only needed for merging (i.e. the row_type)
+add_stat_label <- function(x, location = NULL, label = NULL) {
+  # checking inputs ------------------------------------------------------------
+  if (!inherits(x, "tbl_summary")) {
+    stop("`x=` must be class `tbl_summary`", call. = FALSE)
+  }
+
+  # setting defaults -----------------------------------------------------------
+  location <- location %||%
+    get_theme_element("add_stat_label-arg:location") %>%
+    match.arg(choices = c("row", "column"))
+
+  # processing statistics label ------------------------------------------------
+  # stat_label default
+  stat_label <- as.list(x$meta_data$stat_label) %>% set_names(x$meta_data$variable)
+  # converting input to named list
+  label <- tidyselect_to_list(x$inputs$data, label,
+                              .meta_data = x$meta_data, arg_name = "label")
+  # updating the default values with values in label
+  stat_label <- imap(stat_label, ~label[[.y]] %||% .x)
+
+  # adding some meta data needed for merging with table_body (i.e. the row_type)
   meta_data_stat_label <-
     x$meta_data %>%
+    select(c("variable", "summary_type")) %>%
+    left_join(
+      stat_label %>%
+        unlist() %>%
+        tibble::enframe(name = "variable", value = "stat_label") ,
+      by = "variable"
+    ) %>%
     mutate(
       row_type = switch(
         location,
@@ -57,28 +82,6 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
       )
     ) %>%
     select(c("variable", "row_type", "stat_label"))
-
-  # processing statistic labels ------------------------------------------------
-  label <- tidyselect_to_list(x$inputs$data, label,
-                              .meta_data = x$meta_data, arg_name = "label")
-
-  df_label <-
-    label %>%
-    unlist() %>%
-    tibble::enframe(name = "variable", value = "stat_label") %>%
-    dplyr::mutate_all(as.character) %>%
-    # inner join puts everything in the same order
-    {dplyr::inner_join(
-      meta_data_stat_label %>% select(.data$variable),
-      .,
-      by = "variable"
-    )}
-
-  # updating meta_data_stat_label with specified stat labels
-  meta_data_stat_label[
-    meta_data_stat_label$variable %in% df_label$variable,
-    c("variable", "stat_label")
-  ] <- df_label
 
   # merging in new labels to table_body
   x$table_body <-

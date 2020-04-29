@@ -12,10 +12,10 @@ tbl_summary(
   statistic = NULL,
   digits = NULL,
   value = NULL,
-  missing = c("ifany", "always", "no"),
-  missing_text = "Unknown",
+  missing = NULL,
+  missing_text = NULL,
   sort = NULL,
-  percent = c("column", "row", "cell"),
+  percent = NULL,
   group = NULL
 )
 }
