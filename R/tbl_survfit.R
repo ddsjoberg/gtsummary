@@ -86,6 +86,12 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     reverse <- failure
   }
 
+  # setting defaults -----------------------------------------------------------
+  statistic <-
+    statistic %||%
+    get_theme_element("tbl_survfit-arg:statistic") %||%
+    "{estimate} ({conf.low}, {conf.high})"
+
   # input checks ---------------------------------------------------------------
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of `times=` and `probs=` must be specified.", call. = FALSE)

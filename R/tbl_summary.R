@@ -142,17 +142,30 @@
 
 tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
-                        missing = c("ifany", "always", "no"),
-                        missing_text = "Unknown", sort = NULL,
-                        percent = c("column", "row", "cell"), group = NULL) {
+                        missing = NULL, missing_text = NULL, sort = NULL,
+                        percent = NULL, group = NULL) {
+
+  # setting defaults from gtsummary theme --------------------------------------
+  label <- label %||% get_theme_element("tbl_summary-arg:label")
+  statistic <- statistic %||% get_theme_element("tbl_summary-arg:statistic")
+  digits <- digits %||% get_theme_element("tbl_summary-arg:digits")
+  type <- type %||% get_theme_element("tbl_summary-arg:type")
+  value <- value %||% get_theme_element("tbl_summary-arg:value")
+  missing <- missing %||% get_theme_element("tbl_summary-arg:missing",
+                                            default = "ifany")
+  missing_text <- missing_text %||% get_theme_element("tbl_summary-arg:missing_text",
+                                                      default = "Unknown")
+  sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
+  percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
+                                            default = "column")
 
   # converting bare arguments to string ----------------------------------------
   by <- var_input_to_string(data = data, select_input = !!rlang::enquo(by),
                             arg_name = "by", select_single = TRUE)
 
   # matching arguments ---------------------------------------------------------
-  missing <- match.arg(missing)
-  percent <- match.arg(percent)
+  missing <- match.arg(missing, choices = c("ifany", "always", "no"))
+  percent <- match.arg(percent, choices = c("column", "row", "cell"))
 
   # ungrouping data ------------------------------------------------------------
   tbl_summary_data_checks(data)
@@ -313,9 +326,12 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     tibble(column = names(table_body)) %>%
     table_header_fill_missing() %>%
     mutate(
-      footnote = ifelse(startsWith(.data$column, "stat_"),
-                        footnote_stat_label(meta_data),
-                        .data$footnote)
+      # adding footnote of statistics on display (unless theme indicates a no print)
+      footnote = ifelse(
+        startsWith(.data$column, "stat_"),
+        footnote_stat_label(meta_data),
+        .data$footnote
+      )
     )
 
   # returning all results in a list --------------------------------------------
