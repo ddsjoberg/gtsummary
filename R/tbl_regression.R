@@ -125,16 +125,23 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
+    get_theme_element("tbl_regression-arg:pvalue_fun") %||%
+    get_theme_element("pkgwide-fn:pvalue_fun") %||%
     getOption("gtsummary.pvalue_fun", default = style_pvalue)
   estimate_fun <-
     estimate_fun %||%
+    get_theme_element("tbl_regression-arg:estimate_fun") %||%
     getOption(
       "gtsummary.tbl_regression.estimate_fun",
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
     )
   conf.level <-
     conf.level %||%
+    get_theme_element("tbl_regression-arg:conf.level") %||%
     getOption("gtsummary.conf.level", default = 0.95)
+  tidy_fun <-
+    tidy_fun %||%
+    get_theme_element("tbl_regression-arg:tidy_fun")
 
   # checking estimate_fun and pvalue_fun are functions
   if (!purrr::every(list(estimate_fun, pvalue_fun, tidy_fun %||% pvalue_fun), is.function)) {
@@ -333,7 +340,10 @@ estimate_header <- function(x, exponentiate) {
     attr(header, "footnote") <- "HR = Hazard Ratio"
   }
   else {
-    header <- ifelse(exponentiate == TRUE, "exp(Beta)", "Beta")
+    header <-
+      get_theme_element("tbl_regression-str:coef_header") %||%
+      ifelse(exponentiate == TRUE, "exp(Beta)", "Beta") %>%
+      as.character()
   }
 
   header

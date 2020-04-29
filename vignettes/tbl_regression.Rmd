@@ -247,37 +247,9 @@ trial %>%
 
 ## Setting Default Options {#options}
 
-The {gtsummary} regression functions and their related functions have sensible defaults for rounding and formatting results.  If you, however, would like to change the defaults there are a few options.  The default options can be changed in a single script with addition an `options()` command in the script.  The defaults can also be set on the project- or user-level R profile, `.Rprofile`.
-
-```{r, eval=FALSE}
-help("Rprofile")
-
-usethis::edit_r_profile()
-```
-
-The following parameters are available to be set:
-
-```{r, echo=FALSE}
-data.frame(
-  `Description` = c("Formatting and rounding p-values", 
-                    "Formatting and rounding for regression coefficients",
-                    "Set level for limits",
-                    "Print tables with `gt` or `kable`"),
-  `Example` = c("`options(gtsummary.pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 2))`",
-                '`options(gtsummary.tbl_regression.estimate_fun = function(x) gtsummary::style_sigfig(x, digits = 3))`',
-                '`options(gtsummary.conf.level = 0.90)`',
-                '`options(gtsummary.print_engine = "kable")`   `options(gtsummary.print_engine = "gt")`'),
-  `Functions` = c("`add_p()`, `tbl_regression()`, `tbl_uvregression()`",
-                  "`tbl_regression()`, `tbl_uvregression()`",
-                  "`tbl_regression()`, `tbl_uvregression()`",
-                  "All `tbl_*()` functions")
-) %>% 
-  knitr::kable()
-```
-
-When setting default rounding/formatting functions, set the default to a function object rather than an evaluated function.  For example, if you want to round estimates to 3 significant figures use,
-
-```{r,eval=FALSE}
-options(gtsummary.tbl_regression.estimate_fun = function(x) sigfig(x, digits = 3))
-```
-
+The {gtsummary} regression functions and their related functions have sensible defaults for rounding and formatting results.
+If you, however, would like to change the defaults there are a few options.
+The default options can be changed using the {gtsummary} themes function `set_gtsummary_theme()`.
+The package includes pre-specified themes, and you can also create your own.
+Themes can control baseline behavior, for example, how p-values are rounded, coefficients are rounded, default headers, confidence levels, etc.
+For details on creating a theme and setting personal defaults, visit the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html).
