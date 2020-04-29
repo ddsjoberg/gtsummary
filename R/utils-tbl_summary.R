@@ -739,7 +739,6 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
   percent_fun <-
     get_theme_element("tbl_summary-fn:percent_fun") %||%
     getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
-
   N_fun <-
     get_theme_element("tbl_summary-fn:N_fun",
                       default = function(x) sprintf("%.0f", x))

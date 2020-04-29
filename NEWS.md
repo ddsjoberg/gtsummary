@@ -1,6 +1,13 @@
 # gtsummary (development version)
 
-* `add_stat_label()` function updated with `location=` and `label=` arguments to change the location of the statistic labels and to modify the text of the labels. (#467)
+* Introducing themes in {gtsummary}. Use the function `set_gtsummary_theme()` to set new themes, and review the themes vignette for details on setting and creating personalized themes. (#424)
+
+* Handling of passed custom p-value functions in `add_p.tbl_summary()` has been improved with more careful handling of the environments from which the functions were passed. Other related updates were also made:
+    - Users may pass their custom p-value function as a quoted string or bare.
+    - The basic functions for calculating p-values, such as `t.test()` can now be passed directly e.g. `test = age ~ t.test`. We now perform a check match check for functions passed. If it is passed, we replace it with our internal version that returns the p-value and assigns the test name.
+    - If a user passes a custom function, and it's not the proper form (i.e. a named list return object) AND the function returns a single numeric value, we assume that is the p-value and it's added to the gtsummary table.
+
+* `add_stat_label()` function updated with `location=` and `label=` arguments to change the location of the statistic labels and to modify the text of the labels. `location = "row"` is now the default. (#467)
 
 * `tbl_stack()` function added the `group_header=` argument that groups the stacked tables and adds a horizontal header row between them. (#468)
 
