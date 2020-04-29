@@ -11,7 +11,9 @@ NULL
 #' @export
 print.gtsummary <- function(x, ...) {
   # select print engine
-  print_engine <- getOption("gtsummary.print_engine")
+  print_engine <-
+    getOption("gtsummary.print_engine") %||%
+    get_theme_element("pkgwide-str:print_engine")
 
   # default printer is gt
   if (is.null(print_engine)) print_engine <- "gt"
@@ -34,7 +36,9 @@ print.gtsummary <- function(x, ...) {
 knit_print.gtsummary <- function(x, ...) {
   # assigning print engine -----------------------------------------------------
   # select print engine
-  print_engine <- getOption("gtsummary.print_engine")
+  print_engine <-
+    getOption("gtsummary.print_engine") %||%
+    get_theme_element("pkgwide-str:print_engine")
 
   # gt is the default printer for html output
   if (is.null(print_engine) && knitr::is_html_output() == TRUE) {

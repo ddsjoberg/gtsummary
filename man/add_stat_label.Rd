@@ -10,8 +10,8 @@ add_stat_label(x, location = NULL, label = NULL)
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
 \item{location}{location where statistic label will be included.
-\code{"column"} (default) adds a column with the statistic label, and
-\code{"row"} to add the statistic label to the variable label.}
+\code{"row"} (the default) to add the statistic label to the variable label row,
+and \code{"column"} adds a column with the statistic label.}
 
 \item{label}{a list of formulas or a single formula updating the statistic
 label, e.g. \code{label = all_categorical() ~ "No. (\%)"}}
@@ -27,30 +27,35 @@ each variable in the \link{tbl_summary} table.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_stat_label_ex1.png}{options: width=60\%}}
+\if{html}{\figure{add_stat_label_ex1.png}{options: width=60\%}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_stat_label_ex2.png}{options: width=60\%}}
+\if{html}{\figure{add_stat_label_ex2.png}{options: width=60\%}}
 }
 
 \examples{
-tbl_stat_label_ex1 <-
-  trial \%>\%
+tbl <- trial \%>\%
   dplyr::select(trt, age, grade, response) \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_stat_label()
+  tbl_summary(by = trt)
 
-# update stat label and put it on the variable label row
-tbl_stat_label_ex2 <-
-  trial \%>\%
-  dplyr::select(trt, age, grade, response) \%>\%
-  tbl_summary(by = trt) \%>\%
+# Example 1 ----------------------------------
+# Add statistic presented to the variable label row
+add_stat_label_ex1 <-
+  tbl \%>\%
   add_stat_label(
-    location = "row",
-    label = list(all_categorical() ~ "no. (\%)",
-                 all_continuous() ~ "med. (iqr)")
+    # update default statistic label for continuous variables
+    label = all_continuous() ~ "med. (iqr)"
   )
+
+# Example 2 ----------------------------------
+add_stat_label_ex2 <-
+  tbl \%>\%
+  add_stat_label(
+    # add a new column with statistic labels
+    location = "column"
+  )
+
 }
 \seealso{
 Other tbl_summary tools: 

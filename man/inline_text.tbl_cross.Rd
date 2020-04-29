@@ -9,7 +9,7 @@
   col_level,
   row_level = NULL,
   pattern = NULL,
-  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  pvalue_fun = NULL,
   ...
 )
 }

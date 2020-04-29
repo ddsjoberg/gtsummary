@@ -10,7 +10,7 @@
   prob = NULL,
   level = NULL,
   estimate_fun = NULL,
-  pvalue_fun = function(x) style_pvalue(x, prepend_p = TRUE),
+  pvalue_fun = NULL,
   ...
 )
 }
