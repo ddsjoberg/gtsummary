@@ -63,7 +63,7 @@ to create your own themes.
 set_gtsummary_theme(theme_gtsummary_jama())
 # Themes can be combined by including more than one
 set_gtsummary_theme(theme_gtsummary_compact())
-  
+
 set_gtsummary_theme_ex1 <-
   trial \%>\%
   dplyr::select(age, grade, trt) \%>\%
