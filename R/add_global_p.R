@@ -18,12 +18,7 @@
 
 add_global_p <- function(x, ...) {
   # must have car package installed to use this function
-  if (!requireNamespace("car", quietly = TRUE)) {
-    stop(paste0(
-      "The 'car' package is required for 'add_global_p'.\n",
-      "Install with install.packages('car')"
-    ), call. = FALSE)
-  }
+  assert_package("car", "add_global_p")
   UseMethod("add_global_p")
 }
 

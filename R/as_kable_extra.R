@@ -22,12 +22,7 @@
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
-  if (!requireNamespace("kableExtra", quietly = TRUE)) {
-    stop(paste0(
-      "The 'kableExtra' package is required for 'as_kable_extra'.\n",
-      "Install with install.packages('kableExtra')"
-    ), call. = FALSE)
-  }
+  assert_package("kableExtra", "as_kable_extra")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {

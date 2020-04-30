@@ -49,12 +49,7 @@ as_flextable <- function(x, ...) {
 as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = TRUE, ...) {
   # must have flextable package installed to use this function -----------------
-  if (!requireNamespace("flextable", quietly = TRUE)) {
-    stop(paste0(
-      "The 'flextable' package is required for 'as_flextable'.\n",
-      "Install with install.packages('flextable')"
-    ), call. = FALSE)
-  }
+  assert_package("flextable", "as_flextable")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
