@@ -40,6 +40,12 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
+      # Added by DS 2020-04-09 (https://github.com/r-lib/actions/issues/78)
+      # 2020-04-30 Checks pass on 4.0 without XQuartz, but failed on macOS devel
+      - name: Install XQuartz on macOS
+        if: runner.os == 'macOS'
+        run: brew cask install xquartz
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
