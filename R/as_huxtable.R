@@ -256,7 +256,13 @@ table_header_to_huxtable_calls <- function(x, ...) {
       )
     )
   }
-
+  header_bottom_row <- if (any_spanning_header) 2 else 1
+  huxtable_calls[["insert_row"]] <- append(huxtable_calls[["insert_row"]],
+    expr(
+      huxtable::set_bottom_border(row = !! header_bottom_row, col =
+        huxtable::everywhere, value = 0.4)
+    )
+  )
 
   huxtable_calls
 }
