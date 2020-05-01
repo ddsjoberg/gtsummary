@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-#          - {os: macOS-latest,   r: 'devel'}
+          - {os: macOS-latest,   r: 'devel'}
           - {os: macOS-latest,   r: '4.0'}
           - {os: windows-latest, r: '4.0'}
           - {os: ubuntu-16.04,   r: '4.0', rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
@@ -39,6 +39,23 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@master
+
+      # this is here because of an issue installing the systemfonts package
+      # can likely remove later (https://github.com/r-lib/systemfonts/issues/21)
+      # Added by DS 2020-04-09
+      - name: Install pkg-config on macOS
+      if: runner.os == 'macOS'
+      run: brew install pkg-config
+
+      # Added by DS 2020-04-09
+      - name: Install cairo on macOS
+      if: runner.os == 'macOS'
+      run: brew install cairo
+
+      # Added by DS 2020-04-09 (https://github.com/r-lib/actions/issues/78)
+      - name: Install XQuartz on macOS
+      if: runner.os == 'macOS'
+      run: brew cask install xquartz
 
       - name: Query dependencies
         run: |
