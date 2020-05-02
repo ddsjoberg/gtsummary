@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Introducing `as_huxtable()`! The function converts gtsummary objects to {huxtable} objects. {huxtable} is a great option when using R markdown with Microsoft Word output. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (#469)
+
 * Introducing themes in {gtsummary}. Use the function `set_gtsummary_theme()` to set new themes, and review the themes vignette for details on setting and creating personalized themes. (#424)
 
 * Handling of passed custom p-value functions in `add_p.tbl_summary()` has been improved with more careful handling of the environments from which the functions were passed. Other related updates were also made:

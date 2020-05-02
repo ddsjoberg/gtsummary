@@ -69,7 +69,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
   if (!is.null(x$list_output$source_note)) {
     gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!x$list_output$source_note))
   }
-  if (return_calls == TRUE) return(gt_calls)
 
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(gt_calls)),
@@ -83,6 +82,9 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
   # user cannot omit the first 'gt' command
   include <- include %>% setdiff(exclude)
   include <- "gt" %>% union(include)
+
+  # return calls, if requested -------------------------------------------------
+  if (return_calls == TRUE) return(gt_calls[include])
 
   # taking each gt function call, concatenating them with %>% separating them
   gt_calls[include] %>%

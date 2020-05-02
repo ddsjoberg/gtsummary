@@ -49,12 +49,7 @@ as_flextable <- function(x, ...) {
 as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = TRUE, ...) {
   # must have flextable package installed to use this function -----------------
-  if (!requireNamespace("flextable", quietly = TRUE)) {
-    stop(paste0(
-      "The 'flextable' package is required for 'as_flextable'.\n",
-      "Install with install.packages('flextable')"
-    ), call. = FALSE)
-  }
+  assert_package("flextable", "as_flextable")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -72,11 +67,13 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
 
   # creating list of flextable calls -------------------------------------------
   flextable_calls <- table_header_to_flextable_calls(x = x)
-  if (return_calls == TRUE) return(flextable_calls)
 
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(flextable_calls)),
                                  select_input = !!rlang::enquo(include))
+
+  # return calls, if requested -------------------------------------------------
+  if (return_calls == TRUE) return(flextable_calls[include])
 
   # taking each kable function call, concatenating them with %>% separating them
   flextable_calls[include] %>%
