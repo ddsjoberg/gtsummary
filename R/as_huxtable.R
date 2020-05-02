@@ -42,13 +42,9 @@ as_huxtable.gtsummary <- function(x, include = everything(),
   if (strip_md_bold == TRUE) {
     x$table_header <-
       x$table_header %>%
-      mutate(
-        label = str_replace_all(
-          .data$label, pattern = fixed("**"), replacement = fixed("")
-        ),
-        spanning_header = str_replace_all(
-          .data$spanning_header, pattern = fixed("**"), replacement = fixed("")
-        )
+      mutate_at(
+        vars(.data$label, .data$spanning_header),
+        ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
       )
   }
 
@@ -58,6 +54,18 @@ as_huxtable.gtsummary <- function(x, include = everything(),
   # converting to character vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(huxtable_calls)),
                                  select_input = !!rlang::enquo(include))
+
+  # adding user-specified calls ------------------------------------------------
+  insert_expr_after <- get_theme_element("as_huxtable.gtsummary-lst:addl_cmds")
+  huxtable_calls <-
+    purrr::reduce(
+      .x = seq_along(insert_expr_after),
+      .f = function(x, y) add_expr_after(calls = x,
+                                         add_after = names(insert_expr_after[y]),
+                                         expr = insert_expr_after[[y]],
+                                         new_name = paste0("user_added", y)),
+      .init = huxtable_calls
+    )
 
   # return calls, if requested -------------------------------------------------
   if (return_calls == TRUE) return(huxtable_calls[include])
