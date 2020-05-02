@@ -80,8 +80,7 @@ table_header_to_kable_calls <- function(x, ...) {
   table_header <- x$table_header
   dots <- rlang::enexprs(...)
 
-  kable_calls <-
-    table_header_to_tibble_calls(x = x, col_labels = FALSE)
+  kable_calls <- as_tibble(x, return_calls = TRUE, include = -c("cols_label"))
 
   # fmt_missing ----------------------------------------------------------------
   kable_calls[["fmt_missing"]] <- expr(dplyr::mutate_all(~ifelse(is.na(.), "", .)))

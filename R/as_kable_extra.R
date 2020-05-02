@@ -67,8 +67,7 @@ table_header_to_kable_extra_calls <- function(x, ...) {
   table_header <- x$table_header
 
   # getting kable calls
-  kable_extra_calls <-
-    table_header_to_kable_calls(x = x, ...)
+  kable_extra_calls <- as_kable(x = x, return_calls = TRUE, ...)
 
   # add_indent -----------------------------------------------------------------
   tab_style_indent <-
