@@ -18,6 +18,11 @@ knitr::knit_print
 #' @export
 dplyr::vars
 
+# huxtable ---------------------------------------------------------------------
+#' @export
+#' @importFrom huxtable as_huxtable
+huxtable::as_huxtable
+
 # tidyselect -------------------------------------------------------------------
 #' @importFrom tidyselect starts_with
 #' @export
