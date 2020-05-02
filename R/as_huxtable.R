@@ -4,7 +4,7 @@
 #' Function converts a gtsummary object to a huxtable object.
 #' A user can use this function if they wish to add customized formatting
 #' available via the huxtable functions. The huxtable package supports output
-#' to PDF via LaTeX, as well as HTML and
+#' to PDF via LaTeX, as well as HTML and Word.
 #'
 #' @section Details:
 #' The `as_huxtable()` takes the data frame that will be printed, converts
@@ -19,12 +19,9 @@
 #' 1. [huxtable::set_italic()] to italicize cells
 #' 1. [huxtable::set_na_string()] to use an em-dash for missing numbers
 #'
-#'
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
-#' @inheritParams as_gt
-#' @param ... Not used
-#' @name as_huxtable
+#' @inheritParams as_flextable.gtsummary
 #' @export
 #' @return A {huxtable} object
 #' @family gtsummary output types
@@ -35,36 +32,35 @@
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   as_huxtable()
-as_huxtable <- function(x, ...) {
-  UseMethod("as_huxtable")
-}
-
-#' @rdname as_huxtable
 #' @export
-as_huxtable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
-  ...) {
+
+as_huxtable.gtsummary <- function(x, include = everything(),
+                                  return_calls = FALSE, strip_md_bold = TRUE, ...) {
   assert_package("huxtable", "as_huxtable")
 
   # stripping markdown asterisk ------------------------------------------------
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      label = str_replace_all(
-        .data$label, pattern = fixed("**"), replacement = fixed("")
-      ),
-      spanning_header = str_replace_all(
-        .data$spanning_header, pattern = fixed("**"), replacement = fixed("")
+  if (strip_md_bold == TRUE) {
+    x$table_header <-
+      x$table_header %>%
+      mutate(
+        label = str_replace_all(
+          .data$label, pattern = fixed("**"), replacement = fixed("")
+        ),
+        spanning_header = str_replace_all(
+          .data$spanning_header, pattern = fixed("**"), replacement = fixed("")
+        )
       )
-    )
-
+  }
 
   # creating list of huxtable calls -------------------------------------------
   huxtable_calls <- table_header_to_huxtable_calls(x = x)
-  if (return_calls == TRUE) return(huxtable_calls)
 
   # converting to character vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(huxtable_calls)),
-    select_input = !!rlang::enquo(include))
+                                 select_input = !!rlang::enquo(include))
+
+  # return calls, if requested -------------------------------------------------
+  if (return_calls == TRUE) return(huxtable_calls[include])
 
   huxtable_calls[include] %>%
     # removing NULL elements
@@ -78,6 +74,7 @@ as_huxtable.gtsummary <- function(x, include = everything(), return_calls = FALS
 
 # creating huxxtable calls from table_header -----------------------------------
 table_header_to_huxtable_calls <- function(x, ...) {
+  # adding a col id for columns that are not hidden
   table_header <-
     x$table_header %>%
     group_by(.data$hide) %>%
@@ -85,10 +82,11 @@ table_header_to_huxtable_calls <- function(x, ...) {
     ungroup()
 
   # tibble ---------------------------------------------------------------------
+  # huxtable doesn't use the markdown language `__` or `**`
+  # to bold and italicize text, so removing them here
   huxtable_calls <-
-    table_header_to_tibble_calls(x = x, col_labels = FALSE)
-  huxtable_calls[["tab_style_bold"]] <- NULL
-  huxtable_calls[["tab_style_italic"]] <- NULL
+    as_tibble(x, return_calls = TRUE,
+              include = -c("cols_label", "tab_style_bold", "tab_style_italic"))
 
   huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable())
 
@@ -211,7 +209,6 @@ table_header_to_huxtable_calls <- function(x, ...) {
   )
 
   # set_na_string -------------------------------------------------------
-  #
   df_na_emdash <-
     table_header %>%
     filter(!is.na(.data$missing_emdash)) %>%
