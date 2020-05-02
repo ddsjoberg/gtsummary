@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9006</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Introducing <code><a href="https://rdrr.io/pkg/huxtable/man/as_huxtable.html">as_huxtable()</a></code>! The function converts gtsummary objects to {huxtable} objects. {huxtable} is a great option when using R markdown with Microsoft Word output. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/469'>#469</a>)</p></li>
 <li><p>Introducing themes in {gtsummary}. Use the function <code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code> to set new themes, and review the themes vignette for details on setting and creating personalized themes. (<a href='https://github.com/ddsjoberg/gtsummary/issues/424'>#424</a>)</p></li>
 <li>
 <p>Handling of passed custom p-value functions in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> has been improved with more careful handling of the environments from which the functions were passed. Other related updates were also made:</p>
