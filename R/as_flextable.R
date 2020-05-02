@@ -95,11 +95,11 @@ table_header_to_flextable_calls <- function(x, ...) {
     ungroup()
 
   # tibble ---------------------------------------------------------------------
-  # getting flextable calls
+  # flextable doesn't use the markdown language `__` or `**`
+  # to bold and italicize text, so removing them here
   flextable_calls <-
-    table_header_to_tibble_calls(x = x, col_labels = FALSE)
-  flextable_calls[["tab_style_bold"]] <- NULL
-  flextable_calls[["tab_style_italic"]] <- NULL
+    as_tibble(x, return_calls = TRUE,
+              include = -c("cols_label", "tab_style_bold", "tab_style_italic"))
 
   # flextable ------------------------------------------------------------------
   flextable_calls[["flextable"]] <- expr(flextable::flextable())
@@ -127,7 +127,8 @@ table_header_to_flextable_calls <- function(x, ...) {
                                       " ",
                                       .data$spanning_header)) %>%
       group_by(.data$spanning_header) %>%
-      dplyr::summarise(width = n()) %>%
+      mutate(width = n()) %>%
+      distinct() %>%
       ungroup()
 
     flextable_calls[["add_header_row"]] <- expr(
