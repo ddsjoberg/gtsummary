@@ -51,10 +51,6 @@ as_huxtable.gtsummary <- function(x, include = everything(),
   # creating list of huxtable calls -------------------------------------------
   huxtable_calls <- table_header_to_huxtable_calls(x = x)
 
-  # converting to character vector ----------------------------------------------
-  include <- var_input_to_string(data = vctr_2_tibble(names(huxtable_calls)),
-                                 select_input = !!rlang::enquo(include))
-
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_huxtable.gtsummary-lst:addl_cmds")
   huxtable_calls <-
@@ -66,6 +62,10 @@ as_huxtable.gtsummary <- function(x, include = everything(),
                                          new_name = paste0("user_added", y)),
       .init = huxtable_calls
     )
+
+  # converting to character vector ----------------------------------------------
+  include <- var_input_to_string(data = vctr_2_tibble(names(huxtable_calls)),
+                                 select_input = !!rlang::enquo(include))
 
   # return calls, if requested -------------------------------------------------
   if (return_calls == TRUE) return(huxtable_calls[include])

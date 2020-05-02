@@ -130,10 +130,18 @@ theme_gtsummary_compact <- function(){
     ),
     # compact flextables
     "as_flextable.gtsummary-lst:addl_cmds" = list(
-      autofit = list(
+      footnote = list(
         rlang::expr(flextable::fontsize(size = 8, part = "all")),
         rlang::expr(flextable::padding(padding.top = 0, part = "all")),
         rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))
+      )
+    ),
+    # compact huxtable
+    "as_huxtable.gtsummary-lst:addl_cmds" = list(
+      insert_row = list(
+        rlang::expr(huxtable::set_font_size(value = 8)),
+        rlang::expr(huxtable::set_bottom_padding(value = 0)),
+        rlang::expr(huxtable::set_top_padding(value = 0))
       )
     )
   )
