@@ -1,5 +1,10 @@
 # gtsummary (development version)
 
+* Bug fix for `as_flextable()`. (#482)
+  - Added a formatting function to all numeric columns to force conversion to character.
+  - Spanning headers were being printed in alphabetical order! Update to preserve the ordering.
+
+
 * Introducing `as_huxtable()`! The function converts gtsummary objects to {huxtable} objects. {huxtable} is a great option when using R markdown with Microsoft Word output. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (#469)
 
 * Introducing themes in {gtsummary}. Use the function `set_gtsummary_theme()` to set new themes, and review the themes vignette for details on setting and creating personalized themes. (#424)
