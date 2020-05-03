@@ -145,8 +145,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
                         percent = NULL, include = everything(), group = NULL) {
-  # enqou ----------------------------------------------------------------------
-  include <- rlang::enquo(include)
+  # eval -----------------------------------------------------------------------
+  include <- select(data, {{ include }}) %>% names()
 
   # setting defaults from gtsummary theme --------------------------------------
   label <- label %||% get_theme_element("tbl_summary-arg:label")

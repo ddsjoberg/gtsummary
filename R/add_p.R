@@ -115,10 +115,10 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   group <- var_input_to_string(data = x$inputs$data,
                                select_input = !!rlang::enquo(group),
                                arg_name = "group", select_single = TRUE)
-  include <- var_input_to_string(data = x$inputs$data,
+  include <- var_input_to_string(data = select(x$inputs$data, any_of(x$meta_data$variable)),
                                  select_input = !!rlang::enquo(include),
                                  arg_name = "include")
-  exclude <- var_input_to_string(data = x$inputs$data,
+  exclude <- var_input_to_string(data = select(x$inputs$data, any_of(x$meta_data$variable)),
                                  select_input = !!rlang::enquo(exclude),
                                  arg_name = "exclude")
 
@@ -159,8 +159,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   # test -----------------------------------------------------------------------
   # parsing into a named list
   test <- tidyselect_to_list(
-    x$inputs$data, test,
-    .meta_data = x$meta_data, arg_name = "test"
+    select(x$inputs$data, any_of(x$meta_data$variable)),
+    test, .meta_data = x$meta_data, arg_name = "test"
   )
 
   # checking pvalue_fun are functions
@@ -260,6 +260,7 @@ footnote_add_p <- function(meta_data) {
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Calculate and add a p-value comparing the two variables in the cross table.
+#' Missing values are *not* included in p-value calculations.
 #'
 #' @param x Object with class `tbl_cross` from the [tbl_cross] function
 #' @param pvalue_fun Function to round and format p-value.
