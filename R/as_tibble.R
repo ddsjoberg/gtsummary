@@ -37,9 +37,8 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
     )
   }
 
-  # creating list of gt calls --------------------------------------------------
+  # creating list of calls to get formatted tibble -----------------------------
   tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels)
-  if (return_calls == TRUE) return(tibble_calls)
 
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(tibble_calls)),
@@ -51,9 +50,12 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   # this ensures list is in the same order as names(x$kable_calls)
   include <- names(tibble_calls) %>% intersect(include)
 
-  # user cannot exclude the first 'kable' command
+  # user cannot exclude the first 'tibble' command
   include <- include %>% setdiff(exclude)
   include <- "tibble" %>% union(include)
+
+  # return calls, if requested -------------------------------------------------
+  if (return_calls == TRUE) return(tibble_calls[include])
 
   # taking each gt function call, concatenating them with %>% separating them
   tibble_calls[include] %>%

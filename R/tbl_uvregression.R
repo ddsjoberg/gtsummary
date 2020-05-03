@@ -288,6 +288,13 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
             # only display N on label row
             tbl$table_body$N <- ifelse(tbl$table_body$row_type == "label",
                                        tbl$table_body$N, NA)
+
+            # adding a format function to the N column
+            tbl$table_header <- table_header_fmt_fun(
+              tbl$table_header,
+              N = function(x) ifelse(is.na(x), NA_character_, sprintf("%.0f", x))
+            )
+
             tbl
           }
         )

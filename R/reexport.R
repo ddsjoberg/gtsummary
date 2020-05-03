@@ -22,6 +22,11 @@ dplyr::vars
 #' @export
 dplyr::select
 
+# huxtable ---------------------------------------------------------------------
+#' @export
+#' @importFrom huxtable as_huxtable
+huxtable::as_huxtable
+
 # tidyselect -------------------------------------------------------------------
 #' @importFrom tidyselect starts_with
 #' @export

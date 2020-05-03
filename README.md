@@ -186,7 +186,7 @@ Markdown](http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
 vignette for details.
 
 <a href="http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
-<img src="man/figures/gt_output_formats.PNG" width="55%" /> </a>
+<img src="man/img/gt_output_formats.PNG" width="55%" /> </a>
 
 ## Contributing
 
@@ -203,6 +203,7 @@ thank you to all contributors\!
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@emilyvertosick](https://github.com/emilyvertosick),
 [@GuiMarthe](https://github.com/GuiMarthe),
+[@hughjonesd](https://github.com/hughjonesd),
 [@jeanmanguy](https://github.com/jeanmanguy),
 [@jennybc](https://github.com/jennybc),
 [@jflynn264](https://github.com/jflynn264),
