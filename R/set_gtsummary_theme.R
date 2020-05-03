@@ -143,6 +143,12 @@ theme_gtsummary_compact <- function(){
         rlang::expr(huxtable::set_bottom_padding(value = 0)),
         rlang::expr(huxtable::set_top_padding(value = 0))
       )
+    ),
+    # compact kableExtra
+    "as_kable_extra-lst:addl_cmds" = list(
+      kable = list(
+        rlang::expr(kableExtra::kable_styling(font_size = 8))
+      )
     )
   )
 }
