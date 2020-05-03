@@ -70,6 +70,18 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
     gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!x$list_output$source_note))
   }
 
+  # adding user-specified calls ------------------------------------------------
+  insert_expr_after <- get_theme_element("as_gt-lst:addl_cmds")
+  gt_calls <-
+    purrr::reduce(
+      .x = seq_along(insert_expr_after),
+      .f = function(x, y) add_expr_after(calls = x,
+                                         add_after = names(insert_expr_after[y]),
+                                         expr = insert_expr_after[[y]],
+                                         new_name = paste0("user_added", y)),
+      .init = gt_calls
+    )
+
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(gt_calls)),
                                  select_input = !!rlang::enquo(include))
@@ -90,7 +102,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
   gt_calls[include] %>%
     # adding default gt formatting options
     c(parse_expr(getOption("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
-    c(get_theme_element("as_gt-expr:addl_cmds", eval = FALSE)) %>%
     # removing NULL elements
     unlist() %>%
     compact() %>%
