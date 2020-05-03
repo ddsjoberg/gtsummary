@@ -183,7 +183,8 @@ add_p_test_wilcox.test <- function(data, variable, by, ...) {
   if (length(unique(data[[by]])) > 2) {
     stop("Wilcoxon rank-sum test cannot be calculated with more than 2 groups")
   }
-  result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
+  result$p <- stats::wilcox.test(data[[variable]],
+                                 as.numeric(as.factor(data[[by]])))$p.value
   result$test <- "Wilcoxon rank-sum test"
   result
 }
