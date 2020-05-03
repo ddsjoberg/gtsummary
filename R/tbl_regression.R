@@ -233,6 +233,13 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     table_header_fill_missing() %>%
     table_header_fmt_fun(estimate = estimate_fun)
 
+  if ("N" %in% names(table_body)) {
+    table_header <-
+      table_header_fmt_fun(
+        table_header,
+        N = function(x) ifelse(is.na(x), NA_character_, sprintf("%.0f", x))
+      )
+  }
   if ("p.value" %in% names(table_body)) {
     table_header <- table_header_fmt_fun(table_header, p.value = pvalue_fun)
   }

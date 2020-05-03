@@ -186,7 +186,7 @@ Markdown](http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
 vignette for details.
 
 <a href="http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
-<img src="man/figures/gt_output_formats.PNG" width="55%" /> </a>
+<img src="man/img/gt_output_formats.PNG" width="55%" /> </a>
 
 ## Contributing
 
@@ -197,15 +197,20 @@ By contributing to this project, you agree to abide by its terms. A big
 thank you to all contributors\!  
 [@ablack3](https://github.com/ablack3),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
+[@davidgohel](https://github.com/davidgohel),
 [@davidkane9](https://github.com/davidkane9),
+[@dax44](https://github.com/dax44),
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@emilyvertosick](https://github.com/emilyvertosick),
 [@GuiMarthe](https://github.com/GuiMarthe),
+[@hughjonesd](https://github.com/hughjonesd),
 [@jeanmanguy](https://github.com/jeanmanguy),
 [@jennybc](https://github.com/jennybc),
 [@jflynn264](https://github.com/jflynn264),
+[@joelgautschi](https://github.com/joelgautschi),
 [@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
+[@larmarange](https://github.com/larmarange),
 [@leejasme](https://github.com/leejasme),
 [@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
