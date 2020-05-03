@@ -22,12 +22,7 @@
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
-  if (!requireNamespace("kableExtra", quietly = TRUE)) {
-    stop(paste0(
-      "The 'kableExtra' package is required for 'as_kable_extra'.\n",
-      "Install with install.packages('kableExtra')"
-    ), call. = FALSE)
-  }
+  assert_package("kableExtra", "as_kable_extra")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -45,7 +40,18 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 
   # creating list of kableExtra calls ------------------------------------------
   kable_extra_calls <- table_header_to_kable_extra_calls(x = x, ...)
-  if (return_calls == TRUE) return(kable_extra_calls)
+
+  # adding user-specified calls ------------------------------------------------
+  insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
+  kable_extra_calls <-
+    purrr::reduce(
+      .x = seq_along(insert_expr_after),
+      .f = function(x, y) add_expr_after(calls = x,
+                                         add_after = names(insert_expr_after[y]),
+                                         expr = insert_expr_after[[y]],
+                                         new_name = paste0("user_added", y)),
+      .init = kable_extra_calls
+    )
 
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(kable_extra_calls)),
@@ -56,6 +62,9 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
   include <- names(kable_extra_calls) %>% intersect(include)
   # user cannot exclude the first 'kable' command
   include <- "tibble" %>% union(include)
+
+  # return calls, if requested -------------------------------------------------
+  if (return_calls == TRUE) return(kable_extra_calls)
 
   # taking each kable function call, concatenating them with %>% separating them
   kable_extra_calls[include] %>%
@@ -72,8 +81,7 @@ table_header_to_kable_extra_calls <- function(x, ...) {
   table_header <- x$table_header
 
   # getting kable calls
-  kable_extra_calls <-
-    table_header_to_kable_calls(x = x, ...)
+  kable_extra_calls <- as_kable(x = x, return_calls = TRUE, ...)
 
   # add_indent -----------------------------------------------------------------
   tab_style_indent <-
