@@ -125,12 +125,15 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   # group argument -------------------------------------------------------------
   if (!is.null(group)) {
     # checking group is in the data frame
-    if (!group %in% x$meta_data$variable) {
+    if (!group %in% names(x$inputs$data)) {
       stop(glue("'{group}' is not a column name in the input data frame."), call. = FALSE)
     }
-    # dropping group variable from table_body and meta_data
-    x$table_body <- x$table_body %>% filter(.data$variable != group)
-    x$meta_data <- x$meta_data %>% filter(.data$variable != group)
+    if (group %in% x$meta_data$variable) {
+      rlang::inform(glue::glue(
+        "The `group=` variable is no longer auto-removed from the summary table as of v1.3.1.\n",
+        "The following syntax is now preferred:\n",
+        "tbl_summary(..., include = -{group}) %>% add_p(..., group = {group})"))
+    }
   }
 
   # setting defaults -----------------------------------------------------------
