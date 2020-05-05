@@ -59,7 +59,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   # stat_label default
   stat_label <- as.list(x$meta_data$stat_label) %>% set_names(x$meta_data$variable)
   # converting input to named list
-  label <- tidyselect_to_list(x$inputs$data, label,
+  label <- tidyselect_to_list(x$inputs$data[x$meta_data$variable], label,
                               .meta_data = x$meta_data, arg_name = "label")
   # updating the default values with values in label
   stat_label <- imap(stat_label, ~label[[.y]] %||% .x)
