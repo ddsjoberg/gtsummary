@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Added `include=` argument to `tbl_summary()`. (#477)
+* Added `include=` argument to `tbl_summary()`. The preferred syntax for p-values with correlated data is now `tbl_summary(..., include = -group_var) %>% add_p(group = group_var)`. The group variable is now no longer removed from the table summary. (#477)
 
 * Bug fix for `as_flextable()`. (#482)
   - Added a formatting function to all numeric columns to force conversion to character.
