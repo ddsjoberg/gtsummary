@@ -97,8 +97,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
 
   # unless by_var has >2 levels, then return NA with a message
   if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
-    message(paste0(var, ": P-value calculation for correlated data when by variables have >2 levels is not currently supported"))
-    return(NULL)
+    stop(glue("{var}: There is not default test for correlated data when `by=` variable has >2 levels."))
   }
 
   # for continuous data, default to non-parametric tests
