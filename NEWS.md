@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `include=` argument to `tbl_summary()`. (#477)
+
 * Bug fix for `as_flextable()`. (#482)
   - Added a formatting function to all numeric columns to force conversion to character.
   - Spanning headers were being printed in alphabetical order! Update to preserve the ordering.
