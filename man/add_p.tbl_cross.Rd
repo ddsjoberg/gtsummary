@@ -25,6 +25,7 @@ in the \{gt\} table source notes rather than a column.}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Calculate and add a p-value comparing the two variables in the cross table.
+Missing values are \emph{not} included in p-value calculations.
 }
 \section{Example Output}{
 

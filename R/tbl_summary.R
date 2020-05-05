@@ -45,6 +45,7 @@
 #' e.g. `sort = list(everything() ~ "frequency")`
 #' @param percent Indicates the type of percentage to return. Must be one of
 #' `"column"`, `"row"`, or `"cell"`. Default is `"column"`.
+#' @param include variables to include in the summary table. Default is `everything()`
 #' @param group DEPRECATED. Migrated to [add_p]
 #'
 #' @section select helpers:
@@ -147,7 +148,9 @@
 tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
-                        percent = NULL, group = NULL) {
+                        percent = NULL, include = everything(), group = NULL) {
+  # eval -----------------------------------------------------------------------
+  include <- select(data, {{ include }}) %>% names()
 
   # setting defaults from gtsummary theme --------------------------------------
   label <- label %||% get_theme_element("tbl_summary-arg:label")
@@ -211,12 +214,13 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs <- as.list(environment())
 
   # removing variables with unsupported variable types from data ---------------
+  data <- select(data, !!include)
   classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
   var_to_remove <-
     map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
     discard(. == TRUE) %>%
     names()
-  data <- dplyr::select(data, -var_to_remove)
+  data <- select(data, -var_to_remove)
   if (length(var_to_remove) > 0) {
     message(glue(
       "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",

@@ -421,7 +421,11 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   tbl_summary_data_checks(data)
 
   # by -------------------------------------------------------------------------
-  # no checks for by argument
+  if (!is.null(by) && !by %in% names(data)) {
+    stop(glue(
+      "`by = '{by}'` is not a column in `data=`. Did you misspell the column name, ",
+      "or omit the column with the `include=` argument?"), call. = FALSE)
+  }
 
   # type -----------------------------------------------------------------------
   if (!is.null(type) & is.null(names(type))) { # checking names for deprecated named list input
