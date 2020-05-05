@@ -89,7 +89,42 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
     )
   }
 
-  # fmt ------------------------------------------------------------------------
+  # fmt (part 1) ---------------------------------------------------------------
+  # this needs to be called in as_tibble() before the bolding and italic function,
+  # but the bolding and italic code needs to executed on pre-formatted data
+  # (e.g. `bold_p()`) this holds its place for when it is finally run
+  tibble_calls[["fmt"]] <- list()
+
+  # tab_style_bold -------------------------------------------------------------
+  df_tab_style_bold <-
+    table_header %>%
+    filter(!is.na(.data$bold)) %>%
+    mutate(# lgl indicating the rows to bold
+      row_id = map(.data$bold, ~with(x$table_body, eval(parse_expr(.x))))
+    )
+
+  tibble_calls[["tab_style_bold"]] <-
+    map(
+      seq_len(nrow(df_tab_style_bold)),
+      ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_bold$column[[.x]])),
+                       ~ifelse(!!df_tab_style_bold$row_id[[.x]], paste0("__", ., "__"), .)))
+    )
+
+  # tab_style_italic -------------------------------------------------------------
+  df_tab_style_italic <- table_header %>%
+    filter(!is.na(.data$italic)) %>%
+    mutate(# lgl indicating the rows to italicize
+      row_id = map(.data$italic, ~with(x$table_body, eval(parse_expr(.x))))
+    )
+
+  tibble_calls[["tab_style_italic"]] <-
+    map(
+      seq_len(nrow(df_tab_style_italic)),
+      ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_italic$column[[.x]])),
+                       ~ifelse(!!df_tab_style_bold$row_id[[.x]], paste0("_", ., "_"), .)))
+    )
+
+  # fmt (part 2) ---------------------------------------------------------------
   df_fmt <- table_header %>%
     filter(map_lgl(.data$fmt_fun, ~!is.null(.x)))
 
@@ -97,28 +132,6 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
     seq_len(nrow(df_fmt)),
     ~ expr(mutate_at(vars(!!!syms(df_fmt$column[[.x]])), !!df_fmt$fmt_fun[[.x]]))
   )
-
-  # tab_style_bold -------------------------------------------------------------
-  df_tab_style_bold <- table_header %>%
-    filter(!is.na(.data$bold))
-
-  tibble_calls[["tab_style_bold"]] <-
-    map(
-      seq_len(nrow(df_tab_style_bold)),
-      ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_bold$column[[.x]])),
-                       ~ifelse(!!parse_expr(df_tab_style_bold$bold[[.x]]), paste0("__", ., "__"), .)))
-    )
-
-  # tab_style_italic -------------------------------------------------------------
-  df_tab_style_italic <- table_header %>%
-    filter(!is.na(.data$italic))
-
-  tibble_calls[["tab_style_italic"]] <-
-    map(
-      seq_len(nrow(df_tab_style_italic)),
-      ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_italic$column[[.x]])),
-                       ~ifelse(!!parse_expr(df_tab_style_italic$italic[[.x]]), paste0("_", ., "_"), .)))
-    )
 
   # cols_hide ------------------------------------------------------------------
   cols_to_keep <-
