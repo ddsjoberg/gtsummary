@@ -79,6 +79,7 @@ test_that("tbl_regression creates errors when non-function in input", {
   )
 })
 
+
 test_that("tbl_regression creates errors when inputs are wrong", {
   expect_error(
     tbl_regression(mod_lm_interaction, label = "Age"),
