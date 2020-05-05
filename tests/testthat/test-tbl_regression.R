@@ -99,7 +99,6 @@ test_that("tbl_regression creates errors when inputs are wrong", {
   )
 })
 
-
 test_that("No errors/warnings when data is labelled using Hmisc", {
   expect_error(tbl_regression(cox_hmisclbl), NA)
   expect_warning(tbl_regression(cox_hmisclbl), NA)
