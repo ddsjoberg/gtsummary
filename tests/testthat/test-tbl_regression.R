@@ -79,6 +79,7 @@ test_that("tbl_regression creates errors when non-function in input", {
   )
 })
 
+
 test_that("tbl_regression creates errors when inputs are wrong", {
   expect_error(
     tbl_regression(mod_lm_interaction, label = "Age"),
@@ -97,7 +98,6 @@ test_that("tbl_regression creates errors when inputs are wrong", {
     "*"
   )
 })
-
 
 test_that("No errors/warnings when data is labelled using Hmisc", {
   expect_error(tbl_regression(cox_hmisclbl), NA)

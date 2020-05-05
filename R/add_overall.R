@@ -32,7 +32,8 @@ add_overall <- function(x, last = FALSE) {
 
   # removing 'by' variable from data
   # (so it won't show up in the overall tbl_summary)
-  x_copy$inputs[["data"]] <- x$inputs[["data"]] %>% select(-c(x[["by"]]))
+  x_copy$inputs[["data"]] <- select(x$inputs[["data"]], -x[["by"]])
+  x_copy$inputs$include <- x_copy$inputs$include %>% setdiff(x[["by"]])
 
   # replacing the function call by variable to NULL to get results overall
   x_copy$inputs[["by"]] <- NULL

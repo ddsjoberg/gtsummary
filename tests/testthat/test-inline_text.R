@@ -231,7 +231,7 @@ test_that("inline_text.tbl_survfit", {
 test_that("inline_text.tbl_cross", {
   tbl_cross <-
     tbl_cross(trial, row = trt, col = response) %>%
-    add_p()
+    add_p(percent = "cell")
 
   expect_equal(
     inline_text(tbl_cross, row_level = "Drug A", col_level = "1"),
