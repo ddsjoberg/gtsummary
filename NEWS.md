@@ -2,6 +2,8 @@
 
 * New functions `modify_footnote()` and `modify_spanning_header()` give users control over table footnotes and spanning headers. (#464)
 
+* Added `include=` argument to `tbl_summary()`. The preferred syntax for p-values with correlated data is now `tbl_summary(..., include = -group_var) %>% add_p(group = group_var)`. The group variable is now no longer removed from the table summary. (#477)
+
 * Bug fix for `as_flextable()`. (#482)
   - Added a formatting function to all numeric columns to force conversion to character.
   - Spanning headers were being printed in alphabetical order! Update to preserve the ordering.

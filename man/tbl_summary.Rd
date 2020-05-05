@@ -16,6 +16,7 @@ tbl_summary(
   missing_text = NULL,
   sort = NULL,
   percent = NULL,
+  include = everything(),
   group = NULL
 )
 }
@@ -70,6 +71,8 @@ e.g. \code{sort = list(everything() ~ "frequency")}}
 
 \item{percent}{Indicates the type of percentage to return. Must be one of
 \code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}.}
+
+\item{include}{variables to include in the summary table. Default is \code{everything()}}
 
 \item{group}{DEPRECATED. Migrated to \link{add_p}}
 }
