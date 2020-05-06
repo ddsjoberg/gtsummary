@@ -55,4 +55,9 @@ test_that("as_tibble works with bold_p()", {
       pull(p.value),
     c("__<0.001__", ">0.9", "0.087")
   )
+
+  expect_equal(
+    as_tibble(t2, col_labels = FALSE)$label,
+    c("__Age, yrs__", "__Grade__", "_I_", "_II_", "_III_")
+  )
 })
