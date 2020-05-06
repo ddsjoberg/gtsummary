@@ -6,12 +6,15 @@
 \alias{knit_print.gtsummary}
 \title{print and knit_print methods for gtsummary objects}
 \usage{
-\method{print}{gtsummary}(x, ...)
+\method{print}{gtsummary}(x, print_engine = NULL, ...)
 
 \method{knit_print}{gtsummary}(x, ...)
 }
 \arguments{
 \item{x}{An object created using gtsummary functions}
+
+\item{print_engine}{String indicating the print method. Must be one of
+\code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"huxtable"}, \code{"tibble"}}
 
 \item{...}{Not used}
 }
