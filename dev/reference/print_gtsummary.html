@@ -178,7 +178,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for gtsummary</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='kw'>print_engine</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for gtsummary</span>
 <span class='fu'><a href='https://rdrr.io/pkg/knitr/man/knit_print.html'>knit_print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
@@ -189,6 +189,11 @@
     <tr>
       <th>x</th>
       <td><p>An object created using gtsummary functions</p></td>
+    </tr>
+    <tr>
+      <th>print_engine</th>
+      <td><p>String indicating the print method. Must be one of
+<code>"gt"</code>, <code>"kable"</code>, <code>"kable_extra"</code>, <code>"flextable"</code>, <code>"huxtable"</code>, <code>"tibble"</code></p></td>
     </tr>
     <tr>
       <th>...</th>

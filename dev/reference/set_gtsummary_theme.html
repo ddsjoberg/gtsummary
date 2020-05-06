@@ -193,17 +193,31 @@ personal style.</p>
 
 <span class='fu'>reset_gtsummary_theme</span>()
 
-<span class='fu'>theme_gtsummary_jama</span>()
+<span class='fu'>theme_gtsummary_journal</span>(<span class='kw'>journal</span> <span class='kw'>=</span> <span class='st'>"jama"</span>)
 
-<span class='fu'>theme_gtsummary_compact</span>()</pre>
+<span class='fu'>theme_gtsummary_compact</span>()
+
+<span class='fu'>theme_gtsummary_printer</span>(
+  <span class='kw'>print_engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gt"</span>, <span class='st'>"kable"</span>, <span class='st'>"kable_extra"</span>, <span class='st'>"flextable"</span>, <span class='st'>"huxtable"</span>, <span class='st'>"tibble"</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A gtsummary theme function, e.g. <code>theme_gtsummary_jama()</code>, or a
+      <td><p>A gtsummary theme function, e.g. <code>theme_gtsummary_journal()</code>, or a
 named list defining a gtsummary theme. See details below.</p></td>
+    </tr>
+    <tr>
+      <th>journal</th>
+      <td><p>String indicating the journal theme to follow.</p><ul>
+<li><p><code>"jama"</code> Journal of the American Medical Association</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>print_engine</th>
+      <td><p>String indicating the print engine. Default is <code>"gt"</code></p></td>
     </tr>
     </table>
 
@@ -212,19 +226,27 @@ named list defining a gtsummary theme. See details below.</p></td>
     
 
 <ul>
-<li><p><code>theme_gtsummary_jama()</code></p><ul>
+<li><p><code>theme_gtsummary_journal(journal=)</code></p><ul>
+<li><p><code>journal = "jama"</code></p><ul>
 <li><p>sets theme to align with the JAMA reporting guidelines</p></li>
 <li><p>large p-values are rounded to two decimal places</p></li>
 <li><p>in <code><a href='tbl_summary.html'>tbl_summary()</a></code> the IQR is separated with a dash, rather than comma</p></li>
 <li><p>in <code><a href='tbl_summary.html'>tbl_summary()</a></code> the percent symbol is not printed next to percentages</p></li>
-<li><p>in <code><a href='add_stat_label.html'>add_stat_label()</a></code> the label is added to the variable label row</p></li>
+</ul></li>
 </ul></li>
 <li><p><code>theme_gtsummary_compact()</code></p><ul>
-<li><p>tables printed with gt will be compact with smaller font size and reduced cell padding</p></li>
+<li><p>tables printed with gt, flextable, and huxtable will be compact with smaller font size and reduced cell padding</p></li>
+</ul></li>
+<li><p><code>theme_gtsummary_printer(print_engine=)</code></p><ul>
+<li><p><code>print_engine = "gt"</code> sets the gt package as the default print engine</p></li>
+<li><p><code>print_engine = "kable"</code> sets the <code><a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable()</a></code> function as the default print engine</p></li>
+<li><p><code>print_engine = "flextable"</code> sets the flextable package as the default print engine</p></li>
+<li><p><code>print_engine = "kable_extra"</code> sets the kableExtra package as the default print engine</p></li>
+<li><p><code>print_engine = "huxtable"</code> sets the huxtable package as the default print engine
+Use <code>reset_gtsummary_theme()</code> to restore the default settings</p></li>
 </ul></li>
 </ul>
 
-<p>Use <code>reset_gtsummary_theme()</code> to restore the default settings</p>
 <p>Review the <a href='http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html'>themes vignette</a>
 to create your own themes.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
@@ -236,7 +258,7 @@ to create your own themes.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Setting JAMA theme for gtsummary</span>
-<span class='fu'>set_gtsummary_theme</span>(<span class='fu'>theme_gtsummary_jama</span>())
+<span class='fu'>set_gtsummary_theme</span>(<span class='fu'>theme_gtsummary_journal</span>(<span class='st'>"jama"</span>))
 <span class='co'># Themes can be combined by including more than one</span>
 <span class='fu'>set_gtsummary_theme</span>(<span class='fu'>theme_gtsummary_compact</span>())
 
