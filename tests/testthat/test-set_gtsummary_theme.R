@@ -2,7 +2,7 @@ context("test-set_gtsummary_theme")
 
 test_that("setting themes", {
   expect_error(
-    set_gtsummary_theme(theme_gtsummary_jama()),
+    set_gtsummary_theme(theme_gtsummary_journal("jama")),
     NA)
 
   expect_error(
