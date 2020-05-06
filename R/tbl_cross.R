@@ -178,6 +178,7 @@ tbl_cross <- function(data,
   # update inputs and call list in return
   x[["call_list"]] <- list(tbl_cross = match.call())
   x[["inputs"]] <- tbl_cross_inputs
+  x[["tbl_data"]] <- data # this is the data frame that was passed to `tbl_summary()`
 
   class(x) <- c("tbl_cross", "tbl_summary", "gtsummary")
 

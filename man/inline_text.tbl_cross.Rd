@@ -4,13 +4,7 @@
 \alias{inline_text.tbl_cross}
 \title{Report statistics from cross table inline}
 \usage{
-\method{inline_text}{tbl_cross}(
-  x,
-  col_level,
-  row_level = NULL,
-  pvalue_fun = NULL,
-  ...
-)
+\method{inline_text}{tbl_cross}(x, col_level, row_level = NULL, pvalue_fun = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{tbl_cross} object}

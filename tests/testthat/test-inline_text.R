@@ -243,7 +243,7 @@ test_that("inline_text.tbl_cross", {
   )
   expect_equal(
     inline_text(tbl_cross, col_level = "p.value"),
-    "p=0.6"
+    "p=0.7"
   )
 })
 

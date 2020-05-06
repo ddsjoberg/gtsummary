@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added `tbl_cross(margin=)` argument to control which margins are shown in the output table. (#444)
+
+* The missing values are now included in the calculation of p-values in `tbl_cross()`.
+
 * Added `include=` argument to `tbl_summary()`. The preferred syntax for p-values with correlated data is now `tbl_summary(..., include = -group_var) %>% add_p(group = group_var)`. The group variable is now no longer removed from the table summary. (#477)
 
 * Bug fix for `as_flextable()`. (#482)
