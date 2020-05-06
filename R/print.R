@@ -2,6 +2,8 @@
 #'
 #' @name print_gtsummary
 #' @param x An object created using gtsummary functions
+#' @param print_engine String indicating the print method. Must be one of
+#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"huxtable"`, `"tibble"`
 #' @param ... Not used
 #' @author Daniel D. Sjoberg
 #' @seealso [tbl_summary] [tbl_regression] [tbl_uvregression] [tbl_merge] [tbl_stack]
@@ -9,26 +11,35 @@ NULL
 
 #' @rdname print_gtsummary
 #' @export
-print.gtsummary <- function(x, ...) {
+print.gtsummary <- function(x, print_engine = NULL, ...) {
   # select print engine
   print_engine <-
+    print_engine %||%
     getOption("gtsummary.print_engine") %||%
-    get_theme_element("pkgwide-str:print_engine")
+    get_theme_element("pkgwide-str:print_engine") %||%
+    "gt" # default printer is gt
 
-  # default printer is gt
-  if (is.null(print_engine)) print_engine <- "gt"
-
-  # printing results
-  if (print_engine == "gt") {
-    return(as_gt(x) %>% print())
-  } else if (print_engine == "kable") {
-    return(as_kable(x) %>% print())
-  } else {
+  # checking engine
+  accepted_print_engines <-
+    c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble")
+  if (!rlang::is_string(print_engine) || !print_engine %in% accepted_print_engines) {
     stop(glue(
-      "'{print_engine}' is not a valid print engine. ",
-      "Please select 'gt' or 'kable' in 'options(gtsummary.print_engine = \"gt\")'"
+      "Select a valid print engine. ",
+      "Please select one of {quoted_list(accepted_print_engines)}"
     ))
   }
+
+  # printing results
+  switch(
+    print_engine,
+    "gt" = as_gt(x),
+    "kable" = as_kable(x),
+    "flextable" = as_flextable(x),
+    "kable_extra" = as_kable_extra(x),
+    "huxtable" = as_huxtable(x),
+    "tibble" = as_tibble(x)
+  ) %>%
+    print()
 }
 
 #' @rdname print_gtsummary
@@ -83,16 +94,7 @@ knit_print.gtsummary <- function(x, ...) {
   # all other types (if any), will attempt to print with gt
   else if (is.null(print_engine)) print_engine <- "gt"
 
-  # printing results
-  if (print_engine == "gt") {
-    return(as_gt(x) %>% knitr::knit_print())
-  } else if (print_engine == "kable") {
-    return(as_kable(x) %>% knitr::knit_print())
-  } else {
-    stop(glue(
-      "'{print_engine}' is not a valid print engine. ",
-      "Please select 'gt' or 'kable' in 'options(gtsummary.print_engine = \"gt\")'"
-    ))
-  }
+  # printing gtsummary table with appropriate engine
+  print(x, print_engine = print_engine)
 }
 
