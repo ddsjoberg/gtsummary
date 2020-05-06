@@ -95,6 +95,15 @@ knit_print.gtsummary <- function(x, ...) {
   else if (is.null(print_engine)) print_engine <- "gt"
 
   # printing gtsummary table with appropriate engine
-  print(x, print_engine = print_engine)
+  switch(
+    print_engine,
+    "gt" = as_gt(x),
+    "kable" = as_kable(x),
+    "flextable" = as_flextable(x),
+    "kable_extra" = as_kable_extra(x),
+    "huxtable" = as_huxtable(x),
+    "tibble" = as_tibble(x)
+  ) %>%
+      knitr::knit_print()
 }
 
