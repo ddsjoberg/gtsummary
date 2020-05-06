@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix for `bold_p()`. The bold_p() function now works correctly and no longer bolds p>0.9 when using as_tibble for kable print engine. (#489)
+
 * Added `include=` argument to `tbl_summary()`. The preferred syntax for p-values with correlated data is now `tbl_summary(..., include = -group_var) %>% add_p(group = group_var)`. The group variable is now no longer removed from the table summary. (#477)
 
 * Bug fix for `as_flextable()`. (#482)
