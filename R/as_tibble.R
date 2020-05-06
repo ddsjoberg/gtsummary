@@ -121,7 +121,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
     map(
       seq_len(nrow(df_tab_style_italic)),
       ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_italic$column[[.x]])),
-                       ~ifelse(!!df_tab_style_bold$row_id[[.x]], paste0("_", ., "_"), .)))
+                       ~ifelse(!!df_tab_style_italic$row_id[[.x]], paste0("_", ., "_"), .)))
     )
 
   # fmt (part 2) ---------------------------------------------------------------

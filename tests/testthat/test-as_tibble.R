@@ -1,9 +1,17 @@
 context("test-as_tibble")
 
-t1 <- trial %>% tbl_summary()
+t1 <- trial %>%
+  tbl_summary() %>%
+  bold_labels() %>%
+  italicize_levels()
+
 t2 <-
   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
-  tbl_regression(exponentiate = TRUE)
+  tbl_regression(exponentiate = TRUE) %>%
+  bold_labels() %>%
+  italicize_levels() %>%
+  bold_p()
+
 t3 <-
   tbl_uvregression(
     trial %>% dplyr::select(response, age, grade),
@@ -11,7 +19,10 @@ t3 <-
     y = response,
     method.args = list(family = binomial),
     exponentiate = TRUE
-  )
+  ) %>%
+  bold_levels() %>%
+  italicize_labels() %>%
+  bold_p()
 
 test_that("as_tibble works with standard use", {
   expect_error(as_tibble(t1), NA)
