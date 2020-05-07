@@ -47,6 +47,7 @@ with a single row in the output table.  The p-value is calculated using
 }
 
 \examples{
+# Example 1 ----------------------------------
 # fit model with nonlinear terms for marker
 nlmod1 <- lm(
   age ~ marker + I(marker^2) + grade,
@@ -61,6 +62,7 @@ combine_terms_ex1 <-
     label = "Marker (non-linear terms)"
   )
 
+# Example 2 ----------------------------------
 # Example with Cubic Splines
 library(Hmisc)
 mod2 <- lm(
@@ -75,6 +77,7 @@ combine_terms_ex2 <-
     label = "Marker (non-linear terms)"
   )
 
+# Example 3 ----------------------------------
 # Logistic Regression Example, LRT p-value
 combine_terms_ex3 <-
   glm(
