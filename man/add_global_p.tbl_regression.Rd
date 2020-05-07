@@ -10,7 +10,7 @@
     "interaction")],
   keep = FALSE,
   terms = NULL,
-  quiet = FALSE,
+  quiet = NULL,
   ...
 )
 }

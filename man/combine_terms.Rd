@@ -4,7 +4,7 @@
 \alias{combine_terms}
 \title{Combine terms in a regression model}
 \usage{
-combine_terms(x, formula_update, label = NULL, ...)
+combine_terms(x, formula_update, label = NULL, quiet = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{tbl_regression} object}
@@ -16,6 +16,9 @@ group of removed terms.  See the \link[stats:update]{stats::update} help file fo
 function's \verb{formula.=} argument}
 
 \item{label}{Option string argument labeling the combined rows}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
 
 \item{...}{Additional arguments passed to \link[stats:anova]{stats::anova}}
 }

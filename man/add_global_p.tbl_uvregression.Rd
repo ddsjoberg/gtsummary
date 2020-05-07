@@ -4,7 +4,7 @@
 \alias{add_global_p.tbl_uvregression}
 \title{Adds the global p-value for categorical variables}
 \usage{
-\method{add_global_p}{tbl_uvregression}(x, quiet = FALSE, ...)
+\method{add_global_p}{tbl_uvregression}(x, quiet = NULL, ...)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_uvregression} from the
