@@ -13,6 +13,7 @@
 #' function's `formula.=` argument
 #' @param label Option string argument labeling the combined rows
 #' @param ... Additional arguments passed to [stats::anova]
+#' @inheritParams add_global_p.tbl_regression
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @return `tbl_regression` object
@@ -75,7 +76,10 @@
 #'
 #' \if{html}{\figure{combine_terms_ex3.png}{options: width=45\%}}
 
-combine_terms <- function(x, formula_update, label = NULL, ...) {
+combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # checking input -------------------------------------------------------------
   if (!inherits(x, "tbl_regression")) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)

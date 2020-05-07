@@ -42,6 +42,8 @@ add_global_p <- function(x, ...) {
 #' quoted or unquoted variable names. tidyselect and gtsummary select helper
 #' functions are also accepted. Default is `NULL`, which adds global p-values
 #' for all categorical and interaction terms.
+#' @param quiet Logical indicating whether to print messages in console. Default is
+#' `FALSE`
 #' @param terms DEPRECATED.  Use `include=` argument instead.
 #' @param ... Additional arguments to be passed to [car::Anova]
 #' @author Daniel D. Sjoberg
@@ -58,7 +60,7 @@ add_global_p <- function(x, ...) {
 
 add_global_p.tbl_regression <- function(x,
                                         include = x$table_body$variable[x$table_body$var_type %in% c("categorical", "interaction")],
-                                        keep = FALSE, terms = NULL, ...) {
+                                        keep = FALSE, terms = NULL, quiet = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(terms)) {
     lifecycle::deprecate_warn(
@@ -68,13 +70,17 @@ add_global_p.tbl_regression <- function(x,
     include <- terms
   }
 
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
                                  select_input = !!rlang::enquo(include))
 
   # if no terms are provided, stop and return x
   if (length(include) == 0) {
-    message("No terms were selected, and no global p-values added to table")
+    if (quiet == FALSE)
+      message("No terms were selected, and no global p-values added to table")
     return(x)
   }
 
@@ -92,7 +98,8 @@ add_global_p.tbl_regression <- function(x,
       expr_car <-
         rlang::expr(car::Anova(x$model_obj, type = "III", !!!list(...))) %>%
         deparse()
-      rlang::inform(glue("Global p-values calculated with\n  `{expr_car}`"))
+      if (quiet == FALSE)
+        rlang::inform(glue("Global p-values calculated with\n  `{expr_car}`"))
 
       car_Anova <-
         x$model_obj %>%
@@ -102,7 +109,8 @@ add_global_p.tbl_regression <- function(x,
       usethis::ui_oops(paste0(
         "{usethis::ui_code('add_global_p()')} uses ",
         "{usethis::ui_code('car::Anova()')} to calculate the global p-value,\n",
-        "and the function returned an error while calculating the p-values."
+        "and the function returned an error while calculating the p-values.\n",
+        "Is your model type supported by {usethis::ui_code('car::Anova()')}?"
       ))
       stop(e)
     }
@@ -169,6 +177,7 @@ add_global_p.tbl_regression <- function(x,
 #' @param x Object with class `tbl_uvregression` from the
 #' [tbl_uvregression] function
 #' @param ... Additional arguments to be passed to [car::Anova].
+#' @inheritParams add_global_p.tbl_regression
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @examples
@@ -186,7 +195,10 @@ add_global_p.tbl_regression <- function(x,
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'
-add_global_p.tbl_uvregression <- function(x, ...) {
+add_global_p.tbl_uvregression <- function(x, quiet = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # capturing dots in expression
   dots <- rlang::enexprs(...)
 
@@ -194,7 +206,8 @@ add_global_p.tbl_uvregression <- function(x, ...) {
   expr_car <-
     rlang::expr(car::Anova(mod = x$model_obj, type = "III", !!!list(...))) %>%
     deparse()
-  rlang::inform(glue("Global p-values calculated with\n  `{expr_car}`"))
+  if (quiet == FALSE)
+    rlang::inform(glue("Global p-values calculated with\n  `{expr_car}`"))
 
   global_p <-
     imap_dfr(
