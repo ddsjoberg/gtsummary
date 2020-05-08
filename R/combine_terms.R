@@ -98,13 +98,15 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
   expr_update <-
     rlang::expr(stats::update(x$model_obj, formula. = !!formula_update)) %>%
     deparse()
-  rlang::inform(glue("Creating a reduced model with\n  `reduced_model <- {expr_update}`"))
+  if (quiet == FALSE)
+    rlang::inform(glue("Creating a reduced model with\n  `reduced_model <- {expr_update}`"))
   reduced_model <- stats::update(x$model_obj, formula. = formula_update)
   tryCatch({
     expr_anova <-
       rlang::expr(stats::anova(x$model_obj, reduced_model, !!!list(...))) %>%
       deparse()
-    rlang::inform(glue("Calculating p-value comparing full and reduced models with\n",
+    if (quiet == FALSE)
+      rlang::inform(glue("Calculating p-value comparing full and reduced models with\n",
                        "  `{expr_anova}`"))
 
     anova <- stats::anova(x$model_obj, reduced_model, ...)
