@@ -77,6 +77,11 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
   if (!is.null(test_func)) return(test_func)
 
   # if no test supplied, setting defaults --------------------------------------
+  # if by var hs 3 or more levels, return error...no default test.
+  if (!is.null(group) && length(unique(data[[by_var]])) > 2) {
+    stop("There is no default test for correlated data when `by=` variable has >2 levels.", call. = FALSE)
+  }
+
   # if group variable supplied, fit a random effects model
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
     if (var_summary_type == "continuous") {
@@ -93,11 +98,6 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
         test_match_to_fn()
       return(test_func)
     }
-  }
-
-  # unless by_var has >2 levels, then return NA with a message
-  if (!is.null(group) & length(unique(data[[by_var]])) > 2) {
-    stop(glue("{var}: There is no default test for correlated data when `by=` variable has >2 levels."))
   }
 
   # for continuous data, default to non-parametric tests

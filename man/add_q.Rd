@@ -5,7 +5,7 @@
 \title{Add a column of q-values to account for
 multiple comparisons}
 \usage{
-add_q(x, method = "fdr", pvalue_fun = NULL)
+add_q(x, method = "fdr", pvalue_fun = NULL, quiet = NULL)
 }
 \arguments{
 \item{x}{a \code{gtsummary} object}
@@ -20,6 +20,9 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
 }
 \description{
 Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust}.

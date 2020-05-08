@@ -114,6 +114,22 @@ test_that("combine_terms works without error", {
     NA
   )
 
+  expect_message(
+    tbl_regression(mod1, label = stage ~ "Stage") %>%
+      combine_terms(formula_update = . ~ . -marker -I(marker^2),
+                    label = "Marker (non-linear terms)",
+                    quiet = TRUE),
+    NA
+  )
+
+  expect_message(
+    tbl_regression(mod1, label = stage ~ "Stage") %>%
+      combine_terms(formula_update = . ~ . -marker -I(marker^2),
+                    label = "Marker (non-linear terms)",
+                    quiet = FALSE),
+    "*"
+  )
+
 })
 
 test_that("error catching working properly", {
