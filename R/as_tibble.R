@@ -141,7 +141,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
     pull(.data$column)
 
   tibble_calls[["fmt"]] <-
-    c(tibble_calls[["fmt"]], list(expr(mutate_at(!!!syms(cols_to_keep), as.character))))
+    c(tibble_calls[["fmt"]], list(expr(mutate_at(vars(!!!syms(cols_to_keep)), as.character))))
 
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
