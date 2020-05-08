@@ -133,10 +133,18 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
     ~ expr(mutate_at(vars(!!!syms(df_fmt$column[[.x]])), !!df_fmt$fmt_fun[[.x]]))
   )
 
-  # cols_hide ------------------------------------------------------------------
+  # converting all cols to character...
+  # this is important for some output types, e.g. as_flextable, so missing don't
+  # display as NA
   cols_to_keep <-
     dplyr::filter(table_header, .data$hide == FALSE) %>%
     pull(.data$column)
+
+  tibble_calls[["fmt"]] <-
+    c(tibble_calls[["fmt"]], list(expr(mutate_at(!!!syms(cols_to_keep), as.character))))
+
+  # cols_hide ------------------------------------------------------------------
+  # cols_to_keep object created above in fmt section
   tibble_calls[["cols_hide"]] <- expr(dplyr::select(!!!syms(cols_to_keep)))
 
   # cols_label -----------------------------------------------------------------
