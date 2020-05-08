@@ -13,12 +13,14 @@
 #' function's `formula.=` argument
 #' @param label Option string argument labeling the combined rows
 #' @param ... Additional arguments passed to [stats::anova]
+#' @inheritParams add_global_p.tbl_regression
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @return `tbl_regression` object
 #' @export
 #'
 #' @examples
+#' # Example 1 ----------------------------------
 #' # fit model with nonlinear terms for marker
 #' nlmod1 <- lm(
 #'   age ~ marker + I(marker^2) + grade,
@@ -33,6 +35,7 @@
 #'     label = "Marker (non-linear terms)"
 #'   )
 #'
+#' # Example 2 ----------------------------------
 #' # Example with Cubic Splines
 #' library(Hmisc)
 #' mod2 <- lm(
@@ -47,6 +50,7 @@
 #'     label = "Marker (non-linear terms)"
 #'   )
 #'
+#' # Example 3 ----------------------------------
 #' # Logistic Regression Example, LRT p-value
 #' combine_terms_ex3 <-
 #'   glm(
@@ -75,7 +79,10 @@
 #'
 #' \if{html}{\figure{combine_terms_ex3.png}{options: width=45\%}}
 
-combine_terms <- function(x, formula_update, label = NULL, ...) {
+combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # checking input -------------------------------------------------------------
   if (!inherits(x, "tbl_regression")) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)
@@ -88,9 +95,21 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
   }
 
   # creating updated model object ----------------------------------------------
-  new_model_obj <- stats::update(x$model_obj, formula. = formula_update)
+  expr_update <-
+    rlang::expr(stats::update(x$model_obj, formula. = !!formula_update)) %>%
+    deparse()
+  if (quiet == FALSE)
+    rlang::inform(glue("Creating a reduced model with\n  `reduced_model <- {expr_update}`"))
+  reduced_model <- stats::update(x$model_obj, formula. = formula_update)
   tryCatch({
-    anova <- stats::anova(x$model_obj, new_model_obj, ...)
+    expr_anova <-
+      rlang::expr(stats::anova(x$model_obj, reduced_model, !!!list(...))) %>%
+      deparse()
+    if (quiet == FALSE)
+      rlang::inform(glue("Calculating p-value comparing full and reduced models with\n",
+                       "  `{expr_anova}`"))
+
+    anova <- stats::anova(x$model_obj, reduced_model, ...)
     },
     error = function(e) {
       err_msg <-
@@ -131,7 +150,7 @@ combine_terms <- function(x, formula_update, label = NULL, ...) {
   new_model_tbl <-
     rlang::call2(
       "tbl_regression",
-      x = new_model_obj, # updated model object
+      x = reduced_model, # updated model object
       label = x$inputs$label,
       exponentiate = x$inputs$exponentiate,
       include = rlang::expr(intersect(any_of(!!x$inputs$include), everything())),
