@@ -267,10 +267,12 @@ Default is <code>"Unknown"</code>.</p></td>
 <code><a href='inline_text.tbl_cross.html'>inline_text.tbl_cross</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_cross_ex1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='no'>tbl_cross_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_cross</span>(<span class='kw'>row</span> <span class='kw'>=</span> <span class='no'>trt</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>response</span>)
 
+<span class='co'># Example 2 ----------------------------------</span>
 <span class='no'>tbl_cross_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_cross</span>(<span class='kw'>row</span> <span class='kw'>=</span> <span class='no'>stage</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>

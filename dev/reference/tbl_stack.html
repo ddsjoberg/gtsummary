@@ -246,7 +246,8 @@ the length of <code>tbls=</code></p></td>
 <code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 - stacking two tbl_regression objects</span>
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='co'># stacking two tbl_regression objects</span>
 <span class='no'>t1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(
@@ -264,7 +265,8 @@ the length of <code>tbls=</code></p></td>
 
 <span class='no'>tbl_stack_ex1</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_stack</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>))
 
-<span class='co'># Example 2 - stacking two tbl_merge objects</span>
+<span class='co'># Example 2 ----------------------------------</span>
+<span class='co'># stacking two tbl_merge objects</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>t3</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/survival/man/coxph.html'>coxph</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>

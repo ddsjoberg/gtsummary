@@ -290,11 +290,13 @@ as it is for <code><a href='tbl_regression.html'>tbl_regression()</a></code>.</p
 <code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>add_p_ex1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='no'>add_p_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
+<span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># Conduct a custom McNemar test for response,</span>
 <span class='co'># Function must return a named list of the p-value and the</span>
 <span class='co'># test name: list(p = 0.123, test = "McNemar's test")</span>

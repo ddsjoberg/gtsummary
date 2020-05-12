@@ -380,7 +380,8 @@ units in your model.  Here are some common exceptions.</p><ol>
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_uv_ex1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='no'>tbl_uv_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
     <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"response"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)],
     <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>glm</span>,
@@ -389,6 +390,7 @@ units in your model.  Here are some common exceptions.</p><ol>
     <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )
 
+<span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># rounding pvalues to 2 decimal places</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>tbl_uv_ex2</span> <span class='kw'>&lt;-</span>

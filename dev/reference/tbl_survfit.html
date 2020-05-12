@@ -265,6 +265,7 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
 <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
 
+<span class='co'># Example 1 ----------------------------------</span>
 <span class='no'>tbl_survfit_ex1</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
   <span class='no'>fit1</span>,
   <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
@@ -272,6 +273,7 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
   <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**{time} Month**"</span>
 )
 
+<span class='co'># Example 2 ----------------------------------</span>
 <span class='no'>tbl_survfit_ex2</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
   <span class='no'>fit2</span>,
   <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,

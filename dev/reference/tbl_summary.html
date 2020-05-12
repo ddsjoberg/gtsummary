@@ -370,10 +370,12 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>()
 
+<span class='co'># Example 2 ----------------------------------</span>
 <span class='no'>tbl_summary_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>(
@@ -383,6 +385,7 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
     <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>age</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>))
   )
 
+<span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># for convenience, you can also pass named lists to any arguments</span>
 <span class='co'># that accept formulas (e.g label, digits, etc.)</span>
 <span class='no'>tbl_summary_ex3</span> <span class='kw'>&lt;-</span>

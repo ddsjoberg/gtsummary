@@ -231,9 +231,9 @@ is not gt.</p></td>
     
 
 <p>Example 1</p>
-<p><img src='figures/tbl_col_ex1.png' width=31% /></p>
+<p><img src='figures/modify_header_ex1.png' width=31% /></p>
 <p>Example 2</p>
-<p><img src='figures/tbl_col_ex2.png' width=50% /></p>
+<p><img src='figures/modify_header_ex2.png' width=50% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: 
@@ -272,12 +272,14 @@ is not gt.</p></td>
 <code><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_col_ex1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='no'>modify_header_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'>modify_header</span>(<span class='kw'>stat_0</span> <span class='kw'>=</span> <span class='st'>"**All Patients**, N = {N}"</span>)
 
-<span class='no'>tbl_col_ex2</span> <span class='kw'>&lt;-</span>
+<span class='co'># Example 2 ----------------------------------</span>
+<span class='no'>modify_header_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'>modify_header</span>(
