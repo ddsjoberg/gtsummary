@@ -18,21 +18,23 @@ Sort tables created by gtsummary by p-values
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_sum_sort_p_ex.png}{options: width=50\%}}
+\if{html}{\figure{sort_p_ex1.png}{options: width=50\%}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_lm_sort_p_ex.png}{options: width=50\%}}
+\if{html}{\figure{sort_p_ex2.png}{options: width=50\%}}
 }
 
 \examples{
-tbl_sum_sort_p_ex <-
+# Example 1 ----------------------------------
+sort_p_ex1 <-
   trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   sort_p()
 
-tbl_lm_sort_p_ex <-
+# Example 2 ----------------------------------
+sort_p_ex2 <-
   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   sort_p()
