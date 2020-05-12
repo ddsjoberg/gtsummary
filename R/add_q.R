@@ -8,19 +8,22 @@
 #' adjustment. Methods from
 #' [stats::p.adjust] are accepted.  Default is `method = "fdr"`.
 #' @inheritParams tbl_regression
+#' @inheritParams add_global_p.tbl_regression
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @export
 #' @examples
-#' tbl_sum_q_ex1 <-
+#' # Example 1 ----------------------------------
+#' add_q_ex1 <-
 #'   trial[c("trt", "age", "grade", "response")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   add_q()
 #'
-#' tbl_uv_q_ex2 <-
+#' # Example 2 ----------------------------------
+#' add_q_ex2 <-
 #'   trial[c("trt", "age", "grade", "response")] %>%
 #'   tbl_uvregression(
 #'     y = response,
@@ -28,18 +31,21 @@
 #'     method.args = list(family = binomial),
 #'     exponentiate = TRUE
 #'   ) %>%
-#'     add_global_p() %>%
-#'     add_q()
+#'   add_global_p() %>%
+#'   add_q()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_sum_q_ex1.png}{options: width=65\%}}
+#' \if{html}{\figure{add_q_ex1.png}{options: width=65\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_uv_q_ex2.png}{options: width=60\%}}
+#' \if{html}{\figure{add_q_ex2.png}{options: width=60\%}}
 
-add_q <- function(x, method = "fdr", pvalue_fun = NULL) {
+add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # checking inputs ------------------------------------------------------------
   # checking class of x
   if (!inherits(x, "gtsummary")) {
@@ -67,6 +73,12 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL) {
   }
 
   # perform multiple comparisons -----------------------------------------------
+  expr_p.adjust <-
+    rlang::expr(stats::p.adjust(x$table_body$p.value, method = !!method)) %>%
+    deparse()
+  if (quiet == FALSE)
+    rlang::inform(glue("Adjusting p-values with\n`{expr_p.adjust}`"))
+
   x$table_body$q.value <- x$table_body$p.value %>% stats::p.adjust(method = method)
 
   # update table_header --------------------------------------------------------

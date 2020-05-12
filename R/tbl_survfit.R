@@ -32,6 +32,7 @@
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #'
+#' # Example 1 ----------------------------------
 #' tbl_survfit_ex1 <- tbl_survfit(
 #'   fit1,
 #'   times = c(12, 24),
@@ -39,6 +40,7 @@
 #'   label_header = "**{time} Month**"
 #' )
 #'
+#' # Example 2 ----------------------------------
 #' tbl_survfit_ex2 <- tbl_survfit(
 #'   fit2,
 #'   probs = 0.5,
