@@ -46,6 +46,7 @@ tbl_summary <-
   select(trt, age, grade) \%>\%
   tbl_summary(by = trt)
 
+# Example 1 ----------------------------------
 # update footnote
 modify_footnote_ex1 <-
   tbl_summary \%>\%
@@ -54,11 +55,13 @@ modify_footnote_ex1 <-
       "median (IQR) for continuous variables; n (\%) categorical variables"
   )
 
+# Example 2 ----------------------------------
 # deleting all footnote
 modify_footnote_ex2 <-
   tbl_summary \%>\%
   modify_footnote(update = everything() ~ NA)
 
+# Example 3 ----------------------------------
 # updating the footnote abbreviation for CI
 modify_footnote_ex3 <-
   glm(response ~ age + grade, trial, family = binomial) \%>\%
