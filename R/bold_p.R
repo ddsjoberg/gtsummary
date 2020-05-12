@@ -10,24 +10,26 @@
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @export
 #' @examples
-#' tbl_sum_bold_p_ex <-
+#' # Example 1 ----------------------------------
+#' bold_p_ex1 <-
 #'   trial[c("age", "grade", "response", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   bold_p(t = 0.65)
 #'
-#' tbl_lm_bold_p_ex <-
+#' # Example 2 ----------------------------------
+#' bold_p_ex2 <-
 #'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   bold_p(t = 0.65)
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_sum_bold_p_ex.png}{options: width=60\%}}
+#' \if{html}{\figure{bold_p_ex1.png}{options: width=60\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_lm_bold_p_ex.png}{options: width=50\%}}
+#' \if{html}{\figure{bold_p_ex2.png}{options: width=50\%}}
 
 bold_p <- function(x, t = 0.05, q = FALSE) {
   # checking inputs ------------------------------------------------------------
