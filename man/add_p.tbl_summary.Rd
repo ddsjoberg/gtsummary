@@ -89,11 +89,13 @@ as it is for \code{tbl_regression()}.
 }
 
 \examples{
+# Example 1 ----------------------------------
 add_p_ex1 <-
   trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p()
 
+# Example 2 ----------------------------------
 # Conduct a custom McNemar test for response,
 # Function must return a named list of the p-value and the
 # test name: list(p = 0.123, test = "McNemar's test")

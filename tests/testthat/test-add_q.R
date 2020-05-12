@@ -1,10 +1,10 @@
 context("test-add_q")
 
-test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
-  table1 <- trial %>%
-    tbl_summary(by = trt) %>%
-    add_p()
+table1 <- trial %>%
+  tbl_summary(by = trt) %>%
+  add_p()
 
+test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
   expect_error(add_q(table1), NA)
   expect_warning(add_q(table1), NA)
 })
@@ -57,5 +57,18 @@ test_that("Checking q-values against p.adjust", {
   expect_equal(
     q_check2$table_body$q.value %>% discard(is.na),
     q_check2$table_body$p.value %>% discard(is.na) %>% stats::p.adjust(method = "bonferroni")
+  )
+})
+
+
+test_that("add_q messaging checks", {
+  expect_message(
+    add_q(table1),
+    "*"
+  )
+
+  expect_message(
+    add_q(table1, quiet = TRUE),
+    NA
   )
 })

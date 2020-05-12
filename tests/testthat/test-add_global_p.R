@@ -1,26 +1,34 @@
 context("test-add_global_p")
 
 test_that("no errors/warnings with standard use after tbl_regression", {
+  mod1 <- lm(hp ~ factor(cyl) + mpg + factor(am), mtcars) %>% tbl_regression()
   expect_error(
-    lm(hp ~ factor(cyl) + mpg + factor(am), mtcars) %>% tbl_regression() %>% add_global_p(), NA
+    mod1 %>% add_global_p(), NA
   )
   expect_warning(
-    lm(hp ~ factor(cyl) + mpg + factor(am), mtcars) %>% tbl_regression() %>% add_global_p(), NA
+    mod1 %>% add_global_p(), NA
   )
 
   expect_error(
-    lm(hp ~ factor(cyl) + mpg + factor(am), mtcars) %>% tbl_regression() %>% add_global_p(keep = TRUE), NA
+    mod1 %>% add_global_p(keep = TRUE), NA
   )
   expect_warning(
-    lm(hp ~ factor(cyl) + mpg + factor(am), mtcars) %>% tbl_regression() %>% add_global_p(keep = TRUE), NA
+    mod1 %>% add_global_p(keep = TRUE), NA
   )
+
+  expect_message(mod1 %>% add_global_p(quiet = TRUE), NA)
+  expect_message(mod1 %>% add_global_p(quiet = FALSE), "*")
 })
 
 test_that("no errors/warnings with standard use after tbl_uvregression", {
+  mod2 <- trial %>% tbl_uvregression(method = lm, y = age)
   expect_error(
-    trial %>% tbl_uvregression(method = lm, y = age) %>% add_global_p(), NA
+    mod2 %>% add_global_p(), NA
   )
   expect_warning(
-    trial %>% tbl_uvregression(method = lm, y = age) %>% add_global_p(), NA
+    mod2 %>% add_global_p(), NA
   )
+
+  expect_message(mod2 %>% add_global_p(quiet = TRUE), NA)
+  expect_message(mod2 %>% add_global_p(quiet = FALSE), "*")
 })
