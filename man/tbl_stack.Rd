@@ -33,7 +33,8 @@ table.
 }
 
 \examples{
-# Example 1 - stacking two tbl_regression objects
+# Example 1 ----------------------------------
+# stacking two tbl_regression objects
 t1 <-
   glm(response ~ trt, trial, family = binomial) \%>\%
   tbl_regression(
@@ -51,7 +52,8 @@ t2 <-
 
 tbl_stack_ex1 <- tbl_stack(list(t1, t2))
 
-# Example 2 - stacking two tbl_merge objects
+# Example 2 ----------------------------------
+# stacking two tbl_merge objects
 library(survival)
 t3 <-
   coxph(Surv(ttdeath, death) ~ trt, trial) \%>\%

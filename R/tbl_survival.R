@@ -58,6 +58,7 @@ tbl_survival <- function(x, ...) {
 #' @keywords internal
 #' @return A `tbl_survival` object
 #' @examples
+#' # Example 1 ----------------------------------
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 #' tbl_strata_ex1 <-
@@ -67,6 +68,7 @@ tbl_survival <- function(x, ...) {
 #'     label = "{time} Months"
 #'   )
 #'
+#' # Example 2 ----------------------------------
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' tbl_nostrata_ex2 <-
 #'   tbl_survival(
