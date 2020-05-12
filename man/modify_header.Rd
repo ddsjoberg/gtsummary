@@ -47,20 +47,22 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_col_ex1.png}{options: width=31\%}}
+\if{html}{\figure{modify_header_ex1.png}{options: width=31\%}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_col_ex2.png}{options: width=50\%}}
+\if{html}{\figure{modify_header_ex2.png}{options: width=50\%}}
 }
 
 \examples{
-tbl_col_ex1 <-
+# Example 1 ----------------------------------
+modify_header_ex1 <-
   trial[c("age", "grade", "response")] \%>\%
   tbl_summary() \%>\%
   modify_header(stat_0 = "**All Patients**, N = {N}")
 
-tbl_col_ex2 <-
+# Example 2 ----------------------------------
+modify_header_ex2 <-
   trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   modify_header(

@@ -25,10 +25,12 @@
 #' @export
 #' @return A `tbl_cross` object
 #' @examples
+#' # Example 1 ----------------------------------
 #' tbl_cross_ex1 <-
 #'   trial %>%
 #'   tbl_cross(row = trt, col = response)
 #'
+#' # Example 2 ----------------------------------
 #' tbl_cross_ex2 <-
 #'   trial %>%
 #'   tbl_cross(row = stage, col = trt, percent = "cell") %>%
