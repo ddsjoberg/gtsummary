@@ -48,6 +48,7 @@
 #' @export
 #' @return A `tbl_uvregression` object
 #' @examples
+#' # Example 1 ----------------------------------
 #' tbl_uv_ex1 <-
 #'   tbl_uvregression(
 #'     trial[c("response", "age", "grade")],
@@ -57,6 +58,7 @@
 #'     exponentiate = TRUE
 #'   )
 #'
+#' # Example 2 ----------------------------------
 #' # rounding pvalues to 2 decimal places
 #' library(survival)
 #' tbl_uv_ex2 <-

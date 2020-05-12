@@ -108,10 +108,12 @@
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 #' @author Daniel D. Sjoberg
 #' @examples
+#' # Example 1 ----------------------------------
 #' tbl_summary_ex1 <-
 #'   trial[c("age", "grade", "response")] %>%
 #'   tbl_summary()
 #'
+#' # Example 2 ----------------------------------
 #' tbl_summary_ex2 <-
 #'   trial[c("age", "grade", "response", "trt")] %>%
 #'   tbl_summary(
@@ -121,6 +123,7 @@
 #'     digits = list(age ~ c(0, 1))
 #'   )
 #'
+#' # Example 3 ----------------------------------
 #' # for convenience, you can also pass named lists to any arguments
 #' # that accept formulas (e.g label, digits, etc.)
 #' tbl_summary_ex3 <-

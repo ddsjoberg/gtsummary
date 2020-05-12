@@ -5,7 +5,7 @@
 \title{Add a column of q-values to account for
 multiple comparisons}
 \usage{
-add_q(x, method = "fdr", pvalue_fun = NULL)
+add_q(x, method = "fdr", pvalue_fun = NULL, quiet = NULL)
 }
 \arguments{
 \item{x}{a \code{gtsummary} object}
@@ -20,6 +20,9 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
 }
 \description{
 Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust}.
@@ -28,21 +31,23 @@ Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_sum_q_ex1.png}{options: width=65\%}}
+\if{html}{\figure{add_q_ex1.png}{options: width=65\%}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_uv_q_ex2.png}{options: width=60\%}}
+\if{html}{\figure{add_q_ex2.png}{options: width=60\%}}
 }
 
 \examples{
-tbl_sum_q_ex1 <-
+# Example 1 ----------------------------------
+add_q_ex1 <-
   trial[c("trt", "age", "grade", "response")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   add_q()
 
-tbl_uv_q_ex2 <-
+# Example 2 ----------------------------------
+add_q_ex2 <-
   trial[c("trt", "age", "grade", "response")] \%>\%
   tbl_uvregression(
     y = response,
@@ -50,8 +55,8 @@ tbl_uv_q_ex2 <-
     method.args = list(family = binomial),
     exponentiate = TRUE
   ) \%>\%
-    add_global_p() \%>\%
-    add_q()
+  add_global_p() \%>\%
+  add_q()
 }
 \seealso{
 Other tbl_summary tools: 

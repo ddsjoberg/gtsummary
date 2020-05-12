@@ -10,6 +10,7 @@
     "interaction")],
   keep = FALSE,
   terms = NULL,
+  quiet = NULL,
   ...
 )
 }
@@ -27,6 +28,9 @@ p-values in the table output for each level of the categorical variable.
 Default is \code{FALSE}}
 
 \item{terms}{DEPRECATED.  Use \verb{include=} argument instead.}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
 
 \item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}}
 }

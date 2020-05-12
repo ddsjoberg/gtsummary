@@ -16,6 +16,7 @@
 #' @export
 #' @return A `tbl_merge` object
 #' @examples
+#' # Example 1 ----------------------------------
 #' # Side-by-side Regression Models
 #' library(survival)
 #' t1 <-
@@ -30,6 +31,7 @@
 #'     tab_spanner = c("**Tumor Response**", "**Time to Death**")
 #'   )
 #'
+#' # Example 2 ----------------------------------
 #' # Descriptive statistics alongside univariate regression, with no spanning header
 #' t3 <-
 #'   trial[c("age", "grade", "response")] %>%
