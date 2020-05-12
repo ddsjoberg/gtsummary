@@ -64,24 +64,23 @@
 #' @export
 #' @return A `tbl_regression` object
 #' @examples
+#' # Example 1 ----------------------------------
 #' library(survival)
 #' tbl_regression_ex1 <-
 #'   coxph(Surv(ttdeath, death) ~ age + marker, trial) %>%
 #'   tbl_regression(exponentiate = TRUE)
 #'
+#' # Example 2 ----------------------------------
 #' tbl_regression_ex2 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
 #'
+#' # Example 3 ----------------------------------
 #' library(lme4)
 #' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
 #'
-#' # for convenience, you can also pass named lists to any arguments
-#' # that accept formulas (e.g label, etc.)
-#' glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
-#'   tbl_regression(exponentiate = TRUE, label = list(age = "Patient Age"))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

@@ -51,7 +51,7 @@
 #' # reset gtsummary theme
 #' reset_gtsummary_theme()
 #' @section Example Output:
-#' \if{html}{Example 1}
+#' \if{html}{Example}
 #'
 #' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=70\%}}
 

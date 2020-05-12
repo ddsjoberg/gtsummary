@@ -38,12 +38,12 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @export
 #' @return A `tbl_regression` object
 #' @examples
-#' tbl_reg_nevent_ex <-
+#' add_nevent_ex <-
 #'   glm(response ~ trt, trial, family = binomial) %>%
 #'   tbl_regression() %>%
 #'   add_nevent()
 #' @section Example Output:
-#' \if{html}{\figure{tbl_reg_nevent_ex.png}{options: width=50\%}}
+#' \if{html}{\figure{add_nevent_ex.png}{options: width=50\%}}
 
 add_nevent.tbl_regression <- function(x, ...) {
   # if model is a cox model, adding number of events as well

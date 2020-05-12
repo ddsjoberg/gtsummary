@@ -17,7 +17,7 @@
 #'   add_overall()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
-#'
+
 add_overall <- function(x, last = FALSE) {
   # checking that input is class tbl_summary
   if (!inherits(x, "tbl_summary")) stop("`x` must be class 'tbl_summary'", call. = FALSE)

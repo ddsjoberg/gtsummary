@@ -161,10 +161,12 @@ the \code{value} argument, e.g. \code{value = list(varname ~ "level to show")}
 }
 
 \examples{
+# Example 1 ----------------------------------
 tbl_summary_ex1 <-
   trial[c("age", "grade", "response")] \%>\%
   tbl_summary()
 
+# Example 2 ----------------------------------
 tbl_summary_ex2 <-
   trial[c("age", "grade", "response", "trt")] \%>\%
   tbl_summary(
@@ -174,6 +176,7 @@ tbl_summary_ex2 <-
     digits = list(age ~ c(0, 1))
   )
 
+# Example 3 ----------------------------------
 # for convenience, you can also pass named lists to any arguments
 # that accept formulas (e.g label, digits, etc.)
 tbl_summary_ex3 <-
