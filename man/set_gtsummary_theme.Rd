@@ -32,6 +32,7 @@ named list defining a gtsummary theme. See details below.}
 \item{print_engine}{String indicating the print engine. Default is \code{"gt"}}
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Use this function to set preferences for the display of gtsummary tables.
 The default formatting and styling throughout the gtsummary package are
 taken from the published reporting guidelines of the top four urology
