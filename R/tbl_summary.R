@@ -164,6 +164,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
   percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
                                             default = "column")
+  # ungrouping data ------------------------------------------------------------
+  data <- data %>% ungroup()
 
   # converting bare arguments to string ----------------------------------------
   by <- var_input_to_string(data = data, select_input = !!rlang::enquo(by),
@@ -173,9 +175,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   missing <- match.arg(missing, choices = c("ifany", "always", "no"))
   percent <- match.arg(percent, choices = c("column", "row", "cell"))
 
-  # ungrouping data ------------------------------------------------------------
+  # checking input data --------------------------------------------------------
   tbl_summary_data_checks(data)
-  data <- data %>% ungroup()
 
   # removing orderered class from factor by variables --------------------------
   if (!is.null(by) && inherits(data[[by]], "ordered") && inherits(data[[by]], "factor")) {

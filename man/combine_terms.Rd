@@ -95,7 +95,7 @@ combine_terms_ex3 <-
 
 }
 \seealso{
-Other tbl_regression tools:
+Other tbl_regression tools: 
 \code{\link{add_global_p.tbl_regression}()},
 \code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},

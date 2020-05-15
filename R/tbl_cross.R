@@ -63,6 +63,9 @@ tbl_cross <- function(data,
     )
   }
 
+  # ungrouping data ------------------------------------------------------------
+  data <- data %>% ungroup()
+
   # converting inputs to string ------------------------------------------------
   row <- var_input_to_string(
     data = data, select_input = !!rlang::enquo(row),
