@@ -595,7 +595,7 @@ inline_text.tbl_survfit <-
 #' @param x a `tbl_cross` object
 #' @param row_level Level of the row variable to display.
 #' Can also specify the 'Unknown' row. Default is `NULL`
-#' @param col_level Level of the column variable to display.
+#' @param col_level Level of the column variable to display. Default is `NULL`
 #' Can also specify "`p.value`" for the p-value and "`stat_0`" for Total column.
 #' @inheritParams inline_text.tbl_summary
 #'
@@ -612,8 +612,13 @@ inline_text.tbl_survfit <-
 #' inline_text(tbl_cross, col_level = "p.value")
 
 inline_text.tbl_cross <-
-  function(x, col_level, row_level = NULL, 
+  function(x, col_level = NULL, row_level = NULL,
            pvalue_fun = NULL, ...) {
+
+    # check arguments ----------------------------------------------------------
+    if (is.null(col_level) | (is.null(row_level) & !identical("p.value", col_level))) {
+      stop("Please specify both `col_level=` and `row_level=` arguments")
+    }
 
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
