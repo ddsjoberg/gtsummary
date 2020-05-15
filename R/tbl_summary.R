@@ -197,6 +197,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     for (i in names(lbls)) {
       attr(data[[i]], "label") <- lbls[[i]]
     }
+
+    rm(lbls, i)
   }
 
   # deprecation note about group -----------------------------------------------
