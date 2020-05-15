@@ -64,7 +64,7 @@ combine_terms_ex1 <-
 
 # Example 2 ----------------------------------
 # Example with Cubic Splines
-library(Hmisc, quietly = TRUE, warn.conflicts = FALSE)
+library(Hmisc, warn.conflicts = FALSE, quietly = TRUE)
 mod2 <- lm(
   age ~ rcspline.eval(marker, inclx = TRUE) + grade,
   trial[c("age", "marker", "grade")] \%>\% na.omit() # keep complete cases only!
@@ -95,7 +95,7 @@ combine_terms_ex3 <-
 
 }
 \seealso{
-Other tbl_regression tools: 
+Other tbl_regression tools:
 \code{\link{add_global_p.tbl_regression}()},
 \code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},
