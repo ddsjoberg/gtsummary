@@ -98,7 +98,7 @@ The function creates a cross table of two categorical variables." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9012</span>
       </span>
     </div>
 
@@ -188,6 +188,7 @@ The function creates a cross table of two categorical variables.</p>
   <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>percent</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>, <span class='st'>"column"</span>, <span class='st'>"row"</span>, <span class='st'>"cell"</span>),
+  <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"column"</span>, <span class='st'>"row"</span>),
   <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>),
   <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>,
   <span class='kw'>margin_text</span> <span class='kw'>=</span> <span class='st'>"Total"</span>
@@ -232,6 +233,11 @@ Must be one of "none", "column", "row", or "cell". Default is "cell" when
 <code>{N}</code> or <code>{p}</code> is used in statistic.</p></td>
     </tr>
     <tr>
+      <th>margin</th>
+      <td><p>Indicates which margins to add to the table.
+Default is <code><a href='https://rdrr.io/r/base/c.html'>c("row", "column")</a></code></p></td>
+    </tr>
+    <tr>
       <th>missing</th>
       <td><p>Indicates whether to include counts of <code>NA</code> values in the table.
 Allowed values are <code>"no"</code> (never display NA values),
@@ -259,7 +265,7 @@ Default is <code>"Unknown"</code>.</p></td>
 <p>Example 1</p>
 <p><img src='figures/tbl_cross_ex1.png' width=50% /></p>
 <p>Example 2</p>
-<p><img src='figures/tbl_cross_ex2.png' width=50% /></p>
+<p><img src='figures/tbl_cross_ex2.png' width=60% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_cross tools: 
@@ -275,7 +281,7 @@ Default is <code>"Unknown"</code>.</p></td>
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='no'>tbl_cross_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_cross</span>(<span class='kw'>row</span> <span class='kw'>=</span> <span class='no'>stage</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>tbl_cross</span>(<span class='kw'>row</span> <span class='kw'>=</span> <span class='no'>stage</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>trt</span>, <span class='kw'>percent</span> <span class='kw'>=</span> <span class='st'>"cell"</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

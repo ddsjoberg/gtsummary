@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9012</span>
       </span>
     </div>
 
@@ -176,9 +176,12 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added <code><a href="../reference/tbl_cross.html">tbl_cross(margin=)</a></code> argument to control which margins are shown in the output table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/444'>#444</a>)</p></li>
+<li><p>The missing values are now included in the calculation of p-values in <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code>.</p></li>
+<li><p>Bug fix when using a <code><a href="../reference/tbl_summary.html">tbl_summary(by=)</a></code> with missing observations in <code>by=</code> followed by <code><a href="../reference/add_overall.html">add_overall()</a></code></p></li>
 <li><p>All columns in <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> are now styled and converted to character. Previously, styling was applied to most columns, but there were a few that relied on default printing for the type of underlying data. This was ok to rely on this default behavior for <code><a href="../reference/as_kable.html">as_kable()</a></code>, but with the introduction of <code><a href="../reference/as_flextable.html">as_flextable()</a></code> we needed to style and format each column to character. Potential to break some code in edge cases. (<a href='https://github.com/ddsjoberg/gtsummary/issues/493'>#493</a>)</p></li>
 <li><p>Messaging about statistical methods used has been added for <code><a href="../reference/add_global_p.html">add_global_p()</a></code>, <code><a href="../reference/add_q.html">add_q()</a></code>, and <code><a href="../reference/combine_terms.html">combine_terms()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/471'>#471</a>)</p></li>
-<li><p>Bug fix for <code><a href="../reference/bold_p.html">bold_p()</a></code>. The bold_p() function now works correctly and no longer makes p&gt;0.9 bold when using as_tibble for kable print engine. (<a href='https://github.com/ddsjoberg/gtsummary/issues/489'>#489</a>)</p></li>
+<li><p>Bug fix where values <code>"&gt;0.9"</code> were incorrectly made bold using <code><a href="../reference/bold_p.html">bold_p()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/489'>#489</a>)</p></li>
 <li><p>Added <code>include=</code> argument to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. The preferred syntax for p-values with correlated data is now <code>tbl_summary(..., include = -group_var) %&gt;% add_p(group = group_var)</code>. The group variable is now no longer removed from the table summary. (<a href='https://github.com/ddsjoberg/gtsummary/issues/477'>#477</a>)</p></li>
 <li>
 <p>Bug fix for <code><a href="../reference/as_flextable.html">as_flextable()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/482'>#482</a>)</p>
