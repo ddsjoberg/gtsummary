@@ -1,5 +1,6 @@
 #' Set a gtsummary theme
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Use this function to set preferences for the display of gtsummary tables.
 #' The default formatting and styling throughout the gtsummary package are
 #' taken from the published reporting guidelines of the top four urology
@@ -69,6 +70,10 @@ set_gtsummary_theme <- function(x) {
     ), call. = FALSE)
   }
 
+  # print name of theme if present ---------------------------------------------
+  if (!is.null(x$`pkgwide-str:theme_name`))
+    rlang::inform(glue("Setting `{x$`pkgwide-str:theme_name`}` theme"))
+
   # adding theme elements to environment ---------------------------------------
   rlang::env_bind(.env = env_gtsummary_theme, !!!x)
 }
@@ -114,9 +119,9 @@ theme_gtsummary_journal <- function(journal = "jama") {
   if (journal == "jama") {
     lst_theme <-
       list(
+        "pkgwide-str:theme_name" = "JAMA",
         "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
         "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
-        "pkgwide-str:theme_name" = "JAMA",
         "add_stat_label-arg:location" = "row",
         "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
         "tbl_summary-str:categorical_stat" = "{n} ({p})"
@@ -131,6 +136,7 @@ theme_gtsummary_journal <- function(journal = "jama") {
 #' @export
 theme_gtsummary_compact <- function(){
   list(
+    "pkgwide-str:theme_name" = "Compact",
     # compact gt tables
     "as_gt-lst:addl_cmds" = list(
       tab_spanner = rlang::expr(
