@@ -19,3 +19,8 @@ test_that("no errors/warnings with missing data", {
   expect_error(lung %>% tbl_summary(by = sex) %>% add_overall(last = TRUE), NA)
   expect_warning(lung %>% tbl_summary(by = sex) %>% add_overall(last = TRUE), NA)
 })
+
+test_that("no errors/warnings with missing data in by variable", {
+  expect_error(trial %>% tbl_summary(by = response) %>% add_overall(), NA)
+
+})
