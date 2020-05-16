@@ -262,7 +262,7 @@ footnote_add_p <- function(meta_data) {
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Calculate and add a p-value comparing the two variables in the cross table.
-#' Missing values are *not* included in p-value calculations.
+#' Missing values are included in p-value calculations.
 #'
 #' @param x Object with class `tbl_cross` from the [tbl_cross] function
 #' @param pvalue_fun Function to round and format p-value.
@@ -317,7 +317,12 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                        rlang::expr(everything() ~ !!test))
 
   # running add_p to add the p-value to the output
-  x <- expr(add_p.tbl_summary(x, test = !!input_test)) %>% eval()
+  x_copy <- x
+  # passing the data frame after missing values have been transformed to factor/observed levels
+  x$inputs$data <- x$tbl_data
+  x <- expr(add_p.tbl_summary(x, test = !!input_test, include = -any_of("..total.."))) %>% eval()
+  # replacing the input dataset with the original from the `tbl_cross()` call
+  x$inputs$data <- x_copy$inputs$data
 
   # updating footnote
   test_name <- x$meta_data$stat_test_lbl %>% discard(is.na)

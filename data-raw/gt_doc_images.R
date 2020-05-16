@@ -13,17 +13,19 @@ path_gtsummary <- file.path(tempdir(), "gtsummary")
 fs::dir_create(path_gtsummary)
 unlink(path_gtsummary) # just in case it already existed with files in folder
 
+# delete existing png example images
+list.files(here::here("man", "figures")) %>%
+  purrr::keep(~(stringr::str_ends(., "_ex[:digit:]+.png") | stringr::str_ends(., "_ex.png")) &
+                !stringr::str_starts(., "README-")) %>%
+  purrr::walk(~fs::file_delete(here::here("man", "figures", .x)))
+
 # cycling over each help file, and saving gt images
+set_gtsummary_theme(list("pkgwide-lgl:quiet" = TRUE))
 for (f in gt_functions) {
-  usethis::ui_done(f)
+  usethis::ui_done("Working on {f}")
 
-  # save example code to temp file
-  example_chr <- Rd2roxygen::parse_file(here::here("man", stringr::str_glue("{f}.Rd")))$examples
-  if (is.null(example_chr)) next # skipping if not example script
-  readr::write_lines(example_chr, path = file.path(path_gtsummary, stringr::str_glue("{f}.R")))
-
-  # run the example code
-  source(file.path(path_gtsummary, stringr::str_glue("{f}.R")))
+  # run code from example
+  utils::example(topic = f, package = "gtsummary", character.only = TRUE, give.lines = FALSE, echo = FALSE)
 
   # get list of example objects that end in "_ex###"
   example_objs <- ls()[stringr::str_ends(ls(), "_ex[:digit:]+") | stringr::str_ends(ls(), "_ex")]
@@ -48,3 +50,4 @@ for (f in gt_functions) {
   # removing all objects except `gt_functions`, `path_gtsummary`
   rm(list = ls()[!ls() %in% c("gt_functions", "path_gtsummary")])
 }
+reset_gtsummary_theme()
