@@ -4,26 +4,16 @@
 \alias{inline_text.tbl_cross}
 \title{Report statistics from cross table inline}
 \usage{
-\method{inline_text}{tbl_cross}(
-  x,
-  col_level,
-  row_level = NULL,
-  pattern = NULL,
-  pvalue_fun = NULL,
-  ...
-)
+\method{inline_text}{tbl_cross}(x, col_level = NULL, row_level = NULL, pvalue_fun = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{tbl_cross} object}
 
-\item{col_level}{Level of the column variable to display.
+\item{col_level}{Level of the column variable to display. Default is \code{NULL}
 Can also specify "\code{p.value}" for the p-value and "\code{stat_0}" for Total column.}
 
 \item{row_level}{Level of the row variable to display.
 Can also specify the 'Unknown' row. Default is \code{NULL}}
-
-\item{pattern}{String indicating the statistics to return.
-Uses \link[glue:glue]{glue::glue} formatting. Default is pattern shown in \code{tbl_cross()} output}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.

@@ -14,7 +14,7 @@ Checklist for PR reviewer
 - [ ] If a new function was added, function included in `pkgdown.yml`
 - [ ] If a bug was fixed, a unit test was added for the bug check
 - [ ] Run `pkgdown::build_site()`. Check the R console for errors, and review the rendered website.
-- [ ] Code coverage is suitable for any new functions/features. 
+- [ ] Code coverage is suitable for any new functions/features. Review coverage with `covr::report()`. 
 - [ ] R CMD Check runs without errors, warnings, and notes
 - [ ] When the branch is ready to be merged into master, increment the version number using `usethis::use_version(which = "dev")`, run `codemetar::write_codemeta()`, approve, and merge the PR.
 
