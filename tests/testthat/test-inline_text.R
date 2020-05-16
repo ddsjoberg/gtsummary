@@ -243,8 +243,31 @@ test_that("inline_text.tbl_cross", {
   )
   expect_equal(
     inline_text(tbl_cross, col_level = "p.value"),
-    "p=0.6"
+    "p=0.7"
   )
 })
+
+
+
+test_that("inline_text.tbl_cross- expect error args aren't present", {
+  tbl_cross <-
+    tbl_cross(trial, row = trt, col = response) %>%
+    add_p(percent = "cell")
+
+  expect_error(
+    inline_text(tbl_cross, row_level = "Drug A"),
+    "*"
+  )
+  expect_error(
+    inline_text(tbl_cross, col_level = "0"),
+    "*"
+  )
+
+    expect_error(
+      inline_text(tbl_cross),
+      "*"
+  )
+})
+
 
 

@@ -11,6 +11,6 @@ test_that("no errors/warnings with standard use", {
   expect_error(tbl %>% add_overall() %>% add_stat_label(), NA)
   expect_warning(tbl %>% add_overall() %>% add_stat_label(), NA)
 
-  expect_error(tbl %>% add_stat_label(location = "row", label = all_categorical() ~ "no. (%)"), NA)
-  expect_warning(tbl %>% add_stat_label(location = "row", label = all_categorical() ~ "no. (%)"), NA)
+  expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
+  expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
 })
