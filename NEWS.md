@@ -4,11 +4,13 @@
 
 * The missing values are now included in the calculation of p-values in `tbl_cross()`.
 
+* Bug fix when using a `tbl_summary(by=)` with missing observations in `by=` followed by `add_overall()`
+
 * All columns in `as_tibble()` are now styled and converted to character. Previously, styling was applied to most columns, but there were a few that relied on default printing for the type of underlying data.  This was ok to rely on this default behavior for `as_kable()`, but with the introduction of `as_flextable()` we needed to style and format each column to character. Potential to break some code in edge cases. (#493)  
 
 * Messaging about statistical methods used has been added for `add_global_p()`, `add_q()`, and `combine_terms()`. (#471)
 
-* Bug fix for `bold_p()`. The bold_p() function now works correctly and no longer makes p>0.9 bold when using as_tibble for kable print engine. (#489)
+* Bug fix where values `">0.9"` were incorrectly made bold using `bold_p()`. (#489)
 
 * Added `include=` argument to `tbl_summary()`. The preferred syntax for p-values with correlated data is now `tbl_summary(..., include = -group_var) %>% add_p(group = group_var)`. The group variable is now no longer removed from the table summary. (#477)
 
