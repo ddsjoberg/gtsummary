@@ -15,6 +15,8 @@
 #' @param percent Indicates the type of percentage to return.
 #' Must be one of "none", "column", "row", or "cell". Default is "cell" when
 #' `{N}` or `{p}` is used in statistic.
+#' @param margin Indicates which margins to add to the table.
+#' Default is `c("row", "column")`
 #' @param margin_text Text to display for margin totals. Default is `"Total"`
 #' @inheritParams tbl_summary
 #'
@@ -31,7 +33,7 @@
 #' # Example 2 ----------------------------------
 #' tbl_cross_ex2 <-
 #'   trial %>%
-#'   tbl_cross(row = stage, col = trt) %>%
+#'   tbl_cross(row = stage, col = trt, percent = "cell") %>%
 #'   add_p()
 #'
 #' @section Example Output:
@@ -41,7 +43,7 @@
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_cross_ex2.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_cross_ex2.png}{options: width=60\%}}
 
 tbl_cross <- function(data,
                       row = NULL,
@@ -49,6 +51,7 @@ tbl_cross <- function(data,
                       label = NULL,
                       statistic = NULL,
                       percent = c("none", "column", "row", "cell"),
+                      margin = c("column", "row"),
                       missing = c("ifany", "always", "no"),
                       missing_text = "Unknown",
                       margin_text = "Total") {
@@ -59,6 +62,9 @@ tbl_cross <- function(data,
          call. = FALSE
     )
   }
+
+  # ungrouping data ------------------------------------------------------------
+  data <- data %>% ungroup()
 
   # converting inputs to string ------------------------------------------------
   row <- var_input_to_string(
@@ -74,6 +80,7 @@ tbl_cross <- function(data,
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
   percent <- match.arg(percent)
+  margin <- match.arg(margin, several.ok = TRUE)
 
   # if no col AND no row provided, default to first two columns of data --------
   if (is.null(row) && is.null(col)) {
@@ -96,8 +103,13 @@ tbl_cross <- function(data,
 
   # create new dummy col for tabulating column totals in cross table
   data <- data %>%
-    select(any_of(c(row, col))) %>%
-    mutate(..total.. = 1)
+    select(any_of(c(row, col)))
+
+  # adding row total if requested
+  if ("row" %in% margin) {
+    data <- data %>%
+      mutate(..total.. = 1)
+  }
 
   # get labels -----------------------------------------------------------------
   label <- tidyselect_to_list(data, label)
@@ -108,7 +120,6 @@ tbl_cross <- function(data,
   new_label[["..total.."]] <- margin_text
 
   # statistic argument ---------------------------------------------------------
-
   # if no user-defined stat, default to {n} if percent is "none"
   statistic <- statistic %||% ifelse(percent == "none", "{n}", "{n} ({p}%)")
   if (!rlang::is_string(statistic)) {
@@ -146,21 +157,26 @@ tbl_cross <- function(data,
       label = new_label,
       missing_text = missing_text
     ) %>%
-    add_overall(last = TRUE) %>%
     bold_labels() %>%
-    modify_header(
-      update = list(stat_0 ~ paste0("**", margin_text, "**")),
-      stat_by = "{level}"
-    ) %>%
+    modify_header(stat_by = "{level}") %>%
     modify_footnote(everything() ~ NA_character_) %>%
     modify_spanning_header(
       c(starts_with("stat_"), -any_of("stat_0")) ~ paste0("**", new_label[[col]], "**")
     )
 
+  # adding column margin
+  if ("column" %in% margin) {
+    x <- add_overall(x, last = TRUE) %>%
+      modify_header(
+        update = list(stat_0 ~ paste0("**", margin_text, "**"))
+      )
+  }
+
   # returning results ----------------------------------------------------------
   # update inputs and call list in return
   x[["call_list"]] <- list(tbl_cross = match.call())
   x[["inputs"]] <- tbl_cross_inputs
+  x[["tbl_data"]] <- data # this is the data frame that was passed to `tbl_summary()`
 
   class(x) <- c("tbl_cross", "tbl_summary", "gtsummary")
   x
