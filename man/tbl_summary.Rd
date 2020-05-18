@@ -132,8 +132,19 @@ For continuous variables the following statistics are available to display.
 }
 
 For both categorical and continuous variables, statistics on the number of
-missing and non-missing observations and their proportions are available to print.
-\code{{N_obs}}, \code{{N_miss}}, \code{{N_nonmiss}}, \code{{p_miss}}, \code{{p_nonmiss}}
+missing and non-missing observations and their proportions are available to
+display.
+\itemize{
+\item \code{{N_obs}} total number of observations
+\item \code{{N_miss}} number of missing observations
+\item \code{{N_nonmiss}} number of non-missing observations
+\item \code{{p_miss}} percentage of observations missing
+\item \code{{p_nonmiss}} percentage of observations not missing
+}
+
+Note that for categorical variables, \code{{N_obs}}, \code{{N_miss}} and \code{{N_nonmiss}} refer
+to the total number, number missing and number non missing observations
+in the denominator, not at each level of the categorical variable.
 }
 
 \section{type argument}{

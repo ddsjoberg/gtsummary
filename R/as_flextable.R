@@ -15,7 +15,7 @@
 #' 1. [flextable::add_header_row()], if applicable, to set spanning column header
 #' 1. [flextable::align()] to set column alignment
 #' 1. [flextable::padding()] to indent variable levels
-#' 1. [flextable::fontsize()] to set fotn size
+#' 1. [flextable::fontsize()] to set font size
 #' 1. [flextable::autofit()] to estimate the column widths
 #' 1. [flextable::footnote()] to add table footnotes and source notes
 #' 1. [flextable::bold()] to bold cells in data frame
