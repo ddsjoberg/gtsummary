@@ -30,6 +30,7 @@ Update gtsummary table spanning header
 }
 
 \examples{
+# Example 1 ----------------------------------
 # add header above summary statistics
 spanning_header_ex1 <-
   trial \%>\%
