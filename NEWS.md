@@ -2,6 +2,8 @@
 
 * New functions `modify_footnote()` and `modify_spanning_header()` give users control over table footnotes and spanning headers. (#464)
 
+* Improved appearance of default `as_flextable()` output (#499)
+
 * Added `tbl_cross(margin=)` argument to control which margins are shown in the output table. (#444)
 
 * The missing values are now included in the calculation of p-values in `tbl_cross()`.
