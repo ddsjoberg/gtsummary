@@ -47,7 +47,7 @@ as_flextable <- function(x, ...) {
 #' @rdname as_flextable
 #' @export
 as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = TRUE, ...) {
+                                   strip_md_bold = TRUE, ...) {
   # must have flextable package installed to use this function -----------------
   assert_package("flextable", "as_flextable")
 
@@ -139,10 +139,21 @@ table_header_to_flextable_calls <- function(x, ...) {
       distinct() %>%
       ungroup()
 
-    flextable_calls[["add_header_row"]] <- expr(
-      flextable::add_header_row(
-        values = !!df_header$spanning_header,
-        colwidths = !!df_header$width
+    flextable_calls[["add_header_row"]] <- list(
+      expr(
+        # add the header row with the spanning headers
+        flextable::add_header_row(
+          values = !!df_header$spanning_header,
+          colwidths = !!df_header$width
+        )
+      ),
+      expr(
+        # add border above that matches border below
+        flextable::border(
+          i = 1,
+          border.top = officer::fp_border(width=2),
+          part = "header"
+        )
       )
     )
   }
@@ -176,6 +187,11 @@ table_header_to_flextable_calls <- function(x, ...) {
   flextable_calls[["padding"]] <- map2(
     df_padding$id, df_padding$i_index,
     ~expr(flextable::padding(i = !!.y, j = !!.x, padding.left = 15))
+  )
+
+  # fontsize -------------------------------------------------------------------
+  flextable_calls[["fontsize"]] <- list(
+    expr(flextable::fontsize(part = "header", size = 11))
   )
 
   # autofit --------------------------------------------------------------------
