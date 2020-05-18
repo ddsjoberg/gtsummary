@@ -15,6 +15,7 @@
 #' @family tbl_uvregression tools
 #' @export
 #' @examples
+#' # Example 1 ----------------------------------
 #' # add header above summary statistics
 #' spanning_header_ex1 <-
 #'   trial %>%
