@@ -55,12 +55,12 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
 }
 
 \examples{
-# create a summary table
+# create summary table
 tbl <- trial[c("age", "grade", "trt")] \%>\%
-  tbl_summary(by = trt) \%>\%
+  tbl_summary(by = trt, missing = "no") \%>\%
   add_p()
 
-# print `.$table_body` to show column names, so the header may be modified
+# print `.$table_body` to show column names and update headers
 tbl$table_body
 
 # Example 1 ----------------------------------
