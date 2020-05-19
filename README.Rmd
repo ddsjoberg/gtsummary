@@ -91,13 +91,15 @@ if (pkgdown::in_pkgdown()) {
 There are many **customization options** to **add information** (like comparing groups) and **format results** (like bold labels) in your table. See the [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
 
 ```{r table2, include = TRUE}
-table2 <- tbl_summary(
-  trial2,
-  by = trt, # split table by group
-  missing = "no" # don't list missing data separately
-) %>%
+table2 <- 
+  tbl_summary(
+    trial2,
+    by = trt, # split table by group
+    missing = "no" # don't list missing data separately
+  ) %>%
   add_n() %>% # add column with total number of non-missing observations
-  add_p() %>% # test if there's difference between groups
+  add_p() %>% # test for a difference between groups
+  modify_header(label = "**Variable**") %>% # update the column header
   bold_labels() 
 
 ```
