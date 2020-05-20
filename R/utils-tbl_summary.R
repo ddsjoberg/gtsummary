@@ -939,7 +939,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
 
   # calculating the statistic to be displayed in the cell in the table.
   tryCatch(
-    df_stats$statistic <- glue::glue_data(df_stats, stat_display),
+    df_stats$statistic <- glue::glue_data(df_stats, stat_display) %>% as.character(),
     error = function(e) {
       stop(glue(
         "There was an error assembling the summary statistics for '{{variable}}'\n",
