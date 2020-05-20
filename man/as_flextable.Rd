@@ -54,6 +54,7 @@ it to a flextable and formats the table with the following flextable functions.
 \item \code{\link[flextable:add_header_row]{flextable::add_header_row()}}, if applicable, to set spanning column header
 \item \code{\link[flextable:align]{flextable::align()}} to set column alignment
 \item \code{\link[flextable:padding]{flextable::padding()}} to indent variable levels
+\item \code{\link[flextable:fontsize]{flextable::fontsize()}} to set font size
 \item \code{\link[flextable:autofit]{flextable::autofit()}} to estimate the column widths
 \item \code{\link[flextable:footnote]{flextable::footnote()}} to add table footnotes and source notes
 \item \code{\link[flextable:bold]{flextable::bold()}} to bold cells in data frame

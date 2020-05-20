@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* The following columns in `tbl_summary()` are now available to print for both continuous and categorical variables: total number of observations `{N_obs}`, number of missing observations `{N_miss}`, number of non-missing observations `{N_nomiss}`, proportion of missing observations `{p_miss}`, proportion of non-missing observations `{p_nomiss}`. (#473)
+
+* Improved appearance of default `as_flextable()` output (#499)
+
 * Added `tbl_cross(margin=)` argument to control which margins are shown in the output table. (#444)
 
 * The missing values are now included in the calculation of p-values in `tbl_cross()`.
