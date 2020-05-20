@@ -947,7 +947,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         "There are 2 common sources for this error.\n",
         "1. You have requested summary statistics meant for continuous\n",
         "   variables for a variable being as summarized as categorical.\n",
-        "   To change the summary type to continuous add the argument\n",
+        "   To change the summary type to continuous, add the argument\n",
         "  `type = list({{variable}} ~ 'continuous')`\n",
         "2. One of the functions or statistics from the `statistic=` argument is not valid.",
         .open = "{{", .close = "}}"
