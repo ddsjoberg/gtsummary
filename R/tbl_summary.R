@@ -91,6 +91,21 @@
 #'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }
 #'
+#' For both categorical and continuous variables, statistics on the number of
+#' missing and non-missing observations and their proportions are available to
+#' display.
+#' \itemize{
+#'   \item `{N_obs}` total number of observations
+#'   \item `{N_miss}` number of missing observations
+#'   \item `{N_nonmiss}` number of non-missing observations
+#'   \item `{p_miss}` percentage of observations missing
+#'   \item `{p_nonmiss}` percentage of observations not missing
+#' }
+#'
+#' Note that for categorical variables, `{N_obs}`, `{N_miss}` and `{N_nonmiss}` refer
+#' to the total number, number missing and number non missing observations
+#' in the denominator, not at each level of the categorical variable.
+#'
 #' @section type argument:
 #' tbl_summary displays summary statistics for three types of data:
 #' continuous, categorical, and dichotomous. If the type is not specified,
@@ -292,24 +307,13 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       ),
       sort = assign_sort(.data$variable, .data$summary_type, sort),
       df_stats = pmap(
-        list(.data$summary_type, .data$variable, .data$class, .data$dichotomous_value,
+        list(.data$summary_type, .data$variable,
+             .data$class, .data$dichotomous_value,
              .data$sort, .data$stat_display, .data$digits),
-        function(summary_type, variable, class, dichotomous_value, sort, stat_display, digits) {
-          switch(
-            summary_type,
-            "continuous" = summarize_continuous(data = data, variable = variable,
-                                                 by = by, stat_display = stat_display,
-                                                 digits = digits),
-            "categorical" = summarize_categorical(data = data, variable = variable,
-                                                   by = by, class = class,
-                                                   dichotomous_value = dichotomous_value,
-                                                   sort = sort, percent = percent),
-            "dichotomous" = summarize_categorical(data = data, variable = variable,
-                                                   by = by, class = class,
-                                                   dichotomous_value = dichotomous_value,
-                                                   sort = sort, percent = percent)
-          )
-        }
+        ~ df_stats_fun(summary_type = ..1, variable = ..2,
+                       class = ..3, dichotomous_value = ..4,
+                       sort = ..5, stat_display = ..6, digits = ..7,
+                       data = data, by = by, percent = percent)
       )
     )
 

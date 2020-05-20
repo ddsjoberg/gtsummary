@@ -652,6 +652,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 #   stat_display = NULL, digits = NULL, pvalue_fun = NULL
 # )
 
+# stat_label_match -------------------------------------------------------------
 # provide a vector of stat_display and get labels back i.e. {mean} ({sd}) gives Mean (SD)
 stat_label_match <- function(stat_display, iqr = TRUE) {
   labels <-
@@ -666,7 +667,14 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       "{n}", "n",
       "{N}", "N",
       "{p}%", "%",
-      "{p}", "%"
+      "{p_miss}%", "% missing",
+      "{p_nonmiss}%", "% not missing",
+      "{p}", "%",
+      "{p_miss}", "% missing",
+      "{p_nonmiss}", "% not missing",
+      "{N_miss}", "N missing",
+      "{N_nonmiss}", "N",
+      "{N_obs}", "no. obs."
     ) %>%
     # adding in quartiles
     bind_rows(
@@ -711,6 +719,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
   stat_display
 }
 
+# footnote_stat_label ----------------------------------------------------------
 # stat_label footnote maker
 footnote_stat_label <- function(meta_data) {
   meta_data %>%
@@ -728,18 +737,15 @@ footnote_stat_label <- function(meta_data) {
     paste0("Statistics presented: ", .)
 }
 
+# summarize_categorical --------------------------------------------------------
 summarize_categorical <- function(data, variable, by, class, dichotomous_value, sort, percent) {
   # grabbing percent formatting function
   percent_fun <-
     get_theme_element("tbl_summary-fn:percent_fun") %||%
     getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
-  if (!rlang::is_function(percent_fun)) {
-    stop(paste0(
-      "'percent_fun' is not a valid function.  Please pass only a function\n",
-      "object. For example, to round percentages to 2 decimal places, \n\n",
-      "'options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(\"%.2f\", 100 * x))'"
-    ), call. = FALSE)
-  }
+  N_fun <-
+    get_theme_element("tbl_summary-fn:N_fun",
+                      default = function(x) sprintf("%.0f", x))
 
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
@@ -765,7 +771,7 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
       variable = switch(class, factor = .data$variable) %||% factor(.data$variable),
       # adding dichotomous level (in case it is unobserved)
       variable = forcats::fct_expand(.data$variable, as.character(dichotomous_value)),
-      # re-leveling by alphanumeric order or frequency
+      # # re-leveling by alphanumeric order or frequency
       variable = switch(sort,
                         "alphanumeric" = .data$variable,
                         "frequency" = forcats::fct_infreq(.data$variable))
@@ -811,11 +817,13 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
 
   # adding percent_fun as attr to p column
   attr(result$p, "fmt_fun") <- percent_fun
+  attr(result$N, "fmt_fun") <- N_fun
+  attr(result$n, "fmt_fun") <- N_fun
 
   result
 }
 
-
+# summarize_continuous ---------------------------------------------------------
 summarize_continuous <- function(data, variable, by, stat_display, digits) {
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
@@ -831,7 +839,9 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
     str_extract_all(stat_display, "\\{.*?\\}") %>%
     map(str_remove_all, pattern = fixed("}")) %>%
     map(str_remove_all, pattern = fixed("{")) %>%
-    unlist()
+    unlist() %>%
+    # removing elements protected as other items
+    setdiff(c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs"))
 
   # defining shortcut quantile functions, if needed
   if (any(fns_names_chr %in% paste0("p", 0:100))) {
@@ -918,109 +928,65 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
   df_stats
 }
 
+# df_stats_to_tbl --------------------------------------------------------------
 df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_display,
                             df_stats, missing, missing_text) {
-  # continuous and dichotomous with no by variable
-  if (summary_type %in% c("continuous", "dichotomous") && is.null(by)) {
-    result <-
-      df_stats %>%
-      purrr::map_dfc(
-        function(x) {
-          if(is.null(attr(x, "fmt_fun"))) return(x)
-          attr(x, "fmt_fun")(x)
-        }
-      ) %>%
-      mutate(
-        stat_0 = glue(stat_display) %>% as.character(),
-        row_type = "label",
-        label = var_label
-      ) %>%
-      select(c("variable", "row_type", "label", "stat_0"))
+
+  # styling the statistics -----------------------------------------------------
+  for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels")))) {
+    df_stats[[v]] <- df_stats[[v]] %>% attr(df_stats[[v]], "fmt_fun")()
   }
-  # categorical with no by variable
-  else if (summary_type %in% c("categorical") && is.null(by)) {
-    result <-
+
+  # creating the statistic to report in the table cell
+  df_stats <-
+    df_stats %>%
+    mutate(statistic = glue(stat_display) %>% as.character()) %>%
+    select(any_of(c("by", "variable", "variable_levels", "statistic")))
+
+  # reshaping table to wide ----------------------------------------------------
+  if (!is.null(by)) {
+    df_stats_wide <-
       df_stats %>%
-      purrr::map_dfc(
-        function(x) {
-          if(is.null(attr(x, "fmt_fun"))) return(x)
-          attr(x, "fmt_fun")(x)
-        }
-      ) %>%
+      # merging in new column header names
+      left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
+      tidyr::pivot_wider(id_cols = any_of(c("variable", "variable_levels")),
+                         names_from = "by_col",
+                         values_from = "statistic")
+  }
+  else {
+    df_stats_wide <-
+      df_stats %>%
+      rename(stat_0 = .data$statistic) %>%
+      select(any_of(c("variable", "variable_levels", "stat_0")))
+  }
+
+  # setting up structure for table_body
+  if (summary_type == "categorical") {
+    # adding a label row for categorical variables
+    result <-
+      df_stats_wide %>%
       mutate(
-        stat_0 = glue(stat_display) %>% as.character(),
         row_type = "level",
         label = as.character(.data$variable_levels)
       ) %>%
-      select(c("variable", "row_type", "label", "stat_0")) %>%
-      {bind_rows(
-        tibble(variable = variable,
-               row_type = "label",
-               label = var_label),
-        .
-      )}
-  }
-  # continuous and dichotomous with by variable
-  else if (summary_type %in% c("continuous", "dichotomous") && !is.null(by)) {
+      select(-.data$variable_levels)
+
+    # adding label row
     result <-
-      df_stats %>%
-      purrr::map_dfc(
-        function(x) {
-          if(is.null(attr(x, "fmt_fun"))) return(x)
-          attr(x, "fmt_fun")(x)
-        }
-      ) %>%
-      mutate(
-        statistic = glue(stat_display) %>% as.character(),
+      tibble(
+        variable = variable,
         row_type = "label",
         label = var_label
       ) %>%
-      select(c("by", "variable", "row_type", "label", "statistic")) %>%
-      left_join(
-        df_by(data, by)[c("by", "by_col", "by_id")],
-        by = "by"
-      ) %>%
-      arrange(.data$by_id) %>%
-      tidyr::pivot_wider(
-        id_cols = c("variable", "row_type", "label"),
-        names_from = "by_col",
-        values_from = "statistic"
-      ) %>%
-      select(c("variable", "row_type", "label", df_by(data, by)[["by_col"]]))
+      bind_rows(result)
   }
-  # categorical with by variable
-  else if (summary_type %in% c("categorical") && !is.null(by)) {
+  else if (summary_type %in% c("continuous", "dichotomous")) {
     result <-
-      df_stats %>%
-      purrr::map_dfc(
-        function(x) {
-          if(is.null(attr(x, "fmt_fun"))) return(x)
-          attr(x, "fmt_fun")(x)
-        }
-      ) %>%
+      df_stats_wide %>%
       mutate(
-        statistic = glue(stat_display) %>% as.character(),
-        row_type = "level",
-        label = as.character(.data$variable_levels)
-      ) %>%
-      select(c("by", "variable", "row_type", "label", "statistic")) %>%
-      left_join(
-        df_by(data, by)[c("by", "by_col", "by_id")],
-        by = "by"
-      ) %>%
-      arrange(.data$by_id) %>%
-      tidyr::pivot_wider(
-        id_cols = c("variable", "row_type", "label"),
-        names_from = "by_col",
-        values_from = "statistic"
-      ) %>%
-      {bind_rows(
-        tibble(variable = variable,
-               row_type = "label",
-               label = var_label),
-        .
-      )} %>%
-      select(c("variable", "row_type", "label", df_by(data, by)[["by_col"]]))
+        row_type = "label",
+        label = var_label
+      )
   }
 
   # add rows for missing -------------------------------------------------------
@@ -1033,9 +999,13 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
       )
   }
 
-  return(result)
+  # returning final object formatted for table_body ----------------------------
+  # selecting stat_* cols (in the correct order)
+  stat_vars <- switch(!is.null(by), df_by(data, by)$by_col) %||% "stat_0"
+  result %>% select(all_of(c("variable", "row_type", "label", stat_vars)))
 }
 
+# calculate_missing_row --------------------------------------------------------
 calculate_missing_row <- function(data, variable, by, missing_text) {
   # converting variable to TRUE/FALSE for missing
   data <-
@@ -1057,4 +1027,46 @@ calculate_missing_row <- function(data, variable, by, missing_text) {
       missing = "no", missing_text = "Doesn't Matter -- Text should never appear")} %>%
     # changing row_type to missing
     mutate(row_type = "missing")
+}
+
+# df_stats_fun -----------------------------------------------------------------
+# this function creates df_stats in the tbl_summary meta data table
+# and includes the number of missing values
+df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
+                         stat_display, digits, data, by, percent) {
+  # first table are the standard stats
+  t1 <- switch(
+    summary_type,
+    "continuous" = summarize_continuous(data = data, variable = variable,
+                                        by = by, stat_display = stat_display,
+                                        digits = digits),
+    "categorical" = summarize_categorical(data = data, variable = variable,
+                                          by = by, class = class,
+                                          dichotomous_value = dichotomous_value,
+                                          sort = sort, percent = percent),
+    "dichotomous" = summarize_categorical(data = data, variable = variable,
+                                          by = by, class = class,
+                                          dichotomous_value = dichotomous_value,
+                                          sort = sort, percent = percent)
+  )
+
+  # adding the N_obs and N_missing, etc
+  t2 <- summarize_categorical(data = mutate_at(data, vars(all_of(variable)), is.na),
+                              variable = variable,
+                              by = by, class = "logical",
+                              dichotomous_value = TRUE,
+                              sort = "alphanumeric", percent = percent) %>%
+    rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
+    mutate(N_nonmiss = .data$N_obs - .data$N_miss,
+           p_nonmiss = 1 - .data$p_miss)
+
+  # returning table will all stats
+  merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
+  return <- left_join(t1, t2, by = merge_vars)
+
+  # setting fmt_fun for percents and integers
+  attr(return$p_nonmiss, "fmt_fun") <- attr(return$p_miss, "fmt_fun")
+  attr(return$N_nonmiss, "fmt_fun") <- attr(return$N_miss, "fmt_fun")
+
+  return
 }

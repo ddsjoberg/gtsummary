@@ -27,16 +27,27 @@
 #' @family tbl_uvregression tools
 #' @author Daniel D. Sjoberg
 #' @examples
+#' # create summary table
+#' tbl <- trial[c("age", "grade", "trt")] %>%
+#'   tbl_summary(by = trt, missing = "no") %>%
+#'   add_p()
+#'
+#' # print `.$table_body` to show column names and update headers
+#' tbl$table_body
+#'
 #' # Example 1 ----------------------------------
+#' # updating column headers
 #' modify_header_ex1 <-
-#'   trial[c("age", "grade", "response")] %>%
-#'   tbl_summary() %>%
-#'   modify_header(stat_0 ~ "**All Patients**, N = {N}")
+#'   tbl %>%
+#'   modify_header(
+#'     label = "**Variable**",
+#'     p.value = "**P**"
+#'   )
 #'
 #' # Example 2 ----------------------------------
+#' # using `stat_by=` argument to update headers
 #' modify_header_ex2 <-
-#'   trial[c("age", "grade", "response", "trt")] %>%
-#'   tbl_summary(by = trt) %>%
+#'   tbl %>%
 #'   modify_header(
 #'     stat_by = "**{level}**, N = {n} ({style_percent(p)}%)"
 #'   )
@@ -45,11 +56,11 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_header_ex1.png}{options: width=31\%}}
+#' \if{html}{\figure{modify_header_ex1.png}{options: width=45\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{modify_header_ex2.png}{options: width=50\%}}
+#' \if{html}{\figure{modify_header_ex2.png}{options: width=45\%}}
 
 modify_header <- function(x, update = NULL, stat_by = NULL,
                           text_interpret = c("md", "html"), ...) {

@@ -28,11 +28,15 @@ library(dplyr); library(stringr); library(purrr); library(forcats)
 
 ## Summary Tables
 
-Add a spanning header over the group columns for increased clarity, and modify column headers.
+Add a spanning header over the group columns for increased clarity, reporting the number of non-missing observations, and modifying column headers.
 ```{r}
 trial[c("trt", "age", "grade")] %>%
-  tbl_summary(by = trt, missing = "no") %>%
-  modify_header(stat_by = "**{level}** N =  {n} ({style_percent(p)}%)") %>%
+  tbl_summary(
+    by = trt, 
+    missing = "no",
+    statistic = all_continuous() ~ "{median} ({p25}, {p75}) [N = {N_nonmiss}]"
+  ) %>%
+  modify_header(stat_by = md("**{level}**<br>N =  {n} ({style_percent(p)}%)")) %>%
   add_n() %>%
   bold_labels() %>%
   modify_spanning_header(starts_with("stat_") ~ "**Chemotherapy Treatment**")
