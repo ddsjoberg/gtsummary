@@ -937,16 +937,28 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
     df_stats[[v]] <- df_stats[[v]] %>% attr(df_stats[[v]], "fmt_fun")()
   }
 
-  # creating the statistic to report in the table cell
-  df_stats <-
-    df_stats %>%
-    mutate(statistic = glue(stat_display) %>% as.character()) %>%
-    select(any_of(c("by", "variable", "variable_levels", "statistic")))
+  # calculating the statistic to be displayed in the cell in the table.
+  tryCatch(
+    df_stats$statistic <- glue::glue_data(df_stats, stat_display),
+    error = function(e) {
+      stop(glue(
+        "There was an error assembling the summary statistics for '{{variable}}'\n",
+        "  with summary type '{{summary_type}}'.\n\n",
+        "There are 2 common sources for this error.\n",
+        "1. You have requested summary statistics meant for continuous\n",
+        "   variables for a variable being as summarized as categorical.\n",
+        "   To change the summary type to continuous add the argument\n",
+        "  `type = list({{variable}} ~ 'continuous')`\n",
+        "2. One of the functions or statistics from the `statistic=` argument is not valid.",
+        .open = "{{", .close = "}}"
+      ))
+    })
 
   # reshaping table to wide ----------------------------------------------------
   if (!is.null(by)) {
     df_stats_wide <-
       df_stats %>%
+      select(any_of(c("by", "variable", "variable_levels", "statistic"))) %>%
       # merging in new column header names
       left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
       tidyr::pivot_wider(id_cols = any_of(c("variable", "variable_levels")),
@@ -956,6 +968,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
   else {
     df_stats_wide <-
       df_stats %>%
+      select(any_of(c("by", "variable", "variable_levels", "statistic"))) %>%
       rename(stat_0 = .data$statistic) %>%
       select(any_of(c("variable", "variable_levels", "stat_0")))
   }
