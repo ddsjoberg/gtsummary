@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Report statistics from summary tables inline — inline_text.tbl_summary • gtsummary</title>
+<title>Update gtsummary table footnote — modify_footnote • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,10 +52,8 @@
 
 
 
-<meta property="og:title" content="Report statistics from summary tables inline — inline_text.tbl_summary" />
-<meta property="og:description" content="Extracts and returns statistics from a tbl_summary object for
-inline reporting in an R markdown document. Detailed examples in the
-inline_text vignette" />
+<meta property="og:title" content="Update gtsummary table footnote — modify_footnote" />
+<meta property="og:description" content="Update gtsummary table footnote" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -170,72 +168,53 @@ inline_text vignette" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Report statistics from summary tables inline</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/inline_text.R'><code>R/inline_text.R</code></a></small>
-    <div class="hidden name"><code>inline_text.tbl_summary.Rd</code></div>
+    <h1>Update gtsummary table footnote</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/modify_footnote.R'><code>R/modify_footnote.R</code></a></small>
+    <div class="hidden name"><code>modify_footnote.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Extracts and returns statistics from a <code>tbl_summary</code> object for
-inline reporting in an R markdown document. Detailed examples in the
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html'>inline_text vignette</a></p>
+    <p>Update gtsummary table footnote</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(
-  <span class='no'>x</span>,
-  <span class='no'>variable</span>,
-  <span class='kw'>column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>modify_footnote</span>(<span class='no'>x</span>, <span class='no'>update</span>, <span class='kw'>abbreviation</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object created from  <a href='tbl_summary.html'>tbl_summary</a></p></td>
+      <td><p>a gtsummary object</p></td>
     </tr>
     <tr>
-      <th>variable</th>
-      <td><p>Variable name of statistic to present</p></td>
+      <th>update</th>
+      <td><p>list of formulas or a single formula specifying the footnote
+update. The LHS selects the variables
+whose footnote will be updated, and the RHS is the new footnote. For example,
+<code>update = stat_0 ~ "New footnote!"</code> or
+<code>update = starts_with("stat_") ~ "New footnote!"</code>. To delete the footnote,
+update the text to <code>NA</code>. Columns from <code>x$table_body</code> may be selected.</p></td>
     </tr>
     <tr>
-      <th>column</th>
-      <td><p>Column name to return from <code>x$table_body</code>.
-Can also pass the level of a by variable.</p></td>
-    </tr>
-    <tr>
-      <th>level</th>
-      <td><p>Level of the variable to display for categorical variables.
-Can also specify the 'Unknown' row.  Default is <code>NULL</code></p></td>
-    </tr>
-    <tr>
-      <th>pattern</th>
-      <td><p>String indicating the statistics to return.
-Uses <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> formatting. Default is pattern shown in <code><a href='tbl_summary.html'>tbl_summary()</a></code> output</p></td>
-    </tr>
-    <tr>
-      <th>pvalue_fun</th>
-      <td><p>Function to round and format p-values.
-Default is <a href='style_pvalue.html'>style_pvalue</a>.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Not used</p></td>
+      <th>abbreviation</th>
+      <td><p>Logical indicating if an abbreviation is being updated.
+Abbreviation footnotes are handled differently. See examples below.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string reporting results from a gtsummary table</p>
+    <p>gtsummary object</p>
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+
+<p>Example 1</p>
+<p><img src='figures/modify_footnote_ex1.png' width=60% /></p>
+<p>Example 2</p>
+<p><img src='figures/modify_footnote_ex2.png' width=55% /></p>
+<p>Example 3</p>
+<p><img src='figures/modify_footnote_ex3.png' width=45% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: 
@@ -245,20 +224,64 @@ and return a string that is the rounded/formatted p-value (e.g.
 <code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
 <code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
 <code><a href='modify_header.html'>modify_header</a>()</code>,
 <code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
+<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
+<p>Other tbl_regression tools: 
+<code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
+<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
+<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='combine_terms.html'>combine_terms</a>()</code>,
+<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
+<code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p>
+<p>Other tbl_uvregression tools: 
+<code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
+<code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
+<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
+<code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>t1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>)
-<span class='no'>t2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='no'>trial</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='add_p.html'>add_p</a></span>()
+    <pre class="examples"><div class='input'><span class='no'>tbl_summary</span> <span class='kw'>&lt;-</span>
+  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>)
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>age</span>)</div><div class='output co'>#&gt; [1] "47 (38, 57)"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>grade</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"I"</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"Drug A"</span>,
-<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"{n}/{N} ({p})%"</span>)</div><div class='output co'>#&gt; [1] "35/98 (36)%"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>t2</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>grade</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='st'>"p.value"</span>)</div><div class='output co'>#&gt; [1] "p=0.9"</div></pre>
+<span class='co'># Example 1 ----------------------------------</span>
+<span class='co'># update footnote</span>
+<span class='no'>modify_footnote_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='no'>tbl_summary</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>modify_footnote</span>(
+    <span class='kw'>update</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) ~
+      <span class='st'>"median (IQR) for continuous variables; n (%) categorical variables"</span>
+  )
+
+<span class='co'># Example 2 ----------------------------------</span>
+<span class='co'># delete all footnotes</span>
+<span class='no'>modify_footnote_ex2</span> <span class='kw'>&lt;-</span>
+  <span class='no'>tbl_summary</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>modify_footnote</span>(<span class='kw'>update</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() ~ <span class='fl'>NA</span>)
+
+<span class='co'># Example 3 ----------------------------------</span>
+<span class='co'># updating the footnote abbreviation for CI</span>
+<span class='no'>modify_footnote_ex3</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>modify_footnote</span>(<span class='no'>ci</span> ~ <span class='st'>"CI = Credible Interval"</span>, <span class='kw'>abbreviation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -99,7 +99,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.0.9016</span>
       </span>
     </div>
 
@@ -242,9 +242,9 @@ to 1 decimal place, and the SD to 2 use <code>digits = list(age ~ c(1, 2))</code
       <th>type</th>
       <td><p>List of formulas specifying variable types. Accepted values
 are <code><a href='https://rdrr.io/r/base/c.html'>c("continuous", "categorical", "dichotomous")</a></code>,
-e.g. <code>type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")</code>.
+e.g. <code>type = list(age ~ "continuous", female ~ "dichotomous")</code>.
 If type not specified for a variable, the function
-will default to an appropriate summary type.  See below for details.</p></td>
+will default to an appropriate summary type. See below for details.</p></td>
     </tr>
     <tr>
       <th>value</th>
@@ -368,7 +368,8 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
 <p><img src='figures/tbl_summary_ex3.png' width=45% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed examples</p>
+    <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed tutorial</p>
+<p>See <a href='http://www.danieldsjoberg.com/gtsummary/articles/gallery.html'>table gallery</a> for additional examples</p>
 <p>Other tbl_summary tools: 
 <code><a href='add_n.html'>add_n</a>()</code>,
 <code><a href='add_overall.html'>add_overall</a>()</code>,
@@ -378,7 +379,9 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
 <code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
+<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
 <code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
 
