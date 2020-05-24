@@ -286,7 +286,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
         tbl = map(
           .data$tbl,
           function(tbl) {
-            tbl <- modify_header(tbl, N = "**N**")
+            tbl <- modify_header(tbl, N ~ "**N**")
             # only display N on label row
             tbl$table_body$N <- ifelse(tbl$table_body$row_type == "label",
                                        tbl$table_body$N, NA)
