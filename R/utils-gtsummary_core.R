@@ -1,7 +1,7 @@
 # THIS FILE CONTAINS A FEW SCRIPTS THAT ASSIST IN SETTING UP A GENERAL
 # GTSUMMARY OBJECT. IF YOU'RE CREATING A GTSUMMARY-LIKE FUNCTION, YOU'LL
 # WANT TO GRAB A COPY OF THIS FILE AND PLACE IT IN YOUR PACKAGE.
-# LAST UPDATED: 2020-04-18
+# LAST UPDATED: 2020-04-23
 
 # table_header_fill_missing -----------------------------------------------------
 #' Function fills out table_header when there are missing columns

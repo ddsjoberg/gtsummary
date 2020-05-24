@@ -69,7 +69,7 @@ column width after calling \code{\link[=as_flextable]{as_flextable()}}.
 
 \examples{
 trial \%>\%
-  dplyr::select(trt, age, grade) \%>\%
+  select(trt, age, grade) \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   as_flextable()

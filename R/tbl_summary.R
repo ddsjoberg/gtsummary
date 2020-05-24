@@ -17,9 +17,9 @@
 #' attribute label is `NULL`, the variable name will be used.
 #' @param type List of formulas specifying variable types. Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
-#' e.g. `type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")`.
+#' e.g. `type = list(age ~ "continuous", female ~ "dichotomous")`.
 #' If type not specified for a variable, the function
-#' will default to an appropriate summary type.  See below for details.
+#' will default to an appropriate summary type. See below for details.
 #' @param value List of formulas specifying the value to display for dichotomous
 #' variables.  See below for details.
 #' @param statistic List of formulas specifying types of summary statistics to
@@ -119,7 +119,8 @@
 #' @export
 #' @return A `tbl_summary` object
 #' @family tbl_summary tools
-#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed tutorial
+#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 #' @author Daniel D. Sjoberg
 #' @examples
 #' # Example 1 ----------------------------------

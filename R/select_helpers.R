@@ -14,7 +14,7 @@
 #' @examples
 #' select_ex1 <-
 #'   trial %>%
-#'   dplyr::select(age, response, grade) %>%
+#'   select(age, response, grade) %>%
 #'   tbl_summary(
 #'     statistic = all_continuous() ~ "{mean} ({sd})",
 #'     type = all_dichotomous() ~ "categorical"

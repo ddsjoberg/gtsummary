@@ -14,7 +14,7 @@
 #' @examples
 #' tbl <-
 #'   trial %>%
-#'   dplyr::select(trt, age, grade, response) %>%
+#'   select(trt, age, grade, response) %>%
 #'   tbl_summary(by = trt)
 #'
 #' as_tibble(tbl)

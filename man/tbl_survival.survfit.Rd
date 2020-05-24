@@ -121,8 +121,7 @@ tbl_nostrata_ex2 <-
 }
 \seealso{
 Other tbl_survival tools: 
-\code{\link{inline_text.tbl_survival}()},
-\code{\link{modify_header}()}
+\code{\link{inline_text.tbl_survival}()}
 }
 \author{
 Daniel D. Sjoberg

@@ -77,7 +77,7 @@ For brevity in the tutorial, let's keep a subset of the variables from the trial
 ```{r}
 trial2 =
   trial %>%
-  dplyr::select(trt, marker, stage)
+  select(trt, marker, stage)
 ```
 
 ## Basic Usage
@@ -240,7 +240,7 @@ Note that dichotomous variables are, by default, included with `all_categorical(
 
 ```{r}
 trial %>%
-  dplyr::select(trt, response, age, stage, marker, grade) %>%
+  select(trt, response, age, stage, marker, grade) %>%
   tbl_summary(
     by = trt,
     type = list(c(response, grade) ~ "categorical"), # select by variables in c()
