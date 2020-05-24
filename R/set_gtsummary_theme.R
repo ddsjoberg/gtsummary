@@ -1,5 +1,6 @@
 #' Set a gtsummary theme
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Use this function to set preferences for the display of gtsummary tables.
 #' The default formatting and styling throughout the gtsummary package are
 #' taken from the published reporting guidelines of the top four urology
@@ -10,31 +11,12 @@
 #'
 #' @param x A gtsummary theme function, e.g. `theme_gtsummary_journal()`, or a
 #' named list defining a gtsummary theme. See details below.
-#' @param journal String indicating the journal theme to follow.
-#'  - `"jama"` Journal of the American Medical Association
-#' @param print_engine String indicating the print method. Must be one of
-#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"huxtable"`, `"tibble"`
 #' @name set_gtsummary_theme
 #' @export
 #' @section Themes:
-#' - `theme_gtsummary_journal(journal=)`
-#'   - `journal = "jama"`
-#'     - sets theme to align with the JAMA reporting guidelines
-#'     - large p-values are rounded to two decimal places
-#'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
-#'     - in `tbl_summary()` the percent symbol is not printed next to percentages
-#' - `theme_gtsummary_compact()`
-#'   - tables printed with gt, flextable, and huxtable will be compact with smaller font size and reduced cell padding
-#' - `theme_gtsummary_printer(print_engine=)`
-#'   - `print_engine = "gt"` sets the gt package as the default print engine
-#'   - `print_engine = "kable"` sets the `knitr::kable()` function as the default print engine
-#'   - `print_engine = "flextable"` sets the flextable package as the default print engine
-#'   - `print_engine = "kable_extra"` sets the kableExtra package as the default print engine
-#'   - `print_engine = "huxtable"` sets the huxtable package as the default print engine
-#' Use `reset_gtsummary_theme()` to restore the default settings
-#'
 #' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html)
 #' to create your own themes.
+#' @seealso Available [gtsummary themes][theme_gtsummary]
 #' @examples
 #' # Setting JAMA theme for gtsummary
 #' set_gtsummary_theme(theme_gtsummary_journal("jama"))
@@ -68,6 +50,10 @@ set_gtsummary_theme <- function(x) {
       "List elements", quoted_list(not_name), "are not accepted theme elements."
     ), call. = FALSE)
   }
+
+  # print name of theme if present ---------------------------------------------
+  if (!is.null(x$`pkgwide-str:theme_name`))
+    rlang::inform(glue("Setting `{x$`pkgwide-str:theme_name`}` theme"))
 
   # adding theme elements to environment ---------------------------------------
   rlang::env_bind(.env = env_gtsummary_theme, !!!x)
@@ -106,78 +92,6 @@ reset_gtsummary_theme <- function() {
   invisible()
 }
 
-# ------------------------------------------------------------------------------
-#' @name set_gtsummary_theme
-#' @export
-theme_gtsummary_journal <- function(journal = "jama") {
-  journal <- match.arg(journal)
-  if (journal == "jama") {
-    lst_theme <-
-      list(
-        "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
-        "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
-        "pkgwide-str:theme_name" = "JAMA",
-        "add_stat_label-arg:location" = "row",
-        "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
-        "tbl_summary-str:categorical_stat" = "{n} ({p})"
-      )
-  }
-
-  return(lst_theme)
-}
-
-# ------------------------------------------------------------------------------
-#' @name set_gtsummary_theme
-#' @export
-theme_gtsummary_compact <- function(){
-  list(
-    # compact gt tables
-    "as_gt-lst:addl_cmds" = list(
-      tab_spanner = rlang::expr(
-        gt::tab_options(table.font.size = 'small',
-                        data_row.padding = gt::px(1),
-                        summary_row.padding = gt::px(1),
-                        grand_summary_row.padding = gt::px(1),
-                        footnotes.padding = gt::px(1),
-                        source_notes.padding = gt::px(1),
-                        row_group.padding = gt::px(1))
-      )
-    ),
-    # compact flextables
-    "as_flextable.gtsummary-lst:addl_cmds" = list(
-      footnote = list(
-        rlang::expr(flextable::fontsize(size = 8, part = "all")),
-        rlang::expr(flextable::padding(padding.top = 0, part = "all")),
-        rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))
-      )
-    ),
-    # compact huxtable
-    "as_huxtable.gtsummary-lst:addl_cmds" = list(
-      insert_row = list(
-        rlang::expr(huxtable::set_font_size(value = 8)),
-        rlang::expr(huxtable::set_bottom_padding(value = 0)),
-        rlang::expr(huxtable::set_top_padding(value = 0))
-      )
-    ),
-    # compact kableExtra
-    "as_kable_extra-lst:addl_cmds" = list(
-      kable = list(
-        rlang::expr(kableExtra::kable_styling(font_size = 8))
-      )
-    )
-  )
-}
-
-# ------------------------------------------------------------------------------
-#' @name set_gtsummary_theme
-#' @param print_engine String indicating the print engine. Default is `"gt"`
-#' @export
-theme_gtsummary_printer <- function(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble")) {
-
-  list("pkgwide-str:print_engine" = match.arg(print_engine))
-}
-
 # tibble of all possible theme options
 # THIS DATA FRAME IS SAVED IN "vignettes/data/gtsummary_theme_elements.csv"
 # OPEN THE FILE, COPY THE CELLS, USE THE datapasta PACKAGE TO PASTE AS TRIBBLE HERE
@@ -203,6 +117,7 @@ tibble::tribble(
              "tbl_summary",                           "tbl_summary-arg:percent",      TRUE,                                                                                                                                                                                                                  NA,                                                                                                                                                         NA,
              "tbl_summary",                              "tbl_summary-arg:sort",      TRUE,                                                                                                                                                                                                                  NA,                                                                                                                                                         NA,
              "tbl_summary",                        "tbl_summary-fn:percent_fun",     FALSE,                                                                                                                                                                                     "function to style percentages",                                                                                                                             "function(x) style_percent(x)",
+             "tbl_summary",                              "tbl_summary-fn:N_fun",     FALSE,                                                                                                                                                                                       "function to style intergers",                                                                                                                         "function(x) sprintf(\"%.0f\", x)",
              "tbl_summary",                   "tbl_summary-str:continuous_stat",     FALSE,                                                                                                                                         "glue string defining the default continuous summary statistics to display",                                                                                                                                        "\"{mean} ({sd})\"",
              "tbl_summary",                  "tbl_summary-str:categorical_stat",     FALSE,                                                                                                                        "glue string defining the default categorical and dichotomous summary statistics to display",                                                                                                                                     "\"{n} / {N} ({p}%)\"",
        "add_p.tbl_summary",                        "add_p.tbl_summary-arg:test",      TRUE,                                                                                                                                                                                                                  NA,                                                                                                                                                         NA,

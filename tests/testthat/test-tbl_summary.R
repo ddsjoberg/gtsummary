@@ -123,6 +123,11 @@ test_that("tbl_summary returns errors with bad inputs", {
     tbl_summary(trial, by = c("trt", "grade")),
     "*"
   )
+
+  expect_error(
+    tbl_summary(trial, statistic = everything() ~ "{mean}"),
+    "*"
+  )
 })
 
 
@@ -385,3 +390,13 @@ test_that("tbl_summary-no error when by variable is ordered factor", {
     NA
   )
 })
+
+test_that("tbl_summary- works with grouped data (it ungroups it first)", {
+  expect_error(
+    trial %>% dplyr::group_by(response) %>%
+      dplyr::select(response, death, trt) %>%
+      tbl_summary(by = trt),
+    NA
+  )
+})
+

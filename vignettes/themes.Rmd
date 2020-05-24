@@ -35,6 +35,8 @@ To set a theme, use the `set_gtsummary_theme()` function.
 Themes must be set before you create the {gtsummary} tables.
 Let's take a look at the default table, comparing data between treatment groups.
 
+#### Default Theme
+
 ```{r, message=FALSE}
 library(gtsummary); library(gt); library(dplyr)
 
@@ -42,15 +44,14 @@ trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
   add_p() %>%
-  add_stat_label() %>%
-  as_gt() %>%
-  tab_header("Default Theme")
+  add_stat_label()
 ```
+
+#### JAMA Theme
 
 Now, the same code with the JAMA theme.
 
-```{r, message=FALSE}
-# setting the JAMA theme
+```{r, message=TRUE}
 set_gtsummary_theme(theme_gtsummary_journal(journal = "jama"))
 ```
 
@@ -59,18 +60,17 @@ trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
   add_p() %>%
-  add_stat_label() %>%
-  as_gt() %>%
-  tab_header("JAMA Theme")
+  add_stat_label()
 ```
 
 By setting the theme, we were able to change the default formatting for the p-value and add a dash between the 25th and 75th percentiles.
 
+#### JAMA + Compact Theme
+
 Themes can be stacked as well.
 In the example below, the JAMA theme and the compact theme (reduces font size and cell padding) are stacked.
 
-```{r, message=FALSE}
-# setting the JAMA theme
+```{r, message=TRUE}
 set_gtsummary_theme(theme_gtsummary_journal(journal = "jama"))
 set_gtsummary_theme(theme_gtsummary_compact())
 ```
@@ -80,10 +80,7 @@ trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
   add_p() %>%
-  add_stat_label() %>%
-  as_gt() %>%
-  tab_header("JAMA + Compact Theme")
-  
+  add_stat_label()
 ```
 
 Clear all previously set themes using the `reset_gtsummary_theme()`

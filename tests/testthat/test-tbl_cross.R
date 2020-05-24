@@ -1,6 +1,6 @@
 context("test-tbl_cross")
 
-test_that("tbl_cross throws error if both `col` and `row`` are not specified", {
+test_that("tbl_cross- throws error if both `col` and `row`` are not specified", {
   expect_error(
     tbl_cross(trial, col = trt),
     "*"
@@ -11,7 +11,7 @@ test_that("tbl_cross throws error if both `col` and `row`` are not specified", {
   )
 })
 
-test_that("tbl_cross works if no `col` or `row` specified", {
+test_that("tbl_cross- works if no `col` or `row` specified", {
   expect_error(
     tbl_cross(trial, col = trt, row = response),
     NA
@@ -19,7 +19,7 @@ test_that("tbl_cross works if no `col` or `row` specified", {
 })
 
 
-test_that("tbl_summary works in character inputs for `col` and `row", {
+test_that("tbl_cross- works in character inputs for `col` and `row", {
   col_variable <- "trt"
   row_variable <- "response"
   expect_error(
@@ -29,7 +29,7 @@ test_that("tbl_summary works in character inputs for `col` and `row", {
   )
 })
 
-test_that("tbl_cross creates output without error with continuous args", {
+test_that("tbl_cross- creates output without error with continuous args", {
   expect_error(
     tbl_cross(mtcars, row = gear, col = am),
     NA
@@ -37,7 +37,7 @@ test_that("tbl_cross creates output without error with continuous args", {
 })
 
 
-test_that("tbl_cross returns errors with bad inputs", {
+test_that("tbl_cross- returns errors with bad inputs", {
   expect_error(
     tbl_cross(tibble::tibble()),
     "*"
@@ -53,7 +53,7 @@ test_that("tbl_cross returns errors with bad inputs", {
 })
 
 # Labels Argument ------------------------------------------------------------
-test_that("tbl_cross labels work", {
+test_that("tbl_cross- labels work", {
   expect_error(
     tbl_cross(mtcars, row = am, col = cyl, label = list(am = "AM LABEL",
                                                         cyl = "New cyl")),
@@ -67,7 +67,7 @@ test_that("tbl_cross labels work", {
 })
 
 # Stats and Percent Argument ---------------------------------------------------
-test_that("tbl_cross statistics argument works", {
+test_that("tbl_cross- statistics argument works", {
   expect_error(
     tbl_cross(trial, statistic = "{p}"),
     NA
@@ -79,7 +79,7 @@ test_that("tbl_cross statistics argument works", {
   )
 })
 
-test_that("tbl_cross passing percent without stat works and produces %", {
+test_that("tbl_cross- passing percent without stat works and produces %", {
   expect_error(
     tbl_cross(trial, percent = "cell"),
     NA
@@ -90,7 +90,7 @@ test_that("tbl_cross passing percent without stat works and produces %", {
 })
 
 # Missing Argument -------------------------------------------------------------
-test_that("tbl_cross test 'no' missing throws message", {
+test_that("tbl_cross- test 'no' missing throws message", {
   expect_message(
     x <- tbl_cross(trial,
                    row = trt,
@@ -100,7 +100,7 @@ test_that("tbl_cross test 'no' missing throws message", {
   )
 })
 
-test_that("tbl_cross test no missing omits all NAs", {
+test_that("tbl_cross- test no missing omits all NAs", {
   x <- tbl_cross(trial,
                  row = trt,
                  col = response,
@@ -111,7 +111,7 @@ test_that("tbl_cross test no missing omits all NAs", {
   )
 })
 
-test_that("tbl_cross test ifany missing returns Unknown when missing", {
+test_that("tbl_cross- test ifany missing returns Unknown when missing", {
   x <- tbl_cross(trial,
                  row = response,
                  col = trt,
@@ -123,7 +123,7 @@ test_that("tbl_cross test ifany missing returns Unknown when missing", {
 })
 
 
-test_that("tbl_cross test 'always' missing returns Unknown even when none", {
+test_that("tbl_cross- test 'always' missing returns Unknown even when none", {
   x <- tbl_cross(trial,
                  row = trt,
                  col = grade,
@@ -134,4 +134,11 @@ test_that("tbl_cross test 'always' missing returns Unknown even when none", {
   )
 })
 
+
+test_that("tbl_cross- works with grouped data (it ungroups it first)", {
+  expect_error(
+    trial %>% dplyr::group_by(response) %>% tbl_cross(death, trt),
+    NA
+  )
+})
 
