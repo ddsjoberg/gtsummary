@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Improved error messaging when invalid statistics are requested in `tbl_summary(statistic=)` (#502)
+
 * The following columns in `tbl_summary()` are now available to print for both continuous and categorical variables: total number of observations `{N_obs}`, number of missing observations `{N_miss}`, number of non-missing observations `{N_nomiss}`, proportion of missing observations `{p_miss}`, proportion of non-missing observations `{p_nomiss}`. (#473)
 
 * Improved appearance of default `as_flextable()` output (#499)
