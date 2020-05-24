@@ -4,13 +4,22 @@
 \alias{modify_header}
 \title{Modify column headers in gtsummary tables}
 \usage{
-modify_header(x, stat_by = NULL, ..., text_interpret = c("md", "html"))
+modify_header(
+  x,
+  update = NULL,
+  stat_by = NULL,
+  text_interpret = c("md", "html"),
+  ...
+)
 }
 \arguments{
 \item{x}{gtsummary object, e.g. \code{tbl_summary} or \code{tbl_regression}}
 
-\item{stat_by}{String specifying text to include above the summary statistics
-stratified by a variable.  Only use with stratified \code{tbl_summary} objects.
+\item{update}{list of formulas or a single formula specifying the updated
+column label. Columns from \code{x$table_body} may be selected.}
+
+\item{stat_by}{Used with \code{tbl_summary(by=)} objects with a \verb{by=} argument.
+String specifying text to include above the summary statistics.
 The following fields are available for use in the
 headers:
 \itemize{
@@ -18,22 +27,17 @@ headers:
 \item \code{{N}} total number of observations,
 \item \code{{p}} percentage in each group,
 \item \code{{level}} the 'by' variable level,
-\item \code{"fisher.test"} for a Fisher's exact test,
 }
 
-Syntax follows \link[glue:glue]{glue::glue},
-e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)\\\%})"}.
-The \code{by} argument from the parent \code{tbl_summary()} cannot be \code{NULL}.}
+Syntax follows \code{\link[glue:glue]{glue::glue()}},
+e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"}.}
 
-\item{...}{Specifies column label of any other column in \code{.$table_body}.
-Argument is the column name, and the value is the new column header
-(e.g. \code{p.value = "Model P-values"}). Use
-\code{print(x$table_body)} to see columns available.}
+\item{text_interpret}{String indicates whether text will be interpreted with
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 
-\item{text_interpret}{indicates whether text will be interpreted as markdown (\code{"md"})
-or HTML (\code{"html"}).  The text is interpreted with the {gt} package's \code{md()} or
-\code{html()} functions.  The default is \code{"md"}, and is ignored when the print engine
-is not {gt}.}
+\item{...}{Specify a column and updated column label,
+e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an alternative to the
+\verb{update=} argument. They accomplish the same goal of updating column headers.}
 }
 \value{
 Function return the same class of gtsummary object supplied
@@ -68,8 +72,10 @@ tbl$table_body
 modify_header_ex1 <-
   tbl \%>\%
   modify_header(
-    label = "**Variable**",
-    p.value = "**P**"
+    update = list(
+      label ~ "**Variable**",
+      p.value ~ "**P**"
+    )
   )
 
 # Example 2 ----------------------------------
@@ -77,7 +83,7 @@ modify_header_ex1 <-
 modify_header_ex2 <-
   tbl \%>\%
   modify_header(
-    stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"
+    stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"
   )
 }
 \seealso{
@@ -90,6 +96,8 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
+\code{\link{modify_footnote}()},
+\code{\link{modify_spanning_header}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
@@ -101,6 +109,8 @@ Other tbl_regression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
 \code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_footnote}()},
+\code{\link{modify_spanning_header}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_regression}()},
 \code{\link{tbl_stack}()}
@@ -111,18 +121,15 @@ Other tbl_uvregression tools:
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify_footnote}()},
+\code{\link{modify_spanning_header}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_uvregression}()}
-
-Other tbl_survival tools: 
-\code{\link{inline_text.tbl_survival}()},
-\code{\link{tbl_survival.survfit}()}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
 \concept{tbl_summary tools}
-\concept{tbl_survival tools}
 \concept{tbl_uvregression tools}

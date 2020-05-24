@@ -104,7 +104,7 @@ Example basic table:
 ``` r
 library(gtsummary)
 # make dataset with a few variables to summarize
-trial2 <- trial %>% dplyr::select(trt, age, grade, response)
+trial2 <- trial %>% select(trt, age, grade, response)
 
 # summarize the data with our package
 table1 <- tbl_summary(trial2)

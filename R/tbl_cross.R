@@ -157,36 +157,27 @@ tbl_cross <- function(data,
       label = new_label,
       missing_text = missing_text
     ) %>%
+    bold_labels() %>%
     modify_header(stat_by = "{level}") %>%
-    bold_labels()
+    modify_footnote(everything() ~ NA_character_) %>%
+    modify_spanning_header(
+      c(starts_with("stat_"), -any_of("stat_0")) ~ paste0("**", new_label[[col]], "**")
+    )
 
   # adding column margin
   if ("column" %in% margin) {
     x <- add_overall(x, last = TRUE) %>%
       modify_header(
-        stat_0 = paste0("**", margin_text, "**")
+        update = list(stat_0 ~ paste0("**", margin_text, "**"))
       )
   }
 
-  # clear all existing footnotes
-  x$table_header$footnote <- NA
-
-  # add spanning header
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      spanning_header = ifelse(startsWith(.data$column, "stat_") & .data$column != "stat_0",
-                               paste0("**", new_label[[col]], "**"),
-                               .data$spanning_header)
-    )
-
+  # returning results ----------------------------------------------------------
   # update inputs and call list in return
   x[["call_list"]] <- list(tbl_cross = match.call())
   x[["inputs"]] <- tbl_cross_inputs
   x[["tbl_data"]] <- data # this is the data frame that was passed to `tbl_summary()`
 
   class(x) <- c("tbl_cross", "tbl_summary", "gtsummary")
-
-  # returning results ----------------------------------------------------------
   x
 }

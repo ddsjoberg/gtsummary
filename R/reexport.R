@@ -18,6 +18,10 @@ knitr::knit_print
 #' @export
 dplyr::vars
 
+#' @importFrom dplyr select
+#' @export
+dplyr::select
+
 # huxtable ---------------------------------------------------------------------
 #' @export
 #' @importFrom huxtable as_huxtable
