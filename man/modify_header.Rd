@@ -72,8 +72,10 @@ tbl$table_body
 modify_header_ex1 <-
   tbl \%>\%
   modify_header(
-    label = "**Variable**",
-    p.value = "**P**"
+    update = list(
+      label ~ "**Variable**",
+      p.value ~ "**P**"
+    )
   )
 
 # Example 2 ----------------------------------
