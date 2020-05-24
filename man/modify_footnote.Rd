@@ -56,7 +56,7 @@ modify_footnote_ex1 <-
   )
 
 # Example 2 ----------------------------------
-# deleting all footnote
+# delete all footnotes
 modify_footnote_ex2 <-
   tbl_summary \%>\%
   modify_footnote(update = everything() ~ NA)

@@ -35,8 +35,9 @@ e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"}.}
 \item{text_interpret}{String indicates whether text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 
-\item{...}{DEPRECATED. Specify a column and updated column label,
-e.g. \code{p.value = "Model P-values"}}
+\item{...}{Specify a column and updated column label,
+e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an alternative to the
+\verb{update=} argument. They accomplish the same goal of updating column headers.}
 }
 \value{
 Function return the same class of gtsummary object supplied

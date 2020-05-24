@@ -18,8 +18,9 @@
 #'
 #' Syntax follows [glue::glue()],
 #' e.g. `stat_by = "**{level}**, N = {n} ({style_percent(p)}%)"`.
-#' @param ... DEPRECATED. Specify a column and updated column label,
-#' e.g. `p.value = "Model P-values"`
+#' @param ... Specify a column and updated column label,
+#' e.g. `modify_header(p.value = "Model P-values")`. This is provided as an alternative to the
+#' `update=` argument. They accomplish the same goal of updating column headers.
 #' @param text_interpret String indicates whether text will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #' @family tbl_summary tools
@@ -64,8 +65,6 @@
 
 modify_header <- function(x, update = NULL, stat_by = NULL,
                           text_interpret = c("md", "html"), ...) {
-  # the dots were indicated as deprecated on 4.23.2020
-
   # converting update arg to a tidyselect list ---------------------------------
   update <-
     tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update") %>%
