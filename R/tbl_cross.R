@@ -148,8 +148,6 @@ tbl_cross <- function(data,
   }
 
   # create main table ----------------------------------------------------------
-  vars_str <- c(row, col)
-
   x <- data %>%
     select(any_of(c(row, col, "..total.."))) %>%
     tbl_summary(
@@ -158,8 +156,7 @@ tbl_cross <- function(data,
       percent = ifelse(percent == "none", "cell", percent),
       label = new_label,
       missing_text = missing_text,
-      type = stats::as.formula(glue("vars({vars_str}) ~ 'categorical'")),
-
+      type = everything() ~ 'categorical',
     ) %>%
     bold_labels() %>%
     modify_header(stat_by = "{level}") %>%
