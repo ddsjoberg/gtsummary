@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixed bug where some variables in `tbl_cross()` defaulted to dichotomous instead of showing as categorical (#506)
+
 * New functions `modify_footnote()` and `modify_spanning_header()` give users control over table footnotes and spanning headers. (#464)
 
 * Improved error messaging when invalid statistics are requested in `tbl_summary(statistic=)` (#502)

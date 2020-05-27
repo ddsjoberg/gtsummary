@@ -142,3 +142,19 @@ test_that("tbl_cross- works with grouped data (it ungroups it first)", {
   )
 })
 
+# Test Dichotomous -> Categorical  -------------------------------------------
+test_that("tbl_cross- test 'no' missing throws message", {
+
+  data <- data.frame( X = rep(c("Yes", "No"), 3),
+    Y = rep(c("Yes", "No"), each = 3))
+
+  table <- data %>% tbl_cross(row = X, col = Y)
+
+  type <- table$meta_data %>%
+    filter(variable == "X") %>%
+    pull(summary_type)
+
+  expect_equal(type, "categorical")
+
+})
+
