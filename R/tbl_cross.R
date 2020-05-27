@@ -156,7 +156,7 @@ tbl_cross <- function(data,
       percent = ifelse(percent == "none", "cell", percent),
       label = new_label,
       missing_text = missing_text,
-      type = everything() ~ 'categorical',
+      type = list('categorical') %>% rlang::set_names(row)
     ) %>%
     bold_labels() %>%
     modify_header(stat_by = "{level}") %>%
