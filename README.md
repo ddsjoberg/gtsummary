@@ -104,7 +104,7 @@ Example basic table:
 ``` r
 library(gtsummary)
 # make dataset with a few variables to summarize
-trial2 <- trial %>% dplyr::select(trt, age, grade, response)
+trial2 <- trial %>% select(trt, age, grade, response)
 
 # summarize the data with our package
 table1 <- tbl_summary(trial2)
@@ -119,13 +119,15 @@ table. See the
 tutorial for many more options, or below for one example.
 
 ``` r
-table2 <- tbl_summary(
-  trial2,
-  by = trt, # split table by group
-  missing = "no" # don't list missing data separately
-) %>%
+table2 <- 
+  tbl_summary(
+    trial2,
+    by = trt, # split table by group
+    missing = "no" # don't list missing data separately
+  ) %>%
   add_n() %>% # add column with total number of non-missing observations
-  add_p() %>% # test if there's difference between groups
+  add_p() %>% # test for a difference between groups
+  modify_header(label = "**Variable**") %>% # update the column header
   bold_labels() 
 ```
 
@@ -211,6 +213,7 @@ thank you to all contributors\!
 [@joelgautschi](https://github.com/joelgautschi),
 [@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
+[@khizzr](https://github.com/khizzr),
 [@larmarange](https://github.com/larmarange),
 [@leejasme](https://github.com/leejasme),
 [@ltin1214](https://github.com/ltin1214),

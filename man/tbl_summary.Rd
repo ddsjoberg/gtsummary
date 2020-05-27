@@ -49,9 +49,9 @@ to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}.}
 
 \item{type}{List of formulas specifying variable types. Accepted values
 are \code{c("continuous", "categorical", "dichotomous")},
-e.g. \code{type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")}.
+e.g. \code{type = list(age ~ "continuous", female ~ "dichotomous")}.
 If type not specified for a variable, the function
-will default to an appropriate summary type.  See below for details.}
+will default to an appropriate summary type. See below for details.}
 
 \item{value}{List of formulas specifying the value to display for dichotomous
 variables.  See below for details.}
@@ -130,6 +130,21 @@ For continuous variables the following statistics are available to display.
 \item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
 \item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
+
+For both categorical and continuous variables, statistics on the number of
+missing and non-missing observations and their proportions are available to
+display.
+\itemize{
+\item \code{{N_obs}} total number of observations
+\item \code{{N_miss}} number of missing observations
+\item \code{{N_nonmiss}} number of non-missing observations
+\item \code{{p_miss}} percentage of observations missing
+\item \code{{p_nonmiss}} percentage of observations not missing
+}
+
+Note that for categorical variables, \code{{N_obs}}, \code{{N_miss}} and \code{{N_nonmiss}} refer
+to the total number, number missing and number non missing observations
+in the denominator, not at each level of the categorical variable.
 }
 
 \section{type argument}{
@@ -187,7 +202,9 @@ tbl_summary_ex3 <-
   )
 }
 \seealso{
-See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed tutorial
+
+See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 
 Other tbl_summary tools: 
 \code{\link{add_n}()},
@@ -198,7 +215,9 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
+\code{\link{modify_footnote}()},
 \code{\link{modify_header}()},
+\code{\link{modify_spanning_header}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()}
 }

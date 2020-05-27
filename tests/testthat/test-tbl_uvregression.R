@@ -89,7 +89,7 @@ test_that("glmer: no errors/warnings with standard use", {
   expect_error(
     lme4_uv <-
       mtcars %>%
-      dplyr::select("am", "gear", "hp", "cyl") %>%
+      select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
         y = am,
@@ -101,7 +101,7 @@ test_that("glmer: no errors/warnings with standard use", {
   )
   expect_warning(
     mtcars %>%
-      dplyr::select("am", "gear", "hp", "cyl") %>%
+      select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
         y = am,
@@ -117,7 +117,7 @@ test_that("glmer: no errors/warnings with standard use", {
 
   expect_error(
     mtcars %>%
-      dplyr::select("am", "gear", "hp", "cyl") %>%
+      select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
         y = am,
@@ -130,7 +130,7 @@ test_that("glmer: no errors/warnings with standard use", {
   )
   expect_warning(
     mtcars %>%
-      dplyr::select("am", "gear", "hp", "cyl") %>%
+      select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
         y = am,
