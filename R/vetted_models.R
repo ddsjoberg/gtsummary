@@ -40,7 +40,9 @@
 #'     dplyr::bind_cols(
 #'       broom::tidy(x, conf.int = FALSE),
 #'       # calculate the confidence intervals, and save them in a tibble
-#'       stats::confint.default(x) %>% tibble::as_tibble() %>% rlang::set_names(c("conf.low", "conf.high"))
+#'       stats::confint.default(x) %>%
+#'         tibble::as_tibble() %>%
+#'         rlang::set_names(c("conf.low", "conf.high"))
 #'     )
 #'   # exponentiating, if requested
 #'   if (exponentiate == TRUE)
