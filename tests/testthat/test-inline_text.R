@@ -81,6 +81,14 @@ test_that("inline_text.tbl_summary: with by -  expect errors", {
   )
 })
 
+test_that("inline_text.tbl_summary: no errors with empty string selection", {
+  trial %>%
+    select(grade) %>%
+    mutate(grade = ifelse(grade == "I", "", as.character(grade))) %>%
+    tbl_summary() %>%
+    inline_text(variable = grade, level = "III")
+})
+
 
 # inline_text.regression tests --------------
 

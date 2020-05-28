@@ -492,9 +492,10 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
 #' @keywords internal
 vctr_2_tibble <- function(x) {
   n <- length(x)
-  matrix(ncol = n) %>%
-    tibble::as_tibble(.name_repair = "minimal") %>%
-    rlang::set_names(x) %>%
-    dplyr::slice(0)
+  df <- matrix(ncol = n) %>%
+    tibble::as_tibble(.name_repair = "minimal")
+
+  names(df) <- x
+  df[0, , drop = FALSE]
 }
 
