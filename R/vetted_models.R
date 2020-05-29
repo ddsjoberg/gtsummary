@@ -35,15 +35,19 @@
 #' capture any arguments you may not need). See below for an example where the
 #' confidence limits for a linear regression model are calculated using Wald's method.
 #' @examples
-#' my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
+#' my_tidy <- function(x, exponentiate = FALSE, conf.level = 0.95, ...) {
 #'   tidy <-
 #'     dplyr::bind_cols(
 #'       broom::tidy(x, conf.int = FALSE),
-#'       broom::confint_tidy(x, func = stats::confint.default, conf.level = conf.level)
+#'       # calculate the confidence intervals, and save them in a tibble
+#'       stats::confint.default(x) %>%
+#'         tibble::as_tibble() %>%
+#'         rlang::set_names(c("conf.low", "conf.high"))
 #'     )
 #'   # exponentiating, if requested
 #'   if (exponentiate == TRUE)
 #'     tidy <- dplyr::mutate_at(vars(estimate, conf.low, conf.high), exp)
+#'   tidy
 #' }
 #'
 #' lm(age ~ grade + response, trial) %>%
