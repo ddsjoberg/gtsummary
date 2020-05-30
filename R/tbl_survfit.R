@@ -258,10 +258,16 @@ survfit_time <- function(x, times, label_header, conf.level, reverse) {
     ) %>%
     ungroup()
 
+
+
   # getting requested estimates
   df_stat <-
     tidy %>%
-    # adding in
+    # getting the latest time (not showing estimates after that time)
+    group_by(., !!!syms(strata)) %>%
+    mutate(time_max = max(time)) %>%
+    ungroup() %>%
+    # adding in timepoints requested by user
     full_join(
       select(tidy, !!!syms(strata)) %>%
         distinct()  %>%
@@ -272,14 +278,17 @@ survfit_time <- function(x, times, label_header, conf.level, reverse) {
         unnest(cols = c(.data$time, .data$col_name)),
       by = unlist(c(strata, "time"))
     ) %>%
+    # if the user-specifed time is unobserved, filling estimates with previous value
     arrange(!!!syms(strata), .data$time) %>%
     group_by(!!!syms(strata)) %>%
-    mutate_at(
-      vars(.data$estimate, .data$conf.high, .data$conf.low),
-      ~ifelse(is.na(.) & dplyr::row_number() != n(),
-              dplyr::lag(., n = 1), .)
-    ) %>%
-    filter(.data$time %in% .env$times) %>%
+    tidyr::fill(.data$estimate, .data$conf.high, .data$conf.low,
+                .data$time_max, .direction = "down") %>%
+    ungroup() %>%
+    # keeping obs of user-specified times
+    filter(!is.na(.data$col_name)) %>%
+    # if user-specified time is after the latest follow-up time, making it NA
+    mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low),
+              ~ifelse(.data$time > .data$time_max, NA_real_, .)) %>%
     mutate(
       variable = switch(length(.env$strata) == 0, "..overall..") %||%
         stringr::word(strata, start = 1L, sep = "="),
@@ -288,8 +297,7 @@ survfit_time <- function(x, times, label_header, conf.level, reverse) {
       col_label = .env$label_header %||% "**Time {time}**" %>% glue() %>% as.character()
     ) %>%
     select(any_of(c("variable", "label", "strata", "col_name", "col_label")),
-           everything()) %>%
-    ungroup()
+           everything(), -time_max)
 
   # converting to reverse probs, if requested
   if (reverse == TRUE) {
