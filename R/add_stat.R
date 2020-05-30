@@ -1,4 +1,4 @@
-#' Add a statistic column
+#' Add a custom statistic column
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' The function allows a user to add a new column with any new statistic.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_stat.R
 \name{add_stat}
 \alias{add_stat}
-\title{Add a statistic column}
+\title{Add a custom statistic column}
 \usage{
 add_stat(
   x,
@@ -37,7 +37,7 @@ The function allows a user to add a new column with any new statistic.
 
 
 The custom functions passed in \verb{fns=} are required to follow a specified
-format.
+format. Each of these function will execute on a single variable from \code{tbl_summary()}.
 \enumerate{
 \item Each function must return a single scalar or character value of length one.
 \item Each function may take the following arguments: \code{foo(data, variable, by, tbl)}
