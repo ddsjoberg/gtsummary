@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* New function `add_stat()`! Add a new column of any statistic to a `tbl_summary()` (#495)
+
 * Bug fix for `inline_text.tbl_summary()` when categorical variable contained levels with empty strings.
 
 * Fixed bug where some variables in `tbl_cross()` defaulted to dichotomous instead of showing as categorical (#506)
