@@ -5,31 +5,27 @@
 #' (following [glue::glue] syntax).
 #'
 #' @param x gtsummary object, e.g. `tbl_summary` or `tbl_regression`
-#' @param stat_by String specifying text to include above the summary statistics
-#' stratified by a variable.  Only use with stratified `tbl_summary` objects.
+#' @param update list of formulas or a single formula specifying the updated
+#' column label. Columns from `x$table_body` may be selected.
+#' @param stat_by Used with `tbl_summary(by=)` objects with a `by=` argument.
+#' String specifying text to include above the summary statistics.
 #' The following fields are available for use in the
 #' headers:
 #' * `{n}` number of observations in each group,
 #' * `{N}` total number of observations,
 #' * `{p}` percentage in each group,
 #' * `{level}` the 'by' variable level,
-#' * `"fisher.test"` for a Fisher's exact test,
 #'
-#' Syntax follows [glue::glue],
-#' e.g. `stat_by = "**{level}**, N = {n} ({style_percent(p)\%})"`.
-#' The `by` argument from the parent `tbl_summary()` cannot be `NULL`.
-#' @param ... Specifies column label of any other column in `.$table_body`.
-#' Argument is the column name, and the value is the new column header
-#' (e.g. `p.value = "Model P-values"`). Use
-#' `print(x$table_body)` to see columns available.
-#' @param text_interpret indicates whether text will be interpreted as markdown (`"md"`)
-#' or HTML (`"html"`).  The text is interpreted with the {gt} package's `md()` or
-#' `html()` functions.  The default is `"md"`, and is ignored when the print engine
-#' is not {gt}.
+#' Syntax follows [glue::glue()],
+#' e.g. `stat_by = "**{level}**, N = {n} ({style_percent(p)}%)"`.
+#' @param ... Specify a column and updated column label,
+#' e.g. `modify_header(p.value = "Model P-values")`. This is provided as an alternative to the
+#' `update=` argument. They accomplish the same goal of updating column headers.
+#' @param text_interpret String indicates whether text will be interpreted with
+#' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #' @family tbl_summary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
-#' @family tbl_survival tools
 #' @author Daniel D. Sjoberg
 #' @examples
 #' # create summary table
@@ -45,8 +41,10 @@
 #' modify_header_ex1 <-
 #'   tbl %>%
 #'   modify_header(
-#'     label = "**Variable**",
-#'     p.value = "**P**"
+#'     update = list(
+#'       label ~ "**Variable**",
+#'       p.value ~ "**P**"
+#'     )
 #'   )
 #'
 #' # Example 2 ----------------------------------
@@ -54,7 +52,7 @@
 #' modify_header_ex2 <-
 #'   tbl %>%
 #'   modify_header(
-#'     stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"
+#'     stat_by = "**{level}**, N = {n} ({style_percent(p)}%)"
 #'   )
 #' @return Function return the same class of gtsummary object supplied
 #' @export
@@ -67,21 +65,23 @@
 #'
 #' \if{html}{\figure{modify_header_ex2.png}{options: width=45\%}}
 
-modify_header <- function(x, stat_by = NULL, ..., text_interpret = c("md", "html")) {
+modify_header <- function(x, update = NULL, stat_by = NULL,
+                          text_interpret = c("md", "html"), ...) {
+  # converting update arg to a tidyselect list ---------------------------------
+  update <-
+    tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update") %>%
+    # adding the ... to the update list
+    c(list(...))
 
-  # converting the passed ... to a list, OR if nothing passed to NULL
-  if (length(list(...)) == 0) {
-    passed_dots <- NULL
-  } else {
-    passed_dots <- list(...)
-  }
-
-  do.call(
+  # running modify_header_internal function ------------------------------------
+  rlang::call2(
     modify_header_internal,
-    c(list(
-      x = x, stat_by = stat_by, text_interpret = text_interpret,
-      .save_call = TRUE
-    ), passed_dots)
-  )
+    x = x,
+    stat_by = stat_by,
+    text_interpret = text_interpret,
+    !!!update,
+    .save_call = TRUE
+  ) %>%
+    eval()
 }
 

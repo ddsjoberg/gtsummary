@@ -1,5 +1,15 @@
 # gtsummary (development version)
 
+* New function `add_stat()`! Add a new column of any statistic to a `tbl_summary()` (#495)
+
+* Bug fix for `inline_text.tbl_summary()` when categorical variable contained levels with empty strings.
+
+* Fixed bug where some variables in `tbl_cross()` defaulted to dichotomous instead of showing as categorical (#506)
+
+* New functions `modify_footnote()` and `modify_spanning_header()` give users control over table footnotes and spanning headers. (#464)
+
+* Improved error messaging when invalid statistics are requested in `tbl_summary(statistic=)` (#502)
+
 * The following columns in `tbl_summary()` are now available to print for both continuous and categorical variables: total number of observations `{N_obs}`, number of missing observations `{N_miss}`, number of non-missing observations `{N_nomiss}`, proportion of missing observations `{p_miss}`, proportion of non-missing observations `{p_nomiss}`. (#473)
 
 * Improved appearance of default `as_flextable()` output (#499)
@@ -21,7 +31,6 @@
 * Bug fix for `as_flextable()`. (#482)
   - Added a formatting function to all numeric columns to force conversion to character.
   - Spanning headers were being printed in alphabetical order! Update to preserve the ordering.
-
 
 * Introducing `as_huxtable()`! The function converts gtsummary objects to {huxtable} objects. {huxtable} is a great option when using R markdown with Microsoft Word output. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (#469)
 
@@ -177,7 +186,7 @@
 
 # gtsummary 1.2.2
 
-## New Features
+### New Features
 
 * `tbl_summary` objects may be stacked and merged with `tbl_stack()` and `tbl_merge()` (#230, #255)
 
@@ -195,7 +204,7 @@
 
 * New `show_single_row` argument in `tbl_regression()` and `tbl_uvregression()` allows any binary variable to be printed on a single row.  Previous argument `show_yesno` is now deprecated. (#220)
 
-## Documentation 
+### Documentation 
 
 * Added a gallery of tables possible by merging, stacking, and modifying {gtsummary} arguments (#258)
 
@@ -203,7 +212,7 @@
 
 * Added {lifecycle} badges to mark deprecated and experimental functions (#225)
 
-## Other Updates
+### Other Updates
 
 * The `by = ` column in `tbl_summary()` now has missing variables dropped rather than halting with error (#279)
 

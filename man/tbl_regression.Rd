@@ -145,7 +145,9 @@ Other tbl_regression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
 \code{\link{inline_text.tbl_regression}()},
+\code{\link{modify_footnote}()},
 \code{\link{modify_header}()},
+\code{\link{modify_spanning_header}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()}
 }
