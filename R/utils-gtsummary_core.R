@@ -1,7 +1,8 @@
 # THIS FILE CONTAINS A FEW SCRIPTS THAT ASSIST IN SETTING UP A GENERAL
 # GTSUMMARY OBJECT. IF YOU'RE CREATING A GTSUMMARY-LIKE FUNCTION, YOU'LL
 # WANT TO GRAB A COPY OF THIS FILE AND PLACE IT IN YOUR PACKAGE.
-# LAST UPDATED: 2020-04-23
+
+# LAST UPDATED: 2020-05-09
 
 # table_header_fill_missing -----------------------------------------------------
 #' Function fills out table_header when there are missing columns
@@ -11,7 +12,15 @@
 #' @return A table_header object
 #' @keywords internal
 #' @noRd
-table_header_fill_missing <- function(table_header) {
+table_header_fill_missing <- function(table_header, table_body = NULL) {
+  # if table_body is not null,
+  # ensuring table_header has a row for each col in table_body
+  if (!is.null(table_body)) {
+    table_header <-
+      tibble::tibble(column = names(table_body)) %>%
+      dplyr::left_join(table_header, by = "column")
+  }
+
   # table_header must be a tibble with the following columns with
   # at minimum a column named 'column'
 
