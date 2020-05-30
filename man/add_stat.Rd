@@ -30,8 +30,31 @@ footnote (i.e. NULL)}
 Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 The function allows a user to add a new column with any new statistic.
 }
+\section{Details}{
+
+
+The custom functions passed in \verb{fns=} are required to follow a specified
+format.
+\enumerate{
+\item Each function must return a single scalar or character value of length one.
+\item Each function may take the following arguments: \code{foo(data, variable, by, tbl)}
+}
+\itemize{
+\item \verb{data=} is the input data frame passed to \code{tbl_summary()}
+\item \verb{variable=} is a string indicating the variable to perform the calculation on
+\item \verb{by=} is a string indicating the by variable from \verb{tbl_summary=}, if present
+\item \verb{tbl=} the original \code{tbl_summary()} object is also available to utilize
+}
+
+The user-defined does not need to utilize each of these inputs. It's
+encouraged the user accept \code{...} as an input to safe-guard as each of these
+items \emph{will} be passed to the function, even if not all inputs are utilized by
+the user's function, e.g. \code{foo(data, variable, by, ...)}
+}
+
 \section{Example Output}{
 
 \if{html}{Example 1}
@@ -45,19 +68,24 @@ The function allows a user to add a new column with any new statistic.
 
 \examples{
 # Example 1 ----------------------------------
+# this example replicates `add_p()`
+
 # fn returns t-test pvalue
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
 }
 
 add_stat_ex1 <-
-  trial[c("trt", "age", "marker")] \%>\%
+  trial \%>\%
+  select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
-  add_p(test = everything() ~ t.test) \%>\% # using add_p() to calculate
-  # replicating result with add_stat()
-  add_stat(fns = everything() ~ my_ttest, # all variables compared with with t-test
-           fmt_fun = style_pvalue, # result formatted with style_pvalue()
-           header = "**My p-value**") # new column header
+  add_p(test = everything() ~ t.test) \%>\%
+  # replicating result of `add_p()` with `add_stat()`
+  add_stat(
+    fns = everything() ~ my_ttest, # all variables compared with with t-test
+    fmt_fun = style_pvalue,        # format result with style_pvalue()
+    header = "**My p-value**"      # new column header
+  )
 
 # Example 2 ----------------------------------
 # fn returns t-test test statistic and pvalue
@@ -71,11 +99,14 @@ my_ttest2 <- function(data, variable, by, ...) {
 }
 
 add_stat_ex2 <-
-  trial[c("trt", "age", "marker")] \%>\%
+  trial \%>\%
+  select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
-  add_stat(fns = everything() ~ my_ttest2, # all variables will be compared by t-test
-           fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-           header = "**Treatment Comparison**", # column header
-           footnote = "T-test statistic and p-value") # footnote
+  add_stat(
+    fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
+    fmt_fun = NULL, # fn returns and chr, so no formatting function needed
+    header = "**Treatment Comparison**",       # column header
+    footnote = "T-test statistic and p-value"  # footnote
+  )
 # Example 1 ----------------------------------
 }
