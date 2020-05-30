@@ -31,7 +31,7 @@ Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-The function allows a user to add a new column with any new statistic.
+The function allows a user to add a new column with a custom, user-defined statistic.
 }
 \section{Details}{
 
