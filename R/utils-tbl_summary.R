@@ -1083,3 +1083,18 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
 
   return
 }
+
+# translation function ---------------------------------------------------------
+translate_text <- function(x, language = get_theme_element("pkgwide-str:language", default = "en")) {
+  if (language == "en") return(x)
+
+  # sub-setting on row of text to translate
+  df_text <- df_translations %>%
+    filter(.data$en == x)
+
+  # if no rows selected, return x
+  if (nrow(df_text) != 1) return(x)
+
+  # return translated text
+  df_text[[language]]
+}
