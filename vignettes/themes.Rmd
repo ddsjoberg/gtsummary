@@ -14,11 +14,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-df_theme_elements <-
-  tibble::as_tibble(read.csv("data/gtsummary_theme_elements.csv"))
-
-# df_theme_elements <- tibble::as_tibble(read.csv(here::here("vignettes/data/gtsummary_theme_elements.csv")))
-  
 ```
 
 It's possible to set themes it gtsummary.
@@ -122,7 +117,7 @@ Theme elements fall into two categories.
 The first is modifying internal behavior of the functions that is not directly controllable by function arguments.
 
 ```{r, echo=FALSE}
-df_theme_elements %>%
+gtsummary:::df_theme_elements %>%
   filter(argument == FALSE) %>%
   select(-argument) %>%
   mutate(name = glue::glue("`{name}`"),
@@ -143,7 +138,7 @@ The second type of theme elements set function argument defaults.
 The values of these theme elements must align with the functions' accepted input for the argument.
 
 ```{r, echo=FALSE}
-df_theme_elements %>%
+gtsummary:::df_theme_elements %>%
   filter(argument == TRUE) %>%
   select(fn, name) %>%
   group_by(fn) %>%
