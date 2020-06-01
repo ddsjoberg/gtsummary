@@ -7,7 +7,7 @@
 add_stat(
   x,
   fns,
-  fmt_fun = style_sigfig,
+  fmt_fun = NULL,
   header = "**Statistic**",
   footnote = NULL,
   new_col_name = NULL
@@ -19,7 +19,7 @@ add_stat(
 \item{fns}{list of formulas indicating the functions that create the statistic}
 
 \item{fmt_fun}{for numeric statistics, \verb{fmt_fun=} is the styling/formatting
-function. Default is \code{style_sigfig()}.}
+function. Default is \code{NULL}}
 
 \item{header}{Column header of new column. Default is \code{"**Statistic**"}}
 
@@ -50,8 +50,8 @@ format. Each of these function will execute on a single variable from \code{tbl_
 }
 
 The user-defined does not need to utilize each of these inputs. It's
-encouraged the user accept \code{...} as an input to safe-guard as each of these
-items \emph{will} be passed to the function, even if not all inputs are utilized by
+encouraged the user-defined function accept \code{...} as each of the arguments
+\emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, variable, by, ...)}
 }
 

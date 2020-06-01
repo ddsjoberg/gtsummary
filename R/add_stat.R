@@ -6,7 +6,7 @@
 #' @param x tbl_summary object
 #' @param fns list of formulas indicating the functions that create the statistic
 #' @param fmt_fun for numeric statistics, `fmt_fun=` is the styling/formatting
-#' function. Default is `style_sigfig()`.
+#' function. Default is `NULL`
 #' @param header Column header of new column. Default is `"**Statistic**"`
 #' @param footnote Footnote associated with new column. Default is no
 #' footnote (i.e. NULL)
@@ -25,10 +25,9 @@
 #'   - `tbl=` the original `tbl_summary()` object is also available to utilize
 #'
 #' The user-defined does not need to utilize each of these inputs. It's
-#' encouraged the user accept `...` as an input to safe-guard as each of these
-#' items *will* be passed to the function, even if not all inputs are utilized by
+#' encouraged the user-defined function accept `...` as each of the arguments
+#' *will* be passed to the function, even if not all inputs are utilized by
 #' the user's function, e.g. `foo(data, variable, by, ...)`
-#'
 #'
 #' @export
 #' @examples
@@ -82,7 +81,7 @@
 #'
 #' \if{html}{\figure{add_stat_ex2.png}{options: width=60\%}}
 
-add_stat <- function(x, fns, fmt_fun = style_sigfig, header = "**Statistic**",
+add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
 #' @examples
 #' # Example 1 ----------------------------------
                      footnote = NULL, new_col_name = NULL) {
