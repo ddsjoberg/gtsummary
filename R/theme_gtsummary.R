@@ -24,9 +24,10 @@
 #'   - `"flextable"` sets the flextable package as the default print engine
 #'   - `"kable_extra"` sets the kableExtra package as the default print engine
 #'   - `"huxtable"` sets the huxtable package as the default print engine
+#'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
-#' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html)
+#' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html)
 #' to create your own themes.
 #' @examples
 #' # Setting JAMA theme for gtsummary

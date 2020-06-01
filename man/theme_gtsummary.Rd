@@ -52,11 +52,12 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 \item \code{"flextable"} sets the flextable package as the default print engine
 \item \code{"kable_extra"} sets the kableExtra package as the default print engine
 \item \code{"huxtable"} sets the huxtable package as the default print engine
-Use \code{reset_gtsummary_theme()} to restore the default settings
 }
 }
 
-Review the \href{http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html}{themes vignette}
+Use \code{reset_gtsummary_theme()} to restore the default settings
+
+Review the \href{http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html}{themes vignette}
 to create your own themes.
 }
 
