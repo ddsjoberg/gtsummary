@@ -16,7 +16,7 @@ theme_gtsummary_printer(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble")
 )
 
-theme_gtsummary_language(print_engine = c("es"))
+theme_gtsummary_language(language = c("es"))
 }
 \arguments{
 \item{journal}{String indicating the journal theme to follow.
