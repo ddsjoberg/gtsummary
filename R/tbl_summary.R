@@ -365,15 +365,18 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   class(results) <- c("tbl_summary", "gtsummary")
 
   # adding headers
-  label_header <- translate_text("Characteristic")
   if (is.null(by)) {
-    results <- modify_header_internal(results,
-                                      stat_0 = "**N = {N}**",
-                                      label = paste0("**", label_header, "**"))
+    results <- modify_header_internal(
+      results,
+      stat_0 = "**N = {N}**",
+      label = paste0("**", translate_text("Characteristic"), "**")
+    )
   } else {
-    results <- modify_header_internal(results,
-                                      stat_by = "**{level}**, N = {n}",
-                                      label = paste0("**", label_header, "**"))
+    results <- modify_header_internal(
+      results,
+      stat_by = "**{level}**, N = {n}",
+      label = paste0("**", translate_text("Characteristic"), "**")
+    )
   }
 
   return(results)

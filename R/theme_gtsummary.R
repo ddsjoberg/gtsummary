@@ -8,6 +8,7 @@
 #'  - `"jama"` Journal of the American Medical Association
 #' @param print_engine String indicating the print method. Must be one of
 #' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"huxtable"`, `"tibble"`
+#' @param language String indicating language. Must be one of `"es"`
 #' @seealso [set_gtsummary_theme()]
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`

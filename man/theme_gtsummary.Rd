@@ -5,6 +5,7 @@
 \alias{theme_gtsummary_journal}
 \alias{theme_gtsummary_compact}
 \alias{theme_gtsummary_printer}
+\alias{theme_gtsummary_language}
 \title{Available gtsummary themes}
 \usage{
 theme_gtsummary_journal(journal = "jama")
@@ -14,6 +15,8 @@ theme_gtsummary_compact()
 theme_gtsummary_printer(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble")
 )
+
+theme_gtsummary_language(print_engine = c("es"))
 }
 \arguments{
 \item{journal}{String indicating the journal theme to follow.
@@ -22,6 +25,8 @@ theme_gtsummary_printer(
 }}
 
 \item{print_engine}{String indicating the print engine. Default is \code{"gt"}}
+
+\item{language}{String indicating the language.}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
