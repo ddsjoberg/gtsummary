@@ -56,7 +56,8 @@ modify_footnote_ex1 <-
   )
 
 # Example 2 ----------------------------------
-# delete all footnotes
+# delete all footnotes - except abbreviations
+# use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
 modify_footnote_ex2 <-
   tbl_summary \%>\%
   modify_footnote(update = everything() ~ NA)
