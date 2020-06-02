@@ -279,9 +279,7 @@ function's <code>formula.=</code> argument</p></td>
     <span class='kw'>formula_update</span> <span class='kw'>=</span> <span class='no'>.</span> ~ <span class='no'>.</span> -<span class='fu'><a href='https://rdrr.io/pkg/Hmisc/man/rcspline.eval.html'>rcspline.eval</a></span>(<span class='no'>marker</span>, <span class='kw'>inclx</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
     <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Marker (non-linear terms)"</span>
   )</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
-#&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - rcspline.eval(marker, `</span>
-#&gt; <span class='message'>* Creating a reduced model with</span>
-#&gt; <span class='message'>`reduced_model &lt;-     inclx = TRUE))`</span></div><div class='output co'>#&gt; <span class='message'>Calculating p-value comparing full and reduced models with</span>
+#&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - rcspline.eval(marker, inclx = TRUE))`</span></div><div class='output co'>#&gt; <span class='message'>Calculating p-value comparing full and reduced models with</span>
 #&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model)`</span></div><div class='input'>
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># Logistic Regression Example, LRT p-value</span>
