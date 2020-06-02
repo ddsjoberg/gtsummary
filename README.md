@@ -199,6 +199,7 @@ By contributing to this project, you agree to abide by its terms. A big
 thank you to all contributors\!  
 [@ablack3](https://github.com/ablack3),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
+[@barthelmes](https://github.com/barthelmes),
 [@calebasaraba](https://github.com/calebasaraba),
 [@davidgohel](https://github.com/davidgohel),
 [@davidkane9](https://github.com/davidkane9),
@@ -224,6 +225,7 @@ thank you to all contributors\!
 [@oranwutang](https://github.com/oranwutang),
 [@ryzhu75](https://github.com/ryzhu75),
 [@sammo3182](https://github.com/sammo3182),
+[@simonpcouch](https://github.com/simonpcouch),
 [@slobaugh](https://github.com/slobaugh),
 [@tormodb](https://github.com/tormodb), and
 [@zabore](https://github.com/zabore)
