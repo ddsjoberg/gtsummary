@@ -23,5 +23,4 @@ test_that("no errors/warnings with missing data", {
 
 test_that("no errors/warnings with missing data in by variable", {
   expect_error(trial %>% tbl_summary(by = response) %>% add_overall(), NA)
-
 })
