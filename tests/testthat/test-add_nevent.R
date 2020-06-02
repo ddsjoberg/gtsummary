@@ -1,4 +1,5 @@
 context("test-add_nevent")
+testthat::skip_on_cran()
 
 library(survival)
 fit_cox <- coxph(Surv(time, status) ~ sex, lung)

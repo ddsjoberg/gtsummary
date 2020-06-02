@@ -1,4 +1,6 @@
 context("test-combine_terms")
+testthat::skip_on_cran()
+
 library(Hmisc)
 mod1 <- lm(age ~ marker + I(marker^2) + stage,
            trial[c("age", "marker", "stage")] %>% na.omit())

@@ -1,4 +1,5 @@
 context("test-tbl_stack")
+testthat::skip_on_cran()
 library(survival)
 t1 <-
   glm(response ~ trt, trial, family = binomial) %>%

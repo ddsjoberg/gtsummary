@@ -30,6 +30,7 @@
 # survival::clogit()    DONE
 
 context("test-vetted_models-survreg")
+testthat::skip_on_cran()
 library(dplyr)
 library(survival)
 

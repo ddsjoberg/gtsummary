@@ -1,4 +1,5 @@
 context("test-tbl_regression")
+testthat::skip_on_cran()
 library(survival)
 library(lme4)
 

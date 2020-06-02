@@ -21,6 +21,7 @@
 #       - works with add_global_p(), add_nevent(), add_q()
 
 context("test-vetted_models-coxph")
+testthat::skip_on_cran()
 library(dplyr)
 library(survival)
 
