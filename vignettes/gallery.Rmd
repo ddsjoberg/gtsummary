@@ -192,7 +192,8 @@ gt_eventn <-
     statistic = all_categorical() ~ "{n}",
     label = list(stage ~ "T Stage", grade ~ "Grade")
   ) %>%
-  modify_header(stat_0 ~ "**Event N**")
+  modify_header(stat_0 ~ "**Event N**") %>%
+  modify_footnote(everything() ~ NA_character_)
 
 tbl_merge(list(gt_eventn, gt_model)) %>%
   bold_labels() %>%

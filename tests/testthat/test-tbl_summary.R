@@ -1,4 +1,5 @@
 context("test-tbl_summary")
+testthat::skip_on_cran()
 
 test_that("tbl_summary creates output without error/warning (no by var)", {
   expect_error(
