@@ -2,11 +2,11 @@
 #'
 #' @param x a gtsummary object
 #' @param update list of formulas or a single formula specifying the footnote
-#'  update. The LHS selects the variables
+#'  update. The LHS selects the columns from `x$table_body`
 #' whose footnote will be updated, and the RHS is the new footnote. For example,
 #' `update = stat_0 ~ "New footnote!"` or
 #' `update = starts_with("stat_") ~ "New footnote!"`. To delete the footnote,
-#' update the text to `NA`. Columns from `x$table_body` may be selected.
+#' update the text to `NA`.
 #' @param abbreviation Logical indicating if an abbreviation is being updated.
 #' Abbreviation footnotes are handled differently. See examples below.
 #'
