@@ -184,7 +184,7 @@ The function allows a user to add a new column with a custom, user-defined stati
     <pre class="usage"><span class='fu'>add_stat</span>(
   <span class='no'>x</span>,
   <span class='no'>fns</span>,
-  <span class='kw'>fmt_fun</span> <span class='kw'>=</span> <span class='no'>style_sigfig</span>,
+  <span class='kw'>fmt_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>header</span> <span class='kw'>=</span> <span class='st'>"**Statistic**"</span>,
   <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>new_col_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
@@ -204,7 +204,7 @@ The function allows a user to add a new column with a custom, user-defined stati
     <tr>
       <th>fmt_fun</th>
       <td><p>for numeric statistics, <code>fmt_fun=</code> is the styling/formatting
-function. Default is <code><a href='style_sigfig.html'>style_sigfig()</a></code>.</p></td>
+function. Default is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>header</th>
@@ -240,8 +240,8 @@ format. Each of these function will execute on a single variable from <code><a h
 </ul>
 
 <p>The user-defined does not need to utilize each of these inputs. It's
-encouraged the user accept <code>...</code> as an input to safe-guard as each of these
-items <em>will</em> be passed to the function, even if not all inputs are utilized by
+encouraged the user-defined function accept <code>...</code> as each of the arguments
+<em>will</em> be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
