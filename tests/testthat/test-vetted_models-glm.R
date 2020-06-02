@@ -22,6 +22,7 @@
 
 
 context("test-vetted_models-glm")
+testthat::skip_on_cran()
 library(dplyr)
 
 # glm() ------------------------------------------------------------------------
