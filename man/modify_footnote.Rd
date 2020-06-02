@@ -10,11 +10,11 @@ modify_footnote(x, update, abbreviation = FALSE)
 \item{x}{a gtsummary object}
 
 \item{update}{list of formulas or a single formula specifying the footnote
-update. The LHS selects the variables
+update. The LHS selects the columns from \code{x$table_body}
 whose footnote will be updated, and the RHS is the new footnote. For example,
 \code{update = stat_0 ~ "New footnote!"} or
 \code{update = starts_with("stat_") ~ "New footnote!"}. To delete the footnote,
-update the text to \code{NA}. Columns from \code{x$table_body} may be selected.}
+update the text to \code{NA}.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.
 Abbreviation footnotes are handled differently. See examples below.}
@@ -56,7 +56,8 @@ modify_footnote_ex1 <-
   )
 
 # Example 2 ----------------------------------
-# delete all footnotes
+# delete all footnotes - except abbreviations
+# use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
 modify_footnote_ex2 <-
   tbl_summary \%>\%
   modify_footnote(update = everything() ~ NA)
