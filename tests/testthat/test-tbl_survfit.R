@@ -1,4 +1,5 @@
 context("test-tbl_survfit")
+testthat::skip_on_cran()
 library(survival)
 
 test_that("no errors/warnings with stratified variable", {
