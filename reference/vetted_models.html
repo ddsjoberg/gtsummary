@@ -111,7 +111,7 @@ geepack::geeglm
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
       </span>
     </div>
 
@@ -146,10 +146,10 @@ geepack::geeglm
       <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/global_options.html">global options</a>
+      <a href="../articles/gallery.html">table gallery</a>
     </li>
   </ul>
 </li>
@@ -232,19 +232,29 @@ capture any arguments you may not need). See below for an example where the
 confidence limits for a linear regression model are calculated using Wald's method.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>my_tidy</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>exponentiate</span> <span class='kw'>=</span>  <span class='fl'>FALSE</span>, <span class='no'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>) {
+    <pre class="examples"><div class='input'><span class='no'>my_tidy</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>) {
   <span class='no'>tidy</span> <span class='kw'>&lt;-</span>
     <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span>(
       <span class='kw pkg'>broom</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/broom/man/reexports.html'>tidy</a></span>(<span class='no'>x</span>, <span class='kw'>conf.int</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
-      <span class='kw pkg'>broom</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/broom/man/confint_tidy.html'>confint_tidy</a></span>(<span class='no'>x</span>, <span class='kw'>func</span> <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/stats/confint.html'>confint.default</a></span>, <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='no'>conf.level</span>)
+      <span class='co'># calculate the confidence intervals, and save them in a tibble</span>
+      <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint.default</a></span>(<span class='no'>x</span>) <span class='kw'>%&gt;%</span>
+        <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>() <span class='kw'>%&gt;%</span>
+        <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/set_names.html'>set_names</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"conf.low"</span>, <span class='st'>"conf.high"</span>))
     )
   <span class='co'># exponentiating, if requested</span>
   <span class='kw'>if</span> (<span class='no'>exponentiate</span> <span class='kw'>==</span> <span class='fl'>TRUE</span>)
     <span class='no'>tidy</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='no'>estimate</span>, <span class='no'>conf.low</span>, <span class='no'>conf.high</span>), <span class='no'>exp</span>)
+  <span class='no'>tidy</span>
 }
 
 <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>age</span> ~ <span class='no'>grade</span> + <span class='no'>response</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>my_tidy</span>()</div></pre>
+  <span class='fu'>my_tidy</span>()</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 4 x 7</span><span>
+#&gt;   term        estimate std.error statistic  p.value conf.low conf.high
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> (Intercept)    45.0       1.93    23.3   5.67</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-56</span><span>   41.2       48.8 
+#&gt; </span><span style='color: #555555;'>2</span><span> gradeII         1.11      2.60     0.425 6.71</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>- 1</span><span>   -</span><span style='color: #BB0000;'>4.00</span><span>       6.21
+#&gt; </span><span style='color: #555555;'>3</span><span> gradeIII        1.86      2.58     0.722 4.71</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>- 1</span><span>   -</span><span style='color: #BB0000;'>3.19</span><span>       6.92
+#&gt; </span><span style='color: #555555;'>4</span><span> response        3.83      2.29     1.67  9.61</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>- 2</span><span>   -</span><span style='color: #BB0000;'>0.657</span><span>      8.32</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

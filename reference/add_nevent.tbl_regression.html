@@ -104,7 +104,7 @@ of events is accessible via the inline_text function for printing in a report." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
       </span>
     </div>
 
@@ -139,10 +139,10 @@ of events is accessible via the inline_text function for printing in a report." 
       <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/global_options.html">global options</a>
+      <a href="../articles/gallery.html">table gallery</a>
     </li>
   </ul>
 </li>
@@ -216,7 +216,7 @@ of events is accessible via the <a href='inline_text.html'>inline_text</a> funct
 
     
 
-<p><img src='figures/tbl_reg_nevent_ex.png' width=50% /></p>
+<p><img src='figures/add_nevent_ex.png' width=50% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_regression tools: 
@@ -225,13 +225,18 @@ of events is accessible via the <a href='inline_text.html'>inline_text</a> funct
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='combine_terms.html'>combine_terms</a>()</code>,
 <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
+<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
 <code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_reg_nevent_ex</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='no'>add_nevent_ex</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='add_nevent.html'>add_nevent</a></span>()</div></pre>

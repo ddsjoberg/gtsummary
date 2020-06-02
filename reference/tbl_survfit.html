@@ -99,7 +99,7 @@ formatted summary table of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
       </span>
     </div>
 
@@ -134,10 +134,10 @@ formatted summary table of the results" />
       <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/global_options.html">global options</a>
+      <a href="../articles/gallery.html">table gallery</a>
     </li>
   </ul>
 </li>
@@ -259,12 +259,16 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <p><img src='figures/tbl_survfit_ex1.png' width=40% /></p>
 <p>Example 2</p>
 <p><img src='figures/tbl_survfit_ex2.png' width=27% /></p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
 <span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
 <span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
 
+<span class='co'># Example 1 ----------------------------------</span>
 <span class='no'>tbl_survfit_ex1</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
   <span class='no'>fit1</span>,
   <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
@@ -272,6 +276,7 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
   <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**{time} Month**"</span>
 )
 
+<span class='co'># Example 2 ----------------------------------</span>
 <span class='no'>tbl_survfit_ex2</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
   <span class='no'>fit2</span>,
   <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,

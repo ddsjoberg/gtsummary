@@ -97,7 +97,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
       </span>
     </div>
 
@@ -132,10 +132,10 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
       <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/global_options.html">global options</a>
+      <a href="../articles/gallery.html">table gallery</a>
     </li>
   </ul>
 </li>
@@ -186,6 +186,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     <span class='st'>"interaction"</span>)],
   <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -213,6 +214,11 @@ Default is <code>FALSE</code></p></td>
     <tr>
       <th>terms</th>
       <td><p>DEPRECATED.  Use <code>include=</code> argument instead.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>Logical indicating whether to print messages in console. Default is
+<code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -243,16 +249,22 @@ Default is <code>FALSE</code></p></td>
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='combine_terms.html'>combine_terms</a>()</code>,
 <code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
+<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
 <code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>tbl_lm_global_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>marker</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>()</div></pre>
+  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Global p-values calculated with</span>
+#&gt; <span class='message'>`car::Anova(x$model_obj, type = "III")`</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

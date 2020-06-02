@@ -56,7 +56,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
       </span>
     </div>
 
@@ -91,10 +91,10 @@
       <a href="articles/rmarkdown.html">gtsummary + R markdown</a>
     </li>
     <li>
-      <a href="articles/gallery.html">table gallery</a>
+      <a href="articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="articles/global_options.html">global options</a>
+      <a href="articles/gallery.html">table gallery</a>
     </li>
   </ul>
 </li>
@@ -162,19 +162,21 @@
 <p>Example basic table:</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gtsummary</span>)
 <span class="co"># make dataset with a few variables to summarize</span>
-<span class="no">trial2</span> <span class="kw">&lt;-</span> <span class="no">trial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">trt</span>, <span class="no">age</span>, <span class="no">grade</span>, <span class="no">response</span>)
+<span class="no">trial2</span> <span class="kw">&lt;-</span> <span class="no">trial</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">trt</span>, <span class="no">age</span>, <span class="no">grade</span>, <span class="no">response</span>)
 
 <span class="co"># summarize the data with our package</span>
 <span class="no">table1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span>(<span class="no">trial2</span>)</pre></div>
 <p><img src="reference/figures/README-tbl_summary_print_simple-1.png" width="30%"></p>
 <p>There are many <strong>customization options</strong> to <strong>add information</strong> (like comparing groups) and <strong>format results</strong> (like bold labels) in your table. See the <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><code><a href="reference/tbl_summary.html">tbl_summary()</a></code></a> tutorial for many more options, or below for one example.</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="no">table2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span>(
-  <span class="no">trial2</span>,
-  <span class="kw">by</span> <span class="kw">=</span> <span class="no">trt</span>, <span class="co"># split table by group</span>
-  <span class="kw">missing</span> <span class="kw">=</span> <span class="st">"no"</span> <span class="co"># don't list missing data separately</span>
-) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="no">table2</span> <span class="kw">&lt;-</span>
+  <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span>(
+    <span class="no">trial2</span>,
+    <span class="kw">by</span> <span class="kw">=</span> <span class="no">trt</span>, <span class="co"># split table by group</span>
+    <span class="kw">missing</span> <span class="kw">=</span> <span class="st">"no"</span> <span class="co"># don't list missing data separately</span>
+  ) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="reference/add_n.html">add_n</a></span>() <span class="kw">%&gt;%</span> <span class="co"># add column with total number of non-missing observations</span>
-  <span class="fu"><a href="reference/add_p.html">add_p</a></span>() <span class="kw">%&gt;%</span> <span class="co"># test if there's difference between groups</span>
+  <span class="fu"><a href="reference/add_p.html">add_p</a></span>() <span class="kw">%&gt;%</span> <span class="co"># test for a difference between groups</span>
+  <span class="fu"><a href="reference/modify_header.html">modify_header</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">"**Variable**"</span>) <span class="kw">%&gt;%</span> <span class="co"># update the column header</span>
   <span class="fu"><a href="reference/bold_italicize_labels_levels.html">bold_labels</a></span>()</pre></div>
 <p><img src="reference/figures/README-tbl_summary_print_extra-1.png" width="60%"></p>
 </div>
@@ -218,7 +220,7 @@
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Please note that the {gtsummary} project is released with a <a href="http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/davidkane9">@davidkane9</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/GuiMarthe">@GuiMarthe</a>, <a href="https://github.com/jeanmanguy">@jeanmanguy</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/jwilliman">@jwilliman</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/leejasme">@leejasme</a>, <a href="https://github.com/ltin1214">@ltin1214</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/MyKo101">@MyKo101</a>, <a href="https://github.com/oranwutang">@oranwutang</a>, <a href="https://github.com/ryzhu75">@ryzhu75</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, <a href="https://github.com/slobaugh">@slobaugh</a>, <a href="https://github.com/tormodb">@tormodb</a>, and <a href="https://github.com/zabore">@zabore</a></p>
+<p>Please note that the {gtsummary} project is released with a <a href="http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/barthelmes">@barthelmes</a>, <a href="https://github.com/calebasaraba">@calebasaraba</a>, <a href="https://github.com/davidgohel">@davidgohel</a>, <a href="https://github.com/davidkane9">@davidkane9</a>, <a href="https://github.com/dax44">@dax44</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/GuiMarthe">@GuiMarthe</a>, <a href="https://github.com/hughjonesd">@hughjonesd</a>, <a href="https://github.com/jeanmanguy">@jeanmanguy</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/joelgautschi">@joelgautschi</a>, <a href="https://github.com/jwilliman">@jwilliman</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/khizzr">@khizzr</a>, <a href="https://github.com/larmarange">@larmarange</a>, <a href="https://github.com/leejasme">@leejasme</a>, <a href="https://github.com/ltin1214">@ltin1214</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/moleps">@moleps</a>, <a href="https://github.com/MyKo101">@MyKo101</a>, <a href="https://github.com/oranwutang">@oranwutang</a>, <a href="https://github.com/ryzhu75">@ryzhu75</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, <a href="https://github.com/simonpcouch">@simonpcouch</a>, <a href="https://github.com/slobaugh">@slobaugh</a>, <a href="https://github.com/tormodb">@tormodb</a>, and <a href="https://github.com/zabore">@zabore</a></p>
 </div>
 
   </div>

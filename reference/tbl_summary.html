@@ -99,7 +99,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
       </span>
     </div>
 
@@ -134,10 +134,10 @@ for detailed examples." />
       <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/global_options.html">global options</a>
+      <a href="../articles/gallery.html">table gallery</a>
     </li>
   </ul>
 </li>
@@ -191,10 +191,11 @@ for detailed examples.</p>
   <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>),
-  <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>,
+  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>percent</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"column"</span>, <span class='st'>"row"</span>, <span class='st'>"cell"</span>),
+  <span class='kw'>percent</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
   <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
@@ -241,9 +242,9 @@ to 1 decimal place, and the SD to 2 use <code>digits = list(age ~ c(1, 2))</code
       <th>type</th>
       <td><p>List of formulas specifying variable types. Accepted values
 are <code><a href='https://rdrr.io/r/base/c.html'>c("continuous", "categorical", "dichotomous")</a></code>,
-e.g. <code>type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")</code>.
+e.g. <code>type = list(age ~ "continuous", female ~ "dichotomous")</code>.
 If type not specified for a variable, the function
-will default to an appropriate summary type.  See below for details.</p></td>
+will default to an appropriate summary type. See below for details.</p></td>
     </tr>
     <tr>
       <th>value</th>
@@ -273,6 +274,10 @@ e.g. <code>sort = list(everything() ~ "frequency")</code></p></td>
       <th>percent</th>
       <td><p>Indicates the type of percentage to return. Must be one of
 <code>"column"</code>, <code>"row"</code>, or <code>"cell"</code>. Default is <code>"column"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>variables to include in the summary table. Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code></p></td>
     </tr>
     <tr>
       <th>group</th>
@@ -325,6 +330,19 @@ will be replaced with the numeric statistic (see <a href='https://glue.tidyverse
 <li><p><code>{foo}</code> any function of the form <code>foo(x)</code> is accepted where <code>x</code> is a numeric vector</p></li>
 </ul>
 
+<p>For both categorical and continuous variables, statistics on the number of
+missing and non-missing observations and their proportions are available to
+display.</p><ul>
+<li><p><code>{N_obs}</code> total number of observations</p></li>
+<li><p><code>{N_miss}</code> number of missing observations</p></li>
+<li><p><code>{N_nonmiss}</code> number of non-missing observations</p></li>
+<li><p><code>{p_miss}</code> percentage of observations missing</p></li>
+<li><p><code>{p_nonmiss}</code> percentage of observations not missing</p></li>
+</ul>
+
+<p>Note that for categorical variables, <code>{N_obs}</code>, <code>{N_miss}</code> and <code>{N_nonmiss}</code> refer
+to the total number, number missing and number non missing observations
+in the denominator, not at each level of the categorical variable.</p>
     <h2 class="hasAnchor" id="type-argument"><a class="anchor" href="#type-argument"></a>type argument</h2>
 
     
@@ -350,7 +368,8 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
 <p><img src='figures/tbl_summary_ex3.png' width=45% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed examples</p>
+    <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed tutorial</p>
+<p>See <a href='http://www.danieldsjoberg.com/gtsummary/articles/gallery.html'>table gallery</a> for additional examples</p>
 <p>Other tbl_summary tools: 
 <code><a href='add_n.html'>add_n</a>()</code>,
 <code><a href='add_overall.html'>add_overall</a>()</code>,
@@ -360,15 +379,22 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
 <code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
+<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
 <code><a href='modify_header.html'>modify_header</a>()</code>,
+<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>()
 
+<span class='co'># Example 2 ----------------------------------</span>
 <span class='no'>tbl_summary_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>(
@@ -378,6 +404,7 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
     <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>age</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>))
   )
 
+<span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># for convenience, you can also pass named lists to any arguments</span>
 <span class='co'># that accept formulas (e.g label, digits, etc.)</span>
 <span class='no'>tbl_summary_ex3</span> <span class='kw'>&lt;-</span>
