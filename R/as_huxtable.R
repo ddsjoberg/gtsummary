@@ -96,22 +96,7 @@ table_header_to_huxtable_calls <- function(x, ...) {
     as_tibble(x, return_calls = TRUE,
               include = -c("cols_label", "tab_style_bold", "tab_style_italic"))
 
-  huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable())
-
-  # align ----------------------------------------------------------------------
-  df_align <-
-    table_header %>%
-    filter(.data$hide == FALSE) %>%
-    select(.data$id, .data$align) %>%
-    group_by(.data$align) %>%
-    nest() %>%
-    ungroup()
-
-  huxtable_calls[["align"]] <- map2(
-    df_align$align, df_align$data,
-    ~expr(huxtable::set_align(row = huxtable::everywhere, col = !!.y$id,
-         value = !!.x))
-  )
+  huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable(add_colnames = FALSE))
 
   # padding --------------------------------------------------------------------
   df_padding <-
@@ -267,6 +252,21 @@ table_header_to_huxtable_calls <- function(x, ...) {
       huxtable::set_bottom_border(row = !! header_bottom_row, col =
         huxtable::everywhere, value = 0.4)
     )
+  )
+
+  # align ----------------------------------------------------------------------
+  df_align <-
+    table_header %>%
+    filter(.data$hide == FALSE) %>%
+    select(.data$id, .data$align) %>%
+    group_by(.data$align) %>%
+    nest() %>%
+    ungroup()
+
+  huxtable_calls[["align"]] <- map2(
+    df_align$align, df_align$data,
+    ~expr(huxtable::set_align(row = huxtable::everywhere, col = !!.y$id,
+                              value = !!.x))
   )
 
   huxtable_calls
