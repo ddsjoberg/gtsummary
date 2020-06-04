@@ -333,17 +333,18 @@ estimate_header <- function(x, exponentiate) {
   }
 
   # assigning header and footer ------------------------------------------------
+  language <- get_theme_element("pkgwide-str:language", default = "en")
   if (model_type == "logistic") {
     header <- ifelse(exponentiate == TRUE, "OR", "log(OR)")
-    attr(header, "footnote") <- translate_text("OR = Odds Ratio")
+    attr(header, "footnote") <- translate_text("OR = Odds Ratio", language)
   }
   else if (model_type == "poisson") {
     header <- ifelse(exponentiate == TRUE, "IRR", "log(IRR)")
-    attr(header, "footnote") <- translate_text("IRR = Incidence Rate Ratio")
+    attr(header, "footnote") <- translate_text("IRR = Incidence Rate Ratio", language)
   }
   else if (model_type == "prop_hazard") {
     header <- ifelse(exponentiate == TRUE, "HR", "log(HR)")
-    attr(header, "footnote") <- translate_text("HR = Hazard Ratio")
+    attr(header, "footnote") <- translate_text("HR = Hazard Ratio", language)
   }
   else {
     header <-
