@@ -335,7 +335,7 @@ estimate_header <- function(x, exponentiate) {
   # assigning header and footer ------------------------------------------------
   if (model_type == "logistic") {
     header <- ifelse(exponentiate == TRUE, "OR", "log(OR)")
-    attr(header, "footnote") <- translate_text("OR = Odds Ratio", language)
+    attr(header, "footnote") <- translate_text("OR = Odds Ratio")
   }
   else if (model_type == "poisson") {
     header <- ifelse(exponentiate == TRUE, "IRR", "log(IRR)")
