@@ -256,7 +256,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
       footnote_abbrev = case_when(
         .data$column == "estimate" ~
           estimate_header(x, exponentiate) %>% attr("footnote") %||% NA_character_,
-        .data$column == "ci" ~ "translate_text(CI = Confidence Interval"),
+        .data$column == "ci" ~ translate_text("CI = Confidence Interval"),
         TRUE ~ .data$footnote_abbrev
       ),
       missing_emdash = case_when(
