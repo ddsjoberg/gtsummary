@@ -132,7 +132,7 @@ theme_gtsummary_printer <- function(
 theme_gtsummary_language <- function(language = c("es")) {
   language <- match.arg(language)
   list(
-    "pkgwide-str:theme_name" = paste("Language", language),
+    "pkgwide-str:theme_name" = paste("language:", language),
     "pkgwide-str:language" = language
   )
 }
