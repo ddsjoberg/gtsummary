@@ -117,14 +117,14 @@ add_q_method_lookup <-
   left_join(
     tibble::tribble(
       ~method, ~method_label,
-      "holm", "Holm correction for multiple testing",
-      "hochberg", "Hochberg correction for multiple testing",
-      "hommel", "Hommel correction for multiple testing",
-      "bonferroni", "Bonferroni correction for multiple testing",
-      "BH", "Benjamini & Hochberg correction for multiple testing",
-      "BY", "Benjamini & Yekutieli correction for multiple testing",
-      "fdr", "False discovery rate correction for multiple testing",
-      "none", "No correction for multiple testing"
+      "holm", translate_text("Holm correction for multiple testing", language),
+      "hochberg", translate_text("Hochberg correction for multiple testing", language),
+      "hommel", translate_text("Hommel correction for multiple testing", language),
+      "bonferroni", translate_text("Bonferroni correction for multiple testing", language),
+      "BH", translate_text("Benjamini & Hochberg correction for multiple testing", language),
+      "BY", translate_text("Benjamini & Yekutieli correction for multiple testing", language),
+      "fdr", translate_text("False discovery rate correction for multiple testing", language),
+      "none", translate_text("No correction for multiple testing", language)
     ),
     by = "method"
   ) %>%
