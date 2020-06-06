@@ -129,7 +129,7 @@ theme_gtsummary_printer <- function(
 #' @rdname theme_gtsummary
 #' @param language String indicating the language.
 #' @export
-theme_gtsummary_language <- function(language = c("es")) {
+theme_gtsummary_language <- function(language = c("en", "es")) {
   language <- match.arg(language)
   list(
     "pkgwide-str:theme_name" = paste("language:", language),
