@@ -8,7 +8,8 @@
 #'  - `"jama"` Journal of the American Medical Association
 #' @param print_engine String indicating the print method. Must be one of
 #' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"huxtable"`, `"tibble"`
-#' @param language String indicating language. Must be one of `"es"`
+#' @param language String indicating language. Must be one of `"es"` (Spanish)
+#' or `"en"` (English).
 #' @seealso [set_gtsummary_theme()]
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
@@ -129,7 +130,7 @@ theme_gtsummary_printer <- function(
 #' @rdname theme_gtsummary
 #' @param language String indicating the language.
 #' @export
-theme_gtsummary_language <- function(language = c("en", "es")) {
+theme_gtsummary_language <- function(language = c("es", "en")) {
   language <- match.arg(language)
   list(
     "pkgwide-str:theme_name" = paste("language:", language),
