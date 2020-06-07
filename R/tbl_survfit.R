@@ -148,7 +148,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   # applying labels
   lbls <- as.list(unique(df_stats$col_label)) %>% set_names(unique(df_stats$col_name))
   results <-
-    expr(modify_header_internal(results, label = paste0("**", translate_text("Characteristic"), "**", !!!lbls))) %>%
+    expr(modify_header_internal(results, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
     eval()
 
   # assigning class
