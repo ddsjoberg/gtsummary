@@ -478,7 +478,7 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
       var_type = var_type
     ) %>%
     select(any_of(c("variable", "var_type", "row_ref", "row_type", "label", "N")),
-                  everything(), -term, -term_id, -interaction, -level_lbl)
+                  everything(), -.data$term, -.data$term_id, -interaction, -.data$level_lbl)
 }
 
 #' Takes a vector and transforms to data frame with those column names
