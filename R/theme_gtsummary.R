@@ -4,12 +4,6 @@
 #' The following themes are available to use within the gtsummary package.
 #' Use the [set_gtsummary_theme()] function to set a theme.
 #'
-#' @param journal String indicating the journal theme to follow.
-#'  - `"jama"` Journal of the American Medical Association
-#' @param print_engine String indicating the print method. Must be one of
-#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"huxtable"`, `"tibble"`
-#' @param language String indicating language. Must be one of `"es"` (Spanish)
-#' or `"en"` (English).
 #' @seealso [set_gtsummary_theme()]
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
@@ -55,6 +49,8 @@ NULL
 
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
+#' @param journal String indicating the journal theme to follow.
+#'  - `"jama"` Journal of the American Medical Association
 #' @export
 theme_gtsummary_journal <- function(journal = "jama") {
   journal <- match.arg(journal)
@@ -118,7 +114,8 @@ theme_gtsummary_compact <- function(){
 
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
-#' @param print_engine String indicating the print engine. Default is `"gt"`
+#' @param print_engine String indicating the print method. Must be one of
+#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"huxtable"`, `"tibble"`
 #' @export
 theme_gtsummary_printer <- function(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble")) {
@@ -128,7 +125,8 @@ theme_gtsummary_printer <- function(
 
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
-#' @param language String indicating the language.
+#' @param language String indicating language. Must be one of `"es"` (Spanish)
+#' or `"en"` (English).
 #' @export
 theme_gtsummary_language <- function(language = c("es", "en")) {
   language <- match.arg(language)
