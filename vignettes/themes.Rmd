@@ -78,7 +78,25 @@ trial %>%
   add_stat_label()
 ```
 
-Clear all previously set themes using the `reset_gtsummary_theme()`
+#### JAMA + Compact + Language Theme
+
+All {gtsummary} tables can be translated into another language using `theme_gtsummary_language()`!
+
+```{r, message=FALSE, echo = FALSE}
+set_gtsummary_theme(theme_gtsummary_journal(journal = "jama"))
+set_gtsummary_theme(theme_gtsummary_compact())
+set_gtsummary_theme(theme_gtsummary_language("es"))
+```
+
+```{r, message=FALSE, echo=FALSE}
+trial %>%
+  select(trt, age, grade) %>%
+  tbl_summary(by = trt) %>%
+  add_p() %>%
+  add_stat_label()
+```
+
+**Clear all previously set themes using the** `reset_gtsummary_theme()`.
 
 ```{r}
 reset_gtsummary_theme()
