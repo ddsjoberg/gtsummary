@@ -97,7 +97,8 @@ tbl_stack <- function(tbls, group_header = NULL) {
   }
   else if (!is.null(group_header)) {
     results$table_body <-
-      imap_dfr(tbls, ~pluck(.x, "table_body") %>% mutate(groupname_col = group_header[.y])) %>%
+      purrr::map2_dfr(tbls, seq_along(tbls),
+                      ~pluck(.x, "table_body") %>% mutate(groupname_col = group_header[.y])) %>%
       group_by(.data$groupname_col)
   }
 

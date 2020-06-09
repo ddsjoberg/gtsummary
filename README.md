@@ -219,6 +219,7 @@ thank you to all contributors\!
 [@leejasme](https://github.com/leejasme),
 [@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
+[@matthieu-faron](https://github.com/matthieu-faron),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@moleps](https://github.com/moleps),
 [@MyKo101](https://github.com/MyKo101),

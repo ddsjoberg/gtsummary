@@ -70,7 +70,7 @@ test_match_to_fn <- function(x, env) {
 
 # assign_test_one() ------------------------------------------------------------
 assign_test_one <- function(data, var, var_summary_type, by_var, test, group, env) {
-  # if user specifed test to be performed, do that test. -----------------------
+  # if user specified test to be performed, do that test. -----------------------
   # matching an internal test by name or base R function match
   # or returning the appropriate test based on what is passed
   test_func <- test_match_to_fn(test[[var]], env = env)
@@ -182,8 +182,7 @@ add_p_test_wilcox.test <- function(data, variable, by, ...) {
   if (length(unique(data[[by]])) > 2) {
     stop("Wilcoxon rank-sum test cannot be calculated with more than 2 groups")
   }
-  result$p <- stats::wilcox.test(data[[variable]],
-                                 as.numeric(as.factor(data[[by]])))$p.value
+  result$p <- stats::wilcox.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
   result$test <- "Wilcoxon rank-sum test"
   result
 }
