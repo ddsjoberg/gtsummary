@@ -2,9 +2,9 @@
 
 * Now returning all columns from `broom::tidy()` in `.$table_body()` (#516)
 
-* `tbl_stack()` now accepts a named list of gtsummary tables (#524)
+* `tbl_stack()` now accepts a named list of gtsummary tables when using the `group_header=` argument (#524)
 
-* `add_0.tbl_summary()` bug fix for Wilcoxon rank-sum p-value calculation (#525 )
+* `add_p.tbl_summary()` bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (#525 )
 
 # gtsummary 1.3.1
 
