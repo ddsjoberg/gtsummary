@@ -1,5 +1,5 @@
 ## Test environments
-* Windows 10 (local), 3.6, 4.0
+* Windows 10 (local), 4.0
 * Ubuntu 16.04.6 LTS (on github actions), 3.4, 3.5, 3.6, 4.0
 * Windows Server 2019 (on github actions), 4.0
 * macOS (on github actions), 4.0, devel
