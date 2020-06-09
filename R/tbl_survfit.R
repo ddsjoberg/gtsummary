@@ -183,7 +183,11 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
       label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
         stringr::word(strata, start = 2L, sep = "="),
       col_label = .env$label_header %||%
+<<<<<<< HEAD
         if (get_theme_element("pkgwide-str:language", default = "en")=="es") {
+=======
+        if (language = get_theme_element("pkgwide-str:language", default = "en")=="es") {
+>>>>>>> 12d45bfb8d651915ac018a19af78a9aa3725ab25
           paste0("**", translate_text("Percentile"), " ", {style_percent(prob)},"**") %>%
             glue() %>% as.character()
         } else {
