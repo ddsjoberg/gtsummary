@@ -72,4 +72,12 @@ test_that("Stacking tbl_summary objects", {
     zz <- tbl_stack(list(yy, tt)),
     NA
   )
+
+  # no error if the list is named
+  lst_summary <- list(yy, tt) %>% set_names("one", "two")
+  expect_error(
+    tbl_stack(lst_summary, group_header = c("Group 1", "Group 2")),
+    NA
+  )
+
 })
