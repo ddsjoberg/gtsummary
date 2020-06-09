@@ -13,7 +13,7 @@ If you have found a bug, please briefly describe your problem and what output yo
 
 INCLUDE a minimal reproducible example (AKA a reprex). If you've never heard of a [reprex](https://reprex.tidyverse.org/) before, start by reading <https://www.tidyverse.org/help/#reprex>.
 
-If you're experiencing unexpected formatting when you print a {gtsummary} table with R markdown with PDF or RTF output, please ensure first that the same issue does not exist in the {gt} package before submitting the issue. Note that {gt} is currently developing PDF and RTF output formats.
+If you're experiencing unexpected formatting when you print a {gtsummary} table with R markdown to PDF or RTF, please ensure first that the same issue does not exist in the {gt} package before submitting the issue. Note that {gt} is currently developing PDF and RTF output formats.
 
 ---
 
