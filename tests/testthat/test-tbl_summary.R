@@ -401,3 +401,12 @@ test_that("tbl_summary- works with grouped data (it ungroups it first)", {
   )
 })
 
+test_that("tbl_summary-may select only {N_obs} (and friends) as summary stat", {
+  expect_error(
+    trial %>%
+      select(stage) %>%
+      tbl_summary(statistic = all_categorical() ~ "{N_obs} {p_miss}"),
+    NA
+  )
+})
+
