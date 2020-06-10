@@ -843,6 +843,9 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
     # removing elements protected as other items
     setdiff(c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs"))
 
+  # if no summary stats listed, return a data frame with variable
+  if (length(fns_names_chr) == 0) return(tibble(variable = variable))
+
   # defining shortcut quantile functions, if needed
   if (any(fns_names_chr %in% paste0("p", 0:100))) {
     fns_names_chr[fns_names_chr %in% paste0("p", 0:100)] %>%
