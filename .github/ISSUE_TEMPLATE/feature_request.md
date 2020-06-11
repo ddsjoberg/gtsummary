@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+Please do not use this form to ask a question, or ask for assistance. Instead, ask on <https://stackoverflow.com/> using the gtsummary tag.
+
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
