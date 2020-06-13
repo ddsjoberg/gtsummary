@@ -4,7 +4,7 @@
 #' in [tbl_regression] and [tbl_uvregression].  If a model is passed to these
 #' functions and the model is not listed below and  a `tidy()` function is
 #' not specified in the `tidy_fun=` argument, the model object will be passed
-#' to [broom::tidy] or [broom.mixed::tidy].
+#' to `broom::tidy` or `broom.mixed::tidy`.
 #'
 #' \itemize{
 #'  \item{[stats::lm]}
