@@ -1,4 +1,5 @@
 context("test-as_kable")
+testthat::skip_on_cran()
 
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_kable_extra(), NA)

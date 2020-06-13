@@ -8,7 +8,6 @@
 \alias{knit_print}
 \alias{vars}
 \alias{select}
-\alias{as_huxtable}
 \alias{starts_with}
 \alias{ends_with}
 \alias{contains}
@@ -27,8 +26,6 @@ below to see their documentation.
 
 \describe{
   \item{dplyr}{\code{\link[dplyr]{select}}, \code{\link[dplyr]{vars}}}
-
-  \item{huxtable}{\code{\link[huxtable]{as_huxtable}}}
 
   \item{knitr}{\code{\link[knitr]{knit_print}}}
 

@@ -14,7 +14,7 @@
 \item{x}{An object created using gtsummary functions}
 
 \item{print_engine}{String indicating the print method. Must be one of
-\code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"huxtable"}, \code{"tibble"}}
+\code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"tibble"}}
 
 \item{...}{Not used}
 }

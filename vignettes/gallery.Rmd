@@ -244,14 +244,16 @@ tbl_merge(list(gt_sum, tbl_reg))  %>%
 ---
 
 Implement a custom tidier to report Wald confidence intervals.
-The Wald confidence intervals are calculated by passing the appropriate `confint()` function to `broom::confint_tidy()`.
+The Wald confidence intervals are calculated using `confint.default()`.
 
 ```{r}
 my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
   dplyr::bind_cols(
     broom::tidy(x, exponentiate = exponentiate, conf.int = FALSE),
-    broom::confint_tidy(x, func = stats::confint.default, conf.level = conf.level)
-  )
+    # calculate the confidence intervals, and save them in a tibble
+    stats::confint.default(x) %>%
+      tibble::as_tibble() %>%
+      rlang::set_names(c("conf.low", "conf.high"))  )
 }
 
 lm(age ~ grade + marker, trial) %>%
