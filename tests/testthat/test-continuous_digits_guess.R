@@ -1,4 +1,5 @@
 context("test-continuous_digits_guess")
+testthat::skip_on_cran()
 
 test_that("guess digits: mtcars$drat", {
   expect_equal(

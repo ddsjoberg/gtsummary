@@ -12,7 +12,7 @@ theme_gtsummary_journal(journal = "jama")
 theme_gtsummary_compact()
 
 theme_gtsummary_printer(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble")
+  print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble")
 )
 }
 \arguments{
@@ -43,7 +43,7 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 }
 \item \code{theme_gtsummary_compact()}
 \itemize{
-\item tables printed with gt, flextable, and huxtable will be compact with smaller font size and reduced cell padding
+\item tables printed with gt or flextable will be compact with smaller font size and reduced cell padding
 }
 \item \code{theme_gtsummary_printer(print_engine=)}
 \itemize{
@@ -51,7 +51,6 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 \item \code{"kable"} sets the \code{knitr::kable()} function as the default print engine
 \item \code{"flextable"} sets the flextable package as the default print engine
 \item \code{"kable_extra"} sets the kableExtra package as the default print engine
-\item \code{"huxtable"} sets the huxtable package as the default print engine
 }
 }
 

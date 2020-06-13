@@ -10,4 +10,4 @@ Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
 
 ## Additional Comments
 
-Thank you for your time! Apologies for the short time between submissions: we've included an important bug fix.
+Thank you for your time! I've shortened the check time for the package unit tests in this re-submission.

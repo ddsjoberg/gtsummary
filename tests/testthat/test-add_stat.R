@@ -1,4 +1,5 @@
 context("test-add_stat")
+testthat::skip_on_cran()
 
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value

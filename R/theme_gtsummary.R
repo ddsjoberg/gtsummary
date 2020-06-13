@@ -7,7 +7,7 @@
 #' @param journal String indicating the journal theme to follow.
 #'  - `"jama"` Journal of the American Medical Association
 #' @param print_engine String indicating the print method. Must be one of
-#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"huxtable"`, `"tibble"`
+#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"tibble"`
 #' @seealso [set_gtsummary_theme()]
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
@@ -17,13 +17,12 @@
 #'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
 #'     - in `tbl_summary()` the percent symbol is not printed next to percentages
 #' - `theme_gtsummary_compact()`
-#'   - tables printed with gt, flextable, and huxtable will be compact with smaller font size and reduced cell padding
+#'   - tables printed with gt or flextable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine=)`
 #'   - `"gt"` sets the gt package as the default print engine
 #'   - `"kable"` sets the `knitr::kable()` function as the default print engine
 #'   - `"flextable"` sets the flextable package as the default print engine
 #'   - `"kable_extra"` sets the kableExtra package as the default print engine
-#'   - `"huxtable"` sets the huxtable package as the default print engine
 #'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
@@ -97,14 +96,14 @@ theme_gtsummary_compact <- function(){
         rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))
       )
     ),
-    # compact huxtable
-    "as_huxtable.gtsummary-lst:addl_cmds" = list(
-      insert_row = list(
-        rlang::expr(huxtable::set_font_size(value = 8)),
-        rlang::expr(huxtable::set_bottom_padding(value = 0)),
-        rlang::expr(huxtable::set_top_padding(value = 0))
-      )
-    ),
+    # # compact huxtable
+    # "as_huxtable.gtsummary-lst:addl_cmds" = list(
+    #   insert_row = list(
+    #     rlang::expr(huxtable::set_font_size(value = 8)),
+    #     rlang::expr(huxtable::set_bottom_padding(value = 0)),
+    #     rlang::expr(huxtable::set_top_padding(value = 0))
+    #   )
+    # ),
     # compact kableExtra
     "as_kable_extra-lst:addl_cmds" = list(
       kable = list(
@@ -119,7 +118,7 @@ theme_gtsummary_compact <- function(){
 #' @param print_engine String indicating the print engine. Default is `"gt"`
 #' @export
 theme_gtsummary_printer <- function(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble")) {
+  print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble")) {
 
   list("pkgwide-str:print_engine" = match.arg(print_engine))
 }

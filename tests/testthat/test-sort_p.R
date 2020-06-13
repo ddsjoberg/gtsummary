@@ -1,4 +1,5 @@
 context("test-sort_p")
+testthat::skip_on_cran()
 
 test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
   table1 <- trial %>%

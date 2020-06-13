@@ -46,13 +46,10 @@ inline reporting in an R markdown document. Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \examples{
-t1 <- tbl_summary(trial)
-t2 <- tbl_summary(trial, by = trt) \%>\% add_p()
+t1 <- trial[c("trt", "grade")] \%>\% tbl_summary(by = trt) \%>\% add_p()
 
-inline_text(t1, variable = age)
-inline_text(t2, variable = grade, level = "I", column = "Drug A",
-pattern = "{n}/{N} ({p})\%")
-inline_text(t2, variable = grade, column = "p.value")
+inline_text(t1, variable = grade, level = "I", column = "Drug A", pattern = "{n}/{N} ({p})\%")
+inline_text(t1, variable = grade, column = "p.value")
 }
 \seealso{
 Other tbl_summary tools: 

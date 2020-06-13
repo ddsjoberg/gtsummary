@@ -1,4 +1,5 @@
 context("test-as_flextable")
+testthat::skip_on_cran()
 
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_flextable(), NA)

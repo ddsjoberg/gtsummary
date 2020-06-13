@@ -1,4 +1,5 @@
 context("test-set_gtsummary_theme")
+testthat::skip_on_cran()
 
 test_that("setting themes", {
   expect_error(
