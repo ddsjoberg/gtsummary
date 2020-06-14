@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 1.3.2
 
 * Now returning all columns from `broom::tidy()` in `.$table_body()` (#516)
