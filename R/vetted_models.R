@@ -19,7 +19,7 @@
 #' @name vetted_models
 #' @keywords internal
 #' @section model support:
-#' If [broom::tidy] or [broom.mixed::tidy] supports a class of model not listed
+#' If `broom::tidy` or `broom.mixed::tidy` supports a class of model not listed
 #' above, please submit a [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues).
 #' The model can be added to the list of vetted models. Unit tests will be
 #' put in place to ensure continued support for the model.
