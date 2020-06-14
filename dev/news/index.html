@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9000</span>
       </span>
     </div>
 
@@ -175,10 +175,16 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
+</div>
+    <div id="gtsummary-132" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.2">
+<a href="#gtsummary-132" class="anchor"></a>gtsummary 1.3.2<small> 2020-06-14 </small>
+</h1>
 <ul>
 <li><p>Now returning all columns from <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy()</a></code> in <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/516'>#516</a>)</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> now accepts a named list of gtsummary tables when using the <code>group_header=</code> argument (<a href='https://github.com/ddsjoberg/gtsummary/issues/524'>#524</a>)</p></li>
-<li><p><code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (<a href='https://github.com/ddsjoberg/gtsummary/issues/525'>#525</a> )</p></li>
+<li><p><code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (<a href='https://github.com/ddsjoberg/gtsummary/issues/525'>#525</a>)</p></li>
+<li><p>Delaying the release of <code>as_huxtable()</code> until the next {huxtable} release.</p></li>
 </ul>
 </div>
     <div id="gtsummary-131" class="section level1">
@@ -191,7 +197,7 @@
 <ul>
 <li><p>Introducing themes in {gtsummary}. Use the function <code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code> to set new themes, and review the themes vignette for details on setting and creating personalized themes. (<a href='https://github.com/ddsjoberg/gtsummary/issues/424'>#424</a>)</p></li>
 <li><p>New functions <code><a href="../reference/modify_footnote.html">modify_footnote()</a></code> and <code><a href="../reference/modify_spanning_header.html">modify_spanning_header()</a></code> give users control over table footnotes and spanning headers. (<a href='https://github.com/ddsjoberg/gtsummary/issues/464'>#464</a>)</p></li>
-<li><p>Introducing <code><a href="https://rdrr.io/pkg/huxtable/man/as_huxtable.html">as_huxtable()</a></code>! The function converts gtsummary objects to {huxtable} objects. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/469'>#469</a>)</p></li>
+<li><p>Introducing <code>as_huxtable()</code>! The function converts gtsummary objects to {huxtable} objects. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/469'>#469</a>)</p></li>
 <li><p>New function <code><a href="../reference/add_stat.html">add_stat()</a></code>! Add a new column of any statistic to a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> table (<a href='https://github.com/ddsjoberg/gtsummary/issues/495'>#495</a>)</p></li>
 </ul>
 </div>
