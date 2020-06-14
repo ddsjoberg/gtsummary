@@ -266,7 +266,7 @@ Abbreviation footnotes are handled differently. See examples below.</p></td>
 <span class='no'>modify_footnote_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>tbl_summary</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>modify_footnote</span>(
-    <span class='kw'>update</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) ~
+    <span class='kw'>update</span> <span class='kw'>=</span> <span class='fu'><a href='starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) ~
       <span class='st'>"median (IQR) for continuous variables; n (%) categorical variables"</span>
   )
 
@@ -275,7 +275,7 @@ Abbreviation footnotes are handled differently. See examples below.</p></td>
 <span class='co'># use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes</span>
 <span class='no'>modify_footnote_ex2</span> <span class='kw'>&lt;-</span>
   <span class='no'>tbl_summary</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>modify_footnote</span>(<span class='kw'>update</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() ~ <span class='fl'>NA</span>)
+  <span class='fu'>modify_footnote</span>(<span class='kw'>update</span> <span class='kw'>=</span> <span class='fu'><a href='everything.html'>everything</a></span>() ~ <span class='fl'>NA</span>)
 
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># updating the footnote abbreviation for CI</span>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Update gtsummary table spanning header — modify_spanning_header • gtsummary</title>
+<title>Select Helpers — matches • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="Update gtsummary table spanning header — modify_spanning_header" />
-<meta property="og:description" content="Update gtsummary table spanning header" />
+<meta property="og:title" content="Select Helpers — matches" />
+<meta property="og:description" content="See ?tidyselect::matches for details." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -168,92 +168,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Update gtsummary table spanning header</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/modify_spanning_header.R'><code>R/modify_spanning_header.R</code></a></small>
-    <div class="hidden name"><code>modify_spanning_header.Rd</code></div>
+    <h1>Select Helpers</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/other_exports.R'><code>R/other_exports.R</code></a></small>
+    <div class="hidden name"><code>matches.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Update gtsummary table spanning header</p>
+    <p>See <code><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>?tidyselect::matches</a></code> for details.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modify_spanning_header</span>(<span class='no'>x</span>, <span class='no'>update</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>a gtsummary object</p></td>
-    </tr>
-    <tr>
-      <th>update</th>
-      <td><p>list of formulas or a single formula specifying the update.
-The LHS selects the variables
-whose spanning header will be updated, and the RHS is the new spanning header.
-For example, <code>update = starts_with("stat_") ~ "New spanning header!"</code>.
-Columns from <code>x$table_body</code> may be selected.
-To remove all spanning headers, use <code>update = everything() ~ NA</code>.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>gtsummary object</p>
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
-
-    
-
-<p>Example 1</p>
-<p><img src='figures/spanning_header_ex1.png' width=70% /></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other tbl_summary tools: 
-<code><a href='add_n.html'>add_n</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
-<code><a href='modify_header.html'>modify_header</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
-<p>Other tbl_regression tools: 
-<code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
-<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='combine_terms.html'>combine_terms</a>()</code>,
-<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
-<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
-<code><a href='modify_header.html'>modify_header</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p>
-<p>Other tbl_uvregression tools: 
-<code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
-<code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
-<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
-<code><a href='modify_header.html'>modify_header</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='co'># add header above summary statistics</span>
-<span class='no'>spanning_header_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>modify_spanning_header</span>(<span class='fu'><a href='starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) ~ <span class='st'>"**Randomization Assignment**"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
