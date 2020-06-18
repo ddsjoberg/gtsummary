@@ -1,10 +1,14 @@
+# gtsummary (development version)
+
 # gtsummary 1.3.2
 
 * Now returning all columns from `broom::tidy()` in `.$table_body()` (#516)
 
 * `tbl_stack()` now accepts a named list of gtsummary tables when using the `group_header=` argument (#524)
 
-* `add_p.tbl_summary()` bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (#525 )
+* `add_p.tbl_summary()` bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (#525)
+
+* Delaying the release of `as_huxtable()` until the next {huxtable} release.
 
 # gtsummary 1.3.1
 

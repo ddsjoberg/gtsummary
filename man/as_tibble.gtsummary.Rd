@@ -54,7 +54,6 @@ as_tibble(tbl, col_labels = FALSE)
 Other gtsummary output types: 
 \code{\link{as_flextable}()},
 \code{\link{as_gt}()},
-\code{\link{as_huxtable.gtsummary}()},
 \code{\link{as_kable_extra}()},
 \code{\link{as_kable}()}
 }

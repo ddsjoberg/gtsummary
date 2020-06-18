@@ -32,13 +32,10 @@ inline_text <- function(x, ...) {
 #' @export
 #' @return A string reporting results from a gtsummary table
 #' @examples
-#' t1 <- tbl_summary(trial)
-#' t2 <- tbl_summary(trial, by = trt) %>% add_p()
+#' t1 <- trial[c("trt", "grade")] %>% tbl_summary(by = trt) %>% add_p()
 #'
-#' inline_text(t1, variable = age)
-#' inline_text(t2, variable = grade, level = "I", column = "Drug A",
-#' pattern = "{n}/{N} ({p})%")
-#' inline_text(t2, variable = grade, column = "p.value")
+#' inline_text(t1, variable = grade, level = "I", column = "Drug A", pattern = "{n}/{N} ({p})%")
+#' inline_text(t1, variable = grade, column = "p.value")
 inline_text.tbl_summary <-
   function(x, variable, column = NULL, level = NULL, pattern = NULL,
            pvalue_fun = NULL, ...) {

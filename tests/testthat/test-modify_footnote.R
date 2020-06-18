@@ -1,4 +1,5 @@
 context("test-modify_footnote")
+testthat::skip_on_cran()
 
 test_that("modify_footnote works", {
   tbl_summary <-
