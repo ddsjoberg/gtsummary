@@ -24,8 +24,7 @@ theme_gtsummary_language(language = c("es", "en"))
 \item \code{"jama"} Journal of the American Medical Association
 }}
 
-\item{print_engine}{String indicating the print method. Must be one of
-\code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"huxtable"}, \code{"tibble"}}
+\item{print_engine}{String indicating the print engine. Default is \code{"gt"}}
 
 \item{language}{String indicating language. Must be one of \code{"es"} (Spanish)
 or \code{"en"} (English).}

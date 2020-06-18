@@ -183,13 +183,11 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
       label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
         stringr::word(strata, start = 2L, sep = "="),
       col_label = .env$label_header %||%
-
-        if (get_theme_element("pkgwide-str:language", default = "en")=="es") {
-          paste0("**", translate_text("Percentile"), " ", {style_percent(prob)},"**") %>%
-            glue() %>% as.character()
-        } else {
-          paste0("**{style_percent(prob, symbol = TRUE)} ", translate_text("Percentile"), "**") %>%
-            glue() %>% as.character()}
+        # for some languages, we show 'Percentile 50%' instead of '50% Percentile'
+        switch(get_theme_element("pkgwide-str:language", default = "en") %in% "es",
+               "**{style_percent(prob, symbol = TRUE)} {translate_text('Percentile')}**") %||%
+        "**{style_percent(prob, symbol = TRUE)} {translate_text('Percentile')}**" %>%
+        glue() %>% as.character()
     )
 
   # removing strata column if there are no stratum in survfit
@@ -199,7 +197,7 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
 }
 
 
-# calcualtes and prepares n-year survival estimates for tbl
+# calculates and prepares n-year survival estimates for tbl
 survfit_time <- function(x, times, label_header, conf.level, failure) {
   tidy <- broom::tidy(x, conf.level = conf.level)
   strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
