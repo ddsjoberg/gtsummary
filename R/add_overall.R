@@ -12,7 +12,7 @@
 #' @return A `tbl_summary` object
 #' @examples
 #' tbl_overall_ex <-
-#'   trial[c("age", "response", "grade", "trt")] %>%
+#'   trial[c("age", "grade", "trt")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_overall()
 #' @section Example Output:

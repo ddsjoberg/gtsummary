@@ -271,4 +271,3 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   huxtable_calls
 }
-
