@@ -1,4 +1,5 @@
 context("test-tbl_survfit")
+testthat::skip_on_cran()
 library(survival)
 
 s1 <- survfit(Surv(ttdeath, death) ~ trt, trial)

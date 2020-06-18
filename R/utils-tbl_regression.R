@@ -380,7 +380,7 @@ parse_fit <- function(fit, tidy, label, show_single_row) {
   }
 
   # final touches to result ----------------------------------------------------
-  # adding in refernce rows, and header rows for categorical and interaction variables
+  # adding in reference rows, and header rows for categorical and interaction variables
   result <-
     tidy_group %>%
     mutate(
@@ -472,16 +472,13 @@ parse_final_touches <- function(group, group_lbl, single_row, var_type, data, mo
 
   # keeping necessary vars and renaming
   # vars to keep (in order)
-  cols_to_keep <-
-    c("variable", "var_type", "row_ref", "row_type", "label", "N",
-    "estimate", "conf.low", "conf.high", "p.value") %>%
-    intersect(c(names(result), "N", "var_type"))
   result %>%
     mutate(
       N = nrow(model_frame),
       var_type = var_type
     ) %>%
-    select(all_of(cols_to_keep))
+    select(any_of(c("variable", "var_type", "row_ref", "row_type", "label", "N")),
+                  everything(), -.data$term, -.data$term_id, -.data$interaction, -.data$level_lbl)
 }
 
 #' Takes a vector and transforms to data frame with those column names

@@ -199,11 +199,13 @@ By contributing to this project, you agree to abide by its terms. A big
 thank you to all contributors\!  
 [@ablack3](https://github.com/ablack3),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
+[@barthelmes](https://github.com/barthelmes),
 [@calebasaraba](https://github.com/calebasaraba),
 [@davidgohel](https://github.com/davidgohel),
 [@davidkane9](https://github.com/davidkane9),
 [@dax44](https://github.com/dax44),
 [@ddsjoberg](https://github.com/ddsjoberg),
+[@DeFilippis](https://github.com/DeFilippis),
 [@emilyvertosick](https://github.com/emilyvertosick),
 [@GuiMarthe](https://github.com/GuiMarthe),
 [@hughjonesd](https://github.com/hughjonesd),
@@ -218,12 +220,16 @@ thank you to all contributors\!
 [@leejasme](https://github.com/leejasme),
 [@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
+[@matthieu-faron](https://github.com/matthieu-faron),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@moleps](https://github.com/moleps),
 [@MyKo101](https://github.com/MyKo101),
 [@oranwutang](https://github.com/oranwutang),
 [@ryzhu75](https://github.com/ryzhu75),
 [@sammo3182](https://github.com/sammo3182),
+[@simonpcouch](https://github.com/simonpcouch),
+[@slb2240](https://github.com/slb2240),
 [@slobaugh](https://github.com/slobaugh),
-[@tormodb](https://github.com/tormodb), and
-[@zabore](https://github.com/zabore)
+[@tormodb](https://github.com/tormodb),
+[@zabore](https://github.com/zabore), and
+[@zeyunlu](https://github.com/zeyunlu)

@@ -91,7 +91,7 @@ as it is for \code{tbl_regression()}.
 \examples{
 # Example 1 ----------------------------------
 add_p_ex1 <-
-  trial[c("age", "grade", "response", "trt")] \%>\%
+  trial[c("age", "grade", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p()
 
