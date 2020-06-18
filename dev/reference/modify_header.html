@@ -181,12 +181,12 @@ e.g. the N can be dynamically included by wrapping it in curly brackets
 (following <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> syntax).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modify_header</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>update</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>text_interpret</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"md"</span>, <span class='st'>"html"</span>),
-  <span class='no'>...</span>
+    <pre class="usage"><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_header.html'>modify_header</a></span>(
+  <span class='kw'>x</span>,
+  update = <span class='kw'>NULL</span>,
+  stat_by = <span class='kw'>NULL</span>,
+  text_interpret = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"md"</span>, <span class='st'>"html"</span>),
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -203,7 +203,7 @@ column label. Columns from <code>x$table_body</code> may be selected.</p></td>
     </tr>
     <tr>
       <th>stat_by</th>
-      <td><p>Used with <code><a href='tbl_summary.html'>tbl_summary(by=)</a></code> objects with a <code>by=</code> argument.
+      <td><p>Used with <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary(by=)</a></code> objects with a <code>by=</code> argument.
 String specifying text to include above the summary statistics.
 The following fields are available for use in the
 headers:</p><ul>
@@ -224,7 +224,7 @@ e.g. <code>stat_by = "**{level}**, N = {n} ({style_percent(p)}%)"</code>.</p></t
     <tr>
       <th>...</th>
       <td><p>Specify a column and updated column label,
-e.g. <code>modify_header(p.value = "Model P-values")</code>. This is provided as an alternative to the
+e.g. <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_header.html'>modify_header(p.value = "Model P-values")</a></code>. This is provided as an alternative to the
 <code>update=</code> argument. They accomplish the same goal of updating column headers.</p></td>
     </tr>
     </table>
@@ -243,54 +243,54 @@ e.g. <code>modify_header(p.value = "Model P-values")</code>. This is provided as
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: 
-<code><a href='add_n.html'>add_n</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
-<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_n.html'>add_n</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_overall.html'>add_overall</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_stat_label.html'>add_stat_label</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_footnote.html'>modify_footnote</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_spanning_header.html'>modify_spanning_header</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary</a>()</code></p>
 <p>Other tbl_regression tools: 
-<code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
-<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='combine_terms.html'>combine_terms</a>()</code>,
-<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
-<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
-<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p>
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/combine_terms.html'>combine_terms</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_footnote.html'>modify_footnote</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_spanning_header.html'>modify_spanning_header</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html'>tbl_regression</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html'>tbl_stack</a>()</code></p>
 <p>Other tbl_uvregression tools: 
-<code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
-<code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
-<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
-<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p></div>
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_footnote.html'>modify_footnote</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_spanning_header.html'>modify_spanning_header</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html'>tbl_uvregression</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># create summary table</span>
-<span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"no"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>()
+<span class='kw'>tbl</span> <span class='op'>&lt;-</span> <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span>)] <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_p.html'>add_p</a></span>()
 
 <span class='co'># print `.$table_body` to show column names and update headers</span>
-<span class='no'>tbl</span>$<span class='no'>table_body</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 5 x 6</span><span>
+<span class='kw'>tbl</span><span class='op'>$</span><span class='kw'>table_body</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 5 x 6</span><span>
 #&gt;   variable row_type label    stat_1      stat_2      p.value
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'>1</span><span> age      label    Age, yrs 46 (37, 59) 48 (39, 56)   0.718
@@ -300,21 +300,21 @@ e.g. <code>modify_header(p.value = "Model P-values")</code>. This is provided as
 #&gt; </span><span style='color: #555555;'>5</span><span> grade    level    III      31 (32%)    33 (32%)     </span><span style='color: #BB0000;'>NA</span><span>    </div><div class='input'>
 <span class='co'># Example 1 ----------------------------------</span>
 <span class='co'># updating column headers</span>
-<span class='no'>modify_header_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>tbl</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>modify_header</span>(
-    <span class='kw'>update</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='no'>label</span> ~ <span class='st'>"**Variable**"</span>,
-      <span class='no'>p.value</span> ~ <span class='st'>"**P**"</span>
+<span class='kw'>modify_header_ex1</span> <span class='op'>&lt;-</span>
+  <span class='kw'>tbl</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_header.html'>modify_header</a></span>(
+    update = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='kw'>label</span> <span class='op'>~</span> <span class='st'>"**Variable**"</span>,
+      <span class='kw'>p.value</span> <span class='op'>~</span> <span class='st'>"**P**"</span>
     )
   )
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># using `stat_by=` argument to update headers</span>
-<span class='no'>modify_header_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='no'>tbl</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>modify_header</span>(
-    <span class='kw'>stat_by</span> <span class='kw'>=</span> <span class='st'>"**{level}**, N = {n} ({style_percent(p)}%)"</span>
+<span class='kw'>modify_header_ex2</span> <span class='op'>&lt;-</span>
+  <span class='kw'>tbl</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify_header.html'>modify_header</a></span>(
+    stat_by = <span class='st'>"**{level}**, N = {n} ({style_percent(p)}%)"</span>
   )</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

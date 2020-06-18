@@ -183,17 +183,17 @@ Function takes a <code>survfit</code> object as an argument, and provides a
 formatted summary table of the results</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_survfit</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>"{estimate} ({conf.low}, {conf.high})"</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"--"</span>,
-  <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>failure</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+    <pre class="usage"><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_survfit.html'>tbl_survfit</a></span>(
+  <span class='kw'>x</span>,
+  times = <span class='kw'>NULL</span>,
+  probs = <span class='kw'>NULL</span>,
+  statistic = <span class='st'>"{estimate} ({conf.low}, {conf.high})"</span>,
+  label = <span class='kw'>NULL</span>,
+  label_header = <span class='kw'>NULL</span>,
+  estimate_fun = <span class='kw'>NULL</span>,
+  missing = <span class='st'>"--"</span>,
+  conf.level = <span class='fl'>0.95</span>,
+  failure = <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -202,8 +202,8 @@ formatted summary table of the results</p>
     <tr>
       <th>x</th>
       <td><p>survfit object. Object may have no stratification
-(e.g. <code>survfit(Surv(ttdeath, death) ~ 1, trial)</code>), or a single stratifying
-variable (e.g. <code>survfit(Surv(ttdeath, death) ~ trt, trial)</code>)</p></td>
+(e.g. <code><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit(Surv(ttdeath, death) ~ 1, trial)</a></code>), or a single stratifying
+variable (e.g. <code><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit(Surv(ttdeath, death) ~ trt, trial)</a></code>)</p></td>
     </tr>
     <tr>
       <th>times</th>
@@ -233,7 +233,7 @@ survival estimates</p></td>
     <tr>
       <th>estimate_fun</th>
       <td><p>function to format the Kaplan-Meier estimates. Default
-is <a href='style_percent.html'>style_percent</a> for survival probabilities and <a href='style_sigfig.html'>style_sigfig</a> for
+is <a href='http://www.danieldsjoberg.com/gtsummary//reference/style_percent.html'>style_percent</a> for survival probabilities and <a href='http://www.danieldsjoberg.com/gtsummary//reference/style_sigfig.html'>style_sigfig</a> for
 survival times</p></td>
     </tr>
     <tr>
@@ -264,23 +264,23 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
-<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)
-<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/therneau/survival'>survival</a></span>)
+<span class='kw'>fit1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='kw'>trt</span>, <span class='kw'>trial</span>)
+<span class='kw'>fit2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='fl'>1</span>, <span class='kw'>trial</span>)
 
 <span class='co'># Example 1 ----------------------------------</span>
-<span class='no'>tbl_survfit_ex1</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
-  <span class='no'>fit1</span>,
-  <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Treatment"</span>,
-  <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**{time} Month**"</span>
+<span class='kw'>tbl_survfit_ex1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_survfit.html'>tbl_survfit</a></span>(
+  <span class='kw'>fit1</span>,
+  times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+  label = <span class='st'>"Treatment"</span>,
+  label_header = <span class='st'>"**{time} Month**"</span>
 )
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='no'>tbl_survfit_ex2</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
-  <span class='no'>fit2</span>,
-  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**Median Survival**"</span>
+<span class='kw'>tbl_survfit_ex2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_survfit.html'>tbl_survfit</a></span>(
+  <span class='kw'>fit2</span>,
+  probs = <span class='fl'>0.5</span>,
+  label_header = <span class='st'>"**Median Survival**"</span>
 )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

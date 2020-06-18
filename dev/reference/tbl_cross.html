@@ -181,17 +181,17 @@ The function creates a cross table of two categorical variables." />
 The function creates a cross table of two categorical variables.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_cross</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>row</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>percent</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>, <span class='st'>"column"</span>, <span class='st'>"row"</span>, <span class='st'>"cell"</span>),
-  <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"column"</span>, <span class='st'>"row"</span>),
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>),
-  <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='st'>"Unknown"</span>,
-  <span class='kw'>margin_text</span> <span class='kw'>=</span> <span class='st'>"Total"</span>
+    <pre class="usage"><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_cross.html'>tbl_cross</a></span>(
+  <span class='kw'>data</span>,
+  row = <span class='kw'>NULL</span>,
+  col = <span class='kw'>NULL</span>,
+  label = <span class='kw'>NULL</span>,
+  statistic = <span class='kw'>NULL</span>,
+  percent = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>, <span class='st'>"column"</span>, <span class='st'>"row"</span>, <span class='st'>"cell"</span>),
+  margin = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"column"</span>, <span class='st'>"row"</span>),
+  missing = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>),
+  missing_text = <span class='st'>"Unknown"</span>,
+  margin_text = <span class='st'>"Total"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -269,23 +269,24 @@ Default is <code>"Unknown"</code>.</p></td>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_cross tools: 
-<code><a href='add_p.tbl_cross.html'>add_p.tbl_cross</a>()</code>,
-<code><a href='inline_text.tbl_cross.html'>inline_text.tbl_cross</a>()</code></p></div>
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_p.tbl_cross.html'>add_p.tbl_cross</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_cross.html'>inline_text.tbl_cross</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Karissa Whiting, Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='no'>tbl_cross_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_cross</span>(<span class='kw'>row</span> <span class='kw'>=</span> <span class='no'>trt</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>response</span>)
+<span class='kw'>tbl_cross_ex1</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_cross.html'>tbl_cross</a></span>(row = <span class='kw'>trt</span>, col = <span class='kw'>response</span>)
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='no'>tbl_cross_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_cross</span>(<span class='kw'>row</span> <span class='kw'>=</span> <span class='no'>stage</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>trt</span>, <span class='kw'>percent</span> <span class='kw'>=</span> <span class='st'>"cell"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>()</div></pre>
+<span class='kw'>tbl_cross_ex2</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_cross.html'>tbl_cross</a></span>(row = <span class='kw'>stage</span>, col = <span class='kw'>trt</span>, percent = <span class='st'>"cell"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_p.html'>add_p</a></span>()
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

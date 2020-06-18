@@ -181,9 +181,9 @@
 <a href="#gtsummary-132" class="anchor"></a>gtsummary 1.3.2<small> 2020-06-14 </small>
 </h1>
 <ul>
-<li><p>Now returning all columns from <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy()</a></code> in <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/516'>#516</a>)</p></li>
-<li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> now accepts a named list of gtsummary tables when using the <code>group_header=</code> argument (<a href='https://github.com/ddsjoberg/gtsummary/issues/524'>#524</a>)</p></li>
-<li><p><code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (<a href='https://github.com/ddsjoberg/gtsummary/issues/525'>#525</a>)</p></li>
+<li><p>Now returning all columns from <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom::tidy()</a></code> in <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/516'>#516</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html">tbl_stack()</a></code> now accepts a named list of gtsummary tables when using the <code>group_header=</code> argument (<a href='https://github.com/ddsjoberg/gtsummary/issues/524'>#524</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (<a href='https://github.com/ddsjoberg/gtsummary/issues/525'>#525</a>)</p></li>
 <li><p>Delaying the release of <code>as_huxtable()</code> until the next {huxtable} release.</p></li>
 </ul>
 </div>
@@ -195,35 +195,35 @@
 <h3 class="hasAnchor">
 <a href="#new-functions" class="anchor"></a>New Functions</h3>
 <ul>
-<li><p>Introducing themes in {gtsummary}. Use the function <code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code> to set new themes, and review the themes vignette for details on setting and creating personalized themes. (<a href='https://github.com/ddsjoberg/gtsummary/issues/424'>#424</a>)</p></li>
-<li><p>New functions <code><a href="../reference/modify_footnote.html">modify_footnote()</a></code> and <code><a href="../reference/modify_spanning_header.html">modify_spanning_header()</a></code> give users control over table footnotes and spanning headers. (<a href='https://github.com/ddsjoberg/gtsummary/issues/464'>#464</a>)</p></li>
+<li><p>Introducing themes in {gtsummary}. Use the function <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code> to set new themes, and review the themes vignette for details on setting and creating personalized themes. (<a href='https://github.com/ddsjoberg/gtsummary/issues/424'>#424</a>)</p></li>
+<li><p>New functions <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/modify_footnote.html">modify_footnote()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/modify_spanning_header.html">modify_spanning_header()</a></code> give users control over table footnotes and spanning headers. (<a href='https://github.com/ddsjoberg/gtsummary/issues/464'>#464</a>)</p></li>
 <li><p>Introducing <code>as_huxtable()</code>! The function converts gtsummary objects to {huxtable} objects. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/469'>#469</a>)</p></li>
-<li><p>New function <code><a href="../reference/add_stat.html">add_stat()</a></code>! Add a new column of any statistic to a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> table (<a href='https://github.com/ddsjoberg/gtsummary/issues/495'>#495</a>)</p></li>
+<li><p>New function <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_stat.html">add_stat()</a></code>! Add a new column of any statistic to a <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> table (<a href='https://github.com/ddsjoberg/gtsummary/issues/495'>#495</a>)</p></li>
 </ul>
 </div>
 <div id="user-facing-updates" class="section level3">
 <h3 class="hasAnchor">
 <a href="#user-facing-updates" class="anchor"></a>User-facing Updates</h3>
 <ul>
-<li><p>The following columns in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> are now available to print for both continuous and categorical variables: total number of observations <code>{N_obs}</code>, number of missing observations <code>{N_miss}</code>, number of non-missing observations <code>{N_nomiss}</code>, proportion of missing observations <code>{p_miss}</code>, proportion of non-missing observations <code>{p_nomiss}</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/473'>#473</a>)</p></li>
-<li><p>Improved appearance of default <code><a href="../reference/as_flextable.html">as_flextable()</a></code> output (<a href='https://github.com/ddsjoberg/gtsummary/issues/499'>#499</a>)</p></li>
-<li><p>Added <code><a href="../reference/tbl_cross.html">tbl_cross(margin=)</a></code> argument to control which margins are shown in the output table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/444'>#444</a>)</p></li>
-<li><p>The missing values are now included in the calculation of p-values in <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code>.</p></li>
-<li><p>Messaging about statistical methods used has been added for <code><a href="../reference/add_global_p.html">add_global_p()</a></code>, <code><a href="../reference/add_q.html">add_q()</a></code>, and <code><a href="../reference/combine_terms.html">combine_terms()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/471'>#471</a>)</p></li>
-<li><p>Added <code>include=</code> argument to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. The preferred syntax for p-values with correlated data is now <code>tbl_summary(..., include = -group_var) %&gt;% add_p(group = group_var)</code>. The group variable is now no longer removed from the table summary. (<a href='https://github.com/ddsjoberg/gtsummary/issues/477'>#477</a>)</p></li>
-<li><p><code><a href="../reference/add_stat_label.html">add_stat_label()</a></code> function updated with <code>location=</code> and <code>label=</code> arguments to change the location of the statistic labels and to modify the text of the labels. <code>location = "row"</code> is now the default. (<a href='https://github.com/ddsjoberg/gtsummary/issues/467'>#467</a>)</p></li>
-<li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> function added the <code>group_header=</code> argument that groups the stacked tables and adds a horizontal header row between them. (<a href='https://github.com/ddsjoberg/gtsummary/issues/468'>#468</a>)</p></li>
-<li><p>Updated handling for interaction terms in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>. Interaction terms may now be specified in the <code>show_single_row=</code> and <code>label=</code> arguments. (<a href='https://github.com/ddsjoberg/gtsummary/issues/451'>#451</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/452'>#452</a>)</p></li>
+<li><p>The following columns in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> are now available to print for both continuous and categorical variables: total number of observations <code>{N_obs}</code>, number of missing observations <code>{N_miss}</code>, number of non-missing observations <code>{N_nomiss}</code>, proportion of missing observations <code>{p_miss}</code>, proportion of non-missing observations <code>{p_nomiss}</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/473'>#473</a>)</p></li>
+<li><p>Improved appearance of default <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_flextable.html">as_flextable()</a></code> output (<a href='https://github.com/ddsjoberg/gtsummary/issues/499'>#499</a>)</p></li>
+<li><p>Added <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_cross.html">tbl_cross(margin=)</a></code> argument to control which margins are shown in the output table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/444'>#444</a>)</p></li>
+<li><p>The missing values are now included in the calculation of p-values in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_cross.html">tbl_cross()</a></code>.</p></li>
+<li><p>Messaging about statistical methods used has been added for <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html">add_global_p()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_q.html">add_q()</a></code>, and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/combine_terms.html">combine_terms()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/471'>#471</a>)</p></li>
+<li><p>Added <code>include=</code> argument to <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code>. The preferred syntax for p-values with correlated data is now <code>tbl_summary(..., include = -group_var) %&gt;% add_p(group = group_var)</code>. The group variable is now no longer removed from the table summary. (<a href='https://github.com/ddsjoberg/gtsummary/issues/477'>#477</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_stat_label.html">add_stat_label()</a></code> function updated with <code>location=</code> and <code>label=</code> arguments to change the location of the statistic labels and to modify the text of the labels. <code>location = "row"</code> is now the default. (<a href='https://github.com/ddsjoberg/gtsummary/issues/467'>#467</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html">tbl_stack()</a></code> function added the <code>group_header=</code> argument that groups the stacked tables and adds a horizontal header row between them. (<a href='https://github.com/ddsjoberg/gtsummary/issues/468'>#468</a>)</p></li>
+<li><p>Updated handling for interaction terms in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code>. Interaction terms may now be specified in the <code>show_single_row=</code> and <code>label=</code> arguments. (<a href='https://github.com/ddsjoberg/gtsummary/issues/451'>#451</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/452'>#452</a>)</p></li>
 </ul>
 </div>
 <div id="internal-updates" class="section level3">
 <h3 class="hasAnchor">
 <a href="#internal-updates" class="anchor"></a>Internal Updates</h3>
 <ul>
-<li><p>Improved error messaging when invalid statistics are requested in <code><a href="../reference/tbl_summary.html">tbl_summary(statistic=)</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/502'>#502</a>)</p></li>
-<li><p>All columns in <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> are now styled and converted to character. Previously, styling was applied to most columns, but there were a few that relied on default printing for the type of underlying data. This was ok to rely on this default behavior for <code><a href="../reference/as_kable.html">as_kable()</a></code>, but with the introduction of <code><a href="../reference/as_flextable.html">as_flextable()</a></code> we needed to style and format each column to character. Potential to break some code in edge cases. (<a href='https://github.com/ddsjoberg/gtsummary/issues/493'>#493</a>)</p></li>
+<li><p>Improved error messaging when invalid statistics are requested in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary(statistic=)</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/502'>#502</a>)</p></li>
+<li><p>All columns in <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> are now styled and converted to character. Previously, styling was applied to most columns, but there were a few that relied on default printing for the type of underlying data. This was ok to rely on this default behavior for <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_kable.html">as_kable()</a></code>, but with the introduction of <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_flextable.html">as_flextable()</a></code> we needed to style and format each column to character. Potential to break some code in edge cases. (<a href='https://github.com/ddsjoberg/gtsummary/issues/493'>#493</a>)</p></li>
 <li>
-<p>Handling of passed custom p-value functions in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> has been improved with more careful handling of the environments from which the functions were passed. Other related updates were also made:</p>
+<p>Handling of passed custom p-value functions in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> has been improved with more careful handling of the environments from which the functions were passed. Other related updates were also made:</p>
 <ul>
 <li>Users may pass their custom p-value function as a quoted string or bare.</li>
 <li>The basic functions for calculating p-values, such as <code><a href="https://rdrr.io/r/stats/t.test.html">t.test()</a></code> can now be passed directly e.g. <code>test = age ~ t.test</code>. We now perform a check match check for functions passed. If it is passed, we replace it with our internal version that returns the p-value and assigns the test name.</li>
@@ -237,12 +237,12 @@
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
 <ul>
-<li><p>Bug fix for <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code> when categorical variable contained levels with empty strings. There is still an issue if a user tries to select the empty string, however.</p></li>
-<li><p>Fixed bug where some variables in <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> defaulted to dichotomous instead of showing as categorical (<a href='https://github.com/ddsjoberg/gtsummary/issues/506'>#506</a>)</p></li>
-<li><p>Bug fix when using a <code><a href="../reference/tbl_summary.html">tbl_summary(by=)</a></code> with missing observations in <code>by=</code> followed by <code><a href="../reference/add_overall.html">add_overall()</a></code></p></li>
-<li><p>Bug fix where values <code>"&gt;0.9"</code> were incorrectly made bold using <code><a href="../reference/bold_p.html">bold_p()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/489'>#489</a>)</p></li>
+<li><p>Bug fix for <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code> when categorical variable contained levels with empty strings. There is still an issue if a user tries to select the empty string, however.</p></li>
+<li><p>Fixed bug where some variables in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_cross.html">tbl_cross()</a></code> defaulted to dichotomous instead of showing as categorical (<a href='https://github.com/ddsjoberg/gtsummary/issues/506'>#506</a>)</p></li>
+<li><p>Bug fix when using a <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary(by=)</a></code> with missing observations in <code>by=</code> followed by <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_overall.html">add_overall()</a></code></p></li>
+<li><p>Bug fix where values <code>"&gt;0.9"</code> were incorrectly made bold using <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html">bold_p()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/489'>#489</a>)</p></li>
 <li>
-<p>Bug fix for <code><a href="../reference/as_flextable.html">as_flextable()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/482'>#482</a>)</p>
+<p>Bug fix for <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_flextable.html">as_flextable()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/482'>#482</a>)</p>
 <ul>
 <li>Added a formatting function to all numeric columns to force conversion to character.</li>
 <li>Spanning headers were being printed in alphabetical order! Update to preserve the ordering.</li>
@@ -259,10 +259,10 @@
 <h3 class="hasAnchor">
 <a href="#new-functions-1" class="anchor"></a>New Functions</h3>
 <ul>
-<li><p>Introducing <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code>, <code><a href="../reference/add_p.tbl_cross.html">add_p.tbl_cross()</a></code>, and <code><a href="../reference/inline_text.tbl_cross.html">inline_text.tbl_cross()</a></code>! Easily construct cross tabulations of two variables.</p></li>
-<li><p>Introducing <code><a href="../reference/tbl_survfit.html">tbl_survfit()</a></code> and <code><a href="../reference/inline_text.tbl_survfit.html">inline_text.tbl_survfit()</a></code>! These will eventually replace <code><a href="../reference/tbl_survival.html">tbl_survival()</a></code>, which will no longer be encouraged. The new functions follow the structural guidelines of a {gtsummary} object and can be merged and stacked with any other {gtsummary} object (<a href='https://github.com/ddsjoberg/gtsummary/issues/280'>#280</a>)</p></li>
-<li><p>Introducing <code><a href="../reference/as_flextable.html">as_flextable()</a></code>! The function converts gtsummary objects to {flextable} objects. {flextable} is a great option when using R markdown with Microsoft Word output. {flextable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output.</p></li>
-<li><p>Introducing <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code>! The function converts gtsummary objects to {kableExtra} objects. {kableExtra} supports indentation, footnotes, and spanning headers with HTML and PDF output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/394'>#394</a>)</p></li>
+<li><p>Introducing <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_cross.html">tbl_cross()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.tbl_cross.html">add_p.tbl_cross()</a></code>, and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_cross.html">inline_text.tbl_cross()</a></code>! Easily construct cross tabulations of two variables.</p></li>
+<li><p>Introducing <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_survfit.html">tbl_survfit()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_survfit.html">inline_text.tbl_survfit()</a></code>! These will eventually replace <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_survival.html">tbl_survival()</a></code>, which will no longer be encouraged. The new functions follow the structural guidelines of a {gtsummary} object and can be merged and stacked with any other {gtsummary} object (<a href='https://github.com/ddsjoberg/gtsummary/issues/280'>#280</a>)</p></li>
+<li><p>Introducing <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_flextable.html">as_flextable()</a></code>! The function converts gtsummary objects to {flextable} objects. {flextable} is a great option when using R markdown with Microsoft Word output. {flextable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output.</p></li>
+<li><p>Introducing <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_kable_extra.html">as_kable_extra()</a></code>! The function converts gtsummary objects to {kableExtra} objects. {kableExtra} supports indentation, footnotes, and spanning headers with HTML and PDF output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/394'>#394</a>)</p></li>
 </ul>
 </div>
 <div id="user-facing-updates-1" class="section level3">
@@ -270,7 +270,7 @@
 <a href="#user-facing-updates-1" class="anchor"></a>User-facing Updates</h3>
 <ul>
 <li><p>Updated default print engine for {gtsummary} objects. {gt} is the default printer for the R console and R markdown documents with HTML output. PDF, RTF, and Word output default to using {kable} with a note referring users to a new vignette explaining why {gt} was not used. (<a href='https://github.com/ddsjoberg/gtsummary/issues/395'>#395</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/396'>#396</a>)</p></li>
-<li><p>Updated <code><a href="../reference/add_p.html">add_p()</a></code> custom p-value description to NOT require double escape characters for quotation marks (<a href='https://github.com/ddsjoberg/gtsummary/issues/361'>#361</a>)</p></li>
+<li><p>Updated <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code> custom p-value description to NOT require double escape characters for quotation marks (<a href='https://github.com/ddsjoberg/gtsummary/issues/361'>#361</a>)</p></li>
 <li><p>Created structure and enumerated list of unit tests each vetted model must pass, and added the tests (<a href='https://github.com/ddsjoberg/gtsummary/issues/383'>#383</a>)</p></li>
 </ul>
 </div>
@@ -280,16 +280,16 @@
 <ul>
 <li><p>Each gtsummary object has an associated <code>.$table_header</code>. The code needed to print a table with either gt or kable was previously a mix of information stored in the <code>table_header</code>, and code manually added to the <code>gt_calls</code> or <code>kable_calls</code> object. Now, all the information needed to print a table is stored in <code>table_header</code>. This has the advantage that any updates to the printing will now require an update to <code>table_header</code> only, and we no longer need to update the tibble, kable and gt calls. (<a href='https://github.com/ddsjoberg/gtsummary/issues/412'>#412</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/414'>#414</a>)</p></li>
 <li><p>The {gt} package is now released on CRAN, and we’ve updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation and code. For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/420'>#420</a>)</p></li>
-<li><p>Several functions have been made general, and may now be applied to any {gtsummary}-like object. Functions updated are <code><a href="../reference/add_q.html">add_q()</a></code>, <code><a href="../reference/bold_p.html">bold_p()</a></code>, <code><a href="../reference/sort_p.html">sort_p()</a></code>, <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>, <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, and <code><a href="../reference/bold_italicize_labels_levels.html">italicize_levels()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/429'>#429</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/373'>#373</a>)</p></li>
-<li><p>In <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> we previously printed the estimate, confidence interval, and p-value for all models. But some models don’t have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if <code>tidy()</code> returns a <code>"p.value"</code> column. Similarly, the confidence interval is printed if <code>tidy()</code> returns <code>"conf.low"</code> and <code>"conf.high"</code> columns. (<a href='https://github.com/ddsjoberg/gtsummary/issues/391'>#391</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/404'>#404</a>)</p></li>
+<li><p>Several functions have been made general, and may now be applied to any {gtsummary}-like object. Functions updated are <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_q.html">add_q()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html">bold_p()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/sort_p.html">sort_p()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html">tbl_merge()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html">tbl_stack()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html">italicize_levels()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/429'>#429</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/373'>#373</a>)</p></li>
+<li><p>In <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code> we previously printed the estimate, confidence interval, and p-value for all models. But some models don’t have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if <code>tidy()</code> returns a <code>"p.value"</code> column. Similarly, the confidence interval is printed if <code>tidy()</code> returns <code>"conf.low"</code> and <code>"conf.high"</code> columns. (<a href='https://github.com/ddsjoberg/gtsummary/issues/391'>#391</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/404'>#404</a>)</p></li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h3>
 <ul>
-<li><p>Bug fix when data frame passed to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with a single column (<a href='https://github.com/ddsjoberg/gtsummary/issues/389'>#389</a>)</p></li>
-<li><p>In <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> passing an ordered factor in the <code>by=</code> argument no longer causes as error. (<a href='https://github.com/ddsjoberg/gtsummary/issues/453'>#453</a>)</p></li>
+<li><p>Bug fix when data frame passed to <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> with a single column (<a href='https://github.com/ddsjoberg/gtsummary/issues/389'>#389</a>)</p></li>
+<li><p>In <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> passing an ordered factor in the <code>by=</code> argument no longer causes as error. (<a href='https://github.com/ddsjoberg/gtsummary/issues/453'>#453</a>)</p></li>
 </ul>
 </div>
 </div>
@@ -298,7 +298,7 @@
 <a href="#gtsummary-126" class="anchor"></a>gtsummary 1.2.6<small> 2020-02-13 </small>
 </h1>
 <ul>
-<li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://rdrr.io/pkg/broom.mixed/man/reexports.html">broom.mixed::tidy()</a></code> rather than <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy()</a></code> resolved issue.</li>
+<li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom.mixed::tidy()</a></code> rather than <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom::tidy()</a></code> resolved issue.</li>
 </ul>
 </div>
     <div id="gtsummary-125" class="section level1">
@@ -318,7 +318,7 @@
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
 <ul>
 <li><p>Removed deprecated <code>fmt*_()</code> and <code>cols_label_summary()</code> functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/365'>#365</a>)</p></li>
-<li><p>Functions <code><a href="../reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="../reference/deprecated.html">add_p_()</a></code> have been deprecated because the <code>by=</code> and <code>group=</code> arguments now accept strings (<a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>)</p></li>
+<li><p>Functions <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">add_p_()</a></code> have been deprecated because the <code>by=</code> and <code>group=</code> arguments now accept strings (<a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>)</p></li>
 </ul>
 </div>
 <div id="syntax" class="section level3">
@@ -327,32 +327,32 @@
 <ul>
 <li>
 <p>Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers. When passing a single variable, the <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> function wrapper is no longer required. (<a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>)</p>
-<div class="sourceCode" id="cb1"><pre class="r">tbl_summary(trial, label = age ~ "NEW LABEL"))
-tbl_summary(trial, label = "age" ~ "NEW LABEL"))
-tbl_summary(trial, label = c("age", "trt") ~ "NEW LABEL"))
-tbl_summary(trial, label = c(age, trt) ~ "NEW LABEL"))
-tbl_summary(trial, label = vars(age, trt) ~ "NEW LABEL"))
-tbl_summary(trial, label = vars(everything(), -age, -trt) ~ "NEW LABEL"))
-
-age_column = "age"
-tbl_summary(trial, label = age_column ~ "NEW LABEL"))
-tbl_summary(trial, label = vars(age_column) ~ "NEW LABEL")
-
-purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> age <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="st">"age"</span> <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">c</span>(<span class="st">"age"</span>, <span class="st">"trt"</span>) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">c</span>(age, trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(age, trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(<span class="kw">everything</span>(), <span class="op">-</span>age, <span class="op">-</span>trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>age_column =<span class="st"> "age"</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> age_column <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(age_column) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a>purrr<span class="op">::</span><span class="kw">map</span>(<span class="kw">c</span>(<span class="st">"trt"</span>, <span class="st">"grade"</span>), <span class="op">~</span><span class="kw">tbl_summary</span>(trial, <span class="dt">by =</span> .x))</span></code></pre></div>
 </li>
-<li><p>Updated <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> to allow flexible tidyselect inputs and improved error messaging for arguments <code>x</code> and <code>y</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/249'>#249</a>)</p></li>
-<li><p>After the input updates in <a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>, the <code>exclude=</code> argument appearing in <code><a href="../reference/add_p.html">add_p()</a></code>, <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>, <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> was redundant. The <code>exclude=</code> argument is now deprecated. Use <code>include=</code> instead, with tidyselect syntax. (<a href='https://github.com/ddsjoberg/gtsummary/issues/331'>#331</a>)</p></li>
-<li><p>Functions <code><a href="../reference/select_helpers.html">all_categorical()</a></code>, <code><a href="../reference/select_helpers.html">all_dichotomous()</a></code>, and <code><a href="../reference/select_helpers.html">all_continuous()</a></code> may now be used in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> argument <code>type=</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/256'>#256</a>)</p></li>
+<li><p>Updated <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code> to allow flexible tidyselect inputs and improved error messaging for arguments <code>x</code> and <code>y</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/249'>#249</a>)</p></li>
+<li><p>After the input updates in <a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>, the <code>exclude=</code> argument appearing in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_gt.html">as_gt()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_kable.html">as_kable()</a></code>, and <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> was redundant. The <code>exclude=</code> argument is now deprecated. Use <code>include=</code> instead, with tidyselect syntax. (<a href='https://github.com/ddsjoberg/gtsummary/issues/331'>#331</a>)</p></li>
+<li><p>Functions <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html">all_categorical()</a></code>, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html">all_dichotomous()</a></code>, and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html">all_continuous()</a></code> may now be used in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> argument <code>type=</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/256'>#256</a>)</p></li>
 </ul>
 </div>
 <div id="user-facing-improvements" class="section level3">
 <h3 class="hasAnchor">
 <a href="#user-facing-improvements" class="anchor"></a>User-facing improvements</h3>
 <ul>
-<li><p>New <code>pattern=</code> argument in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code>. Previously, we could only grab the entire cell from a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with <code><a href="../reference/inline_text.html">inline_text()</a></code>, and now we can get any single statistic reported (<a href='https://github.com/ddsjoberg/gtsummary/issues/254'>#254</a>)</p></li>
+<li><p>New <code>pattern=</code> argument in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code>. Previously, we could only grab the entire cell from a <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> with <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/inline_text.html">inline_text()</a></code>, and now we can get any single statistic reported (<a href='https://github.com/ddsjoberg/gtsummary/issues/254'>#254</a>)</p></li>
 <li><p>Improved messaging for users who use <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> to print gtsummary tables, and users who have not yet installed the {gt} package (<a href='https://github.com/ddsjoberg/gtsummary/issues/347'>#347</a>)</p></li>
-<li><p>New function <code><a href="../reference/combine_terms.html">combine_terms()</a></code> allows users to combine multiple independent variables in a regression model into a single line after <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>. The single line does not report regression coefficients, rather a single p-value from the <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> function. (<a href='https://github.com/ddsjoberg/gtsummary/issues/310'>#310</a>)</p></li>
-<li><p>In the regression modeling functions <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, the users are presented an informative error message when the tidier fails (e.g. <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy()</a></code>) alerting them to the location of the error so they may address the issue (<a href='https://github.com/ddsjoberg/gtsummary/issues/337'>#337</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/338'>#338</a>)</p></li>
+<li><p>New function <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/combine_terms.html">combine_terms()</a></code> allows users to combine multiple independent variables in a regression model into a single line after <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code>. The single line does not report regression coefficients, rather a single p-value from the <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> function. (<a href='https://github.com/ddsjoberg/gtsummary/issues/310'>#310</a>)</p></li>
+<li><p>In the regression modeling functions <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code>, the users are presented an informative error message when the tidier fails (e.g. <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom::tidy()</a></code>) alerting them to the location of the error so they may address the issue (<a href='https://github.com/ddsjoberg/gtsummary/issues/337'>#337</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/338'>#338</a>)</p></li>
 <li><p>For each release of gtsummary, we now can make reference to the version of gt our release coincides with. The commit SHA for gt is now saved in an object called <code>gt_sha</code>, and the version of gt can be installed with <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("rstudio/gt", ref = gt_sha)</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/329'>#329</a>)</p></li>
 <li><p>Created “style” family of functions</p></li>
 <li><p>Improved error messaging in <code>tidyselect_to_list()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/300'>#300</a>)</p></li>
@@ -363,13 +363,13 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <a href="#other-features-and-fixes" class="anchor"></a>Other features and fixes</h3>
 <ul>
 <li><p>Updated class detection to use <code><a href="https://rdrr.io/r/base/class.html">inherits()</a></code>, and added secondary class of <code>"gtsummary"</code> to all objects. This allows users to create their own cobbled/custom gtsummary objects while utilizing the gtsummary print functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/249'>#249</a>)</p></li>
-<li><p><code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> will now summarize columns of class <code>difftime</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/343'>#343</a>)</p></li>
-<li><p>Infrastructure update to the way styling/formatting functions are returned. Styling functions are now returned as a column in the <code>.$table_header</code> tibble. The update simplifies handling of these styling functions in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> and <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/298'>#298</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/299'>#299</a>)</p></li>
-<li><p>Bug fix for <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when variables were all NA (<a href='https://github.com/ddsjoberg/gtsummary/issues/344'>#344</a>)</p></li>
-<li><p>The data summary function <code><a href="../reference/add_p.html">add_p()</a></code> now uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large data sets. (<a href='https://github.com/ddsjoberg/gtsummary/issues/341'>#341</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> will now summarize columns of class <code>difftime</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/343'>#343</a>)</p></li>
+<li><p>Infrastructure update to the way styling/formatting functions are returned. Styling functions are now returned as a column in the <code>.$table_header</code> tibble. The update simplifies handling of these styling functions in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html">tbl_merge()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html">tbl_stack()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/298'>#298</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/299'>#299</a>)</p></li>
+<li><p>Bug fix for <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> when variables were all NA (<a href='https://github.com/ddsjoberg/gtsummary/issues/344'>#344</a>)</p></li>
+<li><p>The data summary function <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code> now uses probabilities rather than counts to calculate expected cell counts to avoid an error when working with large data sets. (<a href='https://github.com/ddsjoberg/gtsummary/issues/341'>#341</a>)</p></li>
 <li><p>Cubic spline terms are now accurately matched to a variable name/term (<a href='https://github.com/ddsjoberg/gtsummary/issues/312'>#312</a>)</p></li>
-<li><p>Bug fix when non-standard evaluation arguments were passed in <code>method.args=</code> argument of <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/322'>#322</a>)</p></li>
-<li><p>Updates after the gt package deprecated <code><a href="https://rdrr.io/pkg/gt/man/cells_data.html">gt::cells_data()</a></code> in favor of <code><a href="https://rdrr.io/pkg/gt/man/cells_body.html">gt::cells_body()</a></code>. Check added to <code><a href="../reference/as_gt.html">as_gt()</a></code> ensuring a version of gt with <code><a href="https://rdrr.io/pkg/gt/man/cells_body.html">gt::cells_body()</a></code> in its NAMESPACE</p></li>
+<li><p>Bug fix when non-standard evaluation arguments were passed in <code>method.args=</code> argument of <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/322'>#322</a>)</p></li>
+<li><p>Updates after the gt package deprecated <code><a href="https://rdrr.io/pkg/gt/man/cells_data.html">gt::cells_data()</a></code> in favor of <code><a href="https://rdrr.io/pkg/gt/man/cells_body.html">gt::cells_body()</a></code>. Check added to <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_gt.html">as_gt()</a></code> ensuring a version of gt with <code><a href="https://rdrr.io/pkg/gt/man/cells_body.html">gt::cells_body()</a></code> in its NAMESPACE</p></li>
 <li><p>Lowered minimum required version of R to v3.4 (<a href='https://github.com/ddsjoberg/gtsummary/issues/356'>#356</a>)</p></li>
 <li><p>Removed {broom.mixed} dependency as the {broom} package contained all necessary tidiers (<a href='https://github.com/ddsjoberg/gtsummary/issues/354'>#354</a>)</p></li>
 </ul>
@@ -380,10 +380,10 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <a href="#gtsummary-124" class="anchor"></a>gtsummary 1.2.4<small> 2019-12-16 </small>
 </h1>
 <ul>
-<li><p>Bug fix in <code><a href="../reference/as_kable.html">as_kable()</a></code> where column header did not match statistics presented when certain levels of the <code>by=</code> variable are entirely missing in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/304'>#304</a>)</p></li>
+<li><p>Bug fix in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_kable.html">as_kable()</a></code> where column header did not match statistics presented when certain levels of the <code>by=</code> variable are entirely missing in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/304'>#304</a>)</p></li>
 <li><p>Updated the trial example data set <code>"trt"</code> variable to be <code>"Drug A"</code> and <code>"Drug B"</code> instead of <code>"Placebo"</code> and <code>"Drug"</code></p></li>
-<li><p>Improved messaging to users when an error or warning occurs while calculating a p-value in <code><a href="../reference/add_p.html">add_p()</a></code>. Also, p-values are no longer omitted from output when a warning is encountered during their calculation (<a href='https://github.com/ddsjoberg/gtsummary/issues/283'>#283</a>)</p></li>
-<li><p>Added <code>tidy_fun=</code> argument to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> allowing users to pass tidiers that are not in the {broom} and {broom.mixed} packages (<a href='https://github.com/ddsjoberg/gtsummary/issues/247'>#247</a>)</p></li>
+<li><p>Improved messaging to users when an error or warning occurs while calculating a p-value in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code>. Also, p-values are no longer omitted from output when a warning is encountered during their calculation (<a href='https://github.com/ddsjoberg/gtsummary/issues/283'>#283</a>)</p></li>
+<li><p>Added <code>tidy_fun=</code> argument to <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code> allowing users to pass tidiers that are not in the {broom} and {broom.mixed} packages (<a href='https://github.com/ddsjoberg/gtsummary/issues/247'>#247</a>)</p></li>
 </ul>
 </div>
     <div id="gtsummary-123" class="section level1">
@@ -391,7 +391,7 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <a href="#gtsummary-123" class="anchor"></a>gtsummary 1.2.3<small> 2019-11-12 </small>
 </h1>
 <ul>
-<li><p><code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> now accepts an <code>x=</code> argument to build univariate regression models where the covariate <code>x</code> remains the same while models are built the with remaining variables as the outcome (<a href='https://github.com/ddsjoberg/gtsummary/issues/294'>#294</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code> now accepts an <code>x=</code> argument to build univariate regression models where the covariate <code>x</code> remains the same while models are built the with remaining variables as the outcome (<a href='https://github.com/ddsjoberg/gtsummary/issues/294'>#294</a>)</p></li>
 <li><p>Internal updates to the way {gt} is installed during CRAN checks.</p></li>
 <li><p>Bug fix when stacking <code>tbl_summary</code> objects with calculated p-values.</p></li>
 </ul>
@@ -404,14 +404,14 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New Features</h3>
 <ul>
-<li><p><code>tbl_summary</code> objects may be stacked and merged with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> and <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/230'>#230</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/255'>#255</a>)</p></li>
-<li><p>The <code><a href="../reference/add_n.html">add_n()</a></code> function now reports additional statistics: total N, non-missing N, missing N, and their percentages. The <code>missing =</code> argument has been deprecated in favor of the <code>statistic =</code> argument. (<a href='https://github.com/ddsjoberg/gtsummary/issues/237'>#237</a>)</p></li>
+<li><p><code>tbl_summary</code> objects may be stacked and merged with <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html">tbl_stack()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html">tbl_merge()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/230'>#230</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/255'>#255</a>)</p></li>
+<li><p>The <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_n.html">add_n()</a></code> function now reports additional statistics: total N, non-missing N, missing N, and their percentages. The <code>missing =</code> argument has been deprecated in favor of the <code>statistic =</code> argument. (<a href='https://github.com/ddsjoberg/gtsummary/issues/237'>#237</a>)</p></li>
 <li><p>Users may now pass a list of formulas, named lists, or a combination of both (<a href='https://github.com/ddsjoberg/gtsummary/issues/251'>#251</a>)</p></li>
 <li><p>Users can add an option to their script to append any {gt} calls when a {gtsummary} object is printed: <code>gtsummary.as_gt.addl_cmds</code></p></li>
-<li><p>Added <code>include =</code> and <code>exclude =</code> arguments to <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/240'>#240</a>)</p></li>
-<li><p>Added standard evaluation variants, <code><a href="../reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="../reference/deprecated.html">add_p_()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/223'>#223</a>)</p></li>
+<li><p>Added <code>include =</code> and <code>exclude =</code> arguments to <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/240'>#240</a>)</p></li>
+<li><p>Added standard evaluation variants, <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">add_p_()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/223'>#223</a>)</p></li>
 <li><p>Added <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> function that converts any {gtsummary} table to a tibble (<a href='https://github.com/ddsjoberg/gtsummary/issues/245'>#245</a>)</p></li>
-<li><p>New <code>show_single_row</code> argument in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> allows any binary variable to be printed on a single row. Previous argument <code>show_yesno</code> is now deprecated. (<a href='https://github.com/ddsjoberg/gtsummary/issues/220'>#220</a>)</p></li>
+<li><p>New <code>show_single_row</code> argument in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code> allows any binary variable to be printed on a single row. Previous argument <code>show_yesno</code> is now deprecated. (<a href='https://github.com/ddsjoberg/gtsummary/issues/220'>#220</a>)</p></li>
 </ul>
 </div>
 <div id="documentation-1" class="section level3">
@@ -427,14 +427,14 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <h3 class="hasAnchor">
 <a href="#other-updates" class="anchor"></a>Other Updates</h3>
 <ul>
-<li><p>The <code>by =</code> column in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> now has missing variables dropped rather than halting with error (<a href='https://github.com/ddsjoberg/gtsummary/issues/279'>#279</a>)</p></li>
+<li><p>The <code>by =</code> column in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> now has missing variables dropped rather than halting with error (<a href='https://github.com/ddsjoberg/gtsummary/issues/279'>#279</a>)</p></li>
 <li><p>Bug fix in <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> selection where only first variable listed was being selected (<a href='https://github.com/ddsjoberg/gtsummary/issues/259'>#259</a>)</p></li>
-<li><p>Bug fix where logical variable labels printed as <code>NA</code> in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/248'>#248</a>)</p></li>
-<li><p><code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> now interprets <code>tab_spanner =</code> text with <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/253'>#253</a>)</p></li>
-<li><p>No longer checking outcome variable name for consistency in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>—only checking independent variable names (<a href='https://github.com/ddsjoberg/gtsummary/issues/287'>#287</a>)</p></li>
-<li><p>Improved error messaging for <code><a href="../reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/243'>#243</a>)</p></li>
-<li><p>Removed <code><a href="https://rdrr.io/pkg/gt/man/cols_merge.html">gt::cols_merge()</a></code> function ahead of the {gt} package <a href="https://github.com/rstudio/gt/pull/355">PR 355</a> that changes the <code>cols_merge()</code> API (<a href='https://github.com/ddsjoberg/gtsummary/issues/222'>#222</a>)</p></li>
-<li><p>Updated API for using custom functions to calculate p-values in <code><a href="../reference/add_p.html">add_p()</a></code>. User now may reference a custom function by its name. (<a href='https://github.com/ddsjoberg/gtsummary/issues/226'>#226</a>)</p></li>
+<li><p>Bug fix where logical variable labels printed as <code>NA</code> in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/248'>#248</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html">tbl_merge()</a></code> now interprets <code>tab_spanner =</code> text with <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/253'>#253</a>)</p></li>
+<li><p>No longer checking outcome variable name for consistency in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code>—only checking independent variable names (<a href='https://github.com/ddsjoberg/gtsummary/issues/287'>#287</a>)</p></li>
+<li><p>Improved error messaging for <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/243'>#243</a>)</p></li>
+<li><p>Removed <code><a href="https://rdrr.io/pkg/gt/man/cols_merge.html">gt::cols_merge()</a></code> function ahead of the {gt} package <a href="https://github.com/rstudio/gt/pull/355">PR 355</a> that changes the <code><a href="https://rdrr.io/pkg/gt/man/cols_merge.html">cols_merge()</a></code> API (<a href='https://github.com/ddsjoberg/gtsummary/issues/222'>#222</a>)</p></li>
+<li><p>Updated API for using custom functions to calculate p-values in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code>. User now may reference a custom function by its name. (<a href='https://github.com/ddsjoberg/gtsummary/issues/226'>#226</a>)</p></li>
 <li><p>Removed legacy support for tidyr version less than 1.0.0 (<a href='https://github.com/ddsjoberg/gtsummary/issues/235'>#235</a>)</p></li>
 </ul>
 </div>
@@ -445,7 +445,7 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 </h1>
 <ul>
 <li><p>Vignettes no longer install the {gt} package (required for CRAN check) (<a href='https://github.com/ddsjoberg/gtsummary/issues/217'>#217</a>)</p></li>
-<li><p>Added ability to name custom <code><a href="../reference/add_p.html">add_p()</a></code> tests (<a href='https://github.com/ddsjoberg/gtsummary/issues/213'>#213</a>)</p></li>
+<li><p>Added ability to name custom <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code> tests (<a href='https://github.com/ddsjoberg/gtsummary/issues/213'>#213</a>)</p></li>
 </ul>
 </div>
     <div id="gtsummary-120" class="section level1">
@@ -454,25 +454,27 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 </h1>
 <ul>
 <li><p>Users can pass variable names in backticks (<a href='https://github.com/ddsjoberg/gtsummary/issues/212'>#212</a>)</p></li>
-<li><p>The <code>group =</code> argument in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> has been moved to <code><a href="../reference/add_p.html">add_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/208'>#208</a>)</p></li>
-<li><p>Users can now write custom functions to calculate p-values in <code><a href="../reference/add_p.html">add_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/194'>#194</a>)</p></li>
-<li><p>In <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> the <code>by =</code> argument accepts a bare variable name instead of the variable name passed as a string (<a href='https://github.com/ddsjoberg/gtsummary/issues/193'>#193</a>)</p></li>
-<li><p>Added support for column, row, and cell percentages in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/181'>#181</a>)</p></li>
-<li><p>Users can now set default p-value formatting functions, regression coefficient formatting functions, default level for confidence intervals, and formatting functions in <code><a href="../reference/tbl_survival.html">tbl_survival()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/120'>#120</a>)</p></li>
-<li><p>The {gt} package is no longer a required dependency. If {gt} is not installed, tables will be printed with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. The <code><a href="../reference/as_kable.html">as_kable()</a></code> function was added to the package as well. (<a href='https://github.com/ddsjoberg/gtsummary/issues/180'>#180</a>)</p></li>
-<li><p>The function <code><a href="../reference/as_gt.html">as_gt()</a></code> now has <code>include =</code> and <code>exclude =</code> arguments</p></li>
+<li><p>The <code>group =</code> argument in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> has been moved to <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/208'>#208</a>)</p></li>
+<li><p>Users can now write custom functions to calculate p-values in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/194'>#194</a>)</p></li>
+<li><p>In <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> the <code>by =</code> argument accepts a bare variable name instead of the variable name passed as a string (<a href='https://github.com/ddsjoberg/gtsummary/issues/193'>#193</a>)</p></li>
+<li><p>Added support for column, row, and cell percentages in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/181'>#181</a>)</p></li>
+<li><p>Users can now set default p-value formatting functions, regression coefficient formatting functions, default level for confidence intervals, and formatting functions in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_survival.html">tbl_survival()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/120'>#120</a>)</p></li>
+<li><p>The {gt} package is no longer a required dependency. If {gt} is not installed, tables will be printed with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. The <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_kable.html">as_kable()</a></code> function was added to the package as well. (<a href='https://github.com/ddsjoberg/gtsummary/issues/180'>#180</a>)</p></li>
+<li><p>The function <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/as_gt.html">as_gt()</a></code> now has <code>include =</code> and <code>exclude =</code> arguments</p></li>
 <li><p>Updated some function names to be the same as they were in the first version</p></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="r">    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span>()            <span class="kw">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_p</a></span>()
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span>()       <span class="kw">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_labels</a></span>()
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span>()       <span class="kw">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_levels</a></span>()
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span>()  <span class="kw">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span>()
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span>()  <span class="kw">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span>()</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html">bold_p</a></span>()            <span class="op">&lt;-</span>  <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">tab_style_bold_p</a></span>()  
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html">bold_labels</a></span>()       <span class="op">&lt;-</span>  <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">tab_style_bold_labels</a></span>()  
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html">bold_levels</a></span>()       <span class="op">&lt;-</span>  <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">tab_style_bold_levels</a></span>()  
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html">italicize_labels</a></span>()  <span class="op">&lt;-</span>  <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">tab_style_italicize_labels</a></span>()  
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html">italicize_levels</a></span>()  <span class="op">&lt;-</span>  <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">tab_style_italicize_levels</a></span>()  
+</pre></div>
 <ul>
-<li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is now defunct.</p></li>
-<li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (<a href='https://github.com/ddsjoberg/gtsummary/issues/175'>#175</a>)</p></li>
-<li><p>Option to exclude some variables from testing when using <code><a href="../reference/add_p.html">add_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/164'>#164</a>)</p></li>
-<li><p>Updates after {gt} package renamed <code>cells_style()</code> to <code>cell_text()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/78'>#78</a>)</p></li>
+<li><p>Passing named lists in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> is now defunct.</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (<a href='https://github.com/ddsjoberg/gtsummary/issues/175'>#175</a>)</p></li>
+<li><p>Option to exclude some variables from testing when using <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/164'>#164</a>)</p></li>
+<li><p>Updates after {gt} package renamed <code>cells_style()</code> to <code><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/78'>#78</a>)</p></li>
 </ul>
 </div>
     <div id="gtsummary-111" class="section level1">
@@ -480,8 +482,8 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <a href="#gtsummary-111" class="anchor"></a>gtsummary 1.1.1<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>Modified <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> to accommodate <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> object (<a href='https://github.com/ddsjoberg/gtsummary/issues/167'>#167</a>)</p></li>
-<li><p>Bug fix with incorrect column order in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with 10+ levels of by variable (<a href='https://github.com/ddsjoberg/gtsummary/issues/166'>#166</a>)</p></li>
+<li><p>Modified <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html">tbl_merge()</a></code> to accommodate <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html">tbl_stack()</a></code> object (<a href='https://github.com/ddsjoberg/gtsummary/issues/167'>#167</a>)</p></li>
+<li><p>Bug fix with incorrect column order in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> with 10+ levels of by variable (<a href='https://github.com/ddsjoberg/gtsummary/issues/166'>#166</a>)</p></li>
 </ul>
 </div>
     <div id="gtsummary-110" class="section level1">
@@ -490,16 +492,16 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 </h1>
 <ul>
 <li><p>Added {tidyselect} and {gtsummary} variable select functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/146'>#146</a>)</p></li>
-<li><p>Added <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/152'>#152</a>)</p></li>
+<li><p>Added <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html">tbl_stack()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/152'>#152</a>)</p></li>
 <li><p>Bug fix for dichotomous yes/no variables in <code>tbl_summary</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/158'>#158</a>)</p></li>
-<li><p>Changed <code><a href="../reference/deprecated.html">add_comparison()</a></code> and <code><a href="../reference/deprecated.html">add_global()</a></code> to <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/143'>#143</a>)</p></li>
-<li><p>Added <code><a href="../reference/sort_p.html">sort_p()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/105'>#105</a>)</p></li>
+<li><p>Changed <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">add_comparison()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/deprecated.html">add_global()</a></code> to <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_p.html">add_p()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/143'>#143</a>)</p></li>
+<li><p>Added <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/sort_p.html">sort_p()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/105'>#105</a>)</p></li>
 <li><p>Allow unobserved values to serve as the level for dichotomous variables (<a href='https://github.com/ddsjoberg/gtsummary/issues/149'>#149</a>)</p></li>
-<li><p>Bug fix in <code><a href="../reference/add_nevent.html">add_nevent()</a></code> when formula was passed to <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> as a string (<a href='https://github.com/ddsjoberg/gtsummary/issues/148'>#148</a>)</p></li>
+<li><p>Bug fix in <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_nevent.html">add_nevent()</a></code> when formula was passed to <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> as a string (<a href='https://github.com/ddsjoberg/gtsummary/issues/148'>#148</a>)</p></li>
 <li><p>Added returned <code>call_list</code> to some functions without it previously (<a href='https://github.com/ddsjoberg/gtsummary/issues/137'>#137</a>)</p></li>
-<li><p>Corrected name of call list in returned <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> results (<a href='https://github.com/ddsjoberg/gtsummary/issues/128'>#128</a>)</p></li>
-<li><p><code><a href="../reference/tbl_survival.html">tbl_survival()</a></code>: bug fix when upper bound of CI was not able to be estimated (<a href='https://github.com/ddsjoberg/gtsummary/issues/134'>#134</a>)</p></li>
-<li><p><code><a href="../reference/tbl_survival.html">tbl_survival()</a></code>: the <code>groupname</code> column name has been changed to <code>label_level</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/133'>#133</a>)</p></li>
+<li><p>Corrected name of call list in returned <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression()</a></code> results (<a href='https://github.com/ddsjoberg/gtsummary/issues/128'>#128</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_survival.html">tbl_survival()</a></code>: bug fix when upper bound of CI was not able to be estimated (<a href='https://github.com/ddsjoberg/gtsummary/issues/134'>#134</a>)</p></li>
+<li><p><code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_survival.html">tbl_survival()</a></code>: the <code>groupname</code> column name has been changed to <code>label_level</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/133'>#133</a>)</p></li>
 </ul>
 </div>
     <div id="gtsummary-100" class="section level1">
@@ -510,19 +512,21 @@ purrr::map(c("trt", "grade"), ~tbl_summary(trial, by = .x))</pre></div>
 <div id="updated-function-names" class="section level3">
 <h3 class="hasAnchor">
 <a href="#updated-function-names" class="anchor"></a>Updated Function Names</h3>
-<div class="sourceCode" id="cb3"><pre class="r">    <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>()       <span class="kw">&lt;-</span>  <span class="fu">fmt_table1</span>()
-    <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span>()    <span class="kw">&lt;-</span>  <span class="fu">fmt_regression</span>()
-    <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span>()  <span class="kw">&lt;-</span>  <span class="fu">fmt_uni_regression</span>()
-    <span class="fu"><a href="../reference/style_pvalue.html">style_pvalue</a></span>()      <span class="kw">&lt;-</span>  <span class="fu">fmt_pvalue</span>()
-    <span class="no">style_percent</span>       <span class="kw">&lt;-</span>  <span class="fu">fmt_percent</span>()
-    <span class="no">style_ratio</span>         <span class="kw">&lt;-</span>  <span class="fu">fmt_beta</span>()</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary</a></span>()       <span class="op">&lt;-</span>  <span class="fu">fmt_table1</span>()  
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html">tbl_regression</a></span>()    <span class="op">&lt;-</span>  <span class="fu">fmt_regression</span>()  
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression</a></span>()  <span class="op">&lt;-</span>  <span class="fu">fmt_uni_regression</span>()  
+    <span class="fu"><a href="http://www.danieldsjoberg.com/gtsummary//reference/style_pvalue.html">style_pvalue</a></span>()      <span class="op">&lt;-</span>  <span class="fu">fmt_pvalue</span>()  
+    <span class="kw">style_percent</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/fmt_percent.html">fmt_percent</a></span>()  
+    <span class="kw">style_ratio</span>         <span class="op">&lt;-</span>  <span class="fu">fmt_beta</span>()  
+</pre></div>
 </div>
 <div id="new-functions-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-functions-2" class="anchor"></a>New Functions</h3>
-<div class="sourceCode" id="cb4"><pre class="r">    tbl_survival()          as_gt()  
-    tbl_merge()             style_sigfig()  
-    add_nevent()            gtsummary_logo()</pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>    <span class="kw">tbl_survival</span>()          <span class="kw">as_gt</span>()  </span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="kw">tbl_merge</span>()             <span class="kw">style_sigfig</span>()  </span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="kw">add_nevent</span>()            <span class="kw">gtsummary_logo</span>()</span></code></pre></div>
 </div>
 </div>
     <div id="gtsummary-010" class="section level1">

@@ -179,29 +179,29 @@ are available throughout the package." />
 
     <div class="ref-description">
     <p>Set of functions to supplement the tidyselect set of functions for selecting
-columns of data frames. <code>all_continuous()</code>, <code>all_categorical()</code>, and
-<code>all_dichotomous()</code> may only be used with <code><a href='tbl_summary.html'>tbl_summary()</a></code>, where each variable
+columns of data frames. <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_continuous()</a></code>, <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_categorical()</a></code>, and
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_dichotomous()</a></code> may only be used with <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary()</a></code>, where each variable
 has been classified into one of these three groups. All other helpers
 are available throughout the package.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>all_continuous</span>()
+    <pre class="usage"><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_continuous</a></span>()
 
-<span class='fu'>all_categorical</span>(<span class='kw'>dichotomous</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_categorical</a></span>(dichotomous = <span class='fl'>TRUE</span>)
 
-<span class='fu'>all_dichotomous</span>()
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_dichotomous</a></span>()
 
-<span class='fu'>all_numeric</span>()
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_numeric</a></span>()
 
-<span class='fu'>all_character</span>()
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_character</a></span>()
 
-<span class='fu'>all_integer</span>()
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_integer</a></span>()
 
-<span class='fu'>all_double</span>()
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_double</a></span>()
 
-<span class='fu'>all_logical</span>()
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_logical</a></span>()
 
-<span class='fu'>all_factor</span>()</pre>
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_factor</a></span>()</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -218,12 +218,12 @@ Default is <code>TRUE</code></p></td>
     <p>A character vector of column names selected</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>select_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>response</span>, <span class='no'>grade</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(
-    <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='fu'>all_continuous</span>() ~ <span class='st'>"{mean} ({sd})"</span>,
-    <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>all_dichotomous</span>() ~ <span class='st'>"categorical"</span>
+    <pre class="examples"><div class='input'><span class='kw'>select_ex1</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>age</span>, <span class='kw'>response</span>, <span class='kw'>grade</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary</a></span>(
+    statistic = <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_continuous</a></span>() <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
+    type = <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/select_helpers.html'>all_dichotomous</a></span>() <span class='op'>~</span> <span class='st'>"categorical"</span>
   )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
