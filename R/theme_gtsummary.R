@@ -96,14 +96,14 @@ theme_gtsummary_compact <- function(){
         rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))
       )
     ),
-    # # compact huxtable
-    # "as_huxtable.gtsummary-lst:addl_cmds" = list(
-    #   insert_row = list(
-    #     rlang::expr(huxtable::set_font_size(value = 8)),
-    #     rlang::expr(huxtable::set_bottom_padding(value = 0)),
-    #     rlang::expr(huxtable::set_top_padding(value = 0))
-    #   )
-    # ),
+    # compact huxtable
+    "as_huxtable.gtsummary-lst:addl_cmds" = list(
+      insert_row = list(
+        rlang::expr(huxtable::set_font_size(value = 8)),
+        rlang::expr(huxtable::set_bottom_padding(value = 0)),
+        rlang::expr(huxtable::set_top_padding(value = 0))
+      )
+    ),
     # compact kableExtra
     "as_kable_extra-lst:addl_cmds" = list(
       kable = list(

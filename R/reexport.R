@@ -17,4 +17,8 @@ dplyr::vars
 #' @export
 dplyr::select
 
+# huxtable ---------------------------------------------------------------------
+#' @export
+#' @importFrom huxtable as_huxtable
+huxtable::as_huxtable
 

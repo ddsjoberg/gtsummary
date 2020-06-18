@@ -7,6 +7,7 @@
 \alias{knit_print}
 \alias{vars}
 \alias{select}
+\alias{as_huxtable}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -15,6 +16,8 @@ below to see their documentation.
 
 \describe{
   \item{dplyr}{\code{\link[dplyr]{select}}, \code{\link[dplyr]{vars}}}
+
+  \item{huxtable}{\code{\link[huxtable]{as_huxtable}}}
 
   \item{knitr}{\code{\link[knitr]{knit_print}}}
 
