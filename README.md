@@ -205,6 +205,7 @@ thank you to all contributors\!
 [@davidkane9](https://github.com/davidkane9),
 [@dax44](https://github.com/dax44),
 [@ddsjoberg](https://github.com/ddsjoberg),
+[@DeFilippis](https://github.com/DeFilippis),
 [@emilyvertosick](https://github.com/emilyvertosick),
 [@GuiMarthe](https://github.com/GuiMarthe),
 [@hughjonesd](https://github.com/hughjonesd),
@@ -227,6 +228,8 @@ thank you to all contributors\!
 [@ryzhu75](https://github.com/ryzhu75),
 [@sammo3182](https://github.com/sammo3182),
 [@simonpcouch](https://github.com/simonpcouch),
+[@slb2240](https://github.com/slb2240),
 [@slobaugh](https://github.com/slobaugh),
-[@tormodb](https://github.com/tormodb), and
-[@zabore](https://github.com/zabore)
+[@tormodb](https://github.com/tormodb),
+[@zabore](https://github.com/zabore), and
+[@zeyunlu](https://github.com/zeyunlu)

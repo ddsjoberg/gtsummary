@@ -8,7 +8,7 @@ Below is a list of models vetted for use
 in \link{tbl_regression} and \link{tbl_uvregression}.  If a model is passed to these
 functions and the model is not listed below and  a \code{tidy()} function is
 not specified in the \verb{tidy_fun=} argument, the model object will be passed
-to \link[broom:tidy]{broom::tidy} or \link[broom.mixed:tidy]{broom.mixed::tidy}.
+to \code{broom::tidy} or \code{broom.mixed::tidy}.
 
 \itemize{
 \item{\link[stats:lm]{stats::lm}}
@@ -23,7 +23,7 @@ to \link[broom:tidy]{broom::tidy} or \link[broom.mixed:tidy]{broom.mixed::tidy}.
 }
 \section{model support}{
 
-If \link[broom:tidy]{broom::tidy} or \link[broom.mixed:tidy]{broom.mixed::tidy} supports a class of model not listed
+If \code{broom::tidy} or \code{broom.mixed::tidy} supports a class of model not listed
 above, please submit a \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub Issue}.
 The model can be added to the list of vetted models. Unit tests will be
 put in place to ensure continued support for the model.

@@ -3,22 +3,10 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
-\alias{\%>\%}
 \alias{as_tibble}
 \alias{knit_print}
 \alias{vars}
 \alias{select}
-\alias{as_huxtable}
-\alias{starts_with}
-\alias{ends_with}
-\alias{contains}
-\alias{matches}
-\alias{num_range}
-\alias{all_of}
-\alias{any_of}
-\alias{everything}
-\alias{last_col}
-\alias{one_of}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -28,14 +16,8 @@ below to see their documentation.
 \describe{
   \item{dplyr}{\code{\link[dplyr]{select}}, \code{\link[dplyr]{vars}}}
 
-  \item{huxtable}{\code{\link[huxtable]{as_huxtable}}}
-
   \item{knitr}{\code{\link[knitr]{knit_print}}}
 
-  \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
-
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
-
-  \item{tidyselect}{\code{\link[tidyselect]{all_of}}, \code{\link[tidyselect]{any_of}}, \code{\link[tidyselect]{contains}}, \code{\link[tidyselect]{ends_with}}, \code{\link[tidyselect]{everything}}, \code{\link[tidyselect]{last_col}}, \code{\link[tidyselect]{matches}}, \code{\link[tidyselect]{num_range}}, \code{\link[tidyselect]{one_of}}, \code{\link[tidyselect]{starts_with}}}
 }}
 
