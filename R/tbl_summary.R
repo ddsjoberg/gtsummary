@@ -175,8 +175,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   value <- value %||% get_theme_element("tbl_summary-arg:value")
   missing <- missing %||% get_theme_element("tbl_summary-arg:missing",
                                             default = "ifany")
-  missing_text <- missing_text %||% get_theme_element("tbl_summary-arg:missing_text",
-                                                      default = "Unknown")
+  missing_text <- missing_text %||%
+    get_theme_element("tbl_summary-arg:missing_text",
+                      default = translate_text("Unknown"))
   sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
   percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
                                             default = "column")
