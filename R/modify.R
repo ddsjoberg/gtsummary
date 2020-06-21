@@ -177,11 +177,10 @@ show_header_names <- function(x) {
     filter(.data$hide == FALSE) %>%
     select(.data$column, .data$label)
 
-  usethis::ui_info("Column names and current headers")
   knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
     print()
 
-  cat("\n\n")
+  cat("\n")
   usethis::ui_info("As a usage guide, the code below re-creates the current column headers.")
   block <- mutate(df_cols, formula = glue("  {column} ~ {dQuote(label)},")) %>%
     pull(.data$formula) %>%
