@@ -27,12 +27,15 @@
 #' `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
 #' See below for details.
 #' @param digits List of formulas specifying the number of decimal
-#' places to round continuous summary statistics. If not specified,
-#' `tbl_summary` guesses an appropriate number of decimals to round statistics.
+#' places to round summary statistics. If not specified,
+#' `tbl_summary` guesses an appropriate number of decimals to display.
 #' When multiple statistics are displayed for a single variable, supply a vector
 #' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
 #' to 1 decimal place, and the SD to 2 use `digits = list(age ~ c(1, 2))`.
+#' Similarly, if you'd like the percentage rounded to two decimal places use
+#' `digits = list(all_categorical() ~ c(0, 2))`.
+#' when the statistics presented are `"{n} ({p}%)"`.
 #' @param missing Indicates whether to include counts of `NA` values in the table.
 #' Allowed values are `"no"` (never display NA values),
 #' `"ifany"` (only display if any NA values), and `"always"`
@@ -302,17 +305,14 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
       stat_label = stat_label_match(.data$stat_display),
-      digits = continuous_digits_guess(
-        data, .data$variable, .data$summary_type, .data$class, digits
-      ),
       sort = assign_sort(.data$variable, .data$summary_type, sort),
       df_stats = pmap(
         list(.data$summary_type, .data$variable,
              .data$class, .data$dichotomous_value,
-             .data$sort, .data$stat_display, .data$digits),
+             .data$sort, .data$stat_display),
         ~ df_stats_fun(summary_type = ..1, variable = ..2,
                        class = ..3, dichotomous_value = ..4,
-                       sort = ..5, stat_display = ..6, digits = ..7,
+                       sort = ..5, stat_display = ..6, digits = digits,
                        data = data, by = by, percent = percent)
       )
     )

@@ -40,12 +40,15 @@ display for each variable.  The default is
 See below for details.}
 
 \item{digits}{List of formulas specifying the number of decimal
-places to round continuous summary statistics. If not specified,
-\code{tbl_summary} guesses an appropriate number of decimals to round statistics.
+places to round summary statistics. If not specified,
+\code{tbl_summary} guesses an appropriate number of decimals to display.
 When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
 statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
-to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}.}
+to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}.
+Similarly, if you'd like the percentage rounded to two decimal places use
+\code{digits = list(all_categorical() ~ c(0, 2))}.
+when the statistics presented are \code{"{n} ({p}\%)"}.}
 
 \item{type}{List of formulas specifying variable types. Accepted values
 are \code{c("continuous", "categorical", "dichotomous")},

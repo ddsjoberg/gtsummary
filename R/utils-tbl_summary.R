@@ -268,18 +268,6 @@ assign_var_label <- function(data, variable, var_label) {
 #' @keywords internal
 #' @author Emily Zabor, Daniel D. Sjoberg
 
-# takes as the input a vector of variable and summary types
-continuous_digits_guess <- function(data,
-                                    variable,
-                                    summary_type,
-                                    class,
-                                    digits = NULL) {
-  pmap(
-    list(variable, summary_type, class),
-    ~ continuous_digits_guess_one(data, ..1, ..2, ..3, digits)
-  )
-}
-
 # runs for a single var
 continuous_digits_guess_one <- function(data,
                                         variable,
@@ -739,14 +727,6 @@ footnote_stat_label <- function(meta_data) {
 
 # summarize_categorical --------------------------------------------------------
 summarize_categorical <- function(data, variable, by, class, dichotomous_value, sort, percent) {
-  # grabbing percent formatting function
-  percent_fun <-
-    get_theme_element("tbl_summary-fn:percent_fun") %||%
-    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
-  N_fun <-
-    get_theme_element("tbl_summary-fn:N_fun",
-                      default = function(x) sprintf("%.0f", x))
-
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
   # when variable has label.  So deleting it.
@@ -815,16 +795,11 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
       select(-.data$variable_levels)
   }
 
-  # adding percent_fun as attr to p column
-  attr(result$p, "fmt_fun") <- percent_fun
-  attr(result$N, "fmt_fun") <- N_fun
-  attr(result$n, "fmt_fun") <- N_fun
-
   result
 }
 
 # summarize_continuous ---------------------------------------------------------
-summarize_continuous <- function(data, variable, by, stat_display, digits) {
+summarize_continuous <- function(data, variable, by, stat_display) {
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
   # when variable has label.  So deleting it.
@@ -912,20 +887,6 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
       ) %>%
       tidyr::pivot_wider(id_cols = c("variable"), names_from = "fn")
   }
-
-  # adding formatting function as attr to summary statistics columns
-  fmt_fun <- as.list(rep(digits, length.out = length(fns_names_chr))) %>%
-    set_names(fns_names_chr)
-
-  df_stats <- purrr::imap_dfc(
-    df_stats,
-    function(column, colname) {
-      if(is.null(fmt_fun[[colname]])) return(column)
-      fmt <- glue("%.{fmt_fun[[colname]]}f")
-      attr(column, "fmt_fun") <- purrr::partial(sprintf, fmt = !!fmt)
-      column
-    }
-  )
 
   # returning final object
   df_stats
@@ -1033,14 +994,23 @@ calculate_missing_row <- function(data, variable, by, missing_text) {
 
   # passing the T/F variable through the functions to format as we do in
   # the tbl_summary output
-  summarize_categorical(
-    data = data, variable = variable, by = by, class = "logical",
-    dichotomous_value = TRUE, sort = "alphanumeric", percent = "column"
+  df_summarize_categorical <-
+    summarize_categorical(
+      data = data, variable = variable, by = by, class = "logical",
+      dichotomous_value = TRUE, sort = "alphanumeric", percent = "column"
+    )
+  attr(df_summarize_categorical$n, "fmt_fun") <-
+    get_theme_element("tbl_summary-fn:N_fun",
+                      default = function(x) sprintf("%.0f", x))
+  attr(df_summarize_categorical$N, "fmt_fun") <- attr(df_summarize_categorical$n, "fmt_fun")
+  attr(df_summarize_categorical$p, "fmt_fun") <- get_theme_element("tbl_summary-fn:percent_fun") %||%
+    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
+
+  df_stats_to_tbl(
+    data = data, variable = variable, summary_type = "dichotomous", by = by,
+    var_label = missing_text, stat_display = "{n}", df_stats = df_summarize_categorical,
+    missing = "no", missing_text = "Doesn't Matter -- Text should never appear"
   ) %>%
-    {df_stats_to_tbl(
-      data = data, variable = variable, summary_type = "dichotomous", by = by,
-      var_label = missing_text, stat_display = "{n}", df_stats = .,
-      missing = "no", missing_text = "Doesn't Matter -- Text should never appear")} %>%
     # changing row_type to missing
     mutate(row_type = "missing")
 }
@@ -1054,8 +1024,7 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
   t1 <- switch(
     summary_type,
     "continuous" = summarize_continuous(data = data, variable = variable,
-                                        by = by, stat_display = stat_display,
-                                        digits = digits),
+                                        by = by, stat_display = stat_display),
     "categorical" = summarize_categorical(data = data, variable = variable,
                                           by = by, class = class,
                                           dichotomous_value = dichotomous_value,
@@ -1080,9 +1049,55 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
 
-  # setting fmt_fun for percents and integers
-  attr(return$p_nonmiss, "fmt_fun") <- attr(return$p_miss, "fmt_fun")
-  attr(return$N_nonmiss, "fmt_fun") <- attr(return$N_miss, "fmt_fun")
+  # setting formatting functions for each returned statistic -------------------
+  # grabbing the requested stats
+  fns_names_chr <-
+    str_extract_all(stat_display, "\\{.*?\\}") %>%
+    map(str_remove_all, pattern = fixed("}")) %>%
+    map(str_remove_all, pattern = fixed("{")) %>%
+    unlist()
+
+  # setting the default formatting ---------------------------------------------
+  percent_fun <- get_theme_element("tbl_summary-fn:percent_fun") %||%
+    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
+  N_fun <- get_theme_element("tbl_summary-fn:N_fun",
+                             default = function(x) sprintf("%.0f", x))
+  attr(return$p_nonmiss, "fmt_fun") <- percent_fun
+  attr(return$p_miss, "fmt_fun") <- percent_fun
+  attr(return$N_miss, "fmt_fun") <- N_fun
+  attr(return$N_obs, "fmt_fun") <- N_fun
+  attr(return$N_nonmiss, "fmt_fun") <- N_fun
+
+  # adding default functions for categorical variables
+  if (summary_type %in% c("categorical", "dichotomous")) {
+    attr(return$p, "fmt_fun") <- percent_fun
+    attr(return$N, "fmt_fun") <- N_fun
+    attr(return$n, "fmt_fun") <- N_fun
+  }
+
+  # if continuous and no digits passed, guessing the number of digits
+  if (summary_type == "continuous" && (is.null(digits[[variable]]))) {
+    digits[[variable]] <- continuous_digits_guess_one(
+      data = data, variable = variable, summary_type = summary_type,
+      class = class, digits = digits[[variable]]
+    )
+  }
+
+  # replacing/adding formatting functions
+  if (!is.null(digits[[variable]])) {
+    # adding formatting function as attribute
+    fmt_fun <- as.list(rep(digits[[variable]], length.out = length(fns_names_chr))) %>% set_names(fns_names_chr)
+    for(i in names(fmt_fun)) {
+      sprintf_dec <- glue("%.{fmt_fun[[i]]}f") %>% as.character()
+      if (i %in% c("p_nonmiss", "p_miss")) {
+        attr(return[[i]], "fmt_fun") <- function(x) purrr::partial(sprintf, fmt = !!sprintf_dec)(x * 100)
+      }
+      else if (i == "p" && summary_type %in% c("categorical", "dichotomous")) {
+        attr(return[[i]], "fmt_fun") <- function(x) purrr::partial(sprintf, fmt = !!sprintf_dec)(x * 100)
+      }
+      else attr(return[[i]], "fmt_fun") <- purrr::partial(sprintf, fmt = !!sprintf_dec)
+    }
+  }
 
   return
 }

@@ -151,7 +151,8 @@ test_that("tbl_summary-testing tidyselect parsing", {
           age ~ "Patient Age", vars(stage) ~ "Patient Stage",
           vars(`bad grade`) ~ "Crazy Grade"
         ),
-        digits = list(vars(age) ~ c(2, 3), marker ~ c(2, 3)),
+        digits = list(vars(age) ~ c(2, 3), marker ~ c(2, 3),
+                      response ~ c(0, 1), death ~ 2),
         value = list(`bad grade` = "III", "stage" = "T1"),
         missing = "no"
       ),
@@ -204,6 +205,14 @@ test_that("tbl_summary-testing tidyselect parsing", {
       nchar() %>%
       unique(),
     3
+  )
+
+  expect_equal(
+    big_test$table_body %>%
+      filter(.data$variable %in% c("response", "death")) %>%
+      pull(.data$stat_1) %>%
+      purrr::discard(is.na),
+    c("67 (70.5%)", "28 (29.5%)", "46.00 (46.94%)", "52.00 (53.06%)")
   )
 
   # checking label
