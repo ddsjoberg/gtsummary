@@ -60,6 +60,13 @@
 #'   modify_footnote(update = everything() ~ NA) %>%
 #'   modify_spanning_header(starts_with("stat_") ~ "**Treatment Received**")
 #'
+#' # Example 3 ----------------------------------
+#' # updating an abbreviation in table footnote
+#' modify_ex3 <-
+#'   glm(response ~ age + grade, trial, family = binomial) %>%
+#'   tbl_regression(exponentiate = TRUE) %>%
+#'   modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE)
+#'
 #' @return Updated gtsummary object
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -69,6 +76,10 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{modify_ex2.png}{options: width=45\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{modify_ex3.png}{options: width=35\%}}
 NULL
 
 #' @name modify
