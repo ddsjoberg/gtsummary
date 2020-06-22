@@ -71,6 +71,10 @@ the column names.
 \if{html}{Example 2}
 
 \if{html}{\figure{modify_ex2.png}{options: width=45\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{modify_ex3.png}{options: width=35\%}}
 }
 
 \examples{
@@ -100,6 +104,13 @@ modify_ex2 <- tbl \%>\%
   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
   modify_footnote(update = everything() ~ NA) \%>\%
   modify_spanning_header(starts_with("stat_") ~ "**Treatment Received**")
+
+# Example 3 ----------------------------------
+# updating an abbreviation in table footnote
+modify_ex3 <-
+  glm(response ~ age + grade, trial, family = binomial) \%>\%
+  tbl_regression(exponentiate = TRUE) \%>\%
+  modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE)
 
 }
 \seealso{
