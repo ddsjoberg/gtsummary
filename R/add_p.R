@@ -16,7 +16,7 @@ add_p <- function(x, ...) {
 #' @section Setting Defaults:
 #' If you like to consistently use a different function to format p-values or
 #' estimates, you can set options in the script or in the user- or
-#' project-level startup file, '.Rprofile'.  The default confidence level can
+#' project-level start-up file, '.Rprofile'.  The default confidence level can
 #' also be set. Please note the default option for the estimate is the same
 #' as it is for `tbl_regression()`.
 #' \itemize{
@@ -241,7 +241,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     )
 
   # updating header
-  x <- modify_header_internal(x, p.value = "**p-value**")
+  x <- modify_header_internal(x, p.value = paste0("**", translate_text("p-value"), "**"))
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
 
@@ -254,7 +254,7 @@ footnote_add_p <- function(meta_data) {
     keep(~ !is.na(.)) %>%
     unique() %>%
     paste(collapse = "; ") %>%
-    paste0("Statistical tests performed: ", .)
+    paste0(translate_text("Statistical tests performed"), ": ", .)
 }
 
 
