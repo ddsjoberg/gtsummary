@@ -77,7 +77,7 @@ add_overall <- function(x, last = FALSE) {
     table_header_fill_missing()
 
   # adding header
-  x <- modify_header_internal(x, stat_0 = "**Overall**, N = {N}")
+  x <- modify_header_internal(x, stat_0 = paste0("**", translate_text("Overall"), "**, N = {N}"))
 
   x
 }

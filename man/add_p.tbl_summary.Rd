@@ -69,7 +69,7 @@ Adds p-values to tables created by \code{tbl_summary} by comparing values across
 
 If you like to consistently use a different function to format p-values or
 estimates, you can set options in the script or in the user- or
-project-level startup file, '.Rprofile'.  The default confidence level can
+project-level start-up file, '.Rprofile'.  The default confidence level can
 also be set. Please note the default option for the estimate is the same
 as it is for \code{tbl_regression()}.
 \itemize{

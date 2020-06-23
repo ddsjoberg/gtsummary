@@ -84,7 +84,8 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
   # update table_header --------------------------------------------------------
   # footnote text
   footnote_text <-
-    add_q_method_lookup[add_q_method_lookup$method == method, ]$method_label
+    add_q_method_lookup[add_q_method_lookup$method == method, ]$method_label %>%
+    translate_text()
 
   x$table_header <-
     tibble(column = names(x$table_body)) %>%
@@ -99,7 +100,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     )
 
   # adding  column header
-  x <- modify_header_internal(x, q.value = "**q-value**")
+  x <- modify_header_internal(x, q.value = paste0("**", translate_text("q-value"), "**"))
 
   # return final object --------------------------------------------------------
   # adding call
