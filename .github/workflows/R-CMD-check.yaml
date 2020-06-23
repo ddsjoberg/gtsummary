@@ -64,7 +64,7 @@ jobs:
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
 
-      - name: Cache R packages
+      - name: Cache R packages - Linux
         - uses: actions/cache@v2
           if: startsWith(runner.os, 'Linux')
           with:
@@ -73,6 +73,7 @@ jobs:
             restore-keys: |
               ${{ runner.os }}-renv-
 
+      - name: Cache R packages - macOS
         - uses: actions/cache@v2
           if: startsWith(runner.os, 'macOS')
           with:
@@ -81,6 +82,7 @@ jobs:
             restore-keys: |
               ${{ runner.os }}-renv-
 
+      - name: Cache R packages - Windows
         - uses: actions/cache@v2
           if: startsWith(runner.os, 'Windows')
           with:
