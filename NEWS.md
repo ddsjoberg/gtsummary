@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added a language theme for translating tables into Spanish and French (#511)
+
 # gtsummary 1.3.2
 
 * Now returning all columns from `broom::tidy()` in `.$table_body()` (#516)
