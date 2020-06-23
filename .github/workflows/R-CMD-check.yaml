@@ -57,12 +57,61 @@ jobs:
         if: runner.os == 'macOS'
         run: brew cask install xquartz
 
-      - name: Query dependencies
+      # - name: Query dependencies
+      #   run: |
+      #     install.packages('remotes')
+      #     saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+      #     writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+      #   shell: Rscript {0}
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        env:
+          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+          Rscript -e "remotes::install_github('r-hub/sysreqs')"
+          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+          sudo -s eval "$sysreqs"
+
+     # installing older versions of packages not supported on newer versions of R
+      - name: Install historical dependencies
+        run: Rscript -e "if (getRversion() < '3.6') remotes::install_version('latticeExtra', version = '0.6-28', repos = 'https://cran.rstudio.com/')"
+                     -e "if (getRversion() < '3.6') remotes::install_version('pbkrtest', version = '0.4-7', repos = 'https://cran.rstudio.com/')"
+                     -e "if (getRversion() < '3.5') remotes::install_version('geepack', version = '1.2-1', repos = 'https://cran.rstudio.com/')"
+                     -e "if (getRversion() < '3.5') remotes::install_version('carData', version = '3.0-3', repos = 'https://cran.rstudio.com/')"
+                     -e "if (getRversion() < '3.5') remotes::install_version('car', version = '3.0-2', repos = 'https://cran.rstudio.com/')"
+                     -e "if (getRversion() < '3.4') remotes::install_version('survival', version = '2.44-1.1', repos = 'https://cran.rstudio.com/')"
+
+      - name: Restore packages
         shell: Rscript {0}
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::snapshot() # this overwrites the renv.lock file with the older versions installed above
+          renv::restore()
+
+      # - name: Install dependencies
+      #   run: |
+      #     remotes::install_deps(dependencies = TRUE)
+      #     remotes::install_cran("rcmdcheck")
+      #   shell: Rscript {0}
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      - name: Check
+        env:
+          _R_CHECK_CRAN_INCOMING_: false
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
+
+      - name: Show testthat output
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
 
       - name: Cache R packages - Linux
         - uses: actions/cache@v2
@@ -90,55 +139,6 @@ jobs:
             key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
             restore-keys: |
               ${{ runner.os }}-renv-
-
-      - name: Install system dependencies
-        if: runner.os == 'Linux'
-        env:
-          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
-        run: |
-          Rscript -e "remotes::install_github('r-hub/sysreqs')"
-          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-          sudo -s eval "$sysreqs"
-
-     # installing older versions of packages not supported on newer versions of R
-      - name: Install historical dependencies
-        run: Rscript -e "if (getRversion() < '3.6') remotes::install_version('latticeExtra', version = '0.6-28', repos = 'https://cran.rstudio.com/')"
-                     -e "if (getRversion() < '3.6') remotes::install_version('pbkrtest', version = '0.4-7', repos = 'https://cran.rstudio.com/')"
-                     -e "if (getRversion() < '3.5') remotes::install_version('geepack', version = '1.2-1', repos = 'https://cran.rstudio.com/')"
-                     -e "if (getRversion() < '3.5') remotes::install_version('carData', version = '3.0-3', repos = 'https://cran.rstudio.com/')"
-                     -e "if (getRversion() < '3.5') remotes::install_version('car', version = '3.0-2', repos = 'https://cran.rstudio.com/')"
-                     -e "if (getRversion() < '3.4') remotes::install_version('survival', version = '2.44-1.1', repos = 'https://cran.rstudio.com/')"
-
-      - name: Restore packages
-        shell: Rscript {0}
-        run: |
-          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-          renv::snapshot() # this overwrites the renv.lock file with the older versions installed above
-          renv::restore()
-
-      - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
-        shell: Rscript {0}
-
-      - name: Session info
-        run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
-        shell: Rscript {0}
-
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
-
-      - name: Show testthat output
-        if: always()
-        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
-        shell: bash
 
       - name: Upload check results
         if: failure()
