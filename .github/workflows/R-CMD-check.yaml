@@ -65,12 +65,29 @@ jobs:
         shell: Rscript {0}
 
       - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v1
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+        - uses: actions/cache@v2
+          if: startsWith(runner.os, 'Linux')
+          with:
+            path: ~/.local/share/renv
+            key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+            restore-keys: |
+              ${{ runner.os }}-renv-
+
+        - uses: actions/cache@v2
+          if: startsWith(runner.os, 'macOS')
+          with:
+            path: ~/Library/Application Support/renv
+            key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+            restore-keys: |
+              ${{ runner.os }}-renv-
+
+        - uses: actions/cache@v2
+          if: startsWith(runner.os, 'Windows')
+          with:
+            path: ~\AppData\Local\renv
+            key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+            restore-keys: |
+              ${{ runner.os }}-renv-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -89,6 +106,13 @@ jobs:
                      -e "if (getRversion() < '3.5') remotes::install_version('carData', version = '3.0-3', repos = 'https://cran.rstudio.com/')"
                      -e "if (getRversion() < '3.5') remotes::install_version('car', version = '3.0-2', repos = 'https://cran.rstudio.com/')"
                      -e "if (getRversion() < '3.4') remotes::install_version('survival', version = '2.44-1.1', repos = 'https://cran.rstudio.com/')"
+
+      - name: Restore packages
+        shell: Rscript {0}
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::snapshot() # this overwrites the renv.lock file with the older versions installed above
+          renv::restore()
 
       - name: Install dependencies
         run: |
