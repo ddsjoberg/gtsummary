@@ -34,11 +34,10 @@ test_that("no errors/warnings with standard use", {
   )
 
   # checking the pvalues match
-  expect_equal(
-    test1$table_body$p.value %>% rlang::set_names(c("age", "marker")),
+  expect_equivalent(
+    test1$table_body$p.value,
     test1$table_body$add_stat_1
   )
-
 
 
   expect_error(
