@@ -125,8 +125,12 @@ theme_gtsummary_printer <- function(
 
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
-#' @param language String indicating language. Must be one of `"es"` (Spanish),
-#' `"fr"` (French), `"de"` (German), or `"en"` (English).
+#' @param language String indicating language. Must be one of
+#' - `"de"` (German)
+#' - `"en"` (English)
+#' - `"es"` (Spanish)
+#' - `"fr"` (French)
+#' - `"pr"` (Portuguese)
 #' @export
 theme_gtsummary_language <- function(language = c("es", "fr", "de", "en")) {
   language <- match.arg(language)
