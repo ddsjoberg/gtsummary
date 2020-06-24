@@ -30,7 +30,6 @@
 #' bold weight) in column labels and spanning headers are removed.
 #' Default is TRUE
 #' @param ... Not used
-#' @name as_flextable
 #' @export
 #' @return A {flextable} object
 #' @family gtsummary output types
@@ -41,17 +40,8 @@
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   as_flextable()
-as_flextable <- function(x, ...) {
-  UseMethod("as_flextable")
-}
-
-#' @rdname as_flextable
-#' @export
 as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
                                    strip_md_bold = TRUE, ...) {
-  # must have flextable package installed to use this function -----------------
-  assert_package("flextable", "as_flextable")
-
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
     x$table_header <-
