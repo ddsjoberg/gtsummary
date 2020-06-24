@@ -175,8 +175,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   value <- value %||% get_theme_element("tbl_summary-arg:value")
   missing <- missing %||% get_theme_element("tbl_summary-arg:missing",
                                             default = "ifany")
-  missing_text <- missing_text %||% get_theme_element("tbl_summary-arg:missing_text",
-                                                      default = "Unknown")
+  missing_text <- missing_text %||%
+    get_theme_element("tbl_summary-arg:missing_text",
+                      default = translate_text("Unknown"))
   sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
   percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
                                             default = "column")
@@ -366,13 +367,17 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # adding headers
   if (is.null(by)) {
-    results <- modify_header_internal(results,
-                                      stat_0 = "**N = {N}**",
-                                      label = "**Characteristic**")
+    results <- modify_header_internal(
+      results,
+      stat_0 = "**N = {N}**",
+      label = paste0("**", translate_text("Characteristic"), "**")
+    )
   } else {
-    results <- modify_header_internal(results,
-                                      stat_by = "**{level}**, N = {n}",
-                                      label = "**Characteristic**")
+    results <- modify_header_internal(
+      results,
+      stat_by = "**{level}**, N = {n}",
+      label = paste0("**", translate_text("Characteristic"), "**")
+    )
   }
 
   return(results)
