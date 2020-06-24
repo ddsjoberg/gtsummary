@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds the global p-value for a categorical variables — add_global_p • gtsummary</title>
+<title>Convert gtsummary object to a flextable object — as_flextable.gtsummary • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,10 +52,14 @@
 
 
 
-<meta property="og:title" content="Adds the global p-value for a categorical variables — add_global_p" />
-<meta property="og:description" content="This function uses car::Anova with argument
-type = &quot;III&quot; to calculate global p-values for categorical variables.
-Output from tbl_regression and tbl_uvregression objects supported." />
+<meta property="og:title" content="Convert gtsummary object to a flextable object — as_flextable.gtsummary" />
+<meta property="og:description" content="
+
+Function converts a gtsummary object to a flextable object.
+A user can use this function if they wish to add customized formatting
+available via the flextable functions. The flextable output is particularly
+useful when combined with R markdown with Word output, since the gt package
+does not support Word." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -170,47 +174,113 @@ Output from tbl_regression and tbl_uvregression objects supported." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds the global p-value for a categorical variables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_global_p.R'><code>R/add_global_p.R</code></a></small>
-    <div class="hidden name"><code>add_global_p.Rd</code></div>
+    <h1>Convert gtsummary object to a flextable object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/as_flextable.R'><code>R/as_flextable.R</code></a></small>
+    <div class="hidden name"><code>as_flextable.gtsummary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function uses <a href='https://rdrr.io/pkg/car/man/Anova.html'>car::Anova</a> with argument
-<code>type = "III"</code> to calculate global p-values for categorical variables.
-Output from <code>tbl_regression</code> and <code>tbl_uvregression</code> objects supported.</p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+
+Function converts a gtsummary object to a flextable object.
+A user can use this function if they wish to add customized formatting
+available via the flextable functions. The flextable output is particularly
+useful when combined with R markdown with Word output, since the gt package
+does not support Word.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for gtsummary</span>
+<span class='fu'><a href='https://rdrr.io/pkg/flextable/man/as_flextable.html'>as_flextable</a></span>(
+  <span class='kw'>x</span>,
+  include = <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/everything.html'>everything</a></span>(),
+  return_calls = <span class='fl'>FALSE</span>,
+  strip_md_bold = <span class='fl'>TRUE</span>,
+  <span class='kw'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_regression</code> or <code>tbl_uvregression</code> object</p></td>
+      <td><p>Object created by a function from the gtsummary package
+(e.g. <a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary</a> or <a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html'>tbl_regression</a>)</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>Commands to include in output. Input may be a vector of
+quoted or unquoted names. tidyselect and gtsummary select helper
+functions are also accepted.
+Default is <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/everything.html'>everything()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>return_calls</th>
+      <td><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
+as a list of expressions.</p></td>
+    </tr>
+    <tr>
+      <th>strip_md_bold</th>
+      <td><p>When TRUE, all double asterisk (markdown language for
+bold weight) in column labels and spanning headers are removed.
+Default is TRUE</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to or from other methods.</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A flextable object</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
 
-<p>If a needed class of model is not supported by
-<a href='https://rdrr.io/pkg/car/man/Anova.html'>car::Anova</a>, please create a
-<a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub Issue</a> to request support.</p>
+<p>The <code><a href='https://rdrr.io/pkg/flextable/man/as_flextable.html'>as_flextable()</a></code> takes the data frame that will be printed and converts
+it to a flextable and formats the table with the following flextable functions.</p><ol>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/flextable.html'>flextable::flextable()</a></code></p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/set_header_labels.html'>flextable::set_header_labels()</a></code> to set column labels</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/add_header_row.html'>flextable::add_header_row()</a></code>, if applicable, to set spanning column header</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/align.html'>flextable::align()</a></code> to set column alignment</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/padding.html'>flextable::padding()</a></code> to indent variable levels</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/fontsize.html'>flextable::fontsize()</a></code> to set font size</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/autofit.html'>flextable::autofit()</a></code> to estimate the column widths</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/footnote.html'>flextable::footnote()</a></code> to add table footnotes and source notes</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/bold.html'>flextable::bold()</a></code> to bold cells in data frame</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/flextable/man/italic.html'>flextable::italic()</a></code> to italicize cells in data frame</p></li>
+</ol>
+
+<p>Any one of these commands may be omitted using the <code>include=</code> argument.</p>
+<p>Pro tip: Use the <code><a href='https://rdrr.io/pkg/flextable/man/width.html'>flextable::width()</a></code> function for exacting control over
+column width after calling <code><a href='https://rdrr.io/pkg/flextable/man/as_flextable.html'>as_flextable()</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a></code>,
-<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a></code></p></div>
+    <div class='dont-index'><p>Other gtsummary output types: 
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/as_gt.html'>as_gt</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/as_kable_extra.html'>as_kable_extra</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/as_kable.html'>as_kable</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/as_tibble.gtsummary.html'>as_tibble.gtsummary</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Daniel D. Sjoberg</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>trt</span>, <span class='kw'>age</span>, <span class='kw'>grade</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_p.html'>add_p</a></span>() <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/flextable/man/as_flextable.html'>as_flextable</a></span>()</div><div class='output co'>#&gt; a flextable object.
+#&gt; col_keys: `label`, `stat_1`, `stat_2`, `p.value` 
+#&gt; header has 1 row(s) 
+#&gt; body has 6 row(s) 
+#&gt; original dataset sample: 
+#&gt;      label      stat_1      stat_2 p.value
+#&gt; 1 Age, yrs 46 (37, 59) 48 (39, 56)     0.7
+#&gt; 2  Unknown           7           4    &lt;NA&gt;
+#&gt; 3    Grade        &lt;NA&gt;        &lt;NA&gt;     0.9
+#&gt; 4        I    35 (36%)    33 (32%)    &lt;NA&gt;
+#&gt; 5       II    32 (33%)    36 (35%)    &lt;NA&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
