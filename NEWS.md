@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Now importing `as_flextable()` generic from {flextable} to avoid conflicts when using both packages (#462)
+
 * Added a language theme for translating tables into Spanish and French (#511)
 
 # gtsummary 1.3.2
