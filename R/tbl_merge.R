@@ -88,8 +88,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # merging tables -------------------------------------------------------------
   # nesting data by variable (one line per variable), and renaming columns with number suffix
-  nested_table <- tbls %>%
-    imap(function(x, y) {
+  nested_table <- map2(
+    tbls, seq_along(tbls),
+    function(x, y) {
       # creating a column that is the variable label
       group_by(x$table_body, .data$variable) %>%
         mutate(
@@ -106,7 +107,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # nesting results within variable
   nested_table <- map(
     nested_table,
-    ~ nest(.x, data = -one_of(c("variable", "var_label")))
+    ~ nest(.x, data = -any_of(c("variable", "var_label")))
   )
 
   # merging formatted objects together
@@ -148,8 +149,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # stacking all table_header dfs together and renaming ------------------------
   table_header <-
-    imap_dfr(
-      tbls,
+    purrr::map2_dfr(
+      tbls, seq_along(tbls),
       ~ pluck(.x, "table_header") %>%
         # tidying the code in these columns (giving it space to breathe),
         # that is can be properly pasred in the next step

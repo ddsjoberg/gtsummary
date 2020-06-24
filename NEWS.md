@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Bug fix when named list of {gtsummary} objects is passed to `tbl_merge()` (#541)
+
+* Now importing `as_flextable()` generic from {flextable} to avoid conflicts when using both packages (#462)
+
+* Added a language theme for translating tables into Spanish and French (#511)
+
 # gtsummary 1.3.2
 
 * Now returning all columns from `broom::tidy()` in `.$table_body()` (#516)
