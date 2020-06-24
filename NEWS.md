@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix when named list of {gtsummary} objects is passed to `tbl_merge()` (#541)
+
 * Now importing `as_flextable()` generic from {flextable} to avoid conflicts when using both packages (#462)
 
 * Added a language theme for translating tables into Spanish and French (#511)
