@@ -256,7 +256,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
       footnote_abbrev = case_when(
         .data$column == "estimate" ~
           estimate_header(x, exponentiate) %>% attr("footnote") %||% NA_character_,
-        .data$column == "ci" ~ "CI = Confidence Interval",
+        .data$column == "ci" ~ translate_text("CI = Confidence Interval"),
         TRUE ~ .data$footnote_abbrev
       ),
       missing_emdash = case_when(
@@ -281,12 +281,12 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # setting column headers
   results <- modify_header_internal(
     results,
-    label = "**Characteristic**",
+    label = paste0("**", translate_text("Characteristic"), "**"),
     estimate = glue("**{estimate_header(x, exponentiate)}**")
   )
   if ("p.value" %in% names(table_body)) {
     results <- modify_header_internal(
-      results, p.value = "**p-value**"
+      results, p.value = paste0("**", translate_text("p-value"), "**")
     )
   }
   if (all(c("conf.low", "conf.high") %in% names(table_body))) {
@@ -333,17 +333,18 @@ estimate_header <- function(x, exponentiate) {
   }
 
   # assigning header and footer ------------------------------------------------
+  language <- get_theme_element("pkgwide-str:language", default = "en")
   if (model_type == "logistic") {
     header <- ifelse(exponentiate == TRUE, "OR", "log(OR)")
-    attr(header, "footnote") <- "OR = Odds Ratio"
+    attr(header, "footnote") <- translate_text("OR = Odds Ratio", language)
   }
   else if (model_type == "poisson") {
     header <- ifelse(exponentiate == TRUE, "IRR", "log(IRR)")
-    attr(header, "footnote") <- "IRR = Incidence Rate Ratio"
+    attr(header, "footnote") <- translate_text("IRR = Incidence Rate Ratio", language)
   }
   else if (model_type == "prop_hazard") {
     header <- ifelse(exponentiate == TRUE, "HR", "log(HR)")
-    attr(header, "footnote") <- "HR = Hazard Ratio"
+    attr(header, "footnote") <- translate_text("HR = Hazard Ratio", language)
   }
   else {
     header <-
