@@ -17,8 +17,13 @@
 #'   add_overall()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
-
 add_overall <- function(x, last = FALSE) {
+  UseMethod("add_overall")
+}
+
+#' @rdname add_overall
+#' @export
+add_overall.tbl_summary <- function(x, last = FALSE) {
   # checking that input is class tbl_summary
   if (!inherits(x, "tbl_summary")) stop("`x` must be class 'tbl_summary'", call. = FALSE)
   # checking that input x has a by var
