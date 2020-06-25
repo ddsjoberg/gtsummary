@@ -35,6 +35,9 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
+#' # MUST LOAD flextable FIRST
+#' library(flextable)
+#'
 #' trial %>%
 #'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
