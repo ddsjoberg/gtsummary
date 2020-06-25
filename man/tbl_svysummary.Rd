@@ -150,6 +150,10 @@ d_clust <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~
 tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"))
 tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"), by = "both")
 }
+\seealso{
+Other tbl_svysummary tools: 
+\code{\link{add_overall}()}
+}
 \author{
 Joseph Larmarange
 }

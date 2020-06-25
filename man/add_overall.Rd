@@ -3,20 +3,24 @@
 \name{add_overall}
 \alias{add_overall}
 \alias{add_overall.tbl_summary}
+\alias{add_overall.tbl_svysummary}
 \title{Add column with overall summary statistics}
 \usage{
 add_overall(x, last = FALSE)
 
 \method{add_overall}{tbl_summary}(x, last = FALSE)
+
+\method{add_overall}{tbl_svysummary}(x, last = FALSE)
 }
 \arguments{
-\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
+\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function or
+object with class \code{tbl_svysummary} from the \link{tbl_svysummary} function.}
 
 \item{last}{Logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
 }
 \value{
-A \code{tbl_summary} object
+A \code{tbl_summary} object or a \code{tbl_svysummary} object
 }
 \description{
 Adds a column with overall summary statistics to tables
@@ -48,8 +52,12 @@ Other tbl_summary tools:
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
+
+Other tbl_svysummary tools: 
+\code{\link{tbl_svysummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_summary tools}
+\concept{tbl_svysummary tools}
