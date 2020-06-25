@@ -85,19 +85,34 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   include <- select(data$variables, {{ include }}) %>% names()
 
   # setting defaults from gtsummary theme --------------------------------------
-  label <- label %||% get_theme_element("tbl_summary-arg:label")
-  statistic <- statistic %||% get_theme_element("tbl_summary-arg:statistic")
-  digits <- digits %||% get_theme_element("tbl_summary-arg:digits")
-  type <- type %||% get_theme_element("tbl_summary-arg:type")
-  value <- value %||% get_theme_element("tbl_summary-arg:value")
-  missing <- missing %||% get_theme_element("tbl_summary-arg:missing",
-                                            default = "ifany")
+  label <- label %||%
+    get_theme_element("tbl_svysummary-arg:label") %||%
+    get_theme_element("tbl_summary-arg:label")
+  statistic <- statistic %||%
+    get_theme_element("tbl_svysummary-arg:statistic") %||%
+    get_theme_element("tbl_summary-arg:statistic")
+  digits <- digits %||%
+    get_theme_element("tbl_svysummary-arg:digits") %||%
+    get_theme_element("tbl_summary-arg:digits")
+  type <- type %||%
+    get_theme_element("tbl_svysummary-arg:type") %||%
+    get_theme_element("tbl_summary-arg:type")
+  value <- value %||%
+    get_theme_element("tbl_svysummary-arg:value") %||%
+    get_theme_element("tbl_summary-arg:value")
+  missing <- missing %||%
+    get_theme_element("tbl_svysummary-arg:missing") %||%
+    get_theme_element("tbl_summary-arg:missing", default = "ifany")
   missing_text <- missing_text %||%
+    get_theme_element("tbl_svysummary-arg:missing_text") %||%
     get_theme_element("tbl_summary-arg:missing_text",
                       default = translate_text("Unknown"))
-  sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
-  percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
-                                            default = "column")
+  sort <- sort %||%
+    get_theme_element("tbl_svysummary-arg:sort") %||%
+    get_theme_element("tbl_summary-arg:sort")
+  percent <- percent %||%
+    get_theme_element("tbl_svysummary-arg:percent") %||%
+    get_theme_element("tbl_summary-arg:percent", default = "column")
 
   # converting bare arguments to string ----------------------------------------
   by <- var_input_to_string(data = data$variables, select_input = !!rlang::enquo(by),
