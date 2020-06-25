@@ -16,9 +16,3 @@ dplyr::vars
 #' @importFrom dplyr select
 #' @export
 dplyr::select
-
-# flextable --------------------------------------------------------------------
-#' @importFrom flextable as_flextable
-#' @export
-flextable::as_flextable
-

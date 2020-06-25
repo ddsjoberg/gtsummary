@@ -4,7 +4,7 @@
 \alias{as_flextable.gtsummary}
 \title{Convert gtsummary object to a flextable object}
 \usage{
-\method{as_flextable}{gtsummary}(
+as_flextable.gtsummary(
   x,
   include = everything(),
   return_calls = FALSE,
@@ -65,6 +65,9 @@ column width after calling \code{\link[=as_flextable]{as_flextable()}}.
 }
 
 \examples{
+# MUST LOAD flextable FIRST
+library(flextable)
+
 trial \%>\%
   select(trt, age, grade) \%>\%
   tbl_summary(by = trt) \%>\%
