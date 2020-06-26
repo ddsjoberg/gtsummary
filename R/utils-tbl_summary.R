@@ -552,7 +552,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
       }
     }
 
-    # all sepcifed statistics must be a string of length 1
+    # all specified statistics must be a string of length 1
     if (inherits(statistic, "formula")) statistic <- list(statistic)
     if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
