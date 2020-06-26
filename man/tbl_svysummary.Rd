@@ -155,7 +155,8 @@ Other tbl_svysummary tools:
 \code{\link{add_n}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_svysummary}()},
-\code{\link{add_q}()}
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()}
 }
 \author{
 Joseph Larmarange
