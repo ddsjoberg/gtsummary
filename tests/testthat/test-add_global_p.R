@@ -11,10 +11,10 @@ test_that("no errors/warnings with standard use after tbl_regression", {
   )
 
   expect_error(
-    mod1 %>% add_global_p(keep = TRUE), NA
+    mod1 %>% add_global_p(keep = TRUE, type = 2), NA
   )
   expect_warning(
-    mod1 %>% add_global_p(keep = TRUE), NA
+    mod1 %>% add_global_p(keep = TRUE, type = "II"), NA
   )
 
   expect_message(mod1 %>% add_global_p(quiet = TRUE), NA)
@@ -28,6 +28,13 @@ test_that("no errors/warnings with standard use after tbl_uvregression", {
   )
   expect_warning(
     mod2 %>% add_global_p(), NA
+  )
+
+  expect_error(
+    mod2 %>% add_global_p(type = 2), NA
+  )
+  expect_warning(
+    mod2 %>% add_global_p(type = "II"), NA
   )
 
   expect_message(mod2 %>% add_global_p(quiet = TRUE), NA)

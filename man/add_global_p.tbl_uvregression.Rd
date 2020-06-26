@@ -4,11 +4,13 @@
 \alias{add_global_p.tbl_uvregression}
 \title{Adds the global p-value for categorical variables}
 \usage{
-\method{add_global_p}{tbl_uvregression}(x, quiet = NULL, ...)
+\method{add_global_p}{tbl_uvregression}(x, type = "III", quiet = NULL, ...)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_uvregression} from the
 \link{tbl_uvregression} function}
+
+\item{type}{Type argument passed to \link[car:Anova]{car::Anova}. Default is \code{"III"}}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
