@@ -242,7 +242,7 @@ is_survey <- function(data) {
 #' @importFrom survey svytable
 summarize_categorical_survey <- function(data, variable, by, class, dichotomous_value, sort, percent) {
   df_stats <- summarize_categorical(data$variables, variable, by, class, dichotomous_value, sort, percent) %>%
-    rename(n_unweighted = n, N_unweighted = N, p_unweighted = p)
+    rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
 
   if (is.null(by)) {
     svy_table <- survey::svytable(stats::as.formula(paste("~", variable)), data) %>%
