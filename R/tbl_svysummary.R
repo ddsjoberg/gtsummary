@@ -69,18 +69,30 @@
 #' @author Joseph Larmarange
 #' @examples
 #' # A simple weighted dataset
-#' d <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
-#' tbl_svysummary(d, by = "Survived", include = -Freq, percent = "row")
+#' tbl_svysummary_ex1 <-
+#'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
+#'   tbl_svysummary(by = Survived, include = -Freq, percent = "row")
 #'
 #' # A dataset with a complex design
 #' data(api, package = "survey")
-#' d_clust <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
-#' tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"))
-#' tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"), by = "both")
+#' tbl_svysummary_ex2 <-
+#'   survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
+#'   tbl_svysummary(by = "both", include = c(cname, api00, api99, both))
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{tbl_svysummary_ex1.png}{options: width=31\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{tbl_svysummary_ex2.png}{options: width=45\%}}
 tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
                         percent = NULL, include = everything()) {
+  # checking for survey package ------------------------------------------------
+  assert_package("survey", "tbl_svysummary")
+
   # eval -----------------------------------------------------------------------
   include <- select(data$variables, {{ include }}) %>% names()
 
@@ -125,7 +137,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # checking input data --------------------------------------------------------
   tbl_summary_data_checks(data$variables)
 
-  # removing orderered class from factor by variables --------------------------
+  # removing ordered class from factor by variables ----------------------------
   if (!is.null(by) && inherits(data$variables[[by]], "ordered") && inherits(data$variables[[by]], "factor")) {
     data$variables[[by]] <- factor(data$variables[[by]], ordered = FALSE)
   }
