@@ -55,6 +55,7 @@ Other tbl_summary tools:
 
 Other tbl_svysummary tools: 
 \code{\link{add_p.tbl_svysummary}()},
+\code{\link{add_q}()},
 \code{\link{tbl_svysummary}()}
 }
 \author{
