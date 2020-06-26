@@ -19,8 +19,8 @@ tbl_summary,tbl_summary-arg:percent,TRUE,,
 tbl_summary,tbl_summary-arg:sort,TRUE,,
 tbl_summary,tbl_summary-fn:percent_fun,FALSE,function to style percentages,function(x) style_percent(x)
 tbl_summary,tbl_summary-fn:N_fun,FALSE,function to style integers,"function(x) sprintf(""%.0f"", x)"
-tbl_summary,tbl_summary-str:continuous_stat,FALSE,glue string defining the default continuous summary statistics to display,"""{mean} ({sd})"""
-tbl_summary,tbl_summary-str:categorical_stat,FALSE,glue string defining the default categorical and dichotomous summary statistics to display,"""{n} / {N} ({p}%)"""
+tbl_summary,tbl_summary-str:continuous_stat,FALSE,glue string defining the default continuous summary statistics to display for complex survey samples,"""{mean} ({sd})"""
+tbl_summary,tbl_summary-str:categorical_stat,FALSE,glue string defining the default categorical and dichotomous summary statistics to display for complex survey samples,"""{n} / {N} ({p}%)"""
 tbl_svysummary,tbl_svysummary-arg:label,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:statistic,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:digits,TRUE,,
@@ -38,6 +38,10 @@ add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical,FALSE,default test for
 add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical.low_count,FALSE,default test for categorical/dichotomous variables with minimum expected count <5,"""fisher.test"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical.group_by2,FALSE,default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable,"""lme4"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous.group_by2,FALSE,default test for continuous grouped/correlated variables with a 2-level by variable,"""lme4"""
+add_p.tbl_svysummary,add_p.tbl_svysummary-arg:test,TRUE,,
+add_p.tbl_svysummary,add_p.tbl_svysummary-arg:pvalue_fun,TRUE,,
+add_p.tbl_svysummary,add_p.tbl_svysummary-attr:test.continuous,FALSE,default test for continuous variables,"""svy.wilcox.test"""
+add_p.tbl_svysummary,add_p.tbl_svysummary-attr:test.categorical,FALSE,default test for categorical/dichotomous variables,"""svy.chisq.test"""
 add_stat_label,add_stat_label-arg:location,TRUE,,
 add_q,add_q-arg:method,TRUE,,
 add_q,add_q-arg:pvalue_fun,TRUE,,
