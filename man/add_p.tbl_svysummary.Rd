@@ -64,6 +64,7 @@ tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"), by = "bo
 \seealso{
 Other tbl_svysummary tools: 
 \code{\link{add_overall}()},
+\code{\link{add_q}()},
 \code{\link{tbl_svysummary}()}
 }
 \author{
