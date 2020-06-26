@@ -368,7 +368,7 @@ df_by <- function(data, by) {
       )
 
     result <- df_by(data$variables, by) %>%
-      rename(n_unweighted = n, N_unweighted = N, p_unweighted = p) %>%
+      rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p) %>%
       left_join(svy_table, by = "by")
 
     result
