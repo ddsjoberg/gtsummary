@@ -177,8 +177,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
           df_stats_to_tbl(
             data = data, variable = variable, summary_type = summary_type, by = by,
             var_label = var_label, stat_display = stat_display,
-            df_stats = df_stats, missing = missing, missing_text = missing_text,
-            calculate_missing_fun = calculate_missing_row_survey
+            df_stats = df_stats, missing = missing, missing_text = missing_text
           )
         }
       )

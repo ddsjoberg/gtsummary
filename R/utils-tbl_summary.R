@@ -963,7 +963,11 @@ adding_formatting_as_attr <- function(df_stats, digits, fns_names_chr) {
 
 # df_stats_to_tbl --------------------------------------------------------------
 df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_display,
-                            df_stats, missing, missing_text, calculate_missing_fun = calculate_missing_row) {
+                            df_stats, missing, missing_text) {
+  if (is_survey(data))
+    calculate_missing_fun <- calculate_missing_row_survey
+  else
+    calculate_missing_fun <- calculate_missing_row
 
   # styling the statistics -----------------------------------------------------
   for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels")))) {
