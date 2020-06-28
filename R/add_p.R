@@ -232,7 +232,6 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun){
     select(c("variable", "p.value")) %>%
     mutate(row_type = "label")
 
-
   table_body <-
     x$table_body %>%
     left_join(
@@ -438,7 +437,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
   if (is.null(x$df_by)) {
     stop(paste0(
       "Cannot add comparison when no 'by' variable ",
-      "in original tbl_summary() call"
+      "in original `tbl_svysummary()` call"
     ), call. = FALSE)
   }
 
