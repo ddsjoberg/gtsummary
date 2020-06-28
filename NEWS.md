@@ -2,9 +2,11 @@
 
 * Bug fix when named list of {gtsummary} objects is passed to `tbl_merge()` (#541)
 
+* Bug fix when for `tbl_uvregression()` when adjustment variables were included in `formula = "{y} ~ {x} + age"`.  The adjustment variables were being printed in the resulting table. (#555)
+
 * Now importing `as_flextable()` generic from {flextable} to avoid conflicts when using both packages (#462)
 
-* Added a language theme for translating tables into Spanish, French and German (#511)
+* Added a language theme for translating tables into Spanish, French, Portuguese, and German (#511)
 
 # gtsummary 1.3.2
 
