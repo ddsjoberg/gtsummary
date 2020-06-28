@@ -139,16 +139,28 @@ to the total number, number missing and number non missing observations
 in the denominator, not at each level of the categorical variable.
 }
 
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_svysummary_ex1.png}{options: width=31\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_svysummary_ex2.png}{options: width=45\%}}
+}
+
 \examples{
 # A simple weighted dataset
-d <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
-tbl_svysummary(d, by = "Survived", include = -Freq, percent = "row")
+tbl_svysummary_ex1 <-
+  survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
+  tbl_svysummary(by = Survived, include = -Freq, percent = "row")
 
 # A dataset with a complex design
 data(api, package = "survey")
-d_clust <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
-tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"))
-tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"), by = "both")
+tbl_svysummary_ex2 <-
+  survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) \%>\%
+  tbl_svysummary(by = "both", include = c(cname, api00, api99, both))
 }
 \seealso{
 Other tbl_svysummary tools: 

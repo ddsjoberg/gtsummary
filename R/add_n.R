@@ -42,9 +42,12 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
     stop("`x` must be class 'tbl_summary' or 'tbl_svysummary'")
 
   # defining function to round percentages -------------------------------------
-  percent_fun <- getOption("gtsummary.tbl_summary.percent_fun",
-    default = style_percent
-  )
+  percent_fun <-
+    get_theme_element("tbl_summary-fn:percent_fun") %||%
+    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
+  N_fun <-
+    get_theme_element("tbl_summary-fn:N_fun",
+                      default = function(x) sprintf("%.0f", x))
 
   # DEPRECATED specifying statistic via missing argument -----------------------
   if (!is.null(missing)) {
@@ -63,17 +66,20 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
   # directly from x$meta_data$df_stats where it is already there
   variable_by_chr <- c("variable", switch(!is.null(x$by), "by"))
   counts <-
-    x$meta_data$df_stats %>%
-    dplyr::bind_rows() %>%
+    map_dfr(
+      x$meta_data$df_stats,
+      ~select(.x, any_of(c("by", "variable", "N_miss", "N_obs",
+                           "p_miss", "N_nonmiss", "p_nonmiss")))
+    ) %>%
     dplyr::distinct_at(variable_by_chr, .keep_all = TRUE) %>%
     dplyr::group_by(.data$variable) %>%
     dplyr::summarise(
       row_type = "label",
-      n = sum(.data$N_nonmiss),
-      n_miss = sum(.data$N_miss),
-      N = .data$n + .data$n_miss,
-      p = percent_fun(.data$n / .data$N),
-      p_miss = percent_fun(.data$n_miss / .data$N),
+      n = N_fun(sum(.data$N_nonmiss)),
+      n_miss = N_fun(sum(.data$N_miss)),
+      N = N_fun(sum(.data$N_nonmiss, .data$N_miss)),
+      p = percent_fun(sum(.data$N_nonmiss) / sum(.data$N_nonmiss, .data$N_miss)),
+      p_miss = percent_fun(sum(.data$N_miss) / sum(.data$N_nonmiss, .data$N_miss)),
       statistic = glue(statistic) %>% as.character(),
       .groups = "drop_last"
     ) %>%
