@@ -420,7 +420,7 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
                                      variable = variable,
                                      by = by, class = "logical",
                                      dichotomous_value = TRUE,
-                                     sort = "alphanumeric", percent = percent) %>%
+                                     sort = "alphanumeric", percent = "column") %>%
     rename(p_miss = .data$p,
            N_obs = .data$N,
            N_miss = .data$n,
