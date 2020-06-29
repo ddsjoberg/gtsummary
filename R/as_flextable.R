@@ -1,6 +1,7 @@
 #' Convert gtsummary object to a flextable object
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' You must load the {flextable} package to use this function, e.g. `library(flextable)`.
 #' Function converts a gtsummary object to a flextable object.
 #' A user can use this function if they wish to add customized formatting
 #' available via the flextable functions. The flextable output is particularly
@@ -8,7 +9,7 @@
 #' does not support Word.
 #'
 #' @section Details:
-#' The `as_flextable()` takes the data frame that will be printed and converts
+#' The `as_flextable.gtsummary()` function takes the gtsummary object converts
 #' it to a flextable and formats the table with the following flextable functions.
 #' 1. [flextable::flextable()]
 #' 1. [flextable::set_header_labels()] to set column labels
@@ -24,7 +25,7 @@
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
 #' Pro tip: Use the [flextable::width()] function for exacting control over
-#' column width after calling [as_flextable()].
+#' column width after calling `as_flextable()`.
 #' @inheritParams as_gt
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for
 #' bold weight) in column labels and spanning headers are removed.
