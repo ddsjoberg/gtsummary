@@ -35,6 +35,7 @@ A {flextable} object
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+You must load the {flextable} package to use this function, e.g. \code{library(flextable)}.
 Function converts a gtsummary object to a flextable object.
 A user can use this function if they wish to add customized formatting
 available via the flextable functions. The flextable output is particularly
@@ -43,7 +44,7 @@ does not support Word.
 }
 \section{Details}{
 
-The \code{as_flextable()} takes the data frame that will be printed and converts
+The \code{as_flextable.gtsummary()} function takes the gtsummary object converts
 it to a flextable and formats the table with the following flextable functions.
 \enumerate{
 \item \code{\link[flextable:flextable]{flextable::flextable()}}
@@ -61,7 +62,7 @@ it to a flextable and formats the table with the following flextable functions.
 Any one of these commands may be omitted using the \verb{include=} argument.
 
 Pro tip: Use the \code{\link[flextable:width]{flextable::width()}} function for exacting control over
-column width after calling \code{\link[=as_flextable]{as_flextable()}}.
+column width after calling \code{as_flextable()}.
 }
 
 \examples{
