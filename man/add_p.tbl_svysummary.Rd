@@ -48,18 +48,43 @@ A \code{tbl_svysummary} object
 \description{
 Adds p-values to tables created by \code{tbl_svysummary} by comparing values across groups.
 }
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{add_p_svysummary_ex1.png}{options: width=45\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{add_p_svysummary_ex2.png}{options: width=65\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{add_p_svysummary_ex3.png}{options: width=60\%}}
+}
+
 \examples{
 # A simple weighted dataset
-d <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
-tbl_svysummary(d, by = "Survived", include = -Freq) \%>\% add_p()
+add_p_svysummary_ex1 <-
+  survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
+  tbl_svysummary(by = Survived) \%>\%
+  add_p()
 
 # A dataset with a complex design
 data(api, package = "survey")
 d_clust <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
-tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"), by = "both") \%>\%
+
+add_p_svysummary_ex2 <-
+  tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99, both)) \%>\%
   add_p()
-tbl_svysummary(d_clust, include = c("cname", "api00", "api99", "both"), by = "both") \%>\%
-  add_p(test = list(all_continuous() ~ "svy.t.test", all_categorical() ~ "svy.wald.test"))
+
+# change default tests to svy t-test and Wald test
+add_p_svysummary_ex3 <-
+  tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99, both)) \%>\%
+  add_p(
+    test = list(all_continuous() ~ "svy.t.test",
+                all_categorical() ~ "svy.wald.test")
+  )
 }
 \seealso{
 Other tbl_svysummary tools: 
