@@ -404,6 +404,8 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
 add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                                  include = everything(), ...) {
+  # checking for survey package ------------------------------------------------
+  assert_package("survey", "add_p.tbl_svysummary")
 
   # setting defaults from gtsummary theme --------------------------------------
   test <- test %||%
