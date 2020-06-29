@@ -145,15 +145,20 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
 
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
-  tibble_calls[["cols_hide"]] <- expr(dplyr::select(!!!syms(cols_to_keep)))
+  tibble_calls[["cols_hide"]] <- expr(dplyr::select(any_of("groupname_col"), !!!syms(cols_to_keep)))
 
   # cols_label -----------------------------------------------------------------
   if (col_labels) {
     df_col_labels <-
       dplyr::filter(table_header, .data$hide == FALSE)
 
-    tibble_calls[["cols_label"]] <-
-      expr(rlang::set_names(!!df_col_labels$label))
+    # if there is a grouping variable, add the column header
+    if (length(group_var) > 0)
+      tibble_calls[["cols_label"]] <-
+        expr(rlang::set_names(c("**Group**", !!df_col_labels$label)))
+    else
+      tibble_calls[["cols_label"]] <-
+        expr(rlang::set_names(!!df_col_labels$label))
   }
 
   tibble_calls
