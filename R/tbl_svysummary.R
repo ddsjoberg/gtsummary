@@ -71,7 +71,7 @@
 #' # A simple weighted dataset
 #' tbl_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
-#'   tbl_svysummary(by = Survived, include = -Freq, percent = "row")
+#'   tbl_svysummary(by = Survived, percent = "row")
 #'
 #' # A dataset with a complex design
 #' data(api, package = "survey")
@@ -89,12 +89,29 @@
 tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
-                        percent = NULL, include = everything()) {
+                        percent = NULL, include = NULL) {
   # checking for survey package ------------------------------------------------
   assert_package("survey", "tbl_svysummary")
 
   # eval -----------------------------------------------------------------------
   include <- select(data$variables, {{ include }}) %>% names()
+
+  # default selection for include
+  if (length(include) == 0) {
+    # look at data$call
+    if (is.null(data$call)) {
+      include <- names(data$variables)
+    } else {
+      exclude <- c(
+        all.vars(data$call$id),
+        all.vars(data$call$probs),
+        all.vars(data$call$strata),
+        all.vars(data$call$fpc),
+        all.vars(data$call$weights)
+      )
+      include <- setdiff(names(data$variables), exclude)
+    }
+  }
 
   # setting defaults from gtsummary theme --------------------------------------
   label <- label %||%
