@@ -16,7 +16,7 @@ tbl_svysummary(
   missing_text = NULL,
   sort = NULL,
   percent = NULL,
-  include = everything()
+  include = NULL
 )
 }
 \arguments{
@@ -154,7 +154,7 @@ in the denominator, not at each level of the categorical variable.
 # A simple weighted dataset
 tbl_svysummary_ex1 <-
   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
-  tbl_svysummary(by = Survived, include = -Freq, percent = "row")
+  tbl_svysummary(by = Survived, percent = "row")
 
 # A dataset with a complex design
 data(api, package = "survey")
