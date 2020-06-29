@@ -147,7 +147,7 @@ in the denominator, not at each level of the categorical variable.
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_svysummary_ex2.png}{options: width=45\%}}
+\if{html}{\figure{tbl_svysummary_ex2.png}{options: width=36\%}}
 }
 
 \examples{

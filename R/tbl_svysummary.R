@@ -85,7 +85,7 @@
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_svysummary_ex2.png}{options: width=45\%}}
+#' \if{html}{\figure{tbl_svysummary_ex2.png}{options: width=36\%}}
 tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
