@@ -357,6 +357,11 @@ compute_survey_stat <- function(data, variable, by, f) {
     na.rm = TRUE,
     keep.var = FALSE
   )
+
+  # if all values are NA, turn na.rm to FALSE to avoid error
+  if (all(is.na(data$variables[[variable]])))
+    args$na.rm <- FALSE
+
   fun <- NULL
   if (f == "mean") {
     fun <- survey::svymean
