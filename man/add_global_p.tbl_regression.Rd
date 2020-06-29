@@ -8,7 +8,7 @@
   x,
   include = x$table_body$variable[x$table_body$var_type \%in\% c("categorical",
     "interaction")],
-  type = "III",
+  type = NULL,
   keep = FALSE,
   quiet = NULL,
   ...,

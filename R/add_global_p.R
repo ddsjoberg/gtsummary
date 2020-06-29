@@ -61,7 +61,7 @@ add_global_p <- function(x, ...) {
 
 add_global_p.tbl_regression <- function(x,
                                         include = x$table_body$variable[x$table_body$var_type %in% c("categorical", "interaction")],
-                                        type = "III", keep = FALSE, quiet = NULL, ..., terms = NULL) {
+                                        type = NULL, keep = FALSE, quiet = NULL, ..., terms = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(terms)) {
     lifecycle::deprecate_warn(
@@ -73,6 +73,7 @@ add_global_p.tbl_regression <- function(x,
 
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+  type <- type %||% get_theme_element("add_global_p-str:type", default = "III")
 
   # converting to charcter vector ----------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
@@ -196,9 +197,10 @@ add_global_p.tbl_regression <- function(x,
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'
-add_global_p.tbl_uvregression <- function(x, type = "III", quiet = NULL, ...) {
+add_global_p.tbl_uvregression <- function(x, type = NULL, quiet = NULL, ...) {
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+  type <- type %||% get_theme_element("add_global_p-str:type", default = "III")
 
   # capturing dots in expression
   dots <- rlang::enexprs(...)
