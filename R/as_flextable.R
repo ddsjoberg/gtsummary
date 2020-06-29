@@ -35,7 +35,7 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' # MUST LOAD flextable FIRST
+#' # Load flextable to use as_flextable()
 #' library(flextable)
 #'
 #' trial %>%

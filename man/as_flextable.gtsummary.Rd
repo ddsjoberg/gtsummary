@@ -65,7 +65,7 @@ column width after calling \code{\link[=as_flextable]{as_flextable()}}.
 }
 
 \examples{
-# MUST LOAD flextable FIRST
+# Load flextable to use as_flextable()
 library(flextable)
 
 trial \%>\%
