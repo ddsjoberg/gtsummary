@@ -9,8 +9,8 @@
 #' @param data A survey object created with created with [survey::svydesign()]
 #' @inheritParams tbl_summary
 #'
-#' @details
-#' See [tbl_summary()] for more details on the different arguments.
+#' @inheritSection tbl_summary type argument
+#' @inheritSection tbl_summary select helpers
 #'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
@@ -41,7 +41,7 @@
 #'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
 #' }
 #'
-#' Unlike [tbl_summary()], It's not possible to pass a custom function.
+#' Unlike [tbl_summary()], it is not possible to pass a custom function.
 #'
 #' For both categorical and continuous variables, statistics on the number of
 #' missing and non-missing observations and their proportions are available to

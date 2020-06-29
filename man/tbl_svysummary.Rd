@@ -83,8 +83,6 @@ A \code{tbl_svysummary} object
 The \code{tbl_svysummary} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables taking into account survey weights and design.
 It is similar to \code{\link[=tbl_summary]{tbl_summary()}}.
-
-See \code{\link[=tbl_summary]{tbl_summary()}} for more details on the different arguments.
 }
 \section{statistic argument}{
 
@@ -116,7 +114,7 @@ For continuous variables the following statistics are available to display.
 \item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
 }
 
-Unlike \code{\link[=tbl_summary]{tbl_summary()}}, It's not possible to pass a custom function.
+Unlike \code{\link[=tbl_summary]{tbl_summary()}}, it is not possible to pass a custom function.
 
 For both categorical and continuous variables, statistics on the number of
 missing and non-missing observations and their proportions are available to
@@ -148,6 +146,37 @@ in the denominator, not at each level of the categorical variable.
 \if{html}{Example 2}
 
 \if{html}{\figure{tbl_svysummary_ex2.png}{options: width=36\%}}
+}
+
+\section{type argument}{
+
+tbl_summary displays summary statistics for three types of data:
+continuous, categorical, and dichotomous. If the type is not specified,
+tbl_summary will do its best to guess the type.  Dichotomous variables
+are categorical variables that are displayed on a single row in the
+output table, rather than one row per level of the variable.
+Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
+and the TRUE, 1, and yes rows are displayed.
+Otherwise, the value to display must be specified in
+the \code{value} argument, e.g. \code{value = list(varname ~ "level to show")}
+}
+
+\section{select helpers}{
+
+\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
+modify default behavior for groups of variables.
+For example, by default continuous variables are reported with the median
+and IQR.  To change all continuous variables to mean and standard deviation use
+\code{statistic = list(all_continuous() ~ "{mean} ({sd})")}.
+
+All columns with class logical are displayed as dichotomous variables showing
+the proportion of events that are \code{TRUE} on a single row. To show both rows
+(i.e. a row for \code{TRUE} and a row for \code{FALSE}) use
+\code{type = list(all_logical() ~ "categorical")}.
+
+The select helpers are available for use in any argument that accepts a list
+of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
 }
 
 \examples{
