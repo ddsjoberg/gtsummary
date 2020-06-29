@@ -87,11 +87,26 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
 
 # creating flextable calls from table_header -----------------------------------
 table_header_to_flextable_calls <- function(x, ...) {
-  table_header <-
-    x$table_header %>%
-    group_by(.data$hide) %>%
-    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-    ungroup()
+
+  # if there is a grouping variable, add table_header info for it
+  if (dplyr::group_vars(x$table_body) %>% length() > 0) {
+    table_header <-
+      tibble::tibble(column = "groupname_col",
+                     label = "Group",
+                     hide = FALSE,
+                     align = "left") %>%
+      bind_rows(x$table_header) %>%
+      group_by(.data$hide) %>%
+      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+      ungroup()
+  }
+  else {
+    table_header <-
+      x$table_header %>%
+      group_by(.data$hide) %>%
+      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+      ungroup()
+  }
 
   # tibble ---------------------------------------------------------------------
   # flextable doesn't use the markdown language `__` or `**`
