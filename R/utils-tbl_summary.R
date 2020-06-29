@@ -1105,7 +1105,7 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
                               variable = variable,
                               by = by, class = "logical",
                               dichotomous_value = TRUE,
-                              sort = "alphanumeric", percent = percent) %>%
+                              sort = "alphanumeric", percent = "column") %>%
     rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
     mutate(N_nonmiss = .data$N_obs - .data$N_miss,
            p_nonmiss = 1 - .data$p_miss)
