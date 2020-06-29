@@ -44,7 +44,7 @@
 as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
                                    strip_md_bold = TRUE, group_header = NULL, ...) {
   # setting defaults -----------------------------------------------------------
-  group_header =
+  group_header <-
     group_header %||%
     get_theme_element("pkgwide-str:group_header", default = "**Group**")
 
@@ -56,6 +56,7 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
         vars(.data$label, .data$spanning_header),
         ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
       )
+    group_header <- str_replace_all(group_header, pattern = fixed("**"), replacement = fixed(""))
   }
 
   # creating list of flextable calls -------------------------------------------

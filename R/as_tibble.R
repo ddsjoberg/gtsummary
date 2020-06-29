@@ -42,7 +42,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   }
 
   # setting defaults -----------------------------------------------------------
-  group_header =
+  group_header <-
     group_header %||%
     get_theme_element("pkgwide-str:group_header", default = "**Group**")
 
