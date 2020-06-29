@@ -16,7 +16,7 @@ theme_gtsummary_printer(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble")
 )
 
-theme_gtsummary_language(language = c("es", "fr", "de", "en"))
+theme_gtsummary_language(language = c("es", "fr", "de", "en", "pr"))
 }
 \arguments{
 \item{journal}{String indicating the journal theme to follow.
@@ -26,8 +26,14 @@ theme_gtsummary_language(language = c("es", "fr", "de", "en"))
 
 \item{print_engine}{String indicating the print engine. Default is \code{"gt"}}
 
-\item{language}{String indicating language. Must be one of \code{"es"} (Spanish),
-\code{"fr"} (French), \code{"de"} (German), or \code{"en"} (English).}
+\item{language}{String indicating language. Must be one of
+\itemize{
+\item \code{"de"} (German)
+\item \code{"en"} (English)
+\item \code{"es"} (Spanish)
+\item \code{"fr"} (French)
+\item \code{"pr"} (Portuguese)
+}}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
