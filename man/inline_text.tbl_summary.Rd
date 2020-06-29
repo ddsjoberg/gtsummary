@@ -2,9 +2,20 @@
 % Please edit documentation in R/inline_text.R
 \name{inline_text.tbl_summary}
 \alias{inline_text.tbl_summary}
+\alias{inline_text.tbl_svysummary}
 \title{Report statistics from summary tables inline}
 \usage{
 \method{inline_text}{tbl_summary}(
+  x,
+  variable,
+  column = NULL,
+  level = NULL,
+  pattern = NULL,
+  pvalue_fun = NULL,
+  ...
+)
+
+\method{inline_text}{tbl_svysummary}(
   x,
   variable,
   column = NULL,
