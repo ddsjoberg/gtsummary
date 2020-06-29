@@ -9,6 +9,7 @@
   include = everything(),
   return_calls = FALSE,
   strip_md_bold = TRUE,
+  group_header = NULL,
   ...
 )
 }
@@ -27,6 +28,10 @@ as a list of expressions.}
 \item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
 bold weight) in column labels and spanning headers are removed.
 Default is TRUE}
+
+\item{group_header}{If a group is present (e.g. via \code{tbl_merge(group_header=)}),
+this string specifies the column header for the grouping column. Default
+is \code{"**Group**"}}
 
 \item{...}{Not used}
 }

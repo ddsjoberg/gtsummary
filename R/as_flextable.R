@@ -26,6 +26,7 @@
 #' Pro tip: Use the [flextable::width()] function for exacting control over
 #' column width after calling [as_flextable()].
 #' @inheritParams as_gt
+#' @inheritParams as_tibble.gtsummary
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for
 #' bold weight) in column labels and spanning headers are removed.
 #' Default is TRUE
@@ -41,7 +42,12 @@
 #'   add_p() %>%
 #'   as_flextable()
 as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
-                                   strip_md_bold = TRUE, ...) {
+                                   strip_md_bold = TRUE, group_header = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  group_header =
+    group_header %||%
+    get_theme_element("pkgwide-str:group_header", default = "**Group**")
+
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
     x$table_header <-
@@ -53,7 +59,7 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
   }
 
   # creating list of flextable calls -------------------------------------------
-  flextable_calls <- table_header_to_flextable_calls(x = x)
+  flextable_calls <- table_header_to_flextable_calls(x = x, group_header = group_header)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_flextable.gtsummary-lst:addl_cmds")
@@ -86,13 +92,13 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
 }
 
 # creating flextable calls from table_header -----------------------------------
-table_header_to_flextable_calls <- function(x, ...) {
+table_header_to_flextable_calls <- function(x, group_header, ...) {
 
   # if there is a grouping variable, add table_header info for it
   if (dplyr::group_vars(x$table_body) %>% length() > 0) {
     table_header <-
       tibble::tibble(column = "groupname_col",
-                     label = "Group",
+                     label = group_header,
                      hide = FALSE,
                      align = "left") %>%
       bind_rows(x$table_header) %>%
