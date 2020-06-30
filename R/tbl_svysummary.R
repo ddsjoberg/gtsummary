@@ -95,6 +95,9 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # checking for survey package ------------------------------------------------
   assert_package("survey", "tbl_svysummary")
 
+  # test if data is a survey object
+  if (!is_survey(data)) stop("'data' should be a survey object (see svydesign()).", call. = FALSE)
+
   # eval -----------------------------------------------------------------------
   include <- select(data$variables, {{ include }}) %>% names()
 
@@ -274,11 +277,11 @@ summarize_categorical_survey <- function(data, variable, by, class, dichotomous_
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
 
   if (is.null(by)) {
-    svy_table <- survey::svytable(stats::as.formula(paste("~", variable)), data) %>%
+    svy_table <- survey::svytable(c_form(right = variable), data) %>%
       as_tibble() %>%
       set_names("variable_levels", "n")
   } else {
-    svy_table <- survey::svytable(stats::as.formula(paste("~", by, "+", variable)), data) %>%
+    svy_table <- survey::svytable(c_form(right = c(by, variable)), data) %>%
       as_tibble() %>%
       set_names("by", "variable_levels", "n")
   }
@@ -390,13 +393,13 @@ compute_survey_stat <- function(data, variable, by, f) {
     stop(paste0("'", f, "' statistic is not supported for survey objects."), call. = FALSE)
 
   if (is.null(by)) {
-    args$x <- as.formula(paste("~", variable))
+    args$x <- c_form(right = variable)
     stat <- do.call(fun, args)
     stat <- tibble(variable, stat[1]) %>%
       set_names(c("variable", f))
   } else {
-    args$formula <- as.formula(paste("~", variable))
-    args$by <- as.formula(paste("~", by))
+    args$formula <- c_form(right = variable)
+    args$by <- c_form(right = by)
     args$FUN <- fun
     stat <- do.call(survey::svyby, args)
     stat <- stat %>%
@@ -489,4 +492,14 @@ calculate_missing_row_survey <- function(data, variable, by, missing_text) {
       missing = "no", missing_text = "Doesn't Matter -- Text should never appear")} %>%
     # changing row_type to missing
     mutate(row_type = "missing")
+}
+
+# helper for generating formulas for survey tests -------------------------------------
+c_form <- function(left = NULL, right = 1) {
+  # quoting to take into account complex names
+  if (!is.null(left)) left <- paste0("`", left, "`")
+  right <- paste0("`", right, "`")
+  left <- paste(left, collapse = "+")
+  right <- paste(right, collapse = "+")
+  stats::as.formula(paste(left, "~", right))
 }
