@@ -355,77 +355,77 @@ assign_test_one_survey <- function(data, var, var_summary_type, by_var, test, gr
 
 add_p_test_svy.chisq.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svychisq(stats::as.formula(paste("~", variable, "+", by)), data, statistic = "F")$p.value
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "F")$p.value
   result$test <- translate_text("chi-squared test with Rao & Scott's second-order correction")
   result
 }
 
 add_p_test_svy.adj.chisq.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svychisq(stats::as.formula(paste("~", variable, "+", by)), data, statistic = "Chisq")$p.value
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Chisq")$p.value
   result$test <- translate_text("chi-squared test adjusted by a design effect estimate")
   result
 }
 
 add_p_test_svy.wald.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svychisq(stats::as.formula(paste("~", variable, "+", by)), data, statistic = "Wald")$p.value
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Wald")$p.value
   result$test <- translate_text("Wald test of independence for complex survey samples")
   result
 }
 
 add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svychisq(stats::as.formula(paste("~", variable, "+", by)), data, statistic = "adjWald")$p.value
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "adjWald")$p.value
   result$test <- translate_text("adjusted Wald test of independence for complex survey samples")
   result
 }
 
 add_p_test_svy.lincom.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svychisq(stats::as.formula(paste("~", variable, "+", by)), data, statistic = "lincom")$p.value
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "lincom")$p.value
   result$test <- translate_text("test of independence using the exact asymptotic distribution for complex survey samples")
   result
 }
 
 add_p_test_svy.saddlepoint.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svychisq(stats::as.formula(paste("~", variable, "+", by)), data, statistic = "saddlepoint")$p.value
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "saddlepoint")$p.value
   result$test <- translate_text("a test of independence using a saddlepoint approximation for complex survey samples")
   result
 }
 
 add_p_test_svy.t.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svyttest(stats::as.formula(paste(variable, "~", by)), data)$p.value
+  result$p <- survey::svyttest(c_form(variable, by), data)$p.value
   result$test <- translate_text("t-test adapted to complex survey samples")
   result
 }
 
 add_p_test_svy.wilcox.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svyranktest(stats::as.formula(paste(variable, "~", by)), data, test = "wilcoxon")$p.value
+  result$p <- survey::svyranktest(c_form(variable, by), data, test = "wilcoxon")$p.value
   result$test <- translate_text("Wilcoxon rank-sum test for complex survey samples")
   result
 }
 
 add_p_test_svy.kruskal.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svyranktest(stats::as.formula(paste(variable, "~", by)), data, test = "KruskalWallis")$p.value
+  result$p <- survey::svyranktest(c_form(variable, by), data, test = "KruskalWallis")$p.value
   result$test <- translate_text("Kruskal-Wallis rank-sum test for complex survey samples")
   result
 }
 
 add_p_test_svy.vanderwaerden.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svyranktest(stats::as.formula(paste(variable, "~", by)), data, test = "vanderWaerden")$p.value
+  result$p <- survey::svyranktest(c_form(variable, by), data, test = "vanderWaerden")$p.value
   result$test <- translate_text("van der Waerden's normal-scores test for complex survey samples")
   result
 }
 
 add_p_test_svy.median.test <- function(data, variable, by, ...) {
   result <- list()
-  result$p <- survey::svyranktest(stats::as.formula(paste(variable, "~", by)), data, test = "median")$p.value
+  result$p <- survey::svyranktest(c_form(variable, by), data, test = "median")$p.value
   result$test <- translate_text("Mood's test for the median for complex survey samples")
   result
 }

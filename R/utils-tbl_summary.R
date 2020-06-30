@@ -359,7 +359,7 @@ df_by <- function(data, by) {
 
   } else {
     # survey object
-    svy_table <- survey::svytable(stats::as.formula(paste("~", by)), data, round = TRUE) %>%
+    svy_table <- survey::svytable(c_form(right = by), data, round = TRUE) %>%
       as_tibble() %>%
       set_names("by", "n") %>%
       mutate(
