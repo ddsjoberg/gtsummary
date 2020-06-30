@@ -43,19 +43,27 @@ test_match_to_fn <- function(x, env) {
       "chisq.test", stats::chisq.test, add_p_test_chisq.test,
       "chisq.test.no.correct", NULL, add_p_test_chisq.test.no.correct,
       "fisher.test", stats::fisher.test, add_p_test_fisher.test,
-      "lme4", NULL, add_p_test_lme4,
-      "svy.t.test", survey::svyttest, add_p_test_svy.t.test,
-      "svy.wilcox.test", survey::svyranktest, add_p_test_svy.wilcox.test,
-      "svy.kruskal.test", NULL, add_p_test_svy.kruskal.test,
-      "svy.vanderwaerden.test", NULL, add_p_test_svy.vanderwaerden.test,
-      "svy.median.test", NULL, add_p_test_svy.median.test,
-      "svy.chisq.test", survey::svychisq, add_p_test_svy.chisq.test,
-      "svy.adj.chisq.test", NULL, add_p_test_svy.adj.chisq.test,
-      "svy.wald.test", NULL, add_p_test_svy.wald.test,
-      "svy.adj.wald.test", NULL, add_p_test_svy.adj.wald.test,
-      "svy.lincom.test", NULL, add_p_test_svy.lincom.test,
-      "svy.saddlepoint.test", NULL, add_p_test_svy.saddlepoint.test
+      "lme4", NULL, add_p_test_lme4
     )
+  if (requireNamespace("survey", quietly = TRUE)) {
+    df_lookup <- dplyr::bind_rows(
+      df_lookup,
+      tibble::tribble(
+        ~fun_chr, ~fun_base_r, ~fun_add_p,
+        "svy.t.test", survey::svyttest, add_p_test_svy.t.test,
+        "svy.wilcox.test", survey::svyranktest, add_p_test_svy.wilcox.test,
+        "svy.kruskal.test", NULL, add_p_test_svy.kruskal.test,
+        "svy.vanderwaerden.test", NULL, add_p_test_svy.vanderwaerden.test,
+        "svy.median.test", NULL, add_p_test_svy.median.test,
+        "svy.chisq.test", survey::svychisq, add_p_test_svy.chisq.test,
+        "svy.adj.chisq.test", NULL, add_p_test_svy.adj.chisq.test,
+        "svy.wald.test", NULL, add_p_test_svy.wald.test,
+        "svy.adj.wald.test", NULL, add_p_test_svy.adj.wald.test,
+        "svy.lincom.test", NULL, add_p_test_svy.lincom.test,
+        "svy.saddlepoint.test", NULL, add_p_test_svy.saddlepoint.test
+      )
+    )
+  }
 
   # if string was passed, match `fun_chr`
   if (rlang::is_string(x) && x %in% df_lookup$fun_chr) {

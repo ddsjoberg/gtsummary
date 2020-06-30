@@ -68,6 +68,7 @@
 #' @family tbl_svysummary tools
 #' @author Joseph Larmarange
 #' @examples
+#' if (require(survey)) {
 #' # A simple weighted dataset
 #' tbl_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
@@ -78,6 +79,7 @@
 #' tbl_svysummary_ex2 <-
 #'   survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
 #'   tbl_svysummary(by = "both", include = c(cname, api00, api99, both))
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -267,7 +269,6 @@ is_survey <- function(data) {
 }
 
 # summarize_categorical for survey design --------------------------------------------------------
-#' @importFrom survey svytable
 summarize_categorical_survey <- function(data, variable, by, class, dichotomous_value, sort, percent) {
   df_stats <- summarize_categorical(data$variables, variable, by, class, dichotomous_value, sort, percent) %>%
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
@@ -350,7 +351,6 @@ summarize_continuous_survey <- function(data, variable, by, stat_display, digits
   df_stats
 }
 
-#' @importFrom survey svymean svyvar svyquantile svyby
 compute_survey_stat <- function(data, variable, by, f) {
   args <- list(
     design = data,

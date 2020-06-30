@@ -64,6 +64,7 @@ Adds p-values to tables created by \code{tbl_svysummary} by comparing values acr
 }
 
 \examples{
+if (require(survey)) {
 # A simple weighted dataset
 add_p_svysummary_ex1 <-
   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
@@ -85,6 +86,7 @@ add_p_svysummary_ex3 <-
     test = list(all_continuous() ~ "svy.t.test",
                 all_categorical() ~ "svy.wald.test")
   )
+}
 }
 \seealso{
 Other tbl_svysummary tools: 
