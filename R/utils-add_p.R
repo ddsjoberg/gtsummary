@@ -343,7 +343,7 @@ assign_test_one_survey <- function(data, var, var_summary_type, by_var, test, gr
   }
 
   # for categorical data, default to chi-squared with Rao & Scott correction
-  if (var_summary_type == "categorical") {
+  if (var_summary_type %in% c("categorical", "dichotomous")) {
     test_func <-
       get_theme_element("add_p.tbl_svysummary-attr:test.categorical", default = "svy.chisq.test") %>%
       test_match_to_fn()
