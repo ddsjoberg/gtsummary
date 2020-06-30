@@ -164,6 +164,11 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     data$variables[[by]] <- factor(data$variables[[by]], ordered = FALSE)
   }
 
+  # if by is numeric, convert into a factor -------------------------------
+  if (!is.null(by) && is.numeric(data$variables[[by]])) {
+    data$variables[[by]] <- factor(data$variables[[by]], ordered = FALSE)
+  }
+
   # deleting obs with missing by values ----------------------------------------
   # saving variable labels
   if (!is.null(by) && sum(is.na(data$variables[[by]])) > 0) {
@@ -275,6 +280,12 @@ is_survey <- function(data) {
 summarize_categorical_survey <- function(data, variable, by, class, dichotomous_value, sort, percent) {
   df_stats <- summarize_categorical(data$variables, variable, by, class, dichotomous_value, sort, percent) %>%
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
+
+  # if there is a dichotomous value, it needs to be present as a level of the variable for svytable
+  if(!is.null(dichotomous_value) && !dichotomous_value %in% unique(data$variables[[variable]])) {
+    data$variables[[variable]] <- as.factor(data$variables[[variable]])
+    levels(data$variables[[variable]]) <- c(levels(data$variables[[variable]]), dichotomous_value)
+  }
 
   if (is.null(by)) {
     svy_table <- survey::svytable(c_form(right = variable), data) %>%
