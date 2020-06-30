@@ -355,6 +355,10 @@ summarize_continuous_survey <- function(data, variable, by, stat_display, digits
 }
 
 compute_survey_stat <- function(data, variable, by, f) {
+  # difftime variable needs to be transformed into numeric for svyquantile
+  if (inherits(data$variables[[variable]], "difftime"))
+    data$variables[[variable]] <- unclass(data$variables[[variable]])
+
   args <- list(
     design = data,
     na.rm = TRUE,
