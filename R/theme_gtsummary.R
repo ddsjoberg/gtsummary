@@ -130,9 +130,9 @@ theme_gtsummary_printer <- function(
 #' - `"en"` (English)
 #' - `"es"` (Spanish)
 #' - `"fr"` (French)
-#' - `"pr"` (Portuguese)
+#' - `"pt"` (Portuguese)
 #' @export
-theme_gtsummary_language <- function(language = c("es", "fr", "de", "en", "pr")) {
+theme_gtsummary_language <- function(language = c("es", "fr", "de", "en", "pt")) {
   language <- match.arg(language)
   list(
     "pkgwide-str:theme_name" = paste("language:", language),
