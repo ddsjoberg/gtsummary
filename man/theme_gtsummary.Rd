@@ -16,7 +16,7 @@ theme_gtsummary_printer(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble")
 )
 
-theme_gtsummary_language(language = c("es", "fr", "de", "en", "pr"))
+theme_gtsummary_language(language = c("es", "fr", "de", "en", "pt"))
 }
 \arguments{
 \item{journal}{String indicating the journal theme to follow.
@@ -32,7 +32,7 @@ theme_gtsummary_language(language = c("es", "fr", "de", "en", "pr"))
 \item \code{"en"} (English)
 \item \code{"es"} (Spanish)
 \item \code{"fr"} (French)
-\item \code{"pr"} (Portuguese)
+\item \code{"pt"} (Portuguese)
 }}
 }
 \description{
