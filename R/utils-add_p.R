@@ -29,7 +29,7 @@ assign_test <- function(data, var, var_summary_type, by_var, test, group, env, a
 # test_match_to_fn -------------------------------------------------------------
 # little function to return the function from the shortcut name,
 # this is a helper function for assign_test_one()
-test_match_to_fn <- function(x, env) {
+test_match_to_fn <- function(x, env, survey = FALSE) {
   if (is.null(x)) return(NULL)
 
   # lookup table
@@ -45,23 +45,27 @@ test_match_to_fn <- function(x, env) {
       "fisher.test", stats::fisher.test, add_p_test_fisher.test,
       "lme4", NULL, add_p_test_lme4
     )
-  if (requireNamespace("survey", quietly = TRUE)) {
-    df_lookup <- dplyr::bind_rows(
-      df_lookup,
-      tibble::tribble(
-        ~fun_chr, ~fun_base_r, ~fun_add_p,
-        "svy.t.test", survey::svyttest, add_p_test_svy.t.test,
-        "svy.wilcox.test", survey::svyranktest, add_p_test_svy.wilcox.test,
-        "svy.kruskal.test", NULL, add_p_test_svy.kruskal.test,
-        "svy.vanderwaerden.test", NULL, add_p_test_svy.vanderwaerden.test,
-        "svy.median.test", NULL, add_p_test_svy.median.test,
-        "svy.chisq.test", survey::svychisq, add_p_test_svy.chisq.test,
-        "svy.adj.chisq.test", NULL, add_p_test_svy.adj.chisq.test,
-        "svy.wald.test", NULL, add_p_test_svy.wald.test,
-        "svy.adj.wald.test", NULL, add_p_test_svy.adj.wald.test,
-        "svy.lincom.test", NULL, add_p_test_svy.lincom.test,
-        "svy.saddlepoint.test", NULL, add_p_test_svy.saddlepoint.test
-      )
+  if (requireNamespace("survey", quietly = TRUE) & survey) {
+    if (rlang::is_string(x) && x %in% df_lookup$fun_chr) {
+      stop(paste0(
+        "\"", x, "\" is not a test adapted to survey objects.\n",
+        "See ?add_p.tbl_svysummary for a list of available statistical tests."
+      ), call. = FALSE)
+    }
+
+    df_lookup <- tibble::tribble(
+      ~fun_chr, ~fun_base_r, ~fun_add_p,
+      "svy.t.test", survey::svyttest, add_p_test_svy.t.test,
+      "svy.wilcox.test", survey::svyranktest, add_p_test_svy.wilcox.test,
+      "svy.kruskal.test", NULL, add_p_test_svy.kruskal.test,
+      "svy.vanderwaerden.test", NULL, add_p_test_svy.vanderwaerden.test,
+      "svy.median.test", NULL, add_p_test_svy.median.test,
+      "svy.chisq.test", survey::svychisq, add_p_test_svy.chisq.test,
+      "svy.adj.chisq.test", NULL, add_p_test_svy.adj.chisq.test,
+      "svy.wald.test", NULL, add_p_test_svy.wald.test,
+      "svy.adj.wald.test", NULL, add_p_test_svy.adj.wald.test,
+      "svy.lincom.test", NULL, add_p_test_svy.lincom.test,
+      "svy.saddlepoint.test", NULL, add_p_test_svy.saddlepoint.test
     )
   }
 
@@ -330,7 +334,7 @@ assign_test_one_survey <- function(data, var, var_summary_type, by_var, test, gr
   # if user specified test to be performed, do that test. -----------------------
   # matching an internal test by name or base R function match
   # or returning the appropriate test based on what is passed
-  test_func <- test_match_to_fn(test[[var]], env = env)
+  test_func <- test_match_to_fn(test[[var]], env = env, survey = TRUE)
   if (!is.null(test_func)) return(test_func)
 
 
@@ -338,7 +342,7 @@ assign_test_one_survey <- function(data, var, var_summary_type, by_var, test, gr
   if (var_summary_type == "continuous") {
     test_func <-
       get_theme_element("add_p.tbl_svysummary-attr:test.continuous", default = "svy.wilcox.test") %>%
-      test_match_to_fn()
+      test_match_to_fn(survey = TRUE)
     return(test_func)
   }
 
@@ -346,7 +350,7 @@ assign_test_one_survey <- function(data, var, var_summary_type, by_var, test, gr
   if (var_summary_type %in% c("categorical", "dichotomous")) {
     test_func <-
       get_theme_element("add_p.tbl_svysummary-attr:test.categorical", default = "svy.chisq.test") %>%
-      test_match_to_fn()
+      test_match_to_fn(survey = TRUE)
     return(test_func)
   }
 }
