@@ -78,56 +78,56 @@ test_that("tbl_summary works in character inputs for `by=`", {
 test_that("tbl_summary returns errors with bad inputs", {
   expect_error(
     tbl_summary(tibble::tibble()),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(tibble::tibble(t = integer())),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(list(test = 5)),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, by = THIS_IS_NOT_A_VARIABLE),
-    "*"
+    NULL
   )
   expect_message(
     tbl_summary(trial, by = response), # should get message about missing data
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, type = response),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, value = "0"),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, label = "Age"),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, statistic = "{mean}"),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, digits = 0),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, sort = list("grade" ~ "frequ55555ency")),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, by = c("trt", "grade")),
-    "*"
+    NULL
   )
 
   expect_error(
     tbl_summary(trial, statistic = everything() ~ "{mean}"),
-    "*"
+    NULL
   )
 })
 
