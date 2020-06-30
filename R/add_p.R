@@ -386,10 +386,10 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' @inheritParams tbl_svysummary
 #' @family tbl_svysummary tools
 #' @export
-#' @importFrom survey svyttest svyranktest svychisq
 #' @return A `tbl_svysummary` object
 #' @author Joseph Larmarange
 #' @examples
+#' if (require(survey)) {
 #' # A simple weighted dataset
 #' add_p_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
@@ -411,6 +411,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #'     test = list(all_continuous() ~ "svy.t.test",
 #'                 all_categorical() ~ "svy.wald.test")
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
