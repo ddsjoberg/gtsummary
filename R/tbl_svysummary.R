@@ -191,6 +191,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # will return call, and all object passed to in tbl_summary call -------------
   # the object func_inputs is a list of every object passed to the function
   tbl_summary_inputs <- as.list(environment())
+  tbl_summary_inputs$exclude <- NULL # should not be exported
 
   # removing variables with unsupported variable types from data ---------------
   classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")

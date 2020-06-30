@@ -24,3 +24,26 @@ test_that("no errors/warnings with missing data", {
 test_that("no errors/warnings with missing data in by variable", {
   expect_error(trial %>% tbl_summary(by = response) %>% add_overall(), NA)
 })
+
+if (require(survey)) {
+  test_that("no errors/warnings with standard use for tbl_svysummary", {
+    t <- trial %>%
+      svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+      tbl_svysummary(by = trt)
+
+    expect_error(t %>% add_overall(), NA)
+    expect_warning(t %>% add_overall(), NA)
+
+    expect_error(t %>% add_overall(last = TRUE), NA)
+    expect_warning(t %>% add_overall(last = TRUE), NA)
+
+    t <- Titanic %>%
+      as.data.frame() %>%
+      svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+      tbl_svysummary(by = Survived)
+
+    expect_error(t %>% add_overall(), NA)
+    expect_warning(t %>% add_overall(), NA)
+  })
+
+}
