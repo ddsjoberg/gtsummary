@@ -79,6 +79,8 @@ Other tbl_svysummary tools:
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_svysummary}()},
 \code{\link{add_stat_label}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
 \code{\link{tbl_svysummary}()}
 
 Other tbl_regression tools: 

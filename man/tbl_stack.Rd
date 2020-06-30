@@ -17,7 +17,7 @@ A \code{tbl_stack} object
 }
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
-or more \code{tbl_regression}, \code{tbl_summary}, or \code{tbl_merge} objects.
+or more \code{tbl_regression}, \code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_merge} objects.
 {gt} attributes from the first regression object are utilized for output
 table.
 }
@@ -95,6 +95,15 @@ Other tbl_summary tools:
 \code{\link{tbl_merge}()},
 \code{\link{tbl_summary}()}
 
+Other tbl_svysummary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_svysummary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_svysummary}()}
+
 Other tbl_regression tools: 
 \code{\link{add_global_p.tbl_regression}()},
 \code{\link{add_nevent.tbl_regression}()},
@@ -125,4 +134,5 @@ Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
 \concept{tbl_summary tools}
+\concept{tbl_svysummary tools}
 \concept{tbl_uvregression tools}
