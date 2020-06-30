@@ -406,6 +406,23 @@ if (require(survey)) {
     )
   })
 
+  test_that("tbl_svysummary-provides similar results than tbl_summary for simple weights", {
+    t1 <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~ Freq) %>%
+      tbl_svysummary()
+    t2 <- as.data.frame(Titanic) %>%
+      tidyr::uncount(Freq) %>%
+      tbl_summary()
+    expect_equal(t1$table_body, t2$table_body)
+    expect_equal(t1$table_header, t2$table_header)
+
+    statistic <- list(all_continuous() ~ "{mean}", all_categorical() ~ "{n} ({p}%)")
+    t1 <- survey::svydesign(~1, data = trial, weights = ~ 1) %>%
+      tbl_svysummary(by = trt, statistic = statistic)
+    t2 <- trial %>%
+      tbl_summary(by = trt, statistic = statistic)
+    expect_equal(t1$table_body, t2$table_body)
+    expect_equal(t1$table_header, t2$table_header)
+  })
 
 }
 
