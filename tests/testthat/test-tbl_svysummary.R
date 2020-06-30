@@ -297,7 +297,7 @@ if (require(survey)) {
   })
 
 
-  test_that("tbl_vysummary-all missing data does not cause error", {
+  test_that("tbl_svysummary-all missing data does not cause error", {
     design_missing <-
       tibble(
         my_by_var = c(1,1,2,2),
