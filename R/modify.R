@@ -197,7 +197,7 @@ show_header_names <- function(x = NULL) {
   block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
     pull(.data$formula) %>%
     paste0("", collapse = ",\n") %>%
-    {glue("modify_header(x, update = list(\n{.}\n))")}
+    {glue("modify_header(update = list(\n{.}\n))")}
 
   usethis::ui_code_block(block)
 
