@@ -81,11 +81,11 @@ test_that("tbl_svysummary works in character inputs for `by=`", {
 
 test_that("tbl_svysummary returns errors with bad inputs", {
   expect_error(
-    tbl_svysummary(svydesign(ids = ~ 1, data = tibble(), weights = ~ 1)),
+    tbl_svysummary(survey::svydesign(ids = ~ 1, data = tibble(), weights = ~ 1)),
     NULL
   )
   expect_error(
-    tbl_svysummary(svydesign(ids = ~ 1, data = tibble(t = integer()), weights = ~ 1)),
+    tbl_svysummary(survey::svydesign(ids = ~ 1, data = tibble(t = integer()), weights = ~ 1)),
     NULL
   )
   expect_error(
@@ -145,7 +145,7 @@ test_that("tbl_svysummary-testing tidyselect parsing", {
   expect_error(
     big_test <-
       tbl_svysummary(
-        data = svydesign(ids = ~1, data = trial2, weights = ~1),
+        data = survey::svydesign(ids = ~1, data = trial2, weights = ~1),
         by = `bad trt`,
         type = vars(response, death) ~ "categorical",
         statistic = list(
@@ -392,7 +392,6 @@ test_that("tbl_svysummary-no error when *data* with single column passed", {
     NA
   )
 })
-
 
 test_that("tbl_svysummary-no error when by variable is ordered factor", {
   expect_error(
