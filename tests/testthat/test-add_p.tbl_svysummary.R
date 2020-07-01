@@ -1,4 +1,4 @@
-context("test-add_p.tbl_ssvyummary")
+context("test-add_p.tbl_svyummary")
 testthat::skip_on_cran()
 
 if (require(survey)) {
@@ -77,10 +77,23 @@ if (require(survey)) {
     expect_error(
       tbl_svysummary(strial, by = response) %>%
         add_p(test = list(
-          trt ~ "svy.wald.test",
           age ~ "svy.t.test",
+          marker ~ "svy.wilcox.test",
+          trt ~ "svy.chisq.test",
+          stage ~"svy.adj.chisq.test",
+          death ~ "svy.wald.test"
+        )),
+      NA
+    )
+
+    expect_error(
+      tbl_svysummary(strial, by = response) %>%
+        add_p(test = list(
+          age ~ "svy.vanderwaerden.test",
+          ttdeath ~ "svy.kruskal.test",
           marker ~ "svy.median.test",
-          stage ~"svy.adj.wald.test",
+          trt ~ "svy.adj.wald.test",
+          stage ~"svy.lincom.test",
           death ~ "svy.saddlepoint.test"
         )),
       NA
