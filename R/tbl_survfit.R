@@ -177,7 +177,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   # applying labels
   lbls <- as.list(unique(df_stats$col_label)) %>% set_names(unique(df_stats$col_name))
   results <-
-    expr(modify_header_internal(results, label = "**Characteristic**", !!!lbls)) %>%
+    expr(modify_header_internal(results, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
     eval()
 
   # assigning class
@@ -187,7 +187,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
 }
 
 
-# calcualtes and prepares survival quantile estimates for tbl
+# calculates and prepares survival quantile estimates for tbl
 survfit_prob <- function(x, probs, label_header, conf.level) {
 
   strata <- intersect("strata", names(broom::tidy(x, conf.level = conf.level))) %>%
@@ -209,10 +209,13 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
     mutate(
       variable = switch(length(.env$strata) == 0, "..overall..") %||%
         stringr::word(strata, start = 1L, sep = "="),
-      label = switch(length(.env$strata) == 0, "Overall") %||%
+      label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
         stringr::word(strata, start = 2L, sep = "="),
       col_label = .env$label_header %||%
-        "**{style_percent(prob, symbol = TRUE)} Percentile**" %>%
+        # for some languages, we show 'Percentile 50%' instead of '50% Percentile'
+        switch(get_theme_element("pkgwide-str:language", default = "en") %in% "es",
+               "**{style_percent(prob, symbol = TRUE)} {translate_text('Percentile')}**") %||%
+        "**{style_percent(prob, symbol = TRUE)} {translate_text('Percentile')}**" %>%
         glue() %>% as.character()
     )
 
@@ -221,7 +224,6 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
 
   df_stat
 }
-
 
 # calcualtes and prepares n-year survival estimates for tbl
 survfit_time <- function(x, times, label_header, conf.level, reverse) {
@@ -292,9 +294,9 @@ survfit_time <- function(x, times, label_header, conf.level, reverse) {
     mutate(
       variable = switch(length(.env$strata) == 0, "..overall..") %||%
         stringr::word(strata, start = 1L, sep = "="),
-      label = switch(length(.env$strata) == 0, "Overall") %||%
+      label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
         stringr::word(strata, start = 2L, sep = "="),
-      col_label = .env$label_header %||% "**Time {time}**" %>% glue() %>% as.character()
+      col_label = .env$label_header %||% paste0("**", translate_text("Time"), " {time}**") %>% glue() %>% as.character()
     ) %>%
     select(any_of(c("variable", "label", "strata", "col_name", "col_label")),
            everything(), -time_max)
