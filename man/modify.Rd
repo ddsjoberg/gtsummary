@@ -20,7 +20,7 @@ modify_footnote(x, update, abbreviation = FALSE)
 
 modify_spanning_header(x, update)
 
-show_header_names(x)
+show_header_names(x = NULL)
 }
 \arguments{
 \item{x}{a gtsummary object}
