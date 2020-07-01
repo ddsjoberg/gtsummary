@@ -75,7 +75,7 @@ add_global_p.tbl_regression <- function(x,
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
   type <- type %||% get_theme_element("add_global_p-str:type", default = "III")
 
-  # converting to charcter vector ----------------------------------------------
+  # converting to character vector ---------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
                                  select_input = !!rlang::enquo(include))
 
@@ -94,15 +94,22 @@ add_global_p.tbl_regression <- function(x,
     ))
   }
 
+  # printing analysis performed
+  if (quiet == FALSE) {
+    expr_car <-
+      rlang::expr(car::Anova(x$model_obj, type = !!type, !!!list(...))) %>%
+      deparse()
+
+    rlang::inform(paste(
+      glue("Global p-values for variable(s)"),
+      glue("{glue::glue_collapse(shQuote(include, type = 'csh'), sep = ', ', last = ' and ')}"),
+      glue("calculated with\n  `{expr_car}`")
+    ))
+  }
+
   # calculating global pvalues
   tryCatch(
     {
-      expr_car <-
-        rlang::expr(car::Anova(x$model_obj, type = !!type, !!!list(...))) %>%
-        deparse()
-      if (quiet == FALSE)
-        rlang::inform(glue("Global p-values calculated with\n  `{expr_car}`"))
-
       car_Anova <-
         x$model_obj %>%
         car::Anova(type = type, ...)
@@ -180,6 +187,9 @@ add_global_p.tbl_regression <- function(x,
 #' [tbl_uvregression] function
 #' @param ... Additional arguments to be passed to [car::Anova].
 #' @inheritParams add_global_p.tbl_regression
+#' @param include Variables to calculate global p-value for. Input may be a vector of
+#' quoted or unquoted variable names. tidyselect and gtsummary select helper
+#' functions are also accepted. Default is `everything()`.
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @examples
@@ -197,24 +207,35 @@ add_global_p.tbl_regression <- function(x,
 #' @section Example Output:
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 #'
-add_global_p.tbl_uvregression <- function(x, type = NULL, quiet = NULL, ...) {
+add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything(),
+                                          keep = FALSE, quiet = NULL, ...) {
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
   type <- type %||% get_theme_element("add_global_p-str:type", default = "III")
 
+  # converting to character vector ---------------------------------------------
+  include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
+                                 select_input = !!rlang::enquo(include))
+
   # capturing dots in expression
   dots <- rlang::enexprs(...)
 
-  # calculating global pvalues
-  expr_car <-
-    rlang::expr(car::Anova(mod = x$model_obj, type = !!type, !!!list(...))) %>%
-    deparse()
-  if (quiet == FALSE)
-    rlang::inform(glue("Global p-values calculated with\n  `{expr_car}`"))
+  # printing analysis performed
+  if (quiet == FALSE) {
+    expr_car <-
+      rlang::expr(car::Anova(mod = x$model_obj, type = !!type, !!!list(...))) %>%
+      deparse()
+    rlang::inform(paste(
+      glue("Global p-values for variable(s)"),
+      glue("{glue::glue_collapse(shQuote(include, type = 'csh'), sep = ', ', last = ' and ')}"),
+      glue("calculated with\n  `{expr_car}`")
+    ))
+  }
 
+  # calculating global pvalues
   global_p <-
     imap_dfr(
-      x$tbls,
+      x$tbls[include],
       function(x, y) {
         tryCatch(
           {
@@ -271,15 +292,28 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, quiet = NULL, ...) {
       )
     x <- modify_header_internal(x, p.value = "**p-value**")
   }
+  # adding global p-values
   x$table_body <-
     x$table_body %>%
-    select(-c("p.value")) %>%
     left_join(
-      global_p %>%
-        set_names(c("variable", "p.value")) %>%
-        mutate(row_type = "label"),
+      global_p %>% mutate(row_type = "label"),
       by = c("row_type", "variable")
-    )
+    ) %>%
+    mutate(
+      p.value = coalesce(.data$p.value_global, .data$p.value)
+    ) %>%
+    select(-c("p.value_global"))
+
+  # if keep == FALSE, then deleting variable-level p-values
+  if (keep == FALSE) {
+    x$table_body <-
+      x$table_body %>%
+      mutate(
+        p.value = if_else(.data$variable %in% !!include & .data$row_type == "level",
+                          NA_real_, .data$p.value
+        )
+      )
+  }
 
   x$call_list <- c(x$call_list, list(add_global_p = match.call()))
 
