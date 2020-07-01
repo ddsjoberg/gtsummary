@@ -27,7 +27,7 @@ test_that("no errors/warnings with missing data in by variable", {
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
   t <- trial %>%
-    svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
     tbl_svysummary(by = trt)
 
   expect_error(t %>% add_overall(), NA)
@@ -38,7 +38,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 
   t <- Titanic %>%
     as.data.frame() %>%
-    svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
     tbl_svysummary(by = Survived)
 
   expect_error(t %>% add_overall(), NA)
