@@ -180,9 +180,10 @@ modify_spanning_header <- function(x, update) {
 
 #' @name modify
 #' @export
-show_header_names <- function(x) {
+show_header_names <- function(x = NULL) {
   # checking input -------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'")
+  if (!inherits(x, "gtsummary"))
+    stop("Pass a 'gtsummary' object in `x=` to print current column names and headers.")
 
   df_cols <- x$table_header %>%
     filter(.data$hide == FALSE) %>%
@@ -193,10 +194,10 @@ show_header_names <- function(x) {
 
   cat("\n")
   usethis::ui_info("As a usage guide, the code below re-creates the current column headers.")
-  block <- mutate(df_cols, formula = glue("  {column} ~ {dQuote(label)},")) %>%
+  block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
     pull(.data$formula) %>%
-    paste0("\n", collapse = "") %>%
-    {glue("modify_header(list(\n{.}))")}
+    paste0("", collapse = ",\n") %>%
+    {glue("modify_header(x, update = list(\n{.}\n))")}
 
   usethis::ui_code_block(block)
 
