@@ -389,7 +389,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' @return A `tbl_svysummary` object
 #' @author Joseph Larmarange
 #' @examples
-#' if (require(survey)) {
+#' # Example 1 ----------------------------------
 #' # A simple weighted dataset
 #' add_p_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
@@ -400,18 +400,19 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' data(api, package = "survey")
 #' d_clust <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
 #'
+#' # Example 2 ----------------------------------
 #' add_p_svysummary_ex2 <-
 #'   tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99, both)) %>%
 #'   add_p()
 #'
-#' # change default tests to svy t-test and Wald test
+#' # Example 3 ----------------------------------
+#' # change tests to svy t-test and Wald test
 #' add_p_svysummary_ex3 <-
 #'   tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99, both)) %>%
 #'   add_p(
 #'     test = list(all_continuous() ~ "svy.t.test",
 #'                 all_categorical() ~ "svy.wald.test")
 #'   )
-#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
