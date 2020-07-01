@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/modify.html">show_header_names()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/539'>#539</a>)</p></li>
 <li><p>Bug fix when named list of {gtsummary} objects is passed to <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html">tbl_merge()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/541'>#541</a>)</p></li>
 <li><p>Bug fix when for <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html">tbl_uvregression()</a></code> when adjustment variables were included in <code>formula = "{y} ~ {x} + age"</code>. The adjustment variables were being printed in the resulting table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/555'>#555</a>)</p></li>
 <li><p>Now importing <code><a href="https://rdrr.io/pkg/flextable/man/as_flextable.html">as_flextable()</a></code> generic from {flextable} to avoid conflicts when using both packages (<a href='https://github.com/ddsjoberg/gtsummary/issues/462'>#462</a>)</p></li>
@@ -202,7 +203,7 @@
 <a href="#new-functions" class="anchor"></a>New Functions</h3>
 <ul>
 <li><p>Introducing themes in {gtsummary}. Use the function <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code> to set new themes, and review the themes vignette for details on setting and creating personalized themes. (<a href='https://github.com/ddsjoberg/gtsummary/issues/424'>#424</a>)</p></li>
-<li><p>New functions <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/modify_footnote.html">modify_footnote()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/modify_spanning_header.html">modify_spanning_header()</a></code> give users control over table footnotes and spanning headers. (<a href='https://github.com/ddsjoberg/gtsummary/issues/464'>#464</a>)</p></li>
+<li><p>New functions <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/modify.html">modify_footnote()</a></code> and <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/modify.html">modify_spanning_header()</a></code> give users control over table footnotes and spanning headers. (<a href='https://github.com/ddsjoberg/gtsummary/issues/464'>#464</a>)</p></li>
 <li><p>Introducing <code>as_huxtable()</code>! The function converts gtsummary objects to {huxtable} objects. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/469'>#469</a>)</p></li>
 <li><p>New function <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/add_stat.html">add_stat()</a></code>! Add a new column of any statistic to a <code><a href="http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html">tbl_summary()</a></code> table (<a href='https://github.com/ddsjoberg/gtsummary/issues/495'>#495</a>)</p></li>
 </ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bold or Italicize labels or levels in gtsummary tables — bold_italicize_labels_levels • gtsummary</title>
+<title>Modify column headers, footnotes, and spanning headers — modify • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,11 @@
 
 
 
-<meta property="og:title" content="Bold or Italicize labels or levels in gtsummary tables — bold_italicize_labels_levels" />
-<meta property="og:description" content="Bold or Italicize labels or levels in gtsummary tables" />
+<meta property="og:title" content="Modify column headers, footnotes, and spanning headers — modify" />
+<meta property="og:description" content="These functions assist with updating or adding column headers
+(modify_header()), footnotes (modify_footnote()), and spanning
+headers (modify_spanning_header()). Use show_header_names() to learn
+the column names." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -168,49 +171,91 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bold or Italicize labels or levels in gtsummary tables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/bold_italicise_labels_levels.R'><code>R/bold_italicise_labels_levels.R</code></a></small>
-    <div class="hidden name"><code>bold_italicize_labels_levels.Rd</code></div>
+    <h1>Modify column headers, footnotes, and spanning headers</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/modify.R'><code>R/modify.R</code></a></small>
+    <div class="hidden name"><code>modify.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Bold or Italicize labels or levels in gtsummary tables</p>
+    <p>These functions assist with updating or adding column headers
+(<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_header()</a></code>), footnotes (<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_footnote()</a></code>), and spanning
+headers (<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_spanning_header()</a></code>). Use <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>show_header_names()</a></code> to learn
+the column names.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_labels</a></span>(<span class='kw'>x</span>)
+    <pre class="usage"><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_header</a></span>(
+  <span class='kw'>x</span>,
+  update = <span class='kw'>NULL</span>,
+  stat_by = <span class='kw'>NULL</span>,
+  text_interpret = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"md"</span>, <span class='st'>"html"</span>),
+  <span class='kw'>...</span>
+)
 
-<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_levels</a></span>(<span class='kw'>x</span>)
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_footnote</a></span>(<span class='kw'>x</span>, <span class='kw'>update</span>, abbreviation = <span class='fl'>FALSE</span>)
 
-<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>italicize_labels</a></span>(<span class='kw'>x</span>)
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_spanning_header</a></span>(<span class='kw'>x</span>, <span class='kw'>update</span>)
 
-<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>italicize_levels</a></span>(<span class='kw'>x</span>)</pre>
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>show_header_names</a></span>(x = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object created using gtsummary functions</p></td>
+      <td><p>a gtsummary object</p></td>
+    </tr>
+    <tr>
+      <th>update</th>
+      <td><p>list of formulas or a single formula specifying the updated
+column header, footnote, or spanning header.
+The LHS specifies the column(s) to be updated, and the RHS is the updated text.
+Use the <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>show_header_names()</a></code> to see the column names that can be modified.</p></td>
+    </tr>
+    <tr>
+      <th>stat_by</th>
+      <td><p>Used with <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary(by=)</a></code> objects with a <code>by=</code> argument.
+String specifying text to include above the summary statistics.
+The following fields are available for use in the
+headers:</p><ul>
+<li><p><code>{n}</code> number of observations in each group,</p></li>
+<li><p><code>{N}</code> total number of observations,</p></li>
+<li><p><code>{p}</code> percentage in each group,</p></li>
+<li><p><code>{level}</code> the 'by' variable level,</p></li>
+</ul>
+
+<p>Syntax follows <code><a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue()</a></code>,
+e.g. <code>stat_by = "**{level}**, N = {n} ({style_percent(p)}%)"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>text_interpret</th>
+      <td><p>String indicates whether text will be interpreted with
+<code><a href='https://rdrr.io/pkg/gt/man/md.html'>gt::md()</a></code> or <code><a href='https://rdrr.io/pkg/gt/man/html.html'>gt::html()</a></code>. Must be <code>"md"</code> (default) or <code>"html"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Specify a column and updated column label,
+e.g. <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_header(p.value = "Model P-values")</a></code>. This is provided as an alternative to the
+<code>update=</code> argument. They accomplish the same goal of updating column headers.</p></td>
+    </tr>
+    <tr>
+      <th>abbreviation</th>
+      <td><p>Logical indicating if an abbreviation is being updated.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Functions return the same class of gtsummary object supplied</p>
-    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
-
-    
-<ul>
-<li><p><code>bold_labels</code>: Bold labels in gtsummary tables</p></li>
-<li><p><code>bold_levels</code>: Bold levels in gtsummary tables</p></li>
-<li><p><code>italicize_labels</code>: Italicize labels in gtsummary tables</p></li>
-<li><p><code>italicize_levels</code>: Italicize levels in gtsummary tables</p></li>
-</ul>
+    <p>Updated gtsummary object</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
 
-<p><img src='figures/tbl_bold_ital_ex.png' width=50% /></p>
+<p>Example 1</p>
+<p><img src='figures/modify_ex1.png' width=45% /></p>
+<p>Example 2</p>
+<p><img src='figures/modify_ex2.png' width=45% /></p>
+<p>Example 3</p>
+<p><img src='figures/modify_ex3.png' width=35% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: 
@@ -219,9 +264,9 @@
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_stat_label.html'>add_stat_label</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify</a></code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html'>tbl_stack</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary</a>()</code></p>
@@ -229,9 +274,9 @@
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/combine_terms.html'>combine_terms</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
-<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify</a></code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html'>tbl_regression</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html'>tbl_stack</a>()</code></p>
@@ -239,8 +284,8 @@
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a>()</code>,
+<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
-<code><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify</a></code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_stack.html'>tbl_stack</a>()</code>,
 <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html'>tbl_uvregression</a>()</code></p></div>
@@ -249,13 +294,52 @@
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>tbl_bold_ital_ex</span> <span class='op'>&lt;-</span>
-  <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"trt"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)] <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_labels</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_levels</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>italicize_labels</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>italicize_levels</a></span>()</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># create summary table</span>
+<span class='kw'>tbl</span> <span class='op'>&lt;-</span> <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span>)] <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_p.html'>add_p</a></span>()
+
+<span class='co'># print the column names that can be modified</span>
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>show_header_names</a></span>(<span class='kw'>tbl</span>)</div><div class='output co'>#&gt; 
+#&gt; 
+#&gt; Column Name   Column Header       
+#&gt; ------------  --------------------
+#&gt; label         **Characteristic**  
+#&gt; stat_1        **Drug A**, N = 98  
+#&gt; stat_2        **Drug B**, N = 102 
+#&gt; p.value       **p-value**         
+#&gt; </div><div class='output co'>#&gt; <span class='message'><span style='color: #BBBB00;'>ℹ</span><span> As a usage guide, the code below re-creates the current column headers.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #555555;'>  modify_header(update = list(</span>
+#&gt; <span class='message'>    label ~ '**Characteristic**',</span>
+#&gt; <span class='message'>    stat_1 ~ '**Drug A**, N = 98',</span>
+#&gt; <span class='message'>    stat_2 ~ '**Drug B**, N = 102',</span>
+#&gt; <span class='message'>    p.value ~ '**p-value**'</span>
+#&gt; <span class='message'>  ))</span><span></span></div><div class='input'>
+<span class='co'># Example 1 ----------------------------------</span>
+<span class='co'># updating column headers and footnote</span>
+<span class='kw'>modify_ex1</span> <span class='op'>&lt;-</span> <span class='kw'>tbl</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_header</a></span>(
+    update = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>label</span> <span class='op'>~</span> <span class='st'>"**Variable**"</span>,
+                  <span class='kw'>p.value</span> <span class='op'>~</span> <span class='st'>"**P**"</span>)
+  ) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_footnote</a></span>(
+    update = <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) <span class='op'>~</span> <span class='st'>"median (IQR) for Age; n (%) for Grade"</span>
+  )
+
+<span class='co'># Example 2 ----------------------------------</span>
+<span class='co'># using `stat_by=` argument to update headers, remove all footnotes, add spanning header</span>
+<span class='kw'>modify_ex2</span> <span class='op'>&lt;-</span> <span class='kw'>tbl</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_header</a></span>(stat_by = <span class='st'>"**{level}**, N = {n} ({style_percent(p)}%)"</span>) <span class='op'>%&gt;%</span>
+  <span class='co'># use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_footnote</a></span>(update = <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='fl'>NA</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_spanning_header</a></span>(<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) <span class='op'>~</span> <span class='st'>"**Treatment Received**"</span>)
+
+<span class='co'># Example 3 ----------------------------------</span>
+<span class='co'># updating an abbreviation in table footnote</span>
+<span class='kw'>modify_ex3</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>response</span> <span class='op'>~</span> <span class='kw'>age</span> <span class='op'>+</span> <span class='kw'>grade</span>, <span class='kw'>trial</span>, family = <span class='kw'>binomial</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html'>tbl_regression</a></span>(exponentiate = <span class='fl'>TRUE</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_footnote</a></span>(<span class='kw'>ci</span> <span class='op'>~</span> <span class='st'>"CI = Credible Interval"</span>, abbreviation = <span class='fl'>TRUE</span>)
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
