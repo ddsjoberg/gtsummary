@@ -91,7 +91,7 @@ tbl_survfit_ex2 <- tbl_survfit(
   label_header = "**Median Survival**"
 )
 
-# Competing Events Example ---------------------------------
+# Example 3 Competing Events Example ---------
 # adding a competing event for death (cancer vs other causes)
 library(dplyr)
 trial2 <- trial \%>\%
