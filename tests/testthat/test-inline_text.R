@@ -69,16 +69,16 @@ test_that("inline_text.tbl_summary: with by", {
 test_that("inline_text.tbl_summary: with by -  expect errors", {
   expect_error(
     inline_text(test_inline2, variable = "age", column = "Pla5cebo"),
-    "*"
+    NULL
   )
   expect_error(
     inline_text(test_inline2, variable = "stage", level = "Tsdfgsdfg1", column = "Drug B"),
-    "*"
+    NULL
   )
 
   expect_error(
     inline_text(test_inline2, variable = "st55age", level = "T1", column = "Drug B"),
-    "*"
+    NULL
   )
 })
 
@@ -123,12 +123,12 @@ test_that("inline_text.regression", {
 test_that("inline_text.regression -  expect errors", {
   expect_error(
     inline_text(test_inline3, variable = "stage", level = "Tsdfgsdfg1"),
-    "*"
+    NULL
   )
 
   expect_error(
     inline_text(test_inline3, variable = "st55age"),
-    "*"
+    NULL
   )
 })
 
@@ -268,16 +268,16 @@ test_that("inline_text.tbl_cross- expect error args aren't present", {
 
   expect_error(
     inline_text(tbl_cross, row_level = "Drug A"),
-    "*"
+    NULL
   )
   expect_error(
     inline_text(tbl_cross, col_level = "0"),
-    "*"
+    NULL
   )
 
-    expect_error(
-      inline_text(tbl_cross),
-      "*"
+  expect_error(
+    inline_text(tbl_cross),
+    NULL
   )
 })
 

@@ -39,11 +39,11 @@ test_that("tbl_summary allows for named list input", {
 test_that("tbl_summary throws errors/messages with bad 'sort = ' specifications", {
   expect_error(
     tbl_summary(mtcars, sort = list(all_categorical() ~ c("frequency", "two"))),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(mtcars, sort = list(all_categorical() ~ "freq5555uency")),
-    "*"
+    NULL
   )
 })
 

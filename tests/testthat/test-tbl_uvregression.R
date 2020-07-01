@@ -172,7 +172,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       pvalue_fun = mtcars
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -181,7 +181,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       estimate_fun = mtcars
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -190,7 +190,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       tidy_fun = mtcars
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -199,7 +199,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       label = "Labels! YAY"
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -208,7 +208,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       label = list("Age")
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -217,7 +217,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       label = list("age" ~ c("Age", "Two"))
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -225,7 +225,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       method = coxph,
       y = Surv(time, status)
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -234,7 +234,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       formula = "y ~ x"
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -243,7 +243,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = age,
       x = marker
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -251,6 +251,6 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       method = lm,
       y = c(age, sex)
     ),
-    "*"
+    NULL
   )
 })

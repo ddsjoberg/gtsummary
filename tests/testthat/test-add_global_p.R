@@ -18,7 +18,7 @@ test_that("no errors/warnings with standard use after tbl_regression", {
   )
 
   expect_message(mod1 %>% add_global_p(quiet = TRUE), NA)
-  expect_message(mod1 %>% add_global_p(quiet = FALSE), "*")
+  expect_message(mod1 %>% add_global_p(quiet = FALSE), NULL)
 })
 
 test_that("no errors/warnings with standard use after tbl_uvregression", {
@@ -31,5 +31,5 @@ test_that("no errors/warnings with standard use after tbl_uvregression", {
   )
 
   expect_message(mod2 %>% add_global_p(quiet = TRUE), NA)
-  expect_message(mod2 %>% add_global_p(quiet = FALSE), "*")
+  expect_message(mod2 %>% add_global_p(quiet = FALSE), NULL)
 })
