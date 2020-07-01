@@ -159,21 +159,21 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
 add_p_test_t.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
-  result$test <- "t-test"
+  result$test <- translate_text("t-test")
   result
 }
 
 add_p_test_aov <- function(data, variable, by, ...) {
   result <- list()
   result$p <- broom::glance(stats::lm(data[[variable]] ~ as.factor(data[[by]])))$p.value
-  result$test <- "One-way ANOVA"
+  result$test <- translate_text("One-way ANOVA")
   result
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
-  result$test <- "Kruskal-Wallis test"
+  result$test <- translate_text("Kruskal-Wallis test")
   result
 }
 
@@ -183,28 +183,29 @@ add_p_test_wilcox.test <- function(data, variable, by, ...) {
     stop("Wilcoxon rank-sum test cannot be calculated with more than 2 groups")
   }
   result$p <- stats::wilcox.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
-  result$test <- "Wilcoxon rank-sum test"
+  result$test <- translate_text("Wilcoxon rank-sum test")
+
   result
 }
 
 add_p_test_chisq.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
-  result$test <- "chi-square test of independence"
+  result$test <- translate_text("chi-square test of independence")
   result
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]), correct = FALSE)$p.value
-  result$test <- "chi-square test of independence"
+  result$test <- translate_text("chi-square test of independence")
   result
 }
 
 add_p_test_fisher.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
-  result$test <- "Fisher's exact test"
+  result$test <- translate_text("Fisher's exact test")
   result
 }
 
@@ -238,7 +239,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
   # returning p-value
   result$p <- stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
-  result$test <- "random intercept logistic regression"
+  result$test <- translate_text("random intercept logistic regression")
   result
 }
 

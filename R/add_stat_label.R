@@ -122,7 +122,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
       table_header_fill_missing()
 
     # updating header
-    x <- modify_header_internal(x, stat_label = "**Statistic**")
+    x <- modify_header_internal(x, stat_label = paste0("**", translate_text("Statistic"), "**"))
   }
 
   # removing stat label footnote
