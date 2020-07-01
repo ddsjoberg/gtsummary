@@ -4,13 +4,15 @@
 \alias{add_overall}
 \title{Add column with overall summary statistics}
 \usage{
-add_overall(x, last = FALSE)
+add_overall(x, last = FALSE, col_label = NULL)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
 \item{last}{Logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
+
+\item{col_label}{String indicating the column label. Default is \code{"**Overall**,  N = {N}"}}
 }
 \value{
 A \code{tbl_summary} object
