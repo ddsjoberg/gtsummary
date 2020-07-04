@@ -7,6 +7,7 @@
 #' object with class `tbl_svysummary` from the [tbl_svysummary] function.
 #' @param last Logical indicator to display overall column last in table.
 #' Default is `FALSE`, which will display overall column first.
+#' @param col_label String indicating the column label. Default is `"**Overall**,  N = {N}"`
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
 #' @author Daniel D. Sjoberg
@@ -19,13 +20,13 @@
 #'   add_overall()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
-add_overall <- function(x, last = FALSE) {
+add_overall <- function(x, last = FALSE, col_label = NULL) {
   UseMethod("add_overall")
 }
 
 #' @rdname add_overall
 #' @export
-add_overall.tbl_summary <- function(x, last = FALSE) {
+add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(
@@ -55,14 +56,15 @@ add_overall.tbl_summary <- function(x, last = FALSE) {
 add_overall_merge <- function(x, overall, last) {
   # checking the original tbl_summary and the added overall,
   # are the same before binding (excluding headers)
-  if (!identical(
-    x$table_body %>%
-    select(c("row_type", "variable", "label")),
-    overall %>%
-    select(c("row_type", "variable", "label")) %>%
-    as_tibble()
-  )) {
-    stop("An error occured in 'add_overall()', cannot merge overall statistics")
+  if (!identical(select(x$table_body, c("row_type", "variable", "label")),
+                 select(overall, c("row_type", "variable", "label")) %>% as_tibble())) {
+    paste(
+      "An error occured in `add_overall()`, and overall statistics cannot be merged.",
+      "Has the variable label change since the original call of `tbl_summary(),",
+      "for example, via `add_stat_label()`?",
+      "If so, run `add_overall()` before the variable label is updated.") %>%
+      stringr::str_wrap() %>%
+      stop(call. = FALSE)
   }
 
   # adding overall stat to the table_body data frame
@@ -87,7 +89,8 @@ add_overall_merge <- function(x, overall, last) {
     table_header_fill_missing()
 
   # adding header
-  x <- modify_header_internal(x, stat_0 = paste0("**", translate_text("Overall"), "**, N = {N}"))
+  col_label <- col_label %||% paste0("**", translate_text("Overall"), "**, N = {N}")
+  x <- modify_header_internal(x, stat_0 = col_label)
 
   x
 }
