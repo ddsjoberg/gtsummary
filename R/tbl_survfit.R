@@ -95,6 +95,11 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     "{estimate} ({conf.low}, {conf.high})"
 
   # input checks ---------------------------------------------------------------
+  if (!inherits(x, "survfit")) {
+    stop("Argument `x=` must be class 'survfit' created from the `survival::survfit()` function.",
+         call. = FALSE)
+  }
+
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of `times=` and `probs=` must be specified.", call. = FALSE)
   }
