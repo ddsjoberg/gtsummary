@@ -118,7 +118,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     getOption(
       "gtsummary.tbl_regression.estimate_fun",
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
-    )
+    ) %>%
+    purrr::as_mapper()
   conf.level <-
     conf.level %||%
     getOption("gtsummary.conf.level", default = 0.95)

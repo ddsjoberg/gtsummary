@@ -134,7 +134,8 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     getOption(
       "gtsummary.tbl_regression.estimate_fun",
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
-    )
+    ) %>%
+    purrr::as_mapper()
   conf.level <-
     conf.level %||%
     get_theme_element("tbl_regression-arg:conf.level") %||%
