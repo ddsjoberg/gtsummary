@@ -6,11 +6,7 @@
 \alias{add_overall.tbl_svysummary}
 \title{Add column with overall summary statistics}
 \usage{
-add_overall(x, last = FALSE)
-
-\method{add_overall}{tbl_summary}(x, last = FALSE)
-
-\method{add_overall}{tbl_svysummary}(x, last = FALSE)
+add_overall(x, last = FALSE, col_label = NULL)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function or
@@ -18,6 +14,8 @@ object with class \code{tbl_svysummary} from the \link{tbl_svysummary} function.
 
 \item{last}{Logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
+
+\item{col_label}{String indicating the column label. Default is \code{"**Overall**,  N = {N}"}}
 }
 \value{
 A \code{tbl_summary} object or a \code{tbl_svysummary} object
@@ -46,9 +44,7 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify_footnote}()},
-\code{\link{modify_header}()},
-\code{\link{modify_spanning_header}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
