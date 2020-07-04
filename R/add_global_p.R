@@ -264,7 +264,8 @@ add_global_p.tbl_uvregression <- function(x, quiet = NULL, ...) {
       table_header_fill_missing() %>%
       table_header_fmt_fun(
         p.value = x$inputs$pvalue_fun %||%
-          getOption("gtsummary.pvalue_fun", default = style_pvalue)
+          getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+          purrr::as_mapper()
       )
     x <- modify_header_internal(x, p.value = "**p-value**")
   }

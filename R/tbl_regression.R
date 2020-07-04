@@ -126,7 +126,8 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     pvalue_fun %||%
     get_theme_element("tbl_regression-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue)
+    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    purrr::as_mapper()
   estimate_fun <-
     estimate_fun %||%
     get_theme_element("tbl_regression-arg:estimate_fun") %||%

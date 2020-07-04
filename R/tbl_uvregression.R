@@ -109,7 +109,10 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue)
+    get_theme_element("tbl_regression-arg:pvalue_fun") %||%
+    get_theme_element("pkgwide-fn:pvalue_fun") %||%
+    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    purrr::as_mapper()
   estimate_fun <-
     estimate_fun %||%
     getOption(
