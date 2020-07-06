@@ -82,7 +82,12 @@ add_global_p.tbl_regression <- function(x,
   # if no terms are provided, stop and return x
   if (length(include) == 0) {
     if (quiet == FALSE)
-      message("No terms were selected, and no global p-values added to table")
+      paste("No terms were selected, and no global p-values were added to the table.",
+            "The default behaviour is to add global p-values for categorical and ",
+            "interaction terms. To obtain p-values for other terms,",
+            "update the `include=` argument.") %>%
+      stringr::str_wrap() %>%
+      message()
     return(x)
   }
 
