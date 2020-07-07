@@ -97,7 +97,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9006</span>
       </span>
     </div>
 
@@ -180,7 +180,14 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
-<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span>(<span class='kw'>x</span>, quiet = <span class='kw'>NULL</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span>(
+  <span class='kw'>x</span>,
+  type = <span class='kw'>NULL</span>,
+  include = <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/everything.html'>everything</a></span>(),
+  keep = <span class='fl'>FALSE</span>,
+  quiet = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,6 +196,22 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
       <th>x</th>
       <td><p>Object with class <code>tbl_uvregression</code> from the
 <a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html'>tbl_uvregression</a> function</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>Type argument passed to <a href='https://rdrr.io/pkg/car/man/Anova.html'>car::Anova</a>. Default is <code>"III"</code></p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. tidyselect and gtsummary select helper
+functions are also accepted. Default is <code><a href='http://www.danieldsjoberg.com/gtsummary//reference/everything.html'>everything()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>keep</th>
+      <td><p>Logical argument indicating whether to also retain the individual
+p-values in the table output for each level of the categorical variable.
+Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>quiet</th>
@@ -233,7 +256,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
     method.args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(family = <span class='kw'>binomial</span>),
     exponentiate = <span class='fl'>TRUE</span>
   ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Global p-values calculated with</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Global p-values for variable(s) 'trt', 'age' and 'grade' calculated with</span>
 #&gt; <span class='message'>`car::Anova(mod = x$model_obj, type = "III")`</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
