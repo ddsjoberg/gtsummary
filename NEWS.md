@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `type =` argument to `add_global_p()`, and added `include =` and `keep =` arguments to `add_global_p.tbl_uvregression()` (#554)
+
 * Added `show_header_names()` function (#539)
 
 * Bug fix when named list of {gtsummary} objects is passed to `tbl_merge()` (#541)
