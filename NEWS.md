@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `type =` argument to `add_global_p()`, and added `include =` and `keep =` arguments to `add_global_p.tbl_uvregression()` (#554)
+
 * Bug fix when named list of {gtsummary} objects is passed to `tbl_merge()` (#541)
 
 * Bug fix when for `tbl_uvregression()` when adjustment variables were included in `formula = "{y} ~ {x} + age"`.  The adjustment variables were being printed in the resulting table. (#555)
