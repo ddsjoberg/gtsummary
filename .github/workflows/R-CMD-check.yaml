@@ -57,11 +57,6 @@ jobs:
         if: runner.os == 'macOS'
         run: brew cask install xquartz
 
-      # testing 2020-07-08
-      - name: Install system dependencies
-        if: runner.os == 'Linux'
-        run: brew install nlopt
-
       - name: Query dependencies
         run: |
           install.packages('remotes')
