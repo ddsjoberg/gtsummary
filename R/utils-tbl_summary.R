@@ -746,7 +746,7 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
     getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
   N_fun <-
     get_theme_element("tbl_summary-fn:N_fun",
-                      default = function(x) sprintf("%.0f", x))
+                      default = function(x) style_number(x, digits = 0))
 
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
@@ -919,8 +919,8 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
     df_stats,
     function(column, colname) {
       if(is.null(fmt_fun[[colname]])) return(column)
-      fmt <- glue("%.{fmt_fun[[colname]]}f")
-      attr(column, "fmt_fun") <- purrr::partial(sprintf, fmt = !!fmt)
+      digits <- fmt_fun[[colname]]
+      attr(column, "fmt_fun") <- purrr::partial(style_number, digits = !!digits)
       column
     }
   )
