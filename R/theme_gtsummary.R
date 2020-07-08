@@ -131,11 +131,18 @@ theme_gtsummary_printer <- function(
 #' - `"es"` (Spanish)
 #' - `"fr"` (French)
 #' - `"pt"` (Portuguese)
+#' @inheritParams style_number
 #' @export
-theme_gtsummary_language <- function(language = c("es", "fr", "de", "en", "pt")) {
+theme_gtsummary_language <- function(language = c("es", "fr", "de", "en", "pt"),
+                                     big.mark = NULL, decimal.mark = NULL) {
   language <- match.arg(language)
-  list(
+  ret <- list(
     "pkgwide-str:theme_name" = paste("language:", language),
     "pkgwide-str:language" = language
   )
+
+  if (!is.null(big.mark)) ret <- c(ret, list("style_number-arg:big.mark" = big.mark))
+  if (!is.null(decimal.mark)) ret <- c(ret, list("style_number-arg:decimal.mark" = decimal.mark))
+
+  ret
 }

@@ -16,7 +16,11 @@ theme_gtsummary_printer(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble")
 )
 
-theme_gtsummary_language(language = c("es", "fr", "de", "en", "pt"))
+theme_gtsummary_language(
+  language = c("es", "fr", "de", "en", "pt"),
+  big.mark = NULL,
+  decimal.mark = NULL
+)
 }
 \arguments{
 \item{journal}{String indicating the journal theme to follow.
@@ -34,6 +38,12 @@ theme_gtsummary_language(language = c("es", "fr", "de", "en", "pt"))
 \item \code{"fr"} (French)
 \item \code{"pt"} (Portuguese)
 }}
+
+\item{big.mark}{Character used between every 3 digits to separate thousands.
+Default is \code{","}}
+
+\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+Default is \code{"."}}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
