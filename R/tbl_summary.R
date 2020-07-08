@@ -195,9 +195,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # checking input data --------------------------------------------------------
   tbl_summary_data_checks(data)
 
-  # removing orderered class from factor by variables --------------------------
-  if (!is.null(by) && inherits(data[[by]], "ordered") && inherits(data[[by]], "factor")) {
-    data[[by]] <- factor(data[[by]], ordered = FALSE)
+  # removing ordered class from factor variables -------------------------------
+  for (v in names(data)) {
+    if (inherits(data[[v]], "ordered") && inherits(data[[v]], "factor"))
+      data[[v]] <- factor(data[[v]], ordered = FALSE)
   }
 
   # deleting obs with missing by values ----------------------------------------
