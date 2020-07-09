@@ -20,7 +20,7 @@
 #'   add_overall()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
-add_overall <- function(x, last = FALSE, col_label = NULL) {
+add_overall <- function(x, last, col_label) {
   UseMethod("add_overall")
 }
 
@@ -49,11 +49,11 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
     do.call(tbl_summary, x_copy$inputs) %>%
     pluck("table_body")
 
-  add_overall_merge(x, overall, last)
+  add_overall_merge(x, overall, last, col_label)
 }
 
 
-add_overall_merge <- function(x, overall, last) {
+add_overall_merge <- function(x, overall, last, col_label) {
   # checking the original tbl_summary and the added overall,
   # are the same before binding (excluding headers)
   if (!identical(select(x$table_body, c("row_type", "variable", "label")),
@@ -98,7 +98,7 @@ add_overall_merge <- function(x, overall, last) {
 
 #' @rdname add_overall
 #' @export
-add_overall.tbl_svysummary <- function(x, last = FALSE) {
+add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(
@@ -121,5 +121,5 @@ add_overall.tbl_svysummary <- function(x, last = FALSE) {
     do.call(tbl_svysummary, x_copy$inputs) %>%
     pluck("table_body")
 
-  add_overall_merge(x, overall, last)
+  add_overall_merge(x, overall, last, col_label)
 }
