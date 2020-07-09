@@ -6,7 +6,11 @@
 \alias{add_overall.tbl_svysummary}
 \title{Add column with overall summary statistics}
 \usage{
-add_overall(x, last = FALSE, col_label = NULL)
+add_overall(x, last, col_label)
+
+\method{add_overall}{tbl_summary}(x, last = FALSE, col_label = NULL)
+
+\method{add_overall}{tbl_svysummary}(x, last = FALSE, col_label = NULL)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function or
