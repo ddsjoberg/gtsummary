@@ -8,8 +8,8 @@
 
 Checklist for PR reviewer
 
-- [ ] PR branch has pulled the most recent updates from master branch 
-- [ ] NEWS.md has been updated under the heading "`# gtsummary (development version)`"?
+- [ ] PR branch has pulled the most recent updates from master branch. Ensure the pull request branch and your local version match and both have the latest updates from the master branch.
+- [ ] NEWS.md has been updated with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parantheses at the end update (see NEWS.md for examples).
 - [ ] `usethis::use_spell_check()` runs with no spelling errors in documentation
 - [ ] If a new function was added, function included in `pkgdown.yml`
 - [ ] If a bug was fixed, a unit test was added for the bug check
