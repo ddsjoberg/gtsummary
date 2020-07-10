@@ -112,6 +112,7 @@ For continuous variables the following statistics are available to display.
 \item \code{{min}} minimum
 \item \code{{max}} maximum
 \item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
+\item \code{{sum}} sum
 }
 
 Unlike \code{\link[=tbl_summary]{tbl_summary()}}, it is not possible to pass a custom function.

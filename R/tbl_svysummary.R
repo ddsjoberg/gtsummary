@@ -39,6 +39,7 @@
 #'   \item `{min}` minimum
 #'   \item `{max}` maximum
 #'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
+#'   \item `{sum}` sum
 #' }
 #'
 #' Unlike [tbl_summary()], it is not possible to pass a custom function.
@@ -384,6 +385,9 @@ compute_survey_stat <- function(data, variable, by, f) {
   fun <- NULL
   if (f == "mean") {
     fun <- survey::svymean
+  }
+  if (f == "sum") {
+    fun <- survey::svytotal
   }
   if (f %in% c("var", "sd")) {
     fun <- survey::svyvar

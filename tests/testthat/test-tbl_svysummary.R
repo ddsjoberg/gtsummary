@@ -18,12 +18,16 @@ test_that("tbl_svysummary creates output without error/warning (no by var)", {
 
 
 test_that("tbl_svtsummary creates output without error/warning (with by var)", {
+  statistics <- list(
+    all_continuous() ~ "{median} {mean} {sd} {var} {min} {max} {sum} {p25} {p42} {p75} {p89}",
+    all_categorical() ~ "{n} {N} {p} | {n_unweighted} {N_unweighted} {p_unweighted}"
+  )
   expect_error(
-    tbl_svysummary(dc_light, by = both),
+    tbl_svysummary(dc_light, by = both, statistic = statistics),
     NA
   )
   expect_warning(
-    tbl_svysummary(dc_light, by = both),
+    tbl_svysummary(dc_light, by = both, statistic = statistics),
     NA
   )
 })
