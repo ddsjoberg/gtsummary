@@ -3,7 +3,7 @@
 #' @param x Object created from a gtsummary function
 #' @param ... Additional arguments passed to other methods.
 #' @author Daniel D. Sjoberg
-#' @seealso [add_p.tbl_summary], [add_p.tbl_cross]
+#' @seealso [add_p.tbl_summary], [add_p.tbl_cross], [add_p.tbl_survfit]
 #' @export
 add_p <- function(x, ...) {
   UseMethod("add_p")
@@ -351,4 +351,35 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
   # return tbl_cross
   x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
   x
+}
+
+
+#' Adds p-value to survfit table
+#'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' Calculate and add a p-value
+#' @export
+add_p.tbl_survfit <- function(x, quiet = FALSE) {
+  #extracting survfit call
+  survfit_call <- x$inputs$x$call %>% as.list()
+
+  # converting call into a survdiff call
+  survdiff_call <- rlang::call2(rlang::expr(survdiff), !!!tt[-1])
+
+  # printing call to calculate p-value
+  if (quiet == FALSE) {
+    survdiff_call_str <-
+      survdiff_call %>%
+      deparse() %>%
+      paste(collapse = "") %>%
+      stringr::str_squish()
+
+    rlang::inform(glue("Calculating p-value with\n  `{survdiff_call_str}`"))
+  }
+
+  # evaluating `survdiff()`
+  survdiff_result <- rlang::eval_tidy(survdiff_call)
+
+  # returning p-value
+  pchisq(survdiff_result$chisq, length(survdiff_result$n)-1, lower.tail = FALSE)
 }
