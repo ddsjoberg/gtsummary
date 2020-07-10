@@ -395,7 +395,7 @@ add_p_test_svy.lincom.test <- function(data, variable, by, ...) {
 add_p_test_svy.saddlepoint.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "saddlepoint")$p.value
-  result$test <- translate_text("a test of independence using a saddlepoint approximation for complex survey samples")
+  result$test <- translate_text("test of independence using a saddlepoint approximation for complex survey samples")
   result
 }
 
