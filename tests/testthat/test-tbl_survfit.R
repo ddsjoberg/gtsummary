@@ -135,3 +135,15 @@ test_that("no errors/warnings with competing events", {
     tbl_survfit(cr_2, times = c(12, 24), label = "Tumor Grade"), NA
   )
 })
+
+
+summod <- summary(cr_2, times = c(12,24))
+
+summod1b <- data.frame(strata = summod$strata,Time = summod$time,
+                       cancerdeath = summod$pstate[,2])
+
+summod2 <- tbl_survfit(cr_2, times = c(12,24))
+
+test_that("output is idential in tbl_survfit and summary",{
+  expect_equal(summod1b$cancerdeath, summod2$table_stats$estimate)
+})
