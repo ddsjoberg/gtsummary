@@ -102,7 +102,7 @@ add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(
-      "Cannot add Overall column when no 'by' variable in original tbl_summary"
+      "Cannot add Overall column when no 'by' variable in original tbl_svysummary"
     )
   }
 
