@@ -1,7 +1,7 @@
 #' Add column with overall summary statistics
 #'
 #' Adds a column with overall summary statistics to tables
-#' created by `tbl_summary`.
+#' created by `tbl_summary` or `tbl_svysummary`.
 #'
 #' @param x Object with class `tbl_summary` from the [tbl_summary] function or
 #' object with class `tbl_svysummary` from the [tbl_svysummary] function.
