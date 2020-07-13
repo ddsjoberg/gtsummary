@@ -349,5 +349,34 @@ svy_apiclus1 %>%
   modify_spanning_header(starts_with("stat_") ~ "**Met Both Targets**")
 ```
 
+`tbl_svysummary()` could also be used to handle weighted data. See the following datasets:
 
+```{r}
+d <- dplyr::as_tibble(Titanic)
+head(d, n = 10)
+```
+
+Each row represent zero or several individuals. If you apply `tbl_summary()` on this dataset, results will be incorrect because each row will count for one observation.
+
+```{r}
+tbl_summary(d, include = -n)
+```
+
+You can use the `survey` package to define a simple weighted dataset (with no strata and no cluster) and then apply `tbl_svysummary')`.
+
+```{r}
+d %>%
+  survey::svydesign(data = ., ids = ~ 1, weights = ~ n) %>%
+  tbl_svysummary()
+```
+
+Note that, like `tbl_summary`, `tbl_svysummary()` can accept a `by` variable. `add_p()` and `add_overall()` works also with tables produced by `tbl_svysummary()`.
+
+```{r}
+d %>%
+  survey::svydesign(data = ., ids = ~ 1, weights = ~ n) %>%
+  tbl_svysummary(by = Survived) %>%
+  add_p() %>%
+  add_overall()
+```
 
