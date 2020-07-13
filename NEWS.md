@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added support for competing risk cumulative incidence estimates to `tbl_survfit()` (#64, #448) 
+
 * Added `type =` argument to `add_global_p()`, and added `include =` and `keep =` arguments to `add_global_p.tbl_uvregression()` (#554)
 
 * Added `show_header_names()` function (#539)
