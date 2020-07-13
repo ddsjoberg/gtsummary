@@ -18,8 +18,8 @@ A \code{tbl_stack} object
 \description{
 Assists in patching together more complex tables. \code{tbl_stack()} appends two
 or more \code{tbl_regression}, \code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_merge} objects.
-{gt} attributes from the first regression object are utilized for output
-table.
+Column attributes, including number formatting and column footnotes, are
+retained from the first passed gtsummary object.
 }
 \section{Example Output}{
 
