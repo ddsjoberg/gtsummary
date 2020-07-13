@@ -298,3 +298,56 @@ The default options can be changed using the {gtsummary} themes function `set_gt
 The package includes pre-specified themes, and you can also create your own.
 Themes can control baseline behavior, for example, how p-values and percentages are rounded, which statistics are presented in `tbl_summary()`, default statistical tests in `add_p()`, etc.
 For details on creating a theme and setting personal defaults, visit the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html).
+
+## Summary Tables for Survey Data
+
+The {gtsummary} package also supports survey data (objects created with the {survey} package) via the `tbl_svysummary()` function.
+The syntax for `tbl_svysummary()` and `tbl_summary()` are nearly identical, thus the examples above apply to survey summaries as well.
+
+To begin, we'll install the {survey} package and load an example data set.
+The `apiclus1` data set with a complex survey design.
+
+```r
+install.packages("survey")
+```
+```{r}
+# loading the api data set
+data(api, package = "survey")
+```
+
+Before we begin, we convert the data frame to a survey object, registering the ID and weighting columns, and setting the finite population correction column.
+
+```{r}
+svy_apiclus1 <- 
+  survey::svydesign(
+    id = ~dnum, 
+    weights = ~pw, 
+    data = apiclus1, 
+    fpc = ~fpc
+  ) 
+```
+
+After creating the survey object, we can now summarize it similarly to a standard data frame using `tbl_svysummary()`
+
+```{r}
+svy_apiclus1 %>%
+  tbl_svysummary(
+    # stratify summary statistics by the "both" column
+    by = "both", 
+    # summarize a subset of the columns
+    include = c(cname, api00, api99, both),
+    # adding labels to table
+    label = list(
+      cname ~ "County",
+      api00 ~ "API in 2000",
+      api99 ~ "API in 1999"
+    )
+  ) %>%
+  # comparing values by "both" column
+  add_p() %>%
+  # adding spanning header
+  modify_spanning_header(starts_with("stat_") ~ "**Met Both Targets**")
+```
+
+
+
