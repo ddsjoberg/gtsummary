@@ -26,7 +26,7 @@ A \code{tbl_summary} object or a \code{tbl_svysummary} object
 }
 \description{
 Adds a column with overall summary statistics to tables
-created by \code{tbl_summary}.
+created by \code{tbl_summary} or \code{tbl_svysummary}.
 }
 \section{Example Output}{
 
