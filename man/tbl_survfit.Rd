@@ -14,7 +14,8 @@ tbl_survfit(
   estimate_fun = NULL,
   missing = "--",
   conf.level = 0.95,
-  failure = FALSE
+  reverse = FALSE,
+  failure = NULL
 )
 }
 \arguments{
@@ -45,8 +46,10 @@ survival times}
 
 \item{conf.level}{Confidence level for confidence intervals. Default is 0.95}
 
-\item{failure}{Calculate failure probabilities rather than survival probabilities.
+\item{reverse}{Flip the probability reported, i.e. \code{1 - estimate}.
 Default is \code{FALSE}.  Does not apply to survival quantile requests}
+
+\item{failure}{DEPRECATED. Use \verb{reverse=} instead.}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -62,6 +65,10 @@ formatted summary table of the results
 \if{html}{Example 2}
 
 \if{html}{\figure{tbl_survfit_ex2.png}{options: width=27\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{survfit_cr_ex3.png}{options: width=27\%}}
 }
 
 \examples{
@@ -83,6 +90,22 @@ tbl_survfit_ex2 <- tbl_survfit(
   probs = 0.5,
   label_header = "**Median Survival**"
 )
+
+# Example 3 Competing Events Example ---------
+# adding a competing event for death (cancer vs other causes)
+library(dplyr)
+trial2 <- trial \%>\%
+  mutate(
+  death_cr = case_when(
+    death == 0 ~ "censor",
+    runif(n()) < 0.5 ~ "death from cancer",
+    TRUE ~ "death other causes"
+  ) \%>\% factor()
+)
+
+survfit_cr_ex3 <-
+  survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) \%>\%
+  tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 }
 \author{
 Daniel D. Sjoberg
