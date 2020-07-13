@@ -28,7 +28,7 @@
 #'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
-#' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html)
+#' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' to create your own themes.
 #' @examples
 #' # Setting JAMA theme for gtsummary
@@ -50,7 +50,7 @@
 #'
 #' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=70\%}}
 #' @name theme_gtsummary
-#' @seealso [Themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html)
+#' @seealso [Themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' @seealso `set_gtsummary_theme()`, `reset_gtsummary_theme()`
 NULL
 
