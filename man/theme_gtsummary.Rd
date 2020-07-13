@@ -75,7 +75,7 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 
 Use \code{reset_gtsummary_theme()} to restore the default settings
 
-Review the \href{http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html}{themes vignette}
+Review the \href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}
 to create your own themes.
 }
 
@@ -105,7 +105,7 @@ reset_gtsummary_theme()
 \seealso{
 \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}}
 
-\href{http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html}{Themes vignette}
+\href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
 
 \code{set_gtsummary_theme()}, \code{reset_gtsummary_theme()}
 }
