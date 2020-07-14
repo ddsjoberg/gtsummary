@@ -61,7 +61,7 @@ test_that("expect errors", {
         header = "**Treatment Comparison**",       # column header
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -72,7 +72,7 @@ test_that("expect errors", {
         header = "**Treatment Comparison**",       # column header
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -83,7 +83,7 @@ test_that("expect errors", {
         header = c("**Treatment Comparison**", "**Treatment Comparison**"),       # column header
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -94,7 +94,7 @@ test_that("expect errors", {
         header = "**Treatment Comparison**",       # column header
         footnote = c("T-test statistic and p-value", "T-test statistic and p-value")  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -106,7 +106,7 @@ test_that("expect errors", {
         new_col_name = mean,
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -117,6 +117,6 @@ test_that("expect errors", {
         header = "**Treatment Comparison**",       # column header
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 })

@@ -15,9 +15,7 @@ test_that("expect error with use in tbl_summary() but NO add_p()", {
   table1_without_comp <-
     tbl_summary(mtcars, by = am)
 
-  expect_error(bold_p(table1_without_comp),
-    "*",
-  )
+  expect_error(bold_p(table1_without_comp), NULL)
 })
 
 
@@ -38,9 +36,7 @@ test_that("expect error with q=TRUE and add_q() NOT USED in tbl_summary", {
     tbl_summary(mtcars, by = am) %>%
     add_p()
 
-  expect_error(bold_p(table1_comp_without_q, q = TRUE),
-    "*",
-  )
+  expect_error(bold_p(table1_comp_without_q, q = TRUE), NULL)
 })
 
 

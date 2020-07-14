@@ -11,7 +11,7 @@
 #' @param statistic A string with the statistic name in curly brackets to
 #' be replaced with the numeric statistic (see glue::glue).
 #' The default is `{n}`. If percent argument is `"column"`, `"row"`, or `"cell"`,
-#' default is `{n} ({p}%)`.
+#' default is `"{n} ({p}%)"`.
 #' @param percent Indicates the type of percentage to return.
 #' Must be one of "none", "column", "row", or "cell". Default is "cell" when
 #' `{N}` or `{p}` is used in statistic.

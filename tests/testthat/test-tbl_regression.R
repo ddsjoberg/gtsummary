@@ -68,15 +68,15 @@ test_that("lm with interactions: no errors/warnings with standard use", {
 test_that("tbl_regression creates errors when non-function in input", {
   expect_error(
     tbl_regression(mod_lm_interaction, pvalue_fun = mtcars),
-    "*"
+    NULL
   )
   expect_error(
     tbl_regression(mod_lm_interaction, estimate_fun = mtcars),
-    "*"
+    NULL
   )
   expect_error(
     tbl_regression(mod_lm_interaction, tidy_fun = mtcars),
-    "*"
+    NULL
   )
 })
 
@@ -84,19 +84,19 @@ test_that("tbl_regression creates errors when non-function in input", {
 test_that("tbl_regression creates errors when inputs are wrong", {
   expect_error(
     tbl_regression(mod_lm_interaction, label = "Age"),
-    "*"
+    NULL
   )
   expect_error(
     tbl_regression(mod_lm_interaction, label = list("Age")),
-    "*"
+    NULL
   )
   expect_error(
     tbl_regression(mod_lm_interaction, label = list("age" ~ c("Age", "Two"))),
-    "*"
+    NULL
   )
   expect_error(
     tbl_regression(mod_lm_interaction, include = "INCLUDE ME!"),
-    "*"
+    NULL
   )
 })
 
@@ -108,11 +108,11 @@ test_that("No errors/warnings when data is labelled using Hmisc", {
 test_that("show_single_row errors print", {
   expect_error(
     tbl_regression(mod_lm_interaction, show_single_row = "NOT_A_VA"),
-    "*"
+    NULL
   )
   expect_error(
     tbl_regression(mod_lm_interaction, show_single_row = "grade"),
-    "*"
+    NULL
   )
 })
 

@@ -4,11 +4,11 @@ testthat::skip_on_cran()
 test_that("tbl_cross- throws error if both `col` and `row`` are not specified", {
   expect_error(
     tbl_cross(trial, col = trt),
-    "*"
+    NULL
   )
   expect_error(
     tbl_cross(trial, row = trt),
-    "*"
+    NULL
   )
 })
 
@@ -41,15 +41,15 @@ test_that("tbl_cross- creates output without error with continuous args", {
 test_that("tbl_cross- returns errors with bad inputs", {
   expect_error(
     tbl_cross(tibble::tibble()),
-    "*"
+    NULL
   )
   expect_error(
     tbl_cross(tibble::tibble(t = integer())),
-    "*"
+    NULL
   )
   expect_error(
     tbl_cross(trial, col = THIS_IS_NOT_A_VARIABLE),
-    "*"
+    NULL
   )
 })
 
@@ -97,7 +97,7 @@ test_that("tbl_cross- test 'no' missing throws message", {
                    row = trt,
                    col = response,
                    missing = "no"),
-    "*"
+    NULL
   )
 })
 

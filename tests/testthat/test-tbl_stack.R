@@ -43,13 +43,13 @@ test_that("Stacking tbl_regression objects", {
   # must pass items as list
   expect_error(
     tbl_stack(t1, t2),
-    "*"
+    NULL
   )
 
   # must pass acceptable objects
   expect_error(
     tbl_stack(list(mtcars)),
-    "*"
+    NULL
   )
 })
 
