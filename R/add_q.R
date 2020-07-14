@@ -11,6 +11,7 @@
 #' @inheritParams add_global_p.tbl_regression
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary tools
+#' @family tbl_svysummary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @export

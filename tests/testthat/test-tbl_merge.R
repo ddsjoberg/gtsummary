@@ -94,10 +94,10 @@ test_that("number of rows the same after joining", {
 })
 
 test_that("tbl_merge throws errors", {
-  expect_error(tbl_merge(t1), "*")
-  expect_error(tbl_merge(list(mtcars)), "*")
-  expect_error(tbl_merge(tbls = list(t5)), "*")
-  expect_error(tbl_merge(tbls = list(t5, t6), tab_spanner = c("Table")), "*")
+  expect_error(tbl_merge(t1), NULL)
+  expect_error(tbl_merge(list(mtcars)), NULL)
+  expect_error(tbl_merge(tbls = list(t5)), NULL)
+  expect_error(tbl_merge(tbls = list(t5, t6), tab_spanner = c("Table")), NULL)
 })
 
 test_that("tbl_merge throws errors", {
