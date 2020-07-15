@@ -36,14 +36,25 @@ for (f in gt_functions) {
     function(example_chr) {
       # converting string to object
       example_obj <- eval(parse(text = example_chr))
-      # convert gtsummary object to gt
-      if (inherits(example_obj, "gtsummary")) example_obj <- as_gt(example_obj)
-      # checking object is now a gt object
-      if (!(inherits(example_obj, "gt_tbl"))) return(invisible())
-      # saving image
       usethis::ui_todo("Saving `{example_chr}.png`")
-      gt::gtsave(example_obj,
-                 filename = here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
+
+      # convert gtsummary object to gt
+      if (inherits(example_obj, "gtsummary"))
+        example_obj <- as_gt(example_obj)
+
+      # checking object is now a gt object
+      if (inherits(example_obj, "gt_tbl"))
+        # saving image
+        gt::gtsave(example_obj,
+                   filename = here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
+
+      # saving flextable image
+      if (inherits(example_obj, "flextable"))
+        flextable::save_as_image(example_obj,
+                                 webshot = "webshot2",
+                                 path = here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
+
+      return(invisible())
     }
   )
 
