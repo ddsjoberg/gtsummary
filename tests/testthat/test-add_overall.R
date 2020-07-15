@@ -35,6 +35,7 @@ test_that("add_overall-works with ordered factors", {
       add_overall(),
     NA
   )
+})
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
   t <- trial %>%
