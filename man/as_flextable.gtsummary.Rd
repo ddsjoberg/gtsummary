@@ -35,13 +35,35 @@ A {flextable} object
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-You must load the {flextable} package to use this function, e.g. \code{library(flextable)}.
-Function converts a gtsummary object to a flextable object.
-A user can use this function if they wish to add customized formatting
-available via the flextable functions. The flextable output is particularly
+You must install and load the {flextable} package to use this function,
+e.g. \code{library(flextable)}.
+The function converts a gtsummary object to a flextable object for printing.
+The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
 does not support Word.
 }
+\section{Usage}{
+
+To use this function, you must first install the flextable package with
+\code{install.packages("flextable")}.
+
+After the package is installed, there are two ways to use the function:
+\enumerate{
+\item Attach the flextable package.\if{html}{\out{<div class="r">}}\preformatted{library(flextable)
+
+# create a gtsummary obejct
+tbl_summary(trail) \%>\%
+  # print gtsummary table with the flextable package
+  as_flextable()
+}\if{html}{\out{</div>}}
+\item Use the double colon syntax, \code{flextable::as_flextable()}.\if{html}{\out{<div class="r">}}\preformatted{# create a gtsummary obejct
+tbl_summary(trail) \%>\%
+  # print gtsummary table with the flextable package
+  flextable::as_flextable()
+}\if{html}{\out{</div>}}
+}
+}
+
 \section{Details}{
 
 The \code{as_flextable.gtsummary()} function takes the gtsummary object converts
@@ -62,14 +84,22 @@ it to a flextable and formats the table with the following flextable functions.
 Any one of these commands may be omitted using the \verb{include=} argument.
 
 Pro tip: Use the \code{\link[flextable:width]{flextable::width()}} function for exacting control over
-column width after calling \code{as_flextable()}.
+column width, e.g. \code{as_flextable() \%>\% flextable::width(...)}.
+}
+
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{as_flextable_ex1.png}{options: width=65\%}}
 }
 
 \examples{
 # Load flextable to use as_flextable()
 library(flextable)
 
-trial \%>\%
+as_flextable_ex1 <-
+  trial \%>\%
   select(trt, age, grade) \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
