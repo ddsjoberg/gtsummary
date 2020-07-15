@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix when only categorical summary statistics were requested for continuous variables in `tbl_summary()` and `tbl_svysummary()` (#528)
+
 * Added `tbl_svysummary()` function to summarize complex and weighted survey designs. `tbl_svysummary` is now its own class that works with `add_n()`, `add_p()`,
 `add_q()`, `add_stat_label()`, `inline_text()`, `tbl_merge()` and `tbl_stack()` (#460).
 
