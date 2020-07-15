@@ -272,7 +272,7 @@ survfit_time <- function(x, times, label_header, conf.level, reverse) {
     tidy %>%
     # getting the latest time (not showing estimates after that time)
     group_by(., !!!syms(strata)) %>%
-    mutate(time_max = max(time)) %>%
+    mutate(time_max = max(.data$time)) %>%
     ungroup() %>%
     # adding in timepoints requested by user
     full_join(
@@ -304,7 +304,7 @@ survfit_time <- function(x, times, label_header, conf.level, reverse) {
       col_label = .env$label_header %||% paste0("**", translate_text("Time"), " {time}**") %>% glue() %>% as.character()
     ) %>%
     select(any_of(c("variable", "label", "strata", "col_name", "col_label")),
-           everything(), -time_max)
+           everything(), -.data$time_max)
 
   # converting to reverse probs, if requested
   if (reverse == TRUE) {

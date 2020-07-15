@@ -11,10 +11,10 @@
 #' @author David Hugh-Jones
 assert_package <- function(pkg, fn) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    stop(glue::glue(
-      "The '{pkg}' package is required for '{fn}'.\n",
-      "Install with install.packages('{pkg}')"
-    ), call. = FALSE)
+    usethis::ui_oops("The {usethis::ui_value(pkg)} is required for function {usethis::ui_code(paste0(fn, '()'))}.")
+    usethis::ui_todo("Install the {usethis::ui_value(pkg)} package with the code below.")
+    usethis::ui_code_block('install.packages("{pkg}")')
+    stop()
   }
 }
 
