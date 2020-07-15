@@ -1,146 +1,155 @@
-context("test-tbl_summary")
+context("test-tbl_svysummary")
 testthat::skip_on_cran()
 
-test_that("tbl_summary creates output without error/warning (no by var)", {
+d <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
+data(api, package = "survey")
+dc_light <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc, variables = ~ stype + growth + both)
+
+test_that("tbl_svysummary creates output without error/warning (no by var)", {
   expect_error(
-    purrr::map(list(mtcars, iris), ~ tbl_summary(.x, sort = list(all_categorical() ~ "frequency"))),
+    purrr::map(list(d, dc_light), ~ tbl_svysummary(.x, sort = list(all_categorical() ~ "frequency"))),
     NA
   )
   expect_warning(
-    purrr::map(list(mtcars, iris), ~ tbl_summary(.x)),
+    purrr::map(list(d, dc_light), ~ tbl_svysummary(.x)),
     NA
   )
 })
 
 
-test_that("tbl_summary creates output without error/warning (with by var)", {
+test_that("tbl_svtsummary creates output without error/warning (with by var)", {
+  statistics <- list(
+    all_continuous() ~ "{median} {mean} {sd} {var} {min} {max} {sum} {p25} {p42} {p75} {p89}",
+    all_categorical() ~ "{n} {N} {p} | {n_unweighted} {N_unweighted} {p_unweighted}"
+  )
   expect_error(
-    tbl_summary(mtcars, by = am),
+    tbl_svysummary(dc_light, by = both, statistic = statistics),
     NA
   )
   expect_warning(
-    tbl_summary(mtcars, by = am),
+    tbl_svysummary(dc_light, by = both, statistic = statistics),
     NA
   )
 })
 
-test_that("tbl_summary allows for named list input", {
+test_that("tbl_svysummary allows for named list input", {
   expect_error(
-    tbl_summary(mtcars, by = am, label = list(mpg = "New mpg", cyl = "New cyl")),
+    tbl_svysummary(d, by = Survived, label = list(Class = "New Class", Sex = "New Sex")),
     NA
   )
   expect_warning(
-    tbl_summary(mtcars, by = am, label = list(mpg = "New mpg", cyl = "New cyl")),
+    tbl_svysummary(d, by = Survived, label = list(Class = "New Class", Sex = "New Sex")),
     NA
   )
 })
 
 
-test_that("tbl_summary throws errors/messages with bad 'sort = ' specifications", {
+test_that("tbl_svysummary throws errors/messages with bad 'sort = ' specifications", {
   expect_error(
-    tbl_summary(mtcars, sort = list(all_categorical() ~ c("frequency", "two"))),
+    tbl_svysummary(d, sort = list(all_categorical() ~ c("frequency", "two"))),
     NULL
   )
   expect_error(
-    tbl_summary(mtcars, sort = list(all_categorical() ~ "freq5555uency")),
+    tbl_svysummary(d, sort = list(all_categorical() ~ "freq5555uency")),
     NULL
   )
 })
 
-test_that("tbl_summary value argument works properly", {
+test_that("tbl_svysummary value argument works properly", {
   expect_error(
-    tbl_summary(trial, value = "grade" ~ "III"),
+    tbl_svysummary(d, value = "Class" ~ "1st"),
     NA
   )
 })
 
-test_that("tbl_summary works in character inputs for `by=`", {
-  my_by_variable <- "trt"
+test_that("tbl_svysummary works in character inputs for `by=`", {
+  my_by_variable <- "Survived"
 
   expect_error(
-    tbl_summary(trial, by = my_by_variable),
+    tbl_svysummary(d, by = my_by_variable),
     NA
   )
   expect_error(
-    tbl_summary(trial, by = "trt"),
+    tbl_svysummary(d, by = "Survived"),
     NA
   )
   expect_error(
     purrr::map(
-      c("trt", "grade", "stage"),
-      ~tbl_summary(trial, by = .x)
+      c("Survived", "Class", "Sex", "Age"),
+      ~tbl_svysummary(d, by = .x)
     ),
     NA
   )
 })
 
 
-test_that("tbl_summary returns errors with bad inputs", {
+test_that("tbl_svysummary returns errors with bad inputs", {
   expect_error(
-    tbl_summary(tibble::tibble()),
+    tbl_svysummary(survey::svydesign(ids = ~ 1, data = tibble(), weights = ~ 1)),
     NULL
   )
   expect_error(
-    tbl_summary(tibble::tibble(t = integer())),
+    tbl_svysummary(survey::svydesign(ids = ~ 1, data = tibble(t = integer()), weights = ~ 1)),
     NULL
   )
   expect_error(
-    tbl_summary(list(test = 5)),
+    tbl_svysummary(trial),
     NULL
   )
   expect_error(
-    tbl_summary(trial, by = THIS_IS_NOT_A_VARIABLE),
+    tbl_svysummary(d, by = THIS_IS_NOT_A_VARIABLE),
     NULL
   )
+  d$variables$Survived[5:8] <- NA
   expect_message(
-    tbl_summary(trial, by = response), # should get message about missing data
+    tbl_svysummary(d, by = Survived), # should get message about missing data
     NULL
   )
   expect_error(
-    tbl_summary(trial, type = response),
+    tbl_svysummary(d, type = Survived),
     NULL
   )
   expect_error(
-    tbl_summary(trial, value = "0"),
+    tbl_svysummary(d, value = "0"),
     NULL
   )
   expect_error(
-    tbl_summary(trial, label = "Age"),
+    tbl_svysummary(d, label = "Age"),
     NULL
   )
   expect_error(
-    tbl_summary(trial, statistic = "{mean}"),
+    tbl_svysummary(d, statistic = "{mean}"),
     NULL
   )
   expect_error(
-    tbl_summary(trial, digits = 0),
+    tbl_svysummary(d, digits = 0),
     NULL
   )
   expect_error(
-    tbl_summary(trial, sort = list("grade" ~ "frequ55555ency")),
+    tbl_svysummary(d, sort = list("Class" ~ "frequ55555ency")),
     NULL
   )
   expect_error(
-    tbl_summary(trial, by = c("trt", "grade")),
+    tbl_svysummary(d, by = c("Class", "Survived")),
     NULL
   )
 
   expect_error(
-    tbl_summary(trial, statistic = everything() ~ "{mean}"),
+    tbl_svysummary(d, statistic = everything() ~ "{mean}"),
     NULL
   )
 })
 
 
-test_that("tbl_summary-testing tidyselect parsing", {
+test_that("tbl_svysummary-testing tidyselect parsing", {
   trial2 <- trial
   trial2$`bad trt` <- trial2$trt
   trial2$`bad grade` <- trial2$grade
 
   expect_error(
     big_test <-
-      tbl_summary(
-        data = trial2,
+      tbl_svysummary(
+        data = survey::svydesign(ids = ~1, data = trial2, weights = ~1),
         by = `bad trt`,
         type = vars(response, death) ~ "categorical",
         statistic = list(
@@ -239,7 +248,7 @@ test_that("tbl_summary-testing tidyselect parsing", {
   )
 })
 
-test_that("tbl_summary-order of output columns", {
+test_that("tbl_svysummary-order of output columns", {
   expect_equal(
     trial %>%
       dplyr::mutate(
@@ -253,7 +262,8 @@ test_that("tbl_summary-order of output columns", {
           )
       ) %>%
       select(grade, grade_str) %>%
-      tbl_summary(by = grade_str) %>%
+      survey::svydesign(data = ., ids = ~1, weights =  ~1) %>%
+      tbl_svysummary(by = grade_str) %>%
       purrr::pluck("table_body") %>%
       names() %>% {
         .[startsWith(., "stat_")]
@@ -262,18 +272,19 @@ test_that("tbl_summary-order of output columns", {
   )
 })
 
-test_that("tbl_summary-all_categorical() use with `type=`", {
+test_that("tbl_svysummary-all_categorical() use with `type=`", {
   # no variables should be dichotomous
   expect_true(
     !"dichotomous" %in%
-      (tbl_summary(trial, type = all_dichotomous() ~ "categorical") %>%
+      (survey::svydesign(data = trial, ids = ~ 1, weights = ~ 1) %>%
+         tbl_svysummary(type = all_dichotomous() ~ "categorical") %>%
          purrr::pluck("meta_data") %>%
          dplyr::pull(summary_type))
   )
 })
 
 
-test_that("tbl_summary-difftime does not cause error", {
+test_that("tbl_svysummary-difftime does not cause error", {
 
   expect_error(
     dplyr::storms %>%
@@ -281,14 +292,15 @@ test_that("tbl_summary-difftime does not cause error", {
         date = ISOdate(year, month, day),
         date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
       ) %>%
-      tbl_summary(),
+      survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+      tbl_svysummary(),
     NA
   )
 })
 
 
-test_that("tbl_summary-all missing data does not cause error", {
-  df_missing <-
+test_that("tbl_svysummary-all missing data does not cause error", {
+  design_missing <-
     tibble(
       my_by_var = c(1,1,2,2),
       fct = rep(NA, 4) %>% factor(levels = c("lion", "tiger", "bear")),
@@ -296,21 +308,22 @@ test_that("tbl_summary-all missing data does not cause error", {
       chr = NA_character_,
       int = NA_integer_,
       dbl = NA_real_
-    )
+    ) %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1)
 
   expect_error(
-    all_missing_no_by <- tbl_summary(df_missing %>% select(-my_by_var)),
+    all_missing_no_by <- tbl_svysummary(design_missing, include = -my_by_var),
     NA
   )
 
   expect_error(
-    all_missing_by <- tbl_summary(df_missing, by = my_by_var),
+    all_missing_by <- tbl_svysummary(design_missing, by = my_by_var),
     NA
   )
 
   # making categorical, variables that cannot be summarized as categorical
   expect_error(
-    tbl_summary(df_missing, by = my_by_var, type = vars(int, dbl) ~ "categorical"),
+    tbl_svysummary(design_missing, by = my_by_var, type = vars(int, dbl) ~ "categorical"),
     NA
   )
 
@@ -362,7 +375,8 @@ test_that("tbl_summary-all missing data does not cause error", {
       trial %>%
       mutate(response2 = factor(response) %>% forcats::fct_explicit_na()) %>%
       filter(!is.na(response)) %>%
-      tbl_summary(by = response2),
+      survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+      tbl_svysummary(by = response2),
     NA
   )
 
@@ -373,42 +387,40 @@ test_that("tbl_summary-all missing data does not cause error", {
 })
 
 
-test_that("tbl_summary-no error when *data frame* with single column passed", {
+test_that("tbl_svysummary-no error when *data* with single column passed", {
   expect_error(
     trial["trt"] %>%
       as.data.frame() %>%
-      tbl_summary(label = trt ~ "TREATMENT GROUP"),
+      survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
+      tbl_svysummary(label = trt ~ "TREATMENT GROUP"),
     NA
   )
 })
 
-
-test_that("tbl_summary-no error when by variable is ordered factor", {
+test_that("tbl_svysummary-no error when by variable is ordered factor", {
   expect_error(
     trial %>%
       dplyr::mutate(grade = as.ordered(grade)) %>%
-      tbl_summary(by=grade),
+      survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
+      tbl_svysummary(by = grade),
     NA
   )
 })
 
-test_that("tbl_summary- works with grouped data (it ungroups it first)", {
-  expect_error(
-    trial %>% dplyr::group_by(response) %>%
-      dplyr::select(response, death, trt) %>%
-      tbl_summary(by = trt),
-    NA
-  )
-})
+test_that("tbl_svysummary-provides similar results than tbl_summary for simple weights", {
+  t1 <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~ Freq) %>%
+    tbl_svysummary()
+  t2 <- as.data.frame(Titanic) %>%
+    tidyr::uncount(Freq) %>%
+    tbl_summary()
+  expect_equal(t1$table_body, t2$table_body)
+  expect_equal(t1$table_header, t2$table_header)
 
-test_that("tbl_summary-works with ordered factors", {
-  expect_error(
-    trial %>%
-      select(response, trt) %>%
-      dplyr::mutate_at(vars(response, trt),
-                       ~factor(., ordered = TRUE)) %>%
-      tbl_summary(by = trt),
-    NA
-  )
+  statistic <- list(all_continuous() ~ "{mean}", all_categorical() ~ "{n} ({p}%)")
+  t1 <- survey::svydesign(~1, data = trial, weights = ~ 1) %>%
+    tbl_svysummary(by = trt, statistic = statistic)
+  t2 <- trial %>%
+    tbl_summary(by = trt, statistic = statistic)
+  expect_equal(t1$table_body, t2$table_body)
+  expect_equal(t1$table_header, t2$table_header)
 })
-

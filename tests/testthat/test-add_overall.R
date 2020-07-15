@@ -35,4 +35,23 @@ test_that("add_overall-works with ordered factors", {
       add_overall(),
     NA
   )
+
+test_that("no errors/warnings with standard use for tbl_svysummary", {
+  t <- trial %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    tbl_svysummary(by = trt)
+
+  expect_error(t %>% add_overall(), NA)
+  expect_warning(t %>% add_overall(), NA)
+
+  expect_error(t %>% add_overall(last = TRUE), NA)
+  expect_warning(t %>% add_overall(last = TRUE), NA)
+
+  t <- Titanic %>%
+    as.data.frame() %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+    tbl_svysummary(by = Survived)
+
+  expect_error(t %>% add_overall(), NA)
+  expect_warning(t %>% add_overall(), NA)
 })

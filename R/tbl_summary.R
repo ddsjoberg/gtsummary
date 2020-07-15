@@ -233,20 +233,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs <- as.list(environment())
 
   # removing variables with unsupported variable types from data ---------------
-  data <- select(data, !!include)
   classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
-  var_to_remove <-
-    map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
-    discard(. == TRUE) %>%
-    names()
-  data <- select(data, -var_to_remove)
-  if (length(var_to_remove) > 0) {
-    message(glue(
-      "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",
-      "omitted from output.\n",
-      "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
-    ))
-  }
+  data <- removing_variables_with_unsupported_types(data, include, classes_expected)
 
   # checking function inputs ---------------------------------------------------
   tbl_summary_input_checks(
@@ -254,69 +242,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     digits, missing, missing_text, sort
   )
 
-  # converting tidyselect formula lists to named lists -------------------------
-  value <- tidyselect_to_list(data, value, arg_name = "value")
-
-  # creating a table with meta data about each variable ------------------------
-  meta_data <- tibble(
-    variable = names(data),
-    # assigning class, if entire var is NA, then assigning class NA
-    class = assign_class(data, .data$variable, classes_expected),
-    # assigning our best guess of the type, the final type is assigned below
-    # we make a guess first, so users may use the gtsummary tidyselect functions for type
-    summary_type = assign_summary_type(
-      data = data, variable = .data$variable, class = .data$class,
-      summary_type = NULL, value = value
-    )
-  )
-  # excluding by variable
-  if (!is.null(by)) meta_data <- filter(meta_data, .data$variable != by)
-
-  # updating type --------------------------------------------------------------
-  # updating type of user supplied one
-  if (!is.null(type)) {
-    # converting tidyselect formula lists to named lists
-    type <- tidyselect_to_list(data, type, .meta_data = meta_data, arg_name = "type")
-
-    # updating meta data object with new types
-    meta_data <-
-      meta_data %>%
-      mutate(
-        summary_type = assign_summary_type(
-          data = data, variable = .data$variable, class = .data$class,
-          summary_type = type, value = value
-        )
-      )
-  }
-
-  # converting tidyselect formula lists to named lists -------------------------
-  label <- tidyselect_to_list(data, label, .meta_data = meta_data, arg_name = "label")
-  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, arg_name = "statistic")
-  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, arg_name = "digits")
-  sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
-
-  # assigning variable characteristics -----------------------------------------
-  meta_data <-
-    meta_data %>%
-    mutate(
-      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
-      var_label = assign_var_label(data, .data$variable, label),
-      stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
-      stat_label = stat_label_match(.data$stat_display),
-      digits = continuous_digits_guess(
-        data, .data$variable, .data$summary_type, .data$class, digits
-      ),
-      sort = assign_sort(.data$variable, .data$summary_type, sort),
-      df_stats = pmap(
-        list(.data$summary_type, .data$variable,
-             .data$class, .data$dichotomous_value,
-             .data$sort, .data$stat_display, .data$digits),
-        ~ df_stats_fun(summary_type = ..1, variable = ..2,
-                       class = ..3, dichotomous_value = ..4,
-                       sort = ..5, stat_display = ..6, digits = ..7,
-                       data = data, by = by, percent = percent)
-      )
-    )
+  # generate meta_data --------------------------------------------------------
+  meta_data <- generate_metadata(data, value, by, classes_expected, type, label, statistic, digits, percent, sort)
 
   # calculating summary statistics ---------------------------------------------
   table_body <-
@@ -381,4 +308,103 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   }
 
   return(results)
+}
+
+
+# removing variables with unsupported variable types from data -------------------------
+removing_variables_with_unsupported_types <- function(data, include, classes_expected) {
+  data <- select(data, !!include)
+  var_to_remove <-
+    map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
+    discard(. == TRUE) %>%
+    names()
+  data <- select(data, -var_to_remove)
+  if (length(var_to_remove) > 0) {
+    message(glue(
+      "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",
+      "omitted from output.\n",
+      "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
+    ))
+  }
+  data
+}
+
+
+# generate metadata table --------------------------------------------------------------
+# for survey objects pass the full survey object to `survey` argument, and `design$variables` to `data` argument
+generate_metadata <- function(data, value, by, classes_expected, type, label, statistic, digits, percent, sort, survey = NULL) {
+  # converting tidyselect formula lists to named lists -------------------------
+  value <- tidyselect_to_list(data, value, arg_name = "value")
+
+  # creating a table with meta data about each variable ------------------------
+  meta_data <- tibble(
+    variable = names(data),
+    # assigning class, if entire var is NA, then assigning class NA
+    class = assign_class(data, .data$variable, classes_expected),
+    # assigning our best guess of the type, the final type is assigned below
+    # we make a guess first, so users may use the gtsummary tidyselect functions for type
+    summary_type = assign_summary_type(
+      data = data, variable = .data$variable, class = .data$class,
+      summary_type = NULL, value = value
+    )
+  )
+  # excluding by variable
+  if (!is.null(by)) meta_data <- filter(meta_data, .data$variable != by)
+
+  # updating type --------------------------------------------------------------
+  # updating type of user supplied one
+  if (!is.null(type)) {
+    # converting tidyselect formula lists to named lists
+    type <- tidyselect_to_list(data, type, .meta_data = meta_data, arg_name = "type")
+
+    # updating meta data object with new types
+    meta_data <-
+      meta_data %>%
+      mutate(
+        summary_type = assign_summary_type(
+          data = data, variable = .data$variable, class = .data$class,
+          summary_type = type, value = value
+        )
+      )
+  }
+
+  # converting tidyselect formula lists to named lists -------------------------
+  label <- tidyselect_to_list(data, label, .meta_data = meta_data, arg_name = "label")
+  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, arg_name = "statistic")
+  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, arg_name = "digits")
+  sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
+
+  # assigning variable characteristics -----------------------------------------
+  if (is.null(survey)) {
+    df_stats_function <- df_stats_fun
+    data_for_df_stats <- data
+  } else {
+    df_stats_function <- df_stats_fun_survey
+    data_for_df_stats <- survey
+  }
+
+
+  meta_data <-
+    meta_data %>%
+    mutate(
+      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
+      var_label = assign_var_label(data, .data$variable, label),
+      stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
+      stat_label = stat_label_match(.data$stat_display),
+      digits = continuous_digits_guess(
+        data, .data$variable, .data$summary_type, .data$class, digits
+      ),
+      sort = assign_sort(.data$variable, .data$summary_type, sort),
+      df_stats = pmap(
+        list(.data$summary_type, .data$variable,
+             .data$class, .data$dichotomous_value,
+             .data$sort, .data$stat_display, .data$digits),
+        ~ df_stats_function(summary_type = ..1, variable = ..2,
+                            class = ..3, dichotomous_value = ..4,
+                            sort = ..5, stat_display = ..6, digits = ..7,
+                            data = data_for_df_stats, by = by, percent = percent)
+      )
+    )
+
+  meta_data
 }
