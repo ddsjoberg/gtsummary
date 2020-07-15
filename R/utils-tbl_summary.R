@@ -337,23 +337,42 @@ continuous_digits_guess_one <- function(data,
 df_by <- function(data, by) {
   if (is.null(by)) return(NULL)
 
-  if (inherits(data[[by]], "factor"))
-    result <- tibble(by = attr(data[[by]], "levels") %>%
-                       factor(x = ., levels= ., labels = .))
-  else result <- data %>% select(by) %>% dplyr::distinct() %>% set_names("by")
+  if (!is_survey(data)) {
+    # classic data.frame
+    if (inherits(data[[by]], "factor"))
+      result <- tibble(by = attr(data[[by]], "levels") %>%
+                         factor(x = ., levels= ., labels = .))
+    else result <- data %>% select(by) %>% dplyr::distinct() %>% set_names("by")
 
-  result <-
-    result %>%
-    arrange(!!sym("by")) %>%
-    mutate(
-      n = purrr::map_int(.data$by, ~ sum(data[[!!by]] == .x)),
-      N = sum(.data$n),
-      p = .data$n / .data$N,
-      by_id = 1:n(), # 'by' variable ID
-      by_chr = as.character(.data$by), # Character version of 'by' variable
-      by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
-    ) %>%
-    select(starts_with("by"), everything())
+    result <-
+      result %>%
+      arrange(!!sym("by")) %>%
+      mutate(
+        n = purrr::map_int(.data$by, ~ sum(data[[!!by]] == .x)),
+        N = sum(.data$n),
+        p = .data$n / .data$N,
+        by_id = 1:n(), # 'by' variable ID
+        by_chr = as.character(.data$by), # Character version of 'by' variable
+        by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
+      ) %>%
+      select(starts_with("by"), everything())
+
+  } else {
+    # survey object
+    svy_table <- survey::svytable(c_form(right = by), data, round = TRUE) %>%
+      as_tibble() %>%
+      set_names("by", "n") %>%
+      mutate(
+        N = sum(.data$n),
+        p = .data$n / .data$N
+      )
+
+    result <- df_by(data$variables, by) %>%
+      rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p) %>%
+      left_join(svy_table, by = "by")
+
+    result
+  }
 
   attr(result$by, "label") <- NULL
   result
@@ -533,7 +552,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
       }
     }
 
-    # all sepcifed statistics must be a string of length 1
+    # all specified statistics must be a string of length 1
     if (inherits(statistic, "formula")) statistic <- list(statistic)
     if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
       stop(glue(
@@ -831,18 +850,12 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
   # when variable has label.  So deleting it.
   attr(data[[variable]], "label") <- NULL
   if (!is.null(by)) attr(data[[by]], "label") <- NULL
-  # same thing when the class "labelled" is included when labeled with the Hmisc package
+  # same thing when the class "labelled" is included when labelled with the Hmisc package
   class(data[[variable]]) <- setdiff(class(data[[variable]]), "labelled")
   if (!is.null(by)) class(data[[by]]) <- setdiff(class(data[[by]]), "labelled")
 
   # extracting function calls
-  fns_names_chr <-
-    str_extract_all(stat_display, "\\{.*?\\}") %>%
-    map(str_remove_all, pattern = fixed("}")) %>%
-    map(str_remove_all, pattern = fixed("{")) %>%
-    unlist() %>%
-    # removing elements protected as other items
-    setdiff(c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs"))
+  fns_names_chr <- extracting_function_calls_from_stat_display(stat_display, variable)
 
   # defining shortcut quantile functions, if needed
   if (any(fns_names_chr %in% paste0("p", 0:100))) {
@@ -853,17 +866,6 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
         probs = as.numeric(stringr::str_replace(.x, pattern = "^p", "")) / 100
       )) %>%
       list2env(envir = rlang::env_parent())
-  }
-
-  if (length(fns_names_chr) == 0) stop(glue(
-    "No summary function found in `{stat_display}` for variable '{variable}'.\n",
-    "Did you wrap the function name in curly brackets?"
-  ), call. = FALSE)
-
-  if (any(c("by", "variable") %in% fns_names_chr)) {
-    stop(paste(
-      "'by' and 'variable' are protected names, and continuous variables",
-      "cannot be summarized with functions by the these name."), call. = FALSE)
   }
 
   # prepping data set
@@ -912,6 +914,37 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
   }
 
   # adding formatting function as attr to summary statistics columns
+  df_stats <- adding_formatting_as_attr(df_stats, digits, fns_names_chr)
+
+  # returning final object
+  df_stats
+}
+
+# extracting_function_calls_from_stat_display ---------------------
+extracting_function_calls_from_stat_display <- function(stat_display, variable) {
+  fns_names_chr <- str_extract_all(stat_display, "\\{.*?\\}") %>%
+    map(str_remove_all, pattern = fixed("}")) %>%
+    map(str_remove_all, pattern = fixed("{")) %>%
+    unlist() %>%
+    # removing elements protected as other items
+    setdiff(c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs"))
+
+  if (length(fns_names_chr) == 0) stop(glue(
+    "No summary function found in `{stat_display}` for variable '{variable}'.\n",
+    "Did you wrap the function name in curly brackets?"
+  ), call. = FALSE)
+
+  if (any(c("by", "variable") %in% fns_names_chr)) {
+    stop(paste(
+      "'by' and 'variable' are protected names, and continuous variables",
+      "cannot be summarized with functions by the these name."), call. = FALSE)
+  }
+
+  fns_names_chr
+}
+
+# adding_formatting_as_attr ----------------------------------------------------
+adding_formatting_as_attr <- function(df_stats, digits, fns_names_chr) {
   fmt_fun <- as.list(rep(digits, length.out = length(fns_names_chr))) %>%
     set_names(fns_names_chr)
 
@@ -925,13 +958,16 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
     }
   )
 
-  # returning final object
   df_stats
 }
 
 # df_stats_to_tbl --------------------------------------------------------------
 df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_display,
                             df_stats, missing, missing_text) {
+  if (is_survey(data))
+    calculate_missing_fun <- calculate_missing_row_survey
+  else
+    calculate_missing_fun <- calculate_missing_row
 
   # styling the statistics -----------------------------------------------------
   for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels")))) {
@@ -1004,11 +1040,11 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
   }
 
   # add rows for missing -------------------------------------------------------
-  if (missing == "always" || (missing == "ifany" & sum(is.na(data[[variable]])) > 0)) {
+  if (missing == "always" || (missing == "ifany" & has_na(data, variable))) {
     result <-
       result %>%
       bind_rows(
-        calculate_missing_row(data = data, variable = variable,
+        calculate_missing_fun(data = data, variable = variable,
                               by = by, missing_text = missing_text)
       )
   }
@@ -1069,7 +1105,7 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
                               variable = variable,
                               by = by, class = "logical",
                               dichotomous_value = TRUE,
-                              sort = "alphanumeric", percent = percent) %>%
+                              sort = "alphanumeric", percent = "column") %>%
     rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
     mutate(N_nonmiss = .data$N_obs - .data$N_miss,
            p_nonmiss = 1 - .data$p_miss)
@@ -1095,3 +1131,13 @@ translate_text <- function(x, language = get_theme_element("pkgwide-str:language
   # if no rows selected OR translation is not provided return x, otherwise the translated text
   ifelse(nrow(df_text) != 1 || is.na(df_text[[language]]), x, df_text[[language]])
 }
+
+# test if a variable has some NA -------------------------------------
+has_na <- function(data, variable) {
+  if (is_survey(data)) {
+    sum(is.na(data$variables[[variable]])) > 0
+  } else {
+    sum(is.na(data[[variable]])) > 0
+  }
+}
+

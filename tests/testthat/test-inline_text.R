@@ -69,16 +69,16 @@ test_that("inline_text.tbl_summary: with by", {
 test_that("inline_text.tbl_summary: with by -  expect errors", {
   expect_error(
     inline_text(test_inline2, variable = "age", column = "Pla5cebo"),
-    "*"
+    NULL
   )
   expect_error(
     inline_text(test_inline2, variable = "stage", level = "Tsdfgsdfg1", column = "Drug B"),
-    "*"
+    NULL
   )
 
   expect_error(
     inline_text(test_inline2, variable = "st55age", level = "T1", column = "Drug B"),
-    "*"
+    NULL
   )
 })
 
@@ -123,12 +123,12 @@ test_that("inline_text.regression", {
 test_that("inline_text.regression -  expect errors", {
   expect_error(
     inline_text(test_inline3, variable = "stage", level = "Tsdfgsdfg1"),
-    "*"
+    NULL
   )
 
   expect_error(
     inline_text(test_inline3, variable = "st55age"),
-    "*"
+    NULL
   )
 })
 
@@ -268,18 +268,112 @@ test_that("inline_text.tbl_cross- expect error args aren't present", {
 
   expect_error(
     inline_text(tbl_cross, row_level = "Drug A"),
-    "*"
+    NULL
   )
   expect_error(
     inline_text(tbl_cross, col_level = "0"),
-    "*"
+    NULL
   )
 
-    expect_error(
-      inline_text(tbl_cross),
-      "*"
+  expect_error(
+    inline_text(tbl_cross),
+    NULL
   )
 })
 
 
+# inline_text.tbl_svysummary tests --------------
+test_inline1 <- trial %>%
+  survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+  tbl_svysummary()
+test_inline2 <- trial %>%
+  survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+  tbl_svysummary(by = trt)
+test_inline2b <- trial %>%
+  survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+  tbl_svysummary(by = trt) %>%
+  add_p()
 
+test_that("inline_text.tbl_svysummary: no by", {
+  expect_error(
+    inline_text(test_inline1, variable = "age"),
+    NA
+  )
+  expect_warning(
+    inline_text(test_inline1, variable = "age"),
+    NA
+  )
+  expect_error(
+    inline_text(test_inline1, variable = "stage", level = "T1"),
+    NA
+  )
+  expect_warning(
+    inline_text(test_inline1, variable = "stage", level = "T1"),
+    NA
+  )
+
+  expect_equal(
+    inline_text(test_inline1, variable = "stage", level = "T1", pattern = "{p}%"),
+    "26%"
+  )
+  expect_equal(
+    inline_text(test_inline1, variable = "age", pattern = "The median is {median}"),
+    "The median is 47"
+  )
+})
+
+test_that("inline_text.tbl_svysummary: with by", {
+  expect_error(
+    inline_text(test_inline2, variable = "age", column = "Drug B"),
+    NA
+  )
+  expect_warning(
+    inline_text(test_inline2, variable = "age", column = "Drug B"),
+    NA
+  )
+  expect_error(
+    inline_text(test_inline2, variable = "stage", level = "T1", column = "Drug B"),
+    NA
+  )
+  expect_warning(
+    inline_text(test_inline2, variable = "stage", level = "T1", column = "Drug B"),
+    NA
+  )
+  expect_error(
+    inline_text(test_inline2b, variable = "stage", column = "p.value"),
+    NA
+  )
+  expect_warning(
+    inline_text(test_inline2b, variable = "stage", column = "p.value"),
+    NA
+  )
+})
+
+
+test_that("inline_text.tbl_svysummary: with by -  expect errors", {
+  expect_error(
+    inline_text(test_inline2, variable = "age", column = "Pla5cebo"),
+    NULL
+  )
+  expect_error(
+    inline_text(test_inline2, variable = "stage", level = "Tsdfgsdfg1", column = "Drug B"),
+    NULL
+  )
+
+  expect_error(
+    inline_text(test_inline2, variable = "st55age", level = "T1", column = "Drug B"),
+    NULL
+  )
+})
+
+test_that("inline_text.tbl_svysummary: no errors with empty string selection", {
+  expect_error(
+    trial %>%
+      select(grade) %>%
+      mutate(grade = ifelse(grade == "I", "", as.character(grade))) %>%
+      survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+      tbl_svysummary() %>%
+      inline_text(variable = grade, level = "III"),
+    NA
+  )
+})
