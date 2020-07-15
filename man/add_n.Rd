@@ -14,7 +14,8 @@ add_n(
 )
 }
 \arguments{
-\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
+\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function or
+with class \code{tbl_svysummary} from the \link{tbl_svysummary} function}
 
 \item{statistic}{String indicating the statistic to report. Default is the
 number of non-missing observation for each variable, \code{statistic = "{n}"}.
@@ -41,7 +42,7 @@ Default is \code{FALSE}, which will display N column first.}
 (\code{missing = FALSE}), or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 }
 \value{
-A \code{tbl_summary} object
+A \code{tbl_summary} or \code{tbl_svysummary} object
 }
 \description{
 For each variable in a \code{tbl_summary} table, the \code{add_n} function adds a column with the
@@ -71,8 +72,18 @@ Other tbl_summary tools:
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
+
+Other tbl_svysummary tools: 
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_svysummary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_svysummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_summary tools}
+\concept{tbl_svysummary tools}

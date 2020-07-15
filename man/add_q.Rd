@@ -72,6 +72,15 @@ Other tbl_summary tools:
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
 
+Other tbl_svysummary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_svysummary}()},
+\code{\link{add_stat_label}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_svysummary}()}
+
 Other tbl_regression tools: 
 \code{\link{add_global_p.tbl_regression}()},
 \code{\link{add_nevent.tbl_regression}()},
@@ -98,4 +107,5 @@ Esther Drill, Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
 \concept{tbl_summary tools}
+\concept{tbl_svysummary tools}
 \concept{tbl_uvregression tools}

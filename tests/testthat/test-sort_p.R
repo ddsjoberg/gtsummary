@@ -41,7 +41,7 @@ test_that("expect error if no p value in table 1", {
 
   expect_error(
     sort_p(table1),
-    "*"
+    NULL
   )
 })
 
@@ -52,6 +52,6 @@ test_that("expect error if q = TRUE and no q values in table 1", {
 
   expect_error(
     sort_p(table1, q = TRUE),
-    "*"
+    NULL
   )
 })

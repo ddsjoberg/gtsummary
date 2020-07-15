@@ -8,7 +8,7 @@ gt_functions <-
   purrr::keep(~stringr::str_ends(., stringr::fixed(".Rd"))) %>%
   stringr::str_remove(".Rd")
 
-# create temp gtsummary firectory (example scripts will be saved here)
+# create temp gtsummary directory (example scripts will be saved here)
 path_gtsummary <- file.path(tempdir(), "gtsummary")
 fs::dir_create(path_gtsummary)
 unlink(path_gtsummary) # just in case it already existed with files in folder
