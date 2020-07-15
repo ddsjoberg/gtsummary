@@ -34,21 +34,21 @@ test_that("error when non-gtsummary object passed", {
   expect_error(
     mtcars %>%
       bold_labels(),
-    "*"
+    NULL
   )
   expect_error(
     mtcars %>%
       bold_levels(),
-    "*"
+    NULL
   )
   expect_error(
     mtcars %>%
       italicize_labels(),
-    "*"
+    NULL
   )
   expect_error(
     mtcars %>%
       italicize_levels(),
-    "*"
+    NULL
   )
 })

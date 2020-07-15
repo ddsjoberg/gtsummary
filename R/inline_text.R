@@ -148,6 +148,10 @@ inline_text.tbl_summary <-
   }
 
 
+#' @name inline_text.tbl_summary
+#' @export
+inline_text.tbl_svysummary <- inline_text.tbl_summary
+
 #' Report statistics from regression summary tables inline
 #'
 #' Takes an object with class `tbl_regression`, and the

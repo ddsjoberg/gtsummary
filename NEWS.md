@@ -1,5 +1,14 @@
 # gtsummary (development version)
 
+* Added `tbl_svysummary()` function to summarize complex and weighted survey designs. `tbl_svysummary` is now its own class that works with `add_n()`, `add_p()`,
+`add_q()`, `add_stat_label()`, `inline_text()`, `tbl_merge()` and `tbl_stack()` (#460).
+
+* `add_overall()` has now become a method function, and `add_overall.tbl_summary` and `add_overall.tbl_svysummary` added (#460).
+
+* `add_n()` to allow for the use of the theme element that styles the integers throughout the package.
+
+* Added support for competing risk cumulative incidence estimates to `tbl_survfit()` (#64, #448) 
+
 * Added `type =` argument to `add_global_p()`, and added `include =` and `keep =` arguments to `add_global_p.tbl_uvregression()` (#554)
 
 * Added `show_header_names()` function (#539)

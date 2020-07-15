@@ -17,11 +17,11 @@ test_that("input checks", {
 
   expect_error(
     tbl_summary_noby %>% modify_header(not_a_col = "test"),
-    "*"
+    NULL
   )
 
   expect_error(
     tbl_summary_noby %>% modify_header(label = c("test", "test2")),
-    "*"
+    NULL
   )
 })
