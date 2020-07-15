@@ -46,7 +46,7 @@ test_that("add_p creates output without error/warning", {
   expect_message(
     tbl_summary(trial, by = trt) %>%
       add_p(test = everything() ~ "lme4", group = response),
-    "*"
+    NULL
   )
 })
 
@@ -54,13 +54,13 @@ test_that("add_p creates errors with bad args", {
   expect_error(
     tbl_summary(mtcars, by = am) %>%
       add_p(pvalue_fun = mtcars),
-    "*"
+    NULL
   )
 
   expect_error(
     tbl_summary(trial, by = grade, include = -response) %>%
       add_p(group = response),
-    "*"
+    NULL
   )
 })
 

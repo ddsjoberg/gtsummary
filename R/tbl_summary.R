@@ -233,8 +233,87 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs <- as.list(environment())
 
   # removing variables with unsupported variable types from data ---------------
-  data <- select(data, !!include)
   classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
+  data <- removing_variables_with_unsupported_types(data, include, classes_expected)
+
+  # checking function inputs ---------------------------------------------------
+  tbl_summary_input_checks(
+    data, by, label, type, value, statistic,
+    digits, missing, missing_text, sort
+  )
+
+  # generate meta_data --------------------------------------------------------
+  meta_data <- generate_metadata(data, value, by, classes_expected, type, label, statistic, digits, percent, sort)
+
+  # calculating summary statistics ---------------------------------------------
+  table_body <-
+    meta_data %>%
+    mutate(
+      tbl_stats = pmap(
+        list(.data$summary_type, .data$variable,
+             .data$var_label, .data$stat_display, .data$df_stats),
+        function(summary_type, variable, var_label, stat_display, df_stats) {
+          df_stats_to_tbl(
+            data = data, variable = variable, summary_type = summary_type, by = by,
+            var_label = var_label, stat_display = stat_display,
+            df_stats = df_stats, missing = missing, missing_text = missing_text
+          )
+        }
+      )
+    ) %>%
+    pull(.data$tbl_stats) %>%
+    purrr::reduce(bind_rows)
+
+  # table of column headers ----------------------------------------------------
+  table_header <-
+    tibble(column = names(table_body)) %>%
+    table_header_fill_missing() %>%
+    mutate(
+      # adding footnote of statistics on display (unless theme indicates a no print)
+      footnote = ifelse(
+        startsWith(.data$column, "stat_"),
+        footnote_stat_label(meta_data),
+        .data$footnote
+      )
+    )
+
+  # returning all results in a list --------------------------------------------
+  results <- list(
+    table_body = table_body,
+    table_header = table_header,
+    meta_data = meta_data,
+    inputs = tbl_summary_inputs,
+    N = nrow(data),
+    call_list = list(tbl_summary = match.call())
+  )
+  results$by <- by
+  results$df_by <- df_by(data, by)
+
+  # assigning a class of tbl_summary (for special printing in Rmarkdown)
+  class(results) <- c("tbl_summary", "gtsummary")
+
+  # adding headers
+  if (is.null(by)) {
+    results <- modify_header_internal(
+      results,
+      stat_0 = "**N = {N}**",
+      label = paste0("**", translate_text("Characteristic"), "**")
+    )
+  } else {
+    results <- modify_header_internal(
+      results,
+      stat_by = "**{level}**, N = {n}",
+      label = paste0("**", translate_text("Characteristic"), "**")
+    )
+  }
+
+  return(results)
+}
+
+
+# removing variables with unsupported variable types from data -------------------------
+removing_variables_with_unsupported_types <- function(data, include, classes_expected) {
+  data <- select(data, !!include)
   var_to_remove <-
     map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
     discard(. == TRUE) %>%
@@ -247,13 +326,13 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
     ))
   }
+  data
+}
 
-  # checking function inputs ---------------------------------------------------
-  tbl_summary_input_checks(
-    data, by, label, type, value, statistic,
-    digits, missing, missing_text, sort
-  )
 
+# generate metadata table --------------------------------------------------------------
+# for survey objects pass the full survey object to `survey` argument, and `design$variables` to `data` argument
+generate_metadata <- function(data, value, by, classes_expected, type, label, statistic, digits, percent, sort, survey = NULL) {
   # converting tidyselect formula lists to named lists -------------------------
   value <- tidyselect_to_list(data, value, arg_name = "value")
 
@@ -296,6 +375,15 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
 
   # assigning variable characteristics -----------------------------------------
+  if (is.null(survey)) {
+    df_stats_function <- df_stats_fun
+    data_for_df_stats <- data
+  } else {
+    df_stats_function <- df_stats_fun_survey
+    data_for_df_stats <- survey
+  }
+
+
   meta_data <-
     meta_data %>%
     mutate(
@@ -311,42 +399,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
         list(.data$summary_type, .data$variable,
              .data$class, .data$dichotomous_value,
              .data$sort, .data$stat_display, .data$digits),
-        ~ df_stats_fun(summary_type = ..1, variable = ..2,
-                       class = ..3, dichotomous_value = ..4,
-                       sort = ..5, stat_display = ..6, digits = ..7,
-                       data = data, by = by, percent = percent)
-      )
-    )
-
-  # calculating summary statistics ---------------------------------------------
-  table_body <-
-    meta_data %>%
-    mutate(
-      tbl_stats = pmap(
-        list(.data$summary_type, .data$variable,
-             .data$var_label, .data$stat_display, .data$df_stats),
-        function(summary_type, variable, var_label, stat_display, df_stats) {
-          df_stats_to_tbl(
-            data = data, variable = variable, summary_type = summary_type, by = by,
-            var_label = var_label, stat_display = stat_display,
-            df_stats = df_stats, missing = missing, missing_text = missing_text
-          )
-        }
-      )
-    ) %>%
-    pull(.data$tbl_stats) %>%
-    purrr::reduce(bind_rows)
-
-  # table of column headers ----------------------------------------------------
-  table_header <-
-    tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    mutate(
-      # adding footnote of statistics on display (unless theme indicates a no print)
-      footnote = ifelse(
-        startsWith(.data$column, "stat_"),
-        footnote_stat_label(meta_data),
-        .data$footnote
+        ~ df_stats_function(summary_type = ..1, variable = ..2,
+                            class = ..3, dichotomous_value = ..4,
+                            sort = ..5, stat_display = ..6, digits = ..7,
+                            data = data_for_df_stats, by = by, percent = percent)
       )
     )
 
