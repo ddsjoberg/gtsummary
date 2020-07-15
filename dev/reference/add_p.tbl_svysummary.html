@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Merge two or more gtsummary objects — tbl_merge • gtsummary</title>
+<title>Adds p-values to svysummary tables — add_p.tbl_svysummary • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,8 @@
 
 
 
-<meta property="og:title" content="Merge two or more gtsummary objects — tbl_merge" />
-<meta property="og:description" content="Merges two or more tbl_regression, tbl_uvregression, tbl_stack,
-tbl_summary, or tbl_svysummary objects and adds appropriate spanning headers." />
+<meta property="og:title" content="Adds p-values to svysummary tables — add_p.tbl_svysummary" />
+<meta property="og:description" content="Adds p-values to tables created by tbl_svysummary by comparing values across groups." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -169,123 +168,116 @@ tbl_summary, or tbl_svysummary objects and adds appropriate spanning headers." /
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Merge two or more gtsummary objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_merge.R'><code>R/tbl_merge.R</code></a></small>
-    <div class="hidden name"><code>tbl_merge.Rd</code></div>
+    <h1>Adds p-values to svysummary tables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_p.R'><code>R/add_p.R</code></a></small>
+    <div class="hidden name"><code>add_p.tbl_svysummary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Merges two or more <code>tbl_regression</code>, <code>tbl_uvregression</code>, <code>tbl_stack</code>,
-<code>tbl_summary</code>, or <code>tbl_svysummary</code> objects and adds appropriate spanning headers.</p>
+    <p>Adds p-values to tables created by <code>tbl_svysummary</code> by comparing values across groups.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_merge</span>(<span class='no'>tbls</span>, <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_svysummary</span>
+<span class='fu'><a href='add_p.html'>add_p</a></span>(<span class='no'>x</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='everything.html'>everything</a></span>(), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tbls</th>
-      <td><p>List of gtsummary objects to merge</p></td>
+      <th>x</th>
+      <td><p>Object with class <code>tbl_svysummary</code> from the <a href='tbl_svysummary.html'>tbl_svysummary</a> function</p></td>
     </tr>
     <tr>
-      <th>tab_spanner</th>
-      <td><p>Character vector specifying the spanning headers.
-Must be the same length as <code>tbls</code>. The
-strings are interpreted with <code><a href='https://rdrr.io/pkg/gt/man/md.html'>gt::md</a></code>.
-Must be same length as <code>tbls</code> argument</p></td>
+      <th>test</th>
+      <td><p>List of formulas specifying statistical tests to perform,
+e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(all_continuous() ~ "svy.t.test", all_categorical() ~ "svy.wald.test")</a></code>.
+Options include</p><ul>
+<li><p><code>"svy.t.test"</code> for a t-test adapted to complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyttest.html'>survey::svyttest</a>),</p></li>
+<li><p><code>"svy.wilcox.test"</code> for a Wilcoxon rank-sum test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
+<li><p><code>"svy.kruskal.test"</code> for a Kruskal-Wallis rank-sum test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
+<li><p><code>"svy.vanderwaerden.test"</code> for a van der Waerden's normal-scores test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
+<li><p><code>"svy.median.test"</code> for a Mood's test for the median for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
+<li><p><code>"svy.chisq.test"</code> for a Chi-squared test with Rao &amp; Scott's second-order correction (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
+<li><p><code>"svy.adj.chisq.test"</code> for a Chi-squared test adjusted by a design effect estimate (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
+<li><p><code>"svy.wald.test"</code> for a Wald test of independence for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
+<li><p><code>"svy.adj.wald.test"</code> for an adjusted Wald test of independence for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
+<li><p><code>"svy.lincom.test"</code> for a test of independence using the exact asymptotic distribution for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
+<li><p><code>"svy.saddlepoint.test"</code> for a test of independence using a saddlepoint approximation for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
+</ul>
+
+<p>Tests default to <code>"svy.wilcox.test"</code> for continuous variables and <code>"svy.chisq.test"</code>
+for categorical variables.</p></td>
+    </tr>
+    <tr>
+      <th>pvalue_fun</th>
+      <td><p>Function to round and format p-values.
+Default is <a href='style_pvalue.html'>style_pvalue</a>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>Variables to include in output. Input may be a vector of
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is <code><a href='everything.html'>everything()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Not used</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>tbl_merge</code> object</p>
+    <p>A <code>tbl_svysummary</code> object</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
 
 <p>Example 1</p>
-<p><img src='figures/tbl_merge_ex1.png' width=70% /></p>
+<p><img src='figures/add_p_svysummary_ex1.png' width=45% /></p>
 <p>Example 2</p>
-<p><img src='figures/tbl_merge_ex2.png' width=65% /></p>
+<p><img src='figures/add_p_svysummary_ex2.png' width=65% /></p>
+<p>Example 3</p>
+<p><img src='figures/add_p_svysummary_ex3.png' width=60% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='tbl_stack.html'>tbl_stack</a></p>
-<p>Other tbl_regression tools: 
-<code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
-<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='combine_terms.html'>combine_terms</a>()</code>,
-<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p>
-<p>Other tbl_uvregression tools: 
-<code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
-<code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p>
-<p>Other tbl_summary tools: 
+    <div class='dont-index'><p>Other tbl_svysummary tools: 
 <code><a href='add_n.html'>add_n</a>()</code>,
 <code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
 <code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
-<p>Other tbl_svysummary tools: 
-<code><a href='add_n.html'>add_n</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_svysummary.html'>add_p.tbl_svysummary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
 <code><a href='tbl_svysummary.html'>tbl_svysummary</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='co'># Side-by-side Regression Models</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
-<span class='no'>t1</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>age</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>t2</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/coxph.html'>coxph</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span> + <span class='no'>grade</span> + <span class='no'>age</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>tbl_merge_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='fu'>tbl_merge</span>(
-    <span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t1</span>, <span class='no'>t2</span>),
-    <span class='kw'>tab_spanner</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"**Tumor Response**"</span>, <span class='st'>"**Time to Death**"</span>)
-  )
+<span class='co'># A simple weighted dataset</span>
+<span class='no'>add_p_svysummary_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='kw pkg'>survey</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(~<span class='fl'>1</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Titanic</span>), <span class='kw'>weights</span> <span class='kw'>=</span> ~<span class='no'>Freq</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>Survived</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>()
+
+<span class='co'># A dataset with a complex design</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>api</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"survey"</span>)
+<span class='no'>d_clust</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>survey</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> ~<span class='no'>dnum</span>, <span class='kw'>weights</span> <span class='kw'>=</span> ~<span class='no'>pw</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>apiclus1</span>, <span class='kw'>fpc</span> <span class='kw'>=</span> ~<span class='no'>fpc</span>)
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='co'># Descriptive statistics alongside univariate regression, with no spanning header</span>
-<span class='no'>t3</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"no"</span>) <span class='kw'>%&gt;%</span>
-  <span class='no'>add_n</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='modify.html'>modify_header</a></span>(<span class='no'>stat_0</span> ~ <span class='st'>"**Summary Statistics**"</span>)
-<span class='no'>t4</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
-    <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ttdeath"</span>, <span class='st'>"death"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)],
-    <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>coxph</span>,
-    <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
-    <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-    <span class='kw'>hide_n</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-  )
+<span class='no'>add_p_svysummary_ex2</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(<span class='no'>d_clust</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>both</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>cname</span>, <span class='no'>api00</span>, <span class='no'>api99</span>, <span class='no'>both</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
-<span class='no'>tbl_merge_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='fu'>tbl_merge</span>(<span class='kw'>tbls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>t3</span>, <span class='no'>t4</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='modify.html'>modify_spanning_header</a></span>(<span class='fu'><a href='everything.html'>everything</a></span>() ~ <span class='fl'>NA_character_</span>)</div></pre>
+<span class='co'># Example 3 ----------------------------------</span>
+<span class='co'># change tests to svy t-test and Wald test</span>
+<span class='no'>add_p_svysummary_ex3</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(<span class='no'>d_clust</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>both</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>cname</span>, <span class='no'>api00</span>, <span class='no'>api99</span>, <span class='no'>both</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(
+    <span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() ~ <span class='st'>"svy.t.test"</span>,
+                <span class='fu'><a href='select_helpers.html'>all_categorical</a></span>() ~ <span class='st'>"svy.wald.test"</span>)
+  )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

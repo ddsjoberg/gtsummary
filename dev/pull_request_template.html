@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9008</span>
       </span>
     </div>
 
@@ -178,10 +178,10 @@
 <ul>
 <li>
 <input type="checkbox" disabled>
-PR branch has pulled the most recent updates from master branch</li>
+PR branch has pulled the most recent updates from master branch. Ensure the pull request branch and your local version match and both have the latest updates from the master branch.</li>
 <li>
 <input type="checkbox" disabled>
-NEWS.md has been updated under the heading “<code># gtsummary (development version)</code>”?</li>
+NEWS.md has been updated with the changes from this pull request under the heading “<code># gtsummary (development version)</code>”. If there is an issue associated with the pull request, reference it in parantheses at the end update (see NEWS.md for examples).</li>
 <li>
 <input type="checkbox" disabled><code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> runs with no spelling errors in documentation</li>
 <li>
@@ -196,13 +196,13 @@ If a bug was fixed, a unit test was added for the bug check</li>
 Run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site()</a></code>. Check the R console for errors, and review the rendered website.</li>
 <li>
 <input type="checkbox" disabled>
-Code coverage is suitable for any new functions/features. Review coverage with <code><a href="http://covr.r-lib.org/reference/report.html">covr::report()</a></code>.</li>
+Code coverage is suitable for any new functions/features. Review coverage with <code><a href="http://covr.r-lib.org/reference/report.html">covr::report()</a></code>. Before you run, set <code><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv(NOT_CRAN = TRUE)</a></code> and begin in a fresh R session without any packages loaded.</li>
 <li>
 <input type="checkbox" disabled>
 R CMD Check runs without errors, warnings, and notes</li>
 <li>
 <input type="checkbox" disabled>
-When the branch is ready to be merged into master, increment the version number using <code><a href="https://usethis.r-lib.org/reference/use_version.html">usethis::use_version(which = "dev")</a></code>, run <code>codemetar::write_codemeta()</code>, approve, and merge the PR.</li>
+When the branch is ready to be merged into master, increment the version number using <code><a href="https://usethis.r-lib.org/reference/use_version.html">usethis::use_version(which = "dev")</a></code>, run <code><a href="https://docs.ropensci.org/codemetar/reference/write_codemeta.html">codemetar::write_codemeta()</a></code>, approve, and merge the PR.</li>
 </ul>
 
 
@@ -224,7 +224,7 @@ When the branch is ready to be merged into master, increment the version number 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
