@@ -114,7 +114,7 @@ test_that("vetted_models geeglm()", {
   #       - without errors, warnings, messages
   # geeglm() does not work with car::Anova()!  update this after #409 issue complete?
   expect_error(
-    tbl_geeglm_lin2 <- tbl_geeglm_lin %>% add_global_p(include = everything()), "*"
+    tbl_geeglm_lin2 <- tbl_geeglm_lin %>% add_global_p(include = everything()), NULL
   )
   # expect_error(
   #   tbl_geeglm_int2 <- tbl_geeglm_int %>% add_global_p(include = everything()), NA
@@ -138,7 +138,7 @@ test_that("vetted_models geeglm()", {
     tbl_geeglm_log3, NA
   )
   expect_error(
-    tbl_geeglm_log4 <- tbl_geeglm_lin %>% add_nevent(), "*"
+    tbl_geeglm_log4 <- tbl_geeglm_lin %>% add_nevent(), NULL
   )
   #       - numbers in table are correct
   # expect_equivalent(
