@@ -258,13 +258,13 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   if (is.null(by)) {
     results <- modify_header_internal(
       results,
-      stat_0 = "**N = {N}**",
+      stat_0 = "**N = {style_number(N)}**",
       label = paste0("**", translate_text("Characteristic"), "**")
     )
   } else {
     results <- modify_header_internal(
       results,
-      stat_by = "**{level}**, N = {n}",
+      stat_by = "**{level}**, N = {style_number(n)}",
       label = paste0("**", translate_text("Characteristic"), "**")
     )
   }

@@ -296,13 +296,13 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   if (is.null(by)) {
     results <- modify_header_internal(
       results,
-      stat_0 = "**N = {N}**",
+      stat_0 = "**N = {style_number(N)}**",
       label = paste0("**", translate_text("Characteristic"), "**")
     )
   } else {
     results <- modify_header_internal(
       results,
-      stat_by = "**{level}**, N = {n}",
+      stat_by = "**{level}**, N = {style_number(n)}",
       label = paste0("**", translate_text("Characteristic"), "**")
     )
   }
@@ -406,35 +406,5 @@ generate_metadata <- function(data, value, by, classes_expected, type, label, st
       )
     )
 
-  # returning all results in a list --------------------------------------------
-  results <- list(
-    table_body = table_body,
-    table_header = table_header,
-    meta_data = meta_data,
-    inputs = tbl_summary_inputs,
-    N = nrow(data),
-    call_list = list(tbl_summary = match.call())
-  )
-  results$by <- by
-  results$df_by <- df_by(data, by)
-
-  # assigning a class of tbl_summary (for special printing in Rmarkdown)
-  class(results) <- c("tbl_summary", "gtsummary")
-
-  # adding headers
-  if (is.null(by)) {
-    results <- modify_header_internal(
-      results,
-      stat_0 = "**N = {style_number(N, digits = 0)}**",
-      label = paste0("**", translate_text("Characteristic"), "**")
-    )
-  } else {
-    results <- modify_header_internal(
-      results,
-      stat_by = "**{level}**, N = {style_number(n, digits = 0)}",
-      label = paste0("**", translate_text("Characteristic"), "**")
-    )
-  }
-
-  return(results)
+  meta_data
 }
