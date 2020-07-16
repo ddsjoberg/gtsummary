@@ -947,7 +947,9 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
     map(str_remove_all, pattern = fixed("}")) %>%
     map(str_remove_all, pattern = fixed("{")) %>%
     unlist()
-  base_stats <- c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs")
+  base_stats <- c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs",
+                  "N_obs_unweighted", "N_miss_unweighted", "N_nonmiss_unweighted",
+                  "p_miss_unweighted", "p_nonmiss_unweighted")
 
   # if user supplied number of digits to round, use them
   if (!is.null(digits[[variable]])) {
@@ -976,11 +978,14 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
 
       # if number of digits was passed by user, round to the specified digits
       if (!is.null(digits[[variable]][[colname]])) {
-        if (summary_type == "continuous" && colname %in% c("p_miss", "p_nonmiss"))
+        if (summary_type == "continuous" && colname %in% c("p_miss", "p_nonmiss",
+                                                           "p_miss_unweighted",
+                                                           "p_nonmiss_unweighted"))
           attr(column, "fmt_fun") <-
             purrr::partial(style_number, scale = 100,
                            digits = !!digits[[variable]][[colname]])
-        else if (colname %in% c("p", "p_miss", "p_nonmiss"))
+        else if (colname %in% c("p", "p_miss", "p_nonmiss",
+                                "p_miss_unweighted", "p_nonmiss_unweighted"))
           attr(column, "fmt_fun") <-
             purrr::partial(style_number, scale = 100,
                            digits = !!digits[[variable]][[colname]])
