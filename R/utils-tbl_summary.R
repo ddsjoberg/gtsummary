@@ -857,6 +857,18 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
   # extracting function calls
   fns_names_chr <- extracting_function_calls_from_stat_display(stat_display, variable)
 
+  # if there are no continuous summary functions, return tibble early ----------
+  if (length(fns_names_chr) == 0) {
+    if (!is.null(by)) {
+      df_stats <- tibble(
+        by = unique(data[[by]]) %>% sort(),
+        variable = variable
+      )
+    }
+    else df_stats <- tibble(variable = variable)
+    return(df_stats)
+  }
+
   # defining shortcut quantile functions, if needed
   if (any(fns_names_chr %in% paste0("p", 0:100))) {
     fns_names_chr[fns_names_chr %in% paste0("p", 0:100)] %>%
@@ -925,14 +937,16 @@ extracting_function_calls_from_stat_display <- function(stat_display, variable) 
   fns_names_chr <- str_extract_all(stat_display, "\\{.*?\\}") %>%
     map(str_remove_all, pattern = fixed("}")) %>%
     map(str_remove_all, pattern = fixed("{")) %>%
-    unlist() %>%
-    # removing elements protected as other items
-    setdiff(c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs"))
+    unlist()
 
   if (length(fns_names_chr) == 0) stop(glue(
     "No summary function found in `{stat_display}` for variable '{variable}'.\n",
     "Did you wrap the function name in curly brackets?"
   ), call. = FALSE)
+
+  # removing elements protected as other items
+  fns_names_chr <- fns_names_chr %>%
+    setdiff(c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs"))
 
   if (any(c("by", "variable") %in% fns_names_chr)) {
     stop(paste(
@@ -1140,4 +1154,3 @@ has_na <- function(data, variable) {
     sum(is.na(data[[variable]])) > 0
   }
 }
-
