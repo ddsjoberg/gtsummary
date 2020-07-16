@@ -243,7 +243,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # generate meta_data --------------------------------------------------------
-  meta_data <- generate_metadata(data, value, by, classes_expected, type, label, statistic, digits, percent, sort)
+  meta_data <- generate_metadata(data = data, value = value, by = by,
+                                 classes_expected =  classes_expected,
+                                 type = type, label = label, statistic =  statistic,
+                                 digits = digits, percent = percent, sort = sort)
 
   # calculating summary statistics ---------------------------------------------
   table_body <-
@@ -391,18 +394,16 @@ generate_metadata <- function(data, value, by, classes_expected, type, label, st
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
       stat_label = stat_label_match(.data$stat_display),
-      digits = continuous_digits_guess(
-        data, .data$variable, .data$summary_type, .data$class, digits
-      ),
       sort = assign_sort(.data$variable, .data$summary_type, sort),
       df_stats = pmap(
         list(.data$summary_type, .data$variable,
              .data$class, .data$dichotomous_value,
-             .data$sort, .data$stat_display, .data$digits),
+             .data$sort, .data$stat_display),
         ~ df_stats_function(summary_type = ..1, variable = ..2,
                             class = ..3, dichotomous_value = ..4,
-                            sort = ..5, stat_display = ..6, digits = ..7,
-                            data = data_for_df_stats, by = by, percent = percent)
+                            sort = ..5, stat_display = ..6,
+                            data = data_for_df_stats, by = by,
+                            percent = percent, digits = digits)
       )
     )
 

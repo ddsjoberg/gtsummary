@@ -268,26 +268,14 @@ assign_var_label <- function(data, variable, var_label) {
 #' @keywords internal
 #' @author Emily Zabor, Daniel D. Sjoberg
 
-# takes as the input a vector of variable and summary types
 continuous_digits_guess <- function(data,
                                     variable,
-                                    summary_type,
-                                    class,
-                                    digits = NULL) {
-  pmap(
-    list(variable, summary_type, class),
-    ~ continuous_digits_guess_one(data, ..1, ..2, ..3, digits)
-  )
-}
-
-# runs for a single var
-continuous_digits_guess_one <- function(data,
-                                        variable,
-                                        summary_type,
-                                        class,
-                                        digits = NULL) {
+                                    summary_type) {
   # if all values are NA, returning 0
-  if (nrow(data) == sum(is.na(data[[variable]]))) {
+  if (!is_survey(data) && nrow(data) == sum(is.na(data[[variable]]))) {
+    return(0)
+  }
+  if (is_survey(data) && length(data$variables[[variable]]) == sum(is.na(data$variables[[variable]]))) {
     return(0)
   }
 
@@ -296,19 +284,23 @@ continuous_digits_guess_one <- function(data,
     return(NA)
   }
 
-  # if the number of digits is specified for a variable, return specified number
-  if (!is.null(digits[[variable]])) {
-    return(digits[[variable]])
+  # if class is integer, then round everything to nearest integer
+  if (!is_survey(data) && inherits(data[[variable]], "integer")) {
+    return(0)
   }
-
-  # if class is integer, then round everythng to nearest integer
-  if (class == "integer") {
+  if (is_survey(data) && inherits(data$variables[[variable]], "integer")) {
     return(0)
   }
 
   # calculate the spread of the variable
-  var_spread <- stats::quantile(data[[variable]], probs = c(0.95), na.rm = TRUE) -
+  if (!is_survey(data))
+    var_spread <-
+      stats::quantile(data[[variable]], probs = c(0.95), na.rm = TRUE) -
     stats::quantile(data[[variable]], probs = c(0.05), na.rm = TRUE)
+  if (is_survey(data))
+    var_spread <-
+      compute_survey_stat(data = data, variable = variable, by = NULL, f = "p95")$p95 -
+      compute_survey_stat(data = data, variable = variable, by = NULL, f = "p5")$p5
 
   # otherwise guess the number of dignits to use based on the spread
   case_when(
@@ -759,14 +751,6 @@ footnote_stat_label <- function(meta_data) {
 
 # summarize_categorical --------------------------------------------------------
 summarize_categorical <- function(data, variable, by, class, dichotomous_value, sort, percent) {
-  # grabbing percent formatting function
-  percent_fun <-
-    get_theme_element("tbl_summary-fn:percent_fun") %||%
-    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
-  N_fun <-
-    get_theme_element("tbl_summary-fn:N_fun",
-                      default = function(x) style_number(x, digits = 0))
-
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
   # when variable has label.  So deleting it.
@@ -835,16 +819,11 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
       select(-.data$variable_levels)
   }
 
-  # adding percent_fun as attr to p column
-  attr(result$p, "fmt_fun") <- percent_fun
-  attr(result$N, "fmt_fun") <- N_fun
-  attr(result$n, "fmt_fun") <- N_fun
-
   result
 }
 
 # summarize_continuous ---------------------------------------------------------
-summarize_continuous <- function(data, variable, by, stat_display, digits) {
+summarize_continuous <- function(data, variable, by, stat_display) {
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
   # when variable has label.  So deleting it.
@@ -925,9 +904,6 @@ summarize_continuous <- function(data, variable, by, stat_display, digits) {
       tidyr::pivot_wider(id_cols = c("variable"), names_from = "fn")
   }
 
-  # adding formatting function as attr to summary statistics columns
-  df_stats <- adding_formatting_as_attr(df_stats, digits, fns_names_chr)
-
   # returning final object
   df_stats
 }
@@ -958,16 +934,68 @@ extracting_function_calls_from_stat_display <- function(stat_display, variable) 
 }
 
 # adding_formatting_as_attr ----------------------------------------------------
-adding_formatting_as_attr <- function(df_stats, digits, fns_names_chr) {
-  fmt_fun <- as.list(rep(digits, length.out = length(fns_names_chr))) %>%
-    set_names(fns_names_chr)
+adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
+                                      stat_display, digits) {
+  # setting the default formatting ---------------------------------------------
+  percent_fun <- get_theme_element("tbl_summary-fn:percent_fun") %||%
+    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
+  N_fun <- get_theme_element("tbl_summary-fn:N_fun", default = style_number)
 
+  # extracting statistics requested
+  fns_names_chr <-
+    str_extract_all(stat_display, "\\{.*?\\}") %>%
+    map(str_remove_all, pattern = fixed("}")) %>%
+    map(str_remove_all, pattern = fixed("{")) %>%
+    unlist()
+  base_stats <- c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs")
+
+  # if user supplied number of digits to round, use them
+  if (!is.null(digits[[variable]])) {
+    digits[[variable]] <-
+      # making the digits passed the same length as stat vector
+      rep(digits[[variable]], length.out = length(fns_names_chr)) %>%
+      as.list() %>%
+      rlang::set_names(fns_names_chr)
+  }
+  # if no digits supplied and variable is continuous, guess how to summarize
+  else if (summary_type == "continuous") {
+    digits[[variable]] <-
+      continuous_digits_guess(data = data,
+                              variable = variable,
+                              summary_type = summary_type) %>%
+      rep(length.out = length(fns_names_chr %>% setdiff(base_stats))) %>%
+      as.list() %>%
+      rlang::set_names(fns_names_chr %>% setdiff(base_stats))
+  }
+
+  # adding the formatting function as an attribute
   df_stats <- purrr::imap_dfc(
     df_stats,
     function(column, colname) {
-      if(is.null(fmt_fun[[colname]])) return(column)
-      digits <- fmt_fun[[colname]]
-      attr(column, "fmt_fun") <- purrr::partial(style_number, digits = !!digits)
+      if (colname %in% c("variable", "by")) return(column)
+
+      # if number of digits was passed by user, round to the specified digits
+      if (!is.null(digits[[variable]][[colname]])) {
+        if (summary_type == "continuous" && colname %in% c("p_miss", "p_nonmiss"))
+          attr(column, "fmt_fun") <-
+            purrr::partial(style_number, scale = 100,
+                           digits = !!digits[[variable]][[colname]])
+        else if (colname %in% c("p", "p_miss", "p_nonmiss"))
+          attr(column, "fmt_fun") <-
+            purrr::partial(style_number, scale = 100,
+                           digits = !!digits[[variable]][[colname]])
+        else
+          attr(column, "fmt_fun") <-
+            purrr::partial(style_number, digits = !!digits[[variable]][[colname]])
+      }
+      # if digits not specified, use the default percent and integer formatting
+      else if (colname %in% c("p" ,"p_miss", "p_nonmiss")) {
+        attr(column, "fmt_fun") <- percent_fun
+      }
+      else {
+        attr(column, "fmt_fun") <- N_fun
+      }
+
       column
     }
   )
@@ -1079,12 +1107,17 @@ calculate_missing_row <- function(data, variable, by, missing_text) {
       !!variable := is.na(.data[[variable]])
     )
 
+
   # passing the T/F variable through the functions to format as we do in
   # the tbl_summary output
   summarize_categorical(
     data = data, variable = variable, by = by, class = "logical",
     dichotomous_value = TRUE, sort = "alphanumeric", percent = "column"
   ) %>%
+    adding_formatting_as_attr(
+      data = data, variable = variable,
+      summary_type = "dichotomous", stat_display = "{n}", digits = NULL
+    ) %>%
     {df_stats_to_tbl(
       data = data, variable = variable, summary_type = "dichotomous", by = by,
       var_label = missing_text, stat_display = "{n}", df_stats = .,
@@ -1097,13 +1130,12 @@ calculate_missing_row <- function(data, variable, by, missing_text) {
 # this function creates df_stats in the tbl_summary meta data table
 # and includes the number of missing values
 df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
-                         stat_display, digits, data, by, percent) {
+                         stat_display, data, by, percent, digits) {
   # first table are the standard stats
   t1 <- switch(
     summary_type,
     "continuous" = summarize_continuous(data = data, variable = variable,
-                                        by = by, stat_display = stat_display,
-                                        digits = digits),
+                                        by = by, stat_display = stat_display),
     "categorical" = summarize_categorical(data = data, variable = variable,
                                           by = by, class = class,
                                           dichotomous_value = dichotomous_value,
@@ -1128,9 +1160,11 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
 
-  # setting fmt_fun for percents and integers
-  attr(return$p_nonmiss, "fmt_fun") <- attr(return$p_miss, "fmt_fun")
-  attr(return$N_nonmiss, "fmt_fun") <- attr(return$N_miss, "fmt_fun")
+  # adding formatting function as attr to summary statistics columns
+  return <- adding_formatting_as_attr(
+    df_stats = return, data = data, variable = variable,
+    summary_type = summary_type, stat_display = stat_display, digits = digits
+  )
 
   return
 }

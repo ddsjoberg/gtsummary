@@ -4,7 +4,14 @@
 \alias{style_number}
 \title{Style numbers}
 \usage{
-style_number(x, digits = 0, big.mark = NULL, decimal.mark = NULL, ...)
+style_number(
+  x,
+  digits = 0,
+  big.mark = NULL,
+  decimal.mark = NULL,
+  scale = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{Numeric vector}
@@ -18,6 +25,8 @@ Default is \code{","}}
 
 \item{decimal.mark}{The character to be used to indicate the numeric decimal point.
 Default is \code{"."}}
+
+\item{scale}{A scaling factor: x will be multiplied by scale before formatting.}
 
 \item{...}{Other arguments passed on to \code{base::format()}}
 }

@@ -332,10 +332,6 @@ summarize_categorical_survey <- function(data, variable, by, class, dichotomous_
       left_join(svy_table)
   )
 
-  attr(df_stats$p, "fmt_fun") <- attr(df_stats$p_unweighted, "fmt_fun")
-  attr(df_stats$N, "fmt_fun") <- attr(df_stats$N_unweighted, "fmt_fun")
-  attr(df_stats$n, "fmt_fun") <- attr(df_stats$n_unweighted, "fmt_fun")
-
   # returning final object
   df_stats
 }
@@ -359,9 +355,6 @@ summarize_continuous_survey <- function(data, variable, by, stat_display, digits
         left_join(compute_survey_stat(data, variable, by, f))
     )
   }
-
-  # adding formatting function as attr to summary statistics columns
-  df_stats <- adding_formatting_as_attr(df_stats, digits, fns_names_chr)
 
   # returning final object
   df_stats
@@ -439,7 +432,7 @@ compute_survey_stat <- function(data, variable, by, f) {
 # this function creates df_stats in the tbl_svysummary meta data table
 # and includes the number of missing values
 df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value, sort,
-                         stat_display, digits, data, by, percent) {
+                                stat_display, digits, data, by, percent) {
   # first table are the standard stats
   t1 <- switch(
     summary_type,
@@ -481,11 +474,11 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
 
-  # setting fmt_fun for percents and integers
-  attr(return$p_nonmiss, "fmt_fun") <- attr(return$p_miss, "fmt_fun")
-  attr(return$N_nonmiss, "fmt_fun") <- attr(return$N_miss, "fmt_fun")
-  attr(return$p_nonmiss_unweighted, "fmt_fun") <- attr(return$p_miss_unweighted, "fmt_fun")
-  attr(return$N_nonmiss_unweighted, "fmt_fun") <- attr(return$N_miss_unweighted, "fmt_fun")
+  return <- adding_formatting_as_attr(
+    df_stats = return, data = data, variable = variable,
+    summary_type = summary_type, stat_display = stat_display,
+    digits = digits
+  )
 
   return
 }
@@ -506,6 +499,10 @@ calculate_missing_row_survey <- function(data, variable, by, missing_text) {
     data = data, variable = variable, by = by, class = "logical",
     dichotomous_value = TRUE, sort = "alphanumeric", percent = "column"
   ) %>%
+    adding_formatting_as_attr(
+      data = data, variable = variable,
+      summary_type = "dichotomous", stat_display = "{n}", digits = NULL
+    ) %>%
     {df_stats_to_tbl(
       data = data, variable = variable, summary_type = "dichotomous", by = by,
       var_label = missing_text, stat_display = "{n}", df_stats = .,
