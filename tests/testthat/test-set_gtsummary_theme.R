@@ -11,6 +11,10 @@ test_that("setting themes", {
     NA)
 
   expect_error(
+    set_gtsummary_theme(theme_gtsummary_language("fr", big.mark = " ", decimal.mark = ",")),
+    NA)
+
+  expect_error(
     tbl_summary(trial, by = trt) %>% add_p() %>% add_stat_label(),
     NA)
 
