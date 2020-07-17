@@ -21,7 +21,7 @@
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is \code{everything()}, which includes all commands in \code{x$kable_calls}.}
+Default is \code{everything()}.}
 
 \item{col_labels}{Logical argument adding column labels to output tibble.
 Default is \code{TRUE}.}
