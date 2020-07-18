@@ -58,7 +58,7 @@
 tbl_survfit <- function(x, times = NULL, probs = NULL,
                         statistic = "{estimate} ({conf.low}, {conf.high})",
                         label = NULL, label_header = NULL, estimate_fun = NULL,
-                        missing = "--", conf.level = 0.95, failure = FALSE) {
+                        missing = "--", conf.level = 0.95, failure = FALSE, ...) {
   # setting defaults -----------------------------------------------------------
   statistic <-
     statistic %||%
@@ -69,9 +69,8 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of `times=` and `probs=` must be specified.", call. = FALSE)
   }
-  if (!rlang::is_string(statistic) || !rlang::is_string(label %||% "") ||
-      !rlang::is_string(label_header %||% "")) {
-    stop("`statistic=`, `label=`, and `label_header=` arguments must be strings of length one.",
+  if (!rlang::is_string(statistic) || !rlang::is_string(label_header %||% "")) {
+    stop("`statistic=` and `label_header=` arguments must be strings of length one.",
          call. = FALSE)
   }
   if (failure == TRUE && !is.null(probs)) {
@@ -84,18 +83,34 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     estimate_fun %||%
     switch(
       estimate_type,
-      probs = getOption("gtsummary.tbl_survfit.probs.estimate_fun"),
-      times = getOption("gtsummary.tbl_survfit.times.estimate_fun")
-    ) %||%
-    switch(
-      estimate_type,
-      probs = partial(style_sigfig, digits = 2),
-      times = partial(style_percent, symbol = TRUE)
+      probs = getOption("gtsummary.tbl_survfit.probs.estimate_fun") %||%
+        partial(style_sigfig, digits = 2),
+      times = getOption("gtsummary.tbl_survfit.times.estimate_fun") %||%
+        partial(style_percent, symbol = TRUE)
     )
 
   # will return call, and all object passed to in tbl_summary call -------------
   # the object func_inputs is a list of every object passed to the function
   tbl_survfit_inputs <- as.list(environment())
+
+  var <- fit2$call %>% as.list() %>% pluck("formula") %>% rlang::f_rhs() %>% all.vars()
+  if (is.null(label) && length(var) == 1) {
+    # try to extra label from data (if exists)
+    data <- x$call %>% as.list() %>% pluck("data")
+    if (!is.null(data)) label <- eval(data)$var %>% attr("label") %||% var
+  }
+  else if (is.null(label) && length(var) == 0) {
+    label = "Overall"
+  }
+  else if (length(var) > 1)
+    stop("`tbl_survfit()` supports only a single stratifying variable on the RHS of `formula=`",
+         call. = FALSE)
+
+  meta_data <-
+    tibble(
+      variable = ifelse(length(var) == 0, "..overall..", var),
+      var_label = label
+    )
 
   # calculating estimates ------------------------------------------------------
   if (estimate_type == "times")
