@@ -16,7 +16,7 @@ test_that("expect error if no p value in table 1", {
 
   expect_error(
     add_q(table1),
-    "*"
+    NULL
   )
 })
 
@@ -36,7 +36,7 @@ test_that("no errors/warnings with standard use after tbl_uvregression() and add
 test_that("add_q creates errors when non-function in input", {
   expect_error(
     add_q(uni_reg, pvalue_fun = mtcars),
-    "*"
+    NULL
   )
 })
 
@@ -65,7 +65,7 @@ test_that("Checking q-values against p.adjust", {
 test_that("add_q messaging checks", {
   expect_message(
     add_q(table1),
-    "*"
+    NULL
   )
 
   expect_message(

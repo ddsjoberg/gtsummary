@@ -35,7 +35,7 @@ attribute label is \code{NULL}, the variable name will be used.}
 \item{statistic}{A string with the statistic name in curly brackets to
 be replaced with the numeric statistic (see glue::glue).
 The default is \code{{n}}. If percent argument is \code{"column"}, \code{"row"}, or \code{"cell"},
-default is \verb{\{n\} (\{p\}\%)}.}
+default is \code{"{n} ({p}\%)"}.}
 
 \item{percent}{Indicates the type of percentage to return.
 Must be one of "none", "column", "row", or "cell". Default is "cell" when

@@ -22,8 +22,9 @@
 #' survival times
 #' @param missing text to fill when estimate is not estimable. Default is `"--"`
 #' @param conf.level Confidence level for confidence intervals. Default is 0.95
-#' @param failure Calculate failure probabilities rather than survival probabilities.
+#' @param reverse Flip the probability reported, i.e. `1 - estimate`.
 #' Default is `FALSE`.  Does not apply to survival quantile requests
+#' @param failure DEPRECATED. Use `reverse=` instead.
 #'
 #' @export
 #' @author Daniel D. Sjoberg
@@ -46,6 +47,22 @@
 #'   probs = 0.5,
 #'   label_header = "**Median Survival**"
 #' )
+#'
+#' # Example 3 Competing Events Example ---------
+#' # adding a competing event for death (cancer vs other causes)
+#' library(dplyr)
+#' trial2 <- trial %>%
+#'   mutate(
+#'   death_cr = case_when(
+#'     death == 0 ~ "censor",
+#'     runif(n()) < 0.5 ~ "death from cancer",
+#'     TRUE ~ "death other causes"
+#'   ) %>% factor()
+#' )
+#'
+#' survfit_cr_ex3 <-
+#'   survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) %>%
+#'   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -54,11 +71,23 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{tbl_survfit_ex2.png}{options: width=27\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{survfit_cr_ex3.png}{options: width=27\%}}
 
 tbl_survfit <- function(x, times = NULL, probs = NULL,
                         statistic = "{estimate} ({conf.low}, {conf.high})",
                         label = NULL, label_header = NULL, estimate_fun = NULL,
-                        missing = "--", conf.level = 0.95, failure = FALSE, ...) {
+                        missing = "--", conf.level = 0.95, reverse = FALSE,
+                        failure = NULL) {
+  # deprecation notes ----------------------------------------------------------
+  if (!is.null(failure)) {
+    lifecycle::deprecate_warn(
+      "1.3.1", "gtsummary::tbl_survfit(failure = )", "tbl_survfit(reverse = )")
+    reverse <- failure
+  }
+
   # setting defaults -----------------------------------------------------------
   statistic <-
     statistic %||%
@@ -66,6 +95,11 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     "{estimate} ({conf.low}, {conf.high})"
 
   # input checks ---------------------------------------------------------------
+  if (!inherits(x, "survfit")) {
+    stop("Argument `x=` must be class 'survfit' created from the `survival::survfit()` function.",
+         call. = FALSE)
+  }
+
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of `times=` and `probs=` must be specified.", call. = FALSE)
   }
@@ -73,8 +107,8 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     stop("`statistic=` and `label_header=` arguments must be strings of length one.",
          call. = FALSE)
   }
-  if (failure == TRUE && !is.null(probs)) {
-    rlang::inform("`failure=TRUE` argument ignored for survival quantile estimation.")
+  if (reverse == TRUE && !is.null(probs)) {
+    rlang::inform("`reverse=TRUE` argument ignored for survival quantile estimation.")
   }
 
   # setting defaults -----------------------------------------------------------
@@ -115,7 +149,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   # calculating estimates ------------------------------------------------------
   if (estimate_type == "times")
     df_stats <- survfit_time(x, times = times, label_header = label_header,
-                             conf.level = conf.level, failure = failure)
+                             conf.level = conf.level, reverse = reverse)
   else if (estimate_type == "probs")
     df_stats <- survfit_prob(x, probs = probs, label_header = label_header,
                              conf.level = conf.level)
@@ -211,27 +245,51 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
   df_stat
 }
 
-
-# calculates and prepares n-year survival estimates for tbl
-survfit_time <- function(x, times, label_header, conf.level, failure) {
+# calcualtes and prepares n-year survival estimates for tbl
+survfit_time <- function(x, times, label_header, conf.level, reverse) {
   tidy <- broom::tidy(x, conf.level = conf.level)
   strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
+  multi_state <- inherits(x, "survfitms")
+  if (multi_state == TRUE) {
+    # selecting state to show
+    state <- unique(tidy$state) %>%
+      setdiff("(s0)") %>%
+      purrr::pluck(1)
+
+    rlang::inform(glue(
+      "Multi-state model detected. Showing probabilities into state '{state}'"
+    ))
+
+    tidy <- dplyr::filter(tidy, .data$state == .env$state)
+  }
 
   # adding time 0 to data frame
   tidy <-
     tidy %>%
+    # if CI is missing, and SE is 0, making the CIs the estimate
+    mutate_at(vars(.data$conf.high, .data$conf.low),
+              ~ifelse(is.na(.) & .data$std.error == 0, .data$estimate, .)) %>%
     select(any_of(c("time", "estimate", "conf.high", "conf.low", "strata"))) %>%
     bind_rows(
       group_by(., !!!syms(strata)) %>%
         slice(1) %>%
-        mutate(time = 0, estimate = 1, conf.low = 1, conf.high = 1)
+        mutate(time = 0,
+               estimate = ifelse(multi_state, 0, 1),
+               conf.low = ifelse(multi_state, 0, 1),
+               conf.high = ifelse(multi_state, 0, 1))
     ) %>%
     ungroup()
+
+
 
   # getting requested estimates
   df_stat <-
     tidy %>%
-    # adding in
+    # getting the latest time (not showing estimates after that time)
+    group_by(., !!!syms(strata)) %>%
+    mutate(time_max = max(.data$time)) %>%
+    ungroup() %>%
+    # adding in timepoints requested by user
     full_join(
       select(tidy, !!!syms(strata)) %>%
         distinct()  %>%
@@ -242,14 +300,17 @@ survfit_time <- function(x, times, label_header, conf.level, failure) {
         unnest(cols = c(.data$time, .data$col_name)),
       by = unlist(c(strata, "time"))
     ) %>%
+    # if the user-specifed time is unobserved, filling estimates with previous value
     arrange(!!!syms(strata), .data$time) %>%
     group_by(!!!syms(strata)) %>%
-    mutate_at(
-      vars(.data$estimate, .data$conf.high, .data$conf.low),
-      ~ifelse(is.na(.) & dplyr::row_number() != n(),
-              dplyr::lag(., n = 1), .)
-    ) %>%
-    filter(.data$time %in% .env$times) %>%
+    tidyr::fill(.data$estimate, .data$conf.high, .data$conf.low,
+                .data$time_max, .direction = "down") %>%
+    ungroup() %>%
+    # keeping obs of user-specified times
+    filter(!is.na(.data$col_name)) %>%
+    # if user-specified time is after the latest follow-up time, making it NA
+    mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low),
+              ~ifelse(.data$time > .data$time_max, NA_real_, .)) %>%
     mutate(
       variable = switch(length(.env$strata) == 0, "..overall..") %||%
         stringr::word(strata, start = 1L, sep = "="),
@@ -258,11 +319,10 @@ survfit_time <- function(x, times, label_header, conf.level, failure) {
       col_label = .env$label_header %||% paste0("**", translate_text("Time"), " {time}**") %>% glue() %>% as.character()
     ) %>%
     select(any_of(c("variable", "label", "strata", "col_name", "col_label")),
-           everything()) %>%
-    ungroup()
+           everything(), -.data$time_max)
 
-  # converting to failure probs, if requested
-  if (failure == TRUE) {
+  # converting to reverse probs, if requested
+  if (reverse == TRUE) {
     df_stat <-
       df_stat %>%
       mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high), ~ 1 - .) %>%
