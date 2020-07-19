@@ -19,6 +19,9 @@ theme_gtsummary_printer(
 
 theme_gtsummary_language(
   language = c("es", "fr", "de", "en", "pt"),
+  big.mark = NULL,
+  decimal.mark = NULL,
+  set_theme = TRUE
 )
 }
 \arguments{
