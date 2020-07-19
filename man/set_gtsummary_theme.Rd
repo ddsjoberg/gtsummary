@@ -23,12 +23,6 @@ the British Journal of Urology International. Use this function to change
 the default reporting style to match another journal, or your own
 personal style.
 }
-\section{Themes}{
-
-Review the \href{http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html}{themes vignette}
-to create your own themes.
-}
-
 \section{Example Output}{
 
 \if{html}{Example}
@@ -53,5 +47,7 @@ set_gtsummary_theme_ex1 <-
 reset_gtsummary_theme()
 }
 \seealso{
+\href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
+
 Available \link[=theme_gtsummary]{gtsummary themes}
 }
