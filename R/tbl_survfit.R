@@ -137,47 +137,19 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     label = "Overall"
   }
   else if (length(var) > 1)
-    stop("`tbl_survfit()` supports only a single stratifying variable on the RHS of `formula=`",
+    stop("`tbl_survfit()` supports a single stratifying variable on the RHS of `formula=`",
          call. = FALSE)
 
   meta_data <-
     tibble(
       variable = ifelse(length(var) == 0, "..overall..", var),
-      var_label = label
+      var_label = label,
+      survfit = list(x)
     )
 
-  # calculating estimates ------------------------------------------------------
-  if (estimate_type == "times")
-    df_stats <- survfit_time(x, times = times, label_header = label_header,
-                             conf.level = conf.level, reverse = reverse)
-  else if (estimate_type == "probs")
-    df_stats <- survfit_prob(x, probs = probs, label_header = label_header,
-                             conf.level = conf.level)
+  meta_data <-
+    meta_to_df_stats(meta_data, inputs = tbl_survfit_inputs, estimate_type = estimate_type)
 
-  # table_body -----------------------------------------------------------------
-  strata <- intersect("strata", names(df_stats)) %>% list() %>% compact()
-  table_body <-
-    df_stats %>%
-    mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high),
-              ~ coalesce(as.character(estimate_fun(.)), missing)) %>%
-    mutate(
-      statistic = glue(.env$statistic) %>% as.character(),
-      row_type = switch(length(strata) == 0, "label") %||% "level"
-    ) %>%
-    select(c("variable", "row_type", "label", "col_name", "statistic")) %>%
-    tidyr::pivot_wider(id_cols = c(.data$variable, .data$row_type, .data$label),
-                       names_from = c(.data$col_name),
-                       values_from = c(.data$statistic))
-  # adding label row, if needed
-  if (nrow(table_body) > 1) {
-    table_body <-
-      table_body %>%
-      select(.data$variable) %>%
-      distinct() %>%
-      mutate(row_type = "label",
-             label = .env$label %||% .data$variable) %>%
-      bind_rows(table_body)
-  }
 
   # table_header ---------------------------------------------------------------
   table_header <-
@@ -206,6 +178,57 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   results
 }
 
+# function that uses meta_data and inputs to finish tbl ----------------------
+meta_to_df_stats <- function(meta_data, inputs, estimate_type) {
+  meta_data %>%
+    mutate(
+      df_stats = map(
+        # calculating estimates ------------------------------------------------------
+        .data$survfit,
+        ~ switch(
+          estimate_type,
+          "times" = survfit_time(.x, times = inputs$times,
+                                 label_header = inputs$label_header,
+                                 conf.level = inputs$conf.level,
+                                 reverse = inputs$reverse),
+          "probs" = survfit_prob(.x, probs = inputs$probs,
+                                 label_header = inputs$label_header,
+                                 conf.level = inputs$conf.level)
+        ),
+        # table_body -----------------------------------------------------------------
+        # table_body = map(
+        #   .data$df_stats,
+        #   function(df_stats) {
+        #     strata <- intersect("strata", names(df_stats)) %>% list() %>% compact()
+        #
+        #     table_body <-
+        #       df_stats %>%
+        #       mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high),
+        #                 ~ coalesce(as.character(estimate_fun(.)), missing)) %>%
+        #       mutate(
+        #         statistic = glue(.env$statistic) %>% as.character(),
+        #         row_type = switch(length(strata) == 0, "label") %||% "level"
+        #       ) %>%
+        #       select(c("variable", "row_type", "label", "col_name", "statistic")) %>%
+        #       tidyr::pivot_wider(id_cols = c(.data$variable, .data$row_type, .data$label),
+        #                          names_from = c(.data$col_name),
+        #                          values_from = c(.data$statistic))
+        #
+        #     # adding label row, if needed
+        #     if (nrow(table_body) > 1) {
+        #       table_body <-
+        #         table_body %>%
+        #         select(.data$variable) %>%
+        #         distinct() %>%
+        #         mutate(row_type = "label",
+        #                label = .env$label %||% .data$variable) %>%
+        #         bind_rows(table_body)
+        #     }
+        #   }
+        # )
+      )
+    )
+}
 
 # calculates and prepares survival quantile estimates for tbl
 survfit_prob <- function(x, probs, label_header, conf.level) {
