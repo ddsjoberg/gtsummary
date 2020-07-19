@@ -13,9 +13,7 @@
 #' named list defining a gtsummary theme. See details below.
 #' @name set_gtsummary_theme
 #' @export
-#' @section Themes:
-#' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html)
-#' to create your own themes.
+#' @seealso [Themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' @seealso Available [gtsummary themes][theme_gtsummary]
 #' @examples
 #' # Setting JAMA theme for gtsummary
