@@ -8,18 +8,17 @@
 \alias{theme_gtsummary_language}
 \title{Available gtsummary themes}
 \usage{
-theme_gtsummary_journal(journal = "jama")
+theme_gtsummary_journal(journal = "jama", set_theme = TRUE)
 
-theme_gtsummary_compact()
+theme_gtsummary_compact(set_theme = TRUE)
 
 theme_gtsummary_printer(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble")
+  print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble"),
+  set_theme = TRUE
 )
 
 theme_gtsummary_language(
   language = c("es", "fr", "de", "en", "pt"),
-  big.mark = NULL,
-  decimal.mark = NULL
 )
 }
 \arguments{
@@ -27,6 +26,9 @@ theme_gtsummary_language(
 \itemize{
 \item \code{"jama"} Journal of the American Medical Association
 }}
+
+\item{set_theme}{Logical indicating whether to set the theme. Default is \code{TRUE}.
+When \code{FALSE} the named list of theme elements is returned invisibly.}
 
 \item{print_engine}{String indicating the print engine. Default is \code{"gt"}}
 
@@ -55,7 +57,7 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 \itemize{
 \item \code{theme_gtsummary_journal(journal=)}
 \itemize{
-\item \code{journal = "jama"}
+\item \code{"jama"}
 \itemize{
 \item sets theme to align with the JAMA reporting guidelines
 \item large p-values are rounded to two decimal places
@@ -78,7 +80,7 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 
 Use \code{reset_gtsummary_theme()} to restore the default settings
 
-Review the \href{http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html}{themes vignette}
+Review the \href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}
 to create your own themes.
 }
 
@@ -91,9 +93,9 @@ to create your own themes.
 
 \examples{
 # Setting JAMA theme for gtsummary
-set_gtsummary_theme(theme_gtsummary_journal("jama"))
+theme_gtsummary_journal("jama")
 # Themes can be combined by including more than one
-set_gtsummary_theme(theme_gtsummary_compact())
+theme_gtsummary_compact()
 
 set_gtsummary_theme_ex1 <-
   trial \%>\%
@@ -102,9 +104,13 @@ set_gtsummary_theme_ex1 <-
   add_stat_label() \%>\%
   as_gt()
 
-# reset gtsummary theme
+# reset gtsummary themes
 reset_gtsummary_theme()
 }
 \seealso{
 \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}}
+
+\href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
+
+\code{set_gtsummary_theme()}, \code{reset_gtsummary_theme()}
 }
