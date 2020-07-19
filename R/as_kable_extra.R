@@ -20,9 +20,14 @@
 #'   as_kable_extra()
 
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
-                           strip_md_bold = TRUE, ...) {
+                           group_header = NULL, strip_md_bold = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
   assert_package("kableExtra", "as_kable_extra")
+
+  # setting defaults -----------------------------------------------------------
+  group_header <-
+    group_header %||%
+    get_theme_element("pkgwide-str:group_header", default = "**Group**")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -36,10 +41,13 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
           .data$spanning_header, pattern = fixed("**"), replacement = fixed("")
         )
       )
+
+    group_header <- str_replace_all(group_header, pattern = fixed("**"), replacement = fixed(""))
   }
 
   # creating list of kableExtra calls ------------------------------------------
-  kable_extra_calls <- table_header_to_kable_extra_calls(x = x, ...)
+  kable_extra_calls <-
+    table_header_to_kable_extra_calls(x = x, group_header = group_header, ...)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
@@ -77,11 +85,12 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-table_header_to_kable_extra_calls <- function(x, ...) {
+table_header_to_kable_extra_calls <- function(x, group_header, ...) {
   table_header <- x$table_header
 
   # getting kable calls
-  kable_extra_calls <- as_kable(x = x, return_calls = TRUE, ...)
+  kable_extra_calls <-
+    table_header_to_kable_calls(x = x, group_header = group_header, ...)
 
   # add_indent -----------------------------------------------------------------
   tab_style_indent <-
