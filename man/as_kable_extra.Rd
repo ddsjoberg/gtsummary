@@ -8,6 +8,7 @@ as_kable_extra(
   x,
   include = everything(),
   return_calls = FALSE,
+  group_header = NULL,
   strip_md_bold = TRUE,
   ...
 )
@@ -19,10 +20,14 @@ as_kable_extra(
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is \code{everything()}, which includes all commands in \code{x$kable_calls}.}
+Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
+
+\item{group_header}{If a group is present (e.g. via \code{tbl_merge(group_header=)}),
+this string specifies the column header for the grouping column. Default
+is \code{"**Group**"}}
 
 \item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
 bold weight) in column labels and spanning headers are removed.
