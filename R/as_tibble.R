@@ -6,6 +6,9 @@
 #' @inheritParams as_kable
 #' @param col_labels Logical argument adding column labels to output tibble.
 #' Default is `TRUE`.
+#' @param group_header If a group is present (e.g. via `tbl_merge(group_header=)`),
+#' this string specifies the column header for the grouping column. Default
+#' is `"**Group**"`
 #' @param ... Not used
 #' @return a [tibble][tibble::tibble-package]
 #' @family gtsummary output types
@@ -22,7 +25,8 @@
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
-                                  return_calls = FALSE, exclude = NULL,  ...) {
+                                return_calls = FALSE, group_header = NULL,
+                                exclude = NULL,  ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(
@@ -37,10 +41,16 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
     )
   }
 
-  # creating list of calls to get formatted tibble -----------------------------
-  tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels)
+  # setting defaults -----------------------------------------------------------
+  group_header <-
+    group_header %||%
+    get_theme_element("pkgwide-str:group_header", default = "**Group**")
 
-  # converting to charcter vector ----------------------------------------------
+  # creating list of calls to get formatted tibble -----------------------------
+  tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels,
+                                               group_header = group_header)
+
+  # converting to character vector ---------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(tibble_calls)),
                                  select_input = !!rlang::enquo(include))
   exclude <- var_input_to_string(data = vctr_2_tibble(names(tibble_calls)),
@@ -69,7 +79,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 }
 
 
-table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
+table_header_to_tibble_calls <- function(x, col_labels =  TRUE, group_header) {
   table_header <- x$table_header
   tibble_calls <- list()
 
@@ -145,15 +155,20 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
 
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
-  tibble_calls[["cols_hide"]] <- expr(dplyr::select(!!!syms(cols_to_keep)))
+  tibble_calls[["cols_hide"]] <- expr(dplyr::select(any_of("groupname_col"), !!!syms(cols_to_keep)))
 
   # cols_label -----------------------------------------------------------------
   if (col_labels) {
     df_col_labels <-
       dplyr::filter(table_header, .data$hide == FALSE)
 
-    tibble_calls[["cols_label"]] <-
-      expr(rlang::set_names(!!df_col_labels$label))
+    # if there is a grouping variable, add the column header
+    if (length(group_var) > 0)
+      tibble_calls[["cols_label"]] <-
+        expr(rlang::set_names(c(!!group_header, !!df_col_labels$label)))
+    else
+      tibble_calls[["cols_label"]] <-
+        expr(rlang::set_names(!!df_col_labels$label))
   }
 
   tibble_calls
