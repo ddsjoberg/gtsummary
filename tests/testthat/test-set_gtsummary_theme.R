@@ -3,15 +3,11 @@ testthat::skip_on_cran()
 
 test_that("setting themes", {
   expect_error(
-    theme_gtsummary_journal("jama"),
-    NA)
-
-  expect_error(
     set_gtsummary_theme(theme_gtsummary_journal("jama")),
     NA)
 
   expect_error(
-    theme_gtsummary_compact(),
+    set_gtsummary_theme(theme_gtsummary_compact()),
     NA)
 
   expect_error(
