@@ -52,6 +52,7 @@
 #' Pro tip: Use the [flextable::width()] function for exacting control over
 #' column width, e.g. `as_flextable() %>% flextable::width(...)`.
 #' @inheritParams as_gt
+#' @inheritParams as_tibble.gtsummary
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for
 #' bold weight) in column labels and spanning headers are removed.
 #' Default is TRUE
@@ -75,9 +76,14 @@
 #'
 #' \if{html}{\figure{as_flextable_ex1.png}{options: width=60\%}}
 as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
-                                   strip_md_bold = TRUE, ...) {
+                                   strip_md_bold = TRUE, group_header = NULL, ...) {
   # checking flextable installation --------------------------------------------
   assert_package("flextable", "as_flextable.gtsummary")
+                                                                   
+  # setting defaults -----------------------------------------------------------
+  group_header <-
+    group_header %||%
+    get_theme_element("pkgwide-str:group_header", default = "**Group**")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -87,10 +93,11 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
         vars(.data$label, .data$spanning_header),
         ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
       )
+    group_header <- str_replace_all(group_header, pattern = fixed("**"), replacement = fixed(""))
   }
 
   # creating list of flextable calls -------------------------------------------
-  flextable_calls <- table_header_to_flextable_calls(x = x)
+  flextable_calls <- table_header_to_flextable_calls(x = x, group_header = group_header)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_flextable.gtsummary-lst:addl_cmds")
@@ -123,12 +130,27 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
 }
 
 # creating flextable calls from table_header -----------------------------------
-table_header_to_flextable_calls <- function(x, ...) {
-  table_header <-
-    x$table_header %>%
-    group_by(.data$hide) %>%
-    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-    ungroup()
+table_header_to_flextable_calls <- function(x, group_header, ...) {
+
+  # if there is a grouping variable, add table_header info for it
+  if (dplyr::group_vars(x$table_body) %>% length() > 0) {
+    table_header <-
+      tibble::tibble(column = "groupname_col",
+                     label = group_header,
+                     hide = FALSE,
+                     align = "left") %>%
+      bind_rows(x$table_header) %>%
+      group_by(.data$hide) %>%
+      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+      ungroup()
+  }
+  else {
+    table_header <-
+      x$table_header %>%
+      group_by(.data$hide) %>%
+      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+      ungroup()
+  }
 
   # tibble ---------------------------------------------------------------------
   # flextable doesn't use the markdown language `__` or `**`

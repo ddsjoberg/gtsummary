@@ -29,7 +29,7 @@ test_that("tbl_survfit", {
   expect_warning(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
 })
 
-test_that("tbl_merge", {
+test_that("tbl_merge/tbl_stack", {
   library(survival)
   t1 <-
     glm(response ~ trt + grade + age, trial, family = binomial) %>%
@@ -43,7 +43,15 @@ test_that("tbl_merge", {
       tab_spanner = c("**Tumor Response**", "**Time to Death**")
     )
 
+  tbl_stack_ex1 <-
+    tbl_stack(
+      tbls = list(t1, t2),
+      group_header = c("**Tumor Response**", "**Time to Death**")
+    )
+
   expect_error(tbl_merge_ex1 %>% as_kable_extra(), NA)
   expect_warning(tbl_merge_ex1 %>% as_kable_extra(), NA)
+  expect_error(tbl_stack_ex1 %>% as_kable_extra(), NA)
+  expect_warning(tbl_stack_ex1 %>% as_kable_extra(), NA)
 
 })
