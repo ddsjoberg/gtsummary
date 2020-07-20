@@ -48,7 +48,7 @@ In `tbl_summary()`, the default function for styling percentages is `style_perce
 If you'd like to update the default, for example, because you'd prefer percentages rounded to one decimal place, you may include the `gtsummary.tbl_summary.percent_fun` option.
 
 ```{r}
-options(gtsummary.tbl_summary.percent_fun = function(x) sprintf(x * 100, fmt='%#.1f'))
+options(gtsummary.tbl_summary.percent_fun = function(x) style_number(x * 100, digits = 1))
 ```
 
 ### survival estimates
