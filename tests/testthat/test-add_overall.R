@@ -25,6 +25,18 @@ test_that("no errors/warnings with missing data in by variable", {
   expect_error(trial %>% tbl_summary(by = response) %>% add_overall(), NA)
 })
 
+test_that("add_overall-works with ordered factors", {
+  expect_error(
+    trial %>%
+      select(response, trt) %>%
+      dplyr::mutate_at(vars(response, trt),
+                       ~factor(., ordered = TRUE)) %>%
+      tbl_summary(by = trt) %>%
+      add_overall(),
+    NA
+  )
+})
+
 test_that("no errors/warnings with standard use for tbl_svysummary", {
   t <- trial %>%
     survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%

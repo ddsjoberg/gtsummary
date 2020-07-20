@@ -401,3 +401,14 @@ test_that("tbl_summary- works with grouped data (it ungroups it first)", {
   )
 })
 
+test_that("tbl_summary-works with ordered factors", {
+  expect_error(
+    trial %>%
+      select(response, trt) %>%
+      dplyr::mutate_at(vars(response, trt),
+                       ~factor(., ordered = TRUE)) %>%
+      tbl_summary(by = trt),
+    NA
+  )
+})
+
