@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Bug fix `tbl_summary()` when a data frame contained an ordered factor column (#567)
+
+* Updated API for `set_gtsummary_theme()`. Users no longer need call `set_gtsummary_theme(theme_gtsummary_journal())`; rather, they call `theme_gtsummary_journal()`. Each built-in theme now has an argument `set_theme = TRUE`. When `FALSE`, the theme function will invisibly return the named list the theme elements, and the theme will not be set. (#522)
+
 * Bug fix when only categorical summary statistics were requested for continuous variables in `tbl_summary()` and `tbl_svysummary()` (#528)
 
 * Added `tbl_svysummary()` function to summarize complex and weighted survey designs. `tbl_svysummary` is now its own class that works with `add_n()`, `add_p()`,
