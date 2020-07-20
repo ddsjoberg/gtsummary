@@ -100,7 +100,7 @@ inline_text vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9009</span>
       </span>
     </div>
 
@@ -267,16 +267,14 @@ and return a string that is the rounded/formatted p-value (e.g.
   <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
   <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Treatment"</span>,
   <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**{time} Month**"</span>
-)
-
+)</div><div class='output co'>#&gt; <span class='error'>Error in eval_tidy(xs[[j]], mask): object 'table_body' not found</span></div><div class='input'>
 <span class='no'>tbl2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span>(
   <span class='no'>fit2</span>,
   <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
   <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**Median Survival**"</span>
-)
-
+)</div><div class='output co'>#&gt; <span class='error'>Error in eval_tidy(xs[[j]], mask): object 'table_body' not found</span></div><div class='input'>
 <span class='co'># report results inline</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>tbl1</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>24</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Drug B"</span>)</div><div class='output co'>#&gt; 41% (33%, 52%)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>tbl2</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='output co'>#&gt; 22 (21, --)</div></pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>tbl1</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>24</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"Drug B"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in inline_text(tbl1, time = 24, level = "Drug B"): object 'tbl1' not found</span></div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>tbl2</span>, <span class='kw'>prob</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='output co'>#&gt; <span class='error'>Error in inline_text(tbl2, prob = 0.5): object 'tbl2' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -102,7 +102,7 @@ changed manually with kableExtra output." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9009</span>
       </span>
     </div>
 
@@ -193,6 +193,7 @@ changed manually with kableExtra output.</p>
   <span class='no'>x</span>,
   <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='everything.html'>everything</a></span>(),
   <span class='kw'>return_calls</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>group_header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>strip_md_bold</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>
 )</pre>
@@ -210,12 +211,18 @@ changed manually with kableExtra output.</p>
       <td><p>Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is <code><a href='everything.html'>everything()</a></code>, which includes all commands in <code>x$kable_calls</code>.</p></td>
+Default is <code><a href='everything.html'>everything()</a></code>.</p></td>
     </tr>
     <tr>
       <th>return_calls</th>
       <td><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
 as a list of expressions.</p></td>
+    </tr>
+    <tr>
+      <th>group_header</th>
+      <td><p>If a group is present (e.g. via <code><a href='tbl_merge.html'>tbl_merge(group_header=)</a></code>),
+this string specifies the column header for the grouping column. Default
+is <code>"**Group**"</code></p></td>
     </tr>
     <tr>
       <th>strip_md_bold</th>
