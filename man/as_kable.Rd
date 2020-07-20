@@ -4,7 +4,14 @@
 \alias{as_kable}
 \title{Convert gtsummary object to a kable object}
 \usage{
-as_kable(x, include = everything(), return_calls = FALSE, exclude = NULL, ...)
+as_kable(
+  x,
+  include = everything(),
+  return_calls = FALSE,
+  group_header = NULL,
+  exclude = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -13,10 +20,14 @@ as_kable(x, include = everything(), return_calls = FALSE, exclude = NULL, ...)
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is \code{everything()}, which includes all commands in \code{x$kable_calls}.}
+Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
+
+\item{group_header}{If a group is present (e.g. via \code{tbl_merge(group_header=)}),
+this string specifies the column header for the grouping column. Default
+is \code{"**Group**"}}
 
 \item{exclude}{DEPRECATED}
 
@@ -48,7 +59,7 @@ trial \%>\%
 }
 \seealso{
 Other gtsummary output types: 
-\code{\link{as_flextable}()},
+\code{\link{as_flextable.gtsummary}()},
 \code{\link{as_gt}()},
 \code{\link{as_huxtable.gtsummary}()},
 \code{\link{as_kable_extra}()},

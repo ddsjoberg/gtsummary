@@ -220,7 +220,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     stop("There were no covariates selected.", call. = FALSE)
   }
 
-  # bulding regression models --------------------------------------------------
+  # building regression models -------------------------------------------------
   df_model <-
     tibble(vars = all_vars) %>%
     set_names(ifelse(!is.null(y), "x", "y")) %>%
@@ -247,6 +247,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
             exponentiate = exponentiate,
             conf.level = conf.level,
             label = label,
+            include = .y, # only include the covariate of interest in output
             show_single_row = intersect(.y, show_single_row),
             tidy_fun = tidy_fun
           )

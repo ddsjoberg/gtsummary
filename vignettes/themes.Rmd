@@ -26,7 +26,18 @@ The defaults in {gtsummary} were written to align with the reporting guidelines 
 
 ## Setting Themes
 
-To set a theme, use the `set_gtsummary_theme()` function.
+To set a pre-defined theme, simply include the theme function in a script or the R console.
+
+```r
+theme_gtsummary_journal(journal = "jama")
+```
+
+Use the `set_gtsummary_theme()` function to set user-defined themes (more on that below).
+
+```r
+set_gtsummary_theme(my_custom_theme)
+```
+
 Themes must be set before you create the {gtsummary} tables.
 Let's take a look at the default table, comparing data between treatment groups.
 
@@ -38,8 +49,7 @@ library(gtsummary); library(gt); library(dplyr)
 trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
-  add_p() %>%
-  add_stat_label()
+  add_p() 
 ```
 
 #### JAMA Theme
@@ -47,15 +57,14 @@ trial %>%
 Now, the same code with the JAMA theme.
 
 ```{r, message=TRUE}
-set_gtsummary_theme(theme_gtsummary_journal(journal = "jama"))
+theme_gtsummary_journal(journal = "jama")
 ```
 
 ```{r, message=FALSE, echo=FALSE}
 trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
-  add_p() %>%
-  add_stat_label()
+  add_p() 
 ```
 
 By setting the theme, we were able to change the default formatting for the p-value and add a dash between the 25th and 75th percentiles.
@@ -66,19 +75,35 @@ Themes can be stacked as well.
 In the example below, the JAMA theme and the compact theme (reduces font size and cell padding) are both called and both themes are utilized.
 
 ```{r, message=TRUE}
-set_gtsummary_theme(theme_gtsummary_journal(journal = "jama"))
-set_gtsummary_theme(theme_gtsummary_compact())
+theme_gtsummary_journal(journal = "jama")
+theme_gtsummary_compact()
 ```
 
 ```{r, message=FALSE, echo=FALSE}
 trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
-  add_p() %>%
-  add_stat_label()
+  add_p() 
 ```
 
-Clear all previously set themes using the `reset_gtsummary_theme()`
+#### JAMA + Compact + Language Theme
+
+All {gtsummary} tables can be translated into another language using `theme_gtsummary_language()`!
+
+```{r, message=FALSE, echo = FALSE}
+set_gtsummary_theme(theme_gtsummary_journal(journal = "jama"))
+set_gtsummary_theme(theme_gtsummary_compact())
+set_gtsummary_theme(theme_gtsummary_language("es"))
+```
+
+```{r, message=FALSE, echo=FALSE}
+trial %>%
+  select(trt, age, grade) %>%
+  tbl_summary(by = trt) %>%
+  add_p() 
+```
+
+*Clear all previously set themes using* `reset_gtsummary_theme()`.
 
 ```{r}
 reset_gtsummary_theme()
@@ -95,14 +120,16 @@ Here's an example of a theme that modifies the function that styles p-values and
 ```{r}
 my_theme <-   
   list(
+    # round large p-values to two places
     "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
     "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+    # report median (IQR) and n (percent) as default stats in `tbl_summary()`
     "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
     "tbl_summary-str:categorical_stat" = "{n} ({p})"
   )
 ```
 
-Once you create the theme, you can set it just like one of the included themes.
+Once you create the theme, you can set it with `set_gtsummary_theme()`.
 
 ```{r, eval=FALSE}
 set_gtsummary_theme(my_theme)
@@ -118,17 +145,20 @@ The first is modifying internal behavior of the functions that is not directly c
 
 ```{r, echo=FALSE}
 gtsummary:::df_theme_elements %>%
-  filter(argument == FALSE) %>%
-  select(-argument) %>%
-  mutate(name = glue::glue("`{name}`"),
-         example = glue::glue("`{example}`")) %>%
-  group_by(fn) %>%
-  gt() %>%
-  cols_align(columns = everything(), align = "left") %>%
-  cols_label(name = "Theme Element", desc = "Description",
-             example = "Example") %>%
-  fmt_markdown(columns = vars(name, example)) %>%
-  tab_options(table.font.size = 'small',
+  dplyr::filter(argument == FALSE) %>%
+  dplyr::select(-argument) %>%
+  dplyr::mutate(
+    name = ifelse(!is.na(name), glue::glue("`{name}`"), NA_character_),
+    example = ifelse(!is.na(example), glue::glue("`{example}`"), NA_character_)
+  ) %>%
+  dplyr::group_by(fn) %>%
+  gt::gt() %>%
+  gt::cols_align(columns = everything(), align = "left") %>%
+  gt::cols_label(name = "Theme Element", desc = "Description",
+                 example = "Example") %>%
+  gt::fmt_markdown(columns = vars(name, example)) %>%
+  gt::fmt_missing(columns = everything(), missing_text = "") %>%
+  gt::tab_options(table.font.size = 'small',
                   data_row.padding = gt::px(1),
                   row_group.padding = gt::px(1))
 

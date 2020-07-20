@@ -34,11 +34,10 @@ test_that("no errors/warnings with standard use", {
   )
 
   # checking the pvalues match
-  expect_equal(
-    test1$table_body$p.value %>% rlang::set_names(c("age", "marker")),
+  expect_equivalent(
+    test1$table_body$p.value,
     test1$table_body$add_stat_1
   )
-
 
 
   expect_error(
@@ -62,7 +61,7 @@ test_that("expect errors", {
         header = "**Treatment Comparison**",       # column header
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -73,7 +72,7 @@ test_that("expect errors", {
         header = "**Treatment Comparison**",       # column header
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -84,7 +83,7 @@ test_that("expect errors", {
         header = c("**Treatment Comparison**", "**Treatment Comparison**"),       # column header
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -95,7 +94,7 @@ test_that("expect errors", {
         header = "**Treatment Comparison**",       # column header
         footnote = c("T-test statistic and p-value", "T-test statistic and p-value")  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -107,7 +106,7 @@ test_that("expect errors", {
         new_col_name = mean,
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 
   expect_error(
@@ -118,6 +117,6 @@ test_that("expect errors", {
         header = "**Treatment Comparison**",       # column header
         footnote = "T-test statistic and p-value"  # footnote
       ),
-    "*"
+    NULL
   )
 })

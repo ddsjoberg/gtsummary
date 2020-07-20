@@ -5,15 +5,16 @@
 #' @param var_summary_type summary_type from meta data
 #' @param by_var categorical variable
 #' @param test list of user defined statistical tests and corresponding variables
+#' @param assign_test_one function for assigning test to one specific variable
 #' @return most appropriate test as text of the test function
 #' @noRd
 #' @keywords internal
 #' @author Daniel D. Sjoberg
 
-assign_test <- function(data, var, var_summary_type, by_var, test, group, env) {
+assign_test <- function(data, var, var_summary_type, by_var, test, group, env, assign_test_one_fun = assign_test_one) {
   map2(
     var, var_summary_type,
-    ~ assign_test_one(
+    ~ assign_test_one_fun(
       data = data,
       var = .x,
       var_summary_type = .y,
@@ -28,7 +29,7 @@ assign_test <- function(data, var, var_summary_type, by_var, test, group, env) {
 # test_match_to_fn -------------------------------------------------------------
 # little function to return the function from the shortcut name,
 # this is a helper function for assign_test_one()
-test_match_to_fn <- function(x, env) {
+test_match_to_fn <- function(x, env, survey = FALSE) {
   if (is.null(x)) return(NULL)
 
   # lookup table
@@ -44,6 +45,29 @@ test_match_to_fn <- function(x, env) {
       "fisher.test", stats::fisher.test, add_p_test_fisher.test,
       "lme4", NULL, add_p_test_lme4
     )
+  if (requireNamespace("survey", quietly = TRUE) & survey) {
+    if (rlang::is_string(x) && x %in% df_lookup$fun_chr) {
+      stop(paste0(
+        "\"", x, "\" is not a test adapted to survey objects.\n",
+        "See ?add_p.tbl_svysummary for a list of available statistical tests."
+      ), call. = FALSE)
+    }
+
+    df_lookup <- tibble::tribble(
+      ~fun_chr, ~fun_base_r, ~fun_add_p,
+      "svy.t.test", survey::svyttest, add_p_test_svy.t.test,
+      "svy.wilcox.test", survey::svyranktest, add_p_test_svy.wilcox.test,
+      "svy.kruskal.test", NULL, add_p_test_svy.kruskal.test,
+      "svy.vanderwaerden.test", NULL, add_p_test_svy.vanderwaerden.test,
+      "svy.median.test", NULL, add_p_test_svy.median.test,
+      "svy.chisq.test", survey::svychisq, add_p_test_svy.chisq.test,
+      "svy.adj.chisq.test", NULL, add_p_test_svy.adj.chisq.test,
+      "svy.wald.test", NULL, add_p_test_svy.wald.test,
+      "svy.adj.wald.test", NULL, add_p_test_svy.adj.wald.test,
+      "svy.lincom.test", NULL, add_p_test_svy.lincom.test,
+      "svy.saddlepoint.test", NULL, add_p_test_svy.saddlepoint.test
+    )
+  }
 
   # if string was passed, match `fun_chr`
   if (rlang::is_string(x) && x %in% df_lookup$fun_chr) {
@@ -159,21 +183,21 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
 add_p_test_t.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
-  result$test <- "t-test"
+  result$test <- translate_text("t-test")
   result
 }
 
 add_p_test_aov <- function(data, variable, by, ...) {
   result <- list()
   result$p <- broom::glance(stats::lm(data[[variable]] ~ as.factor(data[[by]])))$p.value
-  result$test <- "One-way ANOVA"
+  result$test <- translate_text("One-way ANOVA")
   result
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
-  result$test <- "Kruskal-Wallis test"
+  result$test <- translate_text("Kruskal-Wallis test")
   result
 }
 
@@ -183,28 +207,29 @@ add_p_test_wilcox.test <- function(data, variable, by, ...) {
     stop("Wilcoxon rank-sum test cannot be calculated with more than 2 groups")
   }
   result$p <- stats::wilcox.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
-  result$test <- "Wilcoxon rank-sum test"
+  result$test <- translate_text("Wilcoxon rank-sum test")
+
   result
 }
 
 add_p_test_chisq.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]))$p.value
-  result$test <- "chi-square test of independence"
+  result$test <- translate_text("chi-square test of independence")
   result
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::chisq.test(data[[variable]], as.factor(data[[by]]), correct = FALSE)$p.value
-  result$test <- "chi-square test of independence"
+  result$test <- translate_text("chi-square test of independence")
   result
 }
 
 add_p_test_fisher.test <- function(data, variable, by, ...) {
   result <- list()
   result$p <- stats::fisher.test(data[[variable]], as.factor(data[[by]]))$p.value
-  result$test <- "Fisher's exact test"
+  result$test <- translate_text("Fisher's exact test")
   result
 }
 
@@ -238,7 +263,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
   # returning p-value
   result$p <- stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
-  result$test <- "random intercept logistic regression"
+  result$test <- translate_text("random intercept logistic regression")
   result
 }
 
@@ -252,7 +277,8 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
   }
 
   # keeping non-missing values
-  data <- stats::na.omit(data[c(variable, by, group)])
+  # note: this syntax is compatible with survey objects
+  data <- stats::na.omit(data[, c(variable, by, group)])
 
   # calculating pvalue
   tryCatch(
@@ -268,9 +294,14 @@ add_p_test_safe <- function(data, variable, by, group, test, include = NULL, typ
       },
       # printing warning and errors as message
       warning = function(w) {
-        message(glue(
-          "Warning in 'add_p()' for variable '{variable}':\n ", as.character(w)
-        ))
+        w <- as.character(w)
+        # hidden warnings from survey::svychisq() should not be returned
+        w <- stringr::str_subset(w, "chisq.test\\(svytable\\(", negate = TRUE)
+        if (length(w) > 0) {
+          message(glue(
+            "Warning in 'add_p()' for variable '{variable}':\n ", w
+          ))
+        }
         invokeRestart("muffleWarning")
       }
     ),
@@ -297,3 +328,108 @@ calculate_pvalue <- function(data, variable, by, test, type, group, include) {
   )
 }
 
+
+# assign_test_one() ------------------------------------------------------------
+assign_test_one_survey <- function(data, var, var_summary_type, by_var, test, group, env) {
+  # if user specified test to be performed, do that test. -----------------------
+  # matching an internal test by name or base R function match
+  # or returning the appropriate test based on what is passed
+  test_func <- test_match_to_fn(test[[var]], env = env, survey = TRUE)
+  if (!is.null(test_func)) return(test_func)
+
+
+  # for continuous data, default to non-parametric tests
+  if (var_summary_type == "continuous") {
+    test_func <-
+      get_theme_element("add_p.tbl_svysummary-attr:test.continuous", default = "svy.wilcox.test") %>%
+      test_match_to_fn(survey = TRUE)
+    return(test_func)
+  }
+
+  # for categorical data, default to chi-squared with Rao & Scott correction
+  if (var_summary_type %in% c("categorical", "dichotomous")) {
+    test_func <-
+      get_theme_element("add_p.tbl_svysummary-attr:test.categorical", default = "svy.chisq.test") %>%
+      test_match_to_fn(survey = TRUE)
+    return(test_func)
+  }
+}
+
+# tests for tbl_svysummary ------------------------------------------------------------
+
+add_p_test_svy.chisq.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "F")$p.value
+  result$test <- translate_text("chi-squared test with Rao & Scott's second-order correction")
+  result
+}
+
+add_p_test_svy.adj.chisq.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Chisq")$p.value
+  result$test <- translate_text("chi-squared test adjusted by a design effect estimate")
+  result
+}
+
+add_p_test_svy.wald.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Wald")$p.value
+  result$test <- translate_text("Wald test of independence for complex survey samples")
+  result
+}
+
+add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "adjWald")$p.value
+  result$test <- translate_text("adjusted Wald test of independence for complex survey samples")
+  result
+}
+
+add_p_test_svy.lincom.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "lincom")$p.value
+  result$test <- translate_text("test of independence using the exact asymptotic distribution for complex survey samples")
+  result
+}
+
+add_p_test_svy.saddlepoint.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svychisq(c_form(right = c(variable, by)), data, statistic = "saddlepoint")$p.value
+  result$test <- translate_text("test of independence using a saddlepoint approximation for complex survey samples")
+  result
+}
+
+add_p_test_svy.t.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svyttest(c_form(variable, by), data)$p.value
+  result$test <- translate_text("t-test adapted to complex survey samples")
+  result
+}
+
+add_p_test_svy.wilcox.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svyranktest(c_form(variable, by), data, test = "wilcoxon")$p.value
+  result$test <- translate_text("Wilcoxon rank-sum test for complex survey samples")
+  result
+}
+
+add_p_test_svy.kruskal.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svyranktest(c_form(variable, by), data, test = "KruskalWallis")$p.value
+  result$test <- translate_text("Kruskal-Wallis rank-sum test for complex survey samples")
+  result
+}
+
+add_p_test_svy.vanderwaerden.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svyranktest(c_form(variable, by), data, test = "vanderWaerden")$p.value
+  result$test <- translate_text("van der Waerden's normal-scores test for complex survey samples")
+  result
+}
+
+add_p_test_svy.median.test <- function(data, variable, by, ...) {
+  result <- list()
+  result$p <- survey::svyranktest(c_form(variable, by), data, test = "median")$p.value
+  result$test <- translate_text("Mood's test for the median for complex survey samples")
+  result
+}

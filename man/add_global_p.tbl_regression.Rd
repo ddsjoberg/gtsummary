@@ -8,10 +8,11 @@
   x,
   include = x$table_body$variable[x$table_body$var_type \%in\% c("categorical",
     "interaction")],
+  type = NULL,
   keep = FALSE,
-  terms = NULL,
   quiet = NULL,
-  ...
+  ...,
+  terms = NULL
 )
 }
 \arguments{
@@ -23,16 +24,18 @@ quoted or unquoted variable names. tidyselect and gtsummary select helper
 functions are also accepted. Default is \code{NULL}, which adds global p-values
 for all categorical and interaction terms.}
 
+\item{type}{Type argument passed to \link[car:Anova]{car::Anova}. Default is \code{"III"}}
+
 \item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is \code{FALSE}}
-
-\item{terms}{DEPRECATED.  Use \verb{include=} argument instead.}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
 
 \item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}}
+
+\item{terms}{DEPRECATED.  Use \verb{include=} argument instead.}
 }
 \value{
 A \code{tbl_regression} object
@@ -66,9 +69,7 @@ Other tbl_regression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
 \code{\link{inline_text.tbl_regression}()},
-\code{\link{modify_footnote}()},
-\code{\link{modify_header}()},
-\code{\link{modify_spanning_header}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_regression}()},
 \code{\link{tbl_stack}()}

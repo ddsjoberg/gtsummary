@@ -32,16 +32,16 @@ covars <- c("trt", "age")
 
 # get model covariates adjusted by stage and grade
 adj_mods <- map(covars, ~
-coxph(
-  as.formula(
-    paste("Surv(ttdeath, death) ~ grade + ", .x)
-  ),
-  trial
-) %>%
-  tbl_regression(
-    include = .x,
-    exponentiate = TRUE
-  ))
+                  coxph(
+                    as.formula(
+                      paste("Surv(ttdeath, death) ~ grade + ", .x)
+                    ),
+                    trial
+                  ) %>%
+                  tbl_regression(
+                    include = .x,
+                    exponentiate = TRUE
+                  ))
 
 # now get stage and grade models adjusted for each other
 adj_mods[["grade_mod"]] <- coxph(
@@ -94,8 +94,20 @@ test_that("number of rows the same after joining", {
 })
 
 test_that("tbl_merge throws errors", {
-  expect_error(tbl_merge(t1), "*")
-  expect_error(tbl_merge(list(mtcars)), "*")
-  expect_error(tbl_merge(tbls = list(t5)), "*")
-  expect_error(tbl_merge(tbls = list(t5, t6), tab_spanner = c("Table")), "*")
+  expect_error(tbl_merge(t1), NULL)
+  expect_error(tbl_merge(list(mtcars)), NULL)
+  expect_error(tbl_merge(tbls = list(t5)), NULL)
+  expect_error(tbl_merge(tbls = list(t5, t6), tab_spanner = c("Table")), NULL)
+})
+
+test_that("tbl_merge throws errors", {
+  expect_equal(
+    trial %>%
+    split(.$trt) %>%
+    purrr::map(tbl_summary, by = stage) %>%
+    tbl_merge(tab_spanner = c("Drug A", "Drug B")) %>%
+    purrr::pluck("table_header", "spanning_header") %>%
+    unique(),
+    c(NA, "Drug A", "Drug B")
+  )
 })

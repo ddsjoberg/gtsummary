@@ -4,11 +4,28 @@
 \alias{add_global_p.tbl_uvregression}
 \title{Adds the global p-value for categorical variables}
 \usage{
-\method{add_global_p}{tbl_uvregression}(x, quiet = NULL, ...)
+\method{add_global_p}{tbl_uvregression}(
+  x,
+  type = NULL,
+  include = everything(),
+  keep = FALSE,
+  quiet = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_uvregression} from the
 \link{tbl_uvregression} function}
+
+\item{type}{Type argument passed to \link[car:Anova]{car::Anova}. Default is \code{"III"}}
+
+\item{include}{Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. tidyselect and gtsummary select helper
+functions are also accepted. Default is \code{everything()}.}
+
+\item{keep}{Logical argument indicating whether to also retain the individual
+p-values in the table output for each level of the categorical variable.
+Default is \code{FALSE}}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
@@ -44,9 +61,7 @@ Other tbl_uvregression tools:
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify_footnote}()},
-\code{\link{modify_header}()},
-\code{\link{modify_spanning_header}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_uvregression}()}

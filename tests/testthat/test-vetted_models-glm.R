@@ -137,7 +137,7 @@ test_that("vetted_models glm()", {
     tbl_glm_log3, NA
   )
   expect_error(
-    tbl_glm_log4 <- tbl_glm_lin %>% add_nevent(), "*"
+    tbl_glm_log4 <- tbl_glm_lin %>% add_nevent(), NULL
   )
   #       - numbers in table are correct
   expect_equivalent(

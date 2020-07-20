@@ -22,3 +22,8 @@ dplyr::select
 #' @importFrom huxtable as_huxtable
 huxtable::as_huxtable
 
+# flextable --------------------------------------------------------------------
+#' @importFrom flextable as_flextable
+#' @export
+flextable::as_flextable
+

@@ -1,5 +1,32 @@
 # gtsummary (development version)
 
+* Bug fix `tbl_summary()` when a data frame contained an ordered factor column (#567)
+
+* Updated API for `set_gtsummary_theme()`. Users no longer need call `set_gtsummary_theme(theme_gtsummary_journal())`; rather, they call `theme_gtsummary_journal()`. Each built-in theme now has an argument `set_theme = TRUE`. When `FALSE`, the theme function will invisibly return the named list the theme elements, and the theme will not be set. (#522)
+
+* Bug fix when only categorical summary statistics were requested for continuous variables in `tbl_summary()` and `tbl_svysummary()` (#528)
+
+* Added `tbl_svysummary()` function to summarize complex and weighted survey designs. `tbl_svysummary` is now its own class that works with `add_n()`, `add_p()`,
+`add_q()`, `add_stat_label()`, `inline_text()`, `tbl_merge()` and `tbl_stack()` (#460).
+
+* `add_overall()` has now become a method function, and `add_overall.tbl_summary` and `add_overall.tbl_svysummary` added (#460).
+
+* `add_n()` to allow for the use of the theme element that styles the integers throughout the package.
+
+* Added support for competing risk cumulative incidence estimates to `tbl_survfit()` (#64, #448) 
+
+* Added `type =` argument to `add_global_p()`, and added `include =` and `keep =` arguments to `add_global_p.tbl_uvregression()` (#554)
+
+* Added `show_header_names()` function (#539)
+
+* Bug fix when named list of {gtsummary} objects is passed to `tbl_merge()` (#541)
+
+* Bug fix when for `tbl_uvregression()` when adjustment variables were included in `formula = "{y} ~ {x} + age"`.  The adjustment variables were being printed in the resulting table. (#555)
+
+* Now importing `as_flextable()` generic from {flextable} to avoid conflicts when using both packages (#462)
+
+* Added a language theme for translating tables into Spanish, French, Portuguese, and German (#511)
+
 # gtsummary 1.3.2
 
 * Now returning all columns from `broom::tidy()` in `.$table_body()` (#516)
