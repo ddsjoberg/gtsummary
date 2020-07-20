@@ -268,57 +268,8 @@ to create your own themes.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Setting JAMA theme for gtsummary</span>
-<span class='fu'>theme_gtsummary_journal</span>(<span class='st'>"jama"</span>)</div><div class='output co'>#&gt; $`pkgwide-str:theme_name`
-#&gt; [1] "JAMA"
-#&gt; 
-#&gt; $`pkgwide-fn:pvalue_fun`
-#&gt; function(x) style_pvalue(x, digits = 2)
-#&gt; &lt;environment: 0x00000210166f2c10&gt;
-#&gt; 
-#&gt; $`pkgwide-fn:prependpvalue_fun`
-#&gt; function(x) style_pvalue(x, digits = 2, prepend_p = TRUE)
-#&gt; &lt;environment: 0x00000210166f2c10&gt;
-#&gt; 
-#&gt; $`add_stat_label-arg:location`
-#&gt; [1] "row"
-#&gt; 
-#&gt; $`tbl_summary-str:continuous_stat`
-#&gt; [1] "{median} ({p25} - {p75})"
-#&gt; 
-#&gt; $`tbl_summary-str:categorical_stat`
-#&gt; [1] "{n} ({p})"
-#&gt; </div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
-<span class='fu'>theme_gtsummary_compact</span>()</div><div class='output co'>#&gt; $`pkgwide-str:theme_name`
-#&gt; [1] "Compact"
-#&gt; 
-#&gt; $`as_gt-lst:addl_cmds`
-#&gt; $`as_gt-lst:addl_cmds`$tab_spanner
-#&gt; gt::tab_options(table.font.size = "small", data_row.padding = gt::px(1), 
-#&gt;     summary_row.padding = gt::px(1), grand_summary_row.padding = gt::px(1), 
-#&gt;     footnotes.padding = gt::px(1), source_notes.padding = gt::px(1), 
-#&gt;     row_group.padding = gt::px(1))
-#&gt; 
-#&gt; 
-#&gt; $`as_flextable.gtsummary-lst:addl_cmds`
-#&gt; $`as_flextable.gtsummary-lst:addl_cmds`$footnote
-#&gt; $`as_flextable.gtsummary-lst:addl_cmds`$footnote[[1]]
-#&gt; flextable::fontsize(size = 8, part = "all")
-#&gt; 
-#&gt; $`as_flextable.gtsummary-lst:addl_cmds`$footnote[[2]]
-#&gt; flextable::padding(padding.top = 0, part = "all")
-#&gt; 
-#&gt; $`as_flextable.gtsummary-lst:addl_cmds`$footnote[[3]]
-#&gt; flextable::padding(padding.bottom = 0, part = "all")
-#&gt; 
-#&gt; 
-#&gt; 
-#&gt; $`as_kable_extra-lst:addl_cmds`
-#&gt; $`as_kable_extra-lst:addl_cmds`$kable
-#&gt; $`as_kable_extra-lst:addl_cmds`$kable[[1]]
-#&gt; kableExtra::kable_styling(font_size = 8)
-#&gt; 
-#&gt; 
-#&gt; </div><div class='input'>
+<span class='fu'>theme_gtsummary_journal</span>(<span class='st'>"jama"</span>)</div><div class='output co'>#&gt; <span class='message'>Setting `JAMA` theme</span></div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
+<span class='fu'>theme_gtsummary_compact</span>()</div><div class='output co'>#&gt; <span class='message'>Setting `Compact` theme</span></div><div class='input'>
 <span class='no'>set_gtsummary_theme_ex1</span> <span class='kw'>&lt;-</span>
   <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>

@@ -278,25 +278,19 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
   <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
   <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Treatment"</span>,
   <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**{time} Month**"</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in eval_tidy(xs[[j]], mask): object 'table_body' not found</span></div><div class='input'>
+)
+
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='no'>tbl_survfit_ex2</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
   <span class='no'>fit2</span>,
   <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
   <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**Median Survival**"</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in eval_tidy(xs[[j]], mask): object 'table_body' not found</span></div><div class='input'>
+)
+
 <span class='co'># Example 3 Competing Events Example ---------</span>
 <span class='co'># adding a competing event for death (cancer vs other causes)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Hmisc’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    src, summarize</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>trial2</span> <span class='kw'>&lt;-</span> <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
+<span class='no'>trial2</span> <span class='kw'>&lt;-</span> <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(
   <span class='kw'>death_cr</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span>(
     <span class='no'>death</span> <span class='kw'>==</span> <span class='fl'>0</span> ~ <span class='st'>"censor"</span>,
@@ -307,7 +301,7 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 
 <span class='no'>survfit_cr_ex3</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death_cr</span>) ~ <span class='no'>grade</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trial2</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_survfit</span>(<span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Tumor Grade"</span>)</div><div class='output co'>#&gt; <span class='message'>Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div><div class='output co'>#&gt; <span class='error'>Error in eval_tidy(xs[[j]], mask): object 'table_body' not found</span></div></pre>
+  <span class='fu'>tbl_survfit</span>(<span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Tumor Grade"</span>)</div><div class='output co'>#&gt; <span class='message'>Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

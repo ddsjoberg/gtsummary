@@ -263,7 +263,12 @@ Default is <code>FALSE</code></p></td>
     <pre class="examples"><div class='input'><span class='no'>tbl_lm_global_ex1</span> <span class='kw'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>marker</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Global p-values for variable(s) 'grade' calculated with</span>
+  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'car':</span>
+#&gt; <span class='message'>  method                          from</span>
+#&gt; <span class='message'>  influence.merMod                lme4</span>
+#&gt; <span class='message'>  cooks.distance.influence.merMod lme4</span>
+#&gt; <span class='message'>  dfbeta.influence.merMod         lme4</span>
+#&gt; <span class='message'>  dfbetas.influence.merMod        lme4</span></div><div class='output co'>#&gt; <span class='message'>Global p-values for variable(s) 'grade' calculated with</span>
 #&gt; <span class='message'>`car::Anova(x$model_obj, type = "III")`</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
