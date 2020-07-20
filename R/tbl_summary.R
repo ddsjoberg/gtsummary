@@ -195,10 +195,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # checking input data --------------------------------------------------------
   tbl_summary_data_checks(data)
 
-  # removing orderered class from factor by variables --------------------------
-  if (!is.null(by) && inherits(data[[by]], "ordered") && inherits(data[[by]], "factor")) {
-    data[[by]] <- factor(data[[by]], ordered = FALSE)
-  }
+  # removing ordered class from factor variables -------------------------------
+  data <- dplyr::mutate_if(data,
+                           ~inherits(., "ordered") && inherits(., "factor"),
+                           ~factor(., levels = attr(., "levels"), ordered = FALSE))
 
   # deleting obs with missing by values ----------------------------------------
   # saving variable labels
@@ -211,7 +211,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     lbls <- purrr::map(data, ~ attr(.x, "label"))
     data <- data[!is.na(data[[by]]), ]
 
-    # re-applying labels---I think this will NOT be necessary after dplyr 0.9.0
+    # re-applying labels---I think this will NOT be necessary after dplyr 1.0
     for (i in names(lbls)) {
       attr(data[[i]], "label") <- lbls[[i]]
     }
