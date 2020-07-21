@@ -127,7 +127,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   # the object func_inputs is a list of every object passed to the function
   tbl_survfit_inputs <- as.list(environment())
 
-  var <- fit2$call %>% as.list() %>% pluck("formula") %>% rlang::f_rhs() %>% all.vars()
+  var <- x$call %>% as.list() %>% pluck("formula") %>% rlang::f_rhs() %>% all.vars()
   if (is.null(label) && length(var) == 1) {
     # try to extra label from data (if exists)
     data <- x$call %>% as.list() %>% pluck("data")
@@ -148,10 +148,13 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     )
 
   meta_data <-
-    meta_to_df_stats(meta_data, inputs = tbl_survfit_inputs, estimate_type = estimate_type)
+    meta_to_df_stats(meta_data, inputs = tbl_survfit_inputs,
+                     estimate_type = estimate_type, estimate_fun = estimate_fun,
+                     missing = missing, statistic = statistic)
 
 
   # table_header ---------------------------------------------------------------
+  table_body <- map_dfr(meta_data$table_body, ~.x)
   table_header <-
     tibble(column = names(table_body)) %>%
     table_header_fill_missing()
@@ -161,13 +164,13 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   results <- list(
     table_body = table_body,
     table_header = table_header,
-    table_stats = df_stats,
+    meta_data = meta_data,
     inputs = tbl_survfit_inputs,
     call_list = list(tbl_survfit = match.call())
   )
 
   # applying labels
-  lbls <- as.list(unique(df_stats$col_label)) %>% set_names(unique(df_stats$col_name))
+  lbls <- as.list(unique(meta_data$df_stats[[1]]$col_label)) %>% set_names(unique(meta_data$df_stats[[1]]$col_name))
   results <-
     expr(modify_header_internal(results, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
     eval()
@@ -179,7 +182,8 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
 }
 
 # function that uses meta_data and inputs to finish tbl ----------------------
-meta_to_df_stats <- function(meta_data, inputs, estimate_type) {
+meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
+                             missing, statistic) {
   meta_data %>%
     mutate(
       df_stats = map(
@@ -194,38 +198,39 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type) {
           "probs" = survfit_prob(.x, probs = inputs$probs,
                                  label_header = inputs$label_header,
                                  conf.level = inputs$conf.level)
-        ),
-        # table_body -----------------------------------------------------------------
-        # table_body = map(
-        #   .data$df_stats,
-        #   function(df_stats) {
-        #     strata <- intersect("strata", names(df_stats)) %>% list() %>% compact()
-        #
-        #     table_body <-
-        #       df_stats %>%
-        #       mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high),
-        #                 ~ coalesce(as.character(estimate_fun(.)), missing)) %>%
-        #       mutate(
-        #         statistic = glue(.env$statistic) %>% as.character(),
-        #         row_type = switch(length(strata) == 0, "label") %||% "level"
-        #       ) %>%
-        #       select(c("variable", "row_type", "label", "col_name", "statistic")) %>%
-        #       tidyr::pivot_wider(id_cols = c(.data$variable, .data$row_type, .data$label),
-        #                          names_from = c(.data$col_name),
-        #                          values_from = c(.data$statistic))
-        #
-        #     # adding label row, if needed
-        #     if (nrow(table_body) > 1) {
-        #       table_body <-
-        #         table_body %>%
-        #         select(.data$variable) %>%
-        #         distinct() %>%
-        #         mutate(row_type = "label",
-        #                label = .env$label %||% .data$variable) %>%
-        #         bind_rows(table_body)
-        #     }
-        #   }
-        # )
+        )
+      ),
+      # table_body -----------------------------------------------------------------
+      table_body = map2(
+        .data$df_stats, .data$var_label,
+        function(df_stats, var_label) {
+          strata <- intersect("strata", names(df_stats)) %>% list() %>% compact()
+
+          table_body <-
+            df_stats %>%
+            mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high),
+                      ~ coalesce(as.character(estimate_fun(.)), missing)) %>%
+            mutate(
+              statistic = glue(.env$statistic) %>% as.character(),
+              row_type = switch(length(strata) == 0, "label") %||% "level"
+            ) %>%
+            select(c("variable", "row_type", "label", "col_name", "statistic")) %>%
+            tidyr::pivot_wider(id_cols = c(.data$variable, .data$row_type, .data$label),
+                               names_from = c(.data$col_name),
+                               values_from = c(.data$statistic))
+
+          # adding label row, if needed
+          if (nrow(table_body) > 1) {
+            table_body <-
+              table_body %>%
+              select(.data$variable) %>%
+              distinct() %>%
+              mutate(row_type = "label",
+                     label = var_label) %>%
+              bind_rows(table_body)
+          }
+          table_body
+        }
       )
     )
 }
