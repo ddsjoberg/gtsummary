@@ -47,7 +47,7 @@ The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
 does not support Word.
 }
-\section{Usage}{
+\section{Using the \code{as_flextable} function}{
 
 To use this function, you must first install the flextable package with
 \code{install.packages("flextable")}.
@@ -56,13 +56,13 @@ After the package is installed, there are two ways to use the function:
 \enumerate{
 \item Attach the flextable package.\if{html}{\out{<div class="r">}}\preformatted{library(flextable)
 
-# create a gtsummary obejct
-tbl_summary(trail) \%>\%
+# create a gtsummary object
+tbl_summary(trial) \%>\%
   # print gtsummary table with the flextable package
   as_flextable()
 }\if{html}{\out{</div>}}
-\item Use the double colon syntax, \code{flextable::as_flextable()}.\if{html}{\out{<div class="r">}}\preformatted{# create a gtsummary obejct
-tbl_summary(trail) \%>\%
+\item Use the double colon syntax, \code{flextable::as_flextable()}.\if{html}{\out{<div class="r">}}\preformatted{# create a gtsummary object
+tbl_summary(trial) \%>\%
   # print gtsummary table with the flextable package
   flextable::as_flextable()
 }\if{html}{\out{</div>}}
@@ -96,7 +96,7 @@ column width, e.g. \code{as_flextable() \%>\% flextable::width(...)}.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{as_flextable_ex1.png}{options: width=65\%}}
+\if{html}{\figure{as_flextable_ex1.png}{options: width=60\%}}
 }
 
 \examples{

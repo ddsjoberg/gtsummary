@@ -8,7 +8,7 @@
 #' useful when combined with R markdown with Word output, since the gt package
 #' does not support Word.
 #'
-#' @section Usage:
+#' @section Using the `as_flextable` function:
 #' To use this function, you must first install the flextable package with
 #' `install.packages("flextable")`.
 #'
@@ -18,7 +18,7 @@
 #'     ```r
 #'     library(flextable)
 #'
-#'     # create a gtsummary obejct
+#'     # create a gtsummary object
 #'     tbl_summary(trial) %>%
 #'       # print gtsummary table with the flextable package
 #'       as_flextable()
@@ -27,7 +27,7 @@
 #' 2. Use the double colon syntax, `flextable::as_flextable()`.
 #'
 #'     ```r
-#'     # create a gtsummary obejct
+#'     # create a gtsummary object
 #'     tbl_summary(trial) %>%
 #'       # print gtsummary table with the flextable package
 #'       flextable::as_flextable()
