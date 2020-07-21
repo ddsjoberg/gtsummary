@@ -19,7 +19,7 @@
 #'     library(flextable)
 #'
 #'     # create a gtsummary obejct
-#'     tbl_summary(trail) %>%
+#'     tbl_summary(trial) %>%
 #'       # print gtsummary table with the flextable package
 #'       as_flextable()
 #'     ```
@@ -28,7 +28,7 @@
 #'
 #'     ```r
 #'     # create a gtsummary obejct
-#'     tbl_summary(trail) %>%
+#'     tbl_summary(trial) %>%
 #'       # print gtsummary table with the flextable package
 #'       flextable::as_flextable()
 #'     ```
@@ -79,7 +79,7 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
                                    strip_md_bold = TRUE, group_header = NULL, ...) {
   # checking flextable installation --------------------------------------------
   assert_package("flextable", "as_flextable.gtsummary")
-                                                                   
+
   # setting defaults -----------------------------------------------------------
   group_header <-
     group_header %||%
