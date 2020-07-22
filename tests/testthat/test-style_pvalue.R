@@ -10,10 +10,16 @@ test_that("no errors/warnings with standard use", {
   expect_error(style_pvalue(pvals, digits = 1, prepend_p = TRUE), NA)
   expect_warning(style_pvalue(pvals), NA)
   expect_warning(style_pvalue(pvals, digits = 1, prepend_p = TRUE), NA)
+
   expect_error(style_pvalue(pvals, digits = 2), NA)
   expect_error(style_pvalue(pvals, digits = 2, prepend_p = TRUE), NA)
   expect_warning(style_pvalue(pvals, digits = 2), NA)
   expect_warning(style_pvalue(pvals, digits = 2, prepend_p = TRUE), NA)
+
+  expect_error(style_pvalue(pvals, digits = 3), NA)
+  expect_error(style_pvalue(pvals, digits = 3, prepend_p = TRUE), NA)
+  expect_warning(style_pvalue(pvals, digits = 3), NA)
+  expect_warning(style_pvalue(pvals, digits = 3, prepend_p = TRUE), NA)
 })
 
 
