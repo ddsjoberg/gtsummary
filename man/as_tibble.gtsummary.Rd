@@ -41,8 +41,7 @@ is \code{"**Group**"}}
 a \link[tibble:tibble-package]{tibble}
 }
 \description{
-Function converts gtsummary objects tibbles. The formatting stored in
-\code{x$kable_calls} is applied.
+Function converts a gtsummary object to a tibble.
 }
 \examples{
 tbl <-

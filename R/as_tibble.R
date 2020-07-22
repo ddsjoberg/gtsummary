@@ -1,7 +1,6 @@
 #' Convert gtsummary object to a tibble
 #'
-#' Function converts gtsummary objects tibbles. The formatting stored in
-#' `x$kable_calls` is applied.
+#' Function converts a gtsummary object to a tibble.
 #'
 #' @inheritParams as_kable
 #' @param col_labels Logical argument adding column labels to output tibble.
