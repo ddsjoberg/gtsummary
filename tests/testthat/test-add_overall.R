@@ -56,3 +56,9 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
   expect_error(t %>% add_overall(), NA)
   expect_warning(t %>% add_overall(), NA)
 })
+
+test_that("errors produced when expected", {
+  expect_error(mtcars %>% select(am, mpg) %>% tbl_summary() %>% add_overall(), "*")
+  expect_error(mtcars %>% select(am, mpg) %>% tbl_summary(by = am) %>%
+                 add_stat_label() %>% add_overall(), "*")
+})

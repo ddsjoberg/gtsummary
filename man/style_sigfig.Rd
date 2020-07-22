@@ -2,15 +2,23 @@
 % Please edit documentation in R/style_sigfig.R
 \name{style_sigfig}
 \alias{style_sigfig}
-\title{Implement significant figure-like rounding}
+\title{Style significant figure-like rounding}
 \usage{
-style_sigfig(x, digits = 2)
+style_sigfig(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...)
 }
 \arguments{
 \item{x}{Numeric vector}
 
 \item{digits}{Integer specifying the minimum number of significant
 digits to display}
+
+\item{big.mark}{Character used between every 3 digits to separate thousands.
+Default is \code{","}}
+
+\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+Default is \code{"."}}
+
+\item{...}{Other arguments passed on to \code{base::format()}}
 }
 \value{
 A character vector of styled numbers
@@ -28,11 +36,12 @@ when \code{abs(x) < 1}, 1 decimal place when \code{abs(x) >= 1 & abs(x) < 10},
 and to the nearest integer when \code{abs(x) >= 10}.
 }
 \examples{
-c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345, NA, -0.001) \%>\%
+c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) \%>\%
   style_sigfig()
 }
 \seealso{
 Other style tools: 
+\code{\link{style_number}()},
 \code{\link{style_percent}()},
 \code{\link{style_pvalue}()},
 \code{\link{style_ratio}()}
