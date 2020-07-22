@@ -53,13 +53,16 @@ To use this function, you must first install the flextable package with
 After the package is installed, there are two ways to use the function:
 \enumerate{
 \item Attach the flextable package.\if{html}{\out{<div class="r">}}\preformatted{library(flextable)
+library(gtsummary)
 
 # create a gtsummary object
 tbl_summary(trial) \%>\%
   # print gtsummary table with the flextable package
   as_flextable()
 }\if{html}{\out{</div>}}
-\item Use the double colon syntax, \code{flextable::as_flextable()}.\if{html}{\out{<div class="r">}}\preformatted{# create a gtsummary object
+\item Use the double colon syntax, \code{flextable::as_flextable()}.\if{html}{\out{<div class="r">}}\preformatted{library(gtsummary)
+
+# create a gtsummary object
 tbl_summary(trial) \%>\%
   # print gtsummary table with the flextable package
   flextable::as_flextable()
@@ -100,6 +103,7 @@ column width, e.g. \code{as_flextable() \%>\% flextable::width(...)}.
 \examples{
 # Load flextable to use as_flextable()
 library(flextable)
+library(gtsummary)
 
 as_flextable_ex1 <-
   trial \%>\%
