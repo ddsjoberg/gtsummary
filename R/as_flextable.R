@@ -32,6 +32,7 @@
 #'
 #'     ```r
 #'     library(flextable)
+#'     library(gtsummary)
 #'
 #'     # create a gtsummary object
 #'     tbl_summary(trial) %>%
@@ -42,6 +43,8 @@
 #' 2. Use the double colon syntax, `flextable::as_flextable()`.
 #'
 #'     ```r
+#'     library(gtsummary)
+#'
 #'     # create a gtsummary object
 #'     tbl_summary(trial) %>%
 #'       # print gtsummary table with the flextable package
@@ -79,6 +82,7 @@
 #' @examples
 #' # Load flextable to use as_flextable()
 #' library(flextable)
+#' library(gtsummary)
 #'
 #' as_flextable_ex1 <-
 #'   trial %>%
