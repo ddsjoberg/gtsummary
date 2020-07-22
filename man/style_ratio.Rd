@@ -2,9 +2,9 @@
 % Please edit documentation in R/style_ratio.R
 \name{style_ratio}
 \alias{style_ratio}
-\title{Implement significant figure-like rounding for ratios}
+\title{Style significant figure-like rounding for ratios}
 \usage{
-style_ratio(x, digits = 2)
+style_ratio(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...)
 }
 \arguments{
 \item{x}{Numeric vector}
@@ -12,6 +12,14 @@ style_ratio(x, digits = 2)
 \item{digits}{Integer specifying the number of significant
 digits to display for numbers below 1. Numbers larger than 1 will be be \code{digits + 1}.
 Default is \code{digits = 2}.}
+
+\item{big.mark}{Character used between every 3 digits to separate thousands.
+Default is \code{","}}
+
+\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+Default is \code{"."}}
+
+\item{...}{Other arguments passed on to \code{base::format()}}
 }
 \value{
 A character vector of styled ratios
@@ -33,6 +41,7 @@ c(
 }
 \seealso{
 Other style tools: 
+\code{\link{style_number}()},
 \code{\link{style_percent}()},
 \code{\link{style_pvalue}()},
 \code{\link{style_sigfig}()}

@@ -1,8 +1,9 @@
-#' Style percentages to be displayed in tables or text
+#' Style percentages
 #'
 #' @param x numeric vector of percentages
 #' @param symbol Logical indicator to include percent symbol in output.
 #' Default is `FALSE`.
+#' @inheritParams style_number
 #' @export
 #' @return A character vector of styled percentages
 #' @family style tools
@@ -12,11 +13,16 @@
 #' percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
 #' style_percent(percent_vals)
 #' style_percent(percent_vals, symbol = TRUE)
-style_percent <- function(x, symbol = FALSE) {
+style_percent <- function(x, symbol = FALSE, big.mark = NULL, decimal.mark = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  big.mark <- big.mark %||% get_theme_element("style_number-arg:big.mark", default = ",")
+  decimal.mark <- decimal.mark %||% get_theme_element("style_number-arg:decimal.mark", default = ".")
+
   y <- case_when(
-    x >= 0.10 ~ sprintf("%.0f", x * 100),
-    x >= 0.001 ~ sprintf("%.1f", x * 100),
-    x > 0 ~ "<0.1",
+    x * 100 >= 10 ~ style_number(x * 100, digits = 0, big.mark = big.mark, decimal.mark = decimal.mark, ...),
+    x * 100 >= 0.1 ~ style_number(x * 100, digits = 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),
+    x > 0 ~ paste0("<", style_number(x = 0.1, digits = 1, big.mark = big.mark,
+                                     decimal.mark = decimal.mark, ...)),
     x == 0 ~ "0"
   )
 
