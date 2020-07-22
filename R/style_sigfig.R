@@ -1,4 +1,4 @@
-#' Implement significant figure-like rounding
+#' Style significant figure-like rounding
 #'
 #' Converts a numeric argument into a string that has been rounded to a
 #' significant figure-like number. Scientific notation output
@@ -13,38 +13,26 @@
 #' @param x Numeric vector
 #' @param digits Integer specifying the minimum number of significant
 #' digits to display
+#' @inheritParams style_number
 #' @export
 #' @return A character vector of styled numbers
 #' @family style tools
 #' @author Daniel D. Sjoberg
 #' @examples
-#' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -12.345, NA, -0.001) %>%
+#' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) %>%
 #'   style_sigfig()
-style_sigfig <- function(x, digits = 2) {
+style_sigfig <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  big.mark <- big.mark %||% get_theme_element("style_number-arg:big.mark", default = ",")
+  decimal.mark <- decimal.mark %||% get_theme_element("style_number-arg:decimal.mark", default = ".")
 
-  # the purrr portion creates a list of length {digits} with each
-  # condition for rounding.  The are in the order they are run.
-  # They are in the format of case_when
-  map(
-    digits:1,
-    ~ glue("abs(x) < 10^{digits - .x} ~ sprintf('%.{.x}f', x)")
-  ) %>%
-    # pasting together all conditions
-    paste(collapse = ", ") %>%
-    # adding the case_when function, as well as a final
-    # condition to round to nearest integer
-    {
-      glue("case_when({.}, TRUE ~ ifelse(is.na(x), NA_character_, sprintf('%.0f', x)))")
-    } %>%
+  # calculating the number of digits to round number
+  d <- paste0("abs(x) < 10^", digits - digits:1, " ~ ", digits:1, collapse = ", ") %>%
+    {paste0("case_when(", . ,", TRUE ~ 0)")} %>%
     # converting strings into expressions to run
     parse(text = .) %>%
-    eval() %>%
-    # converting "-0.000" type values to "0.000"
-    {
-      ifelse(
-        as.numeric(.) == 0 & str_starts(., pattern = "-"),
-        str_remove(., pattern = "-"),
-        .
-      )
-    }
+    eval()
+
+  # formatting number
+  style_number(x, digits = d, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }

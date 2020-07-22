@@ -236,7 +236,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     table_header <-
       table_header_fmt_fun(
         table_header,
-        N = function(x) ifelse(is.na(x), NA_character_, sprintf("%.0f", x))
+        N = function(x) style_number(x, digits = 0)
       )
   }
   if ("p.value" %in% names(table_body)) {

@@ -2,21 +2,29 @@
 % Please edit documentation in R/style_percent.R
 \name{style_percent}
 \alias{style_percent}
-\title{Style percentages to be displayed in tables or text}
+\title{Style percentages}
 \usage{
-style_percent(x, symbol = FALSE)
+style_percent(x, symbol = FALSE, big.mark = NULL, decimal.mark = NULL, ...)
 }
 \arguments{
 \item{x}{numeric vector of percentages}
 
 \item{symbol}{Logical indicator to include percent symbol in output.
 Default is \code{FALSE}.}
+
+\item{big.mark}{Character used between every 3 digits to separate thousands.
+Default is \code{","}}
+
+\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+Default is \code{"."}}
+
+\item{...}{Other arguments passed on to \code{base::format()}}
 }
 \value{
 A character vector of styled percentages
 }
 \description{
-Style percentages to be displayed in tables or text
+Style percentages
 }
 \examples{
 percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
@@ -27,6 +35,7 @@ style_percent(percent_vals, symbol = TRUE)
 See Table Gallery \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{vignette} for example
 
 Other style tools: 
+\code{\link{style_number}()},
 \code{\link{style_pvalue}()},
 \code{\link{style_ratio}()},
 \code{\link{style_sigfig}()}

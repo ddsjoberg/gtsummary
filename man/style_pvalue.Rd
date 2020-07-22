@@ -2,24 +2,39 @@
 % Please edit documentation in R/style_pvalue.R
 \name{style_pvalue}
 \alias{style_pvalue}
-\title{Style p-values to be displayed in tables or text}
+\title{Style p-values}
 \usage{
-style_pvalue(x, digits = 1, prepend_p = FALSE)
+style_pvalue(
+  x,
+  digits = 1,
+  prepend_p = FALSE,
+  big.mark = NULL,
+  decimal.mark = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Numeric vector of p-values.}
 
-\item{digits}{Number of digits large p-values are rounded. Must be 1 or 2.
+\item{digits}{Number of digits large p-values are rounded. Must be 1, 2, or 3.
 Default is 1.}
 
 \item{prepend_p}{Logical. Should 'p=' be prepended to formatted p-value.
 Default is \code{FALSE}}
+
+\item{big.mark}{Character used between every 3 digits to separate thousands.
+Default is \code{","}}
+
+\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+Default is \code{"."}}
+
+\item{...}{Other arguments passed on to \code{base::format()}}
 }
 \value{
 A character vector of styled p-values
 }
 \description{
-Style p-values to be displayed in tables or text
+Style p-values
 }
 \examples{
 pvals <- c(
@@ -33,6 +48,7 @@ style_pvalue(pvals, digits = 2, prepend_p = TRUE)
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
 
 Other style tools: 
+\code{\link{style_number}()},
 \code{\link{style_percent}()},
 \code{\link{style_ratio}()},
 \code{\link{style_sigfig}()}

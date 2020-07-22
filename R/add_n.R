@@ -47,7 +47,7 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
     getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
   N_fun <-
     get_theme_element("tbl_summary-fn:N_fun",
-                      default = function(x) sprintf("%.0f", x))
+                      default = style_number)
 
   # DEPRECATED specifying statistic via missing argument -----------------------
   if (!is.null(missing)) {

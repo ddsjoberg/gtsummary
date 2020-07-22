@@ -19,9 +19,9 @@ tbl_summary,tbl_summary-arg:missing_text,TRUE,,
 tbl_summary,tbl_summary-arg:percent,TRUE,,
 tbl_summary,tbl_summary-arg:sort,TRUE,,
 tbl_summary,tbl_summary-fn:percent_fun,FALSE,function to style percentages,function(x) style_percent(x)
-tbl_summary,tbl_summary-fn:N_fun,FALSE,function to style integers,"function(x) sprintf(""%.0f"", x)"
-tbl_summary,tbl_summary-str:continuous_stat,FALSE,glue string defining the default continuous summary statistics to display for complex survey samples,"""{mean} ({sd})"""
-tbl_summary,tbl_summary-str:categorical_stat,FALSE,glue string defining the default categorical and dichotomous summary statistics to display for complex survey samples,"""{n} / {N} ({p}%)"""
+tbl_summary,tbl_summary-fn:N_fun,FALSE,function to style integers. Currently questioning...THIS MAY BE REMOVED IN A FUTURE RELEASE. Use `style_number-arg:big.mark` and `style_number-arg:decimal.mark` instead.,"function(x) sprintf(""%.0f"", x)"
+tbl_summary,tbl_summary-str:continuous_stat,FALSE,glue string defining the default continuous summary statistics to display,"""{mean} ({sd})"""
+tbl_summary,tbl_summary-str:categorical_stat,FALSE,glue string defining the default categorical and dichotomous summary statistics to display,"""{n} / {N} ({p}%)"""
 tbl_svysummary,tbl_svysummary-arg:label,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:statistic,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:digits,TRUE,,
@@ -55,3 +55,5 @@ tbl_regression,tbl_regression-arg:pvalue_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:tidy_fun ,TRUE,,
 tbl_regression,tbl_regression-str:coef_header,FALSE,string setting the default term for the beta coefficient column header,"ifelse(exponentiate == TRUE, ""exp(coef)"", ""coef"")"
 add_global_p,add_global_p-str:type,FALSE,set argument default for `add_global_p.tbl_regression(type=)` and `add_global_p.tbl_uvregression(type=)`,"""II"""
+style_number,style_number-arg:big.mark,TRUE,,
+style_number,style_number-arg:decimal.mark,TRUE,,
