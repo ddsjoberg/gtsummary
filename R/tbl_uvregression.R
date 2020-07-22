@@ -299,7 +299,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
             # adding a format function to the N column
             tbl$table_header <- table_header_fmt_fun(
               tbl$table_header,
-              N = function(x) ifelse(is.na(x), NA_character_, sprintf("%.0f", x))
+              N = function(x) style_number(x, digits = 0)
             )
 
             tbl

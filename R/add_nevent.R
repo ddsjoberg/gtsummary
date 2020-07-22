@@ -114,7 +114,7 @@ add_nevent.tbl_regression <- function(x, ...) {
   # adding a format function to the N event column
   x$table_header <- table_header_fmt_fun(
     x$table_header,
-    nevent = function(x) ifelse(is.na(x), NA_character_, sprintf("%.0f", x))
+    nevent = function(x) style_number(x, digits = 0)
   )
 
   x$call_list <- c(x$call_list, list(add_nevent = match.call()))
@@ -192,7 +192,7 @@ add_nevent.tbl_uvregression <- function(x, ...) {
   # adding a format function to the N event column
   x$table_header <- table_header_fmt_fun(
     x$table_header,
-    nevent = function(x) ifelse(is.na(x), NA_character_, sprintf("%.0f", x))
+    nevent = function(x) style_number(x, digits = 0)
   )
 
   x
