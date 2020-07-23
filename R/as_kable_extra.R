@@ -8,7 +8,7 @@
 #' changed manually with kableExtra output.
 #'
 #' @inheritParams as_kable
-#' @inheritParams as_flextable.gtsummary
+#' @inheritParams as_flex_table
 #' @export
 #' @return A {kableExtra} object
 #' @family gtsummary output types

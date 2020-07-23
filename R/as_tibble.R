@@ -143,7 +143,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE, group_header) {
   )
 
   # converting all cols to character...
-  # this is important for some output types, e.g. as_flextable, so missing don't
+  # this is important for some output types, e.g. as_flex_table, so missing don't
   # display as NA
   cols_to_keep <-
     dplyr::filter(table_header, .data$hide == FALSE) %>%
