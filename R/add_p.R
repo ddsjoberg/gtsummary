@@ -362,17 +362,74 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Calculate and add a p-value
+#' @param x Object of class `"tbl_survfit"`
+#' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`
+#' @param footnote_text String of text to add as footnote describing test
+#' @param ... Additional arguments passed to method in `test=`. Does not apply to all test types.
+#' @inheritParams add_p.tbl_summary
+#' @inheritParams combine_terms
 #' @export
-add_p.tbl_survfit <- function(x, test = "survdiff", include = everything(),
-                              footnote_text = NULL, quiet = FALSE, ...) {
+add_p.tbl_survfit <- function(x, test = "logrank",
+                              footnote_text = NULL, pvalue_fun = style_pvalue,
+                              quiet = FALSE, ...) {
+  # checking inputs ------------------------------------------------------------
+  if (identical(x$meta_data_variable, "..overall..")) {
+    stop("`add_p()` may only be applied to `tbl_survfit objects with a stratifying variable.",
+         call. = FALSE)
+  }
 
-  switch (test,
-    "survdiff" = add_p.tbl_survfit_survfit(x, quiet, ...)
-  )
+  if (test == "logrank" && is.null(footnote_text))
+    footnote_text = "Log-rank Test"
 
+  # adding pvalue to meta data
+  x$meta_data <-
+    x$meta_data %>%
+    mutate(
+      p.value = purrr::map2_dbl(
+        .data$survfit, seq(1, nrow(.)),
+        function(survfit, row_number) {
+          # getting the function call
+          pvalue_call <- switch(
+            test,
+            "log-rank" = expr(add_p_tbl_survfit_survfit(x, quiet, rho = 0)),
+            "survdiff" = expr(add_p_tbl_survfit_survfit(x, quiet, ...))
+          ) %||%
+            stop("No valid test selected in argument `test=`.")
+
+          # evaluating code, and returning p.value
+          if (row_number == 1) ret <- eval(pvalue_call)
+          else ret <- suppressMessages(eval(pvalue_call))
+
+          ret
+        }
+      )
+    )
+
+  # adding p-value to table_body -----------------------------------------------
+  x$table_body <-
+    x$meta_data %>%
+    select(.data$variable, .data$p.value) %>%
+    mutate(row_type = "label") %>%
+    {left_join(x$table_body, ., by = c("variable", "row_type"))}
+
+  # updating table_header ------------------------------------------------------
+  x$table_header <- table_header_fill_missing(x$table_header, table_body = x$table_body)
+  x$table_header <- table_header_fmt_fun(x$table_header, p.value = pvalue_fun)
+  x <- modify_header_internal(x, p.value = "**p-value**")
+
+  # adding footnote ------------------------------------------------------------
+  if (!is.null(footnote_text)) {
+    x <- modify_footnote(x, list(p.value = footnote_text))
+    x$call_list$modify_footnote <- NULL
+  }
+
+  # call add_p call and returning final object ---------------------------------
+  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
+
+  x
 }
 
-add_p.tbl_survfit_survfit <- function(x, quiet, ...) {
+add_p_tbl_survfit_survfit <- function(x, quiet, ...) {
   #extracting survfit call
   survfit_call <- x$inputs$x$call %>% as.list()
   # index of formula and data

@@ -127,8 +127,13 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   # the object func_inputs is a list of every object passed to the function
   tbl_survfit_inputs <- as.list(environment())
 
-  var <- x$call %>% as.list() %>% pluck("formula") %>% rlang::f_rhs() %>% all.vars()
+  var <- x$call %>% as.list() %>% pluck("formula") %>% eval() %>% terms() %>%
+    attr("variables") %>% as.list() %>% {.[-c(1, 2)]} %>% map_chr(deparse)
   if (is.null(label) && length(var) == 1) {
+    if (identical(var, "..overall..")) {
+      stop("'..overall..' is a protected name in `tbl_survfit()`.",
+           call. = FALSE)
+    }
     # try to extra label from data (if exists)
     data <- x$call %>% as.list() %>% pluck("data")
     if (!is.null(data))
@@ -138,6 +143,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
       warning = function(w) NULL,
       error = function(e) NULL
       )
+    else label <- var
   }
   else if (is.null(label) && length(var) == 0) {
     label = "Overall"

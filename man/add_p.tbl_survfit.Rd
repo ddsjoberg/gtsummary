@@ -4,7 +4,33 @@
 \alias{add_p.tbl_survfit}
 \title{Adds p-value to survfit table}
 \usage{
-\method{add_p}{tbl_survfit}(x, include = everything(), footnote_text = NULL, quiet = FALSE, ...)
+\method{add_p}{tbl_survfit}(
+  x,
+  test = "logrank",
+  footnote_text = NULL,
+  pvalue_fun = style_pvalue,
+  quiet = FALSE,
+  ...
+)
+}
+\arguments{
+\item{x}{Object of class \code{"tbl_survfit"}}
+
+\item{test}{string indicating test to use. Must be one of \code{"logrank"}, \code{"survdiff"}}
+
+\item{footnote_text}{String of text to add as footnote describing test}
+
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link{style_pvalue}.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+\code{purrr::partial(style_pvalue, digits = 2)}).}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
+
+\item{...}{Additional arguments passed to method in \verb{test=}. Does not apply to all test types.}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

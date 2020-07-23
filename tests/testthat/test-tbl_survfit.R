@@ -2,11 +2,20 @@ context("test-tbl_survfit")
 testthat::skip_on_cran()
 library(survival)
 
-s1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 test_that("no errors/warnings with stratified variable", {
+  s1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+  s1.1 <- survfit(Surv(trial$ttdeath, trial$death) ~ trial$trt)
   expect_error(
     tbl_survfit(
       s1,
+      times = c(12, 24)
+    ),
+    NA
+  )
+
+  expect_error(
+    tbl_survfit(
+      s1.1,
       times = c(12, 24)
     ),
     NA
@@ -44,11 +53,19 @@ test_that("no errors/warnings with stratified variable", {
   )
 })
 
-s2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 test_that("no errors/warnings with no stratified variable", {
+  s2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
+  s2.1 <- survfit(Surv(trial$ttdeath, trial$death) ~ 1)
   expect_error(
     tbl_survfit(
       s2,
+      times = c(12, 24)
+    ),
+    NA
+  )
+  expect_error(
+    tbl_survfit(
+      s2.1,
       times = c(12, 24)
     ),
     NA
@@ -76,10 +93,8 @@ test_that("no errors/warnings with no stratified variable", {
     ),
     NA
   )
-})
 
-
-test_that("expecting errors/messaging", {
+  # expecting errors/messaging
   expect_message(
     tbl_survfit(
       s2,
@@ -132,17 +147,16 @@ test_that("no errors/warnings with competing events", {
     tbl_survfit(cr_1, times = c(12, 24)), NA
   )
   expect_error(
-    tbl_survfit(cr_2, times = c(12, 24), label = "Tumor Grade"), NA
+    summod2 <- tbl_survfit(cr_2, times = c(12, 24), label = "Tumor Grade"), NA
   )
 
-  # output is idential in tbl_survfit and summary
+  # output is identical in tbl_survfit and summary
   summod <- summary(cr_2, times = c(12,24))
 
   summod1b <- data.frame(strata = summod$strata,Time = summod$time,
                          cancerdeath = summod$pstate[,2])
 
-  summod2 <- tbl_survfit(cr_2, times = c(12,24))
-
-  expect_equal(summod1b$cancerdeath, summod2$table_stats$estimate)
+  expect_equal(summod1b$cancerdeath,
+               summod2$meta_data$df_stats[[1]]$estimate)
 })
 

@@ -138,7 +138,7 @@ modify_footnote <- function(x, update, abbreviation = FALSE) {
     table_header_update
 
   # return updated gtsummary object --------------------------------------------
-  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
+  x[["call_list"]] <- list(x[["call_list"]], modify_footnote = match.call())
   x
 }
 
