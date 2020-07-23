@@ -8,8 +8,8 @@
 #' does not support Word.
 #'
 #' @section Details:
-#' The `as_flex_table()` takes the data frame that will be printed and converts
-#' it to a flextable and formats the table with the following flextable functions.
+#' The `as_flex_table()` functions converts the gtsummary object to a flextable,
+#' and prints it with the following styling functions.
 #' 1. [flextable::flextable()]
 #' 1. [flextable::set_header_labels()] to set column labels
 #' 1. [flextable::add_header_row()], if applicable, to set spanning column header

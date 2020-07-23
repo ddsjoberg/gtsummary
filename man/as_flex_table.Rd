@@ -45,8 +45,8 @@ does not support Word.
 }
 \section{Details}{
 
-The \code{as_flex_table()} takes the data frame that will be printed and converts
-it to a flextable and formats the table with the following flextable functions.
+The \code{as_flex_table()} functions converts the gtsummary object to a flextable,
+and prints it with the following styling functions.
 \enumerate{
 \item \code{\link[flextable:flextable]{flextable::flextable()}}
 \item \code{\link[flextable:set_header_labels]{flextable::set_header_labels()}} to set column labels
