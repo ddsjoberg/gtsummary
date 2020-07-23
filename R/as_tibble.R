@@ -5,7 +5,7 @@
 #' @inheritParams as_kable
 #' @param col_labels Logical argument adding column labels to output tibble.
 #' Default is `TRUE`.
-#' @param group_header If a group is present (e.g. via `tbl_merge(group_header=)`),
+#' @param group_header If a group is present (e.g. via `tbl_stack(group_header=)`),
 #' this string specifies the column header for the grouping column. Default
 #' is `"**Group**"`
 #' @param ... Not used
@@ -81,6 +81,9 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 table_header_to_tibble_calls <- function(x, col_labels =  TRUE, group_header) {
   table_header <- x$table_header
   tibble_calls <- list()
+
+  if (!is.null(group_header) && !rlang::is_string(group_header))
+    stop("`group_header=` must be a string of length one.")
 
   # tibble ---------------------------------------------------------------------
   tibble_calls[["tibble"]] <- expr(x$table_body)
