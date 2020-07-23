@@ -28,7 +28,7 @@ as a list of expressions.}
 bold weight) in column labels and spanning headers are removed.
 Default is TRUE}
 
-\item{group_header}{If a group is present (e.g. via \code{tbl_merge(group_header=)}),
+\item{group_header}{If a group is present (e.g. via \code{tbl_stack(group_header=)}),
 this string specifies the column header for the grouping column. Default
 is \code{"**Group**"}}
 }
