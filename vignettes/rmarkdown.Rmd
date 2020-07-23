@@ -157,12 +157,11 @@ tibble::tibble(
 ```
 
 Any **{gtsummary}** table can be converted to one of the types in the table above. 
-To use {flextable} output, you must first load the {flextable} package.
-For example, the code below prints a **{gtsummary}** table as a **kable** table, instead of the default **{gt}** table.
+For example, the code below prints a **{gtsummary}** table as a **{flextable}** table, instead of the default **{gt}** table.
 
 ```{r, eval=FALSE}
 tbl_summary(trial) %>%
-  as_kable()
+  as_flex_table()
 ```
 
 ## Default Printer
@@ -174,7 +173,7 @@ The table below summarizes the default print engine utilized for **{gtsummary}**
 ```{r, echo = FALSE}
 tibble::tibble(
   output = c("**HTML**", "**PDF**", "**RTF**", "**Word**"),
-  default_printer = c("**{gt}**", "**kable**", "**kable**", "**kable**"),
+  default_printer = c("**{gt}**", "**kable**", "**kable**", "**flextable**"),
   desc = c(
     "**{gt}** output is fully supported with **HTML** output.",
     paste("You may force printing with **{gt}** by converting a **{gtsummary}**",
@@ -185,8 +184,9 @@ tibble::tibble(
           "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
           "**RTF** output is under development in the **{gt}** package.",
           "You may get a gorgeous table, but you may also get an error or a malformed table."),
-    paste("**kable** is the default print engine for **Word** output,",
-          "as **{gt}** does not support **Word**.")
+    paste("**{flextable}** is the default print engine for **Word** output,",
+          "as **{gt}** does not support **Word**. If **{flextable}** is not installed,",
+          "**kable** is used.")
   )
 ) %>%
   gt() %>%
