@@ -34,6 +34,7 @@ for (f in gt_functions) {
   purrr::walk(
     example_objs,
     function(example_chr) {
+      browser()
       # converting string to object
       example_obj <- eval(parse(text = example_chr))
       usethis::ui_todo("Saving `{example_chr}.png`")

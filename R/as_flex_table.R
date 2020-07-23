@@ -1,40 +1,14 @@
 #' Convert gtsummary object to a flextable object
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-#' You must install and load the {flextable} package to use this function,
-#' e.g. `library(flextable)`.
-#' The function converts a gtsummary object to a flextable object for printing.
-#' The flextable output is particularly
+#' Function converts a gtsummary object to a flextable object.
+#' A user can use this function if they wish to add customized formatting
+#' available via the flextable functions. The flextable output is particularly
 #' useful when combined with R markdown with Word output, since the gt package
 #' does not support Word.
 #'
-#' @section Using the `as_flextable` function:
-#' To use this function, you must first install the flextable package with
-#' `install.packages("flextable")`.
-#'
-#' After the package is installed, there are two ways to use the function:
-#' 1. Attach the flextable package.
-#'
-#'     ```r
-#'     library(flextable)
-#'
-#'     # create a gtsummary object
-#'     tbl_summary(trial) %>%
-#'       # print gtsummary table with the flextable package
-#'       as_flextable()
-#'     ```
-#'
-#' 2. Use the double colon syntax, `flextable::as_flextable()`.
-#'
-#'     ```r
-#'     # create a gtsummary object
-#'     tbl_summary(trial) %>%
-#'       # print gtsummary table with the flextable package
-#'       flextable::as_flextable()
-#'     ```
-#'
 #' @section Details:
-#' The `as_flextable.gtsummary()` function takes the gtsummary object converts
+#' The `as_flex_table()` takes the data frame that will be printed and converts
 #' it to a flextable and formats the table with the following flextable functions.
 #' 1. [flextable::flextable()]
 #' 1. [flextable::set_header_labels()] to set column labels
@@ -50,35 +24,31 @@
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
 #' Pro tip: Use the [flextable::width()] function for exacting control over
-#' column width, e.g. `as_flextable() %>% flextable::width(...)`.
+#' column width after calling [as_flex_table()].
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for
 #' bold weight) in column labels and spanning headers are removed.
 #' Default is TRUE
-#' @param ... Not used
 #' @export
 #' @return A {flextable} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' # Load flextable to use as_flextable()
-#' library(flextable)
-#'
-#' as_flextable_ex1 <-
+#' as_flex_table_ex1 <-
 #'   trial %>%
 #'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
-#'   as_flextable()
+#'   as_flex_table()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{as_flextable_ex1.png}{options: width=60\%}}
-as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
-                                   strip_md_bold = TRUE, group_header = NULL, ...) {
+#' \if{html}{\figure{as_flex_table_ex1.png}{options: width=60\%}}
+as_flex_table <- function(x, include = everything(), return_calls = FALSE,
+                          strip_md_bold = TRUE, group_header = NULL) {
   # checking flextable installation --------------------------------------------
-  assert_package("flextable", "as_flextable.gtsummary")
+  assert_package("flextable", "as_flex_table")
 
   # setting defaults -----------------------------------------------------------
   group_header <-
@@ -100,7 +70,7 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
   flextable_calls <- table_header_to_flextable_calls(x = x, group_header = group_header)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_flextable.gtsummary-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
   flextable_calls <-
     purrr::reduce(
       .x = seq_along(insert_expr_after),

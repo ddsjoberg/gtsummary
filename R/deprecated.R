@@ -75,3 +75,16 @@ add_p_ <- function(...) {
   add_p(...)
 }
 
+# v1.3.3 -----------------------------------------------------------------------
+as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
+                                   strip_md_bold = TRUE, group_header = NULL, ...) {
+  # soft deprecated on 2020-07-22 ----------------------------------------------
+  lifecycle::deprecate_warn("1.3.3",
+                            "gtsummary::as_flextable.gtsummary()",
+                            "as_flex_table()")
+
+  # passing args to `as_flex_table()` ------------------------------------------
+  rlang::expr(as_flex_table(!!!as.list(environment()))) %>%
+    rlang::eval_tidy()
+}
+

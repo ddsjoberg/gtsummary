@@ -1,32 +1,32 @@
-context("test-as_flextable")
+context("test-as_flex_table")
 testthat::skip_on_cran()
 
 test_that("tbl_summary", {
-  expect_error(tbl_summary(trial) %>% flextable::as_flextable(), NA)
-  expect_warning(tbl_summary(trial) %>% flextable::as_flextable(), NA)
+  expect_error(tbl_summary(trial) %>% flextable::as_flex_table(), NA)
+  expect_warning(tbl_summary(trial) %>% flextable::as_flex_table(), NA)
 })
 
 test_that("tbl_summary", {
-  expect_error(tbl_summary(trial) %>% flextable::as_flextable(return_calls = TRUE), NA)
-  expect_warning(tbl_summary(trial) %>% flextable::as_flextable(return_calls = TRUE), NA)
+  expect_error(tbl_summary(trial) %>% flextable::as_flex_table(return_calls = TRUE), NA)
+  expect_warning(tbl_summary(trial) %>% flextable::as_flex_table(return_calls = TRUE), NA)
 })
 
 test_that("tbl_regression", {
-  expect_error(lm(marker ~ age, trial) %>% tbl_regression() %>% flextable::as_flextable(), NA)
-  expect_warning(lm(marker ~ age, trial) %>% tbl_regression() %>% flextable::as_flextable(), NA)
+  expect_error(lm(marker ~ age, trial) %>% tbl_regression() %>% flextable::as_flex_table(), NA)
+  expect_warning(lm(marker ~ age, trial) %>% tbl_regression() %>% flextable::as_flex_table(), NA)
 })
 
 test_that("tbl_uvregression", {
-  expect_error(trial %>% tbl_uvregression(method = lm, y = age) %>% flextable::as_flextable(), NA)
-  expect_warning(trial %>% tbl_uvregression(method = lm, y = age) %>% flextable::as_flextable(), NA)
+  expect_error(trial %>% tbl_uvregression(method = lm, y = age) %>% flextable::as_flex_table(), NA)
+  expect_warning(trial %>% tbl_uvregression(method = lm, y = age) %>% flextable::as_flex_table(), NA)
 })
 
 test_that("tbl_survfit", {
   library(survival)
   fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 
-  expect_error(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% flextable::as_flextable(), NA)
-  expect_warning(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% flextable::as_flextable(), NA)
+  expect_error(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% flextable::as_flex_table(), NA)
+  expect_warning(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% flextable::as_flex_table(), NA)
 })
 
 test_that("tbl_merge", {
@@ -42,6 +42,6 @@ test_that("tbl_merge", {
       tab_spanner = c("**Tumor Response**", "**Time to Death**")
     )
 
-  expect_error(flextable::as_flextable(tbl_merge_ex1), NA)
-  expect_warning(flextable::as_flextable(tbl_merge_ex1), NA)
+  expect_error(flextable::as_flex_table(tbl_merge_ex1), NA)
+  expect_warning(flextable::as_flex_table(tbl_merge_ex1), NA)
 })
