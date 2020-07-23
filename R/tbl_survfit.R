@@ -131,7 +131,13 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   if (is.null(label) && length(var) == 1) {
     # try to extra label from data (if exists)
     data <- x$call %>% as.list() %>% pluck("data")
-    if (!is.null(data)) label <- eval(data)$var %>% attr("label") %||% var
+    if (!is.null(data))
+      label <- tryCatch({
+        eval(data)[[var]] %>% attr("label") %||% var
+      },
+      warning = function(w) NULL,
+      error = function(e) NULL
+      )
   }
   else if (is.null(label) && length(var) == 0) {
     label = "Overall"

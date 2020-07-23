@@ -363,7 +363,16 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Calculate and add a p-value
 #' @export
-add_p.tbl_survfit <- function(x, include = everything(), footnote_text = NULL, quiet = FALSE, ...) {
+add_p.tbl_survfit <- function(x, test = "survdiff", include = everything(),
+                              footnote_text = NULL, quiet = FALSE, ...) {
+
+  switch (test,
+    "survdiff" = add_p.tbl_survfit_survfit(x, quiet, ...)
+  )
+
+}
+
+add_p.tbl_survfit_survfit <- function(x, quiet, ...) {
   #extracting survfit call
   survfit_call <- x$inputs$x$call %>% as.list()
   # index of formula and data
@@ -389,6 +398,7 @@ add_p.tbl_survfit <- function(x, include = everything(), footnote_text = NULL, q
   # returning p-value
   pchisq(survdiff_result$chisq, length(survdiff_result$n) - 1, lower.tail = FALSE)
 }
+
 
 #' Adds p-values to svysummary tables
 #'
