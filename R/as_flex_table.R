@@ -8,8 +8,8 @@
 #' does not support Word.
 #'
 #' @section Details:
-#' The `as_flextable()` takes the data frame that will be printed and converts
-#' it to a flextable and formats the table with the following flextable functions.
+#' The `as_flex_table()` functions converts the gtsummary object to a flextable,
+#' and prints it with the following styling functions.
 #' 1. [flextable::flextable()]
 #' 1. [flextable::set_header_labels()] to set column labels
 #' 1. [flextable::add_header_row()], if applicable, to set spanning column header
@@ -24,25 +24,32 @@
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
 #' Pro tip: Use the [flextable::width()] function for exacting control over
-#' column width after calling [as_flextable()].
+#' column width after calling [as_flex_table()].
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for
 #' bold weight) in column labels and spanning headers are removed.
 #' Default is TRUE
-#' @param ... Not used
 #' @export
 #' @return A {flextable} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' trial %>%
+#' as_flex_table_ex1 <-
+#'   trial %>%
 #'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
-#'   as_flextable()
-as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
-                                   strip_md_bold = TRUE, group_header = NULL, ...) {
+#'   as_flex_table()
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{as_flex_table_ex1.png}{options: width=60\%}}
+as_flex_table <- function(x, include = everything(), return_calls = FALSE,
+                          strip_md_bold = TRUE, group_header = NULL) {
+  # checking flextable installation --------------------------------------------
+  assert_package("flextable", "as_flex_table")
+
   # setting defaults -----------------------------------------------------------
   group_header <-
     group_header %||%
@@ -63,7 +70,7 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
   flextable_calls <- table_header_to_flextable_calls(x = x, group_header = group_header)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_flextable.gtsummary-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
   flextable_calls <-
     purrr::reduce(
       .x = seq_along(insert_expr_after),
@@ -140,14 +147,23 @@ table_header_to_flextable_calls <- function(x, group_header, ...) {
   any_spanning_header <- sum(!is.na(table_header$spanning_header)) > 0
   if (any_spanning_header == FALSE) flextable_calls[["add_header_row"]] <- list()
   else {
-    df_header <-
+    df_header0 <-
       table_header %>%
       filter(.data$hide == FALSE) %>%
       select(.data$spanning_header) %>%
       mutate(spanning_header = ifelse(is.na(.data$spanning_header),
-                                      " ",
-                                      .data$spanning_header)) %>%
-      group_by(.data$spanning_header) %>%
+                                      " ", .data$spanning_header),
+             spanning_header_id = dplyr::row_number())
+    # assigning an ID for each spanning header group
+    for (i in seq(2, nrow(df_header0))) {
+      if(df_header0$spanning_header[i] == df_header0$spanning_header[i-1]) {
+        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i-1]
+      }
+    }
+
+    df_header <-
+      df_header0 %>%
+      group_by(.data$spanning_header_id) %>%
       mutate(width = n()) %>%
       distinct() %>%
       ungroup()
@@ -288,7 +304,7 @@ table_header_to_flextable_calls <- function(x, group_header, ...) {
   )
 
   # source note ----------------------------------------------------------------
-  # in flextable, this is just a footnote associated with column or symbol
+  # in flextable, this is just a footnote associated without column or symbol
   if (!is.null(x$list_output$source_note)) {
     flextable_calls[["source_note"]] <-
       expr(
