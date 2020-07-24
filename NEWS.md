@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added `style_number()` which controls how numbers are formatted and can be used with theme options. `style_percent()`, `style_pvalue()`, `style_sigfig()`, and `style_ratio()` functions have been updated to use this, and users can now specify how many decimal places to round statistics for categorical variables (#458)
+
+* By default, tables now display commas for thousands mark. This can be changed through `big.mark=` and `decimal.mark=` arguments e.g. `theme_gtsummary_language("fr", big.mark = " ", decimal.mark = ",")` (#557)
+
 * Bug fix `tbl_summary()` when a data frame contained an ordered factor column (#567)
 
 * Updated API for `set_gtsummary_theme()`. Users no longer need call `set_gtsummary_theme(theme_gtsummary_journal())`; rather, they call `theme_gtsummary_journal()`. Each built-in theme now has an argument `set_theme = TRUE`. When `FALSE`, the theme function will invisibly return the named list the theme elements, and the theme will not be set. (#522)
@@ -23,7 +27,7 @@
 
 * Bug fix when for `tbl_uvregression()` when adjustment variables were included in `formula = "{y} ~ {x} + age"`.  The adjustment variables were being printed in the resulting table. (#555)
 
-* Now importing `as_flextable()` generic from {flextable} to avoid conflicts when using both packages (#462)
+* Removing `as_flextable()` and replacing with `as_flex_table()` due to conflicts with `flextable::as_flextable` (#462)
 
 * Added a language theme for translating tables into Spanish, French, Portuguese, and German (#511)
 

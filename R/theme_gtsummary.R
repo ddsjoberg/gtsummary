@@ -96,7 +96,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
         )
       ),
       # compact flextables
-      "as_flextable.gtsummary-lst:addl_cmds" = list(
+      "as_flex_table-lst:addl_cmds" = list(
         footnote = list(
           rlang::expr(flextable::fontsize(size = 8, part = "all")),
           rlang::expr(flextable::padding(padding.top = 0, part = "all")),
@@ -145,16 +145,22 @@ theme_gtsummary_printer <- function(
 #' - `"es"` (Spanish)
 #' - `"fr"` (French)
 #' - `"pt"` (Portuguese)
+#' @inheritParams style_number
 #' @export
 theme_gtsummary_language <- function(language = c("es", "fr", "de", "en", "pt"),
-                                     set_theme = TRUE) {
-  language <- match.arg(language)
-  lst_theme <-
-    list(
-      "pkgwide-str:theme_name" = paste("language:", language),
-      "pkgwide-str:language" = language
-    )
+                                     big.mark = NULL, decimal.mark = NULL, set_theme = TRUE) {
 
-  if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
-  return(invisible(lst_theme))
+  language <- match.arg(language)
+  ret <- list(
+    "pkgwide-str:theme_name" = paste("language:", language),
+    "pkgwide-str:language" = language
+  )
+
+  # setting formatting of numbers
+  if (!is.null(big.mark)) ret <- c(ret, list("style_number-arg:big.mark" = big.mark))
+  if (!is.null(decimal.mark)) ret <- c(ret, list("style_number-arg:decimal.mark" = decimal.mark))
+
+  # either returning list OR setting theme and returning list
+  if (set_theme == TRUE) set_gtsummary_theme(ret)
+  return(invisible(ret))
 }

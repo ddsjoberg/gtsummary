@@ -24,7 +24,7 @@ NULL
 
 release_questions <- function() {
   c(
-    "Have you updated minimum required versions for packages using `usethis::use_latest_dependencies(overwrite = TRUE)`?",
+    "Do you need to run `usethis::use_latest_dependencies()`?",
     "Have you updated all the gt help file images?",
     "Is the size of the build less than 5MB?"
   )

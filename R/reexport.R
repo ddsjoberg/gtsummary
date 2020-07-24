@@ -1,3 +1,8 @@
+# magrittr ---------------------------------------------------------------------
+#' @export
+#' @importFrom magrittr %>%
+magrittr::`%>%`
+
 # tibble -----------------------------------------------------------------------
 #' @export
 #' @importFrom tibble as_tibble
@@ -17,13 +22,43 @@ dplyr::vars
 #' @export
 dplyr::select
 
-# huxtable ---------------------------------------------------------------------
+# tidyselect -------------------------------------------------------------------
+#' @importFrom tidyselect starts_with
 #' @export
-#' @importFrom huxtable as_huxtable
-huxtable::as_huxtable
+tidyselect::starts_with
 
-# flextable --------------------------------------------------------------------
-#' @importFrom flextable as_flextable
+#' @importFrom tidyselect ends_with
 #' @export
-flextable::as_flextable
+tidyselect::ends_with
 
+#' @importFrom tidyselect contains
+#' @export
+tidyselect::contains
+
+#' @importFrom tidyselect matches
+#' @export
+tidyselect::matches
+
+#' @importFrom tidyselect num_range
+#' @export
+tidyselect::num_range
+
+#' @importFrom tidyselect all_of
+#' @export
+tidyselect::all_of
+
+#' @importFrom tidyselect any_of
+#' @export
+tidyselect::any_of
+
+#' @importFrom tidyselect everything
+#' @export
+tidyselect::everything
+
+#' @importFrom tidyselect last_col
+#' @export
+tidyselect::last_col
+
+#' @importFrom tidyselect one_of
+#' @export
+tidyselect::one_of
