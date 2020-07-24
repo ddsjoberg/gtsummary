@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Style p-values to be displayed in tables or text — style_pvalue • gtsummary</title>
+<title>Style p-values — style_pvalue • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="Style p-values to be displayed in tables or text — style_pvalue" />
-<meta property="og:description" content="Style p-values to be displayed in tables or text" />
+<meta property="og:title" content="Style p-values — style_pvalue" />
+<meta property="og:description" content="Style p-values" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9011</span>
       </span>
     </div>
 
@@ -168,16 +168,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Style p-values to be displayed in tables or text</h1>
+    <h1>Style p-values</h1>
     <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/style_pvalue.R'><code>R/style_pvalue.R</code></a></small>
     <div class="hidden name"><code>style_pvalue.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Style p-values to be displayed in tables or text</p>
+    <p>Style p-values</p>
     </div>
 
-    <pre class="usage"><span class='fu'>style_pvalue</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>style_pvalue</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>prepend_p</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>big.mark</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>decimal.mark</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,13 +195,27 @@
     </tr>
     <tr>
       <th>digits</th>
-      <td><p>Number of digits large p-values are rounded. Must be 1 or 2.
+      <td><p>Number of digits large p-values are rounded. Must be 1, 2, or 3.
 Default is 1.</p></td>
     </tr>
     <tr>
       <th>prepend_p</th>
       <td><p>Logical. Should 'p=' be prepended to formatted p-value.
 Default is <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>big.mark</th>
+      <td><p>Character used between every 3 digits to separate thousands.
+Default is <code>","</code></p></td>
+    </tr>
+    <tr>
+      <th>decimal.mark</th>
+      <td><p>The character to be used to indicate the numeric decimal point.
+Default is <code>"."</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed on to <code><a href='https://rdrr.io/r/base/format.html'>base::format()</a></code></p></td>
     </tr>
     </table>
 
@@ -205,6 +226,7 @@ Default is <code>FALSE</code></p></td>
 
     <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for examples</p>
 <p>Other style tools: 
+<code><a href='style_number.html'>style_number</a>()</code>,
 <code><a href='style_percent.html'>style_percent</a>()</code>,
 <code><a href='style_ratio.html'>style_ratio</a>()</code>,
 <code><a href='style_sigfig.html'>style_sigfig</a>()</code></p></div>

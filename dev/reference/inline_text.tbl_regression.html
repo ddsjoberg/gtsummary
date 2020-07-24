@@ -99,7 +99,7 @@ inline_text vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9011</span>
       </span>
     </div>
 
@@ -271,7 +271,7 @@ print the table the estimates are extracted from.</p><ul>
   <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>age</span>)</div><div class='output co'>#&gt; 1.02 (95% CI 1.00, 1.04; p=0.10)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>grade</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"III"</span>)</div><div class='output co'>#&gt; 1.01 (95% CI 0.47, 2.16; p=0.97)</div></pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>age</span>)</div><div class='output co'>#&gt; 1.02 (95% CI 1.00, 1.04; p=0.10)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='no'>inline_text_ex1</span>, <span class='kw'>variable</span> <span class='kw'>=</span> <span class='no'>grade</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='st'>"III"</span>)</div><div class='output co'>#&gt; 1.01 (95% CI 0.47, 2.16; p&gt;0.9)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

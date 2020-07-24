@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9011</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@
 
       
 
-      </header><script src="global_options_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="global_options_files/header-attrs-2.3/header-attrs.js"></script><script src="global_options_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Global Options</h1>
@@ -152,7 +152,7 @@
 <h3 class="hasAnchor">
 <a href="#percentages" class="anchor"></a>percentages</h3>
 <p>In <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, the default function for styling percentages is <code><a href="../reference/style_percent.html">style_percent()</a></code>. If you’d like to update the default, for example, because you’d prefer percentages rounded to one decimal place, you may include the <code>gtsummary.tbl_summary.percent_fun</code> option.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">gtsummary.tbl_summary.percent_fun</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="no">x</span> * <span class="fl">100</span>, <span class="kw">fmt</span><span class="kw">=</span><span class="st">'%#.1f'</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">gtsummary.tbl_summary.percent_fun</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="../reference/style_number.html">style_number</a></span>(<span class="no">x</span> * <span class="fl">100</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="fl">1</span>))</pre></body></html></div>
 </div>
 <div id="survival-estimates" class="section level3">
 <h3 class="hasAnchor">
@@ -177,7 +177,7 @@
 <ol style="list-style-type: decimal">
 <li><p>Only include {gt} functions you want to apply to <em>all</em> tables. For example, a {gt} function that changes the font size would be appropriate. A table-specific header may not.</p></li>
 <li><p>All {gt} functions must be referenced using the double-colon prefix (i.e. <code>gt::foo()</code>). These functions will execute when the {gt} library is not loaded.</p></li>
-<li><p>Do not include the <code>data=</code> argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the <code><a href="../reference/pipe.html">%&gt;%</a></code> operator. The data argument is taken from the previous function in the sequence.</p></li>
+<li><p>Do not include the <code>data=</code> argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> operator. The data argument is taken from the previous function in the sequence.</p></li>
 </ol>
 <p>In the example below, the font size and cell padding are reduced globally.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">gtsummary.as_gt.addl_cmds</span> <span class="kw">=</span> <span class="st">"gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1))"</span>)</pre></body></html></div>
@@ -191,7 +191,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#muvylziynl .gt_table {
+#qhqnmxuuvh .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -214,7 +214,7 @@
   border-left-color: #D3D3D3;
 }
 
-#muvylziynl .gt_heading {
+#qhqnmxuuvh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -226,7 +226,7 @@
   border-right-color: #D3D3D3;
 }
 
-#muvylziynl .gt_title {
+#qhqnmxuuvh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -236,7 +236,7 @@
   border-bottom-width: 0;
 }
 
-#muvylziynl .gt_subtitle {
+#qhqnmxuuvh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -246,13 +246,13 @@
   border-top-width: 0;
 }
 
-#muvylziynl .gt_bottom_border {
+#qhqnmxuuvh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#muvylziynl .gt_col_headings {
+#qhqnmxuuvh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -267,7 +267,7 @@
   border-right-color: #D3D3D3;
 }
 
-#muvylziynl .gt_col_heading {
+#qhqnmxuuvh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -287,7 +287,7 @@
   overflow-x: hidden;
 }
 
-#muvylziynl .gt_column_spanner_outer {
+#qhqnmxuuvh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -299,15 +299,15 @@
   padding-right: 4px;
 }
 
-#muvylziynl .gt_column_spanner_outer:first-child {
+#qhqnmxuuvh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#muvylziynl .gt_column_spanner_outer:last-child {
+#qhqnmxuuvh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#muvylziynl .gt_column_spanner {
+#qhqnmxuuvh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -319,7 +319,7 @@
   width: 100%;
 }
 
-#muvylziynl .gt_group_heading {
+#qhqnmxuuvh .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -341,7 +341,7 @@
   vertical-align: middle;
 }
 
-#muvylziynl .gt_empty_group_heading {
+#qhqnmxuuvh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -356,19 +356,19 @@
   vertical-align: middle;
 }
 
-#muvylziynl .gt_striped {
+#qhqnmxuuvh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#muvylziynl .gt_from_md > :first-child {
+#qhqnmxuuvh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#muvylziynl .gt_from_md > :last-child {
+#qhqnmxuuvh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#muvylziynl .gt_row {
+#qhqnmxuuvh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -387,7 +387,7 @@
   overflow-x: hidden;
 }
 
-#muvylziynl .gt_stub {
+#qhqnmxuuvh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -399,7 +399,7 @@
   padding-left: 12px;
 }
 
-#muvylziynl .gt_summary_row {
+#qhqnmxuuvh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -409,7 +409,7 @@
   padding-right: 5px;
 }
 
-#muvylziynl .gt_first_summary_row {
+#qhqnmxuuvh .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -419,7 +419,7 @@
   border-top-color: #D3D3D3;
 }
 
-#muvylziynl .gt_grand_summary_row {
+#qhqnmxuuvh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -429,7 +429,7 @@
   padding-right: 5px;
 }
 
-#muvylziynl .gt_first_grand_summary_row {
+#qhqnmxuuvh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -439,7 +439,7 @@
   border-top-color: #D3D3D3;
 }
 
-#muvylziynl .gt_table_body {
+#qhqnmxuuvh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -448,7 +448,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#muvylziynl .gt_footnotes {
+#qhqnmxuuvh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -462,13 +462,13 @@
   border-right-color: #D3D3D3;
 }
 
-#muvylziynl .gt_footnote {
+#qhqnmxuuvh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#muvylziynl .gt_sourcenotes {
+#qhqnmxuuvh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -482,46 +482,46 @@
   border-right-color: #D3D3D3;
 }
 
-#muvylziynl .gt_sourcenote {
+#qhqnmxuuvh .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#muvylziynl .gt_left {
+#qhqnmxuuvh .gt_left {
   text-align: left;
 }
 
-#muvylziynl .gt_center {
+#qhqnmxuuvh .gt_center {
   text-align: center;
 }
 
-#muvylziynl .gt_right {
+#qhqnmxuuvh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#muvylziynl .gt_font_normal {
+#qhqnmxuuvh .gt_font_normal {
   font-weight: normal;
 }
 
-#muvylziynl .gt_font_bold {
+#qhqnmxuuvh .gt_font_bold {
   font-weight: bold;
 }
 
-#muvylziynl .gt_font_italic {
+#qhqnmxuuvh .gt_font_italic {
   font-style: italic;
 }
 
-#muvylziynl .gt_super {
+#qhqnmxuuvh .gt_super {
   font-size: 65%;
 }
 
-#muvylziynl .gt_footnote_marks {
+#qhqnmxuuvh .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="muvylziynl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="qhqnmxuuvh" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Option Name</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Tests Modified</th>

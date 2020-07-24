@@ -53,8 +53,7 @@
 
 
 <meta property="og:title" content="Convert gtsummary object to a tibble — as_tibble.gtsummary" />
-<meta property="og:description" content="Function converts gtsummary objects tibbles. The formatting stored in
-x$kable_calls is applied." />
+<meta property="og:description" content="Function converts a gtsummary object to a tibble." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -97,7 +96,7 @@ x$kable_calls is applied." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9011</span>
       </span>
     </div>
 
@@ -175,14 +174,13 @@ x$kable_calls is applied." />
     </div>
 
     <div class="ref-description">
-    <p>Function converts gtsummary objects tibbles. The formatting stored in
-<code>x$kable_calls</code> is applied.</p>
+    <p>Function converts a gtsummary object to a tibble.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for gtsummary</span>
 <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(
   <span class='no'>x</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='everything.html'>everything</a></span>(),
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
   <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>return_calls</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>group_header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -203,7 +201,7 @@ x$kable_calls is applied." />
       <td><p>Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is <code><a href='everything.html'>everything()</a></code>.</p></td>
+Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code>.</p></td>
     </tr>
     <tr>
       <th>col_labels</th>
@@ -217,7 +215,7 @@ as a list of expressions.</p></td>
     </tr>
     <tr>
       <th>group_header</th>
-      <td><p>If a group is present (e.g. via <code><a href='tbl_merge.html'>tbl_merge(group_header=)</a></code>),
+      <td><p>If a group is present (e.g. via <code><a href='tbl_stack.html'>tbl_stack(group_header=)</a></code>),
 this string specifies the column header for the grouping column. Default
 is <code>"**Group**"</code></p></td>
     </tr>
@@ -237,7 +235,7 @@ is <code>"**Group**"</code></p></td>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other gtsummary output types: 
-<code><a href='as_flextable.gtsummary.html'>as_flextable.gtsummary</a>()</code>,
+<code><a href='as_flex_table.html'>as_flex_table</a>()</code>,
 <code><a href='as_gt.html'>as_gt</a>()</code>,
 <code><a href='as_kable_extra.html'>as_kable_extra</a>()</code>,
 <code><a href='as_kable.html'>as_kable</a>()</code></p></div>
@@ -248,29 +246,29 @@ is <code>"**Group**"</code></p></td>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>)
 
-<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 8 x 3</span><span>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>tbl</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 8 x 3</span><span>
 #&gt;   `**Characteristic**` `**Drug A**, N = 98` `**Drug B**, N = 102`
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                
-#&gt; </span><span style='color: #555555;'>1</span><span> Age, yrs             46 (37 - 59)         48 (39 - 56)         
-#&gt; </span><span style='color: #555555;'>2</span><span> Unknown              7                    4                    
-#&gt; </span><span style='color: #555555;'>3</span><span> Grade                </span><span style='color: #BB0000;'>NA</span><span>                   </span><span style='color: #BB0000;'>NA</span><span>                   
-#&gt; </span><span style='color: #555555;'>4</span><span> I                    35 (36)              33 (32)              
-#&gt; </span><span style='color: #555555;'>5</span><span> II                   32 (33)              36 (35)              
-#&gt; </span><span style='color: #555555;'>6</span><span> III                  31 (32)              33 (32)              
-#&gt; </span><span style='color: #555555;'>7</span><span> Tumor Response       28 (29)              33 (34)              
-#&gt; </span><span style='color: #555555;'>8</span><span> Unknown              3                    4                    </div><div class='input'>
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> Age, yrs             46 (37, 59)          48 (39, 56)          
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Unknown              7                    4                    
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> Grade                </span><span style='color: #BB0000;'>NA</span><span>                   </span><span style='color: #BB0000;'>NA</span><span>                   
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> I                    35 (36%)             33 (32%)             
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> II                   32 (33%)             36 (35%)             
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span> III                  31 (32%)             33 (32%)             
+#&gt; </span><span style='color: #BCBCBC;'>7</span><span> Tumor Response       28 (29%)             33 (34%)             
+#&gt; </span><span style='color: #BCBCBC;'>8</span><span> Unknown              3                    4                    </div><div class='input'>
 <span class='co'># without column labels</span>
-<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>tbl</span>, <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 8 x 3</span><span>
-#&gt;   label          stat_1       stat_2      
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       
-#&gt; </span><span style='color: #555555;'>1</span><span> Age, yrs       46 (37 - 59) 48 (39 - 56)
-#&gt; </span><span style='color: #555555;'>2</span><span> Unknown        7            4           
-#&gt; </span><span style='color: #555555;'>3</span><span> Grade          </span><span style='color: #BB0000;'>NA</span><span>           </span><span style='color: #BB0000;'>NA</span><span>          
-#&gt; </span><span style='color: #555555;'>4</span><span> I              35 (36)      33 (32)     
-#&gt; </span><span style='color: #555555;'>5</span><span> II             32 (33)      36 (35)     
-#&gt; </span><span style='color: #555555;'>6</span><span> III            31 (32)      33 (32)     
-#&gt; </span><span style='color: #555555;'>7</span><span> Tumor Response 28 (29)      33 (34)     
-#&gt; </span><span style='color: #555555;'>8</span><span> Unknown        3            4           </div></span></pre>
+<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span>(<span class='no'>tbl</span>, <span class='kw'>col_labels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 8 x 3</span><span>
+#&gt;   label          stat_1      stat_2     
+#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      
+#&gt; </span><span style='color: #BCBCBC;'>1</span><span> Age, yrs       46 (37, 59) 48 (39, 56)
+#&gt; </span><span style='color: #BCBCBC;'>2</span><span> Unknown        7           4          
+#&gt; </span><span style='color: #BCBCBC;'>3</span><span> Grade          </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span>         
+#&gt; </span><span style='color: #BCBCBC;'>4</span><span> I              35 (36%)    33 (32%)   
+#&gt; </span><span style='color: #BCBCBC;'>5</span><span> II             32 (33%)    36 (35%)   
+#&gt; </span><span style='color: #BCBCBC;'>6</span><span> III            31 (32%)    33 (32%)   
+#&gt; </span><span style='color: #BCBCBC;'>7</span><span> Tumor Response 28 (29%)    33 (34%)   
+#&gt; </span><span style='color: #BCBCBC;'>8</span><span> Unknown        3           4          </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

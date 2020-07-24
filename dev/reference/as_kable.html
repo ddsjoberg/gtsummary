@@ -103,7 +103,7 @@ or spanning header rows." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9011</span>
       </span>
     </div>
 
@@ -193,7 +193,7 @@ or spanning header rows.</p>
 
     <pre class="usage"><span class='fu'>as_kable</span>(
   <span class='no'>x</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='everything.html'>everything</a></span>(),
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
   <span class='kw'>return_calls</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>group_header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -213,7 +213,7 @@ or spanning header rows.</p>
       <td><p>Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is <code><a href='everything.html'>everything()</a></code>.</p></td>
+Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code>.</p></td>
     </tr>
     <tr>
       <th>return_calls</th>
@@ -222,7 +222,7 @@ as a list of expressions.</p></td>
     </tr>
     <tr>
       <th>group_header</th>
-      <td><p>If a group is present (e.g. via <code><a href='tbl_merge.html'>tbl_merge(group_header=)</a></code>),
+      <td><p>If a group is present (e.g. via <code><a href='tbl_stack.html'>tbl_stack(group_header=)</a></code>),
 this string specifies the column header for the grouping column. Default
 is <code>"**Group**"</code></p></td>
     </tr>
@@ -246,7 +246,7 @@ indenting is not supported, try <code><a href='bold_italicize_labels_levels.html
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other gtsummary output types: 
-<code><a href='as_flextable.gtsummary.html'>as_flextable.gtsummary</a>()</code>,
+<code><a href='as_flex_table.html'>as_flex_table</a>()</code>,
 <code><a href='as_gt.html'>as_gt</a>()</code>,
 <code><a href='as_kable_extra.html'>as_kable_extra</a>()</code>,
 <code><a href='as_tibble.gtsummary.html'>as_tibble.gtsummary</a>()</code></p></div>
@@ -255,102 +255,27 @@ indenting is not supported, try <code><a href='bold_italicize_labels_levels.html
     <pre class="examples"><div class='input'><span class='no'>trial</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='bold_italicize_labels_levels.html'>bold_labels</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>as_kable</span>()</div><div class='output co'>#&gt; &lt;table&gt;
-#&gt;  &lt;thead&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;th style="text-align:left;"&gt; **Characteristic** &lt;/th&gt;
-#&gt;    &lt;th style="text-align:left;"&gt; **Drug A**, N = 98 &lt;/th&gt;
-#&gt;    &lt;th style="text-align:left;"&gt; **Drug B**, N = 102 &lt;/th&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;  &lt;/thead&gt;
-#&gt; &lt;tbody&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; __Age, yrs__ &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 46 (37 - 59) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 48 (39 - 56) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; Unknown &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; __Marker Level, ng/mL__ &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 0.84 (0.24 - 1.57) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 0.52 (0.19 - 1.20) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; Unknown &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 6 &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; __T Stage__ &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; T1 &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 28 (29) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 25 (25) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; T2 &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 25 (26) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 29 (28) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; T3 &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 22 (22) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 21 (21) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; T4 &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 23 (23) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 27 (26) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; __Grade__ &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; I &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 35 (36) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 33 (32) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; II &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 32 (33) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 36 (35) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; III &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 31 (32) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 33 (32) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; __Tumor Response__ &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 28 (29) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 33 (34) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; Unknown &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; __Patient Died__ &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 52 (53) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 60 (59) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt;   &lt;tr&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; __Months to Death/Censor__ &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 23.5 (17.4 - 24.0) &lt;/td&gt;
-#&gt;    &lt;td style="text-align:left;"&gt; 21.2 (14.6 - 24.0) &lt;/td&gt;
-#&gt;   &lt;/tr&gt;
-#&gt; &lt;/tbody&gt;
-#&gt; &lt;/table&gt;</div></pre>
+  <span class='fu'>as_kable</span>()</div><div class='output co'>#&gt; 
+#&gt; 
+#&gt; |**Characteristic**         |**Drug A**, N = 98 |**Drug B**, N = 102 |
+#&gt; |:--------------------------|:------------------|:-------------------|
+#&gt; |__Age, yrs__               |46 (37, 59)        |48 (39, 56)         |
+#&gt; |Unknown                    |7                  |4                   |
+#&gt; |__Marker Level, ng/mL__    |0.84 (0.24, 1.57)  |0.52 (0.19, 1.20)   |
+#&gt; |Unknown                    |6                  |4                   |
+#&gt; |__T Stage__                |                   |                    |
+#&gt; |T1                         |28 (29%)           |25 (25%)            |
+#&gt; |T2                         |25 (26%)           |29 (28%)            |
+#&gt; |T3                         |22 (22%)           |21 (21%)            |
+#&gt; |T4                         |23 (23%)           |27 (26%)            |
+#&gt; |__Grade__                  |                   |                    |
+#&gt; |I                          |35 (36%)           |33 (32%)            |
+#&gt; |II                         |32 (33%)           |36 (35%)            |
+#&gt; |III                        |31 (32%)           |33 (32%)            |
+#&gt; |__Tumor Response__         |28 (29%)           |33 (34%)            |
+#&gt; |Unknown                    |3                  |4                   |
+#&gt; |__Patient Died__           |52 (53%)           |60 (59%)            |
+#&gt; |__Months to Death/Censor__ |23.5 (17.4, 24.0)  |21.2 (14.6, 24.0)   |</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
