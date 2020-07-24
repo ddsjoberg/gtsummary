@@ -104,7 +104,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
         )
       ),
       # compact huxtable
-      "as_huxtable.gtsummary-lst:addl_cmds" = list(
+      "as_hux_table.gtsummary-lst:addl_cmds" = list(
         insert_row = list(
           rlang::expr(huxtable::set_font_size(value = 8)),
           rlang::expr(huxtable::set_bottom_padding(value = 0)),
@@ -128,7 +128,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
 #' @param print_engine String indicating the print engine. Default is `"gt"`
 #' @export
 theme_gtsummary_printer <- function(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble"),
+  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
   set_theme = TRUE) {
 
   lst_theme <- list("pkgwide-str:print_engine" = match.arg(print_engine))

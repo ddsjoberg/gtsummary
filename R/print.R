@@ -36,7 +36,7 @@ print.gtsummary <- function(x, print_engine = NULL, ...) {
     "kable" = as_kable(x),
     "flextable" = as_flex_table(x),
     "kable_extra" = as_kable_extra(x),
-    "huxtable" = as_huxtable(x),
+    "huxtable" = as_hux_table(x),
     "tibble" = as_tibble(x)
   ) %>%
     print()
@@ -111,7 +111,7 @@ knit_print.gtsummary <- function(x, ...) {
     "kable" = as_kable(x),
     "flextable" = as_flex_table(x),
     "kable_extra" = as_kable_extra(x),
-    "huxtable" = as_huxtable(x),
+    "huxtable" = as_hux_table(x),
     "tibble" = as_tibble(x)
   ) %>%
       knitr::knit_print()

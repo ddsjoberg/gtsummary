@@ -84,7 +84,7 @@ as_flex_table_ex1 <-
 \seealso{
 Other gtsummary output types: 
 \code{\link{as_gt}()},
-\code{\link{as_huxtable.gtsummary}()},
+\code{\link{as_hux_table}()},
 \code{\link{as_kable_extra}()},
 \code{\link{as_kable}()},
 \code{\link{as_tibble.gtsummary}()}

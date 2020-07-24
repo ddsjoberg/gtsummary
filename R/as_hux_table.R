@@ -7,7 +7,7 @@
 #' to PDF via LaTeX, as well as HTML and Word.
 #'
 #' @section Details:
-#' The `as_huxtable()` takes the data frame that will be printed, converts
+#' The `as_hux_table()` takes the data frame that will be printed, converts
 #' it to a huxtable and formats the table with the following huxtable functions:
 #'
 #' 1. [huxtable::huxtable()]
@@ -21,7 +21,7 @@
 #'
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
-#' @inheritParams as_flextable.gtsummary
+#' @inheritParams as_flex_table
 #' @export
 #' @return A {huxtable} object
 #' @family gtsummary output types
@@ -31,12 +31,17 @@
 #'   dplyr::select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
-#'   as_huxtable()
+#'   as_hux_table()
 #' @export
 
-as_huxtable.gtsummary <- function(x, include = everything(),
-                                  return_calls = FALSE, strip_md_bold = TRUE, ...) {
-  assert_package("huxtable", "as_huxtable")
+as_hux_table <- function(x, include = everything(), return_calls = FALSE,
+                         strip_md_bold = TRUE,  group_header = NULL, ...) {
+  assert_package("huxtable", "as_hux_table")
+
+  # setting defaults -----------------------------------------------------------
+  group_header <-
+    group_header %||%
+    get_theme_element("pkgwide-str:group_header", default = "**Group**")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -46,13 +51,14 @@ as_huxtable.gtsummary <- function(x, include = everything(),
         vars(.data$label, .data$spanning_header),
         ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
       )
+    group_header <- str_replace_all(group_header, pattern = fixed("**"), replacement = fixed(""))
   }
 
   # creating list of huxtable calls -------------------------------------------
-  huxtable_calls <- table_header_to_huxtable_calls(x = x)
+  huxtable_calls <- table_header_to_huxtable_calls(x = x, group_header = group_header)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_huxtable.gtsummary-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds")
   huxtable_calls <-
     purrr::reduce(
       .x = seq_along(insert_expr_after),
@@ -81,13 +87,26 @@ as_huxtable.gtsummary <- function(x, include = everything(),
 }
 
 # creating huxxtable calls from table_header -----------------------------------
-table_header_to_huxtable_calls <- function(x, ...) {
-  # adding a col id for columns that are not hidden
-  table_header <-
-    x$table_header %>%
-    group_by(.data$hide) %>%
-    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-    ungroup()
+table_header_to_huxtable_calls <- function(x, group_header, ...) {
+  # if there is a grouping variable, add table_header info for it
+  if (dplyr::group_vars(x$table_body) %>% length() > 0) {
+    table_header <-
+      tibble::tibble(column = "groupname_col",
+                     label = group_header,
+                     hide = FALSE,
+                     align = "left") %>%
+      bind_rows(x$table_header) %>%
+      group_by(.data$hide) %>%
+      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+      ungroup()
+  }
+  else {
+    table_header <-
+      x$table_header %>%
+      group_by(.data$hide) %>%
+      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+      ungroup()
+  }
 
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
@@ -116,7 +135,6 @@ table_header_to_huxtable_calls <- function(x, ...) {
   )
 
   # footnote -------------------------------------------------------------------
-
   footnote_abbrev <-
     table_header %>%
     select(.data$id, .data$footnote_abbrev) %>%
