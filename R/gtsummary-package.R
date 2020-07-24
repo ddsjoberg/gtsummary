@@ -24,6 +24,7 @@ NULL
 
 release_questions <- function() {
   c(
+    "Do you need to run `usethis::use_latest_dependencies()`?",
     "Have you updated all the gt help file images?",
     "Is the size of the build less than 5MB?"
   )
