@@ -35,7 +35,7 @@
 #' @export
 
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = TRUE,  group_header = NULL, ...) {
+                         strip_md_bold = TRUE,  group_header = NULL) {
   assert_package("huxtable", "as_hux_table")
 
   # setting defaults -----------------------------------------------------------
