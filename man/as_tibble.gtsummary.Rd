@@ -9,7 +9,6 @@
   include = everything(),
   col_labels = TRUE,
   return_calls = FALSE,
-  group_header = NULL,
   exclude = NULL,
   ...
 )
@@ -28,10 +27,6 @@ Default is \code{TRUE}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
-
-\item{group_header}{If a group is present (e.g. via \code{tbl_stack(group_header=)}),
-this string specifies the column header for the grouping column. Default
-is \code{"**Group**"}}
 
 \item{exclude}{DEPRECATED}
 
