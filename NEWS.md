@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated the handler arguments that accept functions to allow users to pass anonymous functions using the shortcut tidyverse notation, e.g. `~style_pvalue(.x, digits = 2)`.
+
 * Re-adding `as_hux_table()` after the huxtable 5.0.0 release.
 
 * The header for the `tbl_stack(group_header=)` column is now integrated into a typical gtsummary framework, meaning that all standard functions can be executed on it, e.g. `modify_header()` for non-gt output.
