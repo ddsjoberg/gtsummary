@@ -78,6 +78,7 @@ theme_gtsummary_journal <- function(journal = "jama", set_theme = TRUE) {
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
+
 theme_gtsummary_compact <- function(set_theme = TRUE){
   lst_theme <-
     list(
@@ -102,14 +103,14 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
           rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))
         )
       ),
-      # # compact huxtable
-      # "as_huxtable.gtsummary-lst:addl_cmds" = list(
-      #   insert_row = list(
-      #     rlang::expr(huxtable::set_font_size(value = 8)),
-      #     rlang::expr(huxtable::set_bottom_padding(value = 0)),
-      #     rlang::expr(huxtable::set_top_padding(value = 0))
-      #   )
-      # ),
+      # compact huxtable
+      "as_hux_table.gtsummary-lst:addl_cmds" = list(
+        insert_row = list(
+          rlang::expr(huxtable::set_font_size(value = 8)),
+          rlang::expr(huxtable::set_bottom_padding(value = 0)),
+          rlang::expr(huxtable::set_top_padding(value = 0))
+        )
+      ),
       # compact kableExtra
       "as_kable_extra-lst:addl_cmds" = list(
         kable = list(
@@ -127,7 +128,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
 #' @param print_engine String indicating the print engine. Default is `"gt"`
 #' @export
 theme_gtsummary_printer <- function(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble"),
+  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
   set_theme = TRUE) {
 
   lst_theme <- list("pkgwide-str:print_engine" = match.arg(print_engine))
