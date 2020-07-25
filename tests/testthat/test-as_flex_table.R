@@ -29,17 +29,27 @@ test_that("tbl_survfit", {
   expect_warning(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% as_flex_table(), NA)
 })
 
-test_that("tbl_merge", {
+test_that("tbl_merge/tbl_stack", {
   t1 <-
     glm(response ~ trt + grade + age, trial, family = binomial) %>%
     tbl_regression(exponentiate = TRUE)
   t2 <-
     coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
     tbl_regression(exponentiate = TRUE)
+
   tbl_merge_ex1 <-
     tbl_merge(
       tbls = list(t1, t2),
       tab_spanner = c("**Tumor Response**", "**Time to Death**")
+    )
+
+  expect_error(as_flex_table(tbl_merge_ex1), NA)
+  expect_warning(as_flex_table(tbl_merge_ex1), NA)
+
+  tbl_stack_ex1 <-
+    tbl_stack(
+      tbls = list(t1, t2),
+      group_header = c("**Tumor Response**", "**Time to Death**")
     )
 
   expect_error(as_flex_table(tbl_merge_ex1), NA)

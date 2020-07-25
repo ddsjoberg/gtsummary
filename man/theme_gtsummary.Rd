@@ -13,7 +13,7 @@ theme_gtsummary_journal(journal = "jama", set_theme = TRUE)
 theme_gtsummary_compact(set_theme = TRUE)
 
 theme_gtsummary_printer(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble"),
+  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
   set_theme = TRUE
 )
 

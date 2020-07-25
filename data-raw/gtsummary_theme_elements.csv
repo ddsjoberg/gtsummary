@@ -9,6 +9,7 @@ tbl_stack,tbl_stack-str:group_header,FALSE,"string indicating the group column h
 as_gt,as_gt-lst:addl_cmds,FALSE,"list expression of gt-package commands inserted in the `as_gt()` call. Do not include the `data=` argument. Expression is inserted after the named call, e.g. after ""tab_spanner"" in the example.",list(tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')))
 as_flex_table,as_flex_table-lst:addl_cmds,FALSE,"list of expressions of flextable-package commands inserted in the `as_flex_table()` call. Do not include the `data=` argument. Expression is inserted after the named call, e.g. after ""autofit"" in the example.","list(autofit = list(rlang::expr(flextable::font(fontname = ""Bodoni 72"", part = ""all"")), rlang::expr(flextable::fontsize(size = 8, part = ""all""))))"
 as_kable_extra,as_kable_extra-lst:addl_cmds,FALSE,list expression of kableExtra-package commands inserted in the `as_kable_extra()` call. Do not include the `data=` argument. Expression is inserted after the named call.,
+as_hux_table,as_hux_table.gtsummary-lst:addl_cmds,FALSE,list of expressions of huxtable-package commands inserted in the `as_hux_table()` call. Do not include the `data=` argument. Expression is inserted after the named call.,
 tbl_summary,tbl_summary-arg:label,TRUE,,
 tbl_summary,tbl_summary-arg:statistic,TRUE,,
 tbl_summary,tbl_summary-arg:digits,TRUE,,

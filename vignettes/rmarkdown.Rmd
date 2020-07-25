@@ -39,8 +39,7 @@ path_figure <- list(
 
 # making table with gt
 list(
-  printer = c("gt", "kable", "flextable", "kableExtra", "tibble"),
-  # printer = c("gt", "kable", "flextable", "kableExtra", "huxtable", "tibble"),
+  printer = c("gt", "kable", "flextable", "kableExtra", "huxtable", "tibble"),
   output = c("HTML", "PDF", "RTF", "Word")
 ) %>%
   purrr::cross_df() %>%
@@ -80,7 +79,7 @@ list(
       printer == "kable" ~ "`as_kable()`",
       printer == "flextable" ~ "`as_flex_table()`",
       printer == "kableExtra" ~ "`as_kable_extra()`",
-      printer == "huxtable" ~ "`as_huxtable()`",
+      printer == "huxtable" ~ "`as_hux_table()`",
       printer == "tibble" ~ "`as_tibble()`"
     )
   ) %>%
