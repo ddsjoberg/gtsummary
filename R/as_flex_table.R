@@ -1,6 +1,5 @@
 #' Convert gtsummary object to a flextable object
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Function converts a gtsummary object to a flextable object.
 #' A user can use this function if they wish to add customized formatting
 #' available via the flextable functions. The flextable output is particularly
@@ -249,6 +248,24 @@ table_header_to_flextable_calls <- function(x, ...) {
       )
     )
   )
+
+  # fmt_missing_emdash ---------------------------------------------------------
+  df_na_emdash <-
+    table_header %>%
+    filter(!is.na(.data$missing_emdash)) %>%
+    select(.data$id, .data$column, .data$missing_emdash) %>%
+    mutate(
+      i_index = map(
+        .data$missing_emdash,
+        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
+      )
+    )
+
+  flextable_calls[["fmt_missing_emdash"]] <-
+    map2(
+      df_na_emdash$i_index, df_na_emdash$id,
+      ~expr(flextable::colformat_char(j = !!.y, i = !!.x, na_str = "\U2014"))
+    )
 
   # bold -----------------------------------------------------------------------
   df_bold <-
