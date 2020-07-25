@@ -85,20 +85,3 @@ as_flextable <- function(...) {
   as_flex_table(...)
 }
 
-as_flextable.gtsummary <- function(...) {
-  # soft deprecated on 2020-07-22 ----------------------------------------------
-  lifecycle::deprecate_warn(
-    "1.3.3", "gtsummary::as_flextable()", "as_flex_table()",
-    details = paste(
-      "The `as_flextable()` function graduated",
-      "from 'Experimental' status in v1.3.3. The updated function has",
-      "a new name to avoid name conflicts with {flextable}",
-      "and the ascetics of resulting tables have been improved."
-    ) %>%
-      stringr::str_wrap()
-  )
-
-  # passing args to `as_flex_table()` ------------------------------------------
-  as_flex_table(...)
-}
-
