@@ -9,7 +9,7 @@
   time = NULL,
   prob = NULL,
   level = NULL,
-  estimate_fun = NULL,
+  estimate_fun = x$inputs$estimate_fun,
   pvalue_fun = NULL,
   ...
 )

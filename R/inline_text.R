@@ -43,7 +43,8 @@ inline_text.tbl_summary <-
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # create rlang::enquo() inputs ---------------------------------------------
     variable <- rlang::enquo(variable)
@@ -73,7 +74,7 @@ inline_text.tbl_summary <-
     }
 
     # checking column ----------------------------------------------------------
-    # the follwing code converts the column input to a column name in x$table_body
+    # the following code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
       input = names(x$table_body),
       column_name = names(x$table_body)
@@ -200,25 +201,22 @@ inline_text.tbl_svysummary <- inline_text.tbl_summary
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
-           estimate_fun = x$fmt_fun$estimate,
-           pvalue_fun = NULL, ...) {
+           estimate_fun = NULL, pvalue_fun = NULL, ...) {
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # setting quos -------------------------------------------------------------
     variable <- rlang::enquo(variable)
     level <- rlang::enquo(level)
 
     # setting defaults ---------------------------------------------------------
-    if (is.null(estimate_fun)) estimate_fun <-
-      x$table_header %>%
-      dplyr::filter(startsWith(.data$column, "estimate")) %>%
-      dplyr::slice(1) %>%
-      dplyr::pull("fmt_fun") %>%
-      purrr::pluck(1)
+    estimate_fun <- estimate_fun %||%
+      (filter(x$table_header, .data$column == "estimate") %>% pluck("fmt_fun", 1)) %>%
+      gts_mapper("inline_text(estimate_fun=)")
 
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
@@ -499,14 +497,16 @@ inline_text.tbl_survival <-
 #' inline_text(tbl2, prob = 0.5)
 inline_text.tbl_survfit <-
   function(x, time = NULL, prob = NULL, level = NULL,
-           estimate_fun = NULL, pvalue_fun = NULL, ...) {
+           estimate_fun = x$inputs$estimate_fun, pvalue_fun = NULL, ...) {
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("inline_text(pvalue_fun=)")
 
-    if (is.null(estimate_fun)) estimate_fun <- x$inputs$estimate_fun
+    estimate_fun <- estimate_fun %>%
+      gts_mapper("inline_text(estimate_fun=)")
 
     # checking inputs ----------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
@@ -625,7 +625,8 @@ inline_text.tbl_cross <-
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # row_level ----------------------------------------------------------------
     # converting row_level to a string

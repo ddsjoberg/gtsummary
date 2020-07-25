@@ -110,8 +110,9 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   pvalue_fun <-
     pvalue_fun %||%
     get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
-    get_theme_element("pkgwide-fn:pvalue_fun")
-
+    get_theme_element("pkgwide-fn:pvalue_fun") %||%
+    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    gts_mapper("add_p(pvalue_fun=)")
 
   # converting bare arguments to string ----------------------------------------
   group <- var_input_to_string(data = x$inputs$data,
@@ -136,18 +137,6 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
         "The following syntax is now preferred:\n",
         "tbl_summary(..., include = -{group}) %>% add_p(..., group = {group})"))
     }
-  }
-
-  # setting defaults -----------------------------------------------------------
-  pvalue_fun <-
-    pvalue_fun %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue)
-  if (!rlang::is_function(pvalue_fun)) {
-    stop(paste0(
-      "'pvalue_fun' is not a valid function.  Please pass only a function\n",
-      "object. For example,\n\n",
-      "'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
-    ), call. = FALSE)
   }
 
   # checking that input x has a by var
@@ -309,14 +298,16 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
   if (source_note == FALSE)
     pvalue_fun <-
       pvalue_fun %||%
-      getOption("gtsummary.pvalue_fun", default = style_pvalue)  %||%
       get_theme_element("add_p.tbl_cross-arg:pvalue_fun") %||%
-      get_theme_element("pkgwide-fn:pvalue_fun")
+      get_theme_element("pkgwide-fn:pvalue_fun") %||%
+      getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+      gts_mapper("add_p(pvalue_fun=)")
   else
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("add_p(pvalue_fun=)")
 
   # adding test name if supplied (NULL otherwise)
   input_test <- switch(!is.null(test),
@@ -540,25 +531,15 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
     pvalue_fun %||%
     get_theme_element("add_p.tbl_svysummary-arg:pvalue_fun") %||%
     get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
-    get_theme_element("pkgwide-fn:pvalue_fun")
+    getOption("gtsummary.pvalue_fun", default = style_pvalue) %||%
+    get_theme_element("pkgwide-fn:pvalue_fun") %>%
+    gts_mapper("add_p(pvalue_fun=)")
 
 
   # converting bare arguments to string ----------------------------------------
   include <- var_input_to_string(data = select(x$inputs$data$variables, any_of(x$meta_data$variable)),
                                  select_input = !!rlang::enquo(include),
                                  arg_name = "include")
-
-  # setting defaults -----------------------------------------------------------
-  pvalue_fun <-
-    pvalue_fun %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue)
-  if (!rlang::is_function(pvalue_fun)) {
-    stop(paste0(
-      "'pvalue_fun' is not a valid function.  Please pass only a function\n",
-      "object. For example,\n\n",
-      "'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
-    ), call. = FALSE)
-  }
 
   # checking that input x has a by var
   if (is.null(x$df_by)) {
