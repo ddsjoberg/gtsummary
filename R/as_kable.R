@@ -31,7 +31,7 @@
 #'   as_kable()
 
 as_kable <- function(x, include = everything(), return_calls = FALSE,
-                     group_header = NULL, exclude = NULL, ...) {
+                     exclude = NULL, ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(
@@ -45,14 +45,10 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
       )
     )
   }
-  # setting defaults -----------------------------------------------------------
-  group_header <-
-    group_header %||%
-    get_theme_element("pkgwide-str:group_header", default = "**Group**")
 
   # creating list of kable calls --------------------------------------------------
   kable_calls <-
-    table_header_to_kable_calls(x = x, group_header = group_header, ...)
+    table_header_to_kable_calls(x = x, ...)
   if (return_calls == TRUE) return(kable_calls)
 
   # converting to charcter vector ----------------------------------------------
@@ -80,20 +76,10 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-table_header_to_kable_calls <- function(x, group_header, ...) {
+table_header_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
-  # if there is a grouping variable, add table_header info for it
-  if (dplyr::group_vars(x$table_body) %>% length() > 0) {
-    table_header <-
-      tibble::tibble(column = "groupname_col",
-                     label = group_header,
-                     hide = FALSE,
-                     align = "left") %>%
-      bind_rows(x$table_header)
-  }
-  else table_header <- x$table_header
 
-
+  table_header <- x$table_header
 
   kable_calls <- as_tibble(x, return_calls = TRUE, include = -c("cols_label"))
 

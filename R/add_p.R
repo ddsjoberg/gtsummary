@@ -299,9 +299,11 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun){
 #'
 #' \if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
 add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
-                            source_note = FALSE, ...) {
+                            source_note = NULL, ...) {
   # setting defaults -----------------------------------------------------------
   test <- test %||% get_theme_element("add_p.tbl_cross-arg:test")
+  source_note <- source_note %||%
+    get_theme_element("add_p.tbl_cross-arg:source_note", default = FALSE)
   if (source_note == FALSE)
     pvalue_fun <-
       pvalue_fun %||%

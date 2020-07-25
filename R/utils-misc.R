@@ -23,7 +23,7 @@ quoted_list <- function(x) {
   paste(sQuote(x), collapse = ", ")
 }
 
-# used in the as_flextable (and friends) functions for inserting calls
+# used in the as_flex_table (and friends) functions for inserting calls
 add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
   # checking input
   if (!rlang::is_string(add_after) || !add_after %in% names(calls)) {
