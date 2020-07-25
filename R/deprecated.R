@@ -13,14 +13,12 @@ NULL
 #' @export
 add_comparison <- function(...) {
   lifecycle::deprecate_stop("1.1.0", "gtsummary::add_comparison()", "add_p()")
-  add_p(...)
 }
 
 #' @rdname deprecated
 #' @export
 add_global <- function(...) {
   lifecycle::deprecate_stop("1.1.0", "gtsummary::add_global()", "add_global_p()")
-  add_global_p(...)
 }
 
 # v1.2.0 -----------------------------------------------------------------------
@@ -29,35 +27,30 @@ add_global <- function(...) {
 
 tab_style_bold_p <- function(...) {
   lifecycle::deprecate_stop("1.2.0", "gtsummary::tab_style_bold_p()", "bold_p()")
-  bold_p(...)
 }
 
 #' @rdname deprecated
 #' @export
 tab_style_bold_labels <- function(...) {
   lifecycle::deprecate_stop("1.2.0", "gtsummary::tab_style_bold_labels()", "bold_labels()")
-  bold_labels(...)
 }
 
 #' @rdname deprecated
 #' @export
 tab_style_italicize_levels <- function(...) {
   lifecycle::deprecate_stop("1.2.0", "gtsummary::tab_style_italicize_levels()", "italicize_levels()")
-  italicize_levels(...)
 }
 
 #' @rdname deprecated
 #' @export
 tab_style_italicize_labels <- function(...) {
   lifecycle::deprecate_stop("1.2.0", "gtsummary::tab_style_italicize_labels()", "italicize_labels()")
-  italicize_labels(...)
 }
 
 #' @rdname deprecated
 #' @export
 tab_style_bold_levels <- function(...) {
   lifecycle::deprecate_stop("1.2.0", "gtsummary::tab_style_bold_levels()", "bold_levels()")
-  bold_levels(...)
 }
 
 # v1.2.5 -----------------------------------------------------------------------
