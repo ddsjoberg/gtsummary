@@ -38,3 +38,26 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
   # insert list
   append(calls, new_list, after = index)
 }
+
+#' gtsummary wrapper for purrr::as_mapper
+#'
+#' This wrapper only accepts a function or formula notation function,
+#' and returns an informative message when incorrect inputs passed
+#'
+#' @param x function or anon. function using formula notation.
+#' @param context string indicating function and arg, e.g. `context = "foo(arg=)"`
+#' @noRd
+#' @keywords internal
+
+gts_mapper <- function(x, context) {
+  # checking input, and giving informative error msg
+  if (!rlang::is_function(x) && !rlang::is_formula(x)) {
+    paste("Expecting a function in argument `{context}`,\n",
+          "e.g. `fun = function(x) style_pvalue(x, digits = 2)`, or\n",
+          "`fun = ~style_pvalue(., digits = 2)`") %>%
+      stringr::str_glue()
+    rlang::abort()
+  }
+
+  purrr::as_mapper(x)
+}

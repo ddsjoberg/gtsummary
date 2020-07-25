@@ -9,7 +9,7 @@
   variable,
   level = NULL,
   pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
-  estimate_fun = x$fmt_fun$estimate,
+  estimate_fun = NULL,
   pvalue_fun = NULL,
   ...
 )
