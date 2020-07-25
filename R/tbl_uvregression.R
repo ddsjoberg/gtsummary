@@ -112,14 +112,14 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     get_theme_element("tbl_regression-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
     getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
-    purrr::as_mapper()
+    gts_mapper("tbl_uvregression(pvalue_fun=)")
   estimate_fun <-
     estimate_fun %||%
     getOption(
       "gtsummary.tbl_regression.estimate_fun",
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
     ) %>%
-    purrr::as_mapper()
+    gts_mapper("tbl_uvregression(estimate_fun=)")
   conf.level <-
     conf.level %||%
     getOption("gtsummary.conf.level", default = 0.95)

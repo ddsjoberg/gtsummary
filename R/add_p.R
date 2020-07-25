@@ -112,16 +112,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
     getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
-    purrr::as_mapper()
-
-  # checking pvalue_fun is a function
-  if (!rlang::is_function(pvalue_fun)) {
-    stop(paste0(
-      "'pvalue_fun' is not a valid function.  Please pass only a function\n",
-      "object. For example,\n\n",
-      "'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
-    ), call. = FALSE)
-  }
+    gts_mapper("add_p(pvalue_fun=)")
 
   # converting bare arguments to string ----------------------------------------
   group <- var_input_to_string(data = x$inputs$data,
@@ -310,13 +301,13 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
       get_theme_element("add_p.tbl_cross-arg:pvalue_fun") %||%
       get_theme_element("pkgwide-fn:pvalue_fun") %||%
       getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
-      purrr::as_mapper()
+      gts_mapper("add_p(pvalue_fun=)")
   else
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
       (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
-      purrr::as_mapper()
+      gts_mapper("add_p(pvalue_fun=)")
 
   # adding test name if supplied (NULL otherwise)
   input_test <- switch(!is.null(test),
@@ -443,7 +434,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
     get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
     getOption("gtsummary.pvalue_fun", default = style_pvalue) %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %>%
-    purrr::as_mapper()
+    gts_mapper("add_p(pvalue_fun=)")
 
 
   # converting bare arguments to string ----------------------------------------

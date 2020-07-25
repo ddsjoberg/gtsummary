@@ -44,7 +44,7 @@ inline_text.tbl_summary <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
       (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
-      purrr::as_mapper()
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # create rlang::enquo() inputs ---------------------------------------------
     variable <- rlang::enquo(variable)
@@ -207,7 +207,7 @@ inline_text.tbl_regression <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
       (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
-      purrr::as_mapper()
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # setting quos -------------------------------------------------------------
     variable <- rlang::enquo(variable)
@@ -216,7 +216,7 @@ inline_text.tbl_regression <-
     # setting defaults ---------------------------------------------------------
     estimate_fun <- estimate_fun %||%
       (filter(x$table_header, .data$column == "estimate") %>% pluck("fmt_fun", 1)) %>%
-      purrr::as_mapper()
+      gts_mapper("inline_text(estimate_fun=)")
 
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
@@ -503,10 +503,10 @@ inline_text.tbl_survfit <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
       (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
-      purrr::as_mapper()
+      gts_mapper("inline_text(pvalue_fun=)")
 
     estimate_fun <- estimate_fun %>%
-      purrr::as_mapper()
+      gts_mapper("inline_text(estimate_fun=)")
 
     # checking inputs ----------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
@@ -626,7 +626,7 @@ inline_text.tbl_cross <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
       (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
-      purrr::as_mapper()
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # row_level ----------------------------------------------------------------
     # converting row_level to a string
