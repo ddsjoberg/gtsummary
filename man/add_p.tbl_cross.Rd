@@ -4,7 +4,7 @@
 \alias{add_p.tbl_cross}
 \title{Adds p-value to crosstab table}
 \usage{
-\method{add_p}{tbl_cross}(x, test = NULL, pvalue_fun = NULL, source_note = FALSE, ...)
+\method{add_p}{tbl_cross}(x, test = NULL, pvalue_fun = NULL, source_note = NULL, ...)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_cross} from the \link{tbl_cross} function}

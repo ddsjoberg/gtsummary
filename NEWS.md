@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The header for the `tbl_stack(group_header=)` column is now integrated into a typical gtsummary framework, meaning that all standard functions can be executed on it, e.g. `modify_header()` for non-gt output.
+
 * Added `style_number()` which controls how numbers are formatted and can be used with theme options. `style_percent()`, `style_pvalue()`, `style_sigfig()`, and `style_ratio()` functions have been updated to use this, and users can now specify how many decimal places to round statistics for categorical variables (#458)
 
 * By default, tables now display commas for thousands mark. This can be changed through `big.mark=` and `decimal.mark=` arguments e.g. `theme_gtsummary_language("fr", big.mark = " ", decimal.mark = ",")` (#557)
