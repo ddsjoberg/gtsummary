@@ -122,6 +122,8 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     )
 
   # input checks ---------------------------------------------------------------
+  assert_package("survival", "tbl_survival")
+
   if (c(is.null(times), is.null(probs)) %>% sum() != 1) {
     stop("One and only one of 'times' and 'probs' must be specified.")
   }

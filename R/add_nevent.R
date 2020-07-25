@@ -48,6 +48,8 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 add_nevent.tbl_regression <- function(x, ...) {
   # if model is a cox model, adding number of events as well
   if (inherits(x$model_obj, "coxph") && !inherits(x$model_obj, "clogit")) {
+    assert_package("survival", "tbl_survival")
+
     x$nevent <- x$model_obj %>%
       survival::coxph.detail() %>%
       pluck("nevent") %>%
