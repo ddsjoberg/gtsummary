@@ -35,13 +35,8 @@
 #' @export
 
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = TRUE,  group_header = NULL) {
+                         strip_md_bold = TRUE) {
   assert_package("huxtable", "as_hux_table")
-
-  # setting defaults -----------------------------------------------------------
-  group_header <-
-    group_header %||%
-    get_theme_element("pkgwide-str:group_header", default = "**Group**")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -51,11 +46,10 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
         vars(.data$label, .data$spanning_header),
         ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
       )
-    group_header <- str_replace_all(group_header, pattern = fixed("**"), replacement = fixed(""))
   }
 
   # creating list of huxtable calls -------------------------------------------
-  huxtable_calls <- table_header_to_huxtable_calls(x = x, group_header = group_header)
+  huxtable_calls <- table_header_to_huxtable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds")
@@ -87,26 +81,14 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 }
 
 # creating huxxtable calls from table_header -----------------------------------
-table_header_to_huxtable_calls <- function(x, group_header, ...) {
-  # if there is a grouping variable, add table_header info for it
-  if (dplyr::group_vars(x$table_body) %>% length() > 0) {
-    table_header <-
-      tibble::tibble(column = "groupname_col",
-                     label = group_header,
-                     hide = FALSE,
-                     align = "left") %>%
-      bind_rows(x$table_header) %>%
-      group_by(.data$hide) %>%
-      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-      ungroup()
-  }
-  else {
-    table_header <-
+table_header_to_huxtable_calls <- function(x, ...) {
+
+  # adding id number for columns not hidden
+  table_header <-
       x$table_header %>%
       group_by(.data$hide) %>%
       mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
       ungroup()
-  }
 
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
