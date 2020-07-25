@@ -5,9 +5,6 @@
 #' @inheritParams as_kable
 #' @param col_labels Logical argument adding column labels to output tibble.
 #' Default is `TRUE`.
-#' @param group_header If a group is present (e.g. via `tbl_stack(group_header=)`),
-#' this string specifies the column header for the grouping column. Default
-#' is `"**Group**"`
 #' @param ... Not used
 #' @return a [tibble][tibble::tibble-package]
 #' @family gtsummary output types
@@ -24,8 +21,7 @@
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
-                                return_calls = FALSE, group_header = NULL,
-                                exclude = NULL,  ...) {
+                                return_calls = FALSE, exclude = NULL,  ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(
@@ -40,14 +36,8 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
     )
   }
 
-  # setting defaults -----------------------------------------------------------
-  group_header <-
-    group_header %||%
-    get_theme_element("pkgwide-str:group_header", default = "**Group**")
-
   # creating list of calls to get formatted tibble -----------------------------
-  tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels,
-                                               group_header = group_header)
+  tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels)
 
   # converting to character vector ---------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(tibble_calls)),
@@ -78,12 +68,9 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 }
 
 
-table_header_to_tibble_calls <- function(x, col_labels =  TRUE, group_header) {
+table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   table_header <- x$table_header
   tibble_calls <- list()
-
-  if (!is.null(group_header) && !rlang::is_string(group_header))
-    stop("`group_header=` must be a string of length one.")
 
   # tibble ---------------------------------------------------------------------
   tibble_calls[["tibble"]] <- expr(x$table_body)
@@ -91,13 +78,13 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE, group_header) {
   # ungroup --------------------------------------------------------------------
   group_var <- select(x$table_body, dplyr::group_cols()) %>% names()
   if (length(group_var) > 0) {
+    if (group_var != "groupname_col")
+      stop("`.$table_body` may only be grouped by column 'groupname_col'")
+
     tibble_calls[["ungroup"]] <- list(
-      expr(ungroup()),
-      expr(mutate(...new_group_var... = !!sym(group_var))),
-      expr(group_by(.data$...new_group_var...)),
-      expr(mutate_at(vars(!!sym(group_var)), ~ifelse(dplyr::row_number() == 1, ., NA))),
-      expr(ungroup()),
-      expr(select(-.data$...new_group_var...))
+      expr(mutate(groupname_col =
+                    ifelse(dplyr::row_number() == 1, .data$groupname_col, NA))),
+      expr(ungroup())
     )
   }
 
@@ -164,13 +151,8 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE, group_header) {
     df_col_labels <-
       dplyr::filter(table_header, .data$hide == FALSE)
 
-    # if there is a grouping variable, add the column header
-    if (length(group_var) > 0)
-      tibble_calls[["cols_label"]] <-
-        expr(rlang::set_names(c(!!group_header, !!df_col_labels$label)))
-    else
-      tibble_calls[["cols_label"]] <-
-        expr(rlang::set_names(!!df_col_labels$label))
+    tibble_calls[["cols_label"]] <-
+      expr(rlang::set_names(!!df_col_labels$label))
   }
 
   tibble_calls
