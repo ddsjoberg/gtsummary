@@ -2,7 +2,7 @@
 # GTSUMMARY OBJECT. IF YOU'RE CREATING A GTSUMMARY-LIKE FUNCTION, YOU'LL
 # WANT TO GRAB A COPY OF THIS FILE AND PLACE IT IN YOUR PACKAGE.
 
-# LAST UPDATED: 2020-05-09
+# LAST UPDATED: 2020-07-24
 
 # table_header_fill_missing -----------------------------------------------------
 #' Function fills out table_header when there are missing columns
@@ -37,7 +37,8 @@ table_header_fill_missing <- function(table_header, table_body = NULL) {
 
   # align ----------------------------------------------------------------------
   if (!"align" %in% names(table_header)) {
-    table_header$align <- ifelse(table_header$column == "label", "left", "center")
+    table_header$align <-
+      ifelse(table_header$column %in% c("label", "groupname_col"), "left", "center")
   }
 
   # missing_emdash -------------------------------------------------------------
