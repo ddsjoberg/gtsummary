@@ -441,25 +441,15 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
     pvalue_fun %||%
     get_theme_element("add_p.tbl_svysummary-arg:pvalue_fun") %||%
     get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
-    get_theme_element("pkgwide-fn:pvalue_fun")
+    getOption("gtsummary.pvalue_fun", default = style_pvalue) %||%
+    get_theme_element("pkgwide-fn:pvalue_fun") %>%
+    purrr::as_mapper()
 
 
   # converting bare arguments to string ----------------------------------------
   include <- var_input_to_string(data = select(x$inputs$data$variables, any_of(x$meta_data$variable)),
                                  select_input = !!rlang::enquo(include),
                                  arg_name = "include")
-
-  # setting defaults -----------------------------------------------------------
-  pvalue_fun <-
-    pvalue_fun %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue)
-  if (!rlang::is_function(pvalue_fun)) {
-    stop(paste0(
-      "'pvalue_fun' is not a valid function.  Please pass only a function\n",
-      "object. For example,\n\n",
-      "'pvalue_fun = function(x) style_pvalue(x, digits = 2)'"
-    ), call. = FALSE)
-  }
 
   # checking that input x has a by var
   if (is.null(x$df_by)) {
