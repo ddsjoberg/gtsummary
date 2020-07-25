@@ -126,14 +126,16 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     pvalue_fun %||%
     get_theme_element("tbl_regression-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue)
+    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    gts_mapper("tbl_regression(pvalue_fun=)")
   estimate_fun <-
     estimate_fun %||%
     get_theme_element("tbl_regression-arg:estimate_fun") %||%
     getOption(
       "gtsummary.tbl_regression.estimate_fun",
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
-    )
+    ) %>%
+    gts_mapper("tbl_regression(estimate_fun=)")
   conf.level <-
     conf.level %||%
     get_theme_element("tbl_regression-arg:conf.level") %||%
