@@ -78,6 +78,7 @@ theme_gtsummary_journal <- function(journal = "jama", set_theme = TRUE) {
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
+
 theme_gtsummary_compact <- function(set_theme = TRUE){
   lst_theme <-
     list(
@@ -95,21 +96,21 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
         )
       ),
       # compact flextables
-      "as_flextable.gtsummary-lst:addl_cmds" = list(
+      "as_flex_table-lst:addl_cmds" = list(
         footnote = list(
           rlang::expr(flextable::fontsize(size = 8, part = "all")),
           rlang::expr(flextable::padding(padding.top = 0, part = "all")),
           rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))
         )
       ),
-      # # compact huxtable
-      # "as_huxtable.gtsummary-lst:addl_cmds" = list(
-      #   insert_row = list(
-      #     rlang::expr(huxtable::set_font_size(value = 8)),
-      #     rlang::expr(huxtable::set_bottom_padding(value = 0)),
-      #     rlang::expr(huxtable::set_top_padding(value = 0))
-      #   )
-      # ),
+      # compact huxtable
+      "as_hux_table.gtsummary-lst:addl_cmds" = list(
+        insert_row = list(
+          rlang::expr(huxtable::set_font_size(value = 8)),
+          rlang::expr(huxtable::set_bottom_padding(value = 0)),
+          rlang::expr(huxtable::set_top_padding(value = 0))
+        )
+      ),
       # compact kableExtra
       "as_kable_extra-lst:addl_cmds" = list(
         kable = list(
@@ -127,7 +128,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
 #' @param print_engine String indicating the print engine. Default is `"gt"`
 #' @export
 theme_gtsummary_printer <- function(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "tibble"),
+  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
   set_theme = TRUE) {
 
   lst_theme <- list("pkgwide-str:print_engine" = match.arg(print_engine))
@@ -148,7 +149,7 @@ theme_gtsummary_printer <- function(
 #' @export
 theme_gtsummary_language <- function(language = c("es", "fr", "de", "en", "pt"),
                                      big.mark = NULL, decimal.mark = NULL, set_theme = TRUE) {
-  
+
   language <- match.arg(language)
   ret <- list(
     "pkgwide-str:theme_name" = paste("language:", language),
@@ -158,7 +159,7 @@ theme_gtsummary_language <- function(language = c("es", "fr", "de", "en", "pt"),
   # setting formatting of numbers
   if (!is.null(big.mark)) ret <- c(ret, list("style_number-arg:big.mark" = big.mark))
   if (!is.null(decimal.mark)) ret <- c(ret, list("style_number-arg:decimal.mark" = decimal.mark))
-  
+
   # either returning list OR setting theme and returning list
   if (set_theme == TRUE) set_gtsummary_theme(ret)
   return(invisible(ret))

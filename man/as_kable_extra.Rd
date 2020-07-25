@@ -8,7 +8,6 @@ as_kable_extra(
   x,
   include = everything(),
   return_calls = FALSE,
-  group_header = NULL,
   strip_md_bold = TRUE,
   ...
 )
@@ -24,10 +23,6 @@ Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
-
-\item{group_header}{If a group is present (e.g. via \code{tbl_merge(group_header=)}),
-this string specifies the column header for the grouping column. Default
-is \code{"**Group**"}}
 
 \item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
 bold weight) in column labels and spanning headers are removed.
@@ -54,8 +49,9 @@ tbl <-
 }
 \seealso{
 Other gtsummary output types: 
-\code{\link{as_flextable.gtsummary}()},
+\code{\link{as_flex_table}()},
 \code{\link{as_gt}()},
+\code{\link{as_hux_table}()},
 \code{\link{as_kable}()},
 \code{\link{as_tibble.gtsummary}()}
 }

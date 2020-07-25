@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Re-adding `as_hux_table()` after the huxtable 5.0.0 release.
+
+* The header for the `tbl_stack(group_header=)` column is now integrated into a typical gtsummary framework, meaning that all standard functions can be executed on it, e.g. `modify_header()` for non-gt output.
+
 * Added `style_number()` which controls how numbers are formatted and can be used with theme options. `style_percent()`, `style_pvalue()`, `style_sigfig()`, and `style_ratio()` functions have been updated to use this, and users can now specify how many decimal places to round statistics for categorical variables (#458)
 
 * By default, tables now display commas for thousands mark. This can be changed through `big.mark=` and `decimal.mark=` arguments e.g. `theme_gtsummary_language("fr", big.mark = " ", decimal.mark = ",")` (#557)
@@ -27,7 +31,7 @@
 
 * Bug fix when for `tbl_uvregression()` when adjustment variables were included in `formula = "{y} ~ {x} + age"`.  The adjustment variables were being printed in the resulting table. (#555)
 
-* Now importing `as_flextable()` generic from {flextable} to avoid conflicts when using both packages (#462)
+* Removing `as_flextable()` and replacing with `as_flex_table()` due to conflicts with `flextable::as_flextable` (#462)
 
 * Added a language theme for translating tables into Spanish, French, Portuguese, and German (#511)
 
