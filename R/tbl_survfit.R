@@ -95,6 +95,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     "{estimate} ({conf.low}, {conf.high})"
 
   # input checks ---------------------------------------------------------------
+  assert_package("survival", "tbl_survfit")
   if (!inherits(x, "survfit")) {
     stop("Argument `x=` must be class 'survfit' created from the `survival::survfit()` function.",
          call. = FALSE)
