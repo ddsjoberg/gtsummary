@@ -8,7 +8,9 @@
   x,
   time = NULL,
   prob = NULL,
+  variable = NULL,
   level = NULL,
+  pattern = x$inputs$statistic,
   estimate_fun = x$inputs$estimate_fun,
   pvalue_fun = NULL,
   ...
@@ -21,8 +23,12 @@
 
 \item{prob}{probability with values in (0,1)}
 
+\item{variable}{Variable name of statistic to present.}
+
 \item{level}{Level of the variable to display for categorical variables.
 Can also specify the 'Unknown' row.  Default is \code{NULL}}
+
+\item{pattern}{String indicating the statistics to return.}
 
 \item{estimate_fun}{Function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and

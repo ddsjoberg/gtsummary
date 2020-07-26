@@ -4,16 +4,17 @@
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary table of the results
 #'
-#' @param x survfit object. Object may have no stratification
-#' (e.g. `survfit(Surv(ttdeath, death) ~ 1, trial)`), or a single stratifying
-#' variable (e.g. `survfit(Surv(ttdeath, death) ~ trt, trial)`)
+#' @param x a survfit object, list of survfit objects, or a data frame.
+#' If a data frame is passed, a list of survfit objects is constructed using
+#' each variable as a stratifying variable.
 #' @param times numeric vector of times for which to return survival probabilities.
 #' @param probs numeric vector of probabilities with values in (0,1)
 #' specifying the survival quantiles to return
 #' @param statistic string defining the statistics to present in the table.
 #' Default is `"{estimate} ({conf.low}, {conf.high})"`
-#' @param label string specifying variable or overall label. Default is
-#' stratifying variable name or `"Overall"` when no stratifying variable present
+#' @param label List of formulas specifying variables labels,
+#' e.g. `list(age ~ "Age, yrs", stage ~ "Path T Stage")`, or a string for a
+#' single variable table.
 #' @param label_header string specifying column labels above statistics. Default
 #' is `"{prob} Percentile"` for survival percentiles, and `"Time {time}"` for n-year
 #' survival estimates
@@ -24,31 +25,43 @@
 #' @param conf.level Confidence level for confidence intervals. Default is 0.95
 #' @param reverse Flip the probability reported, i.e. `1 - estimate`.
 #' Default is `FALSE`.  Does not apply to survival quantile requests
+#' @param y outcome call, e.g. `y = Surv(ttdeath, death)`
+#' @param include Variable to include as stratifying variables.
 #' @param failure DEPRECATED. Use `reverse=` instead.
+#' @param ... Not used
 #'
 #' @export
+#' @rdname tbl_survfit
 #' @author Daniel D. Sjoberg
 #' @examples
 #' library(survival)
-#' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-#' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #'
 #' # Example 1 ----------------------------------
+#' # Pass single survfit() object
 #' tbl_survfit_ex1 <- tbl_survfit(
-#'   fit1,
+#'   survfit(Surv(ttdeath, death) ~ trt, trial),
 #'   times = c(12, 24),
-#'   label = "Treatment",
 #'   label_header = "**{time} Month**"
 #' )
 #'
 #' # Example 2 ----------------------------------
+#' # Pass a data frame
 #' tbl_survfit_ex2 <- tbl_survfit(
-#'   fit2,
+#'   trial,
+#'   y = survival::Surv(ttdeath, death),
+#'   include = c(trt, grade),
 #'   probs = 0.5,
 #'   label_header = "**Median Survival**"
 #' )
 #'
-#' # Example 3 Competing Events Example ---------
+#' # Example 3 ----------------------------------
+#' # Pass a list of survfit() objects
+#' tbl_survfit_ex3 <-
+#'   list(survfit(Surv(ttdeath, death) ~ 1, trial),
+#'        survfit(Surv(ttdeath, death) ~ trt, trial)) %>%
+#'   tbl_survfit(times = c(12, 24))
+#'
+#' # Example 4 Competing Events Example ---------
 #' # adding a competing event for death (cancer vs other causes)
 #' library(dplyr)
 #' trial2 <- trial %>%
@@ -60,7 +73,7 @@
 #'   ) %>% factor()
 #' )
 #'
-#' survfit_cr_ex3 <-
+#' survfit_cr_ex4 <-
 #'   survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) %>%
 #'   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 #' @section Example Output:
@@ -75,18 +88,105 @@
 #' \if{html}{Example 3}
 #'
 #' \if{html}{\figure{survfit_cr_ex3.png}{options: width=27\%}}
+#'
+#' \if{html}{Example 4}
+#'
+#' \if{html}{\figure{survfit_cr_ex4.png}{options: width=27\%}}
+tbl_survfit <- function(x, ...) {
+  UseMethod("tbl_survfit")
+}
 
-tbl_survfit <- function(x, times = NULL, probs = NULL,
-                        statistic = "{estimate} ({conf.low}, {conf.high})",
-                        label = NULL, label_header = NULL, estimate_fun = NULL,
-                        missing = "--", conf.level = 0.95, reverse = FALSE,
-                        failure = NULL) {
-  # deprecation notes ----------------------------------------------------------
-  if (!is.null(failure)) {
-    lifecycle::deprecate_warn(
-      "1.3.1", "gtsummary::tbl_survfit(failure = )", "tbl_survfit(reverse = )")
-    reverse <- failure
+#' @export
+#' @rdname tbl_survfit
+tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
+                                statistic = "{estimate} ({conf.low}, {conf.high})",
+                                label = NULL, label_header = NULL, estimate_fun = NULL,
+                                missing = "\U2014", conf.level = 0.95, reverse = FALSE,
+                                failure = NULL, ...) {
+  # converting inputs to be compatible with the list method
+  x <- list(x)
+  if (rlang::is_string(label)) label <- expr(everything() ~ !!label) %>% eval()
+
+  # passing all args to the list method of `tbl_survfit()`
+  expr(tbl_survfit.list(!!!as.list(environment()))) %>% eval()
+}
+
+#' @export
+#' @rdname tbl_survfit
+tbl_survfit.data.frame <- function(x, y, times = NULL, probs = NULL,
+                                   statistic = "{estimate} ({conf.low}, {conf.high})",
+                                   label = NULL, label_header = NULL, estimate_fun = NULL,
+                                   missing = "\U2014", conf.level = 0.95, reverse = FALSE,
+                                   failure = NULL, include = everything(), ...) {
+  include <- dplyr::select(x, {{include}}) %>% names()
+
+  # checking inputs ------------------------------------------------------------
+  # able to construct Surv() object?
+  y <- enexpr(y)
+
+  y_surv <-
+    tryCatch(
+      expr(with(!!x, !!y)) %>% eval(),
+      error = function(e) {
+        paste("There was are error constructing the `Surv()` object from the",
+              "data frame passed in `x=`, and the outcome passed in `y=`.",
+              "All columns in `y=` should appear in `x=`.\n\n") %>%
+          stringr::str_wrap() %>%
+          c(as.character(e)) %>%
+          stop(call. = FALSE)
+      }
+    )
+
+  # Surv object is indeed a of class Surv
+  if (!inherits(y_surv, "Surv")) {
+    paste("Together, the data frame in `x=`, and the survival outcome in `y=`",
+          "must construct `Surv` oject, e.g. `with(trial, Surv(ttdeath, death))`") %>%
+      stringr::str_wrap() %>%
+      stop(call. = FALSE)
   }
+
+  # getting list of all covariates ---------------------------------------------
+  y_vars <- as.list(y)[-1] %>% map(deparse) %>% unlist()
+  x_vars <- include %>% setdiff(y_vars)
+
+  # construct list of survfits -------------------------------------------------
+  survfit_expr_list <-
+    tryCatch(
+      map(
+        x_vars,
+        function(.x) expr(survival::survfit(!!y ~ !!sym(.x), data = !!x)) %>% eval()
+      ),
+      error = function(e) {
+        paste("There was are error constructing the list `survfit()` objects from the",
+              "data frame passed in `x=`, and the outcome passed in `y=`.") %>%
+          stringr::str_wrap() %>%
+          stop(call. = FALSE)
+      }
+    )
+
+  # passing all args to the list method of `tbl_survfit()` ---------------------
+  tbl_survfit_args <-
+    as.list(environment())[!names(as.list(environment())) %in% c("x", "y", "y_surv", "y_vars",
+                                                                 "x_vars", "survfit_expr_list",
+                                                                 "include")]
+
+  expr(tbl_survfit.list(x = survfit_expr_list, !!!tbl_survfit_args)) %>% eval()
+}
+
+#' @export
+#' @rdname tbl_survfit
+tbl_survfit.list <- function(x, times = NULL, probs = NULL,
+                             statistic = "{estimate} ({conf.low}, {conf.high})",
+                             label = NULL, label_header = NULL, estimate_fun = NULL,
+                             missing = "\U2014", conf.level = 0.95, reverse = FALSE,
+                             failure = NULL, ...) {
+  # deprecation notes ----------------------------------------------------------
+    if (!is.null(failure)) {
+      lifecycle::deprecate_warn(
+        "1.3.1", "gtsummary::tbl_survfit(failure = )", "tbl_survfit(reverse = )")
+      reverse <- failure
+      rm(failure)
+    }
 
   # setting defaults -----------------------------------------------------------
   statistic <-
@@ -95,7 +195,7 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
     "{estimate} ({conf.low}, {conf.high})"
 
   # input checks ---------------------------------------------------------------
-  if (!inherits(x, "survfit")) {
+  if (purrr::every(x, ~!inherits(.x, "survfit"))) {
     stop("Argument `x=` must be class 'survfit' created from the `survival::survfit()` function.",
          call. = FALSE)
   }
@@ -127,36 +227,22 @@ tbl_survfit <- function(x, times = NULL, probs = NULL,
   # the object func_inputs is a list of every object passed to the function
   tbl_survfit_inputs <- as.list(environment())
 
-  var <- x$call %>% as.list() %>% pluck("formula") %>% eval() %>% terms() %>%
-    attr("variables") %>% as.list() %>% {.[-c(1, 2)]} %>% map_chr(deparse)
-  if (is.null(label) && length(var) == 1) {
-    if (identical(var, "..overall..")) {
-      stop("'..overall..' is a protected name in `tbl_survfit()`.",
-           call. = FALSE)
-    }
-    # try to extra label from data (if exists)
-    data <- x$call %>% as.list() %>% pluck("data")
-    if (!is.null(data))
-      label <- tryCatch({
-        eval(data)[[var]] %>% attr("label") %||% var
-      },
-      warning = function(w) NULL,
-      error = function(e) NULL
-      )
-    else label <- var
-  }
-  else if (is.null(label) && length(var) == 0) {
-    label = "Overall"
-  }
-  else if (length(var) > 1)
-    stop("`tbl_survfit()` supports a single stratifying variable on the RHS of `formula=`",
-         call. = FALSE)
-
   meta_data <-
     tibble(
-      variable = ifelse(length(var) == 0, "..overall..", var),
-      var_label = label,
-      survfit = list(x)
+      survfit = x,
+      stratified = map_lgl(.data$survfit, is_survfit_stratified),
+      variable = survfit_to_var(.data$survfit, .data$stratified)
+    )
+
+  # apply labels
+  label <- tidyselect_to_list(
+    .data = vctr_2_tibble(unique(meta_data$variable)),
+    x = label, arg_name = "label"
+  )
+  meta_data <-
+    meta_data %>%
+    mutate(
+      var_label = survfit_to_label(.data$survfit, .data$variable, .data$stratified, label)
     )
 
   meta_data <-
@@ -254,8 +340,8 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
     list() %>% compact()
 
   # calculating survival quantiles, and adding estimates to pretty tbl
-  df_stat <- imap_dfr(
-    probs,
+  df_stat <- purrr::map2_dfr(
+    probs, seq_along(probs),
     ~stats::quantile(x, probs = .x) %>%
       as.data.frame() %>%
       tibble::rownames_to_column() %>%
@@ -370,4 +456,54 @@ survfit_time <- function(x, times, label_header, conf.level, reverse) {
   }
 
   df_stat
+}
+
+survfit_to_var <- function(survfit_list, stratified) {
+  purrr::pmap_chr(
+    list(survfit_list, seq_along(survfit_list), stratified),
+    function(x, i, stratified) {
+      # if not stratified, return var name ..overall..
+      if (stratified == FALSE) {
+        return(
+          ifelse(length(survfit_list) == 1, "..overall..", glue("..overall_{i}.."))
+        )
+      }
+      # returning variable name
+      x$call %>% as.list() %>% pluck("formula") %>% eval() %>% stats::terms() %>%
+        attr("variables") %>% as.list() %>% {.[-c(1, 2)]} %>% map_chr(deparse)
+    }
+  )
+}
+
+survfit_to_label <- function(survfit_list, varlist, stratified, label) {
+  purrr::pmap_chr(
+    list(survfit_list, varlist, seq_along(survfit_list), stratified),
+    function(x, v, i, stratified) {
+      if (!is.null(label[[v]])) return(label[[v]])
+      if (stratified == FALSE) return("Overall")
+
+      # try to extra label from data (if exists)
+      data <- x$call %>% as.list() %>% pluck("data")
+      label <- NULL
+      if (!is.null(data)) {
+        label <-  tryCatch(rlang::eval_tidy(data)[[v]] %>% attr("label"),
+                           warning = function(w) NULL,
+                           error = function(e) NULL)
+      }
+
+      # if couldn't get label from data, set variable name as label
+      label %||% v
+    }
+  )
+}
+
+is_survfit_stratified <- function(x) {
+  var <-
+    x$call %>% as.list() %>% pluck("formula") %>% eval() %>% stats::terms() %>%
+    attr("variables") %>% as.list() %>% {.[-c(1, 2)]} %>% map_chr(deparse)
+  if (length(var) == 1) return(TRUE)
+  if (length(var) == 0) return(FALSE)
+
+  stop("`tbl_survfit()` supports a single stratifying variable on the RHS of `formula=`",
+       call. = FALSE)
 }
