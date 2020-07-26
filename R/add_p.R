@@ -384,7 +384,7 @@ add_p.tbl_survfit <- function(x, test = "logrank",
           # getting the function call
           pvalue_call <- switch(
             test,
-            "log-rank" = expr(add_p_tbl_survfit_survfit(x, quiet, rho = 0)),
+            "logrank" = expr(add_p_tbl_survfit_survfit(x, quiet, rho = 0)),
             "survdiff" = expr(add_p_tbl_survfit_survfit(x, quiet, ...))
           ) %||%
             stop("No valid test selected in argument `test=`.")
@@ -424,12 +424,12 @@ add_p.tbl_survfit <- function(x, test = "logrank",
 
 add_p_tbl_survfit_survfit <- function(x, quiet, ...) {
   #extracting survfit call
-  survfit_call <- x$inputs$x$call %>% as.list()
+  survfit_call <- x$inputs$x[[1]]$call %>% as.list()
   # index of formula and data
   call_index <- names(survfit_call) %in% c("formula", "data") %>% which()
 
   # converting call into a survdiff call
-  survdiff_call <- rlang::call2(rlang::expr(survdiff), !!!survfit_call[call_index], ...)
+  survdiff_call <- rlang::call2(rlang::expr(survival::survdiff), !!!survfit_call[call_index], ...)
 
   # printing call to calculate p-value
   if (quiet == FALSE) {
@@ -446,7 +446,7 @@ add_p_tbl_survfit_survfit <- function(x, quiet, ...) {
   survdiff_result <- rlang::eval_tidy(survdiff_call)
 
   # returning p-value
-  pchisq(survdiff_result$chisq, length(survdiff_result$n) - 1, lower.tail = FALSE)
+  stats::pchisq(survdiff_result$chisq, length(survdiff_result$n) - 1, lower.tail = FALSE)
 }
 
 
