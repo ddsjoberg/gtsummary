@@ -75,8 +75,11 @@ as_flextable <- function(...) {
     details = paste(
       "The `as_flextable()` function graduated",
       "from 'Experimental' status in v1.3.3. The updated function has",
-      "a new name to avoid name conflicts with {flextable}",
-      "and the ascetics of resulting tables have been improved."
+      "a new name to avoid name conflicts with {flextable}.",
+      "If you are trying to use the version",
+      "from {flextable}, for the time being, use the double colon notation",
+      "`flextable::as_flextable(...)` when both {gtsummary} and {flextable}",
+      "are loaded."
     ) %>%
       stringr::str_wrap()
   )
