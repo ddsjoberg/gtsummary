@@ -12,6 +12,7 @@
 \item{...}{Not used}
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 For each \code{survfit()} object summarized with \code{tbl_survfit()} this function
 will add the total number of events observed in a new column.
 }
