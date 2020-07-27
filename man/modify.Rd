@@ -115,7 +115,7 @@ modify_ex3 <-
 }
 \seealso{
 Other tbl_summary tools: 
-\code{\link{add_n}()},
+\code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_summary}()},
 \code{\link{add_q}()},

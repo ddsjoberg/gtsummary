@@ -362,6 +362,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' @inheritParams add_p.tbl_summary
 #' @inheritParams combine_terms
 #' @export
+#' @family tbl_survfit tools
 add_p.tbl_survfit <- function(x, test = "logrank",
                               footnote_text = NULL, pvalue_fun = style_pvalue,
                               quiet = FALSE, ...) {

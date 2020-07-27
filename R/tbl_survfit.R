@@ -32,6 +32,7 @@
 #'
 #' @export
 #' @rdname tbl_survfit
+#' @family tbl_survfit tools
 #' @author Daniel D. Sjoberg
 #' @examples
 #' library(survival)
@@ -79,19 +80,19 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_survfit_ex1.png}{options: width=40\%}}
+#' \if{html}{\figure{tbl_survfit_ex1.png}{options: width=55\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_survfit_ex2.png}{options: width=27\%}}
+#' \if{html}{\figure{tbl_survfit_ex2.png}{options: width=45\%}}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{survfit_cr_ex3.png}{options: width=27\%}}
+#' \if{html}{\figure{tbl_survfit_ex3.png}{options: width=55\%}}
 #'
 #' \if{html}{Example 4}
 #'
-#' \if{html}{\figure{survfit_cr_ex4.png}{options: width=27\%}}
+#' \if{html}{\figure{survfit_cr_ex4.png}{options: width=55\%}}
 tbl_survfit <- function(x, ...) {
   UseMethod("tbl_survfit")
 }
@@ -273,7 +274,9 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
     expr(modify_header_internal(results, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
     eval()
 
-  # assigning class
+  # exporting results ----------------------------------------------------------
+  results$inputs <- tbl_survfit_inputs
+  results$call_list = list(tbl_survfit = match.call())
   class(results) <- c("tbl_survfit", "gtsummary")
 
   results
@@ -284,16 +287,16 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
                              missing, statistic) {
   meta_data %>%
     mutate(
-      df_stats = map(
+      df_stats = map2(
         # calculating estimates ------------------------------------------------------
-        .data$survfit,
+        .data$survfit, .data$variable,
         ~ switch(
           estimate_type,
-          "times" = survfit_time(.x, times = inputs$times,
+          "times" = survfit_time(.x, variable = .y, times = inputs$times,
                                  label_header = inputs$label_header,
                                  conf.level = inputs$conf.level,
                                  reverse = inputs$reverse),
-          "probs" = survfit_prob(.x, probs = inputs$probs,
+          "probs" = survfit_prob(.x, variable = .y, probs = inputs$probs,
                                  label_header = inputs$label_header,
                                  conf.level = inputs$conf.level)
         )
@@ -334,7 +337,7 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
 }
 
 # calculates and prepares survival quantile estimates for tbl
-survfit_prob <- function(x, probs, label_header, conf.level) {
+survfit_prob <- function(x, variable, probs, label_header, conf.level) {
 
   strata <- intersect("strata", names(broom::tidy(x, conf.level = conf.level))) %>%
     list() %>% compact()
@@ -353,8 +356,7 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
   ) %>%
     # creating labels
     mutate(
-      variable = switch(length(.env$strata) == 0, "..overall..") %||%
-        stringr::word(strata, start = 1L, sep = "="),
+      variable = .env$variable,
       label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
         stringr::word(strata, start = 2L, sep = "="),
       col_label = .env$label_header %||%
@@ -371,8 +373,8 @@ survfit_prob <- function(x, probs, label_header, conf.level) {
   df_stat
 }
 
-# calcualtes and prepares n-year survival estimates for tbl
-survfit_time <- function(x, times, label_header, conf.level, reverse) {
+# calculates and prepares n-year survival estimates for tbl
+survfit_time <- function(x, variable, times, label_header, conf.level, reverse) {
   tidy <- broom::tidy(x, conf.level = conf.level)
   strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
   multi_state <- inherits(x, "survfitms")
@@ -438,8 +440,7 @@ survfit_time <- function(x, times, label_header, conf.level, reverse) {
     mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low),
               ~ifelse(.data$time > .data$time_max, NA_real_, .)) %>%
     mutate(
-      variable = switch(length(.env$strata) == 0, "..overall..") %||%
-        stringr::word(strata, start = 1L, sep = "="),
+      variable = .env$variable,
       label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
         stringr::word(strata, start = 2L, sep = "="),
       col_label = .env$label_header %||% paste0("**", translate_text("Time"), " {time}**") %>% glue() %>% as.character()

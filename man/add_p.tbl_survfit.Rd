@@ -36,3 +36,10 @@ and return a string that is the rounded/formatted p-value (e.g.
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Calculate and add a p-value
 }
+\seealso{
+Other tbl_survfit tools: 
+\code{\link{add_n.tbl_survfit}()},
+\code{\link{add_nevent.tbl_survfit}()},
+\code{\link{tbl_survfit}()}
+}
+\concept{tbl_survfit tools}

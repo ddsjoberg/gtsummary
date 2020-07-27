@@ -94,7 +94,7 @@ Other tbl_uvregression tools:
 \code{\link{tbl_uvregression}()}
 
 Other tbl_summary tools: 
-\code{\link{add_n}()},
+\code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_summary}()},
 \code{\link{add_q}()},
@@ -107,7 +107,7 @@ Other tbl_summary tools:
 \code{\link{tbl_summary}()}
 
 Other tbl_svysummary tools: 
-\code{\link{add_n}()},
+\code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_svysummary}()},
 \code{\link{add_q}()},

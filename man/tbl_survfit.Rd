@@ -105,19 +105,19 @@ formatted summary table of the results
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_survfit_ex1.png}{options: width=40\%}}
+\if{html}{\figure{tbl_survfit_ex1.png}{options: width=55\%}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_survfit_ex2.png}{options: width=27\%}}
+\if{html}{\figure{tbl_survfit_ex2.png}{options: width=45\%}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{survfit_cr_ex3.png}{options: width=27\%}}
+\if{html}{\figure{tbl_survfit_ex3.png}{options: width=55\%}}
 
 \if{html}{Example 4}
 
-\if{html}{\figure{survfit_cr_ex4.png}{options: width=27\%}}
+\if{html}{\figure{survfit_cr_ex4.png}{options: width=55\%}}
 }
 
 \examples{
@@ -164,6 +164,13 @@ survfit_cr_ex4 <-
   survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) \%>\%
   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
 }
+\seealso{
+Other tbl_survfit tools: 
+\code{\link{add_n.tbl_survfit}()},
+\code{\link{add_nevent.tbl_survfit}()},
+\code{\link{add_p.tbl_survfit}()}
+}
 \author{
 Daniel D. Sjoberg
 }
+\concept{tbl_survfit tools}
