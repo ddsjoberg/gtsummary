@@ -709,7 +709,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
           str_remove_all(pattern = fixed("{"))
       )
     ) %>%
-    mutate(label = map_chr(label, ~translate_text(.x, language)))
+    mutate(label = map_chr(.data$label, ~translate_text(.x, language)))
 
   # adding IQR replacements if indicated
   if (iqr == TRUE) {
