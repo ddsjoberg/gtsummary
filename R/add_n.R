@@ -41,76 +41,72 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
   if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary")))
     stop("`x` must be class 'tbl_summary' or 'tbl_svysummary'")
 
-  # defining function to round percentages -------------------------------------
-  percent_fun <-
-    get_theme_element("tbl_summary-fn:percent_fun") %||%
-    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
-  N_fun <-
-    get_theme_element("tbl_summary-fn:N_fun",
-                      default = style_number)
-
   # DEPRECATED specifying statistic via missing argument -----------------------
   if (!is.null(missing)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.2",
       "gtsummary::add_n(missing = )",
       "gtsummary::add_n(statistic = )"
     )
-    if (identical(missing, TRUE)) {
-      statistic <- "{n_miss}"
-      col_label <- "**N Missing**"
-    }
   }
 
-  # counting non-missing N (or missing N) --------------------------------------
-  # directly from x$meta_data$df_stats where it is already there
-  variable_by_chr <- c("variable", switch(!is.null(x$by), "by"))
-  counts <-
+  # grabbing summary counts ----------------------------------------------------
+  df_stats <-
+    x$meta_data$df_stats %>%
     map_dfr(
-      x$meta_data$df_stats,
-      ~select(.x, any_of(c("by", "variable", "N_miss", "N_obs",
-                           "p_miss", "N_nonmiss", "p_nonmiss")))
+      function(.x) {
+        df_stats <-
+          select(.x, any_of(c("variable", "by", "N_obs", "N_miss", "N_nonmiss", "p_miss",
+                              "p_nonmiss", "N_obs_unweighted", "N_miss_unweighted",
+                              "N_nonmiss_unweighted", "p_miss_unweighted",
+                              "p_nonmiss_unweighted"))) %>%
+          distinct()  %>%
+          # summing counts within by group
+          dplyr::group_by_at(c("variable", "by") %>% intersect(names(.))) %>%
+          mutate_at(vars(-any_of(c("variable", "by"))), sum) %>%
+          select(-any_of("by")) %>%
+          distinct()
+
+        # styling the statistics -----------------------------------------------
+        for (v in (names(df_stats) %>% setdiff("variable"))) {
+          df_stats[[v]] <- df_stats[[v]] %>% attr(.x[[v]], "fmt_fun")()
+        }
+
+        # returning formatted df -----------------------------------------------
+        df_stats %>%
+          mutate(
+            N = .data$N_obs,
+            n = .data$N_nonmiss,
+            n_miss = .data$N_miss,
+            p = .data$p_nonmiss
+          )
+      }
     ) %>%
-    dplyr::distinct_at(variable_by_chr, .keep_all = TRUE) %>%
-    dplyr::group_by(.data$variable) %>%
-    dplyr::summarise(
-      row_type = "label",
-      n = N_fun(sum(.data$N_nonmiss)),
-      n_miss = N_fun(sum(.data$N_miss)),
-      N = N_fun(sum(.data$N_nonmiss, .data$N_miss)),
-      p = percent_fun(sum(.data$N_nonmiss) / sum(.data$N_nonmiss, .data$N_miss)),
-      p_miss = percent_fun(sum(.data$N_miss) / sum(.data$N_nonmiss, .data$N_miss)),
-      statistic = glue(statistic) %>% as.character(),
-      .groups = "drop_last"
+    mutate(
+      statistic = glue(.env$statistic) %>% as.character(),
+      row_type = "label"
     ) %>%
     select(.data$variable, .data$row_type, n = .data$statistic)
 
+  # merging result with existing tbl_summary -----------------------------------
+  x$table_body <-
+    left_join(x$table_body, df_stats, by = c("variable", "row_type"))
+  if (last == FALSE) {
+    x$table_body <- select(x$table_body, any_of(c("variable", "row_type", "label", "n")), everything())
+  }
+
   # DEPRECATED specifying column name via `missing` argument -------------------
   if (identical(missing, TRUE)) {
-    counts <- rename(counts, n_missing = .data$n)
+    x$table_body <- rename(x$table_body, n_missing = .data$n)
   }
 
-  # merging result with existing tbl_summary -----------------------------------
-  if (last == FALSE) {
-    table_body <-
-      x$table_body %>%
-      select(c("variable", "row_type", "label")) %>%
-      left_join(counts, by = c("variable", "row_type")) %>%
-      left_join(x$table_body, by = c("variable", "row_type", "label"))
-  }
-  else if (last == TRUE) {
-    table_body <-
-      x$table_body %>%
-      left_join(counts, by = c("variable", "row_type"))
-  }
-
-  # replacing old table_body with new ------------------------------------------
-  x$table_body <- table_body
-
+  # updating table_header ------------------------------------------------------
   x$table_header <-
-    tibble(column = names(table_body)) %>%
-    left_join(x$table_header, by = "column") %>%
-    table_header_fill_missing()
+    table_header_fill_missing(
+      x$table_header,
+      x$table_body
+    )
+  x <- modify_header_internal(x, n = col_label)
 
   # Adding footnote if requested -----------------------------------------------
   if (footnote == TRUE) {
@@ -118,18 +114,11 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
       x$table_header %>%
       mutate(
         footnote = ifelse(.data$column == "n",
-                          paste("Statistics presented:", stat_to_label(statistic)),
+                          translate_text("Statistics presented",
+                                         get_theme_element("pkgwide-str:language", default = "en")) %>%
+                            paste0(": ", stat_to_label(statistic)),
                           .data$footnote)
       )
-  }
-
-  # updating header ------------------------------------------------------------
-  # DEPRECATED specifying column name via `missing` argument -------------------
-  if (identical(missing, TRUE)) {
-    x <- modify_header_internal(x, n_missing = col_label)
-  }
-  else {
-    x <- modify_header_internal(x, n = col_label)
   }
 
   # adding indicator to output that add_n was run on this data
@@ -140,13 +129,35 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
 }
 
 stat_to_label <- function(x) {
-  x <- stringr::str_replace_all(x, fixed("{N}"), fixed("Total N"))
-  x <- stringr::str_replace_all(x, fixed("{n}"), fixed("N non-Missing"))
-  x <- stringr::str_replace_all(x, fixed("{n_miss}"), fixed("N Missing"))
-  x <- stringr::str_replace_all(x, fixed("{p}%"), fixed("% non-Missing"))
-  x <- stringr::str_replace_all(x, fixed("{p}"), fixed("% non-Missing"))
-  x <- stringr::str_replace_all(x, fixed("{p_miss}%"), fixed("% Missing"))
-  x <- stringr::str_replace_all(x, fixed("{p_miss}"), fixed("% Missing"))
+  language <- get_theme_element("pkgwide-str:language", default = "en")
+  df_statistic_names <-
+    tibble::tribble(
+      ~stat, ~name,
+      "{N}", "Total N",
+      "{n}", "N not Missing",
+      "{n_miss}", "N Missing",
+      "{p}%", "% not Missing",
+      "{p}", "% not Missing",
+      "{p_miss}%", "% Missing",
+      "{N_obs}", "Total N",
+      "{N_miss}", "N Missing",
+      "{N_nonmiss}", "N not Missing",
+      "{p_nonmiss}", "% not Missing",
+      "{N_obs_unweighted}", "Total N (unweighted)",
+      "{N_miss_unweighted}", "N Missing (unweighted)",
+      "{N_nonmiss_unweighted}", "N not Missing (unweighted)",
+      "{p_miss_unweighted}", "% Missing (unweighted)",
+      "{p_nonmiss_unweighted}", "% not Missing (unweighted)"
+    ) %>%
+    mutate(name = map_chr(.data$name, ~translate_text(.x, language)))
+
+  for (i in seq_len(nrow(df_statistic_names))) {
+    x <- stringr::str_replace_all(
+      x,
+      fixed(df_statistic_names$stat[i]),
+      fixed(df_statistic_names$name[i])
+    )
+  }
 
   x
 }

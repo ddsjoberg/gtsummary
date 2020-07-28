@@ -670,23 +670,28 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
   labels <-
     tibble::tribble(
       ~stat, ~label,
-      "{min}", translate_text("minimum", language),
-      "{max}", translate_text("maximum", language),
-      "{median}", translate_text("median", language),
-      "{mean}", translate_text("mean", language),
-      "{sd}", translate_text("SD", language),
-      "{var}", translate_text("variance", language),
-      "{n}", translate_text("n", language),
-      "{N}", translate_text("N", language),
-      "{p}%", translate_text("%", language),
-      "{p_miss}%", translate_text("% missing", language),
-      "{p_nonmiss}%", translate_text("% not missing", language),
-      "{p}", translate_text("%", language),
-      "{p_miss}", translate_text("% missing", language),
-      "{p_nonmiss}", translate_text("% not missing", language),
-      "{N_miss}", translate_text("N missing", language),
-      "{N_nonmiss}", translate_text("N", language),
-      "{N_obs}", translate_text("no. obs.", language)
+      "{min}", "minimum",
+      "{max}", "maximum",
+      "{median}", "median",
+      "{mean}", "mean",
+      "{sd}", "SD",
+      "{var}", "variance",
+      "{n}", "n",
+      "{N}", "N",
+      "{p}%", "%",
+      "{p_miss}%", "% missing",
+      "{p_nonmiss}%", "% not missing",
+      "{p}", "%",
+      "{p_miss}", "% missing",
+      "{p_nonmiss}", "% not missing",
+      "{N_miss}", "N missing",
+      "{N_nonmiss}", "N",
+      "{N_obs}", "no. obs.",
+      "{N_obs_unweighted}", "Total N (unweighted)",
+      "{N_miss_unweighted}", "N Missing (unweighted)",
+      "{N_nonmiss_unweighted}", "N not Missing (unweighted)",
+      "{p_miss_unweighted}", "% Missing (unweighted)",
+      "{p_nonmiss_unweighted}", "% not Missing (unweighted)"
     ) %>%
     # adding in quartiles
     bind_rows(
@@ -703,7 +708,8 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
           str_remove_all(pattern = fixed("}")) %>%
           str_remove_all(pattern = fixed("{"))
       )
-    )
+    ) %>%
+    mutate(label = map_chr(label, ~translate_text(.x, language)))
 
   # adding IQR replacements if indicated
   if (iqr == TRUE) {
