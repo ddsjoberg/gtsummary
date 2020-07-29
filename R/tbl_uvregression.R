@@ -109,13 +109,17 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue)
+    get_theme_element("tbl_regression-arg:pvalue_fun") %||%
+    get_theme_element("pkgwide-fn:pvalue_fun") %||%
+    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    gts_mapper("tbl_uvregression(pvalue_fun=)")
   estimate_fun <-
     estimate_fun %||%
     getOption(
       "gtsummary.tbl_regression.estimate_fun",
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
-    )
+    ) %>%
+    gts_mapper("tbl_uvregression(estimate_fun=)")
   conf.level <-
     conf.level %||%
     getOption("gtsummary.conf.level", default = 0.95)
@@ -220,7 +224,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     stop("There were no covariates selected.", call. = FALSE)
   }
 
-  # bulding regression models --------------------------------------------------
+  # building regression models -------------------------------------------------
   df_model <-
     tibble(vars = all_vars) %>%
     set_names(ifelse(!is.null(y), "x", "y")) %>%
@@ -247,6 +251,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
             exponentiate = exponentiate,
             conf.level = conf.level,
             label = label,
+            include = .y, # only include the covariate of interest in output
             show_single_row = intersect(.y, show_single_row),
             tidy_fun = tidy_fun
           )
@@ -286,7 +291,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
         tbl = map(
           .data$tbl,
           function(tbl) {
-            tbl <- modify_header(tbl, N = "**N**")
+            tbl <- modify_header(tbl, N ~ "**N**")
             # only display N on label row
             tbl$table_body$N <- ifelse(tbl$table_body$row_type == "label",
                                        tbl$table_body$N, NA)
@@ -294,7 +299,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
             # adding a format function to the N column
             tbl$table_header <- table_header_fmt_fun(
               tbl$table_header,
-              N = function(x) ifelse(is.na(x), NA_character_, sprintf("%.0f", x))
+              N = function(x) style_number(x, digits = 0)
             )
 
             tbl

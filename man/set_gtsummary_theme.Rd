@@ -3,33 +3,15 @@
 \name{set_gtsummary_theme}
 \alias{set_gtsummary_theme}
 \alias{reset_gtsummary_theme}
-\alias{theme_gtsummary_journal}
-\alias{theme_gtsummary_compact}
-\alias{theme_gtsummary_printer}
 \title{Set a gtsummary theme}
 \usage{
 set_gtsummary_theme(x)
 
 reset_gtsummary_theme()
-
-theme_gtsummary_journal(journal = "jama")
-
-theme_gtsummary_compact()
-
-theme_gtsummary_printer(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble")
-)
 }
 \arguments{
 \item{x}{A gtsummary theme function, e.g. \code{theme_gtsummary_journal()}, or a
 named list defining a gtsummary theme. See details below.}
-
-\item{journal}{String indicating the journal theme to follow.
-\itemize{
-\item \code{"jama"} Journal of the American Medical Association
-}}
-
-\item{print_engine}{String indicating the print engine. Default is \code{"gt"}}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -41,38 +23,6 @@ the British Journal of Urology International. Use this function to change
 the default reporting style to match another journal, or your own
 personal style.
 }
-\section{Themes}{
-
-\itemize{
-\item \code{theme_gtsummary_journal(journal=)}
-\itemize{
-\item \code{journal = "jama"}
-\itemize{
-\item sets theme to align with the JAMA reporting guidelines
-\item large p-values are rounded to two decimal places
-\item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
-\item in \code{tbl_summary()} the percent symbol is not printed next to percentages
-}
-}
-\item \code{theme_gtsummary_compact()}
-\itemize{
-\item tables printed with gt, flextable, and huxtable will be compact with smaller font size and reduced cell padding
-}
-\item \code{theme_gtsummary_printer(print_engine=)}
-\itemize{
-\item \code{print_engine = "gt"} sets the gt package as the default print engine
-\item \code{print_engine = "kable"} sets the \code{knitr::kable()} function as the default print engine
-\item \code{print_engine = "flextable"} sets the flextable package as the default print engine
-\item \code{print_engine = "kable_extra"} sets the kableExtra package as the default print engine
-\item \code{print_engine = "huxtable"} sets the huxtable package as the default print engine
-Use \code{reset_gtsummary_theme()} to restore the default settings
-}
-}
-
-Review the \href{http://www.danieldsjoberg.com/gtsummary/dev/articles/rmarkdown.html}{themes vignette}
-to create your own themes.
-}
-
 \section{Example Output}{
 
 \if{html}{Example}
@@ -95,4 +45,9 @@ set_gtsummary_theme_ex1 <-
 
 # reset gtsummary theme
 reset_gtsummary_theme()
+}
+\seealso{
+\href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
+
+Available \link[=theme_gtsummary]{gtsummary themes}
 }

@@ -1,4 +1,5 @@
 context("test-tbl_uvregression")
+testthat::skip_on_cran()
 library(survival)
 library(lme4)
 
@@ -89,7 +90,7 @@ test_that("glmer: no errors/warnings with standard use", {
   expect_error(
     lme4_uv <-
       mtcars %>%
-      dplyr::select("am", "gear", "hp", "cyl") %>%
+      select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
         y = am,
@@ -101,7 +102,7 @@ test_that("glmer: no errors/warnings with standard use", {
   )
   expect_warning(
     mtcars %>%
-      dplyr::select("am", "gear", "hp", "cyl") %>%
+      select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
         y = am,
@@ -117,7 +118,7 @@ test_that("glmer: no errors/warnings with standard use", {
 
   expect_error(
     mtcars %>%
-      dplyr::select("am", "gear", "hp", "cyl") %>%
+      select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
         y = am,
@@ -130,7 +131,7 @@ test_that("glmer: no errors/warnings with standard use", {
   )
   expect_warning(
     mtcars %>%
-      dplyr::select("am", "gear", "hp", "cyl") %>%
+      select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
         method = glmer,
         y = am,
@@ -171,7 +172,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       pvalue_fun = mtcars
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -180,7 +181,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       estimate_fun = mtcars
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -189,7 +190,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       tidy_fun = mtcars
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -198,7 +199,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       label = "Labels! YAY"
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -207,7 +208,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       label = list("Age")
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -216,7 +217,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       label = list("age" ~ c("Age", "Two"))
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -224,7 +225,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       method = coxph,
       y = Surv(time, status)
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -233,7 +234,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = Surv(time, status),
       formula = "y ~ x"
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -242,7 +243,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       y = age,
       x = marker
     ),
-    "*"
+    NULL
   )
   expect_error(
     tbl_uvregression(
@@ -250,6 +251,6 @@ test_that("tbl_uvregression creates errors with bad inputs", {
       method = lm,
       y = c(age, sex)
     ),
-    "*"
+    NULL
   )
 })

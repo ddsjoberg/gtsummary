@@ -1,4 +1,5 @@
 context("test-sort_p")
+testthat::skip_on_cran()
 
 test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
   table1 <- trial %>%
@@ -40,7 +41,7 @@ test_that("expect error if no p value in table 1", {
 
   expect_error(
     sort_p(table1),
-    "*"
+    NULL
   )
 })
 
@@ -51,6 +52,6 @@ test_that("expect error if q = TRUE and no q values in table 1", {
 
   expect_error(
     sort_p(table1, q = TRUE),
-    "*"
+    NULL
   )
 })

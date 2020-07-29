@@ -1,18 +1,20 @@
 #' Add statistic labels
 #'
 #' Adds labels describing the summary statistics presented for
-#' each variable in the [tbl_summary] table.
+#' each variable in the [tbl_summary] / [tbl_svysummary] table.
 #'
 #' @param x Object with class `tbl_summary` from the [tbl_summary] function
+#' or with class `tbl_svysummary` from the [tbl_svysummary] function
 #' @param location location where statistic label will be included.
 #'  `"row"` (the default) to add the statistic label to the variable label row,
 #'  and `"column"` adds a column with the statistic label.
 #' @param label a list of formulas or a single formula updating the statistic
 #' label, e.g. `label = all_categorical() ~ "No. (%)"`
 #' @family tbl_summary tools
+#' @family tbl_svysummary tools
 #' @author Daniel D. Sjoberg
 #' @export
-#' @return A `tbl_summary` object
+#' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
 #' tbl <- trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
@@ -46,8 +48,8 @@
 
 add_stat_label <- function(x, location = NULL, label = NULL) {
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "tbl_summary")) {
-    stop("`x=` must be class `tbl_summary`", call. = FALSE)
+  if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary"))) {
+    stop("`x=` must be class `tbl_summary` or `tbl_svysummary`", call. = FALSE)
   }
 
   # setting defaults -----------------------------------------------------------
@@ -59,8 +61,12 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   # stat_label default
   stat_label <- as.list(x$meta_data$stat_label) %>% set_names(x$meta_data$variable)
   # converting input to named list
-  label <- tidyselect_to_list(x$inputs$data[x$meta_data$variable], label,
-                              .meta_data = x$meta_data, arg_name = "label")
+  if (!is_survey(x$inputs$data))
+    label <- tidyselect_to_list(x$inputs$data[x$meta_data$variable], label,
+                                .meta_data = x$meta_data, arg_name = "label")
+  else
+    label <- tidyselect_to_list(x$inputs$data$variables[x$meta_data$variable], label,
+                                .meta_data = x$meta_data, arg_name = "label")
   # updating the default values with values in label
   stat_label <- imap(stat_label, ~label[[.y]] %||% .x)
 
@@ -122,7 +128,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
       table_header_fill_missing()
 
     # updating header
-    x <- modify_header_internal(x, stat_label = "**Statistic**")
+    x <- modify_header_internal(x, stat_label = paste0("**", translate_text("Statistic"), "**"))
   }
 
   # removing stat label footnote

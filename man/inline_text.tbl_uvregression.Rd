@@ -9,7 +9,7 @@
   variable,
   level = NULL,
   pattern = "{estimate} ({conf.level*100}\% CI {conf.low}, {conf.high}; {p.value})",
-  estimate_fun = x$fmt_fun$estimate,
+  estimate_fun = NULL,
   pvalue_fun = NULL,
   ...
 )
@@ -80,7 +80,7 @@ Other tbl_uvregression tools:
 \code{\link{add_nevent.tbl_uvregression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
-\code{\link{modify_header}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_uvregression}()}

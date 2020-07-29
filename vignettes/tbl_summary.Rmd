@@ -77,7 +77,7 @@ For brevity in the tutorial, let's keep a subset of the variables from the trial
 ```{r}
 trial2 =
   trial %>%
-  dplyr::select(trt, marker, stage)
+  select(trt, marker, stage)
 ```
 
 ## Basic Usage
@@ -240,7 +240,7 @@ Note that dichotomous variables are, by default, included with `all_categorical(
 
 ```{r}
 trial %>%
-  dplyr::select(trt, response, age, stage, marker, grade) %>%
+  select(trt, response, age, stage, marker, grade) %>%
   tbl_summary(
     by = trt,
     type = list(c(response, grade) ~ "categorical"), # select by variables in c()
@@ -297,4 +297,89 @@ If you, however, would like to change the defaults there are a few options.
 The default options can be changed using the {gtsummary} themes function `set_gtsummary_theme()`.
 The package includes pre-specified themes, and you can also create your own.
 Themes can control baseline behavior, for example, how p-values and percentages are rounded, which statistics are presented in `tbl_summary()`, default statistical tests in `add_p()`, etc.
+
 For details on creating a theme and setting personal defaults, visit the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html).
+
+## Summary Tables for Survey Data
+
+The {gtsummary} package also supports survey data (objects created with the [{survey}](https://cran.r-project.org/web/packages/survey/index.html) package) via the `tbl_svysummary()` function.
+The syntax for `tbl_svysummary()` and `tbl_summary()` are nearly identical, thus the examples above apply to survey summaries as well.
+
+To begin, we'll install the {survey} package and load the `apiclus1` data set which has a complex survey design.
+
+```r
+install.packages("survey")
+```
+```{r}
+# loading the api data set
+data(api, package = "survey")
+```
+
+Before we begin, we convert the data frame to a survey object, registering the ID and weighting columns, and setting the finite population correction column.
+
+```{r}
+svy_apiclus1 <- 
+  survey::svydesign(
+    id = ~dnum, 
+    weights = ~pw, 
+    data = apiclus1, 
+    fpc = ~fpc
+  ) 
+```
+
+After creating the survey object, we can now summarize it similarly to a standard data frame using `tbl_svysummary()`. Like `tbl_summary()`, `tbl_svysummary()` can accept a `by` variable and works with `add_p()` and `add_overall()` functions. 
+
+One thing to note is that unlike `tbl_summary()`, it is not possible to pass custom functions to the `statistic` argument of `tbl_svysummary()`. You must use one of the [pre-defined summary statistic functions](file:///Users/Whiting/Repositories/gtsummary/docs/dev/reference/tbl_svysummary.html#statistic-argument) (e.g. `{mean}`, `{median}`) which leverage functions from the {survey} package to calculate the correct survey statistics.  
+
+```{r}
+svy_apiclus1 %>%
+  tbl_svysummary(
+    # stratify summary statistics by the "both" column
+    by = both, 
+    # summarize a subset of the columns
+    include = c(cname, api00, api99, both),
+    # adding labels to table
+    label = list(
+      cname ~ "County",
+      api00 ~ "API in 2000",
+      api99 ~ "API in 1999"
+    )
+  ) %>%
+  # comparing values by "both" column
+  add_p() %>%
+  add_overall() %>%
+  # adding spanning header
+  modify_spanning_header(starts_with("stat_") ~ "**Met Both Targets**")
+```
+
+`tbl_svysummary()` can also handle weighted survey data where each row represents several individuals: 
+
+```{r}
+d <- dplyr::as_tibble(Titanic)
+head(d, n = 10)
+```
+
+```{r}
+d %>%
+  survey::svydesign(data = ., ids = ~ 1, weights = ~ n) %>%
+  tbl_svysummary()
+```
+
+## Simple Cross Tables
+
+In addition to `tbl_summary()`, you can also use `tbl_cross()` to quickly and easily compare two categorical variables in your data.
+`tbl_cross()` is a wrapper for `tbl_summary()` that:
+
+* Automatically adds a `gt::tab_spanner()` to your table with the name or label of your comparison variable.
+* Uses `"{n} ({p}%)"` as the default `statistic` argument with `percent = "cell"` (customizable through the `statistic` and `percent` arguments).
+* Adds row and column margin totals (customizable through the `margin` argument).
+* Displays missing data in both row and column variables (customizable through the `missing` argument). 
+
+
+```{r}
+trial %>%
+  tbl_cross(row = stage,
+    col = trt,
+    percent = "cell") %>%
+  add_p()
+```

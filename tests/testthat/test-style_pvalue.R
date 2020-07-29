@@ -1,4 +1,5 @@
 context("test-style_pvalue")
+testthat::skip_on_cran()
 
 test_that("no errors/warnings with standard use", {
   pvals <- c(
@@ -9,10 +10,16 @@ test_that("no errors/warnings with standard use", {
   expect_error(style_pvalue(pvals, digits = 1, prepend_p = TRUE), NA)
   expect_warning(style_pvalue(pvals), NA)
   expect_warning(style_pvalue(pvals, digits = 1, prepend_p = TRUE), NA)
+
   expect_error(style_pvalue(pvals, digits = 2), NA)
   expect_error(style_pvalue(pvals, digits = 2, prepend_p = TRUE), NA)
   expect_warning(style_pvalue(pvals, digits = 2), NA)
   expect_warning(style_pvalue(pvals, digits = 2, prepend_p = TRUE), NA)
+
+  expect_error(style_pvalue(pvals, digits = 3), NA)
+  expect_error(style_pvalue(pvals, digits = 3, prepend_p = TRUE), NA)
+  expect_warning(style_pvalue(pvals, digits = 3), NA)
+  expect_warning(style_pvalue(pvals, digits = 3, prepend_p = TRUE), NA)
 })
 
 

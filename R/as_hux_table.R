@@ -7,7 +7,7 @@
 #' to PDF via LaTeX, as well as HTML and Word.
 #'
 #' @section Details:
-#' The `as_huxtable()` takes the data frame that will be printed, converts
+#' The `as_hux_table()` takes the data frame that will be printed, converts
 #' it to a huxtable and formats the table with the following huxtable functions:
 #'
 #' 1. [huxtable::huxtable()]
@@ -21,7 +21,7 @@
 #'
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
-#' @inheritParams as_flextable.gtsummary
+#' @inheritParams as_flex_table
 #' @export
 #' @return A {huxtable} object
 #' @family gtsummary output types
@@ -31,12 +31,12 @@
 #'   dplyr::select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
-#'   as_huxtable()
+#'   as_hux_table()
 #' @export
 
-as_huxtable.gtsummary <- function(x, include = everything(),
-                                  return_calls = FALSE, strip_md_bold = TRUE, ...) {
-  assert_package("huxtable", "as_huxtable")
+as_hux_table <- function(x, include = everything(), return_calls = FALSE,
+                         strip_md_bold = TRUE) {
+  assert_package("huxtable", "as_hux_table")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -52,7 +52,7 @@ as_huxtable.gtsummary <- function(x, include = everything(),
   huxtable_calls <- table_header_to_huxtable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_huxtable.gtsummary-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds")
   huxtable_calls <-
     purrr::reduce(
       .x = seq_along(insert_expr_after),
@@ -82,12 +82,13 @@ as_huxtable.gtsummary <- function(x, include = everything(),
 
 # creating huxxtable calls from table_header -----------------------------------
 table_header_to_huxtable_calls <- function(x, ...) {
-  # adding a col id for columns that are not hidden
+
+  # adding id number for columns not hidden
   table_header <-
-    x$table_header %>%
-    group_by(.data$hide) %>%
-    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-    ungroup()
+      x$table_header %>%
+      group_by(.data$hide) %>%
+      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+      ungroup()
 
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
@@ -96,22 +97,7 @@ table_header_to_huxtable_calls <- function(x, ...) {
     as_tibble(x, return_calls = TRUE,
               include = -c("cols_label", "tab_style_bold", "tab_style_italic"))
 
-  huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable())
-
-  # align ----------------------------------------------------------------------
-  df_align <-
-    table_header %>%
-    filter(.data$hide == FALSE) %>%
-    select(.data$id, .data$align) %>%
-    group_by(.data$align) %>%
-    nest() %>%
-    ungroup()
-
-  huxtable_calls[["align"]] <- map2(
-    df_align$align, df_align$data,
-    ~expr(huxtable::set_align(row = huxtable::everywhere, col = !!.y$id,
-         value = !!.x))
-  )
+  huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable(add_colnames = FALSE))
 
   # padding --------------------------------------------------------------------
   df_padding <-
@@ -131,7 +117,6 @@ table_header_to_huxtable_calls <- function(x, ...) {
   )
 
   # footnote -------------------------------------------------------------------
-
   footnote_abbrev <-
     table_header %>%
     select(.data$id, .data$footnote_abbrev) %>%
@@ -269,6 +254,20 @@ table_header_to_huxtable_calls <- function(x, ...) {
     )
   )
 
+  # align ----------------------------------------------------------------------
+  df_align <-
+    table_header %>%
+    filter(.data$hide == FALSE) %>%
+    select(.data$id, .data$align) %>%
+    group_by(.data$align) %>%
+    nest() %>%
+    ungroup()
+
+  huxtable_calls[["align"]] <- map2(
+    df_align$align, df_align$data,
+    ~expr(huxtable::set_align(row = huxtable::everywhere, col = !!.y$id,
+                              value = !!.x))
+  )
+
   huxtable_calls
 }
-

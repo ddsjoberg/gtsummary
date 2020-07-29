@@ -3,7 +3,8 @@
 #' For each variable in a `tbl_summary` table, the `add_n` function adds a column with the
 #' total number of non-missing (or missing) observations
 #'
-#' @param x Object with class `tbl_summary` from the [tbl_summary] function
+#' @param x Object with class `tbl_summary` from the [tbl_summary] function or
+#' with class `tbl_svysummary` from the [tbl_svysummary] function
 #' @param statistic String indicating the statistic to report. Default is the
 #' number of non-missing observation for each variable, `statistic = "{n}"`.
 #' Other statistics available to report include:
@@ -22,9 +23,10 @@
 #' @param missing DEPRECATED. Logical argument indicating whether to print N
 #' (`missing = FALSE`), or N missing (`missing = TRUE`).  Default is `FALSE`
 #' @family tbl_summary tools
+#' @family tbl_svysummary tools
 #' @author Daniel D. Sjoberg
 #' @export
-#' @return A `tbl_summary` object
+#' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
 #' tbl_n_ex <-
 #'   trial[c("trt", "age", "grade", "response")] %>%
@@ -36,12 +38,16 @@
 add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
                   last = FALSE, missing = NULL) {
   # checking that input is class tbl_summary
-  if (!inherits(x, "tbl_summary")) stop("`x` must be class 'tbl_summary'")
+  if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary")))
+    stop("`x` must be class 'tbl_summary' or 'tbl_svysummary'")
 
   # defining function to round percentages -------------------------------------
-  percent_fun <- getOption("gtsummary.tbl_summary.percent_fun",
-    default = style_percent
-  )
+  percent_fun <-
+    get_theme_element("tbl_summary-fn:percent_fun") %||%
+    getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
+  N_fun <-
+    get_theme_element("tbl_summary-fn:N_fun",
+                      default = style_number)
 
   # DEPRECATED specifying statistic via missing argument -----------------------
   if (!is.null(missing)) {
@@ -57,17 +63,25 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
   }
 
   # counting non-missing N (or missing N) --------------------------------------
+  # directly from x$meta_data$df_stats where it is already there
+  variable_by_chr <- c("variable", switch(!is.null(x$by), "by"))
   counts <-
-    x$meta_data %>%
-    select(c("variable")) %>%
-    mutate(
+    map_dfr(
+      x$meta_data$df_stats,
+      ~select(.x, any_of(c("by", "variable", "N_miss", "N_obs",
+                           "p_miss", "N_nonmiss", "p_nonmiss")))
+    ) %>%
+    dplyr::distinct_at(variable_by_chr, .keep_all = TRUE) %>%
+    dplyr::group_by(.data$variable) %>%
+    dplyr::summarise(
       row_type = "label",
-      N = nrow(x$inputs$data),
-      n = purrr::map_int(.data$variable, ~ sum(!is.na(x$inputs$data[[.x]]))),
-      n_miss = purrr::map_int(.data$variable, ~ sum(is.na(x$inputs$data[[.x]]))),
-      p = percent_fun(.data$n / .data$N),
-      p_miss = percent_fun(.data$n_miss / .data$N),
-      statistic = glue(statistic) %>% as.character()
+      n = N_fun(sum(.data$N_nonmiss)),
+      n_miss = N_fun(sum(.data$N_miss)),
+      N = N_fun(sum(.data$N_nonmiss, .data$N_miss)),
+      p = percent_fun(sum(.data$N_nonmiss) / sum(.data$N_nonmiss, .data$N_miss)),
+      p_miss = percent_fun(sum(.data$N_miss) / sum(.data$N_nonmiss, .data$N_miss)),
+      statistic = glue(statistic) %>% as.character(),
+      .groups = "drop_last"
     ) %>%
     select(.data$variable, .data$row_type, n = .data$statistic)
 

@@ -17,9 +17,9 @@
 #' attribute label is `NULL`, the variable name will be used.
 #' @param type List of formulas specifying variable types. Accepted values
 #' are `c("continuous", "categorical", "dichotomous")`,
-#' e.g. `type = list(starts_with(age) ~ "continuous", female ~ "dichotomous")`.
+#' e.g. `type = list(age ~ "continuous", female ~ "dichotomous")`.
 #' If type not specified for a variable, the function
-#' will default to an appropriate summary type.  See below for details.
+#' will default to an appropriate summary type. See below for details.
 #' @param value List of formulas specifying the value to display for dichotomous
 #' variables.  See below for details.
 #' @param statistic List of formulas specifying types of summary statistics to
@@ -91,6 +91,21 @@
 #'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }
 #'
+#' For both categorical and continuous variables, statistics on the number of
+#' missing and non-missing observations and their proportions are available to
+#' display.
+#' \itemize{
+#'   \item `{N_obs}` total number of observations
+#'   \item `{N_miss}` number of missing observations
+#'   \item `{N_nonmiss}` number of non-missing observations
+#'   \item `{p_miss}` percentage of observations missing
+#'   \item `{p_nonmiss}` percentage of observations not missing
+#' }
+#'
+#' Note that for categorical variables, `{N_obs}`, `{N_miss}` and `{N_nonmiss}` refer
+#' to the total number, number missing and number non missing observations
+#' in the denominator, not at each level of the categorical variable.
+#'
 #' @section type argument:
 #' tbl_summary displays summary statistics for three types of data:
 #' continuous, categorical, and dichotomous. If the type is not specified,
@@ -104,7 +119,8 @@
 #' @export
 #' @return A `tbl_summary` object
 #' @family tbl_summary tools
-#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed tutorial
+#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 #' @author Daniel D. Sjoberg
 #' @examples
 #' # Example 1 ----------------------------------
@@ -159,11 +175,14 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   value <- value %||% get_theme_element("tbl_summary-arg:value")
   missing <- missing %||% get_theme_element("tbl_summary-arg:missing",
                                             default = "ifany")
-  missing_text <- missing_text %||% get_theme_element("tbl_summary-arg:missing_text",
-                                                      default = "Unknown")
+  missing_text <- missing_text %||%
+    get_theme_element("tbl_summary-arg:missing_text",
+                      default = translate_text("Unknown"))
   sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
   percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
                                             default = "column")
+  # ungrouping data ------------------------------------------------------------
+  data <- data %>% ungroup()
 
   # converting bare arguments to string ----------------------------------------
   by <- var_input_to_string(data = data, select_input = !!rlang::enquo(by),
@@ -173,14 +192,13 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   missing <- match.arg(missing, choices = c("ifany", "always", "no"))
   percent <- match.arg(percent, choices = c("column", "row", "cell"))
 
-  # ungrouping data ------------------------------------------------------------
+  # checking input data --------------------------------------------------------
   tbl_summary_data_checks(data)
-  data <- data %>% ungroup()
 
-  # removing orderered class from factor by variables --------------------------
-  if (!is.null(by) && inherits(data[[by]], "ordered") && inherits(data[[by]], "factor")) {
-    data[[by]] <- factor(data[[by]], ordered = FALSE)
-  }
+  # removing ordered class from factor variables -------------------------------
+  data <- dplyr::mutate_if(data,
+                           ~inherits(., "ordered") && inherits(., "factor"),
+                           ~factor(., levels = attr(., "levels"), ordered = FALSE))
 
   # deleting obs with missing by values ----------------------------------------
   # saving variable labels
@@ -193,10 +211,12 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     lbls <- purrr::map(data, ~ attr(.x, "label"))
     data <- data[!is.na(data[[by]]), ]
 
-    # re-applying labels---I think this will NOT be necessary after dplyr 0.9.0
+    # re-applying labels---I think this will NOT be necessary after dplyr 1.0
     for (i in names(lbls)) {
       attr(data[[i]], "label") <- lbls[[i]]
     }
+
+    rm(lbls, i)
   }
 
   # deprecation note about group -----------------------------------------------
@@ -213,20 +233,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs <- as.list(environment())
 
   # removing variables with unsupported variable types from data ---------------
-  data <- select(data, !!include)
   classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
-  var_to_remove <-
-    map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
-    discard(. == TRUE) %>%
-    names()
-  data <- select(data, -var_to_remove)
-  if (length(var_to_remove) > 0) {
-    message(glue(
-      "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",
-      "omitted from output.\n",
-      "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
-    ))
-  }
+  data <- removing_variables_with_unsupported_types(data, include, classes_expected)
 
   # checking function inputs ---------------------------------------------------
   tbl_summary_input_checks(
@@ -234,80 +242,11 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     digits, missing, missing_text, sort
   )
 
-  # converting tidyselect formula lists to named lists -------------------------
-  value <- tidyselect_to_list(data, value, arg_name = "value")
-
-  # creating a table with meta data about each variable ------------------------
-  meta_data <- tibble(
-    variable = names(data),
-    # assigning class, if entire var is NA, then assigning class NA
-    class = assign_class(data, .data$variable, classes_expected),
-    # assigning our best guess of the type, the final type is assigned below
-    # we make a guess first, so users may use the gtsummary tidyselect functions for type
-    summary_type = assign_summary_type(
-      data = data, variable = .data$variable, class = .data$class,
-      summary_type = NULL, value = value
-    )
-  )
-  # excluding by variable
-  if (!is.null(by)) meta_data <- filter(meta_data, .data$variable != by)
-
-  # updating type --------------------------------------------------------------
-  # updating type of user supplied one
-  if (!is.null(type)) {
-    # converting tidyselect formula lists to named lists
-    type <- tidyselect_to_list(data, type, .meta_data = meta_data, arg_name = "type")
-
-    # updating meta data object with new types
-    meta_data <-
-      meta_data %>%
-      mutate(
-        summary_type = assign_summary_type(
-          data = data, variable = .data$variable, class = .data$class,
-          summary_type = type, value = value
-        )
-      )
-  }
-
-  # converting tidyselect formula lists to named lists -------------------------
-  label <- tidyselect_to_list(data, label, .meta_data = meta_data, arg_name = "label")
-  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, arg_name = "statistic")
-  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, arg_name = "digits")
-  sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
-
-  # assigning variable characteristics -----------------------------------------
-  meta_data <-
-    meta_data %>%
-    mutate(
-      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
-      var_label = assign_var_label(data, .data$variable, label),
-      stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
-      stat_label = stat_label_match(.data$stat_display),
-      digits = continuous_digits_guess(
-        data, .data$variable, .data$summary_type, .data$class, digits
-      ),
-      sort = assign_sort(.data$variable, .data$summary_type, sort),
-      df_stats = pmap(
-        list(.data$summary_type, .data$variable, .data$class, .data$dichotomous_value,
-             .data$sort, .data$stat_display, .data$digits),
-        function(summary_type, variable, class, dichotomous_value, sort, stat_display, digits) {
-          switch(
-            summary_type,
-            "continuous" = summarize_continuous(data = data, variable = variable,
-                                                 by = by, stat_display = stat_display,
-                                                 digits = digits),
-            "categorical" = summarize_categorical(data = data, variable = variable,
-                                                   by = by, class = class,
-                                                   dichotomous_value = dichotomous_value,
-                                                   sort = sort, percent = percent),
-            "dichotomous" = summarize_categorical(data = data, variable = variable,
-                                                   by = by, class = class,
-                                                   dichotomous_value = dichotomous_value,
-                                                   sort = sort, percent = percent)
-          )
-        }
-      )
-    )
+  # generate meta_data --------------------------------------------------------
+  meta_data <- generate_metadata(data = data, value = value, by = by,
+                                 classes_expected =  classes_expected,
+                                 type = type, label = label, statistic =  statistic,
+                                 digits = digits, percent = percent, sort = sort)
 
   # calculating summary statistics ---------------------------------------------
   table_body <-
@@ -358,14 +297,115 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # adding headers
   if (is.null(by)) {
-    results <- modify_header_internal(results,
-                                      stat_0 = "**N = {N}**",
-                                      label = "**Characteristic**")
+    results <- modify_header_internal(
+      results,
+      stat_0 = "**N = {style_number(N)}**",
+      label = paste0("**", translate_text("Characteristic"), "**")
+    )
   } else {
-    results <- modify_header_internal(results,
-                                      stat_by = "**{level}**, N = {n}",
-                                      label = "**Characteristic**")
+    results <- modify_header_internal(
+      results,
+      stat_by = "**{level}**, N = {style_number(n)}",
+      label = paste0("**", translate_text("Characteristic"), "**")
+    )
   }
 
   return(results)
+}
+
+
+# removing variables with unsupported variable types from data -------------------------
+removing_variables_with_unsupported_types <- function(data, include, classes_expected) {
+  data <- select(data, !!include)
+  var_to_remove <-
+    map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
+    discard(. == TRUE) %>%
+    names()
+  data <- select(data, -var_to_remove)
+  if (length(var_to_remove) > 0) {
+    message(glue(
+      "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",
+      "omitted from output.\n",
+      "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
+    ))
+  }
+  data
+}
+
+
+# generate metadata table --------------------------------------------------------------
+# for survey objects pass the full survey object to `survey` argument, and `design$variables` to `data` argument
+generate_metadata <- function(data, value, by, classes_expected, type, label, statistic, digits, percent, sort, survey = NULL) {
+  # converting tidyselect formula lists to named lists -------------------------
+  value <- tidyselect_to_list(data, value, arg_name = "value")
+
+  # creating a table with meta data about each variable ------------------------
+  meta_data <- tibble(
+    variable = names(data),
+    # assigning class, if entire var is NA, then assigning class NA
+    class = assign_class(data, .data$variable, classes_expected),
+    # assigning our best guess of the type, the final type is assigned below
+    # we make a guess first, so users may use the gtsummary tidyselect functions for type
+    summary_type = assign_summary_type(
+      data = data, variable = .data$variable, class = .data$class,
+      summary_type = NULL, value = value
+    )
+  )
+  # excluding by variable
+  if (!is.null(by)) meta_data <- filter(meta_data, .data$variable != by)
+
+  # updating type --------------------------------------------------------------
+  # updating type of user supplied one
+  if (!is.null(type)) {
+    # converting tidyselect formula lists to named lists
+    type <- tidyselect_to_list(data, type, .meta_data = meta_data, arg_name = "type")
+
+    # updating meta data object with new types
+    meta_data <-
+      meta_data %>%
+      mutate(
+        summary_type = assign_summary_type(
+          data = data, variable = .data$variable, class = .data$class,
+          summary_type = type, value = value
+        )
+      )
+  }
+
+  # converting tidyselect formula lists to named lists -------------------------
+  label <- tidyselect_to_list(data, label, .meta_data = meta_data, arg_name = "label")
+  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, arg_name = "statistic")
+  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, arg_name = "digits")
+  sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
+
+  # assigning variable characteristics -----------------------------------------
+  if (is.null(survey)) {
+    df_stats_function <- df_stats_fun
+    data_for_df_stats <- data
+  } else {
+    df_stats_function <- df_stats_fun_survey
+    data_for_df_stats <- survey
+  }
+
+
+  meta_data <-
+    meta_data %>%
+    mutate(
+      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
+      var_label = assign_var_label(data, .data$variable, label),
+      stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
+      stat_label = stat_label_match(.data$stat_display),
+      sort = assign_sort(.data$variable, .data$summary_type, sort),
+      df_stats = pmap(
+        list(.data$summary_type, .data$variable,
+             .data$class, .data$dichotomous_value,
+             .data$sort, .data$stat_display),
+        ~ df_stats_function(summary_type = ..1, variable = ..2,
+                            class = ..3, dichotomous_value = ..4,
+                            sort = ..5, stat_display = ..6,
+                            data = data_for_df_stats, by = by,
+                            percent = percent, digits = digits)
+      )
+    )
+
+  meta_data
 }

@@ -4,10 +4,12 @@ Package-wide,pkgwide-str:print_engine,FALSE,string indicating the default print 
 Package-wide,pkgwide-fn:pvalue_fun,FALSE,function to style p-values throughout package,"function(x) style_pvalue(x, digits = 2)"
 Package-wide,pkgwide-fn:prependpvalue_fun,FALSE,"function to style p-values throughout package that include a ""p"" prefix, e.g. ""p<0.001"" or ""p=0.12""","function(x) style_pvalue(x, digits = 2, prepend_p = TRUE)"
 Package-wide,pkgwide-lgl:quiet,FALSE,logical indicating whether to suppress messages or not,
+Package-wide,pkgwide-str:language,FALSE,string indicating language,"""es"""
+tbl_stack,tbl_stack-str:group_header,FALSE,"string indicating the group column header used in `as_tibble()`, `as_flex_table()`, etc.","""**Group Status**"""
 as_gt,as_gt-lst:addl_cmds,FALSE,"list expression of gt-package commands inserted in the `as_gt()` call. Do not include the `data=` argument. Expression is inserted after the named call, e.g. after ""tab_spanner"" in the example.",list(tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')))
-as_flextable.gtsummary,as_flextable.gtsummary-lst:addl_cmds,FALSE,"list of expressions of flextable-package commands inserted in the `as_flextable()` call. Do not include the `data=` argument. Expression is inserted after the named call, e.g. after ""autofit"" in the example.","list(autofit = list(rlang::expr(flextable::font(fontname = ""Bodoni 72"", part = ""all"")), rlang::expr(flextable::fontsize(size = 8, part = ""all""))))"
-as_huxtable.gtsummary,as_huxtable.gtsummary-lst:addl_cmds,FALSE,list expression of huxtable-package commands inserted in the `as_huxtable()` call. Do not include the `data=` argument. Expression is inserted after the named call.,
+as_flex_table,as_flex_table-lst:addl_cmds,FALSE,"list of expressions of flextable-package commands inserted in the `as_flex_table()` call. Do not include the `data=` argument. Expression is inserted after the named call, e.g. after ""autofit"" in the example.","list(autofit = list(rlang::expr(flextable::font(fontname = ""Bodoni 72"", part = ""all"")), rlang::expr(flextable::fontsize(size = 8, part = ""all""))))"
 as_kable_extra,as_kable_extra-lst:addl_cmds,FALSE,list expression of kableExtra-package commands inserted in the `as_kable_extra()` call. Do not include the `data=` argument. Expression is inserted after the named call.,
+as_hux_table,as_hux_table.gtsummary-lst:addl_cmds,FALSE,list of expressions of huxtable-package commands inserted in the `as_hux_table()` call. Do not include the `data=` argument. Expression is inserted after the named call.,
 tbl_summary,tbl_summary-arg:label,TRUE,,
 tbl_summary,tbl_summary-arg:statistic,TRUE,,
 tbl_summary,tbl_summary-arg:digits,TRUE,,
@@ -18,8 +20,18 @@ tbl_summary,tbl_summary-arg:missing_text,TRUE,,
 tbl_summary,tbl_summary-arg:percent,TRUE,,
 tbl_summary,tbl_summary-arg:sort,TRUE,,
 tbl_summary,tbl_summary-fn:percent_fun,FALSE,function to style percentages,function(x) style_percent(x)
+tbl_summary,tbl_summary-fn:N_fun,FALSE,function to style integers. Currently questioning...THIS MAY BE REMOVED IN A FUTURE RELEASE. Use `style_number-arg:big.mark` and `style_number-arg:decimal.mark` instead.,"function(x) sprintf(""%.0f"", x)"
 tbl_summary,tbl_summary-str:continuous_stat,FALSE,glue string defining the default continuous summary statistics to display,"""{mean} ({sd})"""
 tbl_summary,tbl_summary-str:categorical_stat,FALSE,glue string defining the default categorical and dichotomous summary statistics to display,"""{n} / {N} ({p}%)"""
+tbl_svysummary,tbl_svysummary-arg:label,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:statistic,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:digits,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:type,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:value,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:missing,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:missing_text,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:percent,TRUE,,
+tbl_svysummary,tbl_svysummary-arg:sort,TRUE,,
 add_p.tbl_summary,add_p.tbl_summary-arg:test,TRUE,,
 add_p.tbl_summary,add_p.tbl_summary-arg:pvalue_fun,TRUE,,
 add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous_by2,FALSE,default test for continuous variables with a 2-level by variable,"""t.test"""
@@ -28,14 +40,22 @@ add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical,FALSE,default test for
 add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical.low_count,FALSE,default test for categorical/dichotomous variables with minimum expected count <5,"""fisher.test"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical.group_by2,FALSE,default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable,"""lme4"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous.group_by2,FALSE,default test for continuous grouped/correlated variables with a 2-level by variable,"""lme4"""
+add_p.tbl_svysummary,add_p.tbl_svysummary-arg:test,TRUE,,
+add_p.tbl_svysummary,add_p.tbl_svysummary-arg:pvalue_fun,TRUE,,
+add_p.tbl_svysummary,add_p.tbl_svysummary-attr:test.continuous,FALSE,default test for continuous variables,"""svy.wilcox.test"""
+add_p.tbl_svysummary,add_p.tbl_svysummary-attr:test.categorical,FALSE,default test for categorical/dichotomous variables,"""svy.chisq.test"""
 add_stat_label,add_stat_label-arg:location,TRUE,,
 add_q,add_q-arg:method,TRUE,,
 add_q,add_q-arg:pvalue_fun,TRUE,,
 add_p.tbl_cross,add_p.tbl_cross-arg:test,TRUE,,
 add_p.tbl_cross,add_p.tbl_cross-arg:pvalue_fun,TRUE,,
+add_p.tbl_cross,add_p.tbl_cross-arg:source_note ,TRUE,,
 tbl_survfit,tbl_survfit-arg:statistic,TRUE,,
 tbl_regression,tbl_regression-arg:conf.level,TRUE,,
 tbl_regression,tbl_regression-arg:estimate_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:pvalue_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:tidy_fun ,TRUE,,
-tbl_regression,tbl_regression-str:coef_header,FALSE,String setting the default term for the beta coefficient column header,"ifelse(exponentiate == TRUE, ""exp(coef)"", ""coef"")"
+tbl_regression,tbl_regression-str:coef_header,FALSE,string setting the default term for the beta coefficient column header,"ifelse(exponentiate == TRUE, ""exp(coef)"", ""coef"")"
+add_global_p,add_global_p-str:type,FALSE,set argument default for `add_global_p.tbl_regression(type=)` and `add_global_p.tbl_uvregression(type=)`,"""II"""
+style_number,style_number-arg:big.mark,TRUE,,
+style_number,style_number-arg:decimal.mark,TRUE,,

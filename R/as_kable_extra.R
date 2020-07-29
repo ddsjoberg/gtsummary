@@ -8,7 +8,7 @@
 #' changed manually with kableExtra output.
 #'
 #' @inheritParams as_kable
-#' @inheritParams as_flextable.gtsummary
+#' @inheritParams as_flex_table
 #' @export
 #' @return A {kableExtra} object
 #' @family gtsummary output types
@@ -39,7 +39,8 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
   }
 
   # creating list of kableExtra calls ------------------------------------------
-  kable_extra_calls <- table_header_to_kable_extra_calls(x = x, ...)
+  kable_extra_calls <-
+    table_header_to_kable_extra_calls(x = x, ...)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
@@ -81,7 +82,8 @@ table_header_to_kable_extra_calls <- function(x, ...) {
   table_header <- x$table_header
 
   # getting kable calls
-  kable_extra_calls <- as_kable(x = x, return_calls = TRUE, ...)
+  kable_extra_calls <-
+    table_header_to_kable_calls(x = x, ...)
 
   # add_indent -----------------------------------------------------------------
   tab_style_indent <-

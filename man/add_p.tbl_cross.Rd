@@ -4,7 +4,7 @@
 \alias{add_p.tbl_cross}
 \title{Adds p-value to crosstab table}
 \usage{
-\method{add_p}{tbl_cross}(x, test = NULL, pvalue_fun = NULL, source_note = FALSE, ...)
+\method{add_p}{tbl_cross}(x, test = NULL, pvalue_fun = NULL, source_note = NULL, ...)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_cross} from the \link{tbl_cross} function}
@@ -25,7 +25,7 @@ in the \{gt\} table source notes rather than a column.}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Calculate and add a p-value comparing the two variables in the cross table.
-Missing values are \emph{not} included in p-value calculations.
+Missing values are included in p-value calculations.
 }
 \section{Example Output}{
 

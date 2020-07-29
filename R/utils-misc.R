@@ -11,10 +11,10 @@
 #' @author David Hugh-Jones
 assert_package <- function(pkg, fn) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    stop(glue::glue(
-      "The '{pkg}' package is required for '{fn}'.\n",
-      "Install with install.packages('{pkg}')"
-    ), call. = FALSE)
+    usethis::ui_oops("The {usethis::ui_value(pkg)} is required for function {usethis::ui_code(paste0(fn, '()'))}.")
+    usethis::ui_todo("Install the {usethis::ui_value(pkg)} package with the code below.")
+    usethis::ui_code_block('install.packages("{pkg}")')
+    stop()
   }
 }
 
@@ -23,7 +23,7 @@ quoted_list <- function(x) {
   paste(sQuote(x), collapse = ", ")
 }
 
-# used in the as_flextable (and friends) functions for inserting calls
+# used in the as_flex_table (and friends) functions for inserting calls
 add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
   # checking input
   if (!rlang::is_string(add_after) || !add_after %in% names(calls)) {
@@ -37,4 +37,27 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
 
   # insert list
   append(calls, new_list, after = index)
+}
+
+#' gtsummary wrapper for purrr::as_mapper
+#'
+#' This wrapper only accepts a function or formula notation function,
+#' and returns an informative message when incorrect inputs passed
+#'
+#' @param x function or anon. function using formula notation.
+#' @param context string indicating function and arg, e.g. `context = "foo(arg=)"`
+#' @noRd
+#' @keywords internal
+
+gts_mapper <- function(x, context) {
+  # checking input, and giving informative error msg
+  if (!rlang::is_function(x) && !rlang::is_formula(x)) {
+    paste("Expecting a function in argument `{context}`,\n",
+          "e.g. `fun = function(x) style_pvalue(x, digits = 2)`, or\n",
+          "`fun = ~style_pvalue(., digits = 2)`") %>%
+      stringr::str_glue()
+    rlang::abort()
+  }
+
+  purrr::as_mapper(x)
 }

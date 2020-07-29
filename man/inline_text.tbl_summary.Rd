@@ -2,9 +2,20 @@
 % Please edit documentation in R/inline_text.R
 \name{inline_text.tbl_summary}
 \alias{inline_text.tbl_summary}
+\alias{inline_text.tbl_svysummary}
 \title{Report statistics from summary tables inline}
 \usage{
 \method{inline_text}{tbl_summary}(
+  x,
+  variable,
+  column = NULL,
+  level = NULL,
+  pattern = NULL,
+  pvalue_fun = NULL,
+  ...
+)
+
+\method{inline_text}{tbl_svysummary}(
   x,
   variable,
   column = NULL,
@@ -46,13 +57,10 @@ inline reporting in an R markdown document. Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \examples{
-t1 <- tbl_summary(trial)
-t2 <- tbl_summary(trial, by = trt) \%>\% add_p()
+t1 <- trial[c("trt", "grade")] \%>\% tbl_summary(by = trt) \%>\% add_p()
 
-inline_text(t1, variable = age)
-inline_text(t2, variable = grade, level = "I", column = "Drug A",
-pattern = "{n}/{N} ({p})\%")
-inline_text(t2, variable = grade, column = "p.value")
+inline_text(t1, variable = grade, level = "I", column = "Drug A", pattern = "{n}/{N} ({p})\%")
+inline_text(t1, variable = grade, column = "p.value")
 }
 \seealso{
 Other tbl_summary tools: 
@@ -63,7 +71,7 @@ Other tbl_summary tools:
 \code{\link{add_stat_label}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify_header}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}

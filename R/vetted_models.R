@@ -4,7 +4,7 @@
 #' in [tbl_regression] and [tbl_uvregression].  If a model is passed to these
 #' functions and the model is not listed below and  a `tidy()` function is
 #' not specified in the `tidy_fun=` argument, the model object will be passed
-#' to [broom::tidy] or [broom.mixed::tidy].
+#' to `broom::tidy` or `broom.mixed::tidy`.
 #'
 #' \itemize{
 #'  \item{[stats::lm]}
@@ -19,7 +19,7 @@
 #' @name vetted_models
 #' @keywords internal
 #' @section model support:
-#' If [broom::tidy] or [broom.mixed::tidy] supports a class of model not listed
+#' If `broom::tidy` or `broom.mixed::tidy` supports a class of model not listed
 #' above, please submit a [GitHub Issue](https://github.com/ddsjoberg/gtsummary/issues).
 #' The model can be added to the list of vetted models. Unit tests will be
 #' put in place to ensure continued support for the model.
@@ -35,15 +35,19 @@
 #' capture any arguments you may not need). See below for an example where the
 #' confidence limits for a linear regression model are calculated using Wald's method.
 #' @examples
-#' my_tidy <- function(x, exponentiate =  FALSE, conf.level = 0.95, ...) {
+#' my_tidy <- function(x, exponentiate = FALSE, conf.level = 0.95, ...) {
 #'   tidy <-
 #'     dplyr::bind_cols(
 #'       broom::tidy(x, conf.int = FALSE),
-#'       broom::confint_tidy(x, func = stats::confint.default, conf.level = conf.level)
+#'       # calculate the confidence intervals, and save them in a tibble
+#'       stats::confint.default(x) %>%
+#'         tibble::as_tibble() %>%
+#'         rlang::set_names(c("conf.low", "conf.high"))
 #'     )
 #'   # exponentiating, if requested
 #'   if (exponentiate == TRUE)
 #'     tidy <- dplyr::mutate_at(vars(estimate, conf.low, conf.high), exp)
+#'   tidy
 #' }
 #'
 #' lm(age ~ grade + response, trial) %>%

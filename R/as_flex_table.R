@@ -8,13 +8,14 @@
 #' does not support Word.
 #'
 #' @section Details:
-#' The `as_flextable()` takes the data frame that will be printed and converts
-#' it to a flextable and formats the table with the following flextable functions.
+#' The `as_flex_table()` functions converts the gtsummary object to a flextable,
+#' and prints it with the following styling functions.
 #' 1. [flextable::flextable()]
 #' 1. [flextable::set_header_labels()] to set column labels
 #' 1. [flextable::add_header_row()], if applicable, to set spanning column header
 #' 1. [flextable::align()] to set column alignment
 #' 1. [flextable::padding()] to indent variable levels
+#' 1. [flextable::fontsize()] to set font size
 #' 1. [flextable::autofit()] to estimate the column widths
 #' 1. [flextable::footnote()] to add table footnotes and source notes
 #' 1. [flextable::bold()] to bold cells in data frame
@@ -23,33 +24,31 @@
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
 #' Pro tip: Use the [flextable::width()] function for exacting control over
-#' column width after calling [as_flextable()].
+#' column width after calling [as_flex_table()].
 #' @inheritParams as_gt
+#' @inheritParams as_tibble.gtsummary
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for
 #' bold weight) in column labels and spanning headers are removed.
 #' Default is TRUE
-#' @param ... Not used
-#' @name as_flextable
 #' @export
 #' @return A {flextable} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' trial %>%
-#'   dplyr::select(trt, age, grade) %>%
+#' as_flex_table_ex1 <-
+#'   trial %>%
+#'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
-#'   as_flextable()
-as_flextable <- function(x, ...) {
-  UseMethod("as_flextable")
-}
-
-#' @rdname as_flextable
-#' @export
-as_flextable.gtsummary <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = TRUE, ...) {
-  # must have flextable package installed to use this function -----------------
-  assert_package("flextable", "as_flextable")
+#'   as_flex_table()
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{as_flex_table_ex1.png}{options: width=60\%}}
+as_flex_table <- function(x, include = everything(), return_calls = FALSE,
+                          strip_md_bold = TRUE) {
+  # checking flextable installation --------------------------------------------
+  assert_package("flextable", "as_flex_table")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -65,7 +64,7 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
   flextable_calls <- table_header_to_flextable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
-  insert_expr_after <- get_theme_element("as_flextable.gtsummary-lst:addl_cmds")
+  insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
   flextable_calls <-
     purrr::reduce(
       .x = seq_along(insert_expr_after),
@@ -96,11 +95,13 @@ as_flextable.gtsummary <- function(x, include = everything(), return_calls = FAL
 
 # creating flextable calls from table_header -----------------------------------
 table_header_to_flextable_calls <- function(x, ...) {
-  table_header <-
-    x$table_header %>%
-    group_by(.data$hide) %>%
-    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-    ungroup()
+
+  # adding id number for columns not hidden
+   table_header <-
+      x$table_header %>%
+      group_by(.data$hide) %>%
+      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+      ungroup()
 
   # tibble ---------------------------------------------------------------------
   # flextable doesn't use the markdown language `__` or `**`
@@ -127,22 +128,42 @@ table_header_to_flextable_calls <- function(x, ...) {
   any_spanning_header <- sum(!is.na(table_header$spanning_header)) > 0
   if (any_spanning_header == FALSE) flextable_calls[["add_header_row"]] <- list()
   else {
-    df_header <-
+    df_header0 <-
       table_header %>%
       filter(.data$hide == FALSE) %>%
       select(.data$spanning_header) %>%
       mutate(spanning_header = ifelse(is.na(.data$spanning_header),
-                                      " ",
-                                      .data$spanning_header)) %>%
-      group_by(.data$spanning_header) %>%
+                                      " ", .data$spanning_header),
+             spanning_header_id = dplyr::row_number())
+    # assigning an ID for each spanning header group
+    for (i in seq(2, nrow(df_header0))) {
+      if(df_header0$spanning_header[i] == df_header0$spanning_header[i-1]) {
+        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i-1]
+      }
+    }
+
+    df_header <-
+      df_header0 %>%
+      group_by(.data$spanning_header_id) %>%
       mutate(width = n()) %>%
       distinct() %>%
       ungroup()
 
-    flextable_calls[["add_header_row"]] <- expr(
-      flextable::add_header_row(
-        values = !!df_header$spanning_header,
-        colwidths = !!df_header$width
+    flextable_calls[["add_header_row"]] <- list(
+      expr(
+        # add the header row with the spanning headers
+        flextable::add_header_row(
+          values = !!df_header$spanning_header,
+          colwidths = !!df_header$width
+        )
+      ),
+      expr(
+        # add border above that matches border below
+        flextable::border(
+          i = 1,
+          border.top = officer::fp_border(width=2),
+          part = "header"
+        )
       )
     )
   }
@@ -176,6 +197,11 @@ table_header_to_flextable_calls <- function(x, ...) {
   flextable_calls[["padding"]] <- map2(
     df_padding$id, df_padding$i_index,
     ~expr(flextable::padding(i = !!.y, j = !!.x, padding.left = 15))
+  )
+
+  # fontsize -------------------------------------------------------------------
+  flextable_calls[["fontsize"]] <- list(
+    expr(flextable::fontsize(part = "header", size = 11))
   )
 
   # autofit --------------------------------------------------------------------
@@ -259,7 +285,7 @@ table_header_to_flextable_calls <- function(x, ...) {
   )
 
   # source note ----------------------------------------------------------------
-  # in flextable, this is just a footnote associated with column or symbol
+  # in flextable, this is just a footnote associated without column or symbol
   if (!is.null(x$list_output$source_note)) {
     flextable_calls[["source_note"]] <-
       expr(

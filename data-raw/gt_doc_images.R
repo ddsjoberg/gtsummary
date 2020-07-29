@@ -8,7 +8,7 @@ gt_functions <-
   purrr::keep(~stringr::str_ends(., stringr::fixed(".Rd"))) %>%
   stringr::str_remove(".Rd")
 
-# create temp gtsummary firectory (example scripts will be saved here)
+# create temp gtsummary directory (example scripts will be saved here)
 path_gtsummary <- file.path(tempdir(), "gtsummary")
 fs::dir_create(path_gtsummary)
 unlink(path_gtsummary) # just in case it already existed with files in folder
@@ -34,16 +34,28 @@ for (f in gt_functions) {
   purrr::walk(
     example_objs,
     function(example_chr) {
+      browser()
       # converting string to object
       example_obj <- eval(parse(text = example_chr))
-      # convert gtsummary object to gt
-      if (inherits(example_obj, "gtsummary")) example_obj <- as_gt(example_obj)
-      # checking object is now a gt object
-      if (!(inherits(example_obj, "gt_tbl"))) return(invisible())
-      # saving image
       usethis::ui_todo("Saving `{example_chr}.png`")
-      gt::gtsave(example_obj,
-                 filename = here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
+
+      # convert gtsummary object to gt
+      if (inherits(example_obj, "gtsummary"))
+        example_obj <- as_gt(example_obj)
+
+      # checking object is now a gt object
+      if (inherits(example_obj, "gt_tbl"))
+        # saving image
+        gt::gtsave(example_obj,
+                   filename = here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
+
+      # saving flextable image
+      if (inherits(example_obj, "flextable"))
+        flextable::save_as_image(example_obj,
+                                 webshot = "webshot2",
+                                 path = here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
+
+      return(invisible())
     }
   )
 

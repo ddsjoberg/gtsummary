@@ -1,4 +1,5 @@
 context("test-tbl_summary")
+testthat::skip_on_cran()
 
 test_that("tbl_summary creates output without error/warning (no by var)", {
   expect_error(
@@ -38,11 +39,11 @@ test_that("tbl_summary allows for named list input", {
 test_that("tbl_summary throws errors/messages with bad 'sort = ' specifications", {
   expect_error(
     tbl_summary(mtcars, sort = list(all_categorical() ~ c("frequency", "two"))),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(mtcars, sort = list(all_categorical() ~ "freq5555uency")),
-    "*"
+    NULL
   )
 })
 
@@ -77,51 +78,56 @@ test_that("tbl_summary works in character inputs for `by=`", {
 test_that("tbl_summary returns errors with bad inputs", {
   expect_error(
     tbl_summary(tibble::tibble()),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(tibble::tibble(t = integer())),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(list(test = 5)),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, by = THIS_IS_NOT_A_VARIABLE),
-    "*"
+    NULL
   )
   expect_message(
     tbl_summary(trial, by = response), # should get message about missing data
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, type = response),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, value = "0"),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, label = "Age"),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, statistic = "{mean}"),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, digits = 0),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, sort = list("grade" ~ "frequ55555ency")),
-    "*"
+    NULL
   )
   expect_error(
     tbl_summary(trial, by = c("trt", "grade")),
-    "*"
+    NULL
+  )
+
+  expect_error(
+    tbl_summary(trial, statistic = everything() ~ "{mean}"),
+    NULL
   )
 })
 
@@ -246,7 +252,7 @@ test_that("tbl_summary-order of output columns", {
             grade == "II" ~ "Second Grade"
           )
       ) %>%
-      dplyr::select(grade, grade_str) %>%
+      select(grade, grade_str) %>%
       tbl_summary(by = grade_str) %>%
       purrr::pluck("table_body") %>%
       names() %>% {
@@ -293,7 +299,7 @@ test_that("tbl_summary-all missing data does not cause error", {
     )
 
   expect_error(
-    all_missing_no_by <- tbl_summary(df_missing %>% dplyr::select(-my_by_var)),
+    all_missing_no_by <- tbl_summary(df_missing %>% select(-my_by_var)),
     NA
   )
 
@@ -385,3 +391,24 @@ test_that("tbl_summary-no error when by variable is ordered factor", {
     NA
   )
 })
+
+test_that("tbl_summary- works with grouped data (it ungroups it first)", {
+  expect_error(
+    trial %>% dplyr::group_by(response) %>%
+      dplyr::select(response, death, trt) %>%
+      tbl_summary(by = trt),
+    NA
+  )
+})
+
+test_that("tbl_summary-works with ordered factors", {
+  expect_error(
+    trial %>%
+      select(response, trt) %>%
+      dplyr::mutate_at(vars(response, trt),
+                       ~factor(., ordered = TRUE)) %>%
+      tbl_summary(by = trt),
+    NA
+  )
+})
+

@@ -13,7 +13,7 @@ as_kable(x, include = everything(), return_calls = FALSE, exclude = NULL, ...)
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
-Default is \code{everything()}, which includes all commands in \code{x$kable_calls}.}
+Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
@@ -48,9 +48,9 @@ trial \%>\%
 }
 \seealso{
 Other gtsummary output types: 
-\code{\link{as_flextable}()},
+\code{\link{as_flex_table}()},
 \code{\link{as_gt}()},
-\code{\link{as_huxtable.gtsummary}()},
+\code{\link{as_hux_table}()},
 \code{\link{as_kable_extra}()},
 \code{\link{as_tibble.gtsummary}()}
 }

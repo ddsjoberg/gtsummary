@@ -1,4 +1,5 @@
 context("test-tbl_stack")
+testthat::skip_on_cran()
 library(survival)
 t1 <-
   glm(response ~ trt, trial, family = binomial) %>%
@@ -42,13 +43,13 @@ test_that("Stacking tbl_regression objects", {
   # must pass items as list
   expect_error(
     tbl_stack(t1, t2),
-    "*"
+    NULL
   )
 
   # must pass acceptable objects
   expect_error(
     tbl_stack(list(mtcars)),
-    "*"
+    NULL
   )
 })
 
@@ -71,4 +72,12 @@ test_that("Stacking tbl_summary objects", {
     zz <- tbl_stack(list(yy, tt)),
     NA
   )
+
+  # no error if the list is named
+  lst_summary <- list(yy, tt) %>% set_names("one", "two")
+  expect_error(
+    tbl_stack(lst_summary, group_header = c("Group 1", "Group 2")),
+    NA
+  )
+
 })

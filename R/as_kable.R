@@ -16,10 +16,8 @@
 #' @inheritParams as_gt
 #' @param x Object created by a function from the gtsummary package
 #' (e.g. [tbl_summary] or [tbl_regression])
-#' @param include Commands to include in output. Input may be a vector of
-#' quoted or unquoted names. tidyselect and gtsummary select helper
-#' functions are also accepted.
-#' Default is `everything()`, which includes all commands in `x$kable_calls`.
+#' @inheritParams as_gt
+#' @inheritParams as_tibble.gtsummary
 #' @param exclude DEPRECATED
 #' @param ... Additional arguments passed to [knitr::kable]
 #' @export
@@ -32,7 +30,8 @@
 #'   bold_labels() %>%
 #'   as_kable()
 
-as_kable <- function(x, include = everything(), return_calls = FALSE, exclude = NULL, ...) {
+as_kable <- function(x, include = everything(), return_calls = FALSE,
+                     exclude = NULL, ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(
@@ -48,7 +47,8 @@ as_kable <- function(x, include = everything(), return_calls = FALSE, exclude = 
   }
 
   # creating list of kable calls --------------------------------------------------
-  kable_calls <- table_header_to_kable_calls(x = x, ...)
+  kable_calls <-
+    table_header_to_kable_calls(x = x, ...)
   if (return_calls == TRUE) return(kable_calls)
 
   # converting to charcter vector ----------------------------------------------
@@ -77,8 +77,9 @@ as_kable <- function(x, include = everything(), return_calls = FALSE, exclude = 
 }
 
 table_header_to_kable_calls <- function(x, ...) {
-  table_header <- x$table_header
   dots <- rlang::enexprs(...)
+
+  table_header <- x$table_header
 
   kable_calls <- as_tibble(x, return_calls = TRUE, include = -c("cols_label"))
 

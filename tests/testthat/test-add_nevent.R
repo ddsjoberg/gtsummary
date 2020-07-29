@@ -1,4 +1,5 @@
 context("test-add_nevent")
+testthat::skip_on_cran()
 
 library(survival)
 fit_cox <- coxph(Surv(time, status) ~ sex, lung)
@@ -85,12 +86,12 @@ test_that("add_nevent error with bad inputs", {
     lm(hp ~ mpg, mtcars) %>%
       tbl_regression() %>%
       add_nevent(),
-    "*"
+    NULL
   )
   expect_error(
     lme4::lmer(hp ~ mpg + (1 | cyl), mtcars) %>%
       tbl_regression() %>%
       add_nevent(),
-    "*"
+    NULL
   )
 })

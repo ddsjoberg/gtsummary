@@ -6,7 +6,8 @@
 #' every some pluck flatten negate partial cross_df reduce
 #' @importFrom tidyr nest unnest complete spread
 #' @importFrom tibble tibble as_tibble
-#' @importFrom rlang .data .env %||% set_names sym syms parse_expr expr exprs call2 :=
+#' @importFrom rlang .data .env %||% set_names sym syms parse_expr expr exprs
+#' call2 := inform abort is_function is_string
 #' @importFrom glue glue as_glue glue_collapse
 #' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
 #' str_split str_detect str_remove str_replace_all
@@ -23,6 +24,7 @@ NULL
 
 release_questions <- function() {
   c(
+    "Do you need to run `usethis::use_latest_dependencies()`?",
     "Have you updated all the gt help file images?",
     "Is the size of the build less than 5MB?"
   )

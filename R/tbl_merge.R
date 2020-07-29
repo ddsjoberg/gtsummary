@@ -1,7 +1,7 @@
 #' Merge two or more gtsummary objects
 #'
 #' Merges two or more `tbl_regression`, `tbl_uvregression`, `tbl_stack`,
-#' or `tbl_summary` objects and adds appropriate spanning headers.
+#' `tbl_summary`, or `tbl_svysummary` objects and adds appropriate spanning headers.
 #'
 #' @param tbls List of gtsummary objects to merge
 #' @param tab_spanner Character vector specifying the spanning headers.
@@ -11,6 +11,7 @@
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @family tbl_summary tools
+#' @family tbl_svysummary tools
 #' @seealso [tbl_stack]
 #' @author Daniel D. Sjoberg
 #' @export
@@ -36,7 +37,8 @@
 #' t3 <-
 #'   trial[c("age", "grade", "response")] %>%
 #'   tbl_summary(missing = "no") %>%
-#'   add_n()
+#'   add_n %>%
+#'   modify_header(stat_0 ~ "**Summary Statistics**")
 #' t4 <-
 #'   tbl_uvregression(
 #'     trial[c("ttdeath", "death", "age", "grade", "response")],
@@ -48,8 +50,7 @@
 #'
 #' tbl_merge_ex2 <-
 #'   tbl_merge(tbls = list(t3, t4)) %>%
-#'   as_gt(include = -tab_spanner) %>%
-#'   gt::cols_label(stat_0_1 = gt::md("**Summary Statistics**"))
+#'   modify_spanning_header(everything() ~ NA_character_)
 #'
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -88,8 +89,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # merging tables -------------------------------------------------------------
   # nesting data by variable (one line per variable), and renaming columns with number suffix
-  nested_table <- tbls %>%
-    imap(function(x, y) {
+  nested_table <- map2(
+    tbls, seq_along(tbls),
+    function(x, y) {
       # creating a column that is the variable label
       group_by(x$table_body, .data$variable) %>%
         mutate(
@@ -106,7 +108,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # nesting results within variable
   nested_table <- map(
     nested_table,
-    ~ nest(.x, data = -one_of(c("variable", "var_label")))
+    ~ nest(.x, data = -any_of(c("variable", "var_label")))
   )
 
   # merging formatted objects together
@@ -148,8 +150,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # stacking all table_header dfs together and renaming ------------------------
   table_header <-
-    imap_dfr(
-      tbls,
+    purrr::map2_dfr(
+      tbls, seq_along(tbls),
       ~ pluck(.x, "table_header") %>%
         # tidying the code in these columns (giving it space to breathe),
         # that is can be properly pasred in the next step
@@ -162,7 +164,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           vars(.data$missing_emdash, .data$indent, .data$bold, .data$italic),
           function(x) tbl_merge_update_chr_code(code = x, names = names(.x$table_body), n = .y)
         ) %>%
-        # updading column names to include the index
+        # updating column names to include the index
         mutate(
           column = ifelse(
             .data$column %in% c("label", "variable", "row_type"),
@@ -198,9 +200,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 }
 
 # this function names a chr code string, variable names, and the merge number,
-# and returns teh updated code string with updated variable names
+# and returns the updated code string with updated variable names
 # > tbl_merge_update_chr_code("longvarname == 'label' & varname == TRUE",
-#                             +                           c("varname", "longvarname"), 2)
+#                             c("varname", "longvarname"), 2)
 # [1] "longvarname_2 == 'label' & varname_2 == TRUE"
 tbl_merge_update_chr_code <- function(code, names, n) {
   new_names <- ifelse(

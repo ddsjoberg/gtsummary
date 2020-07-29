@@ -1,4 +1,5 @@
 context("test-add_p_test_safe")
+testthat::skip_on_cran()
 
 test_that("testing statistical tests", {
 

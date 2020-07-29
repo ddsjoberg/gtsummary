@@ -1,14 +1,15 @@
 #' Stacks two or more gtsummary objects
 #'
 #' Assists in patching together more complex tables. `tbl_stack()` appends two
-#' or more `tbl_regression`, `tbl_summary`, or `tbl_merge` objects.
-#' {gt} attributes from the first regression object are utilized for output
-#' table.
+#' or more `tbl_regression`, `tbl_summary`, `tbl_svysummary`, or `tbl_merge` objects.
+#' Column attributes, including number formatting and column footnotes, are
+#' retained from the first passed gtsummary object.
 #'
 #' @param tbls List of gtsummary objects
 #' @param group_header Character vector with table headers where length matches
 #' the length of `tbls=`
 #' @family tbl_summary tools
+#' @family tbl_svysummary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @seealso [tbl_merge]
@@ -96,22 +97,36 @@ tbl_stack <- function(tbls, group_header = NULL) {
       map_dfr(tbls, ~pluck(.x, "table_body"))
   }
   else if (!is.null(group_header)) {
+    # adding grouping column
     results$table_body <-
-      imap_dfr(tbls, ~pluck(.x, "table_body") %>% mutate(groupname_col = group_header[.y])) %>%
+      purrr::map2_dfr(
+        tbls, seq_along(tbls),
+        ~pluck(.x, "table_body") %>% mutate(groupname_col = group_header[.y])
+      ) %>%
+      select(.data$groupname_col, everything()) %>%
       group_by(.data$groupname_col)
   }
 
-
+  # creating table header ------------------------------------------------------
   results$table_header <-
     map_dfr(tbls, ~pluck(.x, "table_header")) %>%
     group_by(.data$column) %>%
     filter(dplyr::row_number() == 1) %>%
-    ungroup()
+    ungroup() %>%
+    table_header_fill_missing(table_body = results$table_body)
 
-  results$table_header <-
-    tibble(column = names(results$table_body)) %>%
-    left_join(results$table_header, by = "column") %>%
-    table_header_fill_missing()
+  # adding label for grouping variable, if present -----------------------------
+  if ("groupname_col" %in% names(results$table_body)) {
+    results <- modify_header_internal(
+      results,
+      groupname_col = get_theme_element("tbl_stack-str:group_header", default = "**Group**")
+    )
+    # making groups column left aligned (if printed with non-gt printer)
+    results$table_header <-
+      results$table_header %>%
+      mutate(align = ifelse(.data$column == "groupname_col", "left", .data$align))
+
+  }
 
   # returning results ----------------------------------------------------------
   results$call_list <- list(tbl_stack = match.call())

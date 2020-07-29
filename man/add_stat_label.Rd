@@ -7,7 +7,8 @@
 add_stat_label(x, location = NULL, label = NULL)
 }
 \arguments{
-\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
+\item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function
+or with class \code{tbl_svysummary} from the \link{tbl_svysummary} function}
 
 \item{location}{location where statistic label will be included.
 \code{"row"} (the default) to add the statistic label to the variable label row,
@@ -17,11 +18,11 @@ and \code{"column"} adds a column with the statistic label.}
 label, e.g. \code{label = all_categorical() ~ "No. (\%)"}}
 }
 \value{
-A \code{tbl_summary} object
+A \code{tbl_summary} or \code{tbl_svysummary} object
 }
 \description{
 Adds labels describing the summary statistics presented for
-each variable in the \link{tbl_summary} table.
+each variable in the \link{tbl_summary} / \link{tbl_svysummary} table.
 }
 \section{Example Output}{
 
@@ -66,12 +67,22 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify_header}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
+
+Other tbl_svysummary tools: 
+\code{\link{add_n}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_svysummary}()},
+\code{\link{add_q}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_svysummary}()}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_summary tools}
+\concept{tbl_svysummary tools}

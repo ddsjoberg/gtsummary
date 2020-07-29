@@ -11,6 +11,7 @@ tbl_cross(
   label = NULL,
   statistic = NULL,
   percent = c("none", "column", "row", "cell"),
+  margin = c("column", "row"),
   missing = c("ifany", "always", "no"),
   missing_text = "Unknown",
   margin_text = "Total"
@@ -34,11 +35,14 @@ attribute label is \code{NULL}, the variable name will be used.}
 \item{statistic}{A string with the statistic name in curly brackets to
 be replaced with the numeric statistic (see glue::glue).
 The default is \code{{n}}. If percent argument is \code{"column"}, \code{"row"}, or \code{"cell"},
-default is \verb{\{n\} (\{p\}\%)}.}
+default is \code{"{n} ({p}\%)"}.}
 
 \item{percent}{Indicates the type of percentage to return.
 Must be one of "none", "column", "row", or "cell". Default is "cell" when
 \code{{N}} or \code{{p}} is used in statistic.}
+
+\item{margin}{Indicates which margins to add to the table.
+Default is \code{c("row", "column")}}
 
 \item{missing}{Indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),
@@ -65,7 +69,7 @@ The function creates a cross table of two categorical variables.
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_cross_ex2.png}{options: width=50\%}}
+\if{html}{\figure{tbl_cross_ex2.png}{options: width=60\%}}
 }
 
 \examples{
@@ -77,7 +81,7 @@ tbl_cross_ex1 <-
 # Example 2 ----------------------------------
 tbl_cross_ex2 <-
   trial \%>\%
-  tbl_cross(row = stage, col = trt) \%>\%
+  tbl_cross(row = stage, col = trt, percent = "cell") \%>\%
   add_p()
 
 }

@@ -21,6 +21,7 @@
 #       - works with add_global_p(), add_nevent(), add_q()
 
 context("test-vetted_models-glmer")
+testthat::skip_on_cran()
 library(dplyr)
 
 # glmer() --------------------------------------------------------------------

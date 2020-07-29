@@ -7,7 +7,7 @@
 \alias{as_tibble}
 \alias{knit_print}
 \alias{vars}
-\alias{as_huxtable}
+\alias{select}
 \alias{starts_with}
 \alias{ends_with}
 \alias{contains}
@@ -25,9 +25,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{vars}}}
-
-  \item{huxtable}{\code{\link[huxtable]{as_huxtable}}}
+  \item{dplyr}{\code{\link[dplyr]{select}}, \code{\link[dplyr]{vars}}}
 
   \item{knitr}{\code{\link[knitr]{knit_print}}}
 

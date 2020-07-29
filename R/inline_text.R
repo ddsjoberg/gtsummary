@@ -32,13 +32,10 @@ inline_text <- function(x, ...) {
 #' @export
 #' @return A string reporting results from a gtsummary table
 #' @examples
-#' t1 <- tbl_summary(trial)
-#' t2 <- tbl_summary(trial, by = trt) %>% add_p()
+#' t1 <- trial[c("trt", "grade")] %>% tbl_summary(by = trt) %>% add_p()
 #'
-#' inline_text(t1, variable = age)
-#' inline_text(t2, variable = grade, level = "I", column = "Drug A",
-#' pattern = "{n}/{N} ({p})%")
-#' inline_text(t2, variable = grade, column = "p.value")
+#' inline_text(t1, variable = grade, level = "I", column = "Drug A", pattern = "{n}/{N} ({p})%")
+#' inline_text(t1, variable = grade, column = "p.value")
 inline_text.tbl_summary <-
   function(x, variable, column = NULL, level = NULL, pattern = NULL,
            pvalue_fun = NULL, ...) {
@@ -46,7 +43,8 @@ inline_text.tbl_summary <-
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # create rlang::enquo() inputs ---------------------------------------------
     variable <- rlang::enquo(variable)
@@ -76,7 +74,7 @@ inline_text.tbl_summary <-
     }
 
     # checking column ----------------------------------------------------------
-    # the follwing code converts the column input to a column name in x$table_body
+    # the following code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
       input = names(x$table_body),
       column_name = names(x$table_body)
@@ -150,6 +148,10 @@ inline_text.tbl_summary <-
   }
 
 
+#' @name inline_text.tbl_summary
+#' @export
+inline_text.tbl_svysummary <- inline_text.tbl_summary
+
 #' Report statistics from regression summary tables inline
 #'
 #' Takes an object with class `tbl_regression`, and the
@@ -199,25 +201,22 @@ inline_text.tbl_summary <-
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
-           estimate_fun = x$fmt_fun$estimate,
-           pvalue_fun = NULL, ...) {
+           estimate_fun = NULL, pvalue_fun = NULL, ...) {
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # setting quos -------------------------------------------------------------
     variable <- rlang::enquo(variable)
     level <- rlang::enquo(level)
 
     # setting defaults ---------------------------------------------------------
-    if (is.null(estimate_fun)) estimate_fun <-
-      x$table_header %>%
-      dplyr::filter(startsWith(.data$column, "estimate")) %>%
-      dplyr::slice(1) %>%
-      dplyr::pull("fmt_fun") %>%
-      purrr::pluck(1)
+    estimate_fun <- estimate_fun %||%
+      (filter(x$table_header, .data$column == "estimate") %>% pluck("fmt_fun", 1)) %>%
+      gts_mapper("inline_text(estimate_fun=)")
 
     # table_body preformatting -------------------------------------------------
     # this is only being performed for tbl_uvregression benefit
@@ -498,14 +497,16 @@ inline_text.tbl_survival <-
 #' inline_text(tbl2, prob = 0.5)
 inline_text.tbl_survfit <-
   function(x, time = NULL, prob = NULL, level = NULL,
-           estimate_fun = NULL, pvalue_fun = NULL, ...) {
+           estimate_fun = x$inputs$estimate_fun, pvalue_fun = NULL, ...) {
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("inline_text(pvalue_fun=)")
 
-    if (is.null(estimate_fun)) estimate_fun <- x$inputs$estimate_fun
+    estimate_fun <- estimate_fun %>%
+      gts_mapper("inline_text(estimate_fun=)")
 
     # checking inputs ----------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
@@ -595,10 +596,8 @@ inline_text.tbl_survfit <-
 #' @param x a `tbl_cross` object
 #' @param row_level Level of the row variable to display.
 #' Can also specify the 'Unknown' row. Default is `NULL`
-#' @param col_level Level of the column variable to display.
+#' @param col_level Level of the column variable to display. Default is `NULL`
 #' Can also specify "`p.value`" for the p-value and "`stat_0`" for Total column.
-#' @param pattern String indicating the statistics to return.
-#' Uses [glue::glue] formatting. Default is pattern shown in `tbl_cross()` output
 #' @inheritParams inline_text.tbl_summary
 #'
 #' @return A string reporting results from a gtsummary table
@@ -614,14 +613,20 @@ inline_text.tbl_survfit <-
 #' inline_text(tbl_cross, col_level = "p.value")
 
 inline_text.tbl_cross <-
-  function(x, col_level, row_level = NULL, pattern = NULL,
+  function(x, col_level = NULL, row_level = NULL,
            pvalue_fun = NULL, ...) {
+
+    # check arguments ----------------------------------------------------------
+    if (is.null(col_level) | (is.null(row_level) & !identical("p.value", col_level))) {
+      stop("Please specify both `col_level=` and `row_level=` arguments")
+    }
 
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
       pvalue_fun %||%
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE))
+      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+      gts_mapper("inline_text(pvalue_fun=)")
 
     # row_level ----------------------------------------------------------------
     # converting row_level to a string
@@ -674,8 +679,7 @@ inline_text.tbl_cross <-
     # evaluating inline_text for tbl_summary -----------------------------------
     expr(
       inline_text.tbl_summary(x, variable = !!variable, level = !!row_level,
-                              column = {{ col_level }}, pattern = !!pattern,
-                              pvalue_fun = !!pvalue_fun)
+                              column = {{ col_level }}, pvalue_fun = !!pvalue_fun)
     ) %>%
       eval()
   }

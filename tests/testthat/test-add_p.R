@@ -1,4 +1,5 @@
 context("test-add_p.tbl_summary")
+testthat::skip_on_cran()
 
 test_that("add_p creates output without error/warning", {
   expect_error(
@@ -45,7 +46,7 @@ test_that("add_p creates output without error/warning", {
   expect_message(
     tbl_summary(trial, by = trt) %>%
       add_p(test = everything() ~ "lme4", group = response),
-    "*"
+    NULL
   )
 })
 
@@ -53,13 +54,13 @@ test_that("add_p creates errors with bad args", {
   expect_error(
     tbl_summary(mtcars, by = am) %>%
       add_p(pvalue_fun = mtcars),
-    "*"
+    NULL
   )
 
   expect_error(
     tbl_summary(trial, by = grade, include = -response) %>%
       add_p(group = response),
-    "*"
+    NULL
   )
 })
 
@@ -105,6 +106,14 @@ test_that("add_p with custom p-value function", {
       tbl_summary(by = trt) %>%
       add_p(test = response ~ my_mcnemar),
     NA
+  )
+})
+
+test_that("Wilcoxon and Kruskal-Wallis p-values match ", {
+  t1 <- trial[c("trt", "age", "marker")] %>% tbl_summary(by = trt) %>% add_p(test = all_continuous() ~ wilcox.test)
+  t2 <- trial[c("trt", "age", "marker")] %>% tbl_summary(by = trt) %>% add_p(test = all_continuous() ~ kruskal.test)
+  expect_true(
+    all(t1$meta_data$p.value - t2$meta_data$p.value < 0.001)
   )
 })
 

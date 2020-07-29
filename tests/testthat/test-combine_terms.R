@@ -1,4 +1,6 @@
 context("test-combine_terms")
+testthat::skip_on_cran()
+
 library(Hmisc)
 mod1 <- lm(age ~ marker + I(marker^2) + stage,
            trial[c("age", "marker", "stage")] %>% na.omit())
@@ -127,7 +129,7 @@ test_that("combine_terms works without error", {
       combine_terms(formula_update = . ~ . -marker -I(marker^2),
                     label = "Marker (non-linear terms)",
                     quiet = FALSE),
-    "*"
+    NULL
   )
 
 })
@@ -137,14 +139,14 @@ test_that("error catching working properly", {
     lm(age ~ marker + stage, trial) %>%
       tbl_regression() %>%
       combine_terms(formula = . ~ . -marker),
-    "*"
+    NULL
   )
 
   expect_error(
     lm(age ~ marker + stage, trial) %>%
       tbl_regression() %>%
       combine_terms(formula = . ~ . -marker, label = c("marker", "marker2")),
-    "*"
+    NULL
   )
 
   # there is no pvalue returned by anova in this model
@@ -152,14 +154,14 @@ test_that("error catching working properly", {
     lm(mpg ~ disp + am * factor(cyl), data = mtcars) %>%
       tbl_regression() %>%
       combine_terms(. ~ . - am),
-    "*"
+    NULL
   )
 
   expect_error(
     glm(am ~ disp + factor(cyl), data = mtcars, family = binomial) %>%
       tbl_regression() %>%
       combine_terms(. ~ . - disp),
-    "*"
+    NULL
   )
 })
 

@@ -1,26 +1,77 @@
 # gtsummary (development version)
 
-* All columns in `as_tibble()` are now styled and converted to character. Previously, styling was applied to most columns, but there were a few that relied on default printing for the type of underlying data.  This was ok to rely on this default behavior for `as_kable()`, but with the introduction of `as_flextable()` we needed to style and format each column to character. Potential to break some code in edge cases. (#493)  
+* Updated the handler arguments that accept functions to allow users to pass anonymous functions using the shortcut tidyverse notation, e.g. `~style_pvalue(.x, digits = 2)`.
 
-* Messaging about statistical methods used has been added for `add_global_p()`, `add_q()`, and `combine_terms()`. (#471)
+* Re-adding `as_hux_table()` after the huxtable 5.0.0 release.
 
-* Bug fix for `bold_p()`. The bold_p() function now works correctly and no longer makes p>0.9 bold when using as_tibble for kable print engine. (#489)
+* The header for the `tbl_stack(group_header=)` column is now integrated into a typical gtsummary framework, meaning that all standard functions can be executed on it, e.g. `modify_header()` for non-gt output.
 
-* Added `include=` argument to `tbl_summary()`. The preferred syntax for p-values with correlated data is now `tbl_summary(..., include = -group_var) %>% add_p(group = group_var)`. The group variable is now no longer removed from the table summary. (#477)
+* Added `style_number()` which controls how numbers are formatted and can be used with theme options. `style_percent()`, `style_pvalue()`, `style_sigfig()`, and `style_ratio()` functions have been updated to use this, and users can now specify how many decimal places to round statistics for categorical variables (#458)
 
-* Bug fix for `as_flextable()`. (#482)
-  - Added a formatting function to all numeric columns to force conversion to character.
-  - Spanning headers were being printed in alphabetical order! Update to preserve the ordering.
+* By default, tables now display commas for thousands mark. This can be changed through `big.mark=` and `decimal.mark=` arguments e.g. `theme_gtsummary_language("fr", big.mark = " ", decimal.mark = ",")` (#557)
 
+* Bug fix `tbl_summary()` when a data frame contained an ordered factor column (#567)
 
-* Introducing `as_huxtable()`! The function converts gtsummary objects to {huxtable} objects. {huxtable} is a great option when using R markdown with Microsoft Word output. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (#469)
+* Updated API for `set_gtsummary_theme()`. Users no longer need call `set_gtsummary_theme(theme_gtsummary_journal())`; rather, they call `theme_gtsummary_journal()`. Each built-in theme now has an argument `set_theme = TRUE`. When `FALSE`, the theme function will invisibly return the named list the theme elements, and the theme will not be set. (#522)
+
+* Bug fix when only categorical summary statistics were requested for continuous variables in `tbl_summary()` and `tbl_svysummary()` (#528)
+
+* Added `tbl_svysummary()` function to summarize complex and weighted survey designs. `tbl_svysummary` is now its own class that works with `add_n()`, `add_p()`,
+`add_q()`, `add_stat_label()`, `inline_text()`, `tbl_merge()` and `tbl_stack()` (#460).
+
+* `add_overall()` has now become a method function, and `add_overall.tbl_summary` and `add_overall.tbl_svysummary` added (#460).
+
+* `add_n()` to allow for the use of the theme element that styles the integers throughout the package.
+
+* Added support for competing risk cumulative incidence estimates to `tbl_survfit()` (#64, #448) 
+
+* Added `type =` argument to `add_global_p()`, and added `include =` and `keep =` arguments to `add_global_p.tbl_uvregression()` (#554)
+
+* Added `show_header_names()` function (#539)
+
+* Bug fix when named list of {gtsummary} objects is passed to `tbl_merge()` (#541)
+
+* Bug fix when for `tbl_uvregression()` when adjustment variables were included in `formula = "{y} ~ {x} + age"`.  The adjustment variables were being printed in the resulting table. (#555)
+
+* Removing `as_flextable()` and replacing with `as_flex_table()` due to conflicts with `flextable::as_flextable` (#462)
+
+* Added a language theme for translating tables into Spanish, French, Portuguese, and German (#511)
+
+# gtsummary 1.3.2
+
+* Now returning all columns from `broom::tidy()` in `.$table_body()` (#516)
+
+* `tbl_stack()` now accepts a named list of gtsummary tables when using the `group_header=` argument (#524)
+
+* `add_p.tbl_summary()` bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (#525)
+
+* Delaying the release of `as_huxtable()` until the next {huxtable} release.
+
+# gtsummary 1.3.1
+
+### New Functions
 
 * Introducing themes in {gtsummary}. Use the function `set_gtsummary_theme()` to set new themes, and review the themes vignette for details on setting and creating personalized themes. (#424)
 
-* Handling of passed custom p-value functions in `add_p.tbl_summary()` has been improved with more careful handling of the environments from which the functions were passed. Other related updates were also made:
-    - Users may pass their custom p-value function as a quoted string or bare.
-    - The basic functions for calculating p-values, such as `t.test()` can now be passed directly e.g. `test = age ~ t.test`. We now perform a check match check for functions passed. If it is passed, we replace it with our internal version that returns the p-value and assigns the test name.
-    - If a user passes a custom function, and it's not the proper form (i.e. a named list return object) AND the function returns a single numeric value, we assume that is the p-value and it's added to the gtsummary table.
+* New functions `modify_footnote()` and `modify_spanning_header()` give users control over table footnotes and spanning headers. (#464)
+
+* Introducing `as_huxtable()`! The function converts gtsummary objects to {huxtable} objects. {huxtable} supports indentation, footnotes, and spanning headers with Word, HTML, and PDF output. (#469)
+
+* New function `add_stat()`! Add a new column of any statistic to a `tbl_summary()` table (#495)
+
+### User-facing Updates
+
+* The following columns in `tbl_summary()` are now available to print for both continuous and categorical variables: total number of observations `{N_obs}`, number of missing observations `{N_miss}`, number of non-missing observations `{N_nomiss}`, proportion of missing observations `{p_miss}`, proportion of non-missing observations `{p_nomiss}`. (#473)
+
+* Improved appearance of default `as_flextable()` output (#499)
+
+* Added `tbl_cross(margin=)` argument to control which margins are shown in the output table. (#444)
+
+* The missing values are now included in the calculation of p-values in `tbl_cross()`.
+
+* Messaging about statistical methods used has been added for `add_global_p()`, `add_q()`, and `combine_terms()`. (#471)
+
+* Added `include=` argument to `tbl_summary()`. The preferred syntax for p-values with correlated data is now `tbl_summary(..., include = -group_var) %>% add_p(group = group_var)`. The group variable is now no longer removed from the table summary. (#477)
 
 * `add_stat_label()` function updated with `location=` and `label=` arguments to change the location of the statistic labels and to modify the text of the labels. `location = "row"` is now the default. (#467)
 
@@ -28,7 +79,32 @@
 
 * Updated handling for interaction terms in `tbl_regression()`. Interaction terms may now be specified in the `show_single_row=` and `label=` arguments. (#451, #452)
 
+### Internal Updates
+
+* Improved error messaging when invalid statistics are requested in `tbl_summary(statistic=)` (#502)
+
+* All columns in `as_tibble()` are now styled and converted to character. Previously, styling was applied to most columns, but there were a few that relied on default printing for the type of underlying data.  This was ok to rely on this default behavior for `as_kable()`, but with the introduction of `as_flextable()` we needed to style and format each column to character. Potential to break some code in edge cases. (#493)
+
+* Handling of passed custom p-value functions in `add_p.tbl_summary()` has been improved with more careful handling of the environments from which the functions were passed. Other related updates were also made:
+    - Users may pass their custom p-value function as a quoted string or bare.
+    - The basic functions for calculating p-values, such as `t.test()` can now be passed directly e.g. `test = age ~ t.test`. We now perform a check match check for functions passed. If it is passed, we replace it with our internal version that returns the p-value and assigns the test name.
+    - If a user passes a custom function, and it's not the proper form (i.e. a named list return object) AND the function returns a single numeric value, we assume that is the p-value and it's added to the gtsummary table.
+
 * Updated the gtsummary core script, `utils-gtsummary_core.R`, to refer to all non-base R functions with the `pkg::` prefix, so other packages that copy the file don't need to import the same functions as {gtsummary} in the NAMESPACE. Now they just need to depend on the same packages. (#454)
+
+### Bug Fixes
+
+* Bug fix for `inline_text.tbl_summary()` when categorical variable contained levels with empty strings. There is still an issue if a user tries to select the empty string, however.
+
+* Fixed bug where some variables in `tbl_cross()` defaulted to dichotomous instead of showing as categorical (#506)
+
+* Bug fix when using a `tbl_summary(by=)` with missing observations in `by=` followed by `add_overall()`
+
+* Bug fix where values `">0.9"` were incorrectly made bold using `bold_p()`. (#489)
+
+* Bug fix for `as_flextable()`. (#482)
+  - Added a formatting function to all numeric columns to force conversion to character.
+  - Spanning headers were being printed in alphabetical order! Update to preserve the ordering.
 
 # gtsummary 1.3.0
 
@@ -167,7 +243,7 @@
 
 # gtsummary 1.2.2
 
-## New Features
+### New Features
 
 * `tbl_summary` objects may be stacked and merged with `tbl_stack()` and `tbl_merge()` (#230, #255)
 
@@ -185,7 +261,7 @@
 
 * New `show_single_row` argument in `tbl_regression()` and `tbl_uvregression()` allows any binary variable to be printed on a single row.  Previous argument `show_yesno` is now deprecated. (#220)
 
-## Documentation 
+### Documentation 
 
 * Added a gallery of tables possible by merging, stacking, and modifying {gtsummary} arguments (#258)
 
@@ -193,7 +269,7 @@
 
 * Added {lifecycle} badges to mark deprecated and experimental functions (#225)
 
-## Other Updates
+### Other Updates
 
 * The `by = ` column in `tbl_summary()` now has missing variables dropped rather than halting with error (#279)
 

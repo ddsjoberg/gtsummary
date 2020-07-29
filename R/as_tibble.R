@@ -1,7 +1,6 @@
 #' Convert gtsummary object to a tibble
 #'
-#' Function converts gtsummary objects tibbles. The formatting stored in
-#' `x$kable_calls` is applied.
+#' Function converts a gtsummary object to a tibble.
 #'
 #' @inheritParams as_kable
 #' @param col_labels Logical argument adding column labels to output tibble.
@@ -14,7 +13,7 @@
 #' @examples
 #' tbl <-
 #'   trial %>%
-#'   dplyr::select(trt, age, grade, response) %>%
+#'   select(trt, age, grade, response) %>%
 #'   tbl_summary(by = trt)
 #'
 #' as_tibble(tbl)
@@ -22,7 +21,7 @@
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
-                                  return_calls = FALSE, exclude = NULL,  ...) {
+                                return_calls = FALSE, exclude = NULL,  ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(
@@ -40,7 +39,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   # creating list of calls to get formatted tibble -----------------------------
   tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels)
 
-  # converting to charcter vector ----------------------------------------------
+  # converting to character vector ---------------------------------------------
   include <- var_input_to_string(data = vctr_2_tibble(names(tibble_calls)),
                                  select_input = !!rlang::enquo(include))
   exclude <- var_input_to_string(data = vctr_2_tibble(names(tibble_calls)),
@@ -79,13 +78,13 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   # ungroup --------------------------------------------------------------------
   group_var <- select(x$table_body, dplyr::group_cols()) %>% names()
   if (length(group_var) > 0) {
+    if (group_var != "groupname_col")
+      stop("`.$table_body` may only be grouped by column 'groupname_col'")
+
     tibble_calls[["ungroup"]] <- list(
-      expr(ungroup()),
-      expr(mutate(...new_group_var... = !!sym(group_var))),
-      expr(group_by(.data$...new_group_var...)),
-      expr(mutate_at(vars(!!sym(group_var)), ~ifelse(dplyr::row_number() == 1, ., NA))),
-      expr(ungroup()),
-      expr(select(-.data$...new_group_var...))
+      expr(mutate(groupname_col =
+                    ifelse(dplyr::row_number() == 1, .data$groupname_col, NA))),
+      expr(ungroup())
     )
   }
 
@@ -134,7 +133,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   )
 
   # converting all cols to character...
-  # this is important for some output types, e.g. as_flextable, so missing don't
+  # this is important for some output types, e.g. as_flex_table, so missing don't
   # display as NA
   cols_to_keep <-
     dplyr::filter(table_header, .data$hide == FALSE) %>%
@@ -145,7 +144,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
 
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
-  tibble_calls[["cols_hide"]] <- expr(dplyr::select(!!!syms(cols_to_keep)))
+  tibble_calls[["cols_hide"]] <- expr(dplyr::select(any_of("groupname_col"), !!!syms(cols_to_keep)))
 
   # cols_label -----------------------------------------------------------------
   if (col_labels) {
