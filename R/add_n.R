@@ -56,12 +56,13 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
     map_dfr(
       function(.x) {
         df_stats <-
+          # selecting all columns with count data
           select(.x, any_of(c("variable", "by", "N_obs", "N_miss", "N_nonmiss", "p_miss",
                               "p_nonmiss", "N_obs_unweighted", "N_miss_unweighted",
                               "N_nonmiss_unweighted", "p_miss_unweighted",
                               "p_nonmiss_unweighted"))) %>%
           distinct()  %>%
-          # summing counts within by group
+          # summing counts within by variable within by levels
           dplyr::group_by_at(c("variable", "by") %>% intersect(names(.))) %>%
           mutate_at(vars(-any_of(c("variable", "by"))), sum) %>%
           select(-any_of("by")) %>%
@@ -74,6 +75,7 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
 
         # returning formatted df -----------------------------------------------
         df_stats %>%
+          # adding these cols for backwards compatibility
           mutate(
             N = .data$N_obs,
             n = .data$N_nonmiss,
@@ -82,6 +84,7 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
           )
       }
     ) %>%
+    # making the row that will be merged into table_body -----------------------
     mutate(
       statistic = glue(.env$statistic) %>% as.character(),
       row_type = "label"
@@ -92,12 +95,8 @@ add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
   x$table_body <-
     left_join(x$table_body, df_stats, by = c("variable", "row_type"))
   if (last == FALSE) {
-    x$table_body <- select(x$table_body, any_of(c("variable", "row_type", "label", "n")), everything())
-  }
-
-  # DEPRECATED specifying column name via `missing` argument -------------------
-  if (identical(missing, TRUE)) {
-    x$table_body <- rename(x$table_body, n_missing = .data$n)
+    x$table_body <-
+      select(x$table_body, any_of(c("variable", "row_type", "label", "n")), everything())
   }
 
   # updating table_header ------------------------------------------------------
