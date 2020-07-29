@@ -379,7 +379,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' @family tbl_survfit tools
 add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               pvalue_fun = style_pvalue,
-                              include = everything(), quiet = FALSE) {
+                              include = everything(), quiet = FALSE, ...) {
   # checking inputs ------------------------------------------------------------
   if (identical(x$meta_data_variable, "..overall..")) {
     stop("`add_p()` may only be applied to `tbl_survfit objects with a stratifying variable.",
@@ -417,7 +417,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
         # getting test information
         test_info <-
           df_add_p_tbl_survfit_tests %>%
-          filter(test_name == test[[variable]]) %>%
+          filter(.data$test_name == test[[variable]]) %>%
           as.list()
         if (length(test_info$test_name) == 0)
           stop("No valid test selected in argument `test=`.")

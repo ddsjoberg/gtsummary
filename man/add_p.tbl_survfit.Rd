@@ -10,7 +10,8 @@
   test.args = NULL,
   pvalue_fun = style_pvalue,
   include = everything(),
-  quiet = FALSE
+  quiet = FALSE,
+  ...
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ functions. Default is \code{everything()}.}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
+
+\item{...}{Not used}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
