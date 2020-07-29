@@ -44,7 +44,11 @@ When \code{FALSE} the named list of theme elements is returned invisibly.}
 \item \code{"ja"} (Japanese)
 \item \code{"pt"} (Portuguese)
 \item \code{"se"} (Swedish)
-}}
+}
+
+If a language is missing a translation for a word or phrase, please feel free
+to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
+with the translated text!}
 
 \item{big.mark}{Character used between every 3 digits to separate thousands.
 Default is \code{","}}
