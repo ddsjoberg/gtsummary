@@ -357,44 +357,59 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' Calculate and add a p-value
 #' @param x Object of class `"tbl_survfit"`
 #' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`
+#' @param test.args Named list of additional arguments passed to method in
+#' `test=`. Does not apply to all test types.
 #' @param footnote_text String of text to add as footnote describing test
-#' @param ... Additional arguments passed to method in `test=`. Does not apply to all test types.
 #' @inheritParams add_p.tbl_summary
 #' @inheritParams combine_terms
 #' @export
 #' @family tbl_survfit tools
-add_p.tbl_survfit <- function(x, test = "logrank",
+add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               footnote_text = NULL, pvalue_fun = style_pvalue,
-                              quiet = FALSE, ...) {
+                              quiet = FALSE) {
   # checking inputs ------------------------------------------------------------
   if (identical(x$meta_data_variable, "..overall..")) {
     stop("`add_p()` may only be applied to `tbl_survfit objects with a stratifying variable.",
          call. = FALSE)
   }
 
-  if (test == "logrank" && is.null(footnote_text))
-    footnote_text = "Log-rank Test"
+  # if (test == "logrank" && is.null(footnote_text))
+  #   footnote_text = "Log-rank Test"
+
+  # if user passed a string of the test name, convert it to a tidy select list
+  if (rlang::is_string(test)) {
+    test <- expr(everything() ~ !!test) %>% eval()
+    if (!is.null(test.args))
+      test.args <- expr(everything() ~ !!test.args) %>% eval()
+  }
+
+  # converting test and test.args to named list --------------------------------
+  test <- tidyselect_to_list(vctr_2_tibble(x$meta_data$variable), test, arg_name = "test")
+  test.args <- tidyselect_to_list(vctr_2_tibble(x$meta_data$variable), test.args, arg_name = "test.args")
 
   # adding pvalue to meta data
   x$meta_data <-
     x$meta_data %>%
     mutate(
-      p.value = purrr::map2_dbl(
-        .data$survfit, seq(1, nrow(.)),
-        function(survfit, row_number) {
+      p.value = purrr::pmap_dbl(
+        list(.data$survfit, .data$variable, seq(1, nrow(.))),
+        function(survfit, variable, row_number) {
+          browser()
+
+          test_arguments <- test.args[[variable]]
           # getting the function call
           pvalue_call <- switch(
-            test,
-            "logrank" = expr(add_p_tbl_survfit_survfit(x, quiet, rho = 0)),
-            "survdiff" = expr(add_p_tbl_survfit_survfit(x, quiet, ...))
+            test[[variable]],
+            "logrank" = expr(add_p_tbl_survfit_survdiff(x, quiet, rho = 0)),
+            "survdiff" = expr(add_p_tbl_survfit_survdiff(x, quiet, !!!test_arguments))
           ) %||%
             stop("No valid test selected in argument `test=`.")
 
           # evaluating code, and returning p.value
-          if (row_number == 1) ret <- eval(pvalue_call)
-          else ret <- suppressMessages(eval(pvalue_call))
-
-          ret
+          # if (row_number == 1) ret <- eval(pvalue_call)
+          # else ret <- suppressMessages(eval(pvalue_call))
+          #
+          # ret
         }
       )
     )
@@ -411,11 +426,11 @@ add_p.tbl_survfit <- function(x, test = "logrank",
   x$table_header <- table_header_fmt_fun(x$table_header, p.value = pvalue_fun)
   x <- modify_header_internal(x, p.value = "**p-value**")
 
-  # adding footnote ------------------------------------------------------------
-  if (!is.null(footnote_text)) {
-    x <- modify_footnote(x, list(p.value = footnote_text))
-    x$call_list$modify_footnote <- NULL
-  }
+  # # adding footnote ------------------------------------------------------------
+  # if (!is.null(footnote_text)) {
+  #   x <- modify_footnote(x, list(p.value = footnote_text))
+  #   x$call_list$modify_footnote <- NULL
+  # }
 
   # call add_p call and returning final object ---------------------------------
   x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
@@ -423,7 +438,7 @@ add_p.tbl_survfit <- function(x, test = "logrank",
   x
 }
 
-add_p_tbl_survfit_survfit <- function(x, quiet, ...) {
+add_p_tbl_survfit_survdiff <- function(x, quiet, ...) {
   #extracting survfit call
   survfit_call <- x$inputs$x[[1]]$call %>% as.list()
   # index of formula and data
