@@ -35,8 +35,6 @@ functions. Default is \code{everything()}.}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
-
-\item{footnote_text}{String of text to add as footnote describing test}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
