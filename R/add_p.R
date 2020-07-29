@@ -356,25 +356,43 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Calculate and add a p-value
 #' @param x Object of class `"tbl_survfit"`
-#' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`
+#' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`.
+#' See details below
 #' @param test.args Named list of additional arguments passed to method in
 #' `test=`. Does not apply to all test types.
-#' @param footnote_text String of text to add as footnote describing test
 #' @inheritParams add_p.tbl_summary
 #' @inheritParams combine_terms
+#'
+#' @section test argument:
+#' The most common way to specify `test=` is by using a single string indicating
+#' the test name. However, if you need to specify different tests within the same
+#' table, the input in flexible using the list notation common throughout the
+#' gtsummary package. For example, the following code would call the log-rank test,
+#' and a second test of the *G-rho* family.
+#' ```r
+#' ... %>%
+#'   add_p(test = list(trt ~ "logrank", grade ~ "survdiff"),
+#'         test.args = grade ~ list(rho = 0.5))
+#' ```
+#'
 #' @export
 #' @family tbl_survfit tools
 add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
-                              footnote_text = NULL, pvalue_fun = style_pvalue,
-                              quiet = FALSE) {
+                              pvalue_fun = style_pvalue,
+                              include = everything(), quiet = FALSE) {
   # checking inputs ------------------------------------------------------------
   if (identical(x$meta_data_variable, "..overall..")) {
     stop("`add_p()` may only be applied to `tbl_survfit objects with a stratifying variable.",
          call. = FALSE)
   }
+  pvalue_fun <-
+    pvalue_fun %||%
+    get_theme_element("pkgwide-fn:pvalue_fun") %||%
+    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    gts_mapper("add_p(pvalue_fun=)")
 
-  # if (test == "logrank" && is.null(footnote_text))
-  #   footnote_text = "Log-rank Test"
+  include <- select(vctr_2_tibble(x$meta_data$variable), {{ include }}) %>% names()
+
 
   # if user passed a string of the test name, convert it to a tidy select list
   if (rlang::is_string(test)) {
@@ -387,36 +405,56 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   test <- tidyselect_to_list(vctr_2_tibble(x$meta_data$variable), test, arg_name = "test")
   test.args <- tidyselect_to_list(vctr_2_tibble(x$meta_data$variable), test.args, arg_name = "test.args")
 
-  # adding pvalue to meta data
-  x$meta_data <-
+  # adding pvalue to meta data -------------------------------------------------
+  meta_data <-
     x$meta_data %>%
-    mutate(
-      p.value = purrr::pmap_dbl(
-        list(.data$survfit, .data$variable, seq(1, nrow(.))),
-        function(survfit, variable, row_number) {
-          browser()
+    filter(.data$stratified == TRUE & .data$variable %in% include)
 
-          test_arguments <- test.args[[variable]]
-          # getting the function call
-          pvalue_call <- switch(
-            test[[variable]],
-            "logrank" = expr(add_p_tbl_survfit_survdiff(x, quiet, rho = 0)),
-            "survdiff" = expr(add_p_tbl_survfit_survdiff(x, quiet, !!!test_arguments))
-          ) %||%
-            stop("No valid test selected in argument `test=`.")
+  meta_data$p.value <-
+    purrr::pmap_dbl(
+      list(meta_data$survfit, meta_data$variable, seq_len(nrow(meta_data))),
+      function(survfit, variable, row_number) {
+        # getting test information
+        test_info <-
+          df_add_p_tbl_survfit_tests %>%
+          filter(test_name == test[[variable]]) %>%
+          as.list()
+        if (length(test_info$test_name) == 0)
+          stop("No valid test selected in argument `test=`.")
 
-          # evaluating code, and returning p.value
-          # if (row_number == 1) ret <- eval(pvalue_call)
-          # else ret <- suppressMessages(eval(pvalue_call))
-          #
-          # ret
-        }
-      )
+        # getting the function call
+        pvalue_call <-
+          rlang::call2(purrr::pluck(test_info , "fn", 1, 1), x,
+                       quiet = quiet, !!!test.args[[variable]])
+
+        # evaluating code, and returning p.value
+        if (row_number == 1) ret <- eval(pvalue_call)
+        else ret <- suppressMessages(eval(pvalue_call))
+
+        ret
+      }
+    )
+
+  meta_data$test_name <-
+    map_chr(
+      meta_data$variable,
+      function(.x) {
+        df_add_p_tbl_survfit_tests %>%
+          filter(.data$test_name == test[[.x]]) %>%
+          pull(.data$footnote)
+      }
+    )
+
+  x$meta_data <-
+    left_join(
+      x$meta_data,
+      meta_data %>% select(.data$variable, .data$p.value, .data$test_name),
+      by = "variable"
     )
 
   # adding p-value to table_body -----------------------------------------------
   x$table_body <-
-    x$meta_data %>%
+    meta_data %>%
     select(.data$variable, .data$p.value) %>%
     mutate(row_type = "label") %>%
     {left_join(x$table_body, ., by = c("variable", "row_type"))}
@@ -426,11 +464,14 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   x$table_header <- table_header_fmt_fun(x$table_header, p.value = pvalue_fun)
   x <- modify_header_internal(x, p.value = "**p-value**")
 
-  # # adding footnote ------------------------------------------------------------
-  # if (!is.null(footnote_text)) {
-  #   x <- modify_footnote(x, list(p.value = footnote_text))
-  #   x$call_list$modify_footnote <- NULL
-  # }
+  # adding footnote ------------------------------------------------------------
+  if (all(!is.na(meta_data$test_name))) {
+    footnote_list <-
+      unique(meta_data$test_name) %>%
+      paste(sep = "; ")
+
+    x <- modify_footnote(x, update = list(p.value = footnote_list))
+  }
 
   # call add_p call and returning final object ---------------------------------
   x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
@@ -465,6 +506,12 @@ add_p_tbl_survfit_survdiff <- function(x, quiet, ...) {
   stats::pchisq(survdiff_result$chisq, length(survdiff_result$n) - 1, lower.tail = FALSE)
 }
 
+df_add_p_tbl_survfit_tests <-
+  tibble::tribble(
+    ~test_name, ~fn, ~footnote, ~additional_args,
+    "logrank", list(add_p_tbl_survfit_survdiff), "Log-rank test", FALSE,
+    "survdiff", list(add_p_tbl_survfit_survdiff), NA_character_, TRUE
+  )
 
 #' Adds p-values to svysummary tables
 #'

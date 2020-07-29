@@ -7,18 +7,20 @@
 \method{add_p}{tbl_survfit}(
   x,
   test = "logrank",
-  footnote_text = NULL,
+  test.args = NULL,
   pvalue_fun = style_pvalue,
-  quiet = FALSE,
-  ...
+  include = everything(),
+  quiet = FALSE
 )
 }
 \arguments{
 \item{x}{Object of class \code{"tbl_survfit"}}
 
-\item{test}{string indicating test to use. Must be one of \code{"logrank"}, \code{"survdiff"}}
+\item{test}{string indicating test to use. Must be one of \code{"logrank"}, \code{"survdiff"}.
+See details below}
 
-\item{footnote_text}{String of text to add as footnote describing test}
+\item{test.args}{Named list of additional arguments passed to method in
+\verb{test=}. Does not apply to all test types.}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.
@@ -27,15 +29,31 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
+\item{include}{Variables to include in output. Input may be a vector of
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is \code{everything()}.}
+
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
 
-\item{...}{Additional arguments passed to method in \verb{test=}. Does not apply to all test types.}
+\item{footnote_text}{String of text to add as footnote describing test}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Calculate and add a p-value
 }
+\section{test argument}{
+
+The most common way to specify \verb{test=} is by using a single string indicating
+the test name. However, if you need to specify different tests within the same
+table, the input in flexible using the list notation common throughout the
+gtsummary package. For example, the following code would call the log-rank test,
+and a second test of the \emph{G-rho} family.\if{html}{\out{<div class="r">}}\preformatted{... \%>\%
+  add_p(test = list(trt ~ "logrank", grade ~ "survdiff"),
+        test.args = grade ~ list(rho = 0.5))
+}\if{html}{\out{</div>}}
+}
+
 \seealso{
 Other tbl_survfit tools: 
 \code{\link{add_n.tbl_survfit}()},
