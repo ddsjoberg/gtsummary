@@ -46,13 +46,13 @@ The \code{as_huxtable()} takes the data frame that will be printed, converts
 it to a huxtable and formats the table with the following huxtable functions:
 \enumerate{
 \item \code{\link[huxtable:huxtable]{huxtable::huxtable()}}
-\item \code{\link[huxtable:insert_row]{huxtable::insert_row()}} to insert header rows
+\item \code{\link[huxtable:insert_column]{huxtable::insert_row()}} to insert header rows
 \item \code{\link[huxtable:align]{huxtable::align()}} to set column alignment
-\item \code{\link[huxtable:set_left_padding]{huxtable::set_left_padding()}} to indent variable levels
+\item \code{\link[huxtable:padding]{huxtable::set_left_padding()}} to indent variable levels
 \item \code{\link[huxtable:add_footnote]{huxtable::add_footnote()}} to add table footnotes and source notes
-\item \code{\link[huxtable:set_bold]{huxtable::set_bold()}} to bold cells
-\item \code{\link[huxtable:set_italic]{huxtable::set_italic()}} to italicize cells
-\item \code{\link[huxtable:set_na_string]{huxtable::set_na_string()}} to use an em-dash for missing numbers
+\item \code{\link[huxtable:bold]{huxtable::set_bold()}} to bold cells
+\item \code{\link[huxtable:bold]{huxtable::set_italic()}} to italicize cells
+\item \code{\link[huxtable:na_string]{huxtable::set_na_string()}} to use an em-dash for missing numbers
 }
 
 Any one of these commands may be omitted using the \verb{include=} argument.

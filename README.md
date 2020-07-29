@@ -96,7 +96,6 @@ remotes::install_github("ddsjoberg/gtsummary")
 Use
 [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 to summarize a data frame.
-[Example](https://github.com/ddsjoberg/gtsummary/blob/master/data-raw/misc_files/tbl_summary_demo1.gif)
 
 <img src = "https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_summary_demo1.gif" alt = "animated" width = "100%">
 
