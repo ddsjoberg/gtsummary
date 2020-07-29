@@ -144,10 +144,12 @@ theme_gtsummary_printer <- function(
 #' - `"en"` (English)
 #' - `"es"` (Spanish)
 #' - `"fr"` (French)
+#' - `"ja"` (Japanese)
 #' - `"pt"` (Portuguese)
+#' - `"se"` (Swedish)
 #' @inheritParams style_number
 #' @export
-theme_gtsummary_language <- function(language = c("es", "fr", "de", "en", "pt"),
+theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "ja", "pt", "se"),
                                      big.mark = NULL, decimal.mark = NULL, set_theme = TRUE) {
 
   language <- match.arg(language)
