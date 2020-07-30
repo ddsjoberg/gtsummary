@@ -97,7 +97,7 @@ Use
 [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 to summarize a data frame.
 
-<img src = "man/figures/tbl_summary_demo1.gif" alt = "animated" width = "100%">
+<img src = "https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_summary_demo1.gif" alt = "animated" width = "100%">
 
 Example basic table:
 
@@ -208,6 +208,7 @@ thank you to all contributors\!
 [@dax44](https://github.com/dax44),
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@DeFilippis](https://github.com/DeFilippis),
+[@denis-or](https://github.com/denis-or),
 [@emilyvertosick](https://github.com/emilyvertosick),
 [@gorkang](https://github.com/gorkang),
 [@GuiMarthe](https://github.com/GuiMarthe),
@@ -219,6 +220,7 @@ thank you to all contributors\!
 [@JesseRop](https://github.com/JesseRop),
 [@jflynn264](https://github.com/jflynn264),
 [@joelgautschi](https://github.com/joelgautschi),
+[@juseer](https://github.com/juseer),
 [@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
 [@khizzr](https://github.com/khizzr),
@@ -227,6 +229,7 @@ thank you to all contributors\!
 [@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
 [@matthieu-faron](https://github.com/matthieu-faron),
+[@MelissaAssel](https://github.com/MelissaAssel),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@moleps](https://github.com/moleps),
 [@MyKo101](https://github.com/MyKo101),
