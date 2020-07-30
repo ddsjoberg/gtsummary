@@ -20,6 +20,9 @@
 #' 1. [flextable::footnote()] to add table footnotes and source notes
 #' 1. [flextable::bold()] to bold cells in data frame
 #' 1. [flextable::italic()] to italicize cells in data frame
+#' 1. [flextable::border()] to set all border widths to 1
+#' 1. [flextable::padding()] to set consistent header padding
+#' 1. [flextable::valign()] to ensure label column is top-left justified
 #'
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
@@ -156,14 +159,6 @@ table_header_to_flextable_calls <- function(x, ...) {
           values = !!df_header$spanning_header,
           colwidths = !!df_header$width
         )
-      ),
-      expr(
-        # add border above that matches border below
-        flextable::border(
-          i = 1,
-          border.top = officer::fp_border(width=2),
-          part = "header"
-        )
       )
     )
   }
@@ -292,6 +287,47 @@ table_header_to_flextable_calls <- function(x, ...) {
         flextable::footnote(value = flextable::as_paragraph(!!x$list_output$source_note), ref_symbols = "")
       )
   }
+
+  # border ---------------------------------------------------------------------
+  flextable_calls[["border"]] <-
+    list(
+      # all header rows get top and bottom borders
+      expr(
+        flextable::border(
+          border.top = officer::fp_border(width = 1),
+          border.bottom = officer::fp_border(width = 1),
+          part = "header"
+        )
+      ),
+      # last row of table body get a row on bottom
+      expr(
+        flextable::border(
+          i = !!nrow(x$table_body),
+          border.bottom = officer::fp_border(width = 1),
+          part = "body"
+        )
+      )
+    )
+
+  # padding for header ---------------------------------------------------------
+  # setting all header rows to the same padding
+  flextable_calls[["padding_header"]] <-
+    list(
+      expr(flextable::padding(
+        padding.bottom = 2,
+        padding.top = 2,
+        part = "header"
+      ))
+    )
+
+  # valign ---------------------------------------------------------------------
+  # when there are line breaks within cells, ensuring variable label is top-left
+  flextable_calls[["valign"]] <-
+    list(
+      expr(
+        flextable::valign(j = ~label, valign = "top", part = "body")
+      )
+    )
 
   flextable_calls
 }
