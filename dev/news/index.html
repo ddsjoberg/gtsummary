@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9016</span>
       </span>
     </div>
 
@@ -176,6 +176,11 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added Japanese and Swedish language translations to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_language()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/588'>#588</a>)</p></li>
+<li><p>Removed large *.gif files out of the package to reduce build size (<a href='https://github.com/ddsjoberg/gtsummary/issues/485'>#485</a>)</p></li>
+<li><p>Updated the handler arguments that accept functions to allow users to pass anonymous functions using the shortcut tidyverse notation, e.g. <code>~style_pvalue(.x, digits = 2)</code>.</p></li>
+<li><p>Re-adding <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> after the huxtable 5.0.0 release.</p></li>
+<li><p>The header for the <code><a href="../reference/tbl_stack.html">tbl_stack(group_header=)</a></code> column is now integrated into a typical gtsummary framework, meaning that all standard functions can be executed on it, e.g. <code><a href="../reference/modify.html">modify_header()</a></code> for non-gt output.</p></li>
 <li><p>Added <code><a href="../reference/style_number.html">style_number()</a></code> which controls how numbers are formatted and can be used with theme options. <code><a href="../reference/style_percent.html">style_percent()</a></code>, <code><a href="../reference/style_pvalue.html">style_pvalue()</a></code>, <code><a href="../reference/style_sigfig.html">style_sigfig()</a></code>, and <code><a href="../reference/style_ratio.html">style_ratio()</a></code> functions have been updated to use this, and users can now specify how many decimal places to round statistics for categorical variables (<a href='https://github.com/ddsjoberg/gtsummary/issues/458'>#458</a>)</p></li>
 <li><p>By default, tables now display commas for thousands mark. This can be changed through <code>big.mark=</code> and <code>decimal.mark=</code> arguments e.g. <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_language("fr", big.mark = " ", decimal.mark = ",")</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/557'>#557</a>)</p></li>
 <li><p>Bug fix <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when a data frame contained an ordered factor column (<a href='https://github.com/ddsjoberg/gtsummary/issues/567'>#567</a>)</p></li>
