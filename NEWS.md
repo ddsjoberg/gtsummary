@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Removed large *.gif files out of the package to reduce build size (#485)
+
 * Updated the handler arguments that accept functions to allow users to pass anonymous functions using the shortcut tidyverse notation, e.g. `~style_pvalue(.x, digits = 2)`.
 
 * Re-adding `as_hux_table()` after the huxtable 5.0.0 release.
