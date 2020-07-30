@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Fixed bug where source note was not made smaller font size with compact theme when table was printed with flextable (#584)
+
+* Formatting improvement for flextables: top-left justify the label column when line breaks occur within cells, and reduce thickness of borders in table (#593)
+
+* Updated the variable labels for age and marker in the trial dataset. 
+
 * Added Japanese and Swedish language translations to `theme_gtsummary_language()` (#588)
 
 * Removed large *.gif files out of the package to reduce build size (#485)

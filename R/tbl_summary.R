@@ -11,7 +11,7 @@
 #' variable (e.g. `by = trt`). If `NULL`, summary statistics
 #' are calculated using all observations.
 #' @param label List of formulas specifying variables labels,
-#' e.g. `list(age ~ "Age, yrs", stage ~ "Path T Stage")`.  If a
+#' e.g. `list(age ~ "Age", stage ~ "Path T Stage")`.  If a
 #' variable's label is not specified here, the label attribute
 #' (`attr(data$age, "label")`) is used.  If
 #' attribute label is `NULL`, the variable name will be used.

@@ -32,7 +32,7 @@
 #' @param exponentiate Logical indicating whether to exponentiate the
 #' coefficient estimates. Default is `FALSE`.
 #' @param label List of formulas specifying variables labels,
-#' e.g. `list(age ~ "Age, yrs", stage ~ "Path T Stage")`
+#' e.g. `list(age ~ "Age", stage ~ "Path T Stage")`
 #' @param include Variables to include in output. Input may be a vector of
 #' quoted variable names, unquoted variable names, or tidyselect select helper
 #' functions. Default is `everything()`.

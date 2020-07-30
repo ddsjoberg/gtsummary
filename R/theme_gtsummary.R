@@ -97,7 +97,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
       ),
       # compact flextables
       "as_flex_table-lst:addl_cmds" = list(
-        footnote = list(
+        valign = list(
           rlang::expr(flextable::fontsize(size = 8, part = "all")),
           rlang::expr(flextable::padding(padding.top = 0, part = "all")),
           rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))

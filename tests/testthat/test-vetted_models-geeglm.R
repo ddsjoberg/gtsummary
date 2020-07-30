@@ -38,7 +38,7 @@ test_that("vetted_models geeglm()", {
   #       - without errors, warnings, messages
   expect_error(
     tbl_geeglm_lin <- tbl_regression(mod_geeglm_lin,
-                                     label = list(age ~ "Age, yrs",
+                                     label = list(age ~ "Age",
                                                   trt ~ "Chemotherapy Treatment",
                                                   grade ~ "Grade")), NA
   )
@@ -47,7 +47,7 @@ test_that("vetted_models geeglm()", {
   )
   expect_error(
     tbl_geeglm_int <- tbl_regression(mod_geeglm_int,
-                                     label = list(age ~ "Age, yrs",
+                                     label = list(age ~ "Age",
                                                   trt ~ "Chemotherapy Treatment",
                                                   grade ~ "Grade")), NA
   )
@@ -56,7 +56,7 @@ test_that("vetted_models geeglm()", {
   )
   expect_error(
     tbl_geeglm_log <- tbl_regression(mod_geeglm_log,
-                                     label = list(age ~ "Age, yrs",
+                                     label = list(age ~ "Age",
                                                   trt ~ "Chemotherapy Treatment",
                                                   grade ~ "Grade")), NA
   )
@@ -82,19 +82,19 @@ test_that("vetted_models geeglm()", {
     tbl_geeglm_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade")
   )
   expect_equivalent(
     tbl_geeglm_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
   expect_equivalent(
     tbl_geeglm_log$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade")
   )
   # 2.  If applicable, runs as expected with logit and log link
   expect_equivalent(
