@@ -20,6 +20,7 @@ tbl_survfit(x, ...)
   missing = "—",
   conf.level = 0.95,
   reverse = FALSE,
+  quiet = NULL,
   failure = NULL,
   ...
 )
@@ -38,6 +39,7 @@ tbl_survfit(x, ...)
   reverse = FALSE,
   failure = NULL,
   include = everything(),
+  quiet = NULL,
   ...
 )
 
@@ -52,7 +54,7 @@ tbl_survfit(x, ...)
   missing = "—",
   conf.level = 0.95,
   reverse = FALSE,
-  failure = NULL,
+  quiet = NULL,
   ...
 )
 }

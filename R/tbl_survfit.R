@@ -103,7 +103,15 @@ tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
                                 statistic = "{estimate} ({conf.low}, {conf.high})",
                                 label = NULL, label_header = NULL, estimate_fun = NULL,
                                 missing = "\U2014", conf.level = 0.95, reverse = FALSE,
-                                failure = NULL, ...) {
+                                quiet = NULL, failure = NULL, ...) {
+  # deprecation notes ----------------------------------------------------------
+  if (!is.null(failure)) {
+    lifecycle::deprecate_warn(
+      "1.3.1", "gtsummary::tbl_survfit(failure = )", "tbl_survfit(reverse = )")
+    reverse <- failure
+    rm(failure)
+  }
+
   # converting inputs to be compatible with the list method
   x <- list(x)
   if (rlang::is_string(label)) label <- expr(everything() ~ !!label) %>% eval()
@@ -118,7 +126,7 @@ tbl_survfit.data.frame <- function(x, y, times = NULL, probs = NULL,
                                    statistic = "{estimate} ({conf.low}, {conf.high})",
                                    label = NULL, label_header = NULL, estimate_fun = NULL,
                                    missing = "\U2014", conf.level = 0.95, reverse = FALSE,
-                                   failure = NULL, include = everything(), ...) {
+                                   failure = NULL, include = everything(), quiet = NULL, ...) {
   include <- dplyr::select(x, {{include}}) %>% names()
 
   # checking inputs ------------------------------------------------------------
@@ -180,20 +188,14 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
                              statistic = "{estimate} ({conf.low}, {conf.high})",
                              label = NULL, label_header = NULL, estimate_fun = NULL,
                              missing = "\U2014", conf.level = 0.95, reverse = FALSE,
-                             failure = NULL, ...) {
-  # deprecation notes ----------------------------------------------------------
-    if (!is.null(failure)) {
-      lifecycle::deprecate_warn(
-        "1.3.1", "gtsummary::tbl_survfit(failure = )", "tbl_survfit(reverse = )")
-      reverse <- failure
-      rm(failure)
-    }
-
+                             quiet = NULL, ...) {
   # setting defaults -----------------------------------------------------------
   statistic <-
     statistic %||%
     get_theme_element("tbl_survfit-arg:statistic") %||%
     "{estimate} ({conf.low}, {conf.high})"
+
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # input checks ---------------------------------------------------------------
   if (purrr::every(x, ~!inherits(.x, "survfit"))) {
@@ -295,10 +297,11 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
           "times" = survfit_time(.x, variable = .y, times = inputs$times,
                                  label_header = inputs$label_header,
                                  conf.level = inputs$conf.level,
-                                 reverse = inputs$reverse),
+                                 reverse = inputs$reverse, quiet = inputs$quiet),
           "probs" = survfit_prob(.x, variable = .y, probs = inputs$probs,
                                  label_header = inputs$label_header,
-                                 conf.level = inputs$conf.level)
+                                 conf.level = inputs$conf.level,
+                                 quiet = inputs$quiet)
         )
       ),
       # table_body -----------------------------------------------------------------
@@ -337,7 +340,7 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
 }
 
 # calculates and prepares survival quantile estimates for tbl
-survfit_prob <- function(x, variable, probs, label_header, conf.level) {
+survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet) {
 
   strata <- intersect("strata", names(broom::tidy(x, conf.level = conf.level))) %>%
     list() %>% compact()
@@ -374,7 +377,7 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level) {
 }
 
 # calculates and prepares n-year survival estimates for tbl
-survfit_time <- function(x, variable, times, label_header, conf.level, reverse) {
+survfit_time <- function(x, variable, times, label_header, conf.level, reverse, quiet) {
   tidy <- broom::tidy(x, conf.level = conf.level)
   strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
   multi_state <- inherits(x, "survfitms")
@@ -384,9 +387,8 @@ survfit_time <- function(x, variable, times, label_header, conf.level, reverse) 
       setdiff("(s0)") %>%
       purrr::pluck(1)
 
-    rlang::inform(glue(
-      "Multi-state model detected. Showing probabilities into state '{state}'"
-    ))
+    if (identical(quiet, FALSE)) rlang::inform(glue(
+      "Multi-state model detected. Showing probabilities into state '{state}'"))
 
     tidy <- dplyr::filter(tidy, .data$state == .env$state)
   }
