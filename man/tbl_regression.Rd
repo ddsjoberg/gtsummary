@@ -23,7 +23,7 @@ tbl_regression(
 \item{x}{Regression model object}
 
 \item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}}
+e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}}
 
 \item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}

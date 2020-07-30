@@ -59,13 +59,13 @@ test_that("vetted_models coxph()", {
     tbl_coxph_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade")
   )
   expect_equivalent(
     tbl_coxph_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
   # 2.  If applicable, runs as expected with logit and log link
   expect_equivalent(
