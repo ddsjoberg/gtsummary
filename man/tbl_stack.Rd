@@ -99,6 +99,7 @@ Other tbl_svysummary tools:
 \code{\link{add_p.tbl_svysummary}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_svysummary}()}
 
@@ -122,11 +123,20 @@ Other tbl_uvregression tools:
 \code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_uvregression}()}
+
+Other tbl_survfit tools: 
+\code{\link{add_n.tbl_survfit}()},
+\code{\link{add_nevent.tbl_survfit}()},
+\code{\link{add_p.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_survfit}()}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
 \concept{tbl_summary tools}
+\concept{tbl_survfit tools}
 \concept{tbl_svysummary tools}
 \concept{tbl_uvregression tools}

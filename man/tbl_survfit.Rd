@@ -92,6 +92,9 @@ survival times}
 \item{reverse}{Flip the probability reported, i.e. \code{1 - estimate}.
 Default is \code{FALSE}.  Does not apply to survival quantile requests}
 
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
+
 \item{failure}{DEPRECATED. Use \verb{reverse=} instead.}
 
 \item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
@@ -170,7 +173,10 @@ survfit_cr_ex4 <-
 Other tbl_survfit tools: 
 \code{\link{add_n.tbl_survfit}()},
 \code{\link{add_nevent.tbl_survfit}()},
-\code{\link{add_p.tbl_survfit}()}
+\code{\link{add_p.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg

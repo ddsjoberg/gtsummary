@@ -59,6 +59,9 @@ and a second test of the \emph{G-rho} family.\if{html}{\out{<div class="r">}}\pr
 Other tbl_survfit tools: 
 \code{\link{add_n.tbl_survfit}()},
 \code{\link{add_nevent.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
 \code{\link{tbl_survfit}()}
 }
 \concept{tbl_survfit tools}

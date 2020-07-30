@@ -29,7 +29,7 @@
 #' @param include Variable to include as stratifying variables.
 #' @param failure DEPRECATED. Use `reverse=` instead.
 #' @param ... Not used
-#'
+#' @inheritParams add_global_p.tbl_regression
 #' @export
 #' @rdname tbl_survfit
 #' @family tbl_survfit tools

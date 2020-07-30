@@ -28,9 +28,12 @@
 #' `update=` argument. They accomplish the same goal of updating column headers.
 #' @param text_interpret String indicates whether text will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
+#' #' @inheritParams add_global_p.tbl_regression
 #' @family tbl_summary tools
+#' @family tbl_svysummary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
+#' @family tbl_survfit tools
 #' @author Daniel D. Sjoberg
 #' @examples
 #' # create summary table
@@ -180,7 +183,10 @@ modify_spanning_header <- function(x, update) {
 
 #' @name modify
 #' @export
-show_header_names <- function(x = NULL) {
+show_header_names <- function(x = NULL, quiet = NULL) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # checking input -------------------------------------------------------------
   if (!inherits(x, "gtsummary"))
     stop("Pass a 'gtsummary' object in `x=` to print current column names and headers.")
@@ -189,17 +195,19 @@ show_header_names <- function(x = NULL) {
     filter(.data$hide == FALSE) %>%
     select(.data$column, .data$label)
 
-  knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
-    print()
+  if (identical(quiet, FALSE)) {
+    knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
+      print()
 
-  cat("\n")
-  usethis::ui_info("As a usage guide, the code below re-creates the current column headers.")
-  block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
-    pull(.data$formula) %>%
-    paste0("", collapse = ",\n") %>%
-    {glue("modify_header(update = list(\n{.}\n))")}
+    cat("\n")
+    usethis::ui_info("As a usage guide, the code below re-creates the current column headers.")
+    block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
+      pull(.data$formula) %>%
+      paste0("", collapse = ",\n") %>%
+      {glue("modify_header(update = list(\n{.}\n))")}
 
-  usethis::ui_code_block(block)
+    usethis::ui_code_block(block)
+  }
 
   return(invisible(df_cols))
 }

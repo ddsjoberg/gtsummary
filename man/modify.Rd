@@ -20,7 +20,7 @@ modify_footnote(x, update, abbreviation = FALSE)
 
 modify_spanning_header(x, update)
 
-show_header_names(x = NULL)
+show_header_names(x = NULL, quiet = NULL)
 }
 \arguments{
 \item{x}{a gtsummary object}
@@ -45,7 +45,8 @@ Syntax follows \code{\link[glue:glue]{glue::glue()}},
 e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"}.}
 
 \item{text_interpret}{String indicates whether text will be interpreted with
-\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.
+#' @inheritParams add_global_p.tbl_regression}
 
 \item{...}{Specify a column and updated column label,
 e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an alternative to the
@@ -127,6 +128,16 @@ Other tbl_summary tools:
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
 
+Other tbl_svysummary tools: 
+\code{\link{add_n.tbl_summary}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_svysummary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_svysummary}()}
+
 Other tbl_regression tools: 
 \code{\link{add_global_p.tbl_regression}()},
 \code{\link{add_nevent.tbl_regression}()},
@@ -147,10 +158,20 @@ Other tbl_uvregression tools:
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_uvregression}()}
+
+Other tbl_survfit tools: 
+\code{\link{add_n.tbl_survfit}()},
+\code{\link{add_nevent.tbl_survfit}()},
+\code{\link{add_p.tbl_survfit}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_survfit}()}
 }
 \author{
 Daniel D. Sjoberg
 }
 \concept{tbl_regression tools}
 \concept{tbl_summary tools}
+\concept{tbl_survfit tools}
+\concept{tbl_svysummary tools}
 \concept{tbl_uvregression tools}
