@@ -299,7 +299,7 @@ table_header_to_flextable_calls <- function(x, ...) {
           part = "header"
         )
       ),
-      # last row of table body get a row on bottom
+      # last row of table body gets bottom border
       expr(
         flextable::border(
           i = !!nrow(x$table_body),
