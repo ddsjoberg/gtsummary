@@ -463,8 +463,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all sepcifed types are continuous, categorical, or dichotomous
     if (inherits(type, "formula")) type <- list(type)
-    if (!every(type, ~ eval(rlang::f_rhs(.x)) %in% c("continuous", "categorical", "dichotomous")) |
-        !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(type, ~ eval_rhs(.x) %in% c("continuous", "categorical", "dichotomous")) |
+        !every(type, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'type'  argument must of one and only one of ",
         "\"continuous\", \"categorical\", or \"dichotomous\""
@@ -663,10 +663,6 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 #   stat_display = NULL, digits = NULL, pvalue_fun = NULL
 # )
 
-# simple function to evaluate the RHS of a formula in the formula's environment
-eval_rhs <- function(x) {
-  rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
-}
 
 # stat_label_match -------------------------------------------------------------
 # provide a vector of stat_display and get labels back i.e. {mean} ({sd}) gives Mean (SD)
