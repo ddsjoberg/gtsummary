@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added Japanese and Swedish language translations to `theme_gtsummary_language()` (#588)
+
 * Removed large *.gif files out of the package to reduce build size (#485)
 
 * Updated the handler arguments that accept functions to allow users to pass anonymous functions using the shortcut tidyverse notation, e.g. `~style_pvalue(.x, digits = 2)`.
