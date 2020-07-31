@@ -31,8 +31,8 @@ trial <-
 summary(trial)
 
 attr(trial$trt, "label") <- "Chemotherapy Treatment"
-attr(trial$age, "label") <- "Age, yrs"
-attr(trial$marker, "label") <- "Marker Level, ng/mL"
+attr(trial$age, "label") <- "Age"
+attr(trial$marker, "label") <- "Marker Level (ng/mL)"
 attr(trial$stage, "label") <- "T Stage"
 attr(trial$grade, "label") <- "Grade"
 attr(trial$response, "label") <- "Tumor Response"

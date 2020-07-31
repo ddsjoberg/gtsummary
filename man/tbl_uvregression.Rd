@@ -52,7 +52,7 @@ random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gea
 coefficient estimates. Default is \code{FALSE}.}
 
 \item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}}
+e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}}
 
 \item{include}{Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper

@@ -59,6 +59,6 @@ test_that("as_tibble works with bold_p()", {
 
   expect_equal(
     as_tibble(t2, col_labels = FALSE)$label,
-    c("__Age, yrs__", "__Grade__", "_I_", "_II_", "_III_")
+    c("__Age__", "__Grade__", "_I_", "_II_", "_III_")
   )
 })

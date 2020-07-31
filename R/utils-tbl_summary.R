@@ -241,7 +241,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
 #' @param data Data frame.
 #' @param variable Vector of column name.
 #' @param var_label list that includes specified variable labels,
-#' e.g. `var_label = list(age = "Age, yrs")`
+#' e.g. `var_label = list(age = "Age")`
 #' @return Vector variable labels.
 #' @keywords internal
 #' @noRd

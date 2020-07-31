@@ -7,8 +7,8 @@
 #' @format A data frame with 200 rows--one row per patient
 #' \describe{
 #'     \item{trt}{Chemotherapy Treatment}
-#'     \item{age}{Age, yrs}
-#'     \item{marker}{Marker Level, ng/mL}
+#'     \item{age}{Age}
+#'     \item{marker}{Marker Level (ng/mL)}
 #'     \item{stage}{T Stage}
 #'     \item{grade}{Grade}
 #'     \item{response}{Tumor Response}

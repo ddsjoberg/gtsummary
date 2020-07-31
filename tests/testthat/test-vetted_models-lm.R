@@ -36,7 +36,7 @@ test_that("vetted_models lm()", {
   #       - without errors, warnings, messages
   expect_error(
     tbl_lm_lin <- tbl_regression(mod_lm_lin,
-                                  label = list(age ~ "Age, yrs",
+                                  label = list(age ~ "Age",
                                                trt ~ "Chemotherapy Treatment",
                                                grade ~ "Grade")), NA
   )
@@ -45,7 +45,7 @@ test_that("vetted_models lm()", {
   )
   expect_error(
     tbl_lm_int <- tbl_regression(mod_lm_int,
-                                  label = list(age ~ "Age, yrs",
+                                  label = list(age ~ "Age",
                                                trt ~ "Chemotherapy Treatment",
                                                grade ~ "Grade")), NA
   )
@@ -67,13 +67,13 @@ test_that("vetted_models lm()", {
     tbl_lm_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade")
   )
   expect_equivalent(
     tbl_lm_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
 
   # 2.  If applicable, runs as expected with logit and log link
