@@ -1,3 +1,15 @@
+#' Adds column with N to gtsummary table
+#'
+#' @param x Object created from a gtsummary function
+#' @param ... Additional arguments passed to other methods.
+#' @author Daniel D. Sjoberg
+#' @seealso [add_n.tbl_summary], [add_n.tbl_svysummary], [add_n.tbl_survfit]
+#' @export
+add_n <- function(x, ...) {
+  UseMethod("add_n")
+}
+
+
 #' Add column with N
 #'
 #' For each variable in a `tbl_summary` table, the `add_n` function adds a column with the
@@ -22,10 +34,12 @@
 #' Default is `FALSE`, which will display N column first.
 #' @param missing DEPRECATED. Logical argument indicating whether to print N
 #' (`missing = FALSE`), or N missing (`missing = TRUE`).  Default is `FALSE`
+#' @param ... Not used
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @rdname add_n.tbl_summary
 #' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
 #' tbl_n_ex <-
@@ -35,8 +49,8 @@
 #' @section Example Output:
 #' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
 
-add_n <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
-                  last = FALSE, missing = NULL) {
+add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
+                              last = FALSE, missing = NULL, ...) {
   # checking that input is class tbl_summary
   if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary")))
     stop("`x` must be class 'tbl_summary' or 'tbl_svysummary'")
@@ -148,6 +162,81 @@ stat_to_label <- function(x) {
   x <- stringr::str_replace_all(x, fixed("{p}"), fixed("% not missing"))
   x <- stringr::str_replace_all(x, fixed("{p_miss}%"), fixed("% missing"))
   x <- stringr::str_replace_all(x, fixed("{p_miss}"), fixed("% missing"))
+
+  x
+}
+
+#' @export
+#' @rdname add_n.tbl_summary
+add_n.tbl_svysummary <- add_n.tbl_summary
+
+#' Add column with number of observations
+#'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' For each `survfit()` object summarized with `tbl_survfit()` this function
+#' will add the total number of observations in a new column.
+#'
+#' @param x object of class "`tbl_survfit`"
+#' @param ... Not used
+#' @export
+#' @family tbl_survfit tools
+#' @examples
+#' library(survival)
+#' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
+#' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+#'
+#' # Example 1 ----------------------------------
+#' add_n.tbl_survfit_ex1 <-
+#'   list(fit1, fit2) %>%
+#'   tbl_survfit(times = c(12, 24)) %>%
+#'   add_n()
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{add_n.tbl_survfit_ex1.png}{options: width=64\%}}
+
+add_n.tbl_survfit <- function(x, ...) {
+
+  # adding N to the table_body -------------------------------------------------
+  x$table_body <-
+    purrr::map2_dfr(
+      x$meta_data$survfit,
+      x$meta_data$variable,
+      function(suvfit, variable) {
+        #extracting survfit call
+        survfit_call <- suvfit$call %>% as.list()
+        # index of formula and data
+        call_index <- names(survfit_call) %in% c("formula", "data") %>% which()
+
+        # converting call into a survdiff call
+        model.frame_call <- rlang::call2(rlang::expr(stats::model.frame), !!!survfit_call[call_index], ...)
+
+        # returning number of rows in data frame
+        tibble(
+          variable = variable,
+          row_type = "label",
+          N = eval(model.frame_call) %>% nrow()
+        )
+      }
+    ) %>%
+    {left_join(
+      x$table_body, .,
+      by = c("variable", "row_type")
+    )} %>%
+    select(any_of(c("variable", "row_type", "label", "N")), everything())
+
+  # adding N to table_header and assigning header label ------------------------
+  x$table_header <-
+    table_header_fill_missing(
+      x$table_header,
+      x$table_body
+    ) %>%
+    table_header_fmt_fun(N = style_number)
+
+  x <- modify_header_internal(x, N = "**N**")
+
+  # adding indicator to output that add_n was run on this data
+  x$call_list <- c(x$call_list, list(add_n = match.call()))
 
   x
 }

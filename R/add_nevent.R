@@ -199,3 +199,71 @@ add_nevent.tbl_uvregression <- function(x, ...) {
 
   x
 }
+
+#' Add column with number of observed events
+#'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' For each `survfit()` object summarized with `tbl_survfit()` this function
+#' will add the total number of events observed in a new column.
+#'
+#' @param x object of class 'tbl_survfit'
+#' @param ... Not used
+#' @export
+#' @family tbl_survfit tools
+#' @examples
+#' library(survival)
+#' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
+#' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+#'
+#' # Example 1 ----------------------------------
+#' add_nevent.tbl_survfit_ex1 <-
+#'   list(fit1, fit2) %>%
+#'   tbl_survfit(times = c(12, 24)) %>%
+#'   add_n() %>%
+#'   add_nevent()
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{add_nevent.tbl_survfit_ex1.png}{options: width=64\%}}
+
+add_nevent.tbl_survfit <- function(x, ...) {
+
+  # checking survfit is a standard (not multi-state)
+  if (!purrr::every(x$meta_data$survfit, ~identical(class(.x), "survfit"))) {
+    paste("Each of the `survfit()` objects must have class 'survfit' only.",
+          "Multi-state models are not supported by this function.") %>%
+      stringr::str_wrap() %>%
+      stop(call. = FALSE)
+  }
+
+  # calculating event N --------------------------------------------------------
+  x$table_body <-
+    purrr::map2_dfr(
+      x$meta_data$survfit, x$meta_data$variable,
+      ~ tibble(
+        nevent = broom::tidy(.x) %>% pull(.data$n.event) %>% sum(),
+        variable = .y,
+        row_type = "label"
+      )
+    ) %>%
+    {left_join(
+      x$table_body, .,
+      by = c("variable", "row_type")
+    )} %>%
+    select(any_of(c("variable", "row_type", "label", "N", "nevent")), everything())
+
+  # adding N to table_header and assigning header label ------------------------
+  x$table_header <-
+    table_header_fill_missing(
+      x$table_header,
+      x$table_body
+    ) %>%
+    table_header_fmt_fun(N = style_number)
+  x <- modify_header_internal(x, nevent = "**Event N**")
+
+  # adding indicator to output that add_n was run on this data
+  x$call_list <- c(x$call_list, list(add_nevent = match.call()))
+
+  x
+}
+
