@@ -508,6 +508,11 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 
     x <- modify_footnote(x, update = list(p.value = footnote_list))
   }
+  # printing instructions for adding a footnote
+  else if (quiet == FALSE) {
+    rlang::inform("Add a footnote describing the test(s) used.")
+    rlang::inform("`add_p(...) %>% modify_footnote(p.value ~ 'List tests used here.')`")
+  }
 
   # call add_p call and returning final object ---------------------------------
   x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
