@@ -194,13 +194,14 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
 
   # adding character CI
   if (all(c("conf.low", "conf.high") %in% names(table_body))) {
+    ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
     table_body <-
       table_body %>%
       # adding character CI
       mutate(
         ci = if_else(
           !is.na(.data$conf.low),
-          paste0(estimate_fun(.data$conf.low), ", ", estimate_fun(.data$conf.high)),
+          paste0(estimate_fun(.data$conf.low), ci.sep, estimate_fun(.data$conf.high)),
           NA_character_
         )
       )
