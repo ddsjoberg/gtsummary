@@ -29,7 +29,7 @@ variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
 are calculated using all observations.}
 
 \item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}.  If a
+e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a
 variable's label is not specified here, the label attribute
 (\code{attr(data$age, "label")}) is used.  If
 attribute label is \code{NULL}, the variable name will be used.}
