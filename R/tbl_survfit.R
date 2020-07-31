@@ -100,7 +100,7 @@ tbl_survfit <- function(x, ...) {
 #' @export
 #' @rdname tbl_survfit
 tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
-                                statistic = "{estimate} ({conf.low}, {conf.high})",
+                                statistic = NULL,
                                 label = NULL, label_header = NULL, estimate_fun = NULL,
                                 missing = "\U2014", conf.level = 0.95, reverse = FALSE,
                                 quiet = NULL, failure = NULL, ...) {
@@ -123,7 +123,7 @@ tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
 #' @export
 #' @rdname tbl_survfit
 tbl_survfit.data.frame <- function(x, y, times = NULL, probs = NULL,
-                                   statistic = "{estimate} ({conf.low}, {conf.high})",
+                                   statistic = NULL,
                                    label = NULL, label_header = NULL, estimate_fun = NULL,
                                    missing = "\U2014", conf.level = 0.95, reverse = FALSE,
                                    failure = NULL, include = everything(), quiet = NULL, ...) {
@@ -185,15 +185,16 @@ tbl_survfit.data.frame <- function(x, y, times = NULL, probs = NULL,
 #' @export
 #' @rdname tbl_survfit
 tbl_survfit.list <- function(x, times = NULL, probs = NULL,
-                             statistic = "{estimate} ({conf.low}, {conf.high})",
-                             label = NULL, label_header = NULL, estimate_fun = NULL,
-                             missing = "\U2014", conf.level = 0.95, reverse = FALSE,
-                             quiet = NULL, ...) {
+                             statistic = NULL, label = NULL, label_header = NULL,
+                             estimate_fun = NULL, missing = "\U2014",
+                             conf.level = 0.95, reverse = FALSE, quiet = NULL, ...) {
   # setting defaults -----------------------------------------------------------
+  ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
   statistic <-
     statistic %||%
     get_theme_element("tbl_survfit-arg:statistic") %||%
-    "{estimate} ({conf.low}, {conf.high})"
+    paste0("{estimate} ({conf.low}", ci.sep, "{conf.high})")
+
 
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
