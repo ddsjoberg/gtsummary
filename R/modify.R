@@ -28,7 +28,7 @@
 #' `update=` argument. They accomplish the same goal of updating column headers.
 #' @param text_interpret String indicates whether text will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
-#' #' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p.tbl_regression
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
 #' @family tbl_regression tools
