@@ -10,7 +10,7 @@
   test.args = NULL,
   pvalue_fun = style_pvalue,
   include = everything(),
-  quiet = FALSE,
+  quiet = NULL,
   ...
 )
 }
@@ -55,6 +55,36 @@ and a second test of the \emph{G-rho} family.\if{html}{\out{<div class="r">}}\pr
 }\if{html}{\out{</div>}}
 }
 
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{add_p_tbl_survfit_ex1.png}{options: width=55\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{add_p_tbl_survfit_ex2.png}{options: width=45\%}}
+}
+
+\examples{
+library(survival)
+
+gts_survfit <-
+  list(survfit(Surv(ttdeath, death) ~ grade, trial),
+       survfit(Surv(ttdeath, death) ~ trt, trial)) \%>\%
+  tbl_survfit(times = c(12, 24))
+
+# Example 1 ----------------------------------
+add_p_tbl_survfit_ex1 <-
+  gts_survfit \%>\%
+  add_p()
+
+# Example 2 ----------------------------------
+# Pass `rho=` argument to `survdiff()`
+add_p_tbl_survfit_ex2 <-
+  gts_survfit \%>\%
+  add_p(test = "survdiff", test.args = list(rho = 0.5))
+}
 \seealso{
 Other tbl_survfit tools: 
 \code{\link{add_n.tbl_survfit}()},

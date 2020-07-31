@@ -362,6 +362,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' `test=`. Does not apply to all test types.
 #' @inheritParams add_p.tbl_summary
 #' @inheritParams combine_terms
+#' @family tbl_survfit tools
 #'
 #' @section test argument:
 #' The most common way to specify `test=` is by using a single string indicating
@@ -376,10 +377,39 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' ```
 #'
 #' @export
-#' @family tbl_survfit tools
+#' @examples
+#' library(survival)
+#'
+#' gts_survfit <-
+#'   list(survfit(Surv(ttdeath, death) ~ grade, trial),
+#'        survfit(Surv(ttdeath, death) ~ trt, trial)) %>%
+#'   tbl_survfit(times = c(12, 24))
+#'
+#' # Example 1 ----------------------------------
+#' add_p_tbl_survfit_ex1 <-
+#'   gts_survfit %>%
+#'   add_p()
+#'
+#' # Example 2 ----------------------------------
+#' # Pass `rho=` argument to `survdiff()`
+#' add_p_tbl_survfit_ex2 <-
+#'   gts_survfit %>%
+#'   add_p(test = "survdiff", test.args = list(rho = 0.5))
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{add_p_tbl_survfit_ex1.png}{options: width=55\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{add_p_tbl_survfit_ex2.png}{options: width=45\%}}
+
 add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               pvalue_fun = style_pvalue,
-                              include = everything(), quiet = FALSE, ...) {
+                              include = everything(), quiet = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # checking inputs ------------------------------------------------------------
   if (identical(x$meta_data_variable, "..overall..")) {
     stop("`add_p()` may only be applied to `tbl_survfit objects with a stratifying variable.",
@@ -421,6 +451,11 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
           as.list()
         if (length(test_info$test_name) == 0)
           stop("No valid test selected in argument `test=`.")
+
+        # checking that a test that does not accept args was indeed not passed any
+        if (test_info$additional_args == FALSE && !is.null(test.args[[variable]]))
+          stop("Additional arguments were passed in `test.args=` when none are accepted.",
+               call. = FALSE)
 
         # getting the function call
         pvalue_call <-
@@ -496,7 +531,9 @@ add_p_tbl_survfit_survdiff <- function(x, quiet, ...) {
       paste(collapse = "") %>%
       stringr::str_squish()
 
-    rlang::inform(glue("Calculating p-value with\n  `{survdiff_call_str}`"))
+    # don't print if the string is super long
+    if (nchar(survdiff_call_str) < 250)
+      rlang::inform(glue("Calculating p-value with\n  `{survdiff_call_str}`"))
   }
 
   # evaluating `survdiff()`
