@@ -11,6 +11,7 @@
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @family tbl_summary tools
+#' @family tbl_survfit tools
 #' @family tbl_svysummary tools
 #' @seealso [tbl_stack]
 #' @author Daniel D. Sjoberg

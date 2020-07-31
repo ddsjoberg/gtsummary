@@ -12,6 +12,7 @@
 #' @family tbl_svysummary tools
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
+#' @family tbl_survfit tools
 #' @seealso [tbl_merge]
 #' @author Daniel D. Sjoberg
 #' @export

@@ -464,6 +464,8 @@ inline_text.tbl_survival <-
 #' @param x Object created from  [tbl_survfit]
 #' @param time time for which to return survival probabilities.
 #' @param prob probability with values in (0,1)
+#' @param variable Variable name of statistic to present.
+#' @param pattern String indicating the statistics to return.
 #' @param level Level of the variable to display for categorical variables.
 #' Can also specify the 'Unknown' row.  Default is `NULL`
 #' @inheritParams tbl_regression
@@ -496,7 +498,8 @@ inline_text.tbl_survival <-
 #' inline_text(tbl1, time = 24, level = "Drug B")
 #' inline_text(tbl2, prob = 0.5)
 inline_text.tbl_survfit <-
-  function(x, time = NULL, prob = NULL, level = NULL,
+  function(x, time = NULL, prob = NULL, variable = NULL, level = NULL,
+           pattern = x$inputs$statistic,
            estimate_fun = x$inputs$estimate_fun, pvalue_fun = NULL, ...) {
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
@@ -513,78 +516,34 @@ inline_text.tbl_survfit <-
       stop("One and only one of `time=` and `prob=` must be specified.", call. = FALSE)
     }
 
-    if(!is.null(prob) & !"prob" %in% names(x$table_stats)) {
-      stop("`prob=` was specified, but `x` does not contain survival quantiles.", call. = FALSE)
-    }
+    # selecting variable -------------------------------------------------------
+    variable <- dplyr::select(vctr_2_tibble(unique(x$meta_data$variable)), {{ variable }}) %>% names()
+    if (length(variable) == 0)
+      variable <- dplyr::select(vctr_2_tibble(unique(x$meta_data$variable)), 1) %>% names()
 
-    if(!is.null(time) & !"time" %in% names(x$table_stats)) {
-      stop("`time=` was specified, but `x` does not contain survival time estimates.", call. = FALSE)
-    }
+    result <-
+      dplyr::filter(x$meta_data, .data$variable == .env$variable) %>%
+      pull(.data$df_stats) %>%
+      purrr::flatten_dfc()
 
     # selecting level ----------------------------------------------------------
-    level <- rlang::enquo(level)
+    level <- dplyr::select(vctr_2_tibble(unique(result$label)), {{ level }}) %>% names()
+    if (length(level) == 0)
+      level <- dplyr::select(vctr_2_tibble(unique(result$label)), 1) %>% names()
 
-    # selecting default column, if column is NULL
-    if (rlang::quo_is_null(level)) {
-      level <- x$table_stats$label[1]
-    }
-
-    # selecting proper column name
-    level <-
-      var_input_to_string(
-        data = vctr_2_tibble(unique(x$table_stats$label)), arg_name = "level",
-        select_single = TRUE, select_input = !!level
-      )
+    result <- dplyr::filter(result, .data$label == .env$level)
 
     # prob and time ------------------------------------------------------------
-    if("time" %in% names(x$table_stat)){
-      if(!is.null(time) && length(intersect(time, x$table_stat$time)) == 0) {
-        stop(glue("`time=` must be one of ",
-                  "{paste(sQuote(unique(x$table_stat$time)), collapse = ', ')}"),
-             call. = FALSE)
-      }
-      if(!is.null(time))
-        table_stats <-
-          filter(x$table_stat, .data$time %in% .env$time, .data$label == .env$level)
-      else
-        table_stats <-
-          filter(x$table_stat, .data$label == .env$level)
-    }
-    if("prob" %in% names(x$table_stat)) {
-      if(!is.null(prob) && length(intersect(prob, x$table_stat$prob)) == 0) {
-        stop(glue("`prob=` must be one of ",
-                  "{paste(sQuote(unique(x$table_stat$prob)), collapse = ', ')}"),
-             call. = FALSE)
-      }
-      if(!is.null(prob))
-        table_stats <-
-          filter(x$table_stat, .data$prob %in% .env$prob, .data$label == .env$level)
-      else
-        table_stats <-
-          filter(x$table_stat, .data$label == .env$level)
-    }
-
-    # pattern ------------------------------------------------------------------
-    # applying formatting
+    est_var <- ifelse(!is.null(time), "time", "prob")
+    est_val <- time %||% prob
     result <-
-      table_stats %>%
-      mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high),
-                ~estimate_fun(.) %>% as.character() %>% coalesce(x$inputs$missing))
+      result[result[[est_var]] == est_val, ] %>%
+      mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low), estimate_fun) %>%
+      mutate(stat = glue(.env$pattern) %>% as.character()) %>%
+      pull(.data$stat)
 
-
-    # applying p-value if column exists
-    if ("p.value" %in% names(result)){
-      result <- result %>%
-        mutate_at(vars(.data$p.value), ~p.value_fun(.))
-    }
-
-    # returning formatted statistic
-    result %>%
-      mutate(
-        statistic = glue("{estimate} ({conf.low}, {conf.high})")
-      ) %>%
-      pull(.data$statistic)
-  }
+    result
+}
 
 
 #' Report statistics from cross table inline

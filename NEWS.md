@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added functions `add_p.tbl_survfit()`, `add_n.tbl_survfit()`, `add_nevent.tbl_survfit()` (ADD THIS)
+
 * Added default separators for IQR and CIs when language theme is set with `decimal.mark = ","`
 
 * Fixed bug where source note was not made smaller font size with compact theme when table was printed with flextable (#584)

@@ -2,26 +2,68 @@
 % Please edit documentation in R/tbl_survfit.R
 \name{tbl_survfit}
 \alias{tbl_survfit}
+\alias{tbl_survfit.survfit}
+\alias{tbl_survfit.data.frame}
+\alias{tbl_survfit.list}
 \title{Creates table of survival probabilities}
 \usage{
-tbl_survfit(
+tbl_survfit(x, ...)
+
+\method{tbl_survfit}{survfit}(
   x,
   times = NULL,
   probs = NULL,
-  statistic = "{estimate} ({conf.low}, {conf.high})",
+  statistic = NULL,
   label = NULL,
   label_header = NULL,
   estimate_fun = NULL,
-  missing = "--",
+  missing = "—",
   conf.level = 0.95,
   reverse = FALSE,
-  failure = NULL
+  quiet = NULL,
+  failure = NULL,
+  ...
+)
+
+\method{tbl_survfit}{data.frame}(
+  x,
+  y,
+  times = NULL,
+  probs = NULL,
+  statistic = NULL,
+  label = NULL,
+  label_header = NULL,
+  estimate_fun = NULL,
+  missing = "—",
+  conf.level = 0.95,
+  reverse = FALSE,
+  failure = NULL,
+  include = everything(),
+  quiet = NULL,
+  ...
+)
+
+\method{tbl_survfit}{list}(
+  x,
+  times = NULL,
+  probs = NULL,
+  statistic = NULL,
+  label = NULL,
+  label_header = NULL,
+  estimate_fun = NULL,
+  missing = "—",
+  conf.level = 0.95,
+  reverse = FALSE,
+  quiet = NULL,
+  ...
 )
 }
 \arguments{
-\item{x}{survfit object. Object may have no stratification
-(e.g. \code{survfit(Surv(ttdeath, death) ~ 1, trial)}), or a single stratifying
-variable (e.g. \code{survfit(Surv(ttdeath, death) ~ trt, trial)})}
+\item{x}{a survfit object, list of survfit objects, or a data frame.
+If a data frame is passed, a list of survfit objects is constructed using
+each variable as a stratifying variable.}
+
+\item{...}{Not used}
 
 \item{times}{numeric vector of times for which to return survival probabilities.}
 
@@ -31,8 +73,9 @@ specifying the survival quantiles to return}
 \item{statistic}{string defining the statistics to present in the table.
 Default is \code{"{estimate} ({conf.low}, {conf.high})"}}
 
-\item{label}{string specifying variable or overall label. Default is
-stratifying variable name or \code{"Overall"} when no stratifying variable present}
+\item{label}{List of formulas specifying variables labels,
+e.g. \code{list(age ~ "Age, yrs", stage ~ "Path T Stage")}, or a string for a
+single variable table.}
 
 \item{label_header}{string specifying column labels above statistics. Default
 is \code{"{prob} Percentile"} for survival percentiles, and \code{"Time {time}"} for n-year
@@ -49,7 +92,14 @@ survival times}
 \item{reverse}{Flip the probability reported, i.e. \code{1 - estimate}.
 Default is \code{FALSE}.  Does not apply to survival quantile requests}
 
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
+
 \item{failure}{DEPRECATED. Use \verb{reverse=} instead.}
+
+\item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
+
+\item{include}{Variable to include as stratifying variables.}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -60,38 +110,50 @@ formatted summary table of the results
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_survfit_ex1.png}{options: width=40\%}}
+\if{html}{\figure{tbl_survfit_ex1.png}{options: width=55\%}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_survfit_ex2.png}{options: width=27\%}}
+\if{html}{\figure{tbl_survfit_ex2.png}{options: width=45\%}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{survfit_cr_ex3.png}{options: width=27\%}}
+\if{html}{\figure{tbl_survfit_ex3.png}{options: width=55\%}}
+
+\if{html}{Example 4}
+
+\if{html}{\figure{survfit_cr_ex4.png}{options: width=55\%}}
 }
 
 \examples{
 library(survival)
-fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 
 # Example 1 ----------------------------------
+# Pass single survfit() object
 tbl_survfit_ex1 <- tbl_survfit(
-  fit1,
+  survfit(Surv(ttdeath, death) ~ trt, trial),
   times = c(12, 24),
-  label = "Treatment",
   label_header = "**{time} Month**"
 )
 
 # Example 2 ----------------------------------
+# Pass a data frame
 tbl_survfit_ex2 <- tbl_survfit(
-  fit2,
+  trial,
+  y = survival::Surv(ttdeath, death),
+  include = c(trt, grade),
   probs = 0.5,
   label_header = "**Median Survival**"
 )
 
-# Example 3 Competing Events Example ---------
+# Example 3 ----------------------------------
+# Pass a list of survfit() objects
+tbl_survfit_ex3 <-
+  list(survfit(Surv(ttdeath, death) ~ 1, trial),
+       survfit(Surv(ttdeath, death) ~ trt, trial)) \%>\%
+  tbl_survfit(times = c(12, 24))
+
+# Example 4 Competing Events Example ---------
 # adding a competing event for death (cancer vs other causes)
 library(dplyr)
 trial2 <- trial \%>\%
@@ -103,10 +165,20 @@ trial2 <- trial \%>\%
   ) \%>\% factor()
 )
 
-survfit_cr_ex3 <-
+survfit_cr_ex4 <-
   survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) \%>\%
   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
+}
+\seealso{
+Other tbl_survfit tools: 
+\code{\link{add_n.tbl_survfit}()},
+\code{\link{add_nevent.tbl_survfit}()},
+\code{\link{add_p.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{tbl_survfit tools}

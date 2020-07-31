@@ -41,7 +41,7 @@ tbl_overall_ex <-
 }
 \seealso{
 Other tbl_summary tools: 
-\code{\link{add_n}()},
+\code{\link{add_n.tbl_summary}()},
 \code{\link{add_p.tbl_summary}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
@@ -54,10 +54,11 @@ Other tbl_summary tools:
 \code{\link{tbl_summary}()}
 
 Other tbl_svysummary tools: 
-\code{\link{add_n}()},
+\code{\link{add_n.tbl_summary}()},
 \code{\link{add_p.tbl_svysummary}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_svysummary}()}

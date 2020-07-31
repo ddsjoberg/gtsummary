@@ -91,10 +91,11 @@ add_p_svysummary_ex3 <-
 }
 \seealso{
 Other tbl_svysummary tools: 
-\code{\link{add_n}()},
+\code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_svysummary}()}

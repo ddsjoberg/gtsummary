@@ -58,3 +58,22 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
     footnote = TRUE
   ), NA)
 })
+
+
+# add_nevent.tbl_surfit --------------------------------------------------------
+
+test_that("add_n.tbl_surfit", {
+  library(survival)
+
+  tbl_survfit <-
+    list(
+      survfit(Surv(ttdeath, death) ~ 1, trial),
+      survfit(Surv(ttdeath, death) ~ trt, trial)
+    ) %>%
+    tbl_survfit(times = c(12, 24))
+
+  expect_error(
+    add_n(tbl_survfit),
+    NA
+  )
+})

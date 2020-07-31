@@ -143,9 +143,40 @@ test_that("add_p.tbl_cross", {
 })
 
 
+# test-add_p.tbl_survfit -------------------------------------------------------
+context("test-add_p.tbl_survfit")
+library(survival)
 
+test_that("add_p.tbl_survfit", {
+  survfit_list <-
+    list(survfit(Surv(ttdeath, death) ~ trt, trial),
+         survfit(Surv(trial$ttdeath, trial$death) ~ trial$trt))
 
+  expect_error(
+    survfit_list %>%
+      purrr::map(~tbl_survfit(.x, times = c(12, 24)) %>% add_p()),
+    NA
+  )
 
+  expect_error(
+    survfit_list %>%
+      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p(),
+    NA
+  )
+
+  expect_error(
+    survfit_list[[1]] %>%
+     tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p(),
+    NA
+  )
+
+  expect_error(
+    trial %>%
+      select(trt, grade, ttdeath, death) %>%
+      tbl_survfit(times = c(12, 24), y = Surv(ttdeath, death)) %>% add_p(),
+    NA
+  )
+})
 
 
 
