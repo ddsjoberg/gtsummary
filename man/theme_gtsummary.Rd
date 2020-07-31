@@ -21,6 +21,8 @@ theme_gtsummary_language(
   language = c("de", "en", "es", "fr", "ja", "pt", "se"),
   big.mark = NULL,
   decimal.mark = NULL,
+  iqr.sep = switch(identical(decimal.mark, ","), " – "),
+  ci.sep = switch(identical(decimal.mark, ","), " – "),
   set_theme = TRUE
 )
 }
@@ -55,6 +57,16 @@ Default is \code{","}}
 
 \item{decimal.mark}{The character to be used to indicate the numeric decimal point.
 Default is \code{"."}}
+
+\item{iqr.sep}{string indicating separator for the default IQR in \code{tbl_summary()}.
+If \verb{decimal.mark=} is NULL, \verb{iqr.sep=} is \code{", "}. The comma
+separator, however, can look odd when \code{decimal.mark = ","}. In this case the argument
+will default to an en dash}
+
+\item{ci.sep}{string indicating separator for confidence intervals.
+If \verb{decimal.mark=} is NULL, \verb{ci.sep=} is \code{", "}. The comma
+separator, however, can look odd when \code{decimal.mark = ","}. In this case the argument
+will default to an en dash}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}

@@ -5,6 +5,7 @@ Package-wide,pkgwide-fn:pvalue_fun,FALSE,function to style p-values throughout p
 Package-wide,pkgwide-fn:prependpvalue_fun,FALSE,"function to style p-values throughout package that include a ""p"" prefix, e.g. ""p<0.001"" or ""p=0.12""","function(x) style_pvalue(x, digits = 2, prepend_p = TRUE)"
 Package-wide,pkgwide-lgl:quiet,FALSE,logical indicating whether to suppress messages or not,
 Package-wide,pkgwide-str:language,FALSE,string indicating language,"""es"""
+Package-wide,pkgwide-str:ci.sep,FALSE,"string indicating separator between upper and lower bounds of confindence intervals. Default is "", """,""" to """
 tbl_stack,tbl_stack-str:group_header,FALSE,"string indicating the group column header used in `as_tibble()`, `as_flex_table()`, etc.","""**Group Status**"""
 as_gt,as_gt-lst:addl_cmds,FALSE,"list expression of gt-package commands inserted in the `as_gt()` call. Do not include the `data=` argument. Expression is inserted after the named call, e.g. after ""tab_spanner"" in the example.",list(tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')))
 as_flex_table,as_flex_table-lst:addl_cmds,FALSE,"list of expressions of flextable-package commands inserted in the `as_flex_table()` call. Do not include the `data=` argument. Expression is inserted after the named call, e.g. after ""autofit"" in the example.","list(autofit = list(rlang::expr(flextable::font(fontname = ""Bodoni 72"", part = ""all"")), rlang::expr(flextable::fontsize(size = 8, part = ""all""))))"
