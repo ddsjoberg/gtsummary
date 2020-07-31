@@ -155,7 +155,6 @@ theme_gtsummary_printer <- function(
 #' If `decimal.mark=` is NULL, `iqr.sep=` is `", "`. The comma
 #' separator, however, can look odd when `decimal.mark = ","`. In this case the argument
 #' will default to `iqr.sep = " - "`
-#' The default is a comma, but this can look odd if the
 #' @param ci.sep string indicating separator for confidence intervals.
 #' If `decimal.mark=` is NULL, `ci.sep=` is `", "`. The comma
 #' separator, however, can look odd when `decimal.mark = ","`. In this case the argument

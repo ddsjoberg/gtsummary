@@ -61,8 +61,7 @@ Default is \code{"."}}
 \item{iqr.sep}{string indicating separator for the default IQR in \code{tbl_summary()}.
 If \verb{decimal.mark=} is NULL, \verb{iqr.sep=} is \code{", "}. The comma
 separator, however, can look odd when \code{decimal.mark = ","}. In this case the argument
-will default to \code{iqr.sep = " - "}
-The default is a comma, but this can look odd if the}
+will default to \code{iqr.sep = " - "}}
 
 \item{ci.sep}{string indicating separator for confidence intervals.
 If \verb{decimal.mark=} is NULL, \verb{ci.sep=} is \code{", "}. The comma
