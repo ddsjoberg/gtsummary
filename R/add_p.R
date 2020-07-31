@@ -459,7 +459,8 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 
         # getting the function call
         pvalue_call <-
-          rlang::call2(purrr::pluck(test_info , "fn", 1, 1), x,
+          rlang::call2(purrr::pluck(test_info , "fn", 1, 1),
+                       x$inputs$x[[row_number]], # passing survfit object
                        quiet = quiet, !!!test.args[[variable]])
 
         # evaluating code, and returning p.value
@@ -516,7 +517,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 
 add_p_tbl_survfit_survdiff <- function(x, quiet, ...) {
   #extracting survfit call
-  survfit_call <- x$inputs$x[[1]]$call %>% as.list()
+  survfit_call <- x$call %>% as.list()
   # index of formula and data
   call_index <- names(survfit_call) %in% c("formula", "data") %>% which()
 
