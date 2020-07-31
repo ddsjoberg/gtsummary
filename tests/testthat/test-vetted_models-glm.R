@@ -38,7 +38,7 @@ test_that("vetted_models glm()", {
   #       - without errors, warnings, messages
   expect_error(
     tbl_glm_lin <- tbl_regression(mod_glm_lin,
-                                  label = list(age ~ "Age, yrs",
+                                  label = list(age ~ "Age",
                                                trt ~ "Chemotherapy Treatment",
                                                grade ~ "Grade")), NA
   )
@@ -47,7 +47,7 @@ test_that("vetted_models glm()", {
   )
   expect_error(
     tbl_glm_int <- tbl_regression(mod_glm_int,
-                                  label = list(age ~ "Age, yrs",
+                                  label = list(age ~ "Age",
                                                trt ~ "Chemotherapy Treatment",
                                                grade ~ "Grade")), NA
   )
@@ -56,7 +56,7 @@ test_that("vetted_models glm()", {
   )
   expect_error(
     tbl_glm_log <- tbl_regression(mod_glm_log,
-                                  label = list(age ~ "Age, yrs",
+                                  label = list(age ~ "Age",
                                                trt ~ "Chemotherapy Treatment",
                                                grade ~ "Grade")), NA
   )
@@ -82,19 +82,19 @@ test_that("vetted_models glm()", {
     tbl_glm_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade")
   )
   expect_equivalent(
     tbl_glm_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
   expect_equivalent(
     tbl_glm_log$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade")
   )
   # 2.  If applicable, runs as expected with logit and log link
   expect_equivalent(

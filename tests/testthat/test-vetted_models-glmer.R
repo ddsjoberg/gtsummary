@@ -67,13 +67,13 @@ test_that("vetted_models glmer()", {
     tbl_glmer_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "trt", "Grade")
+    c("Age", "trt", "Grade")
   )
   expect_equivalent(
     tbl_glmer_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "trt", "Grade", "trt * Grade")
+    c("Age", "trt", "Grade", "trt * Grade")
   )
   # 2.  If applicable, runs as expected with logit and log link
   expect_equivalent(
