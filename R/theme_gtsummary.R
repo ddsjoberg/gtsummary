@@ -66,7 +66,7 @@ theme_gtsummary_journal <- function(journal = "jama", set_theme = TRUE) {
         "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
         "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
         "add_stat_label-arg:location" = "row",
-        "tbl_summary-str:continuous_stat" = "{median} ({p25} - {p75})",
+        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "tbl_summary-str:categorical_stat" = "{n} ({p})"
       )
   }
@@ -154,17 +154,17 @@ theme_gtsummary_printer <- function(
 #' @param iqr.sep string indicating separator for the default IQR in `tbl_summary()`.
 #' If `decimal.mark=` is NULL, `iqr.sep=` is `", "`. The comma
 #' separator, however, can look odd when `decimal.mark = ","`. In this case the argument
-#' will default to `iqr.sep = " - "`
+#' will default to an en dash
 #' @param ci.sep string indicating separator for confidence intervals.
 #' If `decimal.mark=` is NULL, `ci.sep=` is `", "`. The comma
 #' separator, however, can look odd when `decimal.mark = ","`. In this case the argument
-#' will default to `ci.sep = " - "`
+#' will default to an en dash
 #' @inheritParams style_number
 #' @export
 theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "ja", "pt", "se"),
                                      big.mark = NULL, decimal.mark = NULL,
-                                     iqr.sep = switch(identical(decimal.mark, ","), " - "),
-                                     ci.sep = switch(identical(decimal.mark, ","), " - "),
+                                     iqr.sep = switch(identical(decimal.mark, ","), " \U2013 "),
+                                     ci.sep = switch(identical(decimal.mark, ","), " \U2013 "),
                                      set_theme = TRUE) {
 
   language <- match.arg(language)
