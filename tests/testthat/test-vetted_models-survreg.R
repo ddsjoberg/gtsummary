@@ -76,13 +76,13 @@ test_that("vetted_models survreg()", {
     tbl_survreg_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade")
   )
   expect_equivalent(
     tbl_survreg_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age, yrs", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
   # 2.  If applicable, runs as expected with logit and log link (NOT APPLICABLE)
   # 3.  Interaction terms are correctly printed in output table

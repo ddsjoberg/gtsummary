@@ -52,6 +52,9 @@ and prints it with the following styling functions.
 \item \code{\link[flextable:footnote]{flextable::footnote()}} to add table footnotes and source notes
 \item \code{\link[flextable:bold]{flextable::bold()}} to bold cells in data frame
 \item \code{\link[flextable:italic]{flextable::italic()}} to italicize cells in data frame
+\item \code{\link[flextable:border]{flextable::border()}} to set all border widths to 1
+\item \code{\link[flextable:padding]{flextable::padding()}} to set consistent header padding
+\item \code{\link[flextable:valign]{flextable::valign()}} to ensure label column is top-left justified
 }
 
 Any one of these commands may be omitted using the \verb{include=} argument.
