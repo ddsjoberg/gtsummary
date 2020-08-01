@@ -89,7 +89,7 @@ add_overall_merge <- function(x, overall, last, col_label) {
     table_header_fill_missing()
 
   # adding header
-  col_label <- col_label %||% paste0("**", translate_text("Overall"), "**, N = {N}")
+  col_label <- col_label %||% paste0("**", translate_text("Overall"), "**, N = {style_number(N)}")
   x <- modify_header_internal(x, stat_0 = col_label)
 
   x

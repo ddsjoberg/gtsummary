@@ -11,6 +11,7 @@
 \alias{tab_style_bold_levels}
 \alias{tbl_summary_}
 \alias{add_p_}
+\alias{as_flextable}
 \title{Deprecated functions}
 \usage{
 add_comparison(...)
@@ -30,6 +31,8 @@ tab_style_bold_levels(...)
 tbl_summary_(...)
 
 add_p_(...)
+
+as_flextable(...)
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
