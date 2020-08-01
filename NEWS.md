@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Deprecated function `gtsummary::as_flextable()`. It is now soft deprecated and args are passed to the the `as_flex_table()`
+* Deprecated function `gtsummary::as_flextable()`. It is now soft deprecated and args are passed to `as_flex_table()`
 
 * All `lifecycle::deprecate_warn()` have been upgraded to `lifecycle::deprecate_stop()` for <= v1.2.0 (released Aug 2019)
 
@@ -8,7 +8,7 @@
 
 * Added translations to `add_n()` footnotes
 
-* Added functions `add_p.tbl_survfit()`, `add_n.tbl_survfit()`, `add_nevent.tbl_survfit()` (ADD THIS)
+* Added functions `add_p.tbl_survfit()`, `add_n.tbl_survfit()`, `add_nevent.tbl_survfit()`
 
 * Added default separators for IQR and CIs when language theme is set with `decimal.mark = ","`
 
