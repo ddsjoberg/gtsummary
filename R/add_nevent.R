@@ -7,7 +7,7 @@
 #' [geepack::geeglm]) and Cox
 #' Proportion Hazards regression models ([survival::coxph]).
 #'
-#' @param x `tbl_regerssion` or `tbl_uvregression` object
+#' @param x `tbl_regression` or `tbl_uvregression` object
 #' @param ... Additional arguments passed to or from other methods.
 #' @export
 #' @author Daniel D. Sjoberg
@@ -52,6 +52,8 @@ add_nevent.tbl_regression <- function(x, quiet = NULL, ...) {
 
   # if model is a cox model, adding number of events as well
   if (inherits(x$model_obj, "coxph") && !inherits(x$model_obj, "clogit")) {
+    assert_package("survival", "add_nevent")
+
     x$nevent <- x$model_obj %>%
       survival::coxph.detail() %>%
       pluck("nevent") %>%
