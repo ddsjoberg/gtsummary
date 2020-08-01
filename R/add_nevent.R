@@ -7,7 +7,7 @@
 #' [geepack::geeglm]) and Cox
 #' Proportion Hazards regression models ([survival::coxph]).
 #'
-#' @param x `tbl_regerssion` or `tbl_uvregression` object
+#' @param x `tbl_regression` or `tbl_uvregression` object
 #' @param ... Additional arguments passed to or from other methods.
 #' @export
 #' @author Daniel D. Sjoberg
