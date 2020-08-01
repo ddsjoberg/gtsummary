@@ -132,7 +132,8 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
       x$table_header %>%
       mutate(
         footnote = ifelse(.data$column == "n",
-                          paste("Statistics presented:", stat_to_label(statistic)),
+                          paste("Statistics presented:",
+                                translate_text(stat_to_label(statistic))),
                           .data$footnote)
       )
   }
@@ -154,13 +155,13 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
 }
 
 stat_to_label <- function(x) {
-  x <- stringr::str_replace_all(x, fixed("{N}"), fixed("Total N"))
-  x <- stringr::str_replace_all(x, fixed("{n}"), fixed("N non-Missing"))
-  x <- stringr::str_replace_all(x, fixed("{n_miss}"), fixed("N Missing"))
-  x <- stringr::str_replace_all(x, fixed("{p}%"), fixed("% non-Missing"))
-  x <- stringr::str_replace_all(x, fixed("{p}"), fixed("% non-Missing"))
-  x <- stringr::str_replace_all(x, fixed("{p_miss}%"), fixed("% Missing"))
-  x <- stringr::str_replace_all(x, fixed("{p_miss}"), fixed("% Missing"))
+  x <- stringr::str_replace_all(x, fixed("{N}"), fixed("no. obs."))
+  x <- stringr::str_replace_all(x, fixed("{n}"), fixed("N"))
+  x <- stringr::str_replace_all(x, fixed("{n_miss}"), fixed("N missing"))
+  x <- stringr::str_replace_all(x, fixed("{p}%"), fixed("% not missing"))
+  x <- stringr::str_replace_all(x, fixed("{p}"), fixed("% not missing"))
+  x <- stringr::str_replace_all(x, fixed("{p_miss}%"), fixed("% missing"))
+  x <- stringr::str_replace_all(x, fixed("{p_miss}"), fixed("% missing"))
 
   x
 }
