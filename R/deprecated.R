@@ -69,17 +69,19 @@ add_p_ <- function(...) {
 }
 
 # v1.3.3 -----------------------------------------------------------------------
+#' @rdname deprecated
+#' @export
 as_flextable <- function(...) {
   lifecycle::deprecate_warn(
     "1.3.3", "gtsummary::as_flextable()", "as_flex_table()",
     details = paste(
       "The `as_flextable()` function graduated",
-      "from 'Experimental' status in v1.3.3. The updated function has",
-      "a new name to avoid name conflicts with {flextable}.",
-      "If you are trying to use the version",
+      "from 'Experimental' status in v1.3.3. The function's name was changed",
+      "to avoid a name conflict with `flextable::as_flextable()`.",
+      "If you are trying to use the function",
       "from {flextable}, for the time being, use the double colon notation",
-      "`flextable::as_flextable(...)` when both {gtsummary} and {flextable}",
-      "are loaded."
+      "when both {gtsummary} and {flextable}",
+      "are loaded, e.g. `flextable::as_flextable(...)`."
     ) %>%
       stringr::str_wrap()
   )
