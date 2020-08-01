@@ -356,7 +356,8 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Calculate and add a p-value
 #' @param x Object of class `"tbl_survfit"`
-#' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`.
+#' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,
+#' `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`, `"coxph_wald"`, `"coxph_score".`
 #' See details below
 #' @param test.args Named list of additional arguments passed to method in
 #' `test=`. Does not apply to all test types.
@@ -471,7 +472,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
       }
     )
 
-  meta_data$test_name <-
+  meta_data$stat_test_lbl <-
     map_chr(
       meta_data$variable,
       function(.x) {
@@ -484,7 +485,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   x$meta_data <-
     left_join(
       x$meta_data,
-      meta_data %>% select(.data$variable, .data$p.value, .data$test_name),
+      meta_data %>% select(.data$variable, .data$p.value, .data$stat_test_lbl),
       by = "variable"
     )
 
@@ -501,10 +502,10 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   x <- modify_header_internal(x, p.value = "**p-value**")
 
   # adding footnote ------------------------------------------------------------
-  if (all(!is.na(meta_data$test_name))) {
+  if (all(!is.na(meta_data$stat_test_lbl))) {
     footnote_list <-
-      unique(meta_data$test_name) %>%
-      paste(sep = "; ")
+      unique(meta_data$stat_test_lbl) %>%
+      paste(collapse = "; ")
 
     x <- modify_footnote(x, update = list(p.value = footnote_list))
   }
@@ -515,39 +516,85 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   x
 }
 
-add_p_tbl_survfit_survdiff <- function(x, quiet, ...) {
+# function to print a call. if an arg is too long, it's replace with a .
+print_call <- function(call) {
+  # replacing very long arg values with a `.`
+  call_list <- as.list(call)
+  call_list2 <-
+    map2(
+      call_list, seq_len(length(call_list)),
+      function(call, index) {
+        if (index ==  1) return(call)
+        if (deparse(call) %>% nchar() %>% length() > 30) return(rlang::expr(.))
+        call
+      }
+    )
+
+  # re-creating call, deparsing, printing message
+  rlang::call2(call_list2[[1]], !!!call_list2[-1]) %>%
+    deparse() %>%
+    paste(collapse = "") %>%
+    stringr::str_squish() %>%
+    {glue("Calculating p-value with\n  `{.}`")} %>%
+    rlang::inform()
+}
+
+# returns a list of the formula and data arg calls
+extract_formula_data_call <- function(x) {
   #extracting survfit call
   survfit_call <- x$call %>% as.list()
   # index of formula and data
   call_index <- names(survfit_call) %in% c("formula", "data") %>% which()
 
+  survfit_call[call_index]
+}
+
+add_p_tbl_survfit_survdiff <- function(x, quiet, ...) {
+  # formula and data calls
+  formula_data_call <- extract_formula_data_call(x)
+
   # converting call into a survdiff call
-  survdiff_call <- rlang::call2(rlang::expr(survival::survdiff), !!!survfit_call[call_index], ...)
+  survdiff_call <- rlang::call2(rlang::expr(survival::survdiff), !!!formula_data_call, ...)
 
   # printing call to calculate p-value
-  if (quiet == FALSE) {
-    survdiff_call_str <-
-      survdiff_call %>%
-      deparse() %>%
-      paste(collapse = "") %>%
-      stringr::str_squish()
-
-    # don't print if the string is super long
-    if (nchar(survdiff_call_str) < 250)
-      rlang::inform(glue("Calculating p-value with\n  `{survdiff_call_str}`"))
-  }
+  if (quiet == FALSE) print_call(survdiff_call)
 
   # evaluating `survdiff()`
   survdiff_result <- rlang::eval_tidy(survdiff_call)
 
   # returning p-value
-  stats::pchisq(survdiff_result$chisq, length(survdiff_result$n) - 1, lower.tail = FALSE)
+  broom::glance(survdiff_result)$p.value
+}
+
+add_p_tbl_survfit_coxph <- function(x, quiet, type, ...) {
+  # formula and data calls
+  formula_data_call <- extract_formula_data_call(x)
+
+  # converting call into a survdiff call
+  coxph_call <- rlang::call2(rlang::expr(survival::coxph), !!!formula_data_call, ...)
+
+  # printing call to calculate p-value
+  if (quiet == FALSE) print_call(coxph_call)
+
+  # evaluating `survdiff()`
+  coxph_result <- rlang::eval_tidy(coxph_call)
+
+  # returning p-value
+  pvalue_column <- switch(type,
+                          "lrt" = "p.value.log",
+                          "wald" = "p.value.wald",
+                          "score" = "p.value.sc")
+  broom::glance(coxph_result)[[pvalue_column]]
 }
 
 df_add_p_tbl_survfit_tests <-
   tibble::tribble(
     ~test_name, ~fn, ~footnote, ~additional_args,
     "logrank", list(add_p_tbl_survfit_survdiff), "Log-rank test", FALSE,
+    "petopeto_gehanwilcoxon", list(purrr::partial(add_p_tbl_survfit_survdiff, rho = 1)), "Peto & Peto modification of Gehan-Wilcoxon test", FALSE,
+    "coxph_lrt", list(purrr::partial(add_p_tbl_survfit_coxph, type = "lrt")), "Cox regression (LRT)", TRUE,
+    "coxph_wald", list(purrr::partial(add_p_tbl_survfit_coxph, type = "wald")), "Cox regression (Wald)", TRUE,
+    "coxph_score", list(purrr::partial(add_p_tbl_survfit_coxph, type = "score")), "Cox regression (Score)", TRUE,
     "survdiff", list(add_p_tbl_survfit_survdiff), NA_character_, TRUE
   )
 

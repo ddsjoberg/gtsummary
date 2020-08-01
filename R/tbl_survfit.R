@@ -255,6 +255,14 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
                      estimate_type = estimate_type, estimate_fun = estimate_fun,
                      missing = missing, statistic = statistic)
 
+  # checking that the variable list is unique
+  if (quiet == FALSE && !identical(meta_data$variable, unique(meta_data$variable))) {
+    paste("The variable list in `.$meta_data` is not unique.",
+          "This could pose a problem with  subsequent `tbl_survfit` calls,",
+          "e.g. `tbl_survfit() %>% add_p()`") %>%
+      stringr::str_wrap() %>%
+      rlang::inform()
+  }
 
   # table_header ---------------------------------------------------------------
   table_body <- map_dfr(meta_data$table_body, ~.x)
