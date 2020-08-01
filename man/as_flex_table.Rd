@@ -31,7 +31,6 @@ Default is TRUE}
 A {flextable} object
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Function converts a gtsummary object to a flextable object.
 A user can use this function if they wish to add customized formatting
 available via the flextable functions. The flextable output is particularly

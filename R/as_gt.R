@@ -50,7 +50,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
   }
 
   if (!is.null(omit)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.0",
       "gtsummary::as_gt(omit = )",
       "as_gt(include = )",
@@ -60,7 +60,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
         "For example, `include = -tab_spanner`"
       )
     )
-    exclude <- omit
   }
 
   # creating list of gt calls --------------------------------------------------

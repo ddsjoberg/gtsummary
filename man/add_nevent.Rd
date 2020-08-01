@@ -7,7 +7,7 @@
 add_nevent(x, ...)
 }
 \arguments{
-\item{x}{\code{tbl_regerssion} or \code{tbl_uvregression} object}
+\item{x}{\code{tbl_regression} or \code{tbl_uvregression} object}
 
 \item{...}{Additional arguments passed to or from other methods.}
 }

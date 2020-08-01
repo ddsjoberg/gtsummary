@@ -222,8 +222,6 @@ tbl_regression(m1, exponentiate = TRUE) %>%
 
 The `tbl_uvregression()` produces a table of univariate regression results.  The function is a wrapper for `tbl_regression()`, and as a result, accepts nearly identical function arguments.  The function's results can be modified in similar ways to `tbl_regression()` and the results reported inline similarly to `tbl_regression()`. 
 
-<img src = "https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_mvregression_demo.gif" alt = "animated" width = "100%">
-
 ```{r tbl_uvregression}
 trial %>%
   select(-death, -ttdeath, -stage) %>%
