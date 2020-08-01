@@ -718,7 +718,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
         tibble::tribble(
           ~stat, ~label,
           "{p25}, {p75}", translate_text("IQR", language),
-          "{p25} - {p75}", translate_text("IQR", language)
+          "{p25} \U2013 {p75}", translate_text("IQR", language)
         ),
         labels
       )
