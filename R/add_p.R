@@ -356,7 +356,8 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Calculate and add a p-value
 #' @param x Object of class `"tbl_survfit"`
-#' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`.
+#' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,
+#' `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`, `"coxph_wald"`, `"coxph_score".`
 #' See details below
 #' @param test.args Named list of additional arguments passed to method in
 #' `test=`. Does not apply to all test types.
@@ -504,7 +505,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   if (all(!is.na(meta_data$stat_test_lbl))) {
     footnote_list <-
       unique(meta_data$stat_test_lbl) %>%
-      paste(sep = "; ")
+      paste(collapse = "; ")
 
     x <- modify_footnote(x, update = list(p.value = footnote_list))
   }
@@ -562,7 +563,28 @@ add_p_tbl_survfit_survdiff <- function(x, quiet, ...) {
   survdiff_result <- rlang::eval_tidy(survdiff_call)
 
   # returning p-value
-  stats::pchisq(survdiff_result$chisq, length(survdiff_result$n) - 1, lower.tail = FALSE)
+  broom::glance(survdiff_result)$p.value
+}
+
+add_p_tbl_survfit_coxph <- function(x, quiet, type, ...) {
+  # formula and data calls
+  formula_data_call <- extract_formula_data_call(x)
+
+  # converting call into a survdiff call
+  coxph_call <- rlang::call2(rlang::expr(survival::coxph), !!!formula_data_call, ...)
+
+  # printing call to calculate p-value
+  if (quiet == FALSE) print_call(coxph_call)
+
+  # evaluating `survdiff()`
+  coxph_result <- rlang::eval_tidy(coxph_call)
+
+  # returning p-value
+  pvalue_column <- switch(type,
+                          "lrt" = "p.value.log",
+                          "wald" = "p.value.wald",
+                          "score" = "p.value.sc")
+  broom::glance(coxph_result)[[pvalue_column]]
 }
 
 df_add_p_tbl_survfit_tests <-
@@ -570,6 +592,9 @@ df_add_p_tbl_survfit_tests <-
     ~test_name, ~fn, ~footnote, ~additional_args,
     "logrank", list(add_p_tbl_survfit_survdiff), "Log-rank test", FALSE,
     "petopeto_gehanwilcoxon", list(purrr::partial(add_p_tbl_survfit_survdiff, rho = 1)), "Peto & Peto modification of Gehan-Wilcoxon test", FALSE,
+    "coxph_lrt", list(purrr::partial(add_p_tbl_survfit_coxph, type = "lrt")), "Cox regression (LRT)", TRUE,
+    "coxph_wald", list(purrr::partial(add_p_tbl_survfit_coxph, type = "wald")), "Cox regression (Wald)", TRUE,
+    "coxph_score", list(purrr::partial(add_p_tbl_survfit_coxph, type = "score")), "Cox regression (Score)", TRUE,
     "survdiff", list(add_p_tbl_survfit_survdiff), NA_character_, TRUE
   )
 
