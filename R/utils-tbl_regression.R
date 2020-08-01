@@ -92,6 +92,17 @@ tidy_wrap <- function(x, exponentiate, conf.level, tidy_fun) {
     )
   }
 
+  # checking reserved names in the tidy data frame -----------------------------
+  if (any(c("rowname", "groupname_col") %in% names(tidy_bit))) {
+    paste("The resulting tibble from the initial tidying of the model",
+          "(likely from the tidier passed in `tidy_fun=`)",
+          "contains a column named 'rowname' or 'groupname_col'.",
+          "These column names result in special print behavior in the",
+          "{gt} package, and may cause errors or malformed tables.") %>%
+      stringr::str_wrap() %>%
+      rlang::inform()
+  }
+
   # otherwise returning original output
   return(tidy_bit)
 }
