@@ -232,10 +232,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # the object func_inputs is a list of every object passed to the function
   tbl_summary_inputs <- as.list(environment())
 
-  # removing variables with unsupported variable types from data ---------------
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
-  data <- removing_variables_with_unsupported_types(data, include, classes_expected)
-
   # checking function inputs ---------------------------------------------------
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,
@@ -244,7 +240,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # generate meta_data --------------------------------------------------------
   meta_data <- generate_metadata(data = data, value = value, by = by,
-                                 classes_expected =  classes_expected,
                                  type = type, label = label, statistic =  statistic,
                                  digits = digits, percent = percent, sort = sort)
 
@@ -335,20 +330,17 @@ removing_variables_with_unsupported_types <- function(data, include, classes_exp
 
 # generate metadata table --------------------------------------------------------------
 # for survey objects pass the full survey object to `survey` argument, and `design$variables` to `data` argument
-generate_metadata <- function(data, value, by, classes_expected, type, label, statistic, digits, percent, sort, survey = NULL) {
+generate_metadata <- function(data, value, by, type, label, statistic, digits, percent, sort, survey = NULL) {
   # converting tidyselect formula lists to named lists -------------------------
   value <- tidyselect_to_list(data, value, arg_name = "value")
 
   # creating a table with meta data about each variable ------------------------
   meta_data <- tibble(
-    variable = names(data),
-    # assigning class, if entire var is NA, then assigning class NA
-    class = assign_class(data, .data$variable, classes_expected),
+    variable = names(data) %>% setdiff(by),
     # assigning our best guess of the type, the final type is assigned below
     # we make a guess first, so users may use the gtsummary tidyselect functions for type
     summary_type = assign_summary_type(
-      data = data, variable = .data$variable, class = .data$class,
-      summary_type = NULL, value = value
+      data = data, variable = .data$variable, summary_type = NULL, value = value
     )
   )
   # excluding by variable
@@ -365,8 +357,8 @@ generate_metadata <- function(data, value, by, classes_expected, type, label, st
       meta_data %>%
       mutate(
         summary_type = assign_summary_type(
-          data = data, variable = .data$variable, class = .data$class,
-          summary_type = type, value = value
+          data = data, variable = .data$variable,
+          summary_type = type, value = value, check_assignment = TRUE
         )
       )
   }
@@ -390,18 +382,18 @@ generate_metadata <- function(data, value, by, classes_expected, type, label, st
   meta_data <-
     meta_data %>%
     mutate(
-      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, .data$class, value),
+      dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, value),
       var_label = assign_var_label(data, .data$variable, label),
       stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
       stat_label = stat_label_match(.data$stat_display),
       sort = assign_sort(.data$variable, .data$summary_type, sort),
       df_stats = pmap(
         list(.data$summary_type, .data$variable,
-             .data$class, .data$dichotomous_value,
+             .data$dichotomous_value,
              .data$sort, .data$stat_display),
         ~ df_stats_function(summary_type = ..1, variable = ..2,
-                            class = ..3, dichotomous_value = ..4,
-                            sort = ..5, stat_display = ..6,
+                            dichotomous_value = ..3,
+                            sort = ..4, stat_display = ..5,
                             data = data_for_df_stats, by = by,
                             percent = percent, digits = digits)
       )

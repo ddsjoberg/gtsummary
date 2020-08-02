@@ -289,7 +289,7 @@ test_that("tbl_summary-difftime does not cause error", {
 
 test_that("tbl_summary-all missing data does not cause error", {
   df_missing <-
-    tibble(
+    tibble::tibble(
       my_by_var = c(1,1,2,2),
       fct = rep(NA, 4) %>% factor(levels = c("lion", "tiger", "bear")),
       lgl = NA,
