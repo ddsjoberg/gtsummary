@@ -329,16 +329,12 @@ df_by <- function(data, by) {
 
   if (!is_survey(data)) {
     # classic data.frame
-    if (inherits(data[[by]], "factor"))
-      result <- tibble(by = attr(data[[by]], "levels") %>%
-                         factor(x = ., levels= ., labels = .))
-    else result <- data %>% select(by) %>% dplyr::distinct() %>% set_names("by")
-
     result <-
-      result %>%
+      data %>%
+      select(by = all_of(by)) %>%
+      count(!!sym("by"), .drop = FALSE) %>%
       arrange(!!sym("by")) %>%
       mutate(
-        n = purrr::map_int(.data$by, ~ sum(data[[!!by]] == .x)),
         N = sum(.data$n),
         p = .data$n / .data$N,
         by_id = 1:n(), # 'by' variable ID
@@ -770,8 +766,8 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
     data %>%
     mutate(
       # converting to factor, if not already factor
-      variable =
-        switch(inherits(.data$variable, "factor"), .data$variable) %||% factor(.data$variable),
+      variable = switch(inherits(.data$variable, "factor"), .data$variable) %||%
+        factor(.data$variable),
       # adding dichotomous level (in case it is unobserved)
       variable = forcats::fct_expand(.data$variable, as.character(dichotomous_value)),
       # # re-leveling by alphanumeric order or frequency
@@ -779,18 +775,8 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
                         "alphanumeric" = .data$variable,
                         "frequency" = forcats::fct_infreq(.data$variable))
     ) %>%
-    {suppressWarnings(count(., !!!syms(variable_by_chr)))} %>%
-    stats::na.omit() %>%
-    # if there is a by variable, merging in all levels
-    {switch(
-      !is.null(by),
-      full_join(.,
-                list(by = df_by$by,
-                     variable = factor(attr(.$variable, "levels"),
-                                       levels = attr(.$variable, "levels"))) %>%
-                  purrr::cross_df(),
-                by = c("by", "variable"))[c("by", "variable", "n")]) %||% .} %>%
-    tidyr::complete(!!!syms(variable_by_chr), fill = list(n = 0))
+    filter(!is.na(.data$variable)) %>%
+    count(!!!syms(variable_by_chr), .drop = FALSE)
 
   # calculating percent
   group_by_percent <- switch(
@@ -860,39 +846,13 @@ summarize_continuous <- function(data, variable, by, stat_display) {
     set_names(variable_by_chr)
 
   # calculating stats for each var and by level
-  if (!is.null(by)) {
-    df_stats <-
-      list(
-        fn = fns_names_chr,
-        by = df_by$by
-      ) %>%
-      cross_df() %>%
-      mutate(
-        variable = variable,
-        value = purrr::map2_dbl(
-          .data$fn, .data$by,
-          function(x, y) {
-            var_vctr <- filter(data, .data$by == y) %>% pull(.data$variable)
-            if (length(var_vctr) == 0) return(NA)
-            do.call(what = x, args = list(x = var_vctr))
-          }
-        )
-      ) %>%
-      tidyr::pivot_wider(id_cols = c("by", "variable"), names_from = "fn")
-  }
-  else if (is.null(by)) {
-    df_stats <-
-      list(fn = fns_names_chr) %>%
-      cross_df() %>%
-      mutate(
-        variable = variable,
-        value = map_dbl(
-          .data$fn,
-          ~do.call(what = .x, args = list(x = pull(data, .data$variable)))
-        )
-      ) %>%
-      tidyr::pivot_wider(id_cols = c("variable"), names_from = "fn")
-  }
+  fns_names_expr <- map(fns_names_chr, rlang::sym) # converting chars to expressions
+  df_stats <-
+    data %>%
+    dplyr::group_by_at(switch(!is.null(by), "by")) %>%
+    dplyr::summarise_at(vars(.data$variable), tibble::lst(!!!fns_names_expr)) %>%
+    mutate(variable = .env$variable) %>%
+    select(any_of(c("by", "variable")), everything())
 
   # returning final object
   df_stats

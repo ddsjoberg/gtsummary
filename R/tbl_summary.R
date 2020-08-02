@@ -196,9 +196,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_data_checks(data)
 
   # removing ordered class from factor variables -------------------------------
-  data <- dplyr::mutate_if(data,
-                           ~inherits(., "ordered") && inherits(., "factor"),
-                           ~factor(., levels = attr(., "levels"), ordered = FALSE))
+  # data <- dplyr::mutate_if(data,
+  #                          ~inherits(., "ordered") && inherits(., "factor"),
+  #                          ~factor(., levels = attr(., "levels"), ordered = FALSE))
 
   # deleting obs with missing by values ----------------------------------------
   # saving variable labels
