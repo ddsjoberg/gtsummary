@@ -463,8 +463,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all sepcifed types are continuous, categorical, or dichotomous
     if (inherits(type, "formula")) type <- list(type)
-    if (!every(type, ~ eval(rlang::f_rhs(.x)) %in% c("continuous", "categorical", "dichotomous")) |
-        !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(type, ~ eval_rhs(.x) %in% c("continuous", "categorical", "dichotomous")) |
+        !every(type, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'type'  argument must of one and only one of ",
         "\"continuous\", \"categorical\", or \"dichotomous\""
@@ -514,7 +514,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all sepcifed labels must be a string of length 1
     if (inherits(label, "formula")) label <- list(label)
-    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(label, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'label' argument must be a string."
       ), call. = FALSE)
@@ -546,7 +546,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all specified statistics must be a string of length 1
     if (inherits(statistic, "formula")) statistic <- list(statistic)
-    if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(statistic, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'statistic' argument must be a string."
       ), call. = FALSE)
@@ -608,8 +608,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all sepcifed types are frequency or alphanumeric
     if (inherits(sort, "formula")) sort <- list(sort)
-    if (!every(sort, ~ eval(rlang::f_rhs(.x)) %in% c("frequency", "alphanumeric")) |
-        !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(sort, ~ eval_rhs(.x) %in% c("frequency", "alphanumeric")) |
+        !every(sort, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'sort' argument must of one and only one of ",
         "\"frequency\" or \"alphanumeric\""
@@ -662,6 +662,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 #   data = NULL, by = NULL, summary_type = NULL, var_label = NULL,
 #   stat_display = NULL, digits = NULL, pvalue_fun = NULL
 # )
+
 
 # stat_label_match -------------------------------------------------------------
 # provide a vector of stat_display and get labels back i.e. {mean} ({sd}) gives Mean (SD)

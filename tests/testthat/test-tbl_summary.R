@@ -412,3 +412,17 @@ test_that("tbl_summary-works with ordered factors", {
   )
 })
 
+
+test_that("tbl_summary-complex environments check", {
+  no_fun <- function() {
+    grade_level = "I"
+    trial %>%
+      dplyr::select(grade) %>%
+      tbl_summary(
+        label = grade ~ paste("Grade", grade_level)
+      )
+  }
+
+  expect_error(no_fun(), NA)
+})
+

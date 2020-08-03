@@ -2,7 +2,7 @@
 # GTSUMMARY OBJECT. IF YOU'RE CREATING A GTSUMMARY-LIKE FUNCTION, YOU'LL
 # WANT TO GRAB A COPY OF THIS FILE AND PLACE IT IN YOUR PACKAGE.
 
-# LAST UPDATED: 2020-07-24
+# LAST UPDATED: 2020-07-30
 
 # table_header_fill_missing -----------------------------------------------------
 #' Function fills out table_header when there are missing columns
@@ -332,7 +332,8 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
                                    arg_name = arg_name,
                                    select_single = select_single)
 
-        rhs <- rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
+        # evaluate RHS of formula in the original formula environment
+        rhs <- eval_rhs(x)
 
         # converting rhs and lhs into a named list
         purrr::map(lhs, ~ list(rhs) %>% rlang::set_names(.x)) %>%
@@ -440,6 +441,11 @@ tidyselect_to_string <- function(...data..., ...meta_data... = NULL,
     ), call. = FALSE)
   }
   result
+}
+
+# simple function to evaluate the RHS of a formula in the formula's environment
+eval_rhs <- function(x) {
+  rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
 }
 
 # select helpers environments --------------------------------------------------
