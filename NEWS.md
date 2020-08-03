@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Fixed bug where `{N_obs_unweighted}` statistic was not available for continuous variables in `tbl_svysummary()` (#585)
+
+* Updated`add_n()` to include `{N_obs_unweighted}` and added missing translation
+
 * Deprecated function `gtsummary::as_flextable()`. It is now soft deprecated and args are passed to `as_flex_table()`
 
 * All `lifecycle::deprecate_warn()` have been upgraded to `lifecycle::deprecate_stop()` for <= v1.2.0 (released Aug 2019)
