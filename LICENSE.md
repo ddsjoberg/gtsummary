@@ -597,7 +597,7 @@ License. But first, please read
 
 ## Addendum
 
-Wherein the above terms do not apply, the additional terms from the Hippocratic License Version 2.0 are added.
+Additional terms use and from the Hippocratic License Version 2.0 are added.
 
 Licensor hereby grants permission by this license ("License"), free of charge,
 to any person or entity (the "Licensee") obtaining a copy of this software and
