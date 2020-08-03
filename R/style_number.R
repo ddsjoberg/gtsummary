@@ -23,7 +23,8 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
   # setting defaults -----------------------------------------------------------
   decimal.mark <-
     decimal.mark %||%
-    get_theme_element("style_number-arg:decimal.mark", default = getOption("OutDec"))
+    get_theme_element("style_number-arg:decimal.mark",
+                      default = getOption("OutDec", default = "."))
   big.mark <-
     big.mark %||%
     get_theme_element("style_number-arg:big.mark",
