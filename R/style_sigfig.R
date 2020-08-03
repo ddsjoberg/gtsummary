@@ -22,10 +22,6 @@
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) %>%
 #'   style_sigfig()
 style_sigfig <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
-  # setting defaults -----------------------------------------------------------
-  big.mark <- big.mark %||% get_theme_element("style_number-arg:big.mark", default = ",")
-  decimal.mark <- decimal.mark %||% get_theme_element("style_number-arg:decimal.mark", default = ".")
-
   # calculating the number of digits to round number
   d <- paste0("abs(x) < 10^", digits - digits:1, " ~ ", digits:1, collapse = ", ") %>%
     {paste0("case_when(", . ,", TRUE ~ 0)")} %>%

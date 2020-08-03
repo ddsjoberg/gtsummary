@@ -52,11 +52,12 @@ If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
 with the translated text!}
 
-\item{big.mark}{Character used between every 3 digits to separate thousands.
-Default is \code{","}}
+\item{big.mark}{Character used between every 3 digits to separate
+hundreds/thousands/millions/etc.
+Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
 \item{decimal.mark}{The character to be used to indicate the numeric decimal point.
-Default is \code{"."}}
+Default is \code{"."}  or \code{getOption("OutDec")}}
 
 \item{iqr.sep}{string indicating separator for the default IQR in \code{tbl_summary()}.
 If \verb{decimal.mark=} is NULL, \verb{iqr.sep=} is \code{", "}. The comma
