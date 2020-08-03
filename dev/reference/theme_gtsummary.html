@@ -99,7 +99,7 @@ Use the set_gtsummary_theme() function to set a theme." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9017</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
       </span>
     </div>
 
@@ -196,6 +196,8 @@ Use the <code><a href='set_gtsummary_theme.html'>set_gtsummary_theme()</a></code
   <span class='kw'>language</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"de"</span>, <span class='st'>"en"</span>, <span class='st'>"es"</span>, <span class='st'>"fr"</span>, <span class='st'>"ja"</span>, <span class='st'>"pt"</span>, <span class='st'>"se"</span>),
   <span class='kw'>big.mark</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>decimal.mark</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>iqr.sep</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>decimal.mark</span>, <span class='st'>","</span>), <span class='st'>" – "</span>),
+  <span class='kw'>ci.sep</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>decimal.mark</span>, <span class='st'>","</span>), <span class='st'>" – "</span>),
   <span class='kw'>set_theme</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
@@ -242,6 +244,20 @@ Default is <code>","</code></p></td>
       <th>decimal.mark</th>
       <td><p>The character to be used to indicate the numeric decimal point.
 Default is <code>"."</code></p></td>
+    </tr>
+    <tr>
+      <th>iqr.sep</th>
+      <td><p>string indicating separator for the default IQR in <code><a href='tbl_summary.html'>tbl_summary()</a></code>.
+If <code>decimal.mark=</code> is NULL, <code>iqr.sep=</code> is <code>", "</code>. The comma
+separator, however, can look odd when <code>decimal.mark = ","</code>. In this case the argument
+will default to an en dash</p></td>
+    </tr>
+    <tr>
+      <th>ci.sep</th>
+      <td><p>string indicating separator for confidence intervals.
+If <code>decimal.mark=</code> is NULL, <code>ci.sep=</code> is <code>", "</code>. The comma
+separator, however, can look odd when <code>decimal.mark = ","</code>. In this case the argument
+will default to an en dash</p></td>
     </tr>
     </table>
 

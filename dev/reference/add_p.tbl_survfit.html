@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add statistic labels — add_stat_label • gtsummary</title>
+<title>Adds p-value to survfit table — add_p.tbl_survfit • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,10 @@
 
 
 
-<meta property="og:title" content="Add statistic labels — add_stat_label" />
-<meta property="og:description" content="Adds labels describing the summary statistics presented for
-each variable in the tbl_summary / tbl_svysummary table." />
+<meta property="og:title" content="Adds p-value to survfit table — add_p.tbl_survfit" />
+<meta property="og:description" content="
+
+Calculate and add a p-value" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -169,95 +170,120 @@ each variable in the tbl_summary / tbl_svysummary table." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add statistic labels</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_stat_label.R'><code>R/add_stat_label.R</code></a></small>
-    <div class="hidden name"><code>add_stat_label.Rd</code></div>
+    <h1>Adds p-value to survfit table</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_p.R'><code>R/add_p.R</code></a></small>
+    <div class="hidden name"><code>add_p.tbl_survfit.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Adds labels describing the summary statistics presented for
-each variable in the <a href='tbl_summary.html'>tbl_summary</a> / <a href='tbl_svysummary.html'>tbl_svysummary</a> table.</p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+
+Calculate and add a p-value</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_stat_label</span>(<span class='no'>x</span>, <span class='kw'>location</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_survfit</span>
+<span class='fu'><a href='add_p.html'>add_p</a></span>(
+  <span class='no'>x</span>,
+  <span class='kw'>test</span> <span class='kw'>=</span> <span class='st'>"logrank"</span>,
+  <span class='kw'>test.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function
-or with class <code>tbl_svysummary</code> from the <a href='tbl_svysummary.html'>tbl_svysummary</a> function</p></td>
+      <td><p>Object of class <code>"tbl_survfit"</code></p></td>
     </tr>
     <tr>
-      <th>location</th>
-      <td><p>location where statistic label will be included.
-<code>"row"</code> (the default) to add the statistic label to the variable label row,
-and <code>"column"</code> adds a column with the statistic label.</p></td>
+      <th>test</th>
+      <td><p>string indicating test to use. Must be one of <code>"logrank"</code>, <code>"survdiff"</code>,
+<code>"petopeto_gehanwilcoxon"</code>, <code>"coxph_lrt"</code>, <code>"coxph_wald"</code>, <code>"coxph_score".</code>
+See details below</p></td>
     </tr>
     <tr>
-      <th>label</th>
-      <td><p>a list of formulas or a single formula updating the statistic
-label, e.g. <code>label = all_categorical() ~ "No. (%)"</code></p></td>
+      <th>test.args</th>
+      <td><p>Named list of additional arguments passed to method in
+<code>test=</code>. Does not apply to all test types.</p></td>
+    </tr>
+    <tr>
+      <th>pvalue_fun</th>
+      <td><p>Function to round and format p-values.
+Default is <a href='style_pvalue.html'>style_pvalue</a>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>Variables to include in output. Input may be a vector of
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>Logical indicating whether to print messages in console. Default is
+<code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Not used</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="test-argument"><a class="anchor" href="#test-argument"></a>test argument</h2>
 
-    <p>A <code>tbl_summary</code> or <code>tbl_svysummary</code> object</p>
+    
+
+<p>The most common way to specify <code>test=</code> is by using a single string indicating
+the test name. However, if you need to specify different tests within the same
+table, the input in flexible using the list notation common throughout the
+gtsummary package. For example, the following code would call the log-rank test,
+and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span class='no'>...</span> <span class='kw'>%&amp;gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(<span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>trt</span> ~ <span class='st'>"logrank"</span>, <span class='no'>grade</span> ~ <span class='st'>"survdiff"</span>),
+        <span class='kw'>test.args</span> <span class='kw'>=</span> <span class='no'>grade</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.5</span>))</pre><p></div></p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
 
 <p>Example 1</p>
-<p><img src='figures/add_stat_label_ex1.png' width=60% /></p>
+<p><img src='figures/add_p_tbl_survfit_ex1.png' width=55% /></p>
 <p>Example 2</p>
-<p><img src='figures/add_stat_label_ex2.png' width=60% /></p>
+<p><img src='figures/add_p_tbl_survfit_ex2.png' width=45% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_summary tools: 
-<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
+    <div class='dont-index'><p>Other tbl_survfit tools: 
+<code><a href='add_n.tbl_survfit.html'>add_n.tbl_survfit</a>()</code>,
+<code><a href='add_nevent.tbl_survfit.html'>add_nevent.tbl_survfit</a>()</code>,
 <code><a href='modify.html'>modify</a></code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
-<p>Other tbl_svysummary tools: 
-<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_svysummary.html'>add_p.tbl_svysummary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_svysummary.html'>tbl_svysummary</a>()</code></p></div>
+<code><a href='tbl_survfit.html'>tbl_survfit</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl</span> <span class='kw'>&lt;-</span> <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>response</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
+
+<span class='no'>gts_survfit</span> <span class='kw'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>grade</span>, <span class='no'>trial</span>),
+       <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span>(<span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
 
 <span class='co'># Example 1 ----------------------------------</span>
-<span class='co'># Add statistic presented to the variable label row</span>
-<span class='no'>add_stat_label_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>tbl</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>add_stat_label</span>(
-    <span class='co'># update default statistic label for continuous variables</span>
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() ~ <span class='st'>"med. (iqr)"</span>
-  )
-
+<span class='no'>add_p_tbl_survfit_ex1</span> <span class='kw'>&lt;-</span>
+  <span class='no'>gts_survfit</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Calculating p-value with</span>
+#&gt; <span class='message'>`survival::survdiff(formula = Surv(ttdeath, death) ~ grade, data = trial)`</span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='no'>add_stat_label_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='no'>tbl</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>add_stat_label</span>(
-    <span class='co'># add a new column with statistic labels</span>
-    <span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>"column"</span>
-  )</div></pre>
+<span class='co'># Pass `rho=` argument to `survdiff()`</span>
+<span class='no'>add_p_tbl_survfit_ex2</span> <span class='kw'>&lt;-</span>
+  <span class='no'>gts_survfit</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(<span class='kw'>test</span> <span class='kw'>=</span> <span class='st'>"survdiff"</span>, <span class='kw'>test.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.5</span>))</div><div class='output co'>#&gt; <span class='message'>Calculating p-value with</span>
+#&gt; <span class='message'>`survival::survdiff(formula = Surv(ttdeath, death) ~ grade, data = trial, rho = 0.5)`</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

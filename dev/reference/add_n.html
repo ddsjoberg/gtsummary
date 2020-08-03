@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add column with N — add_n • gtsummary</title>
+<title>Adds column with N to gtsummary table — add_n • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,8 @@
 
 
 
-<meta property="og:title" content="Add column with N — add_n" />
-<meta property="og:description" content="For each variable in a tbl_summary table, the add_n function adds a column with the
-total number of non-missing (or missing) observations" />
+<meta property="og:title" content="Adds column with N to gtsummary table — add_n" />
+<meta property="og:description" content="Adds column with N to gtsummary table" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -97,7 +96,7 @@ total number of non-missing (or missing) observations" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9017</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
       </span>
     </div>
 
@@ -169,104 +168,34 @@ total number of non-missing (or missing) observations" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add column with N</h1>
+    <h1>Adds column with N to gtsummary table</h1>
     <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_n.R'><code>R/add_n.R</code></a></small>
     <div class="hidden name"><code>add_n.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>For each variable in a <code>tbl_summary</code> table, the <code>add_n</code> function adds a column with the
-total number of non-missing (or missing) observations</p>
+    <p>Adds column with N to gtsummary table</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_n</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>"{n}"</span>,
-  <span class='kw'>col_label</span> <span class='kw'>=</span> <span class='st'>"**N**"</span>,
-  <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>last</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>add_n</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function or
-with class <code>tbl_svysummary</code> from the <a href='tbl_svysummary.html'>tbl_svysummary</a> function</p></td>
+      <td><p>Object created from a gtsummary function</p></td>
     </tr>
     <tr>
-      <th>statistic</th>
-      <td><p>String indicating the statistic to report. Default is the
-number of non-missing observation for each variable, <code>statistic = "{n}"</code>.
-Other statistics available to report include:</p><ul>
-<li><p><code>"{N}"</code> total number of observations,</p></li>
-<li><p><code>"{n}"</code> number of non-missing observations,</p></li>
-<li><p><code>"{n_miss}"</code> number of missing observations,</p></li>
-<li><p><code>"{p}"</code> percent non-missing data,</p></li>
-<li><p><code>"{p_miss}"</code> percent missing data
-The argument uses <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> syntax and multiple statistics may be reported,
-e.g. <code>statistic = "{n} / {N} ({p}%)"</code></p></li>
-</ul></td>
-    </tr>
-    <tr>
-      <th>col_label</th>
-      <td><p>String indicating the column label.  Default is <code>"**N**"</code></p></td>
-    </tr>
-    <tr>
-      <th>footnote</th>
-      <td><p>Logical argument indicating whether to print a footnote
-clarifying the statistics presented. Default is <code>FALSE</code></p></td>
-    </tr>
-    <tr>
-      <th>last</th>
-      <td><p>Logical indicator to include N column last in table.
-Default is <code>FALSE</code>, which will display N column first.</p></td>
-    </tr>
-    <tr>
-      <th>missing</th>
-      <td><p>DEPRECATED. Logical argument indicating whether to print N
-(<code>missing = FALSE</code>), or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></td>
+      <th>...</th>
+      <td><p>Additional arguments passed to other methods.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A <code>tbl_summary</code> or <code>tbl_svysummary</code> object</p>
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
-
-    
-
-<p><img src='figures/tbl_n_ex.png' width=50% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tbl_summary tools: 
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
-<p>Other tbl_svysummary tools: 
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_svysummary.html'>add_p.tbl_svysummary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_svysummary.html'>tbl_svysummary</a>()</code></p></div>
+    <div class='dont-index'><p><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>, <a href='add_n.tbl_summary.html'>add_n.tbl_svysummary</a>, <a href='add_n.tbl_survfit.html'>add_n.tbl_survfit</a></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_n_ex</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"trt"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>add_n</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
