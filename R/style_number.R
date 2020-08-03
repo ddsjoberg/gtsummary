@@ -28,6 +28,7 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
   big.mark <-
     big.mark %||%
     get_theme_element("style_number-arg:big.mark",
+                      # if decimal is a comma, then making big.mark a thin space, otherwise a comma
                       default = ifelse(identical(decimal.mark, ","), "\U2009", ","))
 
   digits <- rep(digits, length.out = length(x))
