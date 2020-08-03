@@ -4,10 +4,13 @@
 \alias{add_nevent.tbl_regression}
 \title{Add number of events to a regression table}
 \usage{
-\method{add_nevent}{tbl_regression}(x, ...)
+\method{add_nevent}{tbl_regression}(x, quiet = NULL, ...)
 }
 \arguments{
 \item{x}{\code{tbl_regression} object}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
 
 \item{...}{Not used}
 }
