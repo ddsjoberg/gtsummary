@@ -339,7 +339,13 @@ summarize_categorical_survey <- function(data, variable, by, class, dichotomous_
 # summarize_continuous for survey designs ---------------------------------------------------------
 summarize_continuous_survey <- function(data, variable, by, stat_display, digits) {
   # extracting function calls
-  fns_names_chr <- extracting_function_calls_from_stat_display(stat_display, variable)
+  fns_names_chr <-
+    extracting_function_calls_from_stat_display(stat_display, variable) %>%
+    # removing stats that are calculated later
+    setdiff(c("p_miss", "N_obs", "N_miss", "p_miss_unweighted", "N_obs_unweighted",
+              "N_miss_unweighted", "N_nonmiss", "p_nonmiss", "N_nonmiss_unweighted",
+              "p_nonmiss_unweighted"))
+
 
   # preparing df_stats
   if (is.null(by)) {
