@@ -32,6 +32,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #'
 #' @param x `tbl_regression` object
 #' @param ... Not used
+#' @inheritParams add_global_p.tbl_regression
 #' @export
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
@@ -45,7 +46,10 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @section Example Output:
 #' \if{html}{\figure{add_nevent_ex.png}{options: width=50\%}}
 
-add_nevent.tbl_regression <- function(x, ...) {
+add_nevent.tbl_regression <- function(x, quiet = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # if model is a cox model, adding number of events as well
   if (inherits(x$model_obj, "coxph") && !inherits(x$model_obj, "clogit")) {
     assert_package("survival", "add_nevent")
@@ -105,6 +109,13 @@ add_nevent.tbl_regression <- function(x, ...) {
   else {
     stop("Model type not supported")
     return(x)
+  }
+
+  # printing note about placing N Events in table
+  if (quiet == FALSE) {
+    paste("A column called 'nevent' has been added to `x$table_body`.",
+          "Default printing of the table has not been modified.") %>%
+    rlang::inform()
   }
 
   # column label
