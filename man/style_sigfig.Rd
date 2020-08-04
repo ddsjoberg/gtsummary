@@ -12,11 +12,12 @@ style_sigfig(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...)
 \item{digits}{Integer specifying the minimum number of significant
 digits to display}
 
-\item{big.mark}{Character used between every 3 digits to separate thousands.
-Default is \code{","}}
+\item{big.mark}{Character used between every 3 digits to separate
+hundreds/thousands/millions/etc.
+Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
 \item{decimal.mark}{The character to be used to indicate the numeric decimal point.
-Default is \code{"."}}
+Default is \code{"."}  or \code{getOption("OutDec")}}
 
 \item{...}{Other arguments passed on to \code{base::format()}}
 }

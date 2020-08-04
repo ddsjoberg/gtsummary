@@ -105,11 +105,12 @@ add_global_p.tbl_regression <- function(x,
       rlang::expr(car::Anova(x$model_obj, type = !!type, !!!list(...))) %>%
       deparse()
 
-    rlang::inform(paste(
-      glue("Global p-values for variable(s)"),
-      glue("{glue::glue_collapse(shQuote(include, type = 'csh'), sep = ', ', last = ' and ')}"),
-      glue("calculated with\n  `{expr_car}`")
-    ))
+    paste("Global p-values for variable(s)",
+          glue("`include = {deparse(include) %>% paste(collapse = '')}`"),
+          glue("were calculated with")) %>%
+      stringr::str_wrap() %>%
+      paste(glue("`{expr_car}`"), sep = "\n  ") %>%
+      rlang::inform()
   }
 
   # calculating global pvalues
@@ -230,11 +231,13 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
     expr_car <-
       rlang::expr(car::Anova(mod = x$model_obj, type = !!type, !!!list(...))) %>%
       deparse()
-    rlang::inform(paste(
-      glue("Global p-values for variable(s)"),
-      glue("{glue::glue_collapse(shQuote(include, type = 'csh'), sep = ', ', last = ' and ')}"),
-      glue("calculated with\n  `{expr_car}`")
-    ))
+
+    paste("Global p-values for variable(s)",
+          glue("`include = {deparse(include) %>% paste(collapse = '')}`"),
+          glue("were calculated with")) %>%
+      stringr::str_wrap() %>%
+      paste(glue("`{expr_car}`"), sep = "\n  ") %>%
+      rlang::inform()
   }
 
   # calculating global pvalues

@@ -23,10 +23,6 @@
 #' ) %>%
 #'   style_ratio()
 style_ratio <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
-  # setting defaults -----------------------------------------------------------
-  big.mark <- big.mark %||% get_theme_element("style_number-arg:big.mark", default = ",")
-  decimal.mark <- decimal.mark %||% get_theme_element("style_number-arg:decimal.mark", default = ".")
-
   ifelse(
     abs(x) < 1,
     style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
