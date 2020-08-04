@@ -20,10 +20,6 @@
 #' style_pvalue(pvals, digits = 2, prepend_p = TRUE)
 style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
                          big.mark = NULL, decimal.mark = NULL, ...) {
-  # setting defaults -----------------------------------------------------------
-  big.mark <- big.mark %||% get_theme_element("style_number-arg:big.mark", default = ",")
-  decimal.mark <- decimal.mark %||% get_theme_element("style_number-arg:decimal.mark", default = ".")
-
   # rounding large p-values to 1 digits
   if (digits == 1) {
     p_fmt <-
