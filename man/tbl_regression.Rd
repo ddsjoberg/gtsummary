@@ -2,9 +2,12 @@
 % Please edit documentation in R/tbl_regression.R
 \name{tbl_regression}
 \alias{tbl_regression}
+\alias{tbl_regression.default}
 \title{Display regression model results in table}
 \usage{
-tbl_regression(
+tbl_regression(x, ...)
+
+\method{tbl_regression}{default}(
   x,
   label = NULL,
   exponentiate = FALSE,
@@ -14,9 +17,10 @@ tbl_regression(
   intercept = FALSE,
   estimate_fun = NULL,
   pvalue_fun = NULL,
-  tidy_fun = NULL,
+  tidy_fun = broom::tidy,
   show_yesno = NULL,
-  exclude = NULL
+  exclude = NULL,
+  ...
 )
 }
 \arguments{
