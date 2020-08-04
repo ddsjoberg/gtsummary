@@ -457,8 +457,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all sepcifed types are continuous, categorical, or dichotomous
     if (inherits(type, "formula")) type <- list(type)
-    if (!every(type, ~ eval(rlang::f_rhs(.x)) %in% c("continuous", "categorical", "dichotomous")) |
-        !every(type, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(type, ~ eval_rhs(.x) %in% c("continuous", "categorical", "dichotomous")) |
+        !every(type, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'type'  argument must of one and only one of ",
         "\"continuous\", \"categorical\", or \"dichotomous\""
@@ -508,7 +508,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all sepcifed labels must be a string of length 1
     if (inherits(label, "formula")) label <- list(label)
-    if (!every(label, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(label, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'label' argument must be a string."
       ), call. = FALSE)
@@ -540,7 +540,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all specified statistics must be a string of length 1
     if (inherits(statistic, "formula")) statistic <- list(statistic)
-    if (!every(statistic, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(statistic, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'statistic' argument must be a string."
       ), call. = FALSE)
@@ -602,8 +602,8 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all sepcifed types are frequency or alphanumeric
     if (inherits(sort, "formula")) sort <- list(sort)
-    if (!every(sort, ~ eval(rlang::f_rhs(.x)) %in% c("frequency", "alphanumeric")) |
-        !every(sort, ~ rlang::is_string(eval(rlang::f_rhs(.x))))) {
+    if (!every(sort, ~ eval_rhs(.x) %in% c("frequency", "alphanumeric")) |
+        !every(sort, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'sort' argument must of one and only one of ",
         "\"frequency\" or \"alphanumeric\""
@@ -657,6 +657,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 #   stat_display = NULL, digits = NULL, pvalue_fun = NULL
 # )
 
+
 # stat_label_match -------------------------------------------------------------
 # provide a vector of stat_display and get labels back i.e. {mean} ({sd}) gives Mean (SD)
 stat_label_match <- function(stat_display, iqr = TRUE) {
@@ -664,23 +665,28 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
   labels <-
     tibble::tribble(
       ~stat, ~label,
-      "{min}", translate_text("minimum", language),
-      "{max}", translate_text("maximum", language),
-      "{median}", translate_text("median", language),
-      "{mean}", translate_text("mean", language),
-      "{sd}", translate_text("SD", language),
-      "{var}", translate_text("variance", language),
-      "{n}", translate_text("n", language),
-      "{N}", translate_text("N", language),
-      "{p}%", translate_text("%", language),
-      "{p_miss}%", translate_text("% missing", language),
-      "{p_nonmiss}%", translate_text("% not missing", language),
-      "{p}", translate_text("%", language),
-      "{p_miss}", translate_text("% missing", language),
-      "{p_nonmiss}", translate_text("% not missing", language),
-      "{N_miss}", translate_text("N missing", language),
-      "{N_nonmiss}", translate_text("N", language),
-      "{N_obs}", translate_text("no. obs.", language)
+      "{min}", "minimum",
+      "{max}", "maximum",
+      "{median}", "median",
+      "{mean}", "mean",
+      "{sd}", "SD",
+      "{var}", "variance",
+      "{n}", "n",
+      "{N}", "N",
+      "{p}%", "%",
+      "{p_miss}%", "% missing",
+      "{p_nonmiss}%", "% not missing",
+      "{p}", "%",
+      "{p_miss}", "% missing",
+      "{p_nonmiss}", "% not missing",
+      "{N_miss}", "N missing",
+      "{N_nonmiss}", "N",
+      "{N_obs}", "no. obs.",
+      "{N_obs_unweighted}", "Total N (unweighted)",
+      "{N_miss_unweighted}", "N Missing (unweighted)",
+      "{N_nonmiss_unweighted}", "N not Missing (unweighted)",
+      "{p_miss_unweighted}", "% Missing (unweighted)",
+      "{p_nonmiss_unweighted}", "% not Missing (unweighted)"
     ) %>%
     # adding in quartiles
     bind_rows(
@@ -697,7 +703,8 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
           str_remove_all(pattern = fixed("}")) %>%
           str_remove_all(pattern = fixed("{"))
       )
-    )
+    ) %>%
+    mutate(label = map_chr(.data$label, ~translate_text(.x, language)))
 
   # adding IQR replacements if indicated
   if (iqr == TRUE) {

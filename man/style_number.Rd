@@ -20,11 +20,12 @@ style_number(
 to round \verb{x=}. When vector is passed, each integer is mapped 1:1 to the
 numeric values in \code{x}}
 
-\item{big.mark}{Character used between every 3 digits to separate thousands.
-Default is \code{","}}
+\item{big.mark}{Character used between every 3 digits to separate
+hundreds/thousands/millions/etc.
+Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
 
 \item{decimal.mark}{The character to be used to indicate the numeric decimal point.
-Default is \code{"."}}
+Default is \code{"."}  or \code{getOption("OutDec")}}
 
 \item{scale}{A scaling factor: x will be multiplied by scale before formatting.}
 

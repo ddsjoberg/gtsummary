@@ -424,3 +424,26 @@ test_that("tbl_svysummary-provides similar results than tbl_summary for simple w
   expect_equal(t1$table_body, t2$table_body)
   expect_equal(t1$table_header, t2$table_header)
 })
+
+test_that("tbl_svysummary-calculates unweighted N with continuous variables and {N_obs_unweighted}", {
+
+t1 <- as_tibble(Titanic) %>%
+  mutate(age = round(as.numeric(list(runif(1, min = 5, max = 100))))) %>%
+  ungroup() %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ n) %>%
+    tbl_svysummary(by = Sex,
+                 statistic = list(all_continuous() ~ "{N_obs_unweighted}"))
+
+expect_equal(t1$meta_data$df_stats[[1]] %>%
+               pull('N_obs_unweighted') %>%
+               dplyr::first(),
+             as_tibble(Titanic) %>%
+               group_by(Sex) %>%
+               count() %>%
+               pull(n) %>%
+               dplyr::first())
+
+})
+
+
+
