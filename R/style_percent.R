@@ -14,9 +14,6 @@
 #' style_percent(percent_vals)
 #' style_percent(percent_vals, symbol = TRUE)
 style_percent <- function(x, symbol = FALSE, big.mark = NULL, decimal.mark = NULL, ...) {
-  # setting defaults -----------------------------------------------------------
-  big.mark <- big.mark %||% get_theme_element("style_number-arg:big.mark", default = ",")
-  decimal.mark <- decimal.mark %||% get_theme_element("style_number-arg:decimal.mark", default = ".")
 
   y <- case_when(
     x * 100 >= 10 ~ style_number(x * 100, digits = 0, big.mark = big.mark, decimal.mark = decimal.mark, ...),
