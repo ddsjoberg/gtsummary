@@ -62,6 +62,7 @@
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
 #' @export
+#' @rdname tbl_regression
 #' @return A `tbl_regression` object
 #' @examples
 #' # Example 1 ----------------------------------
@@ -94,12 +95,18 @@
 #'
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 
-tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
-                           include = everything(), show_single_row = NULL,
-                           conf.level = NULL, intercept = FALSE,
-                           estimate_fun = NULL, pvalue_fun = NULL,
-                           tidy_fun = NULL,
-                           show_yesno = NULL, exclude = NULL) {
+tbl_regression <- function(x, ...) {
+  UseMethod("tbl_regression")
+}
+
+#' @export
+#' @rdname tbl_regression
+tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
+                                   include = everything(), show_single_row = NULL,
+                                   conf.level = NULL, intercept = FALSE,
+                                   estimate_fun = NULL, pvalue_fun = NULL,
+                                   tidy_fun = broom::tidy,
+                                   show_yesno = NULL, exclude = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
     lifecycle::deprecate_stop(
