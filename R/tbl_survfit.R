@@ -64,7 +64,7 @@
 #'
 #' # Example 4 Competing Events Example ---------
 #' # adding a competing event for death (cancer vs other causes)
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
 #' trial2 <- trial %>%
 #'   mutate(
 #'   death_cr = case_when(
@@ -94,7 +94,7 @@
 #'
 #' \if{html}{\figure{survfit_cr_ex4.png}{options: width=55\%}}
 tbl_survfit <- function(x, ...) {
-  UseMethod("tbl_survfit")
+  UseMethod("tbl_survfit", x)
 }
 
 #' @export
