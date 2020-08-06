@@ -147,7 +147,7 @@ theme_gtsummary_printer <- function(
 #' - `"ja"` (Japanese)
 #' - `"pt"` (Portuguese)
 #' - `"se"` (Swedish)
-#' - `"zh-cn"` Chinese (Traditional)
+#' - `"zh-cn"` Chinese (Simplified)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free
 #' to reach out on [GitHub](https://github.com/ddsjoberg/gtsummary/issues)

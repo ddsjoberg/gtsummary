@@ -46,7 +46,7 @@ When \code{FALSE} the named list of theme elements is returned invisibly.}
 \item \code{"ja"} (Japanese)
 \item \code{"pt"} (Portuguese)
 \item \code{"se"} (Swedish)
-\item \code{"zh-cn"} Chinese (Traditional)
+\item \code{"zh-cn"} Chinese (Simplified)
 }
 
 If a language is missing a translation for a word or phrase, please feel free
