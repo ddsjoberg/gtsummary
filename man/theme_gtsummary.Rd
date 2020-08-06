@@ -18,7 +18,7 @@ theme_gtsummary_printer(
 )
 
 theme_gtsummary_language(
-  language = c("de", "en", "es", "fr", "ja", "pt", "se"),
+  language = c("de", "en", "es", "fr", "ja", "pt", "se", "zh-cn"),
   big.mark = NULL,
   decimal.mark = NULL,
   iqr.sep = switch(identical(decimal.mark, ","), " – "),
@@ -46,6 +46,7 @@ When \code{FALSE} the named list of theme elements is returned invisibly.}
 \item \code{"ja"} (Japanese)
 \item \code{"pt"} (Portuguese)
 \item \code{"se"} (Swedish)
+\item \code{"zh-cn"} Chinese (Traditional)
 }
 
 If a language is missing a translation for a word or phrase, please feel free
