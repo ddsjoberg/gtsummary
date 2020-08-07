@@ -18,6 +18,11 @@
 #'     - large p-values are rounded to two decimal places
 #'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
 #'     - in `tbl_summary()` the percent symbol is not printed next to percentages
+#'   - `"lancet"`
+#'     - sets theme to align with the The Lancet reporting guidelines
+#'     - large p-values are rounded to two decimal places
+#'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
+#'     - confidence intervals are separated with `4.5 to 7.8`, rather than a comma
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt or flextable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine=)`
@@ -57,7 +62,7 @@ NULL
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
-theme_gtsummary_journal <- function(journal = "jama", set_theme = TRUE) {
+theme_gtsummary_journal <- function(journal = c("jama", "lancet"), set_theme = TRUE) {
   journal <- match.arg(journal)
   if (journal == "jama") {
     lst_theme <-
@@ -65,11 +70,28 @@ theme_gtsummary_journal <- function(journal = "jama", set_theme = TRUE) {
         "pkgwide-str:theme_name" = "JAMA",
         "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
         "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+        "style_number-arg:decimal.mark" = ".",
+        "style_number-arg:big.mark" = ",",
         "add_stat_label-arg:location" = "row",
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "tbl_summary-str:categorical_stat" = "{n} ({p})"
       )
   }
+  else if (journal == "lancet") {
+    lst_theme <-
+      list(
+        "pkgwide-str:theme_name" = "The Lancet",
+        "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
+        "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
+        # "style_number-arg:decimal.mark" = "\U00B7", # i am not sure why this does not work
+        "style_number-arg:decimal.mark" = ".",
+        "style_number-arg:big.mark" = "\U2009",
+        "pkgwide-str:ci.sep" = " to "
+      )
+  }
+
+
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
   return(invisible(lst_theme))
@@ -189,6 +211,7 @@ theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", 
   if (!is.null(iqr.sep))
     ret <- c(ret, list("tbl_summary-str:continuous_stat" =
                          paste0("{median} ({p25}", iqr.sep, "{p75})")))
+
   if (is.null(ci.sep) && identical(decimal.mark, ","))
     ci.sep <- " \U2013 "
   if (!is.null(ci.sep)) ret <- c(ret, list("pkgwide-str:ci.sep" = ci.sep))

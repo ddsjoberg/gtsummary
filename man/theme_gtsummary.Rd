@@ -8,7 +8,7 @@
 \alias{theme_gtsummary_language}
 \title{Available gtsummary themes}
 \usage{
-theme_gtsummary_journal(journal = "jama", set_theme = TRUE)
+theme_gtsummary_journal(journal = c("jama", "lancet"), set_theme = TRUE)
 
 theme_gtsummary_compact(set_theme = TRUE)
 
@@ -91,6 +91,13 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 \item large p-values are rounded to two decimal places
 \item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
 \item in \code{tbl_summary()} the percent symbol is not printed next to percentages
+}
+\item \code{"lancet"}
+\itemize{
+\item sets theme to align with the The Lancet reporting guidelines
+\item large p-values are rounded to two decimal places
+\item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
+\item confidence intervals are separated with \verb{4.5 to 7.8}, rather than a comma
 }
 }
 \item \code{theme_gtsummary_compact()}
