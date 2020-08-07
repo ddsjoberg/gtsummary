@@ -20,10 +20,10 @@ theme_gtsummary_printer(
 theme_gtsummary_language(
   language = c("de", "en", "es", "fr", "gu", "hi", "ja", "mr", "pt", "se", "zh-cn",
     "zh-tw"),
-  big.mark = NULL,
   decimal.mark = NULL,
-  iqr.sep = switch(identical(decimal.mark, ","), " – "),
-  ci.sep = switch(identical(decimal.mark, ","), " – "),
+  big.mark = NULL,
+  iqr.sep = NULL,
+  ci.sep = NULL,
   set_theme = TRUE
 )
 }
@@ -58,12 +58,12 @@ If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
 with the translated text!}
 
+\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+Default is \code{"."}  or \code{getOption("OutDec")}}
+
 \item{big.mark}{Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
-
-\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
-Default is \code{"."}  or \code{getOption("OutDec")}}
 
 \item{iqr.sep}{string indicating separator for the default IQR in \code{tbl_summary()}.
 If \verb{decimal.mark=} is NULL, \verb{iqr.sep=} is \code{", "}. The comma

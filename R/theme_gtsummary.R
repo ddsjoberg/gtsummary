@@ -168,9 +168,9 @@ theme_gtsummary_printer <- function(
 #' @export
 theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", "hi", "ja",
                                                   "mr", "pt", "se", "zh-cn", "zh-tw"),
-                                     big.mark = NULL, decimal.mark = NULL,
-                                     iqr.sep = switch(identical(decimal.mark, ","), " \U2013 "),
-                                     ci.sep = switch(identical(decimal.mark, ","), " \U2013 "),
+                                     decimal.mark = NULL, big.mark = NULL,
+                                     iqr.sep = NULL,
+                                     ci.sep = NULL,
                                      set_theme = TRUE) {
 
   language <- match.arg(language)
@@ -180,13 +180,17 @@ theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", 
   )
 
   # setting formatting of numbers
-  if (!is.null(big.mark)) ret <- c(ret, list("style_number-arg:big.mark" = big.mark))
   if (!is.null(decimal.mark)) ret <- c(ret, list("style_number-arg:decimal.mark" = decimal.mark))
+  if (!is.null(big.mark)) ret <- c(ret, list("style_number-arg:big.mark" = big.mark))
 
   # setting themes for separators
+  if (is.null(iqr.sep) && identical(decimal.mark, ","))
+    iqr.sep <- " \U2013 "
   if (!is.null(iqr.sep))
     ret <- c(ret, list("tbl_summary-str:continuous_stat" =
                          paste0("{median} ({p25}", iqr.sep, "{p75})")))
+  if (is.null(ci.sep) && identical(decimal.mark, ","))
+    ci.sep <- " \U2013 "
   if (!is.null(ci.sep)) ret <- c(ret, list("pkgwide-str:ci.sep" = ci.sep))
 
   # either returning list OR setting theme and returning list
