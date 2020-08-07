@@ -18,7 +18,8 @@ theme_gtsummary_printer(
 )
 
 theme_gtsummary_language(
-  language = c("de", "en", "es", "fr", "ja", "pt", "se", "zh-cn", "zh-tw"),
+  language = c("de", "en", "es", "fr", "gu", "hi", "ja", "mr", "pt", "se", "zh-cn",
+    "zh-tw"),
   big.mark = NULL,
   decimal.mark = NULL,
   iqr.sep = switch(identical(decimal.mark, ","), " – "),
@@ -43,7 +44,10 @@ When \code{FALSE} the named list of theme elements is returned invisibly.}
 \item \code{"en"} (English)
 \item \code{"es"} (Spanish)
 \item \code{"fr"} (French)
+\item \code{"gu"} (Gujarati)
+\item \code{"hi"} (Hindi)
 \item \code{"ja"} (Japanese)
+\item \code{"mr"} (Marathi)
 \item \code{"pt"} (Portuguese)
 \item \code{"se"} (Swedish)
 \item \code{"zh-cn"} Chinese (Simplified)
