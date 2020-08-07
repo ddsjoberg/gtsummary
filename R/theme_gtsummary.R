@@ -144,10 +144,14 @@ theme_gtsummary_printer <- function(
 #' - `"en"` (English)
 #' - `"es"` (Spanish)
 #' - `"fr"` (French)
+#' - `"gu"` (Gujarati)
+#' - `"hi"` (Hindi)
 #' - `"ja"` (Japanese)
+#' - `"mr"` (Marathi)
 #' - `"pt"` (Portuguese)
 #' - `"se"` (Swedish)
 #' - `"zh-cn"` Chinese (Simplified)
+#' - `"zh-tw"` Chinese (Traditional)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free
 #' to reach out on [GitHub](https://github.com/ddsjoberg/gtsummary/issues)
@@ -162,8 +166,8 @@ theme_gtsummary_printer <- function(
 #' will default to an en dash
 #' @inheritParams style_number
 #' @export
-theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "ja",
-                                                  "pt", "se", "zh-cn"),
+theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", "hi", "ja",
+                                                  "mr", "pt", "se", "zh-cn", "zh-tw"),
                                      big.mark = NULL, decimal.mark = NULL,
                                      iqr.sep = switch(identical(decimal.mark, ","), " \U2013 "),
                                      ci.sep = switch(identical(decimal.mark, ","), " \U2013 "),
