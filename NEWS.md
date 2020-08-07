@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added the The Lancet theme to `theme_gtsummary_journal()`
+
+* Added Chinese (Traditional and Simplifed), Hindi, Marathi, and Gujarati to `theme_gtsummary_language()`
+
 * Fixed bug where `{N_obs_unweighted}` statistic was not available for continuous variables in `tbl_svysummary()` (#585)
 
 * Updated`add_n()` to include `{N_obs_unweighted}` and added missing translation
