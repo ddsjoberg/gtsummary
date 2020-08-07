@@ -8,7 +8,7 @@
 \alias{theme_gtsummary_language}
 \title{Available gtsummary themes}
 \usage{
-theme_gtsummary_journal(journal = "jama", set_theme = TRUE)
+theme_gtsummary_journal(journal = c("jama", "lancet"), set_theme = TRUE)
 
 theme_gtsummary_compact(set_theme = TRUE)
 
@@ -18,11 +18,12 @@ theme_gtsummary_printer(
 )
 
 theme_gtsummary_language(
-  language = c("de", "en", "es", "fr", "ja", "pt", "se"),
-  big.mark = NULL,
+  language = c("de", "en", "es", "fr", "gu", "hi", "ja", "mr", "pt", "se", "zh-cn",
+    "zh-tw"),
   decimal.mark = NULL,
-  iqr.sep = switch(identical(decimal.mark, ","), " – "),
-  ci.sep = switch(identical(decimal.mark, ","), " – "),
+  big.mark = NULL,
+  iqr.sep = NULL,
+  ci.sep = NULL,
   set_theme = TRUE
 )
 }
@@ -43,21 +44,26 @@ When \code{FALSE} the named list of theme elements is returned invisibly.}
 \item \code{"en"} (English)
 \item \code{"es"} (Spanish)
 \item \code{"fr"} (French)
+\item \code{"gu"} (Gujarati)
+\item \code{"hi"} (Hindi)
 \item \code{"ja"} (Japanese)
+\item \code{"mr"} (Marathi)
 \item \code{"pt"} (Portuguese)
 \item \code{"se"} (Swedish)
+\item \code{"zh-cn"} Chinese (Simplified)
+\item \code{"zh-tw"} Chinese (Traditional)
 }
 
 If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
 with the translated text!}
 
+\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
+Default is \code{"."}  or \code{getOption("OutDec")}}
+
 \item{big.mark}{Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is \code{","}, except when \code{decimal.mark = ","} when the default is a space.}
-
-\item{decimal.mark}{The character to be used to indicate the numeric decimal point.
-Default is \code{"."}  or \code{getOption("OutDec")}}
 
 \item{iqr.sep}{string indicating separator for the default IQR in \code{tbl_summary()}.
 If \verb{decimal.mark=} is NULL, \verb{iqr.sep=} is \code{", "}. The comma
@@ -85,6 +91,13 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 \item large p-values are rounded to two decimal places
 \item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
 \item in \code{tbl_summary()} the percent symbol is not printed next to percentages
+}
+\item \code{"lancet"}
+\itemize{
+\item sets theme to align with the The Lancet reporting guidelines
+\item large p-values are rounded to two decimal places
+\item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
+\item confidence intervals are separated with \verb{4.5 to 7.8}, rather than a comma
 }
 }
 \item \code{theme_gtsummary_compact()}
