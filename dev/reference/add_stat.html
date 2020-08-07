@@ -98,7 +98,7 @@ The function allows a user to add a new column with a custom, user-defined stati
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9022</span>
       </span>
     </div>
 
@@ -182,12 +182,12 @@ The function allows a user to add a new column with a custom, user-defined stati
     </div>
 
     <pre class="usage"><span class='fu'>add_stat</span>(
-  <span class='no'>x</span>,
-  <span class='no'>fns</span>,
-  <span class='kw'>fmt_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>header</span> <span class='kw'>=</span> <span class='st'>"**Statistic**"</span>,
-  <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>new_col_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>fns</span>,
+  fmt_fun = <span class='kw'>NULL</span>,
+  header = <span class='st'>"**Statistic**"</span>,
+  footnote = <span class='kw'>NULL</span>,
+  new_col_name = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -257,42 +257,42 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
 <span class='co'># this example replicates `add_p()`</span>
 
 <span class='co'># fn returns t-test pvalue</span>
-<span class='no'>my_ttest</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>...</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='no'>data</span><span class='kw'>[[</span><span class='no'>variable</span>]] ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='no'>data</span><span class='kw'>[[</span><span class='no'>by</span>]]))$<span class='no'>p.value</span>
+<span class='kw'>my_ttest</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>data</span>, <span class='kw'>variable</span>, <span class='kw'>by</span>, <span class='kw'>...</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='kw'>data</span>[[<span class='kw'>variable</span>]] <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='kw'>data</span>[[<span class='kw'>by</span>]]))<span class='op'>$</span><span class='kw'>p.value</span>
 }
 
-<span class='no'>add_stat_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>marker</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"no"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>(<span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() ~ <span class='no'>t.test</span>) <span class='kw'>%&gt;%</span>
+<span class='kw'>add_stat_ex1</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>trt</span>, <span class='kw'>age</span>, <span class='kw'>marker</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(test = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='kw'>t.test</span>) <span class='op'>%&gt;%</span>
   <span class='co'># replicating result of `add_p()` with `add_stat()`</span>
   <span class='fu'>add_stat</span>(
-    <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() ~ <span class='no'>my_ttest</span>, <span class='co'># all variables compared with with t-test</span>
-    <span class='kw'>fmt_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>,        <span class='co'># format result with style_pvalue()</span>
-    <span class='kw'>header</span> <span class='kw'>=</span> <span class='st'>"**My p-value**"</span>      <span class='co'># new column header</span>
+    fns = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='kw'>my_ttest</span>, <span class='co'># all variables compared with with t-test</span>
+    fmt_fun = <span class='kw'>style_pvalue</span>,        <span class='co'># format result with style_pvalue()</span>
+    header = <span class='st'>"**My p-value**"</span>      <span class='co'># new column header</span>
   )
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># fn returns t-test test statistic and pvalue</span>
-<span class='no'>my_ttest2</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>data</span>, <span class='no'>variable</span>, <span class='no'>by</span>, <span class='no'>...</span>) {
-  <span class='no'>tt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='no'>data</span><span class='kw'>[[</span><span class='no'>variable</span>]] ~ <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='no'>data</span><span class='kw'>[[</span><span class='no'>by</span>]]))
+<span class='kw'>my_ttest2</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>data</span>, <span class='kw'>variable</span>, <span class='kw'>by</span>, <span class='kw'>...</span>) {
+  <span class='kw'>tt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='kw'>data</span>[[<span class='kw'>variable</span>]] <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='kw'>data</span>[[<span class='kw'>by</span>]]))
 
   <span class='co'># returning test statistic and pvalue</span>
-  <span class='kw pkg'>stringr</span><span class='kw ns'>::</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_glue.html'>str_glue</a></span>(
+  <span class='kw'>stringr</span>::<span class='fu'><a href='https://stringr.tidyverse.org/reference/str_glue.html'>str_glue</a></span>(
     <span class='st'>"t={style_sigfig(tt$statistic)}, {style_pvalue(tt$p.value, prepend_p = TRUE)}"</span>
   )
 }
 
-<span class='no'>add_stat_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>trt</span>, <span class='no'>age</span>, <span class='no'>marker</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>, <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"no"</span>) <span class='kw'>%&gt;%</span>
+<span class='kw'>add_stat_ex2</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>trt</span>, <span class='kw'>age</span>, <span class='kw'>marker</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
   <span class='fu'>add_stat</span>(
-    <span class='kw'>fns</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() ~ <span class='no'>my_ttest2</span>,    <span class='co'># all variables will be compared by t-test</span>
-    <span class='kw'>fmt_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='co'># fn returns and chr, so no formatting function needed</span>
-    <span class='kw'>header</span> <span class='kw'>=</span> <span class='st'>"**Treatment Comparison**"</span>,       <span class='co'># column header</span>
-    <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='st'>"T-test statistic and p-value"</span>  <span class='co'># footnote</span>
+    fns = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='kw'>my_ttest2</span>,    <span class='co'># all variables will be compared by t-test</span>
+    fmt_fun = <span class='kw'>NULL</span>, <span class='co'># fn returns and chr, so no formatting function needed</span>
+    header = <span class='st'>"**Treatment Comparison**"</span>,       <span class='co'># column header</span>
+    footnote = <span class='st'>"T-test statistic and p-value"</span>  <span class='co'># footnote</span>
   )
 <span class='co'># Example 1 ----------------------------------</span></div></pre>
   </div>
@@ -310,7 +310,7 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

@@ -97,7 +97,7 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9022</span>
       </span>
     </div>
 
@@ -181,14 +181,14 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
 <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(
-  <span class='no'>x</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>table_body</span>$<span class='no'>variable</span>[<span class='no'>x</span>$<span class='no'>table_body</span>$<span class='no'>var_type</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"categorical"</span>,
+  <span class='kw'>x</span>,
+  include = <span class='kw'>x</span><span class='op'>$</span><span class='kw'>table_body</span><span class='op'>$</span><span class='kw'>variable</span>[<span class='kw'>x</span><span class='op'>$</span><span class='kw'>table_body</span><span class='op'>$</span><span class='kw'>var_type</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"categorical"</span>,
     <span class='st'>"interaction"</span>)],
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>terms</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  type = <span class='kw'>NULL</span>,
+  keep = <span class='fl'>FALSE</span>,
+  quiet = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>,
+  terms = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -258,13 +258,16 @@ Default is <code>FALSE</code></p></td>
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_lm_global_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>marker</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Global p-values for variable(s) 'grade' calculated with</span>
-#&gt; <span class='message'>`car::Anova(x$model_obj, type = "III")`</span></div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>tbl_lm_global_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>marker</span> <span class='op'>~</span> <span class='kw'>age</span> <span class='op'>+</span> <span class='kw'>grade</span>, <span class='kw'>trial</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Global p-values for variable(s) `include = "grade"` were calculated with</span>
+#&gt; <span class='message'>  `car::Anova(x$model_obj, type = "III")`</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -280,7 +283,7 @@ Default is <code>FALSE</code></p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

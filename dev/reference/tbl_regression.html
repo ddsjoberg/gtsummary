@@ -101,7 +101,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9022</span>
       </span>
     </div>
 
@@ -188,18 +188,18 @@ for detailed examples.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tbl_regression</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
-  <span class='kw'>show_single_row</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>intercept</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>tidy_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>show_yesno</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>x</span>,
+  label = <span class='kw'>NULL</span>,
+  exponentiate = <span class='fl'>FALSE</span>,
+  include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  show_single_row = <span class='kw'>NULL</span>,
+  conf.level = <span class='kw'>NULL</span>,
+  intercept = <span class='fl'>FALSE</span>,
+  estimate_fun = <span class='kw'>NULL</span>,
+  pvalue_fun = <span class='kw'>NULL</span>,
+  tidy_fun = <span class='kw'>NULL</span>,
+  show_yesno = <span class='kw'>NULL</span>,
+  exclude = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -326,31 +326,33 @@ units in your model.  Here are some common exceptions.</p><ol>
 <code><a href='modify.html'>modify</a></code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
-<span class='no'>tbl_regression_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/coxph.html'>coxph</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>age</span> + <span class='no'>marker</span>, <span class='no'>trial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/therneau/survival'>survival</a></span>)
+<span class='kw'>tbl_regression_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/coxph.html'>coxph</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='kw'>age</span> <span class='op'>+</span> <span class='kw'>marker</span>, <span class='kw'>trial</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_regression</span>(exponentiate = <span class='fl'>TRUE</span>)
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='no'>tbl_regression_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>response</span> ~ <span class='no'>age</span> + <span class='no'>grade</span>, <span class='no'>trial</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw'>tbl_regression_ex2</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>response</span> <span class='op'>~</span> <span class='kw'>age</span> <span class='op'>+</span> <span class='kw'>grade</span>, <span class='kw'>trial</span>, family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(link = <span class='st'>"logit"</span>)) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_regression</span>(exponentiate = <span class='fl'>TRUE</span>)
 
 <span class='co'># Example 3 ----------------------------------</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'lme4':</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4'>lme4</a></span>, warn.conflicts = <span class='fl'>FALSE</span>, quietly = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'lme4':</span>
 #&gt; <span class='message'>  method                          from</span>
 #&gt; <span class='message'>  cooks.distance.influence.merMod car </span>
 #&gt; <span class='message'>  influence.merMod                car </span>
 #&gt; <span class='message'>  dfbeta.influence.merMod         car </span>
-#&gt; <span class='message'>  dfbetas.influence.merMod        car </span></div><div class='input'><span class='no'>tbl_regression_ex3</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(<span class='no'>am</span> ~ <span class='no'>hp</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>gear</span>), <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(<span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
+#&gt; <span class='message'>  dfbetas.influence.merMod        car </span></div><div class='input'><span class='kw'>tbl_regression_ex3</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(<span class='kw'>am</span> <span class='op'>~</span> <span class='kw'>hp</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>gear</span>), <span class='kw'>mtcars</span>, family = <span class='kw'>binomial</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_regression</span>(exponentiate = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
 #&gt; <span class='message'>  method      from </span>
-#&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='input'>
-</div></pre>
+#&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -366,7 +368,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

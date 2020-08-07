@@ -99,7 +99,7 @@ Use the set_gtsummary_theme() function to set a theme." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9022</span>
       </span>
     </div>
 
@@ -183,22 +183,23 @@ The following themes are available to use within the gtsummary package.
 Use the <code><a href='set_gtsummary_theme.html'>set_gtsummary_theme()</a></code> function to set a theme.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>theme_gtsummary_journal</span>(<span class='kw'>journal</span> <span class='kw'>=</span> <span class='st'>"jama"</span>, <span class='kw'>set_theme</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>theme_gtsummary_journal</span>(journal = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"jama"</span>, <span class='st'>"lancet"</span>), set_theme = <span class='fl'>TRUE</span>)
 
-<span class='fu'>theme_gtsummary_compact</span>(<span class='kw'>set_theme</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>theme_gtsummary_compact</span>(set_theme = <span class='fl'>TRUE</span>)
 
 <span class='fu'>theme_gtsummary_printer</span>(
-  <span class='kw'>print_engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gt"</span>, <span class='st'>"kable"</span>, <span class='st'>"kable_extra"</span>, <span class='st'>"flextable"</span>, <span class='st'>"huxtable"</span>, <span class='st'>"tibble"</span>),
-  <span class='kw'>set_theme</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  print_engine = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gt"</span>, <span class='st'>"kable"</span>, <span class='st'>"kable_extra"</span>, <span class='st'>"flextable"</span>, <span class='st'>"huxtable"</span>, <span class='st'>"tibble"</span>),
+  set_theme = <span class='fl'>TRUE</span>
 )
 
 <span class='fu'>theme_gtsummary_language</span>(
-  <span class='kw'>language</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"de"</span>, <span class='st'>"en"</span>, <span class='st'>"es"</span>, <span class='st'>"fr"</span>, <span class='st'>"ja"</span>, <span class='st'>"pt"</span>, <span class='st'>"se"</span>),
-  <span class='kw'>big.mark</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>decimal.mark</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>iqr.sep</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>decimal.mark</span>, <span class='st'>","</span>), <span class='st'>" – "</span>),
-  <span class='kw'>ci.sep</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>decimal.mark</span>, <span class='st'>","</span>), <span class='st'>" – "</span>),
-  <span class='kw'>set_theme</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  language = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"de"</span>, <span class='st'>"en"</span>, <span class='st'>"es"</span>, <span class='st'>"fr"</span>, <span class='st'>"gu"</span>, <span class='st'>"hi"</span>, <span class='st'>"ja"</span>, <span class='st'>"mr"</span>, <span class='st'>"pt"</span>, <span class='st'>"se"</span>, <span class='st'>"zh-cn"</span>,
+    <span class='st'>"zh-tw"</span>),
+  decimal.mark = <span class='kw'>NULL</span>,
+  big.mark = <span class='kw'>NULL</span>,
+  iqr.sep = <span class='kw'>NULL</span>,
+  ci.sep = <span class='kw'>NULL</span>,
+  set_theme = <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -226,9 +227,14 @@ When <code>FALSE</code> the named list of theme elements is returned invisibly.<
 <li><p><code>"en"</code> (English)</p></li>
 <li><p><code>"es"</code> (Spanish)</p></li>
 <li><p><code>"fr"</code> (French)</p></li>
+<li><p><code>"gu"</code> (Gujarati)</p></li>
+<li><p><code>"hi"</code> (Hindi)</p></li>
 <li><p><code>"ja"</code> (Japanese)</p></li>
+<li><p><code>"mr"</code> (Marathi)</p></li>
 <li><p><code>"pt"</code> (Portuguese)</p></li>
 <li><p><code>"se"</code> (Swedish)</p></li>
+<li><p><code>"zh-cn"</code> Chinese (Simplified)</p></li>
+<li><p><code>"zh-tw"</code> Chinese (Traditional)</p></li>
 </ul>
 
 <p>If a language is missing a translation for a word or phrase, please feel free
@@ -236,14 +242,15 @@ to reach out on <a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub</
 with the translated text!</p></td>
     </tr>
     <tr>
-      <th>big.mark</th>
-      <td><p>Character used between every 3 digits to separate thousands.
-Default is <code>","</code></p></td>
-    </tr>
-    <tr>
       <th>decimal.mark</th>
       <td><p>The character to be used to indicate the numeric decimal point.
-Default is <code>"."</code></p></td>
+Default is <code>"."</code>  or <code><a href='https://rdrr.io/r/base/options.html'>getOption("OutDec")</a></code></p></td>
+    </tr>
+    <tr>
+      <th>big.mark</th>
+      <td><p>Character used between every 3 digits to separate
+hundreds/thousands/millions/etc.
+Default is <code>","</code>, except when <code>decimal.mark = ","</code> when the default is a space.</p></td>
     </tr>
     <tr>
       <th>iqr.sep</th>
@@ -272,6 +279,12 @@ will default to an en dash</p></td>
 <li><p>large p-values are rounded to two decimal places</p></li>
 <li><p>in <code><a href='tbl_summary.html'>tbl_summary()</a></code> the IQR is separated with a dash, rather than comma</p></li>
 <li><p>in <code><a href='tbl_summary.html'>tbl_summary()</a></code> the percent symbol is not printed next to percentages</p></li>
+</ul></li>
+<li><p><code>"lancet"</code></p><ul>
+<li><p>sets theme to align with the The Lancet reporting guidelines</p></li>
+<li><p>large p-values are rounded to two decimal places</p></li>
+<li><p>in <code><a href='tbl_summary.html'>tbl_summary()</a></code> the IQR is separated with a dash, rather than comma</p></li>
+<li><p>confidence intervals are separated with <code>4.5 to 7.8</code>, rather than a comma</p></li>
 </ul></li>
 </ul></li>
 <li><p><code>theme_gtsummary_compact()</code></p><ul>
@@ -304,11 +317,11 @@ to create your own themes.</p>
     <pre class="examples"><div class='input'><span class='co'># Setting JAMA theme for gtsummary</span>
 <span class='fu'>theme_gtsummary_journal</span>(<span class='st'>"jama"</span>)</div><div class='output co'>#&gt; <span class='message'>Setting `JAMA` theme</span></div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
 <span class='fu'>theme_gtsummary_compact</span>()</div><div class='output co'>#&gt; <span class='message'>Setting `Compact` theme</span></div><div class='input'>
-<span class='no'>set_gtsummary_theme_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>age</span>, <span class='no'>grade</span>, <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_stat_label.html'>add_stat_label</a></span>() <span class='kw'>%&gt;%</span>
+<span class='kw'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>age</span>, <span class='kw'>grade</span>, <span class='kw'>trt</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_stat_label.html'>add_stat_label</a></span>() <span class='op'>%&gt;%</span>
   <span class='fu'><a href='as_gt.html'>as_gt</a></span>()
 
 <span class='co'># reset gtsummary themes</span>
@@ -328,7 +341,7 @@ to create your own themes.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

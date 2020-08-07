@@ -99,7 +99,7 @@ formatted summary table of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9022</span>
       </span>
     </div>
 
@@ -183,58 +183,58 @@ Function takes a <code>survfit</code> object as an argument, and provides a
 formatted summary table of the results</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_survfit</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>tbl_survfit</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for survfit</span>
 <span class='fu'>tbl_survfit</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"—"</span>,
-  <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>failure</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>x</span>,
+  times = <span class='kw'>NULL</span>,
+  probs = <span class='kw'>NULL</span>,
+  statistic = <span class='kw'>NULL</span>,
+  label = <span class='kw'>NULL</span>,
+  label_header = <span class='kw'>NULL</span>,
+  estimate_fun = <span class='kw'>NULL</span>,
+  missing = <span class='st'>"—"</span>,
+  conf.level = <span class='fl'>0.95</span>,
+  reverse = <span class='fl'>FALSE</span>,
+  quiet = <span class='kw'>NULL</span>,
+  failure = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>tbl_survfit</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"—"</span>,
-  <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>failure</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  times = <span class='kw'>NULL</span>,
+  probs = <span class='kw'>NULL</span>,
+  statistic = <span class='kw'>NULL</span>,
+  label = <span class='kw'>NULL</span>,
+  label_header = <span class='kw'>NULL</span>,
+  estimate_fun = <span class='kw'>NULL</span>,
+  missing = <span class='st'>"—"</span>,
+  conf.level = <span class='fl'>0.95</span>,
+  reverse = <span class='fl'>FALSE</span>,
+  failure = <span class='kw'>NULL</span>,
+  include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  quiet = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )
 
 <span class='co'># S3 method for list</span>
 <span class='fu'>tbl_survfit</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>times</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>estimate_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='st'>"—"</span>,
-  <span class='kw'>conf.level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>x</span>,
+  times = <span class='kw'>NULL</span>,
+  probs = <span class='kw'>NULL</span>,
+  statistic = <span class='kw'>NULL</span>,
+  label = <span class='kw'>NULL</span>,
+  label_header = <span class='kw'>NULL</span>,
+  estimate_fun = <span class='kw'>NULL</span>,
+  missing = <span class='st'>"—"</span>,
+  conf.level = <span class='fl'>0.95</span>,
+  reverse = <span class='fl'>FALSE</span>,
+  quiet = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -335,56 +335,59 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <code><a href='modify.html'>modify</a></code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/therneau/survival'>survival</a></span>)
 
 <span class='co'># Example 1 ----------------------------------</span>
 <span class='co'># Pass single survfit() object</span>
-<span class='no'>tbl_survfit_ex1</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
-  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>),
-  <span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-  <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**{time} Month**"</span>
+<span class='kw'>tbl_survfit_ex1</span> <span class='op'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
+  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='kw'>trt</span>, <span class='kw'>trial</span>),
+  times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+  label_header = <span class='st'>"**{time} Month**"</span>
 )
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># Pass a data frame</span>
-<span class='no'>tbl_survfit_ex2</span> <span class='kw'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
-  <span class='no'>trial</span>,
-  <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw pkg'>survival</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>),
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>trt</span>, <span class='no'>grade</span>),
-  <span class='kw'>probs</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>label_header</span> <span class='kw'>=</span> <span class='st'>"**Median Survival**"</span>
+<span class='kw'>tbl_survfit_ex2</span> <span class='op'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
+  <span class='kw'>trial</span>,
+  y = <span class='kw'>survival</span>::<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>),
+  include = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>trt</span>, <span class='kw'>grade</span>),
+  probs = <span class='fl'>0.5</span>,
+  label_header = <span class='st'>"**Median Survival**"</span>
 )
 
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># Pass a list of survfit() objects</span>
-<span class='no'>tbl_survfit_ex3</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='fl'>1</span>, <span class='no'>trial</span>),
-       <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_survfit</span>(<span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
+<span class='kw'>tbl_survfit_ex3</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='fl'>1</span>, <span class='kw'>trial</span>),
+       <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='kw'>trt</span>, <span class='kw'>trial</span>)) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_survfit</span>(times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
 
 <span class='co'># Example 4 Competing Events Example ---------</span>
 <span class='co'># adding a competing event for death (cancer vs other causes)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package ‘dplyr’ was built under R version 4.0.2</span></div><div class='output co'>#&gt; <span class='message'></span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>)</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Hmisc’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    src, summarize</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>trial2</span> <span class='kw'>&lt;-</span> <span class='no'>trial</span> <span class='kw'>%&gt;%</span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='kw'>trial2</span> <span class='op'>&lt;-</span> <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(
-  <span class='kw'>death_cr</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span>(
-    <span class='no'>death</span> <span class='kw'>==</span> <span class='fl'>0</span> ~ <span class='st'>"censor"</span>,
-    <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span>()) <span class='kw'>&lt;</span> <span class='fl'>0.5</span> ~ <span class='st'>"death from cancer"</span>,
-    <span class='fl'>TRUE</span> ~ <span class='st'>"death other causes"</span>
-  ) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>()
+  death_cr = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span>(
+    <span class='kw'>death</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"censor"</span>,
+    <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span>()) <span class='op'>&lt;</span> <span class='fl'>0.5</span> <span class='op'>~</span> <span class='st'>"death from cancer"</span>,
+    <span class='fl'>TRUE</span> <span class='op'>~</span> <span class='st'>"death other causes"</span>
+  ) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>()
 )
 
-<span class='no'>survfit_cr_ex4</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death_cr</span>) ~ <span class='no'>grade</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trial2</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'>tbl_survfit</span>(<span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Tumor Grade"</span>)</div><div class='output co'>#&gt; <span class='message'>Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div></pre>
+<span class='kw'>survfit_cr_ex4</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death_cr</span>) <span class='op'>~</span> <span class='kw'>grade</span>, data = <span class='kw'>trial2</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_survfit</span>(times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), label = <span class='st'>"Tumor Grade"</span>)</div><div class='output co'>#&gt; <span class='message'>Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -400,7 +403,7 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

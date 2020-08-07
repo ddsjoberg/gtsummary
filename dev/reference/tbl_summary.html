@@ -99,7 +99,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9022</span>
       </span>
     </div>
 
@@ -184,19 +184,19 @@ for detailed examples.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tbl_summary</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>missing_text</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sort</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>percent</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
-  <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>data</span>,
+  by = <span class='kw'>NULL</span>,
+  label = <span class='kw'>NULL</span>,
+  statistic = <span class='kw'>NULL</span>,
+  digits = <span class='kw'>NULL</span>,
+  type = <span class='kw'>NULL</span>,
+  value = <span class='kw'>NULL</span>,
+  missing = <span class='kw'>NULL</span>,
+  missing_text = <span class='kw'>NULL</span>,
+  sort = <span class='kw'>NULL</span>,
+  percent = <span class='kw'>NULL</span>,
+  include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  group = <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -382,31 +382,34 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
 <code><a href='modify.html'>modify</a></code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='no'>tbl_summary_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='kw'>%&gt;%</span>
+<span class='kw'>tbl_summary_ex1</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)] <span class='op'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>()
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='no'>tbl_summary_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
+<span class='kw'>tbl_summary_ex2</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>, <span class='st'>"trt"</span>)] <span class='op'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>(
-    <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>,
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>age</span> ~ <span class='st'>"Patient Age"</span>),
-    <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() ~ <span class='st'>"{mean} ({sd})"</span>),
-    <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>age</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>))
+    by = <span class='kw'>trt</span>,
+    label = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>age</span> <span class='op'>~</span> <span class='st'>"Patient Age"</span>),
+    statistic = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>),
+    digits = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>age</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>))
   )
 
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># for convenience, you can also pass named lists to any arguments</span>
 <span class='co'># that accept formulas (e.g label, digits, etc.)</span>
-<span class='no'>tbl_summary_ex3</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
+<span class='kw'>tbl_summary_ex3</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"trt"</span>)] <span class='op'>%&gt;%</span>
   <span class='fu'>tbl_summary</span>(
-    <span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>,
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>age</span> <span class='kw'>=</span> <span class='st'>"Patient Age"</span>)
+    by = <span class='kw'>trt</span>,
+    label = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(age = <span class='st'>"Patient Age"</span>)
   )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -423,7 +426,7 @@ the <code>value</code> argument, e.g. <code>value = list(varname ~ "level to sho
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

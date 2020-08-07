@@ -98,7 +98,7 @@ Calculate and add a p-value" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9022</span>
       </span>
     </div>
 
@@ -183,13 +183,13 @@ Calculate and add a p-value</p>
 
     <pre class="usage"><span class='co'># S3 method for tbl_survfit</span>
 <span class='fu'><a href='add_p.html'>add_p</a></span>(
-  <span class='no'>x</span>,
-  <span class='kw'>test</span> <span class='kw'>=</span> <span class='st'>"logrank"</span>,
-  <span class='kw'>test.args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pvalue_fun</span> <span class='kw'>=</span> <span class='no'>style_pvalue</span>,
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>x</span>,
+  test = <span class='st'>"logrank"</span>,
+  test.args = <span class='kw'>NULL</span>,
+  pvalue_fun = <span class='kw'>style_pvalue</span>,
+  include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  quiet = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -244,9 +244,9 @@ functions. Default is <code><a href='https://tidyselect.r-lib.org/reference/ever
 the test name. However, if you need to specify different tests within the same
 table, the input in flexible using the list notation common throughout the
 gtsummary package. For example, the following code would call the log-rank test,
-and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span class='no'>...</span> <span class='kw'>%&amp;gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>(<span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>trt</span> ~ <span class='st'>"logrank"</span>, <span class='no'>grade</span> ~ <span class='st'>"survdiff"</span>),
-        <span class='kw'>test.args</span> <span class='kw'>=</span> <span class='no'>grade</span> ~ <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.5</span>))</pre><p></div></p>
+and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span class='kw'>...</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(test = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>trt</span> <span class='op'>~</span> <span class='st'>"logrank"</span>, <span class='kw'>grade</span> <span class='op'>~</span> <span class='st'>"survdiff"</span>),
+        test.args = <span class='kw'>grade</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(rho = <span class='fl'>0.5</span>))</pre><p></div></p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -266,23 +266,23 @@ and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span cla
 <code><a href='tbl_survfit.html'>tbl_survfit</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>survival</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/therneau/survival'>survival</a></span>)
 
-<span class='no'>gts_survfit</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>grade</span>, <span class='no'>trial</span>),
-       <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='no'>ttdeath</span>, <span class='no'>death</span>) ~ <span class='no'>trt</span>, <span class='no'>trial</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span>(<span class='kw'>times</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
+<span class='kw'>gts_survfit</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='kw'>grade</span>, <span class='kw'>trial</span>),
+       <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='kw'>trt</span>, <span class='kw'>trial</span>)) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span>(times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
 
 <span class='co'># Example 1 ----------------------------------</span>
-<span class='no'>add_p_tbl_survfit_ex1</span> <span class='kw'>&lt;-</span>
-  <span class='no'>gts_survfit</span> <span class='kw'>%&gt;%</span>
+<span class='kw'>add_p_tbl_survfit_ex1</span> <span class='op'>&lt;-</span>
+  <span class='kw'>gts_survfit</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>()</div><div class='output co'>#&gt; <span class='message'>Calculating p-value with</span>
 #&gt; <span class='message'>`survival::survdiff(formula = Surv(ttdeath, death) ~ grade, data = trial)`</span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># Pass `rho=` argument to `survdiff()`</span>
-<span class='no'>add_p_tbl_survfit_ex2</span> <span class='kw'>&lt;-</span>
-  <span class='no'>gts_survfit</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>(<span class='kw'>test</span> <span class='kw'>=</span> <span class='st'>"survdiff"</span>, <span class='kw'>test.args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>rho</span> <span class='kw'>=</span> <span class='fl'>0.5</span>))</div><div class='output co'>#&gt; <span class='message'>Calculating p-value with</span>
+<span class='kw'>add_p_tbl_survfit_ex2</span> <span class='op'>&lt;-</span>
+  <span class='kw'>gts_survfit</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(test = <span class='st'>"survdiff"</span>, test.args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(rho = <span class='fl'>0.5</span>))</div><div class='output co'>#&gt; <span class='message'>Calculating p-value with</span>
 #&gt; <span class='message'>`survival::survdiff(formula = Surv(ttdeath, death) ~ grade, data = trial, rho = 0.5)`</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -299,7 +299,7 @@ and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span cla
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
