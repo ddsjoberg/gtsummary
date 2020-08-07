@@ -112,10 +112,6 @@ tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
     rm(failure)
   }
 
-  # saving environment
-  tbl_survfit_caller_env <- rlang::caller_env()
-
-
   # converting inputs to be compatible with the list method
   x <- list(x)
   if (rlang::is_string(label)) label <- expr(everything() ~ !!label) %>% eval()
