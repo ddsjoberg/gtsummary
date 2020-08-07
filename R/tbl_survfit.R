@@ -112,6 +112,10 @@ tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
     rm(failure)
   }
 
+  # saving environment
+  tbl_survfit_caller_env <- rlang::caller_env()
+
+
   # converting inputs to be compatible with the list method
   x <- list(x)
   if (rlang::is_string(label)) label <- expr(everything() ~ !!label) %>% eval()
@@ -235,8 +239,9 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   meta_data <-
     tibble(
       survfit = x,
-      stratified = map_lgl(.data$survfit, is_survfit_stratified),
-      variable = survfit_to_var(.data$survfit, .data$stratified)
+      tidy = map(survfit, broom::tidy),
+      stratified = map_lgl(.data$tidy, ~ "strata" %in% names(.x)),
+      variable = survfit_to_var(.data$survfit, .data$stratified, .data$tidy, quiet)
     )
 
   # apply labels
@@ -299,19 +304,20 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
                              missing, statistic) {
   meta_data %>%
     mutate(
-      df_stats = map2(
-        # calculating estimates ------------------------------------------------------
-        .data$survfit, .data$variable,
+      df_stats = pmap(
+        # calculating estimates ------------------------------------------------
+        list(.data$survfit, .data$variable, .data$tidy),
         ~ switch(
           estimate_type,
-          "times" = survfit_time(.x, variable = .y, times = inputs$times,
+          "times" = survfit_time(..1, variable = ..2, times = inputs$times,
                                  label_header = inputs$label_header,
                                  conf.level = inputs$conf.level,
-                                 reverse = inputs$reverse, quiet = inputs$quiet),
-          "probs" = survfit_prob(.x, variable = .y, probs = inputs$probs,
+                                 reverse = inputs$reverse,
+                                 quiet = inputs$quiet, tidy = ..3),
+          "probs" = survfit_prob(..1, variable = ..2, probs = inputs$probs,
                                  label_header = inputs$label_header,
                                  conf.level = inputs$conf.level,
-                                 quiet = inputs$quiet)
+                                 quiet = inputs$quiet, tidy = ..3)
         )
       ),
       # table_body -----------------------------------------------------------------
@@ -350,10 +356,9 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
 }
 
 # calculates and prepares survival quantile estimates for tbl
-survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet) {
+survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet, tidy) {
 
-  strata <- intersect("strata", names(broom::tidy(x, conf.level = conf.level))) %>%
-    list() %>% compact()
+  strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
 
   # calculating survival quantiles, and adding estimates to pretty tbl
   df_stat <- purrr::map2_dfr(
@@ -387,8 +392,9 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet) {
 }
 
 # calculates and prepares n-year survival estimates for tbl
-survfit_time <- function(x, variable, times, label_header, conf.level, reverse, quiet) {
-  tidy <- broom::tidy(x, conf.level = conf.level)
+survfit_time <- function(x, variable, times, label_header, conf.level,
+                         reverse, quiet, tidy) {
+
   strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
   multi_state <- inherits(x, "survfitms")
   if (multi_state == TRUE) {
@@ -471,19 +477,25 @@ survfit_time <- function(x, variable, times, label_header, conf.level, reverse, 
   df_stat
 }
 
-survfit_to_var <- function(survfit_list, stratified) {
+survfit_to_var <- function(survfit_list, stratified, tidy, quiet) {
   purrr::pmap_chr(
-    list(survfit_list, seq_along(survfit_list), stratified),
-    function(x, i, stratified) {
+    list(survfit_list, seq_along(survfit_list), stratified, tidy),
+    function(x, i, stratified, tidy) {
       # if not stratified, return var name ..overall..
       if (stratified == FALSE) {
         return(
           ifelse(length(survfit_list) == 1, "..overall..", glue("..overall_{i}.."))
         )
       }
+      var <- word(tidy$strata[1], 1, sep = fixed("="))
+      if (quiet == FALSE &&
+          stringr::str_count(tidy$strata[1], pattern = fixed(paste0(var, "="))) > 1) {
+        paste("The `tbl_survfit` function supports `survfit()` objects with a",
+              "single stratifying variable, and it looks like you may have more.") %>%
+          str_wrap() %>% inform()
+      }
       # returning variable name
-      x$call %>% as.list() %>% pluck("formula") %>% eval() %>% stats::terms() %>%
-        attr("variables") %>% as.list() %>% {.[-c(1, 2)]} %>% map_chr(deparse)
+      var
     }
   )
 }
@@ -510,13 +522,3 @@ survfit_to_label <- function(survfit_list, varlist, stratified, label) {
   )
 }
 
-is_survfit_stratified <- function(x) {
-  var <-
-    x$call %>% as.list() %>% pluck("formula") %>% eval() %>% stats::terms() %>%
-    attr("variables") %>% as.list() %>% {.[-c(1, 2)]} %>% map_chr(deparse)
-  if (length(var) == 1) return(TRUE)
-  if (length(var) == 0) return(FALSE)
-
-  stop("`tbl_survfit()` supports a single stratifying variable on the RHS of `formula=`",
-       call. = FALSE)
-}
