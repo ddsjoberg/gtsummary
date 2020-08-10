@@ -372,7 +372,8 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet, ti
     mutate(
       variable = .env$variable,
       label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
-        stringr::word(strata, start = 2L, sep = "="),
+        # take everything to the right of the first '='
+        str_sub(strata, str_locate(strata, fixed("="))[1] + 1),
       col_label = .env$label_header %||%
         # for some languages, we show 'Percentile 50%' instead of '50% Percentile'
         switch(get_theme_element("pkgwide-str:language", default = "en") %in% "es",
@@ -456,7 +457,8 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
     mutate(
       variable = .env$variable,
       label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
-        stringr::word(strata, start = 2L, sep = "="),
+        # take everything to the right of the first '='
+        str_sub(strata, str_locate(strata, fixed("="))[1] + 1),
       col_label = .env$label_header %||% paste0("**", translate_text("Time"), " {time}**") %>% glue() %>% as.character()
     ) %>%
     select(any_of(c("variable", "label", "strata", "col_name", "col_label")),
