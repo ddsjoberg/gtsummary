@@ -485,10 +485,15 @@ survfit_to_var <- function(survfit_list, stratified, tidy, quiet) {
       }
       var <- word(tidy$strata[1], 1, sep = fixed("="))
       if (quiet == FALSE &&
-          stringr::str_count(tidy$strata[1], pattern = fixed(paste0(var, "="))) > 1) {
-        paste("The `tbl_survfit` function supports `survfit()` objects with a",
-              "single stratifying variable, and it looks like you may have more.") %>%
-          str_wrap() %>% inform()
+          # if you have more than one equal sign
+          stringr::str_count(tidy$strata[1], pattern = fixed("=")) > 1 &&
+          # there are more than one "word" with sep = ", ", then you likely have more than one var
+          stringr::str_count(tidy$strata[1], pattern = fixed(", ")) >= 1) {
+        paste("The `tbl_survfit()` function supports `survfit()` objects with a",
+              "single stratifying variable, and it looks like you may have more.",
+              "Error or unexpected output may occur.") %>%
+          str_wrap() %>%
+          inform()
       }
       # returning variable name
       var
