@@ -1,6 +1,7 @@
 .onAttach <- function(lib, pkg) {
   if (stats::runif(1) > .8) {
-    msgs <- c("#BlackLivesMatter", "#BlackLivesMatter", "#LGBTQ")
-    packageStartupMessage(sample(msgs, size = 1))
+    msg <- c("#BlackLivesMatter" = 2, "#Uighur" = 1, "#LGBTQ" = 1)
+    msg <- rep(names(msg), msg)
+    packageStartupMessage(sample(msg, size = 1))
   }
 }
