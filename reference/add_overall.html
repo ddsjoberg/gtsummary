@@ -54,7 +54,7 @@
 
 <meta property="og:title" content="Add column with overall summary statistics — add_overall" />
 <meta property="og:description" content="Adds a column with overall summary statistics to tables
-created by tbl_summary." />
+created by tbl_summary or tbl_svysummary." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -97,7 +97,7 @@ created by tbl_summary." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
       </span>
     </div>
 
@@ -176,28 +176,39 @@ created by tbl_summary." />
 
     <div class="ref-description">
     <p>Adds a column with overall summary statistics to tables
-created by <code>tbl_summary</code>.</p>
+created by <code>tbl_summary</code> or <code>tbl_svysummary</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_overall</span>(<span class='no'>x</span>, <span class='kw'>last</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>add_overall</span>(<span class='kw'>x</span>, <span class='kw'>last</span>, <span class='kw'>col_label</span>)
+
+<span class='co'># S3 method for tbl_summary</span>
+<span class='fu'>add_overall</span>(<span class='kw'>x</span>, last = <span class='fl'>FALSE</span>, col_label = <span class='kw'>NULL</span>)
+
+<span class='co'># S3 method for tbl_svysummary</span>
+<span class='fu'>add_overall</span>(<span class='kw'>x</span>, last = <span class='fl'>FALSE</span>, col_label = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function</p></td>
+      <td><p>Object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function or
+object with class <code>tbl_svysummary</code> from the <a href='tbl_svysummary.html'>tbl_svysummary</a> function.</p></td>
     </tr>
     <tr>
       <th>last</th>
       <td><p>Logical indicator to display overall column last in table.
 Default is <code>FALSE</code>, which will display overall column first.</p></td>
     </tr>
+    <tr>
+      <th>col_label</th>
+      <td><p>String indicating the column label. Default is <code>"**Overall**,  N = {N}"</code></p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>tbl_summary</code> object</p>
+    <p>A <code>tbl_summary</code> object or a <code>tbl_svysummary</code> object</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -206,27 +217,34 @@ Default is <code>FALSE</code>, which will display overall column first.</p></td>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: 
-<code><a href='add_n.html'>add_n</a>()</code>,
+<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
 <code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
 <code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
 <code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify_footnote.html'>modify_footnote</a>()</code>,
-<code><a href='modify_header.html'>modify_header</a>()</code>,
-<code><a href='modify_spanning_header.html'>modify_spanning_header</a>()</code>,
+<code><a href='modify.html'>modify</a></code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
+<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
+<p>Other tbl_svysummary tools: 
+<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
+<code><a href='add_p.tbl_svysummary.html'>add_p.tbl_svysummary</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
+<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
+<code><a href='modify.html'>modify</a></code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_svysummary.html'>tbl_svysummary</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>tbl_overall_ex</span> <span class='kw'>&lt;-</span>
-  <span class='no'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span>)] <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(<span class='kw'>by</span> <span class='kw'>=</span> <span class='no'>trt</span>) <span class='kw'>%&gt;%</span>
+    <pre class="examples"><div class='input'><span class='kw'>tbl_overall_ex</span> <span class='op'>&lt;-</span>
+  <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span>)] <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>) <span class='op'>%&gt;%</span>
   <span class='fu'>add_overall</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
