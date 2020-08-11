@@ -21,7 +21,7 @@ jobs:
 #          - {os: macOS-latest,   r: 'devel'}
           - {os: macOS-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-16.04,   r: 'devel',   rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+#          - {os: ubuntu-16.04,   r: 'devel',   rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-16.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-16.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
@@ -40,6 +40,11 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@master
+
+      # trying to get nloptr pkg to install on 3.5, 3.4 2020-08-11
+      - name: Install nlopt on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get install pkg-config libnlopt-dev
 
       # this is here because of an issue installing the systemfonts package
       # can likely remove later (https://github.com/r-lib/systemfonts/issues/21)
