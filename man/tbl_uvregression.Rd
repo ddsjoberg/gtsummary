@@ -10,18 +10,18 @@ tbl_uvregression(
   y = NULL,
   x = NULL,
   method.args = NULL,
-  formula = "{y} ~ {x}",
   exponentiate = FALSE,
   label = NULL,
   include = everything(),
-  exclude = NULL,
+  tidy_fun = NULL,
   hide_n = FALSE,
   show_single_row = NULL,
   conf.level = NULL,
   estimate_fun = NULL,
   pvalue_fun = NULL,
+  formula = "{y} ~ {x}",
   show_yesno = NULL,
-  tidy_fun = NULL
+  exclude = NULL
 )
 }
 \arguments{
@@ -43,11 +43,6 @@ Specify one and only one of \code{y} or \code{x}}
 \item{method.args}{List of additional arguments passed on to the regression
 function defined by \code{method}.}
 
-\item{formula}{String of the model formula.
-Uses \link[glue:glue]{glue::glue} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
-is the dependent variable, and \code{{x}} represents a single covariate. For a
-random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
-
 \item{exponentiate}{Logical indicating whether to exponentiate the
 coefficient estimates. Default is \code{FALSE}.}
 
@@ -58,7 +53,9 @@ e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}}
 quoted variable names, unquoted variable names, or tidyselect select helper
 functions. Default is \code{everything()}.}
 
-\item{exclude}{DEPRECATED}
+\item{tidy_fun}{Option to specify a particular tidier function if the
+model is not a \link[=vetted_models]{vetted model} or you need to implement a
+custom method. Default is \code{NULL}}
 
 \item{hide_n}{Hide N column. Default is \code{FALSE}}
 
@@ -81,11 +78,14 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
+\item{formula}{String of the model formula.
+Uses \link[glue:glue]{glue::glue} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
+is the dependent variable, and \code{{x}} represents a single covariate. For a
+random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
+
 \item{show_yesno}{DEPRECATED}
 
-\item{tidy_fun}{Option to specify a particular tidier function if the
-model is not a \link[=vetted_models]{vetted model} or you need to implement a
-custom method. Default is \code{NULL}}
+\item{exclude}{DEPRECATED}
 }
 \value{
 A \code{tbl_uvregression} object

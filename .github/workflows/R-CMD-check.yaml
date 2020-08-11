@@ -21,6 +21,7 @@ jobs:
 #          - {os: macOS-latest,   r: 'devel'}
           - {os: macOS-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
+#          - {os: ubuntu-16.04,   r: 'devel',   rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-16.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 #          - {os: ubuntu-16.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
@@ -39,6 +40,11 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@master
+
+      # trying to get nloptr pkg to install on 3.5, 3.4 2020-08-11
+      - name: Install nlopt on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get install pkg-config libnlopt-dev
 
       # this is here because of an issue installing the systemfonts package
       # can likely remove later (https://github.com/r-lib/systemfonts/issues/21)
@@ -85,9 +91,10 @@ jobs:
       - name: Install historical dependencies
         run: Rscript -e "if (getRversion() < '3.6') remotes::install_version('latticeExtra', version = '0.6-28', repos = 'https://cran.rstudio.com/')"
                      -e "if (getRversion() < '3.6') remotes::install_version('pbkrtest', version = '0.4-7', repos = 'https://cran.rstudio.com/')"
+                     -e "if (getRversion() < '3.6') remotes::install_version('quantreg', version = '5.55', repos = 'https://cran.rstudio.com/')"
+                     -e "if (getRversion() < '3.6') remotes::install_version('carData', version = '3.0-3', repos = 'https://cran.rstudio.com/')"
+                     -e "if (getRversion() < '3.6') remotes::install_version('car', version = '3.0-2', repos = 'https://cran.rstudio.com/')"
                      -e "if (getRversion() < '3.5') remotes::install_version('geepack', version = '1.2-1', repos = 'https://cran.rstudio.com/')"
-                     -e "if (getRversion() < '3.5') remotes::install_version('carData', version = '3.0-3', repos = 'https://cran.rstudio.com/')"
-                     -e "if (getRversion() < '3.5') remotes::install_version('car', version = '3.0-2', repos = 'https://cran.rstudio.com/')"
                      -e "if (getRversion() < '3.4') remotes::install_version('survival', version = '2.44-1.1', repos = 'https://cran.rstudio.com/')"
 
       - name: Install dependencies
