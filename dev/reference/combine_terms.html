@@ -100,7 +100,7 @@ stats::anova()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9022</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.2.9023</span>
       </span>
     </div>
 
@@ -265,7 +265,7 @@ function's <code>formula.=</code> argument</p></td>
 #&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model)`</span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># Example with Cubic Splines</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://biostat.mc.vanderbilt.edu/Hmisc'>Hmisc</a></span>, warn.conflicts = <span class='fl'>FALSE</span>, quietly = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://hbiostat.org/R/Hmisc'>Hmisc</a></span>, warn.conflicts = <span class='fl'>FALSE</span>, quietly = <span class='fl'>TRUE</span>)
 <span class='kw'>mod2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(
   <span class='kw'>age</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/pkg/Hmisc/man/rcspline.eval.html'>rcspline.eval</a></span>(<span class='kw'>marker</span>, inclx = <span class='fl'>TRUE</span>) <span class='op'>+</span> <span class='kw'>grade</span>,
   <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"marker"</span>, <span class='st'>"grade"</span>)] <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/stats/na.fail.html'>na.omit</a></span>() <span class='co'># keep complete cases only!</span>
