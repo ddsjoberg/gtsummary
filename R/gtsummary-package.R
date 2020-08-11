@@ -10,7 +10,7 @@
 #' call2 := inform abort is_function is_string enexpr
 #' @importFrom glue glue as_glue glue_collapse
 #' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
-#' str_split str_detect str_remove str_replace_all
+#' str_split str_detect str_remove str_replace_all str_wrap str_sub str_locate
 #' @keywords internal
 "_PACKAGE"
 
