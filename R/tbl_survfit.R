@@ -493,7 +493,7 @@ survfit_to_var <- function(survfit_list, stratified, tidy, quiet) {
           stringr::str_count(tidy$strata[1], pattern = fixed(", ")) >= 1) {
         paste("The `tbl_survfit()` function supports `survfit()` objects with a",
               "single stratifying variable, and it looks like you may have more.",
-              "Error or unexpected output may occur.") %>%
+              "Errors or unexpected output may occur.") %>%
           str_wrap() %>%
           inform()
       }
