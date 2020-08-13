@@ -25,7 +25,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, value) {
   }
 
   # removing all NA values
-  var_vector <- data[[variable]] %>% na.omit()
+  var_vector <- data[[variable]] %>% stats::na.omit()
 
   # if 'value' provided, then dichotomous_value is the provided one
   if (!is.null(value[[variable]])) {
@@ -165,7 +165,7 @@ assign_summary_type <- function(data, variable, summary_type, value,
 
       # numeric variables that are 0 and 1 only, will be dichotomous
       if (inherits(data[[variable]], c("integer", "numeric")) &&
-          length(setdiff(na.omit(data[[variable]]), c(0, 1))) == 0)
+          length(setdiff(stats::na.omit(data[[variable]]), c(0, 1))) == 0)
         return("dichotomous")
 
       # factor variables that are "No" and "Yes" only, will be dichotomous
@@ -181,13 +181,13 @@ assign_summary_type <- function(data, variable, summary_type, value,
 
       # character variables that are "No" and "Yes" only, will be dichotomous
       if (inherits(data[[variable]], "character") &&
-          setequal(na.omit(data[[variable]]), c("No", "Yes")))
+          setequal(stats::na.omit(data[[variable]]), c("No", "Yes")))
         return("dichotomous")
       if (inherits(data[[variable]], "character") &&
-          setequal(na.omit(data[[variable]]), c("no", "yes")))
+          setequal(stats::na.omit(data[[variable]]), c("no", "yes")))
         return("dichotomous")
       if (inherits(data[[variable]], "character") &&
-          setequal(na.omit(data[[variable]]), c("NO", "YES")))
+          setequal(stats::na.omit(data[[variable]]), c("NO", "YES")))
         return("dichotomous")
 
       # factors and characters are categorical (except when all missing)
@@ -195,7 +195,7 @@ assign_summary_type <- function(data, variable, summary_type, value,
 
       # numeric variables with fewer than 10 levels will be categorical
       if (inherits(data[[variable]], base_numeric_classes) &&
-          length(unique(na.omit(data[[variable]]))) < 10)
+          length(unique(stats::na.omit(data[[variable]]))) < 10)
         return("categorical")
 
       # all other numeric classes are continuous
@@ -339,6 +339,7 @@ df_by <- function(data, by) {
         p = .data$n / .data$N,
         by_id = 1:n(), # 'by' variable ID
         by_chr = as.character(.data$by), # Character version of 'by' variable
+        by_fct = factor(.data$by, ordered = FALSE), # factor version of 'by' variable
         by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
       ) %>%
       select(starts_with("by"), everything())
@@ -771,10 +772,10 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
 
   df_tab <-
     data %>%
+    # converting to factor, if not already factor
+    mutate_at(vars(any_of(c("variable", "by"))),
+              ~switch(inherits(., "factor"), .) %||% factor(.)) %>%
     mutate(
-      # converting to factor, if not already factor
-      variable = switch(inherits(.data$variable, "factor"), .data$variable) %||%
-        factor(.data$variable),
       # adding dichotomous level (in case it is unobserved)
       variable = forcats::fct_expand(.data$variable, as.character(dichotomous_value)),
       # # re-leveling by alphanumeric order or frequency
@@ -785,6 +786,15 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
     filter(!is.na(.data$variable)) %>%
     count(!!!syms(variable_by_chr), .drop = FALSE)
 
+  # replacing by variable with original (non-factor version)
+  if (!is.null(by)) {
+    df_tab <-
+      df_tab %>%
+      select(by_fct = .data$by, everything()) %>%
+      left_join(df_by(data, "by")[c("by", "by_fct")], by = "by_fct") %>%
+      select(-.data$by_fct)
+  }
+
   # calculating percent
   group_by_percent <- switch(
     percent,
@@ -793,7 +803,8 @@ summarize_categorical <- function(data, variable, by, dichotomous_value, sort, p
     "row" = "variable"
   )
 
-  result <- df_tab %>%
+  result <-
+    df_tab %>%
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
       N = sum(.data$n),
@@ -848,18 +859,28 @@ summarize_continuous <- function(data, variable, by, stat_display) {
   data <-
     data %>%
     select(c(variable, by)) %>%
-    stats::na.omit() %>%
     # renaming variables to c("variable", "by") (if there is a by variable)
     set_names(variable_by_chr)
 
   # calculating stats for each var and by level
   fns_names_expr <- map(fns_names_chr, rlang::sym) # converting chars to expressions
   df_stats <-
-    data %>%
-    dplyr::group_by_at(switch(!is.null(by), "by")) %>%
+    data  %>%
+    mutate_at(vars(any_of("by")), ~switch(inherits(., "factor"), .) %||% factor(.)) %>%
+    stats::na.omit() %>%
+    dplyr::group_by_at(switch(!is.null(by), "by"), .drop = FALSE) %>%
     dplyr::summarise_at(vars(.data$variable), tibble::lst(!!!fns_names_expr)) %>%
     mutate(variable = .env$variable) %>%
     select(any_of(c("by", "variable")), everything())
+
+  # replacing by variable with original (non-factor version)
+  if (!is.null(by)) {
+    df_stats <-
+      df_stats %>%
+      select(by_fct = .data$by, everything()) %>%
+      left_join(df_by(data, "by")[c("by", "by_fct")], by = "by_fct") %>%
+      select(-.data$by_fct)
+  }
 
   # returning final object
   df_stats
