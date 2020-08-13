@@ -10,7 +10,7 @@
 #' call2 := inform abort is_function is_string enexpr
 #' @importFrom glue glue as_glue glue_collapse
 #' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
-#' str_split str_detect str_remove str_replace_all str_wrap
+#' str_split str_detect str_remove str_replace_all str_wrap str_sub str_locate
 #' @keywords internal
 "_PACKAGE"
 
@@ -24,7 +24,7 @@ NULL
 
 release_questions <- function() {
   c(
-    "Do you need to run `usethis::use_latest_dependencies()`?",
+    "Do you need to run `usethis::use_latest_dependencies(overwrite = TRUE)`?",
     "Have you updated all the gt help file images?",
     "Is the size of the build less than 5MB?"
   )

@@ -1,8 +1,10 @@
 # gtsummary (development version)
 
+# gtsummary 1.3.3
+
 ### New Functions
 
-* The {flextable} has graduated from Experimental status! Introducing `as_flex_table()`, which replaces `as_flextable()`. The updated function includes improvements to the default ascetics of the tables, and improved consistency for spanning header rows.
+* The {flextable} has graduated from Experimental status! Introducing `as_flex_table()`, which replaces `as_flextable()`. The updated function includes improvements to the default aesthetics of the tables, and improved consistency for spanning header rows.
 
 * Added `tbl_svysummary()` function to summarize complex and weighted survey designs. `tbl_svysummary` is now its own class that works with `add_n()`, `add_p()`, `add_q()`, `add_stat_label()`, `add_overall()`, `inline_text()`, `tbl_merge()` and `tbl_stack()` (#460).
 

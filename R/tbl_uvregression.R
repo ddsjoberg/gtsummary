@@ -79,12 +79,11 @@
 #' \if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
 
 tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NULL,
-                             formula = "{y} ~ {x}",
                              exponentiate = FALSE, label = NULL,
-                             include = everything(), exclude = NULL,
+                             include = everything(), tidy_fun = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
-                             estimate_fun = NULL, pvalue_fun = NULL, show_yesno = NULL,
-                             tidy_fun = NULL) {
+                             estimate_fun = NULL, pvalue_fun = NULL, formula = "{y} ~ {x}",
+                             show_yesno = NULL, exclude = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
     lifecycle::deprecate_stop(
