@@ -344,6 +344,11 @@ df_by <- function(data, by) {
       ) %>%
       select(starts_with("by"), everything())
 
+    # converting `by` column back to ordered factor if that is the original class
+    if (inherits(data[[by]], "ordered")) {
+      result[["by"]] <- factor(result[["by"]], ordered = TRUE)
+    }
+
   } else {
     # survey object
     svy_table <- survey::svytable(c_form(right = by), data, round = TRUE) %>%
