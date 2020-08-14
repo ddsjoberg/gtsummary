@@ -129,6 +129,11 @@ test_that("no errors/warnings with no stratified variable", {
     tbl_survfit(trial, y = Surv(ttdeath, death), include = c(grade, trt), times = 10),
     NA
   )
+
+  expect_message(
+    tbl_survfit(survfit(Surv(ttdeath, death) ~ grade + trt, trial), times = 10),
+    "*"
+  )
 })
 
 
