@@ -111,13 +111,6 @@ add_nevent.tbl_regression <- function(x, quiet = NULL, ...) {
     return(x)
   }
 
-  # printing note about placing N Events in table
-  if (quiet == FALSE) {
-    paste("A column called 'nevent' has been added to `x$table_body`.",
-          "Default printing of the table has not been modified.") %>%
-    rlang::inform()
-  }
-
   # column label
   x$table_header <-
     tibble(column = names(x$table_body)) %>%

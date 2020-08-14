@@ -77,7 +77,7 @@
 #'   tbl_regression(exponentiate = TRUE)
 #'
 #' # Example 3 ----------------------------------
-#' library(lme4, warn.conflicts = FALSE, quietly = TRUE)
+#' suppressMessages(library(lme4))
 #' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)

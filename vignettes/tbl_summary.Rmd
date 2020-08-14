@@ -302,7 +302,7 @@ For details on creating a theme and setting personal defaults, visit the [themes
 
 ## Summary Tables for Survey Data
 
-The {gtsummary} package also supports survey data (objects created with the [{survey}](https://cran.r-project.org/web/packages/survey/index.html) package) via the `tbl_svysummary()` function.
+The {gtsummary} package also supports survey data (objects created with the [{survey}](https://CRAN.R-project.org/package=survey) package) via the `tbl_svysummary()` function.
 The syntax for `tbl_svysummary()` and `tbl_summary()` are nearly identical, thus the examples above apply to survey summaries as well.
 
 To begin, we'll install the {survey} package and load the `apiclus1` data set which has a complex survey design.
@@ -329,7 +329,7 @@ svy_apiclus1 <-
 
 After creating the survey object, we can now summarize it similarly to a standard data frame using `tbl_svysummary()`. Like `tbl_summary()`, `tbl_svysummary()` can accept a `by` variable and works with `add_p()` and `add_overall()` functions. 
 
-One thing to note is that unlike `tbl_summary()`, it is not possible to pass custom functions to the `statistic` argument of `tbl_svysummary()`. You must use one of the [pre-defined summary statistic functions](file:///Users/Whiting/Repositories/gtsummary/docs/dev/reference/tbl_svysummary.html#statistic-argument) (e.g. `{mean}`, `{median}`) which leverage functions from the {survey} package to calculate the correct survey statistics.  
+One thing to note is that unlike `tbl_summary()`, it is not possible to pass custom functions to the `statistic` argument of `tbl_svysummary()`. You must use one of the [pre-defined summary statistic functions](http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.html#statistic-argument) (e.g. `{mean}`, `{median}`) which leverage functions from the {survey} package to calculate the correct survey statistics.  
 
 ```{r}
 svy_apiclus1 %>%
