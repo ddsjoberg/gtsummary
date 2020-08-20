@@ -80,7 +80,8 @@ tbl_cross <- function(data,
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
   percent <- match.arg(percent)
-  margin <- match.arg(margin, several.ok = TRUE)
+  if (!is.null(margin))
+    margin <- match.arg(margin, several.ok = TRUE)
 
   # if no col AND no row provided, default to first two columns of data --------
   if (is.null(row) && is.null(col)) {
