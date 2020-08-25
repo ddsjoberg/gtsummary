@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9001</span>
       </span>
     </div>
 
@@ -175,10 +175,14 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
+<ul>
+<li><p>Fixed <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> bug where function defaulted to <code>'column'</code> when <code>margin = NULL</code>. Now it defaults to display no margins when <code>NULL</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/624'>#624</a>)</p></li>
+<li><p>Changed default of <code><a href="../reference/tbl_survfit.html">tbl_survfit()</a></code> <code>missing</code> argument from <code>'\U2014'</code> (em dash) to NULL (CRAN issue). Em dash is still displayed by default in tables but it is set later in function.</p></li>
+</ul>
 </div>
     <div id="gtsummary-133" class="section level1">
 <h1 class="page-header" data-toc-text="1.3.3">
-<a href="#gtsummary-133" class="anchor"></a>gtsummary 1.3.3<small> Unreleased </small>
+<a href="#gtsummary-133" class="anchor"></a>gtsummary 1.3.3<small> 2020-08-11 </small>
 </h1>
 <div id="new-functions" class="section level3">
 <h3 class="hasAnchor">
