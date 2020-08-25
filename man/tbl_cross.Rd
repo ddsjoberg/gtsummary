@@ -42,7 +42,8 @@ Must be one of "none", "column", "row", or "cell". Default is "cell" when
 \code{{N}} or \code{{p}} is used in statistic.}
 
 \item{margin}{Indicates which margins to add to the table.
-Default is \code{c("row", "column")}}
+Default is \code{c("row", "column")}. Use \code{margin  = NULL} to suppress both
+row and column margins.}
 
 \item{missing}{Indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),

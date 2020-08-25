@@ -16,7 +16,8 @@
 #' Must be one of "none", "column", "row", or "cell". Default is "cell" when
 #' `{N}` or `{p}` is used in statistic.
 #' @param margin Indicates which margins to add to the table.
-#' Default is `c("row", "column")`
+#' Default is `c("row", "column")`. Use `margin  = NULL` to suppress both
+#' row and column margins.
 #' @param margin_text Text to display for margin totals. Default is `"Total"`
 #' @inheritParams tbl_summary
 #'
