@@ -102,7 +102,7 @@ tbl_survfit <- function(x, ...) {
 tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
                                 statistic = NULL,
                                 label = NULL, label_header = NULL, estimate_fun = NULL,
-                                missing = "\U2014", conf.level = 0.95, reverse = FALSE,
+                                missing = NULL, conf.level = 0.95, reverse = FALSE,
                                 quiet = NULL, failure = NULL, ...) {
   # deprecation notes ----------------------------------------------------------
   if (!is.null(failure)) {
@@ -125,7 +125,7 @@ tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
 tbl_survfit.data.frame <- function(x, y, times = NULL, probs = NULL,
                                    statistic = NULL,
                                    label = NULL, label_header = NULL, estimate_fun = NULL,
-                                   missing = "\U2014", conf.level = 0.95, reverse = FALSE,
+                                   missing = NULL, conf.level = 0.95, reverse = FALSE,
                                    failure = NULL, include = everything(), quiet = NULL, ...) {
   include <- dplyr::select(x, {{include}}) %>% names()
 
@@ -186,7 +186,7 @@ tbl_survfit.data.frame <- function(x, y, times = NULL, probs = NULL,
 #' @rdname tbl_survfit
 tbl_survfit.list <- function(x, times = NULL, probs = NULL,
                              statistic = NULL, label = NULL, label_header = NULL,
-                             estimate_fun = NULL, missing = "\U2014",
+                             estimate_fun = NULL, missing = NULL,
                              conf.level = 0.95, reverse = FALSE, quiet = NULL, ...) {
   # setting defaults -----------------------------------------------------------
   ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
@@ -194,6 +194,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
     statistic %||%
     get_theme_element("tbl_survfit-arg:statistic") %||%
     paste0("{estimate} ({conf.low}", ci.sep, "{conf.high})")
+  missing <- missing %||% "\U2014"
 
 
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
