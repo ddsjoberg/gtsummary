@@ -2,6 +2,7 @@
 #'
 #' Need this function when we do checks if the select helpers are wrapped in `var()`.
 #' If it is not present, users cannot use `where(is.numeric)` type selectors.
+#' @noRd
 
 where <- function(fn) {
   predicate <- as_function(fn)
