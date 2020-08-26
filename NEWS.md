@@ -4,9 +4,7 @@
 
 * Fixed `tbl_cross()` bug where function defaulted to `'column'` when `margin = NULL`. Now it defaults to display no margins when `NULL`. (#624)
 
-* Changed default of `tbl_survfit()` `missing` argument from `'\U2014'` (em dash)
-to NULL (CRAN issue). Em dash is still displayed by default in tables but it is 
-set later in function. 
+* Changed default of `tbl_survfit()` `missing` argument from `'\U2014'` (em dash) to NULL (CRAN issue). Em dash is still displayed by default in tables but it is set later in function. 
 
 # gtsummary 1.3.3
 
