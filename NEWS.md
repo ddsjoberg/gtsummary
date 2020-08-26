@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added a copy of tidyselect's `where()` function to allow users to use predicate select helpers (#632)
+
 * Fixed `tbl_cross()` bug where function defaulted to `'column'` when `margin = NULL`. Now it defaults to display no margins when `NULL`. (#624)
 
 * Changed default of `tbl_survfit()` `missing` argument from `'\U2014'` (em dash)
