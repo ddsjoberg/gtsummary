@@ -283,7 +283,7 @@ continuous_digits_guess <- function(data,
   }
 
   # if the variable is not continuous type, return NA
-  if (summary_type != "continuous") {
+  if (!summary_type %in% c("continuous", "continuous2")) {
     return(NA)
   }
 
@@ -998,7 +998,7 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
       rlang::set_names(fns_names_chr)
   }
   # if no digits supplied and variable is continuous, guess how to summarize
-  else if (summary_type == "continuous") {
+  else if (summary_type %in% c("continuous", "continuous2")) {
     digits[[variable]] <-
       continuous_digits_guess(data = data,
                               variable = variable,
