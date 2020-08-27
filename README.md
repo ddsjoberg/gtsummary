@@ -61,7 +61,7 @@ customizable capabilities.
     from summary tables and regression summary tables in **R markdown**.
     Make your reports completely reproducible\!
 
-By leveraging [{broom}](https://broom.tidyverse.org/),
+By leveraging [{broom}](https://broom.tidymodels.org/),
 [{gt}](https://gt.rstudio.com/), and
 [{labelled}](http://larmarange.github.io/labelled/) packages,
 {gtsummary} creates beautifully formatted, ready-to-share summary and
@@ -201,6 +201,7 @@ thank you to all contributors\!
 [@ablack3](https://github.com/ablack3),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
 [@barthelmes](https://github.com/barthelmes),
+[@benediktclaus](https://github.com/benediktclaus),
 [@calebasaraba](https://github.com/calebasaraba),
 [@CodieMonster](https://github.com/CodieMonster),
 [@davidgohel](https://github.com/davidgohel),
@@ -241,6 +242,7 @@ thank you to all contributors\!
 [@simonpcouch](https://github.com/simonpcouch),
 [@slb2240](https://github.com/slb2240),
 [@slobaugh](https://github.com/slobaugh),
+[@tjmeyers](https://github.com/tjmeyers),
 [@tormodb](https://github.com/tormodb),
 [@UAB-BST-680](https://github.com/UAB-BST-680),
 [@zabore](https://github.com/zabore), and
