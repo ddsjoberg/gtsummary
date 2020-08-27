@@ -97,7 +97,7 @@ in a gtsummary tables." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
       </span>
     </div>
 
@@ -223,7 +223,8 @@ than the p-values. Default is <code>FALSE</code>.</p></td>
 <span class='kw'>bold_p_ex2</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>response</span> <span class='op'>~</span> <span class='kw'>trt</span> <span class='op'>+</span> <span class='kw'>grade</span>, <span class='kw'>trial</span>, family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(link = <span class='st'>"logit"</span>)) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(exponentiate = <span class='fl'>TRUE</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>bold_p</span>(t = <span class='fl'>0.65</span>)</div></pre>
+  <span class='fu'>bold_p</span>(t = <span class='fl'>0.65</span>)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
