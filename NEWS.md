@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 1.3.4
 
 * Added a copy of tidyselect's `where()` function to allow users to use predicate select helpers (#632)
