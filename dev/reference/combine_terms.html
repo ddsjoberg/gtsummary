@@ -100,7 +100,7 @@ stats::anova()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9000</span>
       </span>
     </div>
 
@@ -260,7 +260,8 @@ function's <code>formula.=</code> argument</p></td>
   <span class='fu'>combine_terms</span>(
     formula_update = <span class='kw'>.</span> <span class='op'>~</span> <span class='kw'>.</span> <span class='op'>-</span> <span class='kw'>marker</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/AsIs.html'>I</a></span>(<span class='kw'>marker</span><span class='op'>^</span><span class='fl'>2</span>),
     label = <span class='st'>"Marker (non-linear terms)"</span>
-  )</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
+  )
+</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
 #&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - marker - I(marker^2))`</span></div><div class='output co'>#&gt; <span class='message'>Calculating p-value comparing full and reduced models with</span>
 #&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model)`</span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
@@ -276,7 +277,8 @@ function's <code>formula.=</code> argument</p></td>
   <span class='fu'>combine_terms</span>(
     formula_update = <span class='kw'>.</span> <span class='op'>~</span> <span class='kw'>.</span> <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/pkg/Hmisc/man/rcspline.eval.html'>rcspline.eval</a></span>(<span class='kw'>marker</span>, inclx = <span class='fl'>TRUE</span>),
     label = <span class='st'>"Marker (non-linear terms)"</span>
-  )</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
+  )
+</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
 #&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - rcspline.eval(marker, inclx = TRUE))`</span></div><div class='output co'>#&gt; <span class='message'>Calculating p-value comparing full and reduced models with</span>
 #&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model)`</span></div><div class='input'>
 <span class='co'># Example 3 ----------------------------------</span>
@@ -293,9 +295,11 @@ function's <code>formula.=</code> argument</p></td>
     formula_update = <span class='kw'>.</span> <span class='op'>~</span> <span class='kw'>.</span> <span class='op'>-</span> <span class='kw'>marker</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/AsIs.html'>I</a></span>(<span class='kw'>marker</span><span class='op'>^</span><span class='fl'>2</span>),
     label = <span class='st'>"Marker (non-linear terms)"</span>,
     test = <span class='st'>"LRT"</span>
-  )</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
+  )
+</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
 #&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - marker - I(marker^2))`</span></div><div class='output co'>#&gt; <span class='message'>Calculating p-value comparing full and reduced models with</span>
-#&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model, test = "LRT")`</span></div><div class='input'></div></pre>
+#&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model, test = "LRT")`</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

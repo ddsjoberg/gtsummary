@@ -99,7 +99,7 @@ formatted summary table of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9000</span>
       </span>
     </div>
 
@@ -381,7 +381,8 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 
 <span class='kw'>survfit_cr_ex4</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death_cr</span>) <span class='op'>~</span> <span class='kw'>grade</span>, data = <span class='kw'>trial2</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_survfit</span>(times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), label = <span class='st'>"Tumor Grade"</span>)</div><div class='output co'>#&gt; <span class='message'>Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div></pre>
+  <span class='fu'>tbl_survfit</span>(times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), label = <span class='st'>"Tumor Grade"</span>)
+</div><div class='output co'>#&gt; <span class='message'>Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

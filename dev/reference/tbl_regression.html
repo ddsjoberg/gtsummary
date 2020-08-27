@@ -101,7 +101,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.3.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9000</span>
       </span>
     </div>
 
@@ -346,9 +346,11 @@ units in your model.  Here are some common exceptions.</p><ol>
 <span class='fu'><a href='https://rdrr.io/r/base/message.html'>suppressMessages</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4'>lme4</a></span>))
 <span class='kw'>tbl_regression_ex3</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(<span class='kw'>am</span> <span class='op'>~</span> <span class='kw'>hp</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>gear</span>), <span class='kw'>mtcars</span>, family = <span class='kw'>binomial</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(exponentiate = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
+  <span class='fu'>tbl_regression</span>(exponentiate = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
 #&gt; <span class='message'>  method      from </span>
-#&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='input'></div></pre>
+#&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
