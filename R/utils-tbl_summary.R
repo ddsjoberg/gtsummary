@@ -703,18 +703,19 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       tibble(stat = paste0("{p", 0:100, "}")) %>%
         mutate(label = paste0(gsub("[^0-9\\.]", "", .data$stat), "%"))
     ) %>%
+    # translating statistic names
+    mutate(label = map_chr(.data$label, ~translate_text(.x, language))) %>%
     # if function does not appear in above list, the print the function name
     bind_rows(
       tibble(
-        stat = str_extract_all(stat_display, "\\{.*?\\}") %>%
+        stat = str_extract_all(unlist(stat_display), "\\{.*?\\}") %>%
           unlist() %>%
           unique(),
         label = .data$stat %>%
           str_remove_all(pattern = fixed("}")) %>%
           str_remove_all(pattern = fixed("{"))
       )
-    ) %>%
-    mutate(label = map_chr(.data$label, ~translate_text(.x, language)))
+    )
 
   # adding IQR replacements if indicated
   if (iqr == TRUE) {
@@ -733,13 +734,13 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
   for (i in seq_len(nrow(labels))) {
     stat_display <-
       stringr::str_replace_all(
-        stat_display,
+        unlist(stat_display),
         stringr::fixed(labels$stat[i]),
         labels$label[i]
       )
   }
 
-  stat_display
+  list(stat_display)
 }
 
 # footnote_stat_label ----------------------------------------------------------
@@ -926,8 +927,8 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
     return <-
       left_join(
         df_stats,
-        tibble(variable_levels = map_chr(.env$stat_display, stat_label_match),
-               stat_display = .env$stat_display),
+        tibble(variable_levels = map_chr(stat_display, ~stat_label_match(.x) %>% unlist()),
+               stat_display = stat_display),
         by = character()
       ) %>%
       select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
