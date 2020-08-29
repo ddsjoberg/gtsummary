@@ -229,15 +229,21 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # table of column headers ----------------------------------------------------
   table_header <-
     tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    mutate(
-      # adding footnote of statistics on display (unless theme indicates a no print)
-      footnote = ifelse(
-        startsWith(.data$column, "stat_"),
-        footnote_stat_label(meta_data),
-        .data$footnote
+    table_header_fill_missing()
+
+  # adding stat footnote (unless there are continuous2 vars)
+  if (!"continuous2" %in% meta_data$summary_type) {
+    table_header <-
+      table_header %>%
+      mutate(
+        # adding footnote of statistics on display (unless theme indicates a no print)
+        footnote = ifelse(
+          startsWith(.data$column, "stat_"),
+          footnote_stat_label(meta_data),
+          .data$footnote
+        )
       )
-    )
+  }
 
   # returning all results in a list --------------------------------------------
   results <- list(
@@ -377,7 +383,7 @@ summarize_continuous_survey <- function(data, variable, by, stat_display,
     return <-
       left_join(
         df_stats,
-        tibble(variable_levels = map_chr(.env$stat_display, stat_label_match),
+        tibble(variable_levels = map_chr(stat_display, ~stat_label_match(.x) %>% unlist()),
                stat_display = .env$stat_display),
         by = character()
       ) %>%
@@ -473,6 +479,9 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
     "continuous" = summarize_continuous_survey(data = data, variable = variable,
                                                by = by, stat_display = stat_display,
                                                digits = digits, summary_type = summary_type),
+    "continuous2" = summarize_continuous_survey(data = data, variable = variable,
+                                                by = by, stat_display = stat_display,
+                                                digits = digits, summary_type = summary_type),
     "categorical" = summarize_categorical_survey(data = data, variable = variable,
                                                  by = by, class = class,
                                                  dichotomous_value = dichotomous_value,
@@ -495,7 +504,7 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
                                      by = by, class = "logical",
                                      dichotomous_value = TRUE,
                                      sort = "alphanumeric", percent = "column",
-                                     stat_display = stat_display) %>%
+                                     stat_display = "{n}") %>%
     select(-.data$stat_display) %>%
     rename(p_miss = .data$p,
            N_obs = .data$N,

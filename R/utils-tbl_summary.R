@@ -670,7 +670,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
 # stat_label_match -------------------------------------------------------------
 # provide a vector of stat_display and get labels back i.e. {mean} ({sd}) gives Mean (SD)
-stat_label_match <- function(stat_display, iqr = TRUE) {
+stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
   language <- get_theme_element("pkgwide-str:language", default = "en")
   labels <-
     tibble::tribble(
@@ -724,23 +724,41 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
         tibble::tribble(
           ~stat, ~label,
           "{p25}, {p75}", translate_text("IQR", language),
-          "{p25} \U2013 {p75}", translate_text("IQR", language)
+          "{p25} \U2013 {p75}", translate_text("IQR", language),
+          "{p25} - {p75}", translate_text("IQR", language)
+        ),
+        labels
+      )
+  }
+
+  # adding range replacements if indicated
+  if (range == TRUE) {
+    labels <-
+      bind_rows(
+        tibble::tribble(
+          ~stat, ~label,
+          "{min}, {max}", translate_text("range", language),
+          "{min} \U2013 {max}", translate_text("range", language),
+          "{min} - {max}", translate_text("range", language)
         ),
         labels
       )
   }
 
   # replacing statistics in {}, with their labels
-  for (i in seq_len(nrow(labels))) {
-    stat_display <-
-      stringr::str_replace_all(
-        unlist(stat_display),
-        stringr::fixed(labels$stat[i]),
-        labels$label[i]
-      )
-  }
-
-  list(stat_display)
+  map(
+    stat_display,
+    function(.x) {
+      for (i in seq_len(nrow(labels))) {
+        .x <- stringr::str_replace_all(
+          .x,
+          stringr::fixed(labels$stat[i]),
+          labels$label[i]
+        )
+      }
+      .x
+    }
+  )
 }
 
 # footnote_stat_label ----------------------------------------------------------
@@ -1208,7 +1226,7 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
                               by = by, class = "logical",
                               dichotomous_value = TRUE,
                               sort = "alphanumeric", percent = "column",
-                              stat_display = stat_display) %>%
+                              stat_display = "{n}") %>%
     select(-.data$stat_display) %>%
     rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
     mutate(N_nonmiss = .data$N_obs - .data$N_miss,
