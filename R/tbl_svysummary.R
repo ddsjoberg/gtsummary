@@ -278,9 +278,13 @@ is_survey <- function(data) {
   return(inherits(data, "survey.design") | inherits(data, "svyrep.design"))
 }
 
-# summarize_categorical for survey design --------------------------------------------------------
-summarize_categorical_survey <- function(data, variable, by, class, dichotomous_value, sort, percent) {
-  df_stats <- summarize_categorical(data$variables, variable, by, class, dichotomous_value, sort, percent) %>%
+# summarize_categorical for survey design --------------------------------------
+summarize_categorical_survey <- function(data, variable, by, class,
+                                         dichotomous_value, sort, percent, stat_display) {
+  df_stats <-
+    summarize_categorical(data = data$variables, variable = variable, by = by,
+                          class = class, dichotomous_value = dichotomous_value,
+                          sort = sort, percent = percent, stat_display = stat_display) %>%
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
 
   # if there is a dichotomous value, it needs to be present as a level of the variable for svytable
@@ -332,12 +336,18 @@ summarize_categorical_survey <- function(data, variable, by, class, dichotomous_
       left_join(svy_table)
   )
 
+  df_stats <-
+    df_stats %>%
+    mutate(stat_display = .env$stat_display) %>%
+    select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
+
   # returning final object
   df_stats
 }
 
 # summarize_continuous for survey designs ---------------------------------------------------------
-summarize_continuous_survey <- function(data, variable, by, stat_display, digits) {
+summarize_continuous_survey <- function(data, variable, by, stat_display,
+                                        digits, summary_type) {
   # extracting function calls
   fns_names_chr <-
     extracting_function_calls_from_stat_display(stat_display, variable) %>%
@@ -362,8 +372,26 @@ summarize_continuous_survey <- function(data, variable, by, stat_display, digits
     )
   }
 
+  # adding stat_display to the data frame
+  if (summary_type == "continuous2") {
+    return <-
+      left_join(
+        df_stats,
+        tibble(variable_levels = map_chr(.env$stat_display, stat_label_match),
+               stat_display = .env$stat_display),
+        by = character()
+      ) %>%
+      select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
+  }
+  else {
+    return <-
+      df_stats %>%
+      mutate(stat_display = .env$stat_display) %>%
+      select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
+  }
+
   # returning final object
-  df_stats
+  return
 }
 
 compute_survey_stat <- function(data, variable, by, f) {
@@ -444,15 +472,17 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
     summary_type,
     "continuous" = summarize_continuous_survey(data = data, variable = variable,
                                                by = by, stat_display = stat_display,
-                                               digits = digits),
+                                               digits = digits, summary_type = summary_type),
     "categorical" = summarize_categorical_survey(data = data, variable = variable,
                                                  by = by, class = class,
                                                  dichotomous_value = dichotomous_value,
-                                                 sort = sort, percent = percent),
+                                                 sort = sort, percent = percent,
+                                                 stat_display = stat_display),
     "dichotomous" = summarize_categorical_survey(data = data, variable = variable,
                                                  by = by, class = class,
                                                  dichotomous_value = dichotomous_value,
-                                                 sort = sort, percent = percent)
+                                                 sort = sort, percent = percent,
+                                                 stat_display = stat_display)
   )
 
   # adding the N_obs and N_missing, etc
@@ -464,7 +494,9 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
                                      variable = variable,
                                      by = by, class = "logical",
                                      dichotomous_value = TRUE,
-                                     sort = "alphanumeric", percent = "column") %>%
+                                     sort = "alphanumeric", percent = "column",
+                                     stat_display = stat_display) %>%
+    select(-.data$stat_display) %>%
     rename(p_miss = .data$p,
            N_obs = .data$N,
            N_miss = .data$n,
@@ -503,7 +535,8 @@ calculate_missing_row_survey <- function(data, variable, by, missing_text) {
   # the tbl_summary output
   summarize_categorical_survey(
     data = data, variable = variable, by = by, class = "logical",
-    dichotomous_value = TRUE, sort = "alphanumeric", percent = "column"
+    dichotomous_value = TRUE, sort = "alphanumeric", percent = "column",
+    stat_display = "{n}"
   ) %>%
     adding_formatting_as_attr(
       data = data, variable = variable,

@@ -1207,7 +1207,7 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
                               by = by, class = "logical",
                               dichotomous_value = TRUE,
                               sort = "alphanumeric", percent = "column",
-                              stat_display = "{n}") %>%
+                              stat_display = stat_display) %>%
     select(-.data$stat_display) %>%
     rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
     mutate(N_nonmiss = .data$N_obs - .data$N_miss,
