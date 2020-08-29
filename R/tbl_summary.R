@@ -270,15 +270,21 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # table of column headers ----------------------------------------------------
   table_header <-
     tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    mutate(
-      # adding footnote of statistics on display (unless theme indicates a no print)
-      footnote = ifelse(
-        startsWith(.data$column, "stat_"),
-        footnote_stat_label(meta_data),
-        .data$footnote
+    table_header_fill_missing()
+
+  # adding stat footnote (unless there are continuous2 vars)
+  if (!"continuous2" %in% meta_data$summary_type) {
+    table_header <-
+      table_header %>%
+      mutate(
+        # adding footnote of statistics on display (unless theme indicates a no print)
+        footnote = ifelse(
+          startsWith(.data$column, "stat_"),
+          footnote_stat_label(meta_data),
+          .data$footnote
+        )
       )
-    )
+  }
 
   # returning all results in a list --------------------------------------------
   results <- list(
