@@ -150,7 +150,8 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
           .data$row_type == "missing" ~ "n",
           TRUE ~ .data$stat_label
         )
-      )
+      ) %>%
+      select(any_of(c("variable", "row_type", "label", "stat_label")), everything())
 
     # adding new column to table_header
     x$table_header <-
