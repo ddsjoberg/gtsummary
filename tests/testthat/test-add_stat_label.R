@@ -15,3 +15,18 @@ test_that("no errors/warnings with standard use", {
   expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
   expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
 })
+
+test_that("no errors/warnings with standard use for continuous2", {
+  tbl <- mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2")
+  expect_error(tbl %>% add_stat_label(), NA)
+  expect_warning(tbl %>% add_stat_label(), NA)
+
+  expect_error(tbl %>% add_stat_label() %>% add_p(), NA)
+  expect_warning(tbl %>% add_stat_label() %>% add_p(), NA)
+
+  expect_error(tbl %>% add_overall() %>% add_stat_label(), NA)
+  expect_warning(tbl %>% add_overall() %>% add_stat_label(), NA)
+
+  expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
+  expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
+})
