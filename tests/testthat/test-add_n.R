@@ -91,6 +91,32 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
   ), NA)
 })
 
+test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
+  t <- trial %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")
+
+  expect_error(t %>% add_n(), NA)
+  expect_warning(t %>% add_n(), NA)
+
+  expect_error(t %>% add_n(last = TRUE), NA)
+  expect_warning(t %>% add_n(last = TRUE), NA)
+
+  t <- Titanic %>%
+    as.data.frame() %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+    tbl_svysummary(by = Survived, type = all_continuous() ~ "continuous2")
+
+  expect_error(t %>% add_n(
+    statistic = "{N}{n}{n_miss}{p}{p_miss}",
+    footnote = TRUE
+  ), NA)
+  expect_warning(t %>% add_n(
+    statistic = "{N}{n}{n_miss}{p}{p_miss}",
+    footnote = TRUE
+  ), NA)
+})
+
 
 # add_nevent.tbl_surfit --------------------------------------------------------
 

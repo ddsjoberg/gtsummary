@@ -78,6 +78,26 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
   expect_warning(t %>% add_overall(), NA)
 })
 
+test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
+  t <- trial %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")
+
+  expect_error(t %>% add_overall(), NA)
+  expect_warning(t %>% add_overall(), NA)
+
+  expect_error(t %>% add_overall(last = TRUE), NA)
+  expect_warning(t %>% add_overall(last = TRUE), NA)
+
+  t <- Titanic %>%
+    as.data.frame() %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+    tbl_svysummary(by = Survived, type = all_continuous() ~ "continuous2")
+
+  expect_error(t %>% add_overall(), NA)
+  expect_warning(t %>% add_overall(), NA)
+})
+
 test_that("errors produced when expected", {
   expect_error(mtcars %>% select(am, mpg) %>% tbl_summary() %>% add_overall(), "*")
   expect_error(mtcars %>% select(am, mpg) %>% tbl_summary(by = am) %>%
