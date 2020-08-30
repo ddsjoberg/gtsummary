@@ -21,6 +21,27 @@ test_that("no errors/warnings with missing data", {
   expect_warning(lung %>% tbl_summary(by = sex) %>% add_overall(last = TRUE), NA)
 })
 
+
+test_that("no errors/warnings with standard use for continuous 2", {
+  expect_error(mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_warning(mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+
+  expect_error(mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+  expect_warning(mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+
+  expect_error(iris %>% tbl_summary(by = Species, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_warning(iris %>% tbl_summary(by = Species, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+})
+
+test_that("no errors/warnings with missing data for continuous 2", {
+  expect_error(lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_warning(lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+
+  expect_error(lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+  expect_warning(lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+})
+
+
 test_that("no errors/warnings with missing data in by variable", {
   expect_error(trial %>% tbl_summary(by = response) %>% add_overall(), NA)
 })

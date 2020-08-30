@@ -428,3 +428,27 @@ test_that("tbl_summary-complex environments check", {
   expect_error(no_fun(), NA)
 })
 
+
+test_that("tbl_summary creates output without error/warning for continuous2 (no by var)", {
+  expect_error(
+    purrr::map(list(mtcars, iris), ~ tbl_summary(.x, type = all_continuous() ~ "continuous2",
+                                                 sort = list(all_categorical() ~ "frequency"))),
+    NA
+  )
+  expect_warning(
+    purrr::map(list(mtcars, iris), ~ tbl_summary(.x)),
+    NA
+  )
+})
+
+
+test_that("tbl_summary creates output without error/warning for continuous2 (with by var)", {
+  expect_error(
+    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2"),
+    NA
+  )
+  expect_warning(
+    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2"),
+    NA
+  )
+})
