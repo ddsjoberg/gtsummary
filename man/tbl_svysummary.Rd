@@ -47,7 +47,7 @@ statistic being calculated is \code{"{mean} ({sd})"} and you want the mean round
 to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}.}
 
 \item{type}{List of formulas specifying variable types. Accepted values
-are \code{c("continuous", "categorical", "dichotomous")},
+are \code{c("continuous", "continuous2", "categorical", "dichotomous")},
 e.g. \code{type = list(age ~ "continuous", female ~ "dichotomous")}.
 If type not specified for a variable, the function
 will default to an appropriate summary type. See below for details.}
@@ -160,6 +160,9 @@ Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
 and the TRUE, 1, and yes rows are displayed.
 Otherwise, the value to display must be specified in
 the \code{value} argument, e.g. \code{value = list(varname ~ "level to show")}
+
+Continuous variables can be shown two ways: one a single row
+(\code{type = "continuous"}) or on two or more rows (\code{type = "continuous2"}).
 }
 
 \section{select helpers}{

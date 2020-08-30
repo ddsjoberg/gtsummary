@@ -216,7 +216,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
           "categorical",
 
         # everything else is assigned to continuous
-        TRUE ~ "continuous"
+        TRUE ~ get_theme_element("tbl_summary-str:default_con_type", default = "continuous")
       )
   )
 
