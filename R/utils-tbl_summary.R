@@ -139,7 +139,7 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #' corresponding one-to-one with the names in `variable`.
 #' @param summary_type list that includes specified summary types,
 #' e.g. \code{summary_type = list(age = "continuous")}
-#' @return Vector summary types `c("continuous", "categorical", "dichotomous")`.
+#' @return Vector summary types `c("continuous", "continuous2", "categorical", "dichotomous")`.
 #' @keywords internal
 #' @noRd
 #' @author Daniel D. Sjoberg
@@ -224,7 +224,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
   # as a continuous variable
   purrr::pwalk(
     list(type, class, variable),
-    ~ if(..1 == "continuous" && ..2 %in% c("factor", "character"))
+    ~ if(..1 %in% c("continuous", "continuous2") && ..2 %in% c("factor", "character"))
       stop(glue(
         "Column '{..3}' is class \"{..2}\" and cannot be summarized as a continuous variable."
       ), call. = FALSE)
@@ -377,7 +377,7 @@ df_by <- function(data, by) {
 #' Assigns categorical variables sort type ("alphanumeric" or "frequency")
 #'
 #' @param variable variable name
-#' @param summary_type the type of variable ("continuous", "categorical", "dichotomous")
+#' @param summary_type the type of variable ("continuous", "continuous2", "categorical", "dichotomous")
 #' @param sort named list indicating the type of sorting to perform. Default is NULL.
 #' @noRd
 #' @keywords internal
@@ -1035,9 +1035,10 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
 
       # if number of digits was passed by user, round to the specified digits
       if (!is.null(digits[[variable]][[colname]])) {
-        if (summary_type == "continuous" && colname %in% c("p_miss", "p_nonmiss",
-                                                           "p_miss_unweighted",
-                                                           "p_nonmiss_unweighted"))
+        if (summary_type %in% c("continuous", "continuous2") &&
+            colname %in% c("p_miss", "p_nonmiss",
+                           "p_miss_unweighted",
+                           "p_nonmiss_unweighted"))
           attr(column, "fmt_fun") <-
             purrr::partial(style_number, scale = 100,
                            digits = !!digits[[variable]][[colname]])
