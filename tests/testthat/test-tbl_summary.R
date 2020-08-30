@@ -451,4 +451,9 @@ test_that("tbl_summary creates output without error/warning for continuous2 (wit
     tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2"),
     NA
   )
+
+  expect_error(
+    tbl_summary(mtcars, by = am, statistic = all_continuous() ~ c("{median}", "{mean}")),
+    "*"
+  )
 })

@@ -106,8 +106,8 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
   # dichotomous and categorical are treated in the same fashion here
   summary_type <- ifelse(summary_type == "dichotomous", "categorical", summary_type)
 
-  # otherwise, return defaults
-  return(
+  # returning the stats to display
+  stat_display <-
     map2(
       variable, summary_type,
       ~ case_when(
@@ -117,6 +117,7 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
           "{median} ({p25}, {p75})",
         .y == "continuous2" ~
           stat_display[[.x]] %||%
+          get_theme_element("tbl_summary-str:continuous_stat") %||%
           "{median} ({p25}, {p75})",
         .y %in% c("categorical", "dichotomous") ~
           stat_display[[.x]] %||%
@@ -124,7 +125,29 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
           "{n} ({p}%)"
       )
     )
+
+  # checking the stat_display is correct
+  pmap(
+    list(variable, summary_type, stat_display),
+    function(variable, summary_type, stat_display) {
+      if (summary_type != "continuous2" && length(stat_display) > 1) {
+        if (summary_type == "continuous") {
+          glue("The statistic requested for continuous variable '{variable}' ",
+               "has length greater than 1. If you would like a multi-line ",
+               "summary update the summary type to 'continuous2', e.g. ",
+               "`type = list({variable} ~ 'continuous2')`") %>%
+            str_wrap() %>%
+            stop(call. = FALSE)
+        }
+        glue("The statistic requested for variable '{variable}' ",
+             "cannot have length greater than 1.") %>%
+          str_wrap() %>%
+          stop(call. = FALSE)
+      }
+    }
   )
+
+  stat_display
 }
 
 #' Assigns summary type (e.g. continuous, categorical, or dichotomous).
