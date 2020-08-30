@@ -9,6 +9,8 @@
 #' @rdname select_helpers
 #' @param dichotomous Logical indicating whether to include dichotomous variables.
 #' Default is `TRUE`
+#' @param continuous2 Logical indicating whether to include continuous2 variables.
+#' Default is `TRUE`
 #' @export
 #' @return A character vector of column names selected
 #' @examples
@@ -21,16 +23,27 @@
 #'   )
 
 # THE ENVIRONMENTS ARE CREATED IN `utils-gtsummary_core.R`
-all_continuous <- function() {
+all_continuous <- function(continuous2 = TRUE) {
+  if (continuous2) con_types <- c("continuous", "continuous2")
+  else con_types <- "continuous"
+
   meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type == "continuous") %>%
+    keep(meta_data_env$summary_type %in% con_types) %>%
+    names()
+}
+
+#' @rdname select_helpers
+#' @export
+all_continuous2 <- function() {
+  meta_data_env$summary_type %>%
+    keep(meta_data_env$summary_type %in% "continuous2") %>%
     names()
 }
 
 #' @rdname select_helpers
 #' @export
 all_categorical <- function(dichotomous = TRUE) {
-  # return variable names if dochotomous included
+  # return variable names if dichotomous included
   if (dichotomous) {
     x <-
       keep(meta_data_env$summary_type, ~ . %in% c("categorical", "dichotomous")) %>%
@@ -38,7 +51,7 @@ all_categorical <- function(dichotomous = TRUE) {
     return(x)
   }
 
-  # return variable names if dochotomous NOT included
+  # return variable names if dichotomous NOT included
   meta_data_env$summary_type %>%
     keep(meta_data_env$summary_type == "categorical") %>%
     names()

@@ -3,6 +3,7 @@
 \name{select_helpers}
 \alias{select_helpers}
 \alias{all_continuous}
+\alias{all_continuous2}
 \alias{all_categorical}
 \alias{all_dichotomous}
 \alias{all_numeric}
@@ -13,7 +14,9 @@
 \alias{all_factor}
 \title{Select helper functions}
 \usage{
-all_continuous()
+all_continuous(continuous2 = TRUE)
+
+all_continuous2()
 
 all_categorical(dichotomous = TRUE)
 
@@ -32,6 +35,9 @@ all_logical()
 all_factor()
 }
 \arguments{
+\item{continuous2}{Logical indicating whether to include continuous2 variables.
+Default is \code{TRUE}}
+
 \item{dichotomous}{Logical indicating whether to include dichotomous variables.
 Default is \code{TRUE}}
 }
