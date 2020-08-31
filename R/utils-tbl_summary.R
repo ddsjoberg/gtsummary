@@ -741,7 +741,8 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
     )
 
   # adding IQR replacements if indicated
-  if (iqr == TRUE) {
+  has_iqr_translation <- !is.na(filter(df_translations, en == "IQR")[[language]])
+  if (iqr == TRUE && has_iqr_translation) {
     labels <-
       bind_rows(
         tibble::tribble(
@@ -755,7 +756,8 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
   }
 
   # adding range replacements if indicated
-  if (range == TRUE) {
+  has_range_translation <- !is.na(filter(df_translations, en == "Range")[[language]])
+  if (range == TRUE && has_range_translation) {
     labels <-
       bind_rows(
         tibble::tribble(
