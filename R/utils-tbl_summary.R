@@ -698,12 +698,12 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
   labels <-
     tibble::tribble(
       ~stat, ~label,
-      "{min}", "minimum",
-      "{max}", "maximum",
-      "{median}", "median",
-      "{mean}", "mean",
+      "{min}", "Minimum",
+      "{max}", "Maximum",
+      "{median}", "Median",
+      "{mean}", "Mean",
       "{sd}", "SD",
-      "{var}", "variance",
+      "{var}", "Variance",
       "{n}", "n",
       "{N}", "N",
       "{p}%", "%",
@@ -714,7 +714,7 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
       "{p_nonmiss}", "% not missing",
       "{N_miss}", "N missing",
       "{N_nonmiss}", "N",
-      "{N_obs}", "no. obs.",
+      "{N_obs}", "No. obs.",
       "{N_obs_unweighted}", "Total N (unweighted)",
       "{N_miss_unweighted}", "N Missing (unweighted)",
       "{N_nonmiss_unweighted}", "N not Missing (unweighted)",
@@ -760,9 +760,9 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
       bind_rows(
         tibble::tribble(
           ~stat, ~label,
-          "{min}, {max}", translate_text("range", language),
-          "{min} \U2013 {max}", translate_text("range", language),
-          "{min} - {max}", translate_text("range", language)
+          "{min}, {max}", translate_text("Range", language),
+          "{min} \U2013 {max}", translate_text("Range", language),
+          "{min} - {max}", translate_text("Range", language)
         ),
         labels
       )
