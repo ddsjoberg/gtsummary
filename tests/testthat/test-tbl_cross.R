@@ -159,3 +159,37 @@ test_that("tbl_cross- test 'no' missing throws message", {
 
 })
 
+# Margin Argument  -------------------------------------------
+test_that("tbl_cross- test NULL margin argument", {
+
+  margins <- tbl_cross(trial,
+    row = trt,
+    col = response
+  )
+
+  no_margins <- tbl_cross(trial,
+    row = trt,
+    col = response,
+    margin = NULL
+  )
+
+  # test row margins ------
+  expect_equal(
+    "..total.." %in% margins$table_body$variable,
+    TRUE
+  )
+  expect_equal(
+    "..total.." %in% no_margins$table_body$variable,
+    FALSE
+  )
+
+  # test col margins ------
+  expect_equal(
+    "stat_0" %in% names(margins$table_body),
+    TRUE
+  )
+  expect_equal(
+    "stat_0" %in% names(no_margins$table_body),
+    FALSE
+  )
+})
