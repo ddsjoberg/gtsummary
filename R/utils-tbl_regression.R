@@ -71,7 +71,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   # add header rows to categorical variables -----------------------------------
   df_tidy_6 <-
-    broom.helpers::tidy_add_header_rows(df_tidy_5, show_single_row = show_single_row)
+    broom.helpers::tidy_add_header_rows(df_tidy_5, strict = strict,
+                                        show_single_row = show_single_row)
 
   # final tidying before returning ---------------------------------------------
   df_tidy_6 %>%
