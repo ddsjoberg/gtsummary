@@ -96,11 +96,12 @@ gtsummary_model_frame <- function(x) {
       "was\nmisspelled, does not exist, or is not a regression model.\n\n",
       "Rarely, this error may occur if the model object was created within\na ",
       "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
-      "{usethis::ui_code('purrr::map()')}, etc.). The model N will not be available.\n",
-      "Review the GitHub issue linked below for a possible solution."
+      "{usethis::ui_code('purrr::map()')}, etc.).\n",
+      "Review the GitHub issue linked below for a possible solution.\n",
+      "The model N will not be available in the output."
     ))
     usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
-    stop(as.character(e), call. = FALSE)
+    data.frame()
   }
   )
 }
