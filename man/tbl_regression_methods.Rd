@@ -5,6 +5,7 @@
 \alias{tbl_regression.lmerMod}
 \alias{tbl_regression.glmerMod}
 \alias{tbl_regression.survreg}
+\alias{tbl_regression.multinom}
 \title{Methods for tbl_regression}
 \usage{
 \method{tbl_regression}{lmerMod}(
@@ -55,6 +56,22 @@
   exclude = NULL,
   ...
 )
+
+\method{tbl_regression}{multinom}(
+  x,
+  label = NULL,
+  exponentiate = FALSE,
+  include = everything(),
+  show_single_row = NULL,
+  conf.level = NULL,
+  intercept = FALSE,
+  estimate_fun = NULL,
+  pvalue_fun = NULL,
+  show_yesno = NULL,
+  exclude = NULL,
+  group_header = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Regression model object}
@@ -98,9 +115,12 @@ custom method. Default is \code{NULL}}
 \item{show_yesno}{DEPRECATED}
 
 \item{exclude}{DEPRECATED}
+
+\item{group_header}{Character vector with table headers where length matches
+the length of \verb{tbls=}}
 }
 \description{
-Most regression models are properly handled by \link{tbl_regression.default},
+Most regression models are handled by \link{tbl_regression.default},
 which uses \link[broom:reexports]{broom::tidy} to perform initial tidying of results. There are,
 however, some model types that have modified default printing behavior.
 Those methods are listed below.
