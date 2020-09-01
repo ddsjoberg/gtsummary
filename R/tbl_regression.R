@@ -165,39 +165,31 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())
 
-    # converting tidyselect formula lists to named lists
-  # extracting model frame
-  model_frame <- tryCatch({
-      stats::model.frame(x)
-    },
-    error = function(e) {
-      usethis::ui_oops(paste0(
-        "There was an error calling {usethis::ui_code('stats::model.frame(x)')}.\n\n",
-        "Most likely, this is because the argument passed in {usethis::ui_code('x =')} ",
-        "was\nmisspelled, does not exist, or is not a regression model.\n\n",
-        "Rarely, this error may occur if the model object was created within\na ",
-        "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
-        "{usethis::ui_code('purrr::map()')}, etc.).\n",
-        "Review the GitHub issue linked below for a possible solution."
-      ))
-      usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
-      stop(as.character(e), call. = FALSE)
-    }
-  )
-
-  # using broom to tidy up regression results, and
-  # then reversing order of data frame
-  tidy_model <-
-    tidy_wrap(x, exponentiate, conf.level, tidy_fun)
-
-  # parsing the terms from model and variable names
-  # outputing a tibble of the parsed model with
-  # rows for reference groups, and headers for
-  table_body <- parse_fit(x, tidy_model, label, !!show_single_row)
+  table_body <-
+    tidy_prep(x, tidy_fun = tidy_fun, exponentiate = exponentiate,
+              conf.level = conf.level, intercept = intercept,
+              label = label, show_single_row = !!show_single_row)
 
   # saving evaluated `label`, and `show_single_row`
-  func_inputs$label <- attr(table_body, "label")
-  func_inputs$show_single_row <- attr(table_body, "show_single_row")
+  func_inputs$label <-
+    unique(table_body$variable) %>%
+    vctr_2_tibble() %>%
+    tidyselect_to_list(x = {{ label }}, arg_name = "label")
+  func_inputs$show_single_row <-
+    unique(table_body$variable) %>%
+    vctr_2_tibble() %>%
+    var_input_to_string(arg_name = "show_single_row", select_input = {{show_single_row}})
+
+  # including and excluding variables indicated
+  include <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
+                                 arg_name = "include", select_input = !!include)
+  exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
+                                 arg_name = "exclude", select_input = !!exclude)
+
+  include <- include %>% setdiff(exclude)
+
+  # keeping variables indicated in `include`
+  table_body <- table_body %>% filter(.data$variable %in% include)
 
   # adding character CI
   if (all(c("conf.low", "conf.high") %in% names(table_body))) {
@@ -211,30 +203,12 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
           paste0(estimate_fun(.data$conf.low), ci.sep, estimate_fun(.data$conf.high)),
           NA_character_
         )
-      )
+      ) %>%
+      dplyr::relocate(any_of("p.value"), .after = last_col())
   }
-
-  # moving pvalue col to end of df
-  if ("p.value" %in% names(table_body)) {
-    table_body <- select(table_body, -.data$p.value, .data$p.value)
-  }
-
-  # including and excluding variables/intercept indicated
-  include <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
-                                 arg_name = "include", select_input = !!include)
-  exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
-                                 arg_name = "exclude", select_input = !!exclude)
-
-  if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
-  include <- include %>% setdiff(exclude)
-
-  # keeping variables indicated in `include`
-  table_body <-
-    table_body %>%
-    filter(.data$variable %in% include)
 
   # model N
-  n <- nrow(model_frame)
+  n <- table_body$N[1]
 
   # table of column headers
   table_header <-
