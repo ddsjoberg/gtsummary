@@ -7,16 +7,15 @@
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
-#' @section Setting Defaults:
-#' If you prefer to consistently use a different function to format p-values or
-#' estimates, you can set options in the script or in the user- or
-#' project-level startup file, '.Rprofile'.  The default confidence level can
-#' also be set.
-#' \itemize{
-#'   \item `options(gtsummary.pvalue_fun = new_function)`
-#'   \item `options(gtsummary.tbl_regression.estimate_fun = new_function)`
-#'   \item `options(gtsummary.conf.level = 0.90)`
-#' }
+#' @section Methods:
+#'
+#' The default method for `tbl_regression()` model summary uses `broom::tidy(x)`
+#' to perform the initial tidying of the model object. There are, however,
+#' a few [vetted model][vetted_models] that use [modifications][tbl_regression_methods].
+#'
+#' - `"lmerMod"` or `"glmerMod"`: These mixed effects models use `broom.mixed::tidy(x, effects = "fixed")`
+#' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
+#' - `"multinom"`: This multinomial outcome is complex, and the returned object is a `tbl_stack()` object with the paramaters for each outcome stacked into a final object
 #'
 #' @section Note:
 #' The N reported in the output is the number of observations
@@ -147,9 +146,6 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     conf.level %||%
     get_theme_element("tbl_regression-arg:conf.level") %||%
     getOption("gtsummary.conf.level", default = 0.95)
-  tidy_fun <-
-    tidy_fun %||%
-    get_theme_element("tbl_regression-arg:tidy_fun")
 
   # checking estimate_fun and pvalue_fun are functions
   if (!purrr::every(list(estimate_fun, pvalue_fun, tidy_fun %||% pvalue_fun), is.function)) {

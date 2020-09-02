@@ -20,7 +20,7 @@
 #' of model, e.g. they are all continuous variables appropriate for [lm], or
 #' dichotomous variables appropriate for logistic regression with [glm].
 #'
-#' @inheritSection tbl_regression Setting Defaults
+#' @inheritSection tbl_regression Methods
 #' @inheritSection tbl_regression Note
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data
@@ -207,6 +207,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   tbl_uvregression_inputs <-
     tbl_uvregression_inputs[!names(tbl_uvregression_inputs) %in% c("x_name", "y_name")]
 
+
   # get all vars not specified -------------------------------------------------
   all_vars <-
     names(data) %>%
@@ -224,10 +225,17 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   }
 
   # building regression models -------------------------------------------------
+  tbl_reg_args <-
+    c("exponentiate", "conf.level", "label", "include", "show_single_row", "tidy_fun")
+
   df_model <-
-    tibble(vars = all_vars) %>%
-    set_names(ifelse(!is.null(y), "x", "y")) %>%
+    tibble(
+      y = switch(!is.null(y), rep_len(y, length(all_vars))) %||% all_vars,
+      x = switch(!is.null(x), rep_len(x, length(all_vars))) %||% all_vars
+    ) %>%
+    # building model
     mutate(
+      type = ifelse(!is.null(.env$y), "x_varies", "y_varies"),
       formula_chr = glue(formula),
       model = map(
         .data$formula_chr,
@@ -236,51 +244,92 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
           as.call() %>%
           eval()
       )
+    ) %>%
+    select(all_of(c("y", "x", "type", "model"))) %>%
+    # preparing tbl_regression function arguments
+    mutate(
+      tbl_args = pmap(
+        list(.data$model, .data$y, .data$x, .data$type),
+        function(model, y, x, type) {
+          args <- tbl_uvregression_inputs
+          # removing NULL elements from list
+          args[sapply(args, is.null)] <- NULL
+          # keeping args to pass to tbl_regression
+          args <- args[names(args) %in% tbl_reg_args]
+
+          # fixing show_single_row arg for x_varies
+          if (type == "x_varies")
+            args[["show_single_row"]] <- intersect(x, show_single_row)
+
+          # only include the one x var of interest
+          args[["include"]] <- x
+
+          if (type == "y_varies")
+            args[["label"]] <- list(label[[y]] %||% attr(data[[y]], "label") %||% y) %>% set_names(x)
+
+          # adding model object
+          args[["x"]] <- model
+          args
+        }
+      )
     )
 
-  # convert model to tbl_regression object -------------------------------------
-  if (!is.null(y)) {
-    df_model <-
-      df_model %>%
-      mutate(
-        tbl = map2(
-          .data$model, .data$x,
-          ~tbl_regression(
-            .x,
-            exponentiate = exponentiate,
-            conf.level = conf.level,
-            label = label,
-            include = .y, # only include the covariate of interest in output
-            show_single_row = intersect(.y, show_single_row),
-            tidy_fun = tidy_fun
-          )
-        )
-      )
-  }
-  if (!is.null(x)) {
-    df_model <-
-      df_model %>%
-      mutate(
-        tbl = map2(
-          .data$model, .data$y,
-          function(model, y) {
-            tbl_uv <-
-              tbl_regression(
-                model,
-                label = list(label[[y]] %||% attr(data[[y]], "label") %||% y) %>% set_names(x),
-                exponentiate = exponentiate,
-                conf.level = conf.level,
-                include = x,
-                show_single_row = show_single_row,
-                tidy_fun = tidy_fun
-              )
-            tbl_uv$table_body$variable <- y
-            tbl_uv$table_body$var_type <- NA_character_
-            tbl_uv
-          }
-        )
-      )
-  }
+  # creating tbl_regression object
+  df_model$tbl <- pmap(
+    list(df_model$tbl_args, df_model$type, df_model$y),
+    function(tbl_args, type, y) {
+      tbl <- call2(tbl_regression, !!!tbl_args) %>% eval()
+      if (type == "y_varies") {
+        tbl$table_body$variable <- y
+        tbl$table_body$var_type <- NA_character_
+      }
+      tbl
+    }
+  )
+
+  # # convert model to tbl_regression object -------------------------------------
+  # if (!is.null(y)) {
+  #   df_model <-
+  #     df_model %>%
+  #     mutate(
+  #       tbl = map2(
+  #         .data$model, .data$x,
+  #         ~tbl_regression(
+  #           .x,
+  #           exponentiate = exponentiate,
+  #           conf.level = conf.level,
+  #           label = label,
+  #           include = .y, # only include the covariate of interest in output
+  #           show_single_row = intersect(.y, show_single_row),
+  #           tidy_fun = tidy_fun
+  #         )
+  #       )
+  #     )
+  # }
+  # if (!is.null(x)) {
+  #   df_model <-
+  #     df_model %>%
+  #     mutate(
+  #       tbl = map2(
+  #         .data$model, .data$y,
+  #         function(model, y) {
+  #           tbl_uv <-
+  #             tbl_regression(
+  #               model,
+  #               label = list(label[[y]] %||% attr(data[[y]], "label") %||% y) %>% set_names(x),
+  #               exponentiate = exponentiate,
+  #               conf.level = conf.level,
+  #               include = x,
+  #               show_single_row = show_single_row,
+  #               tidy_fun = tidy_fun
+  #             )
+  #           tbl_uv$table_body$variable <- y
+  #           tbl_uv$table_body$var_type <- NA_character_
+  #           tbl_uv
+  #         }
+  #       )
+  #     )
+  # }
 
   # adding N to table ----------------------------------------------------------
   if (hide_n == FALSE) {
