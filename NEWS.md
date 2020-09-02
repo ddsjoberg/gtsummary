@@ -1,5 +1,15 @@
 # gtsummary (development version)
 
+- Exporting the `modify_table_header()` function, which is an advanced-use function used to make modifications to the `.$table_header` object to update printing instructions for the gtsummary object.
+
+# gtsummary 1.3.4
+
+* Added a copy of tidyselect's `where()` function to allow users to use predicate select helpers (#632)
+
+* Fixed `tbl_cross()` bug where function defaulted to `'column'` when `margin = NULL`. Now it defaults to display no margins when `NULL`. (#624)
+
+* Changed default of `tbl_survfit()` `missing` argument from `'\U2014'` (em dash) to NULL (CRAN issue). Em dash is still displayed by default in tables but it is set later in function. 
+
 # gtsummary 1.3.3
 
 ### New Functions
