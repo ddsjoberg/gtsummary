@@ -4,6 +4,10 @@
 #' more control over the characteristics of the resulting
 #' gtsummary table.
 #'
+#' Review the
+#' \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
+#' vignette for information on `.$table_header` objects.
+#'
 #' @param x gtsummary object
 #' @param column columns to update
 #' @param label string of column label
@@ -25,8 +29,18 @@
 #' @return gtsummary object
 #' @export
 #'
+#'
 #' @examples
-#' # add example
+#' lm(mpg ~ factor(cyl), mtcars) %>%
+#'   tbl_regression() %>%
+#'   modify_table_header(column = estimate,
+#'                       label = "estimate test",
+#'                       fmt_fun = function(x) style_sigfig(x, digits = 5),
+#'                       footnote_abbrev = "test = unit test",
+#'                       footnote = "this is a footnote") %>%
+#'   modify_table_header(column = "p.value",
+#'                       hide = TRUE)
+
 modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NULL,
                                 missing_emdash = NULL, indent = NULL,
                                 text_interpret = NULL, bold = NULL, italic = NULL,

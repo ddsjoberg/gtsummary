@@ -61,6 +61,19 @@ This is a function meant for advanced users to gain
 more control over the characteristics of the resulting
 gtsummary table.
 }
+\details{
+Review the
+\href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
+vignette for information on \code{.$table_header} objects.
+}
 \examples{
-# add example
+lm(mpg ~ factor(cyl), mtcars) \%>\%
+  tbl_regression() \%>\%
+  modify_table_header(column = estimate,
+                      label = "estimate test",
+                      fmt_fun = function(x) style_sigfig(x, digits = 5),
+                      footnote_abbrev = "test = unit test",
+                      footnote = "this is a footnote") \%>\%
+  modify_table_header(column = "p.value",
+                      hide = TRUE)
 }
