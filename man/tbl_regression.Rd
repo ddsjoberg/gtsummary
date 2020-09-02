@@ -77,16 +77,16 @@ regression model results. Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 for detailed examples.
 }
-\section{Setting Defaults}{
+\section{Methods}{
 
-If you prefer to consistently use a different function to format p-values or
-estimates, you can set options in the script or in the user- or
-project-level startup file, '.Rprofile'.  The default confidence level can
-also be set.
+
+The default method for \code{tbl_regression()} model summary uses \code{broom::tidy(x)}
+to perform the initial tidying of the model object. There are, however,
+a few \link[=vetted_models]{vetted model} that use \link[=tbl_regression_methods]{modifications}.
 \itemize{
-\item \code{options(gtsummary.pvalue_fun = new_function)}
-\item \code{options(gtsummary.tbl_regression.estimate_fun = new_function)}
-\item \code{options(gtsummary.conf.level = 0.90)}
+\item \code{"lmerMod"} or \code{"glmerMod"}: These mixed effects models use \code{broom.mixed::tidy(x, effects = "fixed")}
+\item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
+\item \code{"multinom"}: This multinomial outcome is complex, and the returned object is a \code{tbl_stack()} object with the paramaters for each outcome stacked into a final object
 }
 }
 

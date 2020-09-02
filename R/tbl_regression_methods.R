@@ -4,6 +4,8 @@
 #' which uses [broom::tidy] to perform initial tidying of results. There are,
 #' however, some model types that have modified default printing behavior.
 #' Those methods are listed below.
+#'
+#' @inheritSection tbl_regression Methods
 #' @name tbl_regression_methods
 #' @rdname tbl_regression_methods
 #' @inheritParams tbl_regression
@@ -41,6 +43,7 @@ tbl_regression.survreg <- function(x, label = NULL, exponentiate = FALSE,
                                    estimate_fun = NULL, pvalue_fun = NULL,
                                    tidy_fun = function(x, ...) broom::tidy(x, ...) %>% dplyr::filter(.data$term != "Log(scale)"),
                                    show_yesno = NULL, exclude = NULL, ...) {
+
   tbl_regression.default(
     x = x, label = label, exponentiate = exponentiate,
     include = {{ include }}, show_single_row = {{ show_single_row }},
@@ -59,6 +62,7 @@ tbl_regression.multinom <- function(x, label = NULL, exponentiate = FALSE,
                                     show_yesno = NULL, exclude = NULL,
                                     group_header = NULL, ...) {
 
+  inform("Constructing `tbl_regression()` objects for each outcome")
   df_tidy <-
     broom::tidy(x, exponentiate = exponentiate,
                 conf.level = conf.level, conf.int = TRUE) %>%

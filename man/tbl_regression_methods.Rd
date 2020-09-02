@@ -125,3 +125,16 @@ which uses \link[broom:reexports]{broom::tidy} to perform initial tidying of res
 however, some model types that have modified default printing behavior.
 Those methods are listed below.
 }
+\section{Methods}{
+
+
+The default method for \code{tbl_regression()} model summary uses \code{broom::tidy(x)}
+to perform the initial tidying of the model object. There are, however,
+a few \link[=vetted_models]{vetted model} that use \link[=tbl_regression_methods]{modifications}.
+\itemize{
+\item \code{"lmerMod"} or \code{"glmerMod"}: These mixed effects models use \code{broom.mixed::tidy(x, effects = "fixed")}
+\item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
+\item \code{"multinom"}: This multinomial outcome is complex, and the returned object is a \code{tbl_stack()} object with the paramaters for each outcome stacked into a final object
+}
+}
+
