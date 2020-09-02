@@ -55,6 +55,8 @@ tbl_survfit,tbl_survfit-arg:statistic,TRUE,,
 tbl_regression,tbl_regression-arg:conf.level,TRUE,,
 tbl_regression,tbl_regression-arg:estimate_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:pvalue_fun ,TRUE,,
+tbl_regression,tbl_regression-lgl:add_ref_est,FALSE,logical indicating whether the reference estimate should be added to regression model tables with caetgorical covariates,TRUE
+tbl_regression,tbl_regression-str:ref_row_text,FALSE,string indicating the text to print on reference rows (default is an em-dash),"""Reference"""
 tbl_regression,tbl_regression-str:coef_header,FALSE,string setting the default term for the beta coefficient column header,"ifelse(exponentiate == TRUE, ""exp(coef)"", ""coef"")"
 add_global_p,add_global_p-str:type,FALSE,set argument default for `add_global_p.tbl_regression(type=)` and `add_global_p.tbl_uvregression(type=)`,"""II"""
 style_number,style_number-arg:big.mark,TRUE,,

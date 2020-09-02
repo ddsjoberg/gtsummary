@@ -134,7 +134,8 @@ table_header_to_gt_calls <- function(x) {
       seq_len(nrow(df_fmt_missing_emdash)),
       ~ expr(gt::fmt_missing(columns = gt::vars(!!!syms(df_fmt_missing_emdash$column[[.x]])),
                              rows = !!parse_expr(df_fmt_missing_emdash$missing_emdash[[.x]]),
-                             missing_text = '---'))
+                             missing_text = !!get_theme_element("tbl_regression-str:ref_row_text",
+                                                              default = "---")))
     )
 
   # cols_align -----------------------------------------------------------------

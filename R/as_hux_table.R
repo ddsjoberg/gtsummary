@@ -215,7 +215,9 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   huxtable_calls[["set_na_string"]] <- map2(df_na_emdash$i_index, df_na_emdash$id,
     ~expr(
-      huxtable::set_na_string(row = !!.x, col = !!.y, value = "\U2014")
+      huxtable::set_na_string(row = !!.x, col = !!.y,
+                              value = !!get_theme_element("tbl_regression-str:ref_row_text",
+                                                          default = "\U2014"))
     )
   )
 
