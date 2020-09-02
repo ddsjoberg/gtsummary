@@ -74,6 +74,12 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     broom.helpers::tidy_add_header_rows(df_tidy_5, strict = strict,
                                         show_single_row = show_single_row)
 
+  # add reference row value, requested -----------------------------------------
+  if (get_theme_element("tbl_regression-lgl:add_ref_est", default = FALSE)) {
+    df_tidy_6 <-
+      broom.helpers::tidy_add_estimate_to_reference_rows(df_tidy_6, exponentiate = exponentiate)
+  }
+
   # final tidying before returning ---------------------------------------------
   df_tidy_6 %>%
     mutate(

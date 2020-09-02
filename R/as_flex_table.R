@@ -259,7 +259,10 @@ table_header_to_flextable_calls <- function(x, ...) {
   flextable_calls[["fmt_missing_emdash"]] <-
     map2(
       df_na_emdash$i_index, df_na_emdash$id,
-      ~expr(flextable::colformat_char(j = !!.y, i = !!.x, na_str = "\U2014"))
+      ~expr(
+        flextable::colformat_char(j = !!.y, i = !!.x,
+                                  na_str = !!get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014"))
+        )
     )
 
   # bold -----------------------------------------------------------------------
