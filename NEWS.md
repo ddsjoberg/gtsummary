@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+- Exporting the `modify_table_header()` function, which is an advanced-use function used to make modifications to the `.$table_header` object to update printing instructions for the gtsummary object.
+
 # gtsummary 1.3.4
 
 * Added a copy of tidyselect's `where()` function to allow users to use predicate select helpers (#632)
