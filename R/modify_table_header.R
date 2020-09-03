@@ -15,7 +15,7 @@
 #' @param align string indicating alignment of column, must be one of
 #' `c("left", "right", "center")`
 #' @param missing_emdash string that evaluates to logical identifying rows to
-#' include em-dash for missing values, e.g. `"row_ref == TRUE"`
+#' include em-dash for missing values, e.g. `"reference_row == TRUE"`
 #' @param indent string that evaluates to logical identifying rows to indent
 #' @param bold string that evaluates to logical identifying rows to bold
 #' @param italic string that evaluates to logical identifying rows to italicize
@@ -127,6 +127,26 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
     x = x, column = column, element = "spanning_header", update = spanning_header,
     class_check = "is.character", in_check = NULL
   )
+
+  # checking updates -----------------------------------------------------------
+  # if column is now hidden, and there are instructions for bold etc, you'll likely get an error
+  hidden_with_instructions <-
+    x$table_header %>%
+    filter(hide == TRUE, !is.na(bold) | !is.na(italic) | !is.na(missing_emdash) |
+             !is.na(indent) | !is.na(footnote_abbrev) | !is.na(footnote)) %>%
+    pull(column)
+  if (length(hidden_with_instructions) > 0) {
+    glue("Column(s) {quoted_list(hidden_with_instructions)} are hidden (`hide = TRUE`), but have ",
+         "instructions for footnotes, bold, italic, missing_emdash, or indent. ",
+         "This can cause printing issues. Use the code below to protect from ",
+         "potential print issues.") %>%
+      str_wrap() %>%
+      glue("\n\n`modify_table_header(x, column = '{hidden_with_instructions[1]}', ",
+           "hide = TRUE, bold = NA_character_, italic = NA_character_, ",
+           "missing_emdash = NA_character_, indent = NA_character_, ",
+           "footnote_abbrev = NA_character_, footnote = NA_character_)`") %>%
+      inform()
+  }
 
   # return gtsummary object ----------------------------------------------------
   x
