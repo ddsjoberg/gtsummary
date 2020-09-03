@@ -70,11 +70,11 @@ tbl_regression.multinom <- function(x, label = NULL, exponentiate = FALSE,
     rowwise() %>%
     mutate(
       # creating a tidy function that just returns the piece needed of this tidy data frame
-      tidy_data = list(function(x, ...) data),
+      tidy_data = list(function(x, ...) .data$data),
       # running tbl_regression on each piece of the tidy tibble (for each outcome)
       tbl_regression =
         tbl_regression.default(
-          x = x, tidy_fun = tidy_data, label = label, exponentiate = exponentiate,
+          x = x, tidy_fun = .data$tidy_data, label = label, exponentiate = exponentiate,
           include = {{ include }}, show_single_row = {{ show_single_row }},
           conf.level = conf.level, intercept = intercept,
           estimate_fun = estimate_fun, pvalue_fun = pvalue_fun,

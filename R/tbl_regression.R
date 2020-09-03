@@ -15,7 +15,7 @@
 #'
 #' - `"lmerMod"` or `"glmerMod"`: These mixed effects models use `broom.mixed::tidy(x, effects = "fixed")`
 #' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
-#' - `"multinom"`: This multinomial outcome is complex, and the returned object is a `tbl_stack()` object with the paramaters for each outcome stacked into a final object
+#' - `"multinom"`: This multinomial outcome is complex, and the returned object is a `tbl_stack()` object with the parameters for each outcome stacked into a final object
 #'
 #' @section Note:
 #' The N reported in the output is the number of observations
@@ -55,6 +55,7 @@
 #' @param tidy_fun Option to specify a particular tidier function if the
 #' model is not a [vetted model][vetted_models] or you need to implement a
 #' custom method. Default is `NULL`
+#' @param ... Not used
 #' @param exclude DEPRECATED
 #' @param show_yesno DEPRECATED
 #' @author Daniel D. Sjoberg
