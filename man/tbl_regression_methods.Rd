@@ -116,6 +116,8 @@ custom method. Default is \code{NULL}}
 
 \item{exclude}{DEPRECATED}
 
+\item{...}{Not used}
+
 \item{group_header}{Character vector with table headers where length matches
 the length of \verb{tbls=}}
 }
@@ -134,7 +136,7 @@ a few \link[=vetted_models]{vetted model} that use \link[=tbl_regression_methods
 \itemize{
 \item \code{"lmerMod"} or \code{"glmerMod"}: These mixed effects models use \code{broom.mixed::tidy(x, effects = "fixed")}
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
-\item \code{"multinom"}: This multinomial outcome is complex, and the returned object is a \code{tbl_stack()} object with the paramaters for each outcome stacked into a final object
+\item \code{"multinom"}: This multinomial outcome is complex, and the returned object is a \code{tbl_stack()} object with the parameters for each outcome stacked into a final object
 }
 }
 

@@ -71,7 +71,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   # add header rows to categorical variables -----------------------------------
   df_tidy_6 <-
-    broom.helpers::tidy_add_header_rows(df_tidy_5, strict = strict,
+    broom.helpers::tidy_add_header_rows(df_tidy_5, strict = TRUE,
                                         show_single_row = show_single_row)
 
   # add reference row value, requested -----------------------------------------
@@ -84,7 +84,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   df_tidy_6 %>%
     mutate(
       N = nrow(gtsummary_model_frame(x)),
-      row_type = ifelse(header_row | is.na(header_row), "label", "level")
+      row_type = ifelse(.data$header_row | is.na(.data$header_row), "label", "level")
     ) %>%
     select(
       any_of(c("variable", "var_label", "var_type",

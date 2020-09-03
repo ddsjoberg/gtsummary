@@ -158,13 +158,13 @@ test_that("Interaction modifications", {
   )
 
   # checking modifications to table
-  expect_equal(
+  expect_equivalent(
     dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
       dplyr::pull(label),
     "Interaction"
   )
 
-  expect_equal(
+  expect_equivalent(
     dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
       nrow(),
     1L
