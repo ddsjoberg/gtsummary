@@ -230,6 +230,14 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     )
   }
 
+  # default 'fmt_fun' for numeric columns is `style_sigfig`
+  col_needs_fmt_fun <-
+    purrr::map2_lgl(table_header$column, table_header$fmt_fun,
+                    ~is.numeric(table_body[[.x]]) & is.null(.y))
+  table_header$fmt_fun[col_needs_fmt_fun] <-
+    list(purrr::partial(style_sigfig, digits = 3))
+
+
   table_header <- table_header %>%
     # adding footnotes to table_header tibble
     mutate(
@@ -240,7 +248,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
         TRUE ~ .data$footnote_abbrev
       ),
       missing_emdash = case_when(
-        .data$column %in% c("estimate", "ci") ~ "row_ref == TRUE",
+        .data$column %in% c("estimate", "ci") ~ "reference_row == TRUE",
         TRUE ~ .data$missing_emdash
       )
     )

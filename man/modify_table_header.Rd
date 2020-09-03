@@ -34,7 +34,7 @@ modify_table_header(
 \code{c("left", "right", "center")}}
 
 \item{missing_emdash}{string that evaluates to logical identifying rows to
-include em-dash for missing values, e.g. \code{"row_ref == TRUE"}}
+include em-dash for missing values, e.g. \code{"reference_row == TRUE"}}
 
 \item{indent}{string that evaluates to logical identifying rows to indent}
 
