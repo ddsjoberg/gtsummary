@@ -86,12 +86,11 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       N = nrow(gtsummary_model_frame(x)),
       row_type = ifelse(header_row | is.na(header_row), "label", "level")
     ) %>%
-    dplyr::select(
-      dplyr::any_of(c("variable", "var_label", "var_type", "reference_row",
-                      "row_type", "label", "N", "estimate", "std.error", "statistic",
-                      "conf.low", "conf.high", "p.value"))
-    ) %>%
-    dplyr::rename(row_ref = .data$reference_row )
+    select(
+      any_of(c("variable", "var_label", "var_type",
+               "reference_row", "row_type", "label", "N")),
+      everything()
+    )
 }
 
 gtsummary_model_frame <- function(x) {

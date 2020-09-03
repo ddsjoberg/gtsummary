@@ -188,10 +188,10 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     x$table_body %>%
     left_join(
       new_model_tbl$table_body %>%
-        select(.data$variable, .data$var_type, .data$row_ref,
+        select(.data$variable, .data$var_type, .data$reference_row,
                .data$row_type, .data$label) %>%
         mutate(collapse_row = FALSE),
-      by = c("variable", "var_type", "row_type", "row_ref", "label")
+      by = c("variable", "var_type", "row_type", "reference_row", "label")
     ) %>%
     # marking rows on tbl that will be reduced to a single row
     mutate(collapse_row = ifelse(is.na(.data$collapse_row), TRUE, .data$collapse_row)) %>%
