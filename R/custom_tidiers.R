@@ -1,13 +1,18 @@
-#' Custom tidiers
+#' Collection of custom tidiers
+#'
+#' Collection of tidiers that can be passed to `tbl_regression()`
+#' and `tbl_uvregression()` to obtain modified results. See examples below.
 #'
 #' @section Details:
 #'
-#' - `tidy_standardize()` tidier to report standardized coefficients. The effectsize
+#' - `tidy_standardize()` tidier to report standardized coefficients. The
+#' [effectsize](https://easystats.github.io/effectsize/reference/standardize_parameters.html)
 #' package includes a wonderful function to estimate standardized coefficients.
 #' The tidier uses the output from `effectsize::standardize_parameters()`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
-#' - `tidy_bootstrap()` tidier to report bootstrapped coefficients. The parameters
+#' - `tidy_bootstrap()` tidier to report bootstrapped coefficients. The
+#' [parameters](https://easystats.github.io/parameters/reference/model_parameters.default.html)
 #' package includes a wonderful function to estimate bootstrapped coefficients.
 #' The tidier uses the output from `parameters::bootstrap_parameters(test = "p")`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
@@ -15,9 +20,9 @@
 #' Ensure your model type is compatible with the methods/functions used to estimate
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
 #' @inheritParams broom::tidy.glm
-#' @param ... arguments passed to method; `effectsize::standardize_parameters()`
-#' for `tidy_standardize()`, and `parameters::bootstrap_parameters()` for
-#' `tidy_bootstrap()`
+#' @param ... arguments passed to method;
+#' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
+#' - `tidy_bootstrap()`: `parameters::bootstrap_parameters(x, ...)`
 #'
 #' @param x a regression model object
 #' @name custom_tidiers

@@ -37,21 +37,26 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{conf.int}{Logical indicating whether or not to include a confidence
 interval in the tidied output. Defaults to \code{FALSE}.}
 
-\item{...}{arguments passed to method; \code{effectsize::standardize_parameters()}
-for \code{tidy_standardize()}, and \code{parameters::bootstrap_parameters()} for
-\code{tidy_bootstrap()}}
+\item{...}{arguments passed to method;
+\itemize{
+\item \code{tidy_standardize()}: \code{effectsize::standardize_parameters(x, ...)}
+\item \code{tidy_bootstrap()}: \code{parameters::bootstrap_parameters(x, ...)}
+}}
 }
 \description{
-Custom tidiers
+Collection of tidiers that can be passed to \code{tbl_regression()}
+and \code{tbl_uvregression()} to obtain modified results. See examples below.
 }
 \section{Details}{
 
 \itemize{
-\item \code{tidy_standardize()} tidier to report standardized coefficients. The effectsize
+\item \code{tidy_standardize()} tidier to report standardized coefficients. The
+\href{https://easystats.github.io/effectsize/reference/standardize_parameters.html}{effectsize}
 package includes a wonderful function to estimate standardized coefficients.
 The tidier uses the output from \code{effectsize::standardize_parameters()}, and
 merely takes the result and puts it in \code{broom::tidy()} format.
-\item \code{tidy_bootstrap()} tidier to report bootstrapped coefficients. The parameters
+\item \code{tidy_bootstrap()} tidier to report bootstrapped coefficients. The
+\href{https://easystats.github.io/parameters/reference/model_parameters.default.html}{parameters}
 package includes a wonderful function to estimate bootstrapped coefficients.
 The tidier uses the output from \code{parameters::bootstrap_parameters(test = "p")}, and
 merely takes the result and puts it in \code{broom::tidy()} format.
