@@ -20,6 +20,7 @@
 #' Ensure your model type is compatible with the methods/functions used to estimate
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
 #' @inheritParams broom::tidy.glm
+#' @inheritParams add_global_p.tbl_regression
 #' @param ... arguments passed to method;
 #' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
 #' - `tidy_bootstrap()`: `parameters::bootstrap_parameters(x, ...)`
@@ -42,7 +43,13 @@
 #'   )
 #'
 #' # Example 2 ----------------------------------
-#' tidy_bootstrap_ex2 <-
+#' # use "posthoc" method for coef calculation
+#' tidy_standardize_ex2 <-
+#'   tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
+#'
+#'
+#' # Example 3 ----------------------------------
+#' tidy_bootstrap_ex3 <-
 #'   tbl_regression(mod, tidy_fun = tidy_bootstrap)
 #'
 #' @section Example Output:
@@ -52,17 +59,30 @@
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tidy_bootstrap_ex2.png}{options: width=47\%}}
+#' \if{html}{\figure{tidy_standardize_ex2.png}{options: width=47\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{tidy_bootstrap_ex3.png}{options: width=47\%}}
 
 tidy_standardize <- function(x, exponentiate = FALSE,
                              conf.level = 0.95,
-                             conf.int = TRUE, ...) {
+                             conf.int = TRUE,
+                             quiet = FALSE, ...) {
   assert_package("effectsize", "tidy_standardize")
+  dots <- list(...)
+
+  # calculating standardize coefs
+  std_coef_expr <- expr(effectsize::standardize_parameters(model = x, ci = !!conf.level, !!!dots))
+  if (quiet == FALSE)
+    inform(glue("Estimating standardized coefs with\n  `{deparse(std_coef_expr)}`"))
+  std_coef <-
+    expr(effectsize::standardize_parameters(model = !!x, ci = !!conf.level, !!!dots)) %>%
+    eval()
 
   # converting output to broom::tidy format
   tidy <-
-    effectsize::standardize_parameters(x, ci = conf.level, ...) %>%
-    as_tibble() %>%
+    as_tibble(std_coef) %>%
     select(term = .data$Parameter, estimate = .data$Std_Coefficient,
            conf.low = .data$CI_low, conf.high = .data$CI_high)
 
@@ -81,13 +101,21 @@ tidy_standardize <- function(x, exponentiate = FALSE,
 #' @export
 tidy_bootstrap <- function(x, exponentiate = FALSE,
                            conf.level = 0.95,
-                           conf.int = TRUE, ...) {
+                           conf.int = TRUE, ..., quiet = FALSE) {
   assert_package("parameters", "bootstrap_parameters")
+  dots <- list(...)
+
+  # calculating bootstrapped coefs
+  boot_coef_expr <- expr(parameters::bootstrap_parameters(model = x, ci = !!conf.level, test = "p", !!!dots))
+  if (quiet == FALSE)
+    inform(glue("Estimating bootstrapped coefs with\n  `{deparse(boot_coef_expr)}`"))
+  boot_coef <-
+    expr(parameters::bootstrap_parameters(model = !!x, ci = !!conf.level, test = "p", !!!dots)) %>%
+    eval()
 
   # converting output to broom::tidy format
   tidy <-
-    parameters::bootstrap_parameters(x, ci = conf.level, test = "p", ...) %>%
-    as_tibble() %>%
+    as_tibble(boot_coef) %>%
     select(term = .data$Parameter, estimate = .data$Coefficient,
            conf.low = .data$CI_low, conf.high = .data$CI_high, p.value = .data$p)
 

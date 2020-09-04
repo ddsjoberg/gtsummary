@@ -4,13 +4,14 @@
 \alias{custom_tidiers}
 \alias{tidy_standardize}
 \alias{tidy_bootstrap}
-\title{Custom tidiers}
+\title{Collection of custom tidiers}
 \usage{
 tidy_standardize(
   x,
   exponentiate = FALSE,
   conf.level = 0.95,
   conf.int = TRUE,
+  quiet = FALSE,
   ...
 )
 
@@ -19,7 +20,8 @@ tidy_bootstrap(
   exponentiate = FALSE,
   conf.level = 0.95,
   conf.int = TRUE,
-  ...
+  ...,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -36,6 +38,9 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
 \item{conf.int}{Logical indicating whether or not to include a confidence
 interval in the tidied output. Defaults to \code{FALSE}.}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
 
 \item{...}{arguments passed to method;
 \itemize{
@@ -74,7 +79,11 @@ the model parameters before attempting to use the tidier with \code{tbl_regressi
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tidy_bootstrap_ex2.png}{options: width=47\%}}
+\if{html}{\figure{tidy_standardize_ex2.png}{options: width=47\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{tidy_bootstrap_ex3.png}{options: width=47\%}}
 }
 
 \examples{
@@ -91,7 +100,13 @@ tidy_standardize_ex1 <-
   )
 
 # Example 2 ----------------------------------
-tidy_bootstrap_ex2 <-
+# use "posthoc" method for coef calculation
+tidy_standardize_ex2 <-
+  tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
+
+
+# Example 3 ----------------------------------
+tidy_bootstrap_ex3 <-
   tbl_regression(mod, tidy_fun = tidy_bootstrap)
 
 }
