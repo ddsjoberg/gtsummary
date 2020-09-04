@@ -14,7 +14,7 @@
 #'
 #' Ensure your model type is compatible with the methods/functions used to estimate
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
-#' @inheritParams broom::tidy.lm
+#' @inheritParams broom::tidy.glm
 #' @param ... arguments passed to method; `effectsize::standardize_parameters()`
 #' for `tidy_standardize()`, and `parameters::bootstrap_parameters()` for
 #' `tidy_bootstrap()`
@@ -58,12 +58,12 @@ tidy_standardize <- function(x, exponentiate = FALSE,
   tidy <-
     effectsize::standardize_parameters(x, ci = conf.level, ...) %>%
     as_tibble() %>%
-    select(term = Parameter, estimate = Std_Coefficient,
-           conf.low = CI_low, conf.high = CI_high)
+    select(term = .data$Parameter, estimate = .data$Std_Coefficient,
+           conf.low = .data$CI_low, conf.high = .data$CI_high)
 
   # exponentiate, if requested
   if (exponentiate) {
-    tidy <- mutate_at(tidy, vars(estimate, conf.low, conf.high), exp)
+    tidy <- mutate_at(tidy, vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
   }
 
   # removing conf int, if requested
@@ -88,7 +88,7 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
 
   # exponentiate, if requested
   if (exponentiate) {
-    tidy <- mutate_at(tidy, vars(estimate, conf.low, conf.high), exp)
+    tidy <- mutate_at(tidy, vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
   }
 
   # removing conf int, if requested
