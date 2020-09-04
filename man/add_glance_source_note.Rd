@@ -31,6 +31,7 @@ add_glance_source_note(
 \item{...}{additional argument passed to \code{broom::glance()}}
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Add the statistics returned in \code{broom::glance()} as a table source note.
 }
 \section{Example Output}{
