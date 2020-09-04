@@ -1,5 +1,6 @@
 #' Collection of custom tidiers
 #'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Collection of tidiers that can be passed to `tbl_regression()`
 #' and `tbl_uvregression()` to obtain modified results. See examples below.
 #'

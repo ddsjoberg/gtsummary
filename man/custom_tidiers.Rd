@@ -49,6 +49,7 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 }}
 }
 \description{
+\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Collection of tidiers that can be passed to \code{tbl_regression()}
 and \code{tbl_uvregression()} to obtain modified results. See examples below.
 }
