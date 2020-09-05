@@ -111,9 +111,14 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
 }
 
 # creating gt calls from table_header ------------------------------------------
-# gt table_header to gt fmt and bolding code
 table_header_to_gt_calls <- function(x) {
-  table_header <- x$table_header
+  table_header <-
+    x$table_header %>%
+    # removing instructions for hidden columns
+    dplyr::mutate_at(
+      vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
+      ~ifelse(.data$hide, NA_character_, .)
+    )
   gt_calls <- list()
 
   # gt -------------------------------------------------------------------------
