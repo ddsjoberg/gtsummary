@@ -10,113 +10,33 @@
 \usage{
 \method{tbl_regression}{lmerMod}(
   x,
-  label = NULL,
-  exponentiate = FALSE,
-  include = everything(),
-  show_single_row = NULL,
-  conf.level = NULL,
-  intercept = FALSE,
-  estimate_fun = NULL,
-  pvalue_fun = NULL,
   tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
-  show_yesno = NULL,
-  exclude = NULL,
   ...
 )
 
 \method{tbl_regression}{glmerMod}(
   x,
-  label = NULL,
-  exponentiate = FALSE,
-  include = everything(),
-  show_single_row = NULL,
-  conf.level = NULL,
-  intercept = FALSE,
-  estimate_fun = NULL,
-  pvalue_fun = NULL,
   tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
-  show_yesno = NULL,
-  exclude = NULL,
   ...
 )
 
 \method{tbl_regression}{survreg}(
   x,
-  label = NULL,
-  exponentiate = FALSE,
-  include = everything(),
-  show_single_row = NULL,
-  conf.level = NULL,
-  intercept = FALSE,
-  estimate_fun = NULL,
-  pvalue_fun = NULL,
   tidy_fun = function(x, ...) broom::tidy(x, ...) \%>\% dplyr::filter(.data$term !=
     "Log(scale)"),
-  show_yesno = NULL,
-  exclude = NULL,
   ...
 )
 
-\method{tbl_regression}{multinom}(
-  x,
-  label = NULL,
-  exponentiate = FALSE,
-  include = everything(),
-  show_single_row = NULL,
-  conf.level = NULL,
-  intercept = FALSE,
-  estimate_fun = NULL,
-  pvalue_fun = NULL,
-  show_yesno = NULL,
-  exclude = NULL,
-  group_header = NULL,
-  ...
-)
+\method{tbl_regression}{multinom}(x, group_header = NULL, ...)
 }
 \arguments{
 \item{x}{Regression model object}
-
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}}
-
-\item{exponentiate}{Logical indicating whether to exponentiate the
-coefficient estimates. Default is \code{FALSE}.}
-
-\item{include}{Variables to include in output. Input may be a vector of
-quoted variable names, unquoted variable names, or tidyselect select helper
-functions. Default is \code{everything()}.}
-
-\item{show_single_row}{By default categorical variables are printed on
-multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
-the regression coefficient on a single row, include the variable name(s)
-here--quoted and unquoted variable name accepted.}
-
-\item{conf.level}{Must be strictly greater than 0 and less than 1.
-Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
-
-\item{intercept}{Logical argument indicating whether to include the intercept
-in the output.  Default is \code{FALSE}}
-
-\item{estimate_fun}{Function to round and format coefficient estimates.
-Default is \link{style_sigfig} when the coefficients are not transformed, and
-\link{style_ratio} when the coefficients have been exponentiated.}
-
-\item{pvalue_fun}{Function to round and format p-values.
-Default is \link{style_pvalue}.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
-\code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{tidy_fun}{Option to specify a particular tidier function if the
 model is not a \link[=vetted_models]{vetted model} or you need to implement a
 custom method. Default is \code{NULL}}
 
-\item{show_yesno}{DEPRECATED}
-
-\item{exclude}{DEPRECATED}
-
-\item{...}{Not used}
+\item{...}{arguments passed to \code{tbl_regression.default()}}
 
 \item{group_header}{Character vector with table headers where length matches
 the length of \verb{tbls=}}
