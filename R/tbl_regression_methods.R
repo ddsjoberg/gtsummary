@@ -34,7 +34,7 @@ tbl_regression.survreg <- function(
 
 #' @export
 #' @rdname tbl_regression_methods
-tbl_regression.multinom <- function(x, group_header = NULL, ...) {
+tbl_regression.multinom <- function(x, exponentiate = FALSE, conf.level = 0.95, group_header = NULL, ...) {
 
   inform("Constructing `tbl_regression()` objects for each outcome")
   df_tidy <-
@@ -47,7 +47,7 @@ tbl_regression.multinom <- function(x, group_header = NULL, ...) {
       tidy_data = list(function(x, ...) .data$data),
       # running tbl_regression on each piece of the tidy tibble (for each outcome)
       tbl_regression =
-        tbl_regression.default(x = x, tidy_fun = tidy_fun, ...) %>%
+        tbl_regression.default(x = x, tidy_fun = .data$tidy_fun, ...) %>%
         list()
     )
 
