@@ -5,7 +5,6 @@
 \alias{tbl_regression.lmerMod}
 \alias{tbl_regression.glmerMod}
 \alias{tbl_regression.survreg}
-\alias{tbl_regression.multinom}
 \title{Methods for tbl_regression}
 \usage{
 \method{tbl_regression}{lmerMod}(
@@ -26,14 +25,6 @@
     "Log(scale)"),
   ...
 )
-
-\method{tbl_regression}{multinom}(
-  x,
-  exponentiate = FALSE,
-  conf.level = 0.95,
-  group_header = NULL,
-  ...
-)
 }
 \arguments{
 \item{x}{Regression model object}
@@ -43,15 +34,6 @@ model is not a \link[=vetted_models]{vetted model} or you need to implement a
 custom method. Default is \code{NULL}}
 
 \item{...}{arguments passed to \code{tbl_regression.default()}}
-
-\item{exponentiate}{Logical indicating whether to exponentiate the
-coefficient estimates. Default is \code{FALSE}.}
-
-\item{conf.level}{Must be strictly greater than 0 and less than 1.
-Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
-
-\item{group_header}{Character vector with table headers where length matches
-the length of \verb{tbls=}}
 }
 \description{
 Most regression models are handled by \link{tbl_regression.default},
