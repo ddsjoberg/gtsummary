@@ -210,6 +210,10 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       dplyr::relocate(any_of("ci"), .after = "conf.high")
   }
 
+  # re-ordering columns
+  table_body <-
+    table_body %>%
+    dplyr::relocate(any_of(c("conf.low", "conf.high", "ci", "p.value")), .after = last_col())
 
   # table of column headers
   table_header <-
