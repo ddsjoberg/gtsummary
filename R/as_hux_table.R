@@ -80,15 +80,20 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-# creating huxxtable calls from table_header -----------------------------------
+# creating huxtable calls from table_header -----------------------------------
 table_header_to_huxtable_calls <- function(x, ...) {
 
   # adding id number for columns not hidden
   table_header <-
-      x$table_header %>%
-      group_by(.data$hide) %>%
-      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-      ungroup()
+    x$table_header %>%
+    # removing instructions for hidden columns
+    dplyr::mutate_at(
+      vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
+      ~ifelse(.data$hide, NA_character_, .)
+    ) %>%
+    group_by(.data$hide) %>%
+    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+    ungroup()
 
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
