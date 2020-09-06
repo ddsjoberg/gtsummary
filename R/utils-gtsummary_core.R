@@ -330,7 +330,8 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
                                    select_input = !!rlang::f_lhs(x),
                                    meta_data = .meta_data,
                                    arg_name = arg_name,
-                                   select_single = select_single)
+                                   select_single = select_single,
+                                   env = rlang::f_env(x))
 
         # evaluate RHS of formula in the original formula environment
         rhs <- eval_rhs(x)
@@ -377,13 +378,14 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
 #' var_input_to_string(mtcars, select_input = vars(everything(), -mpg))
 #' var_input_to_string(mtcars, select_input = c(everything(), -mpg))
 var_input_to_string <- function(data, meta_data = NULL, arg_name = NULL,
-                                select_single = FALSE, select_input) {
+                                select_single = FALSE, select_input, env = NULL) {
 
   select_input <- rlang::enquo(select_input)
   # if NULL passed, return NULL
   if (rlang::quo_is_null(select_input)) {
     return(NULL)
   }
+  if (!is.null(env)) attr(select_input, ".Environment") <- env
 
   # converting to list before passing along to next function
   select_input_list <- as.list(rlang::quo_get_expr(select_input))
