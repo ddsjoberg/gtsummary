@@ -46,7 +46,7 @@ A character vector of column names selected
 }
 \description{
 Set of functions to supplement the {tidyselect} set of functions for selecting
-columns of data frames. \code{all_continuous()}, \code{all_categorical()}, and
+columns of data frames. \code{all_continuous()}, \code{all_continuous2()}, \code{all_categorical()}, and
 \code{all_dichotomous()} may only be used with \code{tbl_summary()}, where each variable
 has been classified into one of these three groups. All other helpers
 are available throughout the package.

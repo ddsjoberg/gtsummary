@@ -1,7 +1,7 @@
 #' Select helper functions
 #'
 #' Set of functions to supplement the {tidyselect} set of functions for selecting
-#' columns of data frames. `all_continuous()`, `all_categorical()`, and
+#' columns of data frames. `all_continuous()`, `all_continuous2()`, `all_categorical()`, and
 #' `all_dichotomous()` may only be used with `tbl_summary()`, where each variable
 #' has been classified into one of these three groups. All other helpers
 #' are available throughout the package.
