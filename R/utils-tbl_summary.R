@@ -756,7 +756,7 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
   }
 
   # adding range replacements if indicated
-  has_range_translation <- !is.na(filter(df_translations, en == "Range")[[language]])
+  has_range_translation <- !is.na(filter(df_translations, .data$en == "Range")[[language]])
   if (range == TRUE && has_range_translation) {
     labels <-
       bind_rows(
