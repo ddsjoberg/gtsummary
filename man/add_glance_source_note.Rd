@@ -9,7 +9,7 @@ add_glance_source_note(
   include = everything(),
   label = NULL,
   fmt_fun = NULL,
-  sep1 = "=",
+  sep1 = " = ",
   sep2 = "; ",
   ...
 )
@@ -24,7 +24,8 @@ add_glance_source_note(
 \item{fmt_fun}{use to update default formatting function. Default is
 \code{everything() ~ purrr::partial(style_sigfig, digits = 3)}}
 
-\item{sep1}{Separator between statistic name and statistic. Default is \code{"="}}
+\item{sep1}{Separator between statistic name and statistic.
+Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
 
 \item{sep2}{Separator between statistics. Default is \code{"; "}}
 
@@ -34,6 +35,25 @@ add_glance_source_note(
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 Add the statistics returned in \code{broom::glance()} as a table source note.
 }
+\section{Default Labels}{
+
+The following statistics have set default labels when being printed.
+When there is no default, the label is the column name from \code{broom::glance()}.\tabular{ll}{
+   Statistic Name \tab Default Label \cr
+   r.squared \tab R² \cr
+   adj.r.squared \tab Adjusted R² \cr
+   p.value \tab p-value \cr
+   logLik \tab log-likelihood \cr
+   statistic \tab Statistic \cr
+   df.residual \tab Residual df \cr
+   null.deviance \tab Null deviance \cr
+   df.null \tab Null df \cr
+   nevent \tab N events \cr
+   concordance \tab c-index \cr
+   std.error.concordance \tab c-index SE \cr
+}
+}
+
 \section{Example Output}{
 
 \if{html}{Example 1}
@@ -42,11 +62,13 @@ Add the statistics returned in \code{broom::glance()} as a table source note.
 }
 
 \examples{
+# Example 1 ----------------------------------
 add_glance_source_note_ex1 <-
   lm(age ~ marker + grade, trial) \%>\%
   tbl_regression() \%>\%
   add_glance_source_note(
-    label = r.squared ~ "R^2",
-    include = c(r.squared, AIC)
+    label = list(df  ~ "Degrees of Freedom", sigma ~ "\U03C3"),
+    fmt_fun = df ~ style_number,
+    include = c(r.squared, AIC, sigma, df)
   )
 }
