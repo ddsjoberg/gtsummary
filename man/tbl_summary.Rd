@@ -187,12 +187,14 @@ Continuous variables can be shown two ways: one a single row
 \examples{
 # Example 1 ----------------------------------
 tbl_summary_ex1 <-
-  trial[c("age", "grade", "response")] \%>\%
+  trial \%>\%
+  select(age, grade, response) \%>\%
   tbl_summary()
 
 # Example 2 ----------------------------------
 tbl_summary_ex2 <-
-  trial[c("age", "grade", "response", "trt")] \%>\%
+  trial \%>\%
+  select(age, grade, response, trt) \%>\%
   tbl_summary(
     by = trt,
     label = list(age ~ "Patient Age"),
@@ -204,7 +206,8 @@ tbl_summary_ex2 <-
 # for convenience, you can also pass named lists to any arguments
 # that accept formulas (e.g label, digits, etc.)
 tbl_summary_ex3 <-
-  trial[c("age", "trt")] \%>\%
+  trial \%>\%
+  select(age, trt) \%>\%
   tbl_summary(
     by = trt,
     label = list(age = "Patient Age")
@@ -212,10 +215,12 @@ tbl_summary_ex3 <-
 
 # Example 4 ----------------------------------
 tbl_summary_ex4 <-
-  trial[c("age", "marker")] \%>\%
+  trial \%>\%
+  select(age, marker) \%>\%
   tbl_summary(
     type = all_continuous() ~ "continuous2",
-    statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min} : {max}")
+    statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
+    missing = "no"
   )
 }
 \seealso{
