@@ -8,19 +8,31 @@
 #' @param label use to update statistic labels
 #' @param fmt_fun use to update default formatting function. Default is
 #' `everything() ~ purrr::partial(style_sigfig, digits = 3)`
-#' @param sep1 Separator between statistic name and statistic. Default is `"="`
+#' @param sep1 Separator between statistic name and statistic.
+#' Default is `" = "`, e.g. `"R2 = 0.456"`
 #' @param sep2 Separator between statistics. Default is `"; "`
 #' @param ... additional argument passed to `broom::glance()`
 #'
 #' @export
+#' @section Default Labels:
+#' The following statistics have set default labels when being printed.
+#' When there is no default, the label is the column name from `broom::glance()`.
+#'
+#' ```{r, echo = FALSE}
+#' df_default_glance_labels %>%
+#'   select(`Statistic Name` = statistic_name, `Default Label` = label) %>%
+#'   knitr::kable()
+#' ```
 #'
 #' @examples
+#' # Example 1 ----------------------------------
 #' add_glance_source_note_ex1 <-
 #'   lm(age ~ marker + grade, trial) %>%
 #'   tbl_regression() %>%
 #'   add_glance_source_note(
-#'     label = r.squared ~ "R^2",
-#'     include = c(r.squared, AIC)
+#'     label = list(df  ~ "Degrees of Freedom", sigma ~ "\U03C3"),
+#'     fmt_fun = df ~ style_number,
+#'     include = c(r.squared, AIC, sigma, df)
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -28,23 +40,29 @@
 #' \if{html}{\figure{add_glance_source_note_ex1.png}{options: width=64\%}}
 
 add_glance_source_note <- function(x, include = everything(), label = NULL,
-                                   fmt_fun = NULL, sep1 = "=", sep2 = "; ", ...) {
+                                   fmt_fun = NULL, sep1 = " = ", sep2 = "; ", ...) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_regression"))
     stop("`x=` must be class 'tbl_regression'")
 
   # prepping table -------------------------------------------------------------
-  df_results <-
+  df_glance <-
     broom::glance(x$model_obj, ...) %>%
     tidyr::pivot_longer(cols = everything(),
                         names_to = "statistic_name",
-                        values_to = "statistic") %>%
+                        values_to = "statistic")
+  df_results <-
+    df_glance %>%
     mutate(
       label = statistic_name,
       fmt_fun = list(purrr::partial(style_sigfig, digits = 3))
     ) %>%
+    # adding default labels
     dplyr::rows_update(
-      df_default_glance_labels,
+      # keeping labels in current glance
+      inner_join(df_default_glance_labels,
+                 select(df_glance, .data$statistic_name),
+                 by = "statistic_name"),
       by = "statistic_name"
     )
 
@@ -81,7 +99,13 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
       )
   }
 
-  df_results <- filter(df_results, statistic_name %in% include)
+  # putting stats in order selected, and only keeping those selected
+  df_results <-
+    inner_join(
+      tibble(statistic_name = include),
+      df_results,
+      by = "statistic_name"
+    )
 
   # constructing source note ---------------------------------------------------
   x$list_output$source_note <-
@@ -89,7 +113,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     dplyr::rowwise() %>%
     mutate(
       statistic_fmt = do.call(fmt_fun, list(statistic)),
-      statistic_label = paste(label, sep1, statistic_fmt)
+      statistic_label = paste0(label, sep1, statistic_fmt)
     ) %>%
     pull(statistic_label) %>%
     paste(collapse = sep2)
@@ -102,11 +126,17 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
 df_default_glance_labels <-
   tibble::tribble(
     ~statistic_name, ~label,
-    "r.squared", "R2",
-    "adj.r.squared", "Adjusted R2",
+    "r.squared", "R\U00B2",
+    "adj.r.squared", "Adjusted R\U00B2",
     "p.value", "p-value",
-    "logLik", "log likelihood",
-    "nobs", "N"
+    "logLik", "log-likelihood",
+    "statistic", "Statistic",
+    "df.residual", "Residual df",
+    "null.deviance", "Null deviance",
+    "df.null", "Null df",
+    "nevent", "N events",
+    "concordance", "c-index",
+    "std.error.concordance", "c-index SE"
   )
 
 
