@@ -64,6 +64,18 @@
 #' The select helpers are available for use in any argument that accepts a list
 #' of formulas (e.g. `statistic`, `type`, `digits`, `value`, `sort`, etc.)
 #'
+#' @section type argument:
+#' The `tbl_summary()` function has four summary types:
+#'    - `"continuous"` summaries are shown on a *single row*
+#'    - `"continuous2"` summaries are shown on *2 or more rows*
+#'    - `"categorical"` *multi-line* summaries of nominal data
+#'    - `"dichotomous"` categorical variables that are displayed on a *single row*,
+#'    rather than one row per level of the variable.
+#'    Variables coded as `TRUE`/`FALSE`, `0`/`1`, or `yes`/`no` are assumed to be dichotomous,
+#'    and the `TRUE`, `1`, and `yes` rows are displayed.
+#'    Otherwise, the value to display must be specified in the `value`
+#'    argument, e.g. `value = list(varname ~ "level to show")`
+#'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
 #' input is a list of formulas that specify the statistics to report. For example,
@@ -108,20 +120,6 @@
 #' to the total number, number missing and number non missing observations
 #' in the denominator, not at each level of the categorical variable.
 #'
-#' @section type argument:
-#' tbl_summary displays summary statistics for three types of data:
-#' continuous, categorical, and dichotomous. If the type is not specified,
-#' tbl_summary will do its best to guess the type.  Dichotomous variables
-#' are categorical variables that are displayed on a single row in the
-#' output table, rather than one row per level of the variable.
-#' Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
-#' and the TRUE, 1, and yes rows are displayed.
-#' Otherwise, the value to display must be specified in
-#' the `value` argument, e.g. `value = list(varname ~ "level to show")`
-#'
-#' Continuous variables can be shown two ways: one a single row
-#' (`type = "continuous"`) or on two or more rows (`type = "continuous2"`).
-#'
 #' @export
 #' @return A `tbl_summary` object
 #' @family tbl_summary tools
@@ -158,6 +156,7 @@
 #'   )
 #'
 #' # Example 4 ----------------------------------
+#' # multi-line summaries of continuous data with type 'continuous2'
 #' tbl_summary_ex4 <-
 #'   trial %>%
 #'   select(age, marker) %>%

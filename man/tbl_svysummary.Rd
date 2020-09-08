@@ -151,18 +151,18 @@ in the denominator, not at each level of the categorical variable.
 
 \section{type argument}{
 
-tbl_summary displays summary statistics for three types of data:
-continuous, categorical, and dichotomous. If the type is not specified,
-tbl_summary will do its best to guess the type.  Dichotomous variables
-are categorical variables that are displayed on a single row in the
-output table, rather than one row per level of the variable.
-Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
-and the TRUE, 1, and yes rows are displayed.
-Otherwise, the value to display must be specified in
-the \code{value} argument, e.g. \code{value = list(varname ~ "level to show")}
-
-Continuous variables can be shown two ways: one a single row
-(\code{type = "continuous"}) or on two or more rows (\code{type = "continuous2"}).
+The \code{tbl_summary()} function has four summary types:
+\itemize{
+\item \code{"continuous"} summaries are shown on a \emph{single row}
+\item \code{"continuous2"} summaries are shown on \emph{2 or more rows}
+\item \code{"categorical"} \emph{multi-line} summaries of nominal data
+\item \code{"dichotomous"} categorical variables that are displayed on a \emph{single row},
+rather than one row per level of the variable.
+Variables coded as \code{TRUE}/\code{FALSE}, \code{0}/\code{1}, or \code{yes}/\code{no} are assumed to be dichotomous,
+and the \code{TRUE}, \code{1}, and \code{yes} rows are displayed.
+Otherwise, the value to display must be specified in the \code{value}
+argument, e.g. \code{value = list(varname ~ "level to show")}
+}
 }
 
 \section{select helpers}{

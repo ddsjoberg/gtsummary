@@ -103,6 +103,22 @@ The select helpers are available for use in any argument that accepts a list
 of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
 }
 
+\section{type argument}{
+
+The \code{tbl_summary()} function has four summary types:
+\itemize{
+\item \code{"continuous"} summaries are shown on a \emph{single row}
+\item \code{"continuous2"} summaries are shown on \emph{2 or more rows}
+\item \code{"categorical"} \emph{multi-line} summaries of nominal data
+\item \code{"dichotomous"} categorical variables that are displayed on a \emph{single row},
+rather than one row per level of the variable.
+Variables coded as \code{TRUE}/\code{FALSE}, \code{0}/\code{1}, or \code{yes}/\code{no} are assumed to be dichotomous,
+and the \code{TRUE}, \code{1}, and \code{yes} rows are displayed.
+Otherwise, the value to display must be specified in the \code{value}
+argument, e.g. \code{value = list(varname ~ "level to show")}
+}
+}
+
 \section{statistic argument}{
 
 The statistic argument specifies the statistics presented in the table. The
@@ -147,22 +163,6 @@ display.
 Note that for categorical variables, \code{{N_obs}}, \code{{N_miss}} and \code{{N_nonmiss}} refer
 to the total number, number missing and number non missing observations
 in the denominator, not at each level of the categorical variable.
-}
-
-\section{type argument}{
-
-tbl_summary displays summary statistics for three types of data:
-continuous, categorical, and dichotomous. If the type is not specified,
-tbl_summary will do its best to guess the type.  Dichotomous variables
-are categorical variables that are displayed on a single row in the
-output table, rather than one row per level of the variable.
-Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
-and the TRUE, 1, and yes rows are displayed.
-Otherwise, the value to display must be specified in
-the \code{value} argument, e.g. \code{value = list(varname ~ "level to show")}
-
-Continuous variables can be shown two ways: one a single row
-(\code{type = "continuous"}) or on two or more rows (\code{type = "continuous2"}).
 }
 
 \section{Example Output}{
@@ -214,6 +214,7 @@ tbl_summary_ex3 <-
   )
 
 # Example 4 ----------------------------------
+# multi-line summaries of continuous data with type 'continuous2'
 tbl_summary_ex4 <-
   trial \%>\%
   select(age, marker) \%>\%
