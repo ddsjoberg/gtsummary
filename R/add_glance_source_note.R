@@ -54,7 +54,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
   df_results <-
     df_glance %>%
     mutate(
-      label = statistic_name,
+      label = .data$statistic_name,
       fmt_fun = list(purrr::partial(style_sigfig, digits = 3))
     ) %>%
     # adding default labels
@@ -110,12 +110,11 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
   # constructing source note ---------------------------------------------------
   x$list_output$source_note <-
     df_results %>%
-    dplyr::rowwise() %>%
     mutate(
-      statistic_fmt = do.call(fmt_fun, list(statistic)),
-      statistic_label = paste0(label, sep1, statistic_fmt)
+      statistic_fmt = map2_chr(.data$fmt_fun, .data$statistic, ~.x(.y)),
+      statistic_label = paste0(.data$label, sep1, .data$statistic_fmt)
     ) %>%
-    pull(statistic_label) %>%
+    pull(.data$statistic_label) %>%
     paste(collapse = sep2)
 
   # return gtsummary object ----------------------------------------------------
