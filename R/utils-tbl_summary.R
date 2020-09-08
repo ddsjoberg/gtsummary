@@ -741,7 +741,7 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
     )
 
   # adding IQR replacements if indicated
-  has_iqr_translation <- !is.na(filter(df_translations, en == "IQR")[[language]])
+  has_iqr_translation <- !is.na(filter(df_translations, .data$en == "IQR")[[language]])
   if (iqr == TRUE && has_iqr_translation) {
     labels <-
       bind_rows(
