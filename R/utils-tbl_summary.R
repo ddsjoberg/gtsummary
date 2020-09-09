@@ -106,12 +106,16 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
   # dichotomous and categorical are treated in the same fashion here
   summary_type <- ifelse(summary_type == "dichotomous", "categorical", summary_type)
 
-  # otherwise, return defaults
-  return(
-    map2_chr(
+  # returning the stats to display
+  stat_display <-
+    map2(
       variable, summary_type,
       ~ case_when(
         .y == "continuous" ~
+          stat_display[[.x]] %||%
+          get_theme_element("tbl_summary-str:continuous_stat") %||%
+          "{median} ({p25}, {p75})",
+        .y == "continuous2" ~
           stat_display[[.x]] %||%
           get_theme_element("tbl_summary-str:continuous_stat") %||%
           "{median} ({p25}, {p75})",
@@ -121,7 +125,29 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
           "{n} ({p}%)"
       )
     )
+
+  # checking the stat_display is correct
+  pmap(
+    list(variable, summary_type, stat_display),
+    function(variable, summary_type, stat_display) {
+      if (summary_type != "continuous2" && length(stat_display) > 1) {
+        if (summary_type == "continuous") {
+          glue("The statistic requested for continuous variable '{variable}' ",
+               "has length greater than 1. If you would like a multi-line ",
+               "summary update the summary type to 'continuous2', e.g. ",
+               "`type = list({variable} ~ 'continuous2')`") %>%
+            str_wrap() %>%
+            stop(call. = FALSE)
+        }
+        glue("The statistic requested for variable '{variable}' ",
+             "cannot have length greater than 1.") %>%
+          str_wrap() %>%
+          stop(call. = FALSE)
+      }
+    }
   )
+
+  stat_display
 }
 
 #' Assigns summary type (e.g. continuous, categorical, or dichotomous).
@@ -136,7 +162,7 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #' corresponding one-to-one with the names in `variable`.
 #' @param summary_type list that includes specified summary types,
 #' e.g. \code{summary_type = list(age = "continuous")}
-#' @return Vector summary types `c("continuous", "categorical", "dichotomous")`.
+#' @return Vector summary types `c("continuous", "continuous2", "categorical", "dichotomous")`.
 #' @keywords internal
 #' @noRd
 #' @author Daniel D. Sjoberg
@@ -213,7 +239,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
           "categorical",
 
         # everything else is assigned to continuous
-        TRUE ~ "continuous"
+        TRUE ~ get_theme_element("tbl_summary-str:default_con_type", default = "continuous")
       )
   )
 
@@ -221,7 +247,7 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
   # as a continuous variable
   purrr::pwalk(
     list(type, class, variable),
-    ~ if(..1 == "continuous" && ..2 %in% c("factor", "character"))
+    ~ if(..1 %in% c("continuous", "continuous2") && ..2 %in% c("factor", "character"))
       stop(glue(
         "Column '{..3}' is class \"{..2}\" and cannot be summarized as a continuous variable."
       ), call. = FALSE)
@@ -280,7 +306,7 @@ continuous_digits_guess <- function(data,
   }
 
   # if the variable is not continuous type, return NA
-  if (summary_type != "continuous") {
+  if (!summary_type %in% c("continuous", "continuous2")) {
     return(NA)
   }
 
@@ -374,7 +400,7 @@ df_by <- function(data, by) {
 #' Assigns categorical variables sort type ("alphanumeric" or "frequency")
 #'
 #' @param variable variable name
-#' @param summary_type the type of variable ("continuous", "categorical", "dichotomous")
+#' @param summary_type the type of variable ("continuous", "continuous2", "categorical", "dichotomous")
 #' @param sort named list indicating the type of sorting to perform. Default is NULL.
 #' @noRd
 #' @keywords internal
@@ -461,13 +487,14 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
       }
     }
 
-    # all sepcifed types are continuous, categorical, or dichotomous
+    # all specified types are continuous, categorical, or dichotomous
     if (inherits(type, "formula")) type <- list(type)
-    if (!every(type, ~ eval_rhs(.x) %in% c("continuous", "categorical", "dichotomous")) |
+    if (!every(type, ~ eval_rhs(.x) %in% c("continuous", "continuous2",
+                                           "categorical", "dichotomous")) |
         !every(type, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'type'  argument must of one and only one of ",
-        "\"continuous\", \"categorical\", or \"dichotomous\""
+        "\"continuous\", \"continuous2\", \"categorical\", or \"dichotomous\""
       ), call. = FALSE)
     }
   }
@@ -546,7 +573,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
     # all specified statistics must be a string of length 1
     if (inherits(statistic, "formula")) statistic <- list(statistic)
-    if (!every(statistic, ~ rlang::is_string(eval_rhs(.x)))) {
+    if (!every(statistic, ~ rlang::is_character(eval_rhs(.x)))) {
       stop(glue(
         "The RHS of the formula in the 'statistic' argument must be a string."
       ), call. = FALSE)
@@ -666,17 +693,17 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
 
 # stat_label_match -------------------------------------------------------------
 # provide a vector of stat_display and get labels back i.e. {mean} ({sd}) gives Mean (SD)
-stat_label_match <- function(stat_display, iqr = TRUE) {
+stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
   language <- get_theme_element("pkgwide-str:language", default = "en")
   labels <-
     tibble::tribble(
       ~stat, ~label,
-      "{min}", "minimum",
-      "{max}", "maximum",
-      "{median}", "median",
-      "{mean}", "mean",
+      "{min}", "Minimum",
+      "{max}", "Maximum",
+      "{median}", "Median",
+      "{mean}", "Mean",
       "{sd}", "SD",
-      "{var}", "variance",
+      "{var}", "Variance",
       "{n}", "n",
       "{N}", "N",
       "{p}%", "%",
@@ -687,7 +714,7 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       "{p_nonmiss}", "% not missing",
       "{N_miss}", "N missing",
       "{N_nonmiss}", "N",
-      "{N_obs}", "no. obs.",
+      "{N_obs}", "No. obs.",
       "{N_obs_unweighted}", "Total N (unweighted)",
       "{N_miss_unweighted}", "N Missing (unweighted)",
       "{N_nonmiss_unweighted}", "N not Missing (unweighted)",
@@ -699,43 +726,64 @@ stat_label_match <- function(stat_display, iqr = TRUE) {
       tibble(stat = paste0("{p", 0:100, "}")) %>%
         mutate(label = paste0(gsub("[^0-9\\.]", "", .data$stat), "%"))
     ) %>%
+    # translating statistic names
+    mutate(label = map_chr(.data$label, ~translate_text(.x, language))) %>%
     # if function does not appear in above list, the print the function name
     bind_rows(
       tibble(
-        stat = str_extract_all(stat_display, "\\{.*?\\}") %>%
+        stat = str_extract_all(unlist(stat_display), "\\{.*?\\}") %>%
           unlist() %>%
           unique(),
         label = .data$stat %>%
           str_remove_all(pattern = fixed("}")) %>%
           str_remove_all(pattern = fixed("{"))
       )
-    ) %>%
-    mutate(label = map_chr(.data$label, ~translate_text(.x, language)))
+    )
 
   # adding IQR replacements if indicated
-  if (iqr == TRUE) {
+  has_iqr_translation <- !is.na(filter(df_translations, .data$en == "IQR")[[language]])
+  if (iqr == TRUE && has_iqr_translation) {
     labels <-
       bind_rows(
         tibble::tribble(
           ~stat, ~label,
           "{p25}, {p75}", translate_text("IQR", language),
-          "{p25} \U2013 {p75}", translate_text("IQR", language)
+          "{p25} \U2013 {p75}", translate_text("IQR", language),
+          "{p25} - {p75}", translate_text("IQR", language)
+        ),
+        labels
+      )
+  }
+
+  # adding range replacements if indicated
+  has_range_translation <- !is.na(filter(df_translations, .data$en == "Range")[[language]])
+  if (range == TRUE && has_range_translation) {
+    labels <-
+      bind_rows(
+        tibble::tribble(
+          ~stat, ~label,
+          "{min}, {max}", translate_text("Range", language),
+          "{min} \U2013 {max}", translate_text("Range", language),
+          "{min} - {max}", translate_text("Range", language)
         ),
         labels
       )
   }
 
   # replacing statistics in {}, with their labels
-  for (i in seq_len(nrow(labels))) {
-    stat_display <-
-      stringr::str_replace_all(
-        stat_display,
-        stringr::fixed(labels$stat[i]),
-        labels$label[i]
-      )
-  }
-
-  stat_display
+  map(
+    stat_display,
+    function(.x) {
+      for (i in seq_len(nrow(labels))) {
+        .x <- stringr::str_replace_all(
+          .x,
+          stringr::fixed(labels$stat[i]),
+          labels$label[i]
+        )
+      }
+      .x
+    }
+  )
 }
 
 # footnote_stat_label ----------------------------------------------------------
@@ -757,7 +805,8 @@ footnote_stat_label <- function(meta_data) {
 }
 
 # summarize_categorical --------------------------------------------------------
-summarize_categorical <- function(data, variable, by, class, dichotomous_value, sort, percent) {
+summarize_categorical <- function(data, variable, by, class, dichotomous_value,
+                                  sort, percent, stat_display) {
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
   # when variable has label.  So deleting it.
@@ -826,11 +875,16 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value, 
       select(-.data$variable_levels)
   }
 
+  result <-
+    result %>%
+    mutate(stat_display = .env$stat_display) %>%
+    select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
+
   result
 }
 
 # summarize_continuous ---------------------------------------------------------
-summarize_continuous <- function(data, variable, by, stat_display) {
+summarize_continuous <- function(data, variable, by, stat_display, summary_type) {
   # stripping attributes/classes that cause issues -----------------------------
   # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
   # when variable has label.  So deleting it.
@@ -911,13 +965,34 @@ summarize_continuous <- function(data, variable, by, stat_display) {
       tidyr::pivot_wider(id_cols = c("variable"), names_from = "fn")
   }
 
+  # adding stat_display to the data frame
+  if (summary_type == "continuous2") {
+    return <-
+      left_join(
+        df_stats,
+        tibble(variable_levels = map_chr(stat_display, ~stat_label_match(.x) %>% unlist()),
+               stat_display = stat_display),
+        by = character()
+      ) %>%
+      select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
+  }
+  else {
+    return <-
+      df_stats %>%
+      mutate(stat_display = .env$stat_display) %>%
+      select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
+  }
+
   # returning final object
-  df_stats
+  return
 }
 
 # extracting_function_calls_from_stat_display ---------------------
 extracting_function_calls_from_stat_display <- function(stat_display, variable) {
-  fns_names_chr <- str_extract_all(stat_display, "\\{.*?\\}") %>%
+  fns_names_chr <-
+    stat_display %>%
+    paste(collapse = " ") %>%
+    str_extract_all("\\{.*?\\}") %>%
     map(str_remove_all, pattern = fixed("}")) %>%
     map(str_remove_all, pattern = fixed("{")) %>%
     unlist()
@@ -967,7 +1042,7 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
       rlang::set_names(fns_names_chr)
   }
   # if no digits supplied and variable is continuous, guess how to summarize
-  else if (summary_type == "continuous") {
+  else if (summary_type %in% c("continuous", "continuous2")) {
     digits[[variable]] <-
       continuous_digits_guess(data = data,
                               variable = variable,
@@ -985,9 +1060,10 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
 
       # if number of digits was passed by user, round to the specified digits
       if (!is.null(digits[[variable]][[colname]])) {
-        if (summary_type == "continuous" && colname %in% c("p_miss", "p_nonmiss",
-                                                           "p_miss_unweighted",
-                                                           "p_nonmiss_unweighted"))
+        if (summary_type %in% c("continuous", "continuous2") &&
+            colname %in% c("p_miss", "p_nonmiss",
+                           "p_miss_unweighted",
+                           "p_nonmiss_unweighted"))
           attr(column, "fmt_fun") <-
             purrr::partial(style_number, scale = 100,
                            digits = !!digits[[variable]][[colname]])
@@ -1024,13 +1100,18 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
     calculate_missing_fun <- calculate_missing_row
 
   # styling the statistics -----------------------------------------------------
-  for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels")))) {
+  for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels", "stat_display")))) {
     df_stats[[v]] <- df_stats[[v]] %>% attr(df_stats[[v]], "fmt_fun")()
   }
 
   # calculating the statistic to be displayed in the cell in the table.
   tryCatch(
-    df_stats$statistic <- glue::glue_data(df_stats, stat_display) %>% as.character(),
+    df_stats <-
+      df_stats %>%
+      dplyr::rowwise() %>%
+      mutate(statistic = glue::glue(.data$stat_display) %>% as.character()) %>%
+      ungroup() %>%
+      select(-.data$stat_display),
     error = function(e) {
       stop(glue(
         "There was an error assembling the summary statistics for '{{variable}}'\n",
@@ -1065,7 +1146,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
   }
 
   # setting up structure for table_body
-  if (summary_type == "categorical") {
+  if (summary_type %in% c("categorical", "continuous2")) {
     # adding a label row for categorical variables
     result <-
       df_stats_wide %>%
@@ -1124,7 +1205,8 @@ calculate_missing_row <- function(data, variable, by, missing_text) {
   # the tbl_summary output
   summarize_categorical(
     data = data, variable = variable, by = by, class = "logical",
-    dichotomous_value = TRUE, sort = "alphanumeric", percent = "column"
+    dichotomous_value = TRUE, sort = "alphanumeric", percent = "column",
+    stat_display = "{n}"
   ) %>%
     adding_formatting_as_attr(
       data = data, variable = variable,
@@ -1147,15 +1229,21 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
   t1 <- switch(
     summary_type,
     "continuous" = summarize_continuous(data = data, variable = variable,
-                                        by = by, stat_display = stat_display),
+                                        by = by, stat_display = stat_display,
+                                        summary_type = summary_type),
+    "continuous2" = summarize_continuous(data = data, variable = variable,
+                                        by = by, stat_display = stat_display,
+                                        summary_type = summary_type),
     "categorical" = summarize_categorical(data = data, variable = variable,
                                           by = by, class = class,
                                           dichotomous_value = dichotomous_value,
-                                          sort = sort, percent = percent),
+                                          sort = sort, percent = percent,
+                                          stat_display = stat_display),
     "dichotomous" = summarize_categorical(data = data, variable = variable,
                                           by = by, class = class,
                                           dichotomous_value = dichotomous_value,
-                                          sort = sort, percent = percent)
+                                          sort = sort, percent = percent,
+                                          stat_display = stat_display)
   )
 
   # adding the N_obs and N_missing, etc
@@ -1163,7 +1251,9 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
                               variable = variable,
                               by = by, class = "logical",
                               dichotomous_value = TRUE,
-                              sort = "alphanumeric", percent = "column") %>%
+                              sort = "alphanumeric", percent = "column",
+                              stat_display = "{n}") %>%
+    select(-.data$stat_display) %>%
     rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
     mutate(N_nonmiss = .data$N_obs - .data$N_miss,
            p_nonmiss = 1 - .data$p_miss)

@@ -27,10 +27,6 @@ test_that("input check", {
     NULL
   )
   expect_error(
-    tbl_summary(trial, statistic = all_continuous() ~ c("{median}", "{mode}")),
-    NULL
-  )
-  expect_error(
     tbl_summary(trial, statistic = list("{median}")),
     NULL
   )
