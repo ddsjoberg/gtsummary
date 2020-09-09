@@ -236,14 +236,16 @@ test_that("tbl_svysummary-testing tidyselect parsing", {
     big_test$meta_data[c("summary_type", "stat_display")] %>%
       dplyr::filter(.data$summary_type %in% c("continuous")) %>%
       dplyr::distinct() %>%
-      dplyr::pull(.data$stat_display),
+      dplyr::pull(.data$stat_display) %>%
+      unlist(),
     c("{min} {max}")
   )
   expect_equal(
     big_test$meta_data[c("variable", "stat_display")] %>%
       dplyr::filter(.data$variable %in% c("grade", "stage")) %>%
       dplyr::pull(.data$stat_display) %>%
-      unique(),
+      unique() %>%
+      unlist(),
     c("{n}")
   )
 })

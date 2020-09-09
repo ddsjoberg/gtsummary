@@ -108,7 +108,7 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
 
   # if group variable supplied, fit a random effects model
   if (!is.null(group) & length(unique(data[[by_var]])) == 2) {
-    if (var_summary_type == "continuous") {
+    if (var_summary_type %in% c("continuous", "continuous2")) {
       test_func <-
         get_theme_element("add_p.tbl_summary-attr:test.continuous.group_by2") %||%
         getOption("gtsummary.add_p.test.continuous.group_by2", default = "lme4") %>%
@@ -125,14 +125,14 @@ assign_test_one <- function(data, var, var_summary_type, by_var, test, group, en
   }
 
   # for continuous data, default to non-parametric tests
-  if (var_summary_type == "continuous" & length(unique(data[[by_var]])) == 2) {
+  if (var_summary_type %in% c("continuous", "continuous2") & length(unique(data[[by_var]])) == 2) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.continuous_by2") %||%
       getOption("gtsummary.add_p.test.continuous_by2", default = "wilcox.test") %>%
       test_match_to_fn()
     return(test_func)
   }
-  if (var_summary_type == "continuous") {
+  if (var_summary_type %in% c("continuous", "continuous2")) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.continuous") %||%
       getOption("gtsummary.add_p.test.continuous", default = "kruskal.test") %>%
@@ -247,7 +247,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
   # creating formulas for base model (without variable) and full model
   formula0 <- glue("as.factor({by}) ~ 1 + (1 | {group})")
-  if (type == "continuous") {
+  if (type %in% c("continuous", "continuous2")) {
     formula1 <- glue("as.factor({by}) ~ {variable} + (1 | {group})")
   } else {
     formula1 <- glue("as.factor({by}) ~ as.factor({variable}) + (1 | {group})")
@@ -339,7 +339,7 @@ assign_test_one_survey <- function(data, var, var_summary_type, by_var, test, gr
 
 
   # for continuous data, default to non-parametric tests
-  if (var_summary_type == "continuous") {
+  if (var_summary_type %in% c("continuous", "continuous2")) {
     test_func <-
       get_theme_element("add_p.tbl_svysummary-attr:test.continuous", default = "svy.wilcox.test") %>%
       test_match_to_fn(survey = TRUE)
