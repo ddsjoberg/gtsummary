@@ -227,14 +227,16 @@ test_that("tbl_summary-testing tidyselect parsing", {
     big_test$meta_data[c("summary_type", "stat_display")] %>%
       dplyr::filter(.data$summary_type %in% c("continuous")) %>%
       dplyr::distinct() %>%
-      dplyr::pull(.data$stat_display),
+      dplyr::pull(.data$stat_display) %>%
+      unlist(),
     c("{min} {max}")
   )
   expect_equal(
     big_test$meta_data[c("variable", "stat_display")] %>%
       dplyr::filter(.data$variable %in% c("grade", "stage")) %>%
       dplyr::pull(.data$stat_display) %>%
-      unique(),
+      unique() %>%
+      unlist(),
     c("{n}")
   )
 })
@@ -443,3 +445,32 @@ test_that("tbl_summary-complex environments check", {
   )
 })
 
+
+test_that("tbl_summary creates output without error/warning for continuous2 (no by var)", {
+  expect_error(
+    purrr::map(list(mtcars, iris), ~ tbl_summary(.x, type = all_continuous() ~ "continuous2",
+                                                 sort = list(all_categorical() ~ "frequency"))),
+    NA
+  )
+  expect_warning(
+    purrr::map(list(mtcars, iris), ~ tbl_summary(.x)),
+    NA
+  )
+})
+
+
+test_that("tbl_summary creates output without error/warning for continuous2 (with by var)", {
+  expect_error(
+    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2"),
+    NA
+  )
+  expect_warning(
+    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2"),
+    NA
+  )
+
+  expect_error(
+    tbl_summary(mtcars, by = am, statistic = all_continuous() ~ c("{median}", "{mean}")),
+    "*"
+  )
+})
