@@ -30,6 +30,9 @@
 #'   - `"kable"` sets the `knitr::kable()` function as the default print engine
 #'   - `"flextable"` sets the flextable package as the default print engine
 #'   - `"kable_extra"` sets the kableExtra package as the default print engine
+#' - `theme_gtsummary_continuous2()`
+#'   - Set all continuous variables to summary type `"continuous2"` by default
+#'   - Use the `statistic=` argument to set the default continuous variable summary statistics
 #'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
@@ -219,4 +222,19 @@ theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", 
   # either returning list OR setting theme and returning list
   if (set_theme == TRUE) set_gtsummary_theme(ret)
   return(invisible(ret))
+}
+
+# ------------------------------------------------------------------------------
+#' @rdname theme_gtsummary
+#' @param statistic Default statistic continuous variables
+#' @export
+theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25, {p75})", set_theme = TRUE) {
+
+  lst_theme <- list(
+    "tbl_summary-str:default_con_type" = "continuous2",
+    "tbl_summary-str:continuous_stat" = statistic
+    )
+
+  if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
+  return(invisible(lst_theme))
 }
