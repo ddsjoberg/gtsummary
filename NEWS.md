@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-- Exporting the `modify_table_header()` function, which is an advanced-use function used to make modifications to the `.$table_header` object to update printing instructions for the gtsummary object.
+* Exporting the `modify_table_header()` function, which is an advanced-use function used to make modifications to the `.$table_header` object to update printing instructions for the gtsummary object.
+
+* New summary type `continuous2` allows adding labelled statistic rows to tables. You can report several lines of statistics with this type. 
 
 # gtsummary 1.3.4
 
