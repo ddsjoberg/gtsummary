@@ -2,7 +2,10 @@
 
 * Exporting the `modify_table_header()` function, which is an advanced-use function used to make modifications to the `.$table_header` object to update printing instructions for the gtsummary object.
 
-* New summary type `continuous2` allows adding labelled statistic rows to tables. You can report several lines of statistics with this type. 
+* New summary type `continuous2` allows adding labelled statistic rows to tables in `tbl_summary()` and `tbl_svysummary()`. You can report several lines of statistics with this type. (#620)
+    - The `all_continuous()` function now selects summary types `continuous` and `continuous2` by default.
+    - Added `all_continuous2()` function for selecting summary type `continuous2` exclusively.
+    - Added `theme_gtsummary_continuous2()` to make `continuous2` the default summary type for all continuous variables.
 
 # gtsummary 1.3.4
 
