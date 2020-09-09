@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9002</span>
       </span>
     </div>
 
@@ -161,8 +161,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
 <span class="co">#&gt;     filter, lag</span>
 <span class="co">#&gt; The following objects are masked from 'package:base':</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-</pre></div>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span></pre></div>
 </div>
 <div id="example-data-set" class="section level2">
 <h2 class="hasAnchor">
@@ -193,14 +192,12 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
 <span class="co">#&gt; 3 Drug A    31  0.277 T1    II           0     0    24  </span>
 <span class="co">#&gt; 4 Drug A    NA  2.07  T3    III          1     1    17.6</span>
 <span class="co">#&gt; 5 Drug A    51  2.77  T4    III          1     1    16.4</span>
-<span class="co">#&gt; 6 Drug B    39  0.613 T4    I            0     1    15.6</span>
-</pre></div>
+<span class="co">#&gt; 6 Drug B    39  0.613 T4    I            0     1    15.6</span></pre></div>
 <p>For brevity in the tutorial, let’s keep a subset of the variables from the trial data set.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="kw">trial2</span> <span class="op">=</span>
   <span class="kw">trial</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">trt</span>, <span class="kw">marker</span>, <span class="kw">stage</span>)
-</pre></div>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">trt</span>, <span class="kw">marker</span>, <span class="kw">stage</span>)</pre></div>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
@@ -208,13 +205,12 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
 <p>The default output from <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is meant to be <strong>publication ready</strong>.</p>
 <p>Let’s start by creating a table of summary statistics from the <code>trial</code> data set. The <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> function can take, at minimum, a data frame as the only input, and returns descriptive statistics for each column in the data frame.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(<span class="kw">trial2</span>)
-</pre></div>
+<span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(<span class="kw">trial2</span>)</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ybwvnhvbuj .gt_table {
+#xgmvxisidl .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -239,7 +235,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-left-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_heading {
+#xgmvxisidl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -251,7 +247,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-right-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_title {
+#xgmvxisidl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -261,7 +257,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-bottom-width: 0;
 }
 
-#ybwvnhvbuj .gt_subtitle {
+#xgmvxisidl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -271,13 +267,13 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-top-width: 0;
 }
 
-#ybwvnhvbuj .gt_bottom_border {
+#xgmvxisidl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_col_headings {
+#xgmvxisidl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -292,7 +288,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-right-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_col_heading {
+#xgmvxisidl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -312,7 +308,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   overflow-x: hidden;
 }
 
-#ybwvnhvbuj .gt_column_spanner_outer {
+#xgmvxisidl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -324,15 +320,15 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   padding-right: 4px;
 }
 
-#ybwvnhvbuj .gt_column_spanner_outer:first-child {
+#xgmvxisidl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ybwvnhvbuj .gt_column_spanner_outer:last-child {
+#xgmvxisidl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ybwvnhvbuj .gt_column_spanner {
+#xgmvxisidl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -344,7 +340,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   width: 100%;
 }
 
-#ybwvnhvbuj .gt_group_heading {
+#xgmvxisidl .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -366,7 +362,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   vertical-align: middle;
 }
 
-#ybwvnhvbuj .gt_empty_group_heading {
+#xgmvxisidl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -381,15 +377,15 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   vertical-align: middle;
 }
 
-#ybwvnhvbuj .gt_from_md > :first-child {
+#xgmvxisidl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ybwvnhvbuj .gt_from_md > :last-child {
+#xgmvxisidl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ybwvnhvbuj .gt_row {
+#xgmvxisidl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -408,7 +404,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   overflow-x: hidden;
 }
 
-#ybwvnhvbuj .gt_stub {
+#xgmvxisidl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -420,7 +416,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   padding-left: 12px;
 }
 
-#ybwvnhvbuj .gt_summary_row {
+#xgmvxisidl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -430,7 +426,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   padding-right: 5px;
 }
 
-#ybwvnhvbuj .gt_first_summary_row {
+#xgmvxisidl .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -440,7 +436,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-top-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_grand_summary_row {
+#xgmvxisidl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -450,7 +446,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   padding-right: 5px;
 }
 
-#ybwvnhvbuj .gt_first_grand_summary_row {
+#xgmvxisidl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -460,11 +456,11 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-top-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_striped {
+#xgmvxisidl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ybwvnhvbuj .gt_table_body {
+#xgmvxisidl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -473,7 +469,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-bottom-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_footnotes {
+#xgmvxisidl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -487,13 +483,13 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-right-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_footnote {
+#xgmvxisidl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ybwvnhvbuj .gt_sourcenotes {
+#xgmvxisidl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -507,46 +503,46 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-right-color: #D3D3D3;
 }
 
-#ybwvnhvbuj .gt_sourcenote {
+#xgmvxisidl .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ybwvnhvbuj .gt_left {
+#xgmvxisidl .gt_left {
   text-align: left;
 }
 
-#ybwvnhvbuj .gt_center {
+#xgmvxisidl .gt_center {
   text-align: center;
 }
 
-#ybwvnhvbuj .gt_right {
+#xgmvxisidl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ybwvnhvbuj .gt_font_normal {
+#xgmvxisidl .gt_font_normal {
   font-weight: normal;
 }
 
-#ybwvnhvbuj .gt_font_bold {
+#xgmvxisidl .gt_font_bold {
   font-weight: bold;
 }
 
-#ybwvnhvbuj .gt_font_italic {
+#xgmvxisidl .gt_font_italic {
   font-style: italic;
 }
 
-#ybwvnhvbuj .gt_super {
+#xgmvxisidl .gt_super {
   font-size: 65%;
 }
 
-#ybwvnhvbuj .gt_footnote_marks {
+#xgmvxisidl .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="ybwvnhvbuj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="xgmvxisidl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
@@ -601,7 +597,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
           <sup class="gt_footnote_marks"><em>1</em>
           </sup>
            
-          Statistics presented: n (%); median (IQR)
+          Statistics presented: n (%); Median (IQR)
           <br></p>
       </td>
     </tr></tfoot>
@@ -615,13 +611,12 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
 </ul>
 <p>This is a great basic table, but for this study data the summary statistics should be <strong>split by treatment group</strong>, which can be done by using the <strong><code>by =</code></strong> argument. To compare two or more groups, include <a href="http://www.danieldsjoberg.com/gtsummary/reference/add_p.html"><code>add_p()</code></a> with the function call, which detects variable type and uses an appropriate test.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(<span class="kw">trial2</span>, by = <span class="kw">trt</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/add_p.html">add_p</a></span>()
-</pre></div>
+<span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(<span class="kw">trial2</span>, by = <span class="kw">trt</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/add_p.html">add_p</a></span>()</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#aathjeaivq .gt_table {
+#yifeqhccas .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -646,7 +641,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-left-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_heading {
+#yifeqhccas .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -658,7 +653,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-right-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_title {
+#yifeqhccas .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -668,7 +663,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-bottom-width: 0;
 }
 
-#aathjeaivq .gt_subtitle {
+#yifeqhccas .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -678,13 +673,13 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-top-width: 0;
 }
 
-#aathjeaivq .gt_bottom_border {
+#yifeqhccas .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_col_headings {
+#yifeqhccas .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -699,7 +694,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-right-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_col_heading {
+#yifeqhccas .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -719,7 +714,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   overflow-x: hidden;
 }
 
-#aathjeaivq .gt_column_spanner_outer {
+#yifeqhccas .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -731,15 +726,15 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   padding-right: 4px;
 }
 
-#aathjeaivq .gt_column_spanner_outer:first-child {
+#yifeqhccas .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#aathjeaivq .gt_column_spanner_outer:last-child {
+#yifeqhccas .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#aathjeaivq .gt_column_spanner {
+#yifeqhccas .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -751,7 +746,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   width: 100%;
 }
 
-#aathjeaivq .gt_group_heading {
+#yifeqhccas .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -773,7 +768,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   vertical-align: middle;
 }
 
-#aathjeaivq .gt_empty_group_heading {
+#yifeqhccas .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -788,15 +783,15 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   vertical-align: middle;
 }
 
-#aathjeaivq .gt_from_md > :first-child {
+#yifeqhccas .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#aathjeaivq .gt_from_md > :last-child {
+#yifeqhccas .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#aathjeaivq .gt_row {
+#yifeqhccas .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -815,7 +810,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   overflow-x: hidden;
 }
 
-#aathjeaivq .gt_stub {
+#yifeqhccas .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -827,7 +822,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   padding-left: 12px;
 }
 
-#aathjeaivq .gt_summary_row {
+#yifeqhccas .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -837,7 +832,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   padding-right: 5px;
 }
 
-#aathjeaivq .gt_first_summary_row {
+#yifeqhccas .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -847,7 +842,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-top-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_grand_summary_row {
+#yifeqhccas .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -857,7 +852,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   padding-right: 5px;
 }
 
-#aathjeaivq .gt_first_grand_summary_row {
+#yifeqhccas .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -867,11 +862,11 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-top-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_striped {
+#yifeqhccas .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#aathjeaivq .gt_table_body {
+#yifeqhccas .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -880,7 +875,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-bottom-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_footnotes {
+#yifeqhccas .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -894,13 +889,13 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-right-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_footnote {
+#yifeqhccas .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#aathjeaivq .gt_sourcenotes {
+#yifeqhccas .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -914,46 +909,46 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
   border-right-color: #D3D3D3;
 }
 
-#aathjeaivq .gt_sourcenote {
+#yifeqhccas .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#aathjeaivq .gt_left {
+#yifeqhccas .gt_left {
   text-align: left;
 }
 
-#aathjeaivq .gt_center {
+#yifeqhccas .gt_center {
   text-align: center;
 }
 
-#aathjeaivq .gt_right {
+#yifeqhccas .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#aathjeaivq .gt_font_normal {
+#yifeqhccas .gt_font_normal {
   font-weight: normal;
 }
 
-#aathjeaivq .gt_font_bold {
+#yifeqhccas .gt_font_bold {
   font-weight: bold;
 }
 
-#aathjeaivq .gt_font_italic {
+#yifeqhccas .gt_font_italic {
   font-style: italic;
 }
 
-#aathjeaivq .gt_super {
+#yifeqhccas .gt_super {
   font-size: 65%;
 }
 
-#aathjeaivq .gt_footnote_marks {
+#yifeqhccas .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="aathjeaivq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="yifeqhccas" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
@@ -1016,7 +1011,7 @@ tbl_summary(mtcars, by = am) %&gt;% add_p() is equivalent to
           <sup class="gt_footnote_marks"><em>1</em>
           </sup>
            
-          Statistics presented: median (IQR); n (%)
+          Statistics presented: Median (IQR); n (%)
           <br></p>
         <p class="gt_footnote">
           <sup class="gt_footnote_marks"><em>2</em>
@@ -1127,13 +1122,12 @@ bold_p()                bold significant p-values  </code></pre>
   <span class="co"># bold p-values under a given threshold (default is 0.05)</span>
   <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span>(t = <span class="fl">0.2</span>) <span class="op">%&gt;%</span>
   <span class="co"># include percent in headers</span>
-  <span class="fu"><a href="../reference/modify.html">modify_header</a></span>(stat_by = <span class="st">"**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</span>)
-</pre></div>
+  <span class="fu"><a href="../reference/modify.html">modify_header</a></span>(stat_by = <span class="st">"**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})"</span>)</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#tusajrhdfk .gt_table {
+#hyisimrpyq .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1158,7 +1152,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_heading {
+#hyisimrpyq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1170,7 +1164,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_title {
+#hyisimrpyq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1180,7 +1174,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-bottom-width: 0;
 }
 
-#tusajrhdfk .gt_subtitle {
+#hyisimrpyq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1190,13 +1184,13 @@ bold_p()                bold significant p-values  </code></pre>
   border-top-width: 0;
 }
 
-#tusajrhdfk .gt_bottom_border {
+#hyisimrpyq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_col_headings {
+#hyisimrpyq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1211,7 +1205,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_col_heading {
+#hyisimrpyq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1231,7 +1225,7 @@ bold_p()                bold significant p-values  </code></pre>
   overflow-x: hidden;
 }
 
-#tusajrhdfk .gt_column_spanner_outer {
+#hyisimrpyq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1243,15 +1237,15 @@ bold_p()                bold significant p-values  </code></pre>
   padding-right: 4px;
 }
 
-#tusajrhdfk .gt_column_spanner_outer:first-child {
+#hyisimrpyq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tusajrhdfk .gt_column_spanner_outer:last-child {
+#hyisimrpyq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tusajrhdfk .gt_column_spanner {
+#hyisimrpyq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1263,7 +1257,7 @@ bold_p()                bold significant p-values  </code></pre>
   width: 100%;
 }
 
-#tusajrhdfk .gt_group_heading {
+#hyisimrpyq .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1285,7 +1279,7 @@ bold_p()                bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#tusajrhdfk .gt_empty_group_heading {
+#hyisimrpyq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1300,15 +1294,15 @@ bold_p()                bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#tusajrhdfk .gt_from_md > :first-child {
+#hyisimrpyq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#tusajrhdfk .gt_from_md > :last-child {
+#hyisimrpyq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#tusajrhdfk .gt_row {
+#hyisimrpyq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1327,7 +1321,7 @@ bold_p()                bold significant p-values  </code></pre>
   overflow-x: hidden;
 }
 
-#tusajrhdfk .gt_stub {
+#hyisimrpyq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1339,7 +1333,7 @@ bold_p()                bold significant p-values  </code></pre>
   padding-left: 12px;
 }
 
-#tusajrhdfk .gt_summary_row {
+#hyisimrpyq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1349,7 +1343,7 @@ bold_p()                bold significant p-values  </code></pre>
   padding-right: 5px;
 }
 
-#tusajrhdfk .gt_first_summary_row {
+#hyisimrpyq .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1359,7 +1353,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_grand_summary_row {
+#hyisimrpyq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1369,7 +1363,7 @@ bold_p()                bold significant p-values  </code></pre>
   padding-right: 5px;
 }
 
-#tusajrhdfk .gt_first_grand_summary_row {
+#hyisimrpyq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1379,11 +1373,11 @@ bold_p()                bold significant p-values  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_striped {
+#hyisimrpyq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#tusajrhdfk .gt_table_body {
+#hyisimrpyq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1392,7 +1386,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_footnotes {
+#hyisimrpyq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1406,13 +1400,13 @@ bold_p()                bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_footnote {
+#hyisimrpyq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#tusajrhdfk .gt_sourcenotes {
+#hyisimrpyq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1426,46 +1420,46 @@ bold_p()                bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#tusajrhdfk .gt_sourcenote {
+#hyisimrpyq .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#tusajrhdfk .gt_left {
+#hyisimrpyq .gt_left {
   text-align: left;
 }
 
-#tusajrhdfk .gt_center {
+#hyisimrpyq .gt_center {
   text-align: center;
 }
 
-#tusajrhdfk .gt_right {
+#hyisimrpyq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tusajrhdfk .gt_font_normal {
+#hyisimrpyq .gt_font_normal {
   font-weight: normal;
 }
 
-#tusajrhdfk .gt_font_bold {
+#hyisimrpyq .gt_font_bold {
   font-weight: bold;
 }
 
-#tusajrhdfk .gt_font_italic {
+#hyisimrpyq .gt_font_italic {
   font-style: italic;
 }
 
-#tusajrhdfk .gt_super {
+#hyisimrpyq .gt_super {
   font-size: 65%;
 }
 
-#tusajrhdfk .gt_footnote_marks {
+#hyisimrpyq .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="tusajrhdfk" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="hyisimrpyq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
@@ -1478,7 +1472,7 @@ bold_p()                bold significant p-values  </code></pre>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td class="gt_row gt_left" style="font-weight: bold;">Marker, ng/mL, mean (SD)</td>
+<td class="gt_row gt_left" style="font-weight: bold;">Marker, ng/mL, Mean (SD)</td>
       <td class="gt_row gt_center">1.0 (0.89)</td>
       <td class="gt_row gt_center">0.8 (0.83)</td>
       <td class="gt_row gt_center" style="font-weight: bold;">0.12</td>
@@ -1571,13 +1565,12 @@ bold_p()                bold significant p-values  </code></pre>
                      <span class="fu"><a href="../reference/select_helpers.html">all_categorical</a></span>() <span class="op">~</span> <span class="st">"{p}%"</span>) <span class="co"># select by summary type</span>
   ) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_p.html">add_p</a></span>(test = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span>(<span class="st">"response"</span>) <span class="op">~</span> <span class="st">"fisher.test"</span>, <span class="co"># select using functions in tidyselect</span>
-                    <span class="fu"><a href="../reference/select_helpers.html">all_continuous</a></span>() <span class="op">~</span> <span class="st">"t.test"</span>))
-</pre></div>
+                    <span class="fu"><a href="../reference/select_helpers.html">all_continuous</a></span>() <span class="op">~</span> <span class="st">"t.test"</span>))</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#rkhxqyoyke .gt_table {
+#krkmtkjdqr .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1602,7 +1595,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_heading {
+#krkmtkjdqr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1614,7 +1607,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_title {
+#krkmtkjdqr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1624,7 +1617,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-bottom-width: 0;
 }
 
-#rkhxqyoyke .gt_subtitle {
+#krkmtkjdqr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1634,13 +1627,13 @@ bold_p()                bold significant p-values  </code></pre>
   border-top-width: 0;
 }
 
-#rkhxqyoyke .gt_bottom_border {
+#krkmtkjdqr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_col_headings {
+#krkmtkjdqr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1655,7 +1648,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_col_heading {
+#krkmtkjdqr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1675,7 +1668,7 @@ bold_p()                bold significant p-values  </code></pre>
   overflow-x: hidden;
 }
 
-#rkhxqyoyke .gt_column_spanner_outer {
+#krkmtkjdqr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1687,15 +1680,15 @@ bold_p()                bold significant p-values  </code></pre>
   padding-right: 4px;
 }
 
-#rkhxqyoyke .gt_column_spanner_outer:first-child {
+#krkmtkjdqr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rkhxqyoyke .gt_column_spanner_outer:last-child {
+#krkmtkjdqr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rkhxqyoyke .gt_column_spanner {
+#krkmtkjdqr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1707,7 +1700,7 @@ bold_p()                bold significant p-values  </code></pre>
   width: 100%;
 }
 
-#rkhxqyoyke .gt_group_heading {
+#krkmtkjdqr .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1729,7 +1722,7 @@ bold_p()                bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#rkhxqyoyke .gt_empty_group_heading {
+#krkmtkjdqr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1744,15 +1737,15 @@ bold_p()                bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#rkhxqyoyke .gt_from_md > :first-child {
+#krkmtkjdqr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rkhxqyoyke .gt_from_md > :last-child {
+#krkmtkjdqr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rkhxqyoyke .gt_row {
+#krkmtkjdqr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1771,7 +1764,7 @@ bold_p()                bold significant p-values  </code></pre>
   overflow-x: hidden;
 }
 
-#rkhxqyoyke .gt_stub {
+#krkmtkjdqr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1783,7 +1776,7 @@ bold_p()                bold significant p-values  </code></pre>
   padding-left: 12px;
 }
 
-#rkhxqyoyke .gt_summary_row {
+#krkmtkjdqr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1793,7 +1786,7 @@ bold_p()                bold significant p-values  </code></pre>
   padding-right: 5px;
 }
 
-#rkhxqyoyke .gt_first_summary_row {
+#krkmtkjdqr .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1803,7 +1796,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_grand_summary_row {
+#krkmtkjdqr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1813,7 +1806,7 @@ bold_p()                bold significant p-values  </code></pre>
   padding-right: 5px;
 }
 
-#rkhxqyoyke .gt_first_grand_summary_row {
+#krkmtkjdqr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1823,11 +1816,11 @@ bold_p()                bold significant p-values  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_striped {
+#krkmtkjdqr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#rkhxqyoyke .gt_table_body {
+#krkmtkjdqr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1836,7 +1829,7 @@ bold_p()                bold significant p-values  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_footnotes {
+#krkmtkjdqr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1850,13 +1843,13 @@ bold_p()                bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_footnote {
+#krkmtkjdqr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#rkhxqyoyke .gt_sourcenotes {
+#krkmtkjdqr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1870,46 +1863,46 @@ bold_p()                bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#rkhxqyoyke .gt_sourcenote {
+#krkmtkjdqr .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#rkhxqyoyke .gt_left {
+#krkmtkjdqr .gt_left {
   text-align: left;
 }
 
-#rkhxqyoyke .gt_center {
+#krkmtkjdqr .gt_center {
   text-align: center;
 }
 
-#rkhxqyoyke .gt_right {
+#krkmtkjdqr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rkhxqyoyke .gt_font_normal {
+#krkmtkjdqr .gt_font_normal {
   font-weight: normal;
 }
 
-#rkhxqyoyke .gt_font_bold {
+#krkmtkjdqr .gt_font_bold {
   font-weight: bold;
 }
 
-#rkhxqyoyke .gt_font_italic {
+#krkmtkjdqr .gt_font_italic {
   font-style: italic;
 }
 
-#rkhxqyoyke .gt_super {
+#krkmtkjdqr .gt_super {
   font-size: 65%;
 }
 
-#rkhxqyoyke .gt_footnote_marks {
+#krkmtkjdqr .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="rkhxqyoyke" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="krkmtkjdqr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
@@ -2032,7 +2025,7 @@ bold_p()                bold significant p-values  </code></pre>
           <sup class="gt_footnote_marks"><em>1</em>
           </sup>
            
-          Statistics presented: %; mean (SD)
+          Statistics presented: %; Mean (SD)
           <br></p>
         <p class="gt_footnote">
           <sup class="gt_footnote_marks"><em>2</em>
@@ -2052,8 +2045,7 @@ bold_p()                bold significant p-values  </code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit">
 <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(<span class="kw">trial2</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>()
 <span class="co">#&gt; [1] "table_body"   "table_header" "meta_data"    "inputs"       "N"           </span>
-<span class="co">#&gt; [6] "call_list"</span>
-</pre></div>
+<span class="co">#&gt; [6] "call_list"</span></pre></div>
 <p>These are the additional data stored in the <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> output list.</p>
 <pre><code>table_body   data frame with summary statistics  
 meta_data    data frame that is one row per variable with data about each  
@@ -2078,8 +2070,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
 <span class="co">#&gt;     align = "center")</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $cols_align[[2]]</span>
-<span class="co">#&gt; gt::cols_align(columns = gt::vars(label), align = "left")</span>
-</pre></div>
+<span class="co">#&gt; gt::cols_align(columns = gt::vars(label), align = "left")</span></pre></div>
 <p>The {gt} functions are called in the order they appear, always beginning with the <code><a href="https://rdrr.io/pkg/gt/man/gt.html">gt::gt()</a></code> function.</p>
 <p>If the user does not want a specific {gt} function to run (i.e. would like to change default printing), any {gt} call can be excluded in the <code><a href="../reference/as_gt.html">as_gt()</a></code> function. In the example below, the default footnote will be excluded from the output.</p>
 <p>After the <code><a href="../reference/as_gt.html">as_gt()</a></code> function is run, additional formatting may be added to the table using {gt} formatting functions. In the example below, a spanning header for the <code>by=</code> variable is included with the {gt} function <code><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner()</a></code>.</p>
@@ -2087,13 +2078,12 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
 <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(<span class="kw">trial2</span>, by = <span class="kw">trt</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/as_gt.html">as_gt</a></span>(include = <span class="op">-</span><span class="kw">tab_footnote</span>) <span class="op">%&gt;%</span>
   <span class="kw">gt</span>::<span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(label = <span class="kw">gt</span>::<span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"**Treatment Group**"</span>),
-                  columns = <span class="kw">gt</span>::<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"stat_"</span>))
-</pre></div>
+                  columns = <span class="kw">gt</span>::<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"stat_"</span>))</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ukbyufllsx .gt_table {
+#nearaiyhqv .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2118,7 +2108,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_heading {
+#nearaiyhqv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2130,7 +2120,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_title {
+#nearaiyhqv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2140,7 +2130,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-bottom-width: 0;
 }
 
-#ukbyufllsx .gt_subtitle {
+#nearaiyhqv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2150,13 +2140,13 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-width: 0;
 }
 
-#ukbyufllsx .gt_bottom_border {
+#nearaiyhqv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_col_headings {
+#nearaiyhqv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2171,7 +2161,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_col_heading {
+#nearaiyhqv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2191,7 +2181,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#ukbyufllsx .gt_column_spanner_outer {
+#nearaiyhqv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2203,15 +2193,15 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 4px;
 }
 
-#ukbyufllsx .gt_column_spanner_outer:first-child {
+#nearaiyhqv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ukbyufllsx .gt_column_spanner_outer:last-child {
+#nearaiyhqv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ukbyufllsx .gt_column_spanner {
+#nearaiyhqv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2223,7 +2213,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   width: 100%;
 }
 
-#ukbyufllsx .gt_group_heading {
+#nearaiyhqv .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2245,7 +2235,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#ukbyufllsx .gt_empty_group_heading {
+#nearaiyhqv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2260,15 +2250,15 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#ukbyufllsx .gt_from_md > :first-child {
+#nearaiyhqv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ukbyufllsx .gt_from_md > :last-child {
+#nearaiyhqv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ukbyufllsx .gt_row {
+#nearaiyhqv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2287,7 +2277,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#ukbyufllsx .gt_stub {
+#nearaiyhqv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2299,7 +2289,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-left: 12px;
 }
 
-#ukbyufllsx .gt_summary_row {
+#nearaiyhqv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2309,7 +2299,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#ukbyufllsx .gt_first_summary_row {
+#nearaiyhqv .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2319,7 +2309,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_grand_summary_row {
+#nearaiyhqv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2329,7 +2319,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#ukbyufllsx .gt_first_grand_summary_row {
+#nearaiyhqv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2339,11 +2329,11 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_striped {
+#nearaiyhqv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ukbyufllsx .gt_table_body {
+#nearaiyhqv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2352,7 +2342,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_footnotes {
+#nearaiyhqv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2366,13 +2356,13 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_footnote {
+#nearaiyhqv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ukbyufllsx .gt_sourcenotes {
+#nearaiyhqv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2386,46 +2376,46 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ukbyufllsx .gt_sourcenote {
+#nearaiyhqv .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ukbyufllsx .gt_left {
+#nearaiyhqv .gt_left {
   text-align: left;
 }
 
-#ukbyufllsx .gt_center {
+#nearaiyhqv .gt_center {
   text-align: center;
 }
 
-#ukbyufllsx .gt_right {
+#nearaiyhqv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ukbyufllsx .gt_font_normal {
+#nearaiyhqv .gt_font_normal {
   font-weight: normal;
 }
 
-#ukbyufllsx .gt_font_bold {
+#nearaiyhqv .gt_font_bold {
   font-weight: bold;
 }
 
-#ukbyufllsx .gt_font_italic {
+#nearaiyhqv .gt_font_italic {
   font-style: italic;
 }
 
-#ukbyufllsx .gt_super {
+#nearaiyhqv .gt_super {
   font-size: 65%;
 }
 
-#ukbyufllsx .gt_footnote_marks {
+#nearaiyhqv .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="ukbyufllsx" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="nearaiyhqv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings">
 <tr>
 <th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1"><strong>Characteristic</strong></th>
@@ -2491,12 +2481,10 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
 <p>The {gtsummary} package also supports survey data (objects created with the <a href="https://CRAN.R-project.org/package=survey">{survey}</a> package) via the <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> function. The syntax for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> and <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> are nearly identical, thus the examples above apply to survey summaries as well.</p>
 <p>To begin, we’ll install the {survey} package and load the <code>apiclus1</code> data set which has a complex survey design.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"survey"</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"survey"</span>)</pre></div>
 <div class="sourceCode" id="cb22"><pre class="downlit">
 <span class="co"># loading the api data set</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">api</span>, package = <span class="st">"survey"</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">api</span>, package = <span class="st">"survey"</span>)</pre></div>
 <p>Before we begin, we convert the data frame to a survey object, registering the ID and weighting columns, and setting the finite population correction column.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="kw">svy_apiclus1</span> <span class="op">&lt;-</span> 
@@ -2505,8 +2493,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
     weights = <span class="op">~</span><span class="kw">pw</span>, 
     data = <span class="kw">apiclus1</span>, 
     fpc = <span class="op">~</span><span class="kw">fpc</span>
-  ) 
-</pre></div>
+  ) </pre></div>
 <p>After creating the survey object, we can now summarize it similarly to a standard data frame using <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. Like <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> can accept a <code>by</code> variable and works with <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_overall.html">add_overall()</a></code> functions.</p>
 <p>One thing to note is that unlike <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, it is not possible to pass custom functions to the <code>statistic</code> argument of <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. You must use one of the <a href="http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.html#statistic-argument">pre-defined summary statistic functions</a> (e.g. <code>{mean}</code>, <code>{median}</code>) which leverage functions from the {survey} package to calculate the correct survey statistics.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit">
@@ -2527,13 +2514,12 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   <span class="fu"><a href="../reference/add_p.html">add_p</a></span>() <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/add_overall.html">add_overall</a></span>() <span class="op">%&gt;%</span>
   <span class="co"># adding spanning header</span>
-  <span class="fu"><a href="../reference/modify.html">modify_spanning_header</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"stat_"</span>) <span class="op">~</span> <span class="st">"**Met Both Targets**"</span>)
-</pre></div>
+  <span class="fu"><a href="../reference/modify.html">modify_spanning_header</a></span>(<span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span>(<span class="st">"stat_"</span>) <span class="op">~</span> <span class="st">"**Met Both Targets**"</span>)</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#aazutlxmkz .gt_table {
+#xeadmvjhjw .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2558,7 +2544,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_heading {
+#xeadmvjhjw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2570,7 +2556,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_title {
+#xeadmvjhjw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2580,7 +2566,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-bottom-width: 0;
 }
 
-#aazutlxmkz .gt_subtitle {
+#xeadmvjhjw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2590,13 +2576,13 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-width: 0;
 }
 
-#aazutlxmkz .gt_bottom_border {
+#xeadmvjhjw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_col_headings {
+#xeadmvjhjw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2611,7 +2597,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_col_heading {
+#xeadmvjhjw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2631,7 +2617,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#aazutlxmkz .gt_column_spanner_outer {
+#xeadmvjhjw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2643,15 +2629,15 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 4px;
 }
 
-#aazutlxmkz .gt_column_spanner_outer:first-child {
+#xeadmvjhjw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#aazutlxmkz .gt_column_spanner_outer:last-child {
+#xeadmvjhjw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#aazutlxmkz .gt_column_spanner {
+#xeadmvjhjw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2663,7 +2649,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   width: 100%;
 }
 
-#aazutlxmkz .gt_group_heading {
+#xeadmvjhjw .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2685,7 +2671,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#aazutlxmkz .gt_empty_group_heading {
+#xeadmvjhjw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2700,15 +2686,15 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#aazutlxmkz .gt_from_md > :first-child {
+#xeadmvjhjw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#aazutlxmkz .gt_from_md > :last-child {
+#xeadmvjhjw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#aazutlxmkz .gt_row {
+#xeadmvjhjw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2727,7 +2713,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#aazutlxmkz .gt_stub {
+#xeadmvjhjw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2739,7 +2725,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-left: 12px;
 }
 
-#aazutlxmkz .gt_summary_row {
+#xeadmvjhjw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2749,7 +2735,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#aazutlxmkz .gt_first_summary_row {
+#xeadmvjhjw .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2759,7 +2745,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_grand_summary_row {
+#xeadmvjhjw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2769,7 +2755,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#aazutlxmkz .gt_first_grand_summary_row {
+#xeadmvjhjw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2779,11 +2765,11 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_striped {
+#xeadmvjhjw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#aazutlxmkz .gt_table_body {
+#xeadmvjhjw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2792,7 +2778,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_footnotes {
+#xeadmvjhjw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2806,13 +2792,13 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_footnote {
+#xeadmvjhjw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#aazutlxmkz .gt_sourcenotes {
+#xeadmvjhjw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2826,46 +2812,46 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#aazutlxmkz .gt_sourcenote {
+#xeadmvjhjw .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#aazutlxmkz .gt_left {
+#xeadmvjhjw .gt_left {
   text-align: left;
 }
 
-#aazutlxmkz .gt_center {
+#xeadmvjhjw .gt_center {
   text-align: center;
 }
 
-#aazutlxmkz .gt_right {
+#xeadmvjhjw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#aazutlxmkz .gt_font_normal {
+#xeadmvjhjw .gt_font_normal {
   font-weight: normal;
 }
 
-#aazutlxmkz .gt_font_bold {
+#xeadmvjhjw .gt_font_bold {
   font-weight: bold;
 }
 
-#aazutlxmkz .gt_font_italic {
+#xeadmvjhjw .gt_font_italic {
   font-style: italic;
 }
 
-#aazutlxmkz .gt_super {
+#xeadmvjhjw .gt_super {
   font-size: 65%;
 }
 
-#aazutlxmkz .gt_footnote_marks {
+#xeadmvjhjw .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="aazutlxmkz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="xeadmvjhjw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings">
 <tr>
 <th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1"><strong>Characteristic</strong></th>
@@ -2993,7 +2979,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
           <sup class="gt_footnote_marks"><em>1</em>
           </sup>
            
-          Statistics presented: n (%); median (IQR)
+          Statistics presented: n (%); Median (IQR)
           <br></p>
         <p class="gt_footnote">
           <sup class="gt_footnote_marks"><em>2</em>
@@ -3020,18 +3006,16 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
 <span class="co">#&gt;  7 3rd   Female Child No          17</span>
 <span class="co">#&gt;  8 Crew  Female Child No           0</span>
 <span class="co">#&gt;  9 1st   Male   Adult No         118</span>
-<span class="co">#&gt; 10 2nd   Male   Adult No         154</span>
-</pre></div>
+<span class="co">#&gt; 10 2nd   Male   Adult No         154</span></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit">
 <span class="kw">d</span> <span class="op">%&gt;%</span>
   <span class="kw">survey</span>::<span class="fu"><a href="https://rdrr.io/pkg/survey/man/svydesign.html">svydesign</a></span>(data = <span class="kw">.</span>, ids = <span class="op">~</span> <span class="fl">1</span>, weights = <span class="op">~</span> <span class="kw">n</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/tbl_svysummary.html">tbl_svysummary</a></span>()
-</pre></div>
+  <span class="fu"><a href="../reference/tbl_svysummary.html">tbl_svysummary</a></span>()</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#kxmzusvusu .gt_table {
+#xcuyefcloj .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -3056,7 +3040,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_heading {
+#xcuyefcloj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3068,7 +3052,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_title {
+#xcuyefcloj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3078,7 +3062,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-bottom-width: 0;
 }
 
-#kxmzusvusu .gt_subtitle {
+#xcuyefcloj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3088,13 +3072,13 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-width: 0;
 }
 
-#kxmzusvusu .gt_bottom_border {
+#xcuyefcloj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_col_headings {
+#xcuyefcloj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3109,7 +3093,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_col_heading {
+#xcuyefcloj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3129,7 +3113,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#kxmzusvusu .gt_column_spanner_outer {
+#xcuyefcloj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3141,15 +3125,15 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 4px;
 }
 
-#kxmzusvusu .gt_column_spanner_outer:first-child {
+#xcuyefcloj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kxmzusvusu .gt_column_spanner_outer:last-child {
+#xcuyefcloj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kxmzusvusu .gt_column_spanner {
+#xcuyefcloj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3161,7 +3145,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   width: 100%;
 }
 
-#kxmzusvusu .gt_group_heading {
+#xcuyefcloj .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3183,7 +3167,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#kxmzusvusu .gt_empty_group_heading {
+#xcuyefcloj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3198,15 +3182,15 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#kxmzusvusu .gt_from_md > :first-child {
+#xcuyefcloj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kxmzusvusu .gt_from_md > :last-child {
+#xcuyefcloj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kxmzusvusu .gt_row {
+#xcuyefcloj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3225,7 +3209,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#kxmzusvusu .gt_stub {
+#xcuyefcloj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3237,7 +3221,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-left: 12px;
 }
 
-#kxmzusvusu .gt_summary_row {
+#xcuyefcloj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3247,7 +3231,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#kxmzusvusu .gt_first_summary_row {
+#xcuyefcloj .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3257,7 +3241,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_grand_summary_row {
+#xcuyefcloj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3267,7 +3251,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#kxmzusvusu .gt_first_grand_summary_row {
+#xcuyefcloj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3277,11 +3261,11 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_striped {
+#xcuyefcloj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kxmzusvusu .gt_table_body {
+#xcuyefcloj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3290,7 +3274,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_footnotes {
+#xcuyefcloj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3304,13 +3288,13 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_footnote {
+#xcuyefcloj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#kxmzusvusu .gt_sourcenotes {
+#xcuyefcloj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3324,46 +3308,46 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#kxmzusvusu .gt_sourcenote {
+#xcuyefcloj .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#kxmzusvusu .gt_left {
+#xcuyefcloj .gt_left {
   text-align: left;
 }
 
-#kxmzusvusu .gt_center {
+#xcuyefcloj .gt_center {
   text-align: center;
 }
 
-#kxmzusvusu .gt_right {
+#xcuyefcloj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kxmzusvusu .gt_font_normal {
+#xcuyefcloj .gt_font_normal {
   font-weight: normal;
 }
 
-#kxmzusvusu .gt_font_bold {
+#xcuyefcloj .gt_font_bold {
   font-weight: bold;
 }
 
-#kxmzusvusu .gt_font_italic {
+#xcuyefcloj .gt_font_italic {
   font-style: italic;
 }
 
-#kxmzusvusu .gt_super {
+#xcuyefcloj .gt_super {
   font-size: 65%;
 }
 
-#kxmzusvusu .gt_footnote_marks {
+#xcuyefcloj .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="kxmzusvusu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="xcuyefcloj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
@@ -3447,13 +3431,12 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   <span class="fu"><a href="../reference/tbl_cross.html">tbl_cross</a></span>(row = <span class="kw">stage</span>,
     col = <span class="kw">trt</span>,
     percent = <span class="st">"cell"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_p.html">add_p</a></span>()
-</pre></div>
+  <span class="fu"><a href="../reference/add_p.html">add_p</a></span>()</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#fmdpdhavep .gt_table {
+#eljgydmtff .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -3478,7 +3461,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_heading {
+#eljgydmtff .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3490,7 +3473,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_title {
+#eljgydmtff .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3500,7 +3483,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-bottom-width: 0;
 }
 
-#fmdpdhavep .gt_subtitle {
+#eljgydmtff .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3510,13 +3493,13 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-width: 0;
 }
 
-#fmdpdhavep .gt_bottom_border {
+#eljgydmtff .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_col_headings {
+#eljgydmtff .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3531,7 +3514,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_col_heading {
+#eljgydmtff .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3551,7 +3534,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#fmdpdhavep .gt_column_spanner_outer {
+#eljgydmtff .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3563,15 +3546,15 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 4px;
 }
 
-#fmdpdhavep .gt_column_spanner_outer:first-child {
+#eljgydmtff .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fmdpdhavep .gt_column_spanner_outer:last-child {
+#eljgydmtff .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fmdpdhavep .gt_column_spanner {
+#eljgydmtff .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3583,7 +3566,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   width: 100%;
 }
 
-#fmdpdhavep .gt_group_heading {
+#eljgydmtff .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3605,7 +3588,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#fmdpdhavep .gt_empty_group_heading {
+#eljgydmtff .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3620,15 +3603,15 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#fmdpdhavep .gt_from_md > :first-child {
+#eljgydmtff .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fmdpdhavep .gt_from_md > :last-child {
+#eljgydmtff .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fmdpdhavep .gt_row {
+#eljgydmtff .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3647,7 +3630,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#fmdpdhavep .gt_stub {
+#eljgydmtff .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3659,7 +3642,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-left: 12px;
 }
 
-#fmdpdhavep .gt_summary_row {
+#eljgydmtff .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3669,7 +3652,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#fmdpdhavep .gt_first_summary_row {
+#eljgydmtff .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3679,7 +3662,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_grand_summary_row {
+#eljgydmtff .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3689,7 +3672,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#fmdpdhavep .gt_first_grand_summary_row {
+#eljgydmtff .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3699,11 +3682,11 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_striped {
+#eljgydmtff .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fmdpdhavep .gt_table_body {
+#eljgydmtff .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3712,7 +3695,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_footnotes {
+#eljgydmtff .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3726,13 +3709,13 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_footnote {
+#eljgydmtff .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#fmdpdhavep .gt_sourcenotes {
+#eljgydmtff .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3746,46 +3729,46 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#fmdpdhavep .gt_sourcenote {
+#eljgydmtff .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#fmdpdhavep .gt_left {
+#eljgydmtff .gt_left {
   text-align: left;
 }
 
-#fmdpdhavep .gt_center {
+#eljgydmtff .gt_center {
   text-align: center;
 }
 
-#fmdpdhavep .gt_right {
+#eljgydmtff .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fmdpdhavep .gt_font_normal {
+#eljgydmtff .gt_font_normal {
   font-weight: normal;
 }
 
-#fmdpdhavep .gt_font_bold {
+#eljgydmtff .gt_font_bold {
   font-weight: bold;
 }
 
-#fmdpdhavep .gt_font_italic {
+#eljgydmtff .gt_font_italic {
   font-style: italic;
 }
 
-#fmdpdhavep .gt_super {
+#eljgydmtff .gt_super {
   font-size: 65%;
 }
 
-#fmdpdhavep .gt_footnote_marks {
+#eljgydmtff .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="fmdpdhavep" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="eljgydmtff" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings">
 <tr>
 <th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1"><strong>Characteristic</strong></th>
@@ -3875,7 +3858,7 @@ inputs       inputs from the `tbl_summary()` function call  </code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
 </div>
 
       </footer>

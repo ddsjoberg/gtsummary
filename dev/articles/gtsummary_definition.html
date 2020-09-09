@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9002</span>
       </span>
     </div>
 
@@ -136,7 +136,7 @@
 <p>Every {gtsummary} object has a few characteristics common among all objects. Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://purrr.tidyverse.org">purrr</a></span>); <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>); <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://tibble.tidyverse.org">tibble</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://purrr.tidyverse.org">purrr</a></span>); <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>); <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://tibble.tidyverse.org/">tibble</a></span>)
 
 <span class="kw">tbl_regression_ex</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw">age</span> <span class="op">~</span> <span class="kw">grade</span> <span class="op">+</span> <span class="kw">marker</span>, <span class="kw">trial</span>) <span class="op">%&gt;%</span>
@@ -146,8 +146,7 @@
 <span class="kw">tbl_summary_ex</span> <span class="op">&lt;-</span>
   <span class="kw">trial</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">trt</span>, <span class="kw">age</span>, <span class="kw">grade</span>, <span class="kw">response</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(by = <span class="kw">trt</span>)
-</pre></div>
+  <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(by = <span class="kw">trt</span>)</pre></div>
 </div>
 <div id="structure-of-a-gtsummary-object" class="section level2">
 <h2 class="hasAnchor">
@@ -170,8 +169,7 @@
 <span class="co">#&gt; 5 grade    level    II             32 (33%)    36 (35%)   </span>
 <span class="co">#&gt; 6 grade    level    III            31 (32%)    33 (32%)   </span>
 <span class="co">#&gt; 7 response label    Tumor Response 28 (29%)    33 (34%)   </span>
-<span class="co">#&gt; 8 response missing  Unknown        3           4</span>
-</pre></div>
+<span class="co">#&gt; 8 response missing  Unknown        3           4</span></pre></div>
 </div>
 <div id="table_header" class="section level4">
 <h4 class="hasAnchor">
@@ -266,8 +264,7 @@
 <span class="co">#&gt; 12 ci     **95… FALSE cent… row_ref == TR… &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
 <span class="co">#&gt; 13 p.val… **p-… FALSE cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         p.va… &lt;NA&gt;  </span>
 <span class="co">#&gt; # … with 4 more variables: fmt_fun &lt;list&gt;, footnote_abbrev &lt;chr&gt;,</span>
-<span class="co">#&gt; #   footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span>
-</pre></div>
+<span class="co">#&gt; #   footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span></pre></div>
 </div>
 </div>
 <div id="constructing-a-gtsummary-object" class="section level2">
@@ -288,8 +285,7 @@
 <span class="co">#&gt; 2 grade    level    I                   </span>
 <span class="co">#&gt; 3 grade    level    II                  </span>
 <span class="co">#&gt; 4 grade    level    III                 </span>
-<span class="co">#&gt; 5 marker   label    Marker Level (ng/mL)</span>
-</pre></div>
+<span class="co">#&gt; 5 marker   label    Marker Level (ng/mL)</span></pre></div>
 <p>The other columns in <code>.$table_body</code> are created by the user and are likely printed in the output. Formatting and printing instructions for these columns is stored in <code>.$table_header</code>.</p>
 </div>
 <div id="table_header-1" class="section level3">
@@ -318,8 +314,7 @@
 <span class="co">#&gt; 12 ci     ci    TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
 <span class="co">#&gt; 13 p.val… p.va… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
 <span class="co">#&gt; # … with 4 more variables: fmt_fun &lt;list&gt;, footnote_abbrev &lt;chr&gt;,</span>
-<span class="co">#&gt; #   footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span>
-</pre></div>
+<span class="co">#&gt; #   footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span></pre></div>
 <p>The <code>modify_header_internal()</code> is useful for assigning column headers. The function accepts a complete {gtsummary} object as its input, and returns an updated version where the column labels have been added to <code>.$table_header</code>. The function also switches the default <code>.$table_header$hide</code> from <code>TRUE</code> to <code>FALSE</code>, resulting in column with labels being printed.</p>
 </div>
 </div>
@@ -337,8 +332,7 @@
   <span class="co">else</span> <span class="co">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span>(<span class="st">"gtsummary.print_engine"</span>) <span class="op">==</span> <span class="st">"kable"</span>) {
     <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="../reference/as_kable.html">as_kable</a></span>(<span class="kw">x</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>())
   }
-}
-</pre></div>
+}</pre></div>
 </div>
   </div>
 
@@ -357,7 +351,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
 </div>
 
       </footer>
