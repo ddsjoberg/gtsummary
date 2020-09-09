@@ -6,6 +6,7 @@
 \alias{theme_gtsummary_compact}
 \alias{theme_gtsummary_printer}
 \alias{theme_gtsummary_language}
+\alias{theme_gtsummary_continuous2}
 \title{Available gtsummary themes}
 \usage{
 theme_gtsummary_journal(journal = c("jama", "lancet"), set_theme = TRUE)
@@ -24,6 +25,11 @@ theme_gtsummary_language(
   big.mark = NULL,
   iqr.sep = NULL,
   ci.sep = NULL,
+  set_theme = TRUE
+)
+
+theme_gtsummary_continuous2(
+  statistic = "{median} ({p25, {p75})",
   set_theme = TRUE
 )
 }
@@ -74,6 +80,8 @@ will default to an en dash}
 If \verb{decimal.mark=} is NULL, \verb{ci.sep=} is \code{", "}. The comma
 separator, however, can look odd when \code{decimal.mark = ","}. In this case the argument
 will default to an en dash}
+
+\item{statistic}{Default statistic continuous variables}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -110,6 +118,11 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 \item \code{"kable"} sets the \code{knitr::kable()} function as the default print engine
 \item \code{"flextable"} sets the flextable package as the default print engine
 \item \code{"kable_extra"} sets the kableExtra package as the default print engine
+}
+\item \code{theme_gtsummary_continuous2()}
+\itemize{
+\item Set all continuous variables to summary type \code{"continuous2"} by default
+\item Use the \verb{statistic=} argument to set the default continuous variable summary statistics
 }
 }
 

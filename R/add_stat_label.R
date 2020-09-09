@@ -37,6 +37,17 @@
 #'     location = "column"
 #'   )
 #'
+#' # Example 3 ----------------------------------
+#' add_stat_label_ex3 <-
+#'   trial %>%
+#'   select(age, grade, trt) %>%
+#'   tbl_summary(
+#'     by = trt,
+#'     type = all_continuous() ~ "continuous2",
+#'     statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
+#'   ) %>%
+#'   add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
+#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -45,6 +56,10 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{add_stat_label_ex2.png}{options: width=60\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{add_stat_label_ex3.png}{options: width=60\%}}
 
 add_stat_label <- function(x, location = NULL, label = NULL) {
   # checking inputs ------------------------------------------------------------
@@ -56,6 +71,16 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   location <- location %||%
     get_theme_element("add_stat_label-arg:location") %>%
     match.arg(choices = c("row", "column"))
+
+  # no column stat label with continuous2 variables ----------------------------
+  if (location == "column" && "continuous2" %in% x$meta_data$summary_type) {
+    paste("Cannot combine `location = \"column\"` with multi-line summaries",
+          "of continuous variables, e.g. summary types \"continuous2\".",
+          "Updating argument value to `location = \"row\"`") %>%
+      str_wrap() %>%
+      inform()
+    location <- "row"
+  }
 
   # processing statistics label ------------------------------------------------
   # stat_label default
@@ -75,39 +100,45 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
     x$meta_data %>%
     select(c("variable", "summary_type")) %>%
     left_join(
-      stat_label %>%
-        unlist() %>%
-        tibble::enframe(name = "variable", value = "stat_label") ,
+      imap_dfr(stat_label, ~tibble(stat_label = .x, variable = .y)),
       by = "variable"
     ) %>%
     mutate(
       row_type = switch(
         location,
-        "row" = "label",
+        "row" = ifelse(.data$summary_type == "continuous2", "level", "label"),
         "column" = ifelse(.data$summary_type == "categorical", "level", "label")
       )
     ) %>%
     select(c("variable", "row_type", "stat_label"))
 
   # merging in new labels to table_body
-  x$table_body <-
-    x$table_body %>%
-    select(c("variable", "row_type", "label")) %>%
-    left_join(meta_data_stat_label, by = c("variable", "row_type")) %>%
-    left_join(x$table_body, c("variable", "row_type", "label"))
+  meta_data_row_types <-
+    select(meta_data_stat_label, .data$variable, .data$row_type) %>%
+    distinct()
+
+  x$table_body$stat_label <- NA_character_
+  for(i in seq_len(nrow(meta_data_row_types))) {
+    x$table_body$stat_label[
+      x$table_body$variable == meta_data_row_types$variable[i] &
+        x$table_body$row_type == meta_data_row_types$row_type[i]] <-
+      filter(meta_data_stat_label, .data$variable == meta_data_row_types$variable[i])$stat_label
+  }
 
   #  updating the label, if stat label is on variable label row
   if (location == "row") {
     x$table_body <-
       x$table_body %>%
+      left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
+                by = "variable") %>%
       mutate(
-        label = ifelse(
-          .data$row_type == "label",
-          glue("{label}, {stat_label}"),
-          .data$label
+        label = case_when(
+          .data$summary_type == "continuous2" & .data$row_type == "level" ~ stat_label,
+          .data$summary_type != "continuous2" & .data$row_type == "label" ~ as.character(glue("{label}, {stat_label}")),
+          TRUE ~ .data$label
         )
       ) %>%
-      select(-.data$stat_label)
+      select(-.data$stat_label, -.data$summary_type)
   }
   # adding label for unknown if stat label column
   else if (location == "column") {
@@ -119,7 +150,8 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
           .data$row_type == "missing" ~ "n",
           TRUE ~ .data$stat_label
         )
-      )
+      ) %>%
+      select(any_of(c("variable", "row_type", "label", "stat_label")), everything())
 
     # adding new column to table_header
     x$table_header <-

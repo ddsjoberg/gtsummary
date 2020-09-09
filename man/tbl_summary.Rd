@@ -48,7 +48,7 @@ statistic being calculated is \code{"{mean} ({sd})"} and you want the mean round
 to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}.}
 
 \item{type}{List of formulas specifying variable types. Accepted values
-are \code{c("continuous", "categorical", "dichotomous")},
+are \code{c("continuous", "continuous2", "categorical", "dichotomous")},
 e.g. \code{type = list(age ~ "continuous", female ~ "dichotomous")}.
 If type not specified for a variable, the function
 will default to an appropriate summary type. See below for details.}
@@ -103,6 +103,22 @@ The select helpers are available for use in any argument that accepts a list
 of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
 }
 
+\section{type argument}{
+
+The \code{tbl_summary()} function has four summary types:
+\itemize{
+\item \code{"continuous"} summaries are shown on a \emph{single row}
+\item \code{"continuous2"} summaries are shown on \emph{2 or more rows}
+\item \code{"categorical"} \emph{multi-line} summaries of nominal data
+\item \code{"dichotomous"} categorical variables that are displayed on a \emph{single row},
+rather than one row per level of the variable.
+Variables coded as \code{TRUE}/\code{FALSE}, \code{0}/\code{1}, or \code{yes}/\code{no} are assumed to be dichotomous,
+and the \code{TRUE}, \code{1}, and \code{yes} rows are displayed.
+Otherwise, the value to display must be specified in the \code{value}
+argument, e.g. \code{value = list(varname ~ "level to show")}
+}
+}
+
 \section{statistic argument}{
 
 The statistic argument specifies the statistics presented in the table. The
@@ -130,6 +146,8 @@ For continuous variables the following statistics are available to display.
 \item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
 \item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
+When the summary type is \code{"continuous2"}, pass a vector of statistics. Each element
+of the vector will result in a separate row in the summary table.
 
 For both categorical and continuous variables, statistics on the number of
 missing and non-missing observations and their proportions are available to
@@ -147,19 +165,6 @@ to the total number, number missing and number non missing observations
 in the denominator, not at each level of the categorical variable.
 }
 
-\section{type argument}{
-
-tbl_summary displays summary statistics for three types of data:
-continuous, categorical, and dichotomous. If the type is not specified,
-tbl_summary will do its best to guess the type.  Dichotomous variables
-are categorical variables that are displayed on a single row in the
-output table, rather than one row per level of the variable.
-Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
-and the TRUE, 1, and yes rows are displayed.
-Otherwise, the value to display must be specified in
-the \code{value} argument, e.g. \code{value = list(varname ~ "level to show")}
-}
-
 \section{Example Output}{
 
 \if{html}{Example 1}
@@ -173,17 +178,23 @@ the \code{value} argument, e.g. \code{value = list(varname ~ "level to show")}
 \if{html}{Example 3}
 
 \if{html}{\figure{tbl_summary_ex3.png}{options: width=45\%}}
+
+\if{html}{Example 4}
+
+\if{html}{\figure{tbl_summary_ex4.png}{options: width=31\%}}
 }
 
 \examples{
 # Example 1 ----------------------------------
 tbl_summary_ex1 <-
-  trial[c("age", "grade", "response")] \%>\%
+  trial \%>\%
+  select(age, grade, response) \%>\%
   tbl_summary()
 
 # Example 2 ----------------------------------
 tbl_summary_ex2 <-
-  trial[c("age", "grade", "response", "trt")] \%>\%
+  trial \%>\%
+  select(age, grade, response, trt) \%>\%
   tbl_summary(
     by = trt,
     label = list(age ~ "Patient Age"),
@@ -195,10 +206,22 @@ tbl_summary_ex2 <-
 # for convenience, you can also pass named lists to any arguments
 # that accept formulas (e.g label, digits, etc.)
 tbl_summary_ex3 <-
-  trial[c("age", "trt")] \%>\%
+  trial \%>\%
+  select(age, trt) \%>\%
   tbl_summary(
     by = trt,
     label = list(age = "Patient Age")
+  )
+
+# Example 4 ----------------------------------
+# multi-line summaries of continuous data with type 'continuous2'
+tbl_summary_ex4 <-
+  trial \%>\%
+  select(age, marker) \%>\%
+  tbl_summary(
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
+    missing = "no"
   )
 }
 \seealso{

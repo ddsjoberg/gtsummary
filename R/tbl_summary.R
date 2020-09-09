@@ -16,7 +16,7 @@
 #' (`attr(data$age, "label")`) is used.  If
 #' attribute label is `NULL`, the variable name will be used.
 #' @param type List of formulas specifying variable types. Accepted values
-#' are `c("continuous", "categorical", "dichotomous")`,
+#' are `c("continuous", "continuous2", "categorical", "dichotomous")`,
 #' e.g. `type = list(age ~ "continuous", female ~ "dichotomous")`.
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type. See below for details.
@@ -64,6 +64,18 @@
 #' The select helpers are available for use in any argument that accepts a list
 #' of formulas (e.g. `statistic`, `type`, `digits`, `value`, `sort`, etc.)
 #'
+#' @section type argument:
+#' The `tbl_summary()` function has four summary types:
+#'    - `"continuous"` summaries are shown on a *single row*
+#'    - `"continuous2"` summaries are shown on *2 or more rows*
+#'    - `"categorical"` *multi-line* summaries of nominal data
+#'    - `"dichotomous"` categorical variables that are displayed on a *single row*,
+#'    rather than one row per level of the variable.
+#'    Variables coded as `TRUE`/`FALSE`, `0`/`1`, or `yes`/`no` are assumed to be dichotomous,
+#'    and the `TRUE`, `1`, and `yes` rows are displayed.
+#'    Otherwise, the value to display must be specified in the `value`
+#'    argument, e.g. `value = list(varname ~ "level to show")`
+#'
 #' @section statistic argument:
 #' The statistic argument specifies the statistics presented in the table. The
 #' input is a list of formulas that specify the statistics to report. For example,
@@ -90,6 +102,8 @@
 #'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
 #'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }
+#' When the summary type is `"continuous2"`, pass a vector of statistics. Each element
+#' of the vector will result in a separate row in the summary table.
 #'
 #' For both categorical and continuous variables, statistics on the number of
 #' missing and non-missing observations and their proportions are available to
@@ -106,16 +120,6 @@
 #' to the total number, number missing and number non missing observations
 #' in the denominator, not at each level of the categorical variable.
 #'
-#' @section type argument:
-#' tbl_summary displays summary statistics for three types of data:
-#' continuous, categorical, and dichotomous. If the type is not specified,
-#' tbl_summary will do its best to guess the type.  Dichotomous variables
-#' are categorical variables that are displayed on a single row in the
-#' output table, rather than one row per level of the variable.
-#' Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
-#' and the TRUE, 1, and yes rows are displayed.
-#' Otherwise, the value to display must be specified in
-#' the `value` argument, e.g. `value = list(varname ~ "level to show")`
 #' @export
 #' @return A `tbl_summary` object
 #' @family tbl_summary tools
@@ -125,12 +129,14 @@
 #' @examples
 #' # Example 1 ----------------------------------
 #' tbl_summary_ex1 <-
-#'   trial[c("age", "grade", "response")] %>%
+#'   trial %>%
+#'   select(age, grade, response) %>%
 #'   tbl_summary()
 #'
 #' # Example 2 ----------------------------------
 #' tbl_summary_ex2 <-
-#'   trial[c("age", "grade", "response", "trt")] %>%
+#'   trial %>%
+#'   select(age, grade, response, trt) %>%
 #'   tbl_summary(
 #'     by = trt,
 #'     label = list(age ~ "Patient Age"),
@@ -142,10 +148,22 @@
 #' # for convenience, you can also pass named lists to any arguments
 #' # that accept formulas (e.g label, digits, etc.)
 #' tbl_summary_ex3 <-
-#'   trial[c("age", "trt")] %>%
+#'   trial %>%
+#'   select(age, trt) %>%
 #'   tbl_summary(
 #'     by = trt,
 #'     label = list(age = "Patient Age")
+#'   )
+#'
+#' # Example 4 ----------------------------------
+#' # multi-line summaries of continuous data with type 'continuous2'
+#' tbl_summary_ex4 <-
+#'   trial %>%
+#'   select(age, marker) %>%
+#'   tbl_summary(
+#'     type = all_continuous() ~ "continuous2",
+#'     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
+#'     missing = "no"
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -159,6 +177,10 @@
 #' \if{html}{Example 3}
 #'
 #' \if{html}{\figure{tbl_summary_ex3.png}{options: width=45\%}}
+#'
+#' \if{html}{Example 4}
+#'
+#' \if{html}{\figure{tbl_summary_ex4.png}{options: width=31\%}}
 
 tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
@@ -270,15 +292,21 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # table of column headers ----------------------------------------------------
   table_header <-
     tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    mutate(
-      # adding footnote of statistics on display (unless theme indicates a no print)
-      footnote = ifelse(
-        startsWith(.data$column, "stat_"),
-        footnote_stat_label(meta_data),
-        .data$footnote
+    table_header_fill_missing()
+
+  # adding stat footnote (unless there are continuous2 vars)
+  if (!"continuous2" %in% meta_data$summary_type) {
+    table_header <-
+      table_header %>%
+      mutate(
+        # adding footnote of statistics on display (unless theme indicates a no print)
+        footnote = ifelse(
+          startsWith(.data$column, "stat_"),
+          footnote_stat_label(meta_data),
+          .data$footnote
+        )
       )
-    )
+  }
 
   # returning all results in a list --------------------------------------------
   results <- list(
