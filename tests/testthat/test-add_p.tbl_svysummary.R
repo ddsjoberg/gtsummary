@@ -44,6 +44,46 @@ test_that("add_p creates output without error/warning", {
 
 })
 
+
+test_that("add_p creates output without error/warning with continuous2", {
+  expect_error(
+    tbl_svysummary(strial, by = grade, type = all_continuous() ~ "continuous2") %>% add_p(),
+    NA
+  )
+
+  expect_error(
+    strial %>%
+      tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2") %>%
+      add_p(),
+    NA
+  )
+
+  expect_warning(
+    strial %>%
+      tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2") %>%
+      add_p(),
+    NA
+  )
+
+  expect_message(
+    strial %>%
+      tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2") %>%
+      add_p(),
+    NA
+  )
+
+  expect_warning(
+    tbl_svysummary(d, by = Survived, type = all_continuous() ~ "continuous2") %>% add_p(),
+    NA
+  )
+
+  expect_message(
+    tbl_svysummary(d, by = Survived, type = all_continuous() ~ "continuous2") %>% add_p(),
+    NA
+  )
+
+})
+
 test_that("add_p creates errors with bad args", {
   expect_error(
     tbl_svysummary(strial, by = trt) %>%
