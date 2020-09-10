@@ -8,8 +8,8 @@ test_that("correct rounding near thresholds", {
     c("1", "1", "1", "0.9")
   )
 
-  expect_false(
-    style_sigfig(0.97, digits = 1) == "0.1"
+  expect_true(
+    style_sigfig(0.97, digits = 1) == "1"
   )
 
 })
