@@ -3,6 +3,7 @@
 \name{select_helpers}
 \alias{select_helpers}
 \alias{all_continuous}
+\alias{all_continuous2}
 \alias{all_categorical}
 \alias{all_dichotomous}
 \alias{all_numeric}
@@ -13,7 +14,9 @@
 \alias{all_factor}
 \title{Select helper functions}
 \usage{
-all_continuous()
+all_continuous(continuous2 = TRUE)
+
+all_continuous2()
 
 all_categorical(dichotomous = TRUE)
 
@@ -32,6 +35,9 @@ all_logical()
 all_factor()
 }
 \arguments{
+\item{continuous2}{Logical indicating whether to include continuous2 variables.
+Default is \code{TRUE}}
+
 \item{dichotomous}{Logical indicating whether to include dichotomous variables.
 Default is \code{TRUE}}
 }
@@ -40,7 +46,7 @@ A character vector of column names selected
 }
 \description{
 Set of functions to supplement the {tidyselect} set of functions for selecting
-columns of data frames. \code{all_continuous()}, \code{all_categorical()}, and
+columns of data frames. \code{all_continuous()}, \code{all_continuous2()}, \code{all_categorical()}, and
 \code{all_dichotomous()} may only be used with \code{tbl_summary()}, where each variable
 has been classified into one of these three groups. All other helpers
 are available throughout the package.

@@ -50,6 +50,55 @@ test_that("add_p creates output without error/warning", {
   )
 })
 
+test_that("add_p creates output without error/warning for continuous2", {
+  expect_error(
+    tbl_summary(trial, by = grade, type = all_continuous() ~ "continuous2") %>% add_p(),
+    NA
+  )
+
+  expect_error(
+    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p(),
+    NA
+  )
+  expect_warning(
+    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p(),
+    NA
+  )
+
+  expect_error(
+    trial %>%
+      tbl_summary(by = trt, type = all_continuous() ~ "continuous2") %>%
+      add_p(),
+    NA
+  )
+
+  expect_warning(
+    trial %>%
+      tbl_summary(by = trt, type = all_continuous() ~ "continuous2") %>%
+      add_p(),
+    NA
+  )
+
+  expect_message(
+    trial %>%
+      tbl_summary(by = trt, type = all_continuous() ~ "continuous2") %>%
+      add_p(),
+    NA
+  )
+
+  expect_error(
+    tbl_summary(trial, by = trt, include = -response, type = all_continuous() ~ "continuous2") %>%
+      add_p(group = response),
+    NA
+  )
+
+  expect_message(
+    tbl_summary(trial, by = trt, type = all_continuous() ~ "continuous2") %>%
+      add_p(test = everything() ~ "lme4", group = response),
+    NULL
+  )
+})
+
 test_that("add_p creates errors with bad args", {
   expect_error(
     tbl_summary(mtcars, by = am) %>%
