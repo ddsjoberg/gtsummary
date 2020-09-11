@@ -425,7 +425,24 @@ test_that("tbl_summary-complex environments check", {
       )
   }
 
-  expect_error(no_fun(), NA)
+  expect_error(tbl_env <- no_fun(), NA)
+  expect_equivalent(
+    tbl_env$meta_data$var_label[tbl_env$meta_data$variable == "grade"],
+    "Grade I"
+  )
+
+  no_fun2 <- function() {
+    label_var = "grade"
+    trial %>%
+      tbl_summary(
+        label = label_var ~ "Grade, oof",
+      )
+  }
+  expect_error(tbl_env2 <- no_fun2(), NA)
+  expect_equivalent(
+    tbl_env2$meta_data$var_label[tbl_env2$meta_data$variable == "grade"],
+    "Grade, oof"
+  )
 })
 
 
