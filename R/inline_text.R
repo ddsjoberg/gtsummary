@@ -64,7 +64,7 @@ inline_text.tbl_summary <-
 
     # setting defaults ---------------------------------------------------------
     pattern_arg_null <- is.null(pattern)
-    pattern <- pattern %||% meta_data$stat_display
+    pattern <- pattern %||% pluck(meta_data$stat_display, 1, 1)
     # selecting default column, if column is NULL
     if (rlang::quo_is_null(column) && is.null(x$by)) {
       column <- rlang::quo("stat_0")
@@ -110,7 +110,8 @@ inline_text.tbl_summary <-
           data = x$inputs$data, variable = variable,
           summary_type = meta_data$summary_type, by = x$by,
           var_label = meta_data$var_label, stat_display = pattern,
-          df_stats = meta_data$df_stats[[1]], missing = "no", missing_text = "Unknown"
+          df_stats = meta_data$df_stats[[1]] %>% mutate(stat_display = .env$pattern),
+          missing = "no", missing_text = "Unknown"
         )
     }
     else {

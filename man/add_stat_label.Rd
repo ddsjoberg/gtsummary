@@ -33,6 +33,10 @@ each variable in the \link{tbl_summary} / \link{tbl_svysummary} table.
 \if{html}{Example 2}
 
 \if{html}{\figure{add_stat_label_ex2.png}{options: width=60\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{add_stat_label_ex3.png}{options: width=60\%}}
 }
 
 \examples{
@@ -56,6 +60,17 @@ add_stat_label_ex2 <-
     # add a new column with statistic labels
     location = "column"
   )
+
+# Example 3 ----------------------------------
+add_stat_label_ex3 <-
+  trial \%>\%
+  select(age, grade, trt) \%>\%
+  tbl_summary(
+    by = trt,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
+  ) \%>\%
+  add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
 
 }
 \seealso{
