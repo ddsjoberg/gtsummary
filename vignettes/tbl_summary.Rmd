@@ -23,21 +23,6 @@ The `tbl_summary()` function calculates **descriptive statistics** for continuou
 
 This vignette will walk a reader through the `tbl_summary()` function, and the various functions available to modify and make additions to an existing table summary object.
 
-To start, a quick note on the {magrittr} package's pipe function, `%>%`.  By default the pipe operator puts whatever is on the left hand side of `%>%` into the first argument of the function on the right hand side.  The pipe function can be used to make the code relating to `tbl_summary()` easier to use, but it is *not* required.  Here are a few examples of how `%>%` translates into typical R notation.
-
-    x %>% f() is equivalent to f(x)
-    x %>% f(y) is equivalent to f(x, y)
-    y %>% f(x, .) is equivalent to f(x, y)
-    z %>% f(x, y, arg = .) is equivalent to f(x, y, arg = z)
-
-Here's how this translates into the use of `tbl_summary()`.
-
-    mtcars %>% tbl_summary() is equivalent to tbl_summary(mtcars)
-    mtcars %>% tbl_summary(by = am) is equivalent to tbl_summary(mtcars, by = am)
-    tbl_summary(mtcars, by = am) %>% add_p() is equivalent to
-        tbl = tbl_summary(mtcars, by = am)
-        add_p(tbl)
-    
 ## Setup
 
 Before going through the tutorial, install {gtsummary} and {gt}.
@@ -182,28 +167,22 @@ The code below calculates the standard table with summary statistics split by tr
 trial2 %>%
   # build base summary table
   tbl_summary(
-    # split table by treatment variable
-    by = trt,
+    by = trt, # split table by treatment variable
     # change variable labels
-    label = list(marker ~ "Marker, ng/mL",
-                 stage ~ "Clinical T Stage"),
+    label = list(marker ~ "Marker", stage ~ "Clinical T Stage"),
     # change statistics printed in table
     statistic = list(all_continuous() ~ "{mean} ({sd})",
                      all_categorical() ~ "{n} / {N} ({p}%)"),
-    digits = list("marker" ~ c(1, 2))
+    digits = "marker" ~ c(1, 2)
   ) %>%
-  # add p-values, report t-test, round large pvalues to two decimal place
-  add_p(test = list(marker ~ "t.test"),
-                 pvalue_fun = function(x) style_pvalue(x, digits = 2)) %>%
-  # add statistic labels
-  add_stat_label() %>%
-  # bold variable labels, italicize levels
-  bold_labels() %>%
-  italicize_levels() %>%
-  # bold p-values under a given threshold (default is 0.05)
-  bold_p(t = 0.2) %>%
+  # add p-values, report t-test, round large p-values to two decimal place
+  add_p(test = list(marker ~ "t.test"), pvalue_fun = ~style_pvalue(.x, digits = 2)) %>%
+  add_stat_label() %>%     # add statistic labels
+  bold_labels() %>%        # bold variable labels
+  italicize_levels() %>%   # italicize levels
+  bold_p(t = 0.2) %>%      # bold p-values under a given threshold (default is 0.05)
   # include percent in headers
-  modify_header(stat_by = "**{level}**, N = {n} ({style_percent(p, symbol = TRUE)})")
+  modify_header(stat_by = "**{level}**, N = {n} ({style_percent(p)}%)")
 ```
 
 Each of the modification functions have additional options outlined in their respective help files.
