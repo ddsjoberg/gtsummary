@@ -137,17 +137,12 @@
 <p>This vignette will walk a reader through the <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function, and the various functions available to modify and make additions to an existing formatted regression table.</p>
 <p><img src="https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_mvregression_demo.gif" alt="animated" width="100%"></p>
 <p><em>Behind the scenes:</em> <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> uses <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom::tidy()</a></code> to perform the initial model formatting, and can accommodate many different model types (e.g. <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>, <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>, <code><a href="https://rdrr.io/pkg/survival/man/coxph.html">survival::coxph()</a></code>, <code><a href="https://rdrr.io/pkg/survival/man/survreg.html">survival::survreg()</a></code> and more are <a href="http://www.danieldsjoberg.com/gtsummary/reference/vetted_models.html">vetted tidy models</a> that are known to work with our package). It is also possible to specify your own function to tidy the model results if needed.</p>
-<p>To start, a quick note on the {magrittr} package’s <strong>pipe function</strong>, <strong><code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code></strong>. By default the pipe operator puts whatever is on the left hand side of <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> into the first argument of the function on the right hand side. The pipe function can be used to make the code relating to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> easier to use, but it is <em>not</em> required. Here are a few examples of how <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> translates into typical R notation.</p>
-<pre><code>x %&gt;% f() is equivalent to f(x)
-x %&gt;% f(y) is equivalent to f(x, y)
-y %&gt;% f(x, .) is equivalent to f(x, y)
-z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
 </div>
 <div id="setup" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setup" class="anchor"></a>Setup</h2>
 <p>Before going through the tutorial, install {gtsummary} and {gt}.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
+<div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>)
 <span class="co">#&gt; </span>
@@ -186,7 +181,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
 <ul>
 <li>Let’s start by creating a <strong>logistic regression model</strong> to <strong>predict tumor response</strong> using the variables age, stage, and grade from the <a href="http://www.danieldsjoberg.com/gtsummary/reference/trial.html"><code>trial</code></a> data set.</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="co"># build logistic regression model</span>
 <span class="kw">m1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="kw">response</span> <span class="op">~</span> <span class="kw">age</span> <span class="op">+</span> <span class="kw">stage</span> <span class="op">+</span> <span class="kw">grade</span>, <span class="kw">trial</span>, family = <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span>(link = <span class="st">"logit"</span>))
 
@@ -203,14 +198,14 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
 <ul>
 <li>We will then a <strong>regression model table</strong> to summarize and present these results in just one line of code from {gtsummary}.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit">
+<div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="co"># format results</span>
 <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(<span class="kw">m1</span>, exponentiate = <span class="fl">TRUE</span>)</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ykvcelrxfe .gt_table {
+#kdoyyplmcb .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -235,7 +230,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_heading {
+#kdoyyplmcb .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -247,7 +242,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_title {
+#kdoyyplmcb .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -257,7 +252,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-bottom-width: 0;
 }
 
-#ykvcelrxfe .gt_subtitle {
+#kdoyyplmcb .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -267,13 +262,13 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-top-width: 0;
 }
 
-#ykvcelrxfe .gt_bottom_border {
+#kdoyyplmcb .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_col_headings {
+#kdoyyplmcb .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -288,7 +283,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_col_heading {
+#kdoyyplmcb .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -308,7 +303,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   overflow-x: hidden;
 }
 
-#ykvcelrxfe .gt_column_spanner_outer {
+#kdoyyplmcb .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -320,15 +315,15 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   padding-right: 4px;
 }
 
-#ykvcelrxfe .gt_column_spanner_outer:first-child {
+#kdoyyplmcb .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ykvcelrxfe .gt_column_spanner_outer:last-child {
+#kdoyyplmcb .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ykvcelrxfe .gt_column_spanner {
+#kdoyyplmcb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -340,7 +335,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   width: 100%;
 }
 
-#ykvcelrxfe .gt_group_heading {
+#kdoyyplmcb .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -362,7 +357,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   vertical-align: middle;
 }
 
-#ykvcelrxfe .gt_empty_group_heading {
+#kdoyyplmcb .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -377,15 +372,15 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   vertical-align: middle;
 }
 
-#ykvcelrxfe .gt_from_md > :first-child {
+#kdoyyplmcb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ykvcelrxfe .gt_from_md > :last-child {
+#kdoyyplmcb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ykvcelrxfe .gt_row {
+#kdoyyplmcb .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -404,7 +399,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   overflow-x: hidden;
 }
 
-#ykvcelrxfe .gt_stub {
+#kdoyyplmcb .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -416,7 +411,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   padding-left: 12px;
 }
 
-#ykvcelrxfe .gt_summary_row {
+#kdoyyplmcb .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -426,7 +421,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   padding-right: 5px;
 }
 
-#ykvcelrxfe .gt_first_summary_row {
+#kdoyyplmcb .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -436,7 +431,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_grand_summary_row {
+#kdoyyplmcb .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -446,7 +441,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   padding-right: 5px;
 }
 
-#ykvcelrxfe .gt_first_grand_summary_row {
+#kdoyyplmcb .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -456,11 +451,11 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_striped {
+#kdoyyplmcb .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ykvcelrxfe .gt_table_body {
+#kdoyyplmcb .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -469,7 +464,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_footnotes {
+#kdoyyplmcb .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -483,13 +478,13 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_footnote {
+#kdoyyplmcb .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ykvcelrxfe .gt_sourcenotes {
+#kdoyyplmcb .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -503,46 +498,46 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ykvcelrxfe .gt_sourcenote {
+#kdoyyplmcb .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ykvcelrxfe .gt_left {
+#kdoyyplmcb .gt_left {
   text-align: left;
 }
 
-#ykvcelrxfe .gt_center {
+#kdoyyplmcb .gt_center {
   text-align: center;
 }
 
-#ykvcelrxfe .gt_right {
+#kdoyyplmcb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ykvcelrxfe .gt_font_normal {
+#kdoyyplmcb .gt_font_normal {
   font-weight: normal;
 }
 
-#ykvcelrxfe .gt_font_bold {
+#kdoyyplmcb .gt_font_bold {
   font-weight: bold;
 }
 
-#ykvcelrxfe .gt_font_italic {
+#kdoyyplmcb .gt_font_italic {
   font-style: italic;
 }
 
-#ykvcelrxfe .gt_super {
+#kdoyyplmcb .gt_super {
   font-size: 65%;
 }
 
-#ykvcelrxfe .gt_footnote_marks {
+#kdoyyplmcb .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="ykvcelrxfe" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="kdoyyplmcb" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
@@ -557,7 +552,7 @@ z %&gt;% f(x, y, arg = .) is equivalent to f(x, y, arg = z)</code></pre>
 <tr>
 <td class="gt_row gt_left">Age</td>
       <td class="gt_row gt_center">1.02</td>
-      <td class="gt_row gt_center">1.00, 1.04</td>
+      <td class="gt_row gt_center">1.0, 1.04</td>
       <td class="gt_row gt_center">0.092</td>
     </tr>
 <tr>
@@ -698,7 +693,7 @@ bold_p()            bold significant p-values  </code></pre>
 - <strong>Global p-values</strong> for T Stage and Grade are reported - P-values less than 0.10 are <strong>bold</strong> - Large p-values are rounded to <strong>two decimal places</strong><br>
 - Coefficients are <strong>exponentiated</strong> to give odds ratios<br>
 - Odds ratios are rounded to 2 or 3 significant figures</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
+<div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="co"># format results into data frame with global p-values</span>
 <span class="kw">m1</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(
@@ -714,7 +709,7 @@ bold_p()            bold significant p-values  </code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#oehumkchve .gt_table {
+#zsayzoisqd .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -739,7 +734,7 @@ bold_p()            bold significant p-values  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#oehumkchve .gt_heading {
+#zsayzoisqd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -751,7 +746,7 @@ bold_p()            bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#oehumkchve .gt_title {
+#zsayzoisqd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -761,7 +756,7 @@ bold_p()            bold significant p-values  </code></pre>
   border-bottom-width: 0;
 }
 
-#oehumkchve .gt_subtitle {
+#zsayzoisqd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -771,13 +766,13 @@ bold_p()            bold significant p-values  </code></pre>
   border-top-width: 0;
 }
 
-#oehumkchve .gt_bottom_border {
+#zsayzoisqd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#oehumkchve .gt_col_headings {
+#zsayzoisqd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -792,7 +787,7 @@ bold_p()            bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#oehumkchve .gt_col_heading {
+#zsayzoisqd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -812,7 +807,7 @@ bold_p()            bold significant p-values  </code></pre>
   overflow-x: hidden;
 }
 
-#oehumkchve .gt_column_spanner_outer {
+#zsayzoisqd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -824,15 +819,15 @@ bold_p()            bold significant p-values  </code></pre>
   padding-right: 4px;
 }
 
-#oehumkchve .gt_column_spanner_outer:first-child {
+#zsayzoisqd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#oehumkchve .gt_column_spanner_outer:last-child {
+#zsayzoisqd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#oehumkchve .gt_column_spanner {
+#zsayzoisqd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -844,7 +839,7 @@ bold_p()            bold significant p-values  </code></pre>
   width: 100%;
 }
 
-#oehumkchve .gt_group_heading {
+#zsayzoisqd .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -866,7 +861,7 @@ bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#oehumkchve .gt_empty_group_heading {
+#zsayzoisqd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -881,15 +876,15 @@ bold_p()            bold significant p-values  </code></pre>
   vertical-align: middle;
 }
 
-#oehumkchve .gt_from_md > :first-child {
+#zsayzoisqd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#oehumkchve .gt_from_md > :last-child {
+#zsayzoisqd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#oehumkchve .gt_row {
+#zsayzoisqd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -908,7 +903,7 @@ bold_p()            bold significant p-values  </code></pre>
   overflow-x: hidden;
 }
 
-#oehumkchve .gt_stub {
+#zsayzoisqd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -920,7 +915,7 @@ bold_p()            bold significant p-values  </code></pre>
   padding-left: 12px;
 }
 
-#oehumkchve .gt_summary_row {
+#zsayzoisqd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -930,7 +925,7 @@ bold_p()            bold significant p-values  </code></pre>
   padding-right: 5px;
 }
 
-#oehumkchve .gt_first_summary_row {
+#zsayzoisqd .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -940,7 +935,7 @@ bold_p()            bold significant p-values  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#oehumkchve .gt_grand_summary_row {
+#zsayzoisqd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -950,7 +945,7 @@ bold_p()            bold significant p-values  </code></pre>
   padding-right: 5px;
 }
 
-#oehumkchve .gt_first_grand_summary_row {
+#zsayzoisqd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -960,11 +955,11 @@ bold_p()            bold significant p-values  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#oehumkchve .gt_striped {
+#zsayzoisqd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#oehumkchve .gt_table_body {
+#zsayzoisqd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -973,7 +968,7 @@ bold_p()            bold significant p-values  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#oehumkchve .gt_footnotes {
+#zsayzoisqd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -987,13 +982,13 @@ bold_p()            bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#oehumkchve .gt_footnote {
+#zsayzoisqd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#oehumkchve .gt_sourcenotes {
+#zsayzoisqd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1007,46 +1002,46 @@ bold_p()            bold significant p-values  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#oehumkchve .gt_sourcenote {
+#zsayzoisqd .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#oehumkchve .gt_left {
+#zsayzoisqd .gt_left {
   text-align: left;
 }
 
-#oehumkchve .gt_center {
+#zsayzoisqd .gt_center {
   text-align: center;
 }
 
-#oehumkchve .gt_right {
+#zsayzoisqd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#oehumkchve .gt_font_normal {
+#zsayzoisqd .gt_font_normal {
   font-weight: normal;
 }
 
-#oehumkchve .gt_font_bold {
+#zsayzoisqd .gt_font_bold {
   font-weight: bold;
 }
 
-#oehumkchve .gt_font_italic {
+#zsayzoisqd .gt_font_italic {
   font-style: italic;
 }
 
-#oehumkchve .gt_super {
+#zsayzoisqd .gt_super {
   font-size: 65%;
 }
 
-#oehumkchve .gt_footnote_marks {
+#zsayzoisqd .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="oehumkchve" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="zsayzoisqd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
@@ -1061,7 +1056,7 @@ bold_p()            bold significant p-values  </code></pre>
 <tr>
 <td class="gt_row gt_left" style="font-weight: bold;">Age</td>
       <td class="gt_row gt_center">1.020</td>
-      <td class="gt_row gt_center">0.997, 1.043</td>
+      <td class="gt_row gt_center">1.00, 1.043</td>
       <td class="gt_row gt_center" style="font-weight: bold;">0.092</td>
     </tr>
 <tr>
@@ -1136,7 +1131,7 @@ bold_p()            bold significant p-values  </code></pre>
 <h2 class="hasAnchor">
 <a href="#advanced" class="anchor"></a>Advanced Customization</h2>
 <p>When you print the output from the <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> function into the R console or into an R markdown, there are default printing functions that are called in the background: <code>print.tbl_regression()</code> and <code>knit_print.tbl_regression()</code>. The true output from <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> is a named list, but when you print the object, a formatted version of <code>.$table_body</code> is displayed. All formatting and modifications are made using the {gt} package by default.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
+<div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(<span class="kw">m1</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>()
 <span class="co">#&gt; [1] "table_body"   "table_header" "n"            "model_obj"    "inputs"      </span>
 <span class="co">#&gt; [6] "call_list"</span></pre></div>
@@ -1147,7 +1142,7 @@ model_obj    the model object passed to `tbl_regression`
 call_list    named list of each function called on the `tbl_regression` object  
 inputs       inputs from the `tbl_regression()` function call  </code></pre>
 <p>When a {gtsummary} object is printed, it is first converted to a {gt} object with <code><a href="../reference/as_gt.html">as_gt()</a></code> via a sequence of {gt} commands executed on <code>x$table_body</code>. Here’s an example of the first few calls saved with <code>tbl_rregression()</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
+<div class="sourceCode" id="cb12"><pre class="downlit">
 <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(<span class="kw">m1</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/as_gt.html">as_gt</a></span>(return_calls = <span class="fl">TRUE</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(n = <span class="fl">3</span>)
 <span class="co">#&gt; $gt</span>
 <span class="co">#&gt; gt::gt(data = x$table_body)</span>
@@ -1165,14 +1160,14 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
 <span class="co">#&gt;     missing_text = "---")</span></pre></div>
 <p>The {gt} functions are called in the order they appear, always beginning with the <code><a href="https://rdrr.io/pkg/gt/man/gt.html">gt::gt()</a></code> function.</p>
 <p>If the user does not want a specific {gt} function to run, any {gt} call can be included or excluded in the <code><a href="../reference/as_gt.html">as_gt()</a></code> function. In this example, the default footnote will be excluded from the output.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
+<div class="sourceCode" id="cb13"><pre class="downlit">
 <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span>(<span class="kw">m1</span>, exponentiate = <span class="fl">TRUE</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/as_gt.html">as_gt</a></span>(include = <span class="op">-</span><span class="kw">tab_footnote</span>)</pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#qnujlrkiwn .gt_table {
+#fmyulapxte .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1197,7 +1192,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_heading {
+#fmyulapxte .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1209,7 +1204,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_title {
+#fmyulapxte .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1219,7 +1214,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-bottom-width: 0;
 }
 
-#qnujlrkiwn .gt_subtitle {
+#fmyulapxte .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1229,13 +1224,13 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-top-width: 0;
 }
 
-#qnujlrkiwn .gt_bottom_border {
+#fmyulapxte .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_col_headings {
+#fmyulapxte .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1250,7 +1245,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_col_heading {
+#fmyulapxte .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1270,7 +1265,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#qnujlrkiwn .gt_column_spanner_outer {
+#fmyulapxte .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1282,15 +1277,15 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   padding-right: 4px;
 }
 
-#qnujlrkiwn .gt_column_spanner_outer:first-child {
+#fmyulapxte .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qnujlrkiwn .gt_column_spanner_outer:last-child {
+#fmyulapxte .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qnujlrkiwn .gt_column_spanner {
+#fmyulapxte .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1302,7 +1297,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   width: 100%;
 }
 
-#qnujlrkiwn .gt_group_heading {
+#fmyulapxte .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1324,7 +1319,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#qnujlrkiwn .gt_empty_group_heading {
+#fmyulapxte .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1339,15 +1334,15 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#qnujlrkiwn .gt_from_md > :first-child {
+#fmyulapxte .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qnujlrkiwn .gt_from_md > :last-child {
+#fmyulapxte .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qnujlrkiwn .gt_row {
+#fmyulapxte .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1366,7 +1361,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#qnujlrkiwn .gt_stub {
+#fmyulapxte .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1378,7 +1373,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   padding-left: 12px;
 }
 
-#qnujlrkiwn .gt_summary_row {
+#fmyulapxte .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1388,7 +1383,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#qnujlrkiwn .gt_first_summary_row {
+#fmyulapxte .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1398,7 +1393,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_grand_summary_row {
+#fmyulapxte .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1408,7 +1403,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#qnujlrkiwn .gt_first_grand_summary_row {
+#fmyulapxte .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1418,11 +1413,11 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_striped {
+#fmyulapxte .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qnujlrkiwn .gt_table_body {
+#fmyulapxte .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1431,7 +1426,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_footnotes {
+#fmyulapxte .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1445,13 +1440,13 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_footnote {
+#fmyulapxte .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#qnujlrkiwn .gt_sourcenotes {
+#fmyulapxte .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1465,46 +1460,46 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#qnujlrkiwn .gt_sourcenote {
+#fmyulapxte .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#qnujlrkiwn .gt_left {
+#fmyulapxte .gt_left {
   text-align: left;
 }
 
-#qnujlrkiwn .gt_center {
+#fmyulapxte .gt_center {
   text-align: center;
 }
 
-#qnujlrkiwn .gt_right {
+#fmyulapxte .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qnujlrkiwn .gt_font_normal {
+#fmyulapxte .gt_font_normal {
   font-weight: normal;
 }
 
-#qnujlrkiwn .gt_font_bold {
+#fmyulapxte .gt_font_bold {
   font-weight: bold;
 }
 
-#qnujlrkiwn .gt_font_italic {
+#fmyulapxte .gt_font_italic {
   font-style: italic;
 }
 
-#qnujlrkiwn .gt_super {
+#fmyulapxte .gt_super {
   font-size: 65%;
 }
 
-#qnujlrkiwn .gt_footnote_marks {
+#fmyulapxte .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="qnujlrkiwn" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="fmyulapxte" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>OR</strong></th>
@@ -1515,7 +1510,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
 <tr>
 <td class="gt_row gt_left">Age</td>
       <td class="gt_row gt_center">1.02</td>
-      <td class="gt_row gt_center">1.00, 1.04</td>
+      <td class="gt_row gt_center">1.0, 1.04</td>
       <td class="gt_row gt_center">0.092</td>
     </tr>
 <tr>
@@ -1579,7 +1574,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
 <h2 class="hasAnchor">
 <a href="#tbl_uvregression" class="anchor"></a>Univariate Regression</h2>
 <p>The <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> produces a table of univariate regression results. The function is a wrapper for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>, and as a result, accepts nearly identical function arguments. The function’s results can be modified in similar ways to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and the results reported inline similarly to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
+<div class="sourceCode" id="cb14"><pre class="downlit">
 <span class="kw">trial</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span><span class="kw">death</span>, <span class="op">-</span><span class="kw">ttdeath</span>, <span class="op">-</span><span class="kw">stage</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span>(
@@ -1607,7 +1602,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#wutnjhoqcq .gt_table {
+#xemybdreag .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1632,7 +1627,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_heading {
+#xemybdreag .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1644,7 +1639,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_title {
+#xemybdreag .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1654,7 +1649,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-bottom-width: 0;
 }
 
-#wutnjhoqcq .gt_subtitle {
+#xemybdreag .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1664,13 +1659,13 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-top-width: 0;
 }
 
-#wutnjhoqcq .gt_bottom_border {
+#xemybdreag .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_col_headings {
+#xemybdreag .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1685,7 +1680,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_col_heading {
+#xemybdreag .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1705,7 +1700,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#wutnjhoqcq .gt_column_spanner_outer {
+#xemybdreag .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1717,15 +1712,15 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   padding-right: 4px;
 }
 
-#wutnjhoqcq .gt_column_spanner_outer:first-child {
+#xemybdreag .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wutnjhoqcq .gt_column_spanner_outer:last-child {
+#xemybdreag .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wutnjhoqcq .gt_column_spanner {
+#xemybdreag .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1737,7 +1732,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   width: 100%;
 }
 
-#wutnjhoqcq .gt_group_heading {
+#xemybdreag .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1759,7 +1754,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#wutnjhoqcq .gt_empty_group_heading {
+#xemybdreag .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1774,15 +1769,15 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   vertical-align: middle;
 }
 
-#wutnjhoqcq .gt_from_md > :first-child {
+#xemybdreag .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wutnjhoqcq .gt_from_md > :last-child {
+#xemybdreag .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wutnjhoqcq .gt_row {
+#xemybdreag .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1801,7 +1796,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   overflow-x: hidden;
 }
 
-#wutnjhoqcq .gt_stub {
+#xemybdreag .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1813,7 +1808,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   padding-left: 12px;
 }
 
-#wutnjhoqcq .gt_summary_row {
+#xemybdreag .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1823,7 +1818,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#wutnjhoqcq .gt_first_summary_row {
+#xemybdreag .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1833,7 +1828,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_grand_summary_row {
+#xemybdreag .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1843,7 +1838,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   padding-right: 5px;
 }
 
-#wutnjhoqcq .gt_first_grand_summary_row {
+#xemybdreag .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1853,11 +1848,11 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_striped {
+#xemybdreag .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wutnjhoqcq .gt_table_body {
+#xemybdreag .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1866,7 +1861,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_footnotes {
+#xemybdreag .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1880,13 +1875,13 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_footnote {
+#xemybdreag .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#wutnjhoqcq .gt_sourcenotes {
+#xemybdreag .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1900,46 +1895,46 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#wutnjhoqcq .gt_sourcenote {
+#xemybdreag .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#wutnjhoqcq .gt_left {
+#xemybdreag .gt_left {
   text-align: left;
 }
 
-#wutnjhoqcq .gt_center {
+#xemybdreag .gt_center {
   text-align: center;
 }
 
-#wutnjhoqcq .gt_right {
+#xemybdreag .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wutnjhoqcq .gt_font_normal {
+#xemybdreag .gt_font_normal {
   font-weight: normal;
 }
 
-#wutnjhoqcq .gt_font_bold {
+#xemybdreag .gt_font_bold {
   font-weight: bold;
 }
 
-#wutnjhoqcq .gt_font_italic {
+#xemybdreag .gt_font_italic {
   font-style: italic;
 }
 
-#wutnjhoqcq .gt_super {
+#xemybdreag .gt_super {
   font-size: 65%;
 }
 
-#wutnjhoqcq .gt_footnote_marks {
+#xemybdreag .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="wutnjhoqcq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="xemybdreag" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>N</strong></th>
@@ -1983,7 +1978,7 @@ inputs       inputs from the `tbl_regression()` function call  </code></pre>
 <td class="gt_row gt_left" style="font-weight: bold;">Age</td>
       <td class="gt_row gt_center">183</td>
       <td class="gt_row gt_center">1.02</td>
-      <td class="gt_row gt_center">1.00, 1.04</td>
+      <td class="gt_row gt_center">1.0, 1.04</td>
       <td class="gt_row gt_center">0.091</td>
       <td class="gt_row gt_center">0.2</td>
     </tr>
