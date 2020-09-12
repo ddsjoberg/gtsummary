@@ -14,6 +14,16 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+gt_compact_fun <- function(x) {
+  gt::tab_options(x, 
+                  table.font.size = 'small',
+                  data_row.padding = gt::px(1),
+                  summary_row.padding = gt::px(1),
+                  grand_summary_row.padding = gt::px(1),
+                  footnotes.padding = gt::px(1),
+                  source_notes.padding = gt::px(1),
+                  row_group.padding = gt::px(1))
+}
 ```
 
 ## Introduction
@@ -26,9 +36,9 @@ This vignette will walk a reader through the `inline_text()` function, and the v
 
 Before going through the tutorial, install {gtsummary} and {gt}.
 
-```{r}
+```{r message = FALSE, warning=FALSE}
 library(gtsummary)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 ```
 
 ## Example data set
@@ -41,7 +51,7 @@ The outcomes are tumor response and death.
 For brevity in the tutorial, let's keep a subset of the variables from the trial data set.
 
 ```{r}
-trial2 =
+trial2 <-
   trial %>%
   select(trt, marker, stage)
 ```
@@ -104,12 +114,20 @@ Here's how the line will appear in your report.
 
 It is reasonable that you'll need to modify the text.  To do this, use the `pattern` argument.  The `pattern` argument syntax follows `glue::glue()` format with referenced R objects being inserted between curly brackets.  The default is `pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"`.  You have access the to following fields within the `pattern` argument.
 
-    {estimate}   primary estimate (e.g. model coefficient, odds ratio)
-    {conf.low}   lower limit of confidence interval
-    {conf.high}  upper limit of confidence interval
-    {p.value}    p-value
-    {conf.level} confidence level of interval
-    {N}          number of observations
+```{r}
+tibble::tribble(
+  ~Parameter,       ~Description,
+  "`{estimate}`",   "primary estimate (e.g. model coefficient, odds ratio)",
+  "`{conf.low}`",   "lower limit of confidence interval",
+  "`{conf.high}`",  "upper limit of confidence interval",
+  "`{p.value}`",    "p-value",
+  "`{conf.level}`", "confidence level of interval",
+  "`{N}`",          "number of observations"  
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = vars(Parameter)) %>%
+  gt_compact_fun()
+```
 
 > Age was not significantly associated with tumor response `` `r
 inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")` ``.
