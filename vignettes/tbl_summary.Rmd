@@ -54,8 +54,10 @@ The outcomes are tumor response and death.
 
 ```{r}
 trial %>%
-  purrr::imap_dfr(~tibble::tibble(Variable = glue::glue("`{.y}`"), Label = attr(.x, "label"))) %>%
-  gt::gt() %>%
+  purrr::imap_dfr(
+    ~tibble::tibble(Variable = glue::glue("`{.y}`"), 
+                    Class = class(.x),
+                    Label = attr(.x, "label"))) %>%  gt::gt() %>%
   gt::tab_source_note("Includes mix of continuous, dichotomous, and categorical variables") %>%
   gt::fmt_markdown(columns = vars(Variable)) %>%
   gt::cols_align("left") %>%
