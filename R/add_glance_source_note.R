@@ -11,7 +11,7 @@
 #' @param sep1 Separator between statistic name and statistic.
 #' Default is `" = "`, e.g. `"R2 = 0.456"`
 #' @param sep2 Separator between statistics. Default is `"; "`
-#' @param ... additional argument passed to `broom::glance()`
+#' @param ... additional arguments passed to `broom::glance()`
 #'
 #' @export
 #' @section Default Labels:
