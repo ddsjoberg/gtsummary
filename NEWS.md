@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixed `style_ratio()` bug where there were rounding errors near one (#651)
+
 * There was an environments bug when evaluating the LHS of the formula inputs. In some complex situations, a stored character vector of column names could not properly evaluate (#604)
 
 * Fixed `style_sigfig()` bug where there were rounding errors near thresholds (#638)
