@@ -29,7 +29,7 @@ Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
 
 \item{sep2}{Separator between statistics. Default is \code{"; "}}
 
-\item{...}{additional argument passed to \code{broom::glance()}}
+\item{...}{additional arguments passed to \code{broom::glance()}}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
