@@ -24,7 +24,7 @@
 #'   style_ratio()
 style_ratio <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
   ifelse(
-    abs(x) < 1,
+    round(abs(x), digits = digits - 1) < 1,
     style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
     style_sigfig(x, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...)
   )
