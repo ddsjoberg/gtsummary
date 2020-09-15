@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bold or Italicize labels or levels in gtsummary tables — bold_italicize_labels_levels • gtsummary</title>
+<title>Add glance statistics — add_glance_source_note • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,10 @@
 
 
 
-<meta property="og:title" content="Bold or Italicize labels or levels in gtsummary tables — bold_italicize_labels_levels" />
-<meta property="og:description" content="Bold or Italicize labels or levels in gtsummary tables" />
+<meta property="og:title" content="Add glance statistics — add_glance_source_note" />
+<meta property="og:description" content="
+
+Add the statistics returned in broom::glance() as a table source note." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -168,94 +170,100 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bold or Italicize labels or levels in gtsummary tables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/bold_italicise_labels_levels.R'><code>R/bold_italicise_labels_levels.R</code></a></small>
-    <div class="hidden name"><code>bold_italicize_labels_levels.Rd</code></div>
+    <h1>Add glance statistics</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_glance_source_note.R'><code>R/add_glance_source_note.R</code></a></small>
+    <div class="hidden name"><code>add_glance_source_note.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Bold or Italicize labels or levels in gtsummary tables</p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+
+Add the statistics returned in <code><a href='https://rdrr.io/pkg/generics/man/glance.html'>broom::glance()</a></code> as a table source note.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bold_labels</span>(<span class='kw'>x</span>)
-
-<span class='fu'>bold_levels</span>(<span class='kw'>x</span>)
-
-<span class='fu'>italicize_labels</span>(<span class='kw'>x</span>)
-
-<span class='fu'>italicize_levels</span>(<span class='kw'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>add_glance_source_note</span>(
+  <span class='kw'>x</span>,
+  include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  label = <span class='kw'>NULL</span>,
+  fmt_fun = <span class='kw'>NULL</span>,
+  sep1 = <span class='st'>" = "</span>,
+  sep2 = <span class='st'>"; "</span>,
+  <span class='kw'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object created using gtsummary functions</p></td>
+      <td><p>'tbl_regression' object</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>tidyselect list of statistics to include. Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>use to update statistic labels</p></td>
+    </tr>
+    <tr>
+      <th>fmt_fun</th>
+      <td><p>use to update default formatting function. Default is
+<code>everything() ~ purrr::partial(style_sigfig, digits = 3)</code></p></td>
+    </tr>
+    <tr>
+      <th>sep1</th>
+      <td><p>Separator between statistic name and statistic.
+Default is <code>" = "</code>, e.g. <code>"R2 = 0.456"</code></p></td>
+    </tr>
+    <tr>
+      <th>sep2</th>
+      <td><p>Separator between statistics. Default is <code>"; "</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments passed to <code><a href='https://rdrr.io/pkg/generics/man/glance.html'>broom::glance()</a></code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Functions return the same class of gtsummary object supplied</p>
-    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+    <h2 class="hasAnchor" id="default-labels"><a class="anchor" href="#default-labels"></a>Default Labels</h2>
 
     
-<ul>
-<li><p><code>bold_labels</code>: Bold labels in gtsummary tables</p></li>
-<li><p><code>bold_levels</code>: Bold levels in gtsummary tables</p></li>
-<li><p><code>italicize_labels</code>: Italicize labels in gtsummary tables</p></li>
-<li><p><code>italicize_levels</code>: Italicize levels in gtsummary tables</p></li>
-</ul>
+
+<p>The following statistics have set default labels when being printed.
+When there is no default, the label is the column name from <code><a href='https://rdrr.io/pkg/generics/man/glance.html'>broom::glance()</a></code>.</p><table class='table'>
+<tr><td>Statistic Name</td><td>Default Label</td></tr>
+<tr><td>r.squared</td><td>R²</td></tr>
+<tr><td>adj.r.squared</td><td>Adjusted R²</td></tr>
+<tr><td>p.value</td><td>p-value</td></tr>
+<tr><td>logLik</td><td>log-likelihood</td></tr>
+<tr><td>statistic</td><td>Statistic</td></tr>
+<tr><td>df.residual</td><td>Residual df</td></tr>
+<tr><td>null.deviance</td><td>Null deviance</td></tr>
+<tr><td>df.null</td><td>Null df</td></tr>
+<tr><td>nevent</td><td>N events</td></tr>
+<tr><td>concordance</td><td>c-index</td></tr>
+<tr><td>std.error.concordance</td><td>c-index SE</td></tr>
+</table>
+
+
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
 
-<p><img src='figures/tbl_bold_ital_ex.png' width=50% /></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other tbl_summary tools: 
-<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
-<p>Other tbl_regression tools: 
-<code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
-<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='combine_terms.html'>combine_terms</a>()</code>,
-<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p>
-<p>Other tbl_uvregression tools: 
-<code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
-<code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Daniel D. Sjoberg</p>
+<p>Example 1</p>
+<p><img src='figures/add_glance_source_note_ex1.png' width=64% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>tbl_bold_ital_ex</span> <span class='op'>&lt;-</span>
-  <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"trt"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)] <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>bold_labels</span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>bold_levels</span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>italicize_labels</span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>italicize_levels</span>()
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='kw'>add_glance_source_note_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>age</span> <span class='op'>~</span> <span class='kw'>marker</span> <span class='op'>+</span> <span class='kw'>grade</span>, <span class='kw'>trial</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='op'>%&gt;%</span>
+  <span class='fu'>add_glance_source_note</span>(
+    label = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>df</span>  <span class='op'>~</span> <span class='st'>"Degrees of Freedom"</span>, <span class='kw'>sigma</span> <span class='op'>~</span> <span class='st'>"\U03C3"</span>),
+    fmt_fun = <span class='kw'>df</span> <span class='op'>~</span> <span class='kw'>style_number</span>,
+    include = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>r.squared</span>, <span class='kw'>AIC</span>, <span class='kw'>sigma</span>, <span class='kw'>df</span>)
+  )
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
