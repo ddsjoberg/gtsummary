@@ -1,6 +1,6 @@
 #' @importFrom dplyr mutate select n group_by ungroup filter pull case_when
 #' if_else full_join left_join distinct bind_rows count coalesce arrange rename
-#' rename_at bind_cols mutate_all mutate_at slice desc
+#' rename_at bind_cols mutate_all mutate_at slice desc inner_join
 #' @importFrom purrr map imap map2 pmap map_chr map_dfr map_lgl map_dbl map_if
 #' imap_dfr imap_lgl map2_chr pmap_lgl pmap_chr pmap_dbl compact keep discard
 #' every some pluck flatten negate partial cross_df reduce
