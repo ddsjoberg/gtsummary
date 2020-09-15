@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* New function `add_glance_source_note` adds the statistics returned in broom::glance() as a source note on a `tbl_regression` (#434)
+
 * Fixed `style_ratio()` bug where there were rounding errors near one (#651)
 
 * There was an environments bug when evaluating the LHS of the formula inputs. In some complex situations, a stored character vector of column names could not properly evaluate (#604)
