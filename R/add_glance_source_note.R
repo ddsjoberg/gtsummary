@@ -51,6 +51,9 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     tidyr::pivot_longer(cols = everything(),
                         names_to = "statistic_name",
                         values_to = "statistic")
+
+  language <- get_theme_element("pkgwide-str:language", default = "en")
+
   df_results <-
     df_glance %>%
     mutate(
@@ -64,7 +67,9 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
                  select(df_glance, .data$statistic_name),
                  by = "statistic_name"),
       by = "statistic_name"
-    )
+    ) %>%
+    # translating statistic names
+    mutate(label = map_chr(.data$label, ~translate_text(.x, language)))
 
   # evaluating tidyselects -----------------------------------------------------
   include <- var_input_to_string(
