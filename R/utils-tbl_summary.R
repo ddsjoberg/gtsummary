@@ -156,7 +156,8 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #'   summary_type = NULL, value = NULL
 #' )
 assign_summary_type <- function(data, variable, summary_type, value,
-                                check_assignment = FALSE) {
+                                check_assignment = FALSE # types are NOT checked on the first pass at guessing the type
+                                ) {
   # base classes that can be summarized as continuous
   base_numeric_classes <- c("numeric", "integer", "difftime", "Date", "POSIXt")
 
