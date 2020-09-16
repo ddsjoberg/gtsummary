@@ -31,21 +31,24 @@ gt_compact_fun <- function(x) {
 
 ## Introduction
 
-The [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready. It is a simple way to summarize and present your analysis results using **R**! Like [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html), `tbl_regression()` creates highly customizable analytic tables with sensible defaults. 
+The [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready.
+It is a simple way to summarize and present your analysis results using **R**!
+Like [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html), `tbl_regression()` creates highly customizable analytic tables with sensible defaults. 
 
 This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table.
 
 <img src = "https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_mvregression_demo.gif" alt = "animated" width = "100%">
 
-*Behind the scenes:* `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and more are [vetted tidy models](http://www.danieldsjoberg.com/gtsummary/reference/vetted_models.html) that are known to work with our package). It is also possible to specify your own function to tidy the model results if needed.  
+*Behind the scenes:* `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and other are [vetted models](http://www.danieldsjoberg.com/gtsummary/reference/vetted_models.html) known to work with {gtsummary}).
+It is also possible to specify your own function to tidy the model results if needed.  
 
 ## Setup
 
-Before going through the tutorial, install {gtsummary} and {gt}.
+Before going through the tutorial, install and load {gtsummary}.
 
 ```{r message = FALSE, warning=FALSE}
+# install.packages("gtsummary")
 library(gtsummary)
-library(dplyr, warn.conflicts = FALSE)
 ```
 
 ## Example data set
@@ -75,10 +78,10 @@ trial %>%
 
 The default output from `tbl_regression()` is meant to be publication ready.  
 
-* Let's start by creating a **logistic regression model** to **predict tumor response** using the variables age, stage, and grade from the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set. 
+* Let's start by creating a **logistic regression model** to **predict tumor response** using the variables age and grade from the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set. 
 ```{r, message=FALSE}
 # build logistic regression model
-m1 = glm(response ~ age + grade, trial, family = binomial)
+m1 <- glm(response ~ age + grade, trial, family = binomial)
 
 # view raw model results
 summary(m1)$coefficients
@@ -87,7 +90,6 @@ summary(m1)$coefficients
 * We will then a **regression model table** to summarize and present these results in just one line of code from {gtsummary}. 
 
 ```{r, message=FALSE}
-# format results
 tbl_regression(m1, exponentiate = TRUE)
 ```
 
@@ -95,13 +97,13 @@ Note the sensible defaults with this basic usage (that can be customized later):
 
 * The model was recognized as logistic regression with coefficients exponentiated, so the **header displayed "OR"** for odds ratio. 
 
-* **Variable types** are automatically detected and **reference rows** are created for categorical variables.
+* **Variable types** are automatically detected and **reference rows** are added for categorical variables.
 
-* **Model estimates** and **confidence intervals** are **rounded** and nicely formatted.
+* **Model estimates** and **confidence intervals** are **rounded** and formatted.
 
 * Because the variables in the data set were [labelled](http://larmarange.github.io/labelled/), the **labels were carried through** into the {gtsummary} output table.  Had the data not been labelled, the default is to display the variable name.
 
-* Variable levels are **indented** and **footnotes** are added if printed using [{gt}](https://gt.rstudio.com/). (can alternatively be printed using `knitr::kable()`; see options [here](http://www.danieldsjoberg.com/gtsummary/articles/global_options.html#printing))
+* Variable levels are **indented** and **footnotes** added.
 
 ## Customize Output
 
@@ -122,7 +124,7 @@ tibble::tribble(
   "`label`",            "modify variable labels in table", 
   "`exponentiate`",     "exponentiate model coefficients",
   "`include`",          "names of variables to include in output. Default is all variables",
-  "`show_single_row`",  "By default, categorical variables are printed on multiple rows. If a variable is dichotomous (e.g. Yes/No) and you wish to print the regression coefficient on a single row, include the variable name(s) here.", 
+  "`show_single_row`",  "By default, categorical variables are printed on multiple rows. If a variable is dichotomous and you wish to print the regression coefficient on a single row, include the variable name(s) here.", 
   "`conf.level`",       "confidence level of confidence interval",  
   "`intercept`",        "indicates whether to include the intercept",  
   "`estimate_fun`",     "function to round and format coefficient estimates",  
@@ -187,9 +189,10 @@ m1 %>%
 
 ### Example
 
-There are formatting options available, such as adding bold and italics to text.  In the example below,  
+There are formatting options available, such as adding bold and italics to text.
+In the example below,  
   - Variable labels are **bold**  
-  - **Global p-values** for T Stage and Grade are reported
+  - **Global p-values** for Stage and Grade are reported
   - P-values less than 0.10 are **bold** 
   - Large p-values are rounded to **two decimal places**  
   - Coefficients are **exponentiated** to give odds ratios  
@@ -208,43 +211,9 @@ m1 %>%
   bold_labels()
 ```
 
-## Advanced Customization {#advanced}
-
-When you print output from the `tbl_regression()` function into the R console or into an R markdown document, there are default printing functions that are called in the background, e.g. `print.tbl_regression()`.
-
-The {gtsummary} table has two important internal objects:
-
-```{r, echo = FALSE}
-tibble::tribble(
-  ~`Internal Object`, ~Description,
-  "`.$table_body`",   "data frame that is printed as the gtsummary output table",
-  "`.$table_header`", "contains instructions for formatting `.$table_body` when printed"
-) %>%
-  gt::gt() %>%
-  gt::fmt_markdown(columns = everything()) %>%
-  gt_compact_fun()
-```
-
-When a {gtsummary} object is printed, it is first converted to a {gt} object with `as_gt()` via a sequence of {gt} commands executed on `x$table_body`.
-Here's an example of the first few calls saved with `tbl_summary()`:
-
-```{r}
-tbl_regression(m1) %>% as_gt(return_calls = TRUE) %>% head(n = 3)
-```
-
-The {gt} functions are called in the order they appear, always beginning with `gt::gt()`.
-
-If the user does not want a specific {gt} function to run (i.e. would like to change default printing), any {gt} call can be excluded in the `as_gt()` function.
-In the example below, the default alignment is restored.
-
-```{r as_gt2}
-tbl_regression(m1, exponentiate = TRUE) %>%
-  as_gt(include = -cols_align)
-```
-
 ## Univariate Regression {#tbl_uvregression}
 
-The `tbl_uvregression()` produces a table of univariate regression results.
+The `tbl_uvregression()` function produces a table of univariate regression models.
 The function is a wrapper for `tbl_regression()`, and as a result, accepts nearly identical function arguments.
 The function's results can be modified in similar ways to `tbl_regression()`. 
 
