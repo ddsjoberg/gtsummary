@@ -213,13 +213,13 @@ system.file(package = "gtsummary") %>%
 
 ## Tips
 
-When printing gt or gtsummary tables in a loop, use `print()` and `results = 'asis'` in the R markdown chunk.
+When printing {gt} or {gtsummary} tables in a loop, use `print()` and `results = 'asis'` in the R markdown chunk.
 
 ````r
 `r ''````{r loop_print, results = 'asis'}
-    for (i in 1) {
-      tbl <- tbl_summary(trial)
-      print(tbl)
-    }
+for (i in 1) {
+  tbl <- tbl_summary(trial)   # build gtsummary table
+  print(tbl)                  # print table
+}
 ```
 ````
