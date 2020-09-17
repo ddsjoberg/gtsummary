@@ -210,3 +210,16 @@ system.file(package = "gtsummary") %>%
   file.path("rmarkdown_example/gtsummary_rmarkdown_html.Rmd") %>%
   file.edit()
 ```
+
+## Tips
+
+When printing gt or gtsummary tables in a loop, use `print()` and `results = 'asis'` in the R markdown chunk.
+
+````r
+`r ''````{r loop_print, results = 'asis'}
+    for (i in 1) {
+      tbl <- tbl_summary(trial)
+      print(tbl)
+    }
+```
+````
