@@ -7,9 +7,13 @@
 \alias{theme_gtsummary_printer}
 \alias{theme_gtsummary_language}
 \alias{theme_gtsummary_continuous2}
+\alias{theme_gtsummary_mean_sd}
 \title{Available gtsummary themes}
 \usage{
-theme_gtsummary_journal(journal = c("jama", "lancet"), set_theme = TRUE)
+theme_gtsummary_journal(
+  journal = c("jama", "nejm", "lancet"),
+  set_theme = TRUE
+)
 
 theme_gtsummary_compact(set_theme = TRUE)
 
@@ -32,17 +36,22 @@ theme_gtsummary_continuous2(
   statistic = "{median} ({p25, {p75})",
   set_theme = TRUE
 )
+
+theme_gtsummary_mean_sd(set_theme = TRUE)
 }
 \arguments{
 \item{journal}{String indicating the journal theme to follow.
 \itemize{
 \item \code{"jama"} Journal of the American Medical Association
+\item \code{"nejm"} New England Journal of Medicine
+\item \code{"lancet"} The Lancet
 }}
 
 \item{set_theme}{Logical indicating whether to set the theme. Default is \code{TRUE}.
-When \code{FALSE} the named list of theme elements is returned invisibly.}
+When \code{FALSE} the named list of theme elements is returned invisibly}
 
-\item{print_engine}{String indicating the print engine. Default is \code{"gt"}}
+\item{print_engine}{String indicating the print method. Must be one of
+\code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"tibble"}#' @export}
 
 \item{language}{String indicating language. Must be one of
 \itemize{
@@ -100,29 +109,44 @@ Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to se
 \item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
 \item in \code{tbl_summary()} the percent symbol is not printed next to percentages
 }
+\item \code{"nejm"}
+\itemize{
+\item sets theme to align with the The New England Journal of Medicine guidelines
+\item large p-values are rounded to two decimal places
+\item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
+\item confidence intervals are separated with \verb{1 to 2}, rather than a comma
+}
 \item \code{"lancet"}
 \itemize{
 \item sets theme to align with the The Lancet reporting guidelines
 \item large p-values are rounded to two decimal places
 \item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
-\item confidence intervals are separated with \verb{4.5 to 7.8}, rather than a comma
+\item confidence intervals are separated with \verb{1 to 2}, rather than a comma
+\item decimal points are mid-line dots
 }
 }
 \item \code{theme_gtsummary_compact()}
 \itemize{
-\item tables printed with gt or flextable will be compact with smaller font size and reduced cell padding
+\item tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 }
 \item \code{theme_gtsummary_printer(print_engine=)}
 \itemize{
 \item \code{"gt"} sets the gt package as the default print engine
-\item \code{"kable"} sets the \code{knitr::kable()} function as the default print engine
 \item \code{"flextable"} sets the flextable package as the default print engine
+\item \code{"huxtable"} sets the huxtable package as the default print engine
+\item \code{"kable"} sets the \code{knitr::kable()} function as the default print engine
 \item \code{"kable_extra"} sets the kableExtra package as the default print engine
+\item \code{"tibble"} returns output as tibble
 }
 \item \code{theme_gtsummary_continuous2()}
 \itemize{
 \item Set all continuous variables to summary type \code{"continuous2"} by default
 \item Use the \verb{statistic=} argument to set the default continuous variable summary statistics
+}
+\item \code{theme_gtsummary_mean_sd()}
+\itemize{
+\item Set default summary statistics to mean and standard deviation in \code{tbl_summary()}
+\item Set default tests in \code{add_p.tbl_summary()} to t-tests and ANOVA
 }
 }
 
@@ -147,7 +171,7 @@ theme_gtsummary_compact()
 
 set_gtsummary_theme_ex1 <-
   trial \%>\%
-  dplyr::select(age, grade, trt) \%>\%
+  select(age, grade, trt) \%>\%
   tbl_summary(by = trt) \%>\%
   add_stat_label() \%>\%
   as_gt()
@@ -156,9 +180,7 @@ set_gtsummary_theme_ex1 <-
 reset_gtsummary_theme()
 }
 \seealso{
-\code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}}
-
 \href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
 
-\code{set_gtsummary_theme()}, \code{reset_gtsummary_theme()}
+\code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}}, \code{\link[=reset_gtsummary_theme]{reset_gtsummary_theme()}}
 }
