@@ -1,5 +1,10 @@
 # gtsummary (development version)
 
+* gtsummary themes updates
+  - Add `theme_gtsummary_mean_sd()` theme to report mean and SD by default and use t-tests and ANOVA in `add_p()` (#654)
+  - Added first draft of the NEJM theme
+  - Added the mid-point decimal separator for the Lancet theme
+
 * New function `add_glance_source_note` adds the statistics returned in broom::glance() as a source note on a `tbl_regression` (#434)
 
 * Fixed `style_ratio()` bug where there were rounding errors near one (#651)
