@@ -5,12 +5,7 @@
 #' Use the [set_gtsummary_theme()] function to set a theme.
 #'
 #' @param set_theme Logical indicating whether to set the theme. Default is `TRUE`.
-#' When `FALSE` the named list of theme elements is returned invisibly.
-#' @param journal String indicating the journal theme to follow.
-#'  - `"jama"` Journal of the American Medical Association
-#' @param print_engine String indicating the print method. Must be one of
-#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"tibble"`
-#' @seealso [set_gtsummary_theme()]
+#' When `FALSE` the named list of theme elements is returned invisibly
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
 #'   - `"jama"`
@@ -18,21 +13,32 @@
 #'     - large p-values are rounded to two decimal places
 #'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
 #'     - in `tbl_summary()` the percent symbol is not printed next to percentages
+#'   - `"nejm"`
+#'     - sets theme to align with the The New England Journal of Medicine guidelines
+#'     - large p-values are rounded to two decimal places
+#'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
+#'     - confidence intervals are separated with `1 to 2`, rather than a comma
 #'   - `"lancet"`
 #'     - sets theme to align with the The Lancet reporting guidelines
 #'     - large p-values are rounded to two decimal places
 #'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
-#'     - confidence intervals are separated with `4.5 to 7.8`, rather than a comma
+#'     - confidence intervals are separated with `1 to 2`, rather than a comma
+#'     - decimal points are mid-line dots
 #' - `theme_gtsummary_compact()`
-#'   - tables printed with gt or flextable will be compact with smaller font size and reduced cell padding
+#'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine=)`
 #'   - `"gt"` sets the gt package as the default print engine
-#'   - `"kable"` sets the `knitr::kable()` function as the default print engine
 #'   - `"flextable"` sets the flextable package as the default print engine
+#'   - `"huxtable"` sets the huxtable package as the default print engine
+#'   - `"kable"` sets the `knitr::kable()` function as the default print engine
 #'   - `"kable_extra"` sets the kableExtra package as the default print engine
+#'   - `"tibble"` returns output as tibble
 #' - `theme_gtsummary_continuous2()`
 #'   - Set all continuous variables to summary type `"continuous2"` by default
 #'   - Use the `statistic=` argument to set the default continuous variable summary statistics
+#' - `theme_gtsummary_mean_sd()`
+#'   - Set default summary statistics to mean and standard deviation in `tbl_summary()`
+#'   - Set default tests in `add_p.tbl_summary()` to t-tests and ANOVA
 #'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
@@ -46,7 +52,7 @@
 #'
 #' set_gtsummary_theme_ex1 <-
 #'   trial %>%
-#'   dplyr::select(age, grade, trt) %>%
+#'   select(age, grade, trt) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_stat_label() %>%
 #'   as_gt()
@@ -59,13 +65,17 @@
 #' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=70\%}}
 #' @name theme_gtsummary
 #' @seealso [Themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
-#' @seealso `set_gtsummary_theme()`, `reset_gtsummary_theme()`
+#' @seealso [set_gtsummary_theme()], [reset_gtsummary_theme()]
 NULL
 
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
-theme_gtsummary_journal <- function(journal = c("jama", "lancet"), set_theme = TRUE) {
+#' @param journal String indicating the journal theme to follow.
+#'  - `"jama"` Journal of the American Medical Association
+#'  - `"nejm"` New England Journal of Medicine
+#'  - `"lancet"` The Lancet
+theme_gtsummary_journal <- function(journal = c("jama", "nejm", "lancet"), set_theme = TRUE) {
   journal <- match.arg(journal)
   if (journal == "jama") {
     lst_theme <-
@@ -80,6 +90,19 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet"), set_theme = T
         "tbl_summary-str:categorical_stat" = "{n} ({p})"
       )
   }
+  else if (journal == "nejm") {
+    lst_theme <-
+      list(
+        "pkgwide-str:theme_name" = "New England Journal of Medicine",
+        "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
+        "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+        "style_number-arg:decimal.mark" = ".",
+        "style_number-arg:big.mark" = ",",
+        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
+        "tbl_summary-str:categorical_stat" = "{n} ({p})",
+        "pkgwide-str:ci.sep" = " to "
+      )
+  }
   else if (journal == "lancet") {
     lst_theme <-
       list(
@@ -87,8 +110,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet"), set_theme = T
         "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
         "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
-        # "style_number-arg:decimal.mark" = "\U00B7", # i am not sure why this does not work
-        "style_number-arg:decimal.mark" = ".",
+        "style_number-arg:decimal.mark" = special_char$interpunct,
         "style_number-arg:big.mark" = "\U2009",
         "pkgwide-str:ci.sep" = " to "
       )
@@ -103,7 +125,6 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet"), set_theme = T
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
-
 theme_gtsummary_compact <- function(set_theme = TRUE){
   lst_theme <-
     list(
@@ -150,8 +171,8 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
 
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
-#' @param print_engine String indicating the print engine. Default is `"gt"`
-#' @export
+#' @param print_engine String indicating the print method. Must be one of
+#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"tibble"`#' @export
 theme_gtsummary_printer <- function(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
   set_theme = TRUE) {
@@ -234,6 +255,22 @@ theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25, {p75})", se
     "tbl_summary-str:default_con_type" = "continuous2",
     "tbl_summary-str:continuous_stat" = statistic
     )
+
+  if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
+  return(invisible(lst_theme))
+}
+
+# ------------------------------------------------------------------------------
+#' @rdname theme_gtsummary
+#' @param statistic Default statistic continuous variables
+#' @export
+theme_gtsummary_mean_sd <- function(set_theme = TRUE) {
+
+  lst_theme <- list(
+    "tbl_summary-str:continuous_stat" = "{mean} ({sd})",
+    "add_p.tbl_summary-attr:test.continuous_by2" = "t.test",
+    "add_p.tbl_summary-attr:test.continuous" = "aov"
+  )
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
   return(invisible(lst_theme))
