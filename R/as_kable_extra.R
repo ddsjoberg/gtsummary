@@ -79,12 +79,7 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 }
 
 table_header_to_kable_extra_calls <- function(x, ...) {
-  table_header <- x$table_header %>%
-    # removing instructions for hidden columns
-    dplyr::mutate_at(
-      vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
-      ~ifelse(.data$hide, NA_character_, .)
-    )
+  table_header <- .clean_table_header(x$table_header)
 
   # getting kable calls
   kable_extra_calls <-

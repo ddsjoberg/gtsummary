@@ -85,12 +85,7 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # adding id number for columns not hidden
   table_header <-
-    x$table_header %>%
-    # removing instructions for hidden columns
-    dplyr::mutate_at(
-      vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
-      ~ifelse(.data$hide, NA_character_, .)
-    ) %>%
+    .clean_table_header(x$table_header) %>%
     group_by(.data$hide) %>%
     mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
     ungroup()

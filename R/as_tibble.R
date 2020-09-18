@@ -69,13 +69,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 
 
 table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
-  table_header <-
-    x$table_header %>%
-    # removing instructions for hidden columns
-    dplyr::mutate_at(
-      vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
-      ~ifelse(.data$hide, NA_character_, .)
-    )
+  table_header <- .clean_table_header(x$table_header)
   tibble_calls <- list()
 
   # tibble ---------------------------------------------------------------------
