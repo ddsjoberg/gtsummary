@@ -111,6 +111,9 @@ add_nevent.tbl_regression <- function(x, quiet = NULL, ...) {
     return(x)
   }
 
+  # moving nevent col after N
+  x$table_body <- dplyr::relocate(x$table_body, any_of("nevent"), .before = any_of("estimate"))
+
   # column label
   x$table_header <-
     tibble(column = names(x$table_body)) %>%

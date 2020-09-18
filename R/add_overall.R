@@ -83,14 +83,20 @@ add_overall_merge <- function(x, overall, last, col_label) {
       )
   }
 
-  x$table_header <-
-    tibble(column = names(x$table_body)) %>%
-    left_join(x$table_header, by = "column") %>%
-    table_header_fill_missing()
+  # updating table_header
+  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # adding header
   col_label <- col_label %||% paste0("**", translate_text("Overall"), "**, N = {style_number(N)}")
   x <- modify_header_internal(x, stat_0 = col_label)
+
+  # adding footnote to overall column (only if a consistent footnote appears in other stat cols)
+  consistent_footnote <-
+    filter(x$table_header, startsWith(.data$column, "stat_") & .data$column != "stat_0") %>%
+    pull(.data$footnote) %>%
+    unique()
+  if (length(consistent_footnote) == 1)
+    x$table_header$footnote[x$table_header$column == "stat_0"] <- consistent_footnote
 
   x
 }
