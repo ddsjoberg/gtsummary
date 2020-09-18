@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -179,10 +179,10 @@
 
     <pre class="usage"><span class='fu'>style_pvalue</span>(
   <span class='va'>x</span>,
-  digits = <span class='fl'>1</span>,
-  prepend_p = <span class='fl'>FALSE</span>,
-  big.mark = <span class='kw'>NULL</span>,
-  decimal.mark = <span class='kw'>NULL</span>,
+  digits <span class='op'>=</span> <span class='fl'>1</span>,
+  prepend_p <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  big.mark <span class='op'>=</span> <span class='kw'>NULL</span>,
+  decimal.mark <span class='op'>=</span> <span class='kw'>NULL</span>,
   <span class='va'>...</span>
 )</pre>
 
@@ -243,7 +243,7 @@ Default is <code>"."</code>  or <code><a href='https://rdrr.io/r/base/options.ht
 <span class='fu'>style_pvalue</span>(<span class='va'>pvals</span>)
 </div><div class='output co'>#&gt;  [1] NA       "&gt;0.9"   "&gt;0.9"   "0.5"    "0.2"    "0.2"    "0.2"    "0.12"  
 #&gt;  [9] "0.10"   "0.10"   "0.060"  "0.030"  "0.002"  "0.001"  "&lt;0.001" "&lt;0.001"
-#&gt; [17] "&lt;0.001" NA      </div><div class='input'><span class='fu'>style_pvalue</span>(<span class='va'>pvals</span>, digits = <span class='fl'>2</span>, prepend_p = <span class='fl'>TRUE</span>)
+#&gt; [17] "&lt;0.001" NA      </div><div class='input'><span class='fu'>style_pvalue</span>(<span class='va'>pvals</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, prepend_p <span class='op'>=</span> <span class='cn'>TRUE</span>)
 </div><div class='output co'>#&gt;  [1] NA        "p&gt;0.99"  "p&gt;0.99"  "p=0.50"  "p=0.25"  "p=0.20"  "p=0.20" 
 #&gt;  [8] "p=0.12"  "p=0.10"  "p=0.10"  "p=0.060" "p=0.030" "p=0.002" "p=0.001"
 #&gt; [15] "p&lt;0.001" "p&lt;0.001" "p&lt;0.001" NA       </div></pre>

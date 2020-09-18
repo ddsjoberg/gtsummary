@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -178,7 +178,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_svysummary</span>
-<span class='fu'><a href='add_p.html'>add_p</a></span>(<span class='va'>x</span>, test = <span class='kw'>NULL</span>, pvalue_fun = <span class='kw'>NULL</span>, include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(), <span class='va'>...</span>)</pre>
+<span class='fu'><a href='add_p.html'>add_p</a></span>(<span class='va'>x</span>, test <span class='op'>=</span> <span class='kw'>NULL</span>, pvalue_fun <span class='op'>=</span> <span class='kw'>NULL</span>, include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(), <span class='va'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -261,25 +261,25 @@ functions. Default is <code><a href='https://tidyselect.r-lib.org/reference/ever
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
 <span class='co'># A simple weighted dataset</span>
 <span class='va'>add_p_svysummary_ex1</span> <span class='op'>&lt;-</span>
-  <span class='kw'>survey</span>::<span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(<span class='op'>~</span><span class='fl'>1</span>, data = <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='va'>Titanic</span>), weights = <span class='op'>~</span><span class='va'>Freq</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(by = <span class='va'>Survived</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>survey</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(<span class='op'>~</span><span class='fl'>1</span>, data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='va'>Titanic</span>), weights <span class='op'>=</span> <span class='op'>~</span><span class='va'>Freq</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(by <span class='op'>=</span> <span class='va'>Survived</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
 <span class='co'># A dataset with a complex design</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='va'>api</span>, package = <span class='st'>"survey"</span>)
-<span class='va'>d_clust</span> <span class='op'>&lt;-</span> <span class='kw'>survey</span>::<span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(id = <span class='op'>~</span><span class='va'>dnum</span>, weights = <span class='op'>~</span><span class='va'>pw</span>, data = <span class='va'>apiclus1</span>, fpc = <span class='op'>~</span><span class='va'>fpc</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='va'>api</span>, package <span class='op'>=</span> <span class='st'>"survey"</span>)
+<span class='va'>d_clust</span> <span class='op'>&lt;-</span> <span class='fu'>survey</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(id <span class='op'>=</span> <span class='op'>~</span><span class='va'>dnum</span>, weights <span class='op'>=</span> <span class='op'>~</span><span class='va'>pw</span>, data <span class='op'>=</span> <span class='va'>apiclus1</span>, fpc <span class='op'>=</span> <span class='op'>~</span><span class='va'>fpc</span>)
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='va'>add_p_svysummary_ex2</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(<span class='va'>d_clust</span>, by = <span class='va'>both</span>, include = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='va'>cname</span>, <span class='va'>api00</span>, <span class='va'>api99</span>, <span class='va'>both</span>)) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(<span class='va'>d_clust</span>, by <span class='op'>=</span> <span class='va'>both</span>, include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='va'>cname</span>, <span class='va'>api00</span>, <span class='va'>api99</span>, <span class='va'>both</span>)) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># change tests to svy t-test and Wald test</span>
 <span class='va'>add_p_svysummary_ex3</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(<span class='va'>d_clust</span>, by = <span class='va'>both</span>, include = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='va'>cname</span>, <span class='va'>api00</span>, <span class='va'>api99</span>, <span class='va'>both</span>)) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span>(<span class='va'>d_clust</span>, by <span class='op'>=</span> <span class='va'>both</span>, include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='va'>cname</span>, <span class='va'>api00</span>, <span class='va'>api99</span>, <span class='va'>both</span>)) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>(
-    test = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() <span class='op'>~</span> <span class='st'>"svy.t.test"</span>,
+    test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() <span class='op'>~</span> <span class='st'>"svy.t.test"</span>,
                 <span class='fu'><a href='select_helpers.html'>all_categorical</a></span>() <span class='op'>~</span> <span class='st'>"svy.wald.test"</span>)
   )
 </div></pre>

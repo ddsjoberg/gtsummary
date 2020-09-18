@@ -98,7 +98,7 @@ The function creates a cross table of two categorical variables." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -183,15 +183,15 @@ The function creates a cross table of two categorical variables.</p>
 
     <pre class="usage"><span class='fu'>tbl_cross</span>(
   <span class='va'>data</span>,
-  row = <span class='kw'>NULL</span>,
-  col = <span class='kw'>NULL</span>,
-  label = <span class='kw'>NULL</span>,
-  statistic = <span class='kw'>NULL</span>,
-  percent = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>, <span class='st'>"column"</span>, <span class='st'>"row"</span>, <span class='st'>"cell"</span>),
-  margin = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"column"</span>, <span class='st'>"row"</span>),
-  missing = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>),
-  missing_text = <span class='st'>"Unknown"</span>,
-  margin_text = <span class='st'>"Total"</span>
+  row <span class='op'>=</span> <span class='kw'>NULL</span>,
+  col <span class='op'>=</span> <span class='kw'>NULL</span>,
+  label <span class='op'>=</span> <span class='kw'>NULL</span>,
+  statistic <span class='op'>=</span> <span class='kw'>NULL</span>,
+  percent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>, <span class='st'>"column"</span>, <span class='st'>"row"</span>, <span class='st'>"cell"</span>),
+  margin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"column"</span>, <span class='st'>"row"</span>),
+  missing <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ifany"</span>, <span class='st'>"always"</span>, <span class='st'>"no"</span>),
+  missing_text <span class='op'>=</span> <span class='st'>"Unknown"</span>,
+  margin_text <span class='op'>=</span> <span class='st'>"Total"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -280,12 +280,12 @@ Default is <code>"Unknown"</code>.</p></td>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
 <span class='va'>tbl_cross_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_cross</span>(row = <span class='va'>trt</span>, col = <span class='va'>response</span>)
+  <span class='fu'>tbl_cross</span>(row <span class='op'>=</span> <span class='va'>trt</span>, col <span class='op'>=</span> <span class='va'>response</span>)
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='va'>tbl_cross_ex2</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_cross</span>(row = <span class='va'>stage</span>, col = <span class='va'>trt</span>, percent = <span class='st'>"cell"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_cross</span>(row <span class='op'>=</span> <span class='va'>stage</span>, col <span class='op'>=</span> <span class='va'>trt</span>, percent <span class='op'>=</span> <span class='st'>"cell"</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
 </div></pre>

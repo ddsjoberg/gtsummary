@@ -99,7 +99,7 @@ formatted summary table of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -188,17 +188,17 @@ formatted summary table of the results</p>
 <span class='co'># S3 method for survfit</span>
 <span class='fu'>tbl_survfit</span>(
   <span class='va'>x</span>,
-  times = <span class='kw'>NULL</span>,
-  probs = <span class='kw'>NULL</span>,
-  statistic = <span class='kw'>NULL</span>,
-  label = <span class='kw'>NULL</span>,
-  label_header = <span class='kw'>NULL</span>,
-  estimate_fun = <span class='kw'>NULL</span>,
-  missing = <span class='kw'>NULL</span>,
-  conf.level = <span class='fl'>0.95</span>,
-  reverse = <span class='fl'>FALSE</span>,
-  quiet = <span class='kw'>NULL</span>,
-  failure = <span class='kw'>NULL</span>,
+  times <span class='op'>=</span> <span class='kw'>NULL</span>,
+  probs <span class='op'>=</span> <span class='kw'>NULL</span>,
+  statistic <span class='op'>=</span> <span class='kw'>NULL</span>,
+  label <span class='op'>=</span> <span class='kw'>NULL</span>,
+  label_header <span class='op'>=</span> <span class='kw'>NULL</span>,
+  estimate_fun <span class='op'>=</span> <span class='kw'>NULL</span>,
+  missing <span class='op'>=</span> <span class='kw'>NULL</span>,
+  conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  reverse <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  quiet <span class='op'>=</span> <span class='kw'>NULL</span>,
+  failure <span class='op'>=</span> <span class='kw'>NULL</span>,
   <span class='va'>...</span>
 )
 
@@ -206,34 +206,34 @@ formatted summary table of the results</p>
 <span class='fu'>tbl_survfit</span>(
   <span class='va'>x</span>,
   <span class='va'>y</span>,
-  times = <span class='kw'>NULL</span>,
-  probs = <span class='kw'>NULL</span>,
-  statistic = <span class='kw'>NULL</span>,
-  label = <span class='kw'>NULL</span>,
-  label_header = <span class='kw'>NULL</span>,
-  estimate_fun = <span class='kw'>NULL</span>,
-  missing = <span class='kw'>NULL</span>,
-  conf.level = <span class='fl'>0.95</span>,
-  reverse = <span class='fl'>FALSE</span>,
-  failure = <span class='kw'>NULL</span>,
-  include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
-  quiet = <span class='kw'>NULL</span>,
+  times <span class='op'>=</span> <span class='kw'>NULL</span>,
+  probs <span class='op'>=</span> <span class='kw'>NULL</span>,
+  statistic <span class='op'>=</span> <span class='kw'>NULL</span>,
+  label <span class='op'>=</span> <span class='kw'>NULL</span>,
+  label_header <span class='op'>=</span> <span class='kw'>NULL</span>,
+  estimate_fun <span class='op'>=</span> <span class='kw'>NULL</span>,
+  missing <span class='op'>=</span> <span class='kw'>NULL</span>,
+  conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  reverse <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  failure <span class='op'>=</span> <span class='kw'>NULL</span>,
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  quiet <span class='op'>=</span> <span class='kw'>NULL</span>,
   <span class='va'>...</span>
 )
 
 <span class='co'># S3 method for list</span>
 <span class='fu'>tbl_survfit</span>(
   <span class='va'>x</span>,
-  times = <span class='kw'>NULL</span>,
-  probs = <span class='kw'>NULL</span>,
-  statistic = <span class='kw'>NULL</span>,
-  label = <span class='kw'>NULL</span>,
-  label_header = <span class='kw'>NULL</span>,
-  estimate_fun = <span class='kw'>NULL</span>,
-  missing = <span class='kw'>NULL</span>,
-  conf.level = <span class='fl'>0.95</span>,
-  reverse = <span class='fl'>FALSE</span>,
-  quiet = <span class='kw'>NULL</span>,
+  times <span class='op'>=</span> <span class='kw'>NULL</span>,
+  probs <span class='op'>=</span> <span class='kw'>NULL</span>,
+  statistic <span class='op'>=</span> <span class='kw'>NULL</span>,
+  label <span class='op'>=</span> <span class='kw'>NULL</span>,
+  label_header <span class='op'>=</span> <span class='kw'>NULL</span>,
+  estimate_fun <span class='op'>=</span> <span class='kw'>NULL</span>,
+  missing <span class='op'>=</span> <span class='kw'>NULL</span>,
+  conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  reverse <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  quiet <span class='op'>=</span> <span class='kw'>NULL</span>,
   <span class='va'>...</span>
 )</pre>
 
@@ -346,18 +346,18 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <span class='co'># Pass single survfit() object</span>
 <span class='va'>tbl_survfit_ex1</span> <span class='op'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
   <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death</span>) <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span>),
-  times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-  label_header = <span class='st'>"**{time} Month**"</span>
+  times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+  label_header <span class='op'>=</span> <span class='st'>"**{time} Month**"</span>
 )
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># Pass a data frame</span>
 <span class='va'>tbl_survfit_ex2</span> <span class='op'>&lt;-</span> <span class='fu'>tbl_survfit</span>(
   <span class='va'>trial</span>,
-  y = <span class='kw'>survival</span>::<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death</span>),
-  include = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='va'>trt</span>, <span class='va'>grade</span>),
-  probs = <span class='fl'>0.5</span>,
-  label_header = <span class='st'>"**Median Survival**"</span>
+  y <span class='op'>=</span> <span class='fu'>survival</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death</span>),
+  include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='va'>trt</span>, <span class='va'>grade</span>),
+  probs <span class='op'>=</span> <span class='fl'>0.5</span>,
+  label_header <span class='op'>=</span> <span class='st'>"**Median Survival**"</span>
 )
 
 <span class='co'># Example 3 ----------------------------------</span>
@@ -365,23 +365,23 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <span class='va'>tbl_survfit_ex3</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death</span>) <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>trial</span>),
        <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death</span>) <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span>)) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_survfit</span>(times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
+  <span class='fu'>tbl_survfit</span>(times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
 
 <span class='co'># Example 4 Competing Events Example ---------</span>
 <span class='co'># adding a competing event for death (cancer vs other causes)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>, warn.conflicts = <span class='fl'>FALSE</span>, quietly = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span>)
 <span class='va'>trial2</span> <span class='op'>&lt;-</span> <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(
-  death_cr = <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span>(
+  death_cr <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span>(
     <span class='va'>death</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"censor"</span>,
     <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span>()) <span class='op'>&lt;</span> <span class='fl'>0.5</span> <span class='op'>~</span> <span class='st'>"death from cancer"</span>,
-    <span class='fl'>TRUE</span> <span class='op'>~</span> <span class='st'>"death other causes"</span>
+    <span class='cn'>TRUE</span> <span class='op'>~</span> <span class='st'>"death other causes"</span>
   ) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>()
 )
 
 <span class='va'>survfit_cr_ex4</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death_cr</span>) <span class='op'>~</span> <span class='va'>grade</span>, data = <span class='va'>trial2</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_survfit</span>(times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), label = <span class='st'>"Tumor Grade"</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death_cr</span>) <span class='op'>~</span> <span class='va'>grade</span>, data <span class='op'>=</span> <span class='va'>trial2</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_survfit</span>(times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>), label <span class='op'>=</span> <span class='st'>"Tumor Grade"</span>)
 </div><div class='output co'>#&gt; <span class='message'>Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

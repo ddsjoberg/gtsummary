@@ -100,7 +100,7 @@ formatted summary of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -188,15 +188,15 @@ formatted summary of the results</p>
     <pre class="usage"><span class='co'># S3 method for survfit</span>
 <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
   <span class='va'>x</span>,
-  times = <span class='kw'>NULL</span>,
-  probs = <span class='kw'>NULL</span>,
-  label = <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='va'>probs</span>), <span class='st'>"{time}"</span>, <span class='st'>"{prob*100}%"</span>),
-  level_label = <span class='st'>"{level}, N = {n}"</span>,
-  header_label = <span class='kw'>NULL</span>,
-  header_estimate = <span class='kw'>NULL</span>,
-  failure = <span class='fl'>FALSE</span>,
-  missing = <span class='st'>"-"</span>,
-  estimate_fun = <span class='kw'>NULL</span>,
+  times <span class='op'>=</span> <span class='kw'>NULL</span>,
+  probs <span class='op'>=</span> <span class='kw'>NULL</span>,
+  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='va'>probs</span>), <span class='st'>"{time}"</span>, <span class='st'>"{prob*100}%"</span>),
+  level_label <span class='op'>=</span> <span class='st'>"{level}, N = {n}"</span>,
+  header_label <span class='op'>=</span> <span class='kw'>NULL</span>,
+  header_estimate <span class='op'>=</span> <span class='kw'>NULL</span>,
+  failure <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  missing <span class='op'>=</span> <span class='st'>"-"</span>,
+  estimate_fun <span class='op'>=</span> <span class='kw'>NULL</span>,
   <span class='va'>...</span>
 )</pre>
 
@@ -313,8 +313,8 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
 <span class='va'>tbl_strata_ex1</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
     <span class='va'>fit1</span>,
-    times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
-    label = <span class='st'>"{time} Months"</span>
+    times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>),
+    label <span class='op'>=</span> <span class='st'>"{time} Months"</span>
   )
 
 <span class='co'># Example 2 ----------------------------------</span>
@@ -322,8 +322,8 @@ depending on the stratum.  Other quantities available to print are:</p><ul>
 <span class='va'>tbl_nostrata_ex2</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span>(
     <span class='va'>fit2</span>,
-    probs = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
-    header_estimate = <span class='st'>"**Months**"</span>
+    probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
+    header_estimate <span class='op'>=</span> <span class='st'>"**Months**"</span>
   )
 </div></pre>
   </div>

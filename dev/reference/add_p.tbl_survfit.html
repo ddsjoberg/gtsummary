@@ -98,7 +98,7 @@ Calculate and add a p-value" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -184,11 +184,11 @@ Calculate and add a p-value</p>
     <pre class="usage"><span class='co'># S3 method for tbl_survfit</span>
 <span class='fu'><a href='add_p.html'>add_p</a></span>(
   <span class='va'>x</span>,
-  test = <span class='st'>"logrank"</span>,
-  test.args = <span class='kw'>NULL</span>,
-  pvalue_fun = <span class='va'>style_pvalue</span>,
-  include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
-  quiet = <span class='kw'>NULL</span>,
+  test <span class='op'>=</span> <span class='st'>"logrank"</span>,
+  test.args <span class='op'>=</span> <span class='kw'>NULL</span>,
+  pvalue_fun <span class='op'>=</span> <span class='va'>style_pvalue</span>,
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  quiet <span class='op'>=</span> <span class='kw'>NULL</span>,
   <span class='va'>...</span>
 )</pre>
 
@@ -245,8 +245,8 @@ the test name. However, if you need to specify different tests within the same
 table, the input in flexible using the list notation common throughout the
 gtsummary package. For example, the following code would call the log-rank test,
 and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span class='va'>...</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>(test = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='va'>trt</span> <span class='op'>~</span> <span class='st'>"logrank"</span>, <span class='va'>grade</span> <span class='op'>~</span> <span class='st'>"survdiff"</span>),
-        test.args = <span class='va'>grade</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(rho = <span class='fl'>0.5</span>))
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='va'>trt</span> <span class='op'>~</span> <span class='st'>"logrank"</span>, <span class='va'>grade</span> <span class='op'>~</span> <span class='st'>"survdiff"</span>),
+        test.args <span class='op'>=</span> <span class='va'>grade</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(rho <span class='op'>=</span> <span class='fl'>0.5</span>))
 </pre><p></div></p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
@@ -272,7 +272,7 @@ and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span cla
 <span class='va'>gts_survfit</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death</span>) <span class='op'>~</span> <span class='va'>grade</span>, <span class='va'>trial</span>),
        <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death</span>) <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span>)) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span>(times = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
+  <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span>(times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>))
 
 <span class='co'># Example 1 ----------------------------------</span>
 <span class='va'>add_p_tbl_survfit_ex1</span> <span class='op'>&lt;-</span>
@@ -284,7 +284,7 @@ and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span cla
 <span class='co'># Pass `rho=` argument to `survdiff()`</span>
 <span class='va'>add_p_tbl_survfit_ex2</span> <span class='op'>&lt;-</span>
   <span class='va'>gts_survfit</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>(test = <span class='st'>"survdiff"</span>, test.args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(rho = <span class='fl'>0.5</span>))
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(test <span class='op'>=</span> <span class='st'>"survdiff"</span>, test.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(rho <span class='op'>=</span> <span class='fl'>0.5</span>))
 </div><div class='output co'>#&gt; <span class='message'>Calculating p-value with</span>
 #&gt; <span class='message'>`survival::survdiff(formula = Surv(ttdeath, death) ~ grade, data = trial, rho = 0.5)`</span></div></pre>
   </div>

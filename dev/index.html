@@ -57,7 +57,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -152,7 +152,7 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"gtsummary"</span>)</pre></div>
 <p>Install the development version of {gtsummary} with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"ddsjoberg/gtsummary"</span>)</pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -176,12 +176,12 @@
 <span class="va">table2</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span>(
     <span class="va">trial2</span>,
-    by = <span class="va">trt</span>, <span class="co"># split table by group</span>
-    missing = <span class="st">"no"</span> <span class="co"># don't list missing data separately</span>
+    by <span class="op">=</span> <span class="va">trt</span>, <span class="co"># split table by group</span>
+    missing <span class="op">=</span> <span class="st">"no"</span> <span class="co"># don't list missing data separately</span>
   ) <span class="op">%&gt;%</span>
   <span class="fu"><a href="reference/add_n.html">add_n</a></span>() <span class="op">%&gt;%</span> <span class="co"># add column with total number of non-missing observations</span>
   <span class="fu"><a href="reference/add_p.html">add_p</a></span>() <span class="op">%&gt;%</span> <span class="co"># test for a difference between groups</span>
-  <span class="fu"><a href="reference/modify.html">modify_header</a></span>(label = <span class="st">"**Variable**"</span>) <span class="op">%&gt;%</span> <span class="co"># update the column header</span>
+  <span class="fu"><a href="reference/modify.html">modify_header</a></span>(label <span class="op">=</span> <span class="st">"**Variable**"</span>) <span class="op">%&gt;%</span> <span class="co"># update the column header</span>
   <span class="fu"><a href="reference/bold_italicize_labels_levels.html">bold_labels</a></span>() </pre></div>
 <p><img src="reference/figures/README-tbl_summary_print_extra-1.png" width="60%"></p>
 </div>
@@ -190,9 +190,9 @@
 <a href="#regression-models" class="anchor"></a>Regression Models</h3>
 <p>Use <a href="http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html"><code>tbl_regression()</code></a> to easily and beautifully display regression model results in a table. See the <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html">tutorial</a> for customization options.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="va">response</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span>, family = <span class="va">binomial</span>)
+<span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="va">response</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span>, family <span class="op">=</span> <span class="va">binomial</span>)
 
-<span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span>(<span class="va">mod1</span>, exponentiate = <span class="fl">TRUE</span>)</pre></div>
+<span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span>(<span class="va">mod1</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span>)</pre></div>
 <p><img src="reference/figures/README-tbl_regression_printa-1.png" width="40%"></p>
 </div>
 <div id="side-by-side-regression-models" class="section level3">
@@ -206,13 +206,13 @@
 <span class="co"># build survival model table</span>
 <span class="va">t2</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span>(<span class="va">ttdeath</span>, <span class="va">death</span>) <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">grade</span> <span class="op">+</span> <span class="va">age</span>, <span class="va">trial</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span>(exponentiate = <span class="fl">TRUE</span>)
+  <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span>(exponentiate <span class="op">=</span> <span class="cn">TRUE</span>)
 
 <span class="co"># merge tables </span>
 <span class="va">tbl_merge_ex1</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="reference/tbl_merge.html">tbl_merge</a></span>(
-    tbls = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="va">t1</span>, <span class="va">t2</span>),
-    tab_spanner = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span>)
+    tbls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="va">t1</span>, <span class="va">t2</span>),
+    tab_spanner <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span>)
   )</pre></div>
 <p><img src="reference/figures/README-tbl_merge_ex1-1.png" width="60%"></p>
 <p>Review even more output options in the <strong><a href="http://www.danieldsjoberg.com/gtsummary/articles/gallery.html">table gallery</a></strong>.</p>

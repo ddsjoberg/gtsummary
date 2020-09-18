@@ -99,7 +99,7 @@ Use the set_gtsummary_theme() function to set a theme." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -184,33 +184,33 @@ Use the <code><a href='set_gtsummary_theme.html'>set_gtsummary_theme()</a></code
     </div>
 
     <pre class="usage"><span class='fu'>theme_gtsummary_journal</span>(
-  journal = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"jama"</span>, <span class='st'>"nejm"</span>, <span class='st'>"lancet"</span>),
-  set_theme = <span class='fl'>TRUE</span>
+  journal <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"jama"</span>, <span class='st'>"nejm"</span>, <span class='st'>"lancet"</span>),
+  set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>
 )
 
-<span class='fu'>theme_gtsummary_compact</span>(set_theme = <span class='fl'>TRUE</span>)
+<span class='fu'>theme_gtsummary_compact</span>(set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>)
 
 <span class='fu'>theme_gtsummary_printer</span>(
-  print_engine = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gt"</span>, <span class='st'>"kable"</span>, <span class='st'>"kable_extra"</span>, <span class='st'>"flextable"</span>, <span class='st'>"huxtable"</span>, <span class='st'>"tibble"</span>),
-  set_theme = <span class='fl'>TRUE</span>
+  print_engine <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gt"</span>, <span class='st'>"kable"</span>, <span class='st'>"kable_extra"</span>, <span class='st'>"flextable"</span>, <span class='st'>"huxtable"</span>, <span class='st'>"tibble"</span>),
+  set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>
 )
 
 <span class='fu'>theme_gtsummary_language</span>(
-  language = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"de"</span>, <span class='st'>"en"</span>, <span class='st'>"es"</span>, <span class='st'>"fr"</span>, <span class='st'>"gu"</span>, <span class='st'>"hi"</span>, <span class='st'>"ja"</span>, <span class='st'>"mr"</span>, <span class='st'>"pt"</span>, <span class='st'>"se"</span>, <span class='st'>"zh-cn"</span>,
+  language <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"de"</span>, <span class='st'>"en"</span>, <span class='st'>"es"</span>, <span class='st'>"fr"</span>, <span class='st'>"gu"</span>, <span class='st'>"hi"</span>, <span class='st'>"ja"</span>, <span class='st'>"mr"</span>, <span class='st'>"pt"</span>, <span class='st'>"se"</span>, <span class='st'>"zh-cn"</span>,
     <span class='st'>"zh-tw"</span>),
-  decimal.mark = <span class='kw'>NULL</span>,
-  big.mark = <span class='kw'>NULL</span>,
-  iqr.sep = <span class='kw'>NULL</span>,
-  ci.sep = <span class='kw'>NULL</span>,
-  set_theme = <span class='fl'>TRUE</span>
+  decimal.mark <span class='op'>=</span> <span class='kw'>NULL</span>,
+  big.mark <span class='op'>=</span> <span class='kw'>NULL</span>,
+  iqr.sep <span class='op'>=</span> <span class='kw'>NULL</span>,
+  ci.sep <span class='op'>=</span> <span class='kw'>NULL</span>,
+  set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>
 )
 
 <span class='fu'>theme_gtsummary_continuous2</span>(
-  statistic = <span class='st'>"{median} ({p25, {p75})"</span>,
-  set_theme = <span class='fl'>TRUE</span>
+  statistic <span class='op'>=</span> <span class='st'>"{median} ({p25, {p75})"</span>,
+  set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>
 )
 
-<span class='fu'>theme_gtsummary_mean_sd</span>(set_theme = <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>theme_gtsummary_mean_sd</span>(set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -355,7 +355,7 @@ to create your own themes.</p>
 <span class='va'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>trt</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='va'>trt</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by <span class='op'>=</span> <span class='va'>trt</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_stat_label.html'>add_stat_label</a></span>() <span class='op'>%&gt;%</span>
   <span class='fu'><a href='as_gt.html'>as_gt</a></span>()
 

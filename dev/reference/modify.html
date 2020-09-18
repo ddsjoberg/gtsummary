@@ -99,7 +99,7 @@ the column names." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9008</span>
       </span>
     </div>
 
@@ -185,17 +185,17 @@ the column names.</p>
 
     <pre class="usage"><span class='fu'>modify_header</span>(
   <span class='va'>x</span>,
-  update = <span class='kw'>NULL</span>,
-  stat_by = <span class='kw'>NULL</span>,
-  text_interpret = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"md"</span>, <span class='st'>"html"</span>),
+  update <span class='op'>=</span> <span class='kw'>NULL</span>,
+  stat_by <span class='op'>=</span> <span class='kw'>NULL</span>,
+  text_interpret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"md"</span>, <span class='st'>"html"</span>),
   <span class='va'>...</span>
 )
 
-<span class='fu'>modify_footnote</span>(<span class='va'>x</span>, <span class='va'>update</span>, abbreviation = <span class='fl'>FALSE</span>)
+<span class='fu'>modify_footnote</span>(<span class='va'>x</span>, <span class='va'>update</span>, abbreviation <span class='op'>=</span> <span class='cn'>FALSE</span>)
 
 <span class='fu'>modify_spanning_header</span>(<span class='va'>x</span>, <span class='va'>update</span>)
 
-<span class='fu'>show_header_names</span>(x = <span class='kw'>NULL</span>, quiet = <span class='kw'>NULL</span>)</pre>
+<span class='fu'>show_header_names</span>(x <span class='op'>=</span> <span class='kw'>NULL</span>, quiet <span class='op'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -316,8 +316,8 @@ e.g. <code>modify_header(p.value = "Model P-values")</code>. This is provided as
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># create summary table</span>
-<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='va'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span>)] <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='va'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
+<span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='va'>trial</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span>)<span class='op'>]</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
 <span class='co'># print the column names that can be modified</span>
@@ -340,27 +340,27 @@ e.g. <code>modify_header(p.value = "Model P-values")</code>. This is provided as
 <span class='co'># updating column headers and footnote</span>
 <span class='va'>modify_ex1</span> <span class='op'>&lt;-</span> <span class='va'>tbl</span> <span class='op'>%&gt;%</span>
   <span class='fu'>modify_header</span>(
-    update = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='va'>label</span> <span class='op'>~</span> <span class='st'>"**Variable**"</span>,
+    update <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='va'>label</span> <span class='op'>~</span> <span class='st'>"**Variable**"</span>,
                   <span class='va'>p.value</span> <span class='op'>~</span> <span class='st'>"**P**"</span>)
   ) <span class='op'>%&gt;%</span>
   <span class='fu'>modify_footnote</span>(
-    update = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) <span class='op'>~</span> <span class='st'>"median (IQR) for Age; n (%) for Grade"</span>
+    update <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) <span class='op'>~</span> <span class='st'>"median (IQR) for Age; n (%) for Grade"</span>
   )
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># using `stat_by=` argument to update headers, remove all footnotes, add spanning header</span>
 <span class='va'>modify_ex2</span> <span class='op'>&lt;-</span> <span class='va'>tbl</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>modify_header</span>(stat_by = <span class='st'>"**{level}**, N = {n} ({style_percent(p)}%)"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>modify_header</span>(stat_by <span class='op'>=</span> <span class='st'>"**{level}**, N = {n} ({style_percent(p)}%)"</span>) <span class='op'>%&gt;%</span>
   <span class='co'># use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes</span>
-  <span class='fu'>modify_footnote</span>(update = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='fl'>NA</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>modify_footnote</span>(update <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='fl'>NA</span>) <span class='op'>%&gt;%</span>
   <span class='fu'>modify_spanning_header</span>(<span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span>(<span class='st'>"stat_"</span>) <span class='op'>~</span> <span class='st'>"**Treatment Received**"</span>)
 
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># updating an abbreviation in table footnote</span>
 <span class='va'>modify_ex3</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='va'>response</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span>, family = <span class='va'>binomial</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(exponentiate = <span class='fl'>TRUE</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>modify_footnote</span>(<span class='va'>ci</span> <span class='op'>~</span> <span class='st'>"CI = Credible Interval"</span>, abbreviation = <span class='fl'>TRUE</span>)
+  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='va'>response</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span>, family <span class='op'>=</span> <span class='va'>binomial</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>(exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>modify_footnote</span>(<span class='va'>ci</span> <span class='op'>~</span> <span class='st'>"CI = Credible Interval"</span>, abbreviation <span class='op'>=</span> <span class='cn'>TRUE</span>)
 
 </div></span></pre>
   </div>
