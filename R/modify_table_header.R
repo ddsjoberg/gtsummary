@@ -31,15 +31,20 @@
 #'
 #'
 #' @examples
-#' lm(mpg ~ factor(cyl), mtcars) %>%
+#' # Example 1 ----------------------------------
+#' modify_table_header_ex1 <-
+#'   lm(mpg ~ factor(cyl), mtcars) %>%
 #'   tbl_regression() %>%
 #'   modify_table_header(column = estimate,
-#'                       label = "estimate test",
+#'                       label = "**Coefficient**",
 #'                       fmt_fun = function(x) style_sigfig(x, digits = 5),
-#'                       footnote_abbrev = "test = unit test",
-#'                       footnote = "this is a footnote") %>%
+#'                       footnote = "Regression Coefficient") %>%
 #'   modify_table_header(column = "p.value",
 #'                       hide = TRUE)
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{modify_table_header_ex1.png}{options: width=50\%}}
 
 modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NULL,
                                 missing_emdash = NULL, indent = NULL,
