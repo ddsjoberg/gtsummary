@@ -1,28 +1,36 @@
 # gtsummary (development version)
 
-* Add footnote to overall column
-  - Adding the footnote from the stat columns describing the statistics presented to the overall column (#643)
-  - Moved the nevent column to after the N column when add_nevent() is called on a tbl_regression() object (#439)
-
-* gtsummary themes updates
-  - Add `theme_gtsummary_mean_sd()` theme to report mean and SD by default and use t-tests and ANOVA in `add_p()` (#654)
-  - Added first draft of the NEJM theme
-  - Added the mid-point decimal separator for the Lancet theme
-
-* New function `add_glance_source_note` adds the statistics returned in broom::glance() as a source note on a `tbl_regression` (#434)
-
-* Fixed `style_ratio()` bug where there were rounding errors near one (#651)
-
-* There was an environments bug when evaluating the LHS of the formula inputs. In some complex situations, a stored character vector of column names could not properly evaluate (#604)
-
-* Fixed `style_sigfig()` bug where there were rounding errors near thresholds (#638)
-
-* Exporting the `modify_table_header()` function, which is an advanced-use function used to make modifications to the `.$table_header` object to update printing instructions for the gtsummary object.
+### New Functionality
 
 * New summary type `continuous2` allows adding labelled statistic rows to tables in `tbl_summary()` and `tbl_svysummary()`. You can report several lines of statistics with this type. (#620)
     - The `all_continuous()` function now selects summary types `continuous` and `continuous2` by default.
     - Added `all_continuous2()` function for selecting summary type `continuous2` exclusively.
     - Added `theme_gtsummary_continuous2()` to make `continuous2` the default summary type for all continuous variables.
+
+* New function `add_glance_source_note()` adds the statistics returned in `broom::glance()` as a source note on a `tbl_regression()` (#434)
+
+* Exporting the `modify_table_header()` function, which is an advanced-use function used to make modifications to the `.$table_header` object to update printing instructions for the gtsummary object.
+
+### Bug Fixes
+
+* Bug fix where `estimate_fun=` and `pvalue_fun=` were not being passed to `tbl_regression()` in `tbl_uvregression()`
+
+* There was an environments bug when evaluating the LHS of the formula inputs. In some complex situations, a stored character vector of column names could not properly evaluate (#604)
+
+* Fixed `style_ratio()` bug where there were rounding errors near one (#651)
+
+* Fixed `style_sigfig()` bug where there were rounding errors near thresholds (#638)
+
+* Adding the footnote from the stat columns describing the statistics presented to the overall column (#643)
+
+### Other Updates
+
+* Moved the nevent column to after the N column when add_nevent() is called on a tbl_regression() object (#439)
+
+* gtsummary themes updates
+  - Add `theme_gtsummary_mean_sd()` theme to report mean and SD by default and use t-tests and ANOVA in `add_p()` (#654)
+  - Added first draft of the NEJM theme
+  - Added the mid-point decimal separator for the Lancet theme
 
 # gtsummary 1.3.4
 
