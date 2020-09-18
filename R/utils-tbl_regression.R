@@ -111,3 +111,103 @@ gtsummary_model_frame <- function(x) {
   }
   )
 }
+
+.tbl_reression_default_table_header <- function(x, exponentiate,
+                                                tidy_columns_to_report,
+                                                estimate_fun,
+                                                pvalue_fun,
+                                                conf.level) {
+  # label ----------------------------------------------------------------------
+  x <-
+    modify_table_header(
+      x,
+      column = "label",
+      label = paste0("**", translate_text("Characteristic"), "**"),
+      hide = FALSE
+    )
+
+
+  # estimate -------------------------------------------------------------------
+  if ("estimate" %in% names(x$table_body))
+    x <- modify_table_header(
+      x,
+      column = "estimate",
+      label = glue("**{estimate_header(x, exponentiate)}**") %>% as.character(),
+      hide = !"estimate" %in% tidy_columns_to_report,
+      missing_emdash = "reference_row == TRUE",
+      footnote_abbrev =
+        estimate_header(x, exponentiate) %>% attr("footnote") %||% NA_character_,
+      fmt_fun = estimate_fun
+    )
+
+  # N --------------------------------------------------------------------------
+  if ("N" %in% names(x$table_body))
+    x <- modify_table_header(
+      x,
+      column = "N",
+      label = glue("**{translate_text('N')}**")  %>% as.character(),
+      fmt_fun = style_number
+    )
+
+  # ci -------------------------------------------------------------------------
+  if (all(c("conf.low", "conf.high") %in% names(x$table_body))) {
+    x <- modify_table_header(
+      x,
+      column = "ci",
+      label = glue("**{style_percent(conf.level, symbol = TRUE)} {translate_text('CI')}**") %>% as.character(),
+      hide = !all(c("conf.low", "conf.high") %in% tidy_columns_to_report),
+      missing_emdash = "reference_row == TRUE",
+      footnote_abbrev = translate_text("CI = Confidence Interval")
+    )
+    x <- modify_table_header(x,
+                             column = c("conf.low", "conf.high"),
+                             fmt_fun = estimate_fun)
+  }
+
+  # p.value --------------------------------------------------------------------
+  if ("p.value" %in% names(x$table_body))
+    x <- modify_table_header(
+      x,
+      column = "p.value",
+      label = paste0("**", translate_text("p-value"), "**"),
+      fmt_fun = pvalue_fun,
+      hide = !"p.value" %in% tidy_columns_to_report
+    )
+
+  # std.error ------------------------------------------------------------------
+  if ("std.error" %in% names(x$table_body))
+    x <- modify_table_header(
+      x,
+      column = "std.error",
+      label = paste0("**", translate_text("SE"), "**"),
+      footnote_abbrev = translate_text("SE = Standard Error"),
+      fmt_fun = purrr::partial(style_sigfig, digits = 3),
+      hide = !"std.error" %in% tidy_columns_to_report
+    )
+
+  # statistic ------------------------------------------------------------------
+  if ("statistic" %in% names(x$table_body))
+    x <- modify_table_header(
+      x,
+      column = "statistic",
+      label = paste0("**", translate_text("Statistic"), "**"),
+      fmt_fun = purrr::partial(style_sigfig, digits = 3),
+      hide = !"statistic" %in% tidy_columns_to_report
+    )
+
+  # finally adding style_sigfig(x, digits = 3) as default for all other columns
+  for (v in names(x$table_body)) {
+    if (
+      is.numeric(x$table_body[[v]]) && # is a numeric column
+      is.null(x$table_header$fmt_fun[x$table_header$column == v]) # fmt_fun is empty
+    )
+      x <-
+        modify_table_header(
+          x,
+          column = v,
+          fmt_fun = purrr::partial(style_sigfig, digits = 3)
+        )
+  }
+
+  x
+}
