@@ -140,7 +140,7 @@ test_that("Testing lme4 results", {
 
   # coefs are exponentiated properly
   expect_equivalent(
-    coef(mod_glmer)[[1]] %>% {.[1, 2:ncol(.)]} %>% map_dbl(exp),
+    coef(mod_glmer)[[1]] %>% {.[1, 2:ncol(.)]} %>% purrr::map_dbl(exp),
     tbl_lme4$table_body %>% pull(estimate) %>% discard(is.na)
   )
 })
