@@ -186,7 +186,7 @@ inline reporting in an R markdown document. Detailed examples in the
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_cross</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='kw'>x</span>, col_level = <span class='kw'>NULL</span>, row_level = <span class='kw'>NULL</span>, pvalue_fun = <span class='kw'>NULL</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='va'>x</span>, col_level = <span class='kw'>NULL</span>, row_level = <span class='kw'>NULL</span>, pvalue_fun = <span class='kw'>NULL</span>, <span class='va'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -230,13 +230,13 @@ and return a string that is the rounded/formatted p-value (e.g.
 <code><a href='tbl_cross.html'>tbl_cross</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>tbl_cross</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='tbl_cross.html'>tbl_cross</a></span>(<span class='kw'>trial</span>, row = <span class='kw'>trt</span>, col = <span class='kw'>response</span>) <span class='op'>%&gt;%</span>
+    <pre class="examples"><div class='input'><span class='va'>tbl_cross</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='tbl_cross.html'>tbl_cross</a></span>(<span class='va'>trial</span>, row = <span class='va'>trt</span>, col = <span class='va'>response</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span>()
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='kw'>tbl_cross</span>, row_level = <span class='st'>"Drug A"</span>, col_level = <span class='st'>"1"</span>)
-</div><div class='output co'>#&gt; [1] "28"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='kw'>tbl_cross</span>, row_level = <span class='st'>"Total"</span>, col_level = <span class='st'>"1"</span>)
-</div><div class='output co'>#&gt; [1] "61"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='kw'>tbl_cross</span>, col_level = <span class='st'>"p.value"</span>)
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='va'>tbl_cross</span>, row_level = <span class='st'>"Drug A"</span>, col_level = <span class='st'>"1"</span>)
+</div><div class='output co'>#&gt; [1] "28"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='va'>tbl_cross</span>, row_level = <span class='st'>"Total"</span>, col_level = <span class='st'>"1"</span>)
+</div><div class='output co'>#&gt; [1] "61"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='va'>tbl_cross</span>, col_level = <span class='st'>"p.value"</span>)
 </div><div class='output co'>#&gt; [1] "p=0.7"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

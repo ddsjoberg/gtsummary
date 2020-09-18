@@ -178,7 +178,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>tbl_svysummary</span>(
-  <span class='kw'>data</span>,
+  <span class='va'>data</span>,
   by = <span class='kw'>NULL</span>,
   label = <span class='kw'>NULL</span>,
   statistic = <span class='kw'>NULL</span>,
@@ -388,16 +388,16 @@ of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
 <span class='co'># A simple weighted dataset</span>
-<span class='kw'>tbl_svysummary_ex1</span> <span class='op'>&lt;-</span>
-  <span class='kw'>survey</span>::<span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(<span class='op'>~</span><span class='fl'>1</span>, data = <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='kw'>Titanic</span>), weights = <span class='op'>~</span><span class='kw'>Freq</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_svysummary</span>(by = <span class='kw'>Survived</span>, percent = <span class='st'>"row"</span>)
+<span class='va'>tbl_svysummary_ex1</span> <span class='op'>&lt;-</span>
+  <span class='kw'>survey</span>::<span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(<span class='op'>~</span><span class='fl'>1</span>, data = <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='va'>Titanic</span>), weights = <span class='op'>~</span><span class='va'>Freq</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_svysummary</span>(by = <span class='va'>Survived</span>, percent = <span class='st'>"row"</span>)
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># A dataset with a complex design</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>api</span>, package = <span class='st'>"survey"</span>)
-<span class='kw'>tbl_svysummary_ex2</span> <span class='op'>&lt;-</span>
-  <span class='kw'>survey</span>::<span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(id = <span class='op'>~</span><span class='kw'>dnum</span>, weights = <span class='op'>~</span><span class='kw'>pw</span>, data = <span class='kw'>apiclus1</span>, fpc = <span class='op'>~</span><span class='kw'>fpc</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_svysummary</span>(by = <span class='st'>"both"</span>, include = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>cname</span>, <span class='kw'>api00</span>, <span class='kw'>api99</span>, <span class='kw'>both</span>))
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='va'>api</span>, package = <span class='st'>"survey"</span>)
+<span class='va'>tbl_svysummary_ex2</span> <span class='op'>&lt;-</span>
+  <span class='kw'>survey</span>::<span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span>(id = <span class='op'>~</span><span class='va'>dnum</span>, weights = <span class='op'>~</span><span class='va'>pw</span>, data = <span class='va'>apiclus1</span>, fpc = <span class='op'>~</span><span class='va'>fpc</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_svysummary</span>(by = <span class='st'>"both"</span>, include = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='va'>cname</span>, <span class='va'>api00</span>, <span class='va'>api99</span>, <span class='va'>both</span>))
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

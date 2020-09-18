@@ -135,18 +135,18 @@
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>Every {gtsummary} object has a few characteristics common among all objects. Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://purrr.tidyverse.org">purrr</a></span>); <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>); <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://tibble.tidyverse.org/">tibble</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="va"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span>); <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>); <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span>)
 
-<span class="kw">tbl_regression_ex</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw">age</span> <span class="op">~</span> <span class="kw">grade</span> <span class="op">+</span> <span class="kw">marker</span>, <span class="kw">trial</span>) <span class="op">%&gt;%</span>
+<span class="va">tbl_regression_ex</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="va">age</span> <span class="op">~</span> <span class="va">grade</span> <span class="op">+</span> <span class="va">marker</span>, <span class="va">trial</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span>() <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span>(t = <span class="fl">0.5</span>) 
 
-<span class="kw">tbl_summary_ex</span> <span class="op">&lt;-</span>
-  <span class="kw">trial</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">trt</span>, <span class="kw">age</span>, <span class="kw">grade</span>, <span class="kw">response</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(by = <span class="kw">trt</span>)</pre></div>
+<span class="va">tbl_summary_ex</span> <span class="op">&lt;-</span>
+  <span class="va">trial</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="va">trt</span>, <span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>(by = <span class="va">trt</span>)</pre></div>
 </div>
 <div id="structure-of-a-gtsummary-object" class="section level2">
 <h2 class="hasAnchor">
@@ -158,7 +158,7 @@
 <a href="#table_body" class="anchor"></a>table_body</h4>
 <p>The <code>.$table_body</code> object is the data frame that will ultimately be printed as the output. The table must include columns <code>"label"</code>, <code>"row_type"</code>, and <code>"variable"</code>. The <code>"label"</code> column is printed, and the other two are hidden from the final output.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">tbl_summary_ex</span><span class="op">$</span><span class="kw">table_body</span>
+<span class="va">tbl_summary_ex</span><span class="op">$</span><span class="va">table_body</span>
 <span class="co">#&gt; # A tibble: 8 x 5</span>
 <span class="co">#&gt;   variable row_type label          stat_1      stat_2     </span>
 <span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;          &lt;chr&gt;       &lt;chr&gt;      </span>
@@ -246,7 +246,7 @@
 <p>NOTE: Columns ‘hide’, ‘align’, ‘missing_emdash’, ‘indent’, ‘bold’, and ‘italic’ MUST follow the tidyverse style guidelines and include spaces around any variable names, e.g. <code>row_type == 'label'</code> (NOT <code>row_type=='label'</code>).</p>
 <p>Example from <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">tbl_regression_ex</span><span class="op">$</span><span class="kw">table_header</span>
+<span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_header</span>
 <span class="co">#&gt; # A tibble: 13 x 13</span>
 <span class="co">#&gt;    column label hide  align missing_emdash indent text_interpret bold  italic</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt; </span>
@@ -275,9 +275,9 @@
 <a href="#table_body-1" class="anchor"></a>table_body</h4>
 <p>When constructing a {gtsummary} object, the author will begin with the <code>.$table_body</code> object. Recall the <code>.$table_body</code> data frame must include columns <code>"label"</code>, <code>"row_type"</code>, and <code>"variable"</code>. Of these columns, only the <code>"label"</code> column will be printed with the final results. The <code>"row_type"</code> column typically will control whether or not the label column is indented. The <code>"variable"</code> column is often used in the <code><a href="../reference/inline_text.html">inline_text()</a></code> family of functions, and merging {gtsummary} tables with <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">tbl_regression_ex</span> <span class="op">%&gt;%</span>
+<span class="va">tbl_regression_ex</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span>(<span class="st">"table_body"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">variable</span>, <span class="kw">row_type</span>, <span class="kw">label</span>)
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="va">variable</span>, <span class="va">row_type</span>, <span class="va">label</span>)
 <span class="co">#&gt; # A tibble: 5 x 3</span>
 <span class="co">#&gt;   variable row_type label               </span>
 <span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;               </span>
@@ -295,7 +295,7 @@
 <p>First is the <code>table_header_fill_missing()</code> function. This function ensures <code>.$table_header</code> contains a row for every column of <code>.$table_body</code>. If a column does not exist, it is populated with appropriate default values.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="kw">gtsummary</span>:::<span class="fu">table_header_fill_missing</span>(
-  table_header = <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(column = <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw">tbl_regression_ex</span><span class="op">$</span><span class="kw">table_body</span>))
+  table_header = <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(column = <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_body</span>))
 ) 
 <span class="co">#&gt; # A tibble: 13 x 13</span>
 <span class="co">#&gt;    column label hide  align missing_emdash indent text_interpret bold  italic</span>
@@ -325,12 +325,12 @@
 <p>In some cases, the package defaults to printing with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> utilizing the <code><a href="../reference/as_kable.html">as_kable()</a></code> function.</p>
 <p>While the actual print function is slightly more involved, it is basically this:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw">print.gtsummary</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">x</span>) {
-  <span class="co">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span>(<span class="st">"gtsummary.print_engine"</span>) <span class="op">==</span> <span class="st">"gt"</span>) {
-    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="../reference/as_gt.html">as_gt</a></span>(<span class="kw">x</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>())
+<span class="va">print.gtsummary</span> <span class="op">&lt;-</span> <span class="kw">function</span>(<span class="kw">x</span>) {
+  <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span>(<span class="st">"gtsummary.print_engine"</span>) <span class="op">==</span> <span class="st">"gt"</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="../reference/as_gt.html">as_gt</a></span>(<span class="va">x</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>())
   }
-  <span class="co">else</span> <span class="co">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span>(<span class="st">"gtsummary.print_engine"</span>) <span class="op">==</span> <span class="st">"kable"</span>) {
-    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="../reference/as_kable.html">as_kable</a></span>(<span class="kw">x</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>())
+  <span class="kw">else</span> <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span>(<span class="st">"gtsummary.print_engine"</span>) <span class="op">==</span> <span class="st">"kable"</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="../reference/as_kable.html">as_kable</a></span>(<span class="va">x</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>())
   }
 }</pre></div>
 </div>

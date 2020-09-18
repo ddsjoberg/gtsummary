@@ -164,19 +164,19 @@
 <p><img src="https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_summary_demo1.gif" alt="animated" width="100%"></p>
 <p>Example basic table:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="va"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span>)
 <span class="co"># make dataset with a few variables to summarize</span>
-<span class="kw">trial2</span> <span class="op">&lt;-</span> <span class="kw">trial</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">trt</span>, <span class="kw">age</span>, <span class="kw">grade</span>, <span class="kw">response</span>)
+<span class="va">trial2</span> <span class="op">&lt;-</span> <span class="va">trial</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="va">trt</span>, <span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span>)
 
 <span class="co"># summarize the data with our package</span>
-<span class="kw">table1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span>(<span class="kw">trial2</span>)</pre></div>
+<span class="va">table1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span>(<span class="va">trial2</span>)</pre></div>
 <p><img src="reference/figures/README-tbl_summary_print_simple-1.png" width="30%"></p>
 <p>There are many <strong>customization options</strong> to <strong>add information</strong> (like comparing groups) and <strong>format results</strong> (like bold labels) in your table. See the <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><code>tbl_summary()</code></a> tutorial for many more options, or below for one example.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">table2</span> <span class="op">&lt;-</span> 
+<span class="va">table2</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span>(
-    <span class="kw">trial2</span>,
-    by = <span class="kw">trt</span>, <span class="co"># split table by group</span>
+    <span class="va">trial2</span>,
+    by = <span class="va">trt</span>, <span class="co"># split table by group</span>
     missing = <span class="st">"no"</span> <span class="co"># don't list missing data separately</span>
   ) <span class="op">%&gt;%</span>
   <span class="fu"><a href="reference/add_n.html">add_n</a></span>() <span class="op">%&gt;%</span> <span class="co"># add column with total number of non-missing observations</span>
@@ -190,9 +190,9 @@
 <a href="#regression-models" class="anchor"></a>Regression Models</h3>
 <p>Use <a href="http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html"><code>tbl_regression()</code></a> to easily and beautifully display regression model results in a table. See the <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html">tutorial</a> for customization options.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="kw">response</span> <span class="op">~</span> <span class="kw">trt</span> <span class="op">+</span> <span class="kw">age</span> <span class="op">+</span> <span class="kw">grade</span>, <span class="kw">trial</span>, family = <span class="kw">binomial</span>)
+<span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="va">response</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span>, family = <span class="va">binomial</span>)
 
-<span class="kw">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span>(<span class="kw">mod1</span>, exponentiate = <span class="fl">TRUE</span>)</pre></div>
+<span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span>(<span class="va">mod1</span>, exponentiate = <span class="fl">TRUE</span>)</pre></div>
 <p><img src="reference/figures/README-tbl_regression_printa-1.png" width="40%"></p>
 </div>
 <div id="side-by-side-regression-models" class="section level3">
@@ -200,18 +200,18 @@
 <a href="#side-by-side-regression-models" class="anchor"></a>Side-by-side Regression Models</h3>
 <p>You can also present side-by-side regression model results using <code><a href="reference/tbl_merge.html">tbl_merge()</a></code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/therneau/survival">survival</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="va"><a href="https://github.com/therneau/survival">survival</a></span>)
 <span class="co">#&gt; Warning: package 'survival' was built under R version 4.0.2</span>
 
 <span class="co"># build survival model table</span>
-<span class="kw">t2</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span>(<span class="kw">ttdeath</span>, <span class="kw">death</span>) <span class="op">~</span> <span class="kw">trt</span> <span class="op">+</span> <span class="kw">grade</span> <span class="op">+</span> <span class="kw">age</span>, <span class="kw">trial</span>) <span class="op">%&gt;%</span>
+<span class="va">t2</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span>(<span class="va">ttdeath</span>, <span class="va">death</span>) <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">grade</span> <span class="op">+</span> <span class="va">age</span>, <span class="va">trial</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span>(exponentiate = <span class="fl">TRUE</span>)
 
 <span class="co"># merge tables </span>
-<span class="kw">tbl_merge_ex1</span> <span class="op">&lt;-</span>
+<span class="va">tbl_merge_ex1</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="reference/tbl_merge.html">tbl_merge</a></span>(
-    tbls = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">t1</span>, <span class="kw">t2</span>),
+    tbls = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="va">t1</span>, <span class="va">t2</span>),
     tab_spanner = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span>)
   )</pre></div>
 <p><img src="reference/figures/README-tbl_merge_ex1-1.png" width="60%"></p>

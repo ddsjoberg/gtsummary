@@ -185,13 +185,13 @@ Detailed examples in the
 
     <pre class="usage"><span class='co'># S3 method for tbl_uvregression</span>
 <span class='fu'><a href='inline_text.html'>inline_text</a></span>(
-  <span class='kw'>x</span>,
-  <span class='kw'>variable</span>,
+  <span class='va'>x</span>,
+  <span class='va'>variable</span>,
   level = <span class='kw'>NULL</span>,
   pattern = <span class='st'>"{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"</span>,
   estimate_fun = <span class='kw'>NULL</span>,
   pvalue_fun = <span class='kw'>NULL</span>,
-  <span class='kw'>...</span>
+  <span class='va'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -269,17 +269,17 @@ print the table the estimates are extracted from.</p><ul>
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>inline_text_ex1</span> <span class='op'>&lt;-</span>
-  <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"response"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)] <span class='op'>%&gt;%</span>
+    <pre class="examples"><div class='input'><span class='va'>inline_text_ex1</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"response"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)] <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span>(
-    method = <span class='kw'>glm</span>,
-    method.args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(family = <span class='kw'>binomial</span>),
-    y = <span class='kw'>response</span>,
+    method = <span class='va'>glm</span>,
+    method.args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(family = <span class='va'>binomial</span>),
+    y = <span class='va'>response</span>,
     exponentiate = <span class='fl'>TRUE</span>
   )
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='kw'>inline_text_ex1</span>, variable = <span class='kw'>age</span>)
-</div><div class='output co'>#&gt; 1.02 (95% CI 1.00, 1.04; p=0.10)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='kw'>inline_text_ex1</span>, variable = <span class='kw'>grade</span>, level = <span class='st'>"III"</span>)
+<span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='va'>inline_text_ex1</span>, variable = <span class='va'>age</span>)
+</div><div class='output co'>#&gt; 1.02 (95% CI 1.00, 1.04; p=0.10)</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span>(<span class='va'>inline_text_ex1</span>, variable = <span class='va'>grade</span>, level = <span class='st'>"III"</span>)
 </div><div class='output co'>#&gt; 1.10 (95% CI 0.52, 2.29; p=0.8)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

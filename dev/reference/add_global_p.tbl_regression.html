@@ -181,13 +181,13 @@ type = &quot;III&quot; to calculate global p-values for categorical variables." 
 
     <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
 <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>(
-  <span class='kw'>x</span>,
-  include = <span class='kw'>x</span><span class='op'>$</span><span class='kw'>table_body</span><span class='op'>$</span><span class='kw'>variable</span>[<span class='kw'>x</span><span class='op'>$</span><span class='kw'>table_body</span><span class='op'>$</span><span class='kw'>var_type</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"categorical"</span>,
+  <span class='va'>x</span>,
+  include = <span class='va'>x</span><span class='op'>$</span><span class='va'>table_body</span><span class='op'>$</span><span class='va'>variable</span>[<span class='va'>x</span><span class='op'>$</span><span class='va'>table_body</span><span class='op'>$</span><span class='va'>var_type</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"categorical"</span>,
     <span class='st'>"interaction"</span>)],
   type = <span class='kw'>NULL</span>,
   keep = <span class='fl'>FALSE</span>,
   quiet = <span class='kw'>NULL</span>,
-  <span class='kw'>...</span>,
+  <span class='va'>...</span>,
   terms = <span class='kw'>NULL</span>
 )</pre>
 
@@ -263,8 +263,8 @@ Default is <code>FALSE</code></p></td>
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>tbl_lm_global_ex1</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>marker</span> <span class='op'>~</span> <span class='kw'>age</span> <span class='op'>+</span> <span class='kw'>grade</span>, <span class='kw'>trial</span>) <span class='op'>%&gt;%</span>
+    <pre class="examples"><div class='input'><span class='va'>tbl_lm_global_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='va'>marker</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_global_p.html'>add_global_p</a></span>()
 </div><div class='output co'>#&gt; <span class='message'>Global p-values for variable(s) `include = "grade"` were calculated with</span>

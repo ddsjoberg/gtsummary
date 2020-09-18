@@ -182,8 +182,8 @@ The function allows a user to add a new column with a custom, user-defined stati
     </div>
 
     <pre class="usage"><span class='fu'>add_stat</span>(
-  <span class='kw'>x</span>,
-  <span class='kw'>fns</span>,
+  <span class='va'>x</span>,
+  <span class='va'>fns</span>,
   fmt_fun = <span class='kw'>NULL</span>,
   header = <span class='st'>"**Statistic**"</span>,
   footnote = <span class='kw'>NULL</span>,
@@ -257,26 +257,26 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
 <span class='co'># this example replicates `add_p()`</span>
 
 <span class='co'># fn returns t-test pvalue</span>
-<span class='kw'>my_ttest</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>data</span>, <span class='kw'>variable</span>, <span class='kw'>by</span>, <span class='kw'>...</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='kw'>data</span>[[<span class='kw'>variable</span>]] <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='kw'>data</span>[[<span class='kw'>by</span>]]))<span class='op'>$</span><span class='kw'>p.value</span>
+<span class='va'>my_ttest</span> <span class='op'>&lt;-</span> <span class='kw'>function</span>(<span class='kw'>data</span>, <span class='kw'>variable</span>, <span class='kw'>by</span>, <span class='kw'>...</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='va'>data</span>[[<span class='va'>variable</span>]] <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='va'>data</span>[[<span class='va'>by</span>]]))<span class='op'>$</span><span class='va'>p.value</span>
 }
 
-<span class='kw'>add_stat_ex1</span> <span class='op'>&lt;-</span>
-  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>trt</span>, <span class='kw'>age</span>, <span class='kw'>marker</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>(test = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='kw'>t.test</span>) <span class='op'>%&gt;%</span>
+<span class='va'>add_stat_ex1</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='va'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span>(test = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='va'>t.test</span>) <span class='op'>%&gt;%</span>
   <span class='co'># replicating result of `add_p()` with `add_stat()`</span>
   <span class='fu'>add_stat</span>(
-    fns = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='kw'>my_ttest</span>, <span class='co'># all variables compared with with t-test</span>
-    fmt_fun = <span class='kw'>style_pvalue</span>,        <span class='co'># format result with style_pvalue()</span>
+    fns = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='va'>my_ttest</span>, <span class='co'># all variables compared with with t-test</span>
+    fmt_fun = <span class='va'>style_pvalue</span>,        <span class='co'># format result with style_pvalue()</span>
     header = <span class='st'>"**My p-value**"</span>      <span class='co'># new column header</span>
   )
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># fn returns t-test test statistic and pvalue</span>
-<span class='kw'>my_ttest2</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>data</span>, <span class='kw'>variable</span>, <span class='kw'>by</span>, <span class='kw'>...</span>) {
-  <span class='kw'>tt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='kw'>data</span>[[<span class='kw'>variable</span>]] <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='kw'>data</span>[[<span class='kw'>by</span>]]))
+<span class='va'>my_ttest2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span>(<span class='kw'>data</span>, <span class='kw'>variable</span>, <span class='kw'>by</span>, <span class='kw'>...</span>) {
+  <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span>(<span class='va'>data</span>[[<span class='va'>variable</span>]] <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='va'>data</span>[[<span class='va'>by</span>]]))
 
   <span class='co'># returning test statistic and pvalue</span>
   <span class='kw'>stringr</span>::<span class='fu'><a href='https://stringr.tidyverse.org/reference/str_glue.html'>str_glue</a></span>(
@@ -284,12 +284,12 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
   )
 }
 
-<span class='kw'>add_stat_ex2</span> <span class='op'>&lt;-</span>
-  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>trt</span>, <span class='kw'>age</span>, <span class='kw'>marker</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
+<span class='va'>add_stat_ex2</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='va'>trt</span>, missing = <span class='st'>"no"</span>) <span class='op'>%&gt;%</span>
   <span class='fu'>add_stat</span>(
-    fns = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='kw'>my_ttest2</span>,    <span class='co'># all variables will be compared by t-test</span>
+    fns = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>() <span class='op'>~</span> <span class='va'>my_ttest2</span>,    <span class='co'># all variables will be compared by t-test</span>
     fmt_fun = <span class='kw'>NULL</span>, <span class='co'># fn returns and chr, so no formatting function needed</span>
     header = <span class='st'>"**Treatment Comparison**"</span>,       <span class='co'># column header</span>
     footnote = <span class='st'>"T-test statistic and p-value"</span>  <span class='co'># footnote</span>

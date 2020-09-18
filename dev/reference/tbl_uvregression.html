@@ -208,8 +208,8 @@ dichotomous variables appropriate for logistic regression with <a href='https://
     </div>
 
     <pre class="usage"><span class='fu'>tbl_uvregression</span>(
-  <span class='kw'>data</span>,
-  <span class='kw'>method</span>,
+  <span class='va'>data</span>,
+  <span class='va'>method</span>,
   y = <span class='kw'>NULL</span>,
   x = <span class='kw'>NULL</span>,
   method.args = <span class='kw'>NULL</span>,
@@ -384,25 +384,25 @@ units in your model.  Here are some common exceptions.</p><ol>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='kw'>tbl_uv_ex1</span> <span class='op'>&lt;-</span>
+<span class='va'>tbl_uv_ex1</span> <span class='op'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
-    <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"response"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)],
-    method = <span class='kw'>glm</span>,
-    y = <span class='kw'>response</span>,
-    method.args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(family = <span class='kw'>binomial</span>),
+    <span class='va'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"response"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>)],
+    method = <span class='va'>glm</span>,
+    y = <span class='va'>response</span>,
+    method.args = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(family = <span class='va'>binomial</span>),
     exponentiate = <span class='fl'>TRUE</span>
   )
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># rounding pvalues to 2 decimal places</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/therneau/survival'>survival</a></span>)
-<span class='kw'>tbl_uv_ex2</span> <span class='op'>&lt;-</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='va'><a href='https://github.com/therneau/survival'>survival</a></span>)
+<span class='va'>tbl_uv_ex2</span> <span class='op'>&lt;-</span>
   <span class='fu'>tbl_uvregression</span>(
-    <span class='kw'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ttdeath"</span>, <span class='st'>"death"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)],
-    method = <span class='kw'>coxph</span>,
-    y = <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>),
+    <span class='va'>trial</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ttdeath"</span>, <span class='st'>"death"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>)],
+    method = <span class='va'>coxph</span>,
+    y = <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='va'>ttdeath</span>, <span class='va'>death</span>),
     exponentiate = <span class='fl'>TRUE</span>,
-    pvalue_fun = <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='kw'>x</span>, digits = <span class='fl'>2</span>)
+    pvalue_fun = <span class='kw'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span>(<span class='va'>x</span>, digits = <span class='fl'>2</span>)
   )
 </div></pre>
   </div>

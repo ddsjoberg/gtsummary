@@ -193,7 +193,7 @@ the default reporting style to match another journal, or your own
 personal style.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>set_gtsummary_theme</span>(<span class='kw'>x</span>)
+    <pre class="usage"><span class='fu'>set_gtsummary_theme</span>(<span class='va'>x</span>)
 
 <span class='fu'>reset_gtsummary_theme</span>()</pre>
 
@@ -224,10 +224,10 @@ named list defining a gtsummary theme. See details below.</p></td>
 </div><div class='output co'>#&gt; <span class='message'>Setting `JAMA` theme</span></div><div class='output co'>#&gt; <span class='message'>Setting `JAMA` theme</span></div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
 <span class='fu'>set_gtsummary_theme</span>(<span class='fu'><a href='theme_gtsummary.html'>theme_gtsummary_compact</a></span>())
 </div><div class='output co'>#&gt; <span class='message'>Setting `Compact` theme</span></div><div class='output co'>#&gt; <span class='message'>Setting `Compact` theme</span></div><div class='input'>
-<span class='kw'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span>
-  <span class='kw'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>age</span>, <span class='kw'>grade</span>, <span class='kw'>trt</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='kw'>trt</span>) <span class='op'>%&gt;%</span>
+<span class='va'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>trt</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by = <span class='va'>trt</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_stat_label.html'>add_stat_label</a></span>() <span class='op'>%&gt;%</span>
   <span class='fu'><a href='as_gt.html'>as_gt</a></span>()
 
