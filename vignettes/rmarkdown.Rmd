@@ -237,12 +237,11 @@ as_kable(tbl, format = "latex")
 Use the {gt} package's `gt::gtsave()` function to save images of {gtsummary} tables. 
 
 ```{r, eval = FALSE}
-# build gtsummary table
-tbl_summary(trial) %>%
-  # convert to gt table
-  as_gt() %>%
-  # save table as image
-  gt::gtsave(filename = "my_table_image.png")
+tbl_summary(trial) %>%    # build gtsummary table
+  as_gt() %>%             # convert to gt table
+  gt::gtsave(             # save table as image
+    filename = "my_table_image.png"
+  )
 ```
 
 ## Tips
