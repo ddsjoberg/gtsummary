@@ -15,8 +15,8 @@ filter_p(x, q = FALSE, t = 0.05)
 
 \item{q}{Logical argument. When \code{TRUE} will the q-value column is used}
 
-\item{t}{Variable with p-value or q-value less than or equal to this threshold
-will be retained. Default is 0.05.}
+\item{t}{p-values/q-values less than or equal to this threshold
+will be retained. Default is 0.05}
 }
 \description{
 Sort and filter variables in table by p-values

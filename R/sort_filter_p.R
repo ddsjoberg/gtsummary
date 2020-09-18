@@ -2,8 +2,8 @@
 #'
 #' @param x An object created using gtsummary functions
 #' @param q Logical argument. When `TRUE` will the q-value column is used
-#' @param t Variable with p-value or q-value less than or equal to this threshold
-#' will be retained. Default is 0.05.
+#' @param t p-values/q-values less than or equal to this threshold
+#' will be retained. Default is 0.05
 #' @author Karissa Whiting, Daniel D. Sjoberg
 #' @name sort_filter_p
 #' @rdname sort_filter_p
