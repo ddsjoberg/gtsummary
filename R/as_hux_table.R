@@ -80,7 +80,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-# creating huxtable calls from table_header -----------------------------------
+# creating huxtable calls from table_header ------------------------------------
 table_header_to_huxtable_calls <- function(x, ...) {
 
   # adding id number for columns not hidden
