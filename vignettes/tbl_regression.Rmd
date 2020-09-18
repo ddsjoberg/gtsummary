@@ -81,7 +81,7 @@ The default output from `tbl_regression()` is meant to be publication ready.
 * Let's start by creating a **logistic regression model** to **predict tumor response** using the variables age and grade from the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set. 
 ```{r, message=FALSE}
 # build logistic regression model
-m1 <- glm(response ~ age + grade, trial, family = binomial)
+m1 <- glm(response ~ age + stage, trial, family = binomial)
 
 # view raw model results
 summary(m1)$coefficients
@@ -191,25 +191,27 @@ m1 %>%
 
 There are formatting options available, such as adding bold and italics to text.
 In the example below,  
-  - Variable labels are **bold**  
-  - **Global p-values** for Stage and Grade are reported
-  - P-values less than 0.10 are **bold** 
-  - Large p-values are rounded to **two decimal places**  
   - Coefficients are **exponentiated** to give odds ratios  
-  - Odds ratios are rounded to 2 or 3 significant figures
+  - **Global p-values** for Stage are reported
+  - Large p-values are rounded to **two decimal places**  
+  - P-values less than 0.10 are **bold** 
+  - Variable labels are **bold**  
+  - Variable levels are **italicized**  
 
-```{r, message=FALSE}
+```{r, eval=FALSE}
 # format results into data frame with global p-values
 m1 %>%
   tbl_regression(
     exponentiate = TRUE, 
     pvalue_fun = ~style_pvalue(.x, digits = 2),
-    estimate_fun = ~style_ratio(.x, digits = 3)
   ) %>% 
   add_global_p() %>%
   bold_p(t = 0.10) %>%
-  bold_labels()
+  bold_labels() %>%
+  italicize_levels()
 ```
+
+<img src = "img/crayon-tbl_regression.png" width = "100%">
 
 ## Univariate Regression {#tbl_uvregression}
 
