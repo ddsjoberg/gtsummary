@@ -66,14 +66,22 @@ Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
 vignette for information on \code{.$table_header} objects.
 }
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{modify_table_header_ex1.png}{options: width=50\%}}
+}
+
 \examples{
-lm(mpg ~ factor(cyl), mtcars) \%>\%
+# Example 1 ----------------------------------
+modify_table_header_ex1 <-
+  lm(mpg ~ factor(cyl), mtcars) \%>\%
   tbl_regression() \%>\%
   modify_table_header(column = estimate,
-                      label = "estimate test",
+                      label = "**Coefficient**",
                       fmt_fun = function(x) style_sigfig(x, digits = 5),
-                      footnote_abbrev = "test = unit test",
-                      footnote = "this is a footnote") \%>\%
+                      footnote = "Regression Coefficient") \%>\%
   modify_table_header(column = "p.value",
                       hide = TRUE)
 }
