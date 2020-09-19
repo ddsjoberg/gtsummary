@@ -198,7 +198,7 @@ In the example below,
   - Variable labels are **bold**  
   - Variable levels are **italicized**  
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 # format results into data frame with global p-values
 m1 %>%
   tbl_regression(
@@ -211,8 +211,6 @@ m1 %>%
   italicize_levels()
 ```
 
-<img src = "img/crayon-tbl_regression.png" width = "100%">
-
 ## Univariate Regression {#tbl_uvregression}
 
 The `tbl_uvregression()` function produces a table of univariate regression models.
@@ -221,7 +219,7 @@ The function's results can be modified in similar ways to `tbl_regression()`.
 
 ```{r tbl_uvregression}
 trial %>%
-  select(-death, -ttdeath, -stage) %>%
+  select(response, age, grade) %>%
   tbl_uvregression(
     method = glm,
     y = response,

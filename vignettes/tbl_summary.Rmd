@@ -136,7 +136,7 @@ tibble::tribble(
 
 Example modifying `tbl_summary()` arguments.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 trial2 %>%
   tbl_summary(
     by = trt,
@@ -147,8 +147,6 @@ trial2 %>%
     missing_text = "(Missing)"
   )
 ```
-
-<img src = "img/crayon-tbl_summary-args.png" width = "100%">
 
 ### {gtsummary} functions to add information
 
@@ -190,10 +188,10 @@ tibble::tribble(
 
 Example adding `tbl_summary()`-family functions
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 trial2 %>%
   tbl_summary(by = trt) %>%
-  add_p() %>%
+  add_p(pvalue_fun = ~style_pvalue(.x, digits = 2)) %>%
   add_overall() %>%
   add_n() %>%
   modify_header(label ~ "**Variable**") %>%
@@ -203,8 +201,6 @@ trial2 %>%
   ) %>%
   bold_labels()
 ```
-
-<img src = "img/crayon-tbl_summary-fns.png" width = "100%">
 
 ### {gt} functions to format table
 
@@ -235,14 +231,14 @@ Going beyond typing out specific variables in your data set, you can use:
 
 1. Additional [**{gtsummary} selectors**](http://www.danieldsjoberg.com/gtsummary/reference/select_helpers.html) that are included in the package to supplement tidyselect functions.
 
-    + **Summary type** There are three types of summary types in {gtsummary}, and you may use the type to select columns.  This is useful, for example, when you wish to report the mean and standard deviation for all continuous variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
+    + **Summary type** There are two primary ways to select variables by their summary type. This is useful, for example, when you wish to report the mean and standard deviation for all continuous variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
 
       ```{r, eval=FALSE}
-      all_continuous()      all_categorical()      all_dichotomous()
+      all_continuous()
+      all_categorical()
       ```
-    Dichotomous variables are, by default, included with `all_categorical()`. Use `all_categorical(dichotomous = FALSE)` to exclude dichotomous variables.
+    Dichotomous variables are, by default, included with `all_categorical()`. 
 
-<img src = "img/crayon-selectors.png" width = "100%">
 
 ## Multi-line Continuous Summaries {#continuous2}
 
@@ -255,7 +251,8 @@ trial2 %>%
   tbl_summary(
     by = trt,
     type = all_continuous() ~ "continuous2",
-    statistic = all_continuous() ~ c("{median} ({p25}, {p75})", 
+    statistic = all_continuous() ~ c("{N_nonmiss}",
+                                     "{median} ({p25}, {p75})", 
                                      "{min}, {max}"),
     missing = "no"
   ) %>%
