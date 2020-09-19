@@ -226,7 +226,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
 
   # building regression models -------------------------------------------------
   tbl_reg_args <-
-    c("exponentiate", "conf.level", "label", "include", "show_single_row", "tidy_fun")
+    c("exponentiate", "conf.level", "label", "include", "show_single_row",
+      "tidy_fun", "estimate_fun", "pvalue_fun")
 
   df_model <-
     tibble(
