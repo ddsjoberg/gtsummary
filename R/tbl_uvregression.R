@@ -252,7 +252,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
             label = label,
             include = .y, # only include the covariate of interest in output
             show_single_row = intersect(.y, show_single_row),
-            tidy_fun = tidy_fun
+            tidy_fun = tidy_fun,
+            estimate_fun = estimate_fun,
+            pvalue_fun = pvalue_fun
           )
         )
       )
@@ -272,7 +274,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                 conf.level = conf.level,
                 include = x,
                 show_single_row = show_single_row,
-                tidy_fun = tidy_fun
+                tidy_fun = tidy_fun,
+                estimate_fun = estimate_fun,
+                pvalue_fun = pvalue_fun
               )
             tbl_uv$table_body$variable <- y
             tbl_uv$table_body$var_type <- NA_character_
