@@ -187,12 +187,12 @@ available via the huxtable functions. The huxtable package supports output
 to PDF via LaTeX, as well as HTML and Word.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_hux_table</span>(
+    <pre class="usage"><span class='fu'>as_hux_table</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
   return_calls <span class='op'>=</span> <span class='cn'>FALSE</span>,
   strip_md_bold <span class='op'>=</span> <span class='cn'>TRUE</span>
-)</pre>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -256,10 +256,10 @@ it to a huxtable and formats the table with the following huxtable functions:</p
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>grade</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span>(by <span class='op'>=</span> <span class='va'>trt</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>as_hux_table</span>()
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>as_hux_table</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    Characteristic       Drug A, N = 98    Drug B, N = 102            p-value  
 #&gt;  ─────────────────────────────────────────────────────────────────────────────
 #&gt;    Age                     46 (37, 59)        48 (39, 56)                0.7  

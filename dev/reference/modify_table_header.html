@@ -181,22 +181,22 @@ more control over the characteristics of the resulting
 gtsummary table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modify_table_header</span>(
+    <pre class="usage"><span class='fu'>modify_table_header</span><span class='op'>(</span>
   <span class='va'>x</span>,
   <span class='va'>column</span>,
-  label <span class='op'>=</span> <span class='kw'>NULL</span>,
-  hide <span class='op'>=</span> <span class='kw'>NULL</span>,
-  align <span class='op'>=</span> <span class='kw'>NULL</span>,
-  missing_emdash <span class='op'>=</span> <span class='kw'>NULL</span>,
-  indent <span class='op'>=</span> <span class='kw'>NULL</span>,
-  text_interpret <span class='op'>=</span> <span class='kw'>NULL</span>,
-  bold <span class='op'>=</span> <span class='kw'>NULL</span>,
-  italic <span class='op'>=</span> <span class='kw'>NULL</span>,
-  fmt_fun <span class='op'>=</span> <span class='kw'>NULL</span>,
-  footnote_abbrev <span class='op'>=</span> <span class='kw'>NULL</span>,
-  footnote <span class='op'>=</span> <span class='kw'>NULL</span>,
-  spanning_header <span class='op'>=</span> <span class='kw'>NULL</span>
-)</pre>
+  label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  hide <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  missing_emdash <span class='op'>=</span> <span class='cn'>NULL</span>,
+  indent <span class='op'>=</span> <span class='cn'>NULL</span>,
+  text_interpret <span class='op'>=</span> <span class='cn'>NULL</span>,
+  bold <span class='op'>=</span> <span class='cn'>NULL</span>,
+  italic <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footnote_abbrev <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footnote <span class='op'>=</span> <span class='cn'>NULL</span>,
+  spanning_header <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -280,14 +280,14 @@ vignette for information on <code>.$table_header</code> objects.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
 <span class='va'>modify_table_header_ex1</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='va'>mpg</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='va'>cyl</span>), <span class='va'>mtcars</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>modify_table_header</span>(column <span class='op'>=</span> <span class='va'>estimate</span>,
+  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>modify_table_header</span><span class='op'>(</span>column <span class='op'>=</span> <span class='va'>estimate</span>,
                       label <span class='op'>=</span> <span class='st'>"**Coefficient**"</span>,
-                      fmt_fun <span class='op'>=</span> <span class='kw'>function</span>(<span class='va'>x</span>) <span class='fu'><a href='style_sigfig.html'>style_sigfig</a></span>(<span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>5</span>),
-                      footnote <span class='op'>=</span> <span class='st'>"Regression Coefficient"</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>modify_table_header</span>(column <span class='op'>=</span> <span class='st'>"p.value"</span>,
-                      hide <span class='op'>=</span> <span class='cn'>TRUE</span>)
+                      fmt_fun <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='style_sigfig.html'>style_sigfig</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>,
+                      footnote <span class='op'>=</span> <span class='st'>"Regression Coefficient"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>modify_table_header</span><span class='op'>(</span>column <span class='op'>=</span> <span class='st'>"p.value"</span>,
+                      hide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

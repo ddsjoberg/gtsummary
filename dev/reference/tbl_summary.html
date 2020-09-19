@@ -183,21 +183,21 @@ continuous, categorical, and dichotomous variables.  Review the
 for detailed examples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_summary</span>(
+    <pre class="usage"><span class='fu'>tbl_summary</span><span class='op'>(</span>
   <span class='va'>data</span>,
-  by <span class='op'>=</span> <span class='kw'>NULL</span>,
-  label <span class='op'>=</span> <span class='kw'>NULL</span>,
-  statistic <span class='op'>=</span> <span class='kw'>NULL</span>,
-  digits <span class='op'>=</span> <span class='kw'>NULL</span>,
-  type <span class='op'>=</span> <span class='kw'>NULL</span>,
-  value <span class='op'>=</span> <span class='kw'>NULL</span>,
-  missing <span class='op'>=</span> <span class='kw'>NULL</span>,
-  missing_text <span class='op'>=</span> <span class='kw'>NULL</span>,
-  sort <span class='op'>=</span> <span class='kw'>NULL</span>,
-  percent <span class='op'>=</span> <span class='kw'>NULL</span>,
-  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
-  group <span class='op'>=</span> <span class='kw'>NULL</span>
-)</pre>
+  by <span class='op'>=</span> <span class='cn'>NULL</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,
+  digits <span class='op'>=</span> <span class='cn'>NULL</span>,
+  type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  value <span class='op'>=</span> <span class='cn'>NULL</span>,
+  missing <span class='op'>=</span> <span class='cn'>NULL</span>,
+  missing_text <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sort <span class='op'>=</span> <span class='cn'>NULL</span>,
+  percent <span class='op'>=</span> <span class='cn'>NULL</span>,
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
+  group <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -395,41 +395,41 @@ in the denominator, not at each level of the categorical variable.</p>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
 <span class='va'>tbl_summary_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>response</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_summary</span>()
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>response</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_summary</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='va'>tbl_summary_ex2</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>response</span>, <span class='va'>trt</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_summary</span>(
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_summary</span><span class='op'>(</span>
     by <span class='op'>=</span> <span class='va'>trt</span>,
-    label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='va'>age</span> <span class='op'>~</span> <span class='st'>"Patient Age"</span>),
-    statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>),
-    digits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='va'>age</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>))
-  )
+    label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='st'>"Patient Age"</span><span class='op'>)</span>,
+    statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span><span class='op'>)</span>,
+    digits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># for convenience, you can also pass named lists to any arguments</span>
 <span class='co'># that accept formulas (e.g label, digits, etc.)</span>
 <span class='va'>tbl_summary_ex3</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>age</span>, <span class='va'>trt</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_summary</span>(
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_summary</span><span class='op'>(</span>
     by <span class='op'>=</span> <span class='va'>trt</span>,
-    label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(age <span class='op'>=</span> <span class='st'>"Patient Age"</span>)
-  )
+    label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>age <span class='op'>=</span> <span class='st'>"Patient Age"</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Example 4 ----------------------------------</span>
 <span class='co'># multi-line summaries of continuous data with type 'continuous2'</span>
 <span class='va'>tbl_summary_ex4</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='va'>age</span>, <span class='va'>marker</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_summary</span>(
-    type <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() <span class='op'>~</span> <span class='st'>"continuous2"</span>,
-    statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span>() <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"{median} ({p25}, {p75})"</span>, <span class='st'>"{min}, {max}"</span>),
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_summary</span><span class='op'>(</span>
+    type <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"continuous2"</span>,
+    statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"{median} ({p25}, {p75})"</span>, <span class='st'>"{min}, {max}"</span><span class='op'>)</span>,
     missing <span class='op'>=</span> <span class='st'>"no"</span>
-  )
+  <span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
