@@ -254,3 +254,19 @@ test_that("tbl_uvregression creates errors with bad inputs", {
     NULL
   )
 })
+
+
+test_that("tbl_uvregression estimate_fun and pvalue_fun respected", {
+  tbl_fmt <- tbl_uvregression(
+    data = lung %>% select(age, inst),
+    method = lm,
+    y = age,
+    pvalue_fun = ~style_pvalue(.x, digits = 3),
+    estimate_fun = ~style_number(.x, digits = 3)
+  )
+
+  expect_equivalent(
+    tbl_fmt %>% as_tibble(col_labels = FALSE) %>% purrr::map_chr(I),
+    c("inst", "227", "0.001", "-0.143, 0.144", "0.993")
+  )
+})
