@@ -121,11 +121,12 @@ The `tbl_summary()` function includes many input options for modifying the appea
 ```{r echo=FALSE}
 tibble::tribble(
   ~Argument,       ~Description,
-  "`label`",       "specify the variable labels printed in table"  ,
+  "`label`",       "specify the variable labels printed in table",
   "`type`",        "specify the variable type (e.g. continuous, categorical, etc.)",
-  "`statistic`",   "change the summary statistics presented"  ,
-  "`digits`",      "number of digits the summary statistics will be rounded to"  ,
-  "`missing`",     "whether to display a row with the number of missing observations" ,
+  "`statistic`",   "change the summary statistics presented",
+  "`digits`",      "number of digits the summary statistics will be rounded to",
+  "`missing`",     "whether to display a row with the number of missing observations",
+  "`missing_text`","text label for the missing number row",
   "`sort`",        "change the sorting of categorical levels by frequency",
   "`percent`",     "print column, row, or cell percentages"
 ) %>%
@@ -226,7 +227,7 @@ The selecting input is flexible, and you may also pass quoted column names.
 
 Going beyond typing out specific variables in your data set, you can use: 
 
-1. All [**{tidyselect} helpers**](https://tidyselect.r-lib.org/reference/select_helpers.html) available throughout the tidyverse, such as `starts_with()`, `contains()`, and `everything()` (i.e. anything you can use with the `dplyr::select()` function can be used with {gtsummary}).
+1. All [**{tidyselect} helpers**](https://tidyselect.r-lib.org/reference/select_helpers.html) available throughout the tidyverse, such as `starts_with()`, `contains()`, and `everything()` (i.e. anything you can use with the `dplyr::select()` function), can be used with {gtsummary}.
 
 
 1. Additional [**{gtsummary} selectors**](http://www.danieldsjoberg.com/gtsummary/reference/select_helpers.html) that are included in the package to supplement tidyselect functions.
@@ -242,7 +243,7 @@ Going beyond typing out specific variables in your data set, you can use:
 
 ## Multi-line Continuous Summaries {#continuous2}
 
-Continuous variables may also be summarized on multiple lines--a common format in some journals.
+Continuous variables may also be summarized on multiple lines---a common format in some journals.
 To update the continuous variables to summarize on multiple lines, update the summary type to `"continuous2"` (for summaries on two or more lines).
 
 ```{r}
@@ -361,12 +362,8 @@ svy_apiclus1 %>%
 `tbl_svysummary()` can also handle weighted survey data where each row represents several individuals: 
 
 ```{r}
-df_titanic <- as_tibble(Titanic)
-head(df_titanic, n = 10)
-```
-
-```{r}
-df_titanic %>%
+Titanic %>%
+  as_tibble() %>%
   survey::svydesign(data = ., ids = ~ 1, weights = ~ n) %>%
   tbl_svysummary(include = c(Age, Survived))
 ```
