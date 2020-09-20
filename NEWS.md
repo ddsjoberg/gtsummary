@@ -25,6 +25,8 @@
 
 ### Other Updates
 
+* Refresh of vignettes to use recently released functions (#649)
+
 * Moved the nevent column to after the N column when add_nevent() is called on a tbl_regression() object (#439)
 
 * gtsummary themes updates
