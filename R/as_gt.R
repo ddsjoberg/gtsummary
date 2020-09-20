@@ -152,13 +152,6 @@ table_header_to_gt_calls <- function(x) {
                             align = !!df_cols_align$align[[.x]]))
     )
 
-  # cols_hide ------------------------------------------------------------------
-  gt_calls[["cols_hide"]] <-
-    table_header %>%
-    filter(.data$hide == TRUE) %>%
-    pull(.data$column) %>%
-    {expr(gt::cols_hide(columns = gt::vars(!!!syms(.))))}
-
   # indent ---------------------------------------------------------------------
   df_tab_style_indent <-
     table_header %>%
@@ -269,6 +262,13 @@ table_header_to_gt_calls <- function(x) {
       ~ expr(gt::tab_spanner(columns = gt::vars(!!!syms(df_spanning_header$cols[[.x]])),
                             label = gt::md(!!df_spanning_header$spanning_header[[.x]])))
     )
+
+  # cols_hide ------------------------------------------------------------------
+  gt_calls[["cols_hide"]] <-
+    table_header %>%
+    filter(.data$hide == TRUE) %>%
+    pull(.data$column) %>%
+    {expr(gt::cols_hide(columns = gt::vars(!!!syms(.))))}
 
   # return list of gt expressions
   gt_calls
