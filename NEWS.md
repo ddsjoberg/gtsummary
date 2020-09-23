@@ -2,6 +2,8 @@
 
 ### New Functionality
 
+* Added two custom tidiers for use in `tbl_regression()` and `tbl_uvregression()`.`tidy_standardize()` returns standardized coefficients using the {effectsize} package, and `tidy_bootstrap()` gives bootstrapped parameter estimates, calculated using the {parameters} package.
+
 * New summary type `continuous2` allows adding labelled statistic rows to tables in `tbl_summary()` and `tbl_svysummary()`. You can report several lines of statistics with this type. (#620)
     - The `all_continuous()` function now selects summary types `continuous` and `continuous2` by default.
     - Added `all_continuous2()` function for selecting summary type `continuous2` exclusively.
