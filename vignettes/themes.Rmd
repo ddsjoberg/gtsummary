@@ -156,7 +156,7 @@ gtsummary:::df_theme_elements %>%
   gt::cols_align(columns = everything(), align = "left") %>%
   gt::cols_label(name = "Theme Element", desc = "Description",
                  example = "Example") %>%
-  gt::fmt_markdown(columns = vars(name, example)) %>%
+  gt::fmt_markdown(columns = vars(name, desc, example)) %>%
   gt::fmt_missing(columns = everything(), missing_text = "") %>%
   gt::tab_options(table.font.size = 'small',
                   data_row.padding = gt::px(1),
