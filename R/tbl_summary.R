@@ -123,7 +123,7 @@
 #' @export
 #' @return A `tbl_summary` object
 #' @family tbl_summary tools
-#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed tutorial
+#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette} for detailed tutorial
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 #' @author Daniel D. Sjoberg
 #' @examples
