@@ -53,21 +53,10 @@ When \code{FALSE} the named list of theme elements is returned invisibly}
 \item{print_engine}{String indicating the print method. Must be one of
 \code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"tibble"}#' @export}
 
-\item{language}{String indicating language. Must be one of
-\itemize{
-\item \code{"de"} (German)
-\item \code{"en"} (English)
-\item \code{"es"} (Spanish)
-\item \code{"fr"} (French)
-\item \code{"gu"} (Gujarati)
-\item \code{"hi"} (Hindi)
-\item \code{"ja"} (Japanese)
-\item \code{"mr"} (Marathi)
-\item \code{"pt"} (Portuguese)
-\item \code{"se"} (Swedish)
-\item \code{"zh-cn"} Chinese (Simplified)
-\item \code{"zh-tw"} Chinese (Traditional)
-}
+\item{language}{String indicating language. Must be one of \code{"de"} (German),
+\code{"en"} (English), \code{"es"} (Spanish), \code{"fr"} (French), \code{"gu"} (Gujarati),
+\code{"hi"} (Hindi), \code{"ja"} (Japanese), \code{"mr"} (Marathi), \code{"pt"} (Portuguese),
+\code{"se"} (Swedish), \code{"zh-cn"} (Chinese Simplified), \code{"zh-tw"} (Chinese Traditional)
 
 If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
@@ -95,35 +84,18 @@ will default to an en dash}
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 The following themes are available to use within the gtsummary package.
-Use the \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}} function to set a theme.
+Print theme elements with \code{theme_gtsummary_journal(set_theme = FALSE) \%>\% print()}.
+Review the \href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}
+for details.
 }
 \section{Themes}{
 
 \itemize{
 \item \code{theme_gtsummary_journal(journal=)}
 \itemize{
-\item \code{"jama"}
-\itemize{
-\item sets theme to align with the JAMA reporting guidelines
-\item large p-values are rounded to two decimal places
-\item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
-\item in \code{tbl_summary()} the percent symbol is not printed next to percentages
-}
-\item \code{"nejm"}
-\itemize{
-\item sets theme to align with the The New England Journal of Medicine guidelines
-\item large p-values are rounded to two decimal places
-\item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
-\item confidence intervals are separated with \verb{1 to 2}, rather than a comma
-}
-\item \code{"lancet"}
-\itemize{
-\item sets theme to align with the The Lancet reporting guidelines
-\item large p-values are rounded to two decimal places
-\item in \code{tbl_summary()} the IQR is separated with a dash, rather than comma
-\item confidence intervals are separated with \verb{1 to 2}, rather than a comma
-\item decimal points are mid-line dots
-}
+\item \code{"jama"} The Journal of the American Medical Association
+\item \code{"nejm"} The New England Journal of Medicine
+\item \code{"lancet"} The Lancet
 }
 \item \code{theme_gtsummary_compact()}
 \itemize{
