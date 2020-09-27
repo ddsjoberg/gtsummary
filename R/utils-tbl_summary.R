@@ -1290,3 +1290,9 @@ has_na <- function(data, variable) {
     sum(is.na(data[[variable]])) > 0
   }
 }
+
+# simple function to evaluate the RHS of a formula in the formula's environment
+eval_rhs <- function(x) {
+  rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
+}
+

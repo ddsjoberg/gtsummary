@@ -281,43 +281,8 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
   # each element must be a formula
   is_formula <- purrr::map_lgl(x, ~ inherits(.x, "formula"))
 
-  if (!all(is_formula)) {
-    example_text <-
-      switch(
-        arg_name %||% "not_specified",
-        "type" = paste("type = list(age ~ \"continuous\", all_integer() ~ \"categorical\")",
-                       collapse = "\n"),
-        "label" = paste("label = list(age ~ \"Age, years\", response ~ \"Tumor Response\")",
-                        collapse = "\n"),
-        "statistic" = paste(c("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
-                              "statistic = list(age ~ \"{median}\")"),
-                            collapse = "\n"),
-        "digits" = paste(c("digits = list(age ~ 2)",
-                           "digits = list(all_continuous() ~ 2)"),
-                         collapse = "\n"),
-        "value" = paste(c("value = list(grade ~ \"III\")",
-                          "value = list(all_logical() ~ FALSE)"),
-                        collapse = "\n"),
-        "test" = paste(c("test = list(all_continuous() ~ \"t.test\")",
-                         "test = list(age ~ \"kruskal.test\")"),
-                       collapse = "\n")
-      ) %||%
-      paste(c("label = list(age ~ \"Age, years\")",
-              "statistic = list(all_continuous() ~ \"{mean} ({sd})\")",
-              "type = list(c(response, death) ~ \"categorical\")"),
-            collapse = "\n")
-
-    # printing error for argument input
-    error_text <- ifelse(
-      !is.null(arg_name),
-      glue::glue("There was a problem with the `{arg_name}=` argument input. "),
-      glue::glue("There was a problem with one of the function argument inputs. ")
-    )
-    stop(glue::glue(
-      "{error_text}",
-      "Below is an example of correct syntax.\n\n",
-      "{example_text}"
-    ), call. = FALSE)
+  if (!purrr::every(x, ~inherits(.x, "formula"))) {
+    tidyselect_to_list_error(arg_name = arg_name)
   }
 
   # converting all inputs to named list ----------------------------------------
@@ -327,14 +292,13 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
       function(x) {
         # for each formula extract lhs and rhs ---------------------------------
         lhs <- var_input_to_string(data = .data, # convert lhs selectors to character
-                                   select_input = !!rlang::f_lhs(x),
+                                   select_input = !!f_side_as_quo(x, "lhs"),
                                    meta_data = .meta_data,
                                    arg_name = arg_name,
-                                   select_single = select_single,
-                                   env = rlang::f_env(x))
+                                   select_single = select_single)
 
         # evaluate RHS of formula in the original formula environment
-        rhs <- eval_rhs(x)
+        rhs <- f_side_as_quo(x, "rhs") %>% eval_tidy()
 
         # converting rhs and lhs into a named list
         purrr::map(lhs, ~ list(rhs) %>% rlang::set_names(.x)) %>%
@@ -352,7 +316,42 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
   named_list[tokeep]
 }
 
+tidyselect_to_list_error <- function(arg_name) {
+  example_text <-
+    switch(
+      arg_name %||% "not_specified",
+      "type" = paste("type = list(age ~ \"continuous\", all_integer() ~ \"categorical\")",
+                     collapse = "\n"),
+      "label" = paste("label = list(age ~ \"Age, years\", response ~ \"Tumor Response\")",
+                      collapse = "\n"),
+      "statistic" = paste(c("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
+                            "statistic = list(age ~ \"{median}\")"),
+                          collapse = "\n"),
+      "digits" = paste(c("digits = list(age ~ 2)",
+                         "digits = list(all_continuous() ~ 2)"),
+                       collapse = "\n"),
+      "value" = paste(c("value = list(grade ~ \"III\")",
+                        "value = list(all_logical() ~ FALSE)"),
+                      collapse = "\n"),
+      "test" = paste(c("test = list(all_continuous() ~ \"t.test\")",
+                       "test = list(age ~ \"kruskal.test\")"),
+                     collapse = "\n")
+    ) %||%
+    paste(c("label = list(age ~ \"Age, years\")",
+            "statistic = list(all_continuous() ~ \"{mean} ({sd})\")",
+            "type = list(c(response, death) ~ \"categorical\")"),
+          collapse = "\n")
 
+  # printing error for argument input
+  error_text <- ifelse(
+    !is.null(arg_name),
+    glue::glue("There was a problem with the `{arg_name}=` argument input. "),
+    glue::glue("There was a problem with one of the function argument inputs. ")
+  )
+  stop(glue::glue("{error_text}",
+                  "Below is an example of correct syntax.\n\n",
+                  "{example_text}"), call. = FALSE)
+}
 
 #' Convert NSE or SE selectors to character
 #'
@@ -378,61 +377,40 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
 #' var_input_to_string(mtcars, select_input = vars(everything(), -mpg))
 #' var_input_to_string(mtcars, select_input = c(everything(), -mpg))
 var_input_to_string <- function(data, meta_data = NULL, arg_name = NULL,
-                                select_single = FALSE, select_input, env = NULL) {
+                                select_single = FALSE, select_input) {
 
   select_input <- rlang::enquo(select_input)
+
   # if NULL passed, return NULL
   if (rlang::quo_is_null(select_input)) {
     return(NULL)
   }
-  if (!is.null(env)) attr(select_input, ".Environment") <- env
-
-  # converting to list before passing along to next function
-  select_input_list <- as.list(rlang::quo_get_expr(select_input))
-
-  # checking if the passed enquo begins with the vars() function
-  if (!rlang::quo_is_symbol(select_input) && # if not a symbol (ie name)
-      identical(eval(select_input_list[[1]]), dplyr::vars)) # and function is dplyr::vars
-  {
-    # first item of the list is vars(), removing and passing to tidyselect_to_string()
-    return(tidyselect_to_string(...data... = data, ...meta_data... = meta_data,
-                                arg_name = arg_name, select_single = select_single,
-                                !!!select_input_list[-1]))
-  }
-
-  tidyselect_to_string(...data... = data, ...meta_data... = meta_data,
-                       arg_name = arg_name, select_single = select_single,
-                       !!select_input)
-}
-
-# this function handles a single tidyselect function, or bare input
-# do not call this function directly. do not pass a vars()
-tidyselect_to_string <- function(...data..., ...meta_data... = NULL,
-                                 arg_name = NULL, select_single = FALSE, ...) {
-
-  dots_enquo <- rlang::enquos(...)
 
   # scoping data to use gtsummary select functions
-  scoped_data(...data...)
-  if(!is.null(...meta_data...)) scoped_meta_data(...meta_data...)
+  scoped_data(data, meta_data)
 
-  tryCatch({
-    result <-
-      rlang::call2(dplyr::select, .data = ...data...[0, , drop = FALSE], !!!dots_enquo) %>%
-      rlang::eval_tidy() %>%
-      colnames()
+  # determine if selecting input begins with `var()`
+  select_input_starts_var <-
+    !rlang::quo_is_symbol(select_input) && # if not a symbol (ie name)
+    identical(eval(as.list(quo_get_expr(select_input))[[1]]), dplyr::vars)
 
-    # if `!!!dots_enquo` resolves to a NULL object, the above call will return
-    # `character(0)`. If this occurs, return a NULL object
-    if (identical(result, character(0))) return(NULL)
-  },
-  error = function(e) {
-    if (!is.null(arg_name))
-      error_msg <- glue::glue("Error in `{arg_name}=` argument input. Select from ",
-                        "{paste(sQuote(names(...data...)), collapse = ', ')}")
-    else error_msg <- as.character(e)
-    stop(error_msg, call. = FALSE)
-  })
+  result <-
+    tryCatch({
+      if (select_input_starts_var) {
+        # `vars()` evaluates to a list of quosures; unquoting them in `select()`
+        names(select(data, !!!eval_tidy(select_input)))
+      }
+      else {
+        names(select(data, !!select_input))
+      }
+    },
+    error = function(e) {
+      if (!is.null(arg_name))
+        error_msg <- glue::glue("Error in `{arg_name}=` argument input. Select from ",
+                                "{paste(sQuote(names(data)), collapse = ', ')}")
+      else error_msg <- as.character(e)
+      stop(error_msg, call. = FALSE)
+    })
 
   # assuring only a single column is selected
   if (select_single == TRUE && length(result) != 1) {
@@ -442,32 +420,45 @@ tidyselect_to_string <- function(...data..., ...meta_data... = NULL,
       "{paste(sQuote(result), collapse = ', ')}"
     ), call. = FALSE)
   }
+
+  # if nothing is selected, return a NULL
+  if (length(result) == 0) return(NULL)
+
   result
 }
 
-# simple function to evaluate the RHS of a formula in the formula's environment
-eval_rhs <- function(x) {
-  rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
+# extract LHS/RHS of formula as quosure. attached env will be the formula env
+f_side_as_quo <- function(x, side = c("lhs", "rhs")) {
+  side <- match.arg(side)
+  f_expr <-
+    switch(side,
+           "lhs" = rlang::f_lhs(x),
+           "rhs" = rlang::f_rhs(x))
+  f_quo <- rlang::quo(!!f_expr)
+  attr(f_quo, ".Environment") <- rlang::f_env(x)
+  f_quo
 }
 
 # select helpers environments --------------------------------------------------
 # setting environments
-data_env <- rlang::new_environment()
-meta_data_env <- rlang::new_environment()
+selecting_env <- rlang::new_environment()
 
 # registering data information
-scoped_data <- function(.data) {
-  data_env$numeric <- purrr::map_lgl(.data, is.numeric)
-  data_env$character <- purrr::map_lgl(.data, is.character)
-  data_env$integer <- purrr::map_lgl(.data, is.integer)
-  data_env$double <- purrr::map_lgl(.data, is.double)
-  data_env$logical <- purrr::map_lgl(.data, is.logical)
-  data_env$factor <- purrr::map_lgl(.data, is.factor)
-}
+scoped_data <- function(.data, .meta_data = NULL) {
+  # removing everything from selecting environment
+  rm(list = ls(envir = selecting_env), envir = selecting_env)
 
-# registering meta data information
-scoped_meta_data <- function(.meta_data) {
-  meta_data_env$summary_type <-
+  # populating env with elements to aid selectors
+  selecting_env$numeric <- purrr::map_lgl(.data, is.numeric)
+  selecting_env$character <- purrr::map_lgl(.data, is.character)
+  selecting_env$integer <- purrr::map_lgl(.data, is.integer)
+  selecting_env$double <- purrr::map_lgl(.data, is.double)
+  selecting_env$logical <- purrr::map_lgl(.data, is.logical)
+  selecting_env$factor <- purrr::map_lgl(.data, is.factor)
+
+  if (!is.null(.meta_data))
+    selecting_env$summary_type <-
     .meta_data$summary_type %>%
     rlang::set_names(.meta_data$variable)
 }
+

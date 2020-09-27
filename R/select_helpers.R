@@ -27,16 +27,16 @@ all_continuous <- function(continuous2 = TRUE) {
   if (continuous2) con_types <- c("continuous", "continuous2")
   else con_types <- "continuous"
 
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type %in% con_types) %>%
+  selecting_env$summary_type %>%
+    keep(selecting_env$summary_type %in% con_types) %>%
     names()
 }
 
 #' @rdname select_helpers
 #' @export
 all_continuous2 <- function() {
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type %in% "continuous2") %>%
+  selecting_env$summary_type %>%
+    keep(selecting_env$summary_type %in% "continuous2") %>%
     names()
 }
 
@@ -46,59 +46,59 @@ all_categorical <- function(dichotomous = TRUE) {
   # return variable names if dichotomous included
   if (dichotomous) {
     x <-
-      keep(meta_data_env$summary_type, ~ . %in% c("categorical", "dichotomous")) %>%
+      keep(selecting_env$summary_type, ~ . %in% c("categorical", "dichotomous")) %>%
       names()
     return(x)
   }
 
   # return variable names if dichotomous NOT included
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type == "categorical") %>%
+  selecting_env$summary_type %>%
+    keep(selecting_env$summary_type == "categorical") %>%
     names()
 }
 
 #' @rdname select_helpers
 #' @export
 all_dichotomous <- function() {
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type == "dichotomous") %>%
+  selecting_env$summary_type %>%
+    keep(selecting_env$summary_type == "dichotomous") %>%
     names()
 }
 
 #' @rdname select_helpers
 #' @export
 all_numeric <- function() {
-  which(data_env$numeric)
+  which(selecting_env$numeric)
 }
 
 #' @rdname select_helpers
 #' @export
 all_character <- function() {
-  which(data_env$character)
+  which(selecting_env$character)
 }
 
 #' @rdname select_helpers
 #' @export
 all_integer <- function() {
-  which(data_env$integer)
+  which(selecting_env$integer)
 }
 
 #' @rdname select_helpers
 #' @export
 all_double <- function() {
-  which(data_env$double)
+  which(selecting_env$double)
 }
 
 #' @rdname select_helpers
 #' @export
 all_logical <- function() {
-  which(data_env$logical)
+  which(selecting_env$logical)
 }
 
 #' @rdname select_helpers
 #' @export
 all_factor <- function() {
-  which(data_env$factor)
+  which(selecting_env$factor)
 }
 
 
