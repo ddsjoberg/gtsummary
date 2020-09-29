@@ -278,9 +278,6 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
   }
 
   # check class of input -------------------------------------------------------
-  # each element must be a formula
-  is_formula <- purrr::map_lgl(x, ~ inherits(.x, "formula"))
-
   if (!purrr::every(x, ~inherits(.x, "formula"))) {
     tidyselect_to_list_error(arg_name = arg_name)
   }
@@ -291,7 +288,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
       x,
       function(x) {
         # for each formula extract lhs and rhs ---------------------------------
-        lhs <- var_input_to_string(data = .data, # convert lhs selectors to character
+        lhs <- var_input_to_string(data = .data,
                                    select_input = !!f_side_as_quo(x, "lhs"),
                                    meta_data = .meta_data,
                                    arg_name = arg_name,
@@ -308,11 +305,7 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
     purrr::flatten()
 
   # removing duplicates (using the last one listed if variable occurs more than once)
-  tokeep <-
-    names(named_list) %>%
-    rev() %>%
-    purrr::negate(duplicated)() %>%
-    rev()
+  tokeep <- names(named_list) %>% rev() %>% {!duplicated(.)} %>% rev()
   named_list[tokeep]
 }
 
@@ -320,37 +313,30 @@ tidyselect_to_list_error <- function(arg_name) {
   example_text <-
     switch(
       arg_name %||% "not_specified",
-      "type" = paste("type = list(age ~ \"continuous\", all_integer() ~ \"categorical\")",
-                     collapse = "\n"),
-      "label" = paste("label = list(age ~ \"Age, years\", response ~ \"Tumor Response\")",
-                      collapse = "\n"),
+      "type" = paste("type = list(age ~ \"continuous\", all_integer() ~ \"categorical\")"),
+      "label" = paste("label = list(age ~ \"Age, years\", response ~ \"Tumor Response\")"),
       "statistic" = paste(c("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
-                            "statistic = list(age ~ \"{median}\")"),
-                          collapse = "\n"),
+                            "statistic = list(age ~ \"{median}\")")),
       "digits" = paste(c("digits = list(age ~ 2)",
-                         "digits = list(all_continuous() ~ 2)"),
-                       collapse = "\n"),
+                         "digits = list(all_continuous() ~ 2)")),
       "value" = paste(c("value = list(grade ~ \"III\")",
-                        "value = list(all_logical() ~ FALSE)"),
-                      collapse = "\n"),
+                        "value = list(all_logical() ~ FALSE)")),
       "test" = paste(c("test = list(all_continuous() ~ \"t.test\")",
-                       "test = list(age ~ \"kruskal.test\")"),
-                     collapse = "\n")
+                       "test = list(age ~ \"kruskal.test\")"))
     ) %||%
     paste(c("label = list(age ~ \"Age, years\")",
             "statistic = list(all_continuous() ~ \"{mean} ({sd})\")",
-            "type = list(c(response, death) ~ \"categorical\")"),
-          collapse = "\n")
+            "type = list(c(response, death) ~ \"categorical\")"))
 
   # printing error for argument input
   error_text <- ifelse(
     !is.null(arg_name),
-    glue::glue("There was a problem with the `{arg_name}=` argument input. "),
-    glue::glue("There was a problem with one of the function argument inputs. ")
+    glue::glue("There was a problem with the `{arg_name}=` argument input."),
+    glue::glue("There was a problem with one of the function argument inputs.")
   )
-  stop(glue::glue("{error_text}",
-                  "Below is an example of correct syntax.\n\n",
-                  "{example_text}"), call. = FALSE)
+  usethis::ui_oops("{error_text} Below is an example of correct syntax.\n\n")
+  purrr::walk(example_text, ~print(usethis::ui_code(.)))
+  stop("Invalid argument syntax", call. = FALSE)
 }
 
 #' Convert NSE or SE selectors to character
