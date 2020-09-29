@@ -6,7 +6,11 @@
 * win-builder release, devel
 
 ## R CMD check results
-Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
+> checking CRAN incoming feasibility ... NOTE
+  Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
+
+> checking for future file timestamps ... NOTE
+  unable to verify current time
 
 ## Additional Comments
 

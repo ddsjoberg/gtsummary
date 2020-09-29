@@ -200,6 +200,7 @@ By contributing to this project, you agree to abide by its terms. A big
 thank you to all contributors\!  
 [@ablack3](https://github.com/ablack3),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
+[@alexis-catherine](https://github.com/alexis-catherine),
 [@barthelmes](https://github.com/barthelmes),
 [@benediktclaus](https://github.com/benediktclaus),
 [@calebasaraba](https://github.com/calebasaraba),
