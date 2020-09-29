@@ -101,7 +101,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
       </span>
     </div>
 
@@ -187,20 +187,20 @@ regression model results. Review the
 for detailed examples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_regression</span>(
-  <span class='kw'>x</span>,
-  label = <span class='kw'>NULL</span>,
-  exponentiate = <span class='fl'>FALSE</span>,
-  include = <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span>(),
-  show_single_row = <span class='kw'>NULL</span>,
-  conf.level = <span class='kw'>NULL</span>,
-  intercept = <span class='fl'>FALSE</span>,
-  estimate_fun = <span class='kw'>NULL</span>,
-  pvalue_fun = <span class='kw'>NULL</span>,
-  tidy_fun = <span class='kw'>NULL</span>,
-  show_yesno = <span class='kw'>NULL</span>,
-  exclude = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>tbl_regression</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  exponentiate <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
+  show_single_row <span class='op'>=</span> <span class='cn'>NULL</span>,
+  conf.level <span class='op'>=</span> <span class='cn'>NULL</span>,
+  intercept <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  estimate_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pvalue_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  tidy_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  show_yesno <span class='op'>=</span> <span class='cn'>NULL</span>,
+  exclude <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -332,21 +332,21 @@ units in your model.  Here are some common exceptions.</p><ol>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/therneau/survival'>survival</a></span>)
-<span class='kw'>tbl_regression_ex1</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/coxph.html'>coxph</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span>(<span class='kw'>ttdeath</span>, <span class='kw'>death</span>) <span class='op'>~</span> <span class='kw'>age</span> <span class='op'>+</span> <span class='kw'>marker</span>, <span class='kw'>trial</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(exponentiate = <span class='fl'>TRUE</span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/therneau/survival'>survival</a></span><span class='op'>)</span>
+<span class='va'>tbl_regression_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/coxph.html'>coxph</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>marker</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_regression</span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='kw'>tbl_regression_ex2</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>response</span> <span class='op'>~</span> <span class='kw'>age</span> <span class='op'>+</span> <span class='kw'>grade</span>, <span class='kw'>trial</span>, family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(link = <span class='st'>"logit"</span>)) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(exponentiate = <span class='fl'>TRUE</span>)
+<span class='va'>tbl_regression_ex2</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>response</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span>, family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_regression</span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># Example 3 ----------------------------------</span>
-<span class='fu'><a href='https://rdrr.io/r/base/message.html'>suppressMessages</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/lme4/lme4'>lme4</a></span>))
-<span class='kw'>tbl_regression_ex3</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(<span class='kw'>am</span> <span class='op'>~</span> <span class='kw'>hp</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>gear</span>), <span class='kw'>mtcars</span>, family = <span class='kw'>binomial</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_regression</span>(exponentiate = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/message.html'>suppressMessages</a></span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/lme4/lme4/'>lme4</a></span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>tbl_regression_ex3</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span><span class='op'>(</span><span class='va'>am</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>gear</span><span class='op'>)</span>, <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_regression</span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
 #&gt; <span class='message'>  method      from </span>
 #&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='input'>
@@ -362,11 +362,11 @@ units in your model.  Here are some common exceptions.</p><ol>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

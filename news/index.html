@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
       </span>
     </div>
 
@@ -171,6 +171,63 @@
       <small>Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="gtsummary-135" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.5">
+<a href="#gtsummary-135" class="anchor"></a>gtsummary 1.3.5<small> Unreleased </small>
+</h1>
+<div id="new-functionality" class="section level3">
+<h3 class="hasAnchor">
+<a href="#new-functionality" class="anchor"></a>New Functionality</h3>
+<ul>
+<li>
+<p>New summary type <code>continuous2</code> allows adding labelled statistic rows to tables in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. You can report several lines of statistics with this type. (<a href='https://github.com/ddsjoberg/gtsummary/issues/620'>#620</a>)</p>
+<ul>
+<li>The <code><a href="../reference/select_helpers.html">all_continuous()</a></code> function now selects summary types <code>continuous</code> and <code>continuous2</code> by default.</li>
+<li>Added <code><a href="../reference/select_helpers.html">all_continuous2()</a></code> function for selecting summary type <code>continuous2</code> exclusively.</li>
+<li>Added <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_continuous2()</a></code> to make <code>continuous2</code> the default summary type for all continuous variables.</li>
+</ul>
+</li>
+<li><p>New function <code><a href="../reference/add_glance_source_note.html">add_glance_source_note()</a></code> adds the statistics returned in <code><a href="https://rdrr.io/pkg/generics/man/glance.html">broom::glance()</a></code> as a source note on a <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>)</p></li>
+<li><p>Exporting the <code><a href="../reference/modify_table_header.html">modify_table_header()</a></code> function, which is an advanced-use function used to make modifications to the <code>.$table_header</code> object to update printing instructions for the gtsummary object.</p></li>
+<li>
+<p>Added two custom tidiers for use in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/635'>#635</a>)</p>
+<ul>
+<li>
+<code><a href="../reference/custom_tidiers.html">tidy_standardize()</a></code> returns standardized coefficients using the {effectsize} package</li>
+<li>
+<code><a href="../reference/custom_tidiers.html">tidy_bootstrap()</a></code> gives bootstrapped parameter estimates, calculated using the {parameters} package</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
+<ul>
+<li><p>Bug fix where <code>estimate_fun=</code> and <code>pvalue_fun=</code> were not being passed to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code></p></li>
+<li><p>There was an environments bug when evaluating the LHS of the formula inputs. In some complex situations, a stored character vector of column names could not properly evaluate (<a href='https://github.com/ddsjoberg/gtsummary/issues/604'>#604</a>)</p></li>
+<li><p>Fixed <code><a href="../reference/style_ratio.html">style_ratio()</a></code> bug where there were rounding errors near one (<a href='https://github.com/ddsjoberg/gtsummary/issues/651'>#651</a>)</p></li>
+<li><p>Fixed <code><a href="../reference/style_sigfig.html">style_sigfig()</a></code> bug where there were rounding errors near thresholds (<a href='https://github.com/ddsjoberg/gtsummary/issues/638'>#638</a>)</p></li>
+<li><p>Adding the footnote from the stat columns describing the statistics presented to the overall column (<a href='https://github.com/ddsjoberg/gtsummary/issues/643'>#643</a>)</p></li>
+</ul>
+</div>
+<div id="other-updates" class="section level3">
+<h3 class="hasAnchor">
+<a href="#other-updates" class="anchor"></a>Other Updates</h3>
+<ul>
+<li><p>Refresh of vignettes to use recently released functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/649'>#649</a>)</p></li>
+<li><p>Moved the nevent column to after the N column when <code><a href="../reference/add_nevent.html">add_nevent()</a></code> is called on a <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> object (<a href='https://github.com/ddsjoberg/gtsummary/issues/439'>#439</a>)</p></li>
+<li>
+<p>gtsummary themes updates</p>
+<ul>
+<li>Add <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_mean_sd()</a></code> theme to report mean and SD by default and use t-tests and ANOVA in <code><a href="../reference/add_p.html">add_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/654'>#654</a>)</li>
+<li>Added first draft of the NEJM theme</li>
+<li>Added the mid-point decimal separator for the Lancet theme</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
     <div id="gtsummary-134" class="section level1">
 <h1 class="page-header" data-toc-text="1.3.4">
 <a href="#gtsummary-134" class="anchor"></a>gtsummary 1.3.4<small> 2020-08-27 </small>
@@ -230,9 +287,9 @@
 <li><p>Removed large *.gif files out of the package to reduce build size (<a href='https://github.com/ddsjoberg/gtsummary/issues/485'>#485</a>)</p></li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level3">
+<div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li><p>Fixed bug where source note was not made smaller font size with compact theme when table was printed with {flextable} (<a href='https://github.com/ddsjoberg/gtsummary/issues/584'>#584</a>)</p></li>
 <li><p>Bug fix for <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when a data frame contained an ordered factor column (<a href='https://github.com/ddsjoberg/gtsummary/issues/567'>#567</a>)</p></li>
@@ -246,7 +303,7 @@
 <a href="#breaking-changes" class="anchor"></a>Breaking Changes</h3>
 <ul>
 <li><p>All <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html">lifecycle::deprecate_warn()</a></code> have been upgraded to <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html">lifecycle::deprecate_stop()</a></code> for &lt;= v1.2.0 (released Aug 2019)</p></li>
-<li><p>Removing <code><a href="../reference/deprecated.html">as_flextable()</a></code> and replacing with <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> due to a name conflict with <code><a href="https://rdrr.io/pkg/flextable/man/as_flextable.html">flextable::as_flextable</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/462'>#462</a>)</p></li>
+<li><p>Removing <code><a href="../reference/deprecated.html">as_flextable()</a></code> and replacing with <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> due to a name conflict with <code><a href="https://davidgohel.github.io/flextable/reference/as_flextable.html">flextable::as_flextable</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/462'>#462</a>)</p></li>
 </ul>
 </div>
 </div>
@@ -307,9 +364,9 @@
 <li><p>Updated the gtsummary core script, <code>utils-gtsummary_core.R</code>, to refer to all non-base R functions with the <code>pkg::</code> prefix, so other packages that copy the file don’t need to import the same functions as {gtsummary} in the NAMESPACE. Now they just need to depend on the same packages. (<a href='https://github.com/ddsjoberg/gtsummary/issues/454'>#454</a>)</p></li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li><p>Bug fix for <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code> when categorical variable contained levels with empty strings. There is still an issue if a user tries to select the empty string, however.</p></li>
 <li><p>Fixed bug where some variables in <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> defaulted to dichotomous instead of showing as categorical (<a href='https://github.com/ddsjoberg/gtsummary/issues/506'>#506</a>)</p></li>
@@ -354,13 +411,13 @@
 <ul>
 <li><p>Each gtsummary object has an associated <code>.$table_header</code>. The code needed to print a table with either gt or kable was previously a mix of information stored in the <code>table_header</code>, and code manually added to the <code>gt_calls</code> or <code>kable_calls</code> object. Now, all the information needed to print a table is stored in <code>table_header</code>. This has the advantage that any updates to the printing will now require an update to <code>table_header</code> only, and we no longer need to update the tibble, kable and gt calls. (<a href='https://github.com/ddsjoberg/gtsummary/issues/412'>#412</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/414'>#414</a>)</p></li>
 <li><p>The {gt} package is now released on CRAN, and we’ve updated to depend on the CRAN version instead of the version on GitHub. This also resulted in significant updates throughout the documentation and code. For example, we no longer provide instructions for installing {gt}, or include internal checks if {gt} is installed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/420'>#420</a>)</p></li>
-<li><p>Several functions have been made general, and may now be applied to any {gtsummary}-like object. Functions updated are <code><a href="../reference/add_q.html">add_q()</a></code>, <code><a href="../reference/bold_p.html">bold_p()</a></code>, <code><a href="../reference/sort_p.html">sort_p()</a></code>, <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>, <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, and <code><a href="../reference/bold_italicize_labels_levels.html">italicize_levels()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/429'>#429</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/373'>#373</a>)</p></li>
+<li><p>Several functions have been made general, and may now be applied to any {gtsummary}-like object. Functions updated are <code><a href="../reference/add_q.html">add_q()</a></code>, <code><a href="../reference/bold_p.html">bold_p()</a></code>, <code><a href="../reference/sort_filter_p.html">sort_p()</a></code>, <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>, <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, and <code><a href="../reference/bold_italicize_labels_levels.html">italicize_levels()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/429'>#429</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/373'>#373</a>)</p></li>
 <li><p>In <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> we previously printed the estimate, confidence interval, and p-value for all models. But some models don’t have associated methods for calculating the p-value or the confidence intervals. In this update, we now print the p-value if <code>tidy()</code> returns a <code>"p.value"</code> column. Similarly, the confidence interval is printed if <code>tidy()</code> returns <code>"conf.low"</code> and <code>"conf.high"</code> columns. (<a href='https://github.com/ddsjoberg/gtsummary/issues/391'>#391</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/404'>#404</a>)</p></li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level3">
+<div id="bug-fixes-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug Fixes</h3>
+<a href="#bug-fixes-3" class="anchor"></a>Bug Fixes</h3>
 <ul>
 <li><p>Bug fix when data frame passed to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with a single column (<a href='https://github.com/ddsjoberg/gtsummary/issues/389'>#389</a>)</p></li>
 <li><p>In <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> passing an ordered factor in the <code>by=</code> argument no longer causes as error. (<a href='https://github.com/ddsjoberg/gtsummary/issues/453'>#453</a>)</p></li>
@@ -497,9 +554,9 @@
 <li><p>Added {lifecycle} badges to mark deprecated and experimental functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/225'>#225</a>)</p></li>
 </ul>
 </div>
-<div id="other-updates" class="section level3">
+<div id="other-updates-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#other-updates" class="anchor"></a>Other Updates</h3>
+<a href="#other-updates-1" class="anchor"></a>Other Updates</h3>
 <ul>
 <li><p>The <code>by =</code> column in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> now has missing variables dropped rather than halting with error (<a href='https://github.com/ddsjoberg/gtsummary/issues/279'>#279</a>)</p></li>
 <li><p>Bug fix in <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> selection where only first variable listed was being selected (<a href='https://github.com/ddsjoberg/gtsummary/issues/259'>#259</a>)</p></li>
@@ -538,12 +595,11 @@
 <li><p>Updated some function names to be the same as they were in the first version</p></li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span>()            <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_p</a></span>()  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span>()       <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_labels</a></span>()  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span>()       <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_levels</a></span>()  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span>()  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span>()  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span>()  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span>()  
-</pre></div>
+    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span><span class="op">)</span>            <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_p</a></span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_labels</a></span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_levels</a></span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  </pre></div>
 <ul>
 <li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is now defunct.</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (<a href='https://github.com/ddsjoberg/gtsummary/issues/175'>#175</a>)</p></li>
@@ -569,7 +625,7 @@
 <li><p>Added <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/152'>#152</a>)</p></li>
 <li><p>Bug fix for dichotomous yes/no variables in <code>tbl_summary</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/158'>#158</a>)</p></li>
 <li><p>Changed <code><a href="../reference/deprecated.html">add_comparison()</a></code> and <code><a href="../reference/deprecated.html">add_global()</a></code> to <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/143'>#143</a>)</p></li>
-<li><p>Added <code><a href="../reference/sort_p.html">sort_p()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/105'>#105</a>)</p></li>
+<li><p>Added <code><a href="../reference/sort_filter_p.html">sort_p()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/105'>#105</a>)</p></li>
 <li><p>Allow unobserved values to serve as the level for dichotomous variables (<a href='https://github.com/ddsjoberg/gtsummary/issues/149'>#149</a>)</p></li>
 <li><p>Bug fix in <code><a href="../reference/add_nevent.html">add_nevent()</a></code> when formula was passed to <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> as a string (<a href='https://github.com/ddsjoberg/gtsummary/issues/148'>#148</a>)</p></li>
 <li><p>Added returned <code>call_list</code> to some functions without it previously (<a href='https://github.com/ddsjoberg/gtsummary/issues/137'>#137</a>)</p></li>
@@ -587,13 +643,12 @@
 <h3 class="hasAnchor">
 <a href="#updated-function-names" class="anchor"></a>Updated Function Names</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-    <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span>()       <span class="op">&lt;-</span>  <span class="fu">fmt_table1</span>()  
-    <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span>()    <span class="op">&lt;-</span>  <span class="fu">fmt_regression</span>()  
-    <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span>()  <span class="op">&lt;-</span>  <span class="fu">fmt_uni_regression</span>()  
-    <span class="fu"><a href="../reference/style_pvalue.html">style_pvalue</a></span>()      <span class="op">&lt;-</span>  <span class="fu">fmt_pvalue</span>()  
-    <span class="kw">style_percent</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/fmt_percent.html">fmt_percent</a></span>()  
-    <span class="kw">style_ratio</span>         <span class="op">&lt;-</span>  <span class="fu">fmt_beta</span>()  
-</pre></div>
+    <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">fmt_table1</span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span>    <span class="op">&lt;-</span>  <span class="fu">fmt_regression</span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">fmt_uni_regression</span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="op">)</span>      <span class="op">&lt;-</span>  <span class="fu">fmt_pvalue</span><span class="op">(</span><span class="op">)</span>  
+    <span class="va">style_percent</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/fmt_percent.html">fmt_percent</a></span><span class="op">(</span><span class="op">)</span>  
+    <span class="va">style_ratio</span>         <span class="op">&lt;-</span>  <span class="fu">fmt_beta</span><span class="op">(</span><span class="op">)</span>  </pre></div>
 </div>
 <div id="new-functions-3" class="section level3">
 <h3 class="hasAnchor">
@@ -622,11 +677,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
