@@ -1,8 +1,8 @@
 # gtsummary (development version)
 
-### New Functionality
+# gtsummary 1.3.5
 
-* Added two custom tidiers for use in `tbl_regression()` and `tbl_uvregression()`.`tidy_standardize()` returns standardized coefficients using the {effectsize} package, and `tidy_bootstrap()` gives bootstrapped parameter estimates, calculated using the {parameters} package.
+### New Functionality
 
 * New summary type `continuous2` allows adding labelled statistic rows to tables in `tbl_summary()` and `tbl_svysummary()`. You can report several lines of statistics with this type. (#620)
     - The `all_continuous()` function now selects summary types `continuous` and `continuous2` by default.
@@ -12,6 +12,10 @@
 * New function `add_glance_source_note()` adds the statistics returned in `broom::glance()` as a source note on a `tbl_regression()` (#434)
 
 * Exporting the `modify_table_header()` function, which is an advanced-use function used to make modifications to the `.$table_header` object to update printing instructions for the gtsummary object.
+
+* Added two custom tidiers for use in `tbl_regression()` and `tbl_uvregression()`. (#635) 
+  - `tidy_standardize()` returns standardized coefficients using the {effectsize} package
+  - `tidy_bootstrap()` gives bootstrapped parameter estimates, calculated using the {parameters} package
 
 ### Bug Fixes
 
@@ -29,7 +33,7 @@
 
 * Refresh of vignettes to use recently released functions (#649)
 
-* Moved the nevent column to after the N column when add_nevent() is called on a tbl_regression() object (#439)
+* Moved the nevent column to after the N column when `add_nevent()` is called on a `tbl_regression()` object (#439)
 
 * gtsummary themes updates
   - Add `theme_gtsummary_mean_sd()` theme to report mean and SD by default and use t-tests and ANOVA in `add_p()` (#654)

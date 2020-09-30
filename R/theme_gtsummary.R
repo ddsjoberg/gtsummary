@@ -2,28 +2,17 @@
 #'
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' The following themes are available to use within the gtsummary package.
-#' Use the [set_gtsummary_theme()] function to set a theme.
+#' Print theme elements with `theme_gtsummary_journal(set_theme = FALSE) %>% print()`.
+#' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
+#' for details.
 #'
 #' @param set_theme Logical indicating whether to set the theme. Default is `TRUE`.
 #' When `FALSE` the named list of theme elements is returned invisibly
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
-#'   - `"jama"`
-#'     - sets theme to align with the JAMA reporting guidelines
-#'     - large p-values are rounded to two decimal places
-#'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
-#'     - in `tbl_summary()` the percent symbol is not printed next to percentages
-#'   - `"nejm"`
-#'     - sets theme to align with the The New England Journal of Medicine guidelines
-#'     - large p-values are rounded to two decimal places
-#'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
-#'     - confidence intervals are separated with `1 to 2`, rather than a comma
-#'   - `"lancet"`
-#'     - sets theme to align with the The Lancet reporting guidelines
-#'     - large p-values are rounded to two decimal places
-#'     - in `tbl_summary()` the IQR is separated with a dash, rather than comma
-#'     - confidence intervals are separated with `1 to 2`, rather than a comma
-#'     - decimal points are mid-line dots
+#'   - `"jama"` The Journal of the American Medical Association
+#'   - `"nejm"` The New England Journal of Medicine
+#'   - `"lancet"` The Lancet
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine=)`
@@ -185,19 +174,10 @@ theme_gtsummary_printer <- function(
 
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
-#' @param language String indicating language. Must be one of
-#' - `"de"` (German)
-#' - `"en"` (English)
-#' - `"es"` (Spanish)
-#' - `"fr"` (French)
-#' - `"gu"` (Gujarati)
-#' - `"hi"` (Hindi)
-#' - `"ja"` (Japanese)
-#' - `"mr"` (Marathi)
-#' - `"pt"` (Portuguese)
-#' - `"se"` (Swedish)
-#' - `"zh-cn"` Chinese (Simplified)
-#' - `"zh-tw"` Chinese (Traditional)
+#' @param language String indicating language. Must be one of `"de"` (German),
+#' `"en"` (English), `"es"` (Spanish), `"fr"` (French), `"gu"` (Gujarati),
+#' `"hi"` (Hindi), `"ja"` (Japanese), `"mr"` (Marathi), `"pt"` (Portuguese),
+#' `"se"` (Swedish), `"zh-cn"` (Chinese Simplified), `"zh-tw"` (Chinese Traditional)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free
 #' to reach out on [GitHub](https://github.com/ddsjoberg/gtsummary/issues)
