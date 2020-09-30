@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9000</span>
       </span>
     </div>
 
@@ -175,11 +175,15 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
+</div>
+    <div id="gtsummary-135" class="section level1">
+<h1 class="page-header" data-toc-text="1.3.5">
+<a href="#gtsummary-135" class="anchor"></a>gtsummary 1.3.5<small> 2020-09-29 </small>
+</h1>
 <div id="new-functionality" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-functionality" class="anchor"></a>New Functionality</h3>
 <ul>
-<li><p>Added two custom tidiers for use in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>.<code><a href="../reference/custom_tidiers.html">tidy_standardize()</a></code> returns standardized coefficients using the {effectsize} package, and <code><a href="../reference/custom_tidiers.html">tidy_bootstrap()</a></code> gives bootstrapped parameter estimates, calculated using the {parameters} package.</p></li>
 <li>
 <p>New summary type <code>continuous2</code> allows adding labelled statistic rows to tables in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. You can report several lines of statistics with this type. (<a href='https://github.com/ddsjoberg/gtsummary/issues/620'>#620</a>)</p>
 <ul>
@@ -190,6 +194,15 @@
 </li>
 <li><p>New function <code><a href="../reference/add_glance_source_note.html">add_glance_source_note()</a></code> adds the statistics returned in <code><a href="https://rdrr.io/pkg/generics/man/glance.html">broom::glance()</a></code> as a source note on a <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>)</p></li>
 <li><p>Exporting the <code><a href="../reference/modify_table_header.html">modify_table_header()</a></code> function, which is an advanced-use function used to make modifications to the <code>.$table_header</code> object to update printing instructions for the gtsummary object.</p></li>
+<li>
+<p>Added two custom tidiers for use in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/635'>#635</a>)</p>
+<ul>
+<li>
+<code><a href="../reference/custom_tidiers.html">tidy_standardize()</a></code> returns standardized coefficients using the {effectsize} package</li>
+<li>
+<code><a href="../reference/custom_tidiers.html">tidy_bootstrap()</a></code> gives bootstrapped parameter estimates, calculated using the {parameters} package</li>
+</ul>
+</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
@@ -208,7 +221,7 @@
 <a href="#other-updates" class="anchor"></a>Other Updates</h3>
 <ul>
 <li><p>Refresh of vignettes to use recently released functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/649'>#649</a>)</p></li>
-<li><p>Moved the nevent column to after the N column when add_nevent() is called on a tbl_regression() object (<a href='https://github.com/ddsjoberg/gtsummary/issues/439'>#439</a>)</p></li>
+<li><p>Moved the nevent column to after the N column when <code><a href="../reference/add_nevent.html">add_nevent()</a></code> is called on a <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> object (<a href='https://github.com/ddsjoberg/gtsummary/issues/439'>#439</a>)</p></li>
 <li>
 <p>gtsummary themes updates</p>
 <ul>
@@ -295,7 +308,7 @@
 <a href="#breaking-changes" class="anchor"></a>Breaking Changes</h3>
 <ul>
 <li><p>All <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html">lifecycle::deprecate_warn()</a></code> have been upgraded to <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html">lifecycle::deprecate_stop()</a></code> for &lt;= v1.2.0 (released Aug 2019)</p></li>
-<li><p>Removing <code><a href="../reference/deprecated.html">as_flextable()</a></code> and replacing with <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> due to a name conflict with <code><a href="https://rdrr.io/pkg/flextable/man/as_flextable.html">flextable::as_flextable</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/462'>#462</a>)</p></li>
+<li><p>Removing <code><a href="../reference/deprecated.html">as_flextable()</a></code> and replacing with <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> due to a name conflict with <code><a href="https://davidgohel.github.io/flextable/reference/as_flextable.html">flextable::as_flextable</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/462'>#462</a>)</p></li>
 </ul>
 </div>
 </div>
@@ -669,7 +682,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

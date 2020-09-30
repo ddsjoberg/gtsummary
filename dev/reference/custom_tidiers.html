@@ -99,7 +99,7 @@ and tbl_uvregression() to obtain modified results. See examples below." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.4.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9000</span>
       </span>
     </div>
 
@@ -234,8 +234,8 @@ interval in the tidied output. Defaults to <code>FALSE</code>.</p></td>
     <tr>
       <th>...</th>
       <td><p>arguments passed to method;</p><ul>
-<li><p><code>tidy_standardize()</code>: <code><a href='https://rdrr.io/pkg/effectsize/man/standardize_parameters.html'>effectsize::standardize_parameters(x, ...)</a></code></p></li>
-<li><p><code>tidy_bootstrap()</code>: <code><a href='https://rdrr.io/pkg/parameters/man/bootstrap_parameters.html'>parameters::bootstrap_parameters(x, ...)</a></code></p></li>
+<li><p><code>tidy_standardize()</code>: <code><a href='https://easystats.github.io/effectsize/reference/standardize_parameters.html'>effectsize::standardize_parameters(x, ...)</a></code></p></li>
+<li><p><code>tidy_bootstrap()</code>: <code><a href='https://easystats.github.io/parameters/reference/bootstrap_parameters.html'>parameters::bootstrap_parameters(x, ...)</a></code></p></li>
 </ul></td>
     </tr>
     </table>
@@ -248,12 +248,12 @@ interval in the tidied output. Defaults to <code>FALSE</code>.</p></td>
 <li><p><code>tidy_standardize()</code> tidier to report standardized coefficients. The
 <a href='https://easystats.github.io/effectsize/reference/standardize_parameters.html'>effectsize</a>
 package includes a wonderful function to estimate standardized coefficients.
-The tidier uses the output from <code><a href='https://rdrr.io/pkg/effectsize/man/standardize_parameters.html'>effectsize::standardize_parameters()</a></code>, and
+The tidier uses the output from <code><a href='https://easystats.github.io/effectsize/reference/standardize_parameters.html'>effectsize::standardize_parameters()</a></code>, and
 merely takes the result and puts it in <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom::tidy()</a></code> format.</p></li>
 <li><p><code>tidy_bootstrap()</code> tidier to report bootstrapped coefficients. The
 <a href='https://easystats.github.io/parameters/reference/model_parameters.default.html'>parameters</a>
 package includes a wonderful function to estimate bootstrapped coefficients.
-The tidier uses the output from <code><a href='https://rdrr.io/pkg/parameters/man/bootstrap_parameters.html'>parameters::bootstrap_parameters(test = "p")</a></code>, and
+The tidier uses the output from <code><a href='https://easystats.github.io/parameters/reference/bootstrap_parameters.html'>parameters::bootstrap_parameters(test = "p")</a></code>, and
 merely takes the result and puts it in <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom::tidy()</a></code> format.</p></li>
 </ul>
 
@@ -308,7 +308,7 @@ the model parameters before attempting to use the tidier with <code><a href='tbl
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
