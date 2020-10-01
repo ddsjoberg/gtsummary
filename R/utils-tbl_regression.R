@@ -136,7 +136,7 @@ gtsummary_model_frame <- function(x) {
       hide = !"estimate" %in% tidy_columns_to_report,
       missing_emdash = "reference_row == TRUE",
       footnote_abbrev =
-        estimate_header(x, exponentiate) %>% attr("footnote") %||% NA_character_,
+        estimate_header(x$model_obj, exponentiate) %>% attr("footnote") %||% NA_character_,
       fmt_fun = estimate_fun
     )
 
