@@ -259,7 +259,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
 
   # checking that the variable list is unique
   if (quiet == FALSE && !identical(meta_data$variable, unique(meta_data$variable))) {
-    paste("The variable list in `.$meta_data` is not unique.",
+    paste("tbl_survfit: The variable list in `.$meta_data` is not unique.",
           "This could pose a problem with  subsequent `tbl_survfit` calls,",
           "e.g. `tbl_survfit() %>% add_p()`") %>%
       stringr::str_wrap() %>%
@@ -402,7 +402,7 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
       purrr::pluck(1)
 
     if (identical(quiet, FALSE)) rlang::inform(glue(
-      "Multi-state model detected. Showing probabilities into state '{state}'"))
+      "tbl_survfit: Multi-state model detected. Showing probabilities into state '{state}'"))
 
     tidy <- dplyr::filter(tidy, .data$state == .env$state)
   }

@@ -105,7 +105,7 @@ add_global_p.tbl_regression <- function(x,
       rlang::expr(car::Anova(x$model_obj, type = !!type, !!!list(...))) %>%
       deparse()
 
-    paste("Global p-values for variable(s)",
+    paste("add_global_p: Global p-values for variable(s)",
           glue("`include = {deparse(include) %>% paste(collapse = '')}`"),
           glue("were calculated with")) %>%
       stringr::str_wrap() %>%
@@ -232,7 +232,7 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
       rlang::expr(car::Anova(mod = x$model_obj, type = !!type, !!!list(...))) %>%
       deparse()
 
-    paste("Global p-values for variable(s)",
+    paste("add_global_p: Global p-values for variable(s)",
           glue("`include = {deparse(include) %>% paste(collapse = '')}`"),
           glue("were calculated with")) %>%
       stringr::str_wrap() %>%
