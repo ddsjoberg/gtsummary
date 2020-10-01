@@ -289,7 +289,8 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
       function(x) {
         # for each formula extract lhs and rhs ---------------------------------
         # checking the LHS is not empty
-        if (is.null(rlang::f_lhs(x))) tidyselect_to_list_error(arg_name = arg_name)
+        f_lhs_quo <- f_side_as_quo(x, "lhs")
+        if (rlang::quo_is_null(f_lhs_quo)) tidyselect_to_list_error(arg_name = arg_name)
         # extract LHS of formula
         lhs <- var_input_to_string(data = .data,
                                    select_input = !!f_side_as_quo(x, "lhs"),
