@@ -181,6 +181,7 @@ gtsummary_model_frame <- function(x) {
       column = "std.error",
       label = paste0("**", translate_text("SE"), "**"),
       footnote_abbrev = translate_text("SE = Standard Error"),
+      missing_emdash = "reference_row == TRUE",
       fmt_fun = purrr::partial(style_sigfig, digits = 3),
       hide = !"std.error" %in% tidy_columns_to_report
     )
@@ -192,6 +193,7 @@ gtsummary_model_frame <- function(x) {
       column = "statistic",
       label = paste0("**", translate_text("Statistic"), "**"),
       fmt_fun = purrr::partial(style_sigfig, digits = 3),
+      missing_emdash = "reference_row == TRUE",
       hide = !"statistic" %in% tidy_columns_to_report
     )
 
