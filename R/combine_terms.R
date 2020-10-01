@@ -101,7 +101,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     paste(collapse = "") %>%
     stringr::str_squish()
   if (quiet == FALSE)
-    rlang::inform(glue("Creating a reduced model with\n  `reduced_model <- {expr_update}`"))
+    rlang::inform(glue("combine_terms: Creating a reduced model with\n  `reduced_model <- {expr_update}`"))
   reduced_model <- stats::update(x$model_obj, formula. = formula_update)
   tryCatch({
     expr_anova <-
@@ -110,7 +110,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
       paste(collapse = "")  %>%
       stringr::str_squish()
     if (quiet == FALSE)
-      rlang::inform(glue("Calculating p-value comparing full and reduced models with\n",
+      rlang::inform(glue("combine_terms: Calculating p-value comparing full and reduced models with\n",
                        "  `{expr_anova}`"))
 
     anova <- stats::anova(x$model_obj, reduced_model, ...)

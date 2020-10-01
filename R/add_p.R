@@ -537,7 +537,7 @@ print_call <- function(call) {
     deparse() %>%
     paste(collapse = "") %>%
     stringr::str_squish() %>%
-    {glue("Calculating p-value with\n  `{.}`")} %>%
+    {glue("add_p: Calculating p-value with\n  `{.}`")} %>%
     rlang::inform()
 }
 
