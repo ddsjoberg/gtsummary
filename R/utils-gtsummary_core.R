@@ -288,13 +288,14 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
       x,
       function(x) {
         # for each formula extract lhs and rhs ---------------------------------
+        # checking the LHS is not empty
+        if (is.null(rlang::f_lhs(x))) tidyselect_to_list_error(arg_name = arg_name)
+        # extract LHS of formula
         lhs <- var_input_to_string(data = .data,
                                    select_input = !!f_side_as_quo(x, "lhs"),
                                    meta_data = .meta_data,
                                    arg_name = arg_name,
                                    select_single = select_single)
-        # error if no columns were selected
-        if(is.null(lhs)) tidyselect_to_list_error(arg_name = arg_name)
 
         # evaluate RHS of formula in the original formula environment
         rhs <- f_side_as_quo(x, "rhs") %>% eval_tidy()
@@ -315,7 +316,7 @@ tidyselect_to_list_error <- function(arg_name) {
   example_text <-
     switch(
       arg_name %||% "not_specified",
-      "type" = paste("type = list(age ~ \"continuous\", all_integer() ~ \"categorical\")"),
+      "type" = paste("type = list(age ~ \"continuous\", where(is.integer) ~ \"categorical\")"),
       "label" = paste("label = list(age ~ \"Age, years\", response ~ \"Tumor Response\")"),
       "statistic" = paste(c("statistic = list(all_continuous() ~ \"{mean} ({sd})\", all_categorical() ~ \"{n} / {N} ({p}%)\")",
                             "statistic = list(age ~ \"{median}\")")),
@@ -331,12 +332,13 @@ tidyselect_to_list_error <- function(arg_name) {
             "type = list(c(response, death) ~ \"categorical\")"))
 
   # printing error for argument input
-  error_text <- ifelse(
-    !is.null(arg_name),
-    glue::glue("There was a problem with the `{arg_name}=` argument input."),
-    glue::glue("There was a problem with one of the function argument inputs.")
-  )
-  usethis::ui_oops("{error_text} Below is an example of correct syntax.\n\n")
+  if (!is.null(arg_name))
+    usethis::ui_oops(glue::glue(
+      "There was a problem with the",
+      "{usethis::ui_code(glue::glue('{arg_name}='))} argument input."))
+  else
+    usethis::ui_oops("There was a problem with one of the function argument inputs.")
+  usethis::ui_info("Below is an example of correct syntax.")
   purrr::walk(example_text, ~print(usethis::ui_code(.)))
   stop("Invalid argument syntax", call. = FALSE)
 }
