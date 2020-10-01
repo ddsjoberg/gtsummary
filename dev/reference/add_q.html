@@ -272,7 +272,7 @@ and return a string that is the rounded/formatted p-value (e.g.
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>add_q</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Adjusting p-values with</span>
+</div><div class='output co'>#&gt; <span class='message'>add_q: Adjusting p-values with</span>
 #&gt; <span class='message'>`stats::p.adjust(x$table_body$p.value, method = "fdr")`</span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='va'>add_q_ex2</span> <span class='op'>&lt;-</span>
@@ -285,9 +285,9 @@ and return a string that is the rounded/formatted p-value (e.g.
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_global_p.html'>add_global_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>add_q</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Global p-values for variable(s) `include = c("trt", "age", "grade")` were</span>
-#&gt; <span class='message'>calculated with</span>
-#&gt; <span class='message'>  `car::Anova(mod = x$model_obj, type = "III")`</span></div><div class='output co'>#&gt; <span class='message'>Adjusting p-values with</span>
+</div><div class='output co'>#&gt; <span class='message'>add_global_p: Global p-values for variable(s) `include = c("trt", "age",</span>
+#&gt; <span class='message'>"grade")` were calculated with</span>
+#&gt; <span class='message'>  `car::Anova(mod = x$model_obj, type = "III")`</span></div><div class='output co'>#&gt; <span class='message'>add_q: Adjusting p-values with</span>
 #&gt; <span class='message'>`stats::p.adjust(x$table_body$p.value, method = "fdr")`</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

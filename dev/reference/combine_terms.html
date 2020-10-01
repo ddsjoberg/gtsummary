@@ -261,8 +261,8 @@ function's <code>formula.=</code> argument</p></td>
     formula_update <span class='op'>=</span> <span class='va'>.</span> <span class='op'>~</span> <span class='va'>.</span> <span class='op'>-</span> <span class='va'>marker</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/AsIs.html'>I</a></span><span class='op'>(</span><span class='va'>marker</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>,
     label <span class='op'>=</span> <span class='st'>"Marker (non-linear terms)"</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
-#&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - marker - I(marker^2))`</span></div><div class='output co'>#&gt; <span class='message'>Calculating p-value comparing full and reduced models with</span>
+</div><div class='output co'>#&gt; <span class='message'>combine_terms: Creating a reduced model with</span>
+#&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - marker - I(marker^2))`</span></div><div class='output co'>#&gt; <span class='message'>combine_terms: Calculating p-value comparing full and reduced models with</span>
 #&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model)`</span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># Example with Cubic Splines</span>
@@ -278,8 +278,8 @@ function's <code>formula.=</code> argument</p></td>
     formula_update <span class='op'>=</span> <span class='va'>.</span> <span class='op'>~</span> <span class='va'>.</span> <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/pkg/Hmisc/man/rcspline.eval.html'>rcspline.eval</a></span><span class='op'>(</span><span class='va'>marker</span>, inclx <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
     label <span class='op'>=</span> <span class='st'>"Marker (non-linear terms)"</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
-#&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - rcspline.eval(marker, inclx = TRUE))`</span></div><div class='output co'>#&gt; <span class='message'>Calculating p-value comparing full and reduced models with</span>
+</div><div class='output co'>#&gt; <span class='message'>combine_terms: Creating a reduced model with</span>
+#&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - rcspline.eval(marker, inclx = TRUE))`</span></div><div class='output co'>#&gt; <span class='message'>combine_terms: Calculating p-value comparing full and reduced models with</span>
 #&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model)`</span></div><div class='input'>
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># Logistic Regression Example, LRT p-value</span>
@@ -296,8 +296,8 @@ function's <code>formula.=</code> argument</p></td>
     label <span class='op'>=</span> <span class='st'>"Marker (non-linear terms)"</span>,
     test <span class='op'>=</span> <span class='st'>"LRT"</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Creating a reduced model with</span>
-#&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - marker - I(marker^2))`</span></div><div class='output co'>#&gt; <span class='message'>Calculating p-value comparing full and reduced models with</span>
+</div><div class='output co'>#&gt; <span class='message'>combine_terms: Creating a reduced model with</span>
+#&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - marker - I(marker^2))`</span></div><div class='output co'>#&gt; <span class='message'>combine_terms: Calculating p-value comparing full and reduced models with</span>
 #&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model, test = "LRT")`</span></div><div class='input'>
 </div></pre>
   </div>
