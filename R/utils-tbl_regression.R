@@ -132,7 +132,7 @@ gtsummary_model_frame <- function(x) {
     x <- modify_table_header(
       x,
       column = "estimate",
-      label = glue("**{estimate_header(x, exponentiate)}**") %>% as.character(),
+      label = glue("**{estimate_header(x$model_obj, exponentiate)}**") %>% as.character(),
       hide = !"estimate" %in% tidy_columns_to_report,
       missing_emdash = "reference_row == TRUE",
       footnote_abbrev =
