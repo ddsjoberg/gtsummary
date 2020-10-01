@@ -293,6 +293,8 @@ tidyselect_to_list <- function(.data, x, .meta_data = NULL,
                                    meta_data = .meta_data,
                                    arg_name = arg_name,
                                    select_single = select_single)
+        # error if no columns were selected
+        if(is.null(lhs)) tidyselect_to_list_error(arg_name = arg_name)
 
         # evaluate RHS of formula in the original formula environment
         rhs <- f_side_as_quo(x, "rhs") %>% eval_tidy()
