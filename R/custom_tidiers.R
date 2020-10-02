@@ -76,7 +76,7 @@ tidy_standardize <- function(x, exponentiate = FALSE,
   # calculating standardize coefs
   std_coef_expr <- expr(effectsize::standardize_parameters(model = x, ci = !!conf.level, !!!dots))
   if (quiet == FALSE)
-    inform(glue("Estimating standardized coefs with\n  `{deparse(std_coef_expr)}`"))
+    inform(glue("tidy_standardize: Estimating standardized coefs with\n  `{deparse(std_coef_expr)}`"))
   std_coef <-
     expr(effectsize::standardize_parameters(model = !!x, ci = !!conf.level, !!!dots)) %>%
     eval()
@@ -109,7 +109,7 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
   # calculating bootstrapped coefs
   boot_coef_expr <- expr(parameters::bootstrap_parameters(model = x, ci = !!conf.level, test = "p", !!!dots))
   if (quiet == FALSE)
-    inform(glue("Estimating bootstrapped coefs with\n  `{deparse(boot_coef_expr)}`"))
+    inform(glue("tidy_bootstrap: Estimating bootstrapped coefs with\n  `{deparse(boot_coef_expr)}`"))
   boot_coef <-
     expr(parameters::bootstrap_parameters(model = !!x, ci = !!conf.level, test = "p", !!!dots)) %>%
     eval()
