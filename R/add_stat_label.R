@@ -74,7 +74,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
 
   # no column stat label with continuous2 variables ----------------------------
   if (location == "column" && "continuous2" %in% x$meta_data$summary_type) {
-    paste("Cannot combine `location = \"column\"` with multi-line summaries",
+    paste("add_stat_label: Cannot combine `location = \"column\"` with multi-line summaries",
           "of continuous variables, e.g. summary types \"continuous2\".",
           "Updating argument value to `location = \"row\"`") %>%
       str_wrap() %>%

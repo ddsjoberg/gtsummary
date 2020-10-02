@@ -79,7 +79,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     rlang::expr(stats::p.adjust(x$table_body$p.value, method = !!method)) %>%
     deparse()
   if (quiet == FALSE)
-    rlang::inform(glue("Adjusting p-values with\n`{expr_p.adjust}`"))
+    rlang::inform(glue("add_q: Adjusting p-values with\n`{expr_p.adjust}`"))
 
   x$table_body$q.value <- x$table_body$p.value %>% stats::p.adjust(method = method)
 
