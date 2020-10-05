@@ -96,17 +96,10 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 gtsummary_model_frame <- function(x) {
   tryCatch(stats::model.frame(x),
   error = function(e) {
-    usethis::ui_oops(paste0(
-      "There was an error calling {usethis::ui_code('stats::model.frame(x)')}.\n\n",
-      "Most likely, this is because the argument passed in {usethis::ui_code('x =')} ",
-      "was\nmisspelled, does not exist, or is not a regression model.\n\n",
-      "Rarely, this error may occur if the model object was created within\na ",
-      "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
-      "{usethis::ui_code('purrr::map()')}, etc.).\n",
-      "Review the GitHub issue linked below for a possible solution.\n",
-      "The model N will not be available in the output."
-    ))
-    usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
+    paste("There was an error calling {usethis::ui_code('stats::model.frame(x)')},",
+          "and the model N will not be available in the output.") %>%
+      stringr::str_wrap() %>%
+      usethis::ui_oops()
     data.frame()
   }
   )
@@ -125,7 +118,6 @@ gtsummary_model_frame <- function(x) {
       label = paste0("**", translate_text("Characteristic"), "**"),
       hide = FALSE
     )
-
 
   # estimate -------------------------------------------------------------------
   if ("estimate" %in% names(x$table_body))

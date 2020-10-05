@@ -4,6 +4,7 @@
 \alias{custom_tidiers}
 \alias{tidy_standardize}
 \alias{tidy_bootstrap}
+\alias{tidy_mice}
 \title{Collection of custom tidiers}
 \usage{
 tidy_standardize(
@@ -23,6 +24,8 @@ tidy_bootstrap(
   ...,
   quiet = FALSE
 )
+
+tidy_mice(x, pool.args = NULL, ..., quiet = FALSE)
 }
 \arguments{
 \item{x}{a regression model object}
@@ -44,9 +47,12 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 
 \item{...}{arguments passed to method;
 \itemize{
+\item \code{tidy_mice_mira()}: \code{mice::tidy(x, ...)}
 \item \code{tidy_standardize()}: \code{effectsize::standardize_parameters(x, ...)}
 \item \code{tidy_bootstrap()}: \code{parameters::bootstrap_parameters(x, ...)}
 }}
+
+\item{pool.args}{list of arguments passed to \code{mice::pool()}. Default is \code{NULL}}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -84,7 +90,7 @@ the model parameters before attempting to use the tidier with \code{tbl_regressi
 
 \if{html}{Example 3}
 
-\if{html}{\figure{tidy_bootstrap_ex3.png}{options: width=47\%}}
+\if{html}{\figure{tidy_mice_ex3.png}{options: width=47\%}}
 }
 
 \examples{
@@ -107,7 +113,10 @@ tidy_standardize_ex2 <-
 
 
 # Example 3 ----------------------------------
-tidy_bootstrap_ex3 <-
-  tbl_regression(mod, tidy_fun = tidy_bootstrap)
+# Multiple Imputation using the mice package
+tidy_mice_ex3 <-
+  suppressWarnings(mice::mice(trial, m = 2)) \%>\%
+  with(lm(age ~ marker + grade)) \%>\%
+  tbl_regression()
 
 }

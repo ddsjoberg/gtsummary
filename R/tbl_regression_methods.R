@@ -31,3 +31,51 @@ tbl_regression.survreg <- function(
   x, tidy_fun = function(x, ...) broom::tidy(x, ...) %>% dplyr::filter(.data$term != "Log(scale)"), ...) {
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 }
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.mira <- function(x, tidy_fun = tidy_mice, ...) {
+  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.mipo <- function(x, ...) {
+  paste("gtsummary summarizes mice models before the model results",
+        "are pooled across the imputated datasets. Pass your mice object to",
+        "{usethis::ui_code('tbl_regression()')} before",
+        "{usethis::ui_code('mice::pool()')}.",
+        "The tidier will both pool and tidy the model.") %>%
+    stringr::str_wrap() %>%
+    usethis::ui_oops()
+  paste("\n\nmice::mice(trial, m = 2) %>%",
+        "with(lm(age ~ marker + grade)) %>%",
+        "tbl_regression()", sep = "\n") %>%
+    usethis::ui_code_block()
+}
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.multinom <- function(x, ...) {
+  result <- tbl_regression.default(x = x, ...)
+
+  # adding a grouped header for the outcome levels
+  result$table_body <-
+    result$table_body %>%
+    mutate(groupname_col = .data$y.level) %>%
+    select(.data$groupname_col, everything()) %>%
+    group_by(.data$groupname_col)
+  result$table_header <-
+    table_header_fill_missing(result$table_header, result$table_body)
+
+  # warning about multi-nomial models
+  paste("Multinomial models have a different underlying structure than",
+        "the models gtsummary was designed for.",
+        "Other gtsummary functions designed to work with",
+        "{usethis::ui_field('tbl_regression')} objects may yield unexpected",
+        "results.") %>%
+    str_wrap() %>%
+    usethis::ui_info()
+
+  result
+}

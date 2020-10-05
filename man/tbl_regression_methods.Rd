@@ -5,6 +5,9 @@
 \alias{tbl_regression.lmerMod}
 \alias{tbl_regression.glmerMod}
 \alias{tbl_regression.survreg}
+\alias{tbl_regression.mira}
+\alias{tbl_regression.mipo}
+\alias{tbl_regression.multinom}
 \title{Methods for tbl_regression}
 \usage{
 \method{tbl_regression}{lmerMod}(
@@ -25,6 +28,12 @@
     "Log(scale)"),
   ...
 )
+
+\method{tbl_regression}{mira}(x, tidy_fun = tidy_mice, ...)
+
+\method{tbl_regression}{mipo}(x, ...)
+
+\method{tbl_regression}{multinom}(x, ...)
 }
 \arguments{
 \item{x}{Regression model object}
