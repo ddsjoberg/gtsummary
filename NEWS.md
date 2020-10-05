@@ -1,5 +1,14 @@
 # gtsummary (development version)
 
+* updates the tbl_regression() internals to use broom.helpers package THIS IS A BIG CHANGE! (#636, #607)
+-- we should now be able to accept ANY wild or horribly named variable
+-- the infrastructure sets us up to accept more model types
+* transforms tbl_regression() into multiple methods: tbl_regression.default(), tbl_regression.lmer(), tbl_regression.glmer(), tbl_regression.survreg()
+*  allow users to to choose which columns to report with a theme element. they can choose among the estimate, std error, statistic, ci, and p-value (#637)
+*  allow users to include the reference value via a theme element
+*  update the printers to use the column reference_row from broom.helpers (currently changing name to match the prior version)
+*  update the missing emdash column in x$table_header to be missing_reference_row and allow users to change the symbol with a theme element. (#628)
+
 # gtsummary 1.3.5
 
 ### New Functionality
