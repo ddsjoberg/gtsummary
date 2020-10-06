@@ -79,7 +79,7 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
 table_header_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
-  table_header <- x$table_header
+  table_header <- .clean_table_header(x$table_header)
 
   kable_calls <- as_tibble(x, return_calls = TRUE, include = -c("cols_label"))
 

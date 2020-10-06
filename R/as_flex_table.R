@@ -99,11 +99,11 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
 table_header_to_flextable_calls <- function(x, ...) {
 
   # adding id number for columns not hidden
-   table_header <-
-      x$table_header %>%
-      group_by(.data$hide) %>%
-      mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-      ungroup()
+  table_header <-
+    .clean_table_header(x$table_header) %>%
+    group_by(.data$hide) %>%
+    mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
+    ungroup()
 
   # tibble ---------------------------------------------------------------------
   # flextable doesn't use the markdown language `__` or `**`
@@ -259,7 +259,10 @@ table_header_to_flextable_calls <- function(x, ...) {
   flextable_calls[["fmt_missing_emdash"]] <-
     map2(
       df_na_emdash$i_index, df_na_emdash$id,
-      ~expr(flextable::colformat_char(j = !!.y, i = !!.x, na_str = "\U2014"))
+      ~expr(
+        flextable::colformat_char(j = !!.y, i = !!.x,
+                                  na_str = !!get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014"))
+        )
     )
 
   # bold -----------------------------------------------------------------------

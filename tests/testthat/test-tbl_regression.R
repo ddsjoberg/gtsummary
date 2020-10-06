@@ -27,11 +27,27 @@ test_that("glm: logistic and poisson regression", {
   expect_warning(tbl_regression(mod_logistic), NA)
   expect_error(tbl_regression(mod_poisson, show_single_row = "trt"), NA)
   expect_warning(tbl_regression(mod_poisson, show_single_row = "trt"), NA)
+  expect_equal(
+    tbl_regression(mod_logistic)$table_header %>% filter(column == "estimate") %>% pull(label),
+    "**log(OR)**"
+  )
+  expect_equal(
+    tbl_regression(mod_poisson)$table_header %>% filter(column == "estimate") %>% pull(label),
+    "**log(IRR)**"
+  )
 
   expect_error(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
   expect_warning(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
   expect_error(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)
   expect_warning(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)
+  expect_equal(
+    tbl_regression(mod_logistic, exponentiate = TRUE)$table_header %>% filter(column == "estimate") %>% pull(label),
+    "**OR**"
+  )
+  expect_equal(
+    tbl_regression(mod_poisson, exponentiate = TRUE)$table_header %>% filter(column == "estimate") %>% pull(label),
+    "**IRR**"
+  )
 })
 
 test_that("lm: no errors/warnings with standard use", {
@@ -103,6 +119,15 @@ test_that("tbl_regression creates errors when inputs are wrong", {
 test_that("No errors/warnings when data is labelled using Hmisc", {
   expect_error(tbl_regression(cox_hmisclbl), NA)
   expect_warning(tbl_regression(cox_hmisclbl), NA)
+
+  expect_equal(
+    tbl_regression(cox_hmisclbl)$table_header %>% filter(column == "estimate") %>% pull(label),
+    "**log(HR)**"
+  )
+  expect_equal(
+    tbl_regression(cox_hmisclbl, exponentiate = TRUE)$table_header %>% filter(column == "estimate") %>% pull(label),
+    "**HR**"
+  )
 })
 
 test_that("show_single_row errors print", {
@@ -140,7 +165,7 @@ test_that("Testing lme4 results", {
 
   # coefs are exponentiated properly
   expect_equivalent(
-    coef(mod_glmer)[[1]] %>% {.[1, 2:ncol(.)]} %>% map_dbl(exp),
+    coef(mod_glmer)[[1]] %>% {.[1, 2:ncol(.)]} %>% purrr::map_dbl(exp),
     tbl_lme4$table_body %>% pull(estimate) %>% discard(is.na)
   )
 })
@@ -158,13 +183,13 @@ test_that("Interaction modifications", {
   )
 
   # checking modifications to table
-  expect_equal(
+  expect_equivalent(
     dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
       dplyr::pull(label),
     "Interaction"
   )
 
-  expect_equal(
+  expect_equivalent(
     dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
       nrow(),
     1L
