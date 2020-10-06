@@ -22,6 +22,8 @@
 
 context("test-vetted_models")
 testthat::skip_on_cran()
+testthat::skip_if_not_installed("survival")
+
 library(dplyr)
 library(survival)
 

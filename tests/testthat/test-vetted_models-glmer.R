@@ -22,6 +22,7 @@
 
 context("test-vetted_models-glmer")
 testthat::skip_on_cran()
+testthat::skip_if_not_installed("lme4")
 library(dplyr)
 
 # glmer() --------------------------------------------------------------------

@@ -16,10 +16,6 @@ mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial
 
 mod_lm_interaction <- lm(age ~ trt * grade * response, data = trial)
 
-lung2 <- lung
-Hmisc::label(lung2$sex) <- "Gender"
-Hmisc::label(lung2$age) <- "AGE"
-cox_hmisclbl <- coxph(Surv(time, status) ~ age + sex, data = lung2)
 
 
 test_that("glm: logistic and poisson regression", {
@@ -116,20 +112,6 @@ test_that("tbl_regression creates errors when inputs are wrong", {
   )
 })
 
-test_that("No errors/warnings when data is labelled using Hmisc", {
-  expect_error(tbl_regression(cox_hmisclbl), NA)
-  expect_warning(tbl_regression(cox_hmisclbl), NA)
-
-  expect_equal(
-    tbl_regression(cox_hmisclbl)$table_header %>% filter(column == "estimate") %>% pull(label),
-    "**log(HR)**"
-  )
-  expect_equal(
-    tbl_regression(cox_hmisclbl, exponentiate = TRUE)$table_header %>% filter(column == "estimate") %>% pull(label),
-    "**HR**"
-  )
-})
-
 test_that("show_single_row errors print", {
   expect_error(
     tbl_regression(mod_lm_interaction, show_single_row = "NOT_A_VA"),
@@ -196,4 +178,23 @@ test_that("Interaction modifications", {
   )
 })
 
+test_that("tbl_regression with Hmisc", {
+  testthat::skip_if_not_installed("Hmisc")
 
+  lung2 <- lung
+  Hmisc::label(lung2$sex) <- "Gender"
+  Hmisc::label(lung2$age) <- "AGE"
+  cox_hmisclbl <- coxph(Surv(time, status) ~ age + sex, data = lung2)
+
+  expect_error(tbl_regression(cox_hmisclbl), NA)
+  expect_warning(tbl_regression(cox_hmisclbl), NA)
+
+  expect_equal(
+    tbl_regression(cox_hmisclbl)$table_header %>% filter(column == "estimate") %>% pull(label),
+    "**log(HR)**"
+  )
+  expect_equal(
+    tbl_regression(cox_hmisclbl, exponentiate = TRUE)$table_header %>% filter(column == "estimate") %>% pull(label),
+    "**HR**"
+  )
+})
