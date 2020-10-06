@@ -17,6 +17,9 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+# not building on lowest versions of R (to pass CI Checks)
+if (getRversion() <= "3.4") knitr::knit_exit()
+
 gt_compact_fun <- function(x) {
   gt::tab_options(x, 
                   table.font.size = 'small',
