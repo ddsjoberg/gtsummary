@@ -101,7 +101,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9001</span>
       </span>
     </div>
 
@@ -187,7 +187,10 @@ regression model results. Review the
 for detailed examples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_regression</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>tbl_regression</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>tbl_regression</span><span class='op'>(</span>
   <span class='va'>x</span>,
   label <span class='op'>=</span> <span class='cn'>NULL</span>,
   exponentiate <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -197,9 +200,10 @@ for detailed examples.</p>
   intercept <span class='op'>=</span> <span class='cn'>FALSE</span>,
   estimate_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
   pvalue_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  tidy_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  tidy_fun <span class='op'>=</span> <span class='fu'>broom</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>,
   show_yesno <span class='op'>=</span> <span class='cn'>NULL</span>,
-  exclude <span class='op'>=</span> <span class='cn'>NULL</span>
+  exclude <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -208,6 +212,10 @@ for detailed examples.</p>
     <tr>
       <th>x</th>
       <td><p>Regression model object</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Not used</p></td>
     </tr>
     <tr>
       <th>label</th>
@@ -276,17 +284,17 @@ custom method. Default is <code>NULL</code></p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>tbl_regression</code> object</p>
-    <h2 class="hasAnchor" id="setting-defaults"><a class="anchor" href="#setting-defaults"></a>Setting Defaults</h2>
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
 
-<p>If you prefer to consistently use a different function to format p-values or
-estimates, you can set options in the script or in the user- or
-project-level startup file, '.Rprofile'.  The default confidence level can
-also be set.</p><ul>
-<li><p><code><a href='https://rdrr.io/r/base/options.html'>options(gtsummary.pvalue_fun = new_function)</a></code></p></li>
-<li><p><code><a href='https://rdrr.io/r/base/options.html'>options(gtsummary.tbl_regression.estimate_fun = new_function)</a></code></p></li>
-<li><p><code><a href='https://rdrr.io/r/base/options.html'>options(gtsummary.conf.level = 0.90)</a></code></p></li>
+
+<p>The default method for <code>tbl_regression()</code> model summary uses <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom::tidy(x)</a></code>
+to perform the initial tidying of the model object. There are, however,
+a few <a href='vetted_models.html'>vetted model</a> that use <a href='tbl_regression_methods.html'>modifications</a>.</p><ul>
+<li><p><code>"lmerMod"</code> or <code>"glmerMod"</code>: These mixed effects models use <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code></p></li>
+<li><p><code>"survreg"</code>: The scale parameter is removed, <code>broom::tidy(x) %&gt;% dplyr::filter(term != "Log(scale)")</code></p></li>
+<li><p><code>"multinom"</code>: This multinomial outcome is complex, and the returned object is a <code><a href='tbl_stack.html'>tbl_stack()</a></code> object with the parameters for each outcome stacked into a final object</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
