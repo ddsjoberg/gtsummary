@@ -7,16 +7,15 @@
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
-#' @section Setting Defaults:
-#' If you prefer to consistently use a different function to format p-values or
-#' estimates, you can set options in the script or in the user- or
-#' project-level startup file, '.Rprofile'.  The default confidence level can
-#' also be set.
-#' \itemize{
-#'   \item `options(gtsummary.pvalue_fun = new_function)`
-#'   \item `options(gtsummary.tbl_regression.estimate_fun = new_function)`
-#'   \item `options(gtsummary.conf.level = 0.90)`
-#' }
+#' @section Methods:
+#'
+#' The default method for `tbl_regression()` model summary uses `broom::tidy(x)`
+#' to perform the initial tidying of the model object. There are, however,
+#' a few [vetted model][vetted_models] that use [modifications][tbl_regression_methods].
+#'
+#' - `"lmerMod"` or `"glmerMod"`: These mixed effects models use `broom.mixed::tidy(x, effects = "fixed")`
+#' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
+#' - `"multinom"`: This multinomial outcome is complex, and the returned object is a `tbl_stack()` object with the parameters for each outcome stacked into a final object
 #'
 #' @section Note:
 #' The N reported in the output is the number of observations
@@ -56,12 +55,14 @@
 #' @param tidy_fun Option to specify a particular tidier function if the
 #' model is not a [vetted model][vetted_models] or you need to implement a
 #' custom method. Default is `NULL`
+#' @param ... Not used
 #' @param exclude DEPRECATED
 #' @param show_yesno DEPRECATED
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
 #' @export
+#' @rdname tbl_regression
 #' @return A `tbl_regression` object
 #' @examples
 #' # Example 1 ----------------------------------
@@ -94,12 +95,18 @@
 #'
 #' \if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
 
-tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
-                           include = everything(), show_single_row = NULL,
-                           conf.level = NULL, intercept = FALSE,
-                           estimate_fun = NULL, pvalue_fun = NULL,
-                           tidy_fun = NULL,
-                           show_yesno = NULL, exclude = NULL) {
+tbl_regression <- function(x, ...) {
+  UseMethod("tbl_regression")
+}
+
+#' @export
+#' @rdname tbl_regression
+tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
+                                   include = everything(), show_single_row = NULL,
+                                   conf.level = NULL, intercept = FALSE,
+                                   estimate_fun = NULL, pvalue_fun = NULL,
+                                   tidy_fun = broom::tidy,
+                                   show_yesno = NULL, exclude = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
     lifecycle::deprecate_stop(
@@ -140,9 +147,6 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     conf.level %||%
     get_theme_element("tbl_regression-arg:conf.level") %||%
     getOption("gtsummary.conf.level", default = 0.95)
-  tidy_fun <-
-    tidy_fun %||%
-    get_theme_element("tbl_regression-arg:tidy_fun")
 
   # checking estimate_fun and pvalue_fun are functions
   if (!purrr::every(list(estimate_fun, pvalue_fun, tidy_fun %||% pvalue_fun), is.function)) {
@@ -158,76 +162,58 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
   # the object func_inputs is a list of every object passed to the function
   func_inputs <- as.list(environment())
 
-    # converting tidyselect formula lists to named lists
-  # extracting model frame
-  model_frame <- tryCatch({
-      stats::model.frame(x)
-    },
-    error = function(e) {
-      usethis::ui_oops(paste0(
-        "There was an error calling {usethis::ui_code('stats::model.frame(x)')}.\n\n",
-        "Most likely, this is because the argument passed in {usethis::ui_code('x =')} ",
-        "was\nmisspelled, does not exist, or is not a regression model.\n\n",
-        "Rarely, this error may occur if the model object was created within\na ",
-        "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
-        "{usethis::ui_code('purrr::map()')}, etc.).\n",
-        "Review the GitHub issue linked below for a possible solution."
-      ))
-      usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
-      stop(as.character(e), call. = FALSE)
-    }
-  )
-
-  # using broom to tidy up regression results, and
-  # then reversing order of data frame
-  tidy_model <-
-    tidy_wrap(x, exponentiate, conf.level, tidy_fun)
-
-  # parsing the terms from model and variable names
-  # outputing a tibble of the parsed model with
-  # rows for reference groups, and headers for
-  table_body <- parse_fit(x, tidy_model, label, !!show_single_row)
+  table_body <-
+    tidy_prep(x, tidy_fun = tidy_fun, exponentiate = exponentiate,
+              conf.level = conf.level, intercept = intercept,
+              label = label, show_single_row = !!show_single_row)
 
   # saving evaluated `label`, and `show_single_row`
-  func_inputs$label <- attr(table_body, "label")
-  func_inputs$show_single_row <- attr(table_body, "show_single_row")
+  func_inputs$label <-
+    unique(table_body$variable) %>%
+    vctr_2_tibble() %>%
+    tidyselect_to_list(x = {{ label }}, arg_name = "label")
+  func_inputs$show_single_row <-
+    unique(table_body$variable) %>%
+    vctr_2_tibble() %>%
+    var_input_to_string(arg_name = "show_single_row", select_input = {{show_single_row}})
+
+  # including and excluding variables indicated
+  include <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
+                                 arg_name = "include", select_input = !!include)
+  exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
+                                 arg_name = "exclude", select_input = !!exclude)
+
+  include <- include %>% setdiff(exclude)
+
+  # saving the evaluated lists (named lists) as the function inputs
+  func_inputs$include <- include
+  func_inputs$exclude <- NULL # making this NULL since it's deprecated
+
+  # keeping variables indicated in `include`
+  table_body <- table_body %>% filter(.data$variable %in% include)
+
+  # model N
+  n <- table_body$N[1]
 
   # adding character CI
   if (all(c("conf.low", "conf.high") %in% names(table_body))) {
     ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
     table_body <-
       table_body %>%
-      # adding character CI
-      mutate(
+      mutate( # adding character CI
         ci = if_else(
           !is.na(.data$conf.low),
           paste0(estimate_fun(.data$conf.low), ci.sep, estimate_fun(.data$conf.high)),
           NA_character_
         )
-      )
+      ) %>%
+      dplyr::relocate(any_of("ci"), .after = "conf.high")
   }
 
-  # moving pvalue col to end of df
-  if ("p.value" %in% names(table_body)) {
-    table_body <- select(table_body, -.data$p.value, .data$p.value)
-  }
-
-  # including and excluding variables/intercept indicated
-  include <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
-                                 arg_name = "include", select_input = !!include)
-  exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
-                                 arg_name = "exclude", select_input = !!exclude)
-
-  if (intercept == FALSE) include <- include %>% setdiff("(Intercept)")
-  include <- include %>% setdiff(exclude)
-
-  # keeping variables indicated in `include`
+  # re-ordering columns
   table_body <-
     table_body %>%
-    filter(.data$variable %in% include)
-
-  # model N
-  n <- nrow(model_frame)
+    dplyr::relocate(any_of(c("conf.low", "conf.high", "ci", "p.value")), .after = last_col())
 
   # table of column headers
   table_header <-
@@ -235,43 +221,7 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     table_header_fill_missing() %>%
     table_header_fmt_fun(estimate = estimate_fun)
 
-  if ("N" %in% names(table_body)) {
-    table_header <-
-      table_header_fmt_fun(
-        table_header,
-        N = function(x) style_number(x, digits = 0)
-      )
-  }
-  if ("p.value" %in% names(table_body)) {
-    table_header <- table_header_fmt_fun(table_header, p.value = pvalue_fun)
-  }
-  if (all(c("conf.low", "conf.high") %in% names(table_body))) {
-    table_header <- table_header_fmt_fun(
-      table_header,
-      conf.low = estimate_fun,
-      conf.high = estimate_fun
-    )
-  }
-
-  table_header <- table_header %>%
-    # adding footnotes to table_header tibble
-    mutate(
-      footnote_abbrev = case_when(
-        .data$column == "estimate" ~
-          estimate_header(x, exponentiate) %>% attr("footnote") %||% NA_character_,
-        .data$column == "ci" ~ translate_text("CI = Confidence Interval"),
-        TRUE ~ .data$footnote_abbrev
-      ),
-      missing_emdash = case_when(
-        .data$column %in% c("estimate", "ci") ~ "row_ref == TRUE",
-        TRUE ~ .data$missing_emdash
-      )
-    )
-
-  # saving the evaluated lists (named lists) as the function inputs
-  func_inputs$include <- include
-  func_inputs$exclude <- NULL # making this NULL since it's deprecated
-
+  # constructing return object
   results <- list(
     table_body = table_body,
     table_header = table_header,
@@ -281,26 +231,27 @@ tbl_regression <- function(x, label = NULL, exponentiate = FALSE,
     call_list = list(tbl_regression = match.call())
   )
 
-  # setting column headers
-  results <- modify_header_internal(
-    results,
-    label = paste0("**", translate_text("Characteristic"), "**"),
-    estimate = glue("**{estimate_header(x, exponentiate)}**")
-  )
-  if ("p.value" %in% names(table_body)) {
-    results <- modify_header_internal(
-      results, p.value = paste0("**", translate_text("p-value"), "**")
-    )
-  }
-  if (all(c("conf.low", "conf.high") %in% names(table_body))) {
-    results <- modify_header_internal(
-      results, ci = glue("**{style_percent(conf.level, symbol = TRUE)} CI**")
-    )
-  }
-
   # assigning a class of tbl_regression (for special printing in R markdown)
   class(results) <- c("tbl_regression", "gtsummary")
 
+  # setting column headers, and print instructions
+  tidy_columns_to_report <-
+    get_theme_element("tbl_regression-chr:tidy_columns",
+                      default = c("conf.low", "conf.high", "p.value")) %>%
+    union("estimate") %>%
+    intersect(names(table_body))
+
+  # setting default table_header values
+  results <-
+    .tbl_reression_default_table_header(
+      results,
+      exponentiate = exponentiate,
+      tidy_columns_to_report = tidy_columns_to_report,
+      estimate_fun = estimate_fun,
+      pvalue_fun = pvalue_fun,
+      conf.level = conf.level)
+
+  # return results -------------------------------------------------------------
   results
 }
 

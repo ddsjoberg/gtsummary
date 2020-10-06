@@ -153,7 +153,7 @@ test_that("tbl_uvregression x= argument tests", {
     NA
   )
 
-  expect_identical(
+  expect_equivalent(
     ux_x$meta_data$label[1],
     "PATIENT AGE"
   )

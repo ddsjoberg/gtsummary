@@ -69,7 +69,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 
 
 table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
-  table_header <- x$table_header
+  table_header <- .clean_table_header(x$table_header)
   tibble_calls <- list()
 
   # tibble ---------------------------------------------------------------------
