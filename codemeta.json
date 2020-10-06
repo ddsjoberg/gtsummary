@@ -10,13 +10,13 @@
   "codeRepository": "https://github.com/ddsjoberg/gtsummary",
   "issueTracker": "https://github.com/ddsjoberg/gtsummary/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.3.4.9009",
+  "version": "1.3.5.9001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
+  "runtimePlatform": "R version 4.0.0 Patched (2020-05-10 r78400)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -30,6 +30,12 @@
       "familyName": "Sjoberg",
       "email": "danield.sjoberg@gmail.com",
       "@id": "https://orcid.org/0000-0003-0862-2018"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Michael",
+      "familyName": "Curry",
+      "@id": "https://orcid.org/0000-0002-0261-4044"
     },
     {
       "@type": "Person",
@@ -51,12 +57,6 @@
     }
   ],
   "contributor": [
-    {
-      "@type": "Person",
-      "givenName": "Michael",
-      "familyName": "Curry",
-      "@id": "https://orcid.org/0000-0002-0261-4044"
-    },
     {
       "@type": "Person",
       "givenName": "Esther",
@@ -99,6 +99,19 @@
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "broom.mixed",
+      "name": "broom.mixed",
+      "version": ">= 0.2.6",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=broom.mixed"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "car",
@@ -340,16 +353,16 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "broom.mixed",
-      "name": "broom.mixed",
-      "version": ">= 0.2.6",
+      "identifier": "broom.helpers",
+      "name": "broom.helpers",
+      "version": ">= 1.0.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=broom.mixed"
+      "sameAs": "https://CRAN.R-project.org/package=broom.helpers"
     },
     {
       "@type": "SoftwareApplication",
@@ -431,19 +444,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "magrittr",
-      "name": "magrittr",
-      "version": ">= 1.5",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=magrittr"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "purrr",
       "name": "purrr",
       "version": ">= 0.3.4",
@@ -509,19 +509,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "tidyselect",
-      "name": "tidyselect",
-      "version": ">= 1.1.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tidyselect"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "usethis",
       "name": "usethis",
       "version": ">= 1.6.1",
@@ -536,7 +523,7 @@
   ],
   "releaseNotes": "https://github.com/ddsjoberg/gtsummary/blob/master/NEWS.md",
   "readme": "https://github.com/ddsjoberg/gtsummary/blob/master/README.md",
-  "fileSize": "23842.433KB",
+  "fileSize": "26505.458KB",
   "contIntegration": "https://codecov.io/gh/ddsjoberg/gtsummary?branch=master",
   "developmentStatus": "https://www.tidyverse.org/lifecycle/#maturing",
   "relatedLink": [
