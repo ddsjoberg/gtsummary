@@ -67,8 +67,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     # when model variables cannot be identified, the var_label is blank...fill it in with term
     dplyr::mutate(
       var_label = if_else(
-        var_type == "unknown" & is.na(var_label) & !is.na(estimate),
-        term, var_label)
+        .data$var_type == "unknown" & is.na(.data$var_label) & !is.na(.data$estimate),
+        .data$term, .data$var_label)
     )
 
   # add header rows to categorical variables -----------------------------------
