@@ -111,9 +111,8 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
 }
 
 # creating gt calls from table_header ------------------------------------------
-# gt table_header to gt fmt and bolding code
 table_header_to_gt_calls <- function(x) {
-  table_header <- x$table_header
+  table_header <- .clean_table_header(x$table_header)
   gt_calls <- list()
 
   # gt -------------------------------------------------------------------------
@@ -134,7 +133,8 @@ table_header_to_gt_calls <- function(x) {
       seq_len(nrow(df_fmt_missing_emdash)),
       ~ expr(gt::fmt_missing(columns = gt::vars(!!!syms(df_fmt_missing_emdash$column[[.x]])),
                              rows = !!parse_expr(df_fmt_missing_emdash$missing_emdash[[.x]]),
-                             missing_text = '---'))
+                             missing_text = !!get_theme_element("tbl_regression-str:ref_row_text",
+                                                              default = "---")))
     )
 
   # cols_align -----------------------------------------------------------------
@@ -274,7 +274,15 @@ table_header_to_gt_calls <- function(x) {
   gt_calls
 }
 
-
+# this function cleans up table_header (i.e. removes formatting for hidden columns, etc.)
+.clean_table_header <- function(x) {
+  # removing instructions for hidden columns
+  dplyr::mutate_at(
+    x,
+    vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
+    ~ifelse(.data$hide, NA_character_, .)
+  )
+}
 
 
 

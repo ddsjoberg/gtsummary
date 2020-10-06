@@ -79,7 +79,7 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 }
 
 table_header_to_kable_extra_calls <- function(x, ...) {
-  table_header <- x$table_header
+  table_header <- .clean_table_header(x$table_header)
 
   # getting kable calls
   kable_extra_calls <-
