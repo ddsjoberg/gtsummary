@@ -1,4 +1,4 @@
-context("test-as_kable")
+context("test-as_kable_extra")
 testthat::skip_on_cran()
 
 test_that("tbl_summary", {

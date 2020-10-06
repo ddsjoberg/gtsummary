@@ -15,7 +15,7 @@
 #' @param align string indicating alignment of column, must be one of
 #' `c("left", "right", "center")`
 #' @param missing_emdash string that evaluates to logical identifying rows to
-#' include em-dash for missing values, e.g. `"row_ref == TRUE"`
+#' include em-dash for missing values, e.g. `"reference_row == TRUE"`
 #' @param indent string that evaluates to logical identifying rows to indent
 #' @param bold string that evaluates to logical identifying rows to bold
 #' @param italic string that evaluates to logical identifying rows to italicize
@@ -60,6 +60,8 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
       data = vctr_2_tibble(x$table_header$column), arg_name = "column",
       select_single = FALSE, select_input = {{ column }}
     )
+  # if no columns selected, returning unaltered
+  if (is.null(column)) return(x)
 
   # label ----------------------------------------------------------------------
   x <- .update_table_header_element(
