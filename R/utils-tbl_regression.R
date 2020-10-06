@@ -51,10 +51,6 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   df_tidy_3 <- broom.helpers::tidy_identify_variables(df_tidy_2) %>%
     # if intercept remains filling in the variable name withe intercept
     dplyr::mutate(variable = dplyr::coalesce(.data$variable, .data$term))
-  if (all(is.na(df_tidy_3$variable))) { # when variables are all missing, print this
-    usethis::ui_oops("Review the GitHub issue linked below for a possible solution.")
-    usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
-  }
 
   # creating label and show_single_row named lists -----------------------------
   label <- unique(df_tidy_3$variable) %>% vctr_2_tibble() %>%
@@ -67,7 +63,13 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   # add header rows to categorical variables
   df_tidy_5 <-
-    broom.helpers::tidy_add_variable_labels(df_tidy_4, labels = label)
+    broom.helpers::tidy_add_variable_labels(df_tidy_4, labels = label) %>%
+    # when model variables cannot be identified, the var_label is blank...fill it in with term
+    dplyr::mutate(
+      var_label = if_else(
+        var_type == "unknown" & is.na(var_label) & !is.na(estimate),
+        term, var_label)
+    )
 
   # add header rows to categorical variables -----------------------------------
   df_tidy_6 <-
