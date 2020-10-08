@@ -53,14 +53,19 @@ If a needed class of model is not supported by
 
 \section{Example Output}{
 
+\if{html}{Example 1}
+
 \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
 }
 
 \examples{
-tbl_lm_global_ex1 <-
-  lm(marker ~ age + grade, trial) \%>\%
-  tbl_regression() \%>\%
-  add_global_p()
+if (requireNamespace("car")) {
+  # Example 1 ----------------------------------
+  tbl_lm_global_ex1 <-
+    lm(marker ~ age + grade, trial) \%>\%
+    tbl_regression() \%>\%
+    add_global_p()
+}
 }
 \seealso{
 Other tbl_regression tools: 

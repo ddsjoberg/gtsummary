@@ -41,19 +41,22 @@ This function uses \link[car:Anova]{car::Anova} with argument
 }
 \section{Example Output}{
 
-\if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
+\if{html}{\figure{tbl_uv_global_ex1.png}{options: width=50\%}}
 }
 
 \examples{
-tbl_uv_global_ex2 <-
-  trial[c("response", "trt", "age", "grade")] \%>\%
-  tbl_uvregression(
-    method = glm,
-    y = response,
-    method.args = list(family = binomial),
-    exponentiate = TRUE
-  ) \%>\%
-  add_global_p()
+if (requireNamespace("car")) {
+  # Example 1 ----------------------------------
+  tbl_uv_global_ex1 <-
+    trial[c("response", "trt", "age", "grade")] \%>\%
+    tbl_uvregression(
+      method = glm,
+      y = response,
+      method.args = list(family = binomial),
+      exponentiate = TRUE
+    ) \%>\%
+    add_global_p()
+}
 }
 \seealso{
 Other tbl_uvregression tools: 

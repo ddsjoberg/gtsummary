@@ -50,13 +50,18 @@ add_global_p <- function(x, ...) {
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @examples
-#' tbl_lm_global_ex1 <-
-#'   lm(marker ~ age + grade, trial) %>%
-#'   tbl_regression() %>%
-#'   add_global_p()
+#' if (requireNamespace("car")) {
+#'   # Example 1 ----------------------------------
+#'   tbl_lm_global_ex1 <-
+#'     lm(marker ~ age + grade, trial) %>%
+#'     tbl_regression() %>%
+#'     add_global_p()
+#' }
 #' @export
 #' @return A `tbl_regression` object
 #' @section Example Output:
+#' \if{html}{Example 1}
+#'
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=50\%}}
 
 add_global_p.tbl_regression <- function(x,
@@ -199,19 +204,22 @@ add_global_p.tbl_regression <- function(x,
 #' @author Daniel D. Sjoberg
 #' @family tbl_uvregression tools
 #' @examples
-#' tbl_uv_global_ex2 <-
-#'   trial[c("response", "trt", "age", "grade")] %>%
-#'   tbl_uvregression(
-#'     method = glm,
-#'     y = response,
-#'     method.args = list(family = binomial),
-#'     exponentiate = TRUE
-#'   ) %>%
-#'   add_global_p()
+#' if (requireNamespace("car")) {
+#'   # Example 1 ----------------------------------
+#'   tbl_uv_global_ex1 <-
+#'     trial[c("response", "trt", "age", "grade")] %>%
+#'     tbl_uvregression(
+#'       method = glm,
+#'       y = response,
+#'       method.args = list(family = binomial),
+#'       exponentiate = TRUE
+#'     ) %>%
+#'     add_global_p()
+#' }
 #' @export
 #' @return A `tbl_uvregression` object
 #' @section Example Output:
-#' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_uv_global_ex1.png}{options: width=50\%}}
 #'
 add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything(),
                                           keep = FALSE, quiet = NULL, ...) {
