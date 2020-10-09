@@ -52,7 +52,7 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \item \code{tidy_bootstrap()}: \code{parameters::bootstrap_parameters(x, ...)}
 }}
 
-\item{pool.args}{list of arguments passed to \code{mice::pool()}. Default is \code{NULL}}
+\item{pool.args}{named list of arguments passed to \code{mice::pool()}. Default is \code{NULL}}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -72,6 +72,9 @@ merely takes the result and puts it in \code{broom::tidy()} format.
 package includes a wonderful function to estimate bootstrapped coefficients.
 The tidier uses the output from \code{parameters::bootstrap_parameters(test = "p")}, and
 merely takes the result and puts it in \code{broom::tidy()} format.
+\item \code{tidy_mice()} tidier to report models resulting from multiply imputed data
+using the mice package. Pass the mice model object \emph{before} the model results
+have been pooled. See example.
 }
 
 Ensure your model type is compatible with the methods/functions used to estimate

@@ -18,11 +18,15 @@
 #' The tidier uses the output from `parameters::bootstrap_parameters(test = "p")`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
+#' - `tidy_mice()` tidier to report models resulting from multiply imputed data
+#' using the mice package. Pass the mice model object *before* the model results
+#' have been pooled. See example.
+#'
 #' Ensure your model type is compatible with the methods/functions used to estimate
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
 #' @inheritParams broom::tidy.glm
 #' @inheritParams add_global_p.tbl_regression
-#' @param pool.args list of arguments passed to `mice::pool()`. Default is `NULL`
+#' @param pool.args named list of arguments passed to `mice::pool()`. Default is `NULL`
 #' @param ... arguments passed to method;
 #' - `tidy_mice_mira()`: `mice::tidy(x, ...)`
 #' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
@@ -56,7 +60,7 @@
 #' tidy_mice_ex3 <-
 #'   suppressWarnings(mice::mice(trial, m = 2)) %>%
 #'   with(lm(age ~ marker + grade)) %>%
-#'   tbl_regression()
+#'   tbl_regression() # mice method called that uses `tidy_mice()` as tidier
 #'
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -74,7 +78,7 @@
 tidy_standardize <- function(x, exponentiate = FALSE,
                              conf.level = 0.95,
                              conf.int = TRUE,
-                             quiet = FALSE, ...) {
+                             ..., quiet = FALSE) {
   assert_package("effectsize", "tidy_standardize")
   dots <- list(...)
 
