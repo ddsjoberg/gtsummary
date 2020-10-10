@@ -12,8 +12,8 @@ tidy_standardize(
   exponentiate = FALSE,
   conf.level = 0.95,
   conf.int = TRUE,
-  quiet = FALSE,
-  ...
+  ...,
+  quiet = FALSE
 )
 
 tidy_bootstrap(
@@ -42,15 +42,15 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{conf.int}{Logical indicating whether or not to include a confidence
 interval in the tidied output. Defaults to \code{FALSE}.}
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
-
 \item{...}{arguments passed to method;
 \itemize{
 \item \code{tidy_mice_mira()}: \code{mice::tidy(x, ...)}
 \item \code{tidy_standardize()}: \code{effectsize::standardize_parameters(x, ...)}
 \item \code{tidy_bootstrap()}: \code{parameters::bootstrap_parameters(x, ...)}
 }}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
 
 \item{pool.args}{named list of arguments passed to \code{mice::pool()}. Default is \code{NULL}}
 }
@@ -120,6 +120,6 @@ tidy_standardize_ex2 <-
 tidy_mice_ex3 <-
   suppressWarnings(mice::mice(trial, m = 2)) \%>\%
   with(lm(age ~ marker + grade)) \%>\%
-  tbl_regression()
+  tbl_regression() # mice method called that uses `tidy_mice()` as tidier
 
 }
