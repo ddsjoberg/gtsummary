@@ -89,6 +89,9 @@ NULL
 #' @export
 modify_header <- function(x, update = NULL, stat_by = NULL,
                           text_interpret = c("md", "html"), ...) {
+  # update table_header --------------------------------------------------------
+  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
+
   # converting update arg to a tidyselect list ---------------------------------
   update <-
     tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update") %>%
@@ -114,6 +117,9 @@ modify_footnote <- function(x, update, abbreviation = FALSE) {
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
   }
+
+  # update table_header --------------------------------------------------------
+  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # converting update arg to a tidyselect list ---------------------------------
   update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
@@ -152,6 +158,9 @@ modify_spanning_header <- function(x, update) {
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
   }
+
+  # update table_header --------------------------------------------------------
+  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # converting update arg to a tidyselect list ---------------------------------
   update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
