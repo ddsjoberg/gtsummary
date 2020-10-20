@@ -26,7 +26,8 @@
 #' @param footnote string with text for column footnote
 #' @param spanning_header string with text for spanning header
 #'
-#' @return gtsummary object
+#' @seealso `modify_table_body()`
+#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #' @export
 #'
 #'
@@ -53,6 +54,9 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
                                 footnote = NULL, spanning_header = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
+
+  # update table_header --------------------------------------------------------
+  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # convert column input to string ---------------------------------------------
   column <-
