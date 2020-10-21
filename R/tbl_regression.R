@@ -165,7 +165,8 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   table_body <-
     tidy_prep(x, tidy_fun = tidy_fun, exponentiate = exponentiate,
               conf.level = conf.level, intercept = intercept,
-              label = label, show_single_row = !!show_single_row)
+              label = label, show_single_row = !!show_single_row,
+              include = !!include)
 
   # saving evaluated `label`, and `show_single_row`
   func_inputs$label <-

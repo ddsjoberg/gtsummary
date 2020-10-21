@@ -15,7 +15,22 @@ vctr_2_tibble <- function(x) {
 
 # prepares the tidy object to be printed with broom.helpers
 tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
-                      show_single_row) {
+                      show_single_row, include) {
+  df_tidy <-
+    broom.helpers::tidy_plus_plus(
+      x = x,
+      tidy_fun = tidy_fun,
+      exponentiate = exponentiate,
+      variable_labels = {{ label }},
+      show_single_row = {{ show_single_row }},
+      intercept = intercept,
+      include = {{ include }},
+      conf.level = conf.level,
+      conf.int = TRUE,
+      add_estimate_to_reference_rows = FALSE,
+      add_header_rows = TRUE
+    )
+
   # run initial tidy -----------------------------------------------------------
   df_tidy_1 <- tryCatch({
     tidy_fun(x, exponentiate = exponentiate, conf.level = conf.level, conf.int = TRUE)
@@ -81,7 +96,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   }
 
   # final tidying before returning ---------------------------------------------
-  df_tidy_6 %>%
+  df_tidy %>%
     mutate(
       N = nrow(gtsummary_model_frame(x)),
       row_type = ifelse(.data$header_row | is.na(.data$header_row), "label", "level")
