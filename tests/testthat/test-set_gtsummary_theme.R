@@ -39,4 +39,19 @@ test_that("setting themes", {
   expect_error(
     get_theme_element("not_a_theme_element"),
     "*")
+
+  # setting a continuous2 default stat
+  list(
+    "tbl_summary-str:default_con_type" = "continuous2",
+    "tbl_summary-str:continuous_stat" = c("{median} ({p25} - {p75})", "{mean} ({sd})"),
+    "tbl_summary-str:categorical_stat" = "{n} / {N} ({p}%)"
+  ) %>%
+    set_gtsummary_theme()
+
+  expect_error(tbl_theme <- tbl_summary(trial[c("trt", "age")]), NA)
+  expect_equal(tbl_theme$meta_data$stat_display,
+               list("{n} / {N} ({p}%)", c("{median} ({p25} - {p75})", "{mean} ({sd})")))
+  reset_gtsummary_theme()
 })
+
+
