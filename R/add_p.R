@@ -105,15 +105,28 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     gts_mapper("add_p(pvalue_fun=)")
 
   # converting bare arguments to string ----------------------------------------
-  group <- var_input_to_string(data = x$inputs$data,
-                               select_input = !!rlang::enquo(group),
-                               arg_name = "group", select_single = TRUE)
-  include <- var_input_to_string(data = select(x$inputs$data, any_of(x$meta_data$variable)),
-                                 select_input = !!rlang::enquo(include),
-                                 arg_name = "include")
-  exclude <- var_input_to_string(data = select(x$inputs$data, any_of(x$meta_data$variable)),
-                                 select_input = !!rlang::enquo(exclude),
-                                 arg_name = "exclude")
+  group <-
+    .select_to_varnames(
+      select = {{ group }},
+      data = x$inputs$data,
+      var_info = x$table_body,
+      arg_name = "group",
+      select_single = TRUE
+    )
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "include"
+    )
+  exclude <-
+    .select_to_varnames(
+      select = {{ exclude }},
+      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "exclude"
+    )
 
   # group argument -------------------------------------------------------------
   if (!is.null(group)) {
@@ -139,10 +152,13 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
 
   # test -----------------------------------------------------------------------
   # parsing into a named list
-  test <- tidyselect_to_list(
-    select(x$inputs$data, any_of(x$meta_data$variable)),
-    test, .meta_data = x$meta_data, arg_name = "test"
-  )
+  test <-
+    .formula_list_to_named_list(
+      x = test,
+      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      var_info = meta_data_to_var_info(x$meta_data),
+      arg_name = "test"
+    )
 
   # checking pvalue_fun are functions
   if (!is.function(pvalue_fun)) {
@@ -425,8 +441,19 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   }
 
   # converting test and test.args to named list --------------------------------
-  test <- tidyselect_to_list(vctr_2_tibble(x$meta_data$variable), test, arg_name = "test")
-  test.args <- tidyselect_to_list(vctr_2_tibble(x$meta_data$variable), test.args, arg_name = "test.args")
+  test <-
+    .formula_list_to_named_list(
+      x = test,
+      var_info = x$table_body,
+      arg_name = "test"
+    )
+
+  test.args <-
+    .formula_list_to_named_list(
+      x = test.args,
+      var_info = x$table_body,
+      arg_name = "test.args"
+    )
 
   # adding pvalue to meta data -------------------------------------------------
   meta_data <-
@@ -677,9 +704,13 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
 
 
   # converting bare arguments to string ----------------------------------------
-  include <- var_input_to_string(data = select(x$inputs$data$variables, any_of(x$meta_data$variable)),
-                                 select_input = !!rlang::enquo(include),
-                                 arg_name = "include")
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      data = select(x$inputs$data$variables, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "include"
+    )
 
   # checking that input x has a by var
   if (is.null(x$df_by)) {
@@ -691,10 +722,13 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
 
   # test -----------------------------------------------------------------------
   # parsing into a named list
-  test <- tidyselect_to_list(
-    select(x$inputs$data$variables, any_of(x$meta_data$variable)),
-    test, .meta_data = x$meta_data, arg_name = "test"
-  )
+  test <-
+    .formula_list_to_named_list(
+      x = test,
+      data = select(x$inputs$data$variables, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "test"
+    )
 
   # checking pvalue_fun are functions
   if (!is.function(pvalue_fun)) {

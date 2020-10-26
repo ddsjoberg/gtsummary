@@ -90,3 +90,93 @@ as_flextable <- function(...) {
   as_flex_table(...)
 }
 
+# v1.3.6 -----------------------------------------------------------------------
+#' @rdname deprecated
+#' @export
+all_numeric <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_numeric()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.numeric)` instead."
+
+    )
+  )
+}
+
+#' @rdname deprecated
+#' @export
+all_character <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_character()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.character)` instead."
+
+    )
+  )
+}
+
+#' @rdname deprecated
+#' @export
+all_integer <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_integer()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.integer)` instead."
+
+    )
+  )
+}
+
+#' @rdname deprecated
+#' @export
+all_double <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_double()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.double)` instead."
+
+    )
+  )
+}
+
+#' @rdname deprecated
+#' @export
+all_logical <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_logical()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.logical)` instead."
+
+    )
+  )
+}
+
+#' @rdname deprecated
+#' @export
+all_factor <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_factor()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.factor)` instead."
+
+    )
+  )
+}

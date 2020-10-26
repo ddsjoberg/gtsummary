@@ -56,10 +56,12 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
 
   # convert column input to string ---------------------------------------------
   column <-
-    var_input_to_string(
-      data = vctr_2_tibble(x$table_header$column), arg_name = "column",
-      select_single = FALSE, select_input = {{ column }}
+    .select_to_varnames(
+      select = {{ column }},
+      var_info = x$table_header$column,
+      arg_name = "column"
     )
+
   # if no columns selected, returning unaltered
   if (is.null(column)) return(x)
 

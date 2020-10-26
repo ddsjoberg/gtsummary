@@ -170,19 +170,32 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
 
   # saving evaluated `label`, and `show_single_row`
   func_inputs$label <-
-    unique(table_body$variable) %>%
-    vctr_2_tibble() %>%
-    tidyselect_to_list(x = {{ label }}, arg_name = "label")
+    .formula_list_to_named_list(
+      x =  label,
+      var_info = table_body,
+      arg_name = "label"
+    )
+
   func_inputs$show_single_row <-
-    unique(table_body$variable) %>%
-    vctr_2_tibble() %>%
-    var_input_to_string(arg_name = "show_single_row", select_input = {{show_single_row}})
+    .select_to_varnames(
+      select = !!show_single_row,
+      var_info = table_body,
+      arg_name = "show_single_row"
+    )
 
   # including and excluding variables indicated
-  include <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
-                                 arg_name = "include", select_input = !!include)
-  exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
-                                 arg_name = "exclude", select_input = !!exclude)
+  include <-
+    .select_to_varnames(
+      select = !!include,
+      var_info = table_body,
+      arg_name =  "include"
+    )
+  exclude <-
+    .select_to_varnames(
+      select = !!exclude,
+      var_info = table_body,
+      arg_name =  "exclude"
+    )
 
   include <- include %>% setdiff(exclude)
 
