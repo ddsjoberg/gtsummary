@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9004</span>
       </span>
     </div>
 
@@ -177,7 +177,14 @@
     <p>Style percentages</p>
     </div>
 
-    <pre class="usage"><span class='fu'>style_percent</span><span class='op'>(</span><span class='va'>x</span>, symbol <span class='op'>=</span> <span class='cn'>FALSE</span>, big.mark <span class='op'>=</span> <span class='cn'>NULL</span>, decimal.mark <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>style_percent</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  symbol <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  digits <span class='op'>=</span> <span class='fl'>0</span>,
+  big.mark <span class='op'>=</span> <span class='cn'>NULL</span>,
+  decimal.mark <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,6 +197,12 @@
       <th>symbol</th>
       <td><p>Logical indicator to include percent symbol in output.
 Default is <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>digits</th>
+      <td><p>number of digits to round large percentages (i.e. greater than 10%).
+Smaller percentages are rounded to <code>digits + 1</code> places.
+Default is <code>0</code></p></td>
     </tr>
     <tr>
       <th>big.mark</th>
@@ -226,8 +239,9 @@ Default is <code>"."</code>  or <code><a href='https://rdrr.io/r/base/options.ht
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>percent_vals</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0.0001</span>, <span class='fl'>0.005</span>, <span class='fl'>0.01</span>, <span class='fl'>0.10</span>, <span class='fl'>0.45356</span>, <span class='fl'>0.99</span>, <span class='fl'>1.45</span><span class='op'>)</span>
 <span class='fu'>style_percent</span><span class='op'>(</span><span class='va'>percent_vals</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA     "0"    "&lt;0.1" "0.5"  "1.0"  "10"   "45"   "99"   "145" </div><div class='input'><span class='fu'>style_percent</span><span class='op'>(</span><span class='va'>percent_vals</span>, symbol <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] NA      "0%"    "&lt;0.1%" "0.5%"  "1.0%"  "10%"   "45%"   "99%"   "145%" </div></pre>
+</div><div class='output co'>#&gt; [1] NA     "0"    "&lt;0.1" "0.5"  "1.0"  "10"   "45"   "99"   "145" </div><div class='input'><span class='fu'>style_percent</span><span class='op'>(</span><span class='va'>percent_vals</span>, symbol <span class='op'>=</span> <span class='cn'>TRUE</span>, digits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] NA       "0%"     "0.01%"  "0.50%"  "1.00%"  "10.0%"  "45.4%"  "99.0%" 
+#&gt; [9] "145.0%"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
