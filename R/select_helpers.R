@@ -14,8 +14,8 @@
 #' Default is `TRUE`
 #' @param continuous2 Logical indicating whether to include continuous2 variables.
 #' Default is `TRUE`
-#' @param type type of contrast to select. Must be one of
-#' `c("treatment", "sum", "poly", "helmert")`
+#' @param type type of contrast to select. Must be one or more of
+#' `c("treatment", "sum", "poly", "helmert")`. Default is all.
 #' @return A character vector of column names selected
 #' @examples
 #' select_ex1 <-
@@ -87,12 +87,15 @@ all_intercepts <- function() {
 #' @rdname select_helpers
 #' @export
 all_contrasts <- function(type = c("treatment", "sum", "poly", "helmert")) {
-  type <- match.arg(type)
-  contr.type <- switch(type,
-                       "treatment" = "contr.treatment",
-                       "sum" = "contr.sum",
-                       "poly" = "contr.poly",
-                       "helmert" = "contr.helmert")
+  type <- match.arg(type, several.ok = TRUE)
+  contr.type <-
+    map_chr(type,
+            ~switch(.x,
+                    "treatment" = "contr.treatment",
+                    "sum" = "contr.sum",
+                    "poly" = "contr.poly",
+                    "helmert" = "contr.helmert")
+    )
 
   .generic_selector("variable", "contrasts",
                     .data$contrasts %in% contr.type,
