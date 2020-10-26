@@ -31,6 +31,9 @@ Default is \code{TRUE}}
 
 \item{dichotomous}{Logical indicating whether to include dichotomous variables.
 Default is \code{TRUE}}
+
+\item{type}{type of contrast to select. Must be one of
+\code{c("treatment", "sum", "poly", "helmert")}}
 }
 \value{
 A character vector of column names selected
@@ -48,6 +51,13 @@ functions for selecting columns of data frames (and other items as well).
 \item \code{all_contrasts()} selects variables in regression model based on their type of contrast
 }
 }
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{select_ex1.png}{options: width=55\%}}
+}
+
 \examples{
 select_ex1 <-
   trial \%>\%

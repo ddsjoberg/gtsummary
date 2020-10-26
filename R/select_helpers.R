@@ -14,6 +14,8 @@
 #' Default is `TRUE`
 #' @param continuous2 Logical indicating whether to include continuous2 variables.
 #' Default is `TRUE`
+#' @param type type of contrast to select. Must be one of
+#' `c("treatment", "sum", "poly", "helmert")`
 #' @return A character vector of column names selected
 #' @examples
 #' select_ex1 <-
@@ -23,6 +25,10 @@
 #'     statistic = all_continuous() ~ "{mean} ({sd})",
 #'     type = all_dichotomous() ~ "categorical"
 #'   )
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{select_ex1.png}{options: width=55\%}}
 NULL
 
 #' @rdname select_helpers
@@ -82,8 +88,13 @@ all_intercepts <- function() {
 #' @export
 all_contrasts <- function(type = c("treatment", "sum", "poly", "helmert")) {
   type <- match.arg(type)
+  contr.type <- switch(type,
+                       "treatment" = "contr.treatment",
+                       "sum" = "contr.sum",
+                       "poly" = "contr.poly",
+                       "helmert" = "contr.helmert")
 
   .generic_selector("variable", "contrasts",
-                    .data$contrasts %in% type,
+                    .data$contrasts %in% contr.type,
                     fun_name = "all_contrasts")
 }
