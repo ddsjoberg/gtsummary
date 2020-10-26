@@ -1,17 +1,19 @@
 #' Select helper functions
 #'
-#' Set of functions to supplement the {tidyselect} set of functions for selecting
-#' columns of data frames. `all_continuous()`, `all_continuous2()`, `all_categorical()`, and
-#' `all_dichotomous()` may only be used with `tbl_summary()`, where each variable
-#' has been classified into one of these three groups. All other helpers
-#' are available throughout the package.
+#' @description Set of functions to supplement the {tidyselect} set of
+#' functions for selecting columns of data frames (and other items as well).
+#' - `all_continuous()` selects continuous variables
+#' - `all_continuous2()` selects only type `"continuous2"`
+#' - `all_categorical()` selects categorical (including `"dichotomous"`) variables
+#' - `all_dichotomous()` selects only type `"dichotomous"`
+#' - `all_interaction()` selects interaction terms from a regression model
+#' - `all_intercepts()` selects intercept terms from a regression model
+#' - `all_contrasts()` selects variables in regression model based on their type of contrast
 #' @name select_helpers
-#' @rdname select_helpers
 #' @param dichotomous Logical indicating whether to include dichotomous variables.
 #' Default is `TRUE`
 #' @param continuous2 Logical indicating whether to include continuous2 variables.
 #' Default is `TRUE`
-#' @export
 #' @return A character vector of column names selected
 #' @examples
 #' select_ex1 <-
@@ -21,7 +23,10 @@
 #'     statistic = all_continuous() ~ "{mean} ({sd})",
 #'     type = all_dichotomous() ~ "categorical"
 #'   )
+NULL
 
+#' @rdname select_helpers
+#' @export
 all_continuous <- function(continuous2 = TRUE) {
   if (continuous2) con_types <- c("continuous", "continuous2")
   else con_types <- "continuous"
@@ -39,13 +44,46 @@ all_continuous2 <- function() {
                     fun_name = "all_continuous")
 }
 
-# broom.helpers ----------------------------------------------------------------
 #' @rdname select_helpers
 #' @export
-#' @importFrom broom.helpers all_dichotomous
-broom.helpers::all_dichotomous
+all_dichotomous <- function() {
+  .generic_selector("variable", "var_type",
+                    .data$var_type %in% "dichotomous",
+                    fun_name = "all_dichotomous")
+}
 
 #' @rdname select_helpers
 #' @export
-#' @importFrom broom.helpers all_categorical
-broom.helpers::all_categorical
+all_categorical <- function(dichotomous = TRUE) {
+  types <- switch(dichotomous, c("categorical", "dichotomous")) %||% "categorical"
+
+  .generic_selector("variable", "var_type",
+                    .data$var_type %in% types,
+                    fun_name = "all_categorical")
+}
+
+#' @rdname select_helpers
+#' @export
+all_interaction <- function() {
+  .generic_selector("variable", "var_type",
+                    .data$var_type %in% "interaction",
+                    fun_name = "all_interaction")
+}
+
+#' @rdname select_helpers
+#' @export
+all_intercepts <- function() {
+  .generic_selector("variable", "var_type",
+                    .data$var_type %in% "intercept",
+                    fun_name = "all_intercepts")
+}
+
+#' @rdname select_helpers
+#' @export
+all_contrasts <- function(type = c("treatment", "sum", "poly", "helmert")) {
+  type <- match.arg(type)
+
+  .generic_selector("variable", "contrasts",
+                    .data$contrasts %in% type,
+                    fun_name = "all_contrasts")
+}
