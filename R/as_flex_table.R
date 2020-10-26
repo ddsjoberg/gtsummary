@@ -77,9 +77,13 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
       .init = flextable_calls
     )
 
-  # converting to charcter vector ----------------------------------------------
-  include <- var_input_to_string(data = vctr_2_tibble(names(flextable_calls)),
-                                 select_input = !!rlang::enquo(include))
+  # converting to character vector ---------------------------------------------
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      var_info = names(flextable_calls),
+      arg_name = "include"
+    )
 
   # return calls, if requested -------------------------------------------------
   if (return_calls == TRUE) return(flextable_calls[include])

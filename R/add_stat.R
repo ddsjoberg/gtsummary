@@ -107,10 +107,13 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
   }
 
   # convert fns to named list --------------------------------------------------
-  fns <- tidyselect_to_list(
-    select(x$inputs$data, any_of(x$meta_data$variable)),
-    fns, .meta_data = x$meta_data, arg_name = "fns"
-  )
+  fns <-
+    .formula_list_to_named_list(
+      x = fns,
+      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "fns"
+    )
 
   # setting new column name ----------------------------------------------------
   stat_col_name <-

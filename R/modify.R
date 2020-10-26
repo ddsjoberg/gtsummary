@@ -91,9 +91,12 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
                           text_interpret = c("md", "html"), ...) {
   # converting update arg to a tidyselect list ---------------------------------
   update <-
-    tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update") %>%
-    # adding the ... to the update list
-    c(list(...))
+    .formula_list_to_named_list(
+      x = update,
+      var_info = x$table_header$column,
+      arg_name = "update"
+    ) %>%
+    c(list(...)) # adding the ... to the update list
 
   # running modify_header_internal function ------------------------------------
   rlang::call2(
@@ -116,7 +119,12 @@ modify_footnote <- function(x, update, abbreviation = FALSE) {
   }
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
+  update <-
+    .formula_list_to_named_list(
+      x = {{ update }},
+      var_info = x$table_header$column,
+      arg_name = "update"
+    )
 
   # updating footnote ----------------------------------------------------------
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
@@ -154,7 +162,12 @@ modify_spanning_header <- function(x, update) {
   }
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
+  update <-
+    .formula_list_to_named_list(
+      x = {{ update }},
+      var_info = x$table_header$column,
+      arg_name = "update"
+    )
 
   # updating footnote ----------------------------------------------------------
   # convert named list to a tibble

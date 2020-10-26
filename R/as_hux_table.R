@@ -64,8 +64,12 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
     )
 
   # converting to character vector ----------------------------------------------
-  include <- var_input_to_string(data = vctr_2_tibble(names(huxtable_calls)),
-                                 select_input = !!rlang::enquo(include))
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      var_info = names(huxtable_calls),
+      arg_name = "include"
+    )
 
   # return calls, if requested -------------------------------------------------
   if (return_calls == TRUE) return(huxtable_calls[include])

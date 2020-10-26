@@ -53,9 +53,15 @@ inline_text.tbl_summary <-
 
     # checking variable input --------------------------------------------------
     variable <-
-      var_input_to_string(
-        data = vctr_2_tibble(x$meta_data$variable), arg_name = "variable",
-        select_single = TRUE, select_input = !!variable
+      .select_to_varnames(
+        select = !!variable,
+        data = switch(class(x[1]),
+                      "tbl_summary" = x$inputs$data,
+                      "tbl_cross" = x$inputs$data,
+                      "tbl_svysummary" = x$inputs$data$variables),
+        var_info = x$table_body,
+        arg_name = "variable",
+        select_single = TRUE
       )
 
     # selecting variable row from meta_data
@@ -90,9 +96,11 @@ inline_text.tbl_summary <-
 
     # selecting proper column name
     column <-
-      var_input_to_string(
-        data = vctr_2_tibble(col_lookup_table$input), arg_name = "column",
-        select_single = TRUE, select_input = !!column
+      .select_to_varnames(
+        select = !!column,
+        var_info = col_lookup_table$input,
+        arg_name = "column",
+        select_single = TRUE
       )
 
     column <- col_lookup_table %>%
@@ -126,10 +134,11 @@ inline_text.tbl_summary <-
     }
     else {
       level <-
-        var_input_to_string(
-          data = vctr_2_tibble(filter(result, .data$row_type != "label") %>%
-                                 pull(.data$label)),
-          arg_name = "level", select_single = TRUE, select_input = !!level
+        .select_to_varnames(
+          select = !!level,
+          var_info = filter(result, .data$row_type != "label")$label,
+          arg_name = "level",
+          select_single = TRUE
         )
 
       result <-
@@ -232,9 +241,12 @@ inline_text.tbl_regression <-
 
     # select variable ----------------------------------------------------------
     variable <-
-      var_input_to_string(
-        data = vctr_2_tibble(unique(x$table_body$variable)), arg_name = "variable",
-        select_single = TRUE, select_input = !!variable
+      .select_to_varnames(
+        select = !!variable,
+        data = NULL,
+        var_info = x$table_body,
+        arg_name = "variable",
+        select_single = TRUE
       )
 
     # grabbing rows matching variable
@@ -249,10 +261,11 @@ inline_text.tbl_regression <-
     }
     else {
       level <-
-        var_input_to_string(
-          data = vctr_2_tibble(filter(result, .data$row_type != "label") %>%
-                                 pull(.data$label)),
-          arg_name = "level", select_single = TRUE, select_input = !!level
+        .select_to_varnames(
+          select = !!level,
+          var_info = filter(result, .data$row_type != "label")$label,
+          arg_name = "level",
+          select_single = TRUE
         )
 
       result <-
@@ -590,11 +603,13 @@ inline_text.tbl_cross <-
 
     # row_level ----------------------------------------------------------------
     # converting row_level to a string
-    row_level <- var_input_to_string(
-      data = vctr_2_tibble(unique(x$table_body$label)),
-      select_input = {{ row_level }},
-      arg_name = "row_level", select_single = TRUE
-    )
+    row_level <-
+      .select_to_varnames(
+        select = {{ row_level }},
+        var_info = x$table_body$label,
+        arg_name = "row_level",
+        select_single = TRUE
+      )
 
     # assessing if user selected total row
     if (!is.null(row_level) && row_level == x$inputs$margin_text && "..total.." %in% x$meta_data$variable) {
@@ -626,15 +641,20 @@ inline_text.tbl_cross <-
 
     # selecting proper column name
     col_level <-
-      var_input_to_string(
-        data = vctr_2_tibble(col_lookup_table$input), arg_name = "col_level",
-        select_single = TRUE, select_input = {{ col_level }}
+      .select_to_varnames(
+        select = {{ col_level }},
+        var_info = col_lookup_table$input,
+        arg_name = "col_level",
+        select_single = TRUE
       )
 
     col_level <- col_lookup_table %>%
       filter(.data$input == col_level) %>%
       slice(1) %>%
       pull(.data$column_name)
+
+    # replacing passed data with, tbl_data (only data used in table) -----------
+    x$inputs$data <- x$tbl_data
 
     # evaluating inline_text for tbl_summary -----------------------------------
     expr(

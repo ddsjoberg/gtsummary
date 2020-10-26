@@ -3,42 +3,37 @@ testthat::skip_on_cran()
 
 test_that("test-select helpers", {
   expect_equal(
-    var_input_to_string(mtcars, select_input = vars(hp, mpg)),
+    .select_to_varnames(select = vars(hp, mpg), data = mtcars),
     dplyr::select(mtcars, hp, mpg) %>% colnames()
   )
 
   expect_equal(
-    var_input_to_string(mtcars, select_input = mpg),
+    .select_to_varnames(select = mpg, data = mtcars),
     dplyr::select(mtcars, mpg) %>% colnames()
   )
 
   expect_equal(
-    var_input_to_string(mtcars, select_input = "mpg"),
+    .select_to_varnames(select = "mpg", data = mtcars),
     dplyr::select(mtcars, "mpg") %>% colnames()
   )
 
   expect_equal(
-    var_input_to_string(mtcars, select_input = "mpg"),
-    dplyr::select(mtcars, "mpg") %>% colnames()
-  )
-
-  expect_equal(
-    var_input_to_string(mtcars, select_input = c("hp", "mpg")),
+    .select_to_varnames(select = c("hp", "mpg"), data = mtcars),
     dplyr::select(mtcars, c("hp", "mpg")) %>% colnames()
   )
 
   expect_equal(
-    var_input_to_string(mtcars, select_input = c(hp, mpg)),
+    .select_to_varnames(select = c(hp, mpg), data = mtcars),
     dplyr::select(mtcars, c(hp, mpg)) %>% colnames()
   )
 
   expect_equal(
-    var_input_to_string(mtcars, select_input = NULL),
+    .select_to_varnames(select = NULL, data = mtcars),
     NULL
   )
 
   expect_equal(
-    var_input_to_string(mtcars, select_input = vars(dplyr::everything(), -mpg)),
+    .select_to_varnames(select = vars(dplyr::everything(), -mpg), data = mtcars),
     dplyr::select(mtcars, dplyr::everything(), -mpg) %>% colnames()
   )
 
@@ -56,20 +51,6 @@ test_that("test-select helpers", {
       {.$summary_type == .$var_label} %>%
       all()
   )
-  expect_true(
-    tbl_summary(
-      trial,
-      label = list(
-        all_character() ~ "character",
-        all_factor() ~ "factor",
-        all_numeric() ~ "numeric",
-        all_integer() ~ "integer"
-      )
-    ) %>%
-      purrr::pluck("meta_data") %>%
-      {.$class == .$var_label} %>%
-      all()
-  )
 
   stage_variable = "stage"
   expect_equal(
@@ -78,23 +59,6 @@ test_that("test-select helpers", {
       ~tbl_summary(trial, by = .x) %>%
         purrr::pluck("by")),
     c("trt", "grade", stage_variable)
-  )
-
-  # var_input_to_string(mtcars, select_input = vars(everything(), -mpg)
-  expect_error(
-    tbl_summary(trial, type = all_character() ~ "categorical"), NA
-  )
-
-  expect_error(
-    tbl_summary(trial, type = all_double() ~ "continuous"), NA
-  )
-
-  expect_error(
-    tbl_summary(trial, type = all_factor() ~ "categorical"), NA
-  )
-
-  expect_error(
-    tbl_summary(trial, type = all_integer() ~ "categorical"), NA
   )
 
   expect_error(
