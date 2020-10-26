@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `digites=` argument to `style_percent()` (#690)
+
 * Bug fix when a default statistic is set using themes for `"continuous2"` variables that has length larger than one
 
 * Added function `modify_table_body()` allowing users to more easily make changes to gtsummary tables
