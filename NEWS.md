@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix when a default statistic is set using themes for `"continuous2"` variables that has length larger than one
+
 * Added function `modify_table_body()` allowing users to more easily make changes to gtsummary tables
 
 * The tidying and preparation of `tbl_regression()` tables are now being performed by the new package {broom.helpers} (#636, #607)
