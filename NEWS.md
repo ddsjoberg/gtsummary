@@ -1,13 +1,20 @@
 # gtsummary (development version)
 
-* updates the tbl_regression() internals to use broom.helpers package THIS IS A BIG CHANGE! (#636, #607)
--- we should now be able to accept ANY wild or horribly named variable
--- the infrastructure sets us up to accept more model types
-* transforms tbl_regression() into multiple methods: tbl_regression.default(), tbl_regression.lmer(), tbl_regression.glmer(), tbl_regression.survreg()
-*  allow users to to choose which columns to report with a theme element. they can choose among the estimate, std error, statistic, ci, and p-value (#637)
-*  allow users to include the reference value via a theme element
-*  update the printers to use the column reference_row from broom.helpers (currently changing name to match the prior version)
-*  update the missing emdash column in x$table_header to be missing_reference_row and allow users to change the symbol with a theme element. (#628)
+* Added `digites=` argument to `style_percent()` (#690)
+
+* Bug fix when a default statistic is set using themes for `"continuous2"` variables that has length larger than one
+
+* Added function `modify_table_body()` allowing users to more easily make changes to gtsummary tables
+
+* The tidying and preparation of `tbl_regression()` tables are now being performed by the new package {broom.helpers} (#636, #607)
+  - Variables that do not follow standard naming conventions are now parsed correctly
+  - The new interface allows for special handling of different model types using S3 methods: `tbl_regression.default()`, `tbl_regression.lmer()`, `tbl_regression.glmer()`, `tbl_regression.survreg()`
+
+* Users may now choose which columns to report with a theme element. they can choose among the `"estimate"`, `"std.error"`, `"statistic"`, `"ci"`, `"conf.low"`, `"conf.high"` and `"p.value"` (#637)
+
+* Allow users to include the reference value via a theme element
+
+* Users may change the symbol with a reference row symbol with a theme element. (#628)
 
 # gtsummary 1.3.5
 
