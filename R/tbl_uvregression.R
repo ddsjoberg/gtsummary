@@ -141,12 +141,18 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     }, error = function(e) {
       rlang::expr_text(x)
     })
+
+  # If y contains spaces or other special characters but not "(" or "+" or "^"
+  if (is.name(y) & grepl("^((?!\\().)*[^[:punct:]]((?!\\().)*$", deparse(substitute(y)), perl = TRUE)) {
+    y = paste0("`", deparse(substitute(y)), "`")
+  } else {
   y <-
     tryCatch({
       var_input_to_string(data = data, select_input = !!y, arg_name = "y")
     }, error = function(e) {
       rlang::expr_text(y)
     })
+  }
 
   # checking selections of x and y
   if (is.null(x) + is.null(y) != 1L) {

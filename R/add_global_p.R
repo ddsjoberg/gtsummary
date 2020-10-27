@@ -134,7 +134,7 @@ add_global_p.tbl_regression <- function(x,
     car_Anova %>%
     as.data.frame() %>%
     tibble::rownames_to_column(var = "variable") %>%
-    mutate(variable = .clean_backticks(variable)) %>%
+    mutate(variable = broom.helpers::.clean_backticks(variable)) %>%
     filter(.data$variable %in% !!include) %>%
     select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
     set_names(c("variable", "p.value_global")) %>%
