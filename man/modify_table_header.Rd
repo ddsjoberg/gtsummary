@@ -53,9 +53,6 @@ include em-dash for missing values, e.g. \code{"reference_row == TRUE"}}
 
 \item{spanning_header}{string with text for spanning header}
 }
-\value{
-gtsummary object
-}
 \description{
 This is a function meant for advanced users to gain
 more control over the characteristics of the resulting
@@ -84,4 +81,9 @@ modify_table_header_ex1 <-
                       footnote = "Regression Coefficient") \%>\%
   modify_table_header(column = "p.value",
                       hide = TRUE)
+}
+\seealso{
+\code{modify_table_body()}
+
+See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 }

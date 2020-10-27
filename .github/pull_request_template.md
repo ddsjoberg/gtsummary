@@ -17,5 +17,5 @@ Checklist for PR reviewer
 - [ ] R CMD Check runs without errors, warnings, and notes
 - [ ] NEWS.md has been updated with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parantheses at the end update (see NEWS.md for examples).
 - [ ] `usethis::use_spell_check()` runs with no spelling errors in documentation
-- [ ] When the branch is ready to be merged into master, increment the version number using `usethis::use_version(which = "dev")`, run `codemetar::write_codemeta()`, approve, and merge the PR.
+- [ ] When the branch is ready to be merged into master, increment the version number using `usethis::use_version(which = "dev")`, run `codemetar::write_codemeta()`, approve, and merge the PR. Please use "Suash and merge".
 

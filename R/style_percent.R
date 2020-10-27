@@ -1,6 +1,9 @@
 #' Style percentages
 #'
 #' @param x numeric vector of percentages
+#' @param digits number of digits to round large percentages (i.e. greater than 10%).
+#' Smaller percentages are rounded to `digits + 1` places.
+#' Default is `0`
 #' @param symbol Logical indicator to include percent symbol in output.
 #' Default is `FALSE`.
 #' @inheritParams style_number
@@ -12,13 +15,13 @@
 #' @examples
 #' percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
 #' style_percent(percent_vals)
-#' style_percent(percent_vals, symbol = TRUE)
-style_percent <- function(x, symbol = FALSE, big.mark = NULL, decimal.mark = NULL, ...) {
+#' style_percent(percent_vals, symbol = TRUE, digits = 1)
+style_percent <- function(x, symbol = FALSE, digits = 0, big.mark = NULL, decimal.mark = NULL, ...) {
 
-  y <- case_when(
-    x * 100 >= 10 ~ style_number(x * 100, digits = 0, big.mark = big.mark, decimal.mark = decimal.mark, ...),
-    x * 100 >= 0.1 ~ style_number(x * 100, digits = 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),
-    x > 0 ~ paste0("<", style_number(x = 0.1, digits = 1, big.mark = big.mark,
+  y <- dplyr::case_when(
+    x * 100 >= 10 ~ style_number(x * 100, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
+    x * 100 >= 10^(-(digits + 1)) ~ style_number(x * 100, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),
+    x > 0 ~ paste0("<", style_number(x = 10^(-(digits + 1)), digits = digits + 1, big.mark = big.mark,
                                      decimal.mark = decimal.mark, ...)),
     x == 0 ~ "0"
   )

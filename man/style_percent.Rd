@@ -4,13 +4,24 @@
 \alias{style_percent}
 \title{Style percentages}
 \usage{
-style_percent(x, symbol = FALSE, big.mark = NULL, decimal.mark = NULL, ...)
+style_percent(
+  x,
+  symbol = FALSE,
+  digits = 0,
+  big.mark = NULL,
+  decimal.mark = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{numeric vector of percentages}
 
 \item{symbol}{Logical indicator to include percent symbol in output.
 Default is \code{FALSE}.}
+
+\item{digits}{number of digits to round large percentages (i.e. greater than 10\%).
+Smaller percentages are rounded to \code{digits + 1} places.
+Default is \code{0}}
 
 \item{big.mark}{Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
@@ -30,7 +41,7 @@ Style percentages
 \examples{
 percent_vals <- c(-1, 0, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)
 style_percent(percent_vals)
-style_percent(percent_vals, symbol = TRUE)
+style_percent(percent_vals, symbol = TRUE, digits = 1)
 }
 \seealso{
 See Table Gallery \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{vignette} for example
