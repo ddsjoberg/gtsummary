@@ -27,11 +27,22 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       include = {{ include }},
       conf.level = conf.level,
       conf.int = TRUE,
-      add_estimate_to_reference_rows = FALSE,
-      add_header_rows = TRUE,
+      add_header_rows =
+        get_theme_element("tbl_regression-lgl:add_header_rows", default = TRUE),
+      interaction_sep =
+        get_theme_element("tbl_regression-str:interaction_sep", default = " * "),
+      categorical_terms_pattern =
+        get_theme_element("tbl_regression-str:categorical_terms_pattern", default = "{level}"),
+      add_reference_rows  =
+        get_theme_element("tbl_regression-lgl:add_reference_rows", default = TRUE),
+      no_reference_row =
+        get_theme_element("tbl_regression:no_reference_row", default = NULL),
+      add_estimate_to_reference_rows =
+        get_theme_element("tbl_regression-lgl:add_estimate_to_reference_rows", default = FALSE),
+      add_header_rows   =
+        get_theme_element("tbl_regression-lgl:add_header_rows", default = FALSE),
       strict = TRUE
     )
-
 
   # add reference row value, requested -----------------------------------------
   if (get_theme_element("tbl_regression-lgl:add_ref_est", default = FALSE)) {
