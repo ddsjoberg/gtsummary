@@ -1,5 +1,5 @@
 context("test-add_global_p")
-# testthat::skip_on_cran()
+testthat::skip_on_cran()
 
 test_that("no errors/warnings with standard use after tbl_regression", {
   mod1 <- lm(hp ~ factor(cyl) + mpg + factor(am), mtcars)
