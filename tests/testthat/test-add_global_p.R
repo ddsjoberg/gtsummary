@@ -93,36 +93,3 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
   expect_message(tbl1 %>% add_global_p(quiet = TRUE), NA)
   expect_message(tbl1 %>% add_global_p(quiet = FALSE), "*")
 })
-
-
-
-test_that("no errors/warnings with standard use after tbl_uvregression with non-standard names", {
-  tbl2 <- trial %>% rename(`age + person` = age) %>% tbl_uvregression(method = lm, y = `age + person`)
-  expect_error(
-    tbl2 %>% add_global_p(), NA
-  )
-  expect_warning(
-    tbl2 %>% add_global_p(), NA
-  )
-
-  expect_error(
-    tbl2 %>% add_global_p(type = 2, keep = TRUE), NA
-  )
-  expect_warning(
-    tbl2 %>% add_global_p(type = "III"), NA
-  )
-
-  # THIS DOES NOT WORK
-  # expect_warning(
-  #   tbl2 %>% add_global_p(type = "II"), NA
-  # )
-
-  expect_equal(
-    lm(age ~ trt, trial) %>% car::Anova(type = "II") %>% select(last_col()) %>%
-      pull() %>% discard(is.na),
-    tbl2 %>% add_global_p(type = "II", include = trt) %>% pluck("table_body", "p.value", 1)
-  )
-
-  expect_message(tbl2 %>% add_global_p(quiet = TRUE), NA)
-  expect_message(tbl2 %>% add_global_p(quiet = FALSE), "*")
-})
