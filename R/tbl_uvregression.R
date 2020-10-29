@@ -141,6 +141,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     }, error = function(e) {
       rlang::expr_text(x)
     })
+
   y <-
     tryCatch({
       .select_to_varnames(select = !!y, data = data, arg_name = "y")
