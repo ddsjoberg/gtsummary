@@ -11,6 +11,26 @@ test_that("setting themes", {
     NA)
 
   expect_error(
+    set_gtsummary_theme(theme_gtsummary_journal("nejm")),
+    NA)
+
+  expect_error(
+    set_gtsummary_theme(theme_gtsummary_journal("lancet")),
+    NA)
+
+  expect_error(
+    theme_gtsummary_continuous2(),
+    NA)
+
+  expect_error(
+    theme_gtsummary_printer(),
+    NA)
+
+  expect_error(
+    theme_gtsummary_mean_sd(),
+    NA)
+
+  expect_error(
     theme_gtsummary_compact(),
     NA)
 
