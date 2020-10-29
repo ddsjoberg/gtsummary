@@ -141,6 +141,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     }, error = function(e) {
       rlang::expr_text(x)
     })
+
   y <-
     tryCatch({
       var_input_to_string(data = data, select_input = !!y, arg_name = "y")

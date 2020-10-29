@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Added `digites=` argument to `style_percent()` (#690)
+* Updates to `add_global_p.tbl_regression()` allowing for variable names with spaces and special characters (#682)
+
+* Added `digits=` argument to `style_percent()` (#690)
 
 * Bug fix when a default statistic is set using themes for `"continuous2"` variables that has length larger than one
 
