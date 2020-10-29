@@ -92,19 +92,19 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
   stat_display <-
     map2(
       variable, summary_type,
-      ~ case_when(
-        .y == "continuous" ~
-          stat_display[[.x]] %||%
-          get_theme_element("tbl_summary-str:continuous_stat") %||%
-          "{median} ({p25}, {p75})",
-        .y == "continuous2" ~
-          stat_display[[.x]] %||%
-          get_theme_element("tbl_summary-str:continuous_stat") %||%
-          "{median} ({p25}, {p75})",
-        .y %in% c("categorical", "dichotomous") ~
-          stat_display[[.x]] %||%
-          get_theme_element("tbl_summary-str:categorical_stat") %||%
-          "{n} ({p}%)"
+      ~switch(.y,
+              "continuous" = stat_display[[.x]] %||%
+                get_theme_element("tbl_summary-str:continuous_stat") %||%
+                "{median} ({p25}, {p75})",
+              "continuous2" = stat_display[[.x]] %||%
+                get_theme_element("tbl_summary-str:continuous_stat") %||%
+                "{median} ({p25}, {p75})",
+              "categorical" = stat_display[[.x]] %||%
+                get_theme_element("tbl_summary-str:categorical_stat") %||%
+                "{n} ({p}%)",
+              "dichotomous" = stat_display[[.x]] %||%
+                get_theme_element("tbl_summary-str:categorical_stat") %||%
+                "{n} ({p}%)"
       )
     )
 
