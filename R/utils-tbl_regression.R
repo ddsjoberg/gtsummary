@@ -1,54 +1,40 @@
-#' Takes a vector and transforms to data frame with those column names
-#'
-#' This will be used for tidyselect to used those functions to select from
-#' the vector
-#' @noRd
-#' @keywords internal
-vctr_2_tibble <- function(x) {
-  n <- length(x)
-  df <- matrix(ncol = n) %>%
-    tibble::as_tibble(.name_repair = "minimal")
-
-  names(df) <- x
-  df[0, , drop = FALSE]
-}
-
 # prepares the tidy object to be printed with broom.helpers
 tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
                       show_single_row, include) {
-  df_tidy <-
-    broom.helpers::tidy_plus_plus(
-      model = x,
-      tidy_fun = tidy_fun,
-      exponentiate = exponentiate,
-      variable_labels = {{ label }},
-      show_single_row = {{ show_single_row }},
-      intercept = intercept,
-      include = {{ include }},
-      conf.level = conf.level,
-      conf.int = TRUE,
-      add_header_rows =
-        get_theme_element("tbl_regression-lgl:add_header_rows", default = TRUE),
-      interaction_sep =
-        get_theme_element("tbl_regression-str:interaction_sep", default = " * "),
-      categorical_terms_pattern =
-        get_theme_element("tbl_regression-str:categorical_terms_pattern", default = "{level}"),
-      add_reference_rows  =
-        get_theme_element("tbl_regression-lgl:add_reference_rows", default = TRUE),
-      no_reference_row =
-        get_theme_element("tbl_regression:no_reference_row", default = NULL),
-      add_estimate_to_reference_rows =
-        get_theme_element("tbl_regression-lgl:add_estimate_to_reference_rows", default = FALSE),
-      add_header_rows   =
-        get_theme_element("tbl_regression-lgl:add_header_rows", default = FALSE),
-      strict = TRUE
-    )
+  # quoting inputs
+  label <- rlang::enquo(label)
+  show_single_row <- rlang::enquo(show_single_row)
+  include <- rlang::enquo(include)
 
-  # add reference row value, requested -----------------------------------------
-  if (get_theme_element("tbl_regression-lgl:add_ref_est", default = FALSE)) {
-    df_tidy <-
-      broom.helpers::tidy_add_estimate_to_reference_rows(df_tidy, exponentiate = exponentiate)
-  }
+  # getting the default `tidy_plus_plus()` args
+  tidy_plus_plus_args <-
+    get_theme_element("tbl_regression-lst:tidy_plus_plus", default = list()) %>%
+    c(list(
+      conf.int = TRUE,
+      add_header_rows = TRUE,
+      add_estimate_to_reference_rows = FALSE
+    ))
+
+  # keeping the first arg listed if duplicated (first is the user-specified one)
+  tidy_plus_plus_args <-
+    tidy_plus_plus_args[names(tidy_plus_plus_args) %>% {!duplicated(.)}]
+
+  # tidying up the tidy data frame with `broom.helpers::tidy_plus_plus()`
+  df_tidy <-
+    rlang::expr(
+      broom.helpers::tidy_plus_plus(
+        model = !!x,
+        tidy_fun = !!tidy_fun,
+        exponentiate = !!exponentiate,
+        variable_labels = !!label,
+        show_single_row = !!show_single_row,
+        intercept = !!intercept,
+        include = !!include,
+        conf.level = !!conf.level,
+        strict = TRUE,
+        !!!tidy_plus_plus_args
+      )
+    ) %>% rlang::eval_tidy()
 
   # final tidying before returning ---------------------------------------------
   df_tidy %>%

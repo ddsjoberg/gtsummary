@@ -4,18 +4,18 @@ add_global_p,add_global_p-str:type,FALSE,"set argument default for `add_global_p
 add_p.tbl_cross,add_p.tbl_cross-arg:pvalue_fun,TRUE,,
 add_p.tbl_cross,add_p.tbl_cross-arg:source_note ,TRUE,,
 add_p.tbl_cross,add_p.tbl_cross-arg:test,TRUE,,
-add_p.tbl_summary,add_p.tbl_summary-arg:pvalue_fun,TRUE,,
-add_p.tbl_summary,add_p.tbl_summary-arg:test,TRUE,,
 add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical,FALSE,default test for categorical/dichotomous variables,"""chisq.test"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical.group_by2,FALSE,default test for categorical/dichotomous grouped/correlated variables with a 2-level by variable,"""lme4"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.categorical.low_count,FALSE,default test for categorical/dichotomous variables with minimum expected count <5,"""fisher.test"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous,FALSE,default test for continuous variables with a 3- or more level by variable,"""aov"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous.group_by2,FALSE,default test for continuous grouped/correlated variables with a 2-level by variable,"""lme4"""
 add_p.tbl_summary,add_p.tbl_summary-attr:test.continuous_by2,FALSE,default test for continuous variables with a 2-level by variable,"""t.test"""
-add_p.tbl_svysummary,add_p.tbl_svysummary-arg:pvalue_fun,TRUE,,
-add_p.tbl_svysummary,add_p.tbl_svysummary-arg:test,TRUE,,
+add_p.tbl_summary,add_p.tbl_summary-arg:pvalue_fun,TRUE,,
+add_p.tbl_summary,add_p.tbl_summary-arg:test,TRUE,,
 add_p.tbl_svysummary,add_p.tbl_svysummary-attr:test.categorical,FALSE,default test for categorical/dichotomous variables,"""svy.chisq.test"""
 add_p.tbl_svysummary,add_p.tbl_svysummary-attr:test.continuous,FALSE,default test for continuous variables,"""svy.wilcox.test"""
+add_p.tbl_svysummary,add_p.tbl_svysummary-arg:pvalue_fun,TRUE,,
+add_p.tbl_svysummary,add_p.tbl_svysummary-arg:test,TRUE,,
 add_q,add_q-arg:method,TRUE,,
 add_q,add_q-arg:pvalue_fun,TRUE,,
 add_stat_label,add_stat_label-arg:location,TRUE,,
@@ -32,22 +32,20 @@ Package-wide,pkgwide-str:print_engine,FALSE,"string indicating the default print
 Package-wide,pkgwide-str:theme_name,FALSE,optional name of theme; name is printed when theme loaded,"""My Personal Theme"""
 style_number,style_number-arg:big.mark,TRUE,,
 style_number,style_number-arg:decimal.mark,TRUE,,
-tbl_regression,tbl_regression:no_reference_row,FALSE,Specifies the `broom.helpers::tidy_plus_plus(no_reference_row=)` argument,
+tbl_regression,tbl_regression-chr:tidy_columns,FALSE,"character vector of columns from `tidy_fun=` tibble to print. 'estimate' column will always be printed. Select among columns 'conf.low', 'conf.high', 'std.error', 'statistic', or 'p.value'.","c(""std.error"", ""p.value"")"
+tbl_regression,tbl_regression-lst:tidy_plus_plus,FALSE,"Additional `tidy_plus_plus()` arguments. Cannot be one of `model=`, `tidy_fun=`, `exponentiate=`, `variable_labels=`, `show_single_row=`, `intercept=`, `include=`, `conf.level=`, or `strict=` as these are controlled by `tbl_summary()`. The default value for the additional arguments is `list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = FALSE)`.","list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = TRUE)"
+tbl_regression,tbl_regression-str:coef_header,FALSE,"string setting the default term for the beta coefficient column header; default is `""Beta""`","ifelse(exponentiate == TRUE, ""exp(coef)"", ""coef"")"
+tbl_regression,tbl_regression-str:ref_row_text,FALSE,string indicating the text to print on reference rows (default is an em-dash),"""Reference"""
 tbl_regression,tbl_regression-arg:conf.level,TRUE,,
 tbl_regression,tbl_regression-arg:estimate_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:pvalue_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:tidy_fun ,TRUE,,
-tbl_regression,tbl_regression-chr:tidy_columns,FALSE,"character vector of columns from `tidy_fun=` tibble to print. 'estimate' column will always be printed. Select among columns 'conf.low', 'conf.high', 'std.error', 'statistic', or 'p.value'.","c(""std.error"", ""p.value"")"
-tbl_regression,tbl_regression-lgl:add_estimate_to_reference_rows,FALSE,Specifies the `broom.helpers::tidy_plus_plus(add_estimate_to_reference_rows=)` argument,
-tbl_regression,tbl_regression-lgl:add_header_rows,FALSE,Specifies the `broom.helpers::tidy_plus_plus(add_header_rows=)` argument,
-tbl_regression,tbl_regression-lgl:add_header_rows,FALSE,Specifies the `broom.helpers::tidy_plus_plus(add_header_rows=)` argument,
-tbl_regression,tbl_regression-lgl:add_ref_est,FALSE,logical indicating whether the reference estimate should be added to regression model tables with caetgorical covariates,TRUE
-tbl_regression,tbl_regression-lgl:add_reference_rows,FALSE,Specifies the `broom.helpers::tidy_plus_plus(add_reference_rows=)` argument,
-tbl_regression,tbl_regression-str:categorical_terms_pattern,FALSE,Specifies the `broom.helpers::tidy_plus_plus(categorical_terms_pattern=)` argument,
-tbl_regression,tbl_regression-str:coef_header,FALSE,"string setting the default term for the beta coefficient column header; default is `""Beta""`","ifelse(exponentiate == TRUE, ""exp(coef)"", ""coef"")"
-tbl_regression,tbl_regression-str:interaction_sep,FALSE,Specifies the `broom.helpers::tidy_plus_plus(interaction_sep=)` argument,
-tbl_regression,tbl_regression-str:ref_row_text,FALSE,string indicating the text to print on reference rows (default is an em-dash),"""Reference"""
 tbl_stack,tbl_stack-str:group_header,FALSE,"string indicating the group column header used in `as_tibble()`, `as_flex_table()`, etc. where row headers are not supported; default is `""**Group**""`","""**Group Status**"""
+tbl_summary,tbl_summary-fn:N_fun,FALSE,function to style integers. Currently questioning...THIS MAY BE REMOVED IN A FUTURE RELEASE. Use `style_number-arg:big.mark` and `style_number-arg:decimal.mark` instead.,"function(x) sprintf(""%.0f"", x)"
+tbl_summary,tbl_summary-fn:percent_fun,FALSE,function to style percentages; default is `style_percent`,function(x) style_percent(x)
+tbl_summary,tbl_summary-str:categorical_stat,FALSE,"glue string defining the default categorical and dichotomous summary statistics to display; default is `""{n} ({p}%)""`","""{n} / {N} ({p}%)"""
+tbl_summary,tbl_summary-str:continuous_stat,FALSE,"glue string defining the default continuous summary statistics to display; default is `""{median} ({p25}, {p75})""`","""{mean} ({sd})"""
+tbl_summary,tbl_summary-str:default_con_type,FALSE,"string indicating the default summary type for continuous variables; default is `""continuous""`; update to `""continuous2""` for multi-line summaries of continuous variables","""continuous2"""
 tbl_summary,tbl_summary-arg:digits,TRUE,,
 tbl_summary,tbl_summary-arg:label,TRUE,,
 tbl_summary,tbl_summary-arg:missing,TRUE,,
@@ -57,11 +55,6 @@ tbl_summary,tbl_summary-arg:sort,TRUE,,
 tbl_summary,tbl_summary-arg:statistic,TRUE,,
 tbl_summary,tbl_summary-arg:type,TRUE,,
 tbl_summary,tbl_summary-arg:value,TRUE,,
-tbl_summary,tbl_summary-fn:N_fun,FALSE,function to style integers. Currently questioning...THIS MAY BE REMOVED IN A FUTURE RELEASE. Use `style_number-arg:big.mark` and `style_number-arg:decimal.mark` instead.,"function(x) sprintf(""%.0f"", x)"
-tbl_summary,tbl_summary-fn:percent_fun,FALSE,function to style percentages; default is `style_percent`,function(x) style_percent(x)
-tbl_summary,tbl_summary-str:categorical_stat,FALSE,"glue string defining the default categorical and dichotomous summary statistics to display; default is `""{n} ({p}%)""`","""{n} / {N} ({p}%)"""
-tbl_summary,tbl_summary-str:continuous_stat,FALSE,"glue string defining the default continuous summary statistics to display; default is `""{median} ({p25}, {p75})""`","""{mean} ({sd})"""
-tbl_summary,tbl_summary-str:default_con_type,FALSE,"string indicating the default summary type for continuous variables; default is `""continuous""`; update to `""continuous2""` for multi-line summaries of continuous variables","""continuous2"""
 tbl_survfit,tbl_survfit-arg:statistic,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:digits,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:label,TRUE,,

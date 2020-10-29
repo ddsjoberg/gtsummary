@@ -515,6 +515,10 @@ inline_text.tbl_survfit <-
   function(x, time = NULL, prob = NULL, variable = NULL, level = NULL,
            pattern = x$inputs$statistic,
            estimate_fun = x$inputs$estimate_fun, pvalue_fun = NULL, ...) {
+    # quoting inputs -------------------------------------------------------------
+    variable <- rlang::enquo(variable)
+    level <- rlang::enquo(level)
+
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
       pvalue_fun %||%
@@ -531,9 +535,9 @@ inline_text.tbl_survfit <-
     }
 
     # selecting variable -------------------------------------------------------
-    variable <- dplyr::select(vctr_2_tibble(unique(x$meta_data$variable)), {{ variable }}) %>% names()
+    variable <- .select_to_varnames(select = !!variable, var_info = x$meta_data)
     if (length(variable) == 0)
-      variable <- dplyr::select(vctr_2_tibble(unique(x$meta_data$variable)), 1) %>% names()
+      variable <- .select_to_varnames(select = 1, var_info = x$meta_data)
 
     result <-
       dplyr::filter(x$meta_data, .data$variable == .env$variable) %>%
@@ -541,9 +545,9 @@ inline_text.tbl_survfit <-
       purrr::flatten_dfc()
 
     # selecting level ----------------------------------------------------------
-    level <- dplyr::select(vctr_2_tibble(unique(result$label)), {{ level }}) %>% names()
+    level <- .select_to_varnames(select = !!level, var_info = unique(result$label))
     if (length(level) == 0)
-      level <- dplyr::select(vctr_2_tibble(unique(result$label)), 1) %>% names()
+      level <- .select_to_varnames(select = 1, var_info = unique(result$label))
 
     result <- dplyr::filter(result, .data$label == .env$level)
 

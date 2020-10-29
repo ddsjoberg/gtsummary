@@ -416,6 +416,9 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               pvalue_fun = style_pvalue,
                               include = everything(), quiet = NULL, ...) {
+  # quoting inputs -------------------------------------------------------------
+  include <- rlang::enquo(include)
+
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -430,7 +433,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
     getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
     gts_mapper("add_p(pvalue_fun=)")
 
-  include <- select(vctr_2_tibble(x$meta_data$variable), {{ include }}) %>% names()
+  include <- .select_to_varnames(select = !!include, var_info = x$meta_data)
 
 
   # if user passed a string of the test name, convert it to a tidy select list
