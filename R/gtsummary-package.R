@@ -13,6 +13,7 @@
 #' str_split str_detect str_remove str_replace_all str_wrap str_sub str_locate
 #' @importFrom broom.helpers .formula_list_to_named_list .select_to_varnames
 #' .generic_selector
+#' @importFrom usethis ui_oops ui_code ui_code_block ui_value
 #' @keywords internal
 "_PACKAGE"
 
