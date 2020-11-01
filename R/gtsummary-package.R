@@ -11,7 +11,7 @@
 #' @importFrom glue glue as_glue glue_collapse
 #' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
 #' str_split str_detect str_remove str_replace_all str_wrap str_sub str_locate
-#' @importFrom usethis ui_oops ui_code ui_value
+#' @importFrom usethis ui_oops ui_code ui_code_block ui_value
 #' @keywords internal
 "_PACKAGE"
 
