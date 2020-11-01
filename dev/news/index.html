@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9006</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added warning message to users when they pass a data frame to <code><a href="../reference/tbl_uvregression.html">tbl_uvregression(data=)</a></code> with column names containing spaces or special characters ( <a href='https://github.com/ddsjoberg/gtsummary/issues/686'>#686</a>)</p></li>
 <li><p>Updates to <code><a href="../reference/add_global_p.tbl_regression.html">add_global_p.tbl_regression()</a></code> allowing for variable names with spaces and special characters (<a href='https://github.com/ddsjoberg/gtsummary/issues/682'>#682</a>)</p></li>
 <li><p>Added <code>digits=</code> argument to <code><a href="../reference/style_percent.html">style_percent()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/690'>#690</a>)</p></li>
 <li><p>Bug fix when a default statistic is set using themes for <code>"continuous2"</code> variables that has length larger than one</p></li>
@@ -209,7 +210,7 @@
 <li>Added <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_continuous2()</a></code> to make <code>continuous2</code> the default summary type for all continuous variables.</li>
 </ul>
 </li>
-<li><p>New function <code><a href="../reference/add_glance_source_note.html">add_glance_source_note()</a></code> adds the statistics returned in <code><a href="https://rdrr.io/pkg/generics/man/glance.html">broom::glance()</a></code> as a source note on a <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>)</p></li>
+<li><p>New function <code><a href="../reference/add_glance_source_note.html">add_glance_source_note()</a></code> adds the statistics returned in <code><a href="https://generics.r-lib.org/reference/glance.html">broom::glance()</a></code> as a source note on a <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/434'>#434</a>)</p></li>
 <li><p>Exporting the <code><a href="../reference/modify_table_header.html">modify_table_header()</a></code> function, which is an advanced-use function used to make modifications to the <code>.$table_header</code> object to update printing instructions for the gtsummary object.</p></li>
 <li>
 <p>Added two custom tidiers for use in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/635'>#635</a>)</p>
@@ -334,7 +335,7 @@
 <a href="#gtsummary-132" class="anchor"></a>gtsummary 1.3.2<small> 2020-06-14 </small>
 </h1>
 <ul>
-<li><p>Now returning all columns from <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom::tidy()</a></code> in <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/516'>#516</a>)</p></li>
+<li><p>Now returning all columns from <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> in <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/516'>#516</a>)</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> now accepts a named list of gtsummary tables when using the <code>group_header=</code> argument (<a href='https://github.com/ddsjoberg/gtsummary/issues/524'>#524</a>)</p></li>
 <li><p><code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> bug fix for Wilcoxon rank-sum p-value calculation introduced in the last release (<a href='https://github.com/ddsjoberg/gtsummary/issues/525'>#525</a>)</p></li>
 <li><p>Delaying the release of <code>as_huxtable()</code> until the next {huxtable} release.</p></li>
@@ -451,7 +452,7 @@
 <a href="#gtsummary-126" class="anchor"></a>gtsummary 1.2.6<small> 2020-02-13 </small>
 </h1>
 <ul>
-<li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom.mixed::tidy()</a></code> rather than <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom::tidy()</a></code> resolved issue.</li>
+<li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom.mixed::tidy()</a></code> rather than <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> resolved issue.</li>
 </ul>
 </div>
     <div id="gtsummary-125" class="section level1">
@@ -505,7 +506,7 @@
 <li><p>New <code>pattern=</code> argument in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code>. Previously, we could only grab the entire cell from a <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> with <code><a href="../reference/inline_text.html">inline_text()</a></code>, and now we can get any single statistic reported (<a href='https://github.com/ddsjoberg/gtsummary/issues/254'>#254</a>)</p></li>
 <li><p>Improved messaging for users who use <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> to print gtsummary tables, and users who have not yet installed the {gt} package (<a href='https://github.com/ddsjoberg/gtsummary/issues/347'>#347</a>)</p></li>
 <li><p>New function <code><a href="../reference/combine_terms.html">combine_terms()</a></code> allows users to combine multiple independent variables in a regression model into a single line after <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>. The single line does not report regression coefficients, rather a single p-value from the <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> function. (<a href='https://github.com/ddsjoberg/gtsummary/issues/310'>#310</a>)</p></li>
-<li><p>In the regression modeling functions <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, the users are presented an informative error message when the tidier fails (e.g. <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">broom::tidy()</a></code>) alerting them to the location of the error so they may address the issue (<a href='https://github.com/ddsjoberg/gtsummary/issues/337'>#337</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/338'>#338</a>)</p></li>
+<li><p>In the regression modeling functions <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, the users are presented an informative error message when the tidier fails (e.g. <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code>) alerting them to the location of the error so they may address the issue (<a href='https://github.com/ddsjoberg/gtsummary/issues/337'>#337</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/338'>#338</a>)</p></li>
 <li><p>For each release of gtsummary, we now can make reference to the version of gt our release coincides with. The commit SHA for gt is now saved in an object called <code>gt_sha</code>, and the version of gt can be installed with <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("rstudio/gt", ref = gt_sha)</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/329'>#329</a>)</p></li>
 <li><p>Created “style” family of functions</p></li>
 <li><p>Improved error messaging in <code>tidyselect_to_list()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/300'>#300</a>)</p></li>

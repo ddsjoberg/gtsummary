@@ -111,7 +111,7 @@ geepack::geeglm
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9006</span>
       </span>
     </div>
 
@@ -193,7 +193,7 @@ geepack::geeglm
 in <a href='tbl_regression.html'>tbl_regression</a> and <a href='tbl_uvregression.html'>tbl_uvregression</a>.  If a model is passed to these
 functions and the model is not listed below and  a <code>tidy()</code> function is
 not specified in the <code>tidy_fun=</code> argument, the model object will be passed
-to <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom::tidy</a></code> or <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom.mixed::tidy</a></code>.</p>
+to <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy</a></code> or <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy</a></code>.</p>
 <ul>
 <li><p><a href='https://rdrr.io/r/stats/lm.html'>stats::lm</a></p></li>
 <li><p><a href='https://rdrr.io/r/stats/glm.html'>stats::glm</a></p></li>
@@ -213,7 +213,7 @@ to <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom::tidy</a></c
 
     
 
-<p>If <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom::tidy</a></code> or <code><a href='https://rdrr.io/pkg/generics/man/tidy.html'>broom.mixed::tidy</a></code> supports a class of model not listed
+<p>If <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy</a></code> or <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy</a></code> supports a class of model not listed
 above, please submit a <a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub Issue</a>.
 The model can be added to the list of vetted models. Unit tests will be
 put in place to ensure continued support for the model.</p>
@@ -235,7 +235,7 @@ confidence limits for a linear regression model are calculated using Wald's meth
     <pre class="examples"><div class='input'><span class='va'>my_tidy</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>exponentiate</span> <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>conf.level</span> <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>tidy</span> <span class='op'>&lt;-</span>
     <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a></span><span class='op'>(</span>
-      <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>x</span>, conf.int <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+      <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>x</span>, conf.int <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
       <span class='co'># calculate the confidence intervals, and save them in a tibble</span>
       <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint.default</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
         <span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
