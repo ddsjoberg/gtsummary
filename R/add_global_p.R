@@ -121,11 +121,11 @@ add_global_p.tbl_regression <- function(x,
         car::Anova(type = type, ...)
     },
     error = function(e) {
-      usethis::ui_oops(paste0(
-        "{usethis::ui_code('add_global_p()')} uses ",
-        "{usethis::ui_code('car::Anova()')} to calculate the global p-value,\n",
+      ui_oops(paste0(
+        "{ui_code('add_global_p()')} uses ",
+        "{ui_code('car::Anova()')} to calculate the global p-value,\n",
         "and the function returned an error while calculating the p-values.\n",
-        "Is your model type supported by {usethis::ui_code('car::Anova()')}?"
+        "Is your model type supported by {ui_code('car::Anova()')}?"
       ))
       stop(e)
     }
@@ -254,11 +254,11 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
               rlang::eval_tidy()
           },
           error = function(e) {
-            usethis::ui_oops(paste0(
-              "{usethis::ui_code('add_global_p()')} uses ",
-              "{usethis::ui_code('car::Anova()')} to calculate the global p-value,\n",
+            ui_oops(paste0(
+              "{ui_code('add_global_p()')} uses ",
+              "{ui_code('car::Anova()')} to calculate the global p-value,\n",
               "and the function returned an error while calculating the p-value ",
-              "for {usethis::ui_value(y)}."
+              "for {ui_value(y)}."
             ))
             stop(e)
           }
