@@ -21,9 +21,9 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     tidy_fun(x, exponentiate = exponentiate, conf.level = conf.level, conf.int = TRUE)
   },
   error = function(e) {
-    usethis::ui_oops(paste0(
-      "There was an error calling {usethis::ui_code('tidy_fun')}.\n",
-      "Most likely, this is because the argument passed in {usethis::ui_code('tidy_fun=')} \n",
+    ui_oops(paste0(
+      "There was an error calling {ui_code('tidy_fun')}.\n",
+      "Most likely, this is because the argument passed in {ui_code('tidy_fun=')} \n",
       "was misspelled, does not exist, is not compatible with your object, \n",
       "or was missing necessary arguments. See error message below. \n"
     ))
@@ -52,8 +52,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     # if intercept remains filling in the variable name withe intercept
     dplyr::mutate(variable = dplyr::coalesce(.data$variable, .data$term))
   if (all(is.na(df_tidy_3$variable))) { # when variables are all missing, print this
-    usethis::ui_oops("Review the GitHub issue linked below for a possible solution.")
-    usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
+    ui_oops("Review the GitHub issue linked below for a possible solution.")
+    ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
   }
 
   # creating label and show_single_row named lists -----------------------------
@@ -96,17 +96,17 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 gtsummary_model_frame <- function(x) {
   tryCatch(stats::model.frame(x),
   error = function(e) {
-    usethis::ui_oops(paste0(
-      "There was an error calling {usethis::ui_code('stats::model.frame(x)')}.\n\n",
-      "Most likely, this is because the argument passed in {usethis::ui_code('x =')} ",
+    ui_oops(paste0(
+      "There was an error calling {ui_code('stats::model.frame(x)')}.\n\n",
+      "Most likely, this is because the argument passed in {ui_code('x =')} ",
       "was\nmisspelled, does not exist, or is not a regression model.\n\n",
       "Rarely, this error may occur if the model object was created within\na ",
-      "functional programming framework (e.g. using {usethis::ui_code('lappy()')}, ",
-      "{usethis::ui_code('purrr::map()')}, etc.).\n",
+      "functional programming framework (e.g. using {ui_code('lappy()')}, ",
+      "{ui_code('purrr::map()')}, etc.).\n",
       "Review the GitHub issue linked below for a possible solution.\n",
       "The model N will not be available in the output."
     ))
-    usethis::ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
+    ui_code_block("https://github.com/ddsjoberg/gtsummary/issues/231")
     data.frame()
   }
   )

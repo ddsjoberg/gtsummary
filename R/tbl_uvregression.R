@@ -108,11 +108,12 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # checking inputs ------------------------------------------------------------
   if (any(stringr::str_detect(names(data), "([.|()\\^{}+$*?]|\\[|\\])")) ||
       any(stringr::str_detect(names(data), fixed(" ")))) {
-    paste("`tbl_uvregression(data=)` does not support column names with special",
-          "characters or spaces. Please update column names or use a utility",
-          "function like `janitor::clean_names()` to rename columns.") %>%
+    paste("{ui_code('tbl_uvregression(data=)')} does not support column names with",
+          "spaces and some special characters. If an error occurs,",
+          "please update column names or use a utility",
+          "function like {ui_code('janitor::clean_names()')} to rename columns.") %>%
       stringr::str_wrap() %>%
-      abort()
+      ui_oops()
   }
 
   # setting defaults -----------------------------------------------------------
