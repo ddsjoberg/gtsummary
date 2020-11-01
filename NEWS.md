@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added warning message to users when they pass a data frame to `tbl_uvregression(data=)` with column names containing spaces or special characters ( #686)
+
 * Updates to `add_global_p.tbl_regression()` allowing for variable names with spaces and special characters (#682)
 
 * Added `digits=` argument to `style_percent()` (#690)
