@@ -45,8 +45,8 @@ custom method. Default is \code{NULL}}
 \item{...}{arguments passed to \code{tbl_regression.default()}}
 }
 \description{
-Most regression models are handled by \link{tbl_regression.default},
-which uses \link[broom:reexports]{broom::tidy} to perform initial tidying of results. There are,
+Most regression models are handled by \code{\link[=tbl_regression.default]{tbl_regression.default()}},
+which uses \code{\link[broom:reexports]{broom::tidy()}} to perform initial tidying of results. There are,
 however, some model types that have modified default printing behavior.
 Those methods are listed below.
 }
@@ -59,7 +59,7 @@ a few \link[=vetted_models]{vetted model} that use \link[=tbl_regression_methods
 \itemize{
 \item \code{"lmerMod"} or \code{"glmerMod"}: These mixed effects models use \code{broom.mixed::tidy(x, effects = "fixed")}
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
-\item \code{"multinom"}: This multinomial outcome is complex, and the returned object is a \code{tbl_stack()} object with the parameters for each outcome stacked into a final object
+\item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 }
 }
 
