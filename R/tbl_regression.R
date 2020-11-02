@@ -15,7 +15,7 @@
 #'
 #' - `"lmerMod"` or `"glmerMod"`: These mixed effects models use `broom.mixed::tidy(x, effects = "fixed")`
 #' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
-#' - `"multinom"`: This multinomial outcome is complex, and the returned object is a `tbl_stack()` object with the parameters for each outcome stacked into a final object
+#' - `"multinom"`: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 #'
 #' @section Note:
 #' The N reported in the output is the number of observations
@@ -193,7 +193,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   table_body <- table_body %>% filter(.data$variable %in% include)
 
   # model N
-  n <- table_body$N[1]
+  n <- pluck(table_body, "N", 1)
 
   # adding character CI
   if (all(c("conf.low", "conf.high") %in% names(table_body))) {
