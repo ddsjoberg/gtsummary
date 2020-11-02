@@ -53,8 +53,8 @@
 
 
 <meta property="og:title" content="Methods for tbl_regression — tbl_regression_methods" />
-<meta property="og:description" content="Most regression models are handled by tbl_regression.default,
-which uses broom::tidy to perform initial tidying of results. There are,
+<meta property="og:description" content="Most regression models are handled by tbl_regression.default(),
+which uses broom::tidy() to perform initial tidying of results. There are,
 however, some model types that have modified default printing behavior.
 Those methods are listed below." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
@@ -99,7 +99,7 @@ Those methods are listed below." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9007</span>
       </span>
     </div>
 
@@ -177,8 +177,8 @@ Those methods are listed below." />
     </div>
 
     <div class="ref-description">
-    <p>Most regression models are handled by <a href='tbl_regression.html'>tbl_regression.default</a>,
-which uses broom::tidy to perform initial tidying of results. There are,
+    <p>Most regression models are handled by <code><a href='tbl_regression.html'>tbl_regression.default()</a></code>,
+which uses <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code> to perform initial tidying of results. There are,
 however, some model types that have modified default printing behavior.
 Those methods are listed below.</p>
     </div>
@@ -203,7 +203,16 @@ Those methods are listed below.</p>
   tidy_fun <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.data</span><span class='op'>$</span><span class='va'>term</span> <span class='op'>!=</span>
     <span class='st'>"Log(scale)"</span><span class='op'>)</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for mira</span>
+<span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>x</span>, tidy_fun <span class='op'>=</span> <span class='va'>pool_and_tidy_mice</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for mipo</span>
+<span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for multinom</span>
+<span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -234,7 +243,7 @@ to perform the initial tidying of the model object. There are, however,
 a few <a href='vetted_models.html'>vetted model</a> that use modifications.</p><ul>
 <li><p><code>"lmerMod"</code> or <code>"glmerMod"</code>: These mixed effects models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code></p></li>
 <li><p><code>"survreg"</code>: The scale parameter is removed, <code>broom::tidy(x) %&gt;% dplyr::filter(term != "Log(scale)")</code></p></li>
-<li><p><code>"multinom"</code>: This multinomial outcome is complex, and the returned object is a <code><a href='tbl_stack.html'>tbl_stack()</a></code> object with the parameters for each outcome stacked into a final object</p></li>
+<li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
 </ul>
 
 

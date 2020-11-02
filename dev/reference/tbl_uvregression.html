@@ -111,7 +111,7 @@ dichotomous variables appropriate for logistic regression with glm." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9007</span>
       </span>
     </div>
 
@@ -349,7 +349,7 @@ to perform the initial tidying of the model object. There are, however,
 a few <a href='vetted_models.html'>vetted model</a> that use <a href='tbl_regression_methods.html'>modifications</a>.</p><ul>
 <li><p><code>"lmerMod"</code> or <code>"glmerMod"</code>: These mixed effects models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code></p></li>
 <li><p><code>"survreg"</code>: The scale parameter is removed, <code>broom::tidy(x) %&gt;% dplyr::filter(term != "Log(scale)")</code></p></li>
-<li><p><code>"multinom"</code>: This multinomial outcome is complex, and the returned object is a <code><a href='tbl_stack.html'>tbl_stack()</a></code> object with the parameters for each outcome stacked into a final object</p></li>
+<li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
