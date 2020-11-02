@@ -11,9 +11,9 @@
 #' @author David Hugh-Jones
 assert_package <- function(pkg, fn) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    usethis::ui_oops("The {usethis::ui_value(pkg)} is required for function {usethis::ui_code(paste0(fn, '()'))}.")
-    usethis::ui_todo("Install the {usethis::ui_value(pkg)} package with the code below.")
-    usethis::ui_code_block('install.packages("{pkg}")')
+    ui_oops("The {ui_value(pkg)} is required for function {ui_code(paste0(fn, '()'))}.")
+    usethis::ui_todo("Install the {ui_value(pkg)} package with the code below.")
+    ui_code_block('install.packages("{pkg}")')
     stop()
   }
 }
