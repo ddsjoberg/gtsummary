@@ -157,7 +157,6 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   }
 
   include <- rlang::enquo(include)
-  exclude <- rlang::enquo(exclude)
   show_single_row <- rlang::enquo(show_single_row)
 
   # will return call, and all object passed to in tbl_regression call
