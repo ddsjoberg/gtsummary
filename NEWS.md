@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Multiple imputation models created with {mice}, and multinomial regression models created with {nnet} are now supported in `tbl_regression()` (#645)
+
 * Added warning message to users when they pass a data frame to `tbl_uvregression(data=)` with column names containing spaces or special characters ( #686)
 
 * Updates to `add_global_p.tbl_regression()` allowing for variable names with spaces and special characters (#682)
