@@ -4,6 +4,7 @@
 \alias{custom_tidiers}
 \alias{tidy_standardize}
 \alias{tidy_bootstrap}
+\alias{pool_and_tidy_mice}
 \title{Collection of custom tidiers}
 \usage{
 tidy_standardize(
@@ -11,8 +12,8 @@ tidy_standardize(
   exponentiate = FALSE,
   conf.level = 0.95,
   conf.int = TRUE,
-  quiet = FALSE,
-  ...
+  ...,
+  quiet = FALSE
 )
 
 tidy_bootstrap(
@@ -23,6 +24,8 @@ tidy_bootstrap(
   ...,
   quiet = FALSE
 )
+
+pool_and_tidy_mice(x, pool.args = NULL, ..., quiet = FALSE)
 }
 \arguments{
 \item{x}{a regression model object}
@@ -39,14 +42,18 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{conf.int}{Logical indicating whether or not to include a confidence
 interval in the tidied output. Defaults to \code{FALSE}.}
 
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
-
 \item{...}{arguments passed to method;
 \itemize{
+\item \code{pool_and_tidy_mice()}: \code{mice::tidy(x, ...)}
 \item \code{tidy_standardize()}: \code{effectsize::standardize_parameters(x, ...)}
 \item \code{tidy_bootstrap()}: \code{parameters::bootstrap_parameters(x, ...)}
 }}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
+
+\item{pool.args}{named list of arguments passed to \code{mice::pool()} in
+\code{pool_and_tidy_mice()}. Default is \code{NULL}}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -66,6 +73,9 @@ merely takes the result and puts it in \code{broom::tidy()} format.
 package includes a wonderful function to estimate bootstrapped coefficients.
 The tidier uses the output from \code{parameters::bootstrap_parameters(test = "p")}, and
 merely takes the result and puts it in \code{broom::tidy()} format.
+\item \code{pool_and_tidy_mice()} tidier to report models resulting from multiply imputed data
+using the mice package. Pass the mice model object \emph{before} the model results
+have been pooled. See example.
 }
 
 Ensure your model type is compatible with the methods/functions used to estimate
@@ -84,7 +94,7 @@ the model parameters before attempting to use the tidier with \code{tbl_regressi
 
 \if{html}{Example 3}
 
-\if{html}{\figure{tidy_bootstrap_ex3.png}{options: width=47\%}}
+\if{html}{\figure{pool_and_tidy_mice_ex3.png}{options: width=47\%}}
 }
 
 \examples{
@@ -107,7 +117,10 @@ tidy_standardize_ex2 <-
 
 
 # Example 3 ----------------------------------
-tidy_bootstrap_ex3 <-
-  tbl_regression(mod, tidy_fun = tidy_bootstrap)
+# Multiple Imputation using the mice package
+pool_and_tidy_mice_ex3 <-
+  suppressWarnings(mice::mice(trial, m = 2)) \%>\%
+  with(lm(age ~ marker + grade)) \%>\%
+  tbl_regression() # mice method called that uses `pool_and_tidy_mice()` as tidier
 
 }

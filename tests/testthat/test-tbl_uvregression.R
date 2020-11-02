@@ -270,3 +270,10 @@ test_that("tbl_uvregression estimate_fun and pvalue_fun respected", {
     c("inst", "227", "0.001", "-0.143, 0.144", "0.993")
   )
 })
+
+
+test_that("tbl_uvregression throw error with odd variable names in `data=`", {
+  expect_error(
+    trial %>% dplyr::rename(`age person` = age) %>% tbl_uvregression(method = lm, y = `age person`)
+  )
+})

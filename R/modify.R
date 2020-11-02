@@ -215,7 +215,7 @@ show_header_names <- function(x = NULL, quiet = NULL) {
       paste0("", collapse = ",\n") %>%
       {glue("modify_header(update = list(\n{.}\n))")}
 
-    usethis::ui_code_block(block)
+    ui_code_block(block)
   }
 
   return(invisible(df_cols))
