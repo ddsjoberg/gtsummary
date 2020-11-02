@@ -58,6 +58,7 @@
 #' @param ... Not used
 #' @param exclude DEPRECATED
 #' @param show_yesno DEPRECATED
+#' @inheritParams broom.helpers::tidy_plus_plus
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
@@ -106,6 +107,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
                                    conf.level = NULL, intercept = FALSE,
                                    estimate_fun = NULL, pvalue_fun = NULL,
                                    tidy_fun = broom::tidy,
+                                   add_estimate_to_reference_rows = FALSE,
                                    show_yesno = NULL, exclude = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
@@ -116,7 +118,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   }
 
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::tbl_regression(exclude = )",
       "tbl_regression(include = )",
@@ -166,9 +168,10 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     tidy_prep(x, tidy_fun = tidy_fun, exponentiate = exponentiate,
               conf.level = conf.level, intercept = intercept,
               label = label, show_single_row = !!show_single_row,
-              include = !!include)
+              include = !!include,
+              add_estimate_to_reference_rows = add_estimate_to_reference_rows)
 
-  # saving evaluated `label`, and `show_single_row`
+  # saving evaluated `label`, `show_single_row`, and `include` -----------------
   func_inputs$label <-
     .formula_list_to_named_list(
       x =  label,
@@ -183,28 +186,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       arg_name = "show_single_row"
     )
 
-  # including and excluding variables indicated
-  include <-
-    .select_to_varnames(
-      select = !!include,
-      var_info = table_body,
-      arg_name =  "include"
-    )
-  exclude <-
-    .select_to_varnames(
-      select = !!exclude,
-      var_info = table_body,
-      arg_name =  "exclude"
-    )
-
-  include <- include %>% setdiff(exclude)
-
-  # saving the evaluated lists (named lists) as the function inputs
-  func_inputs$include <- include
-  func_inputs$exclude <- NULL # making this NULL since it's deprecated
-
-  # keeping variables indicated in `include`
-  table_body <- table_body %>% filter(.data$variable %in% include)
+  func_inputs$include <- unique(table_body$variable)
 
   # model N
   n <- table_body$N[1]
@@ -257,7 +239,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
 
   # setting default table_header values
   results <-
-    .tbl_reression_default_table_header(
+    .tbl_regression_default_table_header(
       results,
       exponentiate = exponentiate,
       tidy_columns_to_report = tidy_columns_to_report,
