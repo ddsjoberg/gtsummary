@@ -29,7 +29,7 @@
   ...
 )
 
-\method{tbl_regression}{mira}(x, tidy_fun = tidy_mice, ...)
+\method{tbl_regression}{mira}(x, tidy_fun = pool_and_tidy_mice, ...)
 
 \method{tbl_regression}{mipo}(x, ...)
 

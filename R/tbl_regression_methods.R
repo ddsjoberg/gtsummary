@@ -34,18 +34,17 @@ tbl_regression.survreg <- function(
 
 #' @export
 #' @rdname tbl_regression_methods
-tbl_regression.mira <- function(x, tidy_fun = tidy_mice, ...) {
+tbl_regression.mira <- function(x, tidy_fun = pool_and_tidy_mice, ...) {
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 }
 
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.mipo <- function(x, ...) {
-  paste("gtsummary summarizes mice models before the model results",
-        "are pooled across the imputated datasets. Pass your mice object to",
-        "{usethis::ui_code('tbl_regression()')} before",
-        "{usethis::ui_code('mice::pool()')}.",
-        "The tidier will both pool and tidy the model.") %>%
+  paste("Please pass the 'mice' model to {ui_code('tbl_regression()')} before ",
+        "models have been combined with {ui_code('mice::pool()')}.",
+        "The default tidier, {ui_code('pool_and_tidy_mice()')}, ","
+        will both pool and tidy the regression model.") %>%
     stringr::str_wrap() %>%
     usethis::ui_oops()
   paste("\n\nmice::mice(trial, m = 2) %>%",

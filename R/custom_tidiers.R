@@ -18,7 +18,7 @@
 #' The tidier uses the output from `parameters::bootstrap_parameters(test = "p")`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
-#' - `tidy_mice()` tidier to report models resulting from multiply imputed data
+#' - `pool_and_tidy_mice()` tidier to report models resulting from multiply imputed data
 #' using the mice package. Pass the mice model object *before* the model results
 #' have been pooled. See example.
 #'
@@ -26,9 +26,10 @@
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
 #' @inheritParams broom::tidy.glm
 #' @inheritParams add_global_p.tbl_regression
-#' @param pool.args named list of arguments passed to `mice::pool()`. Default is `NULL`
+#' @param pool.args named list of arguments passed to `mice::pool()` in
+#' `pool_and_tidy_mice()`. Default is `NULL`
 #' @param ... arguments passed to method;
-#' - `tidy_mice_mira()`: `mice::tidy(x, ...)`
+#' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
 #' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
 #' - `tidy_bootstrap()`: `parameters::bootstrap_parameters(x, ...)`
 #'
@@ -57,10 +58,10 @@
 #'
 #' # Example 3 ----------------------------------
 #' # Multiple Imputation using the mice package
-#' tidy_mice_ex3 <-
+#' pool_and_tidy_mice_ex3 <-
 #'   suppressWarnings(mice::mice(trial, m = 2)) %>%
 #'   with(lm(age ~ marker + grade)) %>%
-#'   tbl_regression() # mice method called that uses `tidy_mice()` as tidier
+#'   tbl_regression() # mice method called that uses `pool_and_tidy_mice()` as tidier
 #'
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -73,7 +74,7 @@
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{tidy_mice_ex3.png}{options: width=47\%}}
+#' \if{html}{\figure{pool_and_tidy_mice_ex3.png}{options: width=47\%}}
 
 tidy_standardize <- function(x, exponentiate = FALSE,
                              conf.level = 0.95,
@@ -142,8 +143,8 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
 
 #' @rdname custom_tidiers
 #' @export
-tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
-  assert_package("mice", "tidy_mice")
+pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
+  assert_package("mice", "pool_and_tidy_mice")
   if(!inherits(x, "mira")) stop("Object `x=` must be of class 'mira'.", call. = FALSE)
 
   dots <- list(...)
@@ -151,7 +152,7 @@ tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
   # printing code that will run
   mice_expr <- expr(mice::pool(x, !!!pool.args) %>% mice::tidy(!!!dots))
   if (quiet == FALSE)
-    inform(glue("tidy_mice: Tidying mice model with\n  `{deparse(mice_expr, width.cutoff = 500L)}`"))
+    inform(glue("pool_and_tidy_mice: Tidying mice model with\n  `{deparse(mice_expr, width.cutoff = 500L)}`"))
 
   # evaluating tidy expression
   expr(mice::pool(!!x, !!!pool.args) %>% mice::tidy(!!!dots)) %>% eval()

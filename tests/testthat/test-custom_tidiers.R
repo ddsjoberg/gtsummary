@@ -14,7 +14,7 @@ test_that("no errors/warnings with tidy_bootstrap", {
 })
 
 
-test_that("no errors/warnings with tidy_mice", {
+test_that("no errors/warnings with pool_and_tidy_mice", {
   mod_mice <-
     suppressWarnings(mice::mice(trial, m = 2)) %>%
     with(glm(response ~ age + marker + grade, family = binomial))

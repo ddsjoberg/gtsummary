@@ -100,6 +100,7 @@ gtsummary_model_frame <- function(x) {
           "and the model N will not be available in the output.") %>%
       stringr::str_wrap() %>%
       usethis::ui_oops()
+    data.frame()
   }
   )
 }
