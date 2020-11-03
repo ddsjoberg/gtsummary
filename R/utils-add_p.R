@@ -1,3 +1,98 @@
+# creating a tibble of all possible tests to select from all `add_p.*()` functions
+df_add_p_tests <- tibble::tribble(
+  ~class,           ~test_package, ~test_name,              ~test_fun,                 ~fun_to_run,                       ~accept_dots, ~description,
+  "tbl_summary",    "stats",       "t.test",                expr(stats::t.test),       add_p_test_t.test,                  TRUE,         "t-test",
+  "tbl_summary",    "stats",       "aov",                   expr(stats::aov),          add_p_test_aov,                     FALSE,        "One-way ANOVA",
+  "tbl_summary",    "stats",       "kruskal.test",          expr(stats::kruskal.test), add_p_test_kruskal.test,            FALSE,        "Kruskal-Wallis test",
+  "tbl_summary",    "stats",       "wilcox.test",           expr(stats::wilcox.test),  add_p_test_wilcox.test,             TRUE,         "Wilcoxon rank-sum test",
+  "tbl_summary",    "stats",       "chisq.test",            expr(stats::chisq.test),   add_p_test_chisq.test,              TRUE,         "chi-square test of independence",
+  "tbl_summary",    "stats",       "chisq.test.no.correct", NULL,                      add_p_test_chisq.test.no.correct,   FALSE,        "chi-square test of independence",
+  "tbl_summary",    "stats",       "fisher.test",           expr(stats::fisher.test),  add_p_test_fisher.test,             TRUE,         "Fisher's exact test",
+  "tbl_summary",    "lme4",        "lme4",                  expr(lme4::glmer),         add_p_test_lme4,                    FALSE,        "random intercept logistic regression"
+)
+
+
+
+#' Convert test arg input to function
+#'
+#' This function accepts the RHS of the test argument formula, and
+#' returns a list that includes the function that will run to calculate
+#' the p-value. List also includes
+#'
+#' @param class string indicating the class of test to select from.
+#' Must be one of `c("tbl_summary", "tbl_svysummary", "tbl_survfit")`
+#' @param test test indicated on the RHS of the formula
+#' @param env environment where formula was created. When a test is passed
+#' as a character, this helps ensure the character is converted to the test
+#' function object in the correct environment.
+#'
+#' @noRd
+#' @author Daniel D. Sjoberg
+.get_add_p_test_fun <- function(class, test, env = NULL) {
+  # if no test, then return NULL
+  if (is.null(test)) return(NULL)
+
+  # keep class of tests
+  df <-
+    df_add_p_tests %>%
+    filter(.data$class %in% .env$class)
+
+  # if test is character, then subset based on test name
+  if (rlang::is_string(test)) { # character test name ------------------------------
+    df <-
+      df %>%
+      filter(.data$test_name %in% .env$test)
+  }
+  else if (rlang::is_function(test)) { # test function passed -------------------------
+    df <-
+      df %>%
+      # first subset on packages that are installed
+      filter(map_lgl(.data$test_package, requireNamespace)) %>%
+      # now select test object equivalent to the passed function
+      filter(map_lgl(.data$test_fun, ~identical(eval(.x), test)))
+  }
+
+  # return info from df if internal test selected
+  if (nrow(df) == 1)
+    return(
+      df %>%
+        select(any_of("test_name", "fun_to_run", "accept_dots", "description")) %>%
+        as.list()
+    )
+  if (rlang::is_string(test) && nrow(df) == 0)
+    return(
+      list(test_name = "user-defined",
+           fun_to_run = rlang::parse_expr(x) %>% rlang::eval_tidy(env = env),
+           accept_dots = TRUE)
+    )
+  if (rlang::is_function(test) && nrow(df) == 0)
+    return(
+      list(test_name = "user-defined",
+           fun_to_run = test,
+           accept_dots = TRUE)
+    )
+  abort("Something went wrong in the test selection....")
+}
+
+
+.run_add_p_test_fun <- function(x, data, by, variable, group = NULL, type = NULL) {
+
+}
+
+
+
+tibble::tribble(
+  ~fun_chr, ~fun_base_r, ~fun_add_p,
+  "t.test", stats::t.test, add_p_test_t.test,
+  "aov", stats::aov, add_p_test_aov,
+  "kruskal.test", stats::kruskal.test, add_p_test_kruskal.test,
+  "wilcox.test", stats::wilcox.test, add_p_test_wilcox.test,
+  "chisq.test", stats::chisq.test, add_p_test_chisq.test,
+  "chisq.test.no.correct", NULL, add_p_test_chisq.test.no.correct,
+  "fisher.test", stats::fisher.test, add_p_test_fisher.test,
+  "lme4", NULL, add_p_test_lme4
+)
+
 #' determine the appropriate test type given two variables
 #'
 #' @param data input data set
