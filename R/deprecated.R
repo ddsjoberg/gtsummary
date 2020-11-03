@@ -108,7 +108,10 @@ all_numeric <- function() {
       "Use `where(is.numeric)` instead."
     )
   )
+
+  where(is.numeric)
 }
+
 
 #' @rdname deprecated
 #' @export
@@ -122,6 +125,8 @@ all_character <- function() {
       "Use `where(is.character)` instead."
     )
   )
+
+  where(is.character)
 }
 
 #' @rdname deprecated
@@ -136,6 +141,8 @@ all_integer <- function() {
       "Use `where(is.integer)` instead."
     )
   )
+
+  where(is.integer)
 }
 
 #' @rdname deprecated
@@ -150,6 +157,8 @@ all_double <- function() {
       "Use `where(is.double)` instead."
     )
   )
+
+  where(is.double)
 }
 
 #' @rdname deprecated
@@ -164,12 +173,14 @@ all_logical <- function() {
       "Use `where(is.logical)` instead."
     )
   )
+
+  where(is.logical)
 }
 
 #' @rdname deprecated
 #' @export
 all_factor <- function() {
-  lifecycle::deprecate_stop(
+  lifecycle::deprecate_warn(
     "1.3.6", "gtsummary::all_factor()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -178,4 +189,22 @@ all_factor <- function() {
       "Use `where(is.factor)` instead."
     )
   )
+
+  where(is.factor)
+}
+
+# this is a copy of the tidyselect where function. it can be deleted after the
+# all_factor, all_character, etc. functions are fully deprecated
+where <- function(fn) {
+  predicate <- rlang::as_function(fn)
+
+  function(x, ...) {
+    out <- predicate(x, ...)
+
+    if (!rlang::is_bool(out)) {
+      abort("`where()` must be used with functions that return `TRUE` or `FALSE`.")
+    }
+
+    out
+  }
 }
