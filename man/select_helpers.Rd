@@ -7,17 +7,6 @@
 \usage{
 all_continuous2()
 }
-\arguments{
-\item{dichotomous}{Logical indicating whether to include dichotomous variables.
-Default is \code{TRUE}}
-
-\item{continuous2}{Logical indicating whether to include continuous2 variables.
-Default is \code{TRUE}}
-
-\item{contrasts_type}{type of contrast to select. When \code{NULL}, all variables with a
-contrast will be selected. Default is \code{NULL}.  Select among contrast types
-\code{c("treatment", "sum", "poly", "helmert", "other")}}
-}
 \value{
 A character vector of column names selected
 }
