@@ -10,13 +10,6 @@
 #' - `all_intercepts()` selects intercept terms from a regression model
 #' - `all_contrasts()` selects variables in regression model based on their type of contrast
 #' @name select_helpers
-#' @param dichotomous Logical indicating whether to include dichotomous variables.
-#' Default is `TRUE`
-#' @param continuous2 Logical indicating whether to include continuous2 variables.
-#' Default is `TRUE`
-#' @param contrasts_type type of contrast to select. When `NULL`, all variables with a
-#' contrast will be selected. Default is `NULL`.  Select among contrast types
-#' `c("treatment", "sum", "poly", "helmert", "other")`
 #' @return A character vector of column names selected
 #' @examples
 #' select_ex1 <-
