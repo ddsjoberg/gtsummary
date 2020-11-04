@@ -661,7 +661,7 @@ df_add_p_tbl_survfit_tests <-
 add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                                  include = everything(), ...) {
   # checking for survey package ------------------------------------------------
-  assert_package("survey", "add_p.tbl_svysummary")
+  assert_package("survey", "add_p.tbl_svysummary()")
 
   # setting defaults from gtsummary theme --------------------------------------
   test <- test %||%

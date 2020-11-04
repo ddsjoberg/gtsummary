@@ -94,7 +94,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
                         percent = NULL, include = NULL) {
   # checking for survey package ------------------------------------------------
-  assert_package("survey", "tbl_svysummary")
+  assert_package("survey", "tbl_svysummary()")
 
   # test if data is a survey object
   if (!is_survey(data)) stop("'data' should be a survey object (see svydesign()).", call. = FALSE)
