@@ -14,7 +14,7 @@ assert_package <- function(pkg, fn) {
     ui_oops("The {ui_value(pkg)} is required for function {ui_code(fn)}.")
     usethis::ui_todo("Install the {ui_value(pkg)} package with the code below.")
     ui_code_block('install.packages("{pkg}")')
-    stop()
+    stop("Install required package", call. = FALSE)
   }
 }
 
