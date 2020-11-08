@@ -55,6 +55,7 @@
 #' @param tidy_fun Option to specify a particular tidier function if the
 #' model is not a [vetted model][vetted_models] or you need to implement a
 #' custom method. Default is `NULL`
+#' @param add_estimate_to_reference_rows add a reference value. Default is FALSE
 #' @param ... Not used
 #' @param exclude DEPRECATED
 #' @param show_yesno DEPRECATED
@@ -149,6 +150,10 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     conf.level %||%
     get_theme_element("tbl_regression-arg:conf.level") %||%
     getOption("gtsummary.conf.level", default = 0.95)
+  add_estimate_to_reference_rows <-
+    add_estimate_to_reference_rows %||%
+    get_theme_element("tbl_regression-arg:add_estimate_to_reference_rows", default = FALSE)
+
 
   # checking estimate_fun and pvalue_fun are functions
   if (!purrr::every(list(estimate_fun, pvalue_fun, tidy_fun %||% pvalue_fun), is.function)) {
