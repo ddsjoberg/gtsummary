@@ -65,7 +65,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 model is not a \link[=vetted_models]{vetted model} or you need to implement a
 custom method. Default is \code{NULL}}
 
-\item{add_estimate_to_reference_rows}{should an estimate value be added to reference rows?}
+\item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
 
 \item{show_yesno}{DEPRECATED}
 

@@ -59,7 +59,6 @@
 #' @param ... Not used
 #' @param exclude DEPRECATED
 #' @param show_yesno DEPRECATED
-#' @inheritParams broom.helpers::tidy_plus_plus
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @family tbl_regression tools
