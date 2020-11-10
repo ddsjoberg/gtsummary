@@ -88,7 +88,10 @@ NULL
 #' @name modify
 #' @export
 modify_header <- function(x, update = NULL, stat_by = NULL,
-                          text_interpret = c("md", "html"), ...) {
+                          text_interpret = c("md", "html"), quiet = NULL, ...) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # update table_header --------------------------------------------------------
   x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
@@ -97,6 +100,9 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
     tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update") %>%
     # adding the ... to the update list
     c(list(...))
+  # if no columns selected, print helpful message
+  if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
+  if (is.null(update)) return(x)
 
   # running modify_header_internal function ------------------------------------
   rlang::call2(
@@ -112,17 +118,22 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
 
 #' @name modify
 #' @export
-modify_footnote <- function(x, update, abbreviation = FALSE) {
+modify_footnote <- function(x, update, abbreviation = FALSE, quiet = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
   }
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # update table_header --------------------------------------------------------
   x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # converting update arg to a tidyselect list ---------------------------------
   update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
+  # if no columns selected, print helpful message
+  if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
+  if (is.null(update)) return(x)
 
   # updating footnote ----------------------------------------------------------
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
@@ -153,17 +164,22 @@ modify_footnote <- function(x, update, abbreviation = FALSE) {
 
 #' @name modify
 #' @export
-modify_spanning_header <- function(x, update) {
+modify_spanning_header <- function(x, update, quiet = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
   }
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # update table_header --------------------------------------------------------
   x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # converting update arg to a tidyselect list ---------------------------------
   update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
+  # if no columns selected, print helpful message
+  if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
+  if (is.null(update)) return(x)
 
   # updating footnote ----------------------------------------------------------
   # convert named list to a tibble
@@ -205,9 +221,6 @@ show_header_names <- function(x = NULL, quiet = NULL) {
     select(.data$column, .data$label)
 
   if (identical(quiet, FALSE)) {
-    knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
-      print()
-
     cat("\n")
     usethis::ui_info("As a usage guide, the code below re-creates the current column headers.")
     block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
@@ -216,7 +229,20 @@ show_header_names <- function(x = NULL, quiet = NULL) {
       {glue("modify_header(update = list(\n{.}\n))")}
 
     ui_code_block(block)
+
+    knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
+      print()
   }
 
   return(invisible(df_cols))
+}
+
+# prints a helpful message when no columns were selected in the modfiy functions
+.modify_no_selected_vars <- function(x) {
+  paste("No columns were selected.",
+        "Use {ui_code('quiet = TRUE')} to supress these messages.") %>%
+    stringr::str_wrap() %>%
+    usethis::ui_info()
+
+  show_header_names(x)
 }
