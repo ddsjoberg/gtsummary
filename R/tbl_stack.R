@@ -8,6 +8,7 @@
 #' @param tbls List of gtsummary objects
 #' @param group_header Character vector with table headers where length matches
 #' the length of `tbls=`
+#' @inheritParams add_global_p.tbl_regression
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
 #' @family tbl_regression tools
@@ -70,7 +71,10 @@
 #'
 #' \if{html}{\figure{tbl_stack_ex2.png}{options: width=80\%}}
 
-tbl_stack <- function(tbls, group_header = NULL) {
+tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # input checks ---------------------------------------------------------------
   # class of tbls
   if (!inherits(tbls, "list")) {
@@ -109,6 +113,9 @@ tbl_stack <- function(tbls, group_header = NULL) {
   }
 
   # creating table header ------------------------------------------------------
+  # print message if column headers, footnotes, etc. are different among tbls
+  if (identical(quiet, FALSE)) print_stack_differences(tbls)
+
   results$table_header <-
     map_dfr(tbls, ~pluck(.x, "table_header")) %>%
     group_by(.data$column) %>%
@@ -135,4 +142,45 @@ tbl_stack <- function(tbls, group_header = NULL) {
 
   class(results) <- c("tbl_stack", "gtsummary")
   results
+}
+
+# function prints changes to column labels, footnotes, and spanning headers
+print_stack_differences <- function(tbls) {
+  tbl_differences <-
+    purrr::map2_dfr(
+      tbls, seq_len(length(tbls)),
+      ~pluck(.x, "table_header") %>%
+        mutate(..tbl_id.. = .y)
+    ) %>%
+    select(.data$..tbl_id.., .data$column, .data$label, .data$footnote,
+           .data$footnote_abbrev, .data$spanning_header) %>%
+    tidyr::pivot_longer(cols = c(.data$label, .data$footnote, .data$footnote_abbrev,
+                                 .data$spanning_header)) %>%
+    group_by(.data$column, .data$name) %>%
+    mutate(
+      new_value = .data$value[1],
+      name_fmt = case_when(name == "label" ~ "Column header",
+                           name == "footnote" ~ "Column footnote",
+                           name == "footnote_abbrev" ~ "Column abbreviation footnote",
+                           name == "spanning_header" ~ "Spanning column header")
+    ) %>%
+    filter(.data$new_value != .data$value) %>%
+    ungroup() %>%
+    arrange(.data$name != "label", .data$name_fmt, .data$..tbl_id..)
+
+  if (nrow(tbl_differences) > 0) {
+    paste("When tables are stacked,",
+          "attributes from the first table are used.",
+          "The following attributes were changed.") %>%
+      usethis::ui_info()
+
+    purrr::pwalk(
+      list(tbl_differences$name_fmt, tbl_differences$..tbl_id..,
+           tbl_differences$column, tbl_differences$value, tbl_differences$new_value),
+      function(name_fmt, ..tbl_id.., column, value, new_value)
+        ui_done("{name_fmt}, table {..tbl_id..} ({column}): {ui_field(value)} ---> {ui_field(new_value)}")
+    )
+  }
+
+  return(invisible())
 }
