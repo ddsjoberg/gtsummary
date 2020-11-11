@@ -82,10 +82,18 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
     )
 
   # converting to charcter vector ----------------------------------------------
-  include <- var_input_to_string(data = vctr_2_tibble(names(gt_calls)),
-                                 select_input = !!rlang::enquo(include))
-  exclude <- var_input_to_string(data = vctr_2_tibble(names(gt_calls)),
-                                 select_input = !!rlang::enquo(exclude))
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      var_info = names(gt_calls),
+      arg_name = "include"
+    )
+  exclude <-
+    .select_to_varnames(
+      select = {{ exclude }},
+      var_info = names(gt_calls),
+      arg_name = "exclude"
+    )
 
   # this ensures list is in the same order as names(x$gt_calls)
   include <- names(gt_calls) %>% intersect(include)

@@ -18,6 +18,7 @@ tbl_regression(x, ...)
   estimate_fun = NULL,
   pvalue_fun = NULL,
   tidy_fun = broom::tidy,
+  add_estimate_to_reference_rows = FALSE,
   show_yesno = NULL,
   exclude = NULL,
   ...
@@ -63,6 +64,8 @@ and return a string that is the rounded/formatted p-value (e.g.
 \item{tidy_fun}{Option to specify a particular tidier function if the
 model is not a \link[=vetted_models]{vetted model} or you need to implement a
 custom method. Default is \code{NULL}}
+
+\item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
 
 \item{show_yesno}{DEPRECATED}
 
