@@ -53,11 +53,17 @@
 
 
 <meta property="og:title" content="Select helper functions — select_helpers" />
-<meta property="og:description" content="Set of functions to supplement the tidyselect set of functions for selecting
-columns of data frames. all_continuous(), all_continuous2(), all_categorical(), and
-all_dichotomous() may only be used with tbl_summary(), where each variable
-has been classified into one of these three groups. All other helpers
-are available throughout the package." />
+<meta property="og:description" content="Set of functions to supplement the tidyselect set of
+functions for selecting columns of data frames (and other items as well).
+all_continuous() selects continuous variables
+all_continuous2() selects only type &quot;continuous2&quot;
+all_categorical() selects categorical (including &quot;dichotomous&quot;) variables
+all_dichotomous() selects only type &quot;dichotomous&quot;
+all_interaction() selects interaction terms from a regression model
+all_intercepts() selects intercept terms from a regression model
+all_contrasts() selects variables in regression model based on their type of contrast
+
+" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -100,7 +106,7 @@ are available throughout the package." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9008</span>
       </span>
     </div>
 
@@ -178,59 +184,39 @@ are available throughout the package." />
     </div>
 
     <div class="ref-description">
-    <p>Set of functions to supplement the tidyselect set of functions for selecting
-columns of data frames. <code>all_continuous()</code>, <code>all_continuous2()</code>, <code>all_categorical()</code>, and
-<code>all_dichotomous()</code> may only be used with <code><a href='tbl_summary.html'>tbl_summary()</a></code>, where each variable
-has been classified into one of these three groups. All other helpers
-are available throughout the package.</p>
+    <p>Set of functions to supplement the tidyselect set of
+functions for selecting columns of data frames (and other items as well).</p><ul>
+<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_continuous()</a></code> selects continuous variables</p></li>
+<li><p><code>all_continuous2()</code> selects only type <code>"continuous2"</code></p></li>
+<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_categorical()</a></code> selects categorical (including <code>"dichotomous"</code>) variables</p></li>
+<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_dichotomous()</a></code> selects only type <code>"dichotomous"</code></p></li>
+<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_interaction()</a></code> selects interaction terms from a regression model</p></li>
+<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_intercepts()</a></code> selects intercept terms from a regression model</p></li>
+<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_contrasts()</a></code> selects variables in regression model based on their type of contrast</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>all_continuous</span><span class='op'>(</span>continuous2 <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>all_continuous2</span><span class='op'>(</span><span class='op'>)</span></pre>
 
-<span class='fu'>all_continuous2</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='fu'>all_categorical</span><span class='op'>(</span>dichotomous <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='fu'>all_dichotomous</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='fu'>all_numeric</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='fu'>all_character</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='fu'>all_integer</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='fu'>all_double</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='fu'>all_logical</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='fu'>all_factor</span><span class='op'>(</span><span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>continuous2</th>
-      <td><p>Logical indicating whether to include continuous2 variables.
-Default is <code>TRUE</code></p></td>
-    </tr>
-    <tr>
-      <th>dichotomous</th>
-      <td><p>Logical indicating whether to include dichotomous variables.
-Default is <code>TRUE</code></p></td>
-    </tr>
-    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A character vector of column names selected</p>
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+
+<p>Example 1</p>
+<p><img src='figures/select_ex1.png' width=55% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>select_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>response</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>
-    statistic <span class='op'>=</span> <span class='fu'>all_continuous</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
-    type <span class='op'>=</span> <span class='fu'>all_dichotomous</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"categorical"</span>
+    statistic <span class='op'>=</span> <span class='fu'><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
+    type <span class='op'>=</span> <span class='fu'><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_dichotomous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"categorical"</span>
   <span class='op'>)</span>
 </div></pre>
   </div>

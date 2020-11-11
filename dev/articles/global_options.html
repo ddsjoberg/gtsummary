@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9008</span>
       </span>
     </div>
 
@@ -147,15 +147,15 @@
 <h3 class="hasAnchor">
 <a href="#p-values" class="anchor"></a>p-values</h3>
 <p>P-values are reported throughout {gtsummary} tables. The default function to style p-values is <code><a href="../reference/style_pvalue.html">style_pvalue()</a></code>, where large p-values are rounded to one decimal place. Use the <code>gtsummary.pvalue_fun</code> option to change the function that styles p-values. For example, to report large p-values rounded to two decimal places rather that one, change the default function to <code><a href="../reference/style_pvalue.html">style_pvalue(x, digits = 2)</a></code>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.pvalue_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.pvalue_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="percentages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#percentages" class="anchor"></a>percentages</h3>
 <p>In <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, the default function for styling percentages is <code><a href="../reference/style_percent.html">style_percent()</a></code>. If you’d like to update the default, for example, because you’d prefer percentages rounded to one decimal place, you may include the <code>gtsummary.tbl_summary.percent_fun</code> option.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.tbl_summary.percent_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/style_number.html">style_number</a></span><span class="op">(</span><span class="va">x</span> <span class="op">*</span> <span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.tbl_summary.percent_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="../reference/style_number.html">style_number</a></span><span class="op">(</span><span class="va">x</span> <span class="op">*</span> <span class="fl">100</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="survival-estimates" class="section level3">
 <h3 class="hasAnchor">
@@ -167,11 +167,11 @@
 <h2 class="hasAnchor">
 <a href="#printing" class="anchor"></a>Printing</h2>
 <p>{gtsummary} uses the <a href="https://gt.rstudio.com/">{gt}</a> package to print all summary tables. In addition to supporting {gt}, the {gtsummary} package works well with <a href="https://rdrr.io/cran/knitr/man/kable.html"><code>knitr::kable()</code></a>. This is particularly useful when outputting documents to Microsoft Word. If the {gt} package is not installed, {gtsummary} will fall back to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code>. To explicitly set the printing engine, set the option in the script or in the user- or project R profile, <code>.Rprofile</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.print_engine <span class="op">=</span> <span class="st">"kable"</span><span class="op">)</span> </pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.print_engine <span class="op">=</span> <span class="st">"kable"</span><span class="op">)</span> </code></pre></div>
 <p>or</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.print_engine <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.print_engine <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></code></pre></div>
 <p>Output from {gt} is more full-featured compared to a summary table produced with {kable}. For example, {gt} summary tables can include indentation, footnotes, and spanning header rows.</p>
 </div>
 <div id="format-gt-tables" class="section level2">
@@ -185,8 +185,8 @@
 <li><p>Do not include the <code>data=</code> argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> operator. The data argument is taken from the previous function in the sequence.</p></li>
 </ol>
 <p>In the example below, the font size and cell padding are reduced globally.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.as_gt.addl_cmds <span class="op">=</span> <span class="st">"gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1))"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gtsummary.as_gt.addl_cmds <span class="op">=</span> <span class="st">"gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1))"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="default-tests-in-add_p" class="section level2">
 <h2 class="hasAnchor">
@@ -197,7 +197,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#umiicedxvu .gt_table {
+#ltflseviwl .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -222,7 +222,7 @@
   border-left-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_heading {
+#ltflseviwl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -234,7 +234,7 @@
   border-right-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_title {
+#ltflseviwl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -244,7 +244,7 @@
   border-bottom-width: 0;
 }
 
-#umiicedxvu .gt_subtitle {
+#ltflseviwl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -254,13 +254,13 @@
   border-top-width: 0;
 }
 
-#umiicedxvu .gt_bottom_border {
+#ltflseviwl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_col_headings {
+#ltflseviwl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -275,7 +275,7 @@
   border-right-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_col_heading {
+#ltflseviwl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -295,7 +295,7 @@
   overflow-x: hidden;
 }
 
-#umiicedxvu .gt_column_spanner_outer {
+#ltflseviwl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -307,15 +307,15 @@
   padding-right: 4px;
 }
 
-#umiicedxvu .gt_column_spanner_outer:first-child {
+#ltflseviwl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#umiicedxvu .gt_column_spanner_outer:last-child {
+#ltflseviwl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#umiicedxvu .gt_column_spanner {
+#ltflseviwl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -327,7 +327,7 @@
   width: 100%;
 }
 
-#umiicedxvu .gt_group_heading {
+#ltflseviwl .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -349,7 +349,7 @@
   vertical-align: middle;
 }
 
-#umiicedxvu .gt_empty_group_heading {
+#ltflseviwl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -364,15 +364,15 @@
   vertical-align: middle;
 }
 
-#umiicedxvu .gt_from_md > :first-child {
+#ltflseviwl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#umiicedxvu .gt_from_md > :last-child {
+#ltflseviwl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#umiicedxvu .gt_row {
+#ltflseviwl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -391,7 +391,7 @@
   overflow-x: hidden;
 }
 
-#umiicedxvu .gt_stub {
+#ltflseviwl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -403,7 +403,7 @@
   padding-left: 12px;
 }
 
-#umiicedxvu .gt_summary_row {
+#ltflseviwl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -413,7 +413,7 @@
   padding-right: 5px;
 }
 
-#umiicedxvu .gt_first_summary_row {
+#ltflseviwl .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -423,7 +423,7 @@
   border-top-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_grand_summary_row {
+#ltflseviwl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -433,7 +433,7 @@
   padding-right: 5px;
 }
 
-#umiicedxvu .gt_first_grand_summary_row {
+#ltflseviwl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -443,11 +443,11 @@
   border-top-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_striped {
+#ltflseviwl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#umiicedxvu .gt_table_body {
+#ltflseviwl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -456,7 +456,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_footnotes {
+#ltflseviwl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -470,13 +470,13 @@
   border-right-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_footnote {
+#ltflseviwl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#umiicedxvu .gt_sourcenotes {
+#ltflseviwl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -490,46 +490,46 @@
   border-right-color: #D3D3D3;
 }
 
-#umiicedxvu .gt_sourcenote {
+#ltflseviwl .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#umiicedxvu .gt_left {
+#ltflseviwl .gt_left {
   text-align: left;
 }
 
-#umiicedxvu .gt_center {
+#ltflseviwl .gt_center {
   text-align: center;
 }
 
-#umiicedxvu .gt_right {
+#ltflseviwl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#umiicedxvu .gt_font_normal {
+#ltflseviwl .gt_font_normal {
   font-weight: normal;
 }
 
-#umiicedxvu .gt_font_bold {
+#ltflseviwl .gt_font_bold {
   font-weight: bold;
 }
 
-#umiicedxvu .gt_font_italic {
+#ltflseviwl .gt_font_italic {
   font-style: italic;
 }
 
-#umiicedxvu .gt_super {
+#ltflseviwl .gt_super {
   font-size: 65%;
 }
 
-#umiicedxvu .gt_footnote_marks {
+#ltflseviwl .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="umiicedxvu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="ltflseviwl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Option Name</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Tests Modified</th>
@@ -562,11 +562,11 @@
 </tbody>
 </table></div>
 <p>For example, to report the t-test and one-way ANOVA for continuous variables, use the following options:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>
   gtsummary.add_p.test.continuous_by2 <span class="op">=</span> <span class="st">"t.test"</span>,
   gtsummary.add_p.test.continuous <span class="op">=</span> <span class="st">"aov"</span>
-<span class="op">)</span></pre></div>
+<span class="op">)</span></code></pre></div>
 </div>
 </div>
   </div>

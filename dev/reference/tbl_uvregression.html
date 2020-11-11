@@ -111,7 +111,7 @@ dichotomous variables appropriate for logistic regression with glm." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9008</span>
       </span>
     </div>
 
@@ -223,6 +223,7 @@ dichotomous variables appropriate for logistic regression with <a href='https://
   estimate_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
   pvalue_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
   formula <span class='op'>=</span> <span class='st'>"{y} ~ {x}"</span>,
+  add_estimate_to_reference_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
   show_yesno <span class='op'>=</span> <span class='cn'>NULL</span>,
   exclude <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -317,6 +318,10 @@ and return a string that is the rounded/formatted p-value (e.g.
 Uses <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> syntax. Default is <code>"{y} ~ {x}"</code>, where <code>{y}</code>
 is the dependent variable, and <code>{x}</code> represents a single covariate. For a
 random intercept model, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>add_estimate_to_reference_rows</th>
+      <td><p>add a reference value. Default is FALSE</p></td>
     </tr>
     <tr>
       <th>show_yesno</th>

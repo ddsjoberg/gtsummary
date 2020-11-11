@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9008</span>
       </span>
     </div>
 
@@ -176,6 +176,15 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>All select helper functions and the utility functions that make them possible, have been cleaned up and migrated to broom.helpers. THIS IS A HUGE UPDATE. <a href='https://github.com/ddsjoberg/gtsummary/issues/648'>#648</a></p></li>
+<li><p>Migrated all selecting functionality from gtsummary to broom.helpers. Exporting functions the functions below. Each has been improved and streamlined compared to their original versions in gtsummary. <a href='https://github.com/ddsjoberg/gtsummary/issues/648'>#648</a> <a href='https://github.com/ddsjoberg/gtsummary/issues/680'>#680</a></p></li>
+<li><p>.generic_selector(): this is a function that makes it easy to create selecting functions like all_continuous(). The internals allow for it to be used in broom.helpers and gtsummary seamlessly. <a href='https://github.com/ddsjoberg/gtsummary/issues/680'>#680</a></p></li>
+<li><p>.select_to_varnames(): This function converts selecting syntax into character varnames <a href='https://github.com/ddsjoberg/gtsummary/issues/680'>#680</a></p></li>
+<li><p>.formula_list_to_named_list(): this function takes the formula selecting syntax used widely in gtsummary, and converts it to a named list.</p></li>
+<li><p>Update to use <a href='https://github.com/ddsjoberg/gtsummary/issues/680'>#680</a> broom.helpers::tidy_plus_plus() instead of the individual broom.helpers::tidy_*() functions. <a href='https://github.com/ddsjoberg/gtsummary/issues/692'>#692</a></p></li>
+<li><p>Theme element has been added for controlling the other tidy_plus_plus() arguments. <a href='https://github.com/ddsjoberg/gtsummary/issues/692'>#692</a> tbl_regression(add_estimate_to_reference_rows=) argument has been added. Added to tbl_uvregression() as well. <a href='https://github.com/ddsjoberg/gtsummary/issues/692'>#692</a></p></li>
+<li><p>Theme element for tbl_regression(add_estimate_to_reference_rows=) has been added. <a href='https://github.com/ddsjoberg/gtsummary/issues/677'>#677</a></p></li>
+<li><p>The argument all_continuous(continuous2=) has been removed. No deprecation messages were added…it was just cut.</p></li>
 <li><p>Multiple imputation models created with {mice}, and multinomial regression models created with {nnet} are now supported in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/645'>#645</a>)</p></li>
 <li><p>Added warning message to users when they pass a data frame to <code><a href="../reference/tbl_uvregression.html">tbl_uvregression(data=)</a></code> with column names containing spaces or special characters ( <a href='https://github.com/ddsjoberg/gtsummary/issues/686'>#686</a>)</p></li>
 <li><p>Updates to <code><a href="../reference/add_global_p.tbl_regression.html">add_global_p.tbl_regression()</a></code> allowing for variable names with spaces and special characters (<a href='https://github.com/ddsjoberg/gtsummary/issues/682'>#682</a>)</p></li>
@@ -206,7 +215,7 @@
 <li>
 <p>New summary type <code>continuous2</code> allows adding labelled statistic rows to tables in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. You can report several lines of statistics with this type. (<a href='https://github.com/ddsjoberg/gtsummary/issues/620'>#620</a>)</p>
 <ul>
-<li>The <code><a href="../reference/select_helpers.html">all_continuous()</a></code> function now selects summary types <code>continuous</code> and <code>continuous2</code> by default.</li>
+<li>The <code><a href="https://larmarange.github.io/broom.helpers//reference/select_helpers.html">all_continuous()</a></code> function now selects summary types <code>continuous</code> and <code>continuous2</code> by default.</li>
 <li>Added <code><a href="../reference/select_helpers.html">all_continuous2()</a></code> function for selecting summary type <code>continuous2</code> exclusively.</li>
 <li>Added <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_continuous2()</a></code> to make <code>continuous2</code> the default summary type for all continuous variables.</li>
 </ul>
@@ -497,7 +506,7 @@
 </li>
 <li><p>Updated <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> to allow flexible tidyselect inputs and improved error messaging for arguments <code>x</code> and <code>y</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/249'>#249</a>)</p></li>
 <li><p>After the input updates in <a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>, the <code>exclude=</code> argument appearing in <code><a href="../reference/add_p.html">add_p()</a></code>, <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>, <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> was redundant. The <code>exclude=</code> argument is now deprecated. Use <code>include=</code> instead, with tidyselect syntax. (<a href='https://github.com/ddsjoberg/gtsummary/issues/331'>#331</a>)</p></li>
-<li><p>Functions <code><a href="../reference/select_helpers.html">all_categorical()</a></code>, <code><a href="../reference/select_helpers.html">all_dichotomous()</a></code>, and <code><a href="../reference/select_helpers.html">all_continuous()</a></code> may now be used in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> argument <code>type=</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/256'>#256</a>)</p></li>
+<li><p>Functions <code><a href="https://larmarange.github.io/broom.helpers//reference/select_helpers.html">all_categorical()</a></code>, <code><a href="https://larmarange.github.io/broom.helpers//reference/select_helpers.html">all_dichotomous()</a></code>, and <code><a href="https://larmarange.github.io/broom.helpers//reference/select_helpers.html">all_continuous()</a></code> may now be used in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> argument <code>type=</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/256'>#256</a>)</p></li>
 </ul>
 </div>
 <div id="user-facing-improvements" class="section level3">
@@ -618,12 +627,13 @@
 <li><p>The function <code><a href="../reference/as_gt.html">as_gt()</a></code> now has <code>include =</code> and <code>exclude =</code> arguments</p></li>
 <li><p>Updated some function names to be the same as they were in the first version</p></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="downlit">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
     <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span><span class="op">)</span>            <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_p</a></span><span class="op">(</span><span class="op">)</span>  
     <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_labels</a></span><span class="op">(</span><span class="op">)</span>  
     <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_levels</a></span><span class="op">(</span><span class="op">)</span>  
     <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  </pre></div>
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  </code></pre></div>
 <ul>
 <li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is now defunct.</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (<a href='https://github.com/ddsjoberg/gtsummary/issues/175'>#175</a>)</p></li>
@@ -666,13 +676,14 @@
 <div id="updated-function-names" class="section level3">
 <h3 class="hasAnchor">
 <a href="#updated-function-names" class="anchor"></a>Updated Function Names</h3>
-<div class="sourceCode" id="cb3"><pre class="downlit">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
     <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">fmt_table1</span><span class="op">(</span><span class="op">)</span>  
     <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span>    <span class="op">&lt;-</span>  <span class="fu">fmt_regression</span><span class="op">(</span><span class="op">)</span>  
     <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">fmt_uni_regression</span><span class="op">(</span><span class="op">)</span>  
     <span class="fu"><a href="../reference/style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="op">)</span>      <span class="op">&lt;-</span>  <span class="fu">fmt_pvalue</span><span class="op">(</span><span class="op">)</span>  
     <span class="va">style_percent</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/fmt_percent.html">fmt_percent</a></span><span class="op">(</span><span class="op">)</span>  
-    <span class="va">style_ratio</span>         <span class="op">&lt;-</span>  <span class="fu">fmt_beta</span><span class="op">(</span><span class="op">)</span>  </pre></div>
+    <span class="va">style_ratio</span>         <span class="op">&lt;-</span>  <span class="fu">fmt_beta</span><span class="op">(</span><span class="op">)</span>  </code></pre></div>
 </div>
 <div id="new-functions-3" class="section level3">
 <h3 class="hasAnchor">
