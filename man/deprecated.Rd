@@ -12,6 +12,12 @@
 \alias{tbl_summary_}
 \alias{add_p_}
 \alias{as_flextable}
+\alias{all_numeric}
+\alias{all_character}
+\alias{all_integer}
+\alias{all_double}
+\alias{all_logical}
+\alias{all_factor}
 \title{Deprecated functions}
 \usage{
 add_comparison(...)
@@ -33,6 +39,18 @@ tbl_summary_(...)
 add_p_(...)
 
 as_flextable(...)
+
+all_numeric()
+
+all_character()
+
+all_integer()
+
+all_double()
+
+all_logical()
+
+all_factor()
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}

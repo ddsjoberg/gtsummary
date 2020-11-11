@@ -76,8 +76,12 @@ add_global_p.tbl_regression <- function(x,
   type <- type %||% get_theme_element("add_global_p-str:type", default = "III")
 
   # converting to character vector ---------------------------------------------
-  include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
-                                 select_input = !!rlang::enquo(include))
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      var_info = x$table_body,
+      arg_name = "include"
+    )
 
   # if no terms are provided, stop and return x
   if (length(include) == 0) {
@@ -220,8 +224,12 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
   type <- type %||% get_theme_element("add_global_p-str:type", default = "III")
 
   # converting to character vector ---------------------------------------------
-  include <- var_input_to_string(data = vctr_2_tibble(unique(x$table_body$variable)),
-                                 select_input = !!rlang::enquo(include))
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      var_info = x$table_body,
+      arg_name = "include"
+    )
 
   # capturing dots in expression
   dots <- rlang::enexprs(...)

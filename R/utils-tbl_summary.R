@@ -1290,3 +1290,26 @@ has_na <- function(data, variable) {
     sum(is.na(data[[variable]])) > 0
   }
 }
+
+# convert a tbl_summary meta_data object to a var_info tibble
+meta_data_to_var_info <- function(meta_data) {
+  var_info <-
+    meta_data %>%
+    select(any_of(c("variable", "summary_type", "class", "var_label")))
+
+  if ("class" %in% names(var_info)){
+    var_info <-
+      var_info %>%
+      mutate(var_class = map_chr(.data$class, pluck, 1)) %>%
+      select(-.data$class)
+  }
+  if ("summary_type" %in% names(var_info))
+    var_info <- select(var_info, var_type = .data$summary_type, everything())
+
+  var_info
+}
+
+# simple function to evaluate the RHS of a formula in the formula's environment
+eval_rhs <- function(x) {
+  rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
+}

@@ -55,6 +55,7 @@
 #' @param tidy_fun Option to specify a particular tidier function if the
 #' model is not a [vetted model][vetted_models] or you need to implement a
 #' custom method. Default is `NULL`
+#' @param add_estimate_to_reference_rows add a reference value. Default is FALSE
 #' @param ... Not used
 #' @param exclude DEPRECATED
 #' @param show_yesno DEPRECATED
@@ -106,6 +107,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
                                    conf.level = NULL, intercept = FALSE,
                                    estimate_fun = NULL, pvalue_fun = NULL,
                                    tidy_fun = broom::tidy,
+                                   add_estimate_to_reference_rows = FALSE,
                                    show_yesno = NULL, exclude = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
@@ -116,7 +118,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   }
 
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::tbl_regression(exclude = )",
       "tbl_regression(include = )",
@@ -147,6 +149,10 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     conf.level %||%
     get_theme_element("tbl_regression-arg:conf.level") %||%
     getOption("gtsummary.conf.level", default = 0.95)
+  add_estimate_to_reference_rows <-
+    add_estimate_to_reference_rows %||%
+    get_theme_element("tbl_regression-arg:add_estimate_to_reference_rows", default = FALSE)
+
 
   # checking estimate_fun and pvalue_fun are functions
   if (!purrr::every(list(estimate_fun, pvalue_fun, tidy_fun %||% pvalue_fun), is.function)) {
@@ -155,7 +161,6 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   }
 
   include <- rlang::enquo(include)
-  exclude <- rlang::enquo(exclude)
   show_single_row <- rlang::enquo(show_single_row)
 
   # will return call, and all object passed to in tbl_regression call
@@ -165,32 +170,26 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   table_body <-
     tidy_prep(x, tidy_fun = tidy_fun, exponentiate = exponentiate,
               conf.level = conf.level, intercept = intercept,
-              label = label, show_single_row = !!show_single_row)
+              label = label, show_single_row = !!show_single_row,
+              include = !!include,
+              add_estimate_to_reference_rows = add_estimate_to_reference_rows)
 
-  # saving evaluated `label`, and `show_single_row`
+  # saving evaluated `label`, `show_single_row`, and `include` -----------------
   func_inputs$label <-
-    unique(table_body$variable) %>%
-    vctr_2_tibble() %>%
-    tidyselect_to_list(x = {{ label }}, arg_name = "label")
+    .formula_list_to_named_list(
+      x =  label,
+      var_info = table_body,
+      arg_name = "label"
+    )
+
   func_inputs$show_single_row <-
-    unique(table_body$variable) %>%
-    vctr_2_tibble() %>%
-    var_input_to_string(arg_name = "show_single_row", select_input = {{show_single_row}})
+    .select_to_varnames(
+      select = !!show_single_row,
+      var_info = table_body,
+      arg_name = "show_single_row"
+    )
 
-  # including and excluding variables indicated
-  include <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
-                                 arg_name = "include", select_input = !!include)
-  exclude <- var_input_to_string(data = vctr_2_tibble(unique(table_body$variable)),
-                                 arg_name = "exclude", select_input = !!exclude)
-
-  include <- include %>% setdiff(exclude)
-
-  # saving the evaluated lists (named lists) as the function inputs
-  func_inputs$include <- include
-  func_inputs$exclude <- NULL # making this NULL since it's deprecated
-
-  # keeping variables indicated in `include`
-  table_body <- table_body %>% filter(.data$variable %in% include)
+  func_inputs$include <- unique(table_body$variable)
 
   # model N
   n <- pluck(table_body, "N", 1)
@@ -243,7 +242,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
 
   # setting default table_header values
   results <-
-    .tbl_reression_default_table_header(
+    .tbl_regression_default_table_header(
       results,
       exponentiate = exponentiate,
       tidy_columns_to_report = tidy_columns_to_report,

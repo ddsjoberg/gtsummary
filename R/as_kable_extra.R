@@ -55,8 +55,12 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
     )
 
   # converting to charcter vector ----------------------------------------------
-  include <- var_input_to_string(data = vctr_2_tibble(names(kable_extra_calls)),
-                                 select_input = !!rlang::enquo(include))
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      var_info = names(kable_extra_calls),
+      arg_name = "include"
+    )
 
   # making list of commands to include -----------------------------------------
   # this ensures list is in the same order as names(x$kable_calls)
