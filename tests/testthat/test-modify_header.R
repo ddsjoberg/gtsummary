@@ -11,6 +11,11 @@ test_that("input checks", {
   )
 
   expect_error(
+    tbl_summary_noby %>% modify_header(),
+    NA
+  )
+
+  expect_error(
     tbl_summary_noby %>% modify_header(stat_by = "test"),
     "'stat_by' argument can only be applied to a 'tbl_summary' object that includes a 'by' argument."
   )
