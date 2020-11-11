@@ -103,8 +103,8 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
   if (identical(list(), update)) update <- NULL
 
   # if no columns selected, print helpful message
-  if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
-  if (is.null(update)) return(x)
+  if (is.null(update) && is.null(stat_by) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
+  if (is.null(update) && is.null(stat_by)) return(x)
 
   # running modify_header_internal function ------------------------------------
   rlang::call2(
