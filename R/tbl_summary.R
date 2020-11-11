@@ -207,8 +207,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   data <- data %>% ungroup()
 
   # converting bare arguments to string ----------------------------------------
-  by <- var_input_to_string(data = data, select_input = !!rlang::enquo(by),
-                            arg_name = "by", select_single = TRUE)
+  by <- .select_to_varnames(select = {{ by }},
+                            data = data,
+                            arg_name = "by",
+                            select_single = TRUE)
 
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing, choices = c("ifany", "always", "no"))
@@ -274,10 +276,12 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
             df_stats = df_stats, missing = missing, missing_text = missing_text
           )
         }
-      )
+      ),
+      var_class = map_chr(.data$class, pluck, 1)
     ) %>%
-    pull(.data$tbl_stats) %>%
-    purrr::reduce(bind_rows)
+    select(var_type = .data$summary_type, .data$var_class, .data$var_label, .data$tbl_stats) %>%
+    unnest(.data$tbl_stats) %>%
+    select(.data$variable, .data$var_type, .data$var_class, .data$var_label, everything())
 
   # table of column headers ----------------------------------------------------
   table_header <-
@@ -355,7 +359,7 @@ removing_variables_with_unsupported_types <- function(data, include, classes_exp
 # for survey objects pass the full survey object to `survey` argument, and `design$variables` to `data` argument
 generate_metadata <- function(data, value, by, type, label, statistic, digits, percent, sort, survey = NULL) {
   # converting tidyselect formula lists to named lists -------------------------
-  value <- tidyselect_to_list(data, value, arg_name = "value")
+  value <- .formula_list_to_named_list(x = value, data = data, arg_name = "value")
 
   # creating a table with meta data about each variable ------------------------
   meta_data <- tibble(
@@ -373,7 +377,10 @@ generate_metadata <- function(data, value, by, type, label, statistic, digits, p
   # updating type of user supplied one
   if (!is.null(type)) {
     # converting tidyselect formula lists to named lists
-    type <- tidyselect_to_list(data, type, .meta_data = meta_data, arg_name = "type")
+    type <- .formula_list_to_named_list(x = type,
+                                        data = data,
+                                        var_info = meta_data_to_var_info(meta_data) ,
+                                        arg_name = "type")
 
     # updating meta data object with new types
     meta_data <-
@@ -387,10 +394,22 @@ generate_metadata <- function(data, value, by, type, label, statistic, digits, p
   }
 
   # converting tidyselect formula lists to named lists -------------------------
-  label <- tidyselect_to_list(data, label, .meta_data = meta_data, arg_name = "label")
-  statistic <- tidyselect_to_list(data, statistic, .meta_data = meta_data, arg_name = "statistic")
-  digits <- tidyselect_to_list(data, digits, .meta_data = meta_data, arg_name = "digits")
-  sort <- tidyselect_to_list(data, sort, .meta_data = meta_data)
+  label <- .formula_list_to_named_list(x = label,
+                                       data = data,
+                                       var_info = meta_data_to_var_info(meta_data) ,
+                                       arg_name = "label")
+  statistic <- .formula_list_to_named_list(x = statistic,
+                                           data = data,
+                                           var_info = meta_data_to_var_info(meta_data) ,
+                                           arg_name = "statistic")
+  digits <- .formula_list_to_named_list(x = digits,
+                                        data = data,
+                                        var_info = meta_data_to_var_info(meta_data) ,
+                                        arg_name = "digits")
+  sort <- .formula_list_to_named_list(x = sort,
+                                      data = data,
+                                      var_info = meta_data_to_var_info(meta_data) ,
+                                      arg_name = "sort")
 
   # assigning variable characteristics -----------------------------------------
   if (is.null(survey)) {
