@@ -13,7 +13,7 @@ Checklist for PR reviewer
 - [ ] If a new function was added, function included in `_pkgdown.yml`
 - [ ] If a bug was fixed, a unit test was added for the bug check
 - [ ] Run `pkgdown::build_site()`. Check the R console for errors, and review the rendered website.
-- [ ] Code coverage is suitable for any new functions/features. Review coverage with `covr::report()`. Before you run, set `Sys.setenv(NOT_CRAN=true)` and begin in a fresh R session without any packages loaded. 
+- [ ] Code coverage is suitable for any new functions/features. Review coverage with `covr::report()`. Before you run, set `Sys.setenv(NOT_CRAN="true")` and begin in a fresh R session without any packages loaded. 
 - [ ] R CMD Check runs without errors, warnings, and notes
 - [ ] NEWS.md has been updated with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parantheses at the end update (see NEWS.md for examples).
 - [ ] `usethis::use_spell_check()` runs with no spelling errors in documentation
