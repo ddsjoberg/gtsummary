@@ -1,17 +1,15 @@
 #' Select helper functions
 #'
-#' Set of functions to supplement the {tidyselect} set of functions for selecting
-#' columns of data frames. `all_continuous()`, `all_continuous2()`, `all_categorical()`, and
-#' `all_dichotomous()` may only be used with `tbl_summary()`, where each variable
-#' has been classified into one of these three groups. All other helpers
-#' are available throughout the package.
+#' @description Set of functions to supplement the {tidyselect} set of
+#' functions for selecting columns of data frames (and other items as well).
+#' - `all_continuous()` selects continuous variables
+#' - `all_continuous2()` selects only type `"continuous2"`
+#' - `all_categorical()` selects categorical (including `"dichotomous"`) variables
+#' - `all_dichotomous()` selects only type `"dichotomous"`
+#' - `all_interaction()` selects interaction terms from a regression model
+#' - `all_intercepts()` selects intercept terms from a regression model
+#' - `all_contrasts()` selects variables in regression model based on their type of contrast
 #' @name select_helpers
-#' @rdname select_helpers
-#' @param dichotomous Logical indicating whether to include dichotomous variables.
-#' Default is `TRUE`
-#' @param continuous2 Logical indicating whether to include continuous2 variables.
-#' Default is `TRUE`
-#' @export
 #' @return A character vector of column names selected
 #' @examples
 #' select_ex1 <-
@@ -21,84 +19,16 @@
 #'     statistic = all_continuous() ~ "{mean} ({sd})",
 #'     type = all_dichotomous() ~ "categorical"
 #'   )
-
-# THE ENVIRONMENTS ARE CREATED IN `utils-gtsummary_core.R`
-all_continuous <- function(continuous2 = TRUE) {
-  if (continuous2) con_types <- c("continuous", "continuous2")
-  else con_types <- "continuous"
-
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type %in% con_types) %>%
-    names()
-}
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{select_ex1.png}{options: width=55\%}}
+NULL
 
 #' @rdname select_helpers
 #' @export
 all_continuous2 <- function() {
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type %in% "continuous2") %>%
-    names()
+  .generic_selector("variable", "var_type",
+                    .data$var_type %in% "continuous2",
+                    fun_name = "all_continuous")
 }
-
-#' @rdname select_helpers
-#' @export
-all_categorical <- function(dichotomous = TRUE) {
-  # return variable names if dichotomous included
-  if (dichotomous) {
-    x <-
-      keep(meta_data_env$summary_type, ~ . %in% c("categorical", "dichotomous")) %>%
-      names()
-    return(x)
-  }
-
-  # return variable names if dichotomous NOT included
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type == "categorical") %>%
-    names()
-}
-
-#' @rdname select_helpers
-#' @export
-all_dichotomous <- function() {
-  meta_data_env$summary_type %>%
-    keep(meta_data_env$summary_type == "dichotomous") %>%
-    names()
-}
-
-#' @rdname select_helpers
-#' @export
-all_numeric <- function() {
-  which(data_env$numeric)
-}
-
-#' @rdname select_helpers
-#' @export
-all_character <- function() {
-  which(data_env$character)
-}
-
-#' @rdname select_helpers
-#' @export
-all_integer <- function() {
-  which(data_env$integer)
-}
-
-#' @rdname select_helpers
-#' @export
-all_double <- function() {
-  which(data_env$double)
-}
-
-#' @rdname select_helpers
-#' @export
-all_logical <- function() {
-  which(data_env$logical)
-}
-
-#' @rdname select_helpers
-#' @export
-all_factor <- function() {
-  which(data_env$factor)
-}
-
-

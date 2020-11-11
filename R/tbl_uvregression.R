@@ -83,6 +83,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                              include = everything(), tidy_fun = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL, formula = "{y} ~ {x}",
+                             add_estimate_to_reference_rows = NULL,
                              show_yesno = NULL, exclude = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
@@ -148,14 +149,14 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   y <- rlang::enexpr(y)
   x <-
     tryCatch({
-      var_input_to_string(data = data, select_input = !!x, arg_name = "x")
+      .select_to_varnames(select = !!x, data = data, arg_name = "x")
     }, error = function(e) {
       rlang::expr_text(x)
     })
 
   y <-
     tryCatch({
-      var_input_to_string(data = data, select_input = !!y, arg_name = "y")
+      .select_to_varnames(select = !!y, data = data, arg_name = "y")
     }, error = function(e) {
       rlang::expr_text(y)
     })
@@ -170,13 +171,24 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     stop("Select only a single column in argument `x=` or `y=`.", call. = FALSE)
   }
 
-  include <- var_input_to_string(data = data, select_input = !!rlang::enquo(include),
-                                 arg_name = "include")
-  exclude <- var_input_to_string(data = data, select_input = !!rlang::enquo(exclude),
-                                 arg_name = "exclude")
-  show_single_row <- var_input_to_string(data = data,
-                                         select_input = !!rlang::enquo(show_single_row),
-                                         arg_name = "show_single_row")
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      data = data,
+      arg_name =  "include"
+    )
+  exclude <-
+    .select_to_varnames(
+      select = {{ exclude }},
+      data = data,
+      arg_name =  "exclude"
+    )
+  show_single_row <-
+    .select_to_varnames(
+      select = {{ show_single_row }},
+      data = data,
+      arg_name =  "show_single_row"
+    )
 
   # checking formula correctly specified ---------------------------------------
   if (!rlang::is_string(formula)) {
@@ -201,8 +213,14 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   }
 
   # converting tidyselect formula lists to named lists -------------------------
-  label <- tidyselect_to_list(data, label, .meta_data = NULL, arg_name = "label")
-  # all sepcifed labels must be a string of length 1
+  label <-
+    .formula_list_to_named_list(
+      x = label,
+      data = data,
+      arg_name = "label"
+    )
+
+  # all specified labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
     stop("Each `label` specified must be a string of length 1.", call. = FALSE)
   }
@@ -239,7 +257,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # building regression models -------------------------------------------------
   tbl_reg_args <-
     c("exponentiate", "conf.level", "label", "include", "show_single_row",
-      "tidy_fun", "estimate_fun", "pvalue_fun")
+      "tidy_fun", "estimate_fun", "pvalue_fun", "add_estimate_to_reference_rows")
 
   df_model <-
     tibble(
