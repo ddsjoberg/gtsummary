@@ -100,6 +100,8 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
     tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update") %>%
     # adding the ... to the update list
     c(list(...))
+  if (identical(list(), update)) update <- NULL
+
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
   if (is.null(update)) return(x)
@@ -118,7 +120,7 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
 
 #' @name modify
 #' @export
-modify_footnote <- function(x, update, abbreviation = FALSE, quiet = NULL) {
+modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
@@ -164,7 +166,7 @@ modify_footnote <- function(x, update, abbreviation = FALSE, quiet = NULL) {
 
 #' @name modify
 #' @export
-modify_spanning_header <- function(x, update, quiet = NULL) {
+modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)

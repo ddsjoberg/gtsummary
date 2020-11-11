@@ -17,9 +17,9 @@ modify_header(
   ...
 )
 
-modify_footnote(x, update, abbreviation = FALSE, quiet = NULL)
+modify_footnote(x, update = NULL, abbreviation = FALSE, quiet = NULL)
 
-modify_spanning_header(x, update, quiet = NULL)
+modify_spanning_header(x, update = NULL, quiet = NULL)
 
 show_header_names(x = NULL, quiet = NULL)
 }
