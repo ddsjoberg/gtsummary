@@ -68,15 +68,21 @@ tbl_cross <- function(data,
   data <- data %>% ungroup()
 
   # converting inputs to string ------------------------------------------------
-  row <- var_input_to_string(
-    data = data, select_input = !!rlang::enquo(row),
-    arg_name = "row", select_single = TRUE
-  )
+  row <-
+    .select_to_varnames(
+      select = {{ row }},
+      data = data,
+      arg_name = "row",
+      select_single = TRUE
+    )
 
-  col <- var_input_to_string(
-    data = data, select_input = !!rlang::enquo(col),
-    arg_name = "col", select_single = TRUE
-  )
+  col <-
+    .select_to_varnames(
+      select = {{ col }},
+      data = data,
+      arg_name = "col",
+      select_single = TRUE
+    )
 
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
@@ -114,7 +120,7 @@ tbl_cross <- function(data,
   }
 
   # get labels -----------------------------------------------------------------
-  label <- tidyselect_to_list(data, label)
+  label <- .formula_list_to_named_list(x = label, data = data)
   new_label <- list()
 
   new_label[[row]] <- label[[row]] %||% attr(data[[row]], "label") %||% row

@@ -8,6 +8,31 @@ tibble::as_tibble
 #' @importFrom knitr knit_print
 knitr::knit_print
 
+# broom.helpers ----------------------------------------------------------------
+#' @export
+#' @importFrom broom.helpers all_continuous
+broom.helpers::all_continuous
+
+#' @export
+#' @importFrom broom.helpers all_categorical
+broom.helpers::all_categorical
+
+#' @export
+#' @importFrom broom.helpers all_dichotomous
+broom.helpers::all_dichotomous
+
+#' @export
+#' @importFrom broom.helpers all_interaction
+broom.helpers::all_interaction
+
+#' @export
+#' @importFrom broom.helpers all_intercepts
+broom.helpers::all_intercepts
+
+#' @export
+#' @importFrom broom.helpers all_contrasts
+broom.helpers::all_contrasts
+
 # dplyr ------------------------------------------------------------------------
 #' @export
 #' @importFrom dplyr %>%

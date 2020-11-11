@@ -20,6 +20,7 @@ tbl_uvregression(
   estimate_fun = NULL,
   pvalue_fun = NULL,
   formula = "{y} ~ {x}",
+  add_estimate_to_reference_rows = NULL,
   show_yesno = NULL,
   exclude = NULL
 )
@@ -82,6 +83,8 @@ and return a string that is the rounded/formatted p-value (e.g.
 Uses \link[glue:glue]{glue::glue} syntax. Default is \code{"{y} ~ {x}"}, where \code{{y}}
 is the dependent variable, and \code{{x}} represents a single covariate. For a
 random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
+
+\item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
 
 \item{show_yesno}{DEPRECATED}
 

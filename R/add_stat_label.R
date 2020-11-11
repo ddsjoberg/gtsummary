@@ -87,11 +87,22 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   stat_label <- as.list(x$meta_data$stat_label) %>% set_names(x$meta_data$variable)
   # converting input to named list
   if (!is_survey(x$inputs$data))
-    label <- tidyselect_to_list(x$inputs$data[x$meta_data$variable], label,
-                                .meta_data = x$meta_data, arg_name = "label")
+    label <-
+      .formula_list_to_named_list(
+        x = label,
+        data = x$inputs$data[x$meta_data$variable],
+        var_info = meta_data_to_var_info(x$meta_data),
+        arg_name = "label"
+      )
   else
-    label <- tidyselect_to_list(x$inputs$data$variables[x$meta_data$variable], label,
-                                .meta_data = x$meta_data, arg_name = "label")
+    label <-
+      .formula_list_to_named_list(
+        x = label,
+        data = x$inputs$data$variables[x$meta_data$variable],
+        var_info = meta_data_to_var_info(x$meta_data),
+        arg_name = "label"
+      )
+
   # updating the default values with values in label
   stat_label <- imap(stat_label, ~label[[.y]] %||% .x)
 

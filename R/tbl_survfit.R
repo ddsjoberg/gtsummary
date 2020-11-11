@@ -242,10 +242,13 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
     )
 
   # apply labels
-  label <- tidyselect_to_list(
-    .data = vctr_2_tibble(unique(meta_data$variable)),
-    x = label, arg_name = "label"
-  )
+  label <-
+    .formula_list_to_named_list(
+      x = label,
+      var_info = meta_data_to_var_info(meta_data),
+      arg_name = "label"
+    )
+
   meta_data <-
     meta_data %>%
     mutate(
@@ -267,7 +270,11 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   }
 
   # table_header ---------------------------------------------------------------
-  table_body <- map_dfr(meta_data$table_body, ~.x)
+  table_body <-
+    meta_data %>%
+    select(.data$var_label, .data$table_body) %>%
+    unnest(.data$table_body) %>%
+    select(.data$variable, .data$var_label, everything())
   table_header <-
     tibble(column = names(table_body)) %>%
     table_header_fill_missing()
