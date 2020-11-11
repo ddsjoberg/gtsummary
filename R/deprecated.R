@@ -8,6 +8,11 @@
 #' @keywords internal
 NULL
 
+# tentative deprecation schedule
+# "warn" for at least 9 month
+# "stop" after 12 months
+# "delete" after 18 months?
+
 # v1.1.0 -----------------------------------------------------------------------
 #' @rdname deprecated
 #' @export
@@ -21,7 +26,7 @@ add_global <- function(...) {
   lifecycle::deprecate_stop("1.1.0", "gtsummary::add_global()", "add_global_p()")
 }
 
-# v1.2.0 -----------------------------------------------------------------------
+# v1.2.0 (2019-08-19) ----------------------------------------------------------
 #' @rdname deprecated
 #' @export
 
@@ -53,7 +58,7 @@ tab_style_bold_levels <- function(...) {
   lifecycle::deprecate_stop("1.2.0", "gtsummary::tab_style_bold_levels()", "bold_levels()")
 }
 
-# v1.2.5 -----------------------------------------------------------------------
+# v1.2.5 (2020-02-11) ----------------------------------------------------------
 #' @rdname deprecated
 #' @export
 tbl_summary_ <- function(...) {
@@ -68,7 +73,7 @@ add_p_ <- function(...) {
   add_p(...)
 }
 
-# v1.3.3 -----------------------------------------------------------------------
+# v1.3.3 (2020-08-11) ----------------------------------------------------------
 #' @rdname deprecated
 #' @export
 as_flextable <- function(...) {
@@ -90,3 +95,116 @@ as_flextable <- function(...) {
   as_flex_table(...)
 }
 
+# v1.3.6 -----------------------------------------------------------------------
+#' @rdname deprecated
+#' @export
+all_numeric <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_numeric()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.numeric)` instead."
+    )
+  )
+
+  where(is.numeric)
+}
+
+
+#' @rdname deprecated
+#' @export
+all_character <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_character()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.character)` instead."
+    )
+  )
+
+  where(is.character)
+}
+
+#' @rdname deprecated
+#' @export
+all_integer <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_integer()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.integer)` instead."
+    )
+  )
+
+  where(is.integer)
+}
+
+#' @rdname deprecated
+#' @export
+all_double <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_double()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.double)` instead."
+    )
+  )
+
+  where(is.double)
+}
+
+#' @rdname deprecated
+#' @export
+all_logical <- function() {
+  lifecycle::deprecate_stop(
+    "1.3.6", "gtsummary::all_logical()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.logical)` instead."
+    )
+  )
+
+  where(is.logical)
+}
+
+#' @rdname deprecated
+#' @export
+all_factor <- function() {
+  lifecycle::deprecate_warn(
+    "1.3.6", "gtsummary::all_factor()",
+    details = paste0(
+      "The {tidyselect} and {dplyr} packages have implemented functions to ",
+      "select variables by class and type, and the {gtsummary} version is ",
+      "now deprecated.\n\n",
+      "Use `where(is.factor)` instead."
+    )
+  )
+
+  where(is.factor)
+}
+
+# this is a copy of the tidyselect where function. it can be deleted after the
+# all_factor, all_character, etc. functions are fully deprecated
+where <- function(fn) {
+  predicate <- rlang::as_function(fn)
+
+  function(x, ...) {
+    out <- predicate(x, ...)
+
+    if (!rlang::is_bool(out)) {
+      abort("`where()` must be used with functions that return `TRUE` or `FALSE`.")
+    }
+
+    out
+  }
+}

@@ -40,10 +40,18 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels)
 
   # converting to character vector ---------------------------------------------
-  include <- var_input_to_string(data = vctr_2_tibble(names(tibble_calls)),
-                                 select_input = !!rlang::enquo(include))
-  exclude <- var_input_to_string(data = vctr_2_tibble(names(tibble_calls)),
-                                 select_input = !!rlang::enquo(exclude))
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      var_info = names(tibble_calls),
+      arg_name = "include"
+    )
+  exclude <-
+    .select_to_varnames(
+      select = {{ exclude }},
+      var_info = names(tibble_calls),
+      arg_name = "exclude"
+    )
 
   # making list of commands to include -----------------------------------------
   # this ensures list is in the same order as names(x$kable_calls)

@@ -97,14 +97,17 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
 
   # converting update arg to a tidyselect list ---------------------------------
   update <-
-    tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update") %>%
-    # adding the ... to the update list
-    c(list(...))
-  if (identical(list(), update)) update <- NULL
+    .formula_list_to_named_list(
+      x = update,
+      var_info = x$table_header$column,
+      arg_name = "update"
+    ) %>%
+    c(list(...)) # adding the ... to the update list
+    if (identical(list(), update)) update <- NULL
 
-  # if no columns selected, print helpful message
-  if (is.null(update) && is.null(stat_by) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
-  if (is.null(update) && is.null(stat_by)) return(x)
+    # if no columns selected, print helpful message
+    if (is.null(update) && is.null(stat_by) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
+    if (is.null(update) && is.null(stat_by)) return(x)
 
   # running modify_header_internal function ------------------------------------
   rlang::call2(
@@ -132,7 +135,12 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
   x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
+  update <-
+    .formula_list_to_named_list(
+      x = {{ update }},
+      var_info = x$table_header$column,
+      arg_name = "update"
+    )
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
   if (is.null(update)) return(x)
@@ -178,7 +186,12 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
   x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- tidyselect_to_list(x$table_body, {{ update }}, arg_name = "update")
+  update <-
+    .formula_list_to_named_list(
+      x = {{ update }},
+      var_info = x$table_header$column,
+      arg_name = "update"
+    )
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
   if (is.null(update)) return(x)

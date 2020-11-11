@@ -49,8 +49,9 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     stop("`x=` must be class 'tbl_regression'")
 
   # prepping table -------------------------------------------------------------
+  df_glance_orig <- glance_fun(x$model_obj, ...)
   df_glance <-
-    glance_fun(x$model_obj, ...) %>%
+    df_glance_orig %>%
     tidyr::pivot_longer(cols = everything(),
                         names_to = "statistic_name",
                         values_to = "statistic")
@@ -75,18 +76,27 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     mutate(label = map_chr(.data$label, ~translate_text(.x, language)))
 
   # evaluating tidyselects -----------------------------------------------------
-  include <- var_input_to_string(
-    data = vctr_2_tibble(df_results$statistic_name), arg_name = "include",
-    select_single = FALSE, select_input = {{include}}
-  )
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      data = df_glance_orig,
+      arg_name = "include"
+    )
 
   label <-
-    tidyselect_to_list(vctr_2_tibble(df_results$statistic_name), label, arg_name = "label")
+    .formula_list_to_named_list(
+      x = label,
+      data = df_glance_orig,
+      arg_name = "label"
+    )
 
   if (rlang::is_function(fmt_fun)) fmt_fun <- everything() ~ fmt_fun
   fmt_fun <-
-    tidyselect_to_list(vctr_2_tibble(df_results$statistic_name), fmt_fun, arg_name = "fmt_fun")
-
+    .formula_list_to_named_list(
+      x = fmt_fun,
+      data = df_glance_orig,
+      arg_name = "fmt_fun"
+    )
 
   # updating df_results with new information -----------------------------------
   if (!is.null(label)) {
