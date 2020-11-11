@@ -18,6 +18,7 @@ tbl_regression(x, ...)
   estimate_fun = NULL,
   pvalue_fun = NULL,
   tidy_fun = broom::tidy,
+  add_estimate_to_reference_rows = FALSE,
   show_yesno = NULL,
   exclude = NULL,
   ...
@@ -64,6 +65,8 @@ and return a string that is the rounded/formatted p-value (e.g.
 model is not a \link[=vetted_models]{vetted model} or you need to implement a
 custom method. Default is \code{NULL}}
 
+\item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
+
 \item{show_yesno}{DEPRECATED}
 
 \item{exclude}{DEPRECATED}
@@ -88,7 +91,7 @@ a few \link[=vetted_models]{vetted model} that use \link[=tbl_regression_methods
 \itemize{
 \item \code{"lmerMod"} or \code{"glmerMod"}: These mixed effects models use \code{broom.mixed::tidy(x, effects = "fixed")}
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
-\item \code{"multinom"}: This multinomial outcome is complex, and the returned object is a \code{tbl_stack()} object with the parameters for each outcome stacked into a final object
+\item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 }
 }
 

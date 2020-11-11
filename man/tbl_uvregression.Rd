@@ -20,6 +20,7 @@ tbl_uvregression(
   estimate_fun = NULL,
   pvalue_fun = NULL,
   formula = "{y} ~ {x}",
+  add_estimate_to_reference_rows = NULL,
   show_yesno = NULL,
   exclude = NULL
 )
@@ -83,6 +84,8 @@ Uses \link[glue:glue]{glue::glue} syntax. Default is \code{"{y} ~ {x}"}, where \
 is the dependent variable, and \code{{x}} represents a single covariate. For a
 random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gear)"}.}
 
+\item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
+
 \item{show_yesno}{DEPRECATED}
 
 \item{exclude}{DEPRECATED}
@@ -130,7 +133,7 @@ a few \link[=vetted_models]{vetted model} that use \link[=tbl_regression_methods
 \itemize{
 \item \code{"lmerMod"} or \code{"glmerMod"}: These mixed effects models use \code{broom.mixed::tidy(x, effects = "fixed")}
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
-\item \code{"multinom"}: This multinomial outcome is complex, and the returned object is a \code{tbl_stack()} object with the parameters for each outcome stacked into a final object
+\item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 }
 }
 

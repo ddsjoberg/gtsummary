@@ -83,6 +83,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                              include = everything(), tidy_fun = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL, formula = "{y} ~ {x}",
+                             add_estimate_to_reference_rows = NULL,
                              show_yesno = NULL, exclude = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(show_yesno)) {
@@ -103,6 +104,17 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
         "For example, `include = -c(age, stage)`"
       )
     )
+  }
+
+  # checking inputs ------------------------------------------------------------
+  if (any(stringr::str_detect(names(data), "([.|()\\^{}+$*?]|\\[|\\])")) ||
+      any(stringr::str_detect(names(data), fixed(" ")))) {
+    paste("{ui_code('tbl_uvregression(data=)')} does not support column names with",
+          "spaces and some special characters. If an error occurs,",
+          "please update column names or use a utility",
+          "function like {ui_code('janitor::clean_names()')} to rename columns.") %>%
+      stringr::str_wrap() %>%
+      ui_oops()
   }
 
   # setting defaults -----------------------------------------------------------
@@ -245,7 +257,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # building regression models -------------------------------------------------
   tbl_reg_args <-
     c("exponentiate", "conf.level", "label", "include", "show_single_row",
-      "tidy_fun", "estimate_fun", "pvalue_fun")
+      "tidy_fun", "estimate_fun", "pvalue_fun", "add_estimate_to_reference_rows")
 
   df_model <-
     tibble(
