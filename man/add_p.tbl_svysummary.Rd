@@ -4,7 +4,14 @@
 \alias{add_p.tbl_svysummary}
 \title{Adds p-values to svysummary tables}
 \usage{
-\method{add_p}{tbl_svysummary}(x, test = NULL, pvalue_fun = NULL, include = everything(), ...)
+\method{add_p}{tbl_svysummary}(
+  x,
+  test = NULL,
+  pvalue_fun = NULL,
+  include = everything(),
+  test.args = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_svysummary} from the \link{tbl_svysummary} function}

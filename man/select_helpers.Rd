@@ -3,9 +3,15 @@
 \name{select_helpers}
 \alias{select_helpers}
 \alias{all_continuous2}
+\alias{all_tests}
 \title{Select helper functions}
 \usage{
 all_continuous2()
+
+all_tests(tests = NULL)
+}
+\arguments{
+\item{tests}{character}
 }
 \value{
 A character vector of column names selected

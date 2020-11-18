@@ -151,10 +151,16 @@ test_that("add_p with custom p-value function", {
   )
 
   expect_error(
-    trial[c("response", "trt")] %>%
+    tbl_mcnemar <-
+      trial[c("response", "trt")] %>%
       tbl_summary(by = trt) %>%
       add_p(test = response ~ my_mcnemar),
     NA
+  )
+
+  expect_equal(
+    tbl_mcnemar$meta_data$p.value,
+    stats::mcnemar.test(trial[["response"]], trial[["trt"]])$p.value
   )
 })
 
@@ -167,141 +173,93 @@ test_that("Wilcoxon and Kruskal-Wallis p-values match ", {
 })
 
 
-# test-add_p.tbl_cross----------------------------------------------------------
-context("test-add_p.tbl_cross")
 
-test_that("add_p.tbl_cross", {
-  expect_error(
-    trial %>% tbl_cross(response, death) %>% add_p(),
-    NA
-  )
-  expect_error(
-    trial[c("trt", "grade")] %>% tbl_cross() %>% add_p(),
-    NA
-  )
-  expect_error(
-    trial[c("trt", "grade")] %>% tbl_cross() %>% add_p(source_note = TRUE),
-    NA
-  )
-  expect_error(
-    mtcars %>%
-      tbl_cross(gear, carb) %>%
-      add_p(test = "fisher.test"),
-    NA
-  )
-})
-
-
-# test-add_p.tbl_survfit -------------------------------------------------------
-context("test-add_p.tbl_survfit")
-library(survival)
-
-test_that("add_p.tbl_survfit works", {
-  survfit_list <-
-    list(survfit(Surv(ttdeath, death) ~ trt, trial),
-         survfit(Surv(trial$ttdeath, trial$death) ~ trial$trt))
-
-  expect_error(
-    survfit_list %>%
-      purrr::map(~tbl_survfit(.x, times = c(12, 24)) %>% add_p()),
-    NA
-  )
-
-  expect_error(
-    survfit_list %>%
-      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p(),
-    NA
-  )
-
-  expect_error(
-    survfit_list[[1]] %>%
-      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p(),
-    NA
-  )
-
-  expect_error(
+test_that("p-values are replicated within tbl_summary()", {
+  tbl_test.args <-
     trial %>%
-      select(trt, grade, ttdeath, death) %>%
-      tbl_survfit(times = c(12, 24), y = Surv(ttdeath, death)) %>% add_p(),
-    NA
+    select(trt,
+           var_t.test = age,
+           var_t.test_dots = age,
+           var_kruskal.test = age,
+           var_wilcox.test = age,
+           var_wilcox.test_dots = age,
+           var_aov = age,
+           var_chisq.test = response,
+           var_chisq.test_dots = response,
+           var_chisq.test.no.correct = response,
+           var_fisher.test = response,
+           var_fisher.test_dots = response,
+           ) %>%
+    tbl_summary(by = trt, missing = "no") %>%
+    add_p(
+      test = list(contains("t.test") ~ t.test,
+                  contains("kruskal.test") ~ kruskal.test,
+                  contains("wilcox.test") ~ wilcox.test,
+                  contains("aov") ~ aov,
+                  contains("chisq.test") ~ chisq.test,
+                  contains("chisq.test.no.correct") ~ "chisq.test.no.correct",
+                  contains("fisher.test") ~ fisher.test
+                  ),
+      test.args = list(var_t.test_dots = list(var.equal = TRUE),
+                       var_wilcox.test_dots = list(correct = FALSE),
+                       var_chisq.test_dots = list(correct = FALSE),
+                       var_fisher.test_dots = list(alternative = "greater"))
+    )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_t.test")$p.value,
+    t.test(age ~ as.factor(trt), data = trial)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_t.test_dots")$p.value,
+    t.test(age ~ as.factor(trt), data = trial, var.equal = TRUE)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_kruskal.test")$p.value,
+    kruskal.test(trial$age, as.factor(trial$trt))$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_wilcox.test")$p.value,
+    wilcox.test(age ~ trt, data = trial)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_wilcox.test_dots")$p.value,
+    wilcox.test(age ~ trt, data = trial, correct = FALSE)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_aov")$p.value,
+    stats::aov(var_aov ~ as.factor(trt), data = trial) %>%
+      summary() %>%
+      pluck(1, "Pr(>F)", 1)
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_chisq.test")$p.value,
+    stats::chisq.test(x = trial[["response"]], y = as.factor(trial[["trt"]]))$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_chisq.test_dots")$p.value,
+    stats::chisq.test(x = trial[["response"]], y = as.factor(trial[["trt"]]), correct = FALSE)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_chisq.test.no.correct")$p.value,
+    stats::chisq.test(x = trial[["response"]], y = as.factor(trial[["trt"]]), correct = FALSE)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_fisher.test")$p.value,
+    fisher.test(trial[["response"]], as.factor(trial[["trt"]]))$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_fisher.test_dots")$p.value,
+    fisher.test(trial[["response"]], as.factor(trial[["trt"]]), alternative = "greater")$p.value
   )
 })
-
-
-
-test_that("add_p.tbl_survfit survdiff family checks", {
-  tbl_survfit <-
-    list(survfit(Surv(ttdeath, death) ~ trt, trial),
-         survfit(Surv(ttdeath, death) ~ response, trial),
-         survfit(Surv(ttdeath, death) ~ grade, trial)) %>%
-    tbl_survfit(times = c(12, 24))
-
-  # logrank
-  logrank_trt <-
-    survdiff(Surv(ttdeath, death) ~ trt, trial) %>%
-    broom::glance() %>%
-    dplyr::pull(p.value)
-
-  # G-rho
-  grho_response <-
-    survdiff(Surv(ttdeath, death) ~ response, trial, rho = 0.5) %>%
-    broom::glance() %>%
-    dplyr::pull(p.value)
-
-  # pete, peto
-  peto_grade <-
-    survdiff(Surv(ttdeath, death) ~ grade, trial, rho = 1) %>%
-    broom::glance() %>%
-    dplyr::pull(p.value)
-
-
-  expect_equivalent(
-    tbl_survfit %>%
-      add_p(test = list(trt ~ "logrank",
-                        response ~ "survdiff",
-                        grade ~ "petopeto_gehanwilcoxon"),
-            test.args = response ~ list(rho = 0.5)) %>%
-      purrr::pluck("meta_data", "p.value"),
-    c(logrank_trt, grho_response, peto_grade)
-  )
-})
-
-
-test_that("add_p.tbl_survfit coxph family checks", {
-  tbl_survfit <-
-    list(survfit(Surv(ttdeath, death) ~ trt, trial),
-         survfit(Surv(ttdeath, death) ~ response, trial),
-         survfit(Surv(ttdeath, death) ~ grade, trial)) %>%
-    tbl_survfit(times = c(12, 24))
-
-  # LRT
-  lrt_trt <-
-    coxph(Surv(ttdeath, death) ~ trt, trial) %>%
-    broom::glance() %>%
-    dplyr::pull(p.value.log)
-
-  # Wald
-  wald_response <-
-    coxph(Surv(ttdeath, death) ~ response, trial) %>%
-    broom::glance() %>%
-    dplyr::pull(p.value.wald)
-
-  # Score
-  score_grade <-
-    coxph(Surv(ttdeath, death) ~ grade, trial) %>%
-    broom::glance() %>%
-    dplyr::pull(p.value.sc)
-
-
-  expect_equivalent(
-    tbl_survfit %>%
-      add_p(test = list(trt ~ "coxph_lrt",
-                        response ~ "coxph_wald",
-                        grade ~ "coxph_score")) %>%
-      purrr::pluck("meta_data", "p.value"),
-    c(lrt_trt, wald_response, score_grade)
-  )
-})
-
-
-

@@ -69,7 +69,7 @@
 #' @param variable character variable name
 #' @param group optional group variable
 #' @param type optional type variable
-.run_add_p_test_fun <- function(x, data, by, variable, group = NULL,
+.run_add_p_test_fun <- function(x, data, variable, by = NULL, group = NULL,
                                 type = NULL, test.args = NULL) {
   # if x is NULL, return NULL
   if (is.null(x)) return(NULL)
@@ -107,7 +107,8 @@
 
   # saving test function results into list 'x'
   x$pvalue <-
-    ifelse(is.list(test_fun_result), test_fun_result$p, test_fun_result) %||%
+    switch(is.list(test_fun_result), test_fun_result$p) %||%
+    test_fun_result %||%
     NA_real_
   if (!rlang::is_scalar_double(x$pvalue)) {
     stop("Errrrrr")
@@ -140,10 +141,10 @@
   if (!is.null(test[[variable]])) return(test[[variable]])
 
   # if all obs are missing, return NULL ----------------------------------------
-  if (length(data[[var]]) == sum(is.na(data[[var]]))) return(NULL)
+  if (length(data[[variable]]) == sum(is.na(data[[variable]]))) return(NULL)
 
   # if no test supplied, setting defaults --------------------------------------
-  # if by var hs 3 or more levels, return error...no default test.
+  # if by var has 3 or more levels, return error...no default test.
   if (!is.null(group) && length(unique(data[[by]])) > 2) {
     stop("There is no default test for correlated data when `by=` variable has >2 levels.", call. = FALSE)
   }
@@ -181,12 +182,12 @@
   # calculate expected counts to select between chisq and fisher
   min_exp <-
     expand.grid(
-      table(data[[var]]) / sum(!is.na(data[[var]])),
-      table(data[[by_var]]) / sum(!is.na(data[[by_var]]))
+      table(data[[variable]]) / sum(!is.na(data[[variable]])),
+      table(data[[by]]) / sum(!is.na(data[[by]]))
     ) %>%
     mutate(
       exp = .data$Var1 * .data$Var2 *
-        sum(!is.na(data[[var]]) & !is.na(data[[by_var]]))
+        sum(!is.na(data[[variable]]) & !is.na(data[[by]]))
     ) %>%
     pull(exp) %>%
     min()
@@ -220,7 +221,7 @@
   if (!is.null(test[[variable]])) return(test[[variable]])
 
   # if all obs are missing, return NULL ----------------------------------------
-  if (length(data[[var]]) == sum(is.na(data[[var]]))) return(NULL)
+  if (length(data$variables[[variable]]) == sum(is.na(data$variables[[variable]]))) return(NULL)
 
   # for continuous data, default to non-parametric tests
   if (summary_type %in% c("continuous", "continuous2")) {

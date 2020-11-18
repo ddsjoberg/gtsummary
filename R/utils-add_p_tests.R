@@ -1,11 +1,15 @@
 # add_p.tbl_summary ------------------------------------------------------------
 add_p_test_t.test <- function(data, variable, by, test.args, ...) {
-  expr(stats::t.test(!!data[[variable]] ~ as.factor(!!data[[by]]), !!!test.args)$p.value) %>%
-    eval()
+  expr(stats::t.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
+                     data = !!data, !!!test.args)) %>%
+    eval() %>%
+    purrr::chuck("p.value")
 }
 
 add_p_test_aov <- function(data, variable, by,...) {
-  broom::glance(stats::lm(data[[variable]] ~ as.factor(data[[by]])))$p.value
+  stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data) %>%
+    summary() %>%
+    pluck(1, "Pr(>F)", 1)
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
@@ -13,17 +17,19 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
 }
 
 add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
-  expr(stats::wilcox.test(!!data[[variable]] ~ as.factor(!!data[[by]], !!!test.args))$p.value) %>%
-    eval()
+  expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
+                          data = !!data, !!!test.args)) %>%
+    eval() %>%
+    purrr::chuck("p.value")
 }
 
 add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
-  expr(stats::chisq.test(!!data[[variable]], as.factor(!!data[[by]], !!!test.args))$p.value) %>%
+  expr(stats::chisq.test(x = !!data[[variable]], y = as.factor(!!data[[by]]), !!!test.args)$p.value) %>%
     eval()
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
-  stats::chisq.test(data[[variable]], as.factor(data[[by]]), correct = FALSE)$p.value
+  add_p_test_chisq.test(data = data, variable = variable, by = by, test.args = list(correct = FALSE))
 }
 
 add_p_test_fisher.test <- function(data, variable, by, test.args, ...) {
@@ -33,6 +39,14 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, ...) {
 
 add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
   assert_package("lme4", "add_p(test = variable ~ 'lme4')")
+  if (is.null(group))
+    glue("Error in 'lme4' test for variable '{variable}'. ",
+         "`add_p(group=)` cannot by NULL") %>%
+    stop(call. = FALSE)
+
+  data <-
+    select(data, variable, by, group) %>%
+    filter(complete.cases(.))
 
   # creating formulas for base model (without variable) and full model
   formula0 <- paste0("as.factor(`", by, "`) ~ 1 + (1 | `", group, "`)")
@@ -98,29 +112,6 @@ add_p_test_svy.median.test <- function(data, variable, by, ...) {
 }
 
 # add_p.tbl_survfit ------------------------------------------------------------
-# function to print a call. if an arg is too long, it's replace with a .
-print_call <- function(call) {
-  # replacing very long arg values with a `.`
-  call_list <- as.list(call)
-  call_list2 <-
-    map2(
-      call_list, seq_len(length(call_list)),
-      function(call, index) {
-        if (index ==  1) return(call)
-        if (deparse(call) %>% nchar() %>% length() > 30) return(rlang::expr(.))
-        call
-      }
-    )
-
-  # re-creating call, deparsing, printing message
-  rlang::call2(call_list2[[1]], !!!call_list2[-1]) %>%
-    deparse() %>%
-    paste(collapse = "") %>%
-    stringr::str_squish() %>%
-    {glue("add_p: Calculating p-value with\n  `{.}`")} %>%
-    rlang::inform()
-}
-
 # returns a list of the formula and data arg calls
 extract_formula_data_call <- function(x) {
   #extracting survfit call
@@ -131,15 +122,12 @@ extract_formula_data_call <- function(x) {
   survfit_call[call_index]
 }
 
-add_p_tbl_survfit_survdiff <- function(x, quiet, test.args, ...) {
+add_p_tbl_survfit_survdiff <- function(data, test.args, ...) {
   # formula and data calls
-  formula_data_call <- extract_formula_data_call(x)
+  formula_data_call <- extract_formula_data_call(data)
 
   # converting call into a survdiff call
-  survdiff_call <- rlang::call2(rlang::expr(survival::survdiff), !!!formula_data_call, !!!test.args, ...)
-
-  # printing call to calculate p-value
-  if (quiet == FALSE) print_call(survdiff_call)
+  survdiff_call <- rlang::call2(rlang::expr(survival::survdiff), !!!formula_data_call, !!!test.args)
 
   # evaluating `survdiff()`
   survdiff_result <- rlang::eval_tidy(survdiff_call)
@@ -148,21 +136,26 @@ add_p_tbl_survfit_survdiff <- function(x, quiet, test.args, ...) {
   broom::glance(survdiff_result)$p.value
 }
 
-add_p_tbl_survfit_coxph <- function(x, quiet, type, test.args, ...) {
+add_p_tbl_survfit_logrank <- function(data, ...) {
+  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 0))
+}
+
+add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, ...) {
+  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1))
+}
+
+add_p_tbl_survfit_coxph <- function(data, test_type, test.args, ...) {
   # formula and data calls
-  formula_data_call <- extract_formula_data_call(x)
+  formula_data_call <- extract_formula_data_call(data)
 
   # converting call into a survdiff call
-  coxph_call <- rlang::call2(rlang::expr(survival::coxph), !!!formula_data_call, !!!test.args, ...)
-
-  # printing call to calculate p-value
-  if (quiet == FALSE) print_call(coxph_call)
+  coxph_call <- rlang::call2(rlang::expr(survival::coxph), !!!formula_data_call, !!!test.args)
 
   # evaluating `survdiff()`
   coxph_result <- rlang::eval_tidy(coxph_call)
 
   # returning p-value
-  pvalue_column <- switch(type,
+  pvalue_column <- switch(test_type,
                           "lrt" = "p.value.log",
                           "wald" = "p.value.wald",
                           "score" = "p.value.sc")

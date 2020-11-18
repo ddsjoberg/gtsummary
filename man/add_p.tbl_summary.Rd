@@ -10,6 +10,7 @@
   pvalue_fun = NULL,
   group = NULL,
   include = everything(),
+  test.args = NULL,
   exclude = NULL,
   ...
 )
@@ -17,23 +18,15 @@
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{test}{List of formulas specifying statistical tests to perform,
+\item{test}{List of formulas specifying statistical tests to perform for each
+variable,
 e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
-Options include
-\itemize{
-\item \code{"t.test"} for a t-test,
-\item \code{"aov"} for a one-way ANOVA test,
-\item \code{"wilcox.test"} for a Wilcoxon rank-sum test,
-\item \code{"kruskal.test"} for a Kruskal-Wallis rank-sum test,
-\item \code{"chisq.test"} for a chi-squared test of independence,
-\item \code{"chisq.test.no.correct"} for a chi-squared test of independence without continuity correction,
-\item \code{"fisher.test"} for a Fisher's exact test,
-\item \code{"lme4"} for a random intercept logistic regression model to account for
-clustered data, \code{lme4::glmer(by ~ variable + (1 | group), family = binomial)}.
-The \code{by} argument must be binary for this option.
-}
+Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{"kruskal.test"},
+\code{"chisq.test"}, \code{"fisher.test"}, and \code{"lme4"} (for clustered data). See \link{add_p_tests}
+for details and more tests.
 
-Tests default to \code{"kruskal.test"} for continuous variables, \code{"chisq.test"} for
+Tests default to \code{"kruskal.test"} for continuous variables (\code{"wilcox.test"}
+when "\code{by}" variable has two levels), \code{"chisq.test"} for
 categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
 for categorical variables with any expected cell count <5.
 A custom test function can be added for all or some variables. See below for
