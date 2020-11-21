@@ -6,14 +6,14 @@
 \description{
 Below is a listing of tests available internally within gtsummary.
 
-Tests that are listed with \code{...} may have additional arguments
-passed to them using the \code{add_p(test.args=)} argument. For example, to
-calculate a p-value from \code{t.test()} assuming equal variable, use
+Tests listed with \code{...} may have additional arguments
+passed to them using \code{add_p(test.args=)}. For example, to
+calculate a p-value from \code{t.test()} assuming equal variance, use
 \code{tbl_summary(trial, by = trt) \%>\% add_p(age ~ "t.test", test.args = age ~ list(var.equal = TRUE))}
 }
 \section{tbl_summary() \%>\% add_p()}{
 \tabular{lll}{
-   alias \tab description \tab pseudo-code \cr
+   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{"t.test"} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, ...)} \cr
    \code{"aov"} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data)} \cr
    \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \cr
@@ -21,13 +21,13 @@ calculate a p-value from \code{t.test()} assuming equal variable, use
    \code{"chisq.test"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \cr
    \code{"chisq.test.no.correct"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
    \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), ...)} \cr
-   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1&#124;group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1&#124;group), data, family = binomial))} \cr
+   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1\\&#124;group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1//&#124;group), data, family = binomial))} \cr
 }
 }
 
 \section{tbl_svysummary() \%>\% add_p()}{
 \tabular{lll}{
-   alias \tab description \tab pseudo-code \cr
+   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{"svy.t.test"} \tab t-test adapted to complex survey samples \tab \code{survey::svyttest(~variable + by, data)} \cr
    \code{"svy.wilcox.test"} \tab Wilcoxon rank-sum test for complex survey samples \tab \code{survey::svyranktest(~variable + by, data, test = 'wilcoxon')} \cr
    \code{"svy.kruskal.test"} \tab Kruskal-Wallis rank-sum test for complex survey samples \tab \code{survey::svyranktest(~variable + by, data, test = 'KruskalWallis')} \cr
@@ -44,13 +44,50 @@ calculate a p-value from \code{t.test()} assuming equal variable, use
 
 \section{tbl_survfit() \%>\% add_p()}{
 \tabular{lll}{
-   alias \tab description \tab pseudo-code \cr
+   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{"logrank"} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ by, data)} \cr
    \code{"petopeto_gehanwilcoxon"} \tab Peto & Peto modification of Gehan-Wilcoxon test \tab \code{survival::survdiff(Surv(.) ~ by, data, rho = 1)} \cr
    \code{"survdiff"} \tab G-rho family test \tab \code{survival::survdiff(Surv(.) ~ by, data, ...)} \cr
    \code{"coxph_lrt"} \tab Cox regression (LRT) \tab \code{survival::coxph(Surv(.) ~ by, data, ...)} \cr
    \code{"coxph_wald"} \tab Cox regression (Wald) \tab \code{survival::coxph(Surv(.) ~ by, data, ...)} \cr
    \code{"coxph_score"} \tab Cox regression (Score) \tab \code{survival::coxph(Surv(.) ~ by, data, ...)} \cr
+}
+}
+
+\section{Custom Functions}{
+
+
+To report a p-value for a test not available in gtsummary, you can create a
+custom function.
+
+Example calculating a p-value from a t-test assuming a common variance
+between groups.\if{html}{\out{<div class="r">}}\preformatted{ttest_common_variance <- function(data, variable, by, ...) \{
+  data <- data[c(variable, by)] \%>\% dplyr::filter(complete.cases(.))
+  t.test(data[[variable]] ~ factor(data[[by]]), var.equal = TRUE) \%>\%
+  purrr::pluck("p.value")
+\}
+
+trial[c("age", "trt")] \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_p(test = age ~ "ttest_common_variance")
+}\if{html}{\out{</div>}}
+\subsection{Function Arguments}{
+
+For \code{tbl_summary()} objects, the custom fucntion will be passed the
+following arguments: \code{custom_pvalue_fun(data=, variable=, by=, group=, type=)}.
+While you're function may not utilize each of these arguments, these arguments
+are passed and the function must accept them. We recommend including \code{...}
+to future-proof against updates where additional arguments are added.
+
+The following table describes each of the inputs for each gtsummary table type.\tabular{llll}{
+   \strong{argument} \tab \strong{tbl_summary} \tab \strong{tbl_svysummary} \tab \strong{tbl_survfit} \cr
+   \verb{data=} \tab A data frame \tab A survey object \tab A \code{survfit()} object \cr
+   \verb{variable=} \tab String variable name \tab String variable name \tab \code{NA} \cr
+   \verb{by=} \tab String variable name \tab String variable name \tab \code{NA} \cr
+   \verb{group=} \tab String variable name \tab \code{NA} \tab \code{NA} \cr
+   \verb{type=} \tab Summary type \tab Summary type \tab \code{NA} \cr
+}
+
 }
 }
 

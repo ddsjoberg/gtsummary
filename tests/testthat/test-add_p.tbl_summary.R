@@ -233,7 +233,7 @@ test_that("p-values are replicated within tbl_summary()", {
 
   expect_equal(
     filter(tbl_test.args$meta_data, variable == "var_aov")$p.value,
-    stats::aov(var_aov ~ as.factor(trt), data = trial) %>%
+    stats::aov(age ~ as.factor(trt), data = trial) %>%
       summary() %>%
       pluck(1, "Pr(>F)", 1)
   )

@@ -7,7 +7,8 @@ add_p_test_t.test <- function(data, variable, by, test.args, ...) {
 }
 
 add_p_test_aov <- function(data, variable, by,...) {
-  stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data) %>%
+  rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
+    eval() %>%
     summary() %>%
     pluck(1, "Pr(>F)", 1)
 }

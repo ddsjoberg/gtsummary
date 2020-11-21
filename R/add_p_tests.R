@@ -13,8 +13,8 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary") %>%
-#'   select(alias = test_name, description, `pseudo-code` = pseudo_code) %>%
-#'   dplyr::mutate(alias = shQuote(alias) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
 #'   knitr::kable()
 #' ```
 #'
@@ -23,8 +23,8 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_svysummary") %>%
-#'   select(alias = test_name, description, `pseudo-code` = pseudo_code) %>%
-#'   dplyr::mutate(alias = shQuote(alias) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
 #'   knitr::kable()
 #' ```
 #'
@@ -33,8 +33,50 @@
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_survfit") %>%
-#'   select(alias = test_name, description, `pseudo-code` = pseudo_code) %>%
-#'   dplyr::mutate(alias = shQuote(alias) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
 #'   knitr::kable()
+#' ```
+#'
+#' @section Custom Functions:
+#'
+#' To report a p-value for a test not available in gtsummary, you can create a
+#' custom function.
+#'
+#' Example calculating a p-value from a t-test assuming a common variance
+#' between groups.
+#'
+#' ```r
+#' ttest_common_variance <- function(data, variable, by, ...) {
+#'   data <- data[c(variable, by)] %>% dplyr::filter(complete.cases(.))
+#'   t.test(data[[variable]] ~ factor(data[[by]]), var.equal = TRUE) %>%
+#'   purrr::pluck("p.value")
+#' }
+#'
+#' trial[c("age", "trt")] %>%
+#'   tbl_summary(by = trt) %>%
+#'   add_p(test = age ~ "ttest_common_variance")
+#' ```
+#'
+#' ### Function Arguments
+#'
+#' For `tbl_summary()` objects, the custom function will be passed the
+#' following arguments: `custom_pvalue_fun(data=, variable=, by=, group=, type=)`.
+#' While you're function may not utilize each of these arguments, these arguments
+#' are passed and the function must accept them. We recommend including `...`
+#' to future-proof against updates where additional arguments are added.
+#'
+#' The following table describes the argument inputs for each gtsummary table type.
+#'
+#' ```{r, echo = FALSE}
+#' tibble::tribble(
+#'   ~`**argument**`, ~`**tbl_summary**`, ~`**tbl_svysummary**`, ~`**tbl_survfit**`,
+#'   "`data=`", "A data frame", "A survey object", "A `survfit()` object",
+#'   "`variable=`", "String variable name", "String variable name", "`NA`",
+#'   "`by=`", "String variable name", "String variable name", "`NA`",
+#'   "`group=`", "String variable name", "`NA`", "`NA`",
+#'   "`type=`", "Summary type", "Summary type", "`NA`"
+#' ) %>%
+#' knitr::kable()
 #' ```
 NULL
