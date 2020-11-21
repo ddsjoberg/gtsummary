@@ -48,6 +48,10 @@ the row associated with this variable is omitted from the summary table.}
 quoted variable names, unquoted variable names, or tidyselect select helper
 functions. Default is \code{everything()}.}
 
+\item{test.args}{List of formulas containing additional arguments to pass to
+tests that accept arguments. For example, add an argument for all t-tests,
+use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
+
 \item{exclude}{DEPRECATED}
 
 \item{...}{Not used}

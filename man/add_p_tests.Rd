@@ -15,13 +15,13 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{"t.test"} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, ...)} \cr
-   \code{"aov"} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data)} \cr
+   \code{"aov"} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data) \%>\% summary()} \cr
    \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \cr
    \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(variable ~ as.factor(by), data = data, ...)} \cr
    \code{"chisq.test"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \cr
    \code{"chisq.test.no.correct"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
    \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), ...)} \cr
-   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1\\&#124;group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1//&#124;group), data, family = binomial))} \cr
+   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1&#124;group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1&#124;group), data, family = binomial))} \cr
 }
 }
 
@@ -45,12 +45,12 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \section{tbl_survfit() \%>\% add_p()}{
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
-   \code{"logrank"} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ by, data)} \cr
-   \code{"petopeto_gehanwilcoxon"} \tab Peto & Peto modification of Gehan-Wilcoxon test \tab \code{survival::survdiff(Surv(.) ~ by, data, rho = 1)} \cr
-   \code{"survdiff"} \tab G-rho family test \tab \code{survival::survdiff(Surv(.) ~ by, data, ...)} \cr
-   \code{"coxph_lrt"} \tab Cox regression (LRT) \tab \code{survival::coxph(Surv(.) ~ by, data, ...)} \cr
-   \code{"coxph_wald"} \tab Cox regression (Wald) \tab \code{survival::coxph(Surv(.) ~ by, data, ...)} \cr
-   \code{"coxph_score"} \tab Cox regression (Score) \tab \code{survival::coxph(Surv(.) ~ by, data, ...)} \cr
+   \code{"logrank"} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ variable, data)} \cr
+   \code{"petopeto_gehanwilcoxon"} \tab Peto & Peto modification of Gehan-Wilcoxon test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 1)} \cr
+   \code{"survdiff"} \tab G-rho family test \tab \code{survival::survdiff(Surv(.) ~ variable, data, ...)} \cr
+   \code{"coxph_lrt"} \tab Cox regression (LRT) \tab \code{survival::coxph(Surv(.) ~ variable, data, ...)} \cr
+   \code{"coxph_wald"} \tab Cox regression (Wald) \tab \code{survival::coxph(Surv(.) ~ variable, data, ...)} \cr
+   \code{"coxph_score"} \tab Cox regression (Score) \tab \code{survival::coxph(Surv(.) ~ variable, data, ...)} \cr
 }
 }
 
@@ -73,13 +73,13 @@ trial[c("age", "trt")] \%>\%
 }\if{html}{\out{</div>}}
 \subsection{Function Arguments}{
 
-For \code{tbl_summary()} objects, the custom fucntion will be passed the
+For \code{tbl_summary()} objects, the custom function will be passed the
 following arguments: \code{custom_pvalue_fun(data=, variable=, by=, group=, type=)}.
 While you're function may not utilize each of these arguments, these arguments
 are passed and the function must accept them. We recommend including \code{...}
 to future-proof against updates where additional arguments are added.
 
-The following table describes each of the inputs for each gtsummary table type.\tabular{llll}{
+The following table describes the argument inputs for each gtsummary table type.\tabular{llll}{
    \strong{argument} \tab \strong{tbl_summary} \tab \strong{tbl_svysummary} \tab \strong{tbl_survfit} \cr
    \verb{data=} \tab A data frame \tab A survey object \tab A \code{survfit()} object \cr
    \verb{variable=} \tab String variable name \tab String variable name \tab \code{NA} \cr

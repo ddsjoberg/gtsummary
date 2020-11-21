@@ -31,6 +31,9 @@ add_p <- function(x, ...) {
 #' The column can be used to calculate p-values with correlated data (e.g. when
 #' the test argument is `"lme4"`). Default is `NULL`.  If specified,
 #' the row associated with this variable is omitted from the summary table.
+#' @param test.args List of formulas containing additional arguments to pass to
+#' tests that accept arguments. For example, add an argument for all t-tests,
+#' use `test.args = all_tests("t.test") ~ list(var.equal = TRUE)`
 #' @param ... Not used
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary

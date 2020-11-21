@@ -47,7 +47,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
   data <-
     select(data, variable, by, group) %>%
-    filter(complete.cases(.))
+    filter(stats::complete.cases(.))
 
   # creating formulas for base model (without variable) and full model
   formula0 <- paste0("as.factor(`", by, "`) ~ 1 + (1 | `", group, "`)")
