@@ -69,6 +69,8 @@
 #' @param variable character variable name
 #' @param group optional group variable
 #' @param type optional type variable
+#' @param test.args named list of additional arguments to pass to `test=`
+#' @noRd
 .run_add_p_test_fun <- function(x, data, variable, by = NULL, group = NULL,
                                 type = NULL, test.args = NULL) {
   # if x is NULL, return NULL
