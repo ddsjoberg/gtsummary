@@ -47,6 +47,10 @@ and return a string that is the rounded/formatted p-value (e.g.
 quoted variable names, unquoted variable names, or tidyselect select helper
 functions. Default is \code{everything()}.}
 
+\item{test.args}{List of formulas containing additional arguments to pass to
+tests that accept arguments. For example, add an argument for all t-tests,
+use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
+
 \item{...}{Not used}
 }
 \value{

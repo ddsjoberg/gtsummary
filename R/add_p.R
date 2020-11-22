@@ -372,8 +372,6 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,
 #' `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`, `"coxph_wald"`, `"coxph_score".`
 #' See details below
-#' @param test.args Named list of additional arguments passed to method in
-#' `test=`. Does not apply to all test types.
 #' @inheritParams add_p.tbl_summary
 #' @inheritParams combine_terms
 #' @family tbl_survfit tools
@@ -521,6 +519,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' Tests default to `"svy.wilcox.test"` for continuous variables and `"svy.chisq.test"`
 #' for categorical variables.
 #' @param ... Not used
+#' @inheritParams add_p.tbl_summary
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_svysummary
 #' @family tbl_svysummary tools
