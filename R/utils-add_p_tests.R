@@ -191,13 +191,13 @@ add_p_tbl_survfit_coxph <- function(data, test_type, test.args, ...) {
   coxph_result <- rlang::eval_tidy(coxph_call)
 
   # returning p-value
-  pvalue_column <- switch(test_type,
-                          "lrt" = list("p.value.log", "Cox regression (LRT)"),
-                          "wald" = list("p.value.wald", "Cox regression (Wald)"),
-                          "score" = list("p.value.sc", "Cox regression (Score)"))
+  method <- switch(test_type,
+                   "log" = "Cox regression (LRT)",
+                   "wald" = "Cox regression (Wald)",
+                   "sc" = "Cox regression (Score)")
   broom::glance(coxph_result) %>%
-    select(all_of(c("statistic", pvalue_column[[1]]))) %>%
+    select(all_of(paste0(c("statistic.", "p.value."), test_type))) %>%
     set_names(c("statistic", "p.value")) %>%
-    mutate(method = pvalue_column[[2]])
+    mutate(method = method)
 
 }
