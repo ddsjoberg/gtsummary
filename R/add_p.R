@@ -218,11 +218,18 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
 
 # function to create text for footnote
 footnote_add_p <- function(meta_data) {
-  meta_data$stat_test_lbl %>%
-    keep(~ !is.na(.)) %>%
-    unique() %>%
-    paste(collapse = "; ") %>%
-    paste0(translate_text("Statistical tests performed"), ": ", .)
+  footnotes <-
+    meta_data %>%
+    filter(!is.na(.data$p.value) & !is.na(.data$stat_test_lbl)) %>%
+    pull(.data$stat_test_lbl) %>%
+    unique()
+
+  if (length(footnotes) > 0)
+    return(
+      paste(footnotes, collapse = "; ") %>%
+        paste0(translate_text("Statistical tests performed"), ": ", .)
+    )
+  else return(NA_character_)
 }
 
 # function to merge p-values to tbl

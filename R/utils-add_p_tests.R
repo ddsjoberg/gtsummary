@@ -42,9 +42,9 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, ...) {
   expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
-    mutate(method = ifelse(method == "Fisher's Exact Test for Count Data",
+    mutate(method = ifelse(.data$method == "Fisher's Exact Test for Count Data",
                            "Fisher's exact test",
-                           method))
+                           .data$method))
 }
 
 add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
