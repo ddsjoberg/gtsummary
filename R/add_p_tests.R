@@ -41,7 +41,10 @@
 #' @section Custom Functions:
 #'
 #' To report a p-value for a test not available in gtsummary, you can create a
-#' custom function.
+#' custom function. The output is a data frame that is one line long. The
+#' structure is similar to the output of `broom::tidy()` of a typical
+#' statistical test. The `add_p()` function will look for columns called
+#' `"p.value"` and `"method"` for the p-value and the test name used in the footnote.
 #'
 #' Example calculating a p-value from a t-test assuming a common variance
 #' between groups.
@@ -50,7 +53,7 @@
 #' ttest_common_variance <- function(data, variable, by, ...) {
 #'   data <- data[c(variable, by)] %>% dplyr::filter(complete.cases(.))
 #'   t.test(data[[variable]] ~ factor(data[[by]]), var.equal = TRUE) %>%
-#'   purrr::pluck("p.value")
+#'   broom::tidy()
 #' }
 #'
 #' trial[c("age", "trt")] %>%
@@ -62,7 +65,7 @@
 #'
 #' For `tbl_summary()` objects, the custom function will be passed the
 #' following arguments: `custom_pvalue_fun(data=, variable=, by=, group=, type=)`.
-#' While you're function may not utilize each of these arguments, these arguments
+#' While your function may not utilize each of these arguments, these arguments
 #' are passed and the function must accept them. We recommend including `...`
 #' to future-proof against updates where additional arguments are added.
 #'

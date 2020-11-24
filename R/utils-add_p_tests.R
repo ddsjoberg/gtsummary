@@ -3,30 +3,35 @@ add_p_test_t.test <- function(data, variable, by, test.args, ...) {
   expr(stats::t.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
                      data = !!data, !!!test.args)) %>%
     eval() %>%
-    purrr::chuck("p.value")
+    broom::tidy()
 }
 
 add_p_test_aov <- function(data, variable, by,...) {
-  rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
+  p.value <-
+    rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
     eval() %>%
     summary() %>%
     pluck(1, "Pr(>F)", 1)
+
+  tibble::tibble(p.value = p.value, method = "One-way ANOVA")
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
-  stats::kruskal.test(data[[variable]], as.factor(data[[by]]))$p.value
+  stats::kruskal.test(data[[variable]], as.factor(data[[by]])) %>%
+    broom::tidy()
 }
 
 add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
   expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
                           data = !!data, !!!test.args)) %>%
     eval() %>%
-    purrr::chuck("p.value")
+    broom::tidy()
 }
 
 add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
-  expr(stats::chisq.test(x = !!data[[variable]], y = as.factor(!!data[[by]]), !!!test.args)$p.value) %>%
-    eval()
+  expr(stats::chisq.test(x = !!data[[variable]], y = as.factor(!!data[[by]]), !!!test.args)) %>%
+    eval() %>%
+    broom::tidy()
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
@@ -34,8 +39,12 @@ add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
 }
 
 add_p_test_fisher.test <- function(data, variable, by, test.args, ...) {
-  expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), !!!test.args)$p.value) %>%
-    eval()
+  expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), !!!test.args)) %>%
+    eval() %>%
+    broom::tidy() %>%
+    mutate(method = ifelse(method == "Fisher's Exact Test for Count Data",
+                           "Fisher's exact test",
+                           method))
 }
 
 add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
@@ -64,52 +73,75 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
                       data = data, family = stats::binomial)
 
   # returning p-value
-  stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
+  p.value <- stats::anova(mod0, mod1)$"Pr(>Chisq)"[2]
+  tibble::tibble(p.value = p.value, method = "random intercept logistic regression")
 }
 
 # add_p.tbl_svysummary ---------------------------------------------------------
 add_p_test_svy.chisq.test <- function(data, variable, by, ...) {
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "F")$p.value
+  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "F") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "chi-squared test with Rao & Scott's second-order correction")
 }
 
 add_p_test_svy.adj.chisq.test <- function(data, variable, by, ...) {
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Chisq")$p.value
+  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Chisq") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "chi-squared test adjusted by a design effect estimate")
 }
 
 add_p_test_svy.wald.test <- function(data, variable, by, ...) {
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Wald")$p.value
+  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Wald") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "Wald test of independence for complex survey samples")
 }
 
 add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "adjWald")$p.value
+  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "adjWald") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "adjusted Wald test of independence for complex survey samples")
 }
 
 add_p_test_svy.lincom.test <- function(data, variable, by, ...) {
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "lincom")$p.value
+  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "lincom") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "test of independence using the exact asymptotic distribution for complex survey samples")
 }
 
 add_p_test_svy.saddlepoint.test <- function(data, variable, by, ...) {
-  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "saddlepoint")$p.value
+  survey::svychisq(c_form(right = c(variable, by)), data, statistic = "saddlepoint") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "test of independence using a saddlepoint approximation for complex survey samples")
 }
 
 add_p_test_svy.t.test <- function(data, variable, by, ...) {
-  survey::svyttest(c_form(variable, by), data)$p.value
+  survey::svyttest(c_form(variable, by), data) %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "t-test adapted to complex survey samples")
 }
 
 add_p_test_svy.wilcox.test <- function(data, variable, by, ...) {
-  survey::svyranktest(c_form(variable, by), data, test = "wilcoxon")$p.value
+  survey::svyranktest(c_form(variable, by), data, test = "wilcoxon") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "Wilcoxon rank-sum test for complex survey samples")
 }
 
 add_p_test_svy.kruskal.test <- function(data, variable, by, ...) {
-  survey::svyranktest(c_form(variable, by), data, test = "KruskalWallis")$p.value
+  survey::svyranktest(c_form(variable, by), data, test = "KruskalWallis") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "Kruskal-Wallis rank-sum test for complex survey samples")
 }
 
 add_p_test_svy.vanderwaerden.test <- function(data, variable, by, ...) {
-  survey::svyranktest(c_form(variable, by), data, test = "vanderWaerden")$p.value
+  survey::svyranktest(c_form(variable, by), data, test = "vanderWaerden") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "van der Waerden's normal-scores test for complex survey samples")
 }
 
 add_p_test_svy.median.test <- function(data, variable, by, ...) {
-  survey::svyranktest(c_form(variable, by), data, test = "median")$p.value
+  survey::svyranktest(c_form(variable, by), data, test = "median") %>%
+    {suppressMessages(broom::tidy(.))} %>%
+    mutate(method = "Mood's test for the median for complex survey samples")
 }
 
 # add_p.tbl_survfit ------------------------------------------------------------
@@ -134,15 +166,18 @@ add_p_tbl_survfit_survdiff <- function(data, test.args, ...) {
   survdiff_result <- rlang::eval_tidy(survdiff_call)
 
   # returning p-value
-  broom::glance(survdiff_result)$p.value
+  broom::glance(survdiff_result) %>%
+    dplyr::mutate(method = "G-rho family test")
 }
 
 add_p_tbl_survfit_logrank <- function(data, ...) {
-  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 0))
+  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 0)) %>%
+    dplyr::mutate(method = "Log-rank test")
 }
 
 add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, ...) {
-  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1))
+  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1)) %>%
+    dplyr::mutate(method = "Peto & Peto modification of Gehan-Wilcoxon test")
 }
 
 add_p_tbl_survfit_coxph <- function(data, test_type, test.args, ...) {
@@ -152,13 +187,17 @@ add_p_tbl_survfit_coxph <- function(data, test_type, test.args, ...) {
   # converting call into a survdiff call
   coxph_call <- rlang::call2(rlang::expr(survival::coxph), !!!formula_data_call, !!!test.args)
 
-  # evaluating `survdiff()`
+  # evaluating `coxph()`
   coxph_result <- rlang::eval_tidy(coxph_call)
 
   # returning p-value
   pvalue_column <- switch(test_type,
-                          "lrt" = "p.value.log",
-                          "wald" = "p.value.wald",
-                          "score" = "p.value.sc")
-  broom::glance(coxph_result)[[pvalue_column]]
+                          "lrt" = list("p.value.log", "Cox regression (LRT)"),
+                          "wald" = list("p.value.wald", "Cox regression (Wald)"),
+                          "score" = list("p.value.sc", "Cox regression (Score)"))
+  broom::glance(coxph_result) %>%
+    select(all_of(c("statistic", pvalue_column[[1]]))) %>%
+    set_names(c("statistic", "p.value")) %>%
+    mutate(method = pvalue_column[[2]])
+
 }

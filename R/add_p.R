@@ -195,7 +195,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       arg_name = "test.args"
     )
 
-  meta_data <-
+  x$meta_data <-
     meta_data %>%
     mutate(
       test_result = pmap(
@@ -206,13 +206,14 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
                               group = group, type = summary_type,
                               test.args = test.args[[variable]])
       ),
-      p.value = map_dbl(.data$test_result, ~pluck(.x, "pvalue")),
-      stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "description"))
+      p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
+      stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%
-    select(.data$variable, .data$p.value, .data$stat_test_lbl) %>%
+    select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
     {left_join(x$meta_data, ., by = "variable")}
 
-  add_p_merge_p_values(x, meta_data, pvalue_fun)
+  x$call_list <- c(x$call_list, list(add_p = match.call()))
+  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
 }
 
 # function to create text for footnote
@@ -225,38 +226,29 @@ footnote_add_p <- function(meta_data) {
 }
 
 # function to merge p-values to tbl
-add_p_merge_p_values <- function(x, meta_data, pvalue_fun){
-  # creating pvalue column for table_body merge
-  pvalue_column <-
+add_p_merge_p_values <- function(x, meta_data, pvalue_fun) {
+
+  x <-
+    # merging in p-value to table_body
+    modify_table_body(
+    x,
+    left_join,
     meta_data %>%
-    select(c("variable", "p.value")) %>%
-    mutate(row_type = "label")
-
-  table_body <-
-    x$table_body %>%
-    left_join(
-      pvalue_column,
-      by = c("variable", "row_type")
+      select(.data$variable, .data$test_result) %>%
+      mutate(df_result = map(.data$test_result, pluck, "df_result"),
+             row_type = "label") %>%
+      unnest(.data$df_result) %>%
+      select(any_of(c("variable", "row_type", "estimate", "conf.low", "conf.high", "p.value"))),
+    by = c("variable", "row_type")
+  ) %>%
+    # adding print instructions for p-value column
+    modify_table_header(
+      "p.value",
+      label = paste0("**", translate_text("p-value"), "**"),
+      hide = FALSE,
+      fmt_fun = pvalue_fun,
+      footnote = footnote_add_p(meta_data)
     )
-
-  x$table_body <- table_body
-  x$meta_data <- meta_data
-
-  x$table_header <-
-    tibble(column = names(table_body)) %>%
-    left_join(x$table_header, by = "column") %>%
-    table_header_fill_missing() %>%
-    table_header_fmt_fun(p.value = pvalue_fun) %>%
-    mutate(
-      footnote = ifelse(.data$column == "p.value",
-                        footnote_add_p(meta_data),
-                        .data$footnote)
-    )
-
-  # updating header
-  x <- modify_header_internal(x, p.value = paste0("**", translate_text("p-value"), "**"))
-
-  x$call_list <- c(x$call_list, list(add_p = match.call()))
 
   x
 }
@@ -476,7 +468,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
       arg_name = "test.args"
     )
 
-  meta_data <-
+  x$meta_data <-
     meta_data %>%
     mutate(
       test_result = pmap(
@@ -486,13 +478,14 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               variable = variable,
                               test.args = test.args[[variable]])
       ),
-      p.value = map_dbl(.data$test_result, ~pluck(.x, "pvalue")),
-      stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "description"))
+      p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
+      stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%
-    select(.data$variable, .data$p.value, .data$stat_test_lbl) %>%
+    select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
     {left_join(x$meta_data, ., by = "variable")}
 
-  add_p_merge_p_values(x, meta_data, pvalue_fun)
+  x$call_list <- c(x$call_list, list(add_p = match.call()))
+  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
 }
 
 
@@ -650,7 +643,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
       arg_name = "test.args"
     )
 
-  meta_data <-
+  x$meta_data <-
     meta_data %>%
     mutate(
       test_result = pmap(
@@ -661,11 +654,12 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                               type = summary_type,
                               test.args = test.args[[variable]])
       ),
-      p.value = map_dbl(.data$test_result, ~pluck(.x, "pvalue")),
-      stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "description"))
+      p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
+      stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%
-    select(.data$variable, .data$p.value, .data$stat_test_lbl) %>%
+    select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
     {left_join(x$meta_data, ., by = "variable")}
 
-  add_p_merge_p_values(x, meta_data, pvalue_fun)
+  x$call_list <- c(x$call_list, list(add_p = match.call()))
+  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
 }

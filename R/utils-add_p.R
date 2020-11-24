@@ -40,7 +40,7 @@
   if (nrow(df) == 1)
     return(
       df %>%
-        select(any_of(c("test_name", "fun_to_run", "accept_dots", "description"))) %>%
+        select(any_of(c("test_name", "fun_to_run", "accept_dots"))) %>%
         mutate_at(vars(.data$fun_to_run), ~map(.x, eval)) %>%
         as.list() %>%
         purrr::flatten()
@@ -108,22 +108,27 @@
     )
 
   # saving test function results into list 'x'
-  x$pvalue <-
-    switch(is.list(test_fun_result), test_fun_result$p) %||%
-    test_fun_result %||%
-    NA_real_
-  if (!rlang::is_scalar_double(x$pvalue)) {
-    stop("Errrrrr")
-  }
+  if (is.data.frame(test_fun_result))
+    x$df_result <- test_fun_result
+  # these list inputs were deprecated and deleted from documentation in v1.3.6
+  else if (is.list(test_fun_result) &&
+           identical(names(test_fun_result), c("p", "test")))
+    x$df_result <-
+    tibble::as_tibble(test_fun_result) %>%
+    set_names(c("p.value", "method"))
+  else if (is.list(test_fun_result) &&
+           identical(names(test_fun_result), c("test", "p")))
+    x$df_result <-
+    tibble::as_tibble(test_fun_result) %>%
+    set_names(c("method", "p.value"))
+  else if (rlang::is_scalar_double(test_fun_result))
+    x$df_result <- tibble(p.value = test_fun_result, method = NA_character_)
+  else if (is.null(test_fun_result))
+    x$df_result <- tibble(p.value = NA_real_, method = NA_character_)
 
-  x$description <-
-    switch(is.list(test_fun_result), test_fun_result$test) %||%
-    x$description %||%
-    NA_character_
-  if (!rlang::is_string(x$description)) {
-    stop("Errrrrr")
-  }
-
+  x$df_result <- x$df_result %>%
+    select(any_of(c("estimate", "conf.low", "conf.high", "p.value", "statistics", "method")),
+           everything())
   x
 }
 

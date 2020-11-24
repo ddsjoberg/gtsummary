@@ -99,12 +99,6 @@ test_that("add_p creates errors with bad args", {
 
   expect_error(
     tbl_svysummary(strial, by = grade, include = -response) %>%
-      add_p(test = list(all_continuous() ~ "t.test")), # not adapted
-    NULL
-  )
-
-  expect_error(
-    tbl_svysummary(strial, by = grade, include = -response) %>%
       add_p(test = list(all_continuous() ~ "ttttessstttt")),
     NULL
   )
