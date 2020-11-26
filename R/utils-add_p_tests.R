@@ -47,6 +47,12 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, ...) {
                            .data$method))
 }
 
+add_p_test_mcnemar.test <- function(data, variable, by, test.args = NULL, ...) {
+  rlang::expr(stats::mcnemar.test(data[[variable]], data[[by]], !!!test.args)) %>%
+    eval() %>%
+    broom::tidy()
+}
+
 add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
   assert_package("lme4", "add_p(test = variable ~ 'lme4')")
   if (is.null(group))
@@ -77,6 +83,67 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
   tibble::tibble(p.value = p.value, method = "random intercept logistic regression")
 }
 
+add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
+                                            test.args = NULL, quiet = FALSE, ...) {
+  # checking inputs
+  if (length(data[[by]] %>% na.omit() %>% unique()) != 2)
+    stop("`by=` must have exactly 2 levels", call. = FALSE)
+  if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
+      pull(.data$..n..) %>% max(na.rm = TRUE) > 1)
+    stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
+
+  # reshaping data
+  data_wide <-
+    tidyr::pivot_wider(data,
+                       id_cols = all_of(group),
+                       names_from = all_of(by),
+                       values_from = all_of(variable))
+
+  # message about missing data
+  if (quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1))
+    glue("Note for variable '{variable}': Some observations included in the ",
+         "calculation of summary statistics ",
+         "were omitted from the p-value calculation due to unbalanced missingness ",
+         "within group.") %>%
+    rlang::inform()
+
+
+  # calculate p-value
+  expr(stats::t.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
+    eval() %>%
+    broom::tidy()
+}
+
+add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
+                                                 test.args = NULL, quiet = FALSE, ...) {
+  # checking inputs
+  if (length(data[[by]] %>% na.omit() %>% unique()) != 2)
+    stop("`by=` must have exactly 2 levels", call. = FALSE)
+  if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
+      pull(.data$..n..) %>% max(na.rm = TRUE) > 1)
+    stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
+
+  # reshaping data
+  data_wide <-
+    tidyr::pivot_wider(data,
+                       id_cols = all_of(group),
+                       names_from = all_of(by),
+                       values_from = all_of(variable))
+
+  # message about missing data
+  if (quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1))
+    glue("Note for variable '{variable}': Some observations included in the ",
+         "calculation of summary statistics ",
+         "were omitted from the p-value calculation due to unbalanced missingness ",
+         "within group.") %>%
+    rlang::inform()
+
+  # calculate p-value
+  expr(stats::wilcox.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
+    eval() %>%
+    broom::tidy()
+}
+
 # add_p.tbl_svysummary ---------------------------------------------------------
 add_p_test_svy.chisq.test <- function(data, variable, by, ...) {
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "F") %>%
@@ -99,6 +166,7 @@ add_p_test_svy.wald.test <- function(data, variable, by, ...) {
 add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "adjWald") %>%
     {suppressMessages(broom::tidy(.))} %>%
+    dplyr::mutate_at(vars(statistic, p.value), as.numeric) %>% # default saves these cols as a matrix
     mutate(method = "adjusted Wald test of independence for complex survey samples")
 }
 

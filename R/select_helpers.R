@@ -9,6 +9,8 @@
 #' - `all_interaction()` selects interaction terms from a regression model
 #' - `all_intercepts()` selects intercept terms from a regression model
 #' - `all_contrasts()` selects variables in regression model based on their type of contrast
+#' - `all_tests()` selects variables by the name of the test performed
+#' - `all_summary_cols()` selects columns from `tbl_summary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
 #' @param tests character
 #' @name select_helpers
 #' @return A character vector of column names selected
@@ -47,3 +49,7 @@ all_tests <- function(tests = NULL) {
                     .data$test_name %in% .env$tests,
                     fun_name = "all_tests")
 }
+
+#' @rdname select_helpers
+#' @export
+# all_summary_cols <- dplyr::matches("^stat_\\d+$") # finds stat_0, stat_1, stat_2, etc.

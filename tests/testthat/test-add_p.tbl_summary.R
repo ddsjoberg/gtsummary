@@ -1,5 +1,6 @@
 context("test-add_p.tbl_summary")
 testthat::skip_on_cran()
+library(dplyr)
 
 test_that("add_p creates output without error/warning", {
   expect_error(
@@ -189,6 +190,8 @@ test_that("p-values are replicated within tbl_summary()", {
            var_chisq.test.no.correct = response,
            var_fisher.test = response,
            var_fisher.test_dots = response,
+           var_mcnemar.test = response,
+           var_mcnemar.test_dots = response,
            ) %>%
     tbl_summary(by = trt, missing = "no") %>%
     add_p(
@@ -198,12 +201,14 @@ test_that("p-values are replicated within tbl_summary()", {
                   contains("aov") ~ aov,
                   contains("chisq.test") ~ chisq.test,
                   contains("chisq.test.no.correct") ~ "chisq.test.no.correct",
-                  contains("fisher.test") ~ fisher.test
+                  contains("fisher.test") ~ fisher.test,
+                  contains("mcnemar.test") ~ mcnemar.test
                   ),
       test.args = list(var_t.test_dots = list(var.equal = TRUE),
                        var_wilcox.test_dots = list(correct = FALSE),
                        var_chisq.test_dots = list(correct = FALSE),
-                       var_fisher.test_dots = list(alternative = "greater"))
+                       var_fisher.test_dots = list(alternative = "greater"),
+                       var_mcnemar.test_dots = list(correct = FALSE))
     )
 
   expect_equal(
@@ -261,5 +266,71 @@ test_that("p-values are replicated within tbl_summary()", {
   expect_equal(
     filter(tbl_test.args$meta_data, variable == "var_fisher.test_dots")$p.value,
     fisher.test(trial[["response"]], as.factor(trial[["trt"]]), alternative = "greater")$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_mcnemar.test")$p.value,
+    mcnemar.test(trial[["response"]], as.factor(trial[["trt"]]))$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_mcnemar.test_dots")$p.value,
+    mcnemar.test(trial[["response"]], as.factor(trial[["trt"]]), correct = FALSE)$p.value
+  )
+
+  trial_group <- trial %>% group_by(trt) %>% mutate(id = row_number()) %>% ungroup()
+  trial_group_wide <-
+    trial_group %>%
+    filter(trt == "Drug A") %>%
+    full_join(
+      trial_group %>%
+        filter(trt == "Drug B"),
+      by = "id"
+    )
+
+  tbl_groups <-
+    trial_group %>%
+    select(trt, id,
+           age_lme4 = age,
+           grade_lme4 = grade,
+           age_paired.t.test = age,
+           age_paired.t.test_dots = age,
+           age_paired.wilcox.test = age,
+           age_paired.wilcox.test_dots = age) %>%
+    tbl_summary(by = trt, missing = "no", include = -id) %>%
+    add_p(
+      test = list(contains("lme4") ~ "lme4",
+                  contains("paired.t.test") ~ "paired.t.test",
+                  contains("paired.wilcox.test") ~ "paired.wilcox.test"),
+      test.args = list(age_paired.t.test_dots ~ list(mu = 1),
+                       age_paired.wilcox.test_dots ~ list(mu = 1)),
+      group = "id"
+    )
+
+  expect_equal(
+    filter(tbl_groups$meta_data, variable == "age_paired.t.test")$p.value,
+    t.test(trial_group_wide[["age.x"]], trial_group_wide[["age.y"]], paired = TRUE)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_groups$meta_data, variable == "age_paired.t.test_dots")$p.value,
+    t.test(trial_group_wide[["age.x"]], trial_group_wide[["age.y"]], paired = TRUE, mu = 1)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_groups$meta_data, variable == "age_paired.wilcox.test")$p.value,
+    wilcox.test(trial_group_wide[["age.x"]], trial_group_wide[["age.y"]], paired = TRUE)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_groups$meta_data, variable == "age_paired.wilcox.test_dots")$p.value,
+    wilcox.test(trial_group_wide[["age.x"]], trial_group_wide[["age.y"]], paired = TRUE, mu = 1)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_groups$meta_data, variable == "age_lme4")$p.value,
+    lme4::glmer(factor(trt) ~ (1|id), tidyr::drop_na(trial_group, trt, age, id), family = binomial) %>%
+      anova(lme4::glmer(factor(trt) ~ age + (1|id), tidyr::drop_na(trial_group, trt, age, id), family = binomial)) %>%
+      pluck("Pr(>Chisq)", 2)
   )
 })

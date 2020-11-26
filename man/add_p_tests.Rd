@@ -21,7 +21,10 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"chisq.test"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \cr
    \code{"chisq.test.no.correct"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
    \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), ...)} \cr
+   \code{"mcnemar.test"} \tab McNemar's test \tab \code{mcnemar.test(data[[variable]], data[[by]], ...)} \cr
    \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1&#124;group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1&#124;group), data, family = binomial))} \cr
+   \code{"paired.t.test"} \tab Paired t-test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, ...)} \cr
+   \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, ...)} \cr
 }
 }
 
@@ -45,7 +48,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \section{tbl_survfit() \%>\% add_p()}{
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
-   \code{"logrank"} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ variable, data)} \cr
+   \code{"logrank"} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 0)} \cr
    \code{"petopeto_gehanwilcoxon"} \tab Peto & Peto modification of Gehan-Wilcoxon test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 1)} \cr
    \code{"survdiff"} \tab G-rho family test \tab \code{survival::survdiff(Surv(.) ~ variable, data, ...)} \cr
    \code{"coxph_lrt"} \tab Cox regression (LRT) \tab \code{survival::coxph(Surv(.) ~ variable, data, ...)} \cr
