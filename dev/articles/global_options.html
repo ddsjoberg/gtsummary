@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9009</span>
       </span>
     </div>
 
@@ -182,7 +182,7 @@
 <ol style="list-style-type: decimal">
 <li><p>Only include {gt} functions you want to apply to <em>all</em> tables. For example, a {gt} function that changes the font size would be appropriate. A table-specific header may not.</p></li>
 <li><p>All {gt} functions must be referenced using the double-colon prefix (i.e. <code>gt::foo()</code>). These functions will execute when the {gt} library is not loaded.</p></li>
-<li><p>Do not include the <code>data=</code> argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> operator. The data argument is taken from the previous function in the sequence.</p></li>
+<li><p>Do not include the <code>data=</code> argument in any {gt} function call. The function will appear in a chained sequence of {gt} calls with the <code><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></code> operator. The data argument is taken from the previous function in the sequence.</p></li>
 </ol>
 <p>In the example below, the font size and cell padding are reduced globally.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -197,7 +197,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ltflseviwl .gt_table {
+#sucrentydl .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -222,7 +222,7 @@
   border-left-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_heading {
+#sucrentydl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -234,7 +234,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_title {
+#sucrentydl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -244,7 +244,7 @@
   border-bottom-width: 0;
 }
 
-#ltflseviwl .gt_subtitle {
+#sucrentydl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -254,13 +254,13 @@
   border-top-width: 0;
 }
 
-#ltflseviwl .gt_bottom_border {
+#sucrentydl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_col_headings {
+#sucrentydl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -275,7 +275,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_col_heading {
+#sucrentydl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -295,7 +295,7 @@
   overflow-x: hidden;
 }
 
-#ltflseviwl .gt_column_spanner_outer {
+#sucrentydl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -307,15 +307,15 @@
   padding-right: 4px;
 }
 
-#ltflseviwl .gt_column_spanner_outer:first-child {
+#sucrentydl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ltflseviwl .gt_column_spanner_outer:last-child {
+#sucrentydl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ltflseviwl .gt_column_spanner {
+#sucrentydl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -327,7 +327,7 @@
   width: 100%;
 }
 
-#ltflseviwl .gt_group_heading {
+#sucrentydl .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -349,7 +349,7 @@
   vertical-align: middle;
 }
 
-#ltflseviwl .gt_empty_group_heading {
+#sucrentydl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -364,15 +364,15 @@
   vertical-align: middle;
 }
 
-#ltflseviwl .gt_from_md > :first-child {
+#sucrentydl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ltflseviwl .gt_from_md > :last-child {
+#sucrentydl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ltflseviwl .gt_row {
+#sucrentydl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -391,7 +391,7 @@
   overflow-x: hidden;
 }
 
-#ltflseviwl .gt_stub {
+#sucrentydl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -403,7 +403,7 @@
   padding-left: 12px;
 }
 
-#ltflseviwl .gt_summary_row {
+#sucrentydl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -413,7 +413,7 @@
   padding-right: 5px;
 }
 
-#ltflseviwl .gt_first_summary_row {
+#sucrentydl .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -423,7 +423,7 @@
   border-top-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_grand_summary_row {
+#sucrentydl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -433,7 +433,7 @@
   padding-right: 5px;
 }
 
-#ltflseviwl .gt_first_grand_summary_row {
+#sucrentydl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -443,11 +443,11 @@
   border-top-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_striped {
+#sucrentydl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ltflseviwl .gt_table_body {
+#sucrentydl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -456,7 +456,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_footnotes {
+#sucrentydl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -470,13 +470,13 @@
   border-right-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_footnote {
+#sucrentydl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ltflseviwl .gt_sourcenotes {
+#sucrentydl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -490,46 +490,46 @@
   border-right-color: #D3D3D3;
 }
 
-#ltflseviwl .gt_sourcenote {
+#sucrentydl .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ltflseviwl .gt_left {
+#sucrentydl .gt_left {
   text-align: left;
 }
 
-#ltflseviwl .gt_center {
+#sucrentydl .gt_center {
   text-align: center;
 }
 
-#ltflseviwl .gt_right {
+#sucrentydl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ltflseviwl .gt_font_normal {
+#sucrentydl .gt_font_normal {
   font-weight: normal;
 }
 
-#ltflseviwl .gt_font_bold {
+#sucrentydl .gt_font_bold {
   font-weight: bold;
 }
 
-#ltflseviwl .gt_font_italic {
+#sucrentydl .gt_font_italic {
   font-style: italic;
 }
 
-#ltflseviwl .gt_super {
+#sucrentydl .gt_super {
   font-size: 65%;
 }
 
-#ltflseviwl .gt_footnote_marks {
+#sucrentydl .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="ltflseviwl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="sucrentydl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Option Name</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Tests Modified</th>
