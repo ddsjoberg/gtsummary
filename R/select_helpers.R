@@ -32,39 +32,3 @@ all_continuous2 <- function() {
                     .data$var_type %in% "continuous2",
                     fun_name = "all_continuous")
 }
-
-#' @rdname select_helpers
-#' @export
-all_numeric <- function() {
-  which(data_env$numeric)
-}
-
-#' @rdname select_helpers
-#' @export
-all_character <- function() {
-  which(data_env$character)
-}
-
-#' @rdname select_helpers
-#' @export
-all_integer <- function() {
-  which(data_env$integer)
-}
-
-#' @rdname select_helpers
-#' @export
-all_double <- function() {
-  which(data_env$double)
-}
-
-#' @rdname select_helpers
-#' @export
-all_logical <- function() {
-  which(data_env$logical)
-}
-
-#' @rdname select_helpers
-#' @export
-all_factor <- function() {
-  which(data_env$factor)
-}
