@@ -142,7 +142,7 @@ table_header_fmt_fun <- function(table_header, ...) {
   table_header[
     table_header$column %in% table_header_update$column, # selecting rows
     c("column", "fmt_fun") # selecting columns
-    ] <- table_header_update[c("column", "fmt_fun")]
+  ] <- table_header_update[c("column", "fmt_fun")]
 
   table_header
 }
@@ -233,7 +233,7 @@ modify_header_internal <- function(x, stat_by = NULL, ...,
   x$table_header[
     x$table_header$column %in% table_header_update$column, # selecting rows
     c("column", "label", "text_interpret", "hide") # selecting columns
-    ] <-
+  ] <-
     table_header_update[c("column", "label", "text_interpret", "hide")]
 
   # keeping track of all functions previously run ------------------------------
@@ -242,29 +242,4 @@ modify_header_internal <- function(x, stat_by = NULL, ...,
   }
 
   x
-}
-
-
-
-
-# select helpers environments --------------------------------------------------
-# setting environments
-data_env <- rlang::new_environment()
-meta_data_env <- rlang::new_environment()
-
-# registering data information
-scoped_data <- function(.data) {
-  data_env$numeric <- purrr::map_lgl(.data, is.numeric)
-  data_env$character <- purrr::map_lgl(.data, is.character)
-  data_env$integer <- purrr::map_lgl(.data, is.integer)
-  data_env$double <- purrr::map_lgl(.data, is.double)
-  data_env$logical <- purrr::map_lgl(.data, is.logical)
-  data_env$factor <- purrr::map_lgl(.data, is.factor)
-}
-
-# registering meta data information
-scoped_meta_data <- function(.meta_data) {
-  meta_data_env$summary_type <-
-    .meta_data$summary_type %>%
-    rlang::set_names(.meta_data$variable)
 }
