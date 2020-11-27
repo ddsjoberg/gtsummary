@@ -10,7 +10,7 @@
 #' - `all_intercepts()` selects intercept terms from a regression model
 #' - `all_contrasts()` selects variables in regression model based on their type of contrast
 #' - `all_tests()` selects variables by the name of the test performed
-#' - `all_summary_cols()` selects columns from `tbl_summary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
+#' - `all_summary_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
 #' @param tests character
 #' @name select_helpers
 #' @return A character vector of column names selected
