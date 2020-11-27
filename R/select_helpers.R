@@ -39,7 +39,7 @@ all_continuous2 <- function() {
 #' @rdname select_helpers
 #' @export
 all_tests <- function(tests = NULL) {
-  if (is.null(tests) || !is.character(tests) || any(!tests %in% df_add_p_tests$test_name)){
+  if (is.null(tests) || !is.character(tests) || any(!tests %in% df_add_p_tests$test_name)) {
     paste("The `tests=` argument must be one or more of the following:",
           paste(shQuote(df_add_p_tests$test_name), collapse = ", ")) %>%
       stop(call. = FALSE)
@@ -52,4 +52,6 @@ all_tests <- function(tests = NULL) {
 
 #' @rdname select_helpers
 #' @export
-# all_summary_cols <- dplyr::matches("^stat_\\d+$") # finds stat_0, stat_1, stat_2, etc.
+all_summary_cols <- function() {
+  dplyr::matches("^stat_\\d+$") # finds stat_0, stat_1, stat_2, etc.
+}

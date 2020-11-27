@@ -4,11 +4,14 @@
 \alias{select_helpers}
 \alias{all_continuous2}
 \alias{all_tests}
+\alias{all_summary_cols}
 \title{Select helper functions}
 \usage{
 all_continuous2()
 
 all_tests(tests = NULL)
+
+all_summary_cols()
 }
 \arguments{
 \item{tests}{character}
