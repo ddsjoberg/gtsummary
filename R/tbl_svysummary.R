@@ -170,28 +170,12 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     data$variables[[by]] <- factor(data$variables[[by]], ordered = FALSE)
   }
 
-  # if by is numeric, convert into a factor -------------------------------
-  if (!is.null(by) && is.numeric(data$variables[[by]])) {
-    data$variables[[by]] <- factor(data$variables[[by]], ordered = FALSE)
-  }
-
-  # deleting obs with missing by values ----------------------------------------
-  # saving variable labels
-  if (!is.null(by) && sum(is.na(data$variables[[by]])) > 0) {
-    message(glue(
-      "{sum(is.na(data$variables[[by]]))} observations missing `{by}` have been removed. ",
-      "To include these observations, use `forcats::fct_explicit_na()` on `{by}` ",
-      "column before passing to `tbl_svysummary()`."
-    ))
-    lbls <- purrr::map(data$variables, ~ attr(.x, "label"))
-    data <- data[!is.na(data$variables[[by]]), ]
-
-    # re-applying labels---I think this will NOT be necessary after dplyr 0.9.0
-    for (i in names(lbls)) {
-      attr(data$variables[[i]], "label") <- lbls[[i]]
-    }
-
-    rm(lbls, i)
+  # converting numeric and vars with missing levels to factor ------------------
+  if (!is.null(by) && (is.numeric(data$variables[[by]]) || sum(is.na(data$variables[[by]])) > 0)) {
+      data$variables[[by]] <-
+        switch(!is.factor(data$variables[[by]]),
+               factor(data$variables[[by]]) %>% forcats::fct_explicit_na()) %||%
+        forcats::fct_explicit_na(data$variables[[by]])
   }
 
   # will return call, and all object passed to in tbl_summary call -------------
