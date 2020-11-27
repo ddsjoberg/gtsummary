@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added new function `remove_row_type()` (#678)
+
 * All select helper functions and the utility functions that make them possible, have been cleaned up and migrated to broom.helpers. THIS IS A HUGE UPDATE. #648
 * Migrated all selecting functionality from gtsummary to broom.helpers. Exporting functions the functions below. Each has been improved and streamlined compared to their original versions in gtsummary. #648 #680
 * .generic_selector(): this is a function that makes it easy to create selecting functions like all_continuous(). The internals allow for it to be used in broom.helpers and gtsummary seamlessly. #680
