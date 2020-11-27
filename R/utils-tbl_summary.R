@@ -1100,6 +1100,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
     calculate_missing_fun <- calculate_missing_row
 
   # styling the statistics -----------------------------------------------------
+  df_stats_original <- df_stats
   for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels", "stat_display")))) {
     df_stats[[v]] <- df_stats[[v]] %>% attr(df_stats[[v]], "fmt_fun")()
   }
@@ -1179,8 +1180,17 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
     result <-
       result %>%
       bind_rows(
-        calculate_missing_fun(data = data, variable = variable,
-                              by = by, missing_text = missing_text)
+        df_stats_original %>%
+          select(any_of(c("by", "variable", "N_miss"))) %>%
+          distinct() %>%
+          mutate(stat_display = "{N_miss}") %>%
+          {df_stats_to_tbl(
+            data = data, variable = variable, summary_type = "dichotomous", by = by,
+            var_label = missing_text, stat_display = "{N_miss}", df_stats = .,
+            missing = "no", missing_text = "Doesn't Matter -- Text should never appear"
+          )} %>%
+          # changing row_type to missing
+          mutate(row_type = "missing")
       )
   }
 
