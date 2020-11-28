@@ -100,11 +100,6 @@ test_that("tbl_svysummary returns errors with bad inputs", {
     tbl_svysummary(d, by = THIS_IS_NOT_A_VARIABLE),
     NULL
   )
-  d$variables$Survived[5:8] <- NA
-  expect_message(
-    tbl_svysummary(d, by = Survived), # should get message about missing data
-    NULL
-  )
   expect_error(
     tbl_svysummary(d, type = Survived),
     NULL
