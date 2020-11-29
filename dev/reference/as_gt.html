@@ -104,7 +104,7 @@ for detailed examples in the 'Advanced Customization' section." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9010</span>
       </span>
     </div>
 
@@ -197,6 +197,7 @@ for detailed examples in the 'Advanced Customization' section.</p>
   <span class='va'>x</span>,
   include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
   return_calls <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>,
   exclude <span class='op'>=</span> <span class='cn'>NULL</span>,
   omit <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -220,6 +221,10 @@ Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html
       <th>return_calls</th>
       <td><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
 as a list of expressions.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed on to <a href='https://rdrr.io/pkg/gt/man/gt.html'>gt::gt</a></p></td>
     </tr>
     <tr>
       <th>exclude</th>
