@@ -25,13 +25,25 @@ add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
   expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
                           data = !!data, !!!test.args)) %>%
     eval() %>%
-    broom::tidy()
+    broom::tidy() %>%
+    mutate(
+      method = case_when(
+        .data$method == "Wilcoxon rank sum test with continuity correction" ~ "Wilcoxon rank sum test",
+        TRUE ~ .data$method
+      )
+    )
 }
 
 add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
   expr(stats::chisq.test(x = !!data[[variable]], y = as.factor(!!data[[by]]), !!!test.args)) %>%
     eval() %>%
-    broom::tidy()
+    broom::tidy() %>%
+    mutate(
+      method = case_when(
+        .data$method == "Pearson's Chi-squared test with Yates' continuity correction" ~ "Pearson's Chi-squared test",
+        TRUE ~ .data$method
+      )
+    )
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
@@ -42,15 +54,23 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, ...) {
   expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
-    mutate(method = ifelse(.data$method == "Fisher's Exact Test for Count Data",
-                           "Fisher's exact test",
-                           .data$method))
+    mutate(
+      method = case_when(
+        .data$method == "Fisher's Exact Test for Count Data" ~ "Fisher's exact test",
+        TRUE ~ .data$method)
+    )
 }
 
 add_p_test_mcnemar.test <- function(data, variable, by, test.args = NULL, ...) {
   rlang::expr(stats::mcnemar.test(data[[variable]], data[[by]], !!!test.args)) %>%
     eval() %>%
-    broom::tidy()
+    broom::tidy() %>%
+    mutate(
+      method = case_when(
+        .data$method == "McNemar's Chi-squared test with continuity correction" ~ "McNemar's Chi-squared test",
+        TRUE ~ .data$method
+      )
+    )
 }
 
 add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
