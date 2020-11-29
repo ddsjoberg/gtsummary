@@ -106,7 +106,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
                                             test.args = NULL, quiet = FALSE, ...) {
   # checking inputs
-  if (length(data[[by]] %>% na.omit() %>% unique()) != 2)
+  if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
       pull(.data$..n..) %>% max(na.rm = TRUE) > 1)
@@ -137,7 +137,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
                                                  test.args = NULL, quiet = FALSE, ...) {
   # checking inputs
-  if (length(data[[by]] %>% na.omit() %>% unique()) != 2)
+  if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
       pull(.data$..n..) %>% max(na.rm = TRUE) > 1)
@@ -186,7 +186,7 @@ add_p_test_svy.wald.test <- function(data, variable, by, ...) {
 add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "adjWald") %>%
     {suppressMessages(broom::tidy(.))} %>%
-    dplyr::mutate_at(vars(statistic, p.value), as.numeric) %>% # default saves these cols as a matrix
+    dplyr::mutate_at(vars(.data$statistic, .data$p.value), as.numeric) %>% # default saves these cols as a matrix
     mutate(method = "adjusted Wald test of independence for complex survey samples")
 }
 

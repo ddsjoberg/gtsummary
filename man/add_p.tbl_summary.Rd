@@ -22,7 +22,7 @@
 variable,
 e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{"kruskal.test"},
-\code{"chisq.test"}, \code{"fisher.test"}, and \code{"lme4"} (for clustered data). See \link{add_p_tests}
+\code{"chisq.test"}, \code{"fisher.test"}, and \code{"lme4"} (for clustered data). See \link{tests}
 for details and more tests.
 
 Tests default to \code{"kruskal.test"} for continuous variables (\code{"wilcox.test"}

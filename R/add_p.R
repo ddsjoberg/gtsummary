@@ -18,7 +18,7 @@ add_p <- function(x, ...) {
 #' variable,
 #' e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 #' Common tests include `"t.test"`, `"aov"`, `"wilcox.test"`, `"kruskal.test"`,
-#' `"chisq.test"`, `"fisher.test"`, and `"lme4"` (for clustered data). See [add_p_tests]
+#' `"chisq.test"`, `"fisher.test"`, and `"lme4"` (for clustered data). See [tests]
 #' for details and more tests.
 #'
 #' Tests default to `"kruskal.test"` for continuous variables (`"wilcox.test"`

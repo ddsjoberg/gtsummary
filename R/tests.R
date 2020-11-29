@@ -7,7 +7,7 @@
 #' calculate a p-value from `t.test()` assuming equal variance, use
 #' `tbl_summary(trial, by = trt) %>% add_p(age ~ "t.test", test.args = age ~ list(var.equal = TRUE))`
 #'
-#' @name add_p_tests
+#' @name tests
 #' @section tbl_summary() %>% add_p():
 #'
 #' ```{r, echo = FALSE}
