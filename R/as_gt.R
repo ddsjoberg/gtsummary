@@ -19,12 +19,13 @@
 #' Default is `everything()`.
 #' @param return_calls Logical. Default is `FALSE`. If `TRUE`, the calls are returned
 #' as a list of expressions.
+#' @param ... Arguments passed on to [gt::gt]
 #' @param exclude DEPRECATED.
 #' @param omit DEPRECATED.
-#' @export
 #' @return A `gt_tbl` object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
+#' @export
 #' @examples
 #' as_gt_ex <-
 #'   trial[c("trt", "age", "response", "grade")] %>%
@@ -34,7 +35,8 @@
 #'
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
 
-as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NULL, omit = NULL) {
+as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
+                  exclude = NULL, omit = NULL) {
   # making list of commands to include -----------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(
@@ -63,7 +65,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
   }
 
   # creating list of gt calls --------------------------------------------------
-  gt_calls <- table_header_to_gt_calls(x = x)
+  gt_calls <- table_header_to_gt_calls(x = x, ...)
   # adding other calls from x$list_output$source_note
   if (!is.null(x$list_output$source_note)) {
     gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!x$list_output$source_note))
@@ -119,12 +121,12 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, exclude = NUL
 }
 
 # creating gt calls from table_header ------------------------------------------
-table_header_to_gt_calls <- function(x) {
+table_header_to_gt_calls <- function(x, ...) {
   table_header <- .clean_table_header(x$table_header)
   gt_calls <- list()
 
   # gt -------------------------------------------------------------------------
-  gt_calls[["gt"]] <- expr(gt::gt(data = x$table_body))
+  gt_calls[["gt"]] <- expr(gt::gt(data = x$table_body, !!!list(...)))
 
   # fmt_missing ----------------------------------------------------------------
   gt_calls[["fmt_missing"]] <- expr(

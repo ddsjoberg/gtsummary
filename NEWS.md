@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `...` arguments have been added to `as_gt()`. These dots are subsequently passed to `gt::gt(...)`. (#701)
+
 * Added new function `remove_row_type()` (#678)
 
 * All select helper functions and the utility functions that make them possible, have been cleaned up and migrated to broom.helpers. THIS IS A HUGE UPDATE. #648
