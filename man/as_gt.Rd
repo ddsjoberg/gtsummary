@@ -8,6 +8,7 @@ as_gt(
   x,
   include = everything(),
   return_calls = FALSE,
+  ...,
   exclude = NULL,
   omit = NULL
 )
@@ -23,6 +24,8 @@ Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
+
+\item{...}{Arguments passed on to \link[gt:gt]{gt::gt}}
 
 \item{exclude}{DEPRECATED.}
 
