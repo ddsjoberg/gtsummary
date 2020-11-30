@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Added messaging to `tbl_stack()` to inform users that the attributes from the first table passed take precedent over the others'. (#699)
+
+* In the `modfiy_*()` functions, if users did not select any columns, they encountered an error. Now, if no columns are selected, instructions are printed for how to correctly select columns in a gtsummary table. Moreover, if no columns are selected, the gtsummary object is now returned unaltered. (#699)
+
+* The `add_glance_source_note()` function has been generalized so users may pass any glance function. Previously, `broom::glance()` was being used with no option to change it. (#699)
+
 * The `...` arguments have been added to `as_gt()`. These dots are subsequently passed to `gt::gt(...)`. (#701)
 
 * Added new function `remove_row_type()` (#678)
