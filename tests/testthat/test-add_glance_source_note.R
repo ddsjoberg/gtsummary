@@ -14,4 +14,14 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
+
+
+  expect_error(
+    lme4::lmer(age ~ marker + (1|grade), trial) %>%
+      tbl_regression() %>%
+      add_glance_source_note(
+        glance_fun = broom.mixed::glance
+      ),
+    NA
+  )
 })

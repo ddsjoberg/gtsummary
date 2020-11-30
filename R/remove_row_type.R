@@ -41,16 +41,16 @@ remove_row_type <- function(x, variables = everything(),
   # expression for selecting the appropriate rows ------------------------------
   if (type == "reference")
     lst_expr <- list(variables = "reference_row",
-                     expr = expr(reference_row %in% TRUE))
+                     expr = expr(.data$reference_row %in% TRUE))
   else if (type == "header" && inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_survfit")))
     lst_expr <- list(variables = c("var_type", "row_type"),
-                     expr = expr(var_type == "categorical" & row_type == "label"))
+                     expr = expr(.data$var_type == "categorical" & .data$row_type == "label"))
   else if (type == "header")
     lst_expr <- list(variables = "header_row",
-                     expr = expr(header_row %in% TRUE))
+                     expr = expr(.data$header_row %in% TRUE))
   else if (type == "missing")
     lst_expr <- list(variables = "row_type",
-                     expr = expr(row_type == "missing"))
+                     expr = expr(.data$row_type == "missing"))
 
   if (!all(lst_expr[["variables"]] %in% names(x$table_body)))
     glue("Cannot select '{type}' rows in this gtsummary table.") %>%
