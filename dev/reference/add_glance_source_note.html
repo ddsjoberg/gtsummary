@@ -98,7 +98,7 @@ Add the statistics returned in broom::glance() as a table source note." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9011</span>
       </span>
     </div>
 
@@ -186,6 +186,7 @@ Add the statistics returned in <code><a href='https://generics.r-lib.org/referen
   include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
   label <span class='op'>=</span> <span class='cn'>NULL</span>,
   fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  glance_fun <span class='op'>=</span> <span class='fu'>broom</span><span class='fu'>::</span><span class='va'><a href='https://generics.r-lib.org/reference/glance.html'>glance</a></span>,
   sep1 <span class='op'>=</span> <span class='st'>" = "</span>,
   sep2 <span class='op'>=</span> <span class='st'>"; "</span>,
   <span class='va'>...</span>
@@ -210,6 +211,11 @@ Add the statistics returned in <code><a href='https://generics.r-lib.org/referen
       <th>fmt_fun</th>
       <td><p>use to update default formatting function. Default is
 <code>everything() ~ purrr::partial(style_sigfig, digits = 3)</code></p></td>
+    </tr>
+    <tr>
+      <th>glance_fun</th>
+      <td><p>function to calculate and return glance statistics.
+Default is <code><a href='https://generics.r-lib.org/reference/glance.html'>broom::glance()</a></code></p></td>
     </tr>
     <tr>
       <th>sep1</th>
