@@ -9,6 +9,7 @@ add_glance_source_note(
   include = everything(),
   label = NULL,
   fmt_fun = NULL,
+  glance_fun = broom::glance,
   sep1 = " = ",
   sep2 = "; ",
   ...
@@ -23,6 +24,9 @@ add_glance_source_note(
 
 \item{fmt_fun}{use to update default formatting function. Default is
 \code{everything() ~ purrr::partial(style_sigfig, digits = 3)}}
+
+\item{glance_fun}{function to calculate and return glance statistics.
+Default is \code{broom::glance()}}
 
 \item{sep1}{Separator between statistic name and statistic.
 Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
