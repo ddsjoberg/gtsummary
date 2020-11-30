@@ -13,12 +13,13 @@ modify_header(
   update = NULL,
   stat_by = NULL,
   text_interpret = c("md", "html"),
+  quiet = NULL,
   ...
 )
 
-modify_footnote(x, update, abbreviation = FALSE)
+modify_footnote(x, update = NULL, abbreviation = FALSE, quiet = NULL)
 
-modify_spanning_header(x, update)
+modify_spanning_header(x, update = NULL, quiet = NULL)
 
 show_header_names(x = NULL, quiet = NULL)
 }
@@ -47,14 +48,14 @@ e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"}.}
 \item{text_interpret}{String indicates whether text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
+
 \item{...}{Specify a column and updated column label,
 e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an alternative to the
 \verb{update=} argument. They accomplish the same goal of updating column headers.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
-
-\item{quiet}{Logical indicating whether to print messages in console. Default is
-\code{FALSE}}
 }
 \value{
 Updated gtsummary object

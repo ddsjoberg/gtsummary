@@ -8,6 +8,8 @@
 #' @param label use to update statistic labels
 #' @param fmt_fun use to update default formatting function. Default is
 #' `everything() ~ purrr::partial(style_sigfig, digits = 3)`
+#' @param glance_fun function to calculate and return glance statistics.
+#' Default is `broom::glance()`
 #' @param sep1 Separator between statistic name and statistic.
 #' Default is `" = "`, e.g. `"R2 = 0.456"`
 #' @param sep2 Separator between statistics. Default is `"; "`
@@ -40,13 +42,14 @@
 #' \if{html}{\figure{add_glance_source_note_ex1.png}{options: width=64\%}}
 
 add_glance_source_note <- function(x, include = everything(), label = NULL,
-                                   fmt_fun = NULL, sep1 = " = ", sep2 = "; ", ...) {
+                                   fmt_fun = NULL, glance_fun = broom::glance,
+                                   sep1 = " = ", sep2 = "; ", ...) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_regression"))
     stop("`x=` must be class 'tbl_regression'")
 
   # prepping table -------------------------------------------------------------
-  df_glance_orig <- broom::glance(x$model_obj, ...)
+  df_glance_orig <- glance_fun(x$model_obj, ...)
   df_glance <-
     df_glance_orig %>%
     tidyr::pivot_longer(cols = everything(),
