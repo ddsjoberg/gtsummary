@@ -1,7 +1,7 @@
 # add_p.tbl_summary ------------------------------------------------------------
-add_p_test_t.test <- function(data, variable, by, test.args, ...) {
+add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   expr(stats::t.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
-                     data = !!data, !!!test.args)) %>%
+                     data = !!data, conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }
@@ -50,8 +50,8 @@ add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
   add_p_test_chisq.test(data = data, variable = variable, by = by, test.args = list(correct = FALSE))
 }
 
-add_p_test_fisher.test <- function(data, variable, by, test.args, ...) {
-  expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), !!!test.args)) %>%
+add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
     mutate(
@@ -104,7 +104,8 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 }
 
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
-                                            test.args = NULL, quiet = FALSE, ...) {
+                                            test.args = NULL, quiet = FALSE,
+                                            conf.level = 0.95, ...) {
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
     stop("`by=` must have exactly 2 levels", call. = FALSE)
@@ -129,7 +130,8 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
 
 
   # calculate p-value
-  expr(stats::t.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
+  expr(stats::t.test(data_wide[[2]], data_wide[[3]], paired = TRUE,
+                     conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }

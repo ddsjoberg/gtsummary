@@ -72,7 +72,7 @@
 #' @param test.args named list of additional arguments to pass to `test=`
 #' @noRd
 .run_add_p_test_fun <- function(x, data, variable, by = NULL, group = NULL,
-                                type = NULL, test.args = NULL) {
+                                type = NULL, test.args = NULL, conf.level = NULL) {
   # if x is NULL, return NULL
   if (is.null(x)) return(NULL)
 
@@ -83,7 +83,8 @@
         {
           # calculating p-value
           do.call(x$fun_to_run, list(data = data, variable = variable, by = by,
-                                     group = group, type = type, test.args = test.args))
+                                     group = group, type = type, test.args = test.args,
+                                     conf.level = conf.level))
         },
         # printing warning and errors as message
         warning = function(w) {
@@ -243,4 +244,11 @@
       get_theme_element("add_p.tbl_svysummary-attr:test.categorical", default = "svy.chisq.test")
     return(test_func)
   }
+}
+
+.assign_test_add_diff <- function(data, variable, summary_type, by, group, test) {
+  # if user supplied a test, use that test -------------------------------------
+  if (!is.null(test[[variable]])) return(test[[variable]])
+
+  return("t.test")
 }

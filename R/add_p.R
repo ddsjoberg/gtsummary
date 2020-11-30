@@ -218,6 +218,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
 
 # function to create text for footnote
 footnote_add_p <- function(meta_data) {
+  if (any(!c("p.value", "stat_test_lbl") %in% names(meta_data)))
+    return(NA_character_)
   footnotes <-
     meta_data %>%
     filter(!is.na(.data$p.value) & !is.na(.data$stat_test_lbl)) %>%
@@ -233,7 +235,8 @@ footnote_add_p <- function(meta_data) {
 }
 
 # function to merge p-values to tbl
-add_p_merge_p_values <- function(x, meta_data, pvalue_fun) {
+add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
+                                 estimate_fun = NULL, conf.level = NULL) {
 
   x <-
     # merging in p-value to table_body
@@ -250,12 +253,37 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun) {
   ) %>%
     # adding print instructions for p-value column
     modify_table_header(
-      "p.value",
+      any_of("p.value"),
       label = paste0("**", translate_text("p-value"), "**"),
       hide = FALSE,
       fmt_fun = pvalue_fun,
       footnote = footnote_add_p(meta_data)
+    ) %>%
+    # adding print instructions for estimates
+    modify_table_header(
+      any_of("estimate"),
+      label = paste0("**", translate_text("difference"), "**"),
+      hide = FALSE,
+      fmt_fun = estimate_fun
     )
+
+  # adding formatted CI column
+  if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
+      !"ci" %in% names(x$table_body)) {
+    x <- x %>%
+      modify_table_body(
+        mutate,
+        ci = glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
+      ) %>%
+      modify_table_body(dplyr::relocate, ci, .before = "conf.low") %>%
+      # adding print instructions for estimates
+      modify_table_header(
+        any_of("ci"),
+        label = paste0("**", conf.level * 100, "% ", translate_text("CI"), "**"),
+        hide = FALSE
+      )
+  }
+
 
   x
 }
