@@ -72,7 +72,7 @@
 #' @param test.args named list of additional arguments to pass to `test=`
 #' @noRd
 .run_add_p_test_fun <- function(x, data, variable, by = NULL, group = NULL,
-                                type = NULL, test.args = NULL, conf.level = NULL) {
+                                type = NULL, test.args = NULL, conf.level = 0.95) {
   # if x is NULL, return NULL
   if (is.null(x)) return(NULL)
 

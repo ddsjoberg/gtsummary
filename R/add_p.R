@@ -230,7 +230,7 @@ footnote_add_p <- function(meta_data) {
 
 # function to merge p-values to tbl
 add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
-                                 estimate_fun = NULL, conf.level = NULL) {
+                                 estimate_fun = style_sigfig, conf.level = 0.95) {
 
   x <-
     # merging in p-value to table_body
