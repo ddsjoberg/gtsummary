@@ -1,5 +1,42 @@
-
-
+#' Add difference between groups
+#'
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' Add the (typically mean) difference between two groups,
+#' along with the confidence interval and p-value.
+#'
+#' @param x `"tbl_summary"` object
+#' @inheritParams  add_p.tbl_summary
+#' @inheritParams tbl_regression
+#' @param adj.vars Variables to include in mean difference adjustment (e.g. in ANCOVA models)
+#' @param estimate_fun Function to round and format difference. Default is [style_sigfig()]
+#' @param test List of formulas specifying statistical tests to perform for each variable,
+#' e.g. `list(all_continuous() ~ "t.test")`
+#' @export
+#'
+#' @examples
+#' # Example 1 ----------------------------------
+#' add_difference_ex1 <-
+#'   trial %>%
+#'   select(trt, age, marker) %>%
+#'   tbl_summary(by = trt, missing = "no") %>%
+#'   add_n() %>%
+#'   add_difference()
+#'
+#' # Example 2 ----------------------------------
+#' add_difference_ex2 <-
+#'   trial %>%
+#'   select(trt, response, death) %>%
+#'   tbl_summary(by = trt, missing = "no") %>%
+#'   add_n() %>%
+#'   add_difference(estimate_fun = ~paste0(style_sigfig(. * 100), "%"))
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{add_difference_ex1.png}{options: width=60\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{add_difference_ex2.png}{options: width=60\%}}
 add_difference <- function(x, test = NULL, group = NULL,
                            conf.level = 0.95, adj.vars = NULL,
                            test.args = NULL, include = everything(),
