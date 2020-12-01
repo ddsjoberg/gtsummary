@@ -12,19 +12,21 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \code{tbl_summary(trial, by = trt) \%>\% add_p(age ~ "t.test", test.args = age ~ list(var.equal = TRUE))}
 }
 \section{tbl_summary() \%>\% add_p()}{
-\tabular{lll}{
-   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
-   \code{"t.test"} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, ...)} \cr
-   \code{"aov"} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data) \%>\% summary()} \cr
-   \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \cr
-   \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(variable ~ as.factor(by), data = data, ...)} \cr
-   \code{"chisq.test"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \cr
-   \code{"chisq.test.no.correct"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
-   \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), ...)} \cr
-   \code{"mcnemar.test"} \tab McNemar's test \tab \code{mcnemar.test(data[[variable]], data[[by]], ...)} \cr
-   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1&#124;group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1&#124;group), data, family = binomial))} \cr
-   \code{"paired.t.test"} \tab Paired t-test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, ...)} \cr
-   \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, ...)} \cr
+\tabular{llll}{
+   \strong{alias} \tab \strong{add_difference() compatible} \tab \strong{description} \tab \strong{pseudo-code} \cr
+   \code{"t.test"} \tab TRUE \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \cr
+   \code{"aov"} \tab FALSE \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data) \%>\% summary()} \cr
+   \code{"kruskal.test"} \tab FALSE \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \cr
+   \code{"wilcox.test"} \tab TRUE \tab Wilcoxon rank-sum test \tab \code{wilcox.test(variable ~ as.factor(by), data = data, conf.int = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"chisq.test"} \tab FALSE \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \cr
+   \code{"chisq.test.no.correct"} \tab FALSE \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
+   \code{"fisher.test"} \tab TRUE \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)} \cr
+   \code{"mcnemar.test"} \tab FALSE \tab McNemar's test \tab \code{mcnemar.test(data[[variable]], data[[by]], conf.level = 0.95, ...)} \cr
+   \code{"lme4"} \tab FALSE \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1&#124;group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1&#124;group), data, family = binomial))} \cr
+   \code{"paired.t.test"} \tab TRUE \tab Paired t-test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"paired.wilcox.test"} \tab TRUE \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"prop.test"} \tab TRUE \tab Test for equality of proportions \tab \verb{prop.test(x, n, conf.level = 0.95, <U+0085>)} \cr
+   \code{"ancova"} \tab TRUE \tab ANCOVA \tab \code{lm(variable ~ by + covars)} \cr
 }
 }
 

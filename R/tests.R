@@ -14,7 +14,10 @@
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary") %>%
 #'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
-#'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
+#'   select(`**alias**` = test_name,
+#'          `**add_difference() compatible**` = add_difference,
+#'          `**description**` = description,
+#'          `**pseudo-code**` = pseudo_code) %>%
 #'   knitr::kable()
 #' ```
 #'

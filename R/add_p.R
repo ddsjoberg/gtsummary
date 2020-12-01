@@ -253,10 +253,10 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
       fmt_fun = pvalue_fun,
       footnote = footnote_add_p(meta_data)
     ) %>%
-    # adding print instructions for estimates
+    # adding print instructions for estimate
     modify_table_header(
       any_of("estimate"),
-      label = paste0("**", translate_text("difference"), "**"),
+      label = paste0("**", translate_text("Difference"), "**"),
       hide = FALSE,
       fmt_fun = estimate_fun
     )
@@ -267,7 +267,10 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
     x <- x %>%
       modify_table_body(
         mutate,
-        ci = glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
+        ci = case_when(
+          !is.na(.data$conf.low) | !is.na(.data$conf.high) ~
+            glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
+        )
       ) %>%
       modify_table_body(dplyr::relocate, ci, .before = "conf.low") %>%
       # adding print instructions for estimates

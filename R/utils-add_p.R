@@ -72,7 +72,8 @@
 #' @param test.args named list of additional arguments to pass to `test=`
 #' @noRd
 .run_add_p_test_fun <- function(x, data, variable, by = NULL, group = NULL,
-                                type = NULL, test.args = NULL, conf.level = 0.95) {
+                                type = NULL, test.args = NULL, conf.level = 0.95,
+                                adj.vars = NULL, tbl = NULL) {
   # if x is NULL, return NULL
   if (is.null(x)) return(NULL)
 
@@ -84,7 +85,8 @@
           # calculating p-value
           do.call(x$fun_to_run, list(data = data, variable = variable, by = by,
                                      group = group, type = type, test.args = test.args,
-                                     conf.level = conf.level, x = x))
+                                     conf.level = conf.level, tbl = tbl,
+                                     adj.vars =  adj.vars))
         },
         # printing warning and errors as message
         warning = function(w) {
@@ -93,7 +95,7 @@
           w <- stringr::str_subset(w, "chisq.test\\(svytable\\(", negate = TRUE)
           if (length(w) > 0) {
             message(glue(
-              "Warning in 'add_p()' for variable '{variable}':\n ", w
+              "Warning for variable '{variable}':\n ", w
             ))
           }
           invokeRestart("muffleWarning")
@@ -250,5 +252,6 @@
   # if user supplied a test, use that test -------------------------------------
   if (!is.null(test[[variable]])) return(test[[variable]])
 
-  return("t.test")
+  if (summary_type %in% c("continuous", "continuous2")) return("t.test")
+  if (summary_type %in% "dichotomous") return("prop.test")
 }

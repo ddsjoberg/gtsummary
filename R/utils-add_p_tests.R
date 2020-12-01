@@ -21,9 +21,10 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
     broom::tidy()
 }
 
-add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
+add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
-                          data = !!data, !!!test.args)) %>%
+                          data = !!data, conf.int = TRUE, conf.level = !!conf.level,
+                          !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
     mutate(
@@ -137,7 +138,8 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
 }
 
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
-                                                 test.args = NULL, quiet = FALSE, ...) {
+                                                 test.args = NULL, conf.level = 0.95,
+                                                 quiet = FALSE, ...) {
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
     stop("`by=` must have exactly 2 levels", call. = FALSE)
@@ -161,21 +163,54 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
     rlang::inform()
 
   # calculate p-value
-  expr(stats::wilcox.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
+  expr(stats::wilcox.test(data_wide[[2]], data_wide[[3]], paired = TRUE,
+                          conf.int = TRUE, conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }
 
-add_p_test_prop.test <- function(x, variable, test.args = NULL, conf.level = 0.95, ...) {
+add_p_test_prop.test <- function(tbl, variable, test.args = NULL, conf.level = 0.95, ...) {
   df_counts <-
-    x$meta_data %>%
+    tbl$meta_data %>%
     filter(variable == .env$variable) %>%
     purrr::pluck("df_stats", 1)
 
   expr(stats::prop.test(df_counts$n, df_counts$N, conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
-    mutate(estimate = estimate1 - estimate2)
+    mutate(estimate = estimate1 - estimate2) %>%
+    mutate(
+      method = case_when(
+        .data$method == "2-sample test for equality of proportions with continuity correction" ~
+          "Two sample test for equality of proportions",
+        TRUE ~ .data$method
+      )
+    )
+}
+
+add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = NULL) {
+  # reverse coding the 'by' variable
+  data[[by]] <-
+    switch(!is.factor(data[[by]]),
+           forcats::fct_rev(factor(data[[by]]))) %||%
+    forcats::fct_rev(data[[by]])
+
+  # assembling formula
+  rhs <- c(by, adj.vars) %>% paste(collapse = " + ")
+  f <- stringr::str_glue("{variable} ~ {rhs}") %>% as.formula()
+
+  # building model
+  browser()
+  stats::lm(formula = f, data = data) %>%
+    broom.helpers::tidy_and_attach(conf.int = TRUE, conf.level = conf.level) %>%
+    broom.helpers::tidy_remove_intercept() %>%
+    dplyr::filter(.data$variable %in% .env$by) %>%
+    select(.data$estimate, .data$std.error, .data$statistic,
+           .data$conf.low, .data$conf.high, .data$p.value) %>%
+    dplyr::mutate(
+      method = case_when(is.null(adj.vars) ~ "One-way ANOVA",
+                         TRUE ~ "ANCOVA")
+    )
 }
 
 # add_p.tbl_svysummary ---------------------------------------------------------
