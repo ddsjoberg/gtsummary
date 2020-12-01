@@ -166,6 +166,18 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
     broom::tidy()
 }
 
+add_p_test_prop.test <- function(x, variable, test.args = NULL, conf.level = 0.95, ...) {
+  df_counts <-
+    x$meta_data %>%
+    filter(variable == .env$variable) %>%
+    purrr::pluck("df_stats", 1)
+
+  expr(stats::prop.test(df_counts$n, df_counts$N, conf.level = !!conf.level, !!!test.args)) %>%
+    eval() %>%
+    broom::tidy() %>%
+    mutate(estimate = estimate1 - estimate2)
+}
+
 # add_p.tbl_svysummary ---------------------------------------------------------
 add_p_test_svy.chisq.test <- function(data, variable, by, ...) {
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "F") %>%

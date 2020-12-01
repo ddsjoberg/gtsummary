@@ -84,7 +84,7 @@
           # calculating p-value
           do.call(x$fun_to_run, list(data = data, variable = variable, by = by,
                                      group = group, type = type, test.args = test.args,
-                                     conf.level = conf.level))
+                                     conf.level = conf.level, x = x))
         },
         # printing warning and errors as message
         warning = function(w) {
