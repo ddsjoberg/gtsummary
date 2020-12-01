@@ -81,22 +81,16 @@ add_p_ex1 <-
   add_p()
 
 # Example 2 ----------------------------------
-# Conduct a custom McNemar test for response,
-# Function must return a named list of the p-value and the
-# test name: list(p = 0.123, test = "McNemar's test")
-# The '...' must be included as input
-# This feature is experimental, and the API may change in the future
-my_mcnemar <- function(data, variable, by, ...) {
-  result <- list()
-  result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
-  result$test <- "McNemar's test"
-  result
-}
-
 add_p_ex2 <-
-  trial[c("response", "trt")] \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p(test = response ~ "my_mcnemar")
+trial \%>\%
+  select(trt, age, marker) \%>\%
+  tbl_summary(by = trt, missing = "no") \%>\%
+  add_p(
+    # perform t-test for all variables
+    test = everything() ~ "t.test",
+    # assume equal variance in the t-test
+    test.args = all_tests("t.test") ~ list(var.equal = TRUE)
+  )
 }
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
