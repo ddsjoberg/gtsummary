@@ -22,7 +22,7 @@
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
-  assert_package("kableExtra", "as_kable_extra")
+  assert_package("kableExtra", "as_kable_extra()")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {

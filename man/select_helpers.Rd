@@ -3,9 +3,18 @@
 \name{select_helpers}
 \alias{select_helpers}
 \alias{all_continuous2}
+\alias{all_tests}
+\alias{all_summary_cols}
 \title{Select helper functions}
 \usage{
 all_continuous2()
+
+all_tests(tests = NULL)
+
+all_summary_cols()
+}
+\arguments{
+\item{tests}{character}
 }
 \value{
 A character vector of column names selected
@@ -21,6 +30,8 @@ functions for selecting columns of data frames (and other items as well).
 \item \code{all_interaction()} selects interaction terms from a regression model
 \item \code{all_intercepts()} selects intercept terms from a regression model
 \item \code{all_contrasts()} selects variables in regression model based on their type of contrast
+\item \code{all_tests()} selects variables by the name of the test performed
+\item \code{all_summary_cols()} selects columns from \code{tbl_summary}/\code{tbl_svysummary} object with summary statistics (i.e. "\code{stat_0}", "\code{stat_1}", "\code{stat_2}", etc.)
 }
 }
 \section{Example Output}{

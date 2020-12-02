@@ -36,7 +36,7 @@
 
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = TRUE) {
-  assert_package("huxtable", "as_hux_table")
+  assert_package("huxtable", "as_hux_table()")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {

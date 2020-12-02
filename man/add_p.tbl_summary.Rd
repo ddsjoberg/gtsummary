@@ -10,6 +10,7 @@
   pvalue_fun = NULL,
   group = NULL,
   include = everything(),
+  test.args = NULL,
   exclude = NULL,
   ...
 )
@@ -17,23 +18,15 @@
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
-\item{test}{List of formulas specifying statistical tests to perform,
+\item{test}{List of formulas specifying statistical tests to perform for each
+variable,
 e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
-Options include
-\itemize{
-\item \code{"t.test"} for a t-test,
-\item \code{"aov"} for a one-way ANOVA test,
-\item \code{"wilcox.test"} for a Wilcoxon rank-sum test,
-\item \code{"kruskal.test"} for a Kruskal-Wallis rank-sum test,
-\item \code{"chisq.test"} for a chi-squared test of independence,
-\item \code{"chisq.test.no.correct"} for a chi-squared test of independence without continuity correction,
-\item \code{"fisher.test"} for a Fisher's exact test,
-\item \code{"lme4"} for a random intercept logistic regression model to account for
-clustered data, \code{lme4::glmer(by ~ variable + (1 | group), family = binomial)}.
-The \code{by} argument must be binary for this option.
-}
+Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{"kruskal.test"},
+\code{"chisq.test"}, \code{"fisher.test"}, and \code{"lme4"} (for clustered data). See \link{tests}
+for details and more tests.
 
-Tests default to \code{"kruskal.test"} for continuous variables, \code{"chisq.test"} for
+Tests default to \code{"kruskal.test"} for continuous variables (\code{"wilcox.test"}
+when "\code{by}" variable has two levels), \code{"chisq.test"} for
 categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
 for categorical variables with any expected cell count <5.
 A custom test function can be added for all or some variables. See below for
@@ -54,6 +47,10 @@ the row associated with this variable is omitted from the summary table.}
 \item{include}{Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper
 functions. Default is \code{everything()}.}
+
+\item{test.args}{List of formulas containing additional arguments to pass to
+tests that accept arguments. For example, add an argument for all t-tests,
+use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
 
 \item{exclude}{DEPRECATED}
 
@@ -84,22 +81,16 @@ add_p_ex1 <-
   add_p()
 
 # Example 2 ----------------------------------
-# Conduct a custom McNemar test for response,
-# Function must return a named list of the p-value and the
-# test name: list(p = 0.123, test = "McNemar's test")
-# The '...' must be included as input
-# This feature is experimental, and the API may change in the future
-my_mcnemar <- function(data, variable, by, ...) {
-  result <- list()
-  result$p <- stats::mcnemar.test(data[[variable]], data[[by]])$p.value
-  result$test <- "McNemar's test"
-  result
-}
-
 add_p_ex2 <-
-  trial[c("response", "trt")] \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p(test = response ~ "my_mcnemar")
+trial \%>\%
+  select(trt, age, marker) \%>\%
+  tbl_summary(by = trt, missing = "no") \%>\%
+  add_p(
+    # perform t-test for all variables
+    test = everything() ~ "t.test",
+    # assume equal variance in the t-test
+    test.args = all_tests("t.test") ~ list(var.equal = TRUE)
+  )
 }
 \seealso{
 See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples

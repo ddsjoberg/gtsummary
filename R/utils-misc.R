@@ -11,16 +11,16 @@
 #' @author David Hugh-Jones
 assert_package <- function(pkg, fn) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    ui_oops("The {ui_value(pkg)} is required for function {ui_code(paste0(fn, '()'))}.")
+    ui_oops("The {ui_value(pkg)} is required for function {ui_code(fn)}.")
     usethis::ui_todo("Install the {ui_value(pkg)} package with the code below.")
     ui_code_block('install.packages("{pkg}")')
-    stop()
+    stop("Install required package", call. = FALSE)
   }
 }
 
 # converts a character vector into a quotes list separated by a comma, eg 'a', 'b'
 quoted_list <- function(x) {
-  paste(sQuote(x), collapse = ", ")
+  paste(shQuote(x, type = "csh"), collapse = ", ")
 }
 
 # used in the as_flex_table (and friends) functions for inserting calls

@@ -18,7 +18,7 @@
 
 add_global_p <- function(x, ...) {
   # must have car package installed to use this function
-  assert_package("car", "add_global_p")
+  assert_package("car", "add_global_p()")
   UseMethod("add_global_p")
 }
 

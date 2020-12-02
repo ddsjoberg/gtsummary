@@ -76,4 +76,11 @@ test_that("test-select helpers", {
   expect_error(
     tbl_summary(trial, statistic = all_categorical(dichotomous = FALSE) ~ "{n}"), NA
   )
+
+  expect_error(
+    tbl_summary(trial, by = trt, include = c(stage, grade, trt)) %>%
+      add_p(test = everything() ~ "fisher.test",
+            test.args = all_tests("fisher.test") ~ list(simulate.p.value = TRUE)),
+    NA
+  )
 })

@@ -97,6 +97,32 @@ trial %>%
 
 ---
 
+Paired t-test
+
+```{r}
+# imagine that each patient recieved Drug A and Drug B (adding ID showing their paired measurements)
+trial_paired <-
+  trial %>%
+  select(trt, marker) %>%
+  group_by(trt) %>%
+  mutate(id = row_number()) %>%
+  ungroup()
+
+# you must first delete incomplete pairs from the data, then you can build the table
+trial_paired %>%
+  # delete missing marker values
+  filter(!is.na(marker)) %>%
+  # keep IDs with both measurements
+  group_by(id) %>%
+  filter(n() == 2) %>%
+  ungroup() %>%
+  # summarize data
+  tbl_summary(by = trt, include = -id) %>%
+  add_p(test = marker ~ "paired.t.test", group = id)
+```
+
+---
+
 Include p-values comparing all groups to a single reference group.
 
 ```{r}

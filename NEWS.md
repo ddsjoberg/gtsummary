@@ -1,5 +1,14 @@
 # gtsummary (development version)
 
+- The code base powering `add_p()` and related methods has been refactored for better performance, organization, and customizability. (#622)
+    - For clarity, a help file listing each test available within gtsummary and the pseudo code for calculating the p-value has been added (`?add_p_test`)
+    - Each `add_p()` method now has the `test.args=` argument. Use this argument to pass additional arguments to the statistical method, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = c(age, marker) ~ list(var.equal = TRUE))`
+    - New function was added `all_tests()` to make it easier to select variables based on the test used to calculate the p-value, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))`
+    - Additional tests have been added: paired t-test, signed rank test
+    - More robust unit testing implemented for all `add_p()` methods.
+- Breaking change. Experimental function `add_p.tbl_survfit(test.args=)` in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as `everything() ~ "test_name"`.  The single string is no longer accepted, and users must use the formula notation.
+- New function: `all_summary_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
+
 * Added messaging to `tbl_stack()` to inform users that the attributes from the first table passed take precedent over the others'. (#699)
 
 * In the `modfiy_*()` functions, if users did not select any columns, they encountered an error. Now, if no columns are selected, instructions are printed for how to correctly select columns in a gtsummary table. Moreover, if no columns are selected, the gtsummary object is now returned unaltered. (#699)

@@ -21,8 +21,9 @@
 \code{"petopeto_gehanwilcoxon"}, \code{"coxph_lrt"}, \code{"coxph_wald"}, \verb{"coxph_score".}
 See details below}
 
-\item{test.args}{Named list of additional arguments passed to method in
-\verb{test=}. Does not apply to all test types.}
+\item{test.args}{List of formulas containing additional arguments to pass to
+tests that accept arguments. For example, add an argument for all t-tests,
+use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.

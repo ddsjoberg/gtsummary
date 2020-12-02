@@ -50,7 +50,7 @@
 as_flex_table <- function(x, include = everything(), return_calls = FALSE,
                           strip_md_bold = TRUE) {
   # checking flextable installation --------------------------------------------
-  assert_package("flextable", "as_flex_table")
+  assert_package("flextable", "as_flex_table()")
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {

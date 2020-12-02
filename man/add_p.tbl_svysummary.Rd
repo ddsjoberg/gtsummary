@@ -4,7 +4,14 @@
 \alias{add_p.tbl_svysummary}
 \title{Adds p-values to svysummary tables}
 \usage{
-\method{add_p}{tbl_svysummary}(x, test = NULL, pvalue_fun = NULL, include = everything(), ...)
+\method{add_p}{tbl_svysummary}(
+  x,
+  test = NULL,
+  pvalue_fun = NULL,
+  include = everything(),
+  test.args = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_svysummary} from the \link{tbl_svysummary} function}
@@ -39,6 +46,10 @@ and return a string that is the rounded/formatted p-value (e.g.
 \item{include}{Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper
 functions. Default is \code{everything()}.}
+
+\item{test.args}{List of formulas containing additional arguments to pass to
+tests that accept arguments. For example, add an argument for all t-tests,
+use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
 
 \item{...}{Not used}
 }

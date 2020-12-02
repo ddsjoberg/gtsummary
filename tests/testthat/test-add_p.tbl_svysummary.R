@@ -99,12 +99,6 @@ test_that("add_p creates errors with bad args", {
 
   expect_error(
     tbl_svysummary(strial, by = grade, include = -response) %>%
-      add_p(test = list(all_continuous() ~ "t.test")), # not adapted
-    NULL
-  )
-
-  expect_error(
-    tbl_svysummary(strial, by = grade, include = -response) %>%
       add_p(test = list(all_continuous() ~ "ttttessstttt")),
     NULL
   )
@@ -113,7 +107,8 @@ test_that("add_p creates errors with bad args", {
 
 test_that("add_p works well", {
   expect_error(
-    tbl_svysummary(strial, by = response) %>%
+    tbl1 <-
+      tbl_svysummary(strial, by = response) %>%
       add_p(test = list(
         age ~ "svy.t.test",
         marker ~ "svy.wilcox.test",
@@ -124,8 +119,39 @@ test_that("add_p works well", {
     NA
   )
 
+  expect_equivalent(
+    dplyr::filter(tbl1$meta_data, variable == "age")$p.value,
+    survey::svyttest(age ~ response, strial)$p.value %>% rlang::set_names(NULL)
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl1$meta_data, variable == "marker")$p.value,
+    survey::svyranktest(marker ~ response, strial, test = "wilcoxon")$p.value %>% rlang::set_names(NULL)
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl1$meta_data, variable == "trt")$p.value,
+    survey::svychisq(~trt + response, strial, statistic = "F")$p.value %>% rlang::set_names(NULL),
+    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl1$meta_data, variable == "stage")$p.value,
+    survey::svychisq(~stage + response, strial, statistic = "Chisq")$p.value %>% rlang::set_names(NULL)
+  )
+
+
+  expect_equivalent(
+    dplyr::filter(tbl1$meta_data, variable == "death")$p.value,
+    survey::svychisq(~death + response, strial, statistic = "Wald")$p.value %>% rlang::set_names(NULL),
+    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+  )
+
+
+
   expect_error(
-    tbl_svysummary(strial, by = response) %>%
+    tbl2 <-
+      tbl_svysummary(strial, by = response) %>%
       add_p(test = list(
         age ~ "svy.vanderwaerden.test",
         ttdeath ~ "svy.kruskal.test",
@@ -135,5 +161,38 @@ test_that("add_p works well", {
         death ~ "svy.saddlepoint.test"
       )),
     NA
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl2$meta_data, variable == "age")$p.value,
+    survey::svyranktest(age ~ response, strial, test = "vanderWaerden")$p.value %>% rlang::set_names(NULL)
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl2$meta_data, variable == "ttdeath")$p.value,
+    survey::svyranktest(ttdeath ~ response, strial, test = "KruskalWallis")$p.value %>% rlang::set_names(NULL)
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl2$meta_data, variable == "marker")$p.value,
+    survey::svyranktest(marker ~ response, strial, test = "median")$p.value %>% rlang::set_names(NULL)
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl2$meta_data, variable == "trt")$p.value,
+    survey::svychisq(~trt + response, strial, statistic = "adjWald")$p.value %>% as.numeric(),
+    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl2$meta_data, variable == "stage")$p.value,
+    survey::svychisq(~stage + response, strial, statistic = "lincom")$p.value %>% as.numeric(),
+    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+  )
+
+  expect_equivalent(
+    dplyr::filter(tbl2$meta_data, variable == "death")$p.value,
+    survey::svychisq(~death + response, strial, statistic = "saddlepoint")$p.value %>% as.numeric(),
+    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 })

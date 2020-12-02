@@ -17,7 +17,7 @@ NULL
 #' @rdname tbl_regression_methods
 tbl_regression.lmerMod <- function(
   x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"), ...) {
-  assert_package("broom.mixed", "tbl_regression.lmerMod")
+  assert_package("broom.mixed", "tbl_regression.lmerMod()")
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 }
 
