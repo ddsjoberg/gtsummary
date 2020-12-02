@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert gtsummary object to a gt object — as_gt • gtsummary</title>
+<title>Assign test in add_p.tbl_summary() — .assign_test_tbl_summary • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,16 +52,9 @@
 
 
 
-<meta property="og:title" content="Convert gtsummary object to a gt object — as_gt" />
-<meta property="og:description" content="Function converts a gtsummary object to a gt_tbl object.
-Function is used in the background when the results are printed or knit.
-A user can use this function if they wish to add customized formatting
-available via the gt package.
-Review the
-tbl_summary vignette
-or
-tbl_regression vignette
-for detailed examples in the 'Advanced Customization' section." />
+<meta property="og:title" content="Assign test in add_p.tbl_summary() — .assign_test_tbl_summary" />
+<meta property="og:description" content="Returns either the user-supplied test, or the default test given the variable
+type" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -176,93 +169,48 @@ for detailed examples in the 'Advanced Customization' section." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert gtsummary object to a gt object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/as_gt.R'><code>R/as_gt.R</code></a></small>
-    <div class="hidden name"><code>as_gt.Rd</code></div>
+    <h1>Assign test in <code>add_p.tbl_summary()</code></h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/utils-add_p.R'><code>R/utils-add_p.R</code></a></small>
+    <div class="hidden name"><code>dot-assign_test_tbl_summary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Function converts a gtsummary object to a gt_tbl object.
-Function is used in the background when the results are printed or knit.
-A user can use this function if they wish to add customized formatting
-available via the <a href='https://gt.rstudio.com/index.html'>gt package</a>.</p>
-<p>Review the
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced'>tbl_summary vignette</a>
-or
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced'>tbl_regression vignette</a>
-for detailed examples in the 'Advanced Customization' section.</p>
+    <p>Returns either the user-supplied test, or the default test given the variable
+type</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_gt</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
-  return_calls <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>...</span>,
-  exclude <span class='op'>=</span> <span class='cn'>NULL</span>,
-  omit <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.assign_test_tbl_summary</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>summary_type</span>, <span class='va'>by</span>, <span class='va'>group</span>, <span class='va'>test</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>Object created by a function from the gtsummary package
-(e.g. <a href='tbl_summary.html'>tbl_summary</a> or <a href='tbl_regression.html'>tbl_regression</a>)</p></td>
+      <th>data</th>
+      <td><p>a data frame</p></td>
     </tr>
     <tr>
-      <th>include</th>
-      <td><p>Commands to include in output. Input may be a vector of
-quoted or unquoted names. tidyselect and gtsummary select helper
-functions are also accepted.
-Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code>.</p></td>
+      <th>variable</th>
+      <td><p>character variable name</p></td>
     </tr>
     <tr>
-      <th>return_calls</th>
-      <td><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
-as a list of expressions.</p></td>
+      <th>summary_type</th>
+      <td><p>summary type</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Arguments passed on to <a href='https://rdrr.io/pkg/gt/man/gt.html'>gt::gt</a></p></td>
+      <th>by</th>
+      <td><p>character by variable</p></td>
     </tr>
     <tr>
-      <th>exclude</th>
-      <td><p>DEPRECATED.</p></td>
+      <th>group</th>
+      <td><p>character grouping variable</p></td>
     </tr>
     <tr>
-      <th>omit</th>
-      <td><p>DEPRECATED.</p></td>
+      <th>test</th>
+      <td><p>named list of user-supplied tests</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>gt_tbl</code> object</p>
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
-
-    
-
-
-<p><img src='figures/as_gt_ex.png' width=50% /></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other gtsummary output types: 
-<code><a href='as_flex_table.html'>as_flex_table</a>()</code>,
-<code><a href='as_hux_table.html'>as_hux_table</a>()</code>,
-<code><a href='as_kable_extra.html'>as_kable_extra</a>()</code>,
-<code><a href='as_kable.html'>as_kable</a>()</code>,
-<code><a href='as_tibble.gtsummary.html'>as_tibble.gtsummary</a>()</code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Daniel D. Sjoberg</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>as_gt_ex</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trt"</span>, <span class='st'>"age"</span>, <span class='st'>"response"</span>, <span class='st'>"grade"</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>as_gt</span><span class='op'>(</span><span class='op'>)</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9012</span>
       </span>
     </div>
 
@@ -176,6 +176,20 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<p>The code base powering <code><a href="../reference/add_p.html">add_p()</a></code> and related methods has been refactored for better performance, organization, and customizability. (<a href='https://github.com/ddsjoberg/gtsummary/issues/622'>#622</a>)</p>
+<ul>
+<li>For clarity, a help file listing each test available within gtsummary and the pseudo code for calculating the p-value has been added (<code>?add_p_test</code>)</li>
+<li>Each <code><a href="../reference/add_p.html">add_p()</a></code> method now has the <code>test.args=</code> argument. Use this argument to pass additional arguments to the statistical method, e.g. <code><a href="../reference/add_p.html">add_p(test = c(age, marker) ~ "t.test", test.args = c(age, marker) ~ list(var.equal = TRUE))</a></code>
+</li>
+<li>New function was added <code><a href="../reference/select_helpers.html">all_tests()</a></code> to make it easier to select variables based on the test used to calculate the p-value, e.g. <code><a href="../reference/add_p.html">add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))</a></code>
+</li>
+<li>Additional tests have been added: paired t-test, signed rank test</li>
+<li>More robust unit testing implemented for all <code><a href="../reference/add_p.html">add_p()</a></code> methods.</li>
+</ul>
+</li>
+<li><p>Breaking change. Experimental function <code><a href="../reference/add_p.tbl_survfit.html">add_p.tbl_survfit(test.args=)</a></code> in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as <code>everything() ~ "test_name"</code>. The single string is no longer accepted, and users must use the formula notation.</p></li>
+<li><p>New function: <code><a href="../reference/select_helpers.html">all_summary_cols()</a></code> selects columns from <code>tbl_summary</code>/<code>tbl_svysummary</code> object with summary statistics (i.e. “<code>stat_0</code>”, “<code>stat_1</code>”, “<code>stat_2</code>”, etc.)</p></li>
 <li><p>Added messaging to <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> to inform users that the attributes from the first table passed take precedent over the others’. (<a href='https://github.com/ddsjoberg/gtsummary/issues/699'>#699</a>)</p></li>
 <li><p>In the <code>modfiy_*()</code> functions, if users did not select any columns, they encountered an error. Now, if no columns are selected, instructions are printed for how to correctly select columns in a gtsummary table. Moreover, if no columns are selected, the gtsummary object is now returned unaltered. (<a href='https://github.com/ddsjoberg/gtsummary/issues/699'>#699</a>)</p></li>
 <li><p>The <code><a href="../reference/add_glance_source_note.html">add_glance_source_note()</a></code> function has been generalized so users may pass any glance function. Previously, <code><a href="https://generics.r-lib.org/reference/glance.html">broom::glance()</a></code> was being used with no option to change it. (<a href='https://github.com/ddsjoberg/gtsummary/issues/699'>#699</a>)</p></li>

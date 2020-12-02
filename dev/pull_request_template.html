@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9012</span>
       </span>
     </div>
 
@@ -199,13 +199,30 @@ Code coverage is suitable for any new functions/features. Review coverage with <
 <input type="checkbox" disabled>
 R CMD Check runs without errors, warnings, and notes</li>
 <li>
-<input type="checkbox" disabled>
-NEWS.md has been updated with the changes from this pull request under the heading “<code># gtsummary (development version)</code>”. If there is an issue associated with the pull request, reference it in parantheses at the end update (see NEWS.md for examples).</li>
-<li>
 <input type="checkbox" disabled><code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> runs with no spelling errors in documentation</li>
+</ul>
+<p>When the branch is ready to be merged into master:</p>
+<ul>
 <li>
 <input type="checkbox" disabled>
-When the branch is ready to be merged into master, increment the version number using <code><a href="https://usethis.r-lib.org/reference/use_version.html">usethis::use_version(which = "dev")</a></code>, run <code>codemetar::write_codemeta()</code>, approve, and merge the PR. Please use “Squash and merge”.</li>
+Update NEWS.md with the changes from this pull request under the heading “<code># gtsummary (development version)</code>”. If there is an issue associated with the pull request, reference it in parantheses at the end update (see <code>NEWS.md</code> for examples).</li>
+<li>
+<input type="checkbox" disabled>
+Increment the version number using <code><a href="https://usethis.r-lib.org/reference/use_version.html">usethis::use_version(which = "dev")</a></code>
+</li>
+<li>
+<input type="checkbox" disabled>
+Run <code>codemetar::write_codemeta()</code>
+</li>
+<li>
+<input type="checkbox" disabled>
+Run <code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> again</li>
+<li>
+<input type="checkbox" disabled>
+Approve Pull Request</li>
+<li>
+<input type="checkbox" disabled>
+Merge the PR. Please use “Squash and merge”.</li>
 </ul>
 
 

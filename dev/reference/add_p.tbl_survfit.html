@@ -98,7 +98,7 @@ Calculate and add a p-value" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9012</span>
       </span>
     </div>
 
@@ -207,8 +207,9 @@ See details below</p></td>
     </tr>
     <tr>
       <th>test.args</th>
-      <td><p>Named list of additional arguments passed to method in
-<code>test=</code>. Does not apply to all test types.</p></td>
+      <td><p>List of formulas containing additional arguments to pass to
+tests that accept arguments. For example, add an argument for all t-tests,
+use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
@@ -278,15 +279,13 @@ and a second test of the <em>G-rho</em> family.<div class="r"></p><pre><span cla
 <span class='va'>add_p_tbl_survfit_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>gts_survfit</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>add_p: Calculating p-value with</span>
-#&gt; <span class='message'>`survival::survdiff(formula = Surv(ttdeath, death) ~ grade, data = trial)`</span></div><div class='input'>
+
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># Pass `rho=` argument to `survdiff()`</span>
 <span class='va'>add_p_tbl_survfit_ex2</span> <span class='op'>&lt;-</span>
   <span class='va'>gts_survfit</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>test <span class='op'>=</span> <span class='st'>"survdiff"</span>, test.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>rho <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>add_p: Calculating p-value with</span>
-#&gt; <span class='message'>`survival::survdiff(formula = Surv(ttdeath, death) ~ grade, data = trial, rho = 0.5)`</span></div></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
