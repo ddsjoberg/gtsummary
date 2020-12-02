@@ -322,8 +322,8 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
 .superfluous_args <- function(variable, ...) {
   superfluous_args <- list(...) %>% purrr::discard(is.null) %>% names()
   if (!rlang::is_empty(superfluous_args)) {
-    glue::glue("Argument(s) {quoted_list(superfluous_args)} ",
-               "do not apply to test used for variable '{variable}' and were ignored. ",
+    glue::glue("Note for variable '{variable}': Argument(s) {quoted_list(superfluous_args)} ",
+               "do not apply and were ignored. ",
                "See `?tests` for details.") %>%
       stringr::str_wrap() %>%
       rlang::inform()
