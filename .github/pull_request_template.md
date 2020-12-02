@@ -15,7 +15,13 @@ Checklist for PR reviewer
 - [ ] Run `pkgdown::build_site()`. Check the R console for errors, and review the rendered website.
 - [ ] Code coverage is suitable for any new functions/features. Review coverage with `covr::report()`. Before you run, set `Sys.setenv(NOT_CRAN="true")` and begin in a fresh R session without any packages loaded. 
 - [ ] R CMD Check runs without errors, warnings, and notes
-- [ ] NEWS.md has been updated with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parantheses at the end update (see NEWS.md for examples).
 - [ ] `usethis::use_spell_check()` runs with no spelling errors in documentation
-- [ ] When the branch is ready to be merged into master, increment the version number using `usethis::use_version(which = "dev")`, run `codemetar::write_codemeta()`, approve, and merge the PR. Please use "Squash and merge".
+
+When the branch is ready to be merged into master:
+- [ ] Update NEWS.md with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parantheses at the end update (see `NEWS.md` for examples).
+- [ ] Increment the version number using `usethis::use_version(which = "dev")` 
+- [ ] Run `codemetar::write_codemeta()`
+- [ ] Run `usethis::use_spell_check()` again
+- [ ] Approve Pull Request
+- [ ] Merge the PR. Please use "Squash and merge".
 

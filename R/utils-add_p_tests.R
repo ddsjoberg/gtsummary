@@ -24,7 +24,6 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
     broom::tidy()
 }
 
-
 add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   .superfluous_args(variable, ...)
   expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
@@ -117,6 +116,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
                                             test.args = NULL, quiet = FALSE,
                                             conf.level = 0.95, ...) {
+
   .superfluous_args(variable, ...)
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
@@ -175,13 +175,13 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
     rlang::inform()
 
   # calculate p-value
-  expr(stats::wilcox.test(data_wide[[2]], data_wide[[3]], paired = TRUE,
-                          conf.int = TRUE, conf.level = !!conf.level, !!!test.args)) %>%
+  expr(stats::wilcox.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }
 
 add_p_test_prop.test <- function(tbl, variable, test.args = NULL, conf.level = 0.95, ...) {
+  .superfluous_args(variable, ...)
   df_counts <-
     tbl$meta_data %>%
     filter(variable == .env$variable) %>%
@@ -201,6 +201,7 @@ add_p_test_prop.test <- function(tbl, variable, test.args = NULL, conf.level = 0
 }
 
 add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = NULL) {
+  .superfluous_args(variable, ...)
   # reverse coding the 'by' variable
   data[[by]] <-
     switch(!is.factor(data[[by]]),

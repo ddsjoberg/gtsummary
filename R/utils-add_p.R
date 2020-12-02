@@ -60,7 +60,6 @@
   abort("Something went wrong in the test selection....")
 }
 
-
 #' Calculate p-values
 #'
 #' @param x list returned from `.get_add_p_test_fun()`
