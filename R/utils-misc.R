@@ -20,7 +20,7 @@ assert_package <- function(pkg, fn) {
 
 # converts a character vector into a quotes list separated by a comma, eg 'a', 'b'
 quoted_list <- function(x) {
-  paste(sQuote(x), collapse = ", ")
+  paste(shQuote(x, type = "csh"), collapse = ", ")
 }
 
 # used in the as_flex_table (and friends) functions for inserting calls

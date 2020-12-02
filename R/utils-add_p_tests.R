@@ -1,5 +1,6 @@
 # add_p.tbl_summary ------------------------------------------------------------
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  .superfluous_args(variable, ...)
   expr(stats::t.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
                      data = !!data, conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
@@ -7,6 +8,7 @@ add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, 
 }
 
 add_p_test_aov <- function(data, variable, by,...) {
+  .superfluous_args(variable, ...)
   p.value <-
     rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
     eval() %>%
@@ -17,11 +19,14 @@ add_p_test_aov <- function(data, variable, by,...) {
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   stats::kruskal.test(data[[variable]], as.factor(data[[by]])) %>%
     broom::tidy()
 }
 
+
 add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  .superfluous_args(variable, ...)
   expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
                           data = !!data, conf.int = TRUE, conf.level = !!conf.level,
                           !!!test.args)) %>%
@@ -36,6 +41,7 @@ add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0
 }
 
 add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
+  .superfluous_args(variable, ...)
   expr(stats::chisq.test(x = !!data[[variable]], y = as.factor(!!data[[by]]), !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
@@ -48,10 +54,12 @@ add_p_test_chisq.test <- function(data, variable, by, test.args, ...) {
 }
 
 add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   add_p_test_chisq.test(data = data, variable = variable, by = by, test.args = list(correct = FALSE))
 }
 
 add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+  .superfluous_args(variable, ...)
   expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
@@ -63,6 +71,7 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0
 }
 
 add_p_test_mcnemar.test <- function(data, variable, by, test.args = NULL, ...) {
+  .superfluous_args(variable, ...)
   rlang::expr(stats::mcnemar.test(data[[variable]], data[[by]], !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
@@ -75,6 +84,7 @@ add_p_test_mcnemar.test <- function(data, variable, by, test.args = NULL, ...) {
 }
 
 add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
+  .superfluous_args(variable, ...)
   assert_package("lme4", "add_p(test = variable ~ 'lme4')")
   if (is.null(group))
     glue("Error in 'lme4' test for variable '{variable}'. ",
@@ -107,6 +117,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
                                             test.args = NULL, quiet = FALSE,
                                             conf.level = 0.95, ...) {
+  .superfluous_args(variable, ...)
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
     stop("`by=` must have exactly 2 levels", call. = FALSE)
@@ -140,6 +151,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
                                                  test.args = NULL, conf.level = 0.95,
                                                  quiet = FALSE, ...) {
+  .superfluous_args(variable, ...)
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
     stop("`by=` must have exactly 2 levels", call. = FALSE)
@@ -215,24 +227,28 @@ add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = 
 
 # add_p.tbl_svysummary ---------------------------------------------------------
 add_p_test_svy.chisq.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "F") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "chi-squared test with Rao & Scott's second-order correction")
 }
 
 add_p_test_svy.adj.chisq.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Chisq") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "chi-squared test adjusted by a design effect estimate")
 }
 
 add_p_test_svy.wald.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "Wald") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "Wald test of independence for complex survey samples")
 }
 
 add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "adjWald") %>%
     {suppressMessages(broom::tidy(.))} %>%
     dplyr::mutate_at(vars(.data$statistic, .data$p.value), as.numeric) %>% # default saves these cols as a matrix
@@ -240,42 +256,49 @@ add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
 }
 
 add_p_test_svy.lincom.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "lincom") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "test of independence using the exact asymptotic distribution for complex survey samples")
 }
 
 add_p_test_svy.saddlepoint.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svychisq(c_form(right = c(variable, by)), data, statistic = "saddlepoint") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "test of independence using a saddlepoint approximation for complex survey samples")
 }
 
 add_p_test_svy.t.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svyttest(c_form(variable, by), data) %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "t-test adapted to complex survey samples")
 }
 
 add_p_test_svy.wilcox.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svyranktest(c_form(variable, by), data, test = "wilcoxon") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "Wilcoxon rank-sum test for complex survey samples")
 }
 
 add_p_test_svy.kruskal.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svyranktest(c_form(variable, by), data, test = "KruskalWallis") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "Kruskal-Wallis rank-sum test for complex survey samples")
 }
 
 add_p_test_svy.vanderwaerden.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svyranktest(c_form(variable, by), data, test = "vanderWaerden") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "van der Waerden's normal-scores test for complex survey samples")
 }
 
 add_p_test_svy.median.test <- function(data, variable, by, ...) {
+  .superfluous_args(variable, ...)
   survey::svyranktest(c_form(variable, by), data, test = "median") %>%
     {suppressMessages(broom::tidy(.))} %>%
     mutate(method = "Mood's test for the median for complex survey samples")
@@ -292,7 +315,8 @@ extract_formula_data_call <- function(x) {
   survfit_call[call_index]
 }
 
-add_p_tbl_survfit_survdiff <- function(data, test.args, ...) {
+add_p_tbl_survfit_survdiff <- function(data, variable, test.args, ...) {
+  .superfluous_args(variable, ...)
   # formula and data calls
   formula_data_call <- extract_formula_data_call(data)
 
@@ -304,20 +328,26 @@ add_p_tbl_survfit_survdiff <- function(data, test.args, ...) {
 
   # returning p-value
   broom::glance(survdiff_result) %>%
-    dplyr::mutate(method = "G-rho family test")
+    dplyr::mutate(
+      method =
+        switch(is.null(test.args$rho) || test.args$rho == 0, "Log-rank test") %||%
+        switch(test.args$rho == 1, "Peto & Peto modification of Gehan-Wilcoxon test") %||%
+        stringr::str_glue("G-rho (\U03C1 = {test.args$rho}) test")
+    )
 }
 
-add_p_tbl_survfit_logrank <- function(data, ...) {
-  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 0)) %>%
-    dplyr::mutate(method = "Log-rank test")
+add_p_tbl_survfit_logrank <- function(data, variable, ...) {
+  .superfluous_args(variable, ...)
+  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 0))
 }
 
-add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, ...) {
-  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1)) %>%
-    dplyr::mutate(method = "Peto & Peto modification of Gehan-Wilcoxon test")
+add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, variable, ...) {
+  .superfluous_args(variable, ...)
+  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1))
 }
 
-add_p_tbl_survfit_coxph <- function(data, test_type, test.args, ...) {
+add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
+  .superfluous_args(variable, ...)
   # formula and data calls
   formula_data_call <- extract_formula_data_call(data)
 
@@ -337,4 +367,16 @@ add_p_tbl_survfit_coxph <- function(data, test_type, test.args, ...) {
     set_names(c("statistic", "p.value")) %>%
     mutate(method = method)
 
+}
+
+# checks if test.args was passed incorrectly
+.superfluous_args <- function(variable, ...) {
+  superfluous_args <- list(...) %>% purrr::discard(is.null) %>% names() %>% intersect("test.args")
+  if (!rlang::is_empty(superfluous_args)) {
+    glue::glue("Note for variable '{variable}': Argument(s) {quoted_list(superfluous_args)} ",
+               "do not apply and were ignored. ",
+               "See `?tests` for details.") %>%
+      stringr::str_wrap() %>%
+      rlang::inform()
+  }
 }
