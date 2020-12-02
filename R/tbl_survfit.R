@@ -200,7 +200,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # input checks ---------------------------------------------------------------
-  assert_package("survival", "tbl_survfit")
+  assert_package("survival", "tbl_survfit()")
   if (purrr::every(x, ~!inherits(.x, "survfit"))) {
     stop("Argument `x=` must be class 'survfit' created from the `survival::survfit()` function.",
          call. = FALSE)
