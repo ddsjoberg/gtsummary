@@ -319,8 +319,9 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
 
 }
 
+# checks if test.args was passed incorrectly
 .superfluous_args <- function(variable, ...) {
-  superfluous_args <- list(...) %>% purrr::discard(is.null) %>% names()
+  superfluous_args <- list(...) %>% purrr::discard(is.null) %>% names() %>% intersect("test.args")
   if (!rlang::is_empty(superfluous_args)) {
     glue::glue("Note for variable '{variable}': Argument(s) {quoted_list(superfluous_args)} ",
                "do not apply and were ignored. ",
