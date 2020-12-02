@@ -443,7 +443,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   # caller_env for add_p
   caller_env <- rlang::caller_env()
 
-  # getting the test name and pvalue
+  # getting the test name and p-value
   meta_data <-
     x$meta_data %>%
     filter(.data$stratified == TRUE & .data$variable %in% include) %>%
