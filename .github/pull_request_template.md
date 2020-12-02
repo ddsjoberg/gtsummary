@@ -21,6 +21,7 @@ When the branch is ready to be merged into master:
 - [ ] Update NEWS.md with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parantheses at the end update (see `NEWS.md` for examples).
 - [ ] Increment the version number using `usethis::use_version(which = "dev")` 
 - [ ] Run `codemetar::write_codemeta()`
+- [ ] Run `usethis::use_spell_check()` again
 - [ ] Approve Pull Request
 - [ ] Merge the PR. Please use "Squash and merge".
 
