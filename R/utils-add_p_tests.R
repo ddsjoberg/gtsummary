@@ -190,7 +190,7 @@ add_p_test_prop.test <- function(tbl, variable, test.args = NULL, conf.level = 0
   expr(stats::prop.test(df_counts$n, df_counts$N, conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
-    mutate(estimate = estimate1 - estimate2) %>%
+    mutate(estimate = .data$estimate1 - .data$estimate2) %>%
     mutate(
       method = case_when(
         .data$method == "2-sample test for equality of proportions with continuity correction" ~
@@ -200,7 +200,7 @@ add_p_test_prop.test <- function(tbl, variable, test.args = NULL, conf.level = 0
     )
 }
 
-add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = NULL) {
+add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = NULL, ...) {
   .superfluous_args(variable, ...)
   # reverse coding the 'by' variable
   data[[by]] <-

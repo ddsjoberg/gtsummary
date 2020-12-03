@@ -268,7 +268,7 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
             glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
         )
       ) %>%
-      modify_table_body(dplyr::relocate, ci, .before = "conf.low") %>%
+      modify_table_body(dplyr::relocate, .data$ci, .before = "conf.low") %>%
       # adding print instructions for estimates
       modify_table_header(
         any_of("ci"),
