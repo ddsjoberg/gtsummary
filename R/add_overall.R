@@ -68,18 +68,18 @@ add_overall_merge <- function(x, overall, last, col_label) {
   }
 
   # adding overall stat to the table_body data frame
+  x$table_body <-
+    bind_cols(
+      x$table_body,
+      overall %>% select(c("stat_0"))
+    )
+
   if (last == FALSE) {
-    x$table_body <-
-      bind_cols(
-        overall,
-        x$table_body %>% select(-c("variable", "row_type", "label"))
-      )
-  }
-  if (last == TRUE) {
-    x$table_body <-
-      bind_cols(
-        x$table_body,
-        overall %>% select(c("stat_0"))
+    x <- x %>%
+      modify_table_body(
+        dplyr::relocate,
+        .data$stat_0,
+        .before = .data$stat_1
       )
   }
 
