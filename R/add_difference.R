@@ -18,7 +18,9 @@
 #' add_difference_ex1 <-
 #'   trial %>%
 #'   select(trt, age, marker) %>%
-#'   tbl_summary(by = trt, missing = "no") %>%
+#'   tbl_summary(by = trt,
+#'               statistic = all_continuous() ~ "{mean} ({sd})",
+#'               missing = "no") %>%
 #'   add_n() %>%
 #'   add_difference()
 #'
@@ -26,7 +28,10 @@
 #' add_difference_ex2 <-
 #'   trial %>%
 #'   select(trt, response, death) %>%
-#'   tbl_summary(by = trt, missing = "no") %>%
+#'   tbl_summary(by = trt,
+#'               statistic = all_dichotomous() ~ "{p}%",
+#'               missing = "no") %>%
+#'   modify_footnote(all_summary_cols() ~ NA) %>%
 #'   add_n() %>%
 #'   add_difference(estimate_fun = ~paste0(style_sigfig(. * 100), "%"))
 #' @section Example Output:
