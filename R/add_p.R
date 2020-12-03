@@ -212,19 +212,13 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
 
 # function to create text for footnote
 footnote_add_p <- function(meta_data) {
-  if (any(!c("p.value", "stat_test_lbl") %in% names(meta_data)))
-    return(NA_character_)
+  if (!"test_result" %in% names(meta_data)) return(NA_character_)
   footnotes <-
-    meta_data %>%
-    filter(!is.na(.data$p.value) & !is.na(.data$stat_test_lbl)) %>%
-    pull(.data$stat_test_lbl) %>%
+    meta_data$test_result %>%
+    map_chr(pluck, "df_result", "method") %>%
     unique()
 
-  if (length(footnotes) > 0)
-    return(
-      paste(footnotes, collapse = "; ") %>%
-        paste0(translate_text("Statistical tests performed"), ": ", .)
-    )
+  if (length(footnotes) > 0) return(paste(footnotes, collapse = "; "))
   else return(NA_character_)
 }
 
@@ -258,7 +252,8 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
       any_of("estimate"),
       label = paste0("**", translate_text("Difference"), "**"),
       hide = FALSE,
-      fmt_fun = estimate_fun
+      fmt_fun = estimate_fun,
+      footnote = footnote_add_p(meta_data)
     )
 
   # adding formatted CI column
@@ -277,7 +272,9 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
       modify_table_header(
         any_of("ci"),
         label = paste0("**", conf.level * 100, "% ", translate_text("CI"), "**"),
-        hide = FALSE
+        hide = FALSE,
+        footnote = footnote_add_p(meta_data),
+        footnote_abbrev = translate_text("CI = Confidence Interval")
       )
   }
 
