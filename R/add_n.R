@@ -127,9 +127,7 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
       x$table_header %>%
       mutate(
         footnote = ifelse(.data$column == "n",
-                          translate_text("Statistics presented",
-                                         get_theme_element("pkgwide-str:language", default = "en")) %>%
-                            paste0(": ", stat_to_label(statistic)),
+                          stat_to_label(statistic),
                           .data$footnote)
       )
   }
