@@ -275,6 +275,7 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
         car_Anova %>%
           as.data.frame() %>%
           tibble::rownames_to_column(var = "variable") %>%
+          mutate(variable = broom.helpers::.clean_backticks(.data$variable)) %>%
           filter(.data$variable == y) %>%
           select(c(
             "variable", starts_with("Pr(>")

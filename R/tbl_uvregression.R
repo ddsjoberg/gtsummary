@@ -106,17 +106,6 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     )
   }
 
-  # checking inputs ------------------------------------------------------------
-  if (any(stringr::str_detect(names(data), "([.|()\\^{}+$*?]|\\[|\\])")) ||
-      any(stringr::str_detect(names(data), fixed(" ")))) {
-    paste("{ui_code('tbl_uvregression(data=)')} does not support column names with",
-          "spaces and some special characters. If an error occurs,",
-          "please update column names or use a utility",
-          "function like {ui_code('janitor::clean_names()')} to rename columns.") %>%
-      stringr::str_wrap() %>%
-      ui_oops()
-  }
-
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
@@ -261,8 +250,12 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
 
   df_model <-
     tibble(
-      y = switch(!is.null(y), rep_len(y, length(all_vars))) %||% all_vars,
-      x = switch(!is.null(x), rep_len(x, length(all_vars))) %||% all_vars
+      # quoting the bad names in backticks
+      all_vars = all_vars,
+      y = switch(!is.null(y), rep_len(y, length(all_vars))) %||%
+        map_chr(all_vars, ~rlang::sym(.) %>% deparse(backtick = TRUE)),
+      x = switch(!is.null(x), rep_len(x, length(all_vars))) %||%
+        map_chr(all_vars, ~rlang::sym(.) %>% deparse(backtick = TRUE))
     ) %>%
     # building model
     mutate(
@@ -274,7 +267,10 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
           c(as.list(method.args)[-1]) %>%
           as.call() %>%
           eval()
-      )
+      ),
+      # removing backticks
+      y = switch(is.null(.env$y), all_vars) %||% y,
+      x = switch(is.null(.env$x), all_vars) %||% x
     ) %>%
     select(all_of(c("y", "x", "type", "model"))) %>%
     # preparing tbl_regression function arguments
@@ -282,9 +278,11 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       tbl_args = pmap(
         list(.data$model, .data$y, .data$x, .data$type),
         function(model, y, x, type) {
+          # browser()
           args <- tbl_uvregression_inputs
           # removing NULL elements from list
           args[sapply(args, is.null)] <- NULL
+          args$label <- args$label[names(args$label) %in% x]
           # keeping args to pass to tbl_regression
           args <- args[names(args) %in% tbl_reg_args]
 
@@ -317,50 +315,6 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       tbl
     }
   )
-
-  # # convert model to tbl_regression object -------------------------------------
-  # if (!is.null(y)) {
-  #   df_model <-
-  #     df_model %>%
-  #     mutate(
-  #       tbl = map2(
-  #         .data$model, .data$x,
-  #         ~tbl_regression(
-  #           .x,
-  #           exponentiate = exponentiate,
-  #           conf.level = conf.level,
-  #           label = label,
-  #           include = .y, # only include the covariate of interest in output
-  #           show_single_row = intersect(.y, show_single_row),
-  #           tidy_fun = tidy_fun
-  #         )
-  #       )
-  #     )
-  # }
-  # if (!is.null(x)) {
-  #   df_model <-
-  #     df_model %>%
-  #     mutate(
-  #       tbl = map2(
-  #         .data$model, .data$y,
-  #         function(model, y) {
-  #           tbl_uv <-
-  #             tbl_regression(
-  #               model,
-  #               label = list(label[[y]] %||% attr(data[[y]], "label") %||% y) %>% set_names(x),
-  #               exponentiate = exponentiate,
-  #               conf.level = conf.level,
-  #               include = x,
-  #               show_single_row = show_single_row,
-  #               tidy_fun = tidy_fun
-  #             )
-  #           tbl_uv$table_body$variable <- y
-  #           tbl_uv$table_body$var_type <- NA_character_
-  #           tbl_uv
-  #         }
-  #       )
-  #     )
-  # }
 
   # adding N to table ----------------------------------------------------------
   if (hide_n == FALSE) {
