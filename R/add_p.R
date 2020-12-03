@@ -215,7 +215,8 @@ footnote_add_p <- function(meta_data) {
   if (!"test_result" %in% names(meta_data)) return(NA_character_)
   footnotes <-
     meta_data$test_result %>%
-    map_chr(pluck, "df_result", "method") %>%
+    map_chr(~pluck(., "df_result", "method") %||% NA_character_) %>%
+    stats::na.omit() %>%
     unique()
 
   if (length(footnotes) > 0) return(paste(footnotes, collapse = "; "))
