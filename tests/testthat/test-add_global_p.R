@@ -92,4 +92,22 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
 
   expect_message(tbl1 %>% add_global_p(quiet = TRUE), NA)
   expect_message(tbl1 %>% add_global_p(quiet = FALSE), "*")
+
+  expect_error(
+    tbl_bad_names <-
+      trial %>%
+      select(response, `grade at dx` = grade, `m?ker` = marker, grade1 = grade) %>%
+      tbl_uvregression(
+        y = response,
+        method = lm
+      ) %>%
+      add_global_p(),
+    NA
+  )
+  expect_equal(
+    dplyr::filter(tbl_bad_names$table_body, variable == "grade at dx") %>%
+      pull(p.value),
+    dplyr::filter(tbl_bad_names$table_body, variable == "grade1") %>%
+      pull(p.value)
+  )
 })
