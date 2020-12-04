@@ -251,6 +251,10 @@
   # if user supplied a test, use that test -------------------------------------
   if (!is.null(test[[variable]])) return(test[[variable]])
 
-  if (summary_type %in% c("continuous", "continuous2")) return("t.test")
-  if (summary_type %in% "dichotomous") return("prop.test")
+  if (summary_type %in% c("continuous", "continuous2") && is.null(group)) return("t.test")
+  if (summary_type %in% "dichotomous" && is.null(group)) return("prop.test")
+
+  if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) return("ancova_lme4")
+  if (summary_type %in% "dichotomous" && is.null(group))
+    stop("There is no default test for correlated (i.e. `group=` is non-NULL) binary data.")
 }
