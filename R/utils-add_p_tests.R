@@ -234,7 +234,7 @@ add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args
   rlang::expr(effectsize::cohens_d(x = !!f, data = !!data, ci = !!conf.level, !!!test.args)) %>%
     eval() %>%
     tibble::as_tibble() %>%
-    select(estimate = .data$Cohens_d, conf.low = .data$CI_low, conf.high = CI_high) %>%
+    select(estimate = .data$Cohens_d, conf.low = .data$CI_low, conf.high = .data$CI_high) %>%
     dplyr::mutate(method = "Cohen's D")
 }
 
