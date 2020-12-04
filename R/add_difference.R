@@ -52,7 +52,15 @@ add_difference <- function(x, test = NULL, group = NULL,
   if (is.null(x$by) || nrow(x$df_by) != 2)
     stop("'tbl_summary' object must have a `by=` value with exactly two levels")
 
-  # expanding formula lists ----------------------------------------------------
+  # expanding formula lists/var selects ----------------------------------------------------
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "include"
+    )
+
   test <-
     .formula_list_to_named_list(
       x = test,
@@ -78,13 +86,7 @@ add_difference <- function(x, test = NULL, group = NULL,
       arg_name = "group",
       select_single = TRUE
     )
-  include <-
-    .select_to_varnames(
-      select = {{ include }},
-      data = select(x$inputs$data, any_of(x$meta_data$variable)),
-      var_info = x$table_body,
-      arg_name = "include"
-    )
+
   # removing categorical variables
   if ("categorical" %in% dplyr::filter(x$meta_data, .data$variable %in% include)) {
     cat_vars <-

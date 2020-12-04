@@ -102,7 +102,7 @@
       ),
       error = function(e) {
         message(glue(
-          "There was an error in 'add_p()' for variable '{variable}', ",
+          "There was an error in 'add_p()/add_difference()' for variable '{variable}', ",
           "p-value omitted:\n", as.character(e)
         ))
         return(NULL)

@@ -27,6 +27,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"paired.wilcox.test"} \tab TRUE \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \cr
    \code{"prop.test"} \tab TRUE \tab Test for equality of proportions \tab \verb{prop.test(x, n, conf.level = 0.95, <U+0085>)} \cr
    \code{"ancova"} \tab TRUE \tab ANCOVA \tab \code{lm(variable ~ by + covars)} \cr
+   \code{"cohens_d"} \tab TRUE \tab Cohen's D \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)} \cr
 }
 }
 

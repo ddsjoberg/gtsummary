@@ -209,8 +209,8 @@ add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = 
     forcats::fct_rev(data[[by]])
 
   # assembling formula
-  rhs <- c(by, adj.vars) %>% paste(collapse = " + ")
-  f <- stringr::str_glue("{variable} ~ {rhs}") %>% as.formula()
+  rhs <- c(by, adj.vars) %>% chr_w_backtick() %>% paste(collapse = " + ")
+  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs}") %>% as.formula()
 
   # building model
   browser()
@@ -224,6 +224,18 @@ add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = 
       method = case_when(is.null(adj.vars) ~ "One-way ANOVA",
                          TRUE ~ "ANCOVA")
     )
+}
+
+add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args = NULL, ...) {
+  assert_package("effectsize")
+  .superfluous_args(variable, ...)
+  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {chr_w_backtick(by)}") %>% as.formula()
+
+  rlang::expr(effectsize::cohens_d(x = !!f, data = !!data, ci = !!conf.level, !!!test.args)) %>%
+    eval() %>%
+    tibble::as_tibble() %>%
+    select(estimate = .data$Cohens_d, conf.low = .data$CI_low, conf.high = CI_high) %>%
+    dplyr::mutate(method = "Cohen's D")
 }
 
 # add_p.tbl_svysummary ---------------------------------------------------------
