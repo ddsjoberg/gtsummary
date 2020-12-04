@@ -253,9 +253,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       # quoting the bad names in backticks
       all_vars = all_vars,
       y = switch(!is.null(y), rep_len(y, length(all_vars))) %||%
-        map_chr(all_vars, ~rlang::sym(.) %>% deparse(backtick = TRUE)),
+        chr_w_backtick(all_vars),
       x = switch(!is.null(x), rep_len(x, length(all_vars))) %||%
-        map_chr(all_vars, ~rlang::sym(.) %>% deparse(backtick = TRUE))
+        chr_w_backtick(all_vars)
     ) %>%
     # building model
     mutate(
