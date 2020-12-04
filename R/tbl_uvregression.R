@@ -278,7 +278,6 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       tbl_args = pmap(
         list(.data$model, .data$y, .data$x, .data$type),
         function(model, y, x, type) {
-          # browser()
           args <- tbl_uvregression_inputs
           # removing NULL elements from list
           args[sapply(args, is.null)] <- NULL
