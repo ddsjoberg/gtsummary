@@ -1,4 +1,4 @@
-#' Tests available in `add_p()`
+#' Tests/methods available in `add_p()` and `add_difference()`
 #'
 #' @description Below is a listing of tests available internally within gtsummary.
 #'
@@ -12,10 +12,9 @@
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
-#'   dplyr::filter(class == "tbl_summary") %>%
+#'   dplyr::filter(class == "tbl_summary", add_p == TRUE) %>%
 #'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
-#'          `**add_difference() compatible**` = add_difference,
 #'          `**description**` = description,
 #'          `**pseudo-code**` = pseudo_code) %>%
 #'   knitr::kable()
@@ -25,7 +24,7 @@
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
-#'   dplyr::filter(class == "tbl_svysummary") %>%
+#'   dplyr::filter(class == "tbl_svysummary", add_p == TRUE) %>%
 #'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
 #'   knitr::kable()
@@ -35,19 +34,31 @@
 #'
 #' ```{r, echo = FALSE}
 #' gtsummary:::df_add_p_tests %>%
-#'   dplyr::filter(class == "tbl_survfit") %>%
+#'   dplyr::filter(class == "tbl_survfit", add_p == TRUE) %>%
 #'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
 #'   knitr::kable()
 #' ```
 #'
+#' @section tbl_summary() %>% add_difference():
+#'
+#' ```{r, echo = FALSE}
+#' gtsummary:::df_add_p_tests %>%
+#'   dplyr::filter(class == "tbl_summary", add_p == add_difference) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   select(`**alias**` = test_name,
+#'          `**description**` = description,
+#'          `**pseudo-code**` = pseudo_code) %>%
+#'   knitr::kable()
+#'
 #' @section Custom Functions:
 #'
-#' To report a p-value for a test not available in gtsummary, you can create a
+#' To report a p-value (or difference) for a test not available in gtsummary, you can create a
 #' custom function. The output is a data frame that is one line long. The
 #' structure is similar to the output of `broom::tidy()` of a typical
-#' statistical test. The `add_p()` function will look for columns called
-#' `"p.value"` and `"method"` for the p-value and the test name used in the footnote.
+#' statistical test. The `add_p()` and `add_comparison()` functions will look for columns called
+#' `"p.value"`, `"estimate"`, `"conf.low"`, `"conf.high"`, and `"method"` for the
+#' p-value, difference, confidence interval, and the test name used in the footnote.
 #'
 #' Example calculating a p-value from a t-test assuming a common variance
 #' between groups.
@@ -64,10 +75,21 @@
 #'   add_p(test = age ~ "ttest_common_variance")
 #' ```
 #'
+#' A custom `add_difference()` is similar, and accepts arguments `conf.level=`
+#' and `adj.vars=` as well.
+#'
+#' ```r
+#' ttest_common_variance <- function(data, variable, by, conf.level, ...) {
+#'   data <- data[c(variable, by)] %>% dplyr::filter(complete.cases(.))
+#'   t.test(data[[variable]] ~ factor(data[[by]]), conf.level = conf.level, var.equal = TRUE) %>%
+#'   broom::tidy()
+#' }
+#' ```
+#'
 #' ### Function Arguments
 #'
 #' For `tbl_summary()` objects, the custom function will be passed the
-#' following arguments: `custom_pvalue_fun(data=, variable=, by=, group=, type=)`.
+#' following arguments: `custom_pvalue_fun(data=, variable=, by=, group=, type=, conf.level=, adj.vars=)`.
 #' While your function may not utilize each of these arguments, these arguments
 #' are passed and the function must accept them. We recommend including `...`
 #' to future-proof against updates where additional arguments are added.
@@ -81,7 +103,9 @@
 #'   "`variable=`", "String variable name", "String variable name", "`NA`",
 #'   "`by=`", "String variable name", "String variable name", "`NA`",
 #'   "`group=`", "String variable name", "`NA`", "`NA`",
-#'   "`type=`", "Summary type", "Summary type", "`NA`"
+#'   "`type=`", "Summary type", "Summary type", "`NA`",
+#'   "`conf.level=`", "Confidence interval level", "`NA`", "`NA`",
+#'   "`adj.vars=`", "Character vector of variable names to adjust analysis for", "`NA`", "`NA`"
 #' ) %>%
 #' knitr::kable()
 #' ```
