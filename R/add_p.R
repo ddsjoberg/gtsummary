@@ -225,7 +225,9 @@ footnote_add_p <- function(meta_data) {
 
 # function to merge p-values to tbl
 add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
-                                 estimate_fun = style_sigfig, conf.level = 0.95) {
+                                 estimate_fun = style_sigfig,
+                                 conf.level = 0.95,
+                                 adj.vars = NULL) {
 
   x <-
     # merging in p-value to table_body
@@ -251,7 +253,9 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
     # adding print instructions for estimate
     modify_table_header(
       any_of("estimate"),
-      label = paste0("**", translate_text("Difference"), "**"),
+      label = ifelse(is.null(adj.vars),
+                     paste0("**", translate_text("Difference"), "**"),
+                     paste0("**", translate_text("Adjusted Difference"), "**")),
       hide = FALSE,
       fmt_fun = estimate_fun,
       footnote = footnote_add_p(meta_data)

@@ -105,7 +105,7 @@
 #'   "`group=`", "String variable name", "`NA`", "`NA`",
 #'   "`type=`", "Summary type", "Summary type", "`NA`",
 #'   "`conf.level=`", "Confidence interval level", "`NA`", "`NA`",
-#'   "`adj.vars=`", "Character vector of variable names to adjust analysis for", "`NA`", "`NA`"
+#'   "`adj.vars=`", "Character vector of adjustment variable names (e.g. used in ANCOVA)", "`NA`", "`NA`"
 #' ) %>%
 #' knitr::kable()
 #' ```

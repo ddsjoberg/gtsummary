@@ -146,7 +146,8 @@ add_difference <- function(x, test = NULL, group = NULL,
                               by = .env$x$by, variable = variable,
                               group = group, type = summary_type,
                               test.args = test.args[[variable]],
-                              conf.level = conf.level, tbl = x)
+                              conf.level = conf.level, tbl = x,
+                              adj.vars = adj.vars)
       )
     ) %>%
     select(.data$variable, .data$test_result) %>%
@@ -156,7 +157,8 @@ add_difference <- function(x, test = NULL, group = NULL,
   add_p_merge_p_values(x = x, meta_data = x$meta_data,
                        pvalue_fun = pvalue_fun,
                        estimate_fun = estimate_fun,
-                       conf.level = conf.level)
+                       conf.level = conf.level,
+                       adj.vars = adj.vars)
 }
 
 

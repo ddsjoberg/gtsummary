@@ -227,6 +227,7 @@ add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = 
 
 add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
   assert_package("lme4")
+  assert_package("broom.mixed")
   .superfluous_args(variable, ...)
   # reverse coding the 'by' variable
   data[[by]] <-
@@ -234,14 +235,15 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
            forcats::fct_rev(factor(data[[by]]))) %||%
     forcats::fct_rev(data[[by]])
 
-  browser()
   # assembling formula
   rhs <- c(by, adj.vars) %>% chr_w_backtick() %>% paste(collapse = " + ")
   f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs} + (1|{chr_w_backtick(group)})") %>% as.formula()
 
   # building model
   lme4::lmer(formula = f, data = data) %>%
-    broom.helpers::tidy_and_attach(conf.int = TRUE, conf.level = conf.level) %>%
+    broom.helpers::tidy_and_attach(conf.int = TRUE,
+                                   conf.level = conf.level,
+                                   tidy_fun = broom.mixed::tidy) %>%
     broom.helpers::tidy_remove_intercept() %>%
     dplyr::filter(.data$variable %in% .env$by) %>%
     select(any_of(c("estimate", "std.error", "statistic", "conf.low", "conf.high", "p.value"))) %>%
