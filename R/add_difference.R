@@ -99,6 +99,21 @@ add_difference <- function(x, test = NULL, group = NULL,
       rlang::inform()
     include <- include %>% setdiff(cat_vars)
   }
+  # checking for `tbl_summary(percent = c("cell", "row"))`, which don't apply
+  if (!identical(x$inputs$percent, "column")) {
+    bad_percent_vars <-
+      filter(x$meta_data,
+           summary_type %in% c("categorical", "dichotomous"),
+           variable %in% include) %>%
+      pull(variable)
+    if (!rlang::is_empty(bad_percent_vars))
+      paste("{ui_code('add_difference()')} results for categorical varialbes",
+            "are not compatible with",
+            "{ui_code('tbl_summary(percent = c(\"cell\", \"row\"))')} options.",
+            "Use column percentages, {ui_code('tbl_summary(percent = \"column\")')}.") %>%
+      stringr::str_wrap() %>%
+      ui_info()
+  }
 
   # caller_env for add_p
   caller_env <- rlang::caller_env()
