@@ -118,11 +118,6 @@
     x$df_result <-
     tibble::as_tibble(test_fun_result) %>%
     set_names(c("p.value", "method"))
-  else if (is.list(test_fun_result) &&
-           identical(names(test_fun_result), c("test", "p")))
-    x$df_result <-
-    tibble::as_tibble(test_fun_result) %>%
-    set_names(c("method", "p.value"))
   else if (rlang::is_scalar_double(test_fun_result))
     x$df_result <- tibble(p.value = test_fun_result, method = NA_character_)
   else if (is.null(test_fun_result))
