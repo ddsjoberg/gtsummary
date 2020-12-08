@@ -88,7 +88,7 @@ add_difference <- function(x, test = NULL, group = NULL,
     )
 
   # removing categorical variables
-  if ("categorical" %in% dplyr::filter(x$meta_data, .data$variable %in% include)) {
+  if ("categorical" %in% dplyr::filter(x$meta_data, .data$variable %in% include)$summary_type) {
     cat_vars <-
       dplyr::filter(x$meta_data,
                     .data$variable %in% include,
