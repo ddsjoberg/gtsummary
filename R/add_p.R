@@ -256,7 +256,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 
   # don't display difference and CI for add_p fns
   if (lgl_add_p == FALSE) {
-    x %>%
+    x <- x %>%
       # adding print instructions for estimate
       modify_table_header(
         any_of("estimate"),
