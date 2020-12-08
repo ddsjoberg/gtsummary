@@ -137,6 +137,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
           "in original `tbl_summary(by=)` call.") %>%
       stop(call. = FALSE)
   }
+  if ("add_difference" %in% names(x$call_list))
+    stop("`add_p()` cannot be run after `add_difference()`, and vice versa")
 
   # test -----------------------------------------------------------------------
   # parsing into a named list
@@ -240,7 +242,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
       mutate(df_result = map(.data$test_result, pluck, "df_result"),
              row_type = "label") %>%
       unnest(.data$df_result) %>%
-      select(any_of(c("variable", "row_type", "estimate", "conf.low", "conf.high", "p.value"))),
+      select(-any_of("method")),
     by = c("variable", "row_type")
   ) %>%
     # adding print instructions for p-value column

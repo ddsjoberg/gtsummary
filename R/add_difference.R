@@ -51,6 +51,8 @@ add_difference <- function(x, test = NULL, group = NULL,
     stop("`x=` must be class 'tbl_summary'")
   if (is.null(x$by) || nrow(x$df_by) != 2)
     stop("'tbl_summary' object must have a `by=` value with exactly two levels")
+  if ("add_p" %in% names(x$call_list))
+    stop("`add_difference()` cannot be run after `add_p()`, and vice versa")
 
   # expanding formula lists/var selects ----------------------------------------------------
   include <-
