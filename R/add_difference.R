@@ -103,9 +103,9 @@ add_difference <- function(x, test = NULL, group = NULL,
   if (!identical(x$inputs$percent, "column")) {
     bad_percent_vars <-
       filter(x$meta_data,
-           summary_type %in% c("categorical", "dichotomous"),
-           variable %in% include) %>%
-      pull(variable)
+           .data$summary_type %in% c("categorical", "dichotomous"),
+           .data$variable %in% include) %>%
+      pull(.data$variable)
     if (!rlang::is_empty(bad_percent_vars))
       paste("{ui_code('add_difference()')} results for categorical variables",
             "may not compatible with",

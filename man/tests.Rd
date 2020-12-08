@@ -117,7 +117,7 @@ The following table describes the argument inputs for each gtsummary table type.
    \verb{group=} \tab String variable name \tab \code{NA} \tab \code{NA} \cr
    \verb{type=} \tab Summary type \tab Summary type \tab \code{NA} \cr
    \verb{conf.level=} \tab Confidence interval level \tab \code{NA} \tab \code{NA} \cr
-   \verb{adj.vars=} \tab Character vector of variable names to adjust analysis for \tab \code{NA} \tab \code{NA} \cr
+   \verb{adj.vars=} \tab Character vector of adjustment variable names (e.g. used in ANCOVA) \tab \code{NA} \tab \code{NA} \cr
 }
 
 }
