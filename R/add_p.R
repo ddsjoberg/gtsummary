@@ -200,12 +200,6 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
                               group = group, type = summary_type,
                               test.args = test.args[[variable]])
       ),
-      # only keep the p.value and method
-      test_result = map(
-        test_result, function(x){
-          x$df_result <- select(x$df_result, any_of(c("p.value", "method")))
-          x
-        }),
       p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%
@@ -213,7 +207,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     {left_join(x$meta_data, ., by = "variable")}
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
+  add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }
 
 # function to create text for footnote
@@ -230,7 +224,8 @@ footnote_add_p <- function(meta_data) {
 }
 
 # function to merge p-values to tbl
-add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
+add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
+                                 meta_data, pvalue_fun,
                                  estimate_fun = style_sigfig,
                                  conf.level = 0.95,
                                  adj.vars = NULL) {
@@ -255,38 +250,43 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun,
       hide = FALSE,
       fmt_fun = pvalue_fun,
       footnote = footnote_add_p(meta_data)
-    ) %>%
-    # adding print instructions for estimate
-    modify_table_header(
-      any_of("estimate"),
-      label = ifelse(is.null(adj.vars),
-                     paste0("**", translate_text("Difference"), "**"),
-                     paste0("**", translate_text("Adjusted Difference"), "**")),
-      hide = FALSE,
-      fmt_fun = estimate_fun,
-      footnote = footnote_add_p(meta_data)
     )
 
-  # adding formatted CI column
-  if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
-      !"ci" %in% names(x$table_body)) {
-    x <- x %>%
-      modify_table_body(
-        mutate,
-        ci = case_when(
-          !is.na(.data$conf.low) | !is.na(.data$conf.high) ~
-            glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
-        )
-      ) %>%
-      modify_table_body(dplyr::relocate, .data$ci, .before = "conf.low") %>%
-      # adding print instructions for estimates
+  # don't display difference and CI for add_p fns
+  if (lgl_add_p == FALSE) {
+    x %>%
+      # adding print instructions for estimate
       modify_table_header(
-        any_of("ci"),
-        label = paste0("**", conf.level * 100, "% ", translate_text("CI"), "**"),
+        any_of("estimate"),
+        label = ifelse(is.null(adj.vars),
+                       paste0("**", translate_text("Difference"), "**"),
+                       paste0("**", translate_text("Adjusted Difference"), "**")),
         hide = FALSE,
-        footnote = footnote_add_p(meta_data),
-        footnote_abbrev = translate_text("CI = Confidence Interval")
+        fmt_fun = estimate_fun,
+        footnote = footnote_add_p(meta_data)
       )
+
+    # adding formatted CI column
+    if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
+        !"ci" %in% names(x$table_body)) {
+      x <- x %>%
+        modify_table_body(
+          mutate,
+          ci = case_when(
+            !is.na(.data$conf.low) | !is.na(.data$conf.high) ~
+              glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
+          )
+        ) %>%
+        modify_table_body(dplyr::relocate, .data$ci, .before = "conf.low") %>%
+        # adding print instructions for estimates
+        modify_table_header(
+          any_of("ci"),
+          label = paste0("**", conf.level * 100, "% ", translate_text("CI"), "**"),
+          hide = FALSE,
+          footnote = footnote_add_p(meta_data),
+          footnote_abbrev = translate_text("CI = Confidence Interval")
+        )
+    }
   }
 
 
@@ -518,12 +518,6 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               variable = variable,
                               test.args = test.args[[variable]])
       ),
-      # only keep the p.value and method
-      test_result = map(
-        test_result, function(x){
-          x$df_result <- select(x$df_result, any_of(c("p.value", "method")))
-          x
-        }),
       p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%
@@ -531,7 +525,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
     {left_join(x$meta_data, ., by = "variable")}
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
+  add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }
 
 
@@ -700,12 +694,6 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                               type = summary_type,
                               test.args = test.args[[variable]])
       ),
-      # only keep the p.value and method
-      test_result = map(
-        test_result, function(x){
-          x$df_result <- select(x$df_result, any_of(c("p.value", "method")))
-          x
-        }),
       p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%
@@ -713,5 +701,5 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
     {left_join(x$meta_data, ., by = "variable")}
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
+  add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }

@@ -124,7 +124,8 @@
     x$df_result <- tibble(p.value = NA_real_, method = NA_character_)
 
   x$df_result <- x$df_result %>%
-    select(any_of(c("estimate", "conf.low", "conf.high", "p.value", "statistics", "method")),
+    select(any_of(c("estimate", "std.error", "statistic", "parameter",
+                    "conf.low", "conf.high", "p.value", "method")),
            everything())
   x
 }

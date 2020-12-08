@@ -169,7 +169,9 @@ add_difference <- function(x, test = NULL, group = NULL,
     {left_join(x$meta_data, ., by = "variable")}
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-  add_p_merge_p_values(x = x, meta_data = x$meta_data,
+  add_p_merge_p_values(x = x,
+                       lgl_add_p = FALSE,
+                       meta_data = x$meta_data,
                        pvalue_fun = pvalue_fun,
                        estimate_fun = estimate_fun,
                        conf.level = conf.level,
