@@ -41,7 +41,7 @@ add_p <- function(x, ...) {
 #' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @export
 #' @return A `tbl_summary` object
-#' @author Emily C. Zabor, Daniel D. Sjoberg
+#' @author Daniel D. Sjoberg, Emily C. Zabor
 #' @examples
 #' # Example 1 ----------------------------------
 #' add_p_ex1 <-
@@ -200,6 +200,12 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
                               group = group, type = summary_type,
                               test.args = test.args[[variable]])
       ),
+      # only keep the p.value and method
+      test_result = map(
+        test_result, function(x){
+          x$df_result <- select(x$df_result, any_of(c("p.value", "method")))
+          x
+        }),
       p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%
@@ -512,6 +518,12 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               variable = variable,
                               test.args = test.args[[variable]])
       ),
+      # only keep the p.value and method
+      test_result = map(
+        test_result, function(x){
+          x$df_result <- select(x$df_result, any_of(c("p.value", "method")))
+          x
+        }),
       p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%
@@ -688,6 +700,12 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                               type = summary_type,
                               test.args = test.args[[variable]])
       ),
+      # only keep the p.value and method
+      test_result = map(
+        test_result, function(x){
+          x$df_result <- select(x$df_result, any_of(c("p.value", "method")))
+          x
+        }),
       p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
     ) %>%

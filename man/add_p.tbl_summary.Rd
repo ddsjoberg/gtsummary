@@ -109,6 +109,6 @@ Other tbl_summary tools:
 \code{\link{tbl_summary}()}
 }
 \author{
-Emily C. Zabor, Daniel D. Sjoberg
+Daniel D. Sjoberg, Emily C. Zabor
 }
 \concept{tbl_summary tools}
