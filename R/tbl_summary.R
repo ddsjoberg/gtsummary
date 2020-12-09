@@ -70,7 +70,7 @@
 #'    variables default to summary type continuous.
 #'    - `"continuous2"` summaries are shown on *2 or more rows*
 #'    - `"categorical"` *multi-line* summaries of nominal data. Character variables,
-#'    factor, variables, and numeric variables with fewer than 10 unique levels default to
+#'    factor variables, and numeric variables with fewer than 10 unique levels default to
 #'    type categorical. To change a numeric variable to continuous that
 #'    defaulted to categorical, use `type = list(varname ~ "continuous")`
 #'    - `"dichotomous"` categorical variables that are displayed on a *single row*,
