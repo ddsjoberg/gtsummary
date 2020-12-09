@@ -66,9 +66,13 @@
 #'
 #' @section type argument:
 #' The `tbl_summary()` function has four summary types:
-#'    - `"continuous"` summaries are shown on a *single row*
+#'    - `"continuous"` summaries are shown on a *single row*. Most numeric
+#'    variables default to summary type continuous.
 #'    - `"continuous2"` summaries are shown on *2 or more rows*
-#'    - `"categorical"` *multi-line* summaries of nominal data
+#'    - `"categorical"` *multi-line* summaries of nominal data. Character variables,
+#'    factor, variables, and numeric variables with fewer than 10 unique levels default to
+#'    type categorical. To change a numeric variable to continuous that
+#'    defaulted to categorical, use `type = list(varname ~ "continuous")`
 #'    - `"dichotomous"` categorical variables that are displayed on a *single row*,
 #'    rather than one row per level of the variable.
 #'    Variables coded as `TRUE`/`FALSE`, `0`/`1`, or `yes`/`no` are assumed to be dichotomous,
