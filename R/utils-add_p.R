@@ -114,7 +114,7 @@
     x$df_result <- test_fun_result
   # these list inputs were deprecated and deleted from documentation in v1.3.6
   else if (is.list(test_fun_result) &&
-           identical(names(test_fun_result), c("p", "test")))
+           setequal(names(test_fun_result), c("p", "test")))
     x$df_result <-
     tibble::as_tibble(test_fun_result) %>%
     set_names(c("p.value", "method"))
