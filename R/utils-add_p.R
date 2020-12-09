@@ -253,7 +253,8 @@
 
   if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) return("ancova_lme4")
 
-  glue("There is no default test for variable '{variable}'. Please specify method in `test=`") %>%
+  glue("There is no default test for variable '{variable}'. Please specify method in `test=` ",
+       "or exclude it with `include = -c({variable})`") %>%
     stringr::str_wrap() %>%
-    stop()
+    stop(call. = FALSE)
 }
