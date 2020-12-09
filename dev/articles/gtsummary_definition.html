@@ -248,7 +248,7 @@
 <p>Example from <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_header</span>
-<span class="co">#&gt; # A tibble: 20 x 13</span>
+<span class="co">#&gt; # A tibble: 21 x 13</span>
 <span class="co">#&gt;    column label hide  align missing_emdash indent text_interpret bold  italic</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt; </span>
 <span class="co">#&gt;  1 varia… vari… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
@@ -261,18 +261,8 @@
 <span class="co">#&gt;  8 term   term  TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
 <span class="co">#&gt;  9 var_c… var_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
 <span class="co">#&gt; 10 var_n… var_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 11 heade… head… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 12 contr… cont… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 13 contr… cont… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 14 estim… **Be… FALSE cent… reference_row… &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 15 std.e… **SE… TRUE  cent… reference_row… &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 16 stati… **St… TRUE  cent… reference_row… &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 17 conf.… conf… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 18 conf.… conf… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 19 ci     **95… FALSE cent… reference_row… &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 20 p.val… **p-… FALSE cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         p.va… &lt;NA&gt;  </span>
-<span class="co">#&gt; # … with 4 more variables: fmt_fun &lt;list&gt;, footnote_abbrev &lt;chr&gt;,</span>
-<span class="co">#&gt; #   footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span></code></pre></div>
+<span class="co">#&gt; # … with 11 more rows, and 4 more variables: fmt_fun &lt;list&gt;,</span>
+<span class="co">#&gt; #   footnote_abbrev &lt;chr&gt;, footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span></code></pre></div>
 </div>
 </div>
 <div id="constructing-a-gtsummary-object" class="section level2">
@@ -305,7 +295,7 @@
 <code class="sourceCode R"><span class="fu">gtsummary</span><span class="fu">:::</span><span class="fu">table_header_fill_missing</span><span class="op">(</span>
   table_header <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>column <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_body</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span> 
-<span class="co">#&gt; # A tibble: 20 x 13</span>
+<span class="co">#&gt; # A tibble: 21 x 13</span>
 <span class="co">#&gt;    column label hide  align missing_emdash indent text_interpret bold  italic</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt; </span>
 <span class="co">#&gt;  1 varia… vari… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
@@ -318,18 +308,8 @@
 <span class="co">#&gt;  8 term   term  TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
 <span class="co">#&gt;  9 var_c… var_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
 <span class="co">#&gt; 10 var_n… var_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 11 heade… head… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 12 contr… cont… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 13 contr… cont… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 14 estim… esti… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 15 std.e… std.… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 16 stati… stat… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 17 conf.… conf… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 18 conf.… conf… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 19 ci     ci    TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 20 p.val… p.va… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; # … with 4 more variables: fmt_fun &lt;list&gt;, footnote_abbrev &lt;chr&gt;,</span>
-<span class="co">#&gt; #   footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span></code></pre></div>
+<span class="co">#&gt; # … with 11 more rows, and 4 more variables: fmt_fun &lt;list&gt;,</span>
+<span class="co">#&gt; #   footnote_abbrev &lt;chr&gt;, footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span></code></pre></div>
 <p>The <code>modify_header_internal()</code> is useful for assigning column headers. The function accepts a complete {gtsummary} object as its input, and returns an updated version where the column labels have been added to <code>.$table_header</code>. The function also switches the default <code>.$table_header$hide</code> from <code>TRUE</code> to <code>FALSE</code>, resulting in column with labels being printed.</p>
 </div>
 </div>

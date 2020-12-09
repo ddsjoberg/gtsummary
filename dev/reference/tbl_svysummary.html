@@ -343,9 +343,13 @@ in the denominator, not at each level of the categorical variable.</p>
     
 
 <p>The <code><a href='tbl_summary.html'>tbl_summary()</a></code> function has four summary types:</p><ul>
-<li><p><code>"continuous"</code> summaries are shown on a <em>single row</em></p></li>
+<li><p><code>"continuous"</code> summaries are shown on a <em>single row</em>. Most numeric
+variables default to summary type continuous.</p></li>
 <li><p><code>"continuous2"</code> summaries are shown on <em>2 or more rows</em></p></li>
-<li><p><code>"categorical"</code> <em>multi-line</em> summaries of nominal data</p></li>
+<li><p><code>"categorical"</code> <em>multi-line</em> summaries of nominal data. Character variables,
+factor, variables, and numeric variables with fewer than 10 unique levels default to
+type categorical. To change a numeric variable to continuous that
+defaulted to categorical, use <code>type = list(varname ~ "continuous")</code></p></li>
 <li><p><code>"dichotomous"</code> categorical variables that are displayed on a <em>single row</em>,
 rather than one row per level of the variable.
 Variables coded as <code>TRUE</code>/<code>FALSE</code>, <code>0</code>/<code>1</code>, or <code>yes</code>/<code>no</code> are assumed to be dichotomous,
