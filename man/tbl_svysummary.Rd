@@ -157,7 +157,7 @@ The \code{tbl_summary()} function has four summary types:
 variables default to summary type continuous.
 \item \code{"continuous2"} summaries are shown on \emph{2 or more rows}
 \item \code{"categorical"} \emph{multi-line} summaries of nominal data. Character variables,
-factor, variables, and numeric variables with fewer than 10 unique levels default to
+factor variables, and numeric variables with fewer than 10 unique levels default to
 type categorical. To change a numeric variable to continuous that
 defaulted to categorical, use \code{type = list(varname ~ "continuous")}
 \item \code{"dichotomous"} categorical variables that are displayed on a \emph{single row},
