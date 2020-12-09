@@ -63,6 +63,14 @@ add_difference <- function(x, test = NULL, group = NULL,
       arg_name = "include"
     )
 
+  adj.vars <-
+    .select_to_varnames(
+      select = {{ adj.vars }},
+      data = x$inputs$data,
+      var_info = x$table_body,
+      arg_name = "adj.vars"
+    )
+
   test <-
     .formula_list_to_named_list(
       x = test,
@@ -131,7 +139,7 @@ add_difference <- function(x, test = NULL, group = NULL,
         function(variable, summary_type)
           .assign_test_add_diff(
             data = x$inputs$data, variable = variable, summary_type = summary_type,
-            by = x$by, group = group, test = test)
+            by = x$by, group = group, test = test, adj.vars = adj.vars)
       ),
       test_info = map(
         .data$test,

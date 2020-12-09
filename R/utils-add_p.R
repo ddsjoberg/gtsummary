@@ -243,14 +243,17 @@
   }
 }
 
-.assign_test_add_diff <- function(data, variable, summary_type, by, group, test) {
+.assign_test_add_diff <- function(data, variable, summary_type, by, group, test, adj.vars) {
   # if user supplied a test, use that test -------------------------------------
   if (!is.null(test[[variable]])) return(test[[variable]])
 
-  if (summary_type %in% c("continuous", "continuous2") && is.null(group)) return("t.test")
-  if (summary_type %in% "dichotomous" && is.null(group)) return("prop.test")
+  if (summary_type %in% c("continuous", "continuous2") && is.null(group) && is.null(adj.vars)) return("t.test")
+  if (summary_type %in% c("continuous", "continuous2") && is.null(group)) return("ancova")
+  if (summary_type %in% "dichotomous" && is.null(group) && is.null(adj.vars)) return("prop.test")
 
   if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) return("ancova_lme4")
-  if (summary_type %in% "dichotomous" && is.null(group))
-    stop("There is no default test for correlated (i.e. `group=` is non-NULL) binary data.")
+
+  glue("There is no default test for variable '{variable}'. Please specify method in `test=`") %>%
+    stringr::str_wrap() %>%
+    stop()
 }
