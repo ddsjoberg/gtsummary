@@ -117,7 +117,7 @@
            setequal(names(test_fun_result), c("p", "test")))
     x$df_result <-
     tibble::as_tibble(test_fun_result) %>%
-    set_names(c("p.value", "method"))
+    set_names(names(test_fun_result))
   else if (rlang::is_scalar_double(test_fun_result))
     x$df_result <- tibble(p.value = test_fun_result, method = NA_character_)
   else if (is.null(test_fun_result))
