@@ -39,15 +39,15 @@
   }
 
   # return info from df if internal test selected
-  if (nrow(df) == 1)
+  if (nrow(df) == 1) {
     if (parent_fun == "add_p" && df$add_p == FALSE)
       glue("You've selected test '{df$test_name}', which does not ",
            "return p-values. See `?tests` for details.") %>%
-    rlang::inform()
-  if (parent_fun == "add_difference" && df$add_difference == FALSE)
+      rlang::inform()
+    if (parent_fun == "add_difference" && df$add_difference == FALSE)
       glue("You've selected test '{df$test_name}', which does not ",
            "return a difference. See `?tests` for details.") %>%
-    rlang::inform()
+      rlang::inform()
 
     return(
       df %>%
@@ -56,6 +56,7 @@
         as.list() %>%
         purrr::flatten()
     )
+  }
   if (rlang::is_string(test) && nrow(df) == 0)
     return(
       list(test_name = "user-defined",
