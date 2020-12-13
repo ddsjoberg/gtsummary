@@ -11,10 +11,12 @@
 #' @param env environment where formula was created. When a test is passed
 #' as a character, this helps ensure the character is converted to the test
 #' function object in the correct environment.
+#' @param parent_fun String indicating either "add_p" or "add_difference",
+#' the parent function.
 #'
 #' @noRd
 #' @author Daniel D. Sjoberg
-.get_add_p_test_fun <- function(class, test, env = NULL) {
+.get_add_p_test_fun <- function(class, test, env = NULL, parent_fun = "add_p") {
   # if no test, then return NULL
   if (is.null(test)) return(NULL)
 
@@ -38,6 +40,15 @@
 
   # return info from df if internal test selected
   if (nrow(df) == 1)
+    if (parent_fun == "add_p" && df$add_p == FALSE)
+      glue("You've selected test '{df$test_name}', which does not ",
+           "return p-values. See `?tests` for details.") %>%
+    rlang::inform()
+  if (parent_fun == "add_difference" && df$add_difference == FALSE)
+      glue("You've selected test '{df$test_name}', which does not ",
+           "return a difference. See `?tests` for details.") %>%
+    rlang::inform()
+
     return(
       df %>%
         select(any_of(c("test_name", "fun_to_run", "accept_dots"))) %>%

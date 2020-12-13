@@ -143,7 +143,8 @@ add_difference <- function(x, test = NULL, group = NULL,
       ),
       test_info = map(
         .data$test,
-        function(test) .get_add_p_test_fun("tbl_summary", test = test, env = caller_env)
+        function(test) .get_add_p_test_fun("tbl_summary", test = test,
+                                           env = caller_env, parent_fun = "add_difference")
       ),
       test_name = map_chr(.data$test_info, ~pluck(.x, "test_name"))
     )
