@@ -114,7 +114,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
                                             test.args = NULL, conf.level = 0.95, ...) {
-
+  quiet = FALSE # need to add support for quiet later
   .superfluous_args(variable, ...)
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
