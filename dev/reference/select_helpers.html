@@ -63,7 +63,7 @@ all_interaction() selects interaction terms from a regression model
 all_intercepts() selects intercept terms from a regression model
 all_contrasts() selects variables in regression model based on their type of contrast
 all_tests() selects variables by the name of the test performed
-all_summary_cols() selects columns from tbl_summary/tbl_svysummary object with summary statistics (i.e. &quot;stat_0&quot;, &quot;stat_1&quot;, &quot;stat_2&quot;, etc.)
+all_stat_cols(stat_0 = TRUE) selects columns from tbl_summary/tbl_svysummary object with summary statistics (i.e. &quot;stat_0&quot;, &quot;stat_1&quot;, &quot;stat_2&quot;, etc.)
 
 " />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
@@ -108,7 +108,7 @@ all_summary_cols() selects columns from tbl_summary/tbl_svysummary object with s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9012</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9013</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ all_summary_cols() selects columns from tbl_summary/tbl_svysummary object with s
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -157,7 +157,7 @@ all_summary_cols() selects columns from tbl_summary/tbl_svysummary object with s
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -196,7 +196,7 @@ functions for selecting columns of data frames (and other items as well).</p><ul
 <li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_intercepts()</a></code> selects intercept terms from a regression model</p></li>
 <li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_contrasts()</a></code> selects variables in regression model based on their type of contrast</p></li>
 <li><p><code>all_tests()</code> selects variables by the name of the test performed</p></li>
-<li><p><code>all_summary_cols()</code> selects columns from <code>tbl_summary</code>/<code>tbl_svysummary</code> object with summary statistics (i.e. "<code>stat_0</code>", "<code>stat_1</code>", "<code>stat_2</code>", etc.)</p></li>
+<li><p><code>all_stat_cols(stat_0 = TRUE)</code> selects columns from <code>tbl_summary</code>/<code>tbl_svysummary</code> object with summary statistics (i.e. "<code>stat_0</code>", "<code>stat_1</code>", "<code>stat_2</code>", etc.)</p></li>
 </ul>
 
     </div>
@@ -205,7 +205,7 @@ functions for selecting columns of data frames (and other items as well).</p><ul
 
 <span class='fu'>all_tests</span><span class='op'>(</span>tests <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>all_summary_cols</span><span class='op'>(</span><span class='op'>)</span></pre>
+<span class='fu'>all_stat_cols</span><span class='op'>(</span>stat_0 <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -213,6 +213,10 @@ functions for selecting columns of data frames (and other items as well).</p><ul
     <tr>
       <th>tests</th>
       <td><p>character</p></td>
+    </tr>
+    <tr>
+      <th>stat_0</th>
+      <td><p>When <code>FALSE</code>, will not select the <code>"stat_0"</code> column. Default it <code>TRUE</code></p></td>
     </tr>
     </table>
 
