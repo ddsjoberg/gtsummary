@@ -144,10 +144,20 @@ test_that("add_p with custom p-value function", {
     result
   }
 
+  my_mcnemar2 <- function(data, variable, by, ...) {
+    stats::mcnemar.test(data[[variable]], data[[by]])$p.value
+  }
+
   expect_error(
     trial[c("response", "trt")] %>%
       tbl_summary(by = trt) %>%
       add_p(test = response ~ "my_mcnemar"),
+    NA
+  )
+  expect_error(
+    trial[c("response", "trt")] %>%
+      tbl_summary(by = trt) %>%
+      add_p(test = response ~ "my_mcnemar2"),
     NA
   )
 
