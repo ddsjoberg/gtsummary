@@ -1,5 +1,10 @@
 # gtsummary (development version)
 
+- Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
+
+- Removed `"Statistics presented:"` and `"Statistical tests performed:"` prefixes from the `tbl_summary() %>% add_p()` footnotes.
+
+
 - The code base powering `add_p()` and related methods has been refactored for better performance, organization, and customizability. (#622)
     - For clarity, a help file listing each test available within gtsummary and the pseudo code for calculating the p-value has been added (`?add_p_test`)
     - Each `add_p()` method now has the `test.args=` argument. Use this argument to pass additional arguments to the statistical method, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = c(age, marker) ~ list(var.equal = TRUE))`
