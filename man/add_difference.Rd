@@ -8,9 +8,9 @@ add_difference(
   x,
   test = NULL,
   group = NULL,
-  conf.level = 0.95,
   adj.vars = NULL,
   test.args = NULL,
+  conf.level = 0.95,
   include = everything(),
   pvalue_fun = NULL,
   estimate_fun = style_sigfig
@@ -20,21 +20,23 @@ add_difference(
 \item{x}{\code{"tbl_summary"} object}
 
 \item{test}{List of formulas specifying statistical tests to perform for each variable,
-e.g. \code{list(all_continuous() ~ "t.test")}}
+e.g. \code{list(all_continuous() ~ "t.test")}.
+Common tests include \code{"t.test"} or \code{"ancova"} for continuous data, and
+\code{"prop.test"} for dichotomous variables.
+See \link{tests} for details and more tests.}
 
 \item{group}{Column name (unquoted or quoted) of an ID or grouping variable.
 The column can be used to calculate p-values with correlated data (e.g. when
-the test argument is \code{"lme4"}). Default is \code{NULL}.  If specified,
-the row associated with this variable is omitted from the summary table.}
-
-\item{conf.level}{Must be strictly greater than 0 and less than 1.
-Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+the test argument is \code{"lme4"}). Default is \code{NULL}.}
 
 \item{adj.vars}{Variables to include in mean difference adjustment (e.g. in ANCOVA models)}
 
 \item{test.args}{List of formulas containing additional arguments to pass to
 tests that accept arguments. For example, add an argument for all t-tests,
 use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
+
+\item{conf.level}{Must be strictly greater than 0 and less than 1.
+Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
 \item{include}{Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper

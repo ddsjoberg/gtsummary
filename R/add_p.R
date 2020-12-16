@@ -29,8 +29,7 @@ add_p <- function(x, ...) {
 #' an example.
 #' @param group Column name (unquoted or quoted) of an ID or grouping variable.
 #' The column can be used to calculate p-values with correlated data (e.g. when
-#' the test argument is `"lme4"`). Default is `NULL`.  If specified,
-#' the row associated with this variable is omitted from the summary table.
+#' the test argument is `"lme4"`). Default is `NULL`.
 #' @param test.args List of formulas containing additional arguments to pass to
 #' tests that accept arguments. For example, add an argument for all t-tests,
 #' use `test.args = all_tests("t.test") ~ list(var.equal = TRUE)`

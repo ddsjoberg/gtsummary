@@ -24,11 +24,10 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
     broom::tidy()
 }
 
-add_p_test_wilcox.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
+add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
   .superfluous_args(variable, ...)
   expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
-                          data = !!data, conf.int = TRUE, conf.level = !!conf.level,
-                          !!!test.args)) %>%
+                          data = !!data, !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
     mutate(
@@ -114,8 +113,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 }
 
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
-                                            test.args = NULL, quiet = FALSE,
-                                            conf.level = 0.95, ...) {
+                                            test.args = NULL, conf.level = 0.95, ...) {
 
   .superfluous_args(variable, ...)
   # checking inputs

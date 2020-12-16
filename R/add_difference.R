@@ -10,7 +10,10 @@
 #' @param adj.vars Variables to include in mean difference adjustment (e.g. in ANCOVA models)
 #' @param estimate_fun Function to round and format difference. Default is [style_sigfig()]
 #' @param test List of formulas specifying statistical tests to perform for each variable,
-#' e.g. `list(all_continuous() ~ "t.test")`
+#' e.g. `list(all_continuous() ~ "t.test")`.
+#' Common tests include `"t.test"` or `"ancova"` for continuous data, and
+#' `"prop.test"` for dichotomous variables.
+#' See [tests] for details and more tests.
 #' @export
 #'
 #' @examples
@@ -43,8 +46,8 @@
 #'
 #' \if{html}{\figure{add_difference_ex2.png}{options: width=60\%}}
 add_difference <- function(x, test = NULL, group = NULL,
-                           conf.level = 0.95, adj.vars = NULL,
-                           test.args = NULL, include = everything(),
+                           adj.vars = NULL, test.args = NULL,
+                           conf.level = 0.95, include = everything(),
                            pvalue_fun = NULL, estimate_fun = style_sigfig) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_summary"))

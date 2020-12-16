@@ -4,6 +4,7 @@
 \alias{tbl_regression_methods}
 \alias{tbl_regression.lmerMod}
 \alias{tbl_regression.glmerMod}
+\alias{tbl_regression.stanreg}
 \alias{tbl_regression.survreg}
 \alias{tbl_regression.mira}
 \alias{tbl_regression.mipo}
@@ -21,6 +22,8 @@
   tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
   ...
 )
+
+\method{tbl_regression}{stanreg}(x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ...), ...)
 
 \method{tbl_regression}{survreg}(
   x,
