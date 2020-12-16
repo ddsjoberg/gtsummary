@@ -12,7 +12,7 @@
     - Additional tests have been added: paired t-test, signed rank test
     - More robust unit testing implemented for all `add_p()` methods.
 - Breaking change. Experimental function `add_p.tbl_survfit(test.args=)` in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as `everything() ~ "test_name"`.  The single string is no longer accepted, and users must use the formula notation.
-- New function: `all_summary_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
+- New function: `all_stat_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
 
 * Added messaging to `tbl_stack()` to inform users that the attributes from the first table passed take precedent over the others'. (#699)
 

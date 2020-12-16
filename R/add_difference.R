@@ -34,7 +34,7 @@
 #'   tbl_summary(by = trt,
 #'               statistic = all_dichotomous() ~ "{p}%",
 #'               missing = "no") %>%
-#'   modify_footnote(all_summary_cols() ~ NA) %>%
+#'   modify_footnote(all_stat_cols() ~ NA) %>%
 #'   add_n() %>%
 #'   add_difference(estimate_fun = ~paste0(style_sigfig(. * 100), "%"))
 #' @section Example Output:
