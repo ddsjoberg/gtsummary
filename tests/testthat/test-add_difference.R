@@ -71,7 +71,7 @@ test_that("p-values are replicated within tbl_summary()", {
     filter(tbl_test.args$meta_data, variable == "var_wilcox.test") %>%
       purrr::pluck("test_result", 1, "df_result") %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    wilcox.test(age ~ trt, data = trial, conf.int = TRUE) %>%
+    wilcox.test(age ~ trt, data = trial) %>%
       broom::tidy() %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value")))
   )
@@ -80,7 +80,7 @@ test_that("p-values are replicated within tbl_summary()", {
     filter(tbl_test.args$meta_data, variable == "var_wilcox.test_dots") %>%
       purrr::pluck("test_result", 1, "df_result") %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    wilcox.test(age ~ trt, data = trial, conf.int = TRUE, correct = FALSE) %>%
+    wilcox.test(age ~ trt, data = trial, correct = FALSE) %>%
       broom::tidy() %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value")))
   )
