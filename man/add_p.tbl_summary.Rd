@@ -41,8 +41,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 
 \item{group}{Column name (unquoted or quoted) of an ID or grouping variable.
 The column can be used to calculate p-values with correlated data (e.g. when
-the test argument is \code{"lme4"}). Default is \code{NULL}.  If specified,
-the row associated with this variable is omitted from the summary table.}
+the test argument is \code{"lme4"}). Default is \code{NULL}.}
 
 \item{include}{Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper
@@ -109,6 +108,6 @@ Other tbl_summary tools:
 \code{\link{tbl_summary}()}
 }
 \author{
-Emily C. Zabor, Daniel D. Sjoberg
+Daniel D. Sjoberg, Emily C. Zabor
 }
 \concept{tbl_summary tools}

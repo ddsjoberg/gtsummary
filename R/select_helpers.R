@@ -10,8 +10,9 @@
 #' - `all_intercepts()` selects intercept terms from a regression model
 #' - `all_contrasts()` selects variables in regression model based on their type of contrast
 #' - `all_tests()` selects variables by the name of the test performed
-#' - `all_summary_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
+#' - `all_stat_cols(stat_0 = TRUE)` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
 #' @param tests character
+#' @param stat_0 When `FALSE`, will not select the `"stat_0"` column. Default it `TRUE`
 #' @name select_helpers
 #' @return A character vector of column names selected
 #' @examples
@@ -52,6 +53,8 @@ all_tests <- function(tests = NULL) {
 
 #' @rdname select_helpers
 #' @export
-all_summary_cols <- function() {
-  dplyr::matches("^stat_\\d+$") # finds stat_0, stat_1, stat_2, etc.
+all_stat_cols <- function(stat_0 = TRUE) {
+  # finds stat_0, stat_1, stat_2, etc.
+  if (stat_0 == TRUE) return(dplyr::matches("^stat_\\d+$"))
+  if (stat_0 == FALSE) return(dplyr::matches("^stat_\\d*[1-9]\\d*$"))
 }

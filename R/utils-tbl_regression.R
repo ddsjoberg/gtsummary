@@ -161,3 +161,9 @@ gtsummary_model_frame <- function(x) {
 
   x
 }
+
+
+chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = TRUE))
+# > chr_w_backtick("var with spaces")
+# [1] "`var with spaces`"
+

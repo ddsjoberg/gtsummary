@@ -2,7 +2,7 @@
 % Please edit documentation in R/tests.R
 \name{tests}
 \alias{tests}
-\title{Tests available in \code{add_p()}}
+\title{Tests/methods available in \code{add_p()} and \code{add_difference()}}
 \description{
 Below is a listing of tests available internally within gtsummary.
 
@@ -14,17 +14,19 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \section{tbl_summary() \%>\% add_p()}{
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
-   \code{"t.test"} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, ...)} \cr
+   \code{"t.test"} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \cr
    \code{"aov"} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data) \%>\% summary()} \cr
    \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \cr
    \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(variable ~ as.factor(by), data = data, ...)} \cr
    \code{"chisq.test"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \cr
    \code{"chisq.test.no.correct"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
-   \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), ...)} \cr
-   \code{"mcnemar.test"} \tab McNemar's test \tab \code{mcnemar.test(data[[variable]], data[[by]], ...)} \cr
-   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1&#124;group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1&#124;group), data, family = binomial))} \cr
-   \code{"paired.t.test"} \tab Paired t-test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, ...)} \cr
-   \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, ...)} \cr
+   \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)} \cr
+   \code{"mcnemar.test"} \tab McNemar's test \tab \code{mcnemar.test(data[[variable]], data[[by]], conf.level = 0.95, ...)} \cr
+   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1 \\UFF5C group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1 \\UFF5C group), data, family = binomial))} \cr
+   \code{"paired.t.test"} \tab Paired t-test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"prop.test"} \tab Test for equality of proportions \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \cr
+   \code{"ancova"} \tab ANCOVA \tab \code{lm(variable ~ by + adj.vars)} \cr
 }
 }
 
@@ -57,14 +59,28 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
+\section{tbl_summary() \%>\% add_difference()}{
+\tabular{llll}{
+   \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \cr
+   \code{"t.test"} \tab t-test \tab mean difference \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \cr
+   \code{"paired.t.test"} \tab Paired t-test \tab mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab rate difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"prop.test"} \tab Test for equality of proportions \tab rate difference \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \cr
+   \code{"ancova"} \tab ANCOVA \tab mean difference \tab \code{lm(variable ~ by + adj.vars)} \cr
+   \code{"ancova_lme4"} \tab ANCOVA with random intercept \tab mean difference \tab \verb{lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)} \cr
+   \code{"cohens_d"} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)} \cr
+}
+}
+
 \section{Custom Functions}{
 
 
-To report a p-value for a test not available in gtsummary, you can create a
+To report a p-value (or difference) for a test not available in gtsummary, you can create a
 custom function. The output is a data frame that is one line long. The
 structure is similar to the output of \code{broom::tidy()} of a typical
-statistical test. The \code{add_p()} function will look for columns called
-\code{"p.value"} and \code{"method"} for the p-value and the test name used in the footnote.
+statistical test. The \code{add_p()} and \code{add_comparison()} functions will look for columns called
+\code{"p.value"}, \code{"estimate"}, \code{"conf.low"}, \code{"conf.high"}, and \code{"method"} for the
+p-value, difference, confidence interval, and the test name used in the footnote.
 
 Example calculating a p-value from a t-test assuming a common variance
 between groups.\if{html}{\out{<div class="r">}}\preformatted{ttest_common_variance <- function(data, variable, by, ...) \{
@@ -77,10 +93,18 @@ trial[c("age", "trt")] \%>\%
   tbl_summary(by = trt) \%>\%
   add_p(test = age ~ "ttest_common_variance")
 }\if{html}{\out{</div>}}
+
+A custom \code{add_difference()} is similar, and accepts arguments \verb{conf.level=}
+and \verb{adj.vars=} as well.\if{html}{\out{<div class="r">}}\preformatted{ttest_common_variance <- function(data, variable, by, conf.level, ...) \{
+  data <- data[c(variable, by)] \%>\% dplyr::filter(complete.cases(.))
+  t.test(data[[variable]] ~ factor(data[[by]]), conf.level = conf.level, var.equal = TRUE) \%>\%
+  broom::tidy()
+\}
+}\if{html}{\out{</div>}}
 \subsection{Function Arguments}{
 
 For \code{tbl_summary()} objects, the custom function will be passed the
-following arguments: \code{custom_pvalue_fun(data=, variable=, by=, group=, type=)}.
+following arguments: \code{custom_pvalue_fun(data=, variable=, by=, group=, type=, conf.level=, adj.vars=)}.
 While your function may not utilize each of these arguments, these arguments
 are passed and the function must accept them. We recommend including \code{...}
 to future-proof against updates where additional arguments are added.
@@ -92,6 +116,8 @@ The following table describes the argument inputs for each gtsummary table type.
    \verb{by=} \tab String variable name \tab String variable name \tab \code{NA} \cr
    \verb{group=} \tab String variable name \tab \code{NA} \tab \code{NA} \cr
    \verb{type=} \tab Summary type \tab Summary type \tab \code{NA} \cr
+   \verb{conf.level=} \tab Confidence interval level \tab \code{NA} \tab \code{NA} \cr
+   \verb{adj.vars=} \tab Character vector of adjustment variable names (e.g. used in ANCOVA) \tab \code{NA} \tab \code{NA} \cr
 }
 
 }

@@ -1,8 +1,8 @@
 # add_p.tbl_summary ------------------------------------------------------------
-add_p_test_t.test <- function(data, variable, by, test.args, ...) {
+add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   .superfluous_args(variable, ...)
   expr(stats::t.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
-                     data = !!data, !!!test.args)) %>%
+                     data = !!data, conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }
@@ -56,9 +56,9 @@ add_p_test_chisq.test.no.correct <- function(data, variable, by, ...) {
   add_p_test_chisq.test(data = data, variable = variable, by = by, test.args = list(correct = FALSE))
 }
 
-add_p_test_fisher.test <- function(data, variable, by, test.args, ...) {
+add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   .superfluous_args(variable, ...)
-  expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), !!!test.args)) %>%
+  expr(stats::fisher.test(!!data[[variable]], as.factor(!!data[[by]]), conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy() %>%
     mutate(
@@ -113,7 +113,8 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 }
 
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
-                                            test.args = NULL, quiet = FALSE, ...) {
+                                            test.args = NULL, conf.level = 0.95, ...) {
+  quiet = FALSE # need to add support for quiet later
   .superfluous_args(variable, ...)
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
@@ -139,13 +140,15 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
 
 
   # calculate p-value
-  expr(stats::t.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
+  expr(stats::t.test(data_wide[[2]], data_wide[[3]], paired = TRUE,
+                     conf.level = !!conf.level, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }
 
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
-                                                 test.args = NULL, quiet = FALSE, ...) {
+                                                 test.args = NULL, conf.level = 0.95,
+                                                 quiet = FALSE, ...) {
   .superfluous_args(variable, ...)
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2)
@@ -173,6 +176,91 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
   expr(stats::wilcox.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
+}
+
+add_p_test_prop.test <- function(tbl, variable, test.args = NULL, conf.level = 0.95, ...) {
+  .superfluous_args(variable, ...)
+  df_counts <-
+    tbl$meta_data %>%
+    filter(variable == .env$variable) %>%
+    purrr::pluck("df_stats", 1)
+
+  expr(stats::prop.test(df_counts$n, df_counts$N, conf.level = !!conf.level, !!!test.args)) %>%
+    eval() %>%
+    broom::tidy() %>%
+    mutate(estimate = .data$estimate1 - .data$estimate2) %>%
+    mutate(
+      method = case_when(
+        .data$method == "2-sample test for equality of proportions with continuity correction" ~
+          "Two sample test for equality of proportions",
+        TRUE ~ .data$method
+      )
+    )
+}
+
+add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = NULL, ...) {
+  .superfluous_args(variable, ...)
+  # reverse coding the 'by' variable
+  data[[by]] <-
+    switch(!is.factor(data[[by]]),
+           forcats::fct_rev(factor(data[[by]]))) %||%
+    forcats::fct_rev(data[[by]])
+
+  # assembling formula
+  rhs <- c(by, adj.vars) %>% chr_w_backtick() %>% paste(collapse = " + ")
+  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs}") %>% as.formula()
+
+  # building model
+  stats::lm(formula = f, data = data) %>%
+    broom.helpers::tidy_and_attach(conf.int = TRUE, conf.level = conf.level) %>%
+    broom.helpers::tidy_remove_intercept() %>%
+    dplyr::filter(.data$variable %in% .env$by) %>%
+    select(.data$estimate, .data$std.error, .data$statistic,
+           .data$conf.low, .data$conf.high, .data$p.value) %>%
+    dplyr::mutate(
+      method = case_when(is.null(adj.vars) ~ "One-way ANOVA",
+                         TRUE ~ "ANCOVA")
+    )
+}
+
+add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
+  assert_package("lme4")
+  assert_package("broom.mixed")
+  .superfluous_args(variable, ...)
+  # reverse coding the 'by' variable
+  data[[by]] <-
+    switch(!is.factor(data[[by]]),
+           forcats::fct_rev(factor(data[[by]]))) %||%
+    forcats::fct_rev(data[[by]])
+
+  # assembling formula
+  rhs <- c(by, adj.vars) %>% chr_w_backtick() %>% paste(collapse = " + ")
+  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs} + (1|{chr_w_backtick(group)})") %>% as.formula()
+
+  # building model
+  lme4::lmer(formula = f, data = data) %>%
+    broom.helpers::tidy_and_attach(conf.int = TRUE,
+                                   conf.level = conf.level,
+                                   tidy_fun = broom.mixed::tidy) %>%
+    broom.helpers::tidy_remove_intercept() %>%
+    dplyr::filter(.data$variable %in% .env$by) %>%
+    select(any_of(c("estimate", "std.error", "statistic", "conf.low", "conf.high", "p.value"))) %>%
+    dplyr::mutate(
+      method = case_when(is.null(adj.vars) ~ "One-way ANOVA with random intercept",
+                         TRUE ~ "ANCOVA with random intercept")
+    )
+}
+
+add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args = NULL, ...) {
+  assert_package("effectsize")
+  .superfluous_args(variable, ...)
+  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {chr_w_backtick(by)}") %>% as.formula()
+
+  rlang::expr(effectsize::cohens_d(x = !!f, data = !!data, ci = !!conf.level, !!!test.args)) %>%
+    eval() %>%
+    tibble::as_tibble() %>%
+    select(estimate = .data$Cohens_d, conf.low = .data$CI_low, conf.high = .data$CI_high) %>%
+    dplyr::mutate(method = "Cohen's D")
 }
 
 # add_p.tbl_svysummary ---------------------------------------------------------
