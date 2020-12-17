@@ -59,7 +59,7 @@ Default is \code{"Unknown"}.}
 A \code{tbl_cross} object
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 The function creates a cross table of two categorical variables.
 }
 \section{Example Output}{

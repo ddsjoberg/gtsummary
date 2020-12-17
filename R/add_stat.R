@@ -1,6 +1,6 @@
 #' Add a custom statistic column
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' The function allows a user to add a new column with a custom, user-defined statistic.
 #'
 #' @param x tbl_summary object

@@ -28,8 +28,8 @@ add_p <- function(x, ...) {
 #' A custom test function can be added for all or some variables. See below for
 #' an example.
 #' @param group Column name (unquoted or quoted) of an ID or grouping variable.
-#' The column can be used to calculate p-values with correlated data (e.g. when
-#' the test argument is `"lme4"`). Default is `NULL`.
+#' The column can be used to calculate p-values with correlated data.
+#' Default is `NULL`. See [tests] for methods that utilize the `group=` argument.
 #' @param test.args List of formulas containing additional arguments to pass to
 #' tests that accept arguments. For example, add an argument for all t-tests,
 #' use `test.args = all_tests("t.test") ~ list(var.equal = TRUE)`
@@ -297,7 +297,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 
 #' Adds p-value to crosstab table
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Calculate and add a p-value comparing the two variables in the cross table.
 #' Missing values are included in p-value calculations.
 #'
@@ -399,7 +399,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
 #' Adds p-value to survfit table
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Calculate and add a p-value
 #' @param x Object of class `"tbl_survfit"`
 #' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,

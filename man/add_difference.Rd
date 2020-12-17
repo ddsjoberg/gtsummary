@@ -26,8 +26,8 @@ Common tests include \code{"t.test"} or \code{"ancova"} for continuous data, and
 See \link{tests} for details and more tests.}
 
 \item{group}{Column name (unquoted or quoted) of an ID or grouping variable.
-The column can be used to calculate p-values with correlated data (e.g. when
-the test argument is \code{"lme4"}). Default is \code{NULL}.}
+The column can be used to calculate p-values with correlated data.
+Default is \code{NULL}. See \link{tests} for methods that utilize the \verb{group=} argument.}
 
 \item{adj.vars}{Variables to include in mean difference adjustment (e.g. in ANCOVA models)}
 
@@ -52,9 +52,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 \item{estimate_fun}{Function to round and format difference. Default is \code{\link[=style_sigfig]{style_sigfig()}}}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-Add the (typically mean) difference between two groups,
-along with the confidence interval and p-value.
+\lifecycle{experimental}
+Add the difference between two groups (typically mean difference),
+along with the difference confidence interval and p-value.
 }
 \section{Example Output}{
 
