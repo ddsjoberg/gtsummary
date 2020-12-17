@@ -52,7 +52,7 @@
 #'                   p.value ~ "**P**")
 #'   ) %>%
 #'   modify_footnote(
-#'     update = starts_with("stat_") ~ "median (IQR) for Age; n (%) for Grade"
+#'     update = all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade"
 #'   )
 #'
 #' # Example 2 ----------------------------------
@@ -61,7 +61,7 @@
 #'   modify_header(stat_by = "**{level}**, N = {n} ({style_percent(p)}%)") %>%
 #'   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
 #'   modify_footnote(update = everything() ~ NA) %>%
-#'   modify_spanning_header(starts_with("stat_") ~ "**Treatment Received**")
+#'   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
 #'
 #' # Example 3 ----------------------------------
 #' # updating an abbreviation in table footnote
@@ -142,7 +142,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
       arg_name = "update"
     )
   # if no columns selected, print helpful message
-  if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
+  if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
   if (is.null(update)) return(x)
 
   # updating footnote ----------------------------------------------------------
@@ -192,8 +192,9 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
       var_info = x$table_header$column,
       arg_name = "update"
     )
+
   # if no columns selected, print helpful message
-  if (identical(quiet, FALSE) && is.null(update)) .modify_no_selected_vars(x)
+  if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
   if (is.null(update)) return(x)
 
   # updating footnote ----------------------------------------------------------
