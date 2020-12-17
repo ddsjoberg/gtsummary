@@ -40,8 +40,8 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{group}{Column name (unquoted or quoted) of an ID or grouping variable.
-The column can be used to calculate p-values with correlated data (e.g. when
-the test argument is \code{"lme4"}). Default is \code{NULL}.}
+The column can be used to calculate p-values with correlated data.
+Default is \code{NULL}. See \link{tests} for methods that utilize the \verb{group=} argument.}
 
 \item{include}{Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper

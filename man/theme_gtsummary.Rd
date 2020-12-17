@@ -82,7 +82,7 @@ will default to an en dash}
 \item{statistic}{Default statistic continuous variables}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 The following themes are available to use within the gtsummary package.
 Print theme elements with \code{theme_gtsummary_journal(set_theme = FALSE) \%>\% print()}.
 Review the \href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}

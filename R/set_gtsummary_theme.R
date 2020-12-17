@@ -1,6 +1,6 @@
 #' Set a gtsummary theme
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Use this function to set preferences for the display of gtsummary tables.
 #' The default formatting and styling throughout the gtsummary package are
 #' taken from the published reporting guidelines of the top four urology

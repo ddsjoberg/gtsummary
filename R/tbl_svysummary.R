@@ -1,7 +1,6 @@
 #' Create a table of summary statistics from a survey object
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-#'
+#' \lifecycle{experimental}
 #' The `tbl_svysummary` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables taking into account survey weights and design.
 #' It is similar to [tbl_summary()].

@@ -53,7 +53,7 @@ all_logical()
 all_factor()
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("deprecated")}
+\lifecycle{deprecated}
 Some functions have been deprecated and are no longer being actively
 supported.
 }

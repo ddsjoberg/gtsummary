@@ -1,6 +1,6 @@
 #' Add glance statistics
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Add the statistics returned in `broom::glance()` as a table source note.
 #'
 #' @param x 'tbl_regression' object

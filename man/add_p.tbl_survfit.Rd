@@ -42,7 +42,7 @@ functions. Default is \code{everything()}.}
 \item{...}{Not used}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 Calculate and add a p-value
 }
 \section{test argument}{

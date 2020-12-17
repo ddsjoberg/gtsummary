@@ -1,6 +1,6 @@
 #' Creates table of survival probabilities
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary table of the results
 #'

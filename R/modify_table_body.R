@@ -1,7 +1,7 @@
 #' Modify table_body
 #'
 #' @description
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Function is for advanced manipulation of gtsummary tables.
 #' It allow users to modify the `.$table_body` data frame included
 #' in each gtsummary object.

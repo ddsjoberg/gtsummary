@@ -102,7 +102,7 @@ Default is \code{FALSE}.  Does not apply to survival quantile requests}
 \item{include}{Variable to include as stratifying variables.}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 Function takes a \code{survfit} object as an argument, and provides a
 formatted summary table of the results
 }

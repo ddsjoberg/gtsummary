@@ -179,7 +179,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 
 #' Add column with number of observations
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' For each `survfit()` object summarized with `tbl_survfit()` this function
 #' will add the total number of observations in a new column.
 #'

@@ -30,7 +30,7 @@ footnote (i.e. NULL)}
 Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 The function allows a user to add a new column with a custom, user-defined statistic.
 }
 \section{Details}{

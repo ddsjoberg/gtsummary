@@ -12,7 +12,7 @@ tbl_survival(x, ...)
 \item{...}{Additional arguments passed to other methods}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("questioning")}
+\lifecycle{questioning}
 Please use \link{tbl_survfit}.
 Function takes a \code{survfit} object as an argument, and provides a
 formatted summary of the results

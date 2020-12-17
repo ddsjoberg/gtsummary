@@ -77,9 +77,7 @@ e.g. \code{sort = list(everything() ~ "frequency")}}
 A \code{tbl_svysummary} object
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-}
-\details{
+\lifecycle{experimental}
 The \code{tbl_svysummary} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables taking into account survey weights and design.
 It is similar to \code{\link[=tbl_summary]{tbl_summary()}}.

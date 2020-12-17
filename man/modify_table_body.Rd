@@ -15,7 +15,7 @@ modify_table_body(x, fun, ...)
 must be \code{x$table_body}}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 Function is for advanced manipulation of gtsummary tables.
 It allow users to modify the \code{.$table_body} data frame included
 in each gtsummary object.

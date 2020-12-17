@@ -26,7 +26,7 @@ function's \verb{formula.=} argument}
 \code{tbl_regression} object
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 The function combines terms from a regression model, and replaces the terms
 with a single row in the output table.  The p-value is calculated using
 \code{\link[stats:anova]{stats::anova()}}.

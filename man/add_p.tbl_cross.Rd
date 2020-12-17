@@ -23,7 +23,7 @@ in the \{gt\} table source notes rather than a column.}
 \item{...}{Not used}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 Calculate and add a p-value comparing the two variables in the cross table.
 Missing values are included in p-value calculations.
 }
