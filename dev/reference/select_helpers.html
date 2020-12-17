@@ -59,11 +59,11 @@ all_continuous() selects continuous variables
 all_continuous2() selects only type &quot;continuous2&quot;
 all_categorical() selects categorical (including &quot;dichotomous&quot;) variables
 all_dichotomous() selects only type &quot;dichotomous&quot;
+all_tests() selects variables by the name of the test performed
+all_stat_cols() selects columns from tbl_summary/tbl_svysummary object with summary statistics (i.e. &quot;stat_0&quot;, &quot;stat_1&quot;, &quot;stat_2&quot;, etc.)
 all_interaction() selects interaction terms from a regression model
 all_intercepts() selects intercept terms from a regression model
 all_contrasts() selects variables in regression model based on their type of contrast
-all_tests() selects variables by the name of the test performed
-all_stat_cols(stat_0 = TRUE) selects columns from tbl_summary/tbl_svysummary object with summary statistics (i.e. &quot;stat_0&quot;, &quot;stat_1&quot;, &quot;stat_2&quot;, etc.)
 
 " />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
@@ -188,35 +188,59 @@ all_stat_cols(stat_0 = TRUE) selects columns from tbl_summary/tbl_svysummary obj
     <div class="ref-description">
     <p>Set of functions to supplement the tidyselect set of
 functions for selecting columns of data frames (and other items as well).</p><ul>
-<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_continuous()</a></code> selects continuous variables</p></li>
+<li><p><code>all_continuous()</code> selects continuous variables</p></li>
 <li><p><code>all_continuous2()</code> selects only type <code>"continuous2"</code></p></li>
-<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_categorical()</a></code> selects categorical (including <code>"dichotomous"</code>) variables</p></li>
-<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_dichotomous()</a></code> selects only type <code>"dichotomous"</code></p></li>
-<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_interaction()</a></code> selects interaction terms from a regression model</p></li>
-<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_intercepts()</a></code> selects intercept terms from a regression model</p></li>
-<li><p><code><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_contrasts()</a></code> selects variables in regression model based on their type of contrast</p></li>
+<li><p><code>all_categorical()</code> selects categorical (including <code>"dichotomous"</code>) variables</p></li>
+<li><p><code>all_dichotomous()</code> selects only type <code>"dichotomous"</code></p></li>
 <li><p><code>all_tests()</code> selects variables by the name of the test performed</p></li>
-<li><p><code>all_stat_cols(stat_0 = TRUE)</code> selects columns from <code>tbl_summary</code>/<code>tbl_svysummary</code> object with summary statistics (i.e. "<code>stat_0</code>", "<code>stat_1</code>", "<code>stat_2</code>", etc.)</p></li>
+<li><p><code>all_stat_cols()</code> selects columns from <code>tbl_summary</code>/<code>tbl_svysummary</code> object with summary statistics (i.e. <code>"stat_0"</code>, <code>"stat_1"</code>, <code>"stat_2"</code>, etc.)</p></li>
+<li><p><code>all_interaction()</code> selects interaction terms from a regression model</p></li>
+<li><p><code>all_intercepts()</code> selects intercept terms from a regression model</p></li>
+<li><p><code>all_contrasts()</code> selects variables in regression model based on their type of contrast</p></li>
 </ul>
 
     </div>
 
-    <pre class="usage"><span class='fu'>all_continuous2</span><span class='op'>(</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>all_continuous</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'>all_continuous2</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'>all_categorical</span><span class='op'>(</span>dichotomous <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'>all_dichotomous</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='fu'>all_tests</span><span class='op'>(</span>tests <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>all_stat_cols</span><span class='op'>(</span>stat_0 <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+<span class='fu'>all_stat_cols</span><span class='op'>(</span>stat_0 <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'>all_interaction</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'>all_intercepts</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'>all_contrasts</span><span class='op'>(</span>contrasts_type <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>dichotomous</th>
+      <td><p>Logical indicating whether to include dichotomous variables.
+Default is <code>TRUE</code></p></td>
+    </tr>
+    <tr>
       <th>tests</th>
-      <td><p>character</p></td>
+      <td><p>string indicating the test type of the variables to select, e.g.
+select all variables being compared with <code>"t.test"</code></p></td>
     </tr>
     <tr>
       <th>stat_0</th>
-      <td><p>When <code>FALSE</code>, will not select the <code>"stat_0"</code> column. Default it <code>TRUE</code></p></td>
+      <td><p>When <code>FALSE</code>, will not select the <code>"stat_0"</code> column. Default is <code>TRUE</code></p></td>
+    </tr>
+    <tr>
+      <th>contrasts_type</th>
+      <td><p>type of contrast to select. When <code>NULL</code>, all variables with a
+contrast will be selected. Default is <code>NULL</code>.  Select among contrast types
+<code><a href='https://rdrr.io/r/base/c.html'>c("treatment", "sum", "poly", "helmert", "other")</a></code></p></td>
     </tr>
     </table>
 
@@ -235,8 +259,8 @@ functions for selecting columns of data frames (and other items as well).</p><ul
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>response</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>
-    statistic <span class='op'>=</span> <span class='fu'><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
-    type <span class='op'>=</span> <span class='fu'><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_dichotomous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"categorical"</span>
+    statistic <span class='op'>=</span> <span class='fu'>all_continuous</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
+    type <span class='op'>=</span> <span class='fu'>all_dichotomous</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"categorical"</span>
   <span class='op'>)</span>
 </div></pre>
   </div>

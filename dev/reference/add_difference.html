@@ -267,7 +267,7 @@ and return a string that is the rounded/formatted p-value (e.g.
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>,
-              statistic <span class='op'>=</span> <span class='fu'><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
+              statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
               missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>add_difference</span><span class='op'>(</span><span class='op'>)</span>
@@ -277,7 +277,7 @@ and return a string that is the rounded/formatted p-value (e.g.
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>response</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>,
-              statistic <span class='op'>=</span> <span class='fu'><a href='https://larmarange.github.io/broom.helpers//reference/select_helpers.html'>all_dichotomous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span>,
+              statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_dichotomous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span>,
               missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_stat_cols</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
