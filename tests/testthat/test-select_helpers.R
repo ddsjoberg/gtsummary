@@ -83,4 +83,25 @@ test_that("test-select helpers", {
             test.args = all_tests("fisher.test") ~ list(simulate.p.value = TRUE)),
     NA
   )
+
+  df <-
+    data.frame(
+      stat = NA,
+      stat_0 = NA,
+      stat_0_1 = NA,
+      stat_0_11 = NA,
+      stat_1 = NA,
+      stat_11 = NA,
+      stat_1_1 = NA,
+      stat_11_1 = NA
+    )
+
+  expect_equal(
+    select(df, all_stat_cols()) %>% names(),
+    c("stat_0", "stat_1", "stat_11", "stat_0_1", "stat_0_11", "stat_1_1", "stat_11_1")
+  )
+  expect_equal(
+    select(df, all_stat_cols(FALSE)) %>% names(),
+    c("stat_1", "stat_11", "stat_1_1", "stat_11_1")
+  )
 })

@@ -198,7 +198,7 @@ trial2 %>%
   modify_header(label ~ "**Variable**") %>%
   modify_spanning_header(c("stat_1", "stat_2") ~ "**Treatment Received**") %>%
   modify_footnote(
-    starts_with("stat_") ~ "Median (IQR) or Frequency (%)"
+    all_stat_cols() ~ "Median (IQR) or Frequency (%)"
   ) %>%
   bold_labels()
 ```
