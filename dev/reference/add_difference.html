@@ -55,8 +55,8 @@
 <meta property="og:title" content="Add difference between groups — add_difference" />
 <meta property="og:description" content="
 
-Add the (typically mean) difference between two groups,
-along with the confidence interval and p-value." />
+Add the difference between two groups (typically mean difference),
+along with the difference confidence interval and p-value." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -179,8 +179,8 @@ along with the confidence interval and p-value." />
     <div class="ref-description">
     <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
 
-Add the (typically mean) difference between two groups,
-along with the confidence interval and p-value.</p>
+Add the difference between two groups (typically mean difference),
+along with the difference confidence interval and p-value.</p>
     </div>
 
     <pre class="usage"><span class='fu'>add_difference</span><span class='op'>(</span>
@@ -213,8 +213,8 @@ See <a href='tests.html'>tests</a> for details and more tests.</p></td>
     <tr>
       <th>group</th>
       <td><p>Column name (unquoted or quoted) of an ID or grouping variable.
-The column can be used to calculate p-values with correlated data (e.g. when
-the test argument is <code>"lme4"</code>). Default is <code>NULL</code>.</p></td>
+The column can be used to calculate p-values with correlated data.
+Default is <code>NULL</code>. See <a href='tests.html'>tests</a> for methods that utilize the <code>group=</code> argument.</p></td>
     </tr>
     <tr>
       <th>adj.vars</th>

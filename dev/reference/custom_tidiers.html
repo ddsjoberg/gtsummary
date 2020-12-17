@@ -286,7 +286,7 @@ the model parameters before attempting to use the tidier with <code><a href='tbl
 <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span>
 
 <span class='va'>tbl_stnd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span>, tidy_fun <span class='op'>=</span> <span class='va'>tidy_standardize</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidy_standardize: Estimating standardized coefs with</span>
+</div><div class='output co'>#&gt; <span class='message'>tidy_standardize(): Estimating standardized coefs with</span>
 #&gt; <span class='message'>`effectsize::standardize_parameters(model = x, ci = 0.95)`</span></div><div class='input'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
 
 <span class='va'>tidy_standardize_ex1</span> <span class='op'>&lt;-</span>
@@ -299,7 +299,7 @@ the model parameters before attempting to use the tidier with <code><a href='tbl
 <span class='co'># use "posthoc" method for coef calculation</span>
 <span class='va'>tidy_standardize_ex2</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span>, tidy_fun <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/partial.html'>partial</a></span><span class='op'>(</span><span class='va'>tidy_standardize</span>, method <span class='op'>=</span> <span class='st'>"posthoc"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>tidy_standardize: Estimating standardized coefs with</span>
+</div><div class='output co'>#&gt; <span class='message'>tidy_standardize(): Estimating standardized coefs with</span>
 #&gt; <span class='message'>`effectsize::standardize_parameters(model = x, ci = 0.95, method = "posthoc")`</span></div><div class='input'>
 
 <span class='co'># Example 3 ----------------------------------</span>
@@ -319,7 +319,7 @@ the model parameters before attempting to use the tidier with <code><a href='tbl
 #&gt;   4   1  age  marker  response
 #&gt;   4   2  age  marker  response
 #&gt;   5   1  age  marker  response
-#&gt;   5   2  age  marker  response</div><div class='output co'>#&gt; <span class='message'>pool_and_tidy_mice: Tidying mice model with</span>
+#&gt;   5   2  age  marker  response</div><div class='output co'>#&gt; <span class='message'>pool_and_tidy_mice(): Tidying mice model with</span>
 #&gt; <span class='message'>`mice::pool(x) %&gt;% mice::tidy(exponentiate = FALSE, conf.int = TRUE, conf.level = 0.95)`</span></div><div class='output co'>#&gt; <span class='message'><span style='color: #BB0000;'>✖</span><span> There was an error calling </span><span style='color: #555555;'>`stats::model.frame(x)`</span><span>, and the</span>
 #&gt; <span class='message'>  model N will not be available in the output.</span></div><div class='input'>
 </div></span></pre>
