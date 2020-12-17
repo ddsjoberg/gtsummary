@@ -1,8 +1,8 @@
 #' Add difference between groups
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-#' Add the (typically mean) difference between two groups,
-#' along with the confidence interval and p-value.
+#' \lifecycle{experimental}
+#' Add the difference between two groups (typically mean difference),
+#' along with the difference confidence interval and p-value.
 #'
 #' @param x `"tbl_summary"` object
 #' @inheritParams  add_p.tbl_summary
@@ -57,7 +57,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   if ("add_p" %in% names(x$call_list))
     stop("`add_difference()` cannot be run after `add_p()`, and vice versa")
 
-  # expanding formula lists/var selects ----------------------------------------------------
+  # expanding formula lists/var selects ----------------------------------------
   include <-
     .select_to_varnames(
       select = {{ include }},

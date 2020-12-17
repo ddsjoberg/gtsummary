@@ -1,6 +1,6 @@
 #' Combine terms in a regression model
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' The function combines terms from a regression model, and replaces the terms
 #' with a single row in the output table.  The p-value is calculated using
 #' [stats::anova()].

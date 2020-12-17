@@ -65,7 +65,7 @@ probabilities, and
 A \code{tbl_survival} object
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("questioning")}
+\lifecycle{questioning}
 Please use \link{tbl_survfit}.
 Function takes a \code{survfit} object as an argument, and provides a
 formatted summary of the results

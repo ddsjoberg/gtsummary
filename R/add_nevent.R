@@ -209,7 +209,7 @@ add_nevent.tbl_uvregression <- function(x, ...) {
 
 #' Add column with number of observed events
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' For each `survfit()` object summarized with `tbl_survfit()` this function
 #' will add the total number of events observed in a new column.
 #'

@@ -47,7 +47,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 A string reporting results from a gtsummary table
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\lifecycle{experimental}
 Extracts and returns statistics from a \code{tbl_survfit} object for
 inline reporting in an R markdown document. Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}

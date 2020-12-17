@@ -470,7 +470,7 @@ inline_text.tbl_survival <-
 
 #' Report statistics from survfit tables inline
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Extracts and returns statistics from a `tbl_survfit` object for
 #' inline reporting in an R markdown document. Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
@@ -566,7 +566,7 @@ inline_text.tbl_survfit <-
 
 #' Report statistics from cross table inline
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Extracts and returns statistics from a `tbl_cross` object for
 #' inline reporting in an R markdown document. Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}

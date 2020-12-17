@@ -1,6 +1,6 @@
 #' Available gtsummary themes
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' The following themes are available to use within the gtsummary package.
 #' Print theme elements with `theme_gtsummary_journal(set_theme = FALSE) %>% print()`.
 #' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
