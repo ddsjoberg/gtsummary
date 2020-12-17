@@ -17,8 +17,9 @@ assert_package <- function(pkg, fn, version = NULL) {
     stop("Install required package", call. = FALSE)
   }
 
-  if (!requireNamespace(pkg, quietly = TRUE) ||
-      (requireNamespace(pkg, quietly = TRUE) && packageVersion(pkg) < version)) {
+  if (!is.null(version) &&
+      (!requireNamespace(pkg, quietly = TRUE) ||
+       (requireNamespace(pkg, quietly = TRUE) && packageVersion(pkg) < version))) {
     ui_oops("The {ui_value(pkg)} v{version} or greater is required for function {ui_code(fn)}.")
     usethis::ui_todo("Install/update the {ui_value(pkg)} package with the code below.")
     ui_code_block('install.packages("{pkg}")')
