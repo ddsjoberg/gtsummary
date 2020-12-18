@@ -262,3 +262,47 @@ show_header_names <- function(x = NULL, quiet = NULL) {
 
   show_header_names(x)
 }
+
+.info_tibble <- function(x) {
+  # tbl_summary with no by variable
+  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && is.null(x$df_by)) {
+    return(
+      tbl_svy$meta_data %>%
+        dplyr::slice(1) %>%
+        pluck("df_stats", 1) %>%
+        select(any_of(c("N_obs", "N_unweighted"))) %>%
+        dplyr::slice(1) %>%
+        dplyr::rename(N = .data$N_obs) %>%
+        full_join(
+          select(x$table_header, .data$column),
+          by = character()
+        )
+    )
+  }
+
+  # tbl_summary with by variable
+  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && !is.null(x$df_by)) {
+    return(
+      x$table_header %>%
+        select(.data$column) %>%
+        full_join(
+          x$df_by %>%
+            select(any_of(c("N",  "N_unweighted"))) %>%
+            distinct(),
+          by = character()
+        ) %>%
+        left_join(
+          x$df_by %>%
+            select(column = .data$by_col, level = .data$by_chr,
+                   any_of(c("n", "p", "n_unweighted", "p_unweighted"))),
+          by = "column"
+        )
+    )
+  }
+
+  # otherwise return tibble with N
+  x$table_header %>%
+    select(.data$column) %>%
+    mutate(N = x$N %||% NA_integer_)
+}
+

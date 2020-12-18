@@ -152,6 +152,15 @@ table_header_fmt_fun <- function(table_header, ...) {
 # an updated version where the column labels have been added to `.$table_header`.
 # The function also switches the default `.$table_header$hide` from
 # `TRUE` to `FALSE`, resulting in column with labels being printed.
+modify_header_internal <- function(x, vars,  text_interpret = c("md", "html")) {
+  # input checks ---------------------------------------------------------------
+  text_interpret <- match.arg(text_interpret)
+
+  # information data frame -----------------------------------------------------
+
+
+}
+
 modify_header_internal <- function(x, stat_by = NULL, ...,
                                    text_interpret = c("md", "html"),
                                    .save_call = FALSE) {
