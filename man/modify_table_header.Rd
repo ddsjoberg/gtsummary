@@ -24,7 +24,7 @@ modify_table_header(
 \arguments{
 \item{x}{gtsummary object}
 
-\item{column}{columns to update}
+\item{column}{vector or selector of columns in \code{x$table_body}}
 
 \item{label}{string of column label}
 
