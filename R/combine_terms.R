@@ -181,7 +181,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
         p.value = x$inputs$pvalue_fun %||%
           getOption("gtsummary.pvalue_fun", default = style_pvalue)
       )
-    x <- modify_header_internal(x, p.value = "**p-value**")
+    x <- modify_header(x, p.value = "**p-value**")
   }
   # replacing the combined rows with a single row
   table_body <-
