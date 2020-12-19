@@ -9,7 +9,7 @@
 #' vignette for information on `.$table_header` objects.
 #'
 #' @param x gtsummary object
-#' @param column columns to update
+#' @param column vector or selector of columns in `x$table_body`
 #' @param label string of column label
 #' @param hide logical indicating whether to hide column from output
 #' @param align string indicating alignment of column, must be one of
