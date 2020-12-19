@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+- Added new functions `modify_column_hide()` and `modify_column_unhide()` to hide and unhide columns in `.$table_body`. Simple wrappers for `modify_table_header()`. 
+
 - Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
 
 - Removed `"Statistics presented:"` and `"Statistical tests performed:"` prefixes from the `tbl_summary() %>% add_p()` footnotes.
