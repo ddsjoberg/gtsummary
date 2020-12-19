@@ -34,7 +34,6 @@ Default is TRUE}
 A {kableExtra} object
 }
 \description{
-\lifecycle{experimental}
 Function converts a gtsummary object to a knitr_kable + kableExtra object.
 A user can use this function if they wish to add customized formatting
 available via \link[knitr:kable]{knitr::kable} and {kableExtra}. Note that {gtsummary}

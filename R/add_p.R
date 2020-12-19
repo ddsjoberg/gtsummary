@@ -297,7 +297,6 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 
 #' Adds p-value to crosstab table
 #'
-#' \lifecycle{experimental}
 #' Calculate and add a p-value comparing the two variables in the cross table.
 #' Missing values are included in p-value calculations.
 #'
