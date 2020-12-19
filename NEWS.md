@@ -1,20 +1,56 @@
 # gtsummary (development version)
+    
+### New Functionality
 
-- Added new functions `modify_column_hide()` and `modify_column_unhide()` to hide and unhide columns in `.$table_body`. Simple wrappers for `modify_table_header()`. 
+* Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
 
-- Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
+* Added new functions `modify_column_hide()` and `modify_column_unhide()` to hide and unhide columns in `.$table_body`. Simple wrappers for `modify_table_header()`.
 
-- Removed `"Statistics presented:"` and `"Statistical tests performed:"` prefixes from the `tbl_summary() %>% add_p()` footnotes.
+* Added function `modify_table_body()` allowing users to more easily make changes to gtsummary tables
 
+* Added new function `remove_row_type()` for removing header, reference, or missing rows from a gtsummary tables. (#678)
 
-- The code base powering `add_p()` and related methods has been refactored for better performance, organization, and customizability. (#622)
-    - For clarity, a help file listing each test available within gtsummary and the pseudo code for calculating the p-value has been added (`?add_p_test`)
-    - Each `add_p()` method now has the `test.args=` argument. Use this argument to pass additional arguments to the statistical method, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = c(age, marker) ~ list(var.equal = TRUE))`
-    - New function was added `all_tests()` to make it easier to select variables based on the test used to calculate the p-value, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))`
-    - Additional tests have been added: paired t-test, signed rank test
-    - More robust unit testing implemented for all `add_p()` methods.
-- Breaking change. Experimental function `add_p.tbl_survfit(test.args=)` in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as `everything() ~ "test_name"`.  The single string is no longer accepted, and users must use the formula notation.
-- New function: `all_stat_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
+* New selecting function: `all_stat_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. `"stat_0"`, `"stat_1"`, `"stat_2"`, etc.).
+
+* New selecting function was added `all_tests()` to make it easier to select variables based on the test used to calculate the p-value, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))`
+
+### Other Updates
+
+* Introducing new package dependency {broom.helpers}
+
+    * The tidying and preparation of `tbl_regression()` tables are now being performed by the new package {broom.helpers} (#636, #607)
+
+    * All select helper functions and the utility functions that make them possible, have been cleaned up and migrated to broom.helpers. (#648)
+
+    * Migrated all selecting functionality from {gtsummary} to {broom.helpers}. (#648, #680)
+    
+    * Importing  `.generic_selector()`: this is a function that makes it easy to create selecting functions like `all_continuous()`. The internals allow for it to be used in {broom.helpers} and {gtsummary} seamlessly. (#680)
+    
+    * Importing `.select_to_varnames()`: This function converts selecting syntax into character varnames (#680)
+    
+    * Importing `.formula_list_to_named_list()`: This function takes the formula selecting syntax used widely in gtsummary, and converts it to a named list.
+    
+    * Theme element has been added for controlling the other tidy_plus_plus() arguments. (#692)
+
+    * `tbl_regression(add_estimate_to_reference_rows=)` argument has been added. Also added to `tbl_uvregression()`. (#692)
+
+    * Theme element for `tbl_regression(add_estimate_to_reference_rows=)` has been added. (#677)
+
+    * Variables that do not follow standard naming conventions are now parsed correctly
+    
+    * The new interface allows for special handling of different model types using S3 methods: `tbl_regression.default()`, `tbl_regression.lmer()`, `tbl_regression.glmer()`, `tbl_regression.survreg()`
+    
+* Removed `"Statistics presented:"` and `"Statistical tests performed:"` prefixes from the `tbl_summary() %>% add_p()` footnotes.
+
+* The codebase powering `add_p()` and related methods has been refactored for better performance, organization, and customizability. (#622)
+
+    * For clarity, a help file listing each test available within gtsummary and the pseudo code for calculating the p-value has been added (`?tests`)
+    
+    * Each `add_p()` method now has the `test.args=` argument. Use this argument to pass additional arguments to the statistical method, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = c(age, marker) ~ list(var.equal = TRUE))`
+    
+    * Additional tests have been added: paired t-test, signed rank test, and more. See `?tests` for full list.
+    
+    * More robust unit testing implemented for all `add_p()` methods.
 
 * Added messaging to `tbl_stack()` to inform users that the attributes from the first table passed take precedent over the others'. (#699)
 
@@ -24,40 +60,36 @@
 
 * The `...` arguments have been added to `as_gt()`. These dots are subsequently passed to `gt::gt(...)`. (#701)
 
-* Added new function `remove_row_type()` (#678)
-
-* All select helper functions and the utility functions that make them possible, have been cleaned up and migrated to broom.helpers. THIS IS A HUGE UPDATE. #648
-* Migrated all selecting functionality from gtsummary to broom.helpers. Exporting functions the functions below. Each has been improved and streamlined compared to their original versions in gtsummary. #648 #680
-* .generic_selector(): this is a function that makes it easy to create selecting functions like all_continuous(). The internals allow for it to be used in broom.helpers and gtsummary seamlessly. #680
-* .select_to_varnames(): This function converts selecting syntax into character varnames #680
-* .formula_list_to_named_list(): this function takes the formula selecting syntax used widely in gtsummary, and converts it to a named list.
-* Update to use #680 broom.helpers::tidy_plus_plus() instead of the individual broom.helpers::tidy_*() functions. #692
-* Theme element has been added for controlling the other tidy_plus_plus() arguments. #692
-tbl_regression(add_estimate_to_reference_rows=) argument has been added. Added to tbl_uvregression() as well. #692
-* Theme element for tbl_regression(add_estimate_to_reference_rows=) has been added. #677
-* The argument all_continuous(continuous2=) has been removed. No deprecation messages were added...it was just cut. 
-
 * Multiple imputation models created with {mice}, and multinomial regression models created with {nnet} are now supported in `tbl_regression()` (#645)
-
-* Added warning message to users when they pass a data frame to `tbl_uvregression(data=)` with column names containing spaces or special characters ( #686)
 
 * Updates to `add_global_p.tbl_regression()` allowing for variable names with spaces and special characters (#682)
 
 * Added `digits=` argument to `style_percent()` (#690)
 
-* Bug fix when a default statistic is set using themes for `"continuous2"` variables that has length larger than one
-
-* Added function `modify_table_body()` allowing users to more easily make changes to gtsummary tables
-
-* The tidying and preparation of `tbl_regression()` tables are now being performed by the new package {broom.helpers} (#636, #607)
-  - Variables that do not follow standard naming conventions are now parsed correctly
-  - The new interface allows for special handling of different model types using S3 methods: `tbl_regression.default()`, `tbl_regression.lmer()`, `tbl_regression.glmer()`, `tbl_regression.survreg()`
-
 * Users may now choose which columns to report with a theme element. they can choose among the `"estimate"`, `"std.error"`, `"statistic"`, `"ci"`, `"conf.low"`, `"conf.high"` and `"p.value"` (#637)
 
-* Allow users to include the reference value via a theme element
+* Allow users to include the reference value in `tbl_regression()` via a theme element
 
 * Users may change the symbol with a reference row symbol with a theme element. (#628)
+
+### Bug Fixes
+
+* Bug fix when a default statistic is set using themes for `"continuous2"` variables that has length larger than one
+
+### Breaking Changes
+
+* Experimental function `add_p.tbl_survfit(test.args=)` in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as `everything() ~ "test_name"`.  The single string is no longer accepted, and users must use the formula notation.
+
+* The argument `all_continuous(continuous2=)` has been removed. No deprecation messages were added...it was just cut. 
+
+
+
+
+
+
+
+    
+
 
 # gtsummary 1.3.5
 
