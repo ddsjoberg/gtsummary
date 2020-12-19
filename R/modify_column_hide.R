@@ -1,5 +1,6 @@
 #' Modify Hidden Columns
 #'
+#' \lifecycle{experimental}
 #' Use these functions to hide or unhide columns in a gtsummary tables.
 #'
 #' @inheritParams modify_table_header
