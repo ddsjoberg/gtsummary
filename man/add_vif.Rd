@@ -15,6 +15,7 @@ See \code{\link[car:vif]{car::vif()}} for details.}
 \item{estimate_fun}{Default is \code{\link[=style_sigfig]{style_sigfig()}}.}
 }
 \description{
+\lifecycle{experimental}
 Add the variance inflation factor (VIF) or
 generalized VIF (GVIF) to the regression table.
 Function uses \code{car::vif()} to calculate the VIF.

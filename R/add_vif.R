@@ -1,5 +1,6 @@
 #' Add Variance Inflation Factor
 #'
+#' \lifecycle{experimental}
 #' Add the variance inflation factor (VIF) or
 #' generalized VIF (GVIF) to the regression table.
 #' Function uses `car::vif()` to calculate the VIF.
