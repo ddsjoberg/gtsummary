@@ -85,5 +85,12 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
       as.data.frame() %>%
       tibble::rownames_to_column(var = "variable") %>%
       tibble::as_tibble()
-  return(result %>% mutate(row_type = "label"))
+
+  result <-
+    result %>%
+    mutate(
+      variable = broom.helpers::.clean_backticks(variable),
+      row_type = "label"
+    )
+  return(result)
 }
