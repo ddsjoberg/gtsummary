@@ -53,7 +53,7 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
     ) %>%
     # add column header
     modify_table_header(
-      vif,
+      "vif",
       label = "**VIF**",
       fmt_fun = estimate_fun,
       hide = FALSE
