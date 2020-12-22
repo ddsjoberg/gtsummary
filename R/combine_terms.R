@@ -13,7 +13,7 @@
 #' function's `formula.=` argument
 #' @param label Option string argument labeling the combined rows
 #' @param ... Additional arguments passed to [stats::anova]
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @return `tbl_regression` object
