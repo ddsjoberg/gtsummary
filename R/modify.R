@@ -199,7 +199,6 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
     table_header_update
 
   # return updated gtsummary object --------------------------------------------
-  x[["call_list"]] <- list(x[["call_list"]], modify_footnote = match.call())
   x
 }
 
@@ -249,7 +248,6 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
     table_header_update
 
   # return updated gtsummary object --------------------------------------------
-  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
   x
 }
 
