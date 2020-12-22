@@ -11,10 +11,10 @@
 modify_header(
   x,
   update = NULL,
-  stat_by = NULL,
   text_interpret = c("md", "html"),
   quiet = NULL,
-  ...
+  ...,
+  stat_by = NULL
 )
 
 modify_footnote(x, update = NULL, abbreviation = FALSE, quiet = NULL)
@@ -31,8 +31,6 @@ column header, footnote, or spanning header.
 The LHS specifies the column(s) to be updated, and the RHS is the updated text.
 Use the \code{show_header_names()} to see the column names that can be modified.}
 
-\item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
-
 \item{text_interpret}{String indicates whether text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 
@@ -42,6 +40,8 @@ Use the \code{show_header_names()} to see the column names that can be modified.
 \item{...}{Specify a column and updated column label,
 e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an alternative to the
 \verb{update=} argument. They accomplish the same goal of updating column headers.}
+
+\item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
 }

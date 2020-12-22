@@ -92,8 +92,8 @@ NULL
 
 #' @name modify
 #' @export
-modify_header <- function(x, update = NULL, stat_by = NULL,
-                          text_interpret = c("md", "html"), quiet = NULL, ...) {
+modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
+                          quiet = NULL, ..., stat_by = NULL) {
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
   text_interpret <- match.arg(text_interpret)
