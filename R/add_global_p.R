@@ -39,9 +39,11 @@
 #' @family tbl_regression tools
 #' @section Example Output:
 #' \if{html}{Example 1}
+#'
 #' \if{html}{\figure{tbl_lm_global_ex1.png}{options: width=45\%}}
 #'
 #' \if{html}{Example 2}
+#'
 #' \if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 
 add_global_p <- function(x, ...) {

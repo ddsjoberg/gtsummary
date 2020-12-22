@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+- The default value for `include=` argument for the `add_global_p.tbl_regression()` and `add_global_p.tbl_uvregression()` methods have been made the same with `include = everything()`, and the help files for these methods have been brought together in a single file. (#721)
+
+- The default test for 2 by 2 tables with expected cell counts has been updated from the chi-squared test with continuity correction to the original chi-squared test for `add_p.tbl_summary()` (#721)
+
 - Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
 
 - Removed `"Statistics presented:"` and `"Statistical tests performed:"` prefixes from the `tbl_summary() %>% add_p()` footnotes.
