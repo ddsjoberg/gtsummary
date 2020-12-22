@@ -6,7 +6,7 @@
 #' Function uses `car::vif()` to calculate the VIF.
 #'
 #' @param x `'tbl_regression'` object
-#' @param statistic One of `c("VIF", "GVIF", "GVIF^(1/(2*Df))")`.
+#' @param statistic One of `c("VIF", "GVIF", "aGVIF")`.
 #' See [`car::vif()`] for details.
 #' @param estimate_fun Default is [`style_sigfig()`].
 #' @export
@@ -37,10 +37,11 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
     statistic %||%
     switch("VIF" %in% names(df_vif), "VIF") %||%
     switch("GVIF" %in% names(df_vif), "GVIF") %>%
-    match.arg(choices = c("VIF", "GVIF", "GVIF^(1/(2*Df))"))
+    match.arg(choices = c("VIF", "GVIF", "aGVIF"))
   if (!statistic %in% names(df_vif))
     glue("Statistic '{statistic}' not available for this model. ",
-         "Select from {quoted_list(names(df_vif) %>% intersect(c('VIF', 'GVIF', 'GVIF^(1/(2*Df))')))}.")
+         "Select from {quoted_list(names(df_vif) %>% intersect(c('VIF', 'GVIF', 'aGVIF')))}.") %>%
+    stop(call. = FALSE)
 
   # merging VIF with gtsummary table -------------------------------------------
   # merge in VIF stats
@@ -55,7 +56,10 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
     # add column header
     modify_table_header(
       "vif",
-      label = "**VIF**",
+      label = switch(statistic,
+                     "VIF" = "**VIF**",
+                     "GVIF" = "**GVIF**",
+                     "aGVIF" = "**Adjusted GVIF**"),
       fmt_fun = estimate_fun,
       hide = FALSE
     )
@@ -84,7 +88,8 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
       vif %>%
       as.data.frame() %>%
       tibble::rownames_to_column(var = "variable") %>%
-      tibble::as_tibble()
+      tibble::as_tibble() %>%
+      dplyr::rename(aGVIF = .data$`GVIF^(1/(2*Df))`)
 
   result <-
     result %>%
