@@ -76,6 +76,8 @@
 
 * Bug fix when a default statistic is set using themes for `"continuous2"` variables that has length larger than one
 
+* Bug fix when missing/non-missing percentages requested in `add_n.tbl_summary()`
+
 ### Breaking Changes
 
 * Experimental function `add_p.tbl_survfit(test.args=)` in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as `everything() ~ "test_name"`.  The single string is no longer accepted, and users must use the formula notation.
