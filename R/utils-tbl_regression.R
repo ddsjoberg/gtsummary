@@ -149,7 +149,7 @@ gtsummary_model_frame <- function(x) {
   for (v in names(x$table_body)) {
     if (
       is.numeric(x$table_body[[v]]) && # is a numeric column
-      is.null(x$table_header$fmt_fun[x$table_header$column == v]) # fmt_fun is empty
+      is.null(x$table_header$fmt_fun[x$table_header$column == v][[1]]) # fmt_fun is empty
     )
       x <-
         modify_table_header(
