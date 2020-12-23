@@ -8,7 +8,7 @@
 #' adjustment. Methods from
 #' [stats::p.adjust] are accepted.  Default is `method = "fdr"`.
 #' @inheritParams tbl_regression
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools

@@ -11,10 +11,12 @@
 #' @param env environment where formula was created. When a test is passed
 #' as a character, this helps ensure the character is converted to the test
 #' function object in the correct environment.
+#' @param parent_fun String indicating either "add_p" or "add_difference",
+#' the parent function.
 #'
 #' @noRd
 #' @author Daniel D. Sjoberg
-.get_add_p_test_fun <- function(class, test, env = NULL) {
+.get_add_p_test_fun <- function(class, test, env = NULL, parent_fun = "add_p") {
   # if no test, then return NULL
   if (is.null(test)) return(NULL)
 
@@ -37,7 +39,16 @@
   }
 
   # return info from df if internal test selected
-  if (nrow(df) == 1)
+  if (nrow(df) == 1) {
+    if (parent_fun == "add_p" && df$add_p == FALSE)
+      glue("You've selected test '{df$test_name}', which does not ",
+           "return p-values. See `?tests` for details.") %>%
+      rlang::inform()
+    if (parent_fun == "add_difference" && df$add_difference == FALSE)
+      glue("You've selected test '{df$test_name}', which does not ",
+           "return a difference. See `?tests` for details.") %>%
+      rlang::inform()
+
     return(
       df %>%
         select(any_of(c("test_name", "fun_to_run", "accept_dots"))) %>%
@@ -45,6 +56,7 @@
         as.list() %>%
         purrr::flatten()
     )
+  }
   if (rlang::is_string(test) && nrow(df) == 0)
     return(
       list(test_name = "user-defined",
@@ -60,7 +72,6 @@
   abort("Something went wrong in the test selection....")
 }
 
-
 #' Calculate p-values
 #'
 #' @param x list returned from `.get_add_p_test_fun()`
@@ -72,7 +83,8 @@
 #' @param test.args named list of additional arguments to pass to `test=`
 #' @noRd
 .run_add_p_test_fun <- function(x, data, variable, by = NULL, group = NULL,
-                                type = NULL, test.args = NULL) {
+                                type = NULL, test.args = NULL, conf.level = 0.95,
+                                adj.vars = NULL, tbl = NULL) {
   # if x is NULL, return NULL
   if (is.null(x)) return(NULL)
 
@@ -83,7 +95,9 @@
         {
           # calculating p-value
           do.call(x$fun_to_run, list(data = data, variable = variable, by = by,
-                                     group = group, type = type, test.args = test.args))
+                                     group = group, type = type, test.args = test.args,
+                                     conf.level = conf.level, tbl = tbl,
+                                     adj.vars =  adj.vars))
         },
         # printing warning and errors as message
         warning = function(w) {
@@ -92,7 +106,7 @@
           w <- stringr::str_subset(w, "chisq.test\\(svytable\\(", negate = TRUE)
           if (length(w) > 0) {
             message(glue(
-              "Warning in 'add_p()' for variable '{variable}':\n ", w
+              "Warning for variable '{variable}':\n ", w
             ))
           }
           invokeRestart("muffleWarning")
@@ -100,7 +114,7 @@
       ),
       error = function(e) {
         message(glue(
-          "There was an error in 'add_p()' for variable '{variable}', ",
+          "There was an error in 'add_p()/add_difference()' for variable '{variable}', ",
           "p-value omitted:\n", as.character(e)
         ))
         return(NULL)
@@ -112,22 +126,18 @@
     x$df_result <- test_fun_result
   # these list inputs were deprecated and deleted from documentation in v1.3.6
   else if (is.list(test_fun_result) &&
-           identical(names(test_fun_result), c("p", "test")))
+           setequal(names(test_fun_result), c("p", "test")))
     x$df_result <-
     tibble::as_tibble(test_fun_result) %>%
-    set_names(c("p.value", "method"))
-  else if (is.list(test_fun_result) &&
-           identical(names(test_fun_result), c("test", "p")))
-    x$df_result <-
-    tibble::as_tibble(test_fun_result) %>%
-    set_names(c("method", "p.value"))
+    dplyr::rename(p.value = .data$p, method = .data$test)
   else if (rlang::is_scalar_double(test_fun_result))
     x$df_result <- tibble(p.value = test_fun_result, method = NA_character_)
   else if (is.null(test_fun_result))
     x$df_result <- tibble(p.value = NA_real_, method = NA_character_)
 
   x$df_result <- x$df_result %>%
-    select(any_of(c("estimate", "conf.low", "conf.high", "p.value", "statistics", "method")),
+    select(any_of(c("estimate", "std.error", "statistic", "parameter",
+                    "conf.low", "conf.high", "p.value", "method")),
            everything())
   x
 }
@@ -203,7 +213,7 @@
   if (min_exp >= 5) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.categorical") %||%
-      getOption("gtsummary.add_p.test.categorical", default = "chisq.test")
+      getOption("gtsummary.add_p.test.categorical", default = "chisq.test.no.correct")
     return(test_func)
   }
   test_func <-
@@ -243,4 +253,20 @@
       get_theme_element("add_p.tbl_svysummary-attr:test.categorical", default = "svy.chisq.test")
     return(test_func)
   }
+}
+
+.assign_test_add_diff <- function(data, variable, summary_type, by, group, test, adj.vars) {
+  # if user supplied a test, use that test -------------------------------------
+  if (!is.null(test[[variable]])) return(test[[variable]])
+
+  if (summary_type %in% c("continuous", "continuous2") && is.null(group) && is.null(adj.vars)) return("t.test")
+  if (summary_type %in% c("continuous", "continuous2") && is.null(group)) return("ancova")
+  if (summary_type %in% "dichotomous" && is.null(group) && is.null(adj.vars)) return("prop.test")
+
+  if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) return("ancova_lme4")
+
+  glue("There is no default test for variable '{variable}'. Please specify method in `test=` ",
+       "or exclude it with `include = -c({variable})`") %>%
+    stringr::str_wrap() %>%
+    stop(call. = FALSE)
 }

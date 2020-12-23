@@ -6,12 +6,19 @@
 #' - `all_continuous2()` selects only type `"continuous2"`
 #' - `all_categorical()` selects categorical (including `"dichotomous"`) variables
 #' - `all_dichotomous()` selects only type `"dichotomous"`
+#' - `all_tests()` selects variables by the name of the test performed
+#' - `all_stat_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. `"stat_0"`, `"stat_1"`, `"stat_2"`, etc.)
 #' - `all_interaction()` selects interaction terms from a regression model
 #' - `all_intercepts()` selects intercept terms from a regression model
 #' - `all_contrasts()` selects variables in regression model based on their type of contrast
-#' - `all_tests()` selects variables by the name of the test performed
-#' - `all_summary_cols()` selects columns from `tbl_summary`/`tbl_svysummary` object with summary statistics (i.e. "`stat_0`", "`stat_1`", "`stat_2`", etc.)
-#' @param tests character
+#' @param tests string indicating the test type of the variables to select, e.g.
+#' select all variables being compared with `"t.test"`
+#' @param stat_0 When `FALSE`, will not select the `"stat_0"` column. Default is `TRUE`
+#' @param dichotomous Logical indicating whether to include dichotomous variables.
+#' Default is `TRUE`
+#' @param contrasts_type type of contrast to select. When `NULL`, all variables with a
+#' contrast will be selected. Default is `NULL`.  Select among contrast types
+#' `c("treatment", "sum", "poly", "helmert", "other")`
 #' @name select_helpers
 #' @return A character vector of column names selected
 #' @examples
@@ -30,11 +37,23 @@ NULL
 
 #' @rdname select_helpers
 #' @export
+all_continuous <- broom.helpers::all_continuous
+
+#' @rdname select_helpers
+#' @export
 all_continuous2 <- function() {
   .generic_selector("variable", "var_type",
                     .data$var_type %in% "continuous2",
                     fun_name = "all_continuous")
 }
+
+#' @rdname select_helpers
+#' @export
+all_categorical <- broom.helpers::all_categorical
+
+#' @rdname select_helpers
+#' @export
+all_dichotomous <- broom.helpers::all_dichotomous
 
 #' @rdname select_helpers
 #' @export
@@ -52,6 +71,34 @@ all_tests <- function(tests = NULL) {
 
 #' @rdname select_helpers
 #' @export
-all_summary_cols <- function() {
-  dplyr::matches("^stat_\\d+$") # finds stat_0, stat_1, stat_2, etc.
+all_stat_cols <- function(stat_0 = TRUE) {
+  # finds stat_0, stat_1, stat_2, etc.
+  if (stat_0 == TRUE)
+    return(
+      union(
+        dplyr::matches("^stat_\\d+$"),
+        dplyr::matches("^stat_\\d+_.*$")
+      )
+                )
+  # finds stat_1, stat_2, etc.
+  if (stat_0 == FALSE)
+    return(
+      union(
+        dplyr::matches("^stat_\\d*[1-9]\\d*$"),
+        dplyr::matches("^stat_\\d*[1-9]\\d*_.*$")
+      )
+    )
 }
+
+#' @rdname select_helpers
+#' @export
+all_interaction <- broom.helpers::all_interaction
+
+#' @rdname select_helpers
+#' @export
+all_intercepts <- broom.helpers::all_intercepts
+
+#' @rdname select_helpers
+#' @export
+all_contrasts <- broom.helpers::all_contrasts
+

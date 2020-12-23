@@ -802,8 +802,7 @@ footnote_stat_label <- function(meta_data) {
     ) %>%
     distinct() %>%
     pull("message") %>%
-    paste(collapse = "; ") %>%
-    paste0(translate_text("Statistics presented"), ": ", .)
+    paste(collapse = "; ")
 }
 
 # summarize_categorical --------------------------------------------------------

@@ -22,15 +22,14 @@ add_p <- function(x, ...) {
 #' for details and more tests.
 #'
 #' Tests default to `"kruskal.test"` for continuous variables (`"wilcox.test"`
-#' when "`by`" variable has two levels), `"chisq.test"` for
+#' when "`by`" variable has two levels), `"chisq.test.no.correct"` for
 #' categorical variables with all expected cell counts >=5, and `"fisher.test"`
 #' for categorical variables with any expected cell count <5.
 #' A custom test function can be added for all or some variables. See below for
 #' an example.
 #' @param group Column name (unquoted or quoted) of an ID or grouping variable.
-#' The column can be used to calculate p-values with correlated data (e.g. when
-#' the test argument is `"lme4"`). Default is `NULL`.  If specified,
-#' the row associated with this variable is omitted from the summary table.
+#' The column can be used to calculate p-values with correlated data.
+#' Default is `NULL`. See [tests] for methods that utilize the `group=` argument.
 #' @param test.args List of formulas containing additional arguments to pass to
 #' tests that accept arguments. For example, add an argument for all t-tests,
 #' use `test.args = all_tests("t.test") ~ list(var.equal = TRUE)`
@@ -41,7 +40,7 @@ add_p <- function(x, ...) {
 #' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @export
 #' @return A `tbl_summary` object
-#' @author Emily C. Zabor, Daniel D. Sjoberg
+#' @author Daniel D. Sjoberg, Emily C. Zabor
 #' @examples
 #' # Example 1 ----------------------------------
 #' add_p_ex1 <-
@@ -137,6 +136,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
           "in original `tbl_summary(by=)` call.") %>%
       stop(call. = FALSE)
   }
+  if ("add_difference" %in% names(x$call_list))
+    stop("`add_p()` cannot be run after `add_difference()`, and vice versa")
 
   # test -----------------------------------------------------------------------
   # parsing into a named list
@@ -207,27 +208,28 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     {left_join(x$meta_data, ., by = "variable")}
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
+  add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }
 
 # function to create text for footnote
 footnote_add_p <- function(meta_data) {
+  if (!"test_result" %in% names(meta_data)) return(NA_character_)
   footnotes <-
-    meta_data %>%
-    filter(!is.na(.data$p.value) & !is.na(.data$stat_test_lbl)) %>%
-    pull(.data$stat_test_lbl) %>%
+    meta_data$test_result %>%
+    map_chr(~pluck(., "df_result", "method") %||% NA_character_) %>%
+    stats::na.omit() %>%
     unique()
 
-  if (length(footnotes) > 0)
-    return(
-      paste(footnotes, collapse = "; ") %>%
-        paste0(translate_text("Statistical tests performed"), ": ", .)
-    )
+  if (length(footnotes) > 0) return(paste(footnotes, collapse = "; "))
   else return(NA_character_)
 }
 
 # function to merge p-values to tbl
-add_p_merge_p_values <- function(x, meta_data, pvalue_fun) {
+add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
+                                 meta_data, pvalue_fun,
+                                 estimate_fun = style_sigfig,
+                                 conf.level = 0.95,
+                                 adj.vars = NULL) {
 
   x <-
     # merging in p-value to table_body
@@ -239,17 +241,55 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun) {
       mutate(df_result = map(.data$test_result, pluck, "df_result"),
              row_type = "label") %>%
       unnest(.data$df_result) %>%
-      select(any_of(c("variable", "row_type", "estimate", "conf.low", "conf.high", "p.value"))),
+      select(-any_of("method")),
     by = c("variable", "row_type")
   ) %>%
     # adding print instructions for p-value column
     modify_table_header(
-      "p.value",
+      any_of("p.value"),
       label = paste0("**", translate_text("p-value"), "**"),
       hide = FALSE,
       fmt_fun = pvalue_fun,
       footnote = footnote_add_p(meta_data)
     )
+
+  # don't display difference and CI for add_p fns
+  if (lgl_add_p == FALSE) {
+    x <- x %>%
+      # adding print instructions for estimate
+      modify_table_header(
+        any_of("estimate"),
+        label = ifelse(is.null(adj.vars),
+                       paste0("**", translate_text("Difference"), "**"),
+                       paste0("**", translate_text("Adjusted Difference"), "**")),
+        hide = FALSE,
+        fmt_fun = estimate_fun,
+        footnote = footnote_add_p(meta_data)
+      )
+
+    # adding formatted CI column
+    if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
+        !"ci" %in% names(x$table_body)) {
+      x <- x %>%
+        modify_table_body(
+          mutate,
+          ci = case_when(
+            !is.na(.data$conf.low) | !is.na(.data$conf.high) ~
+              glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
+          )
+        ) %>%
+        modify_table_body(dplyr::relocate, .data$ci, .before = "conf.low") %>%
+        # adding print instructions for estimates
+        modify_table_header(
+          any_of("ci"),
+          label = paste0("**", conf.level * 100, "% ", translate_text("CI"), "**"),
+          hide = FALSE,
+          footnote = footnote_add_p(meta_data),
+          footnote_abbrev = translate_text("CI = Confidence Interval")
+        )
+    }
+  }
+
 
   x
 }
@@ -257,7 +297,6 @@ add_p_merge_p_values <- function(x, meta_data, pvalue_fun) {
 
 #' Adds p-value to crosstab table
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' Calculate and add a p-value comparing the two variables in the cross table.
 #' Missing values are included in p-value calculations.
 #'
@@ -359,7 +398,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
 #' Adds p-value to survfit table
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Calculate and add a p-value
 #' @param x Object of class `"tbl_survfit"`
 #' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,
@@ -486,7 +525,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
     {left_join(x$meta_data, ., by = "variable")}
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
+  add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }
 
 
@@ -662,5 +701,5 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
     {left_join(x$meta_data, ., by = "variable")}
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-  add_p_merge_p_values(x, x$meta_data, pvalue_fun)
+  add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }

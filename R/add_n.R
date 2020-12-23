@@ -3,7 +3,7 @@
 #' @param x Object created from a gtsummary function
 #' @param ... Additional arguments passed to other methods.
 #' @author Daniel D. Sjoberg
-#' @seealso [add_n.tbl_summary], [add_n.tbl_svysummary], [add_n.tbl_survfit]
+#' @seealso [add_n.tbl_summary()], [add_n.tbl_svysummary()], [add_n.tbl_survfit()]
 #' @export
 add_n <- function(x, ...) {
   UseMethod("add_n")
@@ -70,7 +70,6 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
     map_dfr(
       function(.x) {
         df_stats <-
-          # selecting all columns with count data
           select(.x, any_of(c("variable", "by", "N_obs", "N_miss", "N_nonmiss", "p_miss",
                               "p_nonmiss", "N_obs_unweighted", "N_miss_unweighted",
                               "N_nonmiss_unweighted", "p_miss_unweighted",
@@ -81,6 +80,16 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
           mutate_at(vars(-any_of(c("variable", "by"))), sum) %>%
           select(-any_of("by")) %>%
           distinct()
+
+        # correcting percentages -----------------------------------------------
+        if ("p_miss" %in% names(df_stats))
+          p_nonmiss <- mutate(df_stats, p_miss = .data$N_miss / .data$N_obs)
+        if ("p_miss" %in% names(df_stats))
+          df_stats <- mutate(df_stats, p_nonmiss = .data$N_nonmiss / .data$N_obs)
+        if ("p_miss_unweighted" %in% names(df_stats))
+          df_stats <- mutate(df_stats, p_miss_unweighted = .data$N_miss_unweighted / .data$N_obs_unweighted)
+        if ("p_nonmiss_unweighted" %in% names(df_stats))
+          df_stats <- mutate(df_stats, p_nonmiss_unweighted = .data$N_nonmiss_unweighted / .data$N_obs_unweighted)
 
         # styling the statistics -----------------------------------------------
         for (v in (names(df_stats) %>% setdiff("variable"))) {
@@ -127,9 +136,7 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
       x$table_header %>%
       mutate(
         footnote = ifelse(.data$column == "n",
-                          translate_text("Statistics presented",
-                                         get_theme_element("pkgwide-str:language", default = "en")) %>%
-                            paste0(": ", stat_to_label(statistic)),
+                          stat_to_label(statistic),
                           .data$footnote)
       )
   }
@@ -181,7 +188,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 
 #' Add column with number of observations
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' For each `survfit()` object summarized with `tbl_survfit()` this function
 #' will add the total number of observations in a new column.
 #'

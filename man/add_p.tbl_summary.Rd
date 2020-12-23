@@ -26,7 +26,7 @@ Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{
 for details and more tests.
 
 Tests default to \code{"kruskal.test"} for continuous variables (\code{"wilcox.test"}
-when "\code{by}" variable has two levels), \code{"chisq.test"} for
+when "\code{by}" variable has two levels), \code{"chisq.test.no.correct"} for
 categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
 for categorical variables with any expected cell count <5.
 A custom test function can be added for all or some variables. See below for
@@ -40,9 +40,8 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{group}{Column name (unquoted or quoted) of an ID or grouping variable.
-The column can be used to calculate p-values with correlated data (e.g. when
-the test argument is \code{"lme4"}). Default is \code{NULL}.  If specified,
-the row associated with this variable is omitted from the summary table.}
+The column can be used to calculate p-values with correlated data.
+Default is \code{NULL}. See \link{tests} for methods that utilize the \verb{group=} argument.}
 
 \item{include}{Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper
@@ -109,6 +108,6 @@ Other tbl_summary tools:
 \code{\link{tbl_summary}()}
 }
 \author{
-Emily C. Zabor, Daniel D. Sjoberg
+Daniel D. Sjoberg, Emily C. Zabor
 }
 \concept{tbl_summary tools}

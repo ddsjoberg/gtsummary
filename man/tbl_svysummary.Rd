@@ -77,9 +77,7 @@ e.g. \code{sort = list(everything() ~ "frequency")}}
 A \code{tbl_svysummary} object
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
-}
-\details{
+\lifecycle{experimental}
 The \code{tbl_svysummary} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables taking into account survey weights and design.
 It is similar to \code{\link[=tbl_summary]{tbl_summary()}}.
@@ -153,9 +151,13 @@ in the denominator, not at each level of the categorical variable.
 
 The \code{tbl_summary()} function has four summary types:
 \itemize{
-\item \code{"continuous"} summaries are shown on a \emph{single row}
+\item \code{"continuous"} summaries are shown on a \emph{single row}. Most numeric
+variables default to summary type continuous.
 \item \code{"continuous2"} summaries are shown on \emph{2 or more rows}
-\item \code{"categorical"} \emph{multi-line} summaries of nominal data
+\item \code{"categorical"} \emph{multi-line} summaries of nominal data. Character variables,
+factor variables, and numeric variables with fewer than 10 unique levels default to
+type categorical. To change a numeric variable to continuous that
+defaulted to categorical, use \code{type = list(varname ~ "continuous")}
 \item \code{"dichotomous"} categorical variables that are displayed on a \emph{single row},
 rather than one row per level of the variable.
 Variables coded as \code{TRUE}/\code{FALSE}, \code{0}/\code{1}, or \code{yes}/\code{no} are assumed to be dichotomous,

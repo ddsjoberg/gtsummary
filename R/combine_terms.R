@@ -1,6 +1,5 @@
 #' Combine terms in a regression model
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #' The function combines terms from a regression model, and replaces the terms
 #' with a single row in the output table.  The p-value is calculated using
 #' [stats::anova()].
@@ -13,7 +12,7 @@
 #' function's `formula.=` argument
 #' @param label Option string argument labeling the combined rows
 #' @param ... Additional arguments passed to [stats::anova]
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
 #' @return `tbl_regression` object

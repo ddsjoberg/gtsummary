@@ -98,7 +98,7 @@ modify_ex1 <- tbl \%>\%
                   p.value ~ "**P**")
   ) \%>\%
   modify_footnote(
-    update = starts_with("stat_") ~ "median (IQR) for Age; n (\%) for Grade"
+    update = all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade"
   )
 
 # Example 2 ----------------------------------
@@ -107,7 +107,7 @@ modify_ex2 <- tbl \%>\%
   modify_header(stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)") \%>\%
   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
   modify_footnote(update = everything() ~ NA) \%>\%
-  modify_spanning_header(starts_with("stat_") ~ "**Treatment Received**")
+  modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
 
 # Example 3 ----------------------------------
 # updating an abbreviation in table footnote
@@ -142,7 +142,7 @@ Other tbl_svysummary tools:
 \code{\link{tbl_svysummary}()}
 
 Other tbl_regression tools: 
-\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_global_p}()},
 \code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
@@ -153,7 +153,7 @@ Other tbl_regression tools:
 \code{\link{tbl_stack}()}
 
 Other tbl_uvregression tools: 
-\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_global_p}()},
 \code{\link{add_nevent.tbl_uvregression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},

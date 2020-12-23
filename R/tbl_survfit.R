@@ -1,6 +1,6 @@
 #' Creates table of survival probabilities
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary table of the results
 #'
@@ -29,7 +29,7 @@
 #' @param include Variable to include as stratifying variables.
 #' @param failure DEPRECATED. Use `reverse=` instead.
 #' @param ... Not used
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @export
 #' @rdname tbl_survfit
 #' @family tbl_survfit tools

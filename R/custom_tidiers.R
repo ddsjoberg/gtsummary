@@ -1,6 +1,6 @@
 #' Collection of custom tidiers
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' Collection of tidiers that can be passed to `tbl_regression()`
 #' and `tbl_uvregression()` to obtain modified results. See examples below.
 #'
@@ -25,7 +25,7 @@
 #' Ensure your model type is compatible with the methods/functions used to estimate
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
 #' @inheritParams broom::tidy.glm
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @param pool.args named list of arguments passed to `mice::pool()` in
 #' `pool_and_tidy_mice()`. Default is `NULL`
 #' @param ... arguments passed to method;
@@ -86,7 +86,7 @@ tidy_standardize <- function(x, exponentiate = FALSE,
   # calculating standardize coefs
   std_coef_expr <- expr(effectsize::standardize_parameters(model = x, ci = !!conf.level, !!!dots))
   if (quiet == FALSE)
-    inform(glue("tidy_standardize: Estimating standardized coefs with\n  `{deparse(std_coef_expr, width.cutoff = 500L)}`"))
+    inform(glue("tidy_standardize(): Estimating standardized coefs with\n  `{deparse(std_coef_expr, width.cutoff = 500L)}`"))
   std_coef <-
     expr(effectsize::standardize_parameters(model = !!x, ci = !!conf.level, !!!dots)) %>%
     eval()
@@ -113,13 +113,13 @@ tidy_standardize <- function(x, exponentiate = FALSE,
 tidy_bootstrap <- function(x, exponentiate = FALSE,
                            conf.level = 0.95,
                            conf.int = TRUE, ..., quiet = FALSE) {
-  assert_package("parameters", "bootstrap_parameters()")
+  assert_package("parameters", "tidy_bootstrap()", version = "0.6.0")
   dots <- list(...)
 
   # calculating bootstrapped coefs
   boot_coef_expr <- expr(parameters::bootstrap_parameters(model = x, ci = !!conf.level, test = "p", !!!dots))
   if (quiet == FALSE)
-    inform(glue("tidy_bootstrap: Estimating bootstrapped coefs with\n  `{deparse(boot_coef_expr, width.cutoff = 500L)}`"))
+    inform(glue("tidy_bootstrap(): Estimating bootstrapped coefs with\n  `{deparse(boot_coef_expr, width.cutoff = 500L)}`"))
   boot_coef <-
     expr(parameters::bootstrap_parameters(model = !!x, ci = !!conf.level, test = "p", !!!dots)) %>%
     eval()
@@ -144,7 +144,7 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
 #' @rdname custom_tidiers
 #' @export
 pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
-  assert_package("mice", "pool_and_tidy_mice()")
+  assert_package("mice", "pool_and_tidy_mice()", version = "3.10.0")
   if(!inherits(x, "mira")) stop("Object `x=` must be of class 'mira'.", call. = FALSE)
 
   dots <- list(...)
@@ -152,7 +152,7 @@ pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
   # printing code that will run
   mice_expr <- expr(mice::pool(x, !!!pool.args) %>% mice::tidy(!!!dots))
   if (quiet == FALSE)
-    inform(glue("pool_and_tidy_mice: Tidying mice model with\n  `{deparse(mice_expr, width.cutoff = 500L)}`"))
+    inform(glue("pool_and_tidy_mice(): Tidying mice model with\n  `{deparse(mice_expr, width.cutoff = 500L)}`"))
 
   # evaluating tidy expression
   expr(mice::pool(!!x, !!!pool.args) %>% mice::tidy(!!!dots)) %>% eval()

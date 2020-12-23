@@ -32,7 +32,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #'
 #' @param x `tbl_regression` object
 #' @param ... Not used
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @export
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
@@ -209,7 +209,7 @@ add_nevent.tbl_uvregression <- function(x, ...) {
 
 #' Add column with number of observed events
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \lifecycle{experimental}
 #' For each `survfit()` object summarized with `tbl_survfit()` this function
 #' will add the total number of events observed in a new column.
 #'
