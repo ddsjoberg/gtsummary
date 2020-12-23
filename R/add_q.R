@@ -102,7 +102,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     )
 
   # adding  column header
-  x <- modify_header_internal(x, q.value = paste0("**", translate_text("q-value"), "**"))
+  x <- modify_header(x, q.value = paste0("**", translate_text("q-value"), "**"))
 
   # return final object --------------------------------------------------------
   # adding call

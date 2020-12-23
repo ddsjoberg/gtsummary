@@ -88,7 +88,7 @@ add_overall_merge <- function(x, overall, last, col_label) {
 
   # adding header
   col_label <- col_label %||% paste0("**", translate_text("Overall"), "**, N = {style_number(N)}")
-  x <- modify_header_internal(x, stat_0 = col_label)
+  x <- modify_header(x, stat_0 = col_label)
 
   # adding footnote to overall column (only if a consistent footnote appears in other stat cols)
   consistent_footnote <-

@@ -125,7 +125,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
 
   # adding label for grouping variable, if present -----------------------------
   if ("groupname_col" %in% names(results$table_body)) {
-    results <- modify_header_internal(
+    results <- modify_header(
       results,
       groupname_col = get_theme_element("tbl_stack-str:group_header", default = "**Group**")
     )

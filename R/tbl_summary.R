@@ -333,16 +333,18 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # adding headers
   if (is.null(by)) {
-    results <- modify_header_internal(
+    results <- modify_header(
       results,
       stat_0 = "**N = {style_number(N)}**",
       label = paste0("**", translate_text("Characteristic"), "**")
     )
   } else {
-    results <- modify_header_internal(
+    results <- modify_header(
       results,
-      stat_by = "**{level}**, N = {style_number(n)}",
-      label = paste0("**", translate_text("Characteristic"), "**")
+      update = list(
+        all_stat_cols(FALSE) ~ "**{level}**, N = {style_number(n)}",
+        label ~ paste0("**", translate_text("Characteristic"), "**")
+      )
     )
   }
 

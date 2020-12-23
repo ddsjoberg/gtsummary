@@ -145,7 +145,7 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
 
   # label in table_body
   lst_header <- list(header) %>% set_names(stat_col_name)
-  x <- do.call(modify_header_internal,c(list(x = x), lst_header))
+  x <- do.call(modify_header, c(list(x = x), lst_header))
 
   # adding footnote
   if (!is.null(footnote)) {

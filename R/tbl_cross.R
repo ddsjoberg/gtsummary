@@ -167,7 +167,7 @@ tbl_cross <- function(data,
       type = list('categorical') %>% rlang::set_names(row)
     ) %>%
     bold_labels() %>%
-    modify_header(stat_by = "{level}") %>%
+    modify_header(all_stat_cols(FALSE) ~ "{level}") %>%
     modify_footnote(everything() ~ NA_character_) %>%
     modify_spanning_header(
       c(starts_with("stat_"), -any_of("stat_0")) ~ paste0("**", new_label[[col]], "**")
