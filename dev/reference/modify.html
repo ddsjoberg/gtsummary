@@ -186,10 +186,10 @@ the column names.</p>
     <pre class="usage"><span class='fu'>modify_header</span><span class='op'>(</span>
   <span class='va'>x</span>,
   update <span class='op'>=</span> <span class='cn'>NULL</span>,
-  stat_by <span class='op'>=</span> <span class='cn'>NULL</span>,
   text_interpret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"md"</span>, <span class='st'>"html"</span><span class='op'>)</span>,
   quiet <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
+  <span class='va'>...</span>,
+  stat_by <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
 <span class='fu'>modify_footnote</span><span class='op'>(</span><span class='va'>x</span>, update <span class='op'>=</span> <span class='cn'>NULL</span>, abbreviation <span class='op'>=</span> <span class='cn'>FALSE</span>, quiet <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
@@ -213,21 +213,6 @@ The LHS specifies the column(s) to be updated, and the RHS is the updated text.
 Use the <code>show_header_names()</code> to see the column names that can be modified.</p></td>
     </tr>
     <tr>
-      <th>stat_by</th>
-      <td><p>Used with <code><a href='tbl_summary.html'>tbl_summary(by=)</a></code> objects with a <code>by=</code> argument.
-String specifying text to include above the summary statistics.
-The following fields are available for use in the
-headers:</p><ul>
-<li><p><code>{n}</code> number of observations in each group,</p></li>
-<li><p><code>{N}</code> total number of observations,</p></li>
-<li><p><code>{p}</code> percentage in each group,</p></li>
-<li><p><code>{level}</code> the 'by' variable level,</p></li>
-</ul>
-
-<p>Syntax follows <code><a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue()</a></code>,
-e.g. <code>stat_by = "**{level}**, N = {n} ({style_percent(p)}%)"</code>.</p></td>
-    </tr>
-    <tr>
       <th>text_interpret</th>
       <td><p>String indicates whether text will be interpreted with
 <code><a href='https://rdrr.io/pkg/gt/man/md.html'>gt::md()</a></code> or <code><a href='https://rdrr.io/pkg/gt/man/html.html'>gt::html()</a></code>. Must be <code>"md"</code> (default) or <code>"html"</code>.</p></td>
@@ -244,6 +229,10 @@ e.g. <code>modify_header(p.value = "Model P-values")</code>. This is provided as
 <code>update=</code> argument. They accomplish the same goal of updating column headers.</p></td>
     </tr>
     <tr>
+      <th>stat_by</th>
+      <td><p>DEPRECATED, use <code>update = all_stat_cols() ~ "&lt;label&gt;"</code> instead.</p></td>
+    </tr>
+    <tr>
       <th>abbreviation</th>
       <td><p>Logical indicating if an abbreviation is being updated.</p></td>
     </tr>
@@ -252,6 +241,23 @@ e.g. <code>modify_header(p.value = "Model P-values")</code>. This is provided as
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Updated gtsummary object</p>
+    <h2 class="hasAnchor" id="tbl-summary-tbl-svysummary-and-tbl-cross-"><a class="anchor" href="#tbl-summary-tbl-svysummary-and-tbl-cross-"></a>tbl_summary(), tbl_svysummary(), and tbl_cross()</h2>
+
+    
+
+<p>When assigning column headers for these gtsummary tables,
+you may use <code>{N}</code> to insert the number of observations.
+<code>tbl_svysummary</code> objects additionally have <code>{N_unweighted}</code> available.</p>
+<p>When there is a stratifying <code>by=</code> argument present, the following fields are
+additionally available to stratifying columns: <code>{level}</code>, <code>{n}</code>, and <code>{p}</code>
+(<code>{n_unweighted}</code> and <code>{p_unweighted}</code> for <code>tbl_svysummary</code> objects)</p>
+<p>Syntax follows <code><a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue()</a></code>, e.g. <code>all_stat_cols() ~ "**{level}**, N = {n}"</code>.</p>
+    <h2 class="hasAnchor" id="tbl-regression-"><a class="anchor" href="#tbl-regression-"></a>tbl_regression()</h2>
+
+    
+
+<p>When assigning column headers for <code>tbl_regression</code> tables,
+you may use <code>{N}</code> to insert the number of observations.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -348,9 +354,9 @@ e.g. <code>modify_header(p.value = "Model P-values")</code>. This is provided as
   <span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='co'># using `stat_by=` argument to update headers, remove all footnotes, add spanning header</span>
+<span class='co'># updating headers, remove all footnotes, add spanning header</span>
 <span class='va'>modify_ex2</span> <span class='op'>&lt;-</span> <span class='va'>tbl</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>modify_header</span><span class='op'>(</span>stat_by <span class='op'>=</span> <span class='st'>"**{level}**, N = {n} ({style_percent(p)}%)"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>modify_header</span><span class='op'>(</span>update <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_stat_cols</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"**{level}**, N = {n} ({style_percent(p)}%)"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='co'># use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes</span>
   <span class='fu'>modify_footnote</span><span class='op'>(</span>update <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>modify_spanning_header</span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_stat_cols</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"**Treatment Received**"</span><span class='op'>)</span>
