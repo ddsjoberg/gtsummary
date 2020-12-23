@@ -191,6 +191,9 @@
 <h3 class="hasAnchor">
 <a href="#other-updates" class="anchor"></a>Other Updates</h3>
 <ul>
+<li><p>The default value for <code>include=</code> argument for the <code><a href="../reference/add_global_p.html">add_global_p.tbl_regression()</a></code> and <code><a href="../reference/add_global_p.html">add_global_p.tbl_uvregression()</a></code> methods have been made the same with <code>include = everything()</code>, and the help files for these methods have been brought together in a single file. (<a href='https://github.com/ddsjoberg/gtsummary/issues/721'>#721</a>)</p></li>
+<li><p>The default test for 2 by 2 tables with expected cell counts has been updated from the chi-squared test with continuity correction to the original chi-squared test for <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/721'>#721</a>)</p></li>
+<li><p>Added new function <code><a href="../reference/add_difference.html">add_difference()</a></code>, which adds difference between groups, confidence interval and p-value. (<a href='https://github.com/ddsjoberg/gtsummary/issues/617'>#617</a>)</p></li>
 <li>
 <p>Introducing new package dependency {broom.helpers}</p>
 <ul>
@@ -222,7 +225,7 @@
 <li><p>The <code><a href="../reference/add_glance_source_note.html">add_glance_source_note()</a></code> function has been generalized so users may pass any glance function. Previously, <code><a href="https://generics.r-lib.org/reference/glance.html">broom::glance()</a></code> was being used with no option to change it. (<a href='https://github.com/ddsjoberg/gtsummary/issues/699'>#699</a>)</p></li>
 <li><p>The <code>...</code> arguments have been added to <code><a href="../reference/as_gt.html">as_gt()</a></code>. These dots are subsequently passed to <code><a href="https://rdrr.io/pkg/gt/man/gt.html">gt::gt(...)</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/701'>#701</a>)</p></li>
 <li><p>Multiple imputation models created with {mice}, and multinomial regression models created with {nnet} are now supported in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/645'>#645</a>)</p></li>
-<li><p>Updates to <code><a href="../reference/add_global_p.tbl_regression.html">add_global_p.tbl_regression()</a></code> allowing for variable names with spaces and special characters (<a href='https://github.com/ddsjoberg/gtsummary/issues/682'>#682</a>)</p></li>
+<li><p>Updates to <code><a href="../reference/add_global_p.html">add_global_p.tbl_regression()</a></code> allowing for variable names with spaces and special characters (<a href='https://github.com/ddsjoberg/gtsummary/issues/682'>#682</a>)</p></li>
 <li><p>Added <code>digits=</code> argument to <code><a href="../reference/style_percent.html">style_percent()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/690'>#690</a>)</p></li>
 <li><p>Users may now choose which columns to report with a theme element. they can choose among the <code>"estimate"</code>, <code>"std.error"</code>, <code>"statistic"</code>, <code>"ci"</code>, <code>"conf.low"</code>, <code>"conf.high"</code> and <code>"p.value"</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/637'>#637</a>)</p></li>
 <li><p>Allow users to include the reference value in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> via a theme element</p></li>
@@ -348,7 +351,7 @@
 <li><p>Added the ‘The Lancet’ theme to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal()</a></code></p></li>
 <li><p>Updated the handling for arguments that accept functions to allow users to pass anonymous functions using the tidyverse shortcut notation, e.g. <code>~style_pvalue(.x, digits = 2)</code>.</p></li>
 <li><p>The header for the <code><a href="../reference/tbl_stack.html">tbl_stack(group_header=)</a></code> column is now integrated into a typical gtsummary framework, meaning that all standard functions can be executed on it, e.g. <code><a href="../reference/modify.html">modify_header()</a></code> for non-gt output.</p></li>
-<li><p>Added <code>type=</code> argument to <code><a href="../reference/add_global_p.html">add_global_p()</a></code>, and added <code>include=</code> and <code>keep=</code> arguments to <code><a href="../reference/add_global_p.tbl_uvregression.html">add_global_p.tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/554'>#554</a>)</p></li>
+<li><p>Added <code>type=</code> argument to <code><a href="../reference/add_global_p.html">add_global_p()</a></code>, and added <code>include=</code> and <code>keep=</code> arguments to <code><a href="../reference/add_global_p.html">add_global_p.tbl_uvregression()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/554'>#554</a>)</p></li>
 </ul>
 </div>
 <div id="internal-updates" class="section level3">

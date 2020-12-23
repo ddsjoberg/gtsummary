@@ -243,7 +243,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
 <code><a href='tbl_svysummary.html'>tbl_svysummary</a>()</code></p>
 <p>Other tbl_regression tools: 
-<code><a href='add_global_p.tbl_regression.html'>add_global_p.tbl_regression</a>()</code>,
+<code><a href='add_global_p.html'>add_global_p</a>()</code>,
 <code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='combine_terms.html'>combine_terms</a>()</code>,
@@ -253,7 +253,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 <code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code></p>
 <p>Other tbl_uvregression tools: 
-<code><a href='add_global_p.tbl_uvregression.html'>add_global_p.tbl_uvregression</a>()</code>,
+<code><a href='add_global_p.html'>add_global_p</a>()</code>,
 <code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
@@ -285,8 +285,8 @@ and return a string that is the rounded/formatted p-value (e.g.
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_global_p.html'>add_global_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>add_q</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>add_global_p: Global p-values for variable(s) `include = c("trt", "age",</span>
-#&gt; <span class='message'>"grade")` were calculated with</span>
+</div><div class='output co'>#&gt; <span class='message'>add_global_p: Global p-values for variable(s) `add_global_p(include = c("trt",</span>
+#&gt; <span class='message'>"age", "grade"))` were calculated with</span>
 #&gt; <span class='message'>  `car::Anova(mod = x$model_obj, type = "III")`</span></div><div class='output co'>#&gt; <span class='message'>add_q: Adjusting p-values with</span>
 #&gt; <span class='message'>`stats::p.adjust(x$table_body$p.value, method = "fdr")`</span></div></pre>
   </div>
