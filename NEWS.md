@@ -16,6 +16,12 @@
 
 ### Other Updates
 
+- The default value for `include=` argument for the `add_global_p.tbl_regression()` and `add_global_p.tbl_uvregression()` methods have been made the same with `include = everything()`, and the help files for these methods have been brought together in a single file. (#721)
+
+- The default test for 2 by 2 tables with expected cell counts has been updated from the chi-squared test with continuity correction to the original chi-squared test for `add_p.tbl_summary()` (#721)
+
+- Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
+
 * Introducing new package dependency {broom.helpers}
 
     * The tidying and preparation of `tbl_regression()` tables are now being performed by the new package {broom.helpers} (#636, #607)
@@ -76,19 +82,13 @@
 
 * Bug fix when a default statistic is set using themes for `"continuous2"` variables that has length larger than one
 
+* Bug fix when missing/non-missing percentages requested in `add_n.tbl_summary()`
+
 ### Breaking Changes
 
 * Experimental function `add_p.tbl_survfit(test.args=)` in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as `everything() ~ "test_name"`.  The single string is no longer accepted, and users must use the formula notation.
 
 * The argument `all_continuous(continuous2=)` has been removed. No deprecation messages were added...it was just cut. 
-
-
-
-
-
-
-
-    
 
 
 # gtsummary 1.3.5
