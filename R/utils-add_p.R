@@ -213,7 +213,7 @@
   if (min_exp >= 5) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.categorical") %||%
-      getOption("gtsummary.add_p.test.categorical", default = "chisq.test")
+      getOption("gtsummary.add_p.test.categorical", default = "chisq.test.no.correct")
     return(test_func)
   }
   test_func <-
