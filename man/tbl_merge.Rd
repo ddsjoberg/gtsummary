@@ -73,7 +73,7 @@ tbl_merge_ex2 <-
 \link{tbl_stack}
 
 Other tbl_regression tools: 
-\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_global_p}()},
 \code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
@@ -84,7 +84,7 @@ Other tbl_regression tools:
 \code{\link{tbl_stack}()}
 
 Other tbl_uvregression tools: 
-\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_global_p}()},
 \code{\link{add_nevent.tbl_uvregression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},

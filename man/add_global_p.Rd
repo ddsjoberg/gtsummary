@@ -2,31 +2,109 @@
 % Please edit documentation in R/add_global_p.R
 \name{add_global_p}
 \alias{add_global_p}
-\title{Adds the global p-value for a categorical variables}
+\alias{add_global_p.tbl_regression}
+\alias{add_global_p.tbl_uvregression}
+\title{Add the global p-values}
 \usage{
 add_global_p(x, ...)
+
+\method{add_global_p}{tbl_regression}(
+  x,
+  include = everything(),
+  type = NULL,
+  keep = FALSE,
+  quiet = NULL,
+  ...,
+  terms = NULL
+)
+
+\method{add_global_p}{tbl_uvregression}(
+  x,
+  type = NULL,
+  include = everything(),
+  keep = FALSE,
+  quiet = NULL,
+  ...
+)
 }
 \arguments{
-\item{x}{\code{tbl_regression} or \code{tbl_uvregression} object}
+\item{x}{Object with class \code{tbl_regression} from the
+\link{tbl_regression} function}
 
-\item{...}{Further arguments passed to or from other methods.}
+\item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}}
+
+\item{include}{Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. Default is \code{everything()}}
+
+\item{type}{Type argument passed to \link[car:Anova]{car::Anova}. Default is \code{"III"}}
+
+\item{keep}{Logical argument indicating whether to also retain the individual
+p-values in the table output for each level of the categorical variable.
+Default is \code{FALSE}}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
+
+\item{terms}{DEPRECATED.  Use \verb{include=} argument instead.}
 }
 \description{
-This function uses \link[car:Anova]{car::Anova} with argument
-\code{type = "III"} to calculate global p-values for categorical variables.
+This function uses \code{car::Anova(type = "III")} to calculate global p-values variables.
 Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
-\section{Note}{
+\section{Example Output}{
 
-If a needed class of model is not supported by
-\link[car:Anova]{car::Anova}, please create a
-\href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub Issue} to request support.
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_lm_global_ex1.png}{options: width=45\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
 }
 
+\examples{
+# Example 1 ----------------------------------
+tbl_lm_global_ex1 <-
+  lm(marker ~ age + grade, trial) \%>\%
+  tbl_regression() \%>\%
+  add_global_p()
+
+# Example 2 ----------------------------------
+tbl_uv_global_ex2 <-
+  trial[c("response", "trt", "age", "grade")] \%>\%
+  tbl_uvregression(
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  ) \%>\%
+  add_global_p()
+
+}
 \seealso{
-\code{\link{add_global_p.tbl_regression}},
-\code{\link{add_global_p.tbl_uvregression}}
+Other tbl_uvregression tools: 
+\code{\link{add_nevent.tbl_uvregression}()},
+\code{\link{add_q}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_uvregression}()}
+
+Other tbl_regression tools: 
+\code{\link{add_nevent.tbl_regression}()},
+\code{\link{add_q}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()}
 }
 \author{
 Daniel D. Sjoberg
 }
+\concept{tbl_regression tools}
+\concept{tbl_uvregression tools}

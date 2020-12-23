@@ -8,7 +8,7 @@
 #' @param tbls List of gtsummary objects
 #' @param group_header Character vector with table headers where length matches
 #' the length of `tbls=`
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
 #' @family tbl_regression tools

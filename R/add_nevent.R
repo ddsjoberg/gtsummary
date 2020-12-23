@@ -32,7 +32,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #'
 #' @param x `tbl_regression` object
 #' @param ... Not used
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @export
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
