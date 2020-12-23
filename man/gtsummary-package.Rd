@@ -44,6 +44,7 @@ Other contributors:
   \item Esther Drill (\href{https://orcid.org/0000-0002-3315-4538}{ORCID}) [contributor]
   \item Jessica Flynn (\href{https://orcid.org/0000-0001-8310-6684}{ORCID}) [contributor]
   \item Joseph Larmarange (\href{https://orcid.org/0000-0001-7097-700X}{ORCID}) [contributor]
+  \item Jessica Lavery (\href{https://orcid.org/0000-0002-2746-5647}{ORCID}) [contributor]
   \item Stephanie Lobaugh [contributor]
   \item Gustavo Zapata Wainberg (\href{https://orcid.org/0000-0002-2524-3637}{ORCID}) [contributor]
 }

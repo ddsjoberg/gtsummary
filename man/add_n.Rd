@@ -15,7 +15,7 @@ add_n(x, ...)
 Adds column with N to gtsummary table
 }
 \seealso{
-\link{add_n.tbl_summary}, \link{add_n.tbl_svysummary}, \link{add_n.tbl_survfit}
+\code{\link[=add_n.tbl_summary]{add_n.tbl_summary()}}, \code{\link[=add_n.tbl_svysummary]{add_n.tbl_svysummary()}}, \code{\link[=add_n.tbl_survfit]{add_n.tbl_survfit()}}
 }
 \author{
 Daniel D. Sjoberg
