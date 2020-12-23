@@ -149,6 +149,22 @@ trial2 %>%
   )
 ```
 
+There are multiple  ways to specify the `statistic =` argument. The following table shows equivalent ways to specify the mean statistic for continuous variables:
+
+```{r, echo = FALSE}
+tibble::tribble(
+  ~`select_helper`, ~`varname`, ~`named_list`,
+  '`all_continuous() ~ "{mean}"`<br>`list(all_continuous() ~ "{mean}")`', '`c("age", "marker") ~ "{mean}"`<br>`c(age, marker) ~ "{mean}"`<br>`list(c(age, marker) ~ "{mean}")`', '`list(age = "{mean}", marker = "{mean}")`'
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(everything()) %>%
+  gt::cols_label(select_helper = gt::md("**Select with Helpers**"),
+                 varname = gt::md("**Select by Variable Name**"),
+                 named_list = gt::md("**Select with Named List**")) %>%
+  gt::cols_width(everything() ~ gt::px(390))
+```
+
+
 ### {gtsummary} functions to add information
 
 The {gtsummary} package has functions to adding information or statistics to `tbl_summary()` tables.
