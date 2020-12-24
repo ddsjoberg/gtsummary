@@ -26,7 +26,7 @@ Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{
 for details and more tests.
 
 Tests default to \code{"kruskal.test"} for continuous variables (\code{"wilcox.test"}
-when "\code{by}" variable has two levels), \code{"chisq.test"} for
+when "\code{by}" variable has two levels), \code{"chisq.test.no.correct"} for
 categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
 for categorical variables with any expected cell count <5.
 A custom test function can be added for all or some variables. See below for

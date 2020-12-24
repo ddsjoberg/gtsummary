@@ -11,10 +11,10 @@
 modify_header(
   x,
   update = NULL,
-  stat_by = NULL,
   text_interpret = c("md", "html"),
   quiet = NULL,
-  ...
+  ...,
+  stat_by = NULL
 )
 
 modify_footnote(x, update = NULL, abbreviation = FALSE, quiet = NULL)
@@ -31,20 +31,6 @@ column header, footnote, or spanning header.
 The LHS specifies the column(s) to be updated, and the RHS is the updated text.
 Use the \code{show_header_names()} to see the column names that can be modified.}
 
-\item{stat_by}{Used with \code{tbl_summary(by=)} objects with a \verb{by=} argument.
-String specifying text to include above the summary statistics.
-The following fields are available for use in the
-headers:
-\itemize{
-\item \code{{n}} number of observations in each group,
-\item \code{{N}} total number of observations,
-\item \code{{p}} percentage in each group,
-\item \code{{level}} the 'by' variable level,
-}
-
-Syntax follows \code{\link[glue:glue]{glue::glue()}},
-e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"}.}
-
 \item{text_interpret}{String indicates whether text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 
@@ -54,6 +40,8 @@ e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"}.}
 \item{...}{Specify a column and updated column label,
 e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an alternative to the
 \verb{update=} argument. They accomplish the same goal of updating column headers.}
+
+\item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
 }
@@ -66,6 +54,25 @@ These functions assist with updating or adding column headers
 headers (\code{modify_spanning_header()}). Use \code{show_header_names()} to learn
 the column names.
 }
+\section{tbl_summary(), tbl_svysummary(), and tbl_cross()}{
+
+When assigning column headers for these gtsummary tables,
+you may use \code{{N}} to insert the number of observations.
+\code{tbl_svysummary} objects additionally have \code{{N_unweighted}} available.
+
+When there is a stratifying \verb{by=} argument present, the following fields are
+additionally available to stratifying columns: \code{{level}}, \code{{n}}, and \code{{p}}
+(\code{{n_unweighted}} and \code{{p_unweighted}} for \code{tbl_svysummary} objects)
+
+Syntax follows \code{\link[glue:glue]{glue::glue()}}, e.g. \code{all_stat_cols() ~ "**{level}**, N = {n}"}.
+}
+
+\section{tbl_regression()}{
+
+When assigning column headers for \code{tbl_regression} tables,
+you may use \code{{N}} to insert the number of observations.
+}
+
 \section{Example Output}{
 
 \if{html}{Example 1}
@@ -102,9 +109,9 @@ modify_ex1 <- tbl \%>\%
   )
 
 # Example 2 ----------------------------------
-# using `stat_by=` argument to update headers, remove all footnotes, add spanning header
+# updating headers, remove all footnotes, add spanning header
 modify_ex2 <- tbl \%>\%
-  modify_header(stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)") \%>\%
+  modify_header(update = all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}\%)") \%>\%
   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
   modify_footnote(update = everything() ~ NA) \%>\%
   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
@@ -142,7 +149,7 @@ Other tbl_svysummary tools:
 \code{\link{tbl_svysummary}()}
 
 Other tbl_regression tools: 
-\code{\link{add_global_p.tbl_regression}()},
+\code{\link{add_global_p}()},
 \code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
@@ -153,7 +160,7 @@ Other tbl_regression tools:
 \code{\link{tbl_stack}()}
 
 Other tbl_uvregression tools: 
-\code{\link{add_global_p.tbl_uvregression}()},
+\code{\link{add_global_p}()},
 \code{\link{add_nevent.tbl_uvregression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},

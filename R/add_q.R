@@ -8,7 +8,7 @@
 #' adjustment. Methods from
 #' [stats::p.adjust] are accepted.  Default is `method = "fdr"`.
 #' @inheritParams tbl_regression
-#' @inheritParams add_global_p.tbl_regression
+#' @inheritParams add_global_p
 #' @author Esther Drill, Daniel D. Sjoberg
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
@@ -102,7 +102,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     )
 
   # adding  column header
-  x <- modify_header_internal(x, q.value = paste0("**", translate_text("q-value"), "**"))
+  x <- modify_header(x, q.value = paste0("**", translate_text("q-value"), "**"))
 
   # return final object --------------------------------------------------------
   # adding call

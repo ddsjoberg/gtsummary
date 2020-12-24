@@ -149,6 +149,34 @@ trial2 %>%
   )
 ```
 
+There are multiple ways to specify the `statistic=` argument using a single formula, a list of formulas, and a named list.
+The following table shows equivalent ways to specify the mean statistic for continuous variables `age` and `marker.`
+Any {gtsummary} function argument that accepts formulas will accept each of these variations.
+
+```{r, echo = FALSE}
+tibble::tribble(
+  ~`select_helper`, ~`varname`, ~`named_list`,
+  '`all_continuous() ~ "{mean}"`', '`c("age", "marker") ~ "{mean}"`', '`list(age = "{mean}", marker = "{mean}")`',
+  '`list(all_continuous() ~ "{mean}")`', '`c(age, marker) ~ "{mean}"`', NA_character_ ,
+  NA_character_, '`list(c(age, marker) ~ "{mean}")`', NA_character_
+) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(everything()) %>%
+  gt::cols_label(select_helper = gt::md("**Select with Helpers**"),
+                 varname = gt::md("**Select by Variable Name**"),
+                 named_list = gt::md("**Select with Named List**")) %>%
+  gt::fmt_missing(columns = everything(), missing_text = "---") %>%
+  gt::tab_options(table.font.size = "85%") %>%
+  gt::cols_width(everything() ~ gt::px(390))
+```
+
+```{r out.width = "80%", echo = FALSE, fig.align='center'}
+# print picture of slide if in packagedown so not included in CRAN
+if (pkgdown::in_pkgdown()) {
+  knitr::include_graphics("https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/crayon_images/crayon-selectors.png")
+}
+```
+
 ### {gtsummary} functions to add information
 
 The {gtsummary} package has functions to adding information or statistics to `tbl_summary()` tables.

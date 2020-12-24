@@ -22,7 +22,7 @@ add_p <- function(x, ...) {
 #' for details and more tests.
 #'
 #' Tests default to `"kruskal.test"` for continuous variables (`"wilcox.test"`
-#' when "`by`" variable has two levels), `"chisq.test"` for
+#' when "`by`" variable has two levels), `"chisq.test.no.correct"` for
 #' categorical variables with all expected cell counts >=5, and `"fisher.test"`
 #' for categorical variables with any expected cell count <5.
 #' A custom test function can be added for all or some variables. See below for
