@@ -10,11 +10,12 @@ add_stat(
   fmt_fun = NULL,
   header = "**Statistic**",
   footnote = NULL,
-  new_col_name = NULL
+  new_col_name = NULL,
+  location = c("label", "level")
 )
 }
 \arguments{
-\item{x}{tbl_summary object}
+\item{x}{\code{tbl_summary} or \code{tbl_svysummary} object}
 
 \item{fns}{list of formulas indicating the functions that create the statistic}
 
@@ -28,6 +29,13 @@ footnote (i.e. NULL)}
 
 \item{new_col_name}{name of new column to be created in \code{.$table_body}.
 Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}
+
+\item{location}{Must be one of \code{c("label", "location")} and indicates which
+row(s) the new statistics are placed on. When \code{"label"} a single statistic
+is placed on the variable label row. When \code{"level"} the statistics are placed
+on the variable level rows. The length vector of statistics returned from the
+\code{fns} function must match the dimension of levels. Continuous and dichotomous
+statistics are placed on the variable label row.}
 }
 \description{
 \lifecycle{experimental}
@@ -37,9 +45,13 @@ The function allows a user to add a new column with a custom, user-defined stati
 
 
 The custom functions passed in \verb{fns=} are required to follow a specified
-format. Each of these function will execute on a single variable from \code{tbl_summary()}.
+format. Each of these function will execute on a single variable from
+\code{tbl_summary()}/\code{tbl_svysummary()}.
 \enumerate{
-\item Each function must return a single scalar or character value of length one.
+\item Each function must return a single scalar or character value of length one when
+\code{location = "label"}. When \code{location = "level"}, the returned statistic
+must be a vector of the length of the number of levels (excluding the
+row for unknwon values).
 \item Each function may take the following arguments: \code{foo(data, variable, by, tbl)}
 }
 \itemize{
@@ -64,6 +76,10 @@ the user's function, e.g. \code{foo(data, variable, by, ...)}
 \if{html}{Example 2}
 
 \if{html}{\figure{add_stat_ex2.png}{options: width=60\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
 }
 
 \examples{
@@ -108,5 +124,30 @@ add_stat_ex2 <-
     header = "**Treatment Comparison**",       # column header
     footnote = "T-test statistic and p-value"  # footnote
   )
-# Example 1 ----------------------------------
+
+# Example 3 ----------------------------------
+# Add CI for categorical variables
+library(dplyr)
+categorical_ci <- function(variable, tbl, ...) {
+  filter(tbl$meta_data, variable == .env$variable) \%>\%
+    purrr::pluck("df_stats", 1) \%>\%
+    mutate(
+      # calculate and format 95\% CI
+      prop_ci = purrr::map2(n, N, ~prop.test(.x, .y)$conf.int \%>\% style_percent(symbol = TRUE)),
+      ci = purrr::map_chr(prop_ci, ~glue("{.x[1]}, {.x[2]}"))
+    ) \%>\%
+    pull(ci)
+}
+
+add_stat_ex3 <-
+  trial \%>\%
+  select(grade) \%>\%
+  tbl_summary(statistic = everything() ~ "{p}\%") \%>\%
+  add_stat(
+    fns = everything() ~ "categorical_ci",
+    location = "level",
+    header = "**95\% CI**"
+  ) \%>\%
+  modify_footnote(everything() ~ NA)
+
 }

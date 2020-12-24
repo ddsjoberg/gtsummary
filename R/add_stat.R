@@ -3,7 +3,7 @@
 #' \lifecycle{experimental}
 #' The function allows a user to add a new column with a custom, user-defined statistic.
 #'
-#' @param x tbl_summary object
+#' @param x `tbl_summary` or `tbl_svysummary` object
 #' @param fns list of formulas indicating the functions that create the statistic
 #' @param fmt_fun for numeric statistics, `fmt_fun=` is the styling/formatting
 #' function. Default is `NULL`
@@ -12,12 +12,22 @@
 #' footnote (i.e. NULL)
 #' @param new_col_name name of new column to be created in `.$table_body`.
 #' Default is `"add_stat_1"`, unless that column exists then it is `"add_stat_2"`, etc.
+#' @param location Must be one of `c("label", "location")` and indicates which
+#' row(s) the new statistics are placed on. When `"label"` a single statistic
+#' is placed on the variable label row. When `"level"` the statistics are placed
+#' on the variable level rows. The length vector of statistics returned from the
+#' `fns` function must match the dimension of levels. Continuous and dichotomous
+#' statistics are placed on the variable label row.
 #'
 #' @section Details:
 #'
 #' The custom functions passed in `fns=` are required to follow a specified
-#' format. Each of these function will execute on a single variable from `tbl_summary()`.
-#' 1. Each function must return a single scalar or character value of length one.
+#' format. Each of these function will execute on a single variable from
+#' `tbl_summary()`/`tbl_svysummary()`.
+#' 1. Each function must return a single scalar or character value of length one when
+#' `location = "label"`. When `location = "level"`, the returned statistic
+#' must be a vector of the length of the number of levels (excluding the
+#' row for unknwon values).
 #' 1. Each function may take the following arguments: `foo(data, variable, by, tbl)`
 #'   - `data=` is the input data frame passed to `tbl_summary()`
 #'   - `variable=` is a string indicating the variable to perform the calculation on
@@ -72,6 +82,32 @@
 #'     header = "**Treatment Comparison**",       # column header
 #'     footnote = "T-test statistic and p-value"  # footnote
 #'   )
+#'
+#' # Example 3 ----------------------------------
+#' # Add CI for categorical variables
+#' library(dplyr)
+#' categorical_ci <- function(variable, tbl, ...) {
+#'   filter(tbl$meta_data, variable == .env$variable) %>%
+#'     purrr::pluck("df_stats", 1) %>%
+#'     mutate(
+#'       # calculate and format 95% CI
+#'       prop_ci = purrr::map2(n, N, ~prop.test(.x, .y)$conf.int %>% style_percent(symbol = TRUE)),
+#'       ci = purrr::map_chr(prop_ci, ~glue("{.x[1]}, {.x[2]}"))
+#'     ) %>%
+#'     pull(ci)
+#' }
+#'
+#' add_stat_ex3 <-
+#'   trial %>%
+#'   select(grade) %>%
+#'   tbl_summary(statistic = everything() ~ "{p}%") %>%
+#'   add_stat(
+#'     fns = everything() ~ "categorical_ci",
+#'     location = "level",
+#'     header = "**95% CI**"
+#'   ) %>%
+#'   modify_footnote(everything() ~ NA)
+#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -80,13 +116,18 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{add_stat_ex2.png}{options: width=60\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
 
 add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
-#' @examples
-#' # Example 1 ----------------------------------
-                     footnote = NULL, new_col_name = NULL) {
+                     footnote = NULL, new_col_name = NULL,
+                     location = c("label", "level")) {
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "tbl_summary")) {
+  location <- match.arg(location)
+
+  if (!inherits(x, c("tbl_summary", "tbl_svysummary"))) {
     abort("Argument `x=` must be of class 'tbl_summary'")
   }
 
@@ -110,7 +151,9 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
   fns <-
     .formula_list_to_named_list(
       x = fns,
-      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      data = switch(class(x)[1],
+                    "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+                    "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))) ,
       var_info = x$table_body,
       arg_name = "fns"
     )
@@ -121,40 +164,53 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
     (names(x$table_body) %>% .[startsWith(., "add_stat_")] %>% length() %>% {paste0("add_stat_", . + 1)})
 
   # calculating statistics -----------------------------------------------------
-  df_new_stat <- tibble(
-    row_type = "label",
-    variable = names(fns),
-    !!stat_col_name := purrr::imap(fns, ~eval_fn_safe(tbl = x, variable = .y, fn = .x)) %>% unlist()
+  df_new_stat <-
+    tibble(variable = names(fns)) %>%
+    left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
+              by = "variable") %>%
+    mutate(
+      row_type = ifelse(.data$summary_type == "categorical",
+                        .env$location,
+                        "label")
+    ) %>%
+    left_join(
+      x$table_body %>% select(.data$variable, .data$row_type, .data$label),
+      by = c("variable", "row_type")
+    ) %>%
+    tidyr::nest(data = .data$label) %>%
+    mutate(
+      !!stat_col_name := purrr::imap(fns, ~eval_fn_safe(tbl = x, variable = .y, fn = .x))
+    ) %>%
+    select(-.data$summary_type)
+
+  # check dims of calculated statistics ----
+  purrr::pwalk(
+    list(df_new_stat$variable, df_new_stat$data, df_new_stat[[stat_col_name]]),
+    function(variable, data, stat) {
+      if (nrow(data) != length(stat))
+        glue("Dimension of '{variable}' and the added statistic do not match. ",
+             "Expecting statistic to be length {nrow(data)}.") %>%
+        abort()
+    }
   )
 
+  # un-nesting, preparing to merge
+  df_new_stat <- df_new_stat %>% unnest(cols = all_of(c("data", stat_col_name)))
+
   # updating tbl_summary object ------------------------------------------------
-  # table_body
-  x$table_body <-
-    left_join(
-      x$table_body,
+  x <- x %>%
+    modify_table_body(
+      dplyr::left_join,
       df_new_stat,
-      by = c("variable", "row_type")
+      by = c("variable", "row_type", "label")
+    ) %>%
+    modify_table_header(
+      all_of(stat_col_name),
+      hide = FALSE,
+      label = header,
+      fmt_fun = fmt_fun,
+      footnote = footnote %||% NA_character_
     )
-
-  # fmt_fun in table_body
-  lst_fmt_fun <- list(fmt_fun) %>% set_names(stat_col_name)
-  x$table_header <-
-    table_header_fill_missing(x$table_header, x$table_body)
-  x$table_header <- do.call(table_header_fmt_fun,
-                            c(list(table_header = x$table_header), lst_fmt_fun))
-
-  # label in table_body
-  lst_header <- list(header) %>% set_names(stat_col_name)
-  x <- do.call(modify_header_internal,c(list(x = x), lst_header))
-
-  # adding footnote
-  if (!is.null(footnote)) {
-    x$table_header <-
-      mutate(
-        x$table_header,
-        footnote = ifelse(.data$column == stat_col_name,
-                          .env$footnote, .data$footnote))
-  }
 
   # return tbl_summary object --------------------------------------------------
   x
@@ -164,24 +220,24 @@ eval_fn_safe <- function(variable, tbl, fn) {
 
   tryCatch(
     withCallingHandlers({
-        # initializing to NA
-        stat <- NA_real_
-        stat <- rlang::call2(
-          fn,
-          data = tbl$inputs$data,
-          variable = variable,
-          by = tbl$inputs$by,
-          tbl = tbl
-        ) %>%
-          eval()
-      },
-      # printing warning and errors as message
-      warning = function(w) {
-        message(glue(
-          "There was an warning for variable '{variable}':\n ", as.character(w)
-        ))
-        invokeRestart("muffleWarning")
-      }
+      # initializing to NA
+      stat <- NA_real_
+      stat <- rlang::call2(
+        fn,
+        data = tbl$inputs$data,
+        variable = variable,
+        by = tbl$inputs$by,
+        tbl = tbl
+      ) %>%
+        eval()
+    },
+    # printing warning and errors as message
+    warning = function(w) {
+      message(glue(
+        "There was an warning for variable '{variable}':\n ", as.character(w)
+      ))
+      invokeRestart("muffleWarning")
+    }
     ),
     error = function(e) {
       message(glue(
