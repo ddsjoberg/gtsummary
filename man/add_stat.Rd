@@ -51,7 +51,7 @@ format. Each of these function will execute on a single variable from
 \item Each function must return a single scalar or character value of length one when
 \code{location = "label"}. When \code{location = "level"}, the returned statistic
 must be a vector of the length of the number of levels (excluding the
-row for unknwon values).
+row for unknown values).
 \item Each function may take the following arguments: \code{foo(data, variable, by, tbl)}
 }
 \itemize{
@@ -127,16 +127,15 @@ add_stat_ex2 <-
 
 # Example 3 ----------------------------------
 # Add CI for categorical variables
-library(dplyr)
 categorical_ci <- function(variable, tbl, ...) {
-  filter(tbl$meta_data, variable == .env$variable) \%>\%
+  dplyr::filter(tbl$meta_data, variable == .env$variable) \%>\%
     purrr::pluck("df_stats", 1) \%>\%
-    mutate(
+    dplyr::mutate(
       # calculate and format 95\% CI
       prop_ci = purrr::map2(n, N, ~prop.test(.x, .y)$conf.int \%>\% style_percent(symbol = TRUE)),
-      ci = purrr::map_chr(prop_ci, ~glue("{.x[1]}, {.x[2]}"))
+      ci = purrr::map_chr(prop_ci, ~glue::glue("{.x[1]}, {.x[2]}"))
     ) \%>\%
-    pull(ci)
+    dplyr::pull(ci)
 }
 
 add_stat_ex3 <-

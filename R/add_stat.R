@@ -85,16 +85,15 @@
 #'
 #' # Example 3 ----------------------------------
 #' # Add CI for categorical variables
-#' library(dplyr)
 #' categorical_ci <- function(variable, tbl, ...) {
-#'   filter(tbl$meta_data, variable == .env$variable) %>%
+#'   dplyr::filter(tbl$meta_data, variable == .env$variable) %>%
 #'     purrr::pluck("df_stats", 1) %>%
-#'     mutate(
+#'     dplyr::mutate(
 #'       # calculate and format 95% CI
 #'       prop_ci = purrr::map2(n, N, ~prop.test(.x, .y)$conf.int %>% style_percent(symbol = TRUE)),
-#'       ci = purrr::map_chr(prop_ci, ~glue("{.x[1]}, {.x[2]}"))
+#'       ci = purrr::map_chr(prop_ci, ~glue::glue("{.x[1]}, {.x[2]}"))
 #'     ) %>%
-#'     pull(ci)
+#'     dplyr::pull(ci)
 #' }
 #'
 #' add_stat_ex3 <-
