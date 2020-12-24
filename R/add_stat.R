@@ -27,7 +27,7 @@
 #' 1. Each function must return a single scalar or character value of length one when
 #' `location = "label"`. When `location = "level"`, the returned statistic
 #' must be a vector of the length of the number of levels (excluding the
-#' row for unknwon values).
+#' row for unknown values).
 #' 1. Each function may take the following arguments: `foo(data, variable, by, tbl)`
 #'   - `data=` is the input data frame passed to `tbl_summary()`
 #'   - `variable=` is a string indicating the variable to perform the calculation on
@@ -169,7 +169,7 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
     left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
               by = "variable") %>%
     mutate(
-      row_type = ifelse(.data$summary_type == "categorical",
+      row_type = ifelse(.data$summary_type %in% c("categorical", "continuous2"),
                         .env$location,
                         "label")
     ) %>%

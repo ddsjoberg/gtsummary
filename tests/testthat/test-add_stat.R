@@ -132,6 +132,20 @@ test_that("expect errors", {
     NA
   )
 
+  expect_error(
+    trial %>%
+      select(age) %>%
+      tbl_summary(
+        type = age ~ "continuous2",
+        statistic = everything() ~ c("{mean}", "{min}", "{max}")
+      ) %>%
+      add_stat(
+        fns = everything() ~ return_three_10s,
+        location = "level"
+      ),
+    NA
+  )
+
   return_two_10s <- function(...) rep_len(10, 2)
   expect_error(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
