@@ -373,7 +373,8 @@ removing_variables_with_unsupported_types <- function(data, include, classes_exp
 
 # generate metadata table --------------------------------------------------------------
 # for survey objects pass the full survey object to `survey` argument, and `design$variables` to `data` argument
-generate_metadata <- function(data, value, by, classes_expected, type, label, statistic, digits, percent, sort, survey = NULL) {
+generate_metadata <- function(data, value, by, classes_expected, type, label,
+                              statistic, digits, percent, sort, survey = NULL) {
   # converting tidyselect formula lists to named lists -------------------------
   value <- .formula_list_to_named_list(x = value, data = data, arg_name = "value")
 
