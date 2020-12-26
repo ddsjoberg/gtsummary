@@ -4,7 +4,7 @@
 \alias{add_strata}
 \title{Add stratified columns}
 \usage{
-add_strata(x, strata, include_unstratafied = FALSE)
+add_strata(x, strata, include_unstratafied = FALSE, additional_fn = identity)
 }
 \arguments{
 \item{x}{\code{tbl_summary} object}
@@ -13,15 +13,27 @@ add_strata(x, strata, include_unstratafied = FALSE)
 
 \item{include_unstratafied}{logical indicated whether to include the
 original table in the result. Default is \code{FALSE}}
+
+\item{additional_fn}{an additional function to run on the resulting individual
+tbls before they are merged. Accepts formula shortcut nontation, e.g.
+\code{~add_p(.x) \%>\% modify_header(all_stat_cols() ~ "**{level}**")}}
 }
 \description{
 Stratifies existing \code{tbl_summary()} object by a third variable
 }
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{add_strata_ex1.png}{options: width=65\%}}
+}
+
 \examples{
 add_strata_ex1 <-
   trial \%>\%
   select(age, grade, trt, stage) \%>\%
   mutate(grade = paste("Grade", grade)) \%>\%
   tbl_summary(by = trt, include = -grade, missing = "no") \%>\%
-  add_strata(grade)
+  add_strata(grade, additional_fn = ~modify_header(.x, all_stat_cols() ~ "**{level}**"))
+
 }
