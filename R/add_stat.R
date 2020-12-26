@@ -12,10 +12,10 @@
 #' footnote (i.e. NULL)
 #' @param new_col_name name of new column to be created in `.$table_body`.
 #' Default is `"add_stat_1"`, unless that column exists then it is `"add_stat_2"`, etc.
-#' @param location Must be one of `c("label", "location")` and indicates which
+#' @param location Must be one of `c("label", "level")` and indicates which
 #' row(s) the new statistics are placed on. When `"label"` a single statistic
 #' is placed on the variable label row. When `"level"` the statistics are placed
-#' on the variable level rows. The length vector of statistics returned from the
+#' on the variable level rows. The length of the vector of statistics returned from the
 #' `fns` function must match the dimension of levels. Continuous and dichotomous
 #' statistics are placed on the variable label row.
 #'

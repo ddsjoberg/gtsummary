@@ -157,6 +157,3 @@ test_that("expect errors", {
     NA
   )
 })
-
-survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
-  tbl_svysummary(by = Survived, percent = "row")
