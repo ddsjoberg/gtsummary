@@ -7,7 +7,7 @@
 #' @param include_unstratafied logical indicated whether to include the
 #' original table in the result. Default is `FALSE`
 #' @param additional_fn an additional function to run on the resulting individual
-#' tbls before they are merged. Accepts formula shortcut nontation, e.g.
+#' tbls before they are merged. Accepts formula shortcut notation, e.g.
 #' `~add_p(.x) %>% modify_header(all_stat_cols() ~ "**{level}**")`
 #'
 #' @export
