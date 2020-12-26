@@ -1,5 +1,6 @@
 context("test-tbl_summary")
 testthat::skip_on_cran()
+library(glue)
 
 test_that("tbl_summary creates output without error/warning (no by var)", {
   expect_error(
@@ -473,4 +474,57 @@ test_that("tbl_summary creates output without error/warning for continuous2 (wit
     tbl_summary(mtcars, by = am, statistic = all_continuous() ~ c("{median}", "{mean}")),
     "*"
   )
+})
+
+
+test_that("tbl_summary(digits=) tests with fn inputs", {
+  expect_error(
+    tbl_digits <-
+      trial %>%
+      select(age, marker, grade, response) %>%
+      tbl_summary(
+        missing = "no",
+        statistic = list(
+          age ~ "{mean}",
+          marker ~ "{mean} {sd} {N_obs} {p_nonmiss}%",
+          response ~ "{n} {N} {p}% {N_obs} {p_nonmiss}%"
+        ),
+        digits = list(
+          age ~ function(x) format(x, digits = 2, scientific = TRUE),
+          marker ~ list(style_number, 2, 1, function(x) style_percent(x, digits = 2)),
+          grade ~ c(1, 1),
+          response ~ list(style_number, 1, 2, 1, function(x) style_percent(x, digits = 4))
+        )
+      ),
+    NA
+  )
+
+  # checking the display is correct
+  expect_equal(
+    tbl_digits$table_body %>% filter(variable =="age") %>% pull(stat_0),
+    with(trial, glue("{format(mean(age, na.rm = TRUE), digits = 2, scientific = TRUE)}")) %>% as.character(),
+    ignore_attr = TRUE
+  )
+
+  expect_equal(
+    tbl_digits$table_body %>% filter(variable =="marker") %>% pull(stat_0),
+    with(trial, glue("{round(mean(marker, na.rm = TRUE))} ",
+                     "{round(sd(marker, na.rm = TRUE), 2)} ",
+                     "{sprintf(length(marker),  fmt = '%#.1f')} ",
+                     "{sprintf(sum(!is.na(marker)) / length(marker) * 100,  fmt = '%#.2f')}%")) %>% as.character(),
+    ignore_attr = TRUE
+  )
+
+  expect_equal(
+    tbl_digits$table_body %>% filter(variable =="grade") %>% pull(stat_0) %>% purrr::keep(~!is.na(.)),
+    c("68.0 (34.0%)", "68.0 (34.0%)", "64.0 (32.0%)"),
+    ignore_attr = TRUE
+  )
+
+  expect_equal(
+    tbl_digits$table_body %>% filter(variable =="response") %>% pull(stat_0) %>% purrr::keep(~!is.na(.)),
+    "61 193.0 31.61% 200.0 96.5000%",
+    ignore_attr = TRUE
+  )
+
 })
