@@ -49,7 +49,7 @@ add_strata <- function(x, strata, include_unstratafied = FALSE, additional_fn = 
     x$inputs$data %>%
     mutate_at(
       all_of(tibble::enframe(args$type) %>% filter(.data$value %in% "categorical") %>% pull(.data$name)),
-      factor
+      ~case_when(inherits(., "factor") ~ ., TRUE ~ factor(.))
     ) %>%
     arrange(!!sym(strata)) %>%
     group_by(!!sym(strata)) %>%
