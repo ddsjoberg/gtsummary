@@ -15,9 +15,12 @@
 #' add_strata_ex1 <-
 #'   trial %>%
 #'   select(age, grade, trt, stage) %>%
-#'   mutate(grade = paste("Grade", grade)) %>%
+#'   dplyr::mutate(grade = paste("Grade", grade)) %>%
 #'   tbl_summary(by = trt, include = -grade, missing = "no") %>%
-#'   add_strata(grade, additional_fn = ~modify_header(.x, all_stat_cols() ~ "**{level}**"))
+#'   add_strata(
+#'     strata = grade,
+#'     additional_fn = ~modify_header(.x, all_stat_cols() ~ "**{level}**")
+#'   )
 #'
 #' @section Example Output:
 #' \if{html}{Example 1}

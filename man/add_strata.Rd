@@ -15,7 +15,7 @@ add_strata(x, strata, include_unstratafied = FALSE, additional_fn = identity)
 original table in the result. Default is \code{FALSE}}
 
 \item{additional_fn}{an additional function to run on the resulting individual
-tbls before they are merged. Accepts formula shortcut nontation, e.g.
+tbls before they are merged. Accepts formula shortcut notation, e.g.
 \code{~add_p(.x) \%>\% modify_header(all_stat_cols() ~ "**{level}**")}}
 }
 \description{
@@ -32,8 +32,11 @@ Stratifies existing \code{tbl_summary()} object by a third variable
 add_strata_ex1 <-
   trial \%>\%
   select(age, grade, trt, stage) \%>\%
-  mutate(grade = paste("Grade", grade)) \%>\%
+  dplyr::mutate(grade = paste("Grade", grade)) \%>\%
   tbl_summary(by = trt, include = -grade, missing = "no") \%>\%
-  add_strata(grade, additional_fn = ~modify_header(.x, all_stat_cols() ~ "**{level}**"))
+  add_strata(
+    strata = grade,
+    additional_fn = ~modify_header(.x, all_stat_cols() ~ "**{level}**")
+  )
 
 }
