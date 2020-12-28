@@ -43,6 +43,22 @@ tbl_regression.MCMCglmm <- function(
 
 #' @export
 #' @rdname tbl_regression_methods
+tbl_regression.TMB <- function(
+  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effect = "fixed"), ...) {
+  assert_package("broom.mixed", "tbl_regression.TMB()")
+  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.brmsfit <- function(
+  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effect = "fixed"), ...) {
+  assert_package("broom.mixed", "tbl_regression.brmsfit()")
+  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
 tbl_regression.survreg <- function(
   x, tidy_fun = function(x, ...) broom::tidy(x, ...) %>% dplyr::filter(.data$term != "Log(scale)"), ...) {
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
