@@ -221,17 +221,12 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
 #' @export
 #' @rdname tbl_survfit
 tbl_survfit.survfit <- function(x, ...) {
-  # deprecation notice ---------------------------------------------------------
   dots <- list(...)
-  if (rlang::is_string(dots[["label"]])) {
-    lifecycle::deprecate_stop(
-      "1.3.6", "gtsummary::tbl_survfit.survfit(label=)",
-      details = glue("The `label=` argument no longer accepts a string. ",
-                     "Please use `label = everything() ~ '{dots$label}'`"))
-  }
+  if (rlang::is_string(dots[["label"]]))
+    dots[["label"]] <- inject(everything() ~ !!dots[["label"]])
 
   # passing all args to the list method of `tbl_survfit()`
-  tbl_survfit.list(list(x), ...)
+  inject(tbl_survfit.list(list(x), !!!dots))
 }
 
 #' @export
