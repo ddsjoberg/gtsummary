@@ -1,5 +1,5 @@
 # gtsummary (development version)
-    
+  
 ### New Functionality
 
 * Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
@@ -15,6 +15,10 @@
 * New selecting function was added `all_tests()` to make it easier to select variables based on the test used to calculate the p-value, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))`
 
 * Previously, the `tbl_summary(digits=)` only accepted integer values specifying the number of decimal places to round a statistic. The argument now accepts both integers or functions, e.g. `digits = age ~ style_sigfig`. (#708)
+
+* The `add_stat()` function now supports `tbl_svysummary()` objects in addition to `tbl_summary()` (#688)
+
+* Multi-dimensional statistics can now be added for categorical variables via `add_stat()`, i.e. one statistic for each level of the categorical level (#714)
 
 ### Other Updates
 
