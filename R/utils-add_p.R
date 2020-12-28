@@ -153,6 +153,8 @@
 #' @param by character by variable
 #' @param group character grouping variable
 #' @param test named list of user-supplied tests
+#' @noRd
+#' @keywords internal
 .assign_test_tbl_summary <- function(data, variable, summary_type, by, group, test) {
   # if user supplied a test, use that test -------------------------------------
   if (!is.null(test[[variable]])) return(test[[variable]])
@@ -233,6 +235,8 @@
 #' @param summary_type summary type
 #' @param by character by variable
 #' @param test named list of user-supplied tests
+#' @noRd
+#' @keywords internal
 .assign_test_tbl_svysummary <- function(data, variable, summary_type, by, test) {
   # if user supplied a test, use that test -------------------------------------
   if (!is.null(test[[variable]])) return(test[[variable]])
