@@ -15,7 +15,7 @@
 #' add_strata_ex1 <-
 #'   trial %>%
 #'   select(age, grade, trt, stage) %>%
-#'   dplyr::mutate(grade = paste("Grade", grade)) %>%
+#'   mutate(grade = paste("Grade", grade)) %>%
 #'   tbl_summary(by = trt, include = -grade, missing = "no") %>%
 #'   add_strata(
 #'     strata = grade,
