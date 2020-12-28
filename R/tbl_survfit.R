@@ -49,7 +49,7 @@
 #' # Pass a data frame
 #' tbl_survfit_ex2 <- tbl_survfit(
 #'   trial,
-#'   y = survival::Surv(ttdeath, death),
+#'   y = Surv(ttdeath, death),
 #'   include = c(trt, grade),
 #'   probs = 0.5,
 #'   label_header = "**Median Survival**"
