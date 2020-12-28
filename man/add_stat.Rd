@@ -30,10 +30,10 @@ footnote (i.e. NULL)}
 \item{new_col_name}{name of new column to be created in \code{.$table_body}.
 Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}
 
-\item{location}{Must be one of \code{c("label", "location")} and indicates which
+\item{location}{Must be one of \code{c("label", "level")} and indicates which
 row(s) the new statistics are placed on. When \code{"label"} a single statistic
 is placed on the variable label row. When \code{"level"} the statistics are placed
-on the variable level rows. The length vector of statistics returned from the
+on the variable level rows. The length of the vector of statistics returned from the
 \code{fns} function must match the dimension of levels. Continuous and dichotomous
 statistics are placed on the variable label row.}
 }
