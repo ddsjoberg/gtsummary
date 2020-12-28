@@ -32,7 +32,8 @@
 #' When multiple statistics are displayed for a single variable, supply a vector
 #' rather than an integer.  For example, if the
 #' statistic being calculated is `"{mean} ({sd})"` and you want the mean rounded
-#' to 1 decimal place, and the SD to 2 use `digits = list(age ~ c(1, 2))`.
+#' to 1 decimal place, and the SD to 2 use `digits = list(age ~ c(1, 2))`. User
+#' may also pass a styling function: `digits = age ~ style_sigfig`
 #' @param missing Indicates whether to include counts of `NA` values in the table.
 #' Allowed values are `"no"` (never display NA values),
 #' `"ifany"` (only display if any NA values), and `"always"`
@@ -333,16 +334,18 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # adding headers
   if (is.null(by)) {
-    results <- modify_header_internal(
+    results <- modify_header(
       results,
       stat_0 = "**N = {style_number(N)}**",
       label = paste0("**", translate_text("Characteristic"), "**")
     )
   } else {
-    results <- modify_header_internal(
+    results <- modify_header(
       results,
-      stat_by = "**{level}**, N = {style_number(n)}",
-      label = paste0("**", translate_text("Characteristic"), "**")
+      update = list(
+        all_stat_cols(FALSE) ~ "**{level}**, N = {style_number(n)}",
+        label ~ paste0("**", translate_text("Characteristic"), "**")
+      )
     )
   }
 
@@ -371,7 +374,8 @@ removing_variables_with_unsupported_types <- function(data, include, classes_exp
 
 # generate metadata table --------------------------------------------------------------
 # for survey objects pass the full survey object to `survey` argument, and `design$variables` to `data` argument
-generate_metadata <- function(data, value, by, classes_expected, type, label, statistic, digits, percent, sort, survey = NULL) {
+generate_metadata <- function(data, value, by, classes_expected, type, label,
+                              statistic, digits, percent, sort, survey = NULL) {
   # converting tidyselect formula lists to named lists -------------------------
   value <- .formula_list_to_named_list(x = value, data = data, arg_name = "value")
 

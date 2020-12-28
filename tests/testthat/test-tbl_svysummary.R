@@ -449,3 +449,28 @@ expect_equal(t1$meta_data$df_stats[[1]] %>%
 
 
 
+
+test_that("tbl_summary(digits=) tests with fn inputs", {
+  expect_error(
+    tbl_digits <-
+      survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
+      tbl_svysummary(statistic = all_continuous() ~ "{min} {max}",
+                     digits = all_continuous() ~ style_sigfig,
+                     include = c(emer)),
+    NA
+  )
+
+  # checking the display is correct
+  expect_equal(
+    tbl_digits$table_body %>% filter(variable =="emer") %>% pull(stat_0),
+    "0.00 49"
+  )
+})
+
+
+survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
+  tbl_svysummary(statistic = all_continuous() ~ "{min} {max}",
+                 digits = all_continuous() ~ style_sigfig,
+                 include = c(emer))
+
+

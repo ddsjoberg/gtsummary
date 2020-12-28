@@ -254,7 +254,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
 
   # specifying labels
   result <-
-    modify_header_internal(
+    modify_header(
       result,
       label = glue("{header_label}"),
       estimate = glue("{header_estimate}"),
@@ -263,7 +263,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
 
   if ("level_label" %in% names(result$table_body)) {
     result <-
-      modify_header_internal(
+      modify_header(
         result,
         level_label = "**Group**"
       )

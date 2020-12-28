@@ -14,13 +14,17 @@
 
 * New selecting function was added `all_tests()` to make it easier to select variables based on the test used to calculate the p-value, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))`
 
+* Previously, the `tbl_summary(digits=)` only accepted integer values specifying the number of decimal places to round a statistic. The argument now accepts both integers or functions, e.g. `digits = age ~ style_sigfig`. (#708)
+
 ### Other Updates
 
-- The default value for `include=` argument for the `add_global_p.tbl_regression()` and `add_global_p.tbl_uvregression()` methods have been made the same with `include = everything()`, and the help files for these methods have been brought together in a single file. (#721)
+* `modify_header()` has been updated so users may more easily access internal data while defining headers and so that it no longer adds its call to the gtsummary `.$call_list` (#719)
 
-- The default test for 2 by 2 tables with expected cell counts has been updated from the chi-squared test with continuity correction to the original chi-squared test for `add_p.tbl_summary()` (#721)
+* The default value for `include=` argument for the `add_global_p.tbl_regression()` and `add_global_p.tbl_uvregression()` methods have been made the same with `include = everything()`, and the help files for these methods have been brought together in a single file. (#721)
 
-- Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
+* The default test for 2 by 2 tables with expected cell counts has been updated from the chi-squared test with continuity correction to the original chi-squared test for `add_p.tbl_summary()` (#721)
+
+* Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
 
 * Introducing new package dependency {broom.helpers}
 
@@ -90,6 +94,7 @@
 
 * The argument `all_continuous(continuous2=)` has been removed. No deprecation messages were added...it was just cut. 
 
+* Removed theme element `N_fun` that was previously marked as questioning and likely to be removed from the package.
 
 # gtsummary 1.3.5
 
