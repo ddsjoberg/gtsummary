@@ -197,7 +197,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
           .run_add_p_test_fun(x = test_info, data = .env$x$inputs$data,
                               by = .env$x$by, variable = variable,
                               group = group, type = summary_type,
-                              test.args = test.args[[variable]])
+                              test.args = test.args[[variable]], tbl = x)
       ),
       p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))
