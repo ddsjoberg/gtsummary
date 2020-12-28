@@ -332,6 +332,8 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   # otherwise return tibble with N
   x$table_header %>%
     select(.data$column) %>%
-    mutate(N = x$N %||% NA_integer_)
+    mutate(N = x$N %||% x$n %||% NA_integer_,
+           # in V1.3.6, all documentation about {n} being supported was removed. This can be removed eventually
+           n = .data$N)
 }
 
