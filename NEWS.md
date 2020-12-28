@@ -14,6 +14,8 @@
 
 * New selecting function was added `all_tests()` to make it easier to select variables based on the test used to calculate the p-value, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))`
 
+* Previously, the `tbl_summary(digits=)` only accepted integer values specifying the number of decimal places to round a statistic. The argument now accepts both integers or functions, e.g. `digits = age ~ style_sigfig`. (#708)
+
 ### Other Updates
 
 * `modify_header()` has been updated so users may more easily access internal data while defining headers and so that it no longer adds its call to the gtsummary `.$call_list` (#719)
@@ -92,6 +94,7 @@
 
 * The argument `all_continuous(continuous2=)` has been removed. No deprecation messages were added...it was just cut. 
 
+* Removed theme element `N_fun` that was previously marked as questioning and likely to be removed from the package.
 
 # gtsummary 1.3.5
 

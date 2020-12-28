@@ -23,14 +23,12 @@ variable,
 e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 Common tests include \code{"t.test"}, \code{"aov"}, \code{"wilcox.test"}, \code{"kruskal.test"},
 \code{"chisq.test"}, \code{"fisher.test"}, and \code{"lme4"} (for clustered data). See \link{tests}
-for details and more tests.
+for details, more tests, and instruction for implementing a custom test.
 
 Tests default to \code{"kruskal.test"} for continuous variables (\code{"wilcox.test"}
 when "\code{by}" variable has two levels), \code{"chisq.test.no.correct"} for
 categorical variables with all expected cell counts >=5, and \code{"fisher.test"}
-for categorical variables with any expected cell count <5.
-A custom test function can be added for all or some variables. See below for
-an example.}
+for categorical variables with any expected cell count <5.}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.
