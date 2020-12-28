@@ -2,46 +2,12 @@
 % Please edit documentation in R/tbl_survfit.R
 \name{tbl_survfit}
 \alias{tbl_survfit}
+\alias{tbl_survfit.list}
 \alias{tbl_survfit.survfit}
 \alias{tbl_survfit.data.frame}
-\alias{tbl_survfit.list}
 \title{Creates table of survival probabilities}
 \usage{
 tbl_survfit(x, ...)
-
-\method{tbl_survfit}{survfit}(
-  x,
-  times = NULL,
-  probs = NULL,
-  statistic = NULL,
-  label = NULL,
-  label_header = NULL,
-  estimate_fun = NULL,
-  missing = NULL,
-  conf.level = 0.95,
-  reverse = FALSE,
-  quiet = NULL,
-  failure = NULL,
-  ...
-)
-
-\method{tbl_survfit}{data.frame}(
-  x,
-  y,
-  times = NULL,
-  probs = NULL,
-  statistic = NULL,
-  label = NULL,
-  label_header = NULL,
-  estimate_fun = NULL,
-  missing = NULL,
-  conf.level = 0.95,
-  reverse = FALSE,
-  failure = NULL,
-  include = everything(),
-  quiet = NULL,
-  ...
-)
 
 \method{tbl_survfit}{list}(
   x,
@@ -57,13 +23,17 @@ tbl_survfit(x, ...)
   quiet = NULL,
   ...
 )
+
+\method{tbl_survfit}{survfit}(x, ...)
+
+\method{tbl_survfit}{data.frame}(x, y, include = everything(), ...)
 }
 \arguments{
 \item{x}{a survfit object, list of survfit objects, or a data frame.
 If a data frame is passed, a list of survfit objects is constructed using
 each variable as a stratifying variable.}
 
-\item{...}{Not used}
+\item{...}{Arguments passed to \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}}
 
 \item{times}{numeric vector of times for which to return survival probabilities.}
 
@@ -95,11 +65,11 @@ Default is \code{FALSE}.  Does not apply to survival quantile requests}
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
 
-\item{failure}{DEPRECATED. Use \verb{reverse=} instead.}
-
 \item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
 
 \item{include}{Variable to include as stratifying variables.}
+
+\item{failure}{DEPRECATED. Use \verb{reverse=} instead.}
 }
 \description{
 \lifecycle{experimental}
