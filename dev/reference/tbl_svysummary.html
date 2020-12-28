@@ -100,7 +100,7 @@ It is similar to tbl_summary()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9016</span>
       </span>
     </div>
 
@@ -237,7 +237,8 @@ places to round continuous summary statistics. If not specified,
 When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
 statistic being calculated is <code>"{mean} ({sd})"</code> and you want the mean rounded
-to 1 decimal place, and the SD to 2 use <code>digits = list(age ~ c(1, 2))</code>.</p></td>
+to 1 decimal place, and the SD to 2 use <code>digits = list(age ~ c(1, 2))</code>. User
+may also pass a styling function: <code>digits = age ~ style_sigfig</code></p></td>
     </tr>
     <tr>
       <th>type</th>

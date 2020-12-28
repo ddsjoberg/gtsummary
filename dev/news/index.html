@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.5.9016</span>
       </span>
     </div>
 
@@ -185,6 +185,7 @@
 <li><p>Added new function <code><a href="../reference/remove_row_type.html">remove_row_type()</a></code> for removing header, reference, or missing rows from a gtsummary tables. (<a href='https://github.com/ddsjoberg/gtsummary/issues/678'>#678</a>)</p></li>
 <li><p>New selecting function: <code><a href="../reference/select_helpers.html">all_stat_cols()</a></code> selects columns from <code>tbl_summary</code>/<code>tbl_svysummary</code> object with summary statistics (i.e. <code>"stat_0"</code>, <code>"stat_1"</code>, <code>"stat_2"</code>, etc.).</p></li>
 <li><p>New selecting function was added <code><a href="../reference/select_helpers.html">all_tests()</a></code> to make it easier to select variables based on the test used to calculate the p-value, e.g. <code><a href="../reference/add_p.html">add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))</a></code></p></li>
+<li><p>Previously, the <code><a href="../reference/tbl_summary.html">tbl_summary(digits=)</a></code> only accepted integer values specifying the number of decimal places to round a statistic. The argument now accepts both integers or functions, e.g. <code>digits = age ~ style_sigfig</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/708'>#708</a>)</p></li>
 </ul>
 </div>
 <div id="other-updates" class="section level3">
@@ -247,6 +248,7 @@
 <ul>
 <li><p>Experimental function <code><a href="../reference/add_p.tbl_survfit.html">add_p.tbl_survfit(test.args=)</a></code> in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as <code>everything() ~ "test_name"</code>. The single string is no longer accepted, and users must use the formula notation.</p></li>
 <li><p>The argument <code><a href="../reference/select_helpers.html">all_continuous(continuous2=)</a></code> has been removed. No deprecation messages were added…it was just cut.</p></li>
+<li><p>Removed theme element <code>N_fun</code> that was previously marked as questioning and likely to be removed from the package.</p></li>
 </ul>
 </div>
 </div>
