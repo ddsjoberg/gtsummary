@@ -21,6 +21,10 @@ dplyr::vars
 #' @export
 dplyr::select
 
+#' @importFrom dplyr mutate
+#' @export
+dplyr::mutate
+
 #' @importFrom dplyr starts_with
 #' @export
 dplyr::starts_with

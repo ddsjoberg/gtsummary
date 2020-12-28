@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' # Example 1 ----------------------------------
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
 #' remove_row_type_ex1 <-
 #'   trial %>%
 #'   select(trt, age) %>%
