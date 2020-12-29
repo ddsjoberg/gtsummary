@@ -389,7 +389,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
   }
 
   # return tbl_cross
-  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
+  x[["call_list"]] <- c(x_copy[["call_list"]], add_p = match.call())
   x
 }
 

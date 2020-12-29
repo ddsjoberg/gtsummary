@@ -71,7 +71,9 @@ add_strata <- function(x, strata, include_unstratafied = FALSE, additional_fn = 
   }
 
   # return merged tbls ---------------------------------------------------------
-  tbl_merge(tbl_list, tab_spanner = tab_spanner)
+  result <- tbl_merge(tbl_list, tab_spanner = tab_spanner)
+  result[["call_list"]] <- c(x[["call_list"]], add_strata = match.call())
+  result
 }
 
 .extract_fmt_funs <- function(x) {
