@@ -55,10 +55,6 @@ tbl_regression.glmerMod <- tbl_regression.lmerMod
 
 #' @export
 #' @rdname tbl_regression_methods
-tbl_regression.MCMCglmm <- tbl_regression.lmerMod
-
-#' @export
-#' @rdname tbl_regression_methods
 tbl_regression.glmmTMB <- tbl_regression.lmerMod
 
 #' @export
@@ -67,31 +63,7 @@ tbl_regression.glmmadmb <- tbl_regression.lmerMod
 
 #' @export
 #' @rdname tbl_regression_methods
-tbl_regression.brmsfit <- tbl_regression.lmerMod
-
-#' @export
-#' @rdname tbl_regression_methods
 tbl_regression.stanreg <- tbl_regression.lmerMod
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.lme <- tbl_regression.lmerMod
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.glmmadmb <- tbl_regression.lmerMod
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.gls <- tbl_regression.lmerMod
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.TMB <- function(
-  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effect = "fixed"), ...) {
-  assert_package("broom.mixed", "tbl_regression.TMB()")
-  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
-}
 
 #' @export
 #' @rdname tbl_regression_methods
