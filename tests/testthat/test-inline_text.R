@@ -206,12 +206,14 @@ test_that("inline_text.tbl_survival - no strata", {
 fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 
-tbl1 <- tbl_survfit(
-  fit1,
-  times = c(12, 24),
-  label = "Treatment",
-  label_header = "**{time} Month**"
-)
+tbl1 <-
+  tbl_survfit(
+    fit1,
+    times = c(12, 24),
+    label = "Treatment",
+    label_header = "**{time} Month**"
+  ) %>%
+  add_p()
 
 tbl2 <- tbl_survfit(
   fit2,
@@ -227,6 +229,20 @@ test_that("inline_text.tbl_survfit", {
     inline_text(tbl1, time = 24, level = "Drug A"),
     NA
   )
+
+  expect_error(
+    tbl1_pvalue <- inline_text(tbl1, column = p.value),
+    NA
+  )
+  expect_equal(tbl1_pvalue, "p=0.2")
+
+  expect_error(
+    tbl1_pattern <-
+      inline_text(tbl1, time = 24, level = "Drug A",
+                pattern = "{estimate}", estimate_fun = ~style_percent(., digits = 3, symbol = TRUE)),
+    NA
+  )
+  expect_equal(tbl1_pattern, "46.939%")
 
   expect_error(
     inline_text(tbl2, prob = 0.5),
