@@ -2,46 +2,12 @@
 % Please edit documentation in R/tbl_survfit.R
 \name{tbl_survfit}
 \alias{tbl_survfit}
+\alias{tbl_survfit.list}
 \alias{tbl_survfit.survfit}
 \alias{tbl_survfit.data.frame}
-\alias{tbl_survfit.list}
 \title{Creates table of survival probabilities}
 \usage{
 tbl_survfit(x, ...)
-
-\method{tbl_survfit}{survfit}(
-  x,
-  times = NULL,
-  probs = NULL,
-  statistic = NULL,
-  label = NULL,
-  label_header = NULL,
-  estimate_fun = NULL,
-  missing = NULL,
-  conf.level = 0.95,
-  reverse = FALSE,
-  quiet = NULL,
-  failure = NULL,
-  ...
-)
-
-\method{tbl_survfit}{data.frame}(
-  x,
-  y,
-  times = NULL,
-  probs = NULL,
-  statistic = NULL,
-  label = NULL,
-  label_header = NULL,
-  estimate_fun = NULL,
-  missing = NULL,
-  conf.level = 0.95,
-  reverse = FALSE,
-  failure = NULL,
-  include = everything(),
-  quiet = NULL,
-  ...
-)
 
 \method{tbl_survfit}{list}(
   x,
@@ -57,13 +23,19 @@ tbl_survfit(x, ...)
   quiet = NULL,
   ...
 )
+
+\method{tbl_survfit}{survfit}(x, ...)
+
+\method{tbl_survfit}{data.frame}(x, y, include = everything(), ...)
 }
 \arguments{
 \item{x}{a survfit object, list of survfit objects, or a data frame.
 If a data frame is passed, a list of survfit objects is constructed using
 each variable as a stratifying variable.}
 
-\item{...}{Not used}
+\item{...}{For \code{\link[=tbl_survfit.data.frame]{tbl_survfit.data.frame()}}  and \code{\link[=tbl_survfit.survfit]{tbl_survfit.survfit()}} the arguments
+are passed to \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}. They are not used when \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}
+is called directly.}
 
 \item{times}{numeric vector of times for which to return survival probabilities.}
 
@@ -82,7 +54,7 @@ is \code{"{prob} Percentile"} for survival percentiles, and \code{"Time {time}"}
 survival estimates}
 
 \item{estimate_fun}{function to format the Kaplan-Meier estimates. Default
-is \link{style_percent} for survival probabilities and \link{style_sigfig} for
+is \code{\link[=style_percent]{style_percent()}} for survival probabilities and \link{style_sigfig} for
 survival times}
 
 \item{missing}{text to fill when estimate is not estimable. Default is \code{"--"}}
@@ -94,8 +66,6 @@ Default is \code{FALSE}.  Does not apply to survival quantile requests}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
-
-\item{failure}{DEPRECATED. Use \verb{reverse=} instead.}
 
 \item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
 
@@ -140,7 +110,7 @@ tbl_survfit_ex1 <- tbl_survfit(
 # Pass a data frame
 tbl_survfit_ex2 <- tbl_survfit(
   trial,
-  y = survival::Surv(ttdeath, death),
+  y = Surv(ttdeath, death),
   include = c(trt, grade),
   probs = 0.5,
   label_header = "**Median Survival**"

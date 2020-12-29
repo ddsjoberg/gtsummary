@@ -1,10 +1,8 @@
 # gtsummary (development version)
   
-### New Functionality
+### New Functions
 
 * Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
-
-* Added new functions `modify_column_hide()` and `modify_column_unhide()` to hide and unhide columns in `.$table_body`. Simple wrappers for `modify_table_header()`.
 
 * Added function `modify_table_body()` allowing users to more easily make changes to gtsummary tables
 
@@ -14,11 +12,17 @@
 
 * New selecting function was added `all_tests()` to make it easier to select variables based on the test used to calculate the p-value, e.g. `add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))`
 
+### New Functionality
+
+* Added new functions `modify_column_hide()` and `modify_column_unhide()` to hide and unhide columns in `.$table_body`. Simple wrappers for `modify_table_header()`.
+
 * Previously, the `tbl_summary(digits=)` only accepted integer values specifying the number of decimal places to round a statistic. The argument now accepts both integers or functions, e.g. `digits = age ~ style_sigfig`. (#708)
 
 * The `add_stat()` function now supports `tbl_svysummary()` objects in addition to `tbl_summary()` (#688)
 
 * Multi-dimensional statistics can now be added for categorical variables via `add_stat()`, i.e. one statistic for each level of the categorical level (#714)
+
+* `inline_text.tbl_survfit()` updated to allow users to select p-value (and other) columns. (#589)
 
 ### Other Updates
 
