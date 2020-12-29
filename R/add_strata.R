@@ -28,8 +28,7 @@
 #' \if{html}{\figure{add_strata_ex1.png}{options: width=65\%}}
 
 add_strata <- function(x, strata, include_unstratafied = FALSE, additional_fn = identity) {
-  if (class(x)[1] != "tbl_summary")
-    abort("`x=` must be class 'tbl_summary'")
+  if (class(x)[1] != "tbl_summary") abort("`x=` must be class 'tbl_summary'")
 
   additional_fn <- gts_mapper(additional_fn)
   strata <- broom.helpers::.select_to_varnames(select = {{ strata }},
