@@ -478,6 +478,8 @@ inline_text.tbl_survival <-
 #' @param x Object created from  [tbl_survfit]
 #' @param time time for which to return survival probabilities.
 #' @param prob probability with values in (0,1)
+#' @param column column to print from `x$table_body`.
+#' Columns may be selected with `time=` or `prob=` as well.
 #' @param variable Variable name of statistic to present.
 #' @param pattern String indicating the statistics to return.
 #' @param level Level of the variable to display for categorical variables.
@@ -495,29 +497,34 @@ inline_text.tbl_survival <-
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #'
 #' # sumarize survfit objects
-#' tbl1 <- tbl_survfit(
-#'   fit1,
-#'   times = c(12, 24),
-#'   label = "Treatment",
-#'   label_header = "**{time} Month**"
-#' )
+#' tbl1 <-
+#'   tbl_survfit(
+#'     fit1,
+#'     times = c(12, 24),
+#'     label = "Treatment",
+#'     label_header = "**{time} Month**"
+#'   ) %>%
+#'   add_p()
 #'
-#' tbl2 <- tbl_survfit(
-#'   fit2,
-#'   probs = 0.5,
-#'   label_header = "**Median Survival**"
-#' )
+#' tbl2 <-
+#'   tbl_survfit(
+#'     fit2,
+#'     probs = 0.5,
+#'     label_header = "**Median Survival**"
+#'   )
 #'
 #' # report results inline
 #' inline_text(tbl1, time = 24, level = "Drug B")
+#' inline_text(tbl1, column = p.value)
 #' inline_text(tbl2, prob = 0.5)
 inline_text.tbl_survfit <-
-  function(x, time = NULL, prob = NULL, variable = NULL, level = NULL,
-           pattern = x$inputs$statistic,
+  function(x, variable = NULL, level = NULL,
+           pattern = NULL, time = NULL, prob = NULL, column = NULL,
            estimate_fun = x$inputs$estimate_fun, pvalue_fun = NULL, ...) {
     # quoting inputs -------------------------------------------------------------
     variable <- rlang::enquo(variable)
     level <- rlang::enquo(level)
+    column <- rlang::enquo(column)
 
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
@@ -525,40 +532,66 @@ inline_text.tbl_survfit <-
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
       (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
       gts_mapper("inline_text(pvalue_fun=)")
-
     estimate_fun <- estimate_fun %>%
       gts_mapper("inline_text(estimate_fun=)")
 
     # checking inputs ----------------------------------------------------------
-    if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
-      stop("One and only one of `time=` and `prob=` must be specified.", call. = FALSE)
+    if (c(!is.null(time), !is.null(prob), !rlang::quo_is_null(column)) %>% sum() != 1) {
+      stop("One and only one of `time=`, `prob=`, and `column=` must be specified.", call. = FALSE)
     }
+
+    # selecting column ---------------------------------------------------------
+    if (!is.null(time)) {
+      if (!time %in% x$inputs$times)
+        glue("`time=` must be one of {quoted_list(x$inputs$times)}") %>% abort()
+      column <- which(x$inputs$times %in% time) %>% {paste0("stat_", .)}
+    }
+    if (!is.null(prob)) {
+      if (!prob %in% x$inputs$probs)
+        glue("`prob=` must be one of {quoted_list(x$inputs$probs)}") %>% abort()
+      column <- which(x$inputs$probs %in% prob) %>% {paste0("stat_", .)}
+    }
+    column <- x$table_body %>% select({{ column }}) %>% names()
 
     # selecting variable -------------------------------------------------------
     variable <- .select_to_varnames(select = !!variable, var_info = x$meta_data)
     if (length(variable) == 0)
       variable <- .select_to_varnames(select = 1, var_info = x$meta_data)
 
-    result <-
-      dplyr::filter(x$meta_data, .data$variable == .env$variable) %>%
-      pull(.data$df_stats) %>%
-      purrr::flatten_dfc()
-
     # selecting level ----------------------------------------------------------
-    level <- .select_to_varnames(select = !!level, var_info = unique(result$label))
+    level <- .select_to_varnames(select = !!level,
+                                 var_info = filter(x$table_body, .data$variable == .env$variable) %>%
+                                   dplyr::pull(.data$label))
     if (length(level) == 0)
-      level <- .select_to_varnames(select = 1, var_info = unique(result$label))
+      level <- .select_to_varnames(select = 1,
+                                   var_info = filter(x$table_body, .data$variable == .env$variable) %>%
+                                     dplyr::pull(.data$label))
 
-    result <- dplyr::filter(result, .data$label == .env$level)
+    # if pattern specified, then construct the stat to display
+    if (!is.null(pattern)) {
+      stat_cols <- select(x$meta_data, .data$df_stats) %>% unnest(cols = .data$df_stats) %>% pull(.data$col_name) %>% unique()
+      if (!column %in% stat_cols)
+        glue("When `pattern=` specified, column must be one of {quoted_list(stat_cols)}") %>%
+        abort()
 
-    # prob and time ------------------------------------------------------------
-    est_var <- ifelse(!is.null(time), "time", "prob")
-    est_val <- time %||% prob
-    result <-
-      result[result[[est_var]] == est_val, ] %>%
-      mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low), estimate_fun) %>%
-      mutate(stat = glue(.env$pattern) %>% as.character()) %>%
-      pull(.data$stat)
+      result <-
+        dplyr::filter(x$meta_data, .data$variable == .env$variable) %>%
+        pull(.data$df_stats) %>%
+        purrr::flatten_dfc() %>%
+        filter(.data$col_name %in% .env$column, .data$label %in% .env$level) %>%
+        mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low), estimate_fun) %>%
+        mutate(stat = glue(.env$pattern) %>% as.character()) %>%
+        pull(.data$stat)
+    }
+    # if not pattern, then return cell from table_body
+    else {
+      result <-
+        x$table_body %>%
+        filter(.data$variable == .env$variable, .data$label == .env$level) %>%
+        pull(all_of(column))
+
+      if (column == "p.value") result <- pvalue_fun(result)
+    }
 
     result
 }
