@@ -6,11 +6,12 @@
 \usage{
 \method{inline_text}{tbl_survfit}(
   x,
-  time = NULL,
-  prob = NULL,
   variable = NULL,
   level = NULL,
-  pattern = x$inputs$statistic,
+  pattern = NULL,
+  time = NULL,
+  prob = NULL,
+  column = NULL,
   estimate_fun = x$inputs$estimate_fun,
   pvalue_fun = NULL,
   ...
@@ -19,16 +20,19 @@
 \arguments{
 \item{x}{Object created from  \link{tbl_survfit}}
 
-\item{time}{time for which to return survival probabilities.}
-
-\item{prob}{probability with values in (0,1)}
-
 \item{variable}{Variable name of statistic to present.}
 
 \item{level}{Level of the variable to display for categorical variables.
 Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
 \item{pattern}{String indicating the statistics to return.}
+
+\item{time}{time for which to return survival probabilities.}
+
+\item{prob}{probability with values in (0,1)}
+
+\item{column}{column to print from \code{x$table_body}.
+Columns may be selected with \verb{time=} or \verb{prob=} as well.}
 
 \item{estimate_fun}{Function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
@@ -59,21 +63,25 @@ fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 
 # sumarize survfit objects
-tbl1 <- tbl_survfit(
-  fit1,
-  times = c(12, 24),
-  label = "Treatment",
-  label_header = "**{time} Month**"
-)
+tbl1 <-
+  tbl_survfit(
+    fit1,
+    times = c(12, 24),
+    label = "Treatment",
+    label_header = "**{time} Month**"
+  ) \%>\%
+  add_p()
 
-tbl2 <- tbl_survfit(
-  fit2,
-  probs = 0.5,
-  label_header = "**Median Survival**"
-)
+tbl2 <-
+  tbl_survfit(
+    fit2,
+    probs = 0.5,
+    label_header = "**Median Survival**"
+  )
 
 # report results inline
 inline_text(tbl1, time = 24, level = "Drug B")
+inline_text(tbl1, column = p.value)
 inline_text(tbl2, prob = 0.5)
 }
 \seealso{
