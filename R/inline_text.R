@@ -495,21 +495,25 @@ inline_text.tbl_survival <-
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #'
 #' # sumarize survfit objects
-#' tbl1 <- tbl_survfit(
-#'   fit1,
-#'   times = c(12, 24),
-#'   label = "Treatment",
-#'   label_header = "**{time} Month**"
-#' )
+#' tbl1 <-
+#'   tbl_survfit(
+#'     fit1,
+#'     times = c(12, 24),
+#'     label = "Treatment",
+#'     label_header = "**{time} Month**"
+#'   ) %>%
+#'   add_p()
 #'
-#' tbl2 <- tbl_survfit(
-#'   fit2,
-#'   probs = 0.5,
-#'   label_header = "**Median Survival**"
-#' )
+#' tbl2 <-
+#'   tbl_survfit(
+#'     fit2,
+#'     probs = 0.5,
+#'     label_header = "**Median Survival**"
+#'   )
 #'
 #' # report results inline
 #' inline_text(tbl1, time = 24, level = "Drug B")
+#' inline_text(tbl1, column = p.value)
 #' inline_text(tbl2, prob = 0.5)
 inline_text.tbl_survfit <-
   function(x, variable = NULL, level = NULL,
