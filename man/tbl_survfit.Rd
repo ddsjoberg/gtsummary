@@ -33,7 +33,9 @@ tbl_survfit(x, ...)
 If a data frame is passed, a list of survfit objects is constructed using
 each variable as a stratifying variable.}
 
-\item{...}{Arguments passed to \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}}
+\item{...}{For \code{\link[=tbl_survfit.data.frame]{tbl_survfit.data.frame()}}  and \code{\link[=tbl_survfit.survfit]{tbl_survfit.survfit()}} the arguments
+are passed to \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}. They are not used when \code{\link[=tbl_survfit.list]{tbl_survfit.list()}}
+is called directly.}
 
 \item{times}{numeric vector of times for which to return survival probabilities.}
 
@@ -52,7 +54,7 @@ is \code{"{prob} Percentile"} for survival percentiles, and \code{"Time {time}"}
 survival estimates}
 
 \item{estimate_fun}{function to format the Kaplan-Meier estimates. Default
-is \link{style_percent} for survival probabilities and \link{style_sigfig} for
+is \code{\link[=style_percent]{style_percent()}} for survival probabilities and \link{style_sigfig} for
 survival times}
 
 \item{missing}{text to fill when estimate is not estimable. Default is \code{"--"}}

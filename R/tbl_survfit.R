@@ -19,7 +19,7 @@
 #' is `"{prob} Percentile"` for survival percentiles, and `"Time {time}"` for n-year
 #' survival estimates
 #' @param estimate_fun function to format the Kaplan-Meier estimates. Default
-#' is [style_percent] for survival probabilities and [style_sigfig] for
+#' is [style_percent()] for survival probabilities and [style_sigfig] for
 #' survival times
 #' @param missing text to fill when estimate is not estimable. Default is `"--"`
 #' @param conf.level Confidence level for confidence intervals. Default is 0.95
@@ -27,7 +27,9 @@
 #' Default is `FALSE`.  Does not apply to survival quantile requests
 #' @param y outcome call, e.g. `y = Surv(ttdeath, death)`
 #' @param include Variable to include as stratifying variables.
-#' @param ... Arguments passed to [tbl_survfit.list()]
+#' @param ... For [tbl_survfit.data.frame()]  and [tbl_survfit.survfit()] the arguments
+#' are passed to [tbl_survfit.list()]. They are not used when [tbl_survfit.list()]
+#' is called directly.
 #' @inheritParams add_global_p
 #' @export
 #' @rdname tbl_survfit
