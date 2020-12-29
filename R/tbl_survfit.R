@@ -116,6 +116,12 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # input checks ---------------------------------------------------------------
+  if (rlang::is_string(label)) {
+    label <- inject(everything() ~ !!label)
+    lifecycle::deprecate_warn(
+      "1.3.6", "gtsummary::tbl_survfit(label=)",
+      details = "`label=` argument no longer accepts a single string. Pass formula list.")
+  }
   assert_package("survival", "tbl_survfit()")
   if (purrr::every(x, ~!inherits(.x, "survfit"))) {
     stop("Argument `x=` must be class 'survfit' created from the `survival::survfit()` function.",
@@ -222,12 +228,8 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
 #' @export
 #' @rdname tbl_survfit
 tbl_survfit.survfit <- function(x, ...) {
-  dots <- list(...)
-  if (rlang::is_string(dots[["label"]]))
-    dots[["label"]] <- inject(everything() ~ !!dots[["label"]])
-
   # passing all args to the list method of `tbl_survfit()`
-  inject(tbl_survfit.list(list(x), !!!dots))
+  tbl_survfit.list(list(x), ...)
 }
 
 #' @export
