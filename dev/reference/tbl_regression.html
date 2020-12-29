@@ -296,10 +296,12 @@ custom method. Default is <code>NULL</code></p></td>
 
 <p>The default method for <code>tbl_regression()</code> model summary uses <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(x)</a></code>
 to perform the initial tidying of the model object. There are, however,
-a few <a href='vetted_models.html'>vetted model</a> that use <a href='tbl_regression_methods.html'>modifications</a>.</p><ul>
-<li><p><code>"lmerMod"</code> or <code>"glmerMod"</code>: These mixed effects models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code></p></li>
+a few models that use <a href='tbl_regression_methods.html'>modifications</a>.</p><ul>
 <li><p><code>"survreg"</code>: The scale parameter is removed, <code>broom::tidy(x) %&gt;% dplyr::filter(term != "Log(scale)")</code></p></li>
 <li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
+<li><p><code>"lmerMod"</code>, <code>"glmerMod"</code>, <code>"glmmTMB"</code>, <code>"glmmadmb"</code>, <code>"stanreg"</code>: These mixed effects
+models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
+to print the random components.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
