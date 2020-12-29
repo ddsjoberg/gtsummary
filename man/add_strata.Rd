@@ -4,7 +4,13 @@
 \alias{add_strata}
 \title{Add stratified columns}
 \usage{
-add_strata(x, strata, include_unstratafied = FALSE, additional_fn = identity)
+add_strata(
+  x,
+  strata,
+  include_unstratafied = FALSE,
+  tbl_fn = tbl_merge,
+  additional_fn = identity
+)
 }
 \arguments{
 \item{x}{\code{tbl_summary} object}
@@ -13,6 +19,9 @@ add_strata(x, strata, include_unstratafied = FALSE, additional_fn = identity)
 
 \item{include_unstratafied}{logical indicated whether to include the
 original table in the result. Default is \code{FALSE}}
+
+\item{tbl_fn}{function used to combine stratified tbls. Must be \code{tbl_merge}
+or \code{tbl_stack}}
 
 \item{additional_fn}{an additional function to run on the resulting individual
 tbls before they are merged. Accepts formula shortcut notation, e.g.

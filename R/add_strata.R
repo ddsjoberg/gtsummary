@@ -6,6 +6,8 @@
 #' @param strata variable that tables will be stratified by
 #' @param include_unstratafied logical indicated whether to include the
 #' original table in the result. Default is `FALSE`
+#' @param tbl_fn function used to combine stratified tbls. Must be `tbl_merge`
+#' or `tbl_stack`
 #' @param additional_fn an additional function to run on the resulting individual
 #' tbls before they are merged. Accepts formula shortcut notation, e.g.
 #' `~add_p(.x) %>% modify_header(all_stat_cols() ~ "**{level}**")`
@@ -27,8 +29,12 @@
 #'
 #' \if{html}{\figure{add_strata_ex1.png}{options: width=65\%}}
 
-add_strata <- function(x, strata, include_unstratafied = FALSE, additional_fn = identity) {
+add_strata <- function(x, strata, include_unstratafied = FALSE,
+                       tbl_fn = tbl_merge,
+                       additional_fn = identity) {
   if (class(x)[1] != "tbl_summary") abort("`x=` must be class 'tbl_summary'")
+  if (!purrr::some(list(tbl_merge, tbl_stack), ~identical(.x, tbl_fn)))
+    abort("`tbl_fn=` must be 'tbl_merge' or 'tbl_stack'")
 
   additional_fn <- gts_mapper(additional_fn)
   strata <- broom.helpers::.select_to_varnames(select = {{ strata }},
@@ -51,7 +57,7 @@ add_strata <- function(x, strata, include_unstratafied = FALSE, additional_fn = 
     x$inputs$data %>%
     mutate_at(
       all_of(tibble::enframe(args$type) %>% filter(.data$value %in% "categorical") %>% pull(.data$name)),
-      ~case_when(inherits(., "factor") ~ ., TRUE ~ factor(.))
+      ~switch(inherits(., "factor"), .) %||% factor(.)
     ) %>%
     arrange(!!sym(strata)) %>%
     group_by(!!sym(strata)) %>%
@@ -61,17 +67,22 @@ add_strata <- function(x, strata, include_unstratafied = FALSE, additional_fn = 
         map(additional_fn)
     )
 
-  tab_spanner <- df_strata[[strata]] %>% as.character() %>% {paste0("**", ., "**")}
+  tbl_header <- df_strata[[strata]] %>% as.character()
   tbl_list <- df_strata$tbl
 
   # include original table if requested ----------------------------------------
   if (include_unstratafied == TRUE) {
-    tab_spanner <- c("**Unstratified**", tab_spanner)
+    tbl_header <- c("Unstratified", tbl_header)
     tbl_list <- c(list(x), tbl_list)
   }
+  if (identical(tbl_fn, tbl_merge)) tbl_header <- paste0("**", tbl_header, "**")
+
+  # creating tbl_fn args list --------------------------------------------------
+  if (identical(tbl_fn, tbl_merge)) tbl_fn_args <- list(tbls = tbl_list, tab_spanner = tbl_header)
+  if (identical(tbl_fn, tbl_stack)) tbl_fn_args <- list(tbls = tbl_list, group_header = tbl_header)
 
   # return merged tbls ---------------------------------------------------------
-  result <- tbl_merge(tbl_list, tab_spanner = tab_spanner)
+  result <- inject(tbl_fn(!!!tbl_fn_args))
   result[["call_list"]] <- c(x[["call_list"]], add_strata = match.call())
   result
 }
