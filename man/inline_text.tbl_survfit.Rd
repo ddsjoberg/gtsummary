@@ -31,6 +31,9 @@ Can also specify the 'Unknown' row.  Default is \code{NULL}}
 
 \item{prob}{probability with values in (0,1)}
 
+\item{column}{column to print from \code{x$table_body}.
+Columns may be selected with \verb{time=} or \verb{prob=} as well.}
+
 \item{estimate_fun}{Function to round and format coefficient estimates.
 Default is \link{style_sigfig} when the coefficients are not transformed, and
 \link{style_ratio} when the coefficients have been exponentiated.}
