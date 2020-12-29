@@ -15,50 +15,6 @@ NULL
 
 #' @export
 #' @rdname tbl_regression_methods
-tbl_regression.lmerMod <- function(
-  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"), ...) {
-  assert_package("broom.mixed", "tbl_regression.lmerMod()")
-  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
-}
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.glmerMod <- tbl_regression.lmerMod
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.stanreg <- function(
-  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ...), ...) {
-  assert_package("broom.mixed", "tbl_regression.stanreg()")
-  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
-}
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.MCMCglmm <- function(
-  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effect = "fixed"), ...) {
-  assert_package("broom.mixed", "tbl_regression.MCMCglmm()")
-  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
-}
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.TMB <- function(
-  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effect = "fixed"), ...) {
-  assert_package("broom.mixed", "tbl_regression.TMB()")
-  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
-}
-
-#' @export
-#' @rdname tbl_regression_methods
-tbl_regression.brmsfit <- function(
-  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effect = "fixed"), ...) {
-  assert_package("broom.mixed", "tbl_regression.brmsfit()")
-  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
-}
-
-#' @export
-#' @rdname tbl_regression_methods
 tbl_regression.survreg <- function(
   x, tidy_fun = function(x, ...) broom::tidy(x, ...) %>% dplyr::filter(.data$term != "Log(scale)"), ...) {
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
@@ -83,6 +39,58 @@ tbl_regression.mipo <- function(x, ...) {
         "with(lm(age ~ marker + grade)) %>%",
         "tbl_regression()", sep = "\n") %>%
     usethis::ui_code_block()
+}
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.lmerMod <- function(
+  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"), ...) {
+  assert_package("broom.mixed", "tbl_regression.lmerMod()")
+  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.glmerMod <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.MCMCglmm <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.glmmTMB <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.glmmadmb <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.brmsfit <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.stanreg <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.lme <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.glmmadmb <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.gls <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.TMB <- function(
+  x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effect = "fixed"), ...) {
+  assert_package("broom.mixed", "tbl_regression.TMB()")
+  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 }
 
 #' @export

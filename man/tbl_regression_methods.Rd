@@ -2,15 +2,33 @@
 % Please edit documentation in R/tbl_regression_methods.R
 \name{tbl_regression_methods}
 \alias{tbl_regression_methods}
-\alias{tbl_regression.lmerMod}
-\alias{tbl_regression.glmerMod}
-\alias{tbl_regression.stanreg}
 \alias{tbl_regression.survreg}
 \alias{tbl_regression.mira}
 \alias{tbl_regression.mipo}
+\alias{tbl_regression.lmerMod}
+\alias{tbl_regression.glmerMod}
+\alias{tbl_regression.MCMCglmm}
+\alias{tbl_regression.glmmTMB}
+\alias{tbl_regression.glmmadmb}
+\alias{tbl_regression.brmsfit}
+\alias{tbl_regression.stanreg}
+\alias{tbl_regression.lme}
+\alias{tbl_regression.gls}
+\alias{tbl_regression.TMB}
 \alias{tbl_regression.multinom}
 \title{Methods for tbl_regression}
 \usage{
+\method{tbl_regression}{survreg}(
+  x,
+  tidy_fun = function(x, ...) broom::tidy(x, ...) \%>\% dplyr::filter(.data$term !=
+    "Log(scale)"),
+  ...
+)
+
+\method{tbl_regression}{mira}(x, tidy_fun = pool_and_tidy_mice, ...)
+
+\method{tbl_regression}{mipo}(x, ...)
+
 \method{tbl_regression}{lmerMod}(
   x,
   tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
@@ -23,18 +41,59 @@
   ...
 )
 
-\method{tbl_regression}{stanreg}(x, tidy_fun = function(x, ...) broom.mixed::tidy(x, ...), ...)
-
-\method{tbl_regression}{survreg}(
+\method{tbl_regression}{MCMCglmm}(
   x,
-  tidy_fun = function(x, ...) broom::tidy(x, ...) \%>\% dplyr::filter(.data$term !=
-    "Log(scale)"),
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
   ...
 )
 
-\method{tbl_regression}{mira}(x, tidy_fun = pool_and_tidy_mice, ...)
+\method{tbl_regression}{glmmTMB}(
+  x,
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
+  ...
+)
 
-\method{tbl_regression}{mipo}(x, ...)
+\method{tbl_regression}{glmmadmb}(
+  x,
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
+  ...
+)
+
+\method{tbl_regression}{brmsfit}(
+  x,
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
+  ...
+)
+
+\method{tbl_regression}{stanreg}(
+  x,
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
+  ...
+)
+
+\method{tbl_regression}{lme}(
+  x,
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
+  ...
+)
+
+\method{tbl_regression}{glmmadmb}(
+  x,
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
+  ...
+)
+
+\method{tbl_regression}{gls}(
+  x,
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effects = "fixed"),
+  ...
+)
+
+\method{tbl_regression}{TMB}(
+  x,
+  tidy_fun = function(x, ...) broom.mixed::tidy(x, ..., effect = "fixed"),
+  ...
+)
 
 \method{tbl_regression}{multinom}(x, ...)
 }
