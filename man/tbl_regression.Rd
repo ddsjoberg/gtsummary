@@ -87,11 +87,13 @@ for detailed examples.
 
 The default method for \code{tbl_regression()} model summary uses \code{broom::tidy(x)}
 to perform the initial tidying of the model object. There are, however,
-a few \link[=vetted_models]{vetted model} that use \link[=tbl_regression_methods]{modifications}.
+a few models that use \link[=tbl_regression_methods]{modifications}.
 \itemize{
-\item \code{"lmerMod"} or \code{"glmerMod"}: These mixed effects models use \code{broom.mixed::tidy(x, effects = "fixed")}
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
+\item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}: These mixed effects
+models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
+to print the random components.
 }
 }
 
