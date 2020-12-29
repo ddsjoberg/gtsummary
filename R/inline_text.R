@@ -478,6 +478,8 @@ inline_text.tbl_survival <-
 #' @param x Object created from  [tbl_survfit]
 #' @param time time for which to return survival probabilities.
 #' @param prob probability with values in (0,1)
+#' @param column column to print from `x$table_body`.
+#' Columns may be selected with `time=` or `prob=` as well.
 #' @param variable Variable name of statistic to present.
 #' @param pattern String indicating the statistics to return.
 #' @param level Level of the variable to display for categorical variables.
@@ -559,15 +561,15 @@ inline_text.tbl_survfit <-
     # selecting level ----------------------------------------------------------
     level <- .select_to_varnames(select = !!level,
                                  var_info = filter(x$table_body, .data$variable == .env$variable) %>%
-                                   dplyr::pull(label))
+                                   dplyr::pull(.data$label))
     if (length(level) == 0)
       level <- .select_to_varnames(select = 1,
                                    var_info = filter(x$table_body, .data$variable == .env$variable) %>%
-                                     dplyr::pull(label))
+                                     dplyr::pull(.data$label))
 
     # if pattern specified, then construct the stat to display
     if (!is.null(pattern)) {
-      stat_cols <- select(x$meta_data, df_stats) %>% unnest(cols = df_stats) %>% pull(col_name) %>% unique()
+      stat_cols <- select(x$meta_data, .data$df_stats) %>% unnest(cols = .data$df_stats) %>% pull(.data$col_name) %>% unique()
       if (!column %in% stat_cols)
         glue("When `pattern=` specified, column must be one of {quoted_list(stat_cols)}") %>%
         abort()
