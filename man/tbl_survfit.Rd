@@ -68,8 +68,6 @@ Default is \code{FALSE}.  Does not apply to survival quantile requests}
 \item{y}{outcome call, e.g. \code{y = Surv(ttdeath, death)}}
 
 \item{include}{Variable to include as stratifying variables.}
-
-\item{failure}{DEPRECATED. Use \verb{reverse=} instead.}
 }
 \description{
 \lifecycle{experimental}

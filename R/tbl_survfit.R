@@ -27,7 +27,6 @@
 #' Default is `FALSE`.  Does not apply to survival quantile requests
 #' @param y outcome call, e.g. `y = Surv(ttdeath, death)`
 #' @param include Variable to include as stratifying variables.
-#' @param failure DEPRECATED. Use `reverse=` instead.
 #' @param ... Arguments passed to [tbl_survfit.list()]
 #' @inheritParams add_global_p
 #' @export
