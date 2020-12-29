@@ -3,6 +3,11 @@
 #' @importFrom tibble as_tibble
 tibble::as_tibble
 
+# survival ---------------------------------------------------------------------
+#' @export
+#' @importFrom survival Surv
+survival::Surv
+
 # knitr ------------------------------------------------------------------------
 #' @export
 #' @importFrom knitr knit_print

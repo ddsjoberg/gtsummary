@@ -11,11 +11,13 @@
 #'
 #' The default method for `tbl_regression()` model summary uses `broom::tidy(x)`
 #' to perform the initial tidying of the model object. There are, however,
-#' a few [vetted model][vetted_models] that use [modifications][tbl_regression_methods].
+#' a few models that use [modifications][tbl_regression_methods].
 #'
-#' - `"lmerMod"` or `"glmerMod"`: These mixed effects models use `broom.mixed::tidy(x, effects = "fixed")`
 #' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
 #' - `"multinom"`: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
+#' - `"lmerMod"`, `"glmerMod"`, `"glmmTMB"`, `"glmmadmb"`, `"stanreg"`: These mixed effects
+#' models use `broom.mixed::tidy(x, effects = "fixed")`. Specify `tidy_fun = broom.mixed::tidy`
+#' to print the random components.
 #'
 #' @section Note:
 #' The N reported in the output is the number of observations
