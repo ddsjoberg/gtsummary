@@ -3,7 +3,8 @@ testthat::skip_on_cran()
 
 test_that("modify_spanning_header works", {
   expect_error(
-    trial %>%
+    tbl1 <-
+      trial %>%
       dplyr::select(trt, age, grade) %>%
       tbl_summary(by = trt) %>%
       modify_spanning_header(starts_with("stat_") ~ "**Randomization Assignment**"),
@@ -16,5 +17,13 @@ test_that("modify_spanning_header works", {
       tbl_summary(by = trt) %>%
       modify_spanning_header(),
     NA
+  )
+
+  expect_true(
+    tbl1 %>%
+      modify_spanning_header(everything() ~ NA) %>%
+      purrr::pluck("table_header", "spanning_header") %>%
+      is.na() %>%
+      all()
   )
 })
