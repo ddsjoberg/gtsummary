@@ -4,8 +4,6 @@
 \name{reexports}
 \alias{reexports}
 \alias{as_tibble}
-\alias{md}
-\alias{html}
 \alias{Surv}
 \alias{knit_print}
 \alias{\%>\%}
@@ -30,8 +28,6 @@ below to see their documentation.
 
 \describe{
   \item{dplyr}{\code{\link[dplyr:reexports]{\%>\%}}, \code{\link[dplyr:reexports]{all_of}}, \code{\link[dplyr:reexports]{any_of}}, \code{\link[dplyr:reexports]{contains}}, \code{\link[dplyr:reexports]{ends_with}}, \code{\link[dplyr:reexports]{everything}}, \code{\link[dplyr:reexports]{last_col}}, \code{\link[dplyr:reexports]{matches}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr:reexports]{num_range}}, \code{\link[dplyr:reexports]{one_of}}, \code{\link[dplyr]{select}}, \code{\link[dplyr:reexports]{starts_with}}, \code{\link[dplyr]{vars}}}
-
-  \item{gt}{\code{\link[gt]{html}}, \code{\link[gt]{md}}}
 
   \item{knitr}{\code{\link[knitr]{knit_print}}}
 
