@@ -147,7 +147,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
     dplyr::rowwise() %>%
     mutate(
-      label = glue(.data$label) %>% as.character(),
+      label = switch(is.na(.data$label), NA_character_) %||% as.character(glue(.data$label)),
       text_interpret = glue("gt::{text_interpret}") %>% as.character(),
       hide = FALSE
     ) %>%
@@ -199,7 +199,8 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
     dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
     dplyr::rowwise() %>%
     mutate(
-      updated_value = glue(.data[[footnote_column_name]]) %>% as.character()
+      updated_value = switch(is.na(.data[[footnote_column_name]]), NA_character_) %||%
+        as.character(glue(.data[[footnote_column_name]])),
     ) %>%
     ungroup() %>%
     select(.data$column, .data$updated_value) %>%
@@ -248,7 +249,8 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
     dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
     dplyr::rowwise() %>%
     mutate(
-      spanning_header = glue(.data$spanning_header) %>% as.character()
+      spanning_header = switch(is.na(.data$spanning_header), NA_character_) %||%
+        as.character(glue(.data$spanning_header)),
     ) %>%
     ungroup() %>%
     select(.data$column, .data$spanning_header)
