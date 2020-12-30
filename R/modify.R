@@ -1,8 +1,9 @@
-#' Modify column headers, footnotes, and spanning headers
+#' Modify column headers, footnotes, spanning headers, and table captions
 #'
 #' These functions assist with updating or adding column headers
-#' (`modify_header()`), footnotes (`modify_footnote()`), and spanning
-#' headers (`modify_spanning_header()`). Use `show_header_names()` to learn
+#' (`modify_header()`), footnotes (`modify_footnote()`), spanning
+#' headers (`modify_spanning_header()`), and table captions
+#' (`modify_caption()`). Use `show_header_names()` to learn
 #' the column names.
 #'
 #' @name modify
@@ -18,6 +19,7 @@
 #' `update=` argument. They accomplish the same goal of updating column headers.
 #' @param text_interpret String indicates whether text will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
+#' @param caption a string of the table caption/title
 #' @inheritParams add_global_p
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
@@ -27,7 +29,8 @@
 #' @author Daniel D. Sjoberg
 #'
 #' @section tbl_summary(), tbl_svysummary(), and tbl_cross():
-#' When assigning column headers for these gtsummary tables,
+#' When assigning column headers, footnotes, spanning headers, and captions
+#' for these gtsummary tables,
 #' you may use `{N}` to insert the number of observations.
 #' `tbl_svysummary` objects additionally have `{N_unweighted}` available.
 #'
@@ -40,6 +43,13 @@
 #' When assigning column headers for `tbl_regression` tables,
 #' you may use `{N}` to insert the number of observations.
 #'
+#' @section captions:
+#' Captions are assigned based on output type.
+#' - `gt::gt(caption=)`, available in gt version >0.2.2
+#' - `flextable::set_caption(caption=)`
+#' - `huxtable::set_caption(value=)`
+#' - `knitr::kable(caption=)`
+#'
 #' @examples
 #' # create summary table
 #' tbl <- trial[c("age", "grade", "trt")] %>%
@@ -50,7 +60,7 @@
 #' show_header_names(tbl)
 #'
 #' # Example 1 ----------------------------------
-#' # updating column headers and footnote
+#' # updating column headers, footnote, and table caption
 #' modify_ex1 <- tbl %>%
 #'   modify_header(
 #'     update = list(label ~ "**Variable**",
@@ -58,7 +68,8 @@
 #'   ) %>%
 #'   modify_footnote(
 #'     update = all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade"
-#'   )
+#'   ) %>%
+#'   modify_caption("**Patient Characteristics** (N = {N})")
 #'
 #' # Example 2 ----------------------------------
 #' # updating headers, remove all footnotes, add spanning header
@@ -127,7 +138,6 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     stop("All labels must be strings of length one.")
 
   # updating column headers ----------------------------------------------------
-  df_header_info <- .info_tibble(x)
   df_update <-
     update %>%
     unlist() %>%
@@ -137,7 +147,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
     dplyr::rowwise() %>%
     mutate(
-      label = glue(.data$label),
+      label = switch(is.na(.data$label), NA_character_) %||% as.character(glue(.data$label)),
       text_interpret = glue("gt::{text_interpret}") %>% as.character(),
       hide = FALSE
     ) %>%
@@ -148,7 +158,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     x$table_header %>%
     dplyr::rows_update(df_update, by = "column")
 
-  # returning gtsummary obejct -------------------------------------------------
+  # returning gtsummary object -------------------------------------------------
   x
 }
 
@@ -179,26 +189,28 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
   # updating footnote ----------------------------------------------------------
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
 
-  # convert named list to a tibble
-  table_header_update <-
+  # updating footnote ----------------------------------------------------------
+  df_update <-
     update %>%
     unlist() %>%
     tibble::enframe(name = "column", value = footnote_column_name) %>%
-    # ensuring the column is a character
-    mutate_at(vars(any_of(footnote_column_name)), as.character) %>%
-    # performing inner join to put the edits in the same order as x$table_header
-    {dplyr::inner_join(
-      x$table_header %>% select(.data$column),
-      .,
-      by = "column"
-    )}
+    dplyr::inner_join(.info_tibble(x), by = "column") %>%
+    # if users passes incorrect colname via `...` removing it
+    dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
+    dplyr::rowwise() %>%
+    mutate(
+      updated_value = switch(is.na(.data[[footnote_column_name]]), NA_character_) %||%
+        as.character(glue(.data[[footnote_column_name]])),
+    ) %>%
+    ungroup() %>%
+    select(.data$column, .data$updated_value) %>%
+    rlang::set_names(c("column", footnote_column_name))
 
-  # updating table_header
-  rows <- x$table_header$column %in% table_header_update$column
-  x$table_header[rows, c("column", footnote_column_name)] <-
-    table_header_update
+  x$table_header <-
+    x$table_header %>%
+    dplyr::rows_update(df_update, by = "column")
 
-  # return updated gtsummary object --------------------------------------------
+  # returning gtsummary object -------------------------------------------------
   x
 }
 
@@ -227,27 +239,50 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
   if (is.null(update)) return(x)
 
-  # updating footnote ----------------------------------------------------------
-  # convert named list to a tibble
-  table_header_update <-
+  # updating spanning header ---------------------------------------------------
+  df_update <-
     update %>%
     unlist() %>%
     tibble::enframe(name = "column", value = "spanning_header") %>%
-    # ensuring the column is a character
-    mutate_at(vars(.data$spanning_header), as.character) %>%
-    # performing inner join to put the edits in the same order as x$table_header
-    {dplyr::inner_join(
-      x$table_header %>% select(.data$column),
-      .,
-      by = "column"
-    )}
+    dplyr::inner_join(.info_tibble(x), by = "column") %>%
+    # if users passes incorrect colname via `...` removing it
+    dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
+    dplyr::rowwise() %>%
+    mutate(
+      spanning_header = switch(is.na(.data$spanning_header), NA_character_) %||%
+        as.character(glue(.data$spanning_header)),
+    ) %>%
+    ungroup() %>%
+    select(.data$column, .data$spanning_header)
 
-  # updating table_header
-  rows <- x$table_header$column %in% table_header_update$column
-  x$table_header[rows, c("column", "spanning_header")] <-
-    table_header_update
+  x$table_header <-
+    x$table_header %>%
+    dplyr::rows_update(df_update, by = "column")
 
   # return updated gtsummary object --------------------------------------------
+  x
+}
+
+#' @name modify
+#' @export
+modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
+  # checking inputs ------------------------------------------------------------
+  if (!inherits(x, "gtsummary")) abort("`x=` must be class 'gtsummary'.")
+  if (!rlang::is_string(caption)) abort("`caption=` must be a string.")
+  text_interpret <- match.arg(text_interpret)
+
+  # first interpreting caption in case user passed glue args -----------------
+  caption <-
+    .info_tibble(x) %>%
+    filter(column == "label") %>%
+    with(glue(caption)) %>%
+    as.character()
+
+  # adding caption to gtsummary object ----------------------------------------
+  x$list_output$caption <- caption
+  attr(x$list_output$caption, "text_interpret") <- text_interpret
+
+  # returning updated object ---------------------------------------------------
   x
 }
 

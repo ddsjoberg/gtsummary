@@ -14,6 +14,7 @@
 #' @importFrom usethis ui_info ui_oops ui_code ui_code_block ui_value ui_field ui_done
 #' @importFrom broom.helpers .formula_list_to_named_list .select_to_varnames
 #' .generic_selector
+#' @importFrom gt md html
 #' @keywords internal
 "_PACKAGE"
 
