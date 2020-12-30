@@ -28,10 +28,8 @@
 
 add_caption <- function(x, caption, text_interpret = c("md", "html")) {
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "gtsummary"))
-    abort("`x=` must be class 'gtsummary'.")
-  if (!rlang::is_string(caption))
-    abort("`caption=` must be a string.")
+  if (!inherits(x, "gtsummary")) abort("`x=` must be class 'gtsummary'.")
+  if (!rlang::is_string(caption)) abort("`caption=` must be a string.")
   text_interpret <- match.arg(text_interpret)
 
   # adding caption to gtsummary object ----------------------------------------
