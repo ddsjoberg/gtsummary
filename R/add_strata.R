@@ -76,7 +76,7 @@ add_strata <- function(x, strata, include_unstratafied = FALSE,
     group_by(!!sym(strata)) %>%
     tidyr::nest() %>%
     mutate(
-      tbl = map(data, ~rlang::inject(x_fun(data = .x, !!!args))) %>%
+      tbl = map(.data$data, ~rlang::inject(x_fun(data = .x, !!!args))) %>%
         map(additional_fn)
     )
 
@@ -102,32 +102,33 @@ add_strata <- function(x, strata, include_unstratafied = FALSE,
 
 .extract_fmt_funs <- function(x) {
   x$meta_data %>%
-    select(variable, stat_display, df_stats) %>%
+    select(.data$variable, .data$stat_display, .data$df_stats) %>%
     mutate(
-      stat_names = map2(stat_display, variable, extracting_function_calls_from_stat_display),
+      stat_names = map2(.data$stat_display, .data$variable,
+                        extracting_function_calls_from_stat_display),
       stat_funs = map2(
-        stat_names, df_stats,
+        .data$stat_names, .data$df_stats,
         function(stat_names, df_stats) {
-          map(stat_names, ~attr(df_stats[[.x]], "fmt_fun")) %>%
-            rlang::set_names(stat_names)
+          map(stat_names, ~attr(.data$df_stats[[.x]], "fmt_fun")) %>%
+            rlang::set_names(.data$stat_names)
         }
       )
     ) %>%
-    select(variable, stat_funs) %>%
+    select(.data$variable, .data$stat_funs) %>%
     tibble::deframe() %>%
     as.list()
 }
 
 .extract_summary_type <- function(x) {
   x$meta_data %>%
-    select(variable, summary_type) %>%
+    select(.data$variable, .data$summary_type) %>%
     tibble::deframe() %>%
     as.list()
 }
 
 .extract_variable_label <- function(x) {
   x$meta_data %>%
-    select(variable, var_label) %>%
+    select(.data$variable, .data$var_label) %>%
     tibble::deframe() %>%
     as.list()
 }

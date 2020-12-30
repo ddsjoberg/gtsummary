@@ -64,7 +64,8 @@ test_that("works with tbl_cross", {
       mutate(exposure = factor(exposure, labels = c("Not Exposed", "Exposed")),
              case = factor(case, labels = c("Control", "Case"))) %>%
       tbl_cross(grade, exposure, margin = "row") %>%
-      add_strata(case)
+      add_strata(case),
+    NA
   )
 })
 
