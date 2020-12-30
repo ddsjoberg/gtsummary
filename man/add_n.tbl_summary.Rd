@@ -64,10 +64,14 @@ total number of non-missing (or missing) observations
 }
 \section{Example Output}{
 
+
+\if{html}{Example 1}
+
 \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
 }
 
 \examples{
+# Example 1 ----------------------------------
 tbl_n_ex <-
   trial[c("trt", "age", "grade", "response")] \%>\%
   tbl_summary(by = trt) \%>\%

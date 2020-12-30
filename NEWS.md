@@ -4,6 +4,8 @@
 
 * Added new function `add_difference()`, which adds difference between groups, confidence interval and p-value. (#617)
 
+* Added function `modify_caption()` that includes table captions. For gt output, requires gt version > 0.2.2 (#701)
+
 * Added function `modify_table_body()` allowing users to more easily make changes to gtsummary tables
 
 * Added new function `remove_row_type()` for removing header, reference, or missing rows from a gtsummary tables. (#678)
