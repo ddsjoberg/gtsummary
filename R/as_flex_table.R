@@ -129,6 +129,13 @@ table_header_to_flextable_calls <- function(x, ...) {
     flextable::set_header_labels(!!!col_labels)
   )
 
+  # set_caption ----------------------------------------------------------------
+  if (!is.null(x$list_output$caption)) {
+    flextable_calls[["set_caption"]] <- expr(
+      flextable::set_caption(caption = !!x$list_output$caption)
+    )
+  }
+
   # add_header_row -------------------------------------------------------------
   # this is the spanning rows
   any_spanning_header <- sum(!is.na(table_header$spanning_header)) > 0

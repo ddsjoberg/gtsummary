@@ -42,11 +42,15 @@ add_n <- function(x, ...) {
 #' @rdname add_n.tbl_summary
 #' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
+#' # Example 1 ----------------------------------
 #' tbl_n_ex <-
 #'   trial[c("trt", "age", "grade", "response")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_n()
 #' @section Example Output:
+#'
+#' \if{html}{Example 1}
+#'
 #' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
 
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,

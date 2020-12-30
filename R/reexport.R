@@ -3,6 +3,15 @@
 #' @importFrom tibble as_tibble
 tibble::as_tibble
 
+# gt ---------------------------------------------------------------------------
+#' @export
+#' @importFrom gt md
+gt::md
+
+#' @export
+#' @importFrom gt html
+gt::html
+
 # survival ---------------------------------------------------------------------
 #' @export
 #' @importFrom survival Surv
