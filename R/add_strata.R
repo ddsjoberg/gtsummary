@@ -1,15 +1,15 @@
 #' Add stratified columns
 #'
-#' Stratifies existing `tbl_summary()` object by a third variable
+#' Stratifies existing `tbl_summary()`/`tbl_cross()` object by a categorical variable
 #'
 #' @param x `tbl_summary` object
 #' @param strata variable that tables will be stratified by
 #' @param include_unstratafied logical indicated whether to include the
 #' original table in the result. Default is `FALSE`
-#' @param tbl_fn function used to combine stratified tbls. Must be `tbl_merge`
-#' or `tbl_stack`
+#' @param method method used to combine stratified tables. Must be one of
+#' `"merge"` or `"stack"`
 #' @param additional_fn an additional function to run on the resulting individual
-#' tbls before they are merged. Accepts formula shortcut notation, e.g.
+#' tbls before they are combined. Accepts formula shortcut notation, e.g.
 #' `~add_p(.x) %>% modify_header(all_stat_cols() ~ "**{level}**")`
 #'
 #' @export
@@ -30,40 +30,53 @@
 #' \if{html}{\figure{add_strata_ex1.png}{options: width=65\%}}
 
 add_strata <- function(x, strata, include_unstratafied = FALSE,
-                       tbl_fn = tbl_merge,
-                       additional_fn = identity) {
-  if (class(x)[1] != "tbl_summary") abort("`x=` must be class 'tbl_summary'")
-  if (!purrr::some(list(tbl_merge, tbl_stack), ~identical(.x, tbl_fn)))
-    abort("`tbl_fn=` must be 'tbl_merge' or 'tbl_stack'")
-
-  additional_fn <- gts_mapper(additional_fn)
+                       method = c("merge", "stack"),
+                       additional_fn = NULL) {
+  if (!inherits(x, c("tbl_summary", "tbl_cross")))
+    abort("`x=` must be class 'tbl_summary' or 'tbl_cross'")
+  additional_fn <- additional_fn %||% identity %>% gts_mapper(additional_fn)
   strata <- broom.helpers::.select_to_varnames(select = {{ strata }},
                                                data = x$inputs$data,
                                                var_info = x$table_body,
                                                arg_name = "strata",
                                                select_single = TRUE)
   if (rlang::is_empty(strata)) abort("`strata=` cannot be missing.")
+  tbl_fun <-
+    match.arg(method) %>%
+    switch("merge" = tbl_merge,
+           "stack" = tbl_stack)
 
   # set args that will be passed to `tbl_summary()` ----------------------------
   args <- x$inputs
   args$data <- NULL
   args$label <- .extract_variable_label(x)
-  args$include <- args$include %>% setdiff(strata)
-  args$digits <- .extract_fmt_funs(x)
-  args$type <- .extract_summary_type(x)
+
+  if (class(x)[1] == "tbl_summary") {
+    args$include <- args$include %>% setdiff(strata)
+    args$digits <- .extract_fmt_funs(x)
+    args$type <- .extract_summary_type(x)
+
+    x_fun <- tbl_summary
+    vars_to_factor <-
+      tibble::enframe(args$type) %>% filter(.data$value %in% "categorical") %>% pull(.data$name)
+  }
+  else if (class(x)[1] == "tbl_cross") {
+    x_fun <- tbl_cross
+    vars_to_factor <- c(x$inputs$row, x$inputs$col)
+  }
 
   # build tbl_summary within each strata ---------------------------------------
   df_strata <-
     x$inputs$data %>%
     mutate_at(
-      all_of(tibble::enframe(args$type) %>% filter(.data$value %in% "categorical") %>% pull(.data$name)),
+      all_of(vars_to_factor),
       ~switch(inherits(., "factor"), .) %||% factor(.)
     ) %>%
     arrange(!!sym(strata)) %>%
     group_by(!!sym(strata)) %>%
     tidyr::nest() %>%
     mutate(
-      tbl = map(data, ~rlang::inject(tbl_summary(data = .x, !!!args))) %>%
+      tbl = map(data, ~rlang::inject(x_fun(data = .x, !!!args))) %>%
         map(additional_fn)
     )
 
@@ -75,14 +88,14 @@ add_strata <- function(x, strata, include_unstratafied = FALSE,
     tbl_header <- c("Unstratified", tbl_header)
     tbl_list <- c(list(x), tbl_list)
   }
-  if (identical(tbl_fn, tbl_merge)) tbl_header <- paste0("**", tbl_header, "**")
+  if (identical(tbl_fun, tbl_merge)) tbl_header <- paste0("**", tbl_header, "**")
 
   # creating tbl_fn args list --------------------------------------------------
-  if (identical(tbl_fn, tbl_merge)) tbl_fn_args <- list(tbls = tbl_list, tab_spanner = tbl_header)
-  if (identical(tbl_fn, tbl_stack)) tbl_fn_args <- list(tbls = tbl_list, group_header = tbl_header)
+  if (identical(tbl_fun, tbl_merge)) tbl_fun_args <- list(tbls = tbl_list, tab_spanner = tbl_header)
+  if (identical(tbl_fun, tbl_stack)) tbl_fun_args <- list(tbls = tbl_list, group_header = tbl_header)
 
   # return merged tbls ---------------------------------------------------------
-  result <- inject(tbl_fn(!!!tbl_fn_args))
+  result <- inject(tbl_fun(!!!tbl_fun_args))
   result[["call_list"]] <- c(x[["call_list"]], add_strata = match.call())
   result
 }
@@ -101,17 +114,20 @@ add_strata <- function(x, strata, include_unstratafied = FALSE,
       )
     ) %>%
     select(variable, stat_funs) %>%
-    tibble::deframe()
+    tibble::deframe() %>%
+    as.list()
 }
 
 .extract_summary_type <- function(x) {
   x$meta_data %>%
     select(variable, summary_type) %>%
-    tibble::deframe()
+    tibble::deframe() %>%
+    as.list()
 }
 
 .extract_variable_label <- function(x) {
   x$meta_data %>%
     select(variable, var_label) %>%
-    tibble::deframe()
+    tibble::deframe() %>%
+    as.list()
 }

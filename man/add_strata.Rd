@@ -8,8 +8,8 @@ add_strata(
   x,
   strata,
   include_unstratafied = FALSE,
-  tbl_fn = tbl_merge,
-  additional_fn = identity
+  method = c("merge", "stack"),
+  additional_fn = NULL
 )
 }
 \arguments{
@@ -20,15 +20,15 @@ add_strata(
 \item{include_unstratafied}{logical indicated whether to include the
 original table in the result. Default is \code{FALSE}}
 
-\item{tbl_fn}{function used to combine stratified tbls. Must be \code{tbl_merge}
-or \code{tbl_stack}}
+\item{method}{method used to combine stratified tables. Must be one of
+\code{"merge"} or \code{"stack"}}
 
 \item{additional_fn}{an additional function to run on the resulting individual
-tbls before they are merged. Accepts formula shortcut notation, e.g.
+tbls before they are combined. Accepts formula shortcut notation, e.g.
 \code{~add_p(.x) \%>\% modify_header(all_stat_cols() ~ "**{level}**")}}
 }
 \description{
-Stratifies existing \code{tbl_summary()} object by a third variable
+Stratifies existing \code{tbl_summary()}/\code{tbl_cross()} object by a categorical variable
 }
 \section{Example Output}{
 

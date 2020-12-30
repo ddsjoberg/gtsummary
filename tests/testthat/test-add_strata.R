@@ -54,4 +54,16 @@ test_that("unobserved levels appear in resulting table", {
   )
 })
 
+test_that("works with tbl_cross", {
+  tbl_strata_cross <-
+    trial %>%
+    # creating a dataset with case-control and exposure status
+    select(exposure = response, case = death, grade) %>%
+    tidyr::drop_na() %>%
+    mutate(exposure = factor(exposure, labels = c("Not Exposed", "Exposed")),
+           case = factor(case, labels = c("Control", "Case"))) %>%
+    tbl_cross(grade, exposure, margin = "row") %>%
+    add_strata(case)
+})
+
 
