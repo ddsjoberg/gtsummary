@@ -109,7 +109,7 @@ add_strata <- function(x, strata, include_unstratafied = FALSE,
       stat_funs = map2(
         .data$stat_names, .data$df_stats,
         function(stat_names, df_stats) {
-          map(stat_names, ~attr(.data$df_stats[[.x]], "fmt_fun")) %>%
+          map(stat_names, ~attr(df_stats[[.x]], "fmt_fun")) %>%
             rlang::set_names(.data$stat_names)
         }
       )
