@@ -20,6 +20,7 @@ test_that("no errors/warnings with all output types", {
   expect_error(tbl_reg %>% modify_caption(letters), "*")
   expect_equal(
     tbl_reg %>% modify_caption("{N}") %>% purrr::pluck("list_output", "caption"),
-    "32"
+    "32",
+    check.attributes = FALSE
   )
 })
