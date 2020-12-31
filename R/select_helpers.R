@@ -37,7 +37,16 @@ NULL
 
 #' @rdname select_helpers
 #' @export
-all_continuous <- broom.helpers::all_continuous
+all_continuous <- function(continuous2 = TRUE) {
+  if (continuous2 == TRUE)
+    return(broom.helpers::all_continuous())
+  else
+    return(
+      .generic_selector("variable", "var_type",
+                        .data$var_type %in% "continuous",
+                        fun_name = "all_continuous")
+    )
+}
 
 #' @rdname select_helpers
 #' @export
