@@ -21,4 +21,18 @@ test_that("no errors/warnings with pool_and_tidy_mice", {
 
   expect_error(tbl_regression(mod_mice), NA)
   expect_warning(tbl_regression(mod_mice, exponentiate = TRUE), NA)
+
+  expect_output(mice::pool(mod_mice), NA)
 })
+
+
+test_that("no errors/warnings with tbl_regression.multinom", {
+  skip_if(!require("nnet"))
+  expect_output(
+    nnet::multinom(grade ~ age, trial) %>%
+      tbl_regression()
+  )
+})
+
+
+

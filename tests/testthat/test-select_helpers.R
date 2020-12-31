@@ -104,4 +104,34 @@ test_that("test-select helpers", {
     select(df, all_stat_cols(FALSE)) %>% names(),
     c("stat_1", "stat_11", "stat_1_1", "stat_11_1")
   )
+
+  expect_equal(
+    trial[c("age", "marker")] %>%
+      tbl_summary(
+        type = marker ~ "continuous2",
+        label = all_continuous() ~ "YASS"
+      ) %>%
+      purrr::pluck("meta_data", "var_label"),
+    c("YASS", "YASS")
+  )
+
+  expect_equal(
+    trial[c("age", "marker")] %>%
+      tbl_summary(
+        type = marker ~ "continuous2",
+        label = all_continuous(FALSE) ~ "YASS"
+      ) %>%
+      purrr::pluck("meta_data", "var_label"),
+    c("YASS", "Marker Level (ng/mL)")
+  )
+
+  expect_equal(
+    trial[c("age", "marker")] %>%
+      tbl_summary(
+        type = marker ~ "continuous2",
+        label = all_continuous2() ~ "YASS"
+      ) %>%
+      purrr::pluck("meta_data", "var_label"),
+    c("Age", "YASS")
+  )
 })

@@ -102,8 +102,6 @@
 
 * Experimental function `add_p.tbl_survfit(test.args=)` in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as `everything() ~ "test_name"`.  The single string is no longer accepted, and users must use the formula notation.
 
-* The argument `all_continuous(continuous2=)` has been removed. No deprecation messages were added...it was just cut. 
-
 * Removed theme element `N_fun` that was previously marked as questioning and likely to be removed from the package.
 
 # gtsummary 1.3.5
