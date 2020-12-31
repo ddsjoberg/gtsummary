@@ -13,7 +13,7 @@
 \alias{all_contrasts}
 \title{Select helper functions}
 \usage{
-all_continuous()
+all_continuous(continuous2 = TRUE)
 
 all_continuous2()
 
