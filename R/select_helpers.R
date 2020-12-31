@@ -14,6 +14,7 @@
 #' @param tests string indicating the test type of the variables to select, e.g.
 #' select all variables being compared with `"t.test"`
 #' @param stat_0 When `FALSE`, will not select the `"stat_0"` column. Default is `TRUE`
+#' @param continuous2 Logical indicating whether to include continuous2 variables. Default is `TRUE`
 #' @param dichotomous Logical indicating whether to include dichotomous variables.
 #' Default is `TRUE`
 #' @param contrasts_type type of contrast to select. When `NULL`, all variables with a
