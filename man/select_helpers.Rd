@@ -32,6 +32,8 @@ all_intercepts()
 all_contrasts(contrasts_type = NULL)
 }
 \arguments{
+\item{continuous2}{Logical indicating whether to include continuous2 variables. Default is \code{TRUE}}
+
 \item{dichotomous}{Logical indicating whether to include dichotomous variables.
 Default is \code{TRUE}}
 
