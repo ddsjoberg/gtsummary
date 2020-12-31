@@ -126,7 +126,14 @@ table_header_to_gt_calls <- function(x, ...) {
   gt_calls <- list()
 
   # gt -------------------------------------------------------------------------
-  gt_calls[["gt"]] <- expr(gt::gt(data = x$table_body, !!!list(...)))
+  if (!is.null(x$list_output$caption) && "caption" %in% names(as.list(gt::gt))) {
+    caption <- rlang::call2(attr(x$list_output$caption, "text_interpret"), x$list_output$caption)
+    gt_calls[["gt"]] <-
+      expr(gt::gt(data = x$table_body, caption = !!caption, !!!list(...)))
+  }
+  else
+    gt_calls[["gt"]] <-
+    expr(gt::gt(data = x$table_body, !!!list(...)))
 
   # fmt_missing ----------------------------------------------------------------
   gt_calls[["fmt_missing"]] <- expr(
