@@ -185,13 +185,13 @@
 <li><p>Added new function <code><a href="../reference/remove_row_type.html">remove_row_type()</a></code> for removing header, reference, or missing rows from a gtsummary tables. (<a href='https://github.com/ddsjoberg/gtsummary/issues/678'>#678</a>)</p></li>
 <li><p>New selecting function: <code><a href="../reference/select_helpers.html">all_stat_cols()</a></code> selects columns from <code>tbl_summary</code>/<code>tbl_svysummary</code> object with summary statistics (i.e. <code>"stat_0"</code>, <code>"stat_1"</code>, <code>"stat_2"</code>, etc.).</p></li>
 <li><p>New selecting function was added <code><a href="../reference/select_helpers.html">all_tests()</a></code> to make it easier to select variables based on the test used to calculate the p-value, e.g. <code><a href="../reference/add_p.html">add_p(test = c(age, marker) ~ "t.test", test.args = all_tests("t.test") ~ list(var.equal = TRUE))</a></code></p></li>
+<li><p>Added new functions <code><a href="../reference/modify_column_hide.html">modify_column_hide()</a></code> and <code><a href="../reference/modify_column_hide.html">modify_column_unhide()</a></code> to hide and unhide columns in <code>.$table_body</code>. Simple wrappers for <code><a href="../reference/modify_table_header.html">modify_table_header()</a></code>.</p></li>
 </ul>
 </div>
 <div id="new-functionality" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-functionality" class="anchor"></a>New Functionality</h3>
 <ul>
-<li><p>Added new functions <code><a href="../reference/modify_column_hide.html">modify_column_hide()</a></code> and <code><a href="../reference/modify_column_hide.html">modify_column_unhide()</a></code> to hide and unhide columns in <code>.$table_body</code>. Simple wrappers for <code><a href="../reference/modify_table_header.html">modify_table_header()</a></code>.</p></li>
 <li><p>Previously, the <code><a href="../reference/tbl_summary.html">tbl_summary(digits=)</a></code> only accepted integer values specifying the number of decimal places to round a statistic. The argument now accepts both integers or functions, e.g. <code>digits = age ~ style_sigfig</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/708'>#708</a>)</p></li>
 <li><p>The <code><a href="../reference/add_stat.html">add_stat()</a></code> function now supports <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects in addition to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/688'>#688</a>)</p></li>
 <li><p>Multi-dimensional statistics can now be added for categorical variables via <code><a href="../reference/add_stat.html">add_stat()</a></code>, i.e. one statistic for each level of the categorical level (<a href='https://github.com/ddsjoberg/gtsummary/issues/714'>#714</a>)</p></li>
@@ -204,7 +204,6 @@
 <ul>
 <li><p><code><a href="../reference/modify.html">modify_header()</a></code> has been updated so users may more easily access internal data while defining headers and so that it no longer adds its call to the gtsummary <code>.$call_list</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/719'>#719</a>)</p></li>
 <li><p>The default value for <code>include=</code> argument for the <code><a href="../reference/add_global_p.html">add_global_p.tbl_regression()</a></code> and <code><a href="../reference/add_global_p.html">add_global_p.tbl_uvregression()</a></code> methods have been made the same with <code>include = everything()</code>, and the help files for these methods have been brought together in a single file. (<a href='https://github.com/ddsjoberg/gtsummary/issues/721'>#721</a>)</p></li>
-<li><p>The default test for 2 by 2 tables with expected cell counts has been updated from the chi-squared test with continuity correction to the original chi-squared test for <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/721'>#721</a>)</p></li>
 <li><p>Added new function <code><a href="../reference/add_difference.html">add_difference()</a></code>, which adds difference between groups, confidence interval and p-value. (<a href='https://github.com/ddsjoberg/gtsummary/issues/617'>#617</a>)</p></li>
 <li>
 <p>Introducing new package dependency {broom.helpers}</p>
@@ -256,6 +255,7 @@
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking Changes</h3>
 <ul>
+<li><p>The default test for 2-by-2 tables with expected cell counts has been updated from the chi-squared test with continuity correction to the original chi-squared test for <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/721'>#721</a>)</p></li>
 <li><p>Experimental function <code><a href="../reference/add_p.tbl_survfit.html">add_p.tbl_survfit(test.args=)</a></code> in addition to accepting the formula list notation, also accepted a single string naming a test that was interpreted as <code>everything() ~ "test_name"</code>. The single string is no longer accepted, and users must use the formula notation.</p></li>
 <li><p>Removed theme element <code>N_fun</code> that was previously marked as questioning and likely to be removed from the package.</p></li>
 </ul>
