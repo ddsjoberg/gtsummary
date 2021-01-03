@@ -11,6 +11,7 @@
 #' @param additional_fn an additional function to run on the resulting individual
 #' tbls before they are combined. Accepts formula shortcut notation, e.g.
 #' `~add_p(.x) %>% modify_header(all_stat_cols() ~ "**{level}**")`
+#' @inheritParams combine_terms
 #'
 #' @export
 #' @examples
@@ -29,9 +30,9 @@
 #'
 #' \if{html}{\figure{add_strata_ex1.png}{options: width=65\%}}
 
-add_strata <- function(x, strata, include_unstratafied = FALSE,
-                       method = c("merge", "stack"),
-                       additional_fn = NULL, quiet = NULL) {
+add_strata <- function(x, strata, method = c("merge", "stack"),
+                       additional_fn = NULL, include_unstratafied = FALSE,
+                       quiet = NULL) {
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
   additional_fn <- additional_fn %||% identity %>% gts_mapper(additional_fn)
