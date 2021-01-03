@@ -31,16 +31,24 @@
 
 add_strata <- function(x, strata, include_unstratafied = FALSE,
                        method = c("merge", "stack"),
-                       additional_fn = NULL) {
+                       additional_fn = NULL, quiet = NULL) {
+  # setting defaults -----------------------------------------------------------
+  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+  additional_fn <- additional_fn %||% identity %>% gts_mapper(additional_fn)
+
+  # checking inputs ------------------------------------------------------------
   if (!inherits(x, c("tbl_summary", "tbl_cross")))
     abort("`x=` must be class 'tbl_summary' or 'tbl_cross'")
-  additional_fn <- additional_fn %||% identity %>% gts_mapper(additional_fn)
+  if (identical(quiet, FALSE)) .additional_fn_msg(x, additional_fn)
+
   strata <- broom.helpers::.select_to_varnames(select = {{ strata }},
                                                data = x$inputs$data,
                                                var_info = x$table_body,
                                                arg_name = "strata",
                                                select_single = TRUE)
   if (rlang::is_empty(strata)) abort("`strata=` cannot be missing.")
+
+
   tbl_fun <-
     match.arg(method) %>%
     switch("merge" = tbl_merge,
@@ -49,16 +57,19 @@ add_strata <- function(x, strata, include_unstratafied = FALSE,
   # set args that will be passed to `tbl_summary()` ----------------------------
   args <- x$inputs
   args$data <- NULL
-  args$label <- .extract_variable_label(x)
+  args$label <- .extract_variable_label(x, strata)
 
   if (class(x)[1] == "tbl_summary") {
     args$include <- args$include %>% setdiff(strata)
-    args$digits <- .extract_fmt_funs(x)
-    args$type <- .extract_summary_type(x)
+    args$digits <- .extract_fmt_funs(x, strata)
+    args$type <- .extract_summary_type(x, strata)
 
     x_fun <- tbl_summary
     vars_to_factor <-
-      tibble::enframe(args$type) %>% filter(.data$value %in% "categorical") %>% pull(.data$name)
+      tibble::enframe(args$type) %>%
+      filter(.data$value %in% "categorical") %>%
+      pull(.data$name) %>%
+      intersect(args$include)
   }
   else if (class(x)[1] == "tbl_cross") {
     x_fun <- tbl_cross
@@ -100,7 +111,25 @@ add_strata <- function(x, strata, include_unstratafied = FALSE,
   result
 }
 
-.extract_fmt_funs <- function(x) {
+.additional_fn_msg <- function(x, additional_fn) {
+  if (!identical(additional_fn, identity)) return(invisible())
+
+  call_names <- x$call_list[-1] %>% names() %>% paste0("()")
+
+  if (is.null(call_names)) return(invisible())
+
+  code_msg <-
+    c(".x", call_names) %>%
+    reduce(~ paste(.x, "%>%", .y)) %>%
+    {paste0("additional_fn = ~", .)}
+
+  glue("Include the additional modifications to the stratified tables with ",
+       "{ui_code(code_msg)}") %>%
+    str_wrap() %>%
+    ui_info()
+}
+
+.extract_fmt_funs <- function(x, strata) {
   x$meta_data %>%
     select(.data$variable, .data$stat_display, .data$df_stats) %>%
     mutate(
@@ -115,20 +144,23 @@ add_strata <- function(x, strata, include_unstratafied = FALSE,
       )
     ) %>%
     select(.data$variable, .data$stat_funs) %>%
+    filter(!.data$variable %in% .env$strata) %>%
     tibble::deframe() %>%
     as.list()
 }
 
-.extract_summary_type <- function(x) {
+.extract_summary_type <- function(x, strata) {
   x$meta_data %>%
     select(.data$variable, .data$summary_type) %>%
+    filter(!.data$variable %in% .env$strata) %>%
     tibble::deframe() %>%
     as.list()
 }
 
-.extract_variable_label <- function(x) {
+.extract_variable_label <- function(x, strata) {
   x$meta_data %>%
     select(.data$variable, .data$var_label) %>%
+    filter(!.data$variable %in% .env$strata) %>%
     tibble::deframe() %>%
     as.list()
 }
