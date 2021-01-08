@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Motivations for cpp11</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Motivations for cpp11</h1>
+
+
+
+<div id="motivations" class="section level1">
+<h1>Motivations</h1>
+<p>R and S have a long history of interacting with compiled languages. In fact the original version of S written in the late 1970s was mainly a wrapper around FORTRAN routines. <a href="https://www.r-project.org/conferences/useR-2006/Slides/Chambers.pdf">(History-of-S)</a> Released in 2000, the <a href="https://cran.r-project.org/package=cxx">cxx</a> package was an early prototype of C++ bindings to R. <a href="https://cran.r-project.org/package=Rcpp">Rcpp</a> was first published to CRAN in 2008, and <a href="https://cran.r-project.org/package=Rcpp11">Rcpp11</a> in 2014. Of these <code>Rcpp</code> has by far the widest adoption, with over 2000 reverse dependencies as of 2020.</p>
+<p>Rcpp has been a widely successful project, however over the years a number of issues and additional C++ features have arisen. Adding these features to Rcpp would require a great deal of work, or in some cases would be impossible without severely breaking backwards compatibility.</p>
+<p>cpp11 is a ground up rewrite of C++ bindings to R with different design trade-offs and features.</p>
+<p>Changes that motivated cpp11 include:</p>
+<ul>
+<li>Enforcing <a href="#copy-on-write-semantics">copy-on-write semantics</a>.</li>
+<li>Improving the <a href="#improve-safety">safety</a> of using the R API from C++ code.</li>
+<li>Supporting <a href="#altrep-support">ALTREP objects</a>.</li>
+<li>Using <a href="#utf-8-everywhere">UTF-8 strings</a> everywhere.</li>
+<li>Applying newer <a href="#c11-features">C++11 features</a>.</li>
+<li>Having a more straightforward, <a href="#simpler-implementation">simpler implementation</a>.</li>
+<li>Faster <a href="#compilation-speed">compilation time</a> with lower memory requirements.</li>
+<li>Being <em>completely</em> <a href="#header-only">header only</a> to avoid ABI issues.</li>
+<li>Capable of <a href="#vendoring">vendoring</a> if desired.</li>
+<li>More robust <a href="#protection">protection</a> using a much more efficient linked list data structure.</li>
+<li><a href="#growing-vectors">Growing vectors</a> more efficiently.</li>
+</ul>
+<div id="copy-on-write-semantics" class="section level2">
+<h2>Copy-on-write semantics</h2>
+<p>R uses <a href="https://adv-r.hadley.nz/names-values.html#copy-on-modify">copy-on-write</a> (also called copy-on-modify) semantics. Lets say you have two variables <code>x</code> and <code>y</code> that both point to the same underlying data.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>y &lt;-<span class="st"> </span>x</span></code></pre></div>
+<p>If you modify <code>y</code>, R will first copy the values of <code>x</code> to a new position, then point <code>y</code> to the new location and only after the copy modify <code>y</code>. This allows <code>x</code> to retain the original values.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>y[[<span class="dv">3</span>]] &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>y</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>x</span></code></pre></div>
+<p>C++ does not have copy-on-write built into the language, however it has related concepts, copy-by-value and copy-by-reference. Copy-by-value works similarly to R, except that R only copies when something is changed, C++ <em>always</em> copies.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1"></a><span class="dt">int</span> x = <span class="dv">42</span>;</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="dt">int</span> y = x;</span>
+<span id="cb3-3"><a href="#cb3-3"></a>y = <span class="dv">0</span>;</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">// x is still == 42</span></span></code></pre></div>
+<p>Copy-by-reference does the opposite, both <code>x</code> and <code>y</code> always point to the <em>same</em> underlying value. In C++ you specify a reference with <code>&amp;</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">int</span> x = <span class="dv">42</span>;</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="dt">int</span> &amp;y = x;</span>
+<span id="cb4-3"><a href="#cb4-3"></a>y = <span class="dv">0</span>;</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">// both x and y are now 0</span></span></code></pre></div>
+<p>Copy-by-reference is a valuable technique, as it avoids the overhead of copying the data. However it can also lead to errors when internal functions change their inputs unexpectedly. Rcpp uses copy-by-reference by default (even if you pass a Rcpp vector class by value). This gives Rcpp functions completely different semantics from normal R functions.</p>
+<p>We can illustrate this by creating a Rcpp function that multiples its input vector by 2.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1"></a><span class="pp">#include </span><span class="im">&quot;Rcpp.h&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">using</span> <span class="kw">namespace</span> Rcpp;</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>NumericVector times_two_rcpp(NumericVector x) {</span>
+<span id="cb5-6"><a href="#cb5-6"></a>  <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; x.size(); ++i) {</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    x[i] = x[i] * <span class="dv">2</span>;</span>
+<span id="cb5-8"><a href="#cb5-8"></a>  }</span>
+<span id="cb5-9"><a href="#cb5-9"></a>  <span class="cf">return</span> x;</span>
+<span id="cb5-10"><a href="#cb5-10"></a>}</span></code></pre></div>
+<p>If you do this with regular R functions, you will see the value of <code>y</code> is <code>x</code> * 2, but the value of <code>x</code> is unchanged.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>y &lt;-<span class="st"> </span>x <span class="op">*</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>y</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a>x</span></code></pre></div>
+<p>However if we now call our <code>times_two_rcpp()</code> function we get the right output value, but now <code>x</code> is <em>also changed</em>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>z &lt;-<span class="st"> </span><span class="kw">times_two_rcpp</span>(x)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>z</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a>x</span></code></pre></div>
+<p>cpp11 strives to make its functions behave similarly to normal R functions, while preserving the speed of Rcpp when read only access is needed. Each of the r_vector classes in cpp11 has a normal <em>read only</em> version that uses copy-by-reference, and a <em>writable</em> version which uses copy-by-value.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11/doubles.hpp&quot;</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>[[<span class="at">cpp11</span>::<span class="at">register</span>]]</span>
+<span id="cb8-4"><a href="#cb8-4"></a>cpp11::doubles times_two_cpp11(cpp11::writable::doubles x) {</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; x.size(); ++i) {</span>
+<span id="cb8-6"><a href="#cb8-6"></a>    x[i] = x[i] * <span class="dv">2</span>;</span>
+<span id="cb8-7"><a href="#cb8-7"></a>  }</span>
+<span id="cb8-8"><a href="#cb8-8"></a>  <span class="cf">return</span> x;</span>
+<span id="cb8-9"><a href="#cb8-9"></a>}</span></code></pre></div>
+<p>Using <code>cpp11::writable::doubles</code> first <em>copies</em> the input vector, so when we do the multiplication we do not modify the original data.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a>z &lt;-<span class="st"> </span><span class="kw">times_two_cpp11</span>(x)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>z</span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a>x</span></code></pre></div>
+</div>
+<div id="improve-safety" class="section level2">
+<h2>Improve safety</h2>
+<p>Internally R is written in C, not C++. In general C and C++ work well together, a large part of C++’s success is due to its high interoperability with C code. However one area in which C and C++ are generally <em>not</em> interoperable is error handling. In C++ the most common way to handle errors is with <a href="https://isocpp.org/wiki/faq/exceptions">exceptions</a>.</p>
+<p>Exceptions provide a clean, safe way for objects to obtain and cleanup resources automatically even when errors occur.</p>
+<div id="c-safety" class="section level3">
+<h3>C safety</h3>
+<p>The C language does not have support for exceptions, so error handling is done a variety of ways. These include error codes like <a href="https://en.cppreference.com/w/c/error/errno">errno</a>, conditional statements, and in the R codebase the <a href="http://www.cplusplus.com/reference/csetjmp/longjmp/">longjmp</a> function.</p>
+<p><code>longjmp</code>, which stands for ‘long jump’ is a function that allows you to transfer the control flow of a program to another location elsewhere in the program. R uses long jumps extensively in its error handling routines. If an R function is executing and an error occurs, a long jump is called which ‘jumps’ the control flow into the error handling code.</p>
+<p>Crucially long jumps are <em>incompatible</em> with C++ <a href="https://isocpp.org/wiki/faq/dtors">destructors</a>. If a long jump occurs the destructors of any active C++ objects are not run, and therefore any resources (such as memory, file handles, etc.) managed by those objects will cause a <a href="https://en.wikipedia.org/wiki/Resource_leak">resource leak</a>.</p>
+<p>For example, the following unsafe code would leak the memory allocated in the C++ <code>std::vector</code> <code>x</code> when the R API function <code>Rf_allocVector()</code> fails (since you can’t create a vector of <code>-1</code> size).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1"></a><span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; x({<span class="fl">1.</span>, <span class="fl">2.</span>, <span class="fl">3.</span>});</span>
+<span id="cb10-2"><a href="#cb10-2"></a></span>
+<span id="cb10-3"><a href="#cb10-3"></a>SEXP y = PROTECT(Rf_allocVector(REALSXP, -<span class="dv">1</span>));</span></code></pre></div>
+<p>cpp11 provides two mechanisms to make interfacing with Rs C API and C++ code safer. <code>cpp11::unwind_protect()</code> takes a functional object (a C++11 lamdba function or <code>std::function</code>) and converts any C long jumps encountered to C++ exceptions. Now instead of a C long jump happening when the <code>Rf_allocVector()</code> call fails, a C++ exception occurs, which <em>does</em> trigger the <code>std::vector</code> destructor, so that memory is automatically released.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1"></a><span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; x({<span class="fl">1.</span>, <span class="fl">2.</span>, <span class="fl">3.</span>});</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a>SEXP y;</span>
+<span id="cb11-4"><a href="#cb11-4"></a>unwind_protect([]() {</span>
+<span id="cb11-5"><a href="#cb11-5"></a>  y = Rf_allocVector(REALSXP, -<span class="dv">1</span>);</span>
+<span id="cb11-6"><a href="#cb11-6"></a>})</span></code></pre></div>
+<p><code>cpp11::safe()</code> is a more concise way to wrap a particular R API function with <code>unwind_protect()</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1"></a><span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; x({<span class="fl">1.</span>, <span class="fl">2.</span>, <span class="fl">3.</span>});</span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a>SEXP y = PROTECT(safe[Rf_allocVector](REALSXP, -<span class="dv">1</span>));</span></code></pre></div>
+<p>Again using <code>cpp11::safe()</code> converts the C long jump to a C++ exception, so the memory is automatically released.</p>
+<p>cpp11 uses these mechanisms extensively internally when calling the R C API, which make cpp11 much safer against resource leaks than using Rcpp or calling Rs C API by hand.</p>
+</div>
+<div id="c-safety-1" class="section level3">
+<h3>C++ safety</h3>
+<p>In the inverse of C safety we also need to ensure that C++ exceptions do not reach the C call stack, as they will terminate R if that occurs. Like Rcpp, cpp11 automatically generates <code>try / catch</code> guards around registered functions to prevent this and also converts C++ exceptions into normal R errors. This is done without developer facing code changes.</p>
+<p>With both C and C++ sides of the coin covered we can safely use R’s C API and C++ code together with C++ objects without leaking resources.</p>
+</div>
+</div>
+<div id="altrep-support" class="section level2">
+<h2>Altrep support</h2>
+<p><a href="https://svn.r-project.org/R/branches/ALTREP/ALTREP.html">ALTREP</a> which stands for <strong>ALT</strong>ernative <strong>REP</strong>resntations is a feature introduced in R 3.5. ALTREP allows R internals and package authors to define alternative ways of representing data to R. One example of the use of altrep is the <code>:</code> operator.</p>
+<p>Prior to R 3.5 <code>:</code> generated a full vector for the entire sequence. e.g. <code>1:1000</code> would require 1000 individual values. As of R 3.5 this sequence is instead represented by an ALTREP vector, so <em>none</em> of the values actually exist in memory. Instead each time R access a particular value in the sequence that value is computed on-the-fly. This saves memory and excution time, and allows users to use sequences which would otherwise be too big to fit in memory.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="dv">1</span><span class="op">:</span><span class="fl">1e9</span></span></code></pre></div>
+<p>Because Rcpp predates the introduction of ALTREP, it does not support the interfaces needed to access ALTREP objects. This means the objects must be converted to normal R objects as soon as they are used by Rcpp.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1"></a><span class="pp">#include </span><span class="im">&quot;Rcpp.h&quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">// [[Rcpp::export]]</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>Rcpp::IntegerVector identity_rcpp(Rcpp::IntegerVector x) {</span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="cf">return</span> x;</span>
+<span id="cb14-6"><a href="#cb14-6"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>x &lt;-<span class="st"> </span><span class="kw">identity_rcpp</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">100000</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>lobstr<span class="op">::</span><span class="kw">obj_size</span>(x)</span></code></pre></div>
+<p>Whereas cpp11 objects preserve the ALTREP object.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11/integers.hpp&quot;</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3"></a>[[<span class="at">cpp11</span>::<span class="at">register</span>]]</span>
+<span id="cb16-4"><a href="#cb16-4"></a>cpp11::integers identity_cpp11(cpp11::integers x) {</span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="cf">return</span> x;</span>
+<span id="cb16-6"><a href="#cb16-6"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>y &lt;-<span class="st"> </span><span class="kw">identity_cpp11</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">100000</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>lobstr<span class="op">::</span><span class="kw">obj_size</span>(y)</span></code></pre></div>
+<div id="altrep-benchmarks" class="section level3">
+<h3>Altrep benchmarks</h3>
+<p>In these benchmarks note that Rcpp allocates memory for the ALTREP vectors. This is because Rcpp implicitly converts them into normal R vectors. cpp11 retains them as ALTREP vectors, so no additional memory is needed.</p>
+<p><code>foreach</code> and <code>accumulate</code> both use iterators that take advantage of <code>REAL_GET_REGION</code> to buffer queries. This makes them faster than naive C-style for loops with ALTREP vectors.</p>
+<p>The for2 case shows an optimization you can use if you know at compile-time that you won’t be dealing with ALTREP vectors. By specifying <code>false</code> to the second argument (<code>is_altrep</code>), you can disable the ALTREP support. This causes the ALTREP conditional code to be compiled out resulting in loop unrolling (and speeds) identical to that generated by Rcpp.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">library</span>(cpp11test)</span>
+<span id="cb18-2"><a href="#cb18-2"></a></span>
+<span id="cb18-3"><a href="#cb18-3"></a>cases &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="dt">len =</span> <span class="fl">3e6</span>,</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="dt">vector =</span> <span class="kw">c</span>(<span class="st">&quot;normal&quot;</span>, <span class="st">&quot;altrep&quot;</span>),</span>
+<span id="cb18-6"><a href="#cb18-6"></a>  <span class="dt">method =</span> <span class="kw">c</span>(<span class="st">&quot;for&quot;</span>, <span class="st">&quot;foreach&quot;</span>, <span class="st">&quot;accumulate&quot;</span>),</span>
+<span id="cb18-7"><a href="#cb18-7"></a>  <span class="dt">pkg =</span> <span class="kw">c</span>(<span class="st">&quot;cpp11&quot;</span>, <span class="st">&quot;rcpp&quot;</span>),</span>
+<span id="cb18-8"><a href="#cb18-8"></a>  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a>)</span>
+<span id="cb18-10"><a href="#cb18-10"></a></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co"># Add special case</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a>cases &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">list</span>(<span class="dt">len =</span> <span class="fl">3e6</span>, <span class="dt">vector =</span> <span class="st">&quot;normal&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;for2&quot;</span>, <span class="dt">pkg =</span> <span class="st">&quot;cpp11&quot;</span>), cases)</span>
+<span id="cb18-13"><a href="#cb18-13"></a></span>
+<span id="cb18-14"><a href="#cb18-14"></a>b_sum &lt;-<span class="st"> </span>bench<span class="op">::</span><span class="kw">press</span>(</span>
+<span id="cb18-15"><a href="#cb18-15"></a>  <span class="dt">.grid =</span> cases,</span>
+<span id="cb18-16"><a href="#cb18-16"></a>  {</span>
+<span id="cb18-17"><a href="#cb18-17"></a>    seq_real &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">as.numeric</span>(<span class="kw">seq_len</span>(x))</span>
+<span id="cb18-18"><a href="#cb18-18"></a>    funs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;normal&quot;</span> =<span class="st"> </span>rnorm, <span class="st">&quot;altrep&quot;</span> =<span class="st"> </span>seq_real)</span>
+<span id="cb18-19"><a href="#cb18-19"></a>    x &lt;-<span class="st"> </span>funs[[vector]](len)</span>
+<span id="cb18-20"><a href="#cb18-20"></a>    fun &lt;-<span class="st"> </span><span class="kw">match.fun</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%ssum_dbl_%s_&quot;</span>, <span class="kw">ifelse</span>(pkg <span class="op">==</span><span class="st"> &quot;cpp11&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="kw">paste0</span>(pkg, <span class="st">&quot;_&quot;</span>)), method))</span>
+<span id="cb18-21"><a href="#cb18-21"></a>    bench<span class="op">::</span><span class="kw">mark</span>(</span>
+<span id="cb18-22"><a href="#cb18-22"></a>      <span class="kw">fun</span>(x)</span>
+<span id="cb18-23"><a href="#cb18-23"></a>    )</span>
+<span id="cb18-24"><a href="#cb18-24"></a>  }</span>
+<span id="cb18-25"><a href="#cb18-25"></a>)[<span class="kw">c</span>(<span class="st">&quot;pkg&quot;</span>, <span class="st">&quot;method&quot;</span>, <span class="st">&quot;vector&quot;</span>, <span class="st">&quot;min&quot;</span>, <span class="st">&quot;median&quot;</span>, <span class="st">&quot;mem_alloc&quot;</span>, <span class="st">&quot;itr/sec&quot;</span>, <span class="st">&quot;n_gc&quot;</span>)]</span>
+<span id="cb18-26"><a href="#cb18-26"></a></span>
+<span id="cb18-27"><a href="#cb18-27"></a><span class="kw">saveRDS</span>(b_sum, <span class="st">&quot;sum.Rds&quot;</span>, <span class="dt">version =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">readRDS</span>(<span class="st">&quot;sum.Rds&quot;</span>))</span></code></pre></div>
+<p><a href="https://github.com/r-lib/cpp11/blob/master/cpp11test/src/sum.cpp">cpp11test/src/sum.cpp</a> contains the code ran in these benchmarks.</p>
+</div>
+</div>
+<div id="utf-8-everywhere" class="section level2">
+<h2>UTF-8 everywhere</h2>
+<p>R has complicated support for Unicode strings and non-ASCII code pages, whose behavior often differs substantially on different operating systems, particularly Windows. Correctly dealing with this is challenging and often feels like whack a mole.</p>
+<p>To combat this complexity cpp11 uses the <a href="http://utf8everywhere.org/">UTF-8 everywhere</a> philosophy. This means that whenever text data is converted from R data structures to C++ data structures by cpp11 the data is translated into UTF-8. Conversely any text data coming from C++ code is assumed to be UTF-8 and marked as such for R. Doing this universally avoids many locale specific issues when dealing with Unicode text.</p>
+<p>Concretely cpp11 always uses <code>Rf_translateCharUTF8()</code> when obtaining <code>const char*</code> from <code>CHRSXP</code> objects and uses <code>Rf_mkCharCE(, CE_UTF8)</code> when creating new <code>CHRSXP</code> objects from <code>const char*</code> inputs.</p>
+<!--TODO: unicode examples?-->
+</div>
+<div id="c11-features" class="section level2">
+<h2>C++11 features</h2>
+<p>C++11 provides a host of new features to the C++ language. cpp11 uses a number of these including</p>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/language/move_constructor">move semantics</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/header/type_traits">type traits</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/utility/initializer_list">initializer_list</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/language/parameter_pack">variadic templates / parameter packs</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/language/user_literal">user defined literals</a></li>
+<li><a href="https://en.cppreference.com/w/cpp/language/attributes">user defined attributes</a></li>
+</ul>
+</div>
+<div id="simpler-implementation" class="section level2">
+<h2>Simpler implementation</h2>
+<p>Rcpp is very ambitious, with a number of advanced features, including <a href="https://cran.r-project.org/package=Rcpp/vignettes/Rcpp-modules.pdf">modules</a>, <a href="https://cran.r-project.org/package=Rcpp/vignettes/Rcpp-sugar.pdf">sugar</a> and extensive support for <a href="https://CRAN.R-project.org/package=Rcpp/vignettes/Rcpp-attributes.pdf">attributes</a>. While these are useful features, many R packages do not use one or any of these advanced features. In addition the code needed to support these features is complex and can be challenging to maintain.</p>
+<p>cpp11 takes a more limited scope, providing only the set of r_vector wrappers for R vector types, coercion methods to and from C++ and the limited attributes necessary to support use in R packages.</p>
+<p>This limited scope allows the implementation to be much simpler, the headers in Rcpp 1.0.4 have 74,658 lines of code (excluding blank or commented lines) in 379 files. Some headers in Rcpp are automatically generated, removing these still gives you 25,249 lines of code in 357 files. In contrast the headers in cpp11 contain only 1,734 lines of code in 19 files.</p>
+<p>This reduction in complexity should make cpp11 an easier project to maintain and ensure correctness, particularly around interactions with the R garbage collector.</p>
+<!--TODO: mention rchk compatibility here?-->
+</div>
+<div id="compilation-speed" class="section level2">
+<h2>Compilation speed</h2>
+<p>Rcpp always bundles all of its headers together, which causes slow compilation times and high peak memory usage when compiling. The headers in cpp11 are more easily decoupled, so you only can include only the particular headers you actually use in a source file. This can significantly improve the compilation speed and memory usage to compile your package.</p>
+<p>Here are some real examples of the reduction in compile time and peak memory usage after converting packages to cpp11.</p>
+<table style="width:100%;">
+<colgroup>
+<col width="14%"></col>
+<col width="14%"></col>
+<col width="14%"></col>
+<col width="14%"></col>
+<col width="14%"></col>
+<col width="14%"></col>
+<col width="14%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>package</th>
+<th>Rcpp compile time</th>
+<th>cpp11 compile time</th>
+<th>Rcpp peak memory</th>
+<th>cpp11 peak memory</th>
+<th>Rcpp commit</th>
+<th>cpp11 commit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>haven</td>
+<td>17.42s</td>
+<td>7.13s</td>
+<td>428MB</td>
+<td>204MB</td>
+<td><a href="https://github.com/tidyverse/haven/compare/a3cf75a4...978cb034">a3cf75a4</a></td>
+<td><a href="https://github.com/tidyverse/haven/compare/a3cf75a4...978cb034">978cb034</a></td>
+</tr>
+<tr class="even">
+<td>readr</td>
+<td>124.13s</td>
+<td>81.08s</td>
+<td>969MB</td>
+<td>684MB</td>
+<td><a href="https://github.com/tidyverse/readr/compare/ec0d8989...aa89ff72">ec0d8989</a></td>
+<td><a href="https://github.com/tidyverse/readr/compare/ec0d8989...aa89ff72">aa89ff72</a></td>
+</tr>
+<tr class="odd">
+<td>roxygen2</td>
+<td>17.34s</td>
+<td>4.24s</td>
+<td>371MB</td>
+<td>109MB</td>
+<td><a href="https://github.com/r-lib/roxygen2/compare/6f081b75...e8e1e22d">6f081b75</a></td>
+<td><a href="https://github.com/r-lib/roxygen2/compare/6f081b75...e8e1e22d">e8e1e22d</a></td>
+</tr>
+<tr class="even">
+<td>tidyr</td>
+<td>14.25s</td>
+<td>3.34s</td>
+<td>363MB</td>
+<td>83MB</td>
+<td><a href="https://github.com/tidyverse/tidyr/compare/3899ed51...60f7c7d4">3899ed51</a></td>
+<td><a href="https://github.com/tidyverse/tidyr/compare/3899ed51...60f7c7d4">60f7c7d4</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="header-only" class="section level2">
+<h2>Header only</h2>
+<p>Rcpp has long been a <em>mostly</em> <a href="https://en.wikipedia.org/wiki/Header-only">header only</a> library, however is not a <em>completely</em> header only library. There have been <a href="https://github.com/tidyverse/dplyr/issues/2308">cases</a> when a package was first installed with version X of Rcpp, and then a newer version of Rcpp was later installed. Then when the original package X was loaded R would crash, because the <a href="https://en.wikipedia.org/wiki/Application_binary_interface">Application Binary Interface</a> of Rcpp had changed between the two versions.</p>
+<p>Because cpp11 consists of exclusively headers this issue does not occur.</p>
+</div>
+<div id="vendoring" class="section level2">
+<h2>Vendoring</h2>
+<p>In the go community the concept of <a href="https://go.googlesource.com/proposal/+/master/design/25719-go15vendor.md">vendoring</a> is widespread. Vendoring means that you copy the code for the dependencies into your project’s source tree. This ensures the dependency code is fixed and stable until it is updated. Because cpp11 is fully <a href="#header-only">header only</a> you can vendor the code in the same way. <code>cpp11::vendor_cpp11()</code> is provided to do this if you choose.</p>
+<p>Vendoring has advantages and drawbacks however. The advantage is that changes to the cpp11 project could never break your existing code. The drawbacks are both minor, your package size is now slightly larger, and major, you no longer get bugfixes and new features until you explicitly update cpp11.</p>
+<p>I think the majority of packages should use <code>LinkingTo: cpp11</code> and <em>not</em> vendor the cpp11 dependency. However, vendoring can be appropriate for certain situations.</p>
+</div>
+<div id="protection" class="section level2">
+<h2>Protection</h2>
+<p>cpp11 uses a custom double linked list data structure to track objects it is managing. This struture is much more efficient for large numbers of objects than using <code>R_PreserveObject()</code> / <code>R_ReleaseObjects()</code> as is done in Rcpp.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">library</span>(cpp11test)</span>
+<span id="cb20-2"><a href="#cb20-2"></a>grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">len =</span> <span class="kw">c</span>(<span class="dv">10</span> <span class="op">^</span><span class="st"> </span>(<span class="dv">2</span><span class="op">:</span><span class="dv">5</span>), <span class="fl">2e5</span>), <span class="dt">pkg =</span> <span class="kw">c</span>(<span class="st">&quot;cpp11&quot;</span>, <span class="st">&quot;rcpp&quot;</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a>b_release &lt;-<span class="st"> </span>bench<span class="op">::</span><span class="kw">press</span>(<span class="dt">.grid =</span> grid,</span>
+<span id="cb20-4"><a href="#cb20-4"></a>  {</span>
+<span id="cb20-5"><a href="#cb20-5"></a>    fun =<span class="st"> </span><span class="kw">match.fun</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%s_release_&quot;</span>, pkg))</span>
+<span id="cb20-6"><a href="#cb20-6"></a>    bench<span class="op">::</span><span class="kw">mark</span>(</span>
+<span id="cb20-7"><a href="#cb20-7"></a>      <span class="kw">fun</span>(len),</span>
+<span id="cb20-8"><a href="#cb20-8"></a>      <span class="dt">iterations =</span> <span class="dv">1</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a>    )</span>
+<span id="cb20-10"><a href="#cb20-10"></a>  }</span>
+<span id="cb20-11"><a href="#cb20-11"></a>)[<span class="kw">c</span>(<span class="st">&quot;len&quot;</span>, <span class="st">&quot;pkg&quot;</span>, <span class="st">&quot;min&quot;</span>)]</span>
+<span id="cb20-12"><a href="#cb20-12"></a><span class="kw">saveRDS</span>(b_release, <span class="st">&quot;release.Rds&quot;</span>, <span class="dt">version =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p>This plot shows the average time to protect and release a given object is essentially constant for cpp11. Whereas it is linear or worse with the number of objects being tracked for Rcpp.</p>
+</div>
+<div id="growing-vectors" class="section level2">
+<h2>Growing vectors</h2>
+<p>One major difference in Rcpp and cpp11 is how vectors are grown. Rcpp vectors have a <code>push_back()</code> method, but unlike <code>std::vector()</code> no additional space is reserved when pushing. This makes calling <code>push_back()</code> repeatably very expensive, as the entire vector has to be copied each call.</p>
+<p>In contrast <code>cpp11</code> vectors grow efficiently, reserving extra space. Because of this you can do ~10,000,000 vector appends with cpp11 in approximately the same amount of time that Rcpp does 10,000, as this benchmark demonstrates.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">len =</span> <span class="dv">10</span> <span class="op">^</span><span class="st"> </span>(<span class="dv">0</span><span class="op">:</span><span class="dv">7</span>), <span class="dt">pkg =</span> <span class="st">&quot;cpp11&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb21-2"><a href="#cb21-2"></a>grid &lt;-<span class="st"> </span><span class="kw">rbind</span>(</span>
+<span id="cb21-3"><a href="#cb21-3"></a>  grid,</span>
+<span id="cb21-4"><a href="#cb21-4"></a>  <span class="kw">expand.grid</span>(<span class="dt">len =</span> <span class="dv">10</span> <span class="op">^</span><span class="st"> </span>(<span class="dv">0</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">pkg =</span> <span class="st">&quot;rcpp&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb21-5"><a href="#cb21-5"></a>)</span>
+<span id="cb21-6"><a href="#cb21-6"></a>b_grow &lt;-<span class="st"> </span>bench<span class="op">::</span><span class="kw">press</span>(<span class="dt">.grid =</span> grid,</span>
+<span id="cb21-7"><a href="#cb21-7"></a>  {</span>
+<span id="cb21-8"><a href="#cb21-8"></a>    fun =<span class="st"> </span><span class="kw">match.fun</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%sgrow_&quot;</span>, <span class="kw">ifelse</span>(pkg <span class="op">==</span><span class="st"> &quot;cpp11&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="kw">paste0</span>(pkg, <span class="st">&quot;_&quot;</span>))))</span>
+<span id="cb21-9"><a href="#cb21-9"></a>    bench<span class="op">::</span><span class="kw">mark</span>(</span>
+<span id="cb21-10"><a href="#cb21-10"></a>      <span class="kw">fun</span>(len)</span>
+<span id="cb21-11"><a href="#cb21-11"></a>    )</span>
+<span id="cb21-12"><a href="#cb21-12"></a>  }</span>
+<span id="cb21-13"><a href="#cb21-13"></a>)[<span class="kw">c</span>(<span class="st">&quot;len&quot;</span>, <span class="st">&quot;pkg&quot;</span>, <span class="st">&quot;min&quot;</span>, <span class="st">&quot;mem_alloc&quot;</span>, <span class="st">&quot;n_itr&quot;</span>, <span class="st">&quot;n_gc&quot;</span>)]</span>
+<span id="cb21-14"><a href="#cb21-14"></a><span class="kw">saveRDS</span>(b_grow, <span class="st">&quot;growth.Rds&quot;</span>, <span class="dt">version =</span> <span class="dv">2</span>)</span></code></pre></div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Rcpp has been and will continue to be widely successful. cpp11 is a alternative implementation of C++ bindings to R that chooses different design trade-offs and features. Both packages can co-exist (even be used in the same package!) and continue to enrich the R community.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

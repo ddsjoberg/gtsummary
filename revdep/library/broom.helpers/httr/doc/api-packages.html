@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Best practices for API packages</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Best practices for API packages</h1>
+
+
+
+<p>So you want to write an R client for a web API? This document walks through the key issues involved in writing API wrappers in R. If you’re new to working with web APIs, you may want to start by reading “<a href="https://zapier.com/learn/apis">An introduction to APIs</a>” by zapier.</p>
+<div id="overall-design" class="section level2">
+<h2>Overall design</h2>
+<p>APIs vary widely. Before starting to code, it is important to understand how the API you are working with handles important issues so that you can implement a complete and coherent R client for the API.</p>
+<p>The key features of any API are the structure of the requests and the structure of the responses. An HTTP request consists of the following parts:</p>
+<ol style="list-style-type: decimal">
+<li>HTTP verb (<code>GET</code>, <code>POST</code>, <code>DELETE</code>, etc.)</li>
+<li>The base URL for the API</li>
+<li>The URL path or endpoint</li>
+<li>URL query arguments (e.g., <code>?foo=bar</code>)</li>
+<li>Optional headers</li>
+<li>An optional request body</li>
+</ol>
+<p>An API package needs to be able to generate these components in order to perform the desired API call, which will typically involve some sort of authentication.</p>
+<p>For example, to request that the GitHub API provides a list of all issues for the httr repo, we send an HTTP request that looks like:</p>
+<pre><code>-&gt; GET /repos/hadley/httr HTTP/1.1
+-&gt; Host: api.github.com
+-&gt; Accept: application/vnd.github.v3+json</code></pre>
+<p>Here we’re using a <code>GET</code> request to the host <code>api.github.com</code>. The url is <code>/repos/hadley/httr</code>, and we send an accept header that tells GitHub what sort of data we want.</p>
+<p>In response to this request, the API will return an HTTP response that includes:</p>
+<ol style="list-style-type: decimal">
+<li>An HTTP status code.</li>
+<li>Headers, key-value pairs.</li>
+<li>A body typically consisting of XML, JSON, plain text, HTML, or some kind of binary representation.</li>
+</ol>
+<p>An API client needs to parse these responses, turning API errors into R errors, and return a useful object to the end user. For the previous HTTP request, GitHub returns:</p>
+<pre><code>&lt;- HTTP/1.1 200 OK
+&lt;- Server: GitHub.com
+&lt;- Content-Type: application/json; charset=utf-8
+&lt;- X-RateLimit-Limit: 5000
+&lt;- X-RateLimit-Remaining: 4998
+&lt;- X-RateLimit-Reset: 1459554901
+&lt;- 
+&lt;- {
+&lt;-   &quot;id&quot;: 2756403,
+&lt;-   &quot;name&quot;: &quot;httr&quot;,
+&lt;-   &quot;full_name&quot;: &quot;hadley/httr&quot;,
+&lt;-   &quot;owner&quot;: {
+&lt;-     &quot;login&quot;: &quot;hadley&quot;,
+&lt;-     &quot;id&quot;: 4196,
+&lt;-     &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/4196?v=3&quot;,
+&lt;-     ...
+&lt;-   },
+&lt;-   &quot;private&quot;: false,
+&lt;-   &quot;html_url&quot;: &quot;https://github.com/hadley/httr&quot;,
+&lt;-   &quot;description&quot;: &quot;httr: a friendly http package for R&quot;,
+&lt;-   &quot;fork&quot;: false,
+&lt;-   &quot;url&quot;: &quot;https://api.github.com/repos/hadley/httr&quot;,
+&lt;-   ...
+&lt;-   &quot;network_count&quot;: 1368,
+&lt;-   &quot;subscribers_count&quot;: 64
+&lt;- }</code></pre>
+<p>Designing a good API client requires identifying how each of these API features is used to compose a request and what type of response is expected for each. It’s best practice to insulate the end user from <em>how</em> the API works so they only need to understand how to use an R function, not the details of how APIs work. It’s your job to suffer so that others don’t have to!</p>
+</div>
+<div id="first-steps" class="section level2">
+<h2>First steps</h2>
+<div id="send-a-simple-request" class="section level3">
+<h3>Send a simple request</h3>
+<p>First, find a simple API endpoint that doesn’t require authentication: this lets you get the basics working before tackling the complexities of authentication. For this example, we’ll use the list of httr issues which requires sending a GET request to <code>repos/hadley/httr</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(httr)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>github_api &lt;-<span class="st"> </span><span class="cf">function</span>(path) {</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  url &lt;-<span class="st"> </span><span class="kw">modify_url</span>(<span class="st">&quot;https://api.github.com&quot;</span>, <span class="dt">path =</span> path)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="kw">GET</span>(url)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>}</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>resp &lt;-<span class="st"> </span><span class="kw">github_api</span>(<span class="st">&quot;/repos/hadley/httr&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>resp</span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; Response [https://api.github.com/repositories/2756403]</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt;   Date: 2020-07-20 14:19</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt;   Status: 200</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt;   Content-Type: application/json; charset=utf-8</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt;   Size: 6.07 kB</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt; {</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt;   &quot;id&quot;: 2756403,</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt;   &quot;node_id&quot;: &quot;MDEwOlJlcG9zaXRvcnkyNzU2NDAz&quot;,</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt;   &quot;name&quot;: &quot;httr&quot;,</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt;   &quot;full_name&quot;: &quot;r-lib/httr&quot;,</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt;   &quot;private&quot;: false,</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt;   &quot;owner&quot;: {</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt;     &quot;login&quot;: &quot;r-lib&quot;,</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt;     &quot;id&quot;: 22618716,</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt;     &quot;node_id&quot;: &quot;MDEyOk9yZ2FuaXphdGlvbjIyNjE4NzE2&quot;,</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#&gt; ...</span></span></code></pre></div>
+</div>
+<div id="parse-the-response" class="section level3">
+<h3>Parse the response</h3>
+<p>Next, you need to take the response returned by the API and turn it into a useful object. Any API will return an HTTP response that consists of headers and a body. While the response can come in multiple forms (see above), two of the most common structured formats are XML and JSON.</p>
+<p>Note that while most APIs will return only one or the other, some, like the colour lovers API, allow you to choose which one with a url parameter:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">GET</span>(<span class="st">&quot;http://www.colourlovers.com/api/color/6B4106?format=xml&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; Response [http://www.colourlovers.com/api/color/6B4106?format=xml]</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt;   Date: 2020-07-20 14:19</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt;   Status: 200</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt;   Content-Type: text/xml; charset=utf-8</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt;   Size: 1.8 kB</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; &lt;colors numResults=&quot;1&quot; totalResults=&quot;10075145&quot;&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt;  &lt;color&gt;</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt;      &lt;id&gt;903893&lt;/id&gt;</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt;      &lt;title&gt;&lt;![CDATA[wet dirt]]&gt;&lt;/title&gt;</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt;      &lt;userName&gt;&lt;![CDATA[jessicabrown]]&gt;&lt;/userName&gt;</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt;      &lt;numViews&gt;597&lt;/numViews&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt;      &lt;numVotes&gt;1&lt;/numVotes&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt;      &lt;numComments&gt;0&lt;/numComments&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="co">#&gt;      &lt;numHearts&gt;0&lt;/numHearts&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="co">#&gt; ...</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="kw">GET</span>(<span class="st">&quot;http://www.colourlovers.com/api/color/6B4106?format=json&quot;</span>)</span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="co">#&gt; Response [http://www.colourlovers.com/api/color/6B4106?format=json]</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="co">#&gt;   Date: 2020-07-20 14:19</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="co">#&gt;   Status: 200</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="co">#&gt;   Content-Type: application/json; charset=utf-8</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="co">#&gt;   Size: 1.43 kB</span></span></code></pre></div>
+<p>Others use <a href="http://en.wikipedia.org/wiki/Content_negotiation">content negotiation</a> to determine what sort of data to send back. If the API you’re wrapping does this, then you’ll need to include one of <code>accept_json()</code> and <code>accept_xml()</code> in your request.</p>
+<p>If you have a choice, choose json: it’s usually much easier to work with than xml.</p>
+<p>Most APIs will return most or all useful information in the response body, which can be accessed using <code>content()</code>. To determine what type of information is returned, you can use <code>http_type()</code></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">http_type</span>(resp)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [1] &quot;application/json&quot;</span></span></code></pre></div>
+<p>I recommend checking that the type is as you expect in your helper function. This will ensure that you get a clear error message if the API changes:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>github_api &lt;-<span class="st"> </span><span class="cf">function</span>(path) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  url &lt;-<span class="st"> </span><span class="kw">modify_url</span>(<span class="st">&quot;https://api.github.com&quot;</span>, <span class="dt">path =</span> path)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  </span>
+<span id="cb6-4"><a href="#cb6-4"></a>  resp &lt;-<span class="st"> </span><span class="kw">GET</span>(url)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="cf">if</span> (<span class="kw">http_type</span>(resp) <span class="op">!=</span><span class="st"> &quot;application/json&quot;</span>) {</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    <span class="kw">stop</span>(<span class="st">&quot;API did not return json&quot;</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  }</span>
+<span id="cb6-8"><a href="#cb6-8"></a>  </span>
+<span id="cb6-9"><a href="#cb6-9"></a>  resp</span>
+<span id="cb6-10"><a href="#cb6-10"></a>}</span></code></pre></div>
+<p>NB: some poorly written APIs will say the content is type A, but it will actually be type B. In this case you should complain to the API authors, and until they fix the problem, simply drop the check for content type.</p>
+<p>Next we need to parse the output into an R object. httr provides some default parsers with <code>content(..., as = &quot;auto&quot;)</code> but I don’t recommend using them inside a package. Instead it’s better to explicitly parse it yourself:</p>
+<ol style="list-style-type: decimal">
+<li>To parse json, use <code>jsonlite</code> package.</li>
+<li>To parse xml, use the <code>xml2</code> package.</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>github_api &lt;-<span class="st"> </span><span class="cf">function</span>(path) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  url &lt;-<span class="st"> </span><span class="kw">modify_url</span>(<span class="st">&quot;https://api.github.com&quot;</span>, <span class="dt">path =</span> path)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  </span>
+<span id="cb7-4"><a href="#cb7-4"></a>  resp &lt;-<span class="st"> </span><span class="kw">GET</span>(url)</span>
+<span id="cb7-5"><a href="#cb7-5"></a>  <span class="cf">if</span> (<span class="kw">http_type</span>(resp) <span class="op">!=</span><span class="st"> &quot;application/json&quot;</span>) {</span>
+<span id="cb7-6"><a href="#cb7-6"></a>    <span class="kw">stop</span>(<span class="st">&quot;API did not return json&quot;</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb7-7"><a href="#cb7-7"></a>  }</span>
+<span id="cb7-8"><a href="#cb7-8"></a>  </span>
+<span id="cb7-9"><a href="#cb7-9"></a>  jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">content</span>(resp, <span class="st">&quot;text&quot;</span>), <span class="dt">simplifyVector =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb7-10"><a href="#cb7-10"></a>}</span></code></pre></div>
+</div>
+<div id="return-a-helpful-object" class="section level3">
+<h3>Return a helpful object</h3>
+<p>Rather than simply returning the response as a list, I think it’s a good practice to make a simple S3 object. That way you can return the response and parsed object, and provide a nice print method. This will make debugging later on much much much more pleasant.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>github_api &lt;-<span class="st"> </span><span class="cf">function</span>(path) {</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  url &lt;-<span class="st"> </span><span class="kw">modify_url</span>(<span class="st">&quot;https://api.github.com&quot;</span>, <span class="dt">path =</span> path)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  </span>
+<span id="cb8-4"><a href="#cb8-4"></a>  resp &lt;-<span class="st"> </span><span class="kw">GET</span>(url)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="cf">if</span> (<span class="kw">http_type</span>(resp) <span class="op">!=</span><span class="st"> &quot;application/json&quot;</span>) {</span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="kw">stop</span>(<span class="st">&quot;API did not return json&quot;</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a>  }</span>
+<span id="cb8-8"><a href="#cb8-8"></a>  </span>
+<span id="cb8-9"><a href="#cb8-9"></a>  parsed &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">content</span>(resp, <span class="st">&quot;text&quot;</span>), <span class="dt">simplifyVector =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb8-10"><a href="#cb8-10"></a>  </span>
+<span id="cb8-11"><a href="#cb8-11"></a>  <span class="kw">structure</span>(</span>
+<span id="cb8-12"><a href="#cb8-12"></a>    <span class="kw">list</span>(</span>
+<span id="cb8-13"><a href="#cb8-13"></a>      <span class="dt">content =</span> parsed,</span>
+<span id="cb8-14"><a href="#cb8-14"></a>      <span class="dt">path =</span> path,</span>
+<span id="cb8-15"><a href="#cb8-15"></a>      <span class="dt">response =</span> resp</span>
+<span id="cb8-16"><a href="#cb8-16"></a>    ),</span>
+<span id="cb8-17"><a href="#cb8-17"></a>    <span class="dt">class =</span> <span class="st">&quot;github_api&quot;</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>  )</span>
+<span id="cb8-19"><a href="#cb8-19"></a>}</span>
+<span id="cb8-20"><a href="#cb8-20"></a></span>
+<span id="cb8-21"><a href="#cb8-21"></a>print.github_api &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</span>
+<span id="cb8-22"><a href="#cb8-22"></a>  <span class="kw">cat</span>(<span class="st">&quot;&lt;GitHub &quot;</span>, x<span class="op">$</span>path, <span class="st">&quot;&gt;</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb8-23"><a href="#cb8-23"></a>  <span class="kw">str</span>(x<span class="op">$</span>content)</span>
+<span id="cb8-24"><a href="#cb8-24"></a>  <span class="kw">invisible</span>(x)</span>
+<span id="cb8-25"><a href="#cb8-25"></a>}</span>
+<span id="cb8-26"><a href="#cb8-26"></a></span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="kw">github_api</span>(<span class="st">&quot;/users/hadley&quot;</span>)</span>
+<span id="cb8-28"><a href="#cb8-28"></a><span class="co">#&gt; &lt;GitHub /users/hadley&gt;</span></span>
+<span id="cb8-29"><a href="#cb8-29"></a><span class="co">#&gt; List of 32</span></span>
+<span id="cb8-30"><a href="#cb8-30"></a><span class="co">#&gt;  $ login              : chr &quot;hadley&quot;</span></span>
+<span id="cb8-31"><a href="#cb8-31"></a><span class="co">#&gt;  $ id                 : int 4196</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a><span class="co">#&gt;  $ node_id            : chr &quot;MDQ6VXNlcjQxOTY=&quot;</span></span>
+<span id="cb8-33"><a href="#cb8-33"></a><span class="co">#&gt;  $ avatar_url         : chr &quot;https://avatars3.githubusercontent.com/u/4196?v=4&quot;</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a><span class="co">#&gt;  $ gravatar_id        : chr &quot;&quot;</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a><span class="co">#&gt;  $ url                : chr &quot;https://api.github.com/users/hadley&quot;</span></span>
+<span id="cb8-36"><a href="#cb8-36"></a><span class="co">#&gt;  $ html_url           : chr &quot;https://github.com/hadley&quot;</span></span>
+<span id="cb8-37"><a href="#cb8-37"></a><span class="co">#&gt;  $ followers_url      : chr &quot;https://api.github.com/users/hadley/followers&quot;</span></span>
+<span id="cb8-38"><a href="#cb8-38"></a><span class="co">#&gt;  $ following_url      : chr &quot;https://api.github.com/users/hadley/following{/other_user}&quot;</span></span>
+<span id="cb8-39"><a href="#cb8-39"></a><span class="co">#&gt;  $ gists_url          : chr &quot;https://api.github.com/users/hadley/gists{/gist_id}&quot;</span></span>
+<span id="cb8-40"><a href="#cb8-40"></a><span class="co">#&gt;  $ starred_url        : chr &quot;https://api.github.com/users/hadley/starred{/owner}{/repo}&quot;</span></span>
+<span id="cb8-41"><a href="#cb8-41"></a><span class="co">#&gt;  $ subscriptions_url  : chr &quot;https://api.github.com/users/hadley/subscriptions&quot;</span></span>
+<span id="cb8-42"><a href="#cb8-42"></a><span class="co">#&gt;  $ organizations_url  : chr &quot;https://api.github.com/users/hadley/orgs&quot;</span></span>
+<span id="cb8-43"><a href="#cb8-43"></a><span class="co">#&gt;  $ repos_url          : chr &quot;https://api.github.com/users/hadley/repos&quot;</span></span>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="co">#&gt;  $ events_url         : chr &quot;https://api.github.com/users/hadley/events{/privacy}&quot;</span></span>
+<span id="cb8-45"><a href="#cb8-45"></a><span class="co">#&gt;  $ received_events_url: chr &quot;https://api.github.com/users/hadley/received_events&quot;</span></span>
+<span id="cb8-46"><a href="#cb8-46"></a><span class="co">#&gt;  $ type               : chr &quot;User&quot;</span></span>
+<span id="cb8-47"><a href="#cb8-47"></a><span class="co">#&gt;  $ site_admin         : logi FALSE</span></span>
+<span id="cb8-48"><a href="#cb8-48"></a><span class="co">#&gt;  $ name               : chr &quot;Hadley Wickham&quot;</span></span>
+<span id="cb8-49"><a href="#cb8-49"></a><span class="co">#&gt;  $ company            : chr &quot;@rstudio &quot;</span></span>
+<span id="cb8-50"><a href="#cb8-50"></a><span class="co">#&gt;  $ blog               : chr &quot;http://hadley.nz&quot;</span></span>
+<span id="cb8-51"><a href="#cb8-51"></a><span class="co">#&gt;  $ location           : chr &quot;Houston, TX&quot;</span></span>
+<span id="cb8-52"><a href="#cb8-52"></a><span class="co">#&gt;  $ email              : NULL</span></span>
+<span id="cb8-53"><a href="#cb8-53"></a><span class="co">#&gt;  $ hireable           : NULL</span></span>
+<span id="cb8-54"><a href="#cb8-54"></a><span class="co">#&gt;  $ bio                : chr &quot;Chief Scientist at @rstudio&quot;</span></span>
+<span id="cb8-55"><a href="#cb8-55"></a><span class="co">#&gt;  $ twitter_username   : chr &quot;hadleywickham&quot;</span></span>
+<span id="cb8-56"><a href="#cb8-56"></a><span class="co">#&gt;  $ public_repos       : int 272</span></span>
+<span id="cb8-57"><a href="#cb8-57"></a><span class="co">#&gt;  $ public_gists       : int 175</span></span>
+<span id="cb8-58"><a href="#cb8-58"></a><span class="co">#&gt;  $ followers          : int 19041</span></span>
+<span id="cb8-59"><a href="#cb8-59"></a><span class="co">#&gt;  $ following          : int 6</span></span>
+<span id="cb8-60"><a href="#cb8-60"></a><span class="co">#&gt;  $ created_at         : chr &quot;2008-04-01T14:47:36Z&quot;</span></span>
+<span id="cb8-61"><a href="#cb8-61"></a><span class="co">#&gt;  $ updated_at         : chr &quot;2020-07-20T12:31:14Z&quot;</span></span></code></pre></div>
+<p>The API might return invalid data, but this should be rare, so you can just rely on the parser to provide a useful error message.</p>
+</div>
+<div id="turn-api-errors-into-r-errors" class="section level3">
+<h3>Turn API errors into R errors</h3>
+<p>Next, you need to make sure that your API wrapper throws an error if the request failed. Using a web API introduces additional possible points of failure into R code aside from those occurring in R itself. These include:</p>
+<ul>
+<li>Client-side exceptions</li>
+<li>Network / communication exceptions</li>
+<li>Server-side exceptions</li>
+</ul>
+<p>You need to make sure these are all converted into regular R errors. You can figure out if there’s a problem with <code>http_error()</code>, which checks the HTTP status code. Status codes in the 400 range usually mean that you’ve done something wrong. Status codes in the 500 range typically mean that something has gone wrong on the server side.</p>
+<p>Often the API will provide information about the error in the body of the response: you should use this where available. If the API returns special errors for common problems, you might want to provide more detail in the error. For example, if you run out of requests and are <a href="https://developer.github.com/v3/#rate-limiting">rate limited</a> you might want to tell the user how long to wait until they can make the next request (or even automatically wait that long!).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>github_api &lt;-<span class="st"> </span><span class="cf">function</span>(path) {</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  url &lt;-<span class="st"> </span><span class="kw">modify_url</span>(<span class="st">&quot;https://api.github.com&quot;</span>, <span class="dt">path =</span> path)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>  </span>
+<span id="cb9-4"><a href="#cb9-4"></a>  resp &lt;-<span class="st"> </span><span class="kw">GET</span>(url)</span>
+<span id="cb9-5"><a href="#cb9-5"></a>  <span class="cf">if</span> (<span class="kw">http_type</span>(resp) <span class="op">!=</span><span class="st"> &quot;application/json&quot;</span>) {</span>
+<span id="cb9-6"><a href="#cb9-6"></a>    <span class="kw">stop</span>(<span class="st">&quot;API did not return json&quot;</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>  }</span>
+<span id="cb9-8"><a href="#cb9-8"></a>  </span>
+<span id="cb9-9"><a href="#cb9-9"></a>  parsed &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">content</span>(resp, <span class="st">&quot;text&quot;</span>), <span class="dt">simplifyVector =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb9-10"><a href="#cb9-10"></a>  </span>
+<span id="cb9-11"><a href="#cb9-11"></a>  <span class="cf">if</span> (<span class="kw">http_error</span>(resp)) {</span>
+<span id="cb9-12"><a href="#cb9-12"></a>    <span class="kw">stop</span>(</span>
+<span id="cb9-13"><a href="#cb9-13"></a>      <span class="kw">sprintf</span>(</span>
+<span id="cb9-14"><a href="#cb9-14"></a>        <span class="st">&quot;GitHub API request failed [%s]</span><span class="ch">\n</span><span class="st">%s</span><span class="ch">\n</span><span class="st">&lt;%s&gt;&quot;</span>, </span>
+<span id="cb9-15"><a href="#cb9-15"></a>        <span class="kw">status_code</span>(resp),</span>
+<span id="cb9-16"><a href="#cb9-16"></a>        parsed<span class="op">$</span>message,</span>
+<span id="cb9-17"><a href="#cb9-17"></a>        parsed<span class="op">$</span>documentation_url</span>
+<span id="cb9-18"><a href="#cb9-18"></a>      ),</span>
+<span id="cb9-19"><a href="#cb9-19"></a>      <span class="dt">call. =</span> <span class="ot">FALSE</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a>    )</span>
+<span id="cb9-21"><a href="#cb9-21"></a>  }</span>
+<span id="cb9-22"><a href="#cb9-22"></a>  </span>
+<span id="cb9-23"><a href="#cb9-23"></a>  <span class="kw">structure</span>(</span>
+<span id="cb9-24"><a href="#cb9-24"></a>    <span class="kw">list</span>(</span>
+<span id="cb9-25"><a href="#cb9-25"></a>      <span class="dt">content =</span> parsed,</span>
+<span id="cb9-26"><a href="#cb9-26"></a>      <span class="dt">path =</span> path,</span>
+<span id="cb9-27"><a href="#cb9-27"></a>      <span class="dt">response =</span> resp</span>
+<span id="cb9-28"><a href="#cb9-28"></a>    ),</span>
+<span id="cb9-29"><a href="#cb9-29"></a>    <span class="dt">class =</span> <span class="st">&quot;github_api&quot;</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a>  )</span>
+<span id="cb9-31"><a href="#cb9-31"></a>}</span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="kw">github_api</span>(<span class="st">&quot;/user/hadley&quot;</span>)</span>
+<span id="cb9-33"><a href="#cb9-33"></a><span class="co">#&gt; Error: GitHub API request failed [404]</span></span>
+<span id="cb9-34"><a href="#cb9-34"></a><span class="co">#&gt; Not Found</span></span>
+<span id="cb9-35"><a href="#cb9-35"></a><span class="co">#&gt; &lt;https://developer.github.com/v3/users/#get-a-single-user&gt;</span></span></code></pre></div>
+<blockquote>
+<p>Some poorly written APIs will return different types of response based on whether or not the request succeeded or failed. If your API does this you’ll need to make your request function check the <code>status_code()</code> before parsing the response.</p>
+</blockquote>
+<p>For many APIs, the common approach is to retry API calls that return something in the 500 range. However, when doing this, it’s <strong>extremely</strong> important to make sure to do this with some form of exponential backoff: if something’s wrong on the server-side, hammering the server with retries may make things worse, and may lead to you exhausting quota (or hitting other sorts of rate limits). A common policy is to retry up to 5 times, starting at 1s, and each time doubling and adding a small amount of jitter (plus or minus up to, say, 5% of the current wait time).</p>
+</div>
+<div id="set-a-user-agent" class="section level3">
+<h3>Set a user agent</h3>
+<p>While we’re in this function, there’s one important header that you should set for every API wrapper: the user agent. The user agent is a string used to identify the client. This is most useful for the API owner as it allows them to see who is using the API. It’s also useful for you if you have a contact on the inside as it often makes it easier for them to pull your requests from their logs and see what’s going wrong. If you’re hitting a commercial API, this also makes it easier for internal R advocates to see how many people are using their API via R and hopefully assign more resources.</p>
+<p>A good default for an R API package wrapper is to make it the URL to your GitHub repo:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>ua &lt;-<span class="st"> </span><span class="kw">user_agent</span>(<span class="st">&quot;http://github.com/hadley/httr&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>ua</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; &lt;request&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; Options:</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; * useragent: http://github.com/hadley/httr</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a>github_api &lt;-<span class="st"> </span><span class="cf">function</span>(path) {</span>
+<span id="cb10-8"><a href="#cb10-8"></a>  url &lt;-<span class="st"> </span><span class="kw">modify_url</span>(<span class="st">&quot;https://api.github.com&quot;</span>, <span class="dt">path =</span> path)</span>
+<span id="cb10-9"><a href="#cb10-9"></a>  </span>
+<span id="cb10-10"><a href="#cb10-10"></a>  resp &lt;-<span class="st"> </span><span class="kw">GET</span>(url, ua)</span>
+<span id="cb10-11"><a href="#cb10-11"></a>  <span class="cf">if</span> (<span class="kw">http_type</span>(resp) <span class="op">!=</span><span class="st"> &quot;application/json&quot;</span>) {</span>
+<span id="cb10-12"><a href="#cb10-12"></a>    <span class="kw">stop</span>(<span class="st">&quot;API did not return json&quot;</span>, <span class="dt">call. =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb10-13"><a href="#cb10-13"></a>  }</span>
+<span id="cb10-14"><a href="#cb10-14"></a>  </span>
+<span id="cb10-15"><a href="#cb10-15"></a>  parsed &lt;-<span class="st"> </span>jsonlite<span class="op">::</span><span class="kw">fromJSON</span>(<span class="kw">content</span>(resp, <span class="st">&quot;text&quot;</span>), <span class="dt">simplifyVector =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb10-16"><a href="#cb10-16"></a>  </span>
+<span id="cb10-17"><a href="#cb10-17"></a>  <span class="cf">if</span> (<span class="kw">status_code</span>(resp) <span class="op">!=</span><span class="st"> </span><span class="dv">200</span>) {</span>
+<span id="cb10-18"><a href="#cb10-18"></a>    <span class="kw">stop</span>(</span>
+<span id="cb10-19"><a href="#cb10-19"></a>      <span class="kw">sprintf</span>(</span>
+<span id="cb10-20"><a href="#cb10-20"></a>        <span class="st">&quot;GitHub API request failed [%s]</span><span class="ch">\n</span><span class="st">%s</span><span class="ch">\n</span><span class="st">&lt;%s&gt;&quot;</span>, </span>
+<span id="cb10-21"><a href="#cb10-21"></a>        <span class="kw">status_code</span>(resp),</span>
+<span id="cb10-22"><a href="#cb10-22"></a>        parsed<span class="op">$</span>message,</span>
+<span id="cb10-23"><a href="#cb10-23"></a>        parsed<span class="op">$</span>documentation_url</span>
+<span id="cb10-24"><a href="#cb10-24"></a>      ),</span>
+<span id="cb10-25"><a href="#cb10-25"></a>      <span class="dt">call. =</span> <span class="ot">FALSE</span></span>
+<span id="cb10-26"><a href="#cb10-26"></a>    )</span>
+<span id="cb10-27"><a href="#cb10-27"></a>  }</span>
+<span id="cb10-28"><a href="#cb10-28"></a>  </span>
+<span id="cb10-29"><a href="#cb10-29"></a>  <span class="kw">structure</span>(</span>
+<span id="cb10-30"><a href="#cb10-30"></a>    <span class="kw">list</span>(</span>
+<span id="cb10-31"><a href="#cb10-31"></a>      <span class="dt">content =</span> parsed,</span>
+<span id="cb10-32"><a href="#cb10-32"></a>      <span class="dt">path =</span> path,</span>
+<span id="cb10-33"><a href="#cb10-33"></a>      <span class="dt">response =</span> resp</span>
+<span id="cb10-34"><a href="#cb10-34"></a>    ),</span>
+<span id="cb10-35"><a href="#cb10-35"></a>    <span class="dt">class =</span> <span class="st">&quot;github_api&quot;</span></span>
+<span id="cb10-36"><a href="#cb10-36"></a>  )</span>
+<span id="cb10-37"><a href="#cb10-37"></a>}</span></code></pre></div>
+</div>
+<div id="passing-parameters" class="section level3">
+<h3>Passing parameters</h3>
+<p>Most APIs work by executing an HTTP method on a specified URL with some additional parameters. These parameters can be specified in a number of ways, including in the URL path, in URL query arguments, in HTTP headers, and in the request body itself. These parameters can be controlled using httr functions:</p>
+<ol style="list-style-type: decimal">
+<li>URL path: <code>modify_url()</code></li>
+<li>Query arguments: The <code>query</code> argument to <code>GET()</code>, <code>POST()</code>, etc.</li>
+<li>HTTP headers: <code>add_headers()</code></li>
+<li>Request body: The <code>body</code> argument to <code>GET()</code>, <code>POST()</code>, etc.</li>
+</ol>
+<p><a href="https://en.wikipedia.org/wiki/Representational_state_transfer">RESTful APIs</a> also use the HTTP verb to communicate arguments (e.g., <code>GET</code> retrieves a file, <code>POST</code> adds a file, <code>DELETE</code> removes a file, etc.). We can use the helpful <a href="http://httpbin.org">httpbin service</a> to show how to send arguments in each of these ways.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># modify_url</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">POST</span>(<span class="kw">modify_url</span>(<span class="st">&quot;https://httpbin.org&quot;</span>, <span class="dt">path =</span> <span class="st">&quot;/post&quot;</span>))</span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># query arguments</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="kw">POST</span>(<span class="st">&quot;http://httpbin.org/post&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="dt">foo =</span> <span class="st">&quot;bar&quot;</span>))</span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># headers</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="kw">POST</span>(<span class="st">&quot;http://httpbin.org/post&quot;</span>, <span class="kw">add_headers</span>(<span class="dt">foo =</span> <span class="st">&quot;bar&quot;</span>))</span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co"># body</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">## as form</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="kw">POST</span>(<span class="st">&quot;http://httpbin.org/post&quot;</span>, <span class="dt">body =</span> <span class="kw">list</span>(<span class="dt">foo =</span> <span class="st">&quot;bar&quot;</span>), <span class="dt">encode =</span> <span class="st">&quot;form&quot;</span>)</span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">## as json</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="kw">POST</span>(<span class="st">&quot;http://httpbin.org/post&quot;</span>, <span class="dt">body =</span> <span class="kw">list</span>(<span class="dt">foo =</span> <span class="st">&quot;bar&quot;</span>), <span class="dt">encode =</span> <span class="st">&quot;json&quot;</span>)</span></code></pre></div>
+<p>Many APIs will use just one of these forms of argument passing, but others will use multiple of them in combination. Best practice is to insulate the user from how and where the various arguments are used by the API and instead simply expose relevant arguments via R function arguments, some of which might be used in the URL, in the headers, in the body, etc.</p>
+<p>If a parameter has a small fixed set of possible values that are allowed by the API, you can use list them in the default arguments and then use <code>match.arg()</code> to ensure that the caller only supplies one of those values. (This also allows the user to supply the short unique prefixes.)</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>f &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;orange&quot;</span>)) {</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="kw">match.arg</span>(x)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>}</span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="kw">f</span>(<span class="st">&quot;a&quot;</span>)</span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; [1] &quot;apple&quot;</span></span></code></pre></div>
+<p>It is good practice to explicitly set default values for arguments that are not required to <code>NULL</code>. If there is a default value, it should be the first one listed in the vector of allowed arguments.</p>
+</div>
+</div>
+<div id="authentication" class="section level2">
+<h2>Authentication</h2>
+<p>Many APIs can be called without any authentication (just as if you called them in a web browser). However, others require authentication to perform particular requests or to avoid rate limits and other limitations. The most common forms of authentication are OAuth and HTTP basic authentication:</p>
+<ol style="list-style-type: decimal">
+<li><p><em>“Basic” authentication</em>: This requires a username and password (or sometimes just a username). This is passed as part of the HTTP request. In httr, you can do: <code>GET(&quot;http://httpbin.org&quot;, authenticate(&quot;username&quot;, &quot;password&quot;))</code></p></li>
+<li><p><em>Basic authentication with an API key</em>: An alternative provided by many APIs is an API “key” or “token” which is passed as part of the request. It is better than a username/password combination because it can be regenerated independent of the username and password.</p>
+<p>This API key can be specified in a number of different ways: in a URL query argument, in an HTTP header such as the <code>Authorization</code> header, or in an argument inside the request body.</p></li>
+<li><p><em>OAuth</em>: OAuth is a protocol for generating a user- or session-specific authentication token to use in subsequent requests. (An early standard, OAuth 1.0, is not terribly common any more. See <code>oauth1.0_token()</code> for details.) The current OAuth 2.0 standard is very common in modern web apps. It involves a round trip between the client and server to establish if the API client has the authority to access the data. See <code>oauth2.0_token()</code>. It’s ok to publish the app ID and app “secret” - these are not actually important for security of user data.</p></li>
+</ol>
+<blockquote>
+<p>Some APIs describe their authentication processes inaccurately, so care needs to be taken to understand the true authentication mechanism regardless of the label used in the API docs.</p>
+</blockquote>
+<p>It is possible to specify the key(s) or token(s) required for basic or OAuth authentication in a number of different ways. You may also need some way to preserve user credentials between function calls so that end users do not need to specify them each time. A good start is to use an environment variable. Here is an example of how to write a function that checks for the presence of a GitHub personal access token and errors otherwise:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>github_pat &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  pat &lt;-<span class="st"> </span><span class="kw">Sys.getenv</span>(<span class="st">&#39;GITHUB_PAT&#39;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="cf">if</span> (<span class="kw">identical</span>(pat, <span class="st">&quot;&quot;</span>)) {</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="kw">stop</span>(<span class="st">&quot;Please set env var GITHUB_PAT to your github personal access token&quot;</span>,</span>
+<span id="cb13-5"><a href="#cb13-5"></a>      <span class="dt">call. =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>  }</span>
+<span id="cb13-7"><a href="#cb13-7"></a></span>
+<span id="cb13-8"><a href="#cb13-8"></a>  pat</span>
+<span id="cb13-9"><a href="#cb13-9"></a>}</span></code></pre></div>
+</div>
+<div id="pagination-handling-multi-page-responses" class="section level2">
+<h2>Pagination (handling multi-page responses)</h2>
+<p>One particularly frustrating aspect of many APIs is dealing with paginated responses. This is common in APIs that offer search functionality and have the potential to return a very large number of responses. Responses might be paginated because there is a large number of response elements or because elements are updated frequently. Often they will be sorted by an explicit or implicit argument specified in the request.</p>
+<p>When a response is paginated, the API response will typically respond with a header or value specified in the body that contains one of the following:</p>
+<ol style="list-style-type: decimal">
+<li>The total number of pages of responses</li>
+<li>The total number of response elements (with multiple elements per page)</li>
+<li>An indicator for whether any further elements or pages are available.</li>
+<li>A URL containing the next page</li>
+</ol>
+<p>These values can then be used to make further requests. This will either involve specifying a specific page of responses or specifying a “next page token” that returns the next page of results. How to deal with pagination is a difficult question and a client could implement any of the following:</p>
+<ol style="list-style-type: decimal">
+<li>Return one page only by default with an option to return additional specific pages</li>
+<li>Return a specified page (defaulting to 1) and require the end user to handle pagination</li>
+<li>Return all pages by writing an internal process of checking for further pages and combining the results</li>
+</ol>
+<p>The choice of which to use depends on your needs and goals and the rate limits of the API.</p>
+<div id="rate-limiting" class="section level3">
+<h3>Rate limiting</h3>
+<p>Many APIs are rate limited, which means that you can only send a certain number of requests per hour. Often if your request is rate limited, the error message will tell you how long you should wait before performing another request. You might want to expose this to the user, or even include a call to <code>Sys.sleep()</code> that waits long enough.</p>
+<p>For example, we could implement a <code>rate_limit()</code> function that tells you how many calls against the github API are available to you.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>rate_limit &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="kw">github_api</span>(<span class="st">&quot;/rate_limit&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>}</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="kw">rate_limit</span>()</span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; &lt;GitHub /rate_limit&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; List of 2</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt;  $ resources:List of 4</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt;   ..$ core                :List of 3</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt;   .. ..$ limit    : int 60</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt;   .. ..$ remaining: int 23</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt;   .. ..$ reset    : int 1595257851</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt;   ..$ graphql             :List of 3</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt;   .. ..$ limit    : int 0</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt;   .. ..$ remaining: int 0</span></span>
+<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt;   .. ..$ reset    : int 1595258346</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt;   ..$ integration_manifest:List of 3</span></span>
+<span id="cb14-17"><a href="#cb14-17"></a><span class="co">#&gt;   .. ..$ limit    : int 5000</span></span>
+<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt;   .. ..$ remaining: int 5000</span></span>
+<span id="cb14-19"><a href="#cb14-19"></a><span class="co">#&gt;   .. ..$ reset    : int 1595258346</span></span>
+<span id="cb14-20"><a href="#cb14-20"></a><span class="co">#&gt;   ..$ search              :List of 3</span></span>
+<span id="cb14-21"><a href="#cb14-21"></a><span class="co">#&gt;   .. ..$ limit    : int 10</span></span>
+<span id="cb14-22"><a href="#cb14-22"></a><span class="co">#&gt;   .. ..$ remaining: int 10</span></span>
+<span id="cb14-23"><a href="#cb14-23"></a><span class="co">#&gt;   .. ..$ reset    : int 1595254806</span></span>
+<span id="cb14-24"><a href="#cb14-24"></a><span class="co">#&gt;  $ rate     :List of 3</span></span>
+<span id="cb14-25"><a href="#cb14-25"></a><span class="co">#&gt;   ..$ limit    : int 60</span></span>
+<span id="cb14-26"><a href="#cb14-26"></a><span class="co">#&gt;   ..$ remaining: int 23</span></span>
+<span id="cb14-27"><a href="#cb14-27"></a><span class="co">#&gt;   ..$ reset    : int 1595257851</span></span></code></pre></div>
+<p>After getting the first version working, you’ll often want to polish the output to be more user friendly. For this example, we can parse the unix timestamps into more useful date types.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>rate_limit &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb15-2"><a href="#cb15-2"></a>  req &lt;-<span class="st"> </span><span class="kw">github_api</span>(<span class="st">&quot;/rate_limit&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>  core &lt;-<span class="st"> </span>req<span class="op">$</span>content<span class="op">$</span>resources<span class="op">$</span>core</span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a>  reset &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(core<span class="op">$</span>reset, <span class="dt">origin =</span> <span class="st">&quot;1970-01-01&quot;</span>)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>  <span class="kw">cat</span>(core<span class="op">$</span>remaining, <span class="st">&quot; / &quot;</span>, core<span class="op">$</span>limit,</span>
+<span id="cb15-7"><a href="#cb15-7"></a>    <span class="st">&quot; (Resets at &quot;</span>, <span class="kw">strftime</span>(reset, <span class="st">&quot;%H:%M:%S&quot;</span>), <span class="st">&quot;)</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-8"><a href="#cb15-8"></a>}</span>
+<span id="cb15-9"><a href="#cb15-9"></a></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="kw">rate_limit</span>()</span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt; 23 / 60 (Resets at 10:10:51)</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

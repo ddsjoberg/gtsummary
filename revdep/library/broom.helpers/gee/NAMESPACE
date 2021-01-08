@@ -1,0 +1,9 @@
+useDynLib(gee, .registration = TRUE)
+
+importFrom(stats, gaussian, model.extract, model.matrix, quantile)
+
+export(gee)
+
+S3method(print, gee)
+S3method(print, summary.gee)
+S3method(summary, gee)

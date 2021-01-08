@@ -1,0 +1,2257 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Kirill Müller" />
+
+
+<title>DBI specification</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+<style type="text/css">
+  p.abstract{
+    text-align: center;
+    font-weight: bold;
+  }
+  div.abstract{
+    margin: auto;
+    width: 90%;
+  }
+</style>
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">DBI specification</h1>
+<h4 class="author">Kirill Müller</h4>
+<div class="abstract">
+<p class="abstract">Abstract</p>
+The DBI package defines the generic DataBase Interface for R. The connection to individual DBMS is provided by other packages that import DBI (so-called <em>DBI backends</em>). This document formalizes the behavior expected by the methods declared in DBI and implemented by the individual backends. To ensure maximum portability and exchangeability, and to reduce the effort for implementing a new DBI backend, the DBItest package defines a comprehensive set of test cases that test conformance to the DBI specification. This document is derived from comments in the test definitions of the DBItest package. Any extensions or updates to the tests will be reflected in this document.
+</div>
+
+
+
+<div id="dbi-r-database-interface" class="section level2">
+<h2>DBI: R Database Interface</h2>
+<p>DBI defines an interface for communication between R and relational database management systems. All classes in this package are virtual and need to be extended by the various R/DBMS implementations (so-called <em>DBI backends</em>).</p>
+<div id="definition" class="section level3">
+<h3>Definition</h3>
+<p>A DBI backend is an R package which imports the <span class="pkg">DBI</span> and <span class="pkg">methods</span> packages. For better or worse, the names of many existing backends start with ‘R’, e.g., <span class="pkg">RSQLite</span>, <span class="pkg">RMySQL</span>, <span class="pkg">RSQLServer</span>; it is up to the backend author to adopt this convention or not.</p>
+</div>
+<div id="dbi-classes-and-methods" class="section level3">
+<h3>DBI classes and methods</h3>
+<p>A backend defines three classes, which are subclasses of DBIDriver, DBIConnection, and DBIResult. The backend provides implementation for all methods of these base classes that are defined but not implemented by DBI. All methods defined in <span class="pkg">DBI</span> are reexported (so that the package can be used without having to attach <span class="pkg">DBI</span>), and have an ellipsis <code>...</code> in their formals for extensibility.</p>
+</div>
+<div id="construction-of-the-dbidriver-object" class="section level3">
+<h3>Construction of the DBIDriver object</h3>
+<p>The backend must support creation of an instance of its DBIDriver subclass with a constructor function. By default, its name is the package name without the leading ‘R’ (if it exists), e.g., <code>SQLite</code> for the <span class="pkg">RSQLite</span> package. However, backend authors may choose a different name. The constructor must be exported, and it must be a function that is callable without arguments. DBI recommends to define a constructor with an empty argument list.</p>
+</div>
+<div id="examples" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">RSQLite<span class="op">::</span><span class="kw">SQLite</span>()</a></code></pre></div>
+</div>
+</div>
+<div id="determine-the-sql-data-type-of-an-object" class="section level2">
+<h2>Determine the SQL data type of an object</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">dbDataType</span>(dbObj, obj, ...)</a></code></pre></div>
+<div id="description" class="section level3">
+<h3>Description</h3>
+<p>Returns an SQL string that describes the SQL data type to be used for an object. The default implementation of this generic determines the SQL type of an R object according to the SQL 92 specification, which may serve as a starting point for driver implementations. DBI also provides an implementation for data.frame which will return a character vector giving the type for each column in the dataframe.</p>
+<div id="methods-in-other-packages" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><p><code>RSQLite::dbDataType(&quot;SQLiteConnection&quot;)</code></p></li>
+<li><p><code>RSQLite::dbDataType(&quot;SQLiteDriver&quot;)</code></p></li>
+</ul>
+</div>
+</div>
+<div id="arguments" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>dbObj</code></td>
+<td>A object inheriting from DBIDriver or DBIConnection</td>
+</tr>
+<tr class="even">
+<td><code>obj</code></td>
+<td>An R object whose SQL type we want to determine.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="details" class="section level3">
+<h3>Details</h3>
+<p>The data types supported by databases are different than the data types in R, but the mapping between the primitive types is straightforward:</p>
+<ul>
+<li><p>Any of the many fixed and varying length character types are mapped to character vectors</p></li>
+<li><p>Fixed-precision (non-IEEE) numbers are mapped into either numeric or integer vectors.</p></li>
+</ul>
+<p>Notice that many DBMS do not follow IEEE arithmetic, so there are potential problems with under/overflows and loss of precision.</p>
+</div>
+<div id="value" class="section level3">
+<h3>Value</h3>
+<p><code>dbDataType()</code> returns the SQL type that corresponds to the <code>obj</code> argument as a non-empty character string. For data frames, a character vector with one element per column is returned. An error is raised for invalid values for the <code>obj</code> argument such as a <code>NULL</code> value.</p>
+</div>
+<div id="specification" class="section level3">
+<h3>Specification</h3>
+<p>The backend can override the <code>dbDataType()</code> generic for its driver class.</p>
+<p>This generic expects an arbitrary object as second argument. To query the values returned by the default implementation, run <code>example(dbDataType, package = &quot;DBI&quot;)</code>. If the backend needs to override this generic, it must accept all basic R data types as its second argument, namely logical, integer, numeric, character, dates (see Dates), date-time (see DateTimeClasses), and difftime. If the database supports blobs, this method also must accept lists of raw vectors, and <a href="blob::blob" class="uri">blob::blob</a> objects. As-is objects (i.e., wrapped by <code>I()</code>) must be supported and return the same results as their unwrapped counterparts. The SQL data type for factor and ordered is the same as for character. The behavior for other object types is not specified.</p>
+<p>All data types returned by <code>dbDataType()</code> are usable in an SQL statement of the form <code>&quot;CREATE TABLE test (a ...)&quot;</code>.</p>
+</div>
+<div id="examples-1" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="kw">Sys.Date</span>())</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="kw">Sys.time</span>())</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="kw">Sys.time</span>() <span class="op">-</span><span class="st"> </span><span class="kw">as.POSIXct</span>(<span class="kw">Sys.Date</span>()))</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;abc&quot;</span>))</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="kw">list</span>(<span class="kw">raw</span>(<span class="dv">10</span>), <span class="kw">raw</span>(<span class="dv">20</span>)))</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), <span class="kw">I</span>(<span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="kw">dbDataType</span>(<span class="kw">ANSI</span>(), iris)</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="kw">dbDataType</span>(con, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="kw">dbDataType</span>(con, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="kw">dbDataType</span>(con, <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="kw">dbDataType</span>(con, <span class="kw">Sys.Date</span>())</a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="kw">dbDataType</span>(con, <span class="kw">Sys.time</span>())</a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="kw">dbDataType</span>(con, <span class="kw">Sys.time</span>() <span class="op">-</span><span class="st"> </span><span class="kw">as.POSIXct</span>(<span class="kw">Sys.Date</span>()))</a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="kw">dbDataType</span>(con, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;abc&quot;</span>))</a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="kw">dbDataType</span>(con, <span class="kw">list</span>(<span class="kw">raw</span>(<span class="dv">10</span>), <span class="kw">raw</span>(<span class="dv">20</span>)))</a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="kw">dbDataType</span>(con, <span class="kw">I</span>(<span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="kw">dbDataType</span>(con, iris)</a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="create-a-connection-to-a-dbms" class="section level2">
+<h2>Create a connection to a DBMS</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">dbConnect</span>(drv, ...)</a></code></pre></div>
+<div id="description-1" class="section level3">
+<h3>Description</h3>
+<p>Connect to a DBMS going through the appropriate authentication procedure. Some implementations may allow you to have multiple connections open, so you may invoke this function repeatedly assigning its output to different objects. The authentication mechanism is left unspecified, so check the documentation of individual drivers for details. Use <code>dbCanConnect()</code> to check if a connection can be established.</p>
+<div id="methods-in-other-packages-1" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><p><code>RSQLite::dbConnect(&quot;SQLiteConnection&quot;)</code></p></li>
+<li><p><code>RSQLite::dbConnect(&quot;SQLiteDriver&quot;)</code></p></li>
+</ul>
+</div>
+</div>
+<div id="arguments-1" class="section level3">
+<h3>Arguments</h3>
+<table>
+<colgroup>
+<col width="2%"></col>
+<col width="97%"></col>
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code>drv</code></td>
+<td>an object that inherits from DBIDriver, or an existing DBIConnection object (in order to clone an existing connection).</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>authentication arguments needed by the DBMS instance; these typically include <code>user</code>, <code>password</code>, <code>host</code>, <code>port</code>, <code>dbname</code>, etc. For details see the appropriate <code>DBIDriver</code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-1" class="section level3">
+<h3>Value</h3>
+<p><code>dbConnect()</code> returns an S4 object that inherits from DBIConnection. This object is used to communicate with the database engine.</p>
+<p>A <code>format()</code> method is defined for the connection object. It returns a string that consists of a single line of text.</p>
+</div>
+<div id="specification-1" class="section level3">
+<h3>Specification</h3>
+<p>DBI recommends using the following argument names for authentication parameters, with <code>NULL</code> default:</p>
+<ul>
+<li><p><code>user</code> for the user name (default: current user)</p></li>
+<li><p><code>password</code> for the password</p></li>
+<li><p><code>host</code> for the host name (default: local connection)</p></li>
+<li><p><code>port</code> for the port number (default: local connection)</p></li>
+<li><p><code>dbname</code> for the name of the database on the host, or the database file name</p></li>
+</ul>
+<p>The defaults should provide reasonable behavior, in particular a local connection for <code>host = NULL</code>. For some DBMS (e.g., PostgreSQL), this is different to a TCP/IP connection to <code>localhost</code>.</p>
+<p>In addition, DBI supports the <code>bigint</code> argument that governs how 64-bit integer data is returned. The following values are supported:</p>
+<ul>
+<li><p><code>&quot;integer&quot;</code>: always return as <code>integer</code>, silently overflow</p></li>
+<li><p><code>&quot;numeric&quot;</code>: always return as <code>numeric</code>, silently round</p></li>
+<li><p><code>&quot;character&quot;</code>: always return the decimal representation as <code>character</code></p></li>
+<li><p><code>&quot;integer64&quot;</code>: return as a data type that can be coerced using <code>as.integer()</code> (with warning on overflow), <code>as.numeric()</code> and <code>as.character()</code></p></li>
+</ul>
+</div>
+<div id="examples-2" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># SQLite only needs a path to the database. (Here, &quot;:memory:&quot; is a special</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co"># path that creates an in-memory database.) Other database drivers</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># will require more details (like user, password, host, port, etc.)</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">con</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw">dbListTables</span>(con)</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="disconnect-close-a-connection" class="section level2">
+<h2>Disconnect (close) a connection</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">dbDisconnect</span>(conn, ...)</a></code></pre></div>
+<div id="description-2" class="section level3">
+<h3>Description</h3>
+<p>This closes the connection, discards all pending work, and frees resources (e.g., memory, sockets).</p>
+<div id="methods-in-other-packages-2" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbDisconnect(&quot;SQLiteConnection&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-2" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-2" class="section level3">
+<h3>Value</h3>
+<p><code>dbDisconnect()</code> returns <code>TRUE</code>, invisibly.</p>
+</div>
+<div id="specification-2" class="section level3">
+<h3>Specification</h3>
+<p>A warning is issued on garbage collection when a connection has been released without calling <code>dbDisconnect()</code>, but this cannot be tested automatically. A warning is issued immediately when calling <code>dbDisconnect()</code> on an already disconnected or invalid connection.</p>
+</div>
+<div id="examples-3" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="execute-a-query-on-a-given-database-connection" class="section level2">
+<h2>Execute a query on a given database connection</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">dbSendQuery</span>(conn, statement, ...)</a></code></pre></div>
+<div id="description-3" class="section level3">
+<h3>Description</h3>
+<p>The <code>dbSendQuery()</code> method only submits and synchronously executes the SQL query to the database engine. It does <em>not</em> extract any records — for that you need to use the <code>dbFetch()</code> method, and then you must call <code>dbClearResult()</code> when you finish fetching the records you need. For interactive use, you should almost always prefer <code>dbGetQuery()</code>.</p>
+<div id="methods-in-other-packages-3" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbSendQuery(&quot;SQLiteConnection&quot;, &quot;character&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-3" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>statement</code></td>
+<td>a character string containing SQL.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="additional-arguments" class="section level3">
+<h3>Additional arguments</h3>
+<p>The following arguments are not part of the <code>dbSendQuery()</code> generic (to improve compatibility across backends) but are part of the DBI specification:</p>
+<ul>
+<li><p><code>params</code> (default: <code>NULL</code>)</p></li>
+<li><p><code>immediate</code> (default: <code>NULL</code>)</p></li>
+</ul>
+<p>They must be provided as named arguments. See the “Specification” sections for details on their usage.</p>
+</div>
+<div id="specification-3" class="section level3">
+<h3>Specification</h3>
+<p>No warnings occur under normal conditions. When done, the DBIResult object must be cleared with a call to <code>dbClearResult()</code>. Failure to clear the result set leads to a warning when the connection is closed.</p>
+<p>If the backend supports only one open result set per connection, issuing a second query invalidates an already open result set and raises a warning. The newly opened result set is valid and must be cleared with <code>dbClearResult()</code>.</p>
+<p>The <code>param</code> argument allows passing query parameters, see <code>dbBind()</code> for details.</p>
+</div>
+<div id="specification-for-the-immediate-argument" class="section level3">
+<h3>Specification for the <code>immediate</code> argument</h3>
+<p>The <code>immediate</code> argument supports distinguishing between “direct” and “prepared” APIs offered by many database drivers. Passing <code>immediate = TRUE</code> leads to immediate execution of the query or statement, via the “direct” API (if supported by the driver). The default <code>NULL</code> means that the backend should choose whatever API makes the most sense for the database, and (if relevant) tries the other API if the first attempt fails. A successful second attempt should result in a message that suggests passing the correct <code>immediate</code> argument. Examples for possible behaviors:</p>
+<ol style="list-style-type: decimal">
+<li><p>DBI backend defaults to <code>immediate = TRUE</code> internally</p>
+<ol style="list-style-type: decimal">
+<li><p>A query without parameters is passed: query is executed</p></li>
+<li><p>A query with parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>params</code> not given: rejected immediately by the database because of a syntax error in the query, the backend tries <code>immediate = FALSE</code> (and gives a message)</p></li>
+<li><p><code>params</code> given: query is executed using <code>immediate = FALSE</code></p></li>
+</ol></li>
+</ol></li>
+<li><p>DBI backend defaults to <code>immediate = FALSE</code> internally</p>
+<ol style="list-style-type: decimal">
+<li><p>A query without parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p>simple query: query is executed</p></li>
+<li><p>“special” query (such as setting a config options): fails, the backend tries <code>immediate = TRUE</code> (and gives a message)</p></li>
+</ol></li>
+<li><p>A query with parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>params</code> not given: waiting for parameters via <code>dbBind()</code></p></li>
+<li><p><code>params</code> given: query is executed</p></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+<div id="details-1" class="section level3">
+<h3>Details</h3>
+<p>This method is for <code>SELECT</code> queries only. Some backends may support data manipulation queries through this method for compatibility reasons. However, callers are strongly encouraged to use <code>dbSendStatement()</code> for data manipulation statements.</p>
+<p>The query is submitted to the database server and the DBMS executes it, possibly generating vast amounts of data. Where these data live is driver-specific: some drivers may choose to leave the output on the server and transfer them piecemeal to R, others may transfer all the data to the client – but not necessarily to the memory that R manages. See individual drivers’ <code>dbSendQuery()</code> documentation for details.</p>
+</div>
+<div id="value-3" class="section level3">
+<h3>Value</h3>
+<p><code>dbSendQuery()</code> returns an S4 object that inherits from DBIResult. The result set can be used with <code>dbFetch()</code> to extract records. Once you have finished using a result, make sure to clear it with <code>dbClearResult()</code>. An error is raised when issuing a query over a closed or invalid connection, or if the query is not a non-<code>NA</code> string. An error is also raised if the syntax of the query is invalid and all query parameters are given (by passing the <code>params</code> argument) or the <code>immediate</code> argument is set to <code>TRUE</code>.</p>
+</div>
+<div id="examples-4" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars WHERE cyl = 4&quot;</span>)</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="kw">dbFetch</span>(rs)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co"># Pass one set of values with the param argument:</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(</a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">  con,</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">  <span class="st">&quot;SELECT * FROM mtcars WHERE cyl = ?&quot;</span>,</a>
+<a class="sourceLine" id="cb9-12" data-line-number="12">  <span class="dt">params =</span> <span class="kw">list</span>(4L)</a>
+<a class="sourceLine" id="cb9-13" data-line-number="13">)</a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="kw">dbFetch</span>(rs)</a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co"># Pass multiple sets of values with dbBind():</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars WHERE cyl = ?&quot;</span>)</a>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="kw">dbBind</span>(rs, <span class="kw">list</span>(6L))</a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="kw">dbFetch</span>(rs)</a>
+<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="kw">dbBind</span>(rs, <span class="kw">list</span>(8L))</a>
+<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="kw">dbFetch</span>(rs)</a>
+<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb9-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb9-25" data-line-number="25"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="fetch-records-from-a-previously-executed-query" class="section level2">
+<h2>Fetch records from a previously executed query</h2>
+<p>This section describes the behavior of the following methods:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">dbFetch</span>(res, <span class="dt">n =</span> <span class="dv">-1</span>, ...)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">fetch</span>(res, <span class="dt">n =</span> <span class="dv">-1</span>, ...)</a></code></pre></div>
+<div id="description-4" class="section level3">
+<h3>Description</h3>
+<p>Fetch the next <code>n</code> elements (rows) from the result set and return them as a data.frame.</p>
+<div id="methods-in-other-packages-4" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbFetch(&quot;SQLiteResult&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-4" class="section level3">
+<h3>Arguments</h3>
+<table>
+<colgroup>
+<col width="2%"></col>
+<col width="97%"></col>
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code>res</code></td>
+<td>An object inheriting from DBIResult, created by <code>dbSendQuery()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>n</code></td>
+<td>maximum number of records to retrieve per fetch. Use <code>n = -1</code> or <code>n = Inf</code> to retrieve all pending records. Some implementations may recognize other special values.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="details-2" class="section level3">
+<h3>Details</h3>
+<p><code>fetch()</code> is provided for compatibility with older DBI clients - for all new code you are strongly encouraged to use <code>dbFetch()</code>. The default implementation for <code>dbFetch()</code> calls <code>fetch()</code> so that it is compatible with existing code. Modern backends should implement for <code>dbFetch()</code> only.</p>
+</div>
+<div id="value-4" class="section level3">
+<h3>Value</h3>
+<p><code>dbFetch()</code> always returns a data.frame with as many rows as records were fetched and as many columns as fields in the result set, even if the result is a single value or has one or zero rows. An attempt to fetch from a closed result set raises an error. If the <code>n</code> argument is not an atomic whole number greater or equal to -1 or Inf, an error is raised, but a subsequent call to <code>dbFetch()</code> with proper <code>n</code> argument succeeds. Calling <code>dbFetch()</code> on a result set from a data manipulation query created by <code>dbSendStatement()</code> can be fetched and return an empty data frame, with a warning.</p>
+</div>
+<div id="specification-4" class="section level3">
+<h3>Specification</h3>
+<p>Fetching multi-row queries with one or more columns by default returns the entire result. Multi-row queries can also be fetched progressively by passing a whole number (integer or numeric) as the <code>n</code> argument. A value of Inf for the <code>n</code> argument is supported and also returns the full result. If more rows than available are fetched, the result is returned in full without warning. If fewer rows than requested are returned, further fetches will return a data frame with zero rows. If zero rows are fetched, the columns of the data frame are still fully typed. Fetching fewer rows than available is permitted, no warning is issued when clearing the result set.</p>
+<p>A column named <code>row_names</code> is treated like any other column.</p>
+<p>The column types of the returned data frame depend on the data returned:</p>
+<ul>
+<li><p>integer (or coercible to an integer) for integer values between -2^31 and 2^31 - 1, with NA for SQL <code>NULL</code> values</p></li>
+<li><p>numeric for numbers with a fractional component, with NA for SQL <code>NULL</code> values</p></li>
+<li><p>logical for Boolean values (some backends may return an integer); with NA for SQL <code>NULL</code> values</p></li>
+<li><p>character for text, with NA for SQL <code>NULL</code> values</p></li>
+<li><p>lists of raw for blobs with NULL entries for SQL NULL values</p></li>
+<li><p>coercible using <code>as.Date()</code> for dates, with NA for SQL <code>NULL</code> values (also applies to the return value of the SQL function <code>current_date</code>)</p></li>
+<li><p>coercible using <code>hms::as_hms()</code> for times, with NA for SQL <code>NULL</code> values (also applies to the return value of the SQL function <code>current_time</code>)</p></li>
+<li><p>coercible using <code>as.POSIXct()</code> for timestamps, with NA for SQL <code>NULL</code> values (also applies to the return value of the SQL function <code>current_timestamp</code>)</p></li>
+</ul>
+<p>If dates and timestamps are supported by the backend, the following R types are used:</p>
+<ul>
+<li><p>Date for dates (also applies to the return value of the SQL function <code>current_date</code>)</p></li>
+<li><p>POSIXct for timestamps (also applies to the return value of the SQL function <code>current_timestamp</code>)</p></li>
+</ul>
+<p>R has no built-in type with lossless support for the full range of 64-bit or larger integers. If 64-bit integers are returned from a query, the following rules apply:</p>
+<ul>
+<li><p>Values are returned in a container with support for the full range of valid 64-bit values (such as the <code>integer64</code> class of the <span class="pkg">bit64</span> package)</p></li>
+<li><p>Coercion to numeric always returns a number that is as close as possible to the true value</p></li>
+<li><p>Loss of precision when converting to numeric gives a warning</p></li>
+<li><p>Conversion to character always returns a lossless decimal representation of the data</p></li>
+</ul>
+</div>
+<div id="examples-5" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co"># Fetch all results</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars WHERE cyl = 4&quot;</span>)</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="kw">dbFetch</span>(rs)</a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co"># Fetch in chunks</span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="cf">while</span> (<span class="op">!</span><span class="kw">dbHasCompleted</span>(rs)) {</a>
+<a class="sourceLine" id="cb11-13" data-line-number="13">  chunk &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(rs, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb11-14" data-line-number="14">  <span class="kw">print</span>(<span class="kw">nrow</span>(chunk))</a>
+<a class="sourceLine" id="cb11-15" data-line-number="15">}</a>
+<a class="sourceLine" id="cb11-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="clear-a-result-set" class="section level2">
+<h2>Clear a result set</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">dbClearResult</span>(res, ...)</a></code></pre></div>
+<div id="description-5" class="section level3">
+<h3>Description</h3>
+<p>Frees all resources (local and remote) associated with a result set. In some cases (e.g., very large result sets) this can be a critical step to avoid exhausting resources (memory, file descriptors, etc.)</p>
+<div id="methods-in-other-packages-5" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbClearResult(&quot;SQLiteResult&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-5" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>res</code></td>
+<td>An object inheriting from DBIResult.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-5" class="section level3">
+<h3>Value</h3>
+<p><code>dbClearResult()</code> returns <code>TRUE</code>, invisibly, for result sets obtained from both <code>dbSendQuery()</code> and <code>dbSendStatement()</code>. An attempt to close an already closed result set issues a warning in both cases.</p>
+</div>
+<div id="specification-5" class="section level3">
+<h3>Specification</h3>
+<p><code>dbClearResult()</code> frees all resources associated with retrieving the result of a query or update operation. The DBI backend can expect a call to <code>dbClearResult()</code> for each <code>dbSendQuery()</code> or <code>dbSendStatement()</code> call.</p>
+</div>
+<div id="examples-6" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT 1&quot;</span>)</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw">print</span>(<span class="kw">dbFetch</span>(rs))</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="bind-values-to-a-parameterizedprepared-statement" class="section level2">
+<h2>Bind values to a parameterized/prepared statement</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">dbBind</span>(res, params, ...)</a></code></pre></div>
+<div id="description-6" class="section level3">
+<h3>Description</h3>
+<p>For parametrized or prepared statements, the <code>dbSendQuery()</code> and <code>dbSendStatement()</code> functions can be called with statements that contain placeholders for values. The <code>dbBind()</code> function binds these placeholders to actual values, and is intended to be called on the result set before calling <code>dbFetch()</code> or <code>dbGetRowsAffected()</code>.</p>
+<div id="methods-in-other-packages-6" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbBind(&quot;SQLiteResult&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-6" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>res</code></td>
+<td>An object inheriting from DBIResult.</td>
+</tr>
+<tr class="even">
+<td><code>params</code></td>
+<td>A list of bindings, named or unnamed.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="details-3" class="section level3">
+<h3>Details</h3>
+<p><span class="pkg">DBI</span> supports parametrized (or prepared) queries and statements via the <code>dbBind()</code> generic. Parametrized queries are different from normal queries in that they allow an arbitrary number of placeholders, which are later substituted by actual values. Parametrized queries (and statements) serve two purposes:</p>
+<ul>
+<li><p>The same query can be executed more than once with different values. The DBMS may cache intermediate information for the query, such as the execution plan, and execute it faster.</p></li>
+<li><p>Separation of query syntax and parameters protects against SQL injection.</p></li>
+</ul>
+<p>The placeholder format is currently not specified by <span class="pkg">DBI</span>; in the future, a uniform placeholder syntax may be supported. Consult the backend documentation for the supported formats. For automated testing, backend authors specify the placeholder syntax with the <code>placeholder_pattern</code> tweak. Known examples are:</p>
+<ul>
+<li><p><code>?</code> (positional matching in order of appearance) in <span class="pkg">RMySQL</span> and <span class="pkg">RSQLite</span></p></li>
+<li><p><code>\$1</code> (positional matching by index) in <span class="pkg">RPostgres</span> and <span class="pkg">RSQLite</span></p></li>
+<li><p><code>:name</code> and <code>\$name</code> (named matching) in <span class="pkg">RSQLite</span></p></li>
+</ul>
+</div>
+<div id="value-6" class="section level3">
+<h3>Value</h3>
+<p><code>dbBind()</code> returns the result set, invisibly, for queries issued by <code>dbSendQuery()</code> and also for data manipulation statements issued by <code>dbSendStatement()</code>. Calling <code>dbBind()</code> for a query without parameters raises an error. Binding too many or not enough values, or parameters with wrong names or unequal length, also raises an error. If the placeholders in the query are named, all parameter values must have names (which must not be empty or <code>NA</code>), and vice versa, otherwise an error is raised. The behavior for mixing placeholders of different types (in particular mixing positional and named placeholders) is not specified.</p>
+<p>Calling <code>dbBind()</code> on a result set already cleared by <code>dbClearResult()</code> also raises an error.</p>
+</div>
+<div id="specification-6" class="section level3">
+<h3>Specification</h3>
+<p><span class="pkg">DBI</span> clients execute parametrized statements as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>Call <code>dbSendQuery()</code> or <code>dbSendStatement()</code> with a query or statement that contains placeholders, store the returned DBIResult object in a variable. Mixing placeholders (in particular, named and unnamed ones) is not recommended. It is good practice to register a call to <code>dbClearResult()</code> via <code>on.exit()</code> right after calling <code>dbSendQuery()</code> or <code>dbSendStatement()</code> (see the last enumeration item). Until <code>dbBind()</code> has been called, the returned result set object has the following behavior:</p>
+<ul>
+<li><p><code>dbFetch()</code> raises an error (for <code>dbSendQuery()</code>)</p></li>
+<li><p><code>dbGetRowCount()</code> returns zero (for <code>dbSendQuery()</code>)</p></li>
+<li><p><code>dbGetRowsAffected()</code> returns an integer <code>NA</code> (for <code>dbSendStatement()</code>)</p></li>
+<li><p><code>dbIsValid()</code> returns <code>TRUE</code></p></li>
+<li><p><code>dbHasCompleted()</code> returns <code>FALSE</code></p></li>
+</ul></li>
+<li><p>Construct a list with parameters that specify actual values for the placeholders. The list must be named or unnamed, depending on the kind of placeholders used. Named values are matched to named parameters, unnamed values are matched by position in the list of parameters. All elements in this list must have the same lengths and contain values supported by the backend; a data.frame is internally stored as such a list. The parameter list is passed to a call to <code>dbBind()</code> on the <code>DBIResult</code> object.</p></li>
+<li><p>Retrieve the data or the number of affected rows from the <code>DBIResult</code> object.</p>
+<ul>
+<li><p>For queries issued by <code>dbSendQuery()</code>, call <code>dbFetch()</code>.</p></li>
+<li><p>For statements issued by <code>dbSendStatements()</code>, call <code>dbGetRowsAffected()</code>. (Execution begins immediately after the <code>dbBind()</code> call, the statement is processed entirely before the function returns.)</p></li>
+</ul></li>
+<li><p>Repeat 2. and 3. as necessary.</p></li>
+<li><p>Close the result set via <code>dbClearResult()</code>.</p></li>
+</ol>
+<p>The elements of the <code>params</code> argument do not need to be scalars, vectors of arbitrary length (including length 0) are supported. For queries, calling <code>dbFetch()</code> binding such parameters returns concatenated results, equivalent to binding and fetching for each set of values and connecting via <code>rbind()</code>. For data manipulation statements, <code>dbGetRowsAffected()</code> returns the total number of rows affected if binding non-scalar parameters. <code>dbBind()</code> also accepts repeated calls on the same result set for both queries and data manipulation statements, even if no results are fetched between calls to <code>dbBind()</code>.</p>
+<p>If the placeholders in the query are named, their order in the <code>params</code> argument is not important.</p>
+<p>At least the following data types are accepted on input (including NA):</p>
+<ul>
+<li><p>integer</p></li>
+<li><p>numeric</p></li>
+<li><p>logical for Boolean values</p></li>
+<li><p>character</p></li>
+<li><p>factor (bound as character, with warning)</p></li>
+<li><p>Date</p></li>
+<li><p>POSIXct timestamps</p></li>
+<li><p>POSIXlt timestamps</p></li>
+<li><p>lists of raw for blobs (with <code>NULL</code> entries for SQL NULL values)</p></li>
+<li><p>objects of type <a href="blob::blob" class="uri">blob::blob</a></p></li>
+</ul>
+</div>
+<div id="examples-7" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;iris&quot;</span>, iris)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co"># Using the same query for different values</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">iris_result &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM iris WHERE [Petal.Width] &gt; ?&quot;</span>)</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="kw">dbBind</span>(iris_result, <span class="kw">list</span>(<span class="fl">2.3</span>))</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="kw">dbFetch</span>(iris_result)</a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="kw">dbBind</span>(iris_result, <span class="kw">list</span>(<span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="kw">dbFetch</span>(iris_result)</a>
+<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="kw">dbClearResult</span>(iris_result)</a>
+<a class="sourceLine" id="cb15-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co"># Executing the same statement with different values at once</span></a>
+<a class="sourceLine" id="cb15-14" data-line-number="14">iris_result &lt;-<span class="st"> </span><span class="kw">dbSendStatement</span>(con, <span class="st">&quot;DELETE FROM iris WHERE [Species] = $species&quot;</span>)</a>
+<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="kw">dbBind</span>(iris_result, <span class="kw">list</span>(<span class="dt">species =</span> <span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;unknown&quot;</span>)))</a>
+<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="kw">dbGetRowsAffected</span>(iris_result)</a>
+<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="kw">dbClearResult</span>(iris_result)</a>
+<a class="sourceLine" id="cb15-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb15-19" data-line-number="19"><span class="kw">nrow</span>(<span class="kw">dbReadTable</span>(con, <span class="st">&quot;iris&quot;</span>))</a>
+<a class="sourceLine" id="cb15-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb15-21" data-line-number="21"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="send-query-retrieve-results-and-then-clear-result-set" class="section level2">
+<h2>Send query, retrieve results and then clear result set</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">dbGetQuery</span>(conn, statement, ...)</a></code></pre></div>
+<div id="description-7" class="section level3">
+<h3>Description</h3>
+<p>Returns the result of a query as a data frame. <code>dbGetQuery()</code> comes with a default implementation (which should work with most backends) that calls <code>dbSendQuery()</code>, then <code>dbFetch()</code>, ensuring that the result is always free-d by <code>dbClearResult()</code>.</p>
+</div>
+<div id="arguments-7" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>statement</code></td>
+<td>a character string containing SQL.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="additional-arguments-1" class="section level3">
+<h3>Additional arguments</h3>
+<p>The following arguments are not part of the <code>dbGetQuery()</code> generic (to improve compatibility across backends) but are part of the DBI specification:</p>
+<ul>
+<li><p><code>n</code> (default: -1)</p></li>
+<li><p><code>params</code> (default: <code>NULL</code>)</p></li>
+<li><p><code>immediate</code> (default: <code>NULL</code>)</p></li>
+</ul>
+<p>They must be provided as named arguments. See the “Specification” and “Value” sections for details on their usage.</p>
+</div>
+<div id="specification-7" class="section level3">
+<h3>Specification</h3>
+<p>A column named <code>row_names</code> is treated like any other column.</p>
+<p>The <code>n</code> argument specifies the number of rows to be fetched. If omitted, fetching multi-row queries with one or more columns returns the entire result. A value of Inf for the <code>n</code> argument is supported and also returns the full result. If more rows than available are fetched (by passing a too large value for <code>n</code>), the result is returned in full without warning. If zero rows are requested, the columns of the data frame are still fully typed. Fetching fewer rows than available is permitted, no warning is issued.</p>
+<p>The <code>param</code> argument allows passing query parameters, see <code>dbBind()</code> for details.</p>
+</div>
+<div id="specification-for-the-immediate-argument-1" class="section level3">
+<h3>Specification for the <code>immediate</code> argument</h3>
+<p>The <code>immediate</code> argument supports distinguishing between “direct” and “prepared” APIs offered by many database drivers. Passing <code>immediate = TRUE</code> leads to immediate execution of the query or statement, via the “direct” API (if supported by the driver). The default <code>NULL</code> means that the backend should choose whatever API makes the most sense for the database, and (if relevant) tries the other API if the first attempt fails. A successful second attempt should result in a message that suggests passing the correct <code>immediate</code> argument. Examples for possible behaviors:</p>
+<ol style="list-style-type: decimal">
+<li><p>DBI backend defaults to <code>immediate = TRUE</code> internally</p>
+<ol style="list-style-type: decimal">
+<li><p>A query without parameters is passed: query is executed</p></li>
+<li><p>A query with parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>params</code> not given: rejected immediately by the database because of a syntax error in the query, the backend tries <code>immediate = FALSE</code> (and gives a message)</p></li>
+<li><p><code>params</code> given: query is executed using <code>immediate = FALSE</code></p></li>
+</ol></li>
+</ol></li>
+<li><p>DBI backend defaults to <code>immediate = FALSE</code> internally</p>
+<ol style="list-style-type: decimal">
+<li><p>A query without parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p>simple query: query is executed</p></li>
+<li><p>“special” query (such as setting a config options): fails, the backend tries <code>immediate = TRUE</code> (and gives a message)</p></li>
+</ol></li>
+<li><p>A query with parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>params</code> not given: waiting for parameters via <code>dbBind()</code></p></li>
+<li><p><code>params</code> given: query is executed</p></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+<div id="details-4" class="section level3">
+<h3>Details</h3>
+<p>This method is for <code>SELECT</code> queries only (incl. other SQL statements that return a <code>SELECT</code>-alike result, e. g. execution of a stored procedure).</p>
+<p>To execute a stored procedure that does not return a result set, use <code>dbExecute()</code>.</p>
+<p>Some backends may support data manipulation statements through this method for compatibility reasons. However, callers are strongly advised to use <code>dbExecute()</code> for data manipulation statements.</p>
+</div>
+<div id="value-7" class="section level3">
+<h3>Value</h3>
+<p><code>dbGetQuery()</code> always returns a data.frame with as many rows as records were fetched and as many columns as fields in the result set, even if the result is a single value or has one or zero rows. An error is raised when issuing a query over a closed or invalid connection, if the syntax of the query is invalid, or if the query is not a non-<code>NA</code> string. If the <code>n</code> argument is not an atomic whole number greater or equal to -1 or Inf, an error is raised, but a subsequent call to <code>dbGetQuery()</code> with proper <code>n</code> argument succeeds.</p>
+</div>
+<div id="implementation-notes" class="section level3">
+<h3>Implementation notes</h3>
+<p>Subclasses should override this method only if they provide some sort of performance optimization.</p>
+</div>
+<div id="examples-8" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">dbGetQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="kw">dbGetQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars&quot;</span>, <span class="dt">n =</span> <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co"># Pass values using the param argument:</span></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co"># (This query runs eight times, once for each different</span></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co"># parameter. The resulting rows are combined into a single</span></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co"># data frame.)</span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="kw">dbGetQuery</span>(</a>
+<a class="sourceLine" id="cb17-12" data-line-number="12">  con,</a>
+<a class="sourceLine" id="cb17-13" data-line-number="13">  <span class="st">&quot;SELECT COUNT(*) FROM mtcars WHERE cyl = ?&quot;</span>,</a>
+<a class="sourceLine" id="cb17-14" data-line-number="14">  <span class="dt">params =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>)</a>
+<a class="sourceLine" id="cb17-15" data-line-number="15">)</a>
+<a class="sourceLine" id="cb17-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb17-17" data-line-number="17"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="execute-a-data-manipulation-statement-on-a-given-database-connection" class="section level2">
+<h2>Execute a data manipulation statement on a given database connection</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">dbSendStatement</span>(conn, statement, ...)</a></code></pre></div>
+<div id="description-8" class="section level3">
+<h3>Description</h3>
+<p>The <code>dbSendStatement()</code> method only submits and synchronously executes the SQL data manipulation statement (e.g., <code>UPDATE</code>, <code>DELETE</code>, <code>INSERT INTO</code>, <code>DROP TABLE</code>, …) to the database engine. To query the number of affected rows, call <code>dbGetRowsAffected()</code> on the returned result object. You must also call <code>dbClearResult()</code> after that. For interactive use, you should almost always prefer <code>dbExecute()</code>.</p>
+</div>
+<div id="arguments-8" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>statement</code></td>
+<td>a character string containing SQL.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="additional-arguments-2" class="section level3">
+<h3>Additional arguments</h3>
+<p>The following arguments are not part of the <code>dbSendStatement()</code> generic (to improve compatibility across backends) but are part of the DBI specification:</p>
+<ul>
+<li><p><code>params</code> (default: <code>NULL</code>)</p></li>
+<li><p><code>immediate</code> (default: <code>NULL</code>)</p></li>
+</ul>
+<p>They must be provided as named arguments. See the “Specification” sections for details on their usage.</p>
+</div>
+<div id="specification-8" class="section level3">
+<h3>Specification</h3>
+<p>No warnings occur under normal conditions. When done, the DBIResult object must be cleared with a call to <code>dbClearResult()</code>. Failure to clear the result set leads to a warning when the connection is closed. If the backend supports only one open result set per connection, issuing a second query invalidates an already open result set and raises a warning. The newly opened result set is valid and must be cleared with <code>dbClearResult()</code>.</p>
+<p>The <code>param</code> argument allows passing query parameters, see <code>dbBind()</code> for details.</p>
+</div>
+<div id="specification-for-the-immediate-argument-2" class="section level3">
+<h3>Specification for the <code>immediate</code> argument</h3>
+<p>The <code>immediate</code> argument supports distinguishing between “direct” and “prepared” APIs offered by many database drivers. Passing <code>immediate = TRUE</code> leads to immediate execution of the query or statement, via the “direct” API (if supported by the driver). The default <code>NULL</code> means that the backend should choose whatever API makes the most sense for the database, and (if relevant) tries the other API if the first attempt fails. A successful second attempt should result in a message that suggests passing the correct <code>immediate</code> argument. Examples for possible behaviors:</p>
+<ol style="list-style-type: decimal">
+<li><p>DBI backend defaults to <code>immediate = TRUE</code> internally</p>
+<ol style="list-style-type: decimal">
+<li><p>A query without parameters is passed: query is executed</p></li>
+<li><p>A query with parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>params</code> not given: rejected immediately by the database because of a syntax error in the query, the backend tries <code>immediate = FALSE</code> (and gives a message)</p></li>
+<li><p><code>params</code> given: query is executed using <code>immediate = FALSE</code></p></li>
+</ol></li>
+</ol></li>
+<li><p>DBI backend defaults to <code>immediate = FALSE</code> internally</p>
+<ol style="list-style-type: decimal">
+<li><p>A query without parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p>simple query: query is executed</p></li>
+<li><p>“special” query (such as setting a config options): fails, the backend tries <code>immediate = TRUE</code> (and gives a message)</p></li>
+</ol></li>
+<li><p>A query with parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>params</code> not given: waiting for parameters via <code>dbBind()</code></p></li>
+<li><p><code>params</code> given: query is executed</p></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+<div id="details-5" class="section level3">
+<h3>Details</h3>
+<p><code>dbSendStatement()</code> comes with a default implementation that simply forwards to <code>dbSendQuery()</code>, to support backends that only implement the latter.</p>
+</div>
+<div id="value-8" class="section level3">
+<h3>Value</h3>
+<p><code>dbSendStatement()</code> returns an S4 object that inherits from DBIResult. The result set can be used with <code>dbGetRowsAffected()</code> to determine the number of rows affected by the query. Once you have finished using a result, make sure to clear it with <code>dbClearResult()</code>. An error is raised when issuing a statement over a closed or invalid connection, or if the statement is not a non-<code>NA</code> string. An error is also raised if the syntax of the query is invalid and all query parameters are given (by passing the <code>params</code> argument) or the <code>immediate</code> argument is set to <code>TRUE</code>.</p>
+</div>
+<div id="examples-9" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;cars&quot;</span>, <span class="kw">head</span>(cars, <span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">rs &lt;-<span class="st"> </span><span class="kw">dbSendStatement</span>(</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">  con,</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">  <span class="st">&quot;INSERT INTO cars (speed, dist) VALUES (1, 1), (2, 2), (3, 3)&quot;</span></a>
+<a class="sourceLine" id="cb19-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="kw">dbHasCompleted</span>(rs)</a>
+<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="kw">dbGetRowsAffected</span>(rs)</a>
+<a class="sourceLine" id="cb19-11" data-line-number="11"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb19-12" data-line-number="12"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cars&quot;</span>)   <span class="co"># there are now 6 rows</span></a>
+<a class="sourceLine" id="cb19-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co"># Pass one set of values directly using the param argument:</span></a>
+<a class="sourceLine" id="cb19-15" data-line-number="15">rs &lt;-<span class="st"> </span><span class="kw">dbSendStatement</span>(</a>
+<a class="sourceLine" id="cb19-16" data-line-number="16">  con,</a>
+<a class="sourceLine" id="cb19-17" data-line-number="17">  <span class="st">&quot;INSERT INTO cars (speed, dist) VALUES (?, ?)&quot;</span>,</a>
+<a class="sourceLine" id="cb19-18" data-line-number="18">  <span class="dt">params =</span> <span class="kw">list</span>(4L, 5L)</a>
+<a class="sourceLine" id="cb19-19" data-line-number="19">)</a>
+<a class="sourceLine" id="cb19-20" data-line-number="20"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb19-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb19-22" data-line-number="22"><span class="co"># Pass multiple sets of values using dbBind():</span></a>
+<a class="sourceLine" id="cb19-23" data-line-number="23">rs &lt;-<span class="st"> </span><span class="kw">dbSendStatement</span>(</a>
+<a class="sourceLine" id="cb19-24" data-line-number="24">  con,</a>
+<a class="sourceLine" id="cb19-25" data-line-number="25">  <span class="st">&quot;INSERT INTO cars (speed, dist) VALUES (?, ?)&quot;</span></a>
+<a class="sourceLine" id="cb19-26" data-line-number="26">)</a>
+<a class="sourceLine" id="cb19-27" data-line-number="27"><span class="kw">dbBind</span>(rs, <span class="kw">list</span>(<span class="dv">5</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">6</span><span class="op">:</span><span class="dv">7</span>))</a>
+<a class="sourceLine" id="cb19-28" data-line-number="28"><span class="kw">dbBind</span>(rs, <span class="kw">list</span>(7L, 8L))</a>
+<a class="sourceLine" id="cb19-29" data-line-number="29"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb19-30" data-line-number="30"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cars&quot;</span>)   <span class="co"># there are now 10 rows</span></a>
+<a class="sourceLine" id="cb19-31" data-line-number="31"></a>
+<a class="sourceLine" id="cb19-32" data-line-number="32"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="execute-an-update-statement-query-number-of-rows-affected-and-then-close-result-set" class="section level2">
+<h2>Execute an update statement, query number of rows affected, and then close result set</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">dbExecute</span>(conn, statement, ...)</a></code></pre></div>
+<div id="description-9" class="section level3">
+<h3>Description</h3>
+<p>Executes a statement and returns the number of rows affected. <code>dbExecute()</code> comes with a default implementation (which should work with most backends) that calls <code>dbSendStatement()</code>, then <code>dbGetRowsAffected()</code>, ensuring that the result is always free-d by <code>dbClearResult()</code>.</p>
+</div>
+<div id="arguments-9" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>statement</code></td>
+<td>a character string containing SQL.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="additional-arguments-3" class="section level3">
+<h3>Additional arguments</h3>
+<p>The following arguments are not part of the <code>dbExecute()</code> generic (to improve compatibility across backends) but are part of the DBI specification:</p>
+<ul>
+<li><p><code>params</code> (default: <code>NULL</code>)</p></li>
+<li><p><code>immediate</code> (default: <code>NULL</code>)</p></li>
+</ul>
+<p>They must be provided as named arguments. See the “Specification” sections for details on their usage.</p>
+</div>
+<div id="specification-9" class="section level3">
+<h3>Specification</h3>
+<p>The <code>param</code> argument allows passing query parameters, see <code>dbBind()</code> for details.</p>
+</div>
+<div id="specification-for-the-immediate-argument-3" class="section level3">
+<h3>Specification for the <code>immediate</code> argument</h3>
+<p>The <code>immediate</code> argument supports distinguishing between “direct” and “prepared” APIs offered by many database drivers. Passing <code>immediate = TRUE</code> leads to immediate execution of the query or statement, via the “direct” API (if supported by the driver). The default <code>NULL</code> means that the backend should choose whatever API makes the most sense for the database, and (if relevant) tries the other API if the first attempt fails. A successful second attempt should result in a message that suggests passing the correct <code>immediate</code> argument. Examples for possible behaviors:</p>
+<ol style="list-style-type: decimal">
+<li><p>DBI backend defaults to <code>immediate = TRUE</code> internally</p>
+<ol style="list-style-type: decimal">
+<li><p>A query without parameters is passed: query is executed</p></li>
+<li><p>A query with parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>params</code> not given: rejected immediately by the database because of a syntax error in the query, the backend tries <code>immediate = FALSE</code> (and gives a message)</p></li>
+<li><p><code>params</code> given: query is executed using <code>immediate = FALSE</code></p></li>
+</ol></li>
+</ol></li>
+<li><p>DBI backend defaults to <code>immediate = FALSE</code> internally</p>
+<ol style="list-style-type: decimal">
+<li><p>A query without parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p>simple query: query is executed</p></li>
+<li><p>“special” query (such as setting a config options): fails, the backend tries <code>immediate = TRUE</code> (and gives a message)</p></li>
+</ol></li>
+<li><p>A query with parameters is passed:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>params</code> not given: waiting for parameters via <code>dbBind()</code></p></li>
+<li><p><code>params</code> given: query is executed</p></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+<div id="details-6" class="section level3">
+<h3>Details</h3>
+<p>You can also use <code>dbExecute()</code> to call a stored procedure that performs data manipulation or other actions that do not return a result set. To execute a stored procedure that returns a result set use <code>dbGetQuery()</code> instead.</p>
+</div>
+<div id="value-9" class="section level3">
+<h3>Value</h3>
+<p><code>dbExecute()</code> always returns a scalar numeric that specifies the number of rows affected by the statement. An error is raised when issuing a statement over a closed or invalid connection, if the syntax of the statement is invalid, or if the statement is not a non-<code>NA</code> string.</p>
+</div>
+<div id="implementation-notes-1" class="section level3">
+<h3>Implementation notes</h3>
+<p>Subclasses should override this method only if they provide some sort of performance optimization.</p>
+</div>
+<div id="examples-10" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;cars&quot;</span>, <span class="kw">head</span>(cars, <span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cars&quot;</span>)   <span class="co"># there are 3 rows</span></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="kw">dbExecute</span>(</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6">  con,</a>
+<a class="sourceLine" id="cb21-7" data-line-number="7">  <span class="st">&quot;INSERT INTO cars (speed, dist) VALUES (1, 1), (2, 2), (3, 3)&quot;</span></a>
+<a class="sourceLine" id="cb21-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb21-9" data-line-number="9"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cars&quot;</span>)   <span class="co"># there are now 6 rows</span></a>
+<a class="sourceLine" id="cb21-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="co"># Pass values using the param argument:</span></a>
+<a class="sourceLine" id="cb21-12" data-line-number="12"><span class="kw">dbExecute</span>(</a>
+<a class="sourceLine" id="cb21-13" data-line-number="13">  con,</a>
+<a class="sourceLine" id="cb21-14" data-line-number="14">  <span class="st">&quot;INSERT INTO cars (speed, dist) VALUES (?, ?)&quot;</span>,</a>
+<a class="sourceLine" id="cb21-15" data-line-number="15">  <span class="dt">params =</span> <span class="kw">list</span>(<span class="dv">4</span><span class="op">:</span><span class="dv">7</span>, <span class="dv">5</span><span class="op">:</span><span class="dv">8</span>)</a>
+<a class="sourceLine" id="cb21-16" data-line-number="16">)</a>
+<a class="sourceLine" id="cb21-17" data-line-number="17"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cars&quot;</span>)   <span class="co"># there are now 10 rows</span></a>
+<a class="sourceLine" id="cb21-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb21-19" data-line-number="19"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="quote-literal-strings" class="section level2">
+<h2>Quote literal strings</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">dbQuoteString</span>(conn, x, ...)</a></code></pre></div>
+<div id="description-10" class="section level3">
+<h3>Description</h3>
+<p>Call this method to generate a string that is suitable for use in a query as a string literal, to make sure that you generate valid SQL and protect against SQL injection attacks.</p>
+</div>
+<div id="arguments-10" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>x</code></td>
+<td>A character vector to quote as string.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-10" class="section level3">
+<h3>Value</h3>
+<p><code>dbQuoteString()</code> returns an object that can be coerced to character, of the same length as the input. For an empty character vector this function returns a length-0 object.</p>
+<p>When passing the returned object again to <code>dbQuoteString()</code> as <code>x</code> argument, it is returned unchanged. Passing objects of class SQL should also return them unchanged. (For backends it may be most convenient to return SQL objects to achieve this behavior, but this is not required.)</p>
+</div>
+<div id="specification-10" class="section level3">
+<h3>Specification</h3>
+<p>The returned expression can be used in a <code>SELECT ...</code> query, and for any scalar character <code>x</code> the value of <code>dbGetQuery(paste0(&quot;SELECT &quot;, dbQuoteString(x)))[[1]]</code> must be identical to <code>x</code>, even if <code>x</code> contains spaces, tabs, quotes (single or double), backticks, or newlines (in any combination) or is itself the result of a <code>dbQuoteString()</code> call coerced back to character (even repeatedly). If <code>x</code> is <code>NA</code>, the result must merely satisfy <code>is.na()</code>. The strings <code>&quot;NA&quot;</code> or <code>&quot;NULL&quot;</code> are not treated specially.</p>
+<p><code>NA</code> should be translated to an unquoted SQL <code>NULL</code>, so that the query <code>SELECT * FROM (SELECT 1) a WHERE ... IS NULL</code> returns one row.</p>
+<p>Passing a numeric, integer, logical, or raw vector, or a list for the <code>x</code> argument raises an error.</p>
+</div>
+<div id="examples-11" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># Quoting ensures that arbitrary input is safe for use in a query</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">name &lt;-<span class="st"> &quot;Robert'); DROP TABLE Students;--&quot;</span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="kw">dbQuoteString</span>(<span class="kw">ANSI</span>(), name)</a>
+<a class="sourceLine" id="cb23-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="co"># NAs become NULL</span></a>
+<a class="sourceLine" id="cb23-6" data-line-number="6"><span class="kw">dbQuoteString</span>(<span class="kw">ANSI</span>(), <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="ot">NA</span>))</a>
+<a class="sourceLine" id="cb23-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb23-8" data-line-number="8"><span class="co"># SQL vectors are always passed through as is</span></a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">var_name &lt;-<span class="st"> </span><span class="kw">SQL</span>(<span class="st">&quot;select&quot;</span>)</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">var_name</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11"><span class="kw">dbQuoteString</span>(<span class="kw">ANSI</span>(), var_name)</a>
+<a class="sourceLine" id="cb23-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb23-13" data-line-number="13"><span class="co"># This mechanism is used to prevent double escaping</span></a>
+<a class="sourceLine" id="cb23-14" data-line-number="14"><span class="kw">dbQuoteString</span>(<span class="kw">ANSI</span>(), <span class="kw">dbQuoteString</span>(<span class="kw">ANSI</span>(), name))</a></code></pre></div>
+</div>
+</div>
+<div id="quote-identifiers" class="section level2">
+<h2>Quote identifiers</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">dbQuoteIdentifier</span>(conn, x, ...)</a></code></pre></div>
+<div id="description-11" class="section level3">
+<h3>Description</h3>
+<p>Call this method to generate a string that is suitable for use in a query as a column or table name, to make sure that you generate valid SQL and protect against SQL injection attacks. The inverse operation is <code>dbUnquoteIdentifier()</code>.</p>
+<div id="methods-in-other-packages-7" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><p><code>RSQLite::dbQuoteIdentifier(&quot;SQLiteConnection&quot;, &quot;SQL&quot;)</code></p></li>
+<li><p><code>RSQLite::dbQuoteIdentifier(&quot;SQLiteConnection&quot;, &quot;character&quot;)</code></p></li>
+</ul>
+</div>
+</div>
+<div id="arguments-11" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>x</code></td>
+<td>A character vector, SQL or Id object to quote as identifier.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-11" class="section level3">
+<h3>Value</h3>
+<p><code>dbQuoteIdentifier()</code> returns an object that can be coerced to character, of the same length as the input. For an empty character vector this function returns a length-0 object. The names of the input argument are preserved in the output. When passing the returned object again to <code>dbQuoteIdentifier()</code> as <code>x</code> argument, it is returned unchanged. Passing objects of class SQL should also return them unchanged. (For backends it may be most convenient to return SQL objects to achieve this behavior, but this is not required.)</p>
+<p>An error is raised if the input contains <code>NA</code>, but not for an empty string.</p>
+</div>
+<div id="specification-11" class="section level3">
+<h3>Specification</h3>
+<p>Calling <code>dbGetQuery()</code> for a query of the format <code>SELECT 1 AS ...</code> returns a data frame with the identifier, unquoted, as column name. Quoted identifiers can be used as table and column names in SQL queries, in particular in queries like <code>SELECT 1 AS ...</code> and <code>SELECT * FROM (SELECT 1) ...</code>. The method must use a quoting mechanism that is unambiguously different from the quoting mechanism used for strings, so that a query like <code>SELECT ... FROM (SELECT 1 AS ...)</code> throws an error if the column names do not match.</p>
+<p>The method can quote column names that contain special characters such as a space, a dot, a comma, or quotes used to mark strings or identifiers, if the database supports this. In any case, checking the validity of the identifier should be performed only when executing a query, and not by <code>dbQuoteIdentifier()</code>.</p>
+</div>
+<div id="examples-12" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># Quoting ensures that arbitrary input is safe for use in a query</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">name &lt;-<span class="st"> &quot;Robert'); DROP TABLE Students;--&quot;</span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="kw">dbQuoteIdentifier</span>(<span class="kw">ANSI</span>(), name)</a>
+<a class="sourceLine" id="cb25-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="co"># SQL vectors are always passed through as is</span></a>
+<a class="sourceLine" id="cb25-6" data-line-number="6">var_name &lt;-<span class="st"> </span><span class="kw">SQL</span>(<span class="st">&quot;select&quot;</span>)</a>
+<a class="sourceLine" id="cb25-7" data-line-number="7">var_name</a>
+<a class="sourceLine" id="cb25-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb25-9" data-line-number="9"><span class="kw">dbQuoteIdentifier</span>(<span class="kw">ANSI</span>(), var_name)</a>
+<a class="sourceLine" id="cb25-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb25-11" data-line-number="11"><span class="co"># This mechanism is used to prevent double escaping</span></a>
+<a class="sourceLine" id="cb25-12" data-line-number="12"><span class="kw">dbQuoteIdentifier</span>(<span class="kw">ANSI</span>(), <span class="kw">dbQuoteIdentifier</span>(<span class="kw">ANSI</span>(), name))</a></code></pre></div>
+</div>
+</div>
+<div id="copy-data-frames-from-database-tables" class="section level2">
+<h2>Copy data frames from database tables</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">dbReadTable</span>(conn, name, ...)</a></code></pre></div>
+<div id="description-12" class="section level3">
+<h3>Description</h3>
+<p>Reads a database table to a data frame, optionally converting a column to row names and converting the column names to valid R identifiers.</p>
+<div id="methods-in-other-packages-8" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbReadTable(&quot;SQLiteConnection&quot;, &quot;character&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-12" class="section level3">
+<h3>Arguments</h3>
+<table>
+<colgroup>
+<col width="5%"></col>
+<col width="94%"></col>
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>A character string specifying the unquoted DBMS table name, or the result of a call to <code>dbQuoteIdentifier()</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="additional-arguments-4" class="section level3">
+<h3>Additional arguments</h3>
+<p>The following arguments are not part of the <code>dbReadTable()</code> generic (to improve compatibility across backends) but are part of the DBI specification:</p>
+<ul>
+<li><p><code>row.names</code> (default: <code>FALSE</code>)</p></li>
+<li><p><code>check.names</code></p></li>
+</ul>
+<p>They must be provided as named arguments. See the “Value” section for details on their usage.</p>
+</div>
+<div id="specification-12" class="section level3">
+<h3>Specification</h3>
+<p>The <code>name</code> argument is processed as follows, to support databases that allow non-syntactic names for their objects:</p>
+<ul>
+<li><p>If an unquoted table name as string: <code>dbReadTable()</code> will do the quoting, perhaps by calling <code>dbQuoteIdentifier(conn, x = name)</code></p></li>
+<li><p>If the result of a call to <code>dbQuoteIdentifier()</code>: no more quoting is done</p></li>
+</ul>
+</div>
+<div id="value-12" class="section level3">
+<h3>Value</h3>
+<p><code>dbReadTable()</code> returns a data frame that contains the complete data from the remote table, effectively the result of calling <code>dbGetQuery()</code> with <code>SELECT * FROM &lt;name&gt;</code>. An error is raised if the table does not exist. An empty table is returned as a data frame with zero rows.</p>
+<p>The presence of rownames depends on the <code>row.names</code> argument, see <code>sqlColumnToRownames()</code> for details:</p>
+<ul>
+<li><p>If <code>FALSE</code> or <code>NULL</code>, the returned data frame doesn’t have row names.</p></li>
+<li><p>If <code>TRUE</code>, a column named “row_names” is converted to row names, an error is raised if no such column exists.</p></li>
+<li><p>If <code>NA</code>, a column named “row_names” is converted to row names if it exists, otherwise no translation occurs.</p></li>
+<li><p>If a string, this specifies the name of the column in the remote table that contains the row names, an error is raised if no such column exists.</p></li>
+</ul>
+<p>The default is <code>row.names = FALSE</code>.</p>
+<p>If the database supports identifiers with special characters, the columns in the returned data frame are converted to valid R identifiers if the <code>check.names</code> argument is <code>TRUE</code>, otherwise non-syntactic column names can be returned unquoted.</p>
+<p>An error is raised when calling this method for a closed or invalid connection. An error is raised if <code>name</code> cannot be processed with <code>dbQuoteIdentifier()</code> or if this results in a non-scalar. Unsupported values for <code>row.names</code> and <code>check.names</code> (non-scalars, unsupported data types, <code>NA</code> for <code>check.names</code>) also raise an error.</p>
+</div>
+<div id="examples-13" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, ])</a>
+<a class="sourceLine" id="cb27-4" data-line-number="4"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb27-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb27-6" data-line-number="6"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="copy-data-frames-to-database-tables" class="section level2">
+<h2>Copy data frames to database tables</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">dbWriteTable</span>(conn, name, value, ...)</a></code></pre></div>
+<div id="description-13" class="section level3">
+<h3>Description</h3>
+<p>Writes, overwrites or appends a data frame to a database table, optionally converting row names to a column and specifying SQL data types for fields. New code should prefer <code>dbCreateTable()</code> and <code>dbAppendTable()</code>.</p>
+<div id="methods-in-other-packages-9" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><p><code>RSQLite::dbWriteTable(&quot;SQLiteConnection&quot;, &quot;character&quot;, &quot;character&quot;)</code></p></li>
+<li><p><code>RSQLite::dbWriteTable(&quot;SQLiteConnection&quot;, &quot;character&quot;, &quot;data.frame&quot;)</code></p></li>
+</ul>
+</div>
+</div>
+<div id="arguments-13" class="section level3">
+<h3>Arguments</h3>
+<table>
+<colgroup>
+<col width="6%"></col>
+<col width="93%"></col>
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>A character string specifying the unquoted DBMS table name, or the result of a call to <code>dbQuoteIdentifier()</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>value</code></td>
+<td>a data.frame (or coercible to data.frame).</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="additional-arguments-5" class="section level3">
+<h3>Additional arguments</h3>
+<p>The following arguments are not part of the <code>dbWriteTable()</code> generic (to improve compatibility across backends) but are part of the DBI specification:</p>
+<ul>
+<li><p><code>row.names</code> (default: <code>FALSE</code>)</p></li>
+<li><p><code>overwrite</code> (default: <code>FALSE</code>)</p></li>
+<li><p><code>append</code> (default: <code>FALSE</code>)</p></li>
+<li><p><code>field.types</code> (default: <code>NULL</code>)</p></li>
+<li><p><code>temporary</code> (default: <code>FALSE</code>)</p></li>
+</ul>
+<p>They must be provided as named arguments. See the “Specification” and “Value” sections for details on their usage.</p>
+</div>
+<div id="specification-13" class="section level3">
+<h3>Specification</h3>
+<p>The <code>name</code> argument is processed as follows, to support databases that allow non-syntactic names for their objects:</p>
+<ul>
+<li><p>If an unquoted table name as string: <code>dbWriteTable()</code> will do the quoting, perhaps by calling <code>dbQuoteIdentifier(conn, x = name)</code></p></li>
+<li><p>If the result of a call to <code>dbQuoteIdentifier()</code>: no more quoting is done</p></li>
+</ul>
+<p>If the <code>overwrite</code> argument is <code>TRUE</code>, an existing table of the same name will be overwritten. This argument doesn’t change behavior if the table does not exist yet.</p>
+<p>If the <code>append</code> argument is <code>TRUE</code>, the rows in an existing table are preserved, and the new data are appended. If the table doesn’t exist yet, it is created.</p>
+<p>If the <code>temporary</code> argument is <code>TRUE</code>, the table is not available in a second connection and is gone after reconnecting. Not all backends support this argument. A regular, non-temporary table is visible in a second connection and after reconnecting to the database.</p>
+<p>SQL keywords can be used freely in table names, column names, and data. Quotes, commas, and spaces can also be used in the data, and, if the database supports non-syntactic identifiers, also for table names and column names.</p>
+<p>The following data types must be supported at least, and be read identically with <code>dbReadTable()</code>:</p>
+<ul>
+<li><p>integer</p></li>
+<li><p>numeric (the behavior for <code>Inf</code> and <code>NaN</code> is not specified)</p></li>
+<li><p>logical</p></li>
+<li><p><code>NA</code> as NULL</p></li>
+<li><p>64-bit values (using <code>&quot;bigint&quot;</code> as field type); the result can be</p>
+<ul>
+<li><p>converted to a numeric, which may lose precision,</p></li>
+<li><p>converted a character vector, which gives the full decimal representation</p></li>
+<li><p>written to another table and read again unchanged</p></li>
+</ul></li>
+<li><p>character (in both UTF-8 and native encodings), supporting empty strings</p></li>
+<li><p>factor (returned as character)</p></li>
+<li><p>list of raw (if supported by the database)</p></li>
+<li><p>objects of type <a href="blob::blob" class="uri">blob::blob</a> (if supported by the database)</p></li>
+<li><p>date (if supported by the database; returned as <code>Date</code>)</p></li>
+<li><p>time (if supported by the database; returned as objects that inherit from <code>difftime</code>)</p></li>
+<li><p>timestamp (if supported by the database; returned as <code>POSIXct</code> respecting the time zone but not necessarily preserving the input time zone)</p></li>
+</ul>
+<p>Mixing column types in the same table is supported.</p>
+<p>The <code>field.types</code> argument must be a named character vector with at most one entry for each column. It indicates the SQL data type to be used for a new column. If a column is missed from <code>field.types</code>, the type is inferred from the input data with <code>dbDataType()</code>.</p>
+<p>The interpretation of rownames depends on the <code>row.names</code> argument, see <code>sqlRownamesToColumn()</code> for details:</p>
+<ul>
+<li><p>If <code>FALSE</code> or <code>NULL</code>, row names are ignored.</p></li>
+<li><p>If <code>TRUE</code>, row names are converted to a column named “row_names”, even if the input data frame only has natural row names from 1 to <code>nrow(...)</code>.</p></li>
+<li><p>If <code>NA</code>, a column named “row_names” is created if the data has custom row names, no extra column is created in the case of natural row names.</p></li>
+<li><p>If a string, this specifies the name of the column in the remote table that contains the row names, even if the input data frame only has natural row names.</p></li>
+</ul>
+<p>The default is <code>row.names = FALSE</code>.</p>
+</div>
+<div id="value-13" class="section level3">
+<h3>Value</h3>
+<p><code>dbWriteTable()</code> returns <code>TRUE</code>, invisibly. If the table exists, and both <code>append</code> and <code>overwrite</code> arguments are unset, or <code>append = TRUE</code> and the data frame with the new data has different column names, an error is raised; the remote table remains unchanged.</p>
+<p>An error is raised when calling this method for a closed or invalid connection. An error is also raised if <code>name</code> cannot be processed with <code>dbQuoteIdentifier()</code> or if this results in a non-scalar. Invalid values for the additional arguments <code>row.names</code>, <code>overwrite</code>, <code>append</code>, <code>field.types</code>, and <code>temporary</code> (non-scalars, unsupported data types, <code>NA</code>, incompatible values, duplicate or missing names, incompatible columns) also raise an error.</p>
+</div>
+<div id="examples-14" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ])</a>
+<a class="sourceLine" id="cb29-4" data-line-number="4"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb29-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb29-6" data-line-number="6"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars[<span class="dv">6</span><span class="op">:</span><span class="dv">10</span>, ], <span class="dt">append =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb29-7" data-line-number="7"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb29-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb29-9" data-line-number="9"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, ], <span class="dt">overwrite =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb29-10" data-line-number="10"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb29-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb29-12" data-line-number="12"><span class="co"># No row names</span></a>
+<a class="sourceLine" id="cb29-13" data-line-number="13"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, ], <span class="dt">overwrite =</span> <span class="ot">TRUE</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb29-14" data-line-number="14"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;mtcars&quot;</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="list-remote-tables" class="section level2">
+<h2>List remote tables</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">dbListTables</span>(conn, ...)</a></code></pre></div>
+<div id="description-14" class="section level3">
+<h3>Description</h3>
+<p>Returns the unquoted names of remote tables accessible through this connection. This should include views and temporary objects, but not all database backends (in particular <span class="pkg">RMariaDB</span> and <span class="pkg">RMySQL</span>) support this.</p>
+<div id="methods-in-other-packages-10" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbListTables(&quot;SQLiteConnection&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-14" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-14" class="section level3">
+<h3>Value</h3>
+<p><code>dbListTables()</code> returns a character vector that enumerates all tables and views in the database. Tables added with <code>dbWriteTable()</code> are part of the list, including temporary tables if supported by the database. As soon a table is removed from the database, it is also removed from the list of database tables.</p>
+<p>The returned names are suitable for quoting with <code>dbQuoteIdentifier()</code>. An error is raised when calling this method for a closed or invalid connection.</p>
+</div>
+<div id="examples-15" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="kw">dbListTables</span>(con)</a>
+<a class="sourceLine" id="cb31-4" data-line-number="4"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">dbListTables</span>(con)</a>
+<a class="sourceLine" id="cb31-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb31-7" data-line-number="7"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="does-a-table-exist" class="section level2">
+<h2>Does a table exist?</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">dbExistsTable</span>(conn, name, ...)</a></code></pre></div>
+<div id="description-15" class="section level3">
+<h3>Description</h3>
+<p>Returns if a table given by name exists in the database.</p>
+<div id="methods-in-other-packages-11" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbExistsTable(&quot;SQLiteConnection&quot;, &quot;character&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-15" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>A character string specifying a DBMS table name.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-15" class="section level3">
+<h3>Value</h3>
+<p><code>dbExistsTable()</code> returns a logical scalar, <code>TRUE</code> if the table or view specified by the <code>name</code> argument exists, <code>FALSE</code> otherwise. This includes temporary tables if supported by the database.</p>
+<p>An error is raised when calling this method for a closed or invalid connection. An error is also raised if <code>name</code> cannot be processed with <code>dbQuoteIdentifier()</code> or if this results in a non-scalar.</p>
+</div>
+<div id="specification-14" class="section level3">
+<h3>Specification</h3>
+<p>The <code>name</code> argument is processed as follows, to support databases that allow non-syntactic names for their objects:</p>
+<ul>
+<li><p>If an unquoted table name as string: <code>dbExistsTable()</code> will do the quoting, perhaps by calling <code>dbQuoteIdentifier(conn, x = name)</code></p></li>
+<li><p>If the result of a call to <code>dbQuoteIdentifier()</code>: no more quoting is done</p></li>
+</ul>
+<p>For all tables listed by <code>dbListTables()</code>, <code>dbExistsTable()</code> returns <code>TRUE</code>.</p>
+</div>
+<div id="examples-16" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="kw">dbExistsTable</span>(con, <span class="st">&quot;iris&quot;</span>)</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;iris&quot;</span>, iris)</a>
+<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="kw">dbExistsTable</span>(con, <span class="st">&quot;iris&quot;</span>)</a>
+<a class="sourceLine" id="cb33-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb33-7" data-line-number="7"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="remove-a-table-from-the-database" class="section level2">
+<h2>Remove a table from the database</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">dbRemoveTable</span>(conn, name, ...)</a></code></pre></div>
+<div id="description-16" class="section level3">
+<h3>Description</h3>
+<p>Remove a remote table (e.g., created by <code>dbWriteTable()</code>) from the database.</p>
+<div id="methods-in-other-packages-12" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbRemoveTable(&quot;SQLiteConnection&quot;, &quot;character&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-16" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>A character string specifying a DBMS table name.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="additional-arguments-6" class="section level3">
+<h3>Additional arguments</h3>
+<p>The following arguments are not part of the <code>dbRemoveTable()</code> generic (to improve compatibility across backends) but are part of the DBI specification:</p>
+<ul>
+<li><p><code>temporary</code> (default: <code>FALSE</code>)</p></li>
+<li><p><code>fail_if_missing</code> (default: <code>TRUE</code>)</p></li>
+</ul>
+<p>These arguments must be provided as named arguments.</p>
+<p>If <code>temporary</code> is <code>TRUE</code>, the call to <code>dbRemoveTable()</code> will consider only temporary tables. Not all backends support this argument. In particular, permanent tables of the same name are left untouched.</p>
+<p>If <code>fail_if_missing</code> is <code>FALSE</code>, the call to <code>dbRemoveTable()</code> succeeds if the table does not exist.</p>
+</div>
+<div id="specification-15" class="section level3">
+<h3>Specification</h3>
+<p>A table removed by <code>dbRemoveTable()</code> doesn’t appear in the list of tables returned by <code>dbListTables()</code>, and <code>dbExistsTable()</code> returns <code>FALSE</code>. The removal propagates immediately to other connections to the same database. This function can also be used to remove a temporary table.</p>
+<p>The <code>name</code> argument is processed as follows, to support databases that allow non-syntactic names for their objects:</p>
+<ul>
+<li><p>If an unquoted table name as string: <code>dbRemoveTable()</code> will do the quoting, perhaps by calling <code>dbQuoteIdentifier(conn, x = name)</code></p></li>
+<li><p>If the result of a call to <code>dbQuoteIdentifier()</code>: no more quoting is done</p></li>
+</ul>
+</div>
+<div id="value-16" class="section level3">
+<h3>Value</h3>
+<p><code>dbRemoveTable()</code> returns <code>TRUE</code>, invisibly. If the table does not exist, an error is raised. An attempt to remove a view with this function may result in an error.</p>
+<p>An error is raised when calling this method for a closed or invalid connection. An error is also raised if <code>name</code> cannot be processed with <code>dbQuoteIdentifier()</code> or if this results in a non-scalar.</p>
+</div>
+<div id="examples-17" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">dbExistsTable</span>(con, <span class="st">&quot;iris&quot;</span>)</a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;iris&quot;</span>, iris)</a>
+<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="kw">dbExistsTable</span>(con, <span class="st">&quot;iris&quot;</span>)</a>
+<a class="sourceLine" id="cb35-6" data-line-number="6"><span class="kw">dbRemoveTable</span>(con, <span class="st">&quot;iris&quot;</span>)</a>
+<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="kw">dbExistsTable</span>(con, <span class="st">&quot;iris&quot;</span>)</a>
+<a class="sourceLine" id="cb35-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb35-9" data-line-number="9"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="list-field-names-of-a-remote-table" class="section level2">
+<h2>List field names of a remote table</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">dbListFields</span>(conn, name, ...)</a></code></pre></div>
+<div id="description-17" class="section level3">
+<h3>Description</h3>
+<p>List field names of a remote table</p>
+</div>
+<div id="arguments-17" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>a character string with the name of the remote table.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-17" class="section level3">
+<h3>Value</h3>
+<p><code>dbListFields()</code> returns a character vector that enumerates all fields in the table in the correct order. This also works for temporary tables if supported by the database. The returned names are suitable for quoting with <code>dbQuoteIdentifier()</code>. If the table does not exist, an error is raised. Invalid types for the <code>name</code> argument (e.g., <code>character</code> of length not equal to one, or numeric) lead to an error. An error is also raised when calling this method for a closed or invalid connection.</p>
+</div>
+<div id="specification-16" class="section level3">
+<h3>Specification</h3>
+<p>The <code>name</code> argument can be</p>
+<ul>
+<li><p>a string</p></li>
+<li><p>the return value of <code>dbQuoteIdentifier()</code></p></li>
+<li><p>a value from the <code>table</code> column from the return value of <code>dbListObjects()</code> where <code>is_prefix</code> is <code>FALSE</code></p></li>
+</ul>
+<p>A column named <code>row_names</code> is treated like any other column.</p>
+</div>
+<div id="examples-18" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="kw">dbListFields</span>(con, <span class="st">&quot;mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb37-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb37-6" data-line-number="6"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="is-this-dbms-object-still-valid" class="section level2">
+<h2>Is this DBMS object still valid?</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">dbIsValid</span>(dbObj, ...)</a></code></pre></div>
+<div id="description-18" class="section level3">
+<h3>Description</h3>
+<p>This generic tests whether a database object is still valid (i.e. it hasn’t been disconnected or cleared).</p>
+<div id="methods-in-other-packages-13" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><p><code>RSQLite::dbIsValid(&quot;SQLiteConnection&quot;)</code></p></li>
+<li><p><code>RSQLite::dbIsValid(&quot;SQLiteDriver&quot;)</code></p></li>
+<li><p><code>RSQLite::dbIsValid(&quot;SQLiteResult&quot;)</code></p></li>
+</ul>
+</div>
+</div>
+<div id="arguments-18" class="section level3">
+<h3>Arguments</h3>
+<table>
+<colgroup>
+<col width="7%"></col>
+<col width="92%"></col>
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code>dbObj</code></td>
+<td>An object inheriting from DBIObject, i.e. DBIDriver, DBIConnection, or a DBIResult</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other arguments to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-18" class="section level3">
+<h3>Value</h3>
+<p><code>dbIsValid()</code> returns a logical scalar, <code>TRUE</code> if the object specified by <code>dbObj</code> is valid, <code>FALSE</code> otherwise. A DBIConnection object is initially valid, and becomes invalid after disconnecting with <code>dbDisconnect()</code>. For an invalid connection object (e.g., for some drivers if the object is saved to a file and then restored), the method also returns <code>FALSE</code>. A DBIResult object is valid after a call to <code>dbSendQuery()</code>, and stays valid even after all rows have been fetched; only clearing it with <code>dbClearResult()</code> invalidates it. A DBIResult object is also valid after a call to <code>dbSendStatement()</code>, and stays valid after querying the number of rows affected; only clearing it with <code>dbClearResult()</code> invalidates it. If the connection to the database system is dropped (e.g., due to connectivity problems, server failure, etc.), <code>dbIsValid()</code> should return <code>FALSE</code>. This is not tested automatically.</p>
+</div>
+<div id="examples-19" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">dbIsValid</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>())</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb39-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="kw">dbIsValid</span>(con)</a>
+<a class="sourceLine" id="cb39-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb39-6" data-line-number="6">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT 1&quot;</span>)</a>
+<a class="sourceLine" id="cb39-7" data-line-number="7"><span class="kw">dbIsValid</span>(rs)</a>
+<a class="sourceLine" id="cb39-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb39-9" data-line-number="9"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb39-10" data-line-number="10"><span class="kw">dbIsValid</span>(rs)</a>
+<a class="sourceLine" id="cb39-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb39-12" data-line-number="12"><span class="kw">dbDisconnect</span>(con)</a>
+<a class="sourceLine" id="cb39-13" data-line-number="13"><span class="kw">dbIsValid</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="completion-status" class="section level2">
+<h2>Completion status</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">dbHasCompleted</span>(res, ...)</a></code></pre></div>
+<div id="description-19" class="section level3">
+<h3>Description</h3>
+<p>This method returns if the operation has completed. A <code>SELECT</code> query is completed if all rows have been fetched. A data manipulation statement is always completed.</p>
+<div id="methods-in-other-packages-14" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbHasCompleted(&quot;SQLiteResult&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-19" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>res</code></td>
+<td>An object inheriting from DBIResult.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-19" class="section level3">
+<h3>Value</h3>
+<p><code>dbHasCompleted()</code> returns a logical scalar. For a query initiated by <code>dbSendQuery()</code> with non-empty result set, <code>dbHasCompleted()</code> returns <code>FALSE</code> initially and <code>TRUE</code> after calling <code>dbFetch()</code> without limit. For a query initiated by <code>dbSendStatement()</code>, <code>dbHasCompleted()</code> always returns <code>TRUE</code>. Attempting to query completion status for a result set cleared with <code>dbClearResult()</code> gives an error.</p>
+</div>
+<div id="specification-17" class="section level3">
+<h3>Specification</h3>
+<p>The completion status for a query is only guaranteed to be set to <code>FALSE</code> after attempting to fetch past the end of the entire result. Therefore, for a query with an empty result set, the initial return value is unspecified, but the result value is <code>TRUE</code> after trying to fetch only one row. Similarly, for a query with a result set of length n, the return value is unspecified after fetching n rows, but the result value is <code>TRUE</code> after trying to fetch only one more row.</p>
+</div>
+<div id="examples-20" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb41-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6"><span class="kw">dbHasCompleted</span>(rs)</a>
+<a class="sourceLine" id="cb41-7" data-line-number="7">ret1 &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(rs, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb41-8" data-line-number="8"><span class="kw">dbHasCompleted</span>(rs)</a>
+<a class="sourceLine" id="cb41-9" data-line-number="9">ret2 &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(rs)</a>
+<a class="sourceLine" id="cb41-10" data-line-number="10"><span class="kw">dbHasCompleted</span>(rs)</a>
+<a class="sourceLine" id="cb41-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb41-12" data-line-number="12"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb41-13" data-line-number="13"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="get-the-statement-associated-with-a-result-set" class="section level2">
+<h2>Get the statement associated with a result set</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">dbGetStatement</span>(res, ...)</a></code></pre></div>
+<div id="description-20" class="section level3">
+<h3>Description</h3>
+<p>Returns the statement that was passed to <code>dbSendQuery()</code> or <code>dbSendStatement()</code>.</p>
+<div id="methods-in-other-packages-15" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbGetStatement(&quot;SQLiteResult&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-20" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>res</code></td>
+<td>An object inheriting from DBIResult.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-20" class="section level3">
+<h3>Value</h3>
+<p><code>dbGetStatement()</code> returns a string, the query used in either <code>dbSendQuery()</code> or <code>dbSendStatement()</code>. Attempting to query the statement for a result set cleared with <code>dbClearResult()</code> gives an error.</p>
+</div>
+<div id="examples-21" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb43-5" data-line-number="5"><span class="kw">dbGetStatement</span>(rs)</a>
+<a class="sourceLine" id="cb43-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb43-7" data-line-number="7"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="the-number-of-rows-fetched-so-far" class="section level2">
+<h2>The number of rows fetched so far</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">dbGetRowCount</span>(res, ...)</a></code></pre></div>
+<div id="description-21" class="section level3">
+<h3>Description</h3>
+<p>Returns the total number of rows actually fetched with calls to <code>dbFetch()</code> for this result set.</p>
+<div id="methods-in-other-packages-16" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbGetRowCount(&quot;SQLiteResult&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-21" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>res</code></td>
+<td>An object inheriting from DBIResult.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-21" class="section level3">
+<h3>Value</h3>
+<p><code>dbGetRowCount()</code> returns a scalar number (integer or numeric), the number of rows fetched so far. After calling <code>dbSendQuery()</code>, the row count is initially zero. After a call to <code>dbFetch()</code> without limit, the row count matches the total number of rows returned. Fetching a limited number of rows increases the number of rows by the number of rows returned, even if fetching past the end of the result set. For queries with an empty result set, zero is returned even after fetching. For data manipulation statements issued with <code>dbSendStatement()</code>, zero is returned before and after calling <code>dbFetch()</code>. Attempting to get the row count for a result set cleared with <code>dbClearResult()</code> gives an error.</p>
+</div>
+<div id="examples-22" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb45-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb45-4" data-line-number="4">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb45-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb45-6" data-line-number="6"><span class="kw">dbGetRowCount</span>(rs)</a>
+<a class="sourceLine" id="cb45-7" data-line-number="7">ret1 &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(rs, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb45-8" data-line-number="8"><span class="kw">dbGetRowCount</span>(rs)</a>
+<a class="sourceLine" id="cb45-9" data-line-number="9">ret2 &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(rs)</a>
+<a class="sourceLine" id="cb45-10" data-line-number="10"><span class="kw">dbGetRowCount</span>(rs)</a>
+<a class="sourceLine" id="cb45-11" data-line-number="11"><span class="kw">nrow</span>(ret1) <span class="op">+</span><span class="st"> </span><span class="kw">nrow</span>(ret2)</a>
+<a class="sourceLine" id="cb45-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb45-13" data-line-number="13"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb45-14" data-line-number="14"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="the-number-of-rows-affected" class="section level2">
+<h2>The number of rows affected</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw">dbGetRowsAffected</span>(res, ...)</a></code></pre></div>
+<div id="description-22" class="section level3">
+<h3>Description</h3>
+<p>This method returns the number of rows that were added, deleted, or updated by a data manipulation statement.</p>
+<div id="methods-in-other-packages-17" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><code>RSQLite::dbGetRowsAffected(&quot;SQLiteResult&quot;)</code></li>
+</ul>
+</div>
+</div>
+<div id="arguments-22" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>res</code></td>
+<td>An object inheriting from DBIResult.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-22" class="section level3">
+<h3>Value</h3>
+<p><code>dbGetRowsAffected()</code> returns a scalar number (integer or numeric), the number of rows affected by a data manipulation statement issued with <code>dbSendStatement()</code>. The value is available directly after the call and does not change after calling <code>dbFetch()</code>. For queries issued with <code>dbSendQuery()</code>, zero is returned before and after the call to <code>dbFetch()</code>. Attempting to get the rows affected for a result set cleared with <code>dbClearResult()</code> gives an error.</p>
+</div>
+<div id="examples-23" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb47-4" data-line-number="4">rs &lt;-<span class="st"> </span><span class="kw">dbSendStatement</span>(con, <span class="st">&quot;DELETE FROM mtcars&quot;</span>)</a>
+<a class="sourceLine" id="cb47-5" data-line-number="5"><span class="kw">dbGetRowsAffected</span>(rs)</a>
+<a class="sourceLine" id="cb47-6" data-line-number="6"><span class="kw">nrow</span>(mtcars)</a>
+<a class="sourceLine" id="cb47-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb47-8" data-line-number="8"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb47-9" data-line-number="9"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="information-about-result-types" class="section level2">
+<h2>Information about result types</h2>
+<p>This section describes the behavior of the following method:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">dbColumnInfo</span>(res, ...)</a></code></pre></div>
+<div id="description-23" class="section level3">
+<h3>Description</h3>
+<p>Produces a data.frame that describes the output of a query. The data.frame should have as many rows as there are output fields in the result set, and each column in the data.frame describes an aspect of the result set field (field name, type, etc.)</p>
+</div>
+<div id="arguments-23" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>res</code></td>
+<td>An object inheriting from DBIResult.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other arguments passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="value-23" class="section level3">
+<h3>Value</h3>
+<p><code>dbColumnInfo()</code> returns a data frame with at least two columns <code>&quot;name&quot;</code> and <code>&quot;type&quot;</code> (in that order) (and optional columns that start with a dot). The <code>&quot;name&quot;</code> and <code>&quot;type&quot;</code> columns contain the names and types of the R columns of the data frame that is returned from <code>dbFetch()</code>. The <code>&quot;type&quot;</code> column is of type <code>character</code> and only for information. Do not compute on the <code>&quot;type&quot;</code> column, instead use <code>dbFetch(res, n = 0)</code> to create a zero-row data frame initialized with the correct data types.</p>
+<p>An attempt to query columns for a closed result set raises an error.</p>
+</div>
+<div id="specification-18" class="section level3">
+<h3>Specification</h3>
+<p>A column named <code>row_names</code> is treated like any other column.</p>
+<p>The column names are always consistent with the data returned by <code>dbFetch()</code>. If the query returns unnamed columns, unique non-empty and non-<code>NA</code> names are assigned. In the case of a duplicate column name, the first occurrence retains the original name, and unique names are assigned for the other occurrences. Column names that correspond to SQL or R keywords are left unchanged.</p>
+</div>
+<div id="examples-24" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb49-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb49-3" data-line-number="3">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT 1 AS a, 2 AS b&quot;</span>)</a>
+<a class="sourceLine" id="cb49-4" data-line-number="4"><span class="kw">dbColumnInfo</span>(rs)</a>
+<a class="sourceLine" id="cb49-5" data-line-number="5"><span class="kw">dbFetch</span>(rs)</a>
+<a class="sourceLine" id="cb49-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb49-7" data-line-number="7"><span class="kw">dbClearResult</span>(rs)</a>
+<a class="sourceLine" id="cb49-8" data-line-number="8"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="begincommitrollback-sql-transactions" class="section level2">
+<h2>Begin/commit/rollback SQL transactions</h2>
+<p>This section describes the behavior of the following methods:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">dbBegin</span>(conn, ...)</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="kw">dbCommit</span>(conn, ...)</a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb50-5" data-line-number="5"><span class="kw">dbRollback</span>(conn, ...)</a></code></pre></div>
+<div id="description-24" class="section level3">
+<h3>Description</h3>
+<p>A transaction encapsulates several SQL statements in an atomic unit. It is initiated with <code>dbBegin()</code> and either made persistent with <code>dbCommit()</code> or undone with <code>dbRollback()</code>. In any case, the DBMS guarantees that either all or none of the statements have a permanent effect. This helps ensuring consistency of write operations to multiple tables.</p>
+<div id="methods-in-other-packages-18" class="section level4">
+<h4>Methods in other packages</h4>
+<ul>
+<li><p><code>RSQLite::dbBegin(&quot;SQLiteConnection&quot;)</code></p></li>
+<li><p><code>RSQLite::dbCommit(&quot;SQLiteConnection&quot;)</code></p></li>
+<li><p><code>RSQLite::dbRollback(&quot;SQLiteConnection&quot;)</code></p></li>
+</ul>
+</div>
+</div>
+<div id="arguments-24" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="details-7" class="section level3">
+<h3>Details</h3>
+<p>Not all database engines implement transaction management, in which case these methods should not be implemented for the specific DBIConnection subclass.</p>
+</div>
+<div id="value-24" class="section level3">
+<h3>Value</h3>
+<p><code>dbBegin()</code>, <code>dbCommit()</code> and <code>dbRollback()</code> return <code>TRUE</code>, invisibly. The implementations are expected to raise an error in case of failure, but this is not tested. In any way, all generics throw an error with a closed or invalid connection. In addition, a call to <code>dbCommit()</code> or <code>dbRollback()</code> without a prior call to <code>dbBegin()</code> raises an error. Nested transactions are not supported by DBI, an attempt to call <code>dbBegin()</code> twice yields an error.</p>
+</div>
+<div id="specification-19" class="section level3">
+<h3>Specification</h3>
+<p>Actual support for transactions may vary between backends. A transaction is initiated by a call to <code>dbBegin()</code> and committed by a call to <code>dbCommit()</code>. Data written in a transaction must persist after the transaction is committed. For example, a record that is missing when the transaction is started but is created during the transaction must exist both during and after the transaction, and also in a new connection.</p>
+<p>A transaction can also be aborted with <code>dbRollback()</code>. All data written in such a transaction must be removed after the transaction is rolled back. For example, a record that is missing when the transaction is started but is created during the transaction must not exist anymore after the rollback.</p>
+<p>Disconnection from a connection with an open transaction effectively rolls back the transaction. All data written in such a transaction must be removed after the transaction is rolled back.</p>
+<p>The behavior is not specified if other arguments are passed to these functions. In particular, <span class="pkg">RSQLite</span> issues named transactions with support for nesting if the <code>name</code> argument is set.</p>
+<p>The transaction isolation level is not specified by DBI.</p>
+</div>
+<div id="examples-25" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb51-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb51-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;cash&quot;</span>, <span class="kw">data.frame</span>(<span class="dt">amount =</span> <span class="dv">100</span>))</a>
+<a class="sourceLine" id="cb51-4" data-line-number="4"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;account&quot;</span>, <span class="kw">data.frame</span>(<span class="dt">amount =</span> <span class="dv">2000</span>))</a>
+<a class="sourceLine" id="cb51-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb51-6" data-line-number="6"><span class="co"># All operations are carried out as logical unit:</span></a>
+<a class="sourceLine" id="cb51-7" data-line-number="7"><span class="kw">dbBegin</span>(con)</a>
+<a class="sourceLine" id="cb51-8" data-line-number="8">withdrawal &lt;-<span class="st"> </span><span class="dv">300</span></a>
+<a class="sourceLine" id="cb51-9" data-line-number="9"><span class="kw">dbExecute</span>(con, <span class="st">&quot;UPDATE cash SET amount = amount + ?&quot;</span>, <span class="kw">list</span>(withdrawal))</a>
+<a class="sourceLine" id="cb51-10" data-line-number="10"><span class="kw">dbExecute</span>(con, <span class="st">&quot;UPDATE account SET amount = amount - ?&quot;</span>, <span class="kw">list</span>(withdrawal))</a>
+<a class="sourceLine" id="cb51-11" data-line-number="11"><span class="kw">dbCommit</span>(con)</a>
+<a class="sourceLine" id="cb51-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb51-13" data-line-number="13"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cash&quot;</span>)</a>
+<a class="sourceLine" id="cb51-14" data-line-number="14"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;account&quot;</span>)</a>
+<a class="sourceLine" id="cb51-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb51-16" data-line-number="16"><span class="co"># Rolling back after detecting negative value on account:</span></a>
+<a class="sourceLine" id="cb51-17" data-line-number="17"><span class="kw">dbBegin</span>(con)</a>
+<a class="sourceLine" id="cb51-18" data-line-number="18">withdrawal &lt;-<span class="st"> </span><span class="dv">5000</span></a>
+<a class="sourceLine" id="cb51-19" data-line-number="19"><span class="kw">dbExecute</span>(con, <span class="st">&quot;UPDATE cash SET amount = amount + ?&quot;</span>, <span class="kw">list</span>(withdrawal))</a>
+<a class="sourceLine" id="cb51-20" data-line-number="20"><span class="kw">dbExecute</span>(con, <span class="st">&quot;UPDATE account SET amount = amount - ?&quot;</span>, <span class="kw">list</span>(withdrawal))</a>
+<a class="sourceLine" id="cb51-21" data-line-number="21"><span class="cf">if</span> (<span class="kw">dbReadTable</span>(con, <span class="st">&quot;account&quot;</span>)<span class="op">$</span>amount <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb51-22" data-line-number="22">  <span class="kw">dbCommit</span>(con)</a>
+<a class="sourceLine" id="cb51-23" data-line-number="23">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb51-24" data-line-number="24">  <span class="kw">dbRollback</span>(con)</a>
+<a class="sourceLine" id="cb51-25" data-line-number="25">}</a>
+<a class="sourceLine" id="cb51-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb51-27" data-line-number="27"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cash&quot;</span>)</a>
+<a class="sourceLine" id="cb51-28" data-line-number="28"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;account&quot;</span>)</a>
+<a class="sourceLine" id="cb51-29" data-line-number="29"></a>
+<a class="sourceLine" id="cb51-30" data-line-number="30"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+<div id="self-contained-sql-transactions" class="section level2">
+<h2>Self-contained SQL transactions</h2>
+<p>This section describes the behavior of the following methods:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw">dbWithTransaction</span>(conn, code, ...)</a>
+<a class="sourceLine" id="cb52-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb52-3" data-line-number="3"><span class="kw">dbBreak</span>()</a></code></pre></div>
+<div id="description-25" class="section level3">
+<h3>Description</h3>
+<p>Given that transactions are implemented, this function allows you to pass in code that is run in a transaction. The default method of <code>dbWithTransaction()</code> calls <code>dbBegin()</code> before executing the code, and <code>dbCommit()</code> after successful completion, or <code>dbRollback()</code> in case of an error. The advantage is that you don’t have to remember to do <code>dbBegin()</code> and <code>dbCommit()</code> or <code>dbRollback()</code> – that is all taken care of. The special function <code>dbBreak()</code> allows an early exit with rollback, it can be called only inside <code>dbWithTransaction()</code>.</p>
+</div>
+<div id="arguments-25" class="section level3">
+<h3>Arguments</h3>
+<table>
+<tbody>
+<tr class="odd">
+<td><code>conn</code></td>
+<td>A DBIConnection object, as returned by <code>dbConnect()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>code</code></td>
+<td>An arbitrary block of R code.</td>
+</tr>
+<tr class="odd">
+<td><code>...</code></td>
+<td>Other parameters passed on to methods.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="details-8" class="section level3">
+<h3>Details</h3>
+<p>DBI implements <code>dbWithTransaction()</code>, backends should need to override this generic only if they implement specialized handling.</p>
+</div>
+<div id="value-25" class="section level3">
+<h3>Value</h3>
+<p><code>dbWithTransaction()</code> returns the value of the executed code. Failure to initiate the transaction (e.g., if the connection is closed or invalid of if <code>dbBegin()</code> has been called already) gives an error.</p>
+</div>
+<div id="specification-20" class="section level3">
+<h3>Specification</h3>
+<p><code>dbWithTransaction()</code> initiates a transaction with <code>dbBegin()</code>, executes the code given in the <code>code</code> argument, and commits the transaction with <code>dbCommit()</code>. If the code raises an error, the transaction is instead aborted with <code>dbRollback()</code>, and the error is propagated. If the code calls <code>dbBreak()</code>, execution of the code stops and the transaction is silently aborted. All side effects caused by the code (such as the creation of new variables) propagate to the calling environment.</p>
+</div>
+<div id="examples-26" class="section level3">
+<h3>Examples</h3>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;cash&quot;</span>, <span class="kw">data.frame</span>(<span class="dt">amount =</span> <span class="dv">100</span>))</a>
+<a class="sourceLine" id="cb53-4" data-line-number="4"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;account&quot;</span>, <span class="kw">data.frame</span>(<span class="dt">amount =</span> <span class="dv">2000</span>))</a>
+<a class="sourceLine" id="cb53-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb53-6" data-line-number="6"><span class="co"># All operations are carried out as logical unit:</span></a>
+<a class="sourceLine" id="cb53-7" data-line-number="7"><span class="kw">dbWithTransaction</span>(</a>
+<a class="sourceLine" id="cb53-8" data-line-number="8">  con,</a>
+<a class="sourceLine" id="cb53-9" data-line-number="9">  {</a>
+<a class="sourceLine" id="cb53-10" data-line-number="10">    withdrawal &lt;-<span class="st"> </span><span class="dv">300</span></a>
+<a class="sourceLine" id="cb53-11" data-line-number="11">    <span class="kw">dbExecute</span>(con, <span class="st">&quot;UPDATE cash SET amount = amount + ?&quot;</span>, <span class="kw">list</span>(withdrawal))</a>
+<a class="sourceLine" id="cb53-12" data-line-number="12">    <span class="kw">dbExecute</span>(con, <span class="st">&quot;UPDATE account SET amount = amount - ?&quot;</span>, <span class="kw">list</span>(withdrawal))</a>
+<a class="sourceLine" id="cb53-13" data-line-number="13">  }</a>
+<a class="sourceLine" id="cb53-14" data-line-number="14">)</a>
+<a class="sourceLine" id="cb53-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb53-16" data-line-number="16"><span class="co"># The code is executed as if in the curent environment:</span></a>
+<a class="sourceLine" id="cb53-17" data-line-number="17">withdrawal</a>
+<a class="sourceLine" id="cb53-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb53-19" data-line-number="19"><span class="co"># The changes are committed to the database after successful execution:</span></a>
+<a class="sourceLine" id="cb53-20" data-line-number="20"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cash&quot;</span>)</a>
+<a class="sourceLine" id="cb53-21" data-line-number="21"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;account&quot;</span>)</a>
+<a class="sourceLine" id="cb53-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb53-23" data-line-number="23"><span class="co"># Rolling back with dbBreak():</span></a>
+<a class="sourceLine" id="cb53-24" data-line-number="24"><span class="kw">dbWithTransaction</span>(</a>
+<a class="sourceLine" id="cb53-25" data-line-number="25">  con,</a>
+<a class="sourceLine" id="cb53-26" data-line-number="26">  {</a>
+<a class="sourceLine" id="cb53-27" data-line-number="27">    withdrawal &lt;-<span class="st"> </span><span class="dv">5000</span></a>
+<a class="sourceLine" id="cb53-28" data-line-number="28">    <span class="kw">dbExecute</span>(con, <span class="st">&quot;UPDATE cash SET amount = amount + ?&quot;</span>, <span class="kw">list</span>(withdrawal))</a>
+<a class="sourceLine" id="cb53-29" data-line-number="29">    <span class="kw">dbExecute</span>(con, <span class="st">&quot;UPDATE account SET amount = amount - ?&quot;</span>, <span class="kw">list</span>(withdrawal))</a>
+<a class="sourceLine" id="cb53-30" data-line-number="30">    <span class="cf">if</span> (<span class="kw">dbReadTable</span>(con, <span class="st">&quot;account&quot;</span>)<span class="op">$</span>amount <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb53-31" data-line-number="31">      <span class="kw">dbBreak</span>()</a>
+<a class="sourceLine" id="cb53-32" data-line-number="32">    }</a>
+<a class="sourceLine" id="cb53-33" data-line-number="33">  }</a>
+<a class="sourceLine" id="cb53-34" data-line-number="34">)</a>
+<a class="sourceLine" id="cb53-35" data-line-number="35"></a>
+<a class="sourceLine" id="cb53-36" data-line-number="36"><span class="co"># These changes were not committed to the database:</span></a>
+<a class="sourceLine" id="cb53-37" data-line-number="37"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;cash&quot;</span>)</a>
+<a class="sourceLine" id="cb53-38" data-line-number="38"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;account&quot;</span>)</a>
+<a class="sourceLine" id="cb53-39" data-line-number="39"></a>
+<a class="sourceLine" id="cb53-40" data-line-number="40"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

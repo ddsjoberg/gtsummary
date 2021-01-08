@@ -1,0 +1,18 @@
+#  Calling the dynamic library
+useDynLib(statmod)
+
+#  All functions exported other than those starting with "."
+exportPattern("^[^\\.]")
+
+importFrom("graphics", "abline", "legend", "lines", "plot", "points")
+
+importFrom("stats", "Gamma", "binomial", "chisq.test", "dbinom",
+           "fisher.test", "fitted", "glm", "glm.fit", ".lm.fit", "lm.fit",
+           "lm.wfit", "make.link", "median", "model.matrix",
+           "model.response", "model.weights", "p.adjust", "pbeta",
+           "pbinom", "pchisq", "pgamma", "pnorm", "ppois",
+           "printCoefmat", "qchisq", "qgamma", "qnorm", "quantile", "quasi", "rbinom",
+           "rchisq", "rnorm", "residuals", "runif", "var", "weighted.mean")
+
+S3method(print,limdil)
+S3method(plot,limdil)

@@ -1,0 +1,98 @@
+---
+title: "gert"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gert}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  error = TRUE
+)
+```
+
+gert is a simple git client based on 'libgit2' ([libgit2.org](https://libgit2.org)):
+
+> libgit2 is a portable, pure C implementation of the Git core methods provided as a re-entrant linkable library with a solid API, allowing you to write native speed custom Git applications in any language which supports C bindings.
+
+What this means for R users is that we can work with local and remote Git repositories from the comfort of R!
+
+User-friendly authentication is a high priority for gert, which supports both SSH and HTTPS remotes on all platforms. User credentials are shared with command line Git through the git-credential store and ssh keys stored on disk or ssh-agent.
+
+Let's attach gert.
+
+```{r setup}
+library(gert)
+```
+
+## Introduce yourself to Git
+
+Before you can do anything with Git, you must first configure your user name and email. When you attach gert, it actually reveals whether you've already done this and, above, you can see that we have.
+
+But what if you have not already configured your user name and email? Do this with `git_config_global_set()`:
+
+```{r eval = FALSE}
+git_config_global_set("user.name", "Jerry Johnson")
+git_config_global_set("user.email", "jerry@gmail.com")
+```
+
+We can verify our success (and see all global options) with `git_config_global()`.
+
+```{r}
+git_config_global()
+```
+
+This is equivalent to these commands in command line Git:
+
+```
+git config --global user.name 'Jerry Johnson'
+git config --global user.email 'jerry@gmail.com'
+git config --global --list
+```
+
+To inspect and change local Git config, i.e. options specific to one repository, use `git_config()` and `git_config_set()`.
+
+## Local repository basics
+
+`gert::git_init()` is essentially `git init`; it's how we create a new local repository. You provide the path to the repository you want to create.
+
+```{r}
+(path <- file.path(tempdir(), "aaa", "bbb", "repo_ccc"))
+dir.exists(path)
+
+(r <- git_init(path))
+dir.exists(path)
+```
+
+Note that all non-existing parts of the path are created: `aaa`, `bbb`, and `repo_ccc` (the actual git repository).
+
+`git_find()` finds a git repository at or above the path you provide and errors otherwise.
+
+```{r}
+git_find(r)
+
+dir.create(file.path(r, "child_dir"))
+git_find(file.path(r, "child_dir"))
+
+git_find(file.path(tempdir(), "aaa", "bbb"))
+```
+
+`git_init()` can also create a repository in a pre-existing directory, as long as it is empty.
+
+```{r}
+r2 <- file.path(tempdir(), "repo_ddd")
+dir.create(r2)
+
+git_init(r2)
+```
+
+Cleanup.
+
+```{r}
+unlink(r, recursive = TRUE)
+unlink(r2, recursive = TRUE)
+```

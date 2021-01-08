@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="emmeans package, Version 1.5.3" />
+
+
+<title>Transformations and link functions in emmeans</title>
+
+
+
+
+
+
+<style type="text/css">body {font-size: 11pt; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;margin: 30px 50px 30px 50px; }h1,h2,h3,h4,h5,h6 { font-family: Arial,Helvetica,Sans-serif; }a { text-decoration: none; }a:link { color:darkblue; } a:visited { color:darkblue; } a:hover { color:dodgerblue; }a:active { color:dodgerblue; } code {color: #602000;font-family: "Lucida Console", Monaco, monospace; font-size: 90%;}.r { color: darkred; }.ro { color: darkgreen; background-color: #eeeeee; }.re { color: red;}.r code, a code, .ro code, .re code { color: inherit; }.vigindex ul { list-style-type: none; }.vigindex ul li { list-style: none; }.vigindex a code { color: inherit; }.vigindex li code { color: inherit; }</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Transformations and link functions in emmeans</h1>
+<h4 class="author">emmeans package, Version 1.5.3</h4>
+
+
+
+<!-- @index Vignettes!Transformations and link functions -->
+<div id="contents" class="section level2">
+<h2>Contents</h2>
+<p>This vignette covers the intricacies of transformations and link functions in <strong>emmeans</strong>.</p>
+<ol style="list-style-type: decimal">
+<li><a href="#overview">Overview</a></li>
+<li><a href="#regrid">Re-gridding</a></li>
+<li><a href="#links">Link functions</a></li>
+<li><a href="#tranlink">Both a response transformation and a link</a></li>
+<li><a href="#special">Special transformations</a></li>
+<li><a href="#after">Specifying a transformation after the fact</a></li>
+<li><a href="#auto">Auto-detected transformations</a></li>
+<li><a href="#stdize">Standardized response</a></li>
+<li><a href="#logs">Faking a log transformation</a>
+<ol style="list-style-type: lower-alpha">
+<li><a href="#faking">Faking other transformations</a></li>
+</ol></li>
+<li><a href="#bias-adj">Bias adjustment</a></li>
+</ol>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<!-- @index Transformations!Overview; Examples!`pigs` -->
+<p>Consider the same example with the <code>pigs</code> dataset that is used in many of these vignettes:</p>
+<pre class="r"><code>pigs.lm &lt;- lm(log(conc) ~ source + factor(percent), data = pigs)</code></pre>
+<p>This model has two factors, <code>source</code> and <code>percent</code> (coerced to a factor), as predictors; and log-transformed <code>conc</code> as the response. Here we obtain the EMMs for <code>source</code>, examine its structure, and finally produce a summary, including a test against a null value of log(35):</p>
+<pre class="r"><code>pigs.emm.s &lt;- emmeans(pigs.lm, &quot;source&quot;)
+str(pigs.emm.s)</code></pre>
+<pre class="ro"><code>## &#39;emmGrid&#39; object with variables:
+##     source = fish, soy, skim
+## Transformation: &quot;log&quot;</code></pre>
+<pre class="r"><code>summary(pigs.emm.s, infer = TRUE, null = log(35))</code></pre>
+<pre class="ro"><code>##  source emmean     SE df lower.CL upper.CL null t.ratio p.value
+##  fish     3.39 0.0367 23     3.32     3.47 3.56 -4.385  0.0002 
+##  soy      3.67 0.0374 23     3.59     3.74 3.56  2.988  0.0066 
+##  skim     3.80 0.0394 23     3.72     3.88 3.56  6.130  &lt;.0001 
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<p>Now suppose that we want the EMMs expressed on the same scale as <code>conc</code>. This can be done by adding <code>type = &quot;response&quot;</code> to the <code>summary()</code> call:</p>
+<pre class="r"><code>summary(pigs.emm.s, infer = TRUE, null = log(35), type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  source response   SE df lower.CL upper.CL null t.ratio p.value
+##  fish       29.8 1.09 23     27.6     32.1   35 -4.385  0.0002 
+##  soy        39.1 1.47 23     36.2     42.3   35  2.988  0.0066 
+##  skim       44.6 1.75 23     41.1     48.3   35  6.130  &lt;.0001 
+## 
+## Results are averaged over the levels of: percent 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the log scale 
+## Tests are performed on the log scale</code></pre>
+<p>Note: Looking ahead, this output is compared later in this vignette with a <a href="#pigs-biasadj">bias-adjusted version</a>.</p>
+<div id="timing" class="section level3">
+<h3>Timing is everything</h3>
+<!-- @index Transformations!Timing is everything -->
+<p>Dealing with transformations in <strong>emmeans</strong> is somewhat complex, due to the large number of possibilities. But the key is understanding what happens, when. These results come from a sequence of steps. Here is what happens (and doesn’t happen) at each step:</p>
+<ol style="list-style-type: decimal">
+<li>The reference grid is constructed for the <code>log(conc)</code> model. The fact that a log transformation is used is recorded, but nothing else is done with that information.</li>
+<li>The predictions on the reference grid are averaged over the four <code>percent</code> levels, for each <code>source</code>, to obtain the EMMs for <code>source</code> – <em>still</em> on the <code>log(conc)</code> scale.</li>
+<li>The standard errors and confidence intervals for these EMMs are computed – <em>still</em> on the <code>log(conc)</code> scale.</li>
+<li>Only now do we do back-transformation…
+<ol style="list-style-type: lower-alpha">
+<li>The EMMs are back-transformed to the <code>conc</code> scale.</li>
+<li>The endpoints of the confidence intervals are back-transformed.</li>
+<li>The <em>t</em> tests and <em>P</em> values are left as-is.</li>
+<li>The standard errors are converted to the <code>conc</code> scale using the delta method. These SEs were <em>not</em> used in constructing the tests and confidence intervals.</li>
+</ol></li>
+</ol>
+</div>
+<div id="the-model-is-our-best-guide" class="section level3">
+<h3>The model is our best guide</h3>
+<p>This choice of timing is based on the idea that <em>the model is right</em>. In particular, the fact that the response is transformed suggests that the transformed scale is the best scale to be working with. In addition, the model specifies that the effects of <code>source</code> and <code>percent</code> are <em>linear</em> on the transformed scale; inasmuch as marginal averaging to obtain EMMs is a linear operation, that averaging is best done on the transformed scale. For those two good reasons, back-transforming to the response scale is delayed until the very end by default.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="regrid" class="section level2">
+<h2>Re-gridding</h2>
+<!-- @index `regrid()`; Transformations!Re-gridding; `emmeans()`!With transformations -->
+<p>As well-advised as it is, some users may not want the default timing of things. The tool for changing when back-transformation is performed is the <code>regrid()</code> function – which, with default settings of its arguments, back-transforms an <code>emmGrid</code> object and adjusts everything in it appropriately. For example:</p>
+<pre class="r"><code>str(regrid(pigs.emm.s))</code></pre>
+<pre class="ro"><code>## &#39;emmGrid&#39; object with variables:
+##     source = fish, soy, skim</code></pre>
+<pre class="r"><code>summary(regrid(pigs.emm.s), infer = TRUE, null = 35)</code></pre>
+<pre class="ro"><code>##  source response   SE df lower.CL upper.CL null t.ratio p.value
+##  fish       29.8 1.09 23     27.5     32.1   35 -4.758  0.0001 
+##  soy        39.1 1.47 23     36.1     42.2   35  2.827  0.0096 
+##  skim       44.6 1.75 23     40.9     48.2   35  5.446  &lt;.0001 
+## 
+## Results are averaged over the levels of: percent 
+## Confidence level used: 0.95</code></pre>
+<p>Notice that the structure no longer includes the transformation. That’s because it is no longer relevant; the reference grid is on the <code>conc</code> scale, and how we got there is now forgotten. Compare this <code>summary()</code> result with the preceding one, and note the following:</p>
+<ul>
+<li>It no longer has annotations concerning transformations.</li>
+<li>The estimates and SEs are identical.</li>
+<li>The confidence intervals, <em>t</em> ratios, and <em>P</em> values are <em>not</em> identical. This is because, this time, the SEs shown in the table are the ones actually used to construct the tests and intervals.</li>
+</ul>
+<p>Understood, right? But think carefully about how these EMMs were obtained. They are back-transformed from <code>pigs.emm.s</code>, in which <em>the marginal averaging was done on the log scale</em>. If we want to back-transform <em>before</em> doing the averaging, we need to call <code>regrid()</code> after the reference grid is constructed but before the averaging takes place:</p>
+<pre class="r"><code>pigs.rg &lt;- ref_grid(pigs.lm)
+pigs.remm.s &lt;- emmeans(regrid(pigs.rg), &quot;source&quot;)
+summary(pigs.remm.s, infer = TRUE, null = 35)</code></pre>
+<pre class="ro"><code>##  source response   SE df lower.CL upper.CL null t.ratio p.value
+##  fish       30.0 1.10 23     27.7     32.2   35 -4.585  0.0001 
+##  soy        39.4 1.49 23     36.3     42.5   35  2.927  0.0076 
+##  skim       44.8 1.79 23     41.1     48.5   35  5.486  &lt;.0001 
+## 
+## Results are averaged over the levels of: percent 
+## Confidence level used: 0.95</code></pre>
+<p>These results all differ from either of the previous two summaries – again, because the averaging is done on the <code>conc</code> scale rather than the <code>log(conc)</code> scale.</p>
+<div id="regrid" class="section level6">
+<h6></h6>
+<!-- @index `regrid()`!`transform` vs. `type` -->
+<p>Note: For those who want to routinely back-transform before averaging, the <code>transform</code> argument in <code>ref_grid()</code> simplifies this. The first two steps above could have been done more easily as follows:</p>
+<pre class="r"><code>pigs.remm.s &lt;- emmeans(pigs.lm, &quot;source&quot;, transform = &quot;response&quot;)</code></pre>
+<p>But don’t get <code>transform</code> and <code>type</code> confused. The <code>transform</code> argument is passed to <code>regrid()</code> after the reference grid is constructed, whereas the <code>type</code> argument is simply remembered and used by <code>summary()</code>. So a similar-looking call:</p>
+<pre class="r"><code>emmeans(pigs.lm, &quot;source&quot;, type = &quot;response&quot;)</code></pre>
+<p>will compute the results we have seen for <code>pigs.emm.s</code> – back-transformed <em>after</em> averaging on the log scale.</p>
+<p>Remember again: When it comes to transformations, timing is everything.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="links" class="section level2">
+<h2>Link functions</h2>
+<!-- @index Link functions; Examples!`neuralgia`; Examples!Logistic regression -->
+<p>Exactly the same ideas we have presented for response transformations apply to generalized linear models having non-identity link functions. As far as <strong>emmeans</strong> is concerned, there is no difference at all.</p>
+<p>To illustrate, consider the <code>neuralgia</code> dataset provided in the package. These data come from an experiment reported in a SAS technical report where different treatments for neuralgia are compared. The patient’s sex is an additional factor, and their age is a covariate. The response is <code>Pain</code>, a binary variable on whether or not the patient reports neuralgia pain after treatment. The model suggested in the SAS report is equivalent to the following. We use it to obtain estimated probabilities of experiencing pain:</p>
+<pre class="r"><code>neuralgia.glm &lt;- glm(Pain ~ Treatment * Sex + Age, family = binomial(), data = neuralgia)
+neuralgia.emm &lt;- emmeans(neuralgia.glm, &quot;Treatment&quot;, type = &quot;response&quot;)</code></pre>
+<pre><code>## NOTE: Results may be misleading due to involvement in interactions</code></pre>
+<pre class="r"><code>neuralgia.emm</code></pre>
+<pre class="ro"><code>##  Treatment  prob     SE  df asymp.LCL asymp.UCL
+##  A         0.211 0.1109 Inf    0.0675     0.497
+##  B         0.121 0.0835 Inf    0.0285     0.391
+##  P         0.866 0.0883 Inf    0.5927     0.966
+## 
+## Results are averaged over the levels of: Sex 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the logit scale</code></pre>
+<div id="oddsrats" class="section level6">
+<h6></h6>
+<!-- @index Odds ratios; Logistic regression!Odds ratios -->
+<p>(The note about the interaction is discussed shortly.) Note that the averaging over <code>Sex</code> is done on the logit scale, <em>before</em> the results are back-transformed for the summary. We may use <code>pairs()</code> to compare these estimates; note that logits are logs of odds; so this is another instance where log-differences are back-transformed – in this case to odds ratios:</p>
+<pre class="r"><code>pairs(neuralgia.emm, reverse = TRUE)</code></pre>
+<pre class="ro"><code>##  contrast odds.ratio     SE  df z.ratio p.value
+##  B / A         0.513  0.515 Inf -0.665  0.7837 
+##  P / A        24.234 25.142 Inf  3.073  0.0060 
+##  P / B        47.213 57.242 Inf  3.179  0.0042 
+## 
+## Results are averaged over the levels of: Sex 
+## P value adjustment: tukey method for comparing a family of 3 estimates 
+## Tests are performed on the log odds ratio scale</code></pre>
+<p>So there is evidence of considerably more pain being reported with placebo (treatment <code>P</code>) than with either of the other two treatments. The estimated odds of pain with <code>B</code> are about half that for <code>A</code>, but this finding is not statistically significant. (The odds that this is a made-up dataset seem quite high, but that finding is strictly this author’s impression.)</p>
+<p>Observe that there is a note in the output for <code>neuralgia.emm</code> that the results may be misleading. It is important to take it seriously, because if two factors interact, it may be the case that marginal averages of predictions don’t reflect what is happening at any level of the factors being averaged over. To find out, look at an interaction plot of the fitted model:</p>
+<pre class="r"><code>emmip(neuralgia.glm, Sex ~ Treatment)</code></pre>
+<p><img src="data:image/png;base64,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" width="432" /></p>
+<p>There is no practical difference between females and males in the patterns of response to <code>Treatment</code>; so I think most people would be quite comfortable with the marginal results that are reported earlier.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="tranlink" class="section level2">
+<h2>Models having both a response transformation and a link function</h2>
+<!-- @index Transformations!with link function@link; Examples!`warpbreaks`
+            Examples!Gamma regression; `summary()`!`type = "unlink"` -->
+<p>It is possible to have a generalized linear model with a non-identity link <em>and</em> a response transformation. Here is an example, with the built-in <code>wapbreaks</code> dataset:</p>
+<pre class="r"><code>warp.glm &lt;- glm(sqrt(breaks) ~ wool*tension, family = Gamma, data = warpbreaks)
+ref_grid(warp.glm)</code></pre>
+<pre class="ro"><code>## &#39;emmGrid&#39; object with variables:
+##     wool = A, B
+##     tension = L, M, H
+## Transformation: &quot;inverse&quot; 
+## Additional response transformation: &quot;sqrt&quot;</code></pre>
+<p>The canonical link for a gamma model is the reciprocal (or inverse); and there is the square-root response transformation besides. If we choose <code>type = &quot;response&quot;</code> in summarizing, we undo <em>both</em> transformations:</p>
+<pre class="r"><code>emmeans(warp.glm, ~ tension | wool, type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>## wool = A:
+##  tension response   SE  df asymp.LCL asymp.UCL
+##  L           42.9 5.24 Inf      33.2      53.7
+##  M           23.3 2.85 Inf      18.0      29.2
+##  H           23.6 2.88 Inf      18.3      29.6
+## 
+## wool = B:
+##  tension response   SE  df asymp.LCL asymp.UCL
+##  L           27.4 3.35 Inf      21.3      34.4
+##  M           28.1 3.43 Inf      21.8      35.2
+##  H           18.5 2.26 Inf      14.3      23.2
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the sqrt scale</code></pre>
+<p>What happened here is first the linear predictor was back-transformed from the link scale (inverse); then the squares were obtained to back-transform the rest of the way. It is possible to undo the link, and not the response transformation:</p>
+<pre class="r"><code>emmeans(warp.glm, ~ tension | wool, type = &quot;unlink&quot;)</code></pre>
+<pre class="ro"><code>## wool = A:
+##  tension response    SE  df asymp.LCL asymp.UCL
+##  L           6.55 0.400 Inf      5.85      7.44
+##  M           4.83 0.295 Inf      4.31      5.48
+##  H           4.86 0.297 Inf      4.34      5.52
+## 
+## wool = B:
+##  tension response    SE  df asymp.LCL asymp.UCL
+##  L           5.24 0.320 Inf      4.68      5.95
+##  M           5.30 0.324 Inf      4.73      6.02
+##  H           4.30 0.263 Inf      3.84      4.89
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the inverse scale</code></pre>
+<p>It is <em>not</em> possible to undo the response transformation and leave the link in place, because the response was transform first, then the link model was applied; we have to undo those in reverse order to make sense.</p>
+<p>One may also use <code>&quot;unlink&quot;</code> as a <code>transform</code> argument in <code>regrid()</code> or through <code>ref_grid()</code>.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="special" class="section level2">
+<h2>Special transformations</h2>
+<!-- @index Transformations!Custom; `make.tran()` -->
+<p>The <code>make.tran()</code> function provides several special transformations and sets things up so they can be handled in <strong>emmeans</strong> with relative ease. (See <code>help(&quot;make.tran&quot;, &quot;emmeans&quot;)</code> for descriptions of what is available.) <code>make.tran()</code> works much like <code>stats::make.link()</code> in that it returns a list of functions <code>linkfun()</code>, <code>linkinv()</code>, etc. that serve in managing results on a transformed scale. The difference is that most transformations with <code>make.tran()</code> require additional arguments.</p>
+<p>To use this capability in <code>emmeans()</code>, it is fortuitous to first obtain the <code>make.tran()</code> result, and then to use it as the enclosing environment for fitting the model, with <code>linkfun</code> as the transformation. For example, suppose the response variable is a percentage and we want to use the response transformation <span class="math inline">\(\sin^{-1}\sqrt{y/100}\)</span>. Then proceed like this:</p>
+<pre class="r"><code>tran &lt;- make.tran(&quot;asin.sqrt&quot;, 100)
+my.model &lt;- with(tran, 
+    lmer(linkfun(percent) ~ treatment + (1|Block), data = mydata))</code></pre>
+<p>Subsequent calls to <code>ref_grid()</code>, <code>emmeans()</code>, <code>regrid()</code>, etc. will then be able to access the transformation information correctly.</p>
+<p>The help page for <code>make.tran()</code> has an example like this using a Box-Cox transformation.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="after" class="section level2">
+<h2>Specifying a transformation after the fact</h2>
+<!-- @index Transformations!Adding after the fact; `update()`!`tran` -->
+<p>It is not at all uncommon to fit a model using statements like the following:</p>
+<pre class="r"><code>mydata &lt;- transform(mydata, logy.5 = log(yield + 0.5))
+my.model &lt;- lmer(logy.5 ~ treatment + (1|Block), data = mydata)</code></pre>
+<p>In this case, there is no way for <code>ref_grid()</code> to figure out that a response transformation was used. What can be done is to update the reference grid with the required information:</p>
+<pre class="r"><code>my.rg &lt;- update(ref_grid(my.model), tran = make.tran(&quot;genlog&quot;, .5))</code></pre>
+<p>Subsequently, use <code>my.rg</code> in place of <code>my.model</code> in any <code>emmeans()</code> analyses, and the transformation information will be there.</p>
+<p>For standard transformations (those in <code>stats::make.link()</code>), just give the name of the transformation; e.g.,</p>
+<pre class="r"><code>model.rg &lt;- update(ref_grid(model), tran = &quot;sqrt&quot;)</code></pre>
+</div>
+<div id="auto" class="section level2">
+<h2>Auto-detected response transformations</h2>
+<!-- @index Transformations!Auto-detected -->
+<p>As can be seen in the initial <code>pigs.lm</code> example in this vignette, certain straightforward response transformations such as <code>log</code>, <code>sqrt</code>, etc. are automatically detected when <code>emmeans()</code> (really, <code>ref_grid()</code>) is called on the model object. In fact, scaling and shifting is supported too; so the preceding example with <code>my.model</code> could have been done more easily by specifying the transformation directly in the model formula:</p>
+<pre class="r"><code>my.better.model &lt;- lmer(log(yield + 0.5) ~ treatment + (1|Block), data = mydata)</code></pre>
+<p>The transformation would be auto-detected, saving you the trouble of adding it later. Similarly, a response transformation of <code>2 * sqrt(y + 1)</code> would be correctly auto-detected. A model with a linearly transformed response, e.g. <code>4*(y - 1)</code>, would <em>not</em> be auto-detected, but <code>4*I(y + -1)</code> would be interpreted as <code>4*identity(y + -1)</code>. Parsing is such that the response expression must be of the form <code>mult * fcn(resp + const)</code>; operators of <code>-</code> and <code>/</code> are not recognized.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="logs" class="section level2">
+<h2>Faking a log transformation</h2>
+<!-- @index Transformations!Faking a log transformation; `regrid()`!`transform = "log"` -->
+<p>The <code>regrid()</code> function makes it possible to fake a log transformation of the response. Why would you want to do this? So that you can make comparisons using ratios instead of differences.</p>
+<p>Consider the <code>pigs</code> example once again, but suppose we had fitted a model with a square-root transformation instead of a log:</p>
+<pre class="r"><code>pigroot.lm &lt;- lm(sqrt(conc) ~ source + factor(percent), data = pigs)
+piglog.emm.s &lt;- regrid(emmeans(pigroot.lm, &quot;source&quot;), transform = &quot;log&quot;)
+confint(piglog.emm.s, type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  source response   SE df lower.CL upper.CL
+##  fish       29.8 1.32 23     27.2     32.7
+##  soy        39.2 1.54 23     36.2     42.6
+##  skim       45.0 1.74 23     41.5     48.7
+## 
+## Results are averaged over the levels of: percent 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the log scale</code></pre>
+<pre class="r"><code>pairs(piglog.emm.s, type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  contrast    ratio     SE df t.ratio p.value
+##  fish / soy  0.760 0.0454 23 -4.591  0.0004 
+##  fish / skim 0.663 0.0391 23 -6.965  &lt;.0001 
+##  soy / skim  0.872 0.0469 23 -2.548  0.0457 
+## 
+## Results are averaged over the levels of: percent 
+## P value adjustment: tukey method for comparing a family of 3 estimates 
+## Tests are performed on the log scale</code></pre>
+<p>These results are not identical, but very similar to the back-transformed confidence intervals <a href="#timing">above</a> for the EMMs and the <a href="comparisons.html#logs">pairwise ratios in the “comparisons” vignette</a>, where the fitted model actually used a log response.</p>
+<div id="faking" class="section level3">
+<h3>Faking other transformations</h3>
+<!-- @index Transformations!faking -->
+<p>It is possible to fake transformations other than the log. Just use the same method, e.g.</p>
+<pre class="r"><code>regrid(emm, transform = &quot;probit&quot;)</code></pre>
+<p>would re-grid the existing <code>emm</code> to the probit scale. Note that any estimates in <code>emm</code> outside of the interval <span class="math inline">\((0,1)\)</span> will be flagged as non-estimable.</p>
+<p>The section on standardized responses gives an example of reverse-engineering a standardized response transformation in this way.</p>
+</div>
+</div>
+<div id="stdize" class="section level2">
+<h2>Standardized response</h2>
+<!-- @index Transformations!Standardizing; Transformations!`scale()`;
+    `scale()`; Standardized response; Examples!`fiber` -->
+<p>In some disciplines, it is common to fit a model to a standardized response variable. R’s base function <code>scale()</code> makes this easy to do; but it is important to notice that <code>scale(y)</code> is more complicated than, say, <code>sqrt(y)</code>, because <code>scale(y)</code> requires all the values of <code>y</code> in order to determine the centering and scaling parameters. The <code>ref_grid()</code> function (called by `emmeans() and others) tries to detect the scaling parameters. To illustrate:</p>
+<pre class="r"><code>fiber.lm &lt;- lm(scale(strength) ~ machine * scale(diameter), data = fiber)
+emmeans(fiber.lm, &quot;machine&quot;)   # on the standardized scale</code></pre>
+<pre class="ro"><code>##  machine   emmean    SE df lower.CL upper.CL
+##  A        0.00444 0.156  9   -0.349    0.358
+##  B        0.28145 0.172  9   -0.109    0.672
+##  C       -0.33473 0.194  9   -0.774    0.105
+## 
+## Results are given on the scale(40.2, 4.97) (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>emmeans(fiber.lm, &quot;machine&quot;, type = &quot;response&quot;)   # strength scale</code></pre>
+<pre class="ro"><code>##  machine response    SE df lower.CL upper.CL
+##  A           40.2 0.777  9     38.5     42.0
+##  B           41.6 0.858  9     39.7     43.5
+##  C           38.5 0.966  9     36.3     40.7
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the scale(40.2, 4.97) scale</code></pre>
+<p>More interesting (and complex) is what happens with <code>emtrends()</code>. Without anything fancy added, we have</p>
+<pre class="r"><code>emtrends(fiber.lm, &quot;machine&quot;, var = &quot;diameter&quot;)</code></pre>
+<pre class="ro"><code>##  machine diameter.trend     SE df lower.CL upper.CL
+##  A                0.222 0.0389  9   0.1339    0.310
+##  B                0.172 0.0450  9   0.0705    0.274
+##  C                0.174 0.0418  9   0.0791    0.268
+## 
+## Confidence level used: 0.95</code></pre>
+<p>These slopes are (change in <code>scale(strength)</code>) / (change in <code>diameter</code>); that is, we didn’t do anything to undo the response transformation, but the trend is based on exactly the variable specified, <code>diameter</code>. To get (change in <code>strength</code>) / (change in <code>diameter</code>), we need to undo the response transformation, and that is done via <code>transform</code> (which invokes <code>regrid()</code> after the reference grid is constructed):</p>
+<pre class="r"><code>emtrends(fiber.lm, &quot;machine&quot;, var = &quot;diameter&quot;, transform = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  machine diameter.trend    SE df lower.CL upper.CL
+##  A                1.104 0.194  9    0.666     1.54
+##  B                0.857 0.224  9    0.351     1.36
+##  C                0.864 0.208  9    0.394     1.33
+## 
+## Confidence level used: 0.95</code></pre>
+<p>What if we want slopes for (change in <code>scale(strength)</code>) / (change in <code>scale(diameter)</code>)? This can be done, but it is necessary to manually specify the scaling parameters for <code>diameter</code>.</p>
+<pre class="r"><code>with(fiber, c(mean = mean(diameter), sd = sd(diameter)))</code></pre>
+<pre class="ro"><code>##      mean        sd 
+## 24.133333  4.323799</code></pre>
+<pre class="r"><code>emtrends(fiber.lm, &quot;machine&quot;, var = &quot;scale(diameter, 24.133, 4.324)&quot;)</code></pre>
+<pre class="ro"><code>##  machine scale(diameter, 24.133, 4.324).trend    SE df lower.CL upper.CL
+##  A                                      0.960 0.168  9    0.579     1.34
+##  B                                      0.745 0.195  9    0.305     1.19
+##  C                                      0.751 0.181  9    0.342     1.16
+## 
+## Confidence level used: 0.95</code></pre>
+<p>This result is the one most directly related to the regression coefficients:</p>
+<pre class="r"><code>coef(fiber.lm)[4:6]</code></pre>
+<pre class="ro"><code>##          scale(diameter) machineB:scale(diameter) machineC:scale(diameter) 
+##                0.9598846               -0.2148202               -0.2086880</code></pre>
+<p>There is a fourth possibility, (change in <code>strength</code>) / (change in <code>scale(diameter)</code>), that I leave to the reader.</p>
+<div id="what-to-do-if-auto-detection-fails" class="section level3">
+<h3>What to do if auto-detection fails</h3>
+<p>Auto-detection of standardized responses is a bit tricky, and doesn’t always succeed. If it fails, a message is displayed and the transformation is ignored. In cases where it doesn’t work, we need to explicitly specify the transformation using <code>make.tran()</code>. The methods are exactly as shown earlier in this vignette, so we show the code but not the results for a hypothetical example.</p>
+<p>One method is to fit the model and then add the transformation information later. In this example, <code>some.fcn</code> is a model-fitting function which for some reason doesn’t allow the scaling information to be detected.</p>
+<pre class="r"><code>mod &lt;- some.fcn(scale(RT) ~ group + (1|subject), data = mydata)
+emmeans(mod, &quot;group&quot;, type = &quot;response&quot;,
+        tran = make.tran(&quot;scale&quot;, y = mydata$RT))</code></pre>
+<p>The other, equivalent, method is to create the transformation object first and use it in fitting the model:</p>
+<pre class="r"><code>mod &lt;- with(make.tran(&quot;scale&quot;, y = mydata$RT),
+            some.fcn(linkfun(RT) ~ group + (1|subject), data = mydata))
+emmeans(mod, &quot;group&quot;, type = &quot;response&quot;)</code></pre>
+</div>
+<div id="reverse-engineering-a-standardized-response" class="section level3">
+<h3>Reverse-engineering a standardized response</h3>
+<p>An interesting twist on all this is the reverse situation: Suppose we fitted the model <em>without</em> the standardized response, but we want to kniow what the results would be if we had standardized. Here we reverse-engineer the <code>fiber.lm</code> example above:</p>
+<pre class="r"><code>fib.lm &lt;- lm(strength ~ machine * diameter, data = fiber)
+
+# On raw scale:
+emmeans(fib.lm, &quot;machine&quot;)</code></pre>
+<pre class="ro"><code>##  machine emmean    SE df lower.CL upper.CL
+##  A         40.2 0.777  9     38.5     42.0
+##  B         41.6 0.858  9     39.7     43.5
+##  C         38.5 0.966  9     36.3     40.7
+## 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code># On standardized scale:
+tran &lt;- make.tran(&quot;scale&quot;, y = fiber$strength)
+emmeans(fib.lm, &quot;machine&quot;, transform = tran)</code></pre>
+<pre class="ro"><code>##  machine   emmean    SE df lower.CL upper.CL
+##  A        0.00444 0.156  9   -0.349    0.358
+##  B        0.28145 0.172  9   -0.109    0.672
+##  C       -0.33473 0.194  9   -0.774    0.105
+## 
+## Results are given on the scale(40.2, 4.97) (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<p>In the latter call, the <code>transform</code> argument causes <code>regrid()</code> to be called after the reference grid is constructed.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="bias-adj" class="section level2">
+<h2>Bias adjustment</h2>
+<!-- @index Transformations!Bias adjustment; Bias adjustment!When back-transforming;
+    Means!Generalized; Geometric means; -->
+<p>So far, we have discussed ideas related to back-transforming results as a simple way of expressing results on the same scale as the response. In particular, means obtained in this way are known as <em>generalized means</em>; for example, a log transformation of the response is associated with geometric means. When the goal is simply to make inferences about which means are less than which other means, and a response transformation is used, it is often acceptable to present estimates and comparisons of these generalized means. However, sometimes it is important to report results that actually do reflect expected values of the untransformed response. An example is a financial study, where the response is in some monetary unit. It may be convenient to use a response transformation for modeling purposes, but ultimately we may want to make financial projections in those same units.</p>
+<p>In such settings, we need to make a bias adjustment when we back-transform, because any nonlinear transformation biases the expected values of statistical quantities. More specifically, suppose that we have a response <span class="math inline">\(Y\)</span> and the transformed response is <span class="math inline">\(U\)</span>. To back-transform, we use <span class="math inline">\(Y = h(U)\)</span>; and using a Taylor approximation, <span class="math inline">\(Y \approx h(\eta) + h&#39;(\eta)(U-\eta) + \frac12h&#39;&#39;(\eta)(U-\eta)^2\)</span>, so that <span class="math inline">\(E(Y) \approx h(\eta) + \frac12h&#39;&#39;(\eta)Var(U)\)</span>. This shows that the amount of needed bias adjustment is approximately <span class="math inline">\(\frac12h&#39;&#39;(\eta)\sigma^2\)</span> where <span class="math inline">\(\sigma\)</span> is the error SD in the model for <span class="math inline">\(U\)</span>. It depends on <span class="math inline">\(\sigma\)</span>, and the larger this is, the greater the bias adjustment is needed. This second-order bias adjustment is what is currently used in the <strong>emmeans</strong> package when bias-adjustment is requested. There are better or exact adjustments for certain cases, and future updates may incorporate some of those.</p>
+<div id="pigs-biasadj" class="section level3">
+<h3>Pigs example revisited</h3>
+<!-- @index Examples!`pigs` -->
+<p>Let us compare the estimates in <a href="#overview">the overview</a> after we apply a bias adjustment. First, note that an estimate of the residual SD is available via the <code>sigma()</code> function:</p>
+<pre class="r"><code>sigma(pigs.lm)</code></pre>
+<pre class="ro"><code>## [1] 0.115128</code></pre>
+<p>This estimate is used by default. The bias-adjusted EMMs for the sources are:</p>
+<pre class="r"><code>summary(pigs.emm.s, type = &quot;response&quot;, bias.adj = TRUE)</code></pre>
+<pre class="ro"><code>##  source response   SE df lower.CL upper.CL
+##  fish       30.0 1.10 23     27.8     32.4
+##  soy        39.4 1.48 23     36.5     42.6
+##  skim       44.9 1.77 23     41.3     48.7
+## 
+## Results are averaged over the levels of: percent 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the log scale 
+## Bias adjustment applied based on sigma = 0.11513</code></pre>
+<p>These estimates (and also their SEs) are slightly larger than we had without bias adjustment. They are estimates of the <em>aritmetic</em> mean responses, rather than the <em>geometric</em> means shown in the overview. Had the value of <code>sigma</code> been larger, the adjustment would have been greater. You can experiment with this by adding a <code>sigma =</code> argument to the above call.</p>
+</div>
+<div id="link-bias" class="section level3">
+<h3>Response transformations vs. link functions</h3>
+<!-- @index Transformations!Response versus link functions;
+    Bias adjustment!For link functions vs. response transformations; -->
+<p>At this point, it is important to point out that the above discussion focuses on <em>response</em> transformations, as opposed to link functions used in generalized linear models (GLMs). In an ordinary GLM, no bias adjustment is needed, nor is it appropriate, because the link function is just used to define a nonlinear relationship between the actual response mean <span class="math inline">\(\eta\)</span> and the linear predictor. That is, the back-transformed parameter is already the mean.</p>
+<div id="insects" class="section level4">
+<h4>InsectSprays example</h4>
+<!-- @index Examples!`InsectSprays`;  Bias adjustment!When *not* to use; -->
+<p>To illustrate this, consider the <code>InsectSprays</code> data in the <strong>datasets</strong> package. The response variable is a count, and there is one treatment, the spray that is used. Let us model the count as a Poisson variable with (by default) a log link; and obtain the EMMs, with and without a bias adjustment</p>
+<pre class="r"><code>ismod &lt;- glm(count ~ spray, data = InsectSprays, family = poisson())
+emmeans(ismod, &quot;spray&quot;, type = &quot;response&quot;, bias.adj = FALSE)</code></pre>
+<pre class="ro"><code>##  spray  rate    SE  df asymp.LCL asymp.UCL
+##  A     14.50 1.099 Inf     12.50     16.82
+##  B     15.33 1.130 Inf     13.27     17.72
+##  C      2.08 0.417 Inf      1.41      3.08
+##  D      4.92 0.640 Inf      3.81      6.35
+##  E      3.50 0.540 Inf      2.59      4.74
+##  F     16.67 1.179 Inf     14.51     19.14
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the log scale</code></pre>
+<pre class="r"><code>emmeans(ismod, &quot;spray&quot;, type = &quot;response&quot;, bias.adj = TRUE)</code></pre>
+<pre class="ro"><code>##  spray  rate    SE  df asymp.LCL asymp.UCL
+##  A     25.30 1.918 Inf     21.81     29.35
+##  B     26.76 1.972 Inf     23.16     30.91
+##  C      3.64 0.727 Inf      2.46      5.38
+##  D      8.58 1.117 Inf      6.65     11.07
+##  E      6.11 0.942 Inf      4.51      8.26
+##  F     29.08 2.056 Inf     25.32     33.41
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the log scale 
+## Bias adjustment applied based on sigma = 1.2206</code></pre>
+<p>These are substantially different! Which is right? Well, due to the simple structure of this dataset, the estimates should be well in line with the simple observed mean counts:</p>
+<pre class="r"><code>with(InsectSprays, tapply(count, spray, mean))</code></pre>
+<pre class="ro"><code>##         A         B         C         D         E         F 
+## 14.500000 15.333333  2.083333  4.916667  3.500000 16.666667</code></pre>
+<p>This illustrates that it is the <em>non</em>-bias-adjusted results that are appropriate. Again, the point here is that a GLM does not have an additive error term, that the model is already formulated in terms of the mean, not some generalized mean. Users must be very careful with this! There is no way to automatically do the right thing.</p>
+<p>Note that, in a generalized linear <em>mixed</em> model, including generalized estimating equations and such, there <em>are</em> additive random components involved, and then bias adjustment becomes appropriate.</p>
+</div>
+<div id="cbpp" class="section level4">
+<h4>CBPP example</h4>
+<!-- @index Examples!`cbpp`; Bias adjustment!In GLMMs and GEE models; -->
+<p>Consider an example adapted from the help page for <code>lme4::cbpp</code>. Contagious bovine pleuropneumonia (CBPP) is a disease in African cattle, and the dataset contains data on incidence of CBPP in several herds of cattle over four time periods. We will fit a mixed model that accounts for herd variations as well as overdispersion (variations larger than expected with a simple binomial model):</p>
+<pre class="r"><code>require(lme4)
+cbpp &lt;- transform(cbpp, unit = 1:nrow(cbpp))
+cbpp.glmer &lt;- glmer(cbind(incidence, size - incidence) ~ period + 
+                          (1 | herd) +  (1 | unit),
+                    family = binomial, data = cbpp)
+
+emm &lt;- emmeans(cbpp.glmer, &quot;period&quot;)
+summary(emm, type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  period   prob     SE  df asymp.LCL asymp.UCL
+##  1      0.1824 0.0442 Inf    0.1109    0.2852
+##  2      0.0614 0.0230 Inf    0.0290    0.1252
+##  3      0.0558 0.0220 Inf    0.0254    0.1182
+##  4      0.0334 0.0172 Inf    0.0120    0.0894
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the logit scale</code></pre>
+<p>The above summary reflects the back-transformed estimates, with no bias adjustment. However, the model estimates two independent sources of random variation that probably should be taken into account:</p>
+<pre class="r"><code>lme4::VarCorr(cbpp.glmer)</code></pre>
+<pre class="ro"><code>##  Groups Name        Std.Dev.
+##  unit   (Intercept) 0.89107 
+##  herd   (Intercept) 0.18396</code></pre>
+<p>Notably, the over-dispersion SD is considerably greater than the herd SD. Suppose we want to estimate the marginal probabilities of CBPP incidence, averaged over herds and over-dispersion variations. For this purpose, we need the combined effect of these variations; so we compute the overall SD via the Pythagorean theorem:</p>
+<pre class="r"><code>total.SD = sqrt(0.89107^2 + 0.18396^2)</code></pre>
+<p>Accordingly, here are the bias-adjusted estimates of the marginal probabilities:</p>
+<pre class="r"><code>summary(emm, type = &quot;response&quot;, bias.adjust = TRUE, sigma = total.SD)</code></pre>
+<pre class="ro"><code>##  period   prob     SE  df asymp.LCL asymp.UCL
+##  1      0.2216 0.0462 Inf    0.1426     0.321
+##  2      0.0823 0.0292 Inf    0.0400     0.159
+##  3      0.0751 0.0282 Inf    0.0351     0.151
+##  4      0.0458 0.0230 Inf    0.0168     0.117
+## 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the logit scale 
+## Bias adjustment applied based on sigma = 0.90986</code></pre>
+<p>These estimates are somewhat larger than the unadjusted estimates (actually, any estimates greater than 0.5 would have been adjusted downward). These adjusted estimates are more appropriate for describing the marginal incidence of CBPP for all herds. In fact, these estimates are fairly close to those obtained directly from the incidences in the data:</p>
+<pre class="r"><code>cases &lt;- with(cbpp, tapply(incidence, period, sum))
+trials &lt;- with(cbpp, tapply(size, period, sum))
+cases / trials</code></pre>
+<pre class="ro"><code>##          1          2          3          4 
+## 0.21942446 0.08018868 0.07106599 0.04516129</code></pre>
+<p>Left as an exercise: Revisit the <code>InsectSprays</code> example, but (using similar methods to the above) create a <code>unit</code> variable and fit an over-dispersion model. Compare the results with and without bias adjustment, and evaluate these results against the earlier results. This is simpler than the CBPP example because there is only one random effect.</p>
+<p><a href="#contents">Back to Contents</a></p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

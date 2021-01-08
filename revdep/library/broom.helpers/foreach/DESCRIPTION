@@ -1,0 +1,36 @@
+Package: foreach
+Type: Package
+Title: Provides Foreach Looping Construct
+Version: 1.5.1
+Authors@R: c(person("Michelle", "Wallig", role="cre", email="Michelle.Wallig@microsoft.com"),
+             person("Microsoft", role=c("aut", "cph")),
+             person("Steve", "Weston", role="aut"))
+Description: Support for the foreach looping construct.  Foreach is an
+        idiom that allows for iterating over elements in a collection,
+        without the use of an explicit loop counter.  This package in
+        particular is intended to be used for its return value, rather
+        than for its side effects.  In that sense, it is similar to the
+        standard lapply function, but doesn't require the evaluation
+        of a function.  Using foreach without side effects also
+        facilitates executing the loop in parallel.
+License: Apache License (== 2.0)
+URL: https://github.com/RevolutionAnalytics/foreach
+BugReports: https://github.com/RevolutionAnalytics/foreach/issues
+Depends: R (>= 2.5.0)
+Imports: codetools, utils, iterators
+Suggests: randomForest, doMC, doParallel, testthat, knitr, rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 7.0.2.9000
+Collate: 'callCombine.R' 'foreach.R' 'do.R' 'foreach-ext.R'
+        'foreach-pkg.R' 'getDoPar.R' 'getDoSeq.R' 'getsyms.R' 'iter.R'
+        'nextElem.R' 'onLoad.R' 'setDoPar.R' 'setDoSeq.R' 'times.R'
+        'utils.R'
+NeedsCompilation: no
+Packaged: 2020-10-12 16:22:02 UTC; hongo
+Author: Michelle Wallig [cre],
+  Microsoft [aut, cph],
+  Steve Weston [aut]
+Maintainer: Michelle Wallig <Michelle.Wallig@microsoft.com>
+Repository: CRAN
+Date/Publication: 2020-10-15 05:00:13 UTC
+Built: R 4.0.3; ; 2020-12-30 19:52:04 UTC; windows

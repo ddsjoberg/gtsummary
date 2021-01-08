@@ -1,0 +1,491 @@
+------------------------------------------------------------------------
+TMB 1.7.18 (2020-07-24)
+------------------------------------------------------------------------
+
+o Fix clang-ASAN issue caused by memory management changes
+
+------------------------------------------------------------------------
+TMB 1.7.17 (2020-07-23)
+------------------------------------------------------------------------
+
+o New function 'FreeADFun()' gives the user more control with memory
+  deallocation. In addition memory management of external pointers
+  have been improved - see '?FreeADFun'.
+
+o Documentation errors in '?sdreport' have been corrected.
+
+o The function 'oneStepPredict()' now calculates residuals in reverse
+  order because it is more stable. Old behaviour can be obtained by
+  passing 'reverse=FALSE'.
+
+------------------------------------------------------------------------
+TMB 1.7.16 (2020-01-15)
+------------------------------------------------------------------------
+
+o Fixed memory leaks in sparse hessian.
+
+o logspace_add: Added some edge case reductions.
+
+o 'oneStepPredict' no longer overwrites mapping of random effects.
+
+o Fix isfinite, isinf, isnan etc (github #297).
+
+o Add support for other object names to 'gdbsource'.
+
+o dbinom: Handle edge cases 0*log(0).
+
+o Add segment method to vector_indicator.
+
+o data_indicator: Add default CTOR.
+
+o splinefun: fix memleak + add vector evaluation.
+
+o Saved models from old TMB versions should now be usable in new TMB
+  versions without giving the INTEGER(...) error.
+
+o checkConsistency bugfix: did not work for mapped random effects.
+
+------------------------------------------------------------------------
+TMB 1.7.15 (2018-11-08)
+------------------------------------------------------------------------
+
+o Allow report array of any type (similar to vector case)
+
+o Solve 'rck' issue from CRAN
+
+o Fix bug in separable simulate
+
+------------------------------------------------------------------------
+TMB 1.7.14 (2018-06-23)
+------------------------------------------------------------------------
+
+o Fix performance bug triggered by R-devel.
+
+o Fixed bug in sparsity detection algorithm.
+
+o Tweedie atomic function speedup.
+
+o Fix save/reload model object. Loaded object no longer overwrites
+  fitted parameters when running e.g. obj$report() or obj$simulate().
+
+o New function 'tmbroot' computes likelihood profile confidence intervals.
+
+------------------------------------------------------------------------
+TMB 1.7.13 (2018-03-22)
+------------------------------------------------------------------------
+
+o Redundant warnings from CHOLMOD have been silenced.
+
+o ADREPORT now tracks object dimensions. More infomation in
+  '?TMB::as.list.sdreport'.
+
+o New feature to do process normalization from R. See
+  '?TMB::normalize'.
+
+o New feature to update data from R without re-taping the
+  computational graph. Enabled on C++ side using 'DATA_UPDATE'.
+
+o bugfix C++ namespace 'autodiff': Jacobian had wrong dimension.
+
+------------------------------------------------------------------------
+TMB 1.7.12 (2017-12-10)
+------------------------------------------------------------------------
+
+o Fix CRAN rchk tool warnings (although false alarm)
+
+o New macro TMB_OBJECTIVE_PTR for more flexible use of DATA and
+  PARAMETER objects.
+
+o Fix 'oneStepPredict' when no random effects.
+
+o C callable routines 'tmb_forward' and 'tmb_reverse' added.
+
+o Fix bug in empty array assignment.
+
+o Fix slow 'oneStepPredict' caused by matrix inversion in
+  'tmbprofile'.
+
+o TMB:::setupRstudio()
+
+o compile: Add flag for tracing forward sweeps.
+
+------------------------------------------------------------------------
+TMB 1.7.11 (2017-08-09)
+------------------------------------------------------------------------
+
+o Allow logical data objects
+
+o Fix conversion R <-> C++ of long objects
+  - Can now pass long vector (length >= 2^31) as DATA_VECTOR.
+  - Can now REPORT a long vector.
+  - Can now calculate long jacobian matrices (m*n can be greater than
+    2^31 where n is the number of parameters and m the number of
+    ADREPORTed variables).
+
+o Fixed a possible segmentation fault in sparsity detection algorithm.
+
+o New flag to sdreport() reduces memory usage when bias correcting a
+  large number of variables.
+
+o New experimental function checkConsistency() to check the Laplace
+  approximation and correctness of the user template.
+
+------------------------------------------------------------------------
+TMB 1.7.10 (2017-05-03)
+------------------------------------------------------------------------
+
+o Fix broken Solaris build caused by Eigen 3.3.3 update
+
+------------------------------------------------------------------------
+TMB 1.7.9 (2017-04-12)
+------------------------------------------------------------------------
+
+o Fix PROTECT bugs reported by Tomas Kalibera.
+
+o Now possible to use 'autodiff::hessian' in conjunction with atomic
+  functions.
+
+o Fix 'testthat:::expect_equal(obj, obj)' crash for non-random effect
+  models.
+
+o Fix compatibility issues of 'tmbutils::vector' with eigen 3.3.2.
+
+------------------------------------------------------------------------
+TMB 1.7.8 (2017-02-08)
+------------------------------------------------------------------------
+
+o Internal bug fixes.
+  - Fix bug in GMRF constructor from grid array.
+  - Fix printing of Eigen/AD types (broken by version 1.7.7)
+
+------------------------------------------------------------------------
+TMB 1.7.7 (2017-01-31)
+------------------------------------------------------------------------
+
+o Internal modifications:
+  - Fix Eigen 3.3.2 compatibility issues.
+  - Disable dynamic symbols.
+
+------------------------------------------------------------------------
+TMB 1.7.6 (2017-01-15)
+------------------------------------------------------------------------
+
+o Add Conway-Maxwell-Poisson distribution (dcompois, rcompois).
+
+o Add lfactorial.
+
+o Move MCMC to separate package.
+
+o Add simulators for exponential, beta, F, logistic, Student T, and
+  Weibull distributions.
+
+o Fix a bug in function 'split'.
+
+------------------------------------------------------------------------
+TMB 1.7.5 (2016-11-20)
+------------------------------------------------------------------------
+
+o Atomic logspace_add and logspace_sub.
+
+o Numerically robust binomial and negative binomial density functions.
+
+o New macros:
+  - DATA_STRING to pass strings from R.
+  - SIMULATE to mark blocks of simulation code.
+
+o Simulation methods implemented for density classes:
+  - MVNORM, AR1, SCALE, VECSCALE, SEPARABLE, GMRF, ARk.
+
+o R-style simulators now available from the template:
+  - rnorm, runif, rpois, rbinom, rgamma, rnbinom and rnbinom2.
+
+------------------------------------------------------------------------
+TMB 1.7.4 (2016-09-21)
+------------------------------------------------------------------------
+
+o Add onLoad check on 'Matrix' package version.
+
+o runExample: Fixed bug when running all examples from a specified
+  example folder.
+
+o sdreport: Fixed bug in the case with exactly one random effect.
+
+o sdreport: Reduced size of output.
+
+------------------------------------------------------------------------
+TMB 1.7.3 (2016-09-05)
+------------------------------------------------------------------------
+
+o New atomic functions:
+  - pbeta
+  - qbeta
+  - dtweedie
+  - besselK (derivatives wrt both arguments)
+  - besselI (derivatives wrt both arguments)
+  - besselJ (derivatives wrt both arguments)
+  - besselY (derivatives wrt both arguments)
+
+o Adaptive numerical integration:
+  - gauss_kronrod::integrate     (one dimension)
+  - gauss_kronrod::mvIntegrate   (multiple dimensions)
+
+o sdreport: Fix bug that caused bias.correction to break when
+  parameter maps were in use.
+
+------------------------------------------------------------------------
+TMB 1.7.2 (2016-08-09)
+------------------------------------------------------------------------
+
+o sdreport: Allow bias correct in chunks to reduce memory.
+
+o Experimental TMB:::install.contrib to install user contributed cpp
+  code from github.
+
+o Disable CHOLMOD warnings from inner problem when silent=TRUE.
+
+o sdreport: Keep running when solve(hessian) fails.
+
+o sdreport: Fix bug that caused summary(sdreport(.)) to fail when
+  nothing was ADREPORTed.
+
+------------------------------------------------------------------------
+TMB 1.7.1 (2016-05-05)
+------------------------------------------------------------------------
+
+o Lots of minor performance optimizations.
+
+o sdreport: New argument getReportCovariance.
+  - Reduces memory usage when many variables are ADREPORTed.
+
+o bugfix: numeric(0) in random list of MakeADFun caused wrong
+  parameter list.
+
+o New atomic: convol2d
+
+------------------------------------------------------------------------
+TMB 1.7.0 (2016-03-22)
+------------------------------------------------------------------------
+
+o CITATION update with JSS publication.
+
+o New function 'as.list.sdreport' converts from sdreport format to
+  original parameter list structure.
+
+o MCMC:
+  - Fix small bug in transforming intial values in NUTS.
+  - Rename mcmc -> run_mcmc to avoid conflict with coda package.
+
+------------------------------------------------------------------------
+TMB 1.6.6 (2016-01-28)
+------------------------------------------------------------------------
+
+o oneStepPredict: Add one-step mean to output for methods
+  'oneStepGaussianOffMode' and 'oneStepGeneric'.
+
+o Array class changes:
+  - More explicit array assignment from other class:
+  Can now assign from matrix and un-evaluated expression template
+  E.g. a = a.matrix() * a.matrix();
+  - Documentation: warning about the 2D case
+  - Re-implement vec() operator (avoid loop)
+  - Add method matrix() to array class: Keeps first dimension and
+    collapses remaining dimensions.
+
+o Clean up potential naming conflicts caused by Rmath macros
+
+o Atomic functions general speedup
+
+o bugfix: precompile broke REGISTER_ATOMIC
+
+------------------------------------------------------------------------
+TMB 1.6.5 (2015-12-02)
+------------------------------------------------------------------------
+
+o Fix bug that caused sdreport to fail for models using the 'profile'
+  argument to MakeADFun.
+
+o Robustify marginal likelihood for extreme parameters (to help MCMC).
+
+o MCMC: Improved stability of adaptive step size algorithm.
+
+o Bias correction documentation and test example. Results are now part
+  of the summary output.
+
+------------------------------------------------------------------------
+TMB 1.6.4 (2015-11-22)
+------------------------------------------------------------------------
+
+o precompile() makeover:
+  - Works on all platforms.
+  - Works with multiple models in same R instance.
+  - Frequently used classes MVNORM_t and GMRF_t added to precompilation.
+
+------------------------------------------------------------------------
+TMB 1.6.3 (2015-11-11)
+------------------------------------------------------------------------
+
+o Fix array rows() method (The method inherited from Eigen would
+  report the length of the underlying vector).
+
+o Eliminate std::cout in CRAN version.
+
+o MCMC samplers (HMC, NUTS and RWM) added by Cole Monnahan.
+
+------------------------------------------------------------------------
+TMB 1.6.0 (2015-10-08)
+------------------------------------------------------------------------
+
+o Major changeset to get closer to CRAN submission
+
+  - Added 'dontrun' to most examples. Reason: All useful TMB examples
+  take too long time to run because they require compilation.
+
+  - Removed TMB-internals.
+
+  - Added Roxygen for remaining functions: dynlib()
+  runSymbolicAnalysis() config() plot.parallelBenchmark()
+  summary.sdreport() print.sdreport() print.backtrace()
+  plot.tmbprofile() confint.tmbprofile()
+
+  - Got rid of global configuration, e.g flagsDefaults(),
+  newtonDefaults() etc.
+
+  - Reworked newtonOption() and adapted all examples to new syntax.
+  (NOTE: not entirely backwards compatible since to old version
+  modified global settings, which we do not allow anymore).
+
+  - Fixed several typos, e.g. c++ -> C++
+
+  - CITATION: Added arxiv reference.
+
+  - DESCRIPTION: Changed title and added URL.
+
+  - NAMESPACE: Cleanup
+
+o CppAD jacobian: prefer reverse mode over forward mode if work is equal
+  - TMB only requires 1st order reverse (not forward) mode to be
+  implemented for atomic functions. This can result in the error
+  'order not implemented' if CppAD automatically selects forward over
+  reverse mode.
+  - In cases where the work of forward and reverse mode are equal it
+  is therefore more natural (from TMB perspective) to select reverse
+  mode.
+
+o Document parallel_accumulator #122
+
+o Lots of doxygen documentation updates
+
+------------------------------------------------------------------------
+TMB 1.5-1 (2015-10-04)
+------------------------------------------------------------------------
+
+o From now on the github version follows the R version
+
+o Added NEWS file
+
+o Emacs mode version 3.0 from Arni Magnusson
+
+o Robustify tmbprofile() #137
+
+o Experimental oneStepPredict() now handles discrete case as part of a
+  general 'oneStepGeneric' method.
+
+o tmbprofile() multiple changes
+  - Allow specification of a valid range of the parameter.
+  - Get more detail in the center of the distribution.
+    (does not affect cases where likelihood has been optimized)
+
+o C++: New namespace 'autodiff' makes it easy to use AD from the user
+  template.
+
+o C++: New namespace 'romberg' with wrappers around CppAD integration
+  routines.
+
+o Automatic retape when loading saved ADFun objects.
+
+o Keep attribute 'check.passed' when subsetting parameter list
+
+o Fix 32 bit
+
+o match pattern: Improvement for large problems. As a result it is now
+  be possible to handle 2^31-1 nonzeros in Cholesky factor. Old method
+  would break down around 2^30.
+
+o MVNORM_t: Method to evaluate marginals.
+
+o oneStepPredict() now works with maps #108.
+
+o Lots of improvements and cleanups from Martin Maechler.
+
+------------------------------------------------------------------------
+TMB 1.5-0 (2015-08-10)
+------------------------------------------------------------------------
+
+o Add pnorm/qnorm one-argument vectorized versions.
+
+o bugfix: Vectorized math operations crashed in the zero-length case.
+
+o Add missing bounds check to array class #100 - Now checks each index
+  component (not just the re-mapped univariate index).
+
+o BesselK atomic + Matern correlation function.
+
+o asSparseMatrix and asSparseVector fix: Conversion from dense to sparse
+  should not drop zero-entries that could potentially become nonzero
+  (i.e. parameter dependent entries).
+
+o CppAD::Variable now works for TMB models.
+
+o Script to enable 'runSymbolicAnalysis' on all Linux and OS X systems.
+
+o New experimental function 'oneStepPredict' for OSA residuals with
+  ar1xar1 as an example.
+
+o New atomic function 'ppois'.
+
+o REPORT: Allow report vector of 'anything'.
+
+o getUserDLL: Improve guess of user's DLL code (when DLL not given to
+  MakeADFun).
+
+o Eliminate warning with '-Wpedantic'.
+
+o sdreport new option: ignore.parm.uncertainty.
+
+o New example: HMM filter.
+
+o General 1D likelihood profile function + method to get profile
+  confidence intervals + plot method.
+
+o MakeADFun: New option to move outer parameters to the inner problem
+  (purpose: get same speed as the REML trick for linear fixed effects
+  without loosing the ML interpretation).
+
+o MakeADFun: New argument 'silent' to disable all tracing output.
+
+------------------------------------------------------------------------
+TMB 1.4-0 (2015-04-16)
+------------------------------------------------------------------------
+
+o CppAD updated to development version. Reduced peak memory usage with
+  up to 50% for large models.
+
+o New configuration variables.
+
+o Avoid crashes due to memory allocation errors.
+
+o Print index errors to error stream.
+
+o Allow compilation with -std=c++11.
+
+o sdreport: bias.correct optimizations.
+
+o Implement up to 7d array (like admb).
+
+o Allow lists as data object with R-inla SPDE structures as an example.
+
+------------------------------------------------------------------------
+TMB 1.0-0 (2013-09-10)
+------------------------------------------------------------------------
+
+o Initial release.

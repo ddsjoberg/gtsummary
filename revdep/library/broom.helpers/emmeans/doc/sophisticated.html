@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="emmeans package, Version 1.5.3" />
+
+
+<title>Sophisticated models in emmeans</title>
+
+
+
+
+
+
+<style type="text/css">body {font-size: 11pt; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;margin: 30px 50px 30px 50px; }h1,h2,h3,h4,h5,h6 { font-family: Arial,Helvetica,Sans-serif; }a { text-decoration: none; }a:link { color:darkblue; } a:visited { color:darkblue; } a:hover { color:dodgerblue; }a:active { color:dodgerblue; } code {color: #602000;font-family: "Lucida Console", Monaco, monospace; font-size: 90%;}.r { color: darkred; }.ro { color: darkgreen; background-color: #eeeeee; }.re { color: red;}.r code, a code, .ro code, .re code { color: inherit; }.vigindex ul { list-style-type: none; }.vigindex ul li { list-style: none; }.vigindex a code { color: inherit; }.vigindex li code { color: inherit; }</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Sophisticated models in emmeans</h1>
+<h4 class="author">emmeans package, Version 1.5.3</h4>
+
+
+
+<!-- @index Vignettes!Sophisticated models -->
+<p>This vignette gives a few examples of the use of the <strong>emmeans</strong> package to analyze other than the basic types of models provided by the <strong>stats</strong> package. Emphasis here is placed on accessing the optional capabilities that are typically not needed for the more basic models. A reference for all supported models is provided in the <a href="models.html">“models” vignette</a>.</p>
+<div id="contents" class="section level2">
+<h2>Contents</h2>
+<ol style="list-style-type: decimal">
+<li><a href="#lmer">Linear mixed models (lmer)</a>
+<ol style="list-style-type: lower-alpha">
+<li><a href="#lmerOpts">System options for lmerMod models</a></li>
+</ol></li>
+<li><a href="#offsets">Models with offsets</a></li>
+<li><a href="#ordinal">Ordinal models</a></li>
+<li><a href="#mcmc">Models fitted using MCMC methods</a></li>
+</ol>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+<div id="lmer" class="section level2">
+<h2>Linear mixed models (lmer)</h2>
+<!-- @index `lmerMod` models; Examples!`Oats`; Examples!Split-plot experiment -->
+<p>Linear mixed models are really important in statistics. Emphasis here is placed on those fitted using <code>lme4::lmer()</code>, but <strong>emmeans</strong> also supports other mixed-model packages such as <strong>nlme</strong>.</p>
+<p>To illustrate, consider the <code>Oats</code> dataset in the <strong>nlme</strong> package. It has the results of a balanced split-plot experiment: experimental blocks are divided into plots that are randomly assigned to oat varieties, and the plots are subdivided into subplots that are randomly assigned to amounts of nitrogen within each plot. We will consider a linear mixed model for these data, excluding interaction (which is justified in this case). For sake of illustration, we will exclude a few observations.</p>
+<pre class="r"><code>Oats.lmer &lt;- lme4::lmer(yield ~ Variety + factor(nitro) + (1|Block/Variety),
+                        data = nlme::Oats, subset = -c(1,2,3,5,8,13,21,34,55))</code></pre>
+<p>Let’s look at the EMMs for <code>nitro</code>:</p>
+<pre class="r"><code>Oats.emm.n &lt;- emmeans(Oats.lmer, &quot;nitro&quot;)
+Oats.emm.n</code></pre>
+<pre class="ro"><code>##  nitro emmean   SE   df lower.CL upper.CL
+##    0.0   78.9 7.29 7.78     62.0     95.8
+##    0.2   97.0 7.14 7.19     80.3    113.8
+##    0.4  114.2 7.14 7.19     97.4    131.0
+##    0.6  124.1 7.07 6.95    107.3    140.8
+## 
+## Results are averaged over the levels of: Variety 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95</code></pre>
+<p>You will notice that the degrees of freedom are fractional: that is due to the fact that whole-plot and subplot variations are combined when standard errors are estimated. Different degrees-of-freedom methods are available. By default, the Kenward-Roger method is used, and that’s why you see a message about the <strong>pbkrtest</strong> package being loaded, as it implements that method. We may specify a different degrees-of-freedom method via the optional argument <code>lmer.df</code>:</p>
+<pre class="r"><code>emmeans(Oats.lmer, &quot;nitro&quot;, lmer.df = &quot;satterthwaite&quot;)</code></pre>
+<pre class="ro"><code>##  nitro emmean   SE   df lower.CL upper.CL
+##    0.0   78.9 7.28 7.28     61.8       96
+##    0.2   97.0 7.13 6.72     80.0      114
+##    0.4  114.2 7.13 6.72     97.2      131
+##    0.6  124.1 7.07 6.49    107.1      141
+## 
+## Results are averaged over the levels of: Variety 
+## Degrees-of-freedom method: satterthwaite 
+## Confidence level used: 0.95</code></pre>
+<div id="dfoptions" class="section level6">
+<h6></h6>
+<!-- @index Degrees of freedom; *z* tests; Asymptotic tests -->
+<p>This latest result uses the Satterthwaite method, which is implemented in the <strong>lmerTest</strong> package. Note that, with this method, not only are the degrees of freedom slightly different, but so are the standard errors. That is because the Kenward-Roger method also entails making a bias adjustment to the covariance matrix of the fixed effects; that is the principal difference between the methods. A third possibility is <code>&quot;asymptotic&quot;</code>:</p>
+<pre class="r"><code>emmeans(Oats.lmer, &quot;nitro&quot;, lmer.df = &quot;asymptotic&quot;)</code></pre>
+<pre class="ro"><code>##  nitro emmean   SE  df asymp.LCL asymp.UCL
+##    0.0   78.9 7.28 Inf      64.6      93.2
+##    0.2   97.0 7.13 Inf      83.1     111.0
+##    0.4  114.2 7.13 Inf     100.2     128.2
+##    0.6  124.1 7.07 Inf     110.2     137.9
+## 
+## Results are averaged over the levels of: Variety 
+## Degrees-of-freedom method: asymptotic 
+## Confidence level used: 0.95</code></pre>
+<p>This just sets all the degrees of freedom to <code>Inf</code> – that’s <strong>emmeans</strong>’s way of using <em>z</em> statistics rather than <em>t</em> statistics. The asymptotic methods tend to make confidence intervals a bit too narrow and P values a bit too low; but they involve much, much less computation. Note that the SEs are the same as obtained using the Satterthwaite method.</p>
+<p>Comparisons and contrasts are pretty much the same as with other models. As <code>nitro</code> has quantitative levels, we might want to test polynomial contrasts:</p>
+<pre class="r"><code>contrast(Oats.emm.n, &quot;poly&quot;)</code></pre>
+<pre class="ro"><code>##  contrast  estimate    SE   df t.ratio p.value
+##  linear      152.69 15.58 43.2  9.802  &lt;.0001 
+##  quadratic    -8.27  6.95 44.2 -1.190  0.2402 
+##  cubic        -6.32 15.21 42.8 -0.415  0.6800 
+## 
+## Results are averaged over the levels of: Variety 
+## Degrees-of-freedom method: kenward-roger</code></pre>
+<p>The interesting thing here is that the degrees of freedom are much larger than they are for the EMMs. The reason is because <code>nitro</code> within-plot factor, so inter-plot variations have little role in estimating contrasts among <code>nitro</code> levels. On the other hand, <code>Variety</code> is a whole-plot factor, and there is not much of a bump in degrees of freedom for comparisons:</p>
+<pre class="r"><code>emmeans(Oats.lmer, pairwise ~ Variety)</code></pre>
+<pre class="ro"><code>## $emmeans
+##  Variety     emmean   SE   df lower.CL upper.CL
+##  Golden Rain  105.2 7.53 8.46     88.0      122
+##  Marvellous   108.5 7.48 8.28     91.3      126
+##  Victory       96.9 7.64 8.81     79.6      114
+## 
+## Results are averaged over the levels of: nitro 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast                 estimate   SE   df t.ratio p.value
+##  Golden Rain - Marvellous    -3.23 6.55 9.56 -0.493  0.8764 
+##  Golden Rain - Victory        8.31 6.71 9.80  1.238  0.4595 
+##  Marvellous - Victory        11.54 6.67 9.80  1.729  0.2431 
+## 
+## Results are averaged over the levels of: nitro 
+## Degrees-of-freedom method: kenward-roger 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+</div>
+<div id="lmerOpts" class="section level3">
+<h3>System options for lmerMod models</h3>
+<!-- @index `lmerMod` models!System options for -->
+<p>The computation required to compute the adjusted covariance matrix and degrees of freedom may become cumbersome. Some user options (i.e., <code>emm_options()</code> calls) make it possible to streamline these computations through default methods and limitations on them. First, the option <code>lmer.df</code>, which may have values of <code>&quot;kenward-roger&quot;</code>, <code>&quot;satterthwaite&quot;</code>, or <code>&quot;asymptotic&quot;</code> (partial matches are OK!) specifies the default degrees-of-freedom method.</p>
+<p>The options <code>disable.pbkrtest</code> and <code>disable.lmerTest</code> may be <code>TRUE</code> or <code>FALSE</code>, and comprise another way of controlling which method is used (e.g., the Kenward-Roger method will not be used if <code>get_emm_option(&quot;disable.pbkrtest&quot;) == TRUE</code>). Finally, the options <code>pbkrtest.limit</code> and <code>lmerTest.limit</code>, which should be set to numeric values, enable the given package conditionally on whether the number of data rows does not exceed the given limit. The factory default is 3000 for both limits.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="offsets" class="section level2">
+<h2>Models with offsets</h2>
+<!-- @index Offsets; Examples!Insurance claims (SAS); `ref_grid()`!`offset` -->
+<p>If a model is fitted and its formula includes an <code>offset()</code> term, then by default, the offset is computed and included in the reference grid. To illustrate, consider a hypothetical dataset on insurance claims (used as an <a href="https://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/viewer.htm#statug_genmod_sect006.htm">example in SAS’s documentation</a>). There are classes of cars of varying counts (<code>n</code>), sizes (<code>size</code>), and age (<code>age</code>), and we record the number of insurance claims (<code>claims</code>). We fit a Poisson model to <code>claims</code> as a function of <code>size</code> and <code>age</code>. An offset of <code>log(n)</code> is included so that <code>n</code> functions as an “exposure” variable.</p>
+<pre class="r"><code>ins &lt;- data.frame(
+    n = c(500, 1200, 100, 400, 500, 300),
+    size = factor(rep(1:3,2), labels = c(&quot;S&quot;,&quot;M&quot;,&quot;L&quot;)),
+    age = factor(rep(1:2, each = 3)),
+    claims = c(42, 37, 1, 101, 73, 14))
+ins.glm &lt;- glm(claims ~ size + age + offset(log(n)), 
+               data = ins, family = &quot;poisson&quot;)</code></pre>
+<p>First, let’s look at the reference grid obtained by default:</p>
+<pre class="r"><code>ref_grid(ins.glm)</code></pre>
+<pre class="ro"><code>## &#39;emmGrid&#39; object with variables:
+##     size = S, M, L
+##     age = 1, 2
+##     n = 500
+## Transformation: &quot;log&quot;</code></pre>
+<p>Note that <code>n</code> is included in the reference grid and that its average value of 500 is used for all predictions. Thus, if we obtain EMMs for, say, <code>age</code>, these are results are based on a pool of 500 cars:</p>
+<pre class="r"><code>emmeans(ins.glm, &quot;size&quot;, type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  size rate   SE  df asymp.LCL asymp.UCL
+##  S    69.3 6.25 Inf     58.03      82.7
+##  M    34.6 3.34 Inf     28.67      41.9
+##  L    11.9 3.14 Inf      7.07      19.9
+## 
+## Results are averaged over the levels of: age 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the log scale</code></pre>
+<p>However, many users would like to ignore the offset for this kind of model, because then the estimates we obtain are rates per unit value of the (logged) offset. This may be accomplished by specifying an <code>offset</code> parameter in the call:</p>
+<pre class="r"><code>emmeans(ins.glm, &quot;size&quot;, type = &quot;response&quot;, offset = 0)</code></pre>
+<pre class="ro"><code>##  size   rate      SE  df asymp.LCL asymp.UCL
+##  S    0.1385 0.01250 Inf    0.1161    0.1653
+##  M    0.0693 0.00669 Inf    0.0573    0.0837
+##  L    0.0237 0.00627 Inf    0.0141    0.0398
+## 
+## Results are averaged over the levels of: age 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the log scale</code></pre>
+<p>You may verify that the above estimates are 1/500th of the previous ones. You may also verify that the above results are identical to those obtained by setting <code>n</code> equal to 1:</p>
+<pre class="r"><code>emmeans(ins.glm, &quot;size&quot;, type = &quot;response&quot;, at = list(n = 1))</code></pre>
+<p>However, those who use these types of models will be more comfortable directly setting the offset to zero.</p>
+<p>By the way, you may set some other reference value for the rates. For example, if you want estimates of claims per 100 cars, simply use (results not shown):</p>
+<pre class="r"><code>emmeans(ins.glm, &quot;size&quot;, type = &quot;response&quot;, offset = log(100))</code></pre>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="ordinal" class="section level2">
+<h2>Ordinal models</h2>
+<!-- @index Ordinal models; Examples!`wine`; Examples!Ordinal model
+  Ordinal models!Latent scale -->
+<p>Ordinal-response models comprise an example where several options are available for obtaining EMMs. To illustrate, consider the <code>wine</code> data in the <strong>ordinal</strong> package. The response is a rating of bitterness on a five-point scale. we will consider a probit model in two factors during fermentation: <code>temp</code> (temperature) and <code>contact</code> (contact with grape skins), with the judge making the rating as a scale predictor:</p>
+<pre class="r"><code>require(&quot;ordinal&quot;)</code></pre>
+<pre><code>## Loading required package: ordinal</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ordinal&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:lme4&#39;:
+## 
+##     VarCorr, ranef</code></pre>
+<pre class="r"><code>wine.clm &lt;- clm(rating ~ temp + contact, scale = ~ judge,
+                data = wine, link = &quot;probit&quot;)</code></pre>
+<p>(in earlier modeling, we found little interaction between the factors.) Here are the EMMs for each factor using default options:</p>
+<pre class="r"><code>emmeans(wine.clm, list(pairwise ~ temp, pairwise ~ contact))</code></pre>
+<pre class="ro"><code>## $`emmeans of temp`
+##  temp emmean    SE  df asymp.LCL asymp.UCL
+##  cold -0.884 0.290 Inf    -1.452    -0.316
+##  warm  0.601 0.225 Inf     0.161     1.041
+## 
+## Results are averaged over the levels of: contact, judge 
+## Confidence level used: 0.95 
+## 
+## $`pairwise differences of temp`
+##  1           estimate    SE  df z.ratio p.value
+##  cold - warm    -1.07 0.422 Inf -2.547  0.0109 
+## 
+## Results are averaged over the levels of: contact, judge 
+## 
+## $`emmeans of contact`
+##  contact emmean    SE  df asymp.LCL asymp.UCL
+##  no      -0.614 0.298 Inf   -1.1990   -0.0297
+##  yes      0.332 0.201 Inf   -0.0632    0.7264
+## 
+## Results are averaged over the levels of: temp, judge 
+## Confidence level used: 0.95 
+## 
+## $`pairwise differences of contact`
+##  1        estimate    SE  df z.ratio p.value
+##  no - yes   -0.684 0.304 Inf -2.251  0.0244 
+## 
+## Results are averaged over the levels of: temp, judge</code></pre>
+<p>These results are on the “latent” scale; the idea is that there is a continuous random variable (in this case normal, due to the probit link) having a mean that depends on the predictors; and that the ratings are a discretization of the latent variable based on a fixed set of cut points (which are estimated). In this particular example, we also have a scale model that says that the variance of the latent variable depends on the judges. The latent results are quite a bit like those for measurement data, making them easy to interpret. The only catch is that they are not uniquely defined: we could apply a linear transformation to them, and the same linear transformation to the cut points, and the results would be the same.</p>
+<div id="ordlp" class="section level6">
+<h6></h6>
+<!-- @index Ordinal models!Linear-predictor scale -->
+<p>The <code>clm</code> function actually fits the model using an ordinary probit model but with different intercepts for each cut point. We can get detailed information for this model by specifying <code>mode = &quot;linear.predictor&quot;</code>:</p>
+<pre class="r"><code>tmp &lt;- ref_grid(wine.clm, mode = &quot;lin&quot;)
+tmp</code></pre>
+<pre class="ro"><code>## &#39;emmGrid&#39; object with variables:
+##     temp = cold, warm
+##     contact = no, yes
+##     judge = 1, 2, 3, 4, 5, 6, 7, 8, 9
+##     cut = multivariate response levels: 1|2, 2|3, 3|4, 4|5
+## Transformation: &quot;probit&quot;</code></pre>
+<p>Note that this reference grid involves an additional constructed predictor named <code>cut</code> that accounts for the different intercepts in the model. Let’s obtain EMMs for <code>temp</code> on the linear-predictor scale:</p>
+<pre class="r"><code>emmeans(tmp, &quot;temp&quot;)</code></pre>
+<pre class="ro"><code>##  temp emmean    SE  df asymp.LCL asymp.UCL
+##  cold  0.884 0.290 Inf     0.316     1.452
+##  warm -0.601 0.225 Inf    -1.041    -0.161
+## 
+## Results are averaged over the levels of: contact, judge, cut 
+## Results are given on the probit (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<p>These are just the negatives of the latent results obtained earlier (the sign is changed to make the comparisons go the right direction). Closely related to this is <code>mode = &quot;cum.prob&quot;</code> and <code>mode = &quot;exc.prob&quot;</code>, which simply transform the linear predictor to cumulative probabilities and exceedance (1 - cumulative) probabilities. These modes give us access to the details of the fitted model but are cumbersome to use for describing results. When they can become useful is when you want to work in terms of a particular cut point. Let’s look at <code>temp</code> again in terms of the probability that the rating will be at least 4:</p>
+<pre class="r"><code>emmeans(wine.clm, ~ temp, mode = &quot;exc.prob&quot;, at = list(cut = &quot;3|4&quot;))</code></pre>
+<pre class="ro"><code>##  temp exc.prob     SE  df asymp.LCL asymp.UCL
+##  cold   0.0748 0.0318 Inf    0.0124     0.137
+##  warm   0.4069 0.0706 Inf    0.2686     0.545
+## 
+## Results are averaged over the levels of: contact, judge 
+## Confidence level used: 0.95</code></pre>
+</div>
+<div id="ordprob" class="section level6">
+<h6></h6>
+<!-- @index Ordinal models!`prob` and `mean.class` -->
+<p>There are yet more modes! With <code>mode = &quot;prob&quot;</code>, we obtain estimates of the probability distribution of each rating. Its reference grid includes a factor with the same name as the model response – in this case <code>rating</code>. We usually want to use that as the primary factor, and the factors of interest as <code>by</code> variables:</p>
+<pre class="r"><code>emmeans(wine.clm, ~ rating | temp, mode = &quot;prob&quot;)</code></pre>
+<pre class="ro"><code>## temp = cold:
+##  rating   prob     SE  df asymp.LCL asymp.UCL
+##  1      0.1292 0.0625 Inf   0.00667    0.2518
+##  2      0.4877 0.0705 Inf   0.34948    0.6259
+##  3      0.3083 0.0594 Inf   0.19186    0.4248
+##  4      0.0577 0.0238 Inf   0.01104    0.1043
+##  5      0.0171 0.0127 Inf  -0.00768    0.0419
+## 
+## temp = warm:
+##  rating   prob     SE  df asymp.LCL asymp.UCL
+##  1      0.0156 0.0129 Inf  -0.00961    0.0408
+##  2      0.1473 0.0448 Inf   0.05959    0.2350
+##  3      0.4302 0.0627 Inf   0.30723    0.5532
+##  4      0.2685 0.0625 Inf   0.14593    0.3910
+##  5      0.1384 0.0506 Inf   0.03923    0.2376
+## 
+## Results are averaged over the levels of: contact, judge 
+## Confidence level used: 0.95</code></pre>
+<p>Using <code>mode = &quot;mean.class&quot;</code> obtains the average of these probability distributions as probabilities of the integers 1–5:</p>
+<pre class="r"><code>emmeans(wine.clm, &quot;temp&quot;, mode = &quot;mean.class&quot;)</code></pre>
+<pre class="ro"><code>##  temp mean.class    SE  df asymp.LCL asymp.UCL
+##  cold       2.35 0.144 Inf      2.06      2.63
+##  warm       3.37 0.146 Inf      3.08      3.65
+## 
+## Results are averaged over the levels of: contact, judge 
+## Confidence level used: 0.95</code></pre>
+<p>And there is a mode for the scale model too. In this example, the scale model involves only judges, and that is the only factor in the grid:</p>
+<pre class="r"><code>summary(ref_grid(wine.clm, mode = &quot;scale&quot;), type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  judge response    SE  df
+##  1        1.000 0.000 Inf
+##  2        1.043 0.570 Inf
+##  3        1.053 0.481 Inf
+##  4        0.710 0.336 Inf
+##  5        0.663 0.301 Inf
+##  6        0.758 0.341 Inf
+##  7        1.071 0.586 Inf
+##  8        0.241 0.179 Inf
+##  9        0.533 0.311 Inf</code></pre>
+<p>Judge 8’s ratings don’t vary much, relative to the others. The scale model is in terms of log(SD). Again, these are not uniquely identifiable, and the first level’s estimate is set to log(1) = 0. so, actually, each estimate shown is a comparison with judge 1.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="mcmc" class="section level2">
+<h2>Models fitted using MCMC methods</h2>
+<!-- @index Bayesian models; Examples!Bayesian model; Examples!`cbpp`
+    `rstanarm`; `hpd.summary()`; `summary()`!HPD intervals -->
+<p>To illustrate <strong>emmeans</strong>’s support for models fitted using MCMC methods, consider the <code>example_model</code> available in the <strong>rstanarm</strong> package. The example concerns CBPP, a serious disease of cattle in Ethiopia. A generalized linear mixed model was fitted to the data using the code below. (This is a Bayesian equivalent of the frequentist model we considered in the <a href="transformations.html#cbpp">“Transformations” vignette</a>.) In fitting the model, we first set the contrast coding to <code>bayestestR::contr.bayes</code> because this equalizes the priors across different treatment levels (a correction from an earlier version of this vignette.) We subsequently obtain the reference grids for these models in the usual way. For later use, we also fit the same model with just the prior information. <!--- I'm faking this; I actually saved the ref_grid in a system file ---></p>
+<pre class="r"><code>cbpp &lt;- transform(lme4::cbpp, unit = 1:56)
+require(&quot;bayestestR&quot;)
+options(contrasts = c(&quot;contr.bayes&quot;, &quot;contr.poly&quot;))
+cbpp.rstan &lt;- rstanarm::stan_glmer(
+    cbind(incidence, size - incidence) ~ period + (1|herd) + (1|unit),
+    data = cbpp, family = binomial,
+    prior = student_t(df = 5, location = 0, scale = 2, autoscale = FALSE),
+    chains = 2, cores = 1, seed = 2021.0120, iter = 1000)
+cbpp_prior.rstan &lt;- update(cbpp.rstan, prior_PD = TRUE)
+cbpp.rg &lt;- ref_grid(cbpp.rstan)
+cbpp_prior.rg &lt;- ref_grid(cbpp_prior.rstan)</code></pre>
+<!--- here's the system file with the ref_grid --->
+<p>Here is the structure of the reference grid:</p>
+<pre class="r"><code>cbpp.rg</code></pre>
+<pre class="ro"><code>## &#39;emmGrid&#39; object with variables:
+##     period = 1, 2, 3, 4
+## Transformation: &quot;logit&quot;</code></pre>
+<p>So here are the EMMs (no averaging needed in this simple model):</p>
+<pre class="r"><code>summary(cbpp.rg)</code></pre>
+<pre class="ro"><code>##  period prediction lower.HPD upper.HPD
+##  1           -1.60     -2.26    -0.987
+##  2           -2.77     -3.65    -1.974
+##  3           -2.90     -3.77    -2.040
+##  4           -3.32     -4.43    -2.385
+## 
+## Point estimate displayed: median 
+## Results are given on the logit (not the response) scale. 
+## HPD interval probability: 0.95</code></pre>
+<p>The summary for EMMs of Bayesian models shows the median of the posterior distribution of each estimate, along with highest posterior density (HPD) intervals. Under the hood, the posterior sample of parameter estimates is used to compute a corresponding sample of posterior EMMs, and it is those that are summarized. (Technical note: the summary is actually rerouted to the <code>hpd.summary()</code> function.</p>
+<div id="bayesxtra" class="section level6">
+<h6></h6>
+<!-- @index `as.mcmc()`; **coda** package; **bayesplot** package; 
+    **bayestestR** package; Bayes factor; Region of practical equivalence; ROPE -->
+<p>We can access the posterior EMMs via the <code>as.mcmc</code> method for <code>emmGrid</code> objects. This gives us an object of class <code>mcmc</code> (defined in the <strong>coda</strong> package), which can be summarized and explored as we please.</p>
+<pre class="r"><code>require(&quot;coda&quot;)</code></pre>
+<pre><code>## Loading required package: coda</code></pre>
+<pre class="r"><code>summary(as.mcmc(cbpp.rg))</code></pre>
+<pre class="ro"><code>## 
+## Iterations = 1:500
+## Thinning interval = 1 
+## Number of chains = 2 
+## Sample size per chain = 500 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##            Mean     SD Naive SE Time-series SE
+## period 1 -1.595 0.3333  0.01054        0.01279
+## period 2 -2.790 0.4327  0.01368        0.01367
+## period 3 -2.916 0.4491  0.01420        0.01706
+## period 4 -3.379 0.5384  0.01703        0.01845
+## 
+## 2. Quantiles for each variable:
+## 
+##            2.5%    25%    50%    75%   97.5%
+## period 1 -2.283 -1.823 -1.597 -1.357 -0.9929
+## period 2 -3.707 -3.038 -2.766 -2.511 -2.0197
+## period 3 -3.834 -3.196 -2.899 -2.610 -2.0915
+## period 4 -4.502 -3.725 -3.318 -3.022 -2.4079</code></pre>
+<p>Note that <code>as.mcmc</code> will actually produce an <code>mcmc.list</code> when there is more than one chain present, as in this example. The 2.5th and 97.5th quantiles are similar, but not identical, to the 95% confidence intervals in the frequentist summary.</p>
+<p>The <strong>bayestestR</strong> package provides <code>emmGrid</code> methods for most of its description and testing functions. For example:</p>
+<pre class="r"><code>bayestestR::bayesfactor_parameters(pairs(cbpp.rg), prior = pairs(cbpp_prior.rg))</code></pre>
+<pre><code>## Loading required namespace: logspline</code></pre>
+<pre class="ro"><code>## # Bayes Factor (Savage-Dickey density ratio)
+## 
+## Parameter |     BF
+## ------------------
+## 1 - 2     |  3.012
+## 1 - 3     |  5.134
+## 1 - 4     | 14.265
+## 2 - 3     |  0.173
+## 2 - 4     |  0.268
+## 3 - 4     |  0.221
+## 
+## * Evidence Against The Null: [0]</code></pre>
+<pre class="r"><code>bayestestR::p_rope(pairs(cbpp.rg), range = c(-0.25, 0.25))</code></pre>
+<pre class="ro"><code>##   Parameter ROPE_low ROPE_high p_ROPE
+## 1     1 - 2    -0.25      0.25  0.021
+## 2     1 - 3    -0.25      0.25  0.015
+## 3     1 - 4    -0.25      0.25  0.004
+## 4     2 - 3    -0.25      0.25  0.367
+## 5     2 - 4    -0.25      0.25  0.184
+## 6     3 - 4    -0.25      0.25  0.290</code></pre>
+<p>Both of these sets of results suggest that period 1 is different from the others. For more information on these methods, refer to <a href="https://cran.r-project.org/package=bayestestR">the CRAN page for <strong>bayestestR</strong></a> and its vignettes, e.g., the one on Bayes factors.</p>
+</div>
+<div id="bias-adj-mcmc" class="section level3">
+<h3>Bias-adjusted incidence probabilities</h3>
+<!-- @index Bias adjustment!in Bayesian models -->
+<p>Next, let us consider the back-transformed results. As is discussed with the <a href="transformations.html#cbpp">frequentist model</a>, there are random effects present, and if wee want to think in terms of marginal probabilities across all herds and units, we should correct for bias; and to do that, we need the standard deviations of the random effects. The model object has MCMC results for the random effects of each herd and each unit, but after those, there are also summary results for the posterior SDs of the two random effects. (I used the <code>colnames</code> function to find that they are in the 78th and 79th columns.) <!-- We already read this in earlier, and here's the faked code --></p>
+<pre class="r"><code>cbpp.sigma = as.matrix(cbpp.rstan$stanfit)[, 78:79]</code></pre>
+<p>Here are the first few:</p>
+<pre class="r"><code>head(cbpp.sigma)</code></pre>
+<pre class="ro"><code>##           parameters
+## iterations Sigma[unit:(Intercept),(Intercept)] Sigma[herd:(Intercept),(Intercept)]
+##       [1,]                            1.154694                         0.167807505
+##       [2,]                            1.459379                         0.040318460
+##       [3,]                            1.482619                         0.006198847
+##       [4,]                            1.236694                         0.206057981
+##       [5,]                            1.460472                         0.088491844
+##       [6,]                            1.412277                         0.070334431</code></pre>
+<p>So to obtain bias-adjusted marginal probabilities, obtain the resultant SD and regrid with bias correction:</p>
+<pre class="r"><code>totSD &lt;- sqrt(apply(cbpp.sigma^2, 1, sum))
+cbpp.rgrd &lt;- regrid(cbpp.rg, bias.adjust = TRUE, sigma = totSD)
+summary(cbpp.rgrd)</code></pre>
+<pre class="ro"><code>##  period   prob lower.HPD upper.HPD
+##  1      0.2192    0.1207     0.377
+##  2      0.0856    0.0285     0.176
+##  3      0.0747    0.0288     0.163
+##  4      0.0506    0.0136     0.120
+## 
+## Point estimate displayed: median 
+## HPD interval probability: 0.95</code></pre>
+<p>Here is a plot of the posterior incidence probabilities, back-transformed:</p>
+<pre class="r"><code>bayesplot::mcmc_areas(as.mcmc(cbpp.rgrd))</code></pre>
+<p><img src="data:image/png;base64,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" width="432" /></p>
+<p>… and here are intervals for each period compared with its neighbor:</p>
+<pre class="r"><code>contrast(cbpp.rgrd, &quot;consec&quot;, reverse = TRUE)</code></pre>
+<pre class="ro"><code>##  contrast estimate lower.HPD upper.HPD
+##  1 - 2     0.13379    0.0258     0.274
+##  2 - 3     0.00864   -0.0714     0.111
+##  3 - 4     0.02317   -0.0564     0.114
+## 
+## Point estimate displayed: median 
+## HPD interval probability: 0.95</code></pre>
+<p>The only interval that excludes zero is the one that compares periods 1 and 2.</p>
+</div>
+<div id="predict-mcmc" class="section level3">
+<h3>Bayesian prediction</h3>
+<!-- @index Predictions!Bayesian models; 
+            Predictions!Posterior predictive distribution -->
+<p>To predict from an MCMC model, just specify the <code>likelihood</code> argument in <code>as.mcmc</code>. Doing so causes the function to simulate data from the posterior predictive distribution. For example, if we want to predict the CBPP incidence in future herds of 25 cattle, we can do:</p>
+<pre class="r"><code>set.seed(2019.0605)
+cbpp.preds &lt;- as.mcmc(cbpp.rgrd, likelihood = &quot;binomial&quot;, trials = 25)
+bayesplot::mcmc_hist(cbpp.preds, binwidth = 1)</code></pre>
+<p><img src="data:image/png;base64,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" width="432" /></p>
+<p><a href="#contents">Back to Contents</a></p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

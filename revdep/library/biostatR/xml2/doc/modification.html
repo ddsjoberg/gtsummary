@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Jim Hester" />
+
+<meta name="date" content="2020-04-23" />
+
+<title>Node Modification</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Node Modification</h1>
+<h4 class="author">Jim Hester</h4>
+<h4 class="date">2020-04-23</h4>
+
+
+
+<div id="modifying-existing-xml" class="section level1">
+<h1>Modifying Existing XML</h1>
+<p>Modifying existing XML can be done in xml2 by using the replacement functions of the accessors. They all have methods for both individual <code>xml_node</code> objects as well as <code>xml_nodeset</code> objects. If a vector of values is provided it is applied piecewise over the nodeset, otherwise the value is recycled.</p>
+<div id="text-modification" class="section level2">
+<h2>Text Modification</h2>
+<p>Text modification only happens on text nodes. If a given node has more than one text node only the first will be affected. If you want to modify additional text nodes you need to select them explicitly with <code>/text()</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;p&gt;This is some &lt;b&gt;text&lt;/b&gt;. This is more.&lt;/p&gt;&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">xml_text</span>(x)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; [1] &quot;This is some text. This is more.&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">xml_text</span>(x) &lt;-<span class="st"> &quot;This is some other text.&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">xml_text</span>(x)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt; [1] &quot;This is some other text.text. This is more.&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># You can avoid this by explicitly selecting the text node.</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;p&gt;This is some text. This is &lt;b&gt;bold!&lt;/b&gt;&lt;/p&gt;&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>text_only &lt;-<span class="st"> </span><span class="kw">xml_find_all</span>(x, <span class="st">&quot;//text()&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="kw">xml_text</span>(text_only) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;This is some other text. &quot;</span>, <span class="st">&quot;Still bold!&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="kw">xml_text</span>(x)</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co">#&gt; [1] &quot;This is some other text. Still bold!&quot;</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="kw">xml_structure</span>(x)</span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co">#&gt; &lt;p&gt;</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="co">#&gt;   {text}</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co">#&gt;   &lt;b&gt;</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co">#&gt;     {text}</span></span></code></pre></div>
+</div>
+<div id="attribute-and-namespace-definition-modification" class="section level2">
+<h2>Attribute and Namespace Definition Modification</h2>
+<p>Attributes and namespace definitions are modified one at a time with <code>xml_attr()</code> or all at once with <code>xml_attrs()</code>. In both cases using <code>NULL</code> as the value will remove the attribute completely.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;a href=&#39;invalid!&#39;&gt;xml2&lt;/a&gt;&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">xml_attr</span>(x, <span class="st">&quot;href&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; [1] &quot;invalid!&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="kw">xml_attr</span>(x, <span class="st">&quot;href&quot;</span>) &lt;-<span class="st"> &quot;https://github.com/r-lib/xml2&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="kw">xml_attr</span>(x, <span class="st">&quot;href&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; [1] &quot;https://github.com/r-lib/xml2&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="kw">xml_attrs</span>(x) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">id =</span> <span class="st">&quot;xml2&quot;</span>, <span class="dt">href =</span> <span class="st">&quot;https://github.com/r-lib/xml2&quot;</span>)</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="kw">xml_attrs</span>(x)</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt;                            href                              id </span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; &quot;https://github.com/r-lib/xml2&quot;                          &quot;xml2&quot;</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>x</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; &lt;a href=&quot;https://github.com/r-lib/xml2&quot; id=&quot;xml2&quot;&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="kw">xml_attrs</span>(x) &lt;-<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a>x</span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">#&gt; &lt;a&gt;</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co"># Namespaces are added with as a xmlns or xmlns:prefix attribute</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="kw">xml_attr</span>(x, <span class="st">&quot;xmlns&quot;</span>) &lt;-<span class="st"> &quot;http://foo&quot;</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a>x</span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt; &lt;a xmlns=&quot;http://foo&quot;&gt;</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a></span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="kw">xml_attr</span>(x, <span class="st">&quot;xmlns:bar&quot;</span>) &lt;-<span class="st"> &quot;http://bar&quot;</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a>x</span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="co">#&gt; &lt;a xmlns=&quot;http://foo&quot; xmlns:bar=&quot;http://bar&quot;&gt;</span></span></code></pre></div>
+</div>
+<div id="name-modification" class="section level2">
+<h2>Name Modification</h2>
+<p>Node names are modified with <code>xml_name()</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;a&gt;&lt;b/&gt;&lt;/a&gt;&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>x</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; &lt;a&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; [1] &lt;b/&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="kw">xml_name</span>(x)</span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; [1] &quot;a&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="kw">xml_name</span>(x) &lt;-<span class="st"> &quot;c&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a>x</span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; &lt;c&gt;</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; [1] &lt;b/&gt;</span></span></code></pre></div>
+</div>
+</div>
+<div id="node-modification" class="section level1">
+<h1>Node modification</h1>
+<p>All of these functions have a <code>.copy</code> argument. If this is set to <code>FALSE</code> they will remove the new node from its location before inserting it into the new location. Otherwise they make a copy of the node before insertion.</p>
+<div id="replacing-existing-nodes" class="section level2">
+<h2>Replacing existing nodes</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;parent&gt;&lt;child&gt;1&lt;/child&gt;&lt;child&gt;2&lt;child&gt;3&lt;/child&gt;&lt;/child&gt;&lt;/parent&gt;&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>children &lt;-<span class="st"> </span><span class="kw">xml_children</span>(x)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>t1 &lt;-<span class="st"> </span>children[[<span class="dv">1</span>]]</span>
+<span id="cb4-4"><a href="#cb4-4"></a>t2 &lt;-<span class="st"> </span>children[[<span class="dv">2</span>]]</span>
+<span id="cb4-5"><a href="#cb4-5"></a>t3 &lt;-<span class="st"> </span><span class="kw">xml_children</span>(children[[<span class="dv">2</span>]])[[<span class="dv">1</span>]]</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="kw">xml_replace</span>(t1, t3)</span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; {xml_node}</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; &lt;child&gt;</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>x</span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; &lt;parent&gt;</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt; [1] &lt;child&gt;3&lt;/child&gt;</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; [2] &lt;child&gt;2&lt;child&gt;3&lt;/child&gt;&lt;/child&gt;</span></span></code></pre></div>
+</div>
+<div id="add-a-sibling" class="section level2">
+<h2>Add a sibling</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;parent&gt;&lt;child&gt;1&lt;/child&gt;&lt;child&gt;2&lt;child&gt;3&lt;/child&gt;&lt;/child&gt;&lt;/parent&gt;&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>children &lt;-<span class="st"> </span><span class="kw">xml_children</span>(x)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>t1 &lt;-<span class="st"> </span>children[[<span class="dv">1</span>]]</span>
+<span id="cb5-4"><a href="#cb5-4"></a>t2 &lt;-<span class="st"> </span>children[[<span class="dv">2</span>]]</span>
+<span id="cb5-5"><a href="#cb5-5"></a>t3 &lt;-<span class="st"> </span><span class="kw">xml_children</span>(children[[<span class="dv">2</span>]])[[<span class="dv">1</span>]]</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="kw">xml_add_sibling</span>(t1, t3)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>x</span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; &lt;parent&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; [1] &lt;child&gt;1&lt;/child&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; [2] &lt;child&gt;3&lt;/child&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt; [3] &lt;child&gt;2&lt;child&gt;3&lt;/child&gt;&lt;/child&gt;</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="kw">xml_add_sibling</span>(t3, t1, <span class="dt">where =</span> <span class="st">&quot;before&quot;</span>)</span>
+<span id="cb5-16"><a href="#cb5-16"></a>x</span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="co">#&gt; &lt;parent&gt;</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">#&gt; [1] &lt;child&gt;1&lt;/child&gt;</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">#&gt; [2] &lt;child&gt;3&lt;/child&gt;</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="co">#&gt; [3] &lt;child&gt;2&lt;child&gt;3&lt;/child&gt;&lt;child&gt;1&lt;/child&gt;&lt;/child&gt;</span></span></code></pre></div>
+</div>
+<div id="add-a-child" class="section level2">
+<h2>Add a child</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;parent&gt;&lt;child&gt;1&lt;/child&gt;&lt;child&gt;2&lt;child&gt;3&lt;/child&gt;&lt;/child&gt;&lt;/parent&gt;&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>children &lt;-<span class="st"> </span><span class="kw">xml_children</span>(x)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>t1 &lt;-<span class="st"> </span>children[[<span class="dv">1</span>]]</span>
+<span id="cb6-4"><a href="#cb6-4"></a>t2 &lt;-<span class="st"> </span>children[[<span class="dv">2</span>]]</span>
+<span id="cb6-5"><a href="#cb6-5"></a>t3 &lt;-<span class="st"> </span><span class="kw">xml_children</span>(children[[<span class="dv">2</span>]])[[<span class="dv">1</span>]]</span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="kw">xml_add_child</span>(t1, t3)</span>
+<span id="cb6-8"><a href="#cb6-8"></a>x</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; &lt;parent&gt;</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; [1] &lt;child&gt;1&lt;child&gt;3&lt;/child&gt;&lt;/child&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; [2] &lt;child&gt;2&lt;child&gt;3&lt;/child&gt;&lt;/child&gt;</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="kw">xml_add_child</span>(t1, <span class="kw">read_xml</span>(<span class="st">&quot;&lt;test/&gt;&quot;</span>))</span>
+<span id="cb6-15"><a href="#cb6-15"></a>x</span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co">#&gt; &lt;parent&gt;</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt; [1] &lt;child&gt;1&lt;child&gt;3&lt;/child&gt;&lt;test/&gt;&lt;/child&gt;</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; [2] &lt;child&gt;2&lt;child&gt;3&lt;/child&gt;&lt;/child&gt;</span></span></code></pre></div>
+</div>
+<div id="removing-nodes" class="section level2">
+<h2>Removing nodes</h2>
+<p>The <code>xml_remove()</code> can be used to remove a node (and its children) from a tree. The default behavior is to unlink the node from the tree, but does <em>not</em> free the memory for the node, so R objects pointing to the node are still valid.</p>
+<p>This allows code like the following to work without crashing R</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;foo&gt;&lt;bar&gt;&lt;baz/&gt;&lt;/bar&gt;&lt;/foo&gt;&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>x1 &lt;-<span class="st"> </span>x <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">xml_children</span>() <span class="op">%&gt;%</span><span class="st"> </span>.[[<span class="dv">1</span>]]</span>
+<span id="cb7-3"><a href="#cb7-3"></a>x2 &lt;-<span class="st"> </span>x1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">xml_children</span>() <span class="op">%&gt;%</span><span class="st"> </span>.[[<span class="dv">1</span>]]</span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="kw">xml_remove</span>(x1)</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="kw">rm</span>(x1)</span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="kw">gc</span>()</span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt;           used (Mb) gc trigger (Mb) limit (Mb) max used (Mb)</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt; Ncells  572576 30.6    1277514 68.3         NA  1277473 68.3</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; Vcells 1102609  8.5    8388608 64.0      32768  2040863 15.6</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a></span>
+<span id="cb7-12"><a href="#cb7-12"></a>x2</span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; {xml_node}</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt; &lt;baz&gt;</span></span></code></pre></div>
+<p>If you are not planning on referencing these nodes again this memory is wasted. Calling <code>xml_remove(free = TRUE)</code> will remove the nodes <em>and</em> free the memory used to store them. <strong>Note</strong> In this case <em>any</em> node which previously pointed to the node or its children will instead be pointing to free memory and may cause R to crash. xml2 can’t figure this out for you, so it’s your responsibility to remove any objects which are no longer valid.</p>
+<p>In particular <code>xml_find_*()</code> results are easy to overlook, for example</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>x &lt;-<span class="st"> </span><span class="kw">read_xml</span>(<span class="st">&quot;&lt;a&gt;&lt;b /&gt;&lt;b&gt;&lt;b /&gt;&lt;/b&gt;&lt;/a&gt;&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>bees &lt;-<span class="st"> </span><span class="kw">xml_find_all</span>(x, <span class="st">&quot;//b&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="kw">xml_remove</span>(<span class="kw">xml_child</span>(x), <span class="dt">free =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># bees[[1]] is no longer valid!!!</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="kw">rm</span>(bees)</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="kw">gc</span>()</span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt;           used (Mb) gc trigger (Mb) limit (Mb) max used (Mb)</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; Ncells  572623 30.6    1277514 68.3         NA  1277473 68.3</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; Vcells 1102660  8.5    8388608 64.0      32768  2040863 15.6</span></span></code></pre></div>
+</div>
+<div id="namespaces" class="section level2">
+<h2>Namespaces</h2>
+<p>We want to construct a document with the following namespace layout. (From <a href="http://stackoverflow.com/questions/32939229/creating-xml-in-r-with-namespaces/32941524#32941524" class="uri">http://stackoverflow.com/questions/32939229/creating-xml-in-r-with-namespaces/32941524#32941524</a>).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">&lt;?xml</span> version = &quot;1.0&quot; encoding=&quot;UTF-8&quot;<span class="kw">?&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">&lt;sld</span><span class="ot"> xmlns=</span><span class="st">&quot;http://www.o.net/sld&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="ot">     xmlns:ogc=</span><span class="st">&quot;http://www.o.net/ogc&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="ot">     xmlns:se=</span><span class="st">&quot;http://www.o.net/se&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="ot">     version=</span><span class="st">&quot;1.1.0&quot;</span> <span class="kw">&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="kw">&lt;layer&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="kw">&lt;se:Name&gt;</span>My Layer<span class="kw">&lt;/se:Name&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="kw">&lt;/layer&gt;</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="kw">&lt;/sld&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>d &lt;-<span class="st"> </span><span class="kw">xml_new_root</span>(<span class="st">&quot;sld&quot;</span>,</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="dt">xmlns =</span> <span class="st">&quot;http://www.o.net/sld&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    <span class="st">&quot;xmlns:ogc&quot;</span> =<span class="st"> &quot;http://www.o.net/ogc&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>    <span class="st">&quot;xmlns:se&quot;</span> =<span class="st"> &quot;http://www.o.net/se&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5"></a>    <span class="dt">version =</span> <span class="st">&quot;1.1.0&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="st">  </span><span class="kw">xml_add_child</span>(<span class="st">&quot;layer&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="st">  </span><span class="kw">xml_add_child</span>(<span class="st">&quot;se:Name&quot;</span>, <span class="st">&quot;My Layer&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="st">  </span><span class="kw">xml_root</span>()</span>
+<span id="cb10-9"><a href="#cb10-9"></a></span>
+<span id="cb10-10"><a href="#cb10-10"></a>d</span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt; {xml_document}</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; &lt;sld version=&quot;1.1.0&quot; xmlns=&quot;http://www.o.net/sld&quot; xmlns:ogc=&quot;http://www.o.net/ogc&quot; xmlns:se=&quot;http://www.o.net/se&quot;&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt; [1] &lt;layer&gt;\n  &lt;se:Name&gt;My Layer&lt;/se:Name&gt;\n&lt;/layer&gt;</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

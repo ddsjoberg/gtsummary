@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="emmeans package, Version 1.5.3" />
+
+
+<title>Utilities and options for emmeans</title>
+
+
+
+
+
+
+<style type="text/css">body {font-size: 11pt; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;margin: 30px 50px 30px 50px; }h1,h2,h3,h4,h5,h6 { font-family: Arial,Helvetica,Sans-serif; }a { text-decoration: none; }a:link { color:darkblue; } a:visited { color:darkblue; } a:hover { color:dodgerblue; }a:active { color:dodgerblue; } code {color: #602000;font-family: "Lucida Console", Monaco, monospace; font-size: 90%;}.r { color: darkred; }.ro { color: darkgreen; background-color: #eeeeee; }.re { color: red;}.r code, a code, .ro code, .re code { color: inherit; }.vigindex ul { list-style-type: none; }.vigindex ul li { list-style: none; }.vigindex a code { color: inherit; }.vigindex li code { color: inherit; }</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Utilities and options for emmeans</h1>
+<h4 class="author">emmeans package, Version 1.5.3</h4>
+
+
+
+<!-- @index Vignettes!Utilities and options -->
+<div id="contents" class="section level2">
+<h2>Contents</h2>
+<ol style="list-style-type: decimal">
+<li><a href="#update">Updating an <code>emmGrid</code> object</a></li>
+<li><a href="#options">Setting options</a>
+<ol style="list-style-type: lower-alpha">
+<li><a href="#defaults">Setting and viewing defaults</a></li>
+<li><a href="#digits">Optimal digits to display</a></li>
+<li><a href="#startup">Startup options</a></li>
+</ol></li>
+<li><a href="#rbind">Combining and subsetting <code>emmGrid</code> objects</a></li>
+<li><a href="#data">Accessing results to use elsewhere</a></li>
+<li><a href="#groups">Adding grouping factors</a></li>
+<li><a href="#relevel">Re-labeling and re-leveling an <code>emmGrid</code></a></li>
+</ol>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+<div id="update" class="section level2">
+<h2>Updating an <code>emmGrid</code> object</h2>
+<!-- @index `update()`; `emmGrid` objects!Modifying -->
+<p>Several internal settings are saved when functions like <code>ref_grid()</code>, <code>emmeans()</code>, <code>contrast()</code>, etc. are run. Those settings can be manipulated via the <code>update()</code> method for <code>emmGrid</code>s. To illustrate, consider the <code>pigs</code> dataset and model yet again:</p>
+<pre class="r"><code>pigs.lm &lt;- lm(log(conc) ~ source + factor(percent), data = pigs)
+pigs.emm &lt;- emmeans(pigs.lm, &quot;source&quot;)
+pigs.emm</code></pre>
+<pre class="ro"><code>##  source emmean     SE df lower.CL upper.CL
+##  fish     3.39 0.0367 23     3.32     3.47
+##  soy      3.67 0.0374 23     3.59     3.74
+##  skim     3.80 0.0394 23     3.72     3.88
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<p>We see confidence intervals but not tests, by default. This happens as a result of internal settings in <code>pigs.emm.s</code> that are passed to <code>summary()</code> when the object is displayed. If we are going to work with this object a lot, we might want to change its internal settings rather than having to rely on explicitly calling <code>summary()</code> with several arguments. If so, just update the internal settings to what is desired; for example:</p>
+<pre class="r"><code>pigs.emm.s &lt;- update(pigs.emm, infer = c(TRUE, TRUE), null = log(35),
+                     calc = c(n = &quot;.wgt.&quot;))
+pigs.emm.s</code></pre>
+<pre class="ro"><code>##  source emmean     SE df  n lower.CL upper.CL null t.ratio p.value
+##  fish     3.39 0.0367 23 10     3.32     3.47 3.56 -4.385  0.0002 
+##  soy      3.67 0.0374 23 10     3.59     3.74 3.56  2.988  0.0066 
+##  skim     3.80 0.0394 23  9     3.72     3.88 3.56  6.130  &lt;.0001 
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<p>Note that by adding of <code>calc</code>, we have set a default to calculate and display the sample size when the object is summarized. See <code>help(&quot;update.emmGrid&quot;)</code> for details on the keywords that can be changed. Mostly, they are the same as the names of arguments in the functions that construct these objects.</p>
+<p>Of course, we can always get what we want via calls to <code>test()</code>, <code>confint()</code> or <code>summary()</code> with appropriate arguments. But the <code>update()</code> function is more useful in sophisticated manipulations of objects, or called implicitly via the <code>...</code> or <code>options</code> argument in <code>emmeans()</code> and other functions. Those options are passed to <code>update()</code> just before the object is returned. For example, we could have done the above update within the <code>emmeans()</code> call as follows (results are not shown because they are the same as before):</p>
+<pre class="r"><code>emmeans(pigs.lm, &quot;source&quot;, infer = c(TRUE, TRUE), null = log(35),
+        calc = c(n = &quot;.wgt.&quot;))</code></pre>
+<p><a href="#contents">Back to contents</a></p>
+</div>
+<div id="options" class="section level2">
+<h2>Setting options</h2>
+<!-- @index `get_emm_option()`; Options -->
+<p>Speaking of the <code>options</code> argument, note that the default in <code>emmeans()</code> is <code>options = get_emm_option(&quot;emmeans&quot;)</code>. Let’s see what that is:</p>
+<pre class="r"><code>get_emm_option(&quot;emmeans&quot;)</code></pre>
+<pre class="ro"><code>## $infer
+## [1]  TRUE FALSE</code></pre>
+<p>So, by default, confidence intervals, but not tests, are displayed when the result is summarized. The reverse is true for results of <code>contrast()</code> (and also the default for <code>pairs()</code> which calls <code>contrast()</code>):</p>
+<pre class="r"><code>get_emm_option(&quot;contrast&quot;)</code></pre>
+<pre class="ro"><code>## $infer
+## [1] FALSE  TRUE</code></pre>
+<p>There are also defaults for a newly constructed reference grid:</p>
+<pre class="r"><code>get_emm_option(&quot;ref_grid&quot;)</code></pre>
+<pre class="ro"><code>## $is.new.rg
+## [1] TRUE
+## 
+## $infer
+## [1] FALSE FALSE</code></pre>
+<p>The default is to display neither intervals nor tests when summarizing. In addition, the flag <code>is.new.rg</code> is set to <code>TRUE</code>, and that is why one sees a <code>str()</code> listing rather than a summary as the default when the object is simply shown by typing its name at the console.</p>
+<div id="defaults" class="section level3">
+<h3>Setting and viewing defaults</h3>
+<!-- @index `emm_options()`; `emmGrid` objects!Setting defaults for
+     `emmeans()`!Changing defaults; `contrast()`!Changing defaults -->
+<p>The user may have other preferences. She may want to see both intervals and tests whenever contrasts are produced; and perhaps she also wants to always default to the response scale when transformations or links are present. We can change the defaults by setting the corresponding options; and that is done via the <code>emm_options()</code> function:</p>
+<pre class="r"><code>emm_options(emmeans = list(type = &quot;response&quot;),
+            contrast = list(infer = c(TRUE, TRUE)))</code></pre>
+<p>Now, new <code>emmeans()</code> results and contrasts follow the new defaults:</p>
+<pre class="r"><code>pigs.anal.p &lt;- emmeans(pigs.lm, consec ~ percent)
+pigs.anal.p</code></pre>
+<pre class="ro"><code>## $emmeans
+##  percent response   SE df lower.CL upper.CL
+##        9     31.4 1.28 23     28.8     34.1
+##       12     37.5 1.44 23     34.7     40.6
+##       15     39.0 1.70 23     35.6     42.7
+##       18     42.3 2.24 23     37.9     47.2
+## 
+## Results are averaged over the levels of: source 
+## Confidence level used: 0.95 
+## Intervals are back-transformed from the log scale 
+## 
+## $contrasts
+##  contrast ratio     SE df lower.CL upper.CL t.ratio p.value
+##  12 / 9    1.20 0.0671 23    1.038     1.38 3.202   0.0112 
+##  15 / 12   1.04 0.0604 23    0.896     1.20 0.650   0.8613 
+##  18 / 15   1.09 0.0750 23    0.911     1.29 1.194   0.5202 
+## 
+## Results are averaged over the levels of: source 
+## Confidence level used: 0.95 
+## Conf-level adjustment: mvt method for 3 estimates 
+## Intervals are back-transformed from the log scale 
+## P value adjustment: mvt method for 3 tests 
+## Tests are performed on the log scale</code></pre>
+<p>Observe that the contrasts “inherited” the <code>type = &quot;response&quot;</code> default from the EMMs.</p>
+<p>NOTE: Setting the above options does <em>not</em> change how existing <code>emmGrid</code> objects are displayed; it only affects ones constructed in the future.</p>
+<p>There is one more option – <code>summary</code> – that overrides all other display defaults for both existing and future objects. For example, specifying <code>emm_options(summary = list(infer = c(TRUE, TRUE)))</code> will result in both intervals and tests being displayed, regardless of their internal defaults, unless <code>infer</code> is explicitly specified in a call to <code>summary()</code>.</p>
+<p>To temporarily revert to factory defaults in a single call to <code>emmeans()</code> or <code>contrast()</code> or <code>pairs()</code>, specify <code>options = NULL</code> in the call. To reset everything to factory defaults (which we do presently), null-out all of the <strong>emmeans</strong> package options:</p>
+<pre class="r"><code>options(emmeans = NULL)</code></pre>
+</div>
+<div id="digits" class="section level3">
+<h3>Optimal digits to display</h3>
+<!-- @index Digits, optimizing; `opt.digits` option -->
+<p>When an <code>emmGrid</code> object is summarized and displayed, the factory default is to display it with just enough digits as is justified by the standard errors or HPD intervals of the estimates displayed. You may use the <code>&quot;opt.digits&quot;</code> option to change this. If it is <code>TRUE</code> (the default), we display only enough digits as is justified (but at least 3). If it is set to <code>FALSE</code>, the number of digits is set using the R system’s default, <code>getOption(&quot;digits&quot;)</code>; this is often much more precision than is justified. To illustrate, here is the summary of <code>pigs.emm</code> displayed without optimizing digits. Compare it with the first summary in this vignette.</p>
+<pre class="r"><code>emm_options(opt.digits = FALSE)
+pigs.emm</code></pre>
+<pre class="ro"><code>##  source   emmean         SE df lower.CL upper.CL
+##  fish   3.394492 0.03668122 23 3.318612 3.470373
+##  soy    3.667260 0.03744798 23 3.589793 3.744727
+##  skim   3.796770 0.03938283 23 3.715300 3.878240
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<pre class="r"><code>emm_options(opt.digits = TRUE)  # revert to optimal digits</code></pre>
+<p>By the way, setting this option does <em>not</em> round the calculated values computed by <code>summary.emmGrid()</code> or saved in a <code>summary)emm</code> object; it simply controls the precision displayed by <code>print.summary_emm()</code>.</p>
+</div>
+<div id="startup" class="section level3">
+<h3>Startup options</h3>
+<!-- @index Startup options; Options!Startup -->
+<p>The options accessed by <code>emm_options()</code> and <code>get_emm_option()</code> are stored in a list named <code>emmeans</code> within R’s options environment. Therefore, if you desire options other than the defaults provided on a regular basis, this can be easily arranged by specifying them in your startup script for R. For example, if you want to default to Satterthwaite degrees of freedom for <code>lmer</code> models, and display confidence intervals rather than tests for contrasts, your <code>.Rprofile</code> file could contain the line</p>
+<pre class="r"><code>options(emmeans = list(lmer.df = &quot;satterthwaite&quot;, 
+                       contrast = list(infer = c(TRUE, FALSE))))</code></pre>
+<p><a href="#contents">Back to contents</a></p>
+</div>
+</div>
+<div id="rbind" class="section level2">
+<h2>Combining and subsetting <code>emmGrid</code> objects</h2>
+<!-- @index `emmGrid` objects!Combining and subsetting
+     `rbind()`; `+` operator@plus -->
+<p>Two or more <code>emmGrid</code> objects may be combined using the <code>rbind()</code> or <code>+</code> methods. The most common reason (or perhaps the only good reason) to do this is to combine EMMs or contrasts into one family for purposes of applying a multiplicity adjustment to tests or intervals. A user may want to combine the three pairwise comparisons of sources with the three comparisons above of consecutive percents into a single family of six tests with a suitable multiplicity adjustment. This is done quite simply:</p>
+<pre class="r"><code>rbind(pairs(pigs.emm.s), pigs.anal.p[[2]])</code></pre>
+<pre class="ro"><code>##  contrast    estimate     SE df t.ratio p.value
+##  fish - soy   -0.2728 0.0529 23 -5.153  0.0002 
+##  fish - skim  -0.4023 0.0542 23 -7.428  &lt;.0001 
+##  soy - skim   -0.1295 0.0530 23 -2.442  0.1364 
+##  12 - 9        0.1796 0.0561 23  3.202  0.0238 
+##  15 - 12       0.0378 0.0582 23  0.650  1.0000 
+##  18 - 15       0.0825 0.0691 23  1.194  1.0000 
+## 
+## Results are averaged over some or all of the levels of: percent, source 
+## Results are given on the log (not the response) scale. 
+## P value adjustment: bonferroni method for 6 tests</code></pre>
+<p>The default adjustment is <code>&quot;bonferroni&quot;</code>; we could have specified something different via the <code>adjust</code> argument. An equivalent way to combine <code>emmGrid</code>s is via the addition operator. Any options may be provided by <code>update()</code>. Below, we combine the same results into a family but ask for the “exact” multiplicity adjustment.</p>
+<pre class="r"><code>update(pigs.anal.p[[2]] + pairs(pigs.emm.s), adjust = &quot;mvt&quot;)</code></pre>
+<pre class="ro"><code>##  contrast    ratio     SE df lower.CL upper.CL t.ratio p.value
+##  12 / 9      1.197 0.0671 23    1.022    1.402  3.202  0.0214 
+##  15 / 12     1.039 0.0604 23    0.881    1.224  0.650  0.9681 
+##  18 / 15     1.086 0.0750 23    0.894    1.320  1.194  0.7305 
+##  fish / soy  0.761 0.0403 23    0.656    0.884 -5.153  0.0002 
+##  fish / skim 0.669 0.0362 23    0.574    0.779 -7.428  &lt;.0001 
+##  soy / skim  0.879 0.0466 23    0.756    1.020 -2.442  0.1109 
+## 
+## Results are averaged over some or all of the levels of: source, percent 
+## Confidence level used: 0.95 
+## Conf-level adjustment: mvt method for 6 estimates 
+## Intervals are back-transformed from the log scale 
+## P value adjustment: mvt method for 6 tests 
+## Tests are performed on the log scale</code></pre>
+<p>Also evident in comparing these results is that settings are obtained from the first object combined. So in the second output, where they are combined in reverse order, we get both confidence intervals and tests, and transformation to the response scale.</p>
+<div id="brackets" class="section level6">
+<h6></h6>
+<!-- @index Selecting results; `[ ]` and `[[ ]]` operators@brackets -->
+<p>To subset an <code>emmGrid</code> object, just use the subscripting operator <code>[]</code>. For instance,</p>
+<pre class="r"><code>pigs.emm[2:3]</code></pre>
+<pre class="ro"><code>##  source emmean     SE df lower.CL upper.CL
+##  soy      3.67 0.0374 23     3.59     3.74
+##  skim     3.80 0.0394 23     3.72     3.88
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+</div>
+</div>
+<div id="data" class="section level2">
+<h2>Accessing results to use elsewhere</h2>
+<!-- @index `as.data.frame()`; `emmGrid` objects!Accessing data; Using results 
+     `summary_emm` object!As a data frame; `as.data.frame()` -->
+<p>Sometimes, users want to use the results of an analysis (say, an <code>emmeans()</code> call) in other computations. The <code>summary()</code> method creates a <code>summary_emm</code> object that inherits from the <code>data.frame</code> class; so one may use the variables therein just as those in a data frame.</p>
+<p>Another way is to use the <code>as.data.frame()</code> method for <code>emmGrid</code> objects. This is provided to implement the standard way to coerce an object to a data frame. For illustration, let’s compute the widths of the confidence intervals in our example.</p>
+<pre class="r"><code>transform(pigs.emm, CI.width = upper.CL - lower.CL)</code></pre>
+<pre class="ro"><code>##   source   emmean         SE df lower.CL upper.CL  CI.width
+## 1   fish 3.394492 0.03668122 23 3.318612 3.470373 0.1517618
+## 2    soy 3.667260 0.03744798 23 3.589793 3.744727 0.1549341
+## 3   skim 3.796770 0.03938283 23 3.715300 3.878240 0.1629392</code></pre>
+<p>This implicitly converted <code>pigs.emm</code> to a data frame by passing it to the <code>as.data.frame()</code> method, then performed the required computation. But sometimes you have to explicitly call <code>as.data.frame()</code>. [Note that the <code>opt.digits</code> option is ignored here, because this is a regular data frame, not the summary of an <code>emmGrid</code>.]</p>
+<p><a href="#contents">Back to contents</a></p>
+</div>
+<div id="groups" class="section level2">
+<h2>Adding grouping factors</h2>
+<!-- @index Grouping factors; `add_grouping()`; Nesting factors!Creating  -->
+<p>Sometimes, users want to group levels of a factor into a smaller number of groups. Those groups may then be, say, averaged separately and compared, or used as a <code>by</code> factor. The <code>add_grouping()</code> function serves this purpose. The function takes four arguments: the object, the name of the grouping factor to be created, the name of the reference factor that is being grouped, and a vector of level names of the grouping factor corresponding to levels of the reference factor. Suppose for example that we want to distinguish animal and non-animal sources of protein in the <code>pigs</code> example:</p>
+<pre class="r"><code>pigs.emm.ss &lt;- add_grouping(pigs.emm.s, &quot;type&quot;, &quot;source&quot;,
+                            c(&quot;animal&quot;, &quot;vegetable&quot;, &quot;animal&quot;))
+str(pigs.emm.ss)</code></pre>
+<pre class="ro"><code>## &#39;emmGrid&#39; object with variables:
+##     source = fish, soy, skim
+##     type = animal, vegetable
+## Nesting structure:  source %in% type
+## Transformation: &quot;log&quot;</code></pre>
+<p>Note that the new object has a nesting structure (see more about this in the <a href="messy-data.html#nesting">“messy-data” vignette</a>), with the reference factor nested in the new grouping factor. Now we can obtain means and comparisons for each group</p>
+<pre class="r"><code>emmeans(pigs.emm.ss, pairwise ~ type)</code></pre>
+<pre class="ro"><code>## $emmeans
+##  type      emmean     SE df  n lower.CL upper.CL
+##  animal      3.60 0.0267 23 19     3.54     3.65
+##  vegetable   3.67 0.0374 23 10     3.59     3.74
+## 
+## Results are averaged over the levels of: percent, source 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast           estimate     SE df t.ratio p.value
+##  animal - vegetable  -0.0716 0.0455 23 -1.573  0.1295 
+## 
+## Results are averaged over the levels of: percent, source 
+## Results are given on the log (not the response) scale.</code></pre>
+<p><a href="#contents">Back to contents</a></p>
+</div>
+<div id="relevel" class="section level2">
+<h2>Re-labeling or re-leveling an <code>emmGrid</code></h2>
+<!-- @index Re-labeling; Levels!Changing; Labels!Changing; Examples!`warpbreaks`;
+    Examples!Welch's *t* comparisons; Welch's *t* comparisons!Example    -->
+<p>Sometimes it is desirable to re-label the rows of an <code>emmGrid</code>, or cast it in terms of other factor(s). This can be done via the <code>levels</code> argument in <code>update()</code>.</p>
+<p>As an example, sometimes a fitted model has a treatment factor that comprises combinations of other factors. In subsequent analysis, we may well want to break it down into the individual factors’ contributions. Consider, for example, the <code>warpbreaks</code> data provided with R. We will define a single factor and fit a non homogeneous-variance model:</p>
+<pre class="r"><code>warp &lt;- transform(warpbreaks, treat = interaction(wool, tension))
+library(nlme)
+warp.gls &lt;- gls(breaks ~ treat, weights = varIdent(form = ~ 1|treat), data = warp)
+( warp.emm &lt;- emmeans(warp.gls, &quot;treat&quot;) )</code></pre>
+<pre class="ro"><code>##  treat emmean   SE   df lower.CL upper.CL
+##  A.L     44.6 6.03 8.01     30.6     58.5
+##  B.L     28.2 3.29 8.00     20.6     35.8
+##  A.M     24.0 2.89 8.00     17.3     30.7
+##  B.M     28.8 3.14 8.00     21.5     36.0
+##  A.H     24.6 3.42 8.00     16.7     32.5
+##  B.H     18.8 1.63 8.00     15.0     22.5
+## 
+## Degrees-of-freedom method: satterthwaite 
+## Confidence level used: 0.95</code></pre>
+<p>But now we want to re-cast this <code>emmGrid</code> into one that has separate factors for <code>wool</code> and <code>tension</code>. We can do this as follows:</p>
+<pre class="r"><code>warp.fac &lt;- update(warp.emm, levels = list(
+                wool = c(&quot;A&quot;, &quot;B&quot;), tension = c(&quot;L&quot;, &quot;M&quot;, &quot;H&quot;)))
+str(warp.fac)</code></pre>
+<pre class="ro"><code>## &#39;emmGrid&#39; object with variables:
+##     wool = A, B
+##     tension = L, M, H</code></pre>
+<p>So now we can do various contrasts involving the separate factors:</p>
+<pre class="r"><code>contrast(warp.fac, &quot;consec&quot;, by = &quot;wool&quot;)</code></pre>
+<pre class="ro"><code>## wool = A:
+##  contrast estimate   SE   df t.ratio p.value
+##  M - L     -20.556 6.69 11.5 -3.074  0.0203 
+##  H - M       0.556 4.48 15.6  0.124  0.9899 
+## 
+## wool = B:
+##  contrast estimate   SE   df t.ratio p.value
+##  M - L       0.556 4.55 16.0  0.122  0.9881 
+##  H - M     -10.000 3.54 12.0 -2.824  0.0269 
+## 
+## Degrees-of-freedom method: satterthwaite 
+## P value adjustment: mvt method for 2 tests</code></pre>
+<p>Note: When re-leveling to more than one factor, you have to be careful to anticipate that the levels will be expanded using <code>expand.grid()</code>: the first factor in the list varies the fastest and the last varies the slowest. That was the case in our example, but in others, it may not be. Had the levels of <code>treat</code> been ordered as <code>A.L, A.M, A.H, B.L, B.M, B.H</code>, then we would have had to specify the levels of <code>tension</code> first and the levels of <code>wool</code> second.</p>
+<p><a href="#contents">Back to contents</a></p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

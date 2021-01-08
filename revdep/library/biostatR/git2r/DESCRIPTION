@@ -1,0 +1,42 @@
+Package: git2r
+Title: Provides Access to Git Repositories
+Description: Interface to the 'libgit2' library, which is a pure C
+    implementation of the 'Git' core methods. Provides access to 'Git'
+    repositories to extract data and running some basic 'Git'
+    commands.
+Version: 0.27.1
+License: GPL-2
+Copyright: See COPYRIGHTS file.
+URL: https://docs.ropensci.org/git2r (website),
+        https://github.com/ropensci/git2r
+BugReports: https://github.com/ropensci/git2r/issues
+Maintainer: Stefan Widgren <stefan.widgren@gmail.com>
+Author: See AUTHORS file.
+Imports: graphics, utils
+Depends: R (>= 3.1)
+Suggests: getPass
+Type: Package
+LazyData: true
+Biarch: true
+NeedsCompilation: yes
+SystemRequirements: By default, git2r uses a system installation of the
+        libgit2 headers and library. However, if a system installation
+        is not available, builds and uses a bundled version of the
+        libgit2 source. zlib headers and library. OpenSSL headers and
+        library (non-macOS). LibSSH2 (optional on non-Windows) to
+        enable the SSH transport.
+Collate: 'blame.R' 'blob.R' 'branch.R' 'bundle_r_package.R'
+        'checkout.R' 'commit.R' 'config.R' 'contributions.R'
+        'credential.R' 'diff.R' 'fetch.R' 'git2r.R' 'index.R'
+        'libgit2.R' 'merge.R' 'note.R' 'odb.R' 'plot.R' 'pull.R'
+        'punch_card.R' 'push.R' 'reference.R' 'reflog.R' 'refspec.R'
+        'remote.R' 'repository.R' 'reset.R' 'revparse.R' 'sha.R'
+        'signature.R' 'stash.R' 'status.R' 'tag.R' 'time.R' 'tree.R'
+        'when.R'
+Encoding: UTF-8
+RoxygenNote: 7.1.0
+Packaged: 2020-05-03 10:25:56 UTC; stefan
+Repository: CRAN
+Date/Publication: 2020-05-03 11:30:02 UTC
+Built: R 4.0.3; x86_64-w64-mingw32; 2020-12-30 18:06:41 UTC; windows
+Archs: i386, x64
