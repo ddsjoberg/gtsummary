@@ -20,36 +20,6 @@
 #'
 #' @examples
 #' # Example 1 ----------------------------------
-#' # fit model with nonlinear terms for marker
-#' nlmod1 <- lm(
-#'   age ~ marker + I(marker^2) + grade,
-#'   trial[c("age", "marker", "grade")] %>% na.omit() # keep complete cases only!
-#' )
-#'
-#' combine_terms_ex1 <-
-#'   tbl_regression(nlmod1, label = grade ~ "Grade") %>%
-#'   # collapse non-linear terms to a single row in output using anova
-#'   combine_terms(
-#'     formula_update = . ~ . - marker - I(marker^2),
-#'     label = "Marker (non-linear terms)"
-#'   )
-#'
-#' # Example 2 ----------------------------------
-#' # Example with Cubic Splines
-#' library(Hmisc, warn.conflicts = FALSE, quietly = TRUE)
-#' mod2 <- lm(
-#'   age ~ rcspline.eval(marker, inclx = TRUE) + grade,
-#'   trial[c("age", "marker", "grade")] %>% na.omit() # keep complete cases only!
-#' )
-#'
-#' combine_terms_ex2 <-
-#'   tbl_regression(mod2, label = grade ~ "Grade") %>%
-#'   combine_terms(
-#'     formula_update = . ~ . -rcspline.eval(marker, inclx = TRUE),
-#'     label = "Marker (non-linear terms)"
-#'   )
-#'
-#' # Example 3 ----------------------------------
 #' # Logistic Regression Example, LRT p-value
 #' combine_terms_ex3 <-
 #'   glm(
@@ -69,14 +39,6 @@
 #' \if{html}{Example 1}
 #'
 #' \if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\figure{combine_terms_ex2.png}{options: width=45\%}}
-#'
-#' \if{html}{Example 3}
-#'
-#' \if{html}{\figure{combine_terms_ex3.png}{options: width=45\%}}
 
 combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
   # setting defaults -----------------------------------------------------------
