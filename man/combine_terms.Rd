@@ -40,7 +40,7 @@ with a single row in the output table.  The p-value is calculated using
 \examples{
 # Example 1 ----------------------------------
 # Logistic Regression Example, LRT p-value
-combine_terms_ex3 <-
+combine_terms_ex1 <-
   glm(
     response ~ marker + I(marker^2) + grade,
     trial[c("response", "marker", "grade")] \%>\% na.omit(), # keep complete cases only!
