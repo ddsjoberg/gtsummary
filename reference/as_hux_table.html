@@ -53,9 +53,7 @@
 
 
 <meta property="og:title" content="Convert gtsummary object to a huxtable object — as_hux_table" />
-<meta property="og:description" content="
-
-Function converts a gtsummary object to a huxtable object.
+<meta property="og:description" content="Function converts a gtsummary object to a huxtable object.
 A user can use this function if they wish to add customized formatting
 available via the huxtable functions. The huxtable package supports output
 to PDF via LaTeX, as well as HTML and Word." />
@@ -101,7 +99,7 @@ to PDF via LaTeX, as well as HTML and Word." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
       </span>
     </div>
 
@@ -109,7 +107,7 @@ to PDF via LaTeX, as well as HTML and Word." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -150,7 +148,7 @@ to PDF via LaTeX, as well as HTML and Word." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -179,9 +177,7 @@ to PDF via LaTeX, as well as HTML and Word." />
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
-
-Function converts a gtsummary object to a huxtable object.
+    <p>Function converts a gtsummary object to a huxtable object.
 A user can use this function if they wish to add customized formatting
 available via the huxtable functions. The huxtable package supports output
 to PDF via LaTeX, as well as HTML and Word.</p>
@@ -260,18 +256,17 @@ it to a huxtable and formats the table with the following huxtable functions:</p
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>as_hux_table</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Characteristic       Drug A, N = 98    Drug B, N = 102            p-value  
-#&gt;  ─────────────────────────────────────────────────────────────────────────────
-#&gt;    Age                     46 (37, 59)        48 (39, 56)                0.7  
-#&gt;    Unknown                           7                  4                     
-#&gt;    Grade                                                                 0.9  
-#&gt;    I                          35 (36%)           33 (32%)                     
-#&gt;    II                         32 (33%)           36 (35%)                     
-#&gt;    III                        31 (32%)           33 (32%)                     
-#&gt;  ─────────────────────────────────────────────────────────────────────────────
-#&gt;    Statistics presented: Median (IQR); n (%)                                  
-#&gt;    Statistical tests performed: Wilcoxon rank-sum test; chi-square            
-#&gt;    test of independence                                                       
+</div><div class='output co'>#&gt;           Characteristic   Drug A, N = 98   Drug B, N = 102   p-value  
+#&gt;         ───────────────────────────────────────────────────────────────
+#&gt;           Age                 46 (37, 59)       48 (39, 56)       0.7  
+#&gt;           Unknown                       7                 4            
+#&gt;           Grade                                                   0.9  
+#&gt;           I                      35 (36%)          33 (32%)            
+#&gt;           II                     32 (33%)          36 (35%)            
+#&gt;           III                    31 (32%)          33 (32%)            
+#&gt;         ───────────────────────────────────────────────────────────────
+#&gt;           Median (IQR); n (%)                                          
+#&gt;           Wilcoxon rank sum test; Pearson's Chi-squared test           
 #&gt; 
 #&gt; Column names: label, stat_1, stat_2, p.value</div></pre>
   </div>

@@ -98,7 +98,7 @@ The function allows a user to add a new column with a custom, user-defined stati
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
       </span>
     </div>
 
@@ -106,7 +106,7 @@ The function allows a user to add a new column with a custom, user-defined stati
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -147,7 +147,7 @@ The function allows a user to add a new column with a custom, user-defined stati
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -187,7 +187,8 @@ The function allows a user to add a new column with a custom, user-defined stati
   fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
   header <span class='op'>=</span> <span class='st'>"**Statistic**"</span>,
   footnote <span class='op'>=</span> <span class='cn'>NULL</span>,
-  new_col_name <span class='op'>=</span> <span class='cn'>NULL</span>
+  new_col_name <span class='op'>=</span> <span class='cn'>NULL</span>,
+  location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"label"</span>, <span class='st'>"level"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -195,7 +196,7 @@ The function allows a user to add a new column with a custom, user-defined stati
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>tbl_summary object</p></td>
+      <td><p><code>tbl_summary</code> or <code>tbl_svysummary</code> object</p></td>
     </tr>
     <tr>
       <th>fns</th>
@@ -220,6 +221,15 @@ footnote (i.e. NULL)</p></td>
       <td><p>name of new column to be created in <code>.$table_body</code>.
 Default is <code>"add_stat_1"</code>, unless that column exists then it is <code>"add_stat_2"</code>, etc.</p></td>
     </tr>
+    <tr>
+      <th>location</th>
+      <td><p>Must be one of <code><a href='https://rdrr.io/r/base/c.html'>c("label", "level")</a></code> and indicates which
+row(s) the new statistics are placed on. When <code>"label"</code> a single statistic
+is placed on the variable label row. When <code>"level"</code> the statistics are placed
+on the variable level rows. The length of the vector of statistics returned from the
+<code>fns</code> function must match the dimension of levels. Continuous and dichotomous
+statistics are placed on the variable label row.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -228,8 +238,12 @@ Default is <code>"add_stat_1"</code>, unless that column exists then it is <code
 
 
 <p>The custom functions passed in <code>fns=</code> are required to follow a specified
-format. Each of these function will execute on a single variable from <code><a href='tbl_summary.html'>tbl_summary()</a></code>.</p><ol>
-<li><p>Each function must return a single scalar or character value of length one.</p></li>
+format. Each of these function will execute on a single variable from
+<code><a href='tbl_summary.html'>tbl_summary()</a></code>/<code><a href='tbl_svysummary.html'>tbl_svysummary()</a></code>.</p><ol>
+<li><p>Each function must return a single scalar or character value of length one when
+<code>location = "label"</code>. When <code>location = "level"</code>, the returned statistic
+must be a vector of the length of the number of levels (excluding the
+row for unknown values).</p></li>
 <li><p>Each function may take the following arguments: <code>foo(data, variable, by, tbl)</code></p></li>
 </ol>
 <ul>
@@ -251,6 +265,8 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
 <p><img src='figures/add_stat_ex1.png' width=60% /></p>
 <p>Example 2</p>
 <p><img src='figures/add_stat_ex2.png' width=60% /></p>
+<p>Example 3</p>
+<p><img src='figures/add_stat_ex3.png' width=60% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
@@ -272,7 +288,12 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
     fmt_fun <span class='op'>=</span> <span class='va'>style_pvalue</span>,        <span class='co'># format result with style_pvalue()</span>
     header <span class='op'>=</span> <span class='st'>"**My p-value**"</span>      <span class='co'># new column header</span>
   <span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'lme4':</span>
+#&gt; <span class='message'>  method                          from</span>
+#&gt; <span class='message'>  cooks.distance.influence.merMod car </span>
+#&gt; <span class='message'>  influence.merMod                car </span>
+#&gt; <span class='message'>  dfbeta.influence.merMod         car </span>
+#&gt; <span class='message'>  dfbetas.influence.merMod        car </span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># fn returns t-test test statistic and pvalue</span>
 <span class='va'>my_ttest2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
@@ -294,7 +315,32 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
     header <span class='op'>=</span> <span class='st'>"**Treatment Comparison**"</span>,       <span class='co'># column header</span>
     footnote <span class='op'>=</span> <span class='st'>"T-test statistic and p-value"</span>  <span class='co'># footnote</span>
   <span class='op'>)</span>
-<span class='co'># Example 1 ----------------------------------</span>
+
+<span class='co'># Example 3 ----------------------------------</span>
+<span class='co'># Add CI for categorical variables</span>
+<span class='va'>categorical_ci</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>tbl</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>$</span><span class='va'>meta_data</span>, <span class='va'>variable</span> <span class='op'>==</span> <span class='va'>.env</span><span class='op'>$</span><span class='va'>variable</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/pluck.html'>pluck</a></span><span class='op'>(</span><span class='st'>"df_stats"</span>, <span class='fl'>1</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
+      <span class='co'># calculate and format 95% CI</span>
+      prop_ci <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map2.html'>map2</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>N</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test</a></span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.y</span><span class='op'>)</span><span class='op'>$</span><span class='va'>conf.int</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='style_percent.html'>style_percent</a></span><span class='op'>(</span>symbol <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
+      ci <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map_chr</a></span><span class='op'>(</span><span class='va'>prop_ci</span>, <span class='op'>~</span><span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"{.x[1]}, {.x[2]}"</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span><span class='op'>(</span><span class='va'>ci</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='va'>add_stat_ex3</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>statistic <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>add_stat</span><span class='op'>(</span>
+    fns <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"categorical_ci"</span>,
+    location <span class='op'>=</span> <span class='st'>"level"</span>,
+    header <span class='op'>=</span> <span class='st'>"**95% CI**"</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>There was an error for variable 'grade':</span>
+#&gt; <span class='message'>Error in categorical_ci(data = structure(list(grade = structure(c(2L, : could not find function "categorical_ci"</span></div><div class='output co'>#&gt; <span class='error'>Error: Dimension of 'grade' and the added statistic do not match. Expecting statistic to be length 3.</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

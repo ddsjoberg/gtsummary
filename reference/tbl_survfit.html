@@ -99,7 +99,7 @@ formatted summary table of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@ formatted summary table of the results" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home"></span>
+    <span class="fas fa-home"></span>
      
   </a>
 </li>
@@ -148,7 +148,7 @@ formatted summary table of the results" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -185,42 +185,6 @@ formatted summary table of the results</p>
 
     <pre class="usage"><span class='fu'>tbl_survfit</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S3 method for survfit</span>
-<span class='fu'>tbl_survfit</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  times <span class='op'>=</span> <span class='cn'>NULL</span>,
-  probs <span class='op'>=</span> <span class='cn'>NULL</span>,
-  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,
-  label <span class='op'>=</span> <span class='cn'>NULL</span>,
-  label_header <span class='op'>=</span> <span class='cn'>NULL</span>,
-  estimate_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  missing <span class='op'>=</span> <span class='cn'>NULL</span>,
-  conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
-  reverse <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  quiet <span class='op'>=</span> <span class='cn'>NULL</span>,
-  failure <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>tbl_survfit</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  <span class='va'>y</span>,
-  times <span class='op'>=</span> <span class='cn'>NULL</span>,
-  probs <span class='op'>=</span> <span class='cn'>NULL</span>,
-  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,
-  label <span class='op'>=</span> <span class='cn'>NULL</span>,
-  label_header <span class='op'>=</span> <span class='cn'>NULL</span>,
-  estimate_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  missing <span class='op'>=</span> <span class='cn'>NULL</span>,
-  conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
-  reverse <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  failure <span class='op'>=</span> <span class='cn'>NULL</span>,
-  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
-  quiet <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
 <span class='co'># S3 method for list</span>
 <span class='fu'>tbl_survfit</span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -235,7 +199,13 @@ formatted summary table of the results</p>
   reverse <span class='op'>=</span> <span class='cn'>FALSE</span>,
   quiet <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for survfit</span>
+<span class='fu'>tbl_survfit</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for data.frame</span>
+<span class='fu'>tbl_survfit</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -248,7 +218,9 @@ each variable as a stratifying variable.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Not used</p></td>
+      <td><p>For <code>tbl_survfit.data.frame()</code>  and <code>tbl_survfit.survfit()</code> the arguments
+are passed to <code>tbl_survfit.list()</code>. They are not used when <code>tbl_survfit.list()</code>
+is called directly.</p></td>
     </tr>
     <tr>
       <th>times</th>
@@ -279,7 +251,7 @@ survival estimates</p></td>
     <tr>
       <th>estimate_fun</th>
       <td><p>function to format the Kaplan-Meier estimates. Default
-is <a href='style_percent.html'>style_percent</a> for survival probabilities and <a href='style_sigfig.html'>style_sigfig</a> for
+is <code><a href='style_percent.html'>style_percent()</a></code> for survival probabilities and <a href='style_sigfig.html'>style_sigfig</a> for
 survival times</p></td>
     </tr>
     <tr>
@@ -299,10 +271,6 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
       <th>quiet</th>
       <td><p>Logical indicating whether to print messages in console. Default is
 <code>FALSE</code></p></td>
-    </tr>
-    <tr>
-      <th>failure</th>
-      <td><p>DEPRECATED. Use <code>reverse=</code> instead.</p></td>
     </tr>
     <tr>
       <th>y</th>
@@ -354,7 +322,7 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <span class='co'># Pass a data frame</span>
 <span class='va'>tbl_survfit_ex2</span> <span class='op'>&lt;-</span> <span class='fu'>tbl_survfit</span><span class='op'>(</span>
   <span class='va'>trial</span>,
-  y <span class='op'>=</span> <span class='fu'>survival</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span>,
+  y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span>,
   include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>grade</span><span class='op'>)</span>,
   probs <span class='op'>=</span> <span class='fl'>0.5</span>,
   label_header <span class='op'>=</span> <span class='st'>"**Median Survival**"</span>
@@ -382,7 +350,7 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <span class='va'>survfit_cr_ex4</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death_cr</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>grade</span>, data <span class='op'>=</span> <span class='va'>trial2</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>tbl_survfit</span><span class='op'>(</span>times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span>, label <span class='op'>=</span> <span class='st'>"Tumor Grade"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div></pre>
+</div><div class='output co'>#&gt; <span class='message'>tbl_survfit: Multi-state model detected. Showing probabilities into state 'death from cancer'</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
