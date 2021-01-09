@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Tibbles</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Tibbles</h1>
+
+
+
+<p>Tibbles are a modern take on data frames. They keep the features that have stood the test of time, and drop the features that used to be convenient but are now frustrating (i.e. converting character vectors to factors).</p>
+<div id="creating" class="section level2">
+<h2>Creating</h2>
+<p><code>tibble()</code> is a nice way to create data frames. It encapsulates best practices for data frames:</p>
+<ul>
+<li><p>It never changes an input’s type (i.e., no more <code>stringsAsFactors = FALSE</code>!).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">tibble</span>(<span class="dt">x =</span> letters)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 26 x 1</span><span>
+#&gt;    </span><span style="font-weight: bold;">x</span><span>    
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span> a    
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span> b    
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span> c    
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span> d    
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span> e    
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span> f    
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span> g    
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span> h    
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span> i    
+#&gt; </span><span style="color: #BCBCBC;">10</span><span> j    
+#&gt; </span><span style="color: #949494;"># … with 16 more rows</span><span>
+</span></code></pre>
+</div>
+<p>This makes it easier to use with list-columns:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">y =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">20</span>))</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 3 x 2</span><span>
+#&gt;       </span><span style="font-weight: bold;">x</span><span> </span><span style="font-weight: bold;">y</span><span>         
+#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;list&gt;</span><span>    
+#&gt; </span><span style="color: #BCBCBC;">1</span><span>     1 </span><span style="color: #949494;">&lt;int [5]&gt;</span><span> 
+#&gt; </span><span style="color: #BCBCBC;">2</span><span>     2 </span><span style="color: #949494;">&lt;int [10]&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;">3</span><span>     3 </span><span style="color: #949494;">&lt;int [20]&gt;</span><span>
+</span></code></pre>
+</div>
+<p>List-columns are most commonly created by <code>do()</code>, but they can be useful to create by hand.</p></li>
+<li><p>It never adjusts the names of variables:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">names</span>(<span class="kw">data.frame</span>(<span class="st">`</span><span class="dt">crazy name</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] &quot;crazy.name&quot;
+</code></pre>
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">names</span>(<span class="kw">tibble</span>(<span class="st">`</span><span class="dt">crazy name</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] &quot;crazy name&quot;
+</code></pre>
+</div></li>
+<li><p>It evaluates its arguments lazily and sequentially:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">y =</span> x <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 5 x 2</span><span>
+#&gt;       </span><span style="font-weight: bold;">x</span><span>     </span><span style="font-weight: bold;">y</span><span>
+#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;">1</span><span>     1     1
+#&gt; </span><span style="color: #BCBCBC;">2</span><span>     2     4
+#&gt; </span><span style="color: #BCBCBC;">3</span><span>     3     9
+#&gt; </span><span style="color: #BCBCBC;">4</span><span>     4    16
+#&gt; </span><span style="color: #BCBCBC;">5</span><span>     5    25
+</span></code></pre>
+</div></li>
+<li><p>It never uses <code>row.names()</code>. The whole point of tidy data is to store variables in a consistent way. So it never stores a variable as special attribute.</p></li>
+<li><p>It only recycles vectors of length 1. This is because recycling vectors of greater lengths is a frequent source of bugs.</p></li>
+</ul>
+</div>
+<div id="coercion" class="section level2">
+<h2>Coercion</h2>
+<p>To complement <code>tibble()</code>, tibble provides <code>as_tibble()</code> to coerce objects into tibbles. Generally, <code>as_tibble()</code> methods are much simpler than <code>as.data.frame()</code> methods, and in fact, it’s precisely what <code>as.data.frame()</code> does, but it’s similar to <code>do.call(cbind, lapply(x, data.frame))</code> - i.e. it coerces each component to a data frame and then <code>cbinds()</code> them all together.</p>
+<p><code>as_tibble()</code> has been written with an eye for performance:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>l &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">26</span>, <span class="kw">sample</span>(<span class="dv">100</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">names</span>(l) &lt;-<span class="st"> </span>letters</span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a>timing &lt;-<span class="st"> </span>bench<span class="op">::</span><span class="kw">mark</span>(</span>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="kw">as_tibble</span>(l),</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  <span class="kw">as.data.frame</span>(l),</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  <span class="dt">check =</span> <span class="ot">FALSE</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>)</span>
+<span id="cb6-9"><a href="#cb6-9"></a></span>
+<span id="cb6-10"><a href="#cb6-10"></a>timing</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 2 x 14</span><span>
+#&gt;   </span><span style="font-weight: bold;">expression</span><span> </span><span style="font-weight: bold;">min</span><span>         </span><span style="font-weight: bold;">mean</span><span>         </span><span style="font-weight: bold;">median</span><span>      </span><span style="font-weight: bold;">max</span><span>         </span><span style="font-weight: bold;">`itr/sec`</span><span>
+#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;chr&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;bench_tm&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;bench_tm&gt;</span><span>   </span><span style="color: #949494;font-style: italic;">&lt;bench_tm&gt;</span><span>  </span><span style="color: #949494;font-style: italic;">&lt;bench_tm&gt;</span><span>      </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;">1</span><span> as_tibble… 0.000287696 0.0006251376 0.000327178 0.004508219     </span><span style="text-decoration: underline;">1</span><span>600.
+#&gt; </span><span style="color: #BCBCBC;">2</span><span> as.data.f… 0.000791522 0.0016640039 0.001098172 0.007652914      601.
+#&gt; </span><span style="color: #949494;"># … with 8 more variables: </span><span style="color: #949494;font-weight: bold;">mem_alloc</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;bnch_byt&gt;</span><span style="color: #949494;">, </span><span style="color: #949494;font-weight: bold;">n_gc</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, </span><span style="color: #949494;font-weight: bold;">n_itr</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">,</span><span>
+#&gt; </span><span style="color: #949494;">#   </span><span style="color: #949494;font-weight: bold;">total_time</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;bench_tm&gt;</span><span style="color: #949494;">, </span><span style="color: #949494;font-weight: bold;">result</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;list&gt;</span><span style="color: #949494;">, </span><span style="color: #949494;font-weight: bold;">memory</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;list&gt;</span><span style="color: #949494;">, </span><span style="color: #949494;font-weight: bold;">time</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;list&gt;</span><span style="color: #949494;">, </span><span style="color: #949494;font-weight: bold;">gc</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;list&gt;</span><span>
+</span></code></pre>
+</div>
+<p>The speed of <code>as.data.frame()</code> is not usually a bottleneck when used interactively, but can be a problem when combining thousands of messy inputs into one tidy data frame.</p>
+</div>
+<div id="tibbles-vs-data-frames" class="section level2">
+<h2>Tibbles vs data frames</h2>
+<p>There are three key differences between tibbles and data frames: printing, subsetting, and recycling rules.</p>
+<div id="printing" class="section level3">
+<h3>Printing</h3>
+<p>When you print a tibble, it only shows the first ten rows and all the columns that fit on one screen. It also prints an abbreviated description of the column type, and uses font styles and color for highlighting:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="dv">-5</span><span class="op">:</span><span class="dv">1000</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 1,006 x 1</span><span>
+#&gt;        </span><span style="font-weight: bold;">x</span><span>
+#&gt;    </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 1</span><span>    -</span><span style="color: #BB0000;">5</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 2</span><span>    -</span><span style="color: #BB0000;">4</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 3</span><span>    -</span><span style="color: #BB0000;">3</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 4</span><span>    -</span><span style="color: #BB0000;">2</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 5</span><span>    -</span><span style="color: #BB0000;">1</span><span>
+#&gt; </span><span style="color: #BCBCBC;"> 6</span><span>     0
+#&gt; </span><span style="color: #BCBCBC;"> 7</span><span>     1
+#&gt; </span><span style="color: #BCBCBC;"> 8</span><span>     2
+#&gt; </span><span style="color: #BCBCBC;"> 9</span><span>     3
+#&gt; </span><span style="color: #BCBCBC;">10</span><span>     4
+#&gt; </span><span style="color: #949494;"># … with 996 more rows</span><span>
+</span></code></pre>
+</div>
+<p>You can control the default appearance with options:</p>
+<ul>
+<li><p><code>options(tibble.print_max = n, tibble.print_min = m)</code>: if there are more than <code>n</code> rows, print only the first <code>m</code> rows. Use <code>options(tibble.print_max = Inf)</code> to always show all rows.</p></li>
+<li><p><code>options(tibble.width = Inf)</code> will always print all columns, regardless of the width of the screen.</p></li>
+</ul>
+</div>
+<div id="subsetting" class="section level3">
+<h3>Subsetting</h3>
+<p>Tibbles are quite strict about subsetting. <code>[</code> always returns another tibble. Contrast this with a data frame: sometimes <code>[</code> returns a data frame and sometimes it just returns a vector:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>df1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">y =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">class</span>(df1[, <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>])</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] &quot;data.frame&quot;
+</code></pre>
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">class</span>(df1[, <span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] &quot;integer&quot;
+</code></pre>
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2"></a>df2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">y =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">1</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="kw">class</span>(df2[, <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>])</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;
+</code></pre>
+</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">class</span>(df2[, <span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;
+</code></pre>
+</div>
+<p>To extract a single column use <code>[[</code> or <code>$</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span>(df2[[<span class="dv">1</span>]])</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] &quot;integer&quot;
+</code></pre>
+</div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">class</span>(df2<span class="op">$</span>x)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] &quot;integer&quot;
+</code></pre>
+</div>
+<p>Tibbles are also stricter with <code>$</code>. Tibbles never do partial matching, and will throw a warning and return <code>NULL</code> if the column does not exist:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">abc =</span> <span class="dv">1</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>df<span class="op">$</span>a</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1
+</code></pre>
+</div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2"></a>df2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">abc =</span> <span class="dv">1</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>df2<span class="op">$</span>a</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode"><span style="color: #BB0000;">#&gt; Warning: Unknown or uninitialised column: `a`.
+</span></code></pre>
+</div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; NULL
+</code></pre>
+</div>
+<p>As of version 1.4.1, tibbles no longer ignore the <code>drop</code> argument:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)[, <span class="st">&quot;a&quot;</span>, drop =<span class="st"> </span><span class="ot">TRUE</span>]</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1 2 3
+</code></pre>
+</div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">tibble</span>(<span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)[, <span class="st">&quot;a&quot;</span>, drop =<span class="st"> </span><span class="ot">TRUE</span>]</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1 2 3
+</code></pre>
+</div>
+</div>
+<div id="recycling" class="section level3">
+<h3>Recycling</h3>
+<p>When constructing a tibble, only values of length 1 are recycled. The first column with length different to one determines the number of rows in the tibble, conflicts lead to an error. This also extends to tibbles with <em>zero</em> rows, which is sometimes important for programming:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">tibble</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 3 x 2</span><span>
+#&gt;       </span><span style="font-weight: bold;">a</span><span>     </span><span style="font-weight: bold;">b</span><span>
+#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;">1</span><span>     1     1
+#&gt; </span><span style="color: #BCBCBC;">2</span><span>     1     2
+#&gt; </span><span style="color: #BCBCBC;">3</span><span>     1     3
+</span></code></pre>
+</div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">tibble</span>(<span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">b =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 3 x 2</span><span>
+#&gt;       </span><span style="font-weight: bold;">a</span><span>     </span><span style="font-weight: bold;">b</span><span>
+#&gt;   </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
+#&gt; </span><span style="color: #BCBCBC;">1</span><span>     1     1
+#&gt; </span><span style="color: #BCBCBC;">2</span><span>     2     1
+#&gt; </span><span style="color: #BCBCBC;">3</span><span>     3     1
+</span></code></pre>
+</div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">tibble</span>(<span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">c =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode"><span style="color: #BB0000;">#&gt; Error: Tibble columns must have compatible sizes.
+#&gt; * Size 3: Existing data.
+#&gt; * Size 2: Column `c`.
+#&gt; </span><span style="color: #0000BB;">ℹ</span><span style="color: #BB0000;"> Only values of size one are recycled.
+</span></code></pre>
+</div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">tibble</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="kw">integer</span>())</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 0 x 2</span><span>
+#&gt; </span><span style="color: #949494;"># … with 2 variables: </span><span style="color: #949494;font-weight: bold;">a</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span style="color: #949494;">, </span><span style="color: #949494;font-weight: bold;">b</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span>
+</span></code></pre>
+</div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">tibble</span>(<span class="dt">a =</span> <span class="kw">integer</span>(), <span class="dt">b =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 0 x 2</span><span>
+#&gt; </span><span style="color: #949494;"># … with 2 variables: </span><span style="color: #949494;font-weight: bold;">a</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;int&gt;</span><span style="color: #949494;">, </span><span style="color: #949494;font-weight: bold;">b</span><span style="color: #949494;"> </span><span style="color: #949494;font-style: italic;">&lt;dbl&gt;</span><span>
+</span></code></pre>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

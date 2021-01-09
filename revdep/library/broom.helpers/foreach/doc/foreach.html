@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Steve Weston" />
+
+
+<title>Using the foreach package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Using the <code>foreach</code> package</h1>
+<h4 class="author">Steve Weston</h4>
+
+
+
+<p><em>Converted to RMarkdown by Hong Ooi</em></p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>One of R’s most useful features is its interactive interpreter. This makes it very easy to learn and experiment with R. It allows you to use R like a calculator to perform arithmetic operations, display data sets, generate plots, and create models.</p>
+<p>Before too long, new R users will find a need to perform some operation repeatedly. Perhaps they want to run a simulation repeatedly in order to find the distribution of the results. Perhaps they need to execute a function with a variety a different arguments passed to it. Or maybe they need to create a model for many different data sets.</p>
+<p>Repeated executions can be done manually, but it becomes quite tedious to execute repeated operations, even with the use of command line editing. Fortunately, R is much more than an interactive calculator. It has its own built-in language that is intended to automate tedious tasks, such as repeatedly executing R calculations.</p>
+<p>R comes with various looping constructs that solve this problem. The <code>for</code> loop is one of the more common looping constructs, but the <code>repeat</code> and <code>while</code> statements are also quite useful. In addition, there is the family of “apply” functions, which includes <code>apply</code>, <code>lapply</code>, <code>sapply</code>, <code>eapply</code>, <code>mapply</code>, <code>rapply</code>, and others.</p>
+<p>The <code>foreach</code> package provides a new looping construct for executing R code repeatedly. With the bewildering variety of existing looping constructs, you may doubt that there is a need for yet another construct. The main reason for using the <code>foreach</code> package is that it supports <em>parallel execution</em>, that is, it can execute those repeated operations on multiple processors/cores on your computer, or on multiple nodes of a cluster. If each operation takes over a minute, and you want to execute it hundreds of times, the overall runtime can take hours. But using <code>foreach</code>, that operation can be executed in parallel on hundreds of processors on a cluster, reducing the execution time back down to minutes.</p>
+<p>But parallel execution is not the only reason for using the <code>foreach</code> package. There are other reasons that you might choose to use it to execute quick executing operations, as we will see later in the document.</p>
+</div>
+<div id="getting-started" class="section level2">
+<h2>Getting Started</h2>
+<p>Let’s take a look at a simple example use of the <code>foreach</code> package. Assuming that you have the <code>foreach</code> package installed, you first need to load it:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(foreach)</span></code></pre></div>
+<p>Note that all of the packages that <code>foreach</code> depends on will be loaded as well.</p>
+<p>Now I can use <code>foreach</code> to execute the <code>sqrt</code> function repeatedly, passing it the values 1 through 3, and returning the results in a list, called <code>x</code>. (Of course, <code>sqrt</code> is a vectorized function, so you would never really do this. But later, we’ll see how to take advantage of vectorized functions with <code>foreach</code>.)</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">sqrt</span>(i)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>x</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 1
+## 
+## [[2]]
+## [1] 1.414214
+## 
+## [[3]]
+## [1] 1.732051</code></pre>
+<p>This is a bit odd looking, because it looks vaguely like a <code>for</code> loop, but is implemented using a binary operator, called <code>%do%</code>. Also, unlike a <code>for</code> loop, it returns a value. This is quite important. The purpose of this statement is to compute the list of results. Generally, <code>foreach</code> with <code>%do%</code> is used to execute an R expression repeatedly, and return the results in some data structure or object, which is a list by default.</p>
+<p>You will note in the previous example that we used a variable <code>i</code> as the argument to the <code>sqrt</code> function. We specified the values of the <code>i</code> variable using a named argument to the <code>foreach</code> function. We could have called that variable anything we wanted, for example, <code>a</code>, or <code>b</code>. We could also specify other variables to be used in the R expression, as in the following example:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">a=</span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">b=</span><span class="kw">rep</span>(<span class="dv">10</span>, <span class="dv">3</span>)) <span class="op">%do%</span><span class="st"> </span>(a <span class="op">+</span><span class="st"> </span>b)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>x</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 11
+## 
+## [[2]]
+## [1] 12
+## 
+## [[3]]
+## [1] 13</code></pre>
+<p>Note that parentheses are needed here. We can also use braces:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">a=</span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">b=</span><span class="kw">rep</span>(<span class="dv">10</span>, <span class="dv">3</span>)) <span class="op">%do%</span><span class="st"> </span>{</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  a <span class="op">+</span><span class="st"> </span>b</span>
+<span id="cb6-3"><a href="#cb6-3"></a>}</span>
+<span id="cb6-4"><a href="#cb6-4"></a>x</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 11
+## 
+## [[2]]
+## [1] 12
+## 
+## [[3]]
+## [1] 13</code></pre>
+<p>We call <code>a</code> and <code>b</code> the <em>iteration variables</em>, since those are the variables that are changing during the multiple executions. Note that we are iterating over them in parallel, that is, they are both changing at the same time. In this case, the same number of values are being specified for both iteration variables, but that need not be the case. If we only supplied two values for <code>b</code>, the result would be a list of length two, even if we specified a thousand values for <code>a</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">a=</span><span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>, <span class="dt">b=</span><span class="kw">rep</span>(<span class="dv">10</span>, <span class="dv">2</span>)) <span class="op">%do%</span><span class="st"> </span>{</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  a <span class="op">+</span><span class="st"> </span>b</span>
+<span id="cb8-3"><a href="#cb8-3"></a>}</span>
+<span id="cb8-4"><a href="#cb8-4"></a>x</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 11
+## 
+## [[2]]
+## [1] 12</code></pre>
+<p>Note that you can put multiple statements between the braces, and you can use assignment statements to save intermediate values of computations. However, if you use an assignment as a way of communicating between the different executions of your loop, then your code won’t work correctly in parallel, which we will discuss later.</p>
+
+<p>So far, all of our examples have returned a list of results. This is a good default, since a list can contain any R object. But sometimes we’d like the results to be returned in a numeric vector, for example. This can be done by using the <code>.combine</code> option to <code>foreach</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">.combine=</span><span class="st">&#39;c&#39;</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">exp</span>(i)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>x</span></code></pre></div>
+<pre><code>## [1]  2.718282  7.389056 20.085537</code></pre>
+<p>The result is returned as a numeric vector, because the standard R <code>c</code> function is being used to concatenate all the results. Since the <code>exp</code> function returns numeric values, concatenating them with the <code>c</code> function will result in a numeric vector of length three.</p>
+<p>What if the R expression returns a vector, and we want to combine those vectors into a matrix? One way to do that is with the <code>cbind</code> function:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">.combine=</span><span class="st">&#39;cbind&#39;</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">4</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>x</span></code></pre></div>
+<pre><code>##        result.1    result.2   result.3    result.4
+## [1,] -0.8701295  0.70988297 -0.5598754 -0.08043917
+## [2,] -0.4626139 -0.67660527 -1.3031857 -1.45756572
+## [3,]  1.1025845 -0.08722428 -1.3029906 -0.24109901
+## [4,] -0.3041361  0.94661877 -0.5842578 -1.11383326</code></pre>
+<p>This generates four vectors of four random numbers, and combines them by column to produce a 4 by 4 matrix.</p>
+<p>We can also use the <code>&quot;+&quot;</code> or <code>&quot;*&quot;</code> functions to combine our results:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">.combine=</span><span class="st">&#39;+&#39;</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">4</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>x</span></code></pre></div>
+<pre><code>## [1]  0.2352222  0.6813665 -3.7098886  0.7658021</code></pre>
+<p>You can also specify a user-written function to combine the results. Here’s an example that throws away the results:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>cfun &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) <span class="ot">NULL</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">.combine=</span><span class="st">&#39;cfun&#39;</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">4</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>x</span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<p>Note that this <code>cfun</code> function takes two arguments. The <code>foreach</code> function knows that the functions <code>c</code>, <code>cbind</code>, and <code>rbind</code> take many arguments, and will call them with up to 100 arguments (by default) in order to improve performance. But if any other function is specified (such as <code>&quot;+&quot;</code>), it assumes that it only takes two arguments. If the function does allow many arguments, you can specify that using the <code>.multicombine</code> argument:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>cfun &lt;-<span class="st"> </span><span class="cf">function</span>(...) <span class="ot">NULL</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">.combine=</span><span class="st">&#39;cfun&#39;</span>, <span class="dt">.multicombine=</span><span class="ot">TRUE</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">4</span>)</span>
+<span id="cb18-3"><a href="#cb18-3"></a>x</span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<p>If you want the combine function to be called with no more than 10 arguments, you can specify that using the <code>.maxcombine</code> option:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>cfun &lt;-<span class="st"> </span><span class="cf">function</span>(...) <span class="ot">NULL</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">.combine=</span><span class="st">&#39;cfun&#39;</span>, <span class="dt">.multicombine=</span><span class="ot">TRUE</span>, <span class="dt">.maxcombine=</span><span class="dv">10</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">4</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a>x</span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<p>The <code>.inorder</code> option is used to specify whether the order in which the arguments are combined is important. The default value is <code>TRUE</code>, but if the combine function is <code>&quot;+&quot;</code>, you could specify <code>.inorder</code> to be <code>FALSE</code>. Actually, this option is important only when executing the R expression in parallel, since results are always computed in order when running sequentially. This is not necessarily true when executing in parallel, however. In fact, if the expressions take very different lengths of time to execute, the results could be returned in any order. Here’s a contrived example, that executes the tasks in parallel to demonstrate the difference. The example uses the <code>Sys.sleep</code> function to cause the earlier tasks to take longer to execute:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">4</span><span class="op">:</span><span class="dv">1</span>, <span class="dt">.combine=</span><span class="st">&#39;c&#39;</span>) <span class="op">%dopar%</span><span class="st"> </span>{</span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="kw">Sys.sleep</span>(<span class="dv">3</span> <span class="op">*</span><span class="st"> </span>i)</span>
+<span id="cb22-3"><a href="#cb22-3"></a>  i</span>
+<span id="cb22-4"><a href="#cb22-4"></a>}</span></code></pre></div>
+<pre><code>## Warning: executing %dopar% sequentially: no parallel backend registered</code></pre>
+<pre><code>## [1] 4 3 2 1</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">4</span><span class="op">:</span><span class="dv">1</span>, <span class="dt">.combine=</span><span class="st">&#39;c&#39;</span>, <span class="dt">.inorder=</span><span class="ot">FALSE</span>) <span class="op">%dopar%</span><span class="st"> </span>{</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="kw">Sys.sleep</span>(<span class="dv">3</span> <span class="op">*</span><span class="st"> </span>i)</span>
+<span id="cb25-3"><a href="#cb25-3"></a>  i</span>
+<span id="cb25-4"><a href="#cb25-4"></a>}</span></code></pre></div>
+<pre><code>## [1] 4 3 2 1</code></pre>
+<p>The results of the first of these two examples is guaranteed to be the vector <code>c(4, 3, 2, 1)</code>. The second example will return the same values, but they will probably be in a different order.</p>
+</div>
+<div id="iterators" class="section level2">
+<h2>Iterators</h2>
+<p>The values for the iteration variables don’t have to be specified with only vectors or lists. They can be specified with an <em>iterator</em>, many of which come with the <code>iterators</code> package. An iterator is an abstract source of data. A vector isn’t itself an iterator, but the <code>foreach</code> function automatically creates an iterator from a vector, list, matrix, or data frame, for example. You can also create an iterator from a file or a data base query, which are natural sources of data. The <code>iterators</code> package supplies a function called <code>irnorm</code> which can return a specified number of random numbers for each time it is called. For example:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw">library</span>(iterators)</span>
+<span id="cb27-2"><a href="#cb27-2"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">a=</span><span class="kw">irnorm</span>(<span class="dv">4</span>, <span class="dt">count=</span><span class="dv">4</span>), <span class="dt">.combine=</span><span class="st">&#39;cbind&#39;</span>) <span class="op">%do%</span><span class="st"> </span>a</span>
+<span id="cb27-3"><a href="#cb27-3"></a>x</span></code></pre></div>
+<pre><code>##        result.1    result.2   result.3   result.4
+## [1,]  0.4693154 -1.34611237  0.2365691  2.7260217
+## [2,]  0.1864013  0.40618089 -0.5481581 -0.5613511
+## [3,] -1.0130826  0.05245615  0.3263917  0.7168364
+## [4,] -0.2743118  0.37121188  0.6028109  0.1781484</code></pre>
+<p>This becomes useful when dealing with large amounts of data. Iterators allow the data to be generated on-the-fly, as it is needed by your operations, rather than requiring all of the data to be generated at the beginning.</p>
+<p>For example, let’s say that we want to sum together a thousand random vectors:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb29-2"><a href="#cb29-2"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">a=</span><span class="kw">irnorm</span>(<span class="dv">4</span>, <span class="dt">count=</span><span class="dv">1000</span>), <span class="dt">.combine=</span><span class="st">&#39;+&#39;</span>) <span class="op">%do%</span><span class="st"> </span>a</span>
+<span id="cb29-3"><a href="#cb29-3"></a>x</span></code></pre></div>
+<pre><code>## [1]   9.097676 -13.106472  14.076261  19.252750</code></pre>
+<p>This uses very little memory, since it is equivalent to the following <code>while</code> loop:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb31-2"><a href="#cb31-2"></a>x &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="dv">4</span>)</span>
+<span id="cb31-3"><a href="#cb31-3"></a>i &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a><span class="cf">while</span> (i <span class="op">&lt;</span><span class="st"> </span><span class="dv">1000</span>) {</span>
+<span id="cb31-5"><a href="#cb31-5"></a>  x &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">4</span>)</span>
+<span id="cb31-6"><a href="#cb31-6"></a>  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb31-7"><a href="#cb31-7"></a>}</span>
+<span id="cb31-8"><a href="#cb31-8"></a>x</span></code></pre></div>
+<pre><code>## [1]   9.097676 -13.106472  14.076261  19.252750</code></pre>
+<p>This could have been done using the <code>icount</code> function, which generates the values from one to 1000:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="kw">icount</span>(<span class="dv">1000</span>), <span class="dt">.combine=</span><span class="st">&#39;+&#39;</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">4</span>)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>x</span></code></pre></div>
+<pre><code>## [1]   9.097676 -13.106472  14.076261  19.252750</code></pre>
+<p>but sometimes it’s preferable to generate the actual data with the iterator (as we’ll see later when we execute in parallel).</p>
+<p>In addition to introducing the <code>icount</code> function from the <code>iterators</code> package, the last example also used an unnamed argument to the <code>foreach</code> function. This can be useful when we’re not intending to generate variable values, but only controlling the number of times that the R expression is executed.</p>
+<p>There’s a lot more that I could say about iterators, but for now, let’s move on to parallel execution.</p>
+</div>
+<div id="parallel-execution" class="section level2">
+<h2>Parallel Execution</h2>
+<p>Although <code>foreach</code> can be a useful construct in its own right, the real point of the <code>foreach</code> package is to do parallel computing. To make any of the previous examples run in parallel, all you have to do is to replace <code>%do%</code> with <code>%dopar%</code>. But for the kinds of quick running operations that we’ve been doing, there wouldn’t be much point to executing them in parallel. Running many tiny tasks in parallel will usually take more time to execute than running them sequentially, and if it already runs fast, there’s no motivation to make it run faster anyway. But if the operation that we’re executing in parallel takes a minute or longer, there starts to be some motivation.</p>
+<div id="parallel-random-forest" class="section level3">
+<h3>Parallel Random Forest</h3>
+<p>Let’s take random forest as an example of an operation that can take a while to execute. Let’s say our inputs are the matrix <code>x</code>, and the factor <code>y</code>:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="dv">500</span>), <span class="dv">100</span>)</span>
+<span id="cb35-2"><a href="#cb35-2"></a>y &lt;-<span class="st"> </span><span class="kw">gl</span>(<span class="dv">2</span>, <span class="dv">50</span>)</span></code></pre></div>
+<p>We’ve already loaded the <code>foreach</code> package, but we’ll also need to load the <code>randomForest</code> package:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">library</span>(randomForest)</span></code></pre></div>
+<pre><code>## randomForest 4.6-14</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<p>If we want want to create a random forest model with a 1000 trees, and our computer has four cores in it, we can split up the problem into four pieces by executing the <code>randomForest</code> function four times, with the <code>ntree</code> argument set to 250. Of course, we have to combine the resulting <code>randomForest</code> objects, but the <code>randomForest</code> package comes with a function called <code>combine</code> that does just that.</p>
+<p>Let’s do that, but first, we’ll do the work sequentially:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>rf &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">ntree=</span><span class="kw">rep</span>(<span class="dv">250</span>, <span class="dv">4</span>), <span class="dt">.combine=</span>combine) <span class="op">%do%</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="st">  </span><span class="kw">randomForest</span>(x, y, <span class="dt">ntree=</span>ntree)</span>
+<span id="cb39-3"><a href="#cb39-3"></a>rf</span></code></pre></div>
+<pre><code>## 
+## Call:
+##  randomForest(x = x, y = y, ntree = ntree) 
+##                Type of random forest: classification
+##                      Number of trees: 1000
+## No. of variables tried at each split: 2</code></pre>
+<p>To run this in parallel, we need to change <code>\%do\%</code>, but we also need to use another <code>foreach</code> option called <code>.packages</code> to tell the <code>foreach</code> package that the R expression needs to have the <code>randomForest</code> package loaded in order to execute successfully. Here’s the parallel version:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>rf &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">ntree=</span><span class="kw">rep</span>(<span class="dv">250</span>, <span class="dv">4</span>), <span class="dt">.combine=</span>combine, <span class="dt">.packages=</span><span class="st">&#39;randomForest&#39;</span>) <span class="op">%dopar%</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="st">  </span><span class="kw">randomForest</span>(x, y, <span class="dt">ntree=</span>ntree)</span>
+<span id="cb41-3"><a href="#cb41-3"></a>rf</span></code></pre></div>
+<pre><code>## 
+## Call:
+##  randomForest(x = x, y = y, ntree = ntree) 
+##                Type of random forest: classification
+##                      Number of trees: 1000
+## No. of variables tried at each split: 2</code></pre>
+<p>If you’ve done any parallel computing, particularly on a cluster, you may wonder why I didn’t have to do anything special to handle <code>x</code> and <code>y</code>. The reason is that the <code>dopar</code> function noticed that those variables were referenced, and that they were defined in the current environment. In that case <code>%dopar%</code> will automatically export them to the parallel execution workers once, and use them for all of the expression evaluations for that <code>foreach</code> execution. That is true for functions that are defined in the current environment as well, but in this case, the function is defined in a package, so we had to specify the package to load with the <code>.packages</code> option instead.</p>
+</div>
+<div id="parallel-apply" class="section level3">
+<h3>Parallel Apply</h3>
+<p>Now let’s take a look at how to make a parallel version of the standard R <code>apply</code> function. The <code>apply</code> function is written in R, and although it’s only about 100 lines of code, it’s a bit difficult to understand on a first reading. However, it all really comes down two <code>for</code> loops, the slightly more complicated of which looks like:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>applyKernel &lt;-<span class="st"> </span><span class="cf">function</span>(newX, FUN, d2, d.call, <span class="dt">dn.call=</span><span class="ot">NULL</span>, ...) {</span>
+<span id="cb43-2"><a href="#cb43-2"></a>  ans &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;list&quot;</span>, d2)</span>
+<span id="cb43-3"><a href="#cb43-3"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>d2) {</span>
+<span id="cb43-4"><a href="#cb43-4"></a>    tmp &lt;-<span class="st"> </span><span class="kw">FUN</span>(<span class="kw">array</span>(newX[,i], d.call, dn.call), ...)</span>
+<span id="cb43-5"><a href="#cb43-5"></a>    <span class="cf">if</span>(<span class="op">!</span><span class="kw">is.null</span>(tmp)) ans[[i]] &lt;-<span class="st"> </span>tmp</span>
+<span id="cb43-6"><a href="#cb43-6"></a>  }</span>
+<span id="cb43-7"><a href="#cb43-7"></a>  ans</span>
+<span id="cb43-8"><a href="#cb43-8"></a>}</span>
+<span id="cb43-9"><a href="#cb43-9"></a><span class="kw">applyKernel</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>, <span class="dv">4</span>), mean, <span class="dv">4</span>, <span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 2.5
+## 
+## [[2]]
+## [1] 6.5
+## 
+## [[3]]
+## [1] 10.5
+## 
+## [[4]]
+## [1] 14.5</code></pre>
+<p>I’ve turned this into a function, because otherwise, R will complain that I’m using <code>...</code> in an invalid context.</p>
+<p>This could be executed using <code>foreach</code> as follows:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>applyKernel &lt;-<span class="st"> </span><span class="cf">function</span>(newX, FUN, d2, d.call, <span class="dt">dn.call=</span><span class="ot">NULL</span>, ...) {</span>
+<span id="cb45-2"><a href="#cb45-2"></a>  <span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span>d2) <span class="op">%dopar%</span></span>
+<span id="cb45-3"><a href="#cb45-3"></a><span class="st">    </span><span class="kw">FUN</span>(<span class="kw">array</span>(newX[,i], d.call, dn.call), ...)</span>
+<span id="cb45-4"><a href="#cb45-4"></a>}</span>
+<span id="cb45-5"><a href="#cb45-5"></a><span class="kw">applyKernel</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>, <span class="dv">4</span>), mean, <span class="dv">4</span>, <span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 2.5
+## 
+## [[2]]
+## [1] 6.5
+## 
+## [[3]]
+## [1] 10.5
+## 
+## [[4]]
+## [1] 14.5</code></pre>
+<p>But this approach will cause the entire <code>newX</code> array to be sent to each of the parallel execution workers. Since each task needs only one column of the array, we’d like to avoid this extra data communication.</p>
+<p>One way to solve this problem is to use an iterator that iterates over the matrix by column:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>applyKernel &lt;-<span class="st"> </span><span class="cf">function</span>(newX, FUN, d2, d.call, <span class="dt">dn.call=</span><span class="ot">NULL</span>, ...) {</span>
+<span id="cb47-2"><a href="#cb47-2"></a>  <span class="kw">foreach</span>(<span class="dt">x=</span><span class="kw">iter</span>(newX, <span class="dt">by=</span><span class="st">&#39;col&#39;</span>)) <span class="op">%dopar%</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="st">    </span><span class="kw">FUN</span>(<span class="kw">array</span>(x, d.call, dn.call), ...)</span>
+<span id="cb47-4"><a href="#cb47-4"></a>}</span>
+<span id="cb47-5"><a href="#cb47-5"></a><span class="kw">applyKernel</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>, <span class="dv">4</span>), mean, <span class="dv">4</span>, <span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 2.5
+## 
+## [[2]]
+## [1] 6.5
+## 
+## [[3]]
+## [1] 10.5
+## 
+## [[4]]
+## [1] 14.5</code></pre>
+<p>Now we’re only sending any given column of the matrix to one parallel execution worker. But it would be even more efficient if we sent the matrix in bigger chunks. To do that, we use a function called <code>iblkcol</code> that returns an iterator that will return multiple columns of the original matrix. That means that the R expression will need to execute the user’s function once for every column in its submatrix.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>iblkcol &lt;-<span class="st"> </span><span class="cf">function</span>(a, chunks) {</span>
+<span id="cb49-2"><a href="#cb49-2"></a>  n &lt;-<span class="st"> </span><span class="kw">ncol</span>(a)</span>
+<span id="cb49-3"><a href="#cb49-3"></a>  i &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb49-4"><a href="#cb49-4"></a></span>
+<span id="cb49-5"><a href="#cb49-5"></a>  nextElem &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb49-6"><a href="#cb49-6"></a>    <span class="cf">if</span> (chunks <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span> <span class="op">||</span><span class="st"> </span>n <span class="op">&lt;=</span><span class="st"> </span><span class="dv">0</span>) <span class="kw">stop</span>(<span class="st">&#39;StopIteration&#39;</span>)</span>
+<span id="cb49-7"><a href="#cb49-7"></a>    m &lt;-<span class="st"> </span><span class="kw">ceiling</span>(n <span class="op">/</span><span class="st"> </span>chunks)</span>
+<span id="cb49-8"><a href="#cb49-8"></a>    r &lt;-<span class="st"> </span><span class="kw">seq</span>(i, <span class="dt">length=</span>m)</span>
+<span id="cb49-9"><a href="#cb49-9"></a>    i &lt;&lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span>m</span>
+<span id="cb49-10"><a href="#cb49-10"></a>    n &lt;&lt;-<span class="st"> </span>n <span class="op">-</span><span class="st"> </span>m</span>
+<span id="cb49-11"><a href="#cb49-11"></a>    chunks &lt;&lt;-<span class="st"> </span>chunks <span class="op">-</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb49-12"><a href="#cb49-12"></a>    a[,r, drop=<span class="ot">FALSE</span>]</span>
+<span id="cb49-13"><a href="#cb49-13"></a>  }</span>
+<span id="cb49-14"><a href="#cb49-14"></a></span>
+<span id="cb49-15"><a href="#cb49-15"></a>  <span class="kw">structure</span>(<span class="kw">list</span>(<span class="dt">nextElem=</span>nextElem), <span class="dt">class=</span><span class="kw">c</span>(<span class="st">&#39;iblkcol&#39;</span>, <span class="st">&#39;iter&#39;</span>))</span>
+<span id="cb49-16"><a href="#cb49-16"></a>}</span>
+<span id="cb49-17"><a href="#cb49-17"></a>nextElem.iblkcol &lt;-<span class="st"> </span><span class="cf">function</span>(obj) obj<span class="op">$</span><span class="kw">nextElem</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>applyKernel &lt;-<span class="st"> </span><span class="cf">function</span>(newX, FUN, d2, d.call, <span class="dt">dn.call=</span><span class="ot">NULL</span>, ...) {</span>
+<span id="cb50-2"><a href="#cb50-2"></a>  <span class="kw">foreach</span>(<span class="dt">x=</span><span class="kw">iblkcol</span>(newX, <span class="dv">3</span>), <span class="dt">.combine=</span><span class="st">&#39;c&#39;</span>, <span class="dt">.packages=</span><span class="st">&#39;foreach&#39;</span>) <span class="op">%dopar%</span><span class="st"> </span>{</span>
+<span id="cb50-3"><a href="#cb50-3"></a>    <span class="kw">foreach</span>(<span class="dt">i=</span><span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(x)) <span class="op">%do%</span><span class="st"> </span><span class="kw">FUN</span>(<span class="kw">array</span>(x[,i], d.call, dn.call), ...)</span>
+<span id="cb50-4"><a href="#cb50-4"></a>  }</span>
+<span id="cb50-5"><a href="#cb50-5"></a>}</span>
+<span id="cb50-6"><a href="#cb50-6"></a><span class="kw">applyKernel</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>, <span class="dv">4</span>), mean, <span class="dv">4</span>, <span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 2.5
+## 
+## [[2]]
+## [1] 6.5
+## 
+## [[3]]
+## [1] 10.5
+## 
+## [[4]]
+## [1] 14.5</code></pre>
+<p>Note the use of the <code>%do%</code> inside the <code>%dopar%</code> to call the function on the columns of the submatrix <code>x</code>. Now that we’re using <code>%do%</code> again, it makes sense for the iterator to be an index into the matrix <code>x</code>, since <code>%do%</code> doesn’t need to copy <code>x</code> the way that <code>%dopar%</code> does.</p>
+</div>
+</div>
+<div id="list-comprehensions" class="section level2">
+<h2>List Comprehensions</h2>
+<p>If you’re familiar with the Python programming language, it may have occurred to you that the <code>foreach</code> package provides something that is not too different from Python’s <em>list comprehensions</em>. In fact, the <code>foreach</code> package also includes a function called <code>when</code> which can prevent some of the evaluations from happening, very much like the “if” clause in Python’s list comprehensions. For example, you could filter out negative values of an iterator using <code>when</code> as follows:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>x &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">a=</span><span class="kw">irnorm</span>(<span class="dv">1</span>, <span class="dt">count=</span><span class="dv">10</span>), <span class="dt">.combine=</span><span class="st">&#39;c&#39;</span>) <span class="op">%:%</span><span class="st"> </span><span class="kw">when</span>(a <span class="op">&gt;=</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%do%</span><span class="st"> </span><span class="kw">sqrt</span>(a)</span>
+<span id="cb52-2"><a href="#cb52-2"></a>x</span></code></pre></div>
+<pre><code>## [1] 0.4055020 1.0835713 0.8704032 0.3653185 1.4166866 0.8115083</code></pre>
+<p>I won’t say much on this topic, but I can’t help showing how <code>foreach</code> with <code>when</code> can be used to write a simple quick sort function, in the classic Haskell fashion:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>qsort &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb54-2"><a href="#cb54-2"></a>  n &lt;-<span class="st"> </span><span class="kw">length</span>(x)</span>
+<span id="cb54-3"><a href="#cb54-3"></a>  <span class="cf">if</span> (n <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) {</span>
+<span id="cb54-4"><a href="#cb54-4"></a>    x</span>
+<span id="cb54-5"><a href="#cb54-5"></a>  } <span class="cf">else</span> {</span>
+<span id="cb54-6"><a href="#cb54-6"></a>    p &lt;-<span class="st"> </span><span class="kw">sample</span>(n, <span class="dv">1</span>)</span>
+<span id="cb54-7"><a href="#cb54-7"></a>    smaller &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">y=</span>x[<span class="op">-</span>p], <span class="dt">.combine=</span>c) <span class="op">%:%</span><span class="st"> </span><span class="kw">when</span>(y <span class="op">&lt;=</span><span class="st"> </span>x[p]) <span class="op">%do%</span><span class="st"> </span>y</span>
+<span id="cb54-8"><a href="#cb54-8"></a>    larger  &lt;-<span class="st"> </span><span class="kw">foreach</span>(<span class="dt">y=</span>x[<span class="op">-</span>p], <span class="dt">.combine=</span>c) <span class="op">%:%</span><span class="st"> </span><span class="kw">when</span>(y <span class="op">&gt;</span><span class="st">  </span>x[p]) <span class="op">%do%</span><span class="st"> </span>y</span>
+<span id="cb54-9"><a href="#cb54-9"></a>    <span class="kw">c</span>(<span class="kw">qsort</span>(smaller), x[p], <span class="kw">qsort</span>(larger))</span>
+<span id="cb54-10"><a href="#cb54-10"></a>  }</span>
+<span id="cb54-11"><a href="#cb54-11"></a>}</span>
+<span id="cb54-12"><a href="#cb54-12"></a></span>
+<span id="cb54-13"><a href="#cb54-13"></a><span class="kw">qsort</span>(<span class="kw">runif</span>(<span class="dv">12</span>))</span></code></pre></div>
+<pre><code>##  [1] 0.05671936 0.05986948 0.19082846 0.22652967 0.54588779 0.62601549
+##  [7] 0.66316703 0.68171436 0.74671367 0.80146286 0.80993460 0.82453758</code></pre>
+<p>Not that I recommend this over the standard R <code>sort</code> function. But it’s a pretty interesting example use of <code>foreach</code>.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Much of parallel computing comes to doing three things: splitting the problem into pieces, executing the pieces in parallel, and combining the results back together. Using the <code>foreach</code> package, the iterators help you to split the problem into pieces, the <code>%dopar%</code> function executes the pieces in parallel, and the specified <code>.combine</code> function puts the results back together. We’ve demonstrated how simple things can be done in parallel quite easily using the <code>foreach</code> package, and given some ideas about how more complex problems can be solved. But it’s a fairly new package, and we will continue to work on ways of making it a more powerful system for doing parallel computing.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

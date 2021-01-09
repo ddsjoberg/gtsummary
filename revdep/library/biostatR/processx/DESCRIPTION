@@ -1,0 +1,38 @@
+Package: processx
+Title: Execute and Control System Processes
+Version: 3.4.5
+Authors@R: c(
+    person("Gábor", "Csárdi", role = c("aut", "cre", "cph"),
+           email = "csardi.gabor@gmail.com",
+	   comment = c(ORCID = "0000-0001-7098-9676")),
+    person("Winston", "Chang", role = "aut"),
+    person("RStudio", role = c("cph", "fnd")),
+    person("Mango Solutions", role  = c("cph", "fnd")))
+Description: Tools to run system processes in the background.
+    It can check if a background process is running; wait on a background
+    process to finish; get the exit status of finished processes; kill
+    background processes. It can read the standard output and error of
+    the processes, using non-blocking connections. 'processx' can poll
+    a process for standard output or error, with a timeout. It can also
+    poll several processes at once.
+License: MIT + file LICENSE
+LazyData: true
+URL: https://processx.r-lib.org,
+        https://github.com/r-lib/processx#readme
+BugReports: https://github.com/r-lib/processx/issues
+RoxygenNote: 7.1.1
+Imports: ps (>= 1.2.0), R6, utils
+Suggests: callr (>= 3.2.0), codetools, covr, crayon, curl, debugme,
+        parallel, testthat, withr
+Encoding: UTF-8
+NeedsCompilation: yes
+Packaged: 2020-11-30 11:08:13 UTC; gaborcsardi
+Author: Gábor Csárdi [aut, cre, cph] (<https://orcid.org/0000-0001-7098-9676>),
+  Winston Chang [aut],
+  RStudio [cph, fnd],
+  Mango Solutions [cph, fnd]
+Maintainer: Gábor Csárdi <csardi.gabor@gmail.com>
+Repository: CRAN
+Date/Publication: 2020-11-30 11:40:02 UTC
+Built: R 4.0.3; x86_64-w64-mingw32; 2020-12-30 19:50:00 UTC; windows
+Archs: i386, x64

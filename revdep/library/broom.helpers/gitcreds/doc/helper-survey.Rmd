@@ -1,0 +1,737 @@
+---
+title: "git credential helpers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{git credential helpers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+editor_options:
+  markdown:
+    wrap: sentence
+    canonical: true
+---
+
+# General remarks
+
+-   For `git credential approve` git (2.28.0 macOS) does not even call the credential helper if no username is supplied:
+
+    ``` {.sh}
+    ❯ export GIT_TRACE=true
+    ❯ (echo url=https://github.com; echo password=secret; echo ) | git credential approve
+    10:43:36.712290 git.c:444               trace: built-in: git credential approve
+    ❯
+    ```
+
+-   The `credential.helper` key has a multi-set value, so if you add a new value, the old values are still kept.
+    From git 2.9 specifying an empty string removes the previously defined helpers.
+
+# Credential helper survey
+
+We do this with an eye of supporting usernames and multiple users.
+
+## `cache`
+
+-   Docs: <https://git-scm.com/docs/git-credential-cache>
+
+-   This helper is not included in the default git installer on Windows .
+    :(
+
+-   This is how we can set up `cache` for a particular repository:
+
+        ❯ mkdir foo
+        ❯ cd foo
+        ❯ git init .
+        11:43:28.618841 git.c:444               trace: built-in: git init .
+        Initialized empty Git repository in /private/tmp/foo/.git/
+
+        ❯ git config --add credential.helper ""
+        11:43:50.682962 git.c:444               trace: built-in: git config --add credential.helper ''
+
+        ❯ git config --add credential.helper cache
+        11:43:54.577707 git.c:444               trace: built-in: git config --add credential.helper cache
+
+        ❯ cat .git/config
+        [core]
+            repositoryformatversion = 0
+            filemode = true
+            bare = false
+            logallrefupdates = true
+            ignorecase = true
+            precomposeunicode = true
+        [credential]
+            helper =
+            helper = cache
+
+-   Now let's add credentials:
+
+        ❯  (echo url=https://github.com; echo username=token; echo password=secret; echo ) | git credential approve
+        11:45:16.813913 git.c:444               trace: built-in: git credential approve
+        11:45:16.814431 run-command.c:663       trace: run_command: 'git credential-cache store'
+        11:45:16.823008 git.c:704               trace: exec: git-credential-cache store
+        11:45:16.823637 run-command.c:663       trace: run_command: git-credential-cache store
+        11:45:16.842902 run-command.c:663       trace: run_command: git-credential-cache--daemon /Users/gaborcsardi/.cache/git/credential/socket
+
+        ❯  (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+        11:45:28.927712 git.c:444               trace: built-in: git credential approve
+        11:45:28.928108 run-command.c:663       trace: run_command: 'git credential-cache store'
+        11:45:28.937087 git.c:704               trace: exec: git-credential-cache store
+        11:45:28.937695 run-command.c:663       trace: run_command: git-credential-cache store
+
+-   Query with username works correctly:
+
+        ❯ (echo url=https://token@github.com; echo ) | git credential fill
+        11:46:40.689122 git.c:444               trace: built-in: git credential fill
+        11:46:40.689638 run-command.c:663       trace: run_command: 'git credential-cache get'
+        11:46:40.696784 git.c:704               trace: exec: git-credential-cache get
+        11:46:40.697333 run-command.c:663       trace: run_command: git-credential-cache get
+        protocol=https
+        host=github.com
+        username=token
+        password=secret
+
+        ❯ (echo url=https://token2@github.com; echo ) | git credential fill
+        11:46:43.767002 git.c:444               trace: built-in: git credential fill
+        11:46:43.767676 run-command.c:663       trace: run_command: 'git credential-cache get'
+        11:46:43.778637 git.c:704               trace: exec: git-credential-cache get
+        11:46:43.779201 run-command.c:663       trace: run_command: git-credential-cache get
+        protocol=https
+        host=github.com
+        username=token2
+        password=secret2
+
+-   Query without username works, and returns *some* credential:
+
+        ❯ (echo url=https://github.com; echo ) | git credential fill
+        11:45:58.200272 git.c:444               trace: built-in: git credential fill
+        11:45:58.200667 run-command.c:663       trace: run_command: 'git credential-cache get'
+        11:45:58.208372 git.c:704               trace: exec: git-credential-cache get
+        11:45:58.208919 run-command.c:663       trace: run_command: git-credential-cache get
+        protocol=https
+        host=github.com
+        username=token
+        password=secret
+
+        ❯ (echo url=https://token@github.com; echo ) | git credential reject
+        11:47:03.921697 git.c:444               trace: built-in: git credential reject
+        11:47:03.922530 run-command.c:663       trace: run_command: 'git credential-cache erase'
+        11:47:03.935858 git.c:704               trace: exec: git-credential-cache erase
+        11:47:03.936400 run-command.c:663       trace: run_command: git-credential-cache erase
+
+        ❯ (echo url=https://github.com; echo ) | git credential fill
+        11:47:10.018877 git.c:444               trace: built-in: git credential fill
+        11:47:10.019386 run-command.c:663       trace: run_command: 'git credential-cache get'
+        11:47:10.027990 git.c:704               trace: exec: git-credential-cache get
+        11:47:10.028572 run-command.c:663       trace: run_command: git-credential-cache get
+        protocol=https
+        host=github.com
+        username=token2
+        password=secret2
+
+## `store`
+
+-   Docs: <https://git-scm.com/docs/git-credential-store>
+
+-   Configure for a repo:
+
+        ❯ mkdir foo
+        ❯ cd foo
+        ❯ git init .
+        11:53:48.042569 git.c:444               trace: built-in: git init .
+        Initialized empty Git repository in /private/tmp/foo/.git/
+
+        ❯ git config --add credential.helper ""
+        11:53:52.949914 git.c:444               trace: built-in: git config --add credential.helper ''
+
+        ❯ git config --add credential.helper store
+        11:53:56.682348 git.c:444               trace: built-in: git config --add credential.helper store
+
+        ❯ cat .git/config
+        [core]
+            repositoryformatversion = 0
+            filemode = true
+            bare = false
+            logallrefupdates = true
+            ignorecase = true
+            precomposeunicode = true
+        [credential]
+            helper =
+            helper = store
+
+-   Add credentials:
+
+        ❯  (echo url=https://github.com; echo username=token; echo password=secret; echo ) | git credential approve
+        11:54:44.184929 git.c:444               trace: built-in: git credential approve
+        11:54:44.185729 run-command.c:663       trace: run_command: 'git credential-store store'
+        11:54:44.197920 git.c:704               trace: exec: git-credential-store store
+        11:54:44.198471 run-command.c:663       trace: run_command: git-credential-store store
+
+        /tmp/foo master
+        ❯  (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+        11:54:48.452942 git.c:444               trace: built-in: git credential approve
+        11:54:48.453399 run-command.c:663       trace: run_command: 'git credential-store store'
+        11:54:48.463535 git.c:704               trace: exec: git-credential-store store
+        11:54:48.464004 run-command.c:663       trace: run_command: git-credential-store store
+
+-   Query with username:
+
+        ❯ (echo url=https://token@github.com; echo ) | git credential fill
+        11:55:21.191654 git.c:444               trace: built-in: git credential fill
+        11:55:21.192357 run-command.c:663       trace: run_command: 'git credential-store get'
+        11:55:21.204279 git.c:704               trace: exec: git-credential-store get
+        11:55:21.205063 run-command.c:663       trace: run_command: git-credential-store get
+        protocol=https
+        host=github.com
+        username=token
+        password=secret
+
+        ❯ (echo url=https://token2@github.com; echo ) | git credential fill
+        11:55:24.194096 git.c:444               trace: built-in: git credential fill
+        11:55:24.194654 run-command.c:663       trace: run_command: 'git credential-store get'
+        11:55:24.207028 git.c:704               trace: exec: git-credential-store get
+        11:55:24.207643 run-command.c:663       trace: run_command: git-credential-store get
+        protocol=https
+        host=github.com
+        username=token2
+        password=secret2
+
+-   Query without username returns *some* credentials, apparently not the ones that were set first:
+
+        ❯ (echo url=https://github.com; echo ) | git credential fill
+        11:56:12.394594 git.c:444               trace: built-in: git credential fill
+        11:56:12.394949 run-command.c:663       trace: run_command: 'git credential-store get'
+        11:56:12.403303 git.c:704               trace: exec: git-credential-store get
+        11:56:12.403863 run-command.c:663       trace: run_command: git-credential-store get
+        protocol=https
+        host=github.com
+        username=token2
+        password=secret2
+
+        ❯ (echo url=https://token2@github.com; echo ) | git credential reject
+        11:56:24.065910 git.c:444               trace: built-in: git credential reject
+        11:56:24.066314 run-command.c:663       trace: run_command: 'git credential-store erase'
+        11:56:24.074851 git.c:704               trace: exec: git-credential-store erase
+        11:56:24.076875 run-command.c:663       trace: run_command: git-credential-store erase
+
+        ❯ (echo url=https://github.com; echo ) | git credential fill
+        11:56:26.438444 git.c:444               trace: built-in: git credential fill
+        11:56:26.438839 run-command.c:663       trace: run_command: 'git credential-store get'
+        11:56:26.446181 git.c:704               trace: exec: git-credential-store get
+        11:56:26.446721 run-command.c:663       trace: run_command: git-credential-store get
+        protocol=https
+        host=github.com
+        username=token
+        password=secret
+
+## `osxkeychain`
+
+-   Some docs: <https://docs.github.com/en/github/using-git/updating-credentials-from-the-osx-keychain>
+
+-   This is the default helper on macOS currently (git 2.28.0).
+
+-   This is how it stores a credential:
+
+    ``` {.sh}
+    Name: github.com
+    Kind: Internet password
+    Account: token
+    Where: https://github.com
+    ```
+
+-   It installs as a git subcommand, so it is possible to call its internal api directly:
+
+        ❯ git credential-osxkeychain
+        11:50:56.325499 git.c:704               trace: exec: git-credential-osxkeychain
+        11:50:56.325783 run-command.c:663       trace: run_command: git-credential-osxkeychain
+        usage: git credential-osxkeychain <get|store|erase>
+
+-   As always, needs `username` when setting the credential.
+
+-   No need to supply `username` to get *some* token that matches the host.
+    This is in a clean keychain.
+    First we set two credentials:
+
+    ``` {.sh}
+    ❯ (echo url=https://github.com; echo username=token; echo password=secret; echo ) | git credential approve
+    10:48:47.187164 git.c:444               trace: built-in: git credential approve
+    10:48:47.187691 run-command.c:663       trace: run_command: 'git credential-osxkeychain store'
+    10:48:47.197964 git.c:704               trace: exec: git-credential-osxkeychain store
+    10:48:47.198518 run-command.c:663       trace: run_command: git-credential-osxkeychain store
+
+    ❯ (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+    10:48:55.299933 git.c:444               trace: built-in: git credential approve
+    10:48:55.300282 run-command.c:663       trace: run_command: 'git credential-osxkeychain store'
+    10:48:55.308568 git.c:704               trace: exec: git-credential-osxkeychain store
+    10:48:55.309276 run-command.c:663       trace: run_command: git-credential-osxkeychain store
+    ```
+
+    If we don't supply a username, then we'll just get one of them:
+
+    ``` {.sh}
+    ❯ (echo url=https://github.com; echo ) | git credential fill
+    10:49:17.371636 git.c:444               trace: built-in: git credential fill
+    10:49:17.372021 run-command.c:663       trace: run_command: 'git credential-osxkeychain get'
+    10:49:17.378688 git.c:704               trace: exec: git-credential-osxkeychain get
+    10:49:17.379164 run-command.c:663       trace: run_command: git-credential-osxkeychain get
+    protocol=https
+    host=github.com
+    username=token
+    password=secret
+    ```
+
+    If we supply the username, then we'll get the correct one:
+
+    ``` {.sh}
+    ❯ (echo url=https://token2@github.com; echo ) | git credential fill
+    10:49:28.613779 git.c:444               trace: built-in: git credential fill
+    10:49:28.614108 run-command.c:663       trace: run_command: 'git credential-osxkeychain get'
+    10:49:28.621440 git.c:704               trace: exec: git-credential-osxkeychain get
+    10:49:28.621979 run-command.c:663       trace: run_command: git-credential-osxkeychain get
+    protocol=https
+    host=github.com
+    username=token2
+    password=secret2
+    ```
+
+    To check that without a username we get an arbitrary one, let's remove `token`:
+
+    ``` {.sh}
+    ❯ (echo url=https://token@github.com; echo ) | git credential reject
+    10:49:58.584332 git.c:444               trace: built-in: git credential reject
+    10:49:58.586880 run-command.c:663       trace: run_command: 'git credential-osxkeychain erase'
+    10:49:58.598463 git.c:704               trace: exec: git-credential-osxkeychain erase
+    10:49:58.599214 run-command.c:663       trace: run_command: git-credential-osxkeychain erase
+
+    ```sh
+    ❯ (echo url=https://github.com; echo ) | git credential fill
+    10:50:07.468385 git.c:444               trace: built-in: git credential fill
+    10:50:07.468728 run-command.c:663       trace: run_command: 'git credential-osxkeychain get'
+    10:50:07.478398 git.c:704               trace: exec: git-credential-osxkeychain get
+    10:50:07.478832 run-command.c:663       trace: run_command: git-credential-osxkeychain get
+    protocol=https
+    host=github.com
+    username=token2
+    password=secret2
+    ```
+
+    Now let's re-add token to make sure that `osxkeychain` does not prefer `token`:
+
+    ``` {.sh}
+    ❯ (echo url=https://github.com; echo username=token; echo password=secret; echo ) | git credential approve
+    10:58:52.302066 git.c:444               trace: built-in: git credential approve
+    10:58:52.311063 run-command.c:663       trace: run_command: 'git credential-osxkeychain store'
+    10:58:52.321633 git.c:704               trace: exec: git-credential-osxkeychain store
+    10:58:52.322108 run-command.c:663       trace: run_command: git-credential-osxkeychain store
+
+    ❯ (echo url=https://github.com; echo ) | git credential fill
+    10:58:57.316418 git.c:444               trace: built-in: git credential fill
+    10:58:57.317630 run-command.c:663       trace: run_command: 'git credential-osxkeychain get'
+    10:58:57.330142 git.c:704               trace: exec: git-credential-osxkeychain get
+    10:58:57.330697 run-command.c:663       trace: run_command: git-credential-osxkeychain get
+    protocol=https
+    host=github.com
+    username=token2
+    password=secret2
+    ```
+
+    So it seems that `osxkeychain` will just find an arbitrary one, or the one that was added first.
+
+## `manager-core` (on macOS), before version 2.0.246-beta
+
+-   Not installed by default (git 2.28.0).
+
+-   Install from brew, according to the instructions: <https://github.com/microsoft/Git-Credential-Manager-Core#macos-homebrew>
+
+-   If updates your global git config, adding these lines:
+
+    ``` {.sh}
+    [credential]
+        helper = ""
+    [credential "https://dev.azure.com"]
+        useHttpPath = true
+    [credential]
+        helper = manager-core
+    ```
+
+    The `helper = ""` line deletes previous handlers.
+    The system helper is kept as `osxkeychain`.
+
+-   It installs as a git subcommand, and you can call its internal API directly:
+
+        ❯ git credential-manager-core
+        11:51:56.434300 git.c:704               trace: exec: git-credential-manager-core
+        11:51:56.434496 run-command.c:663       trace: run_command: git-credential-manager-core
+        Missing command.
+
+        usage: git-credential-manager-core <command>
+
+          Available commands:
+            erase
+            get
+            store
+
+            configure [--system]
+            unconfigure [--system]
+
+            --version, version
+            --help, -h, -?
+
+-   It is not compatible with the `osxkeychain` helper, because it uses different keys in the keychain.
+
+-   It supports different *providers*.
+    Providers are auto-detected by default.
+    GitHub has its own provider, detected via the `github.com` URL.
+    The provider can be configured user a git config key or an environment variable: <https://github.com/microsoft/Git-Credential-Manager-Core/blob/master/docs/configuration.md#credentialprovider>
+
+-   It does not currently supports namepaces (like `manager`).
+
+-   This is how it stores a credential:
+
+        Name: git:https://github.com
+        Kind: application password
+        Account: token
+        Where: git:https://github.com
+
+-   No need to supply `username` to get *some* credential:
+
+        ❯ (echo url=https://github.com; echo ) | git credential fill
+        11:24:47.750966 git.c:444               trace: built-in: git credential fill
+        11:24:47.753268 run-command.c:663       trace: run_command: 'git credential-manager-core get'
+        11:24:47.762249 git.c:704               trace: exec: git-credential-manager-core get
+        11:24:47.762917 run-command.c:663       trace: run_command: git-credential-manager-core get
+        protocol=https
+        host=github.com
+        username=token
+        password=secret
+
+-   If there are multiple credentials, a random one (or the one set first?) is returned:
+
+        ❯  (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+        11:25:41.553761 git.c:444               trace: built-in: git credential approve
+        11:25:41.554242 run-command.c:663       trace: run_command: 'git credential-manager-core store'
+        11:25:41.565748 git.c:704               trace: exec: git-credential-manager-core store
+        11:25:41.566218 run-command.c:663       trace: run_command: git-credential-manager-core store
+
+-   In fact the username is completely ignored when getting credentials, at least for the GitHub provider:
+
+        ❯ (echo url=https://token2@github.com; echo ) | git credential fill
+        11:29:49.274574 git.c:444               trace: built-in: git credential fill
+        11:29:49.275020 run-command.c:663       trace: run_command: 'git credential-manager-core get'
+        11:29:49.283563 git.c:704               trace: exec: git-credential-manager-core get
+        11:29:49.284236 run-command.c:663       trace: run_command: git-credential-manager-core get
+        protocol=https
+        host=github.com
+        username=token
+        password=secret
+
+    This is because the username is not stored as part of the URL by the GitHub provider.
+    Related issue: <https://github.com/microsoft/Git-Credential-Manager-Core/issues/160> `manager` has a similar problem, it is linked from this GitHub issue.
+
+-   If you set the provider to Generic, then usernames work as expected.
+    In this case, this is stored in the keychain:
+
+        Name: git:https://token@github.com/
+        Kind: application password
+        Account: token
+        Where: git:https://token@github.com/
+
+    These credentials are not compatible with the ones set by the GitHub provider.
+
+        ❯ export GCM_PROVIDER=generic
+
+        ❯  (echo url=https://github.com; echo username=token; echo password=secret; echo ) | git credential approve
+        11:34:15.998644 git.c:444               trace: built-in: git credential approve
+        11:34:15.998992 run-command.c:663       trace: run_command: 'git credential-manager-core store'
+        11:34:16.008178 git.c:704               trace: exec: git-credential-manager-core store
+        11:34:16.008834 run-command.c:663       trace: run_command: git-credential-manager-core store
+
+        ❯  (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+        11:35:52.629963 git.c:444               trace: built-in: git credential approve
+        11:35:52.637966 run-command.c:663       trace: run_command: 'git credential-manager-core store'
+        11:35:52.648058 git.c:704               trace: exec: git-credential-manager-core store
+        11:35:52.648514 run-command.c:663       trace: run_command: git-credential-manager-core store
+
+        ❯ (echo url=https://token@github.com; echo ) | git credential fill
+        11:35:58.336428 git.c:444               trace: built-in: git credential fill
+        11:35:58.336881 run-command.c:663       trace: run_command: 'git credential-manager-core get'
+        11:35:58.345187 git.c:704               trace: exec: git-credential-manager-core get
+        11:35:58.345729 run-command.c:663       trace: run_command: git-credential-manager-core get
+        protocol=https
+        host=github.com
+        username=token
+        password=secret
+
+        ❯ (echo url=https://token2@github.com; echo ) | git credential fill
+        11:36:02.550339 git.c:444               trace: built-in: git credential fill
+        11:36:02.550695 run-command.c:663       trace: run_command: 'git credential-manager-core get'
+        11:36:02.557777 git.c:704               trace: exec: git-credential-manager-core get
+        11:36:02.558359 run-command.c:663       trace: run_command: git-credential-manager-core get
+        protocol=https
+        host=github.com
+        username=token2
+        password=secret2
+
+## `manager-core` (macOS), 2.0.246-beta or later
+
+-   This version adds better support for multiple credentials for the same host.
+-   It does not save the `username` as part of the service any more, for the generic provider.
+-   It does save the `username` as `account` and it uses it when searching for credentials, both for the `generic` and the `github` provider.
+
+## `manager` (GitHub authority)
+
+-   This was Git Credential Manager for Windows, and it is the default helper on Windows for git 2.28.0.
+    In git 2.29.0 it is not the default any more, and it is deprecated in favor of `manager-core`.
+    It is still installed, though.
+
+-   Docs: <https://github.com/Microsoft/Git-Credential-Manager-for-Windows>
+
+-   It is installed as a git subcommand, so it can be called directly:
+
+        ❯ $env:GIT_TRACE="true"
+        ❯ git credential-manager
+        12:15:45.554298 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        12:15:45.556249 git.c:704               trace: exec: git-credential-manager
+        12:15:45.556249 run-command.c:663       trace: run_command: git-credential-manager
+        usage: git-credential-manager.exe [approve|clear|config|delete|deploy|erase|fill|get|install|reject|remove|store|uninstall|version] [<args>]
+        fatal: Unable to open help documentation.
+
+-   Setting credentials.
+    The `username` must be provided, and it is stored in the credential, but the GitHub provider overwrites credentials with the same host name, even if they have a different `username`.
+    I.e. after this, there will be only one credential:
+
+        ❯  %  { echo url=https://github.com; echo username=token; echo password=secret; echo "" } | git credential approve
+        13:16:58.118611 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        13:16:58.120617 git.c:444               trace: built-in: git credential approve
+        13:16:58.122612 run-command.c:663       trace: run_command: 'git credential-manager store'
+        13:16:58.170625 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+        13:16:58.173087 git.c:704               trace: exec: git-credential-manager store
+        13:16:58.173087 run-command.c:663       trace: run_command: git-credential-manager store
+
+        ❯  %  { echo url=https://github.com; echo username=token2; echo password=secret2; echo "" } | git credential approve
+        13:17:30.925970 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        13:17:30.928134 git.c:444               trace: built-in: git credential approve
+        13:17:30.928987 run-command.c:663       trace: run_command: 'git credential-manager store'
+        13:17:30.968981 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+        13:17:30.970974 git.c:704               trace: exec: git-credential-manager store
+        13:17:30.970974 run-command.c:663       trace: run_command: git-credential-manager store
+
+-   It stores credentials in the following format:
+
+        Internet or network address: git:https://github.com
+        User name: token
+        Password: ****
+        Persistence: Local computer
+
+\<!-
+- --\>
+
+-   It has multiple authorities, (like providers for `manager-core`).
+    The GitHub authority is used for `github.com` URLs by default.
+    The authority can be set with a config option or an env var.
+
+-   We need to set the `GCM_VALIDATE` env var to `false` , otherwise it tries to validate the GitHub token every time we query it.
+
+        ❯ $env:GCM_VALIDATE="false"
+
+-   No `username` is needed for getting *the* credential, for the GitHub provider.
+
+        ❯  %  { echo url=https://github.com; echo "" } | git credential fill
+        13:24:43.831089 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        13:24:43.833666 git.c:444               trace: built-in: git credential fill
+        13:24:43.834092 run-command.c:663       trace: run_command: 'git credential-manager get'
+        13:24:43.872087 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+        13:24:43.874092 git.c:704               trace: exec: git-credential-manager get
+        13:24:43.874092 run-command.c:663       trace: run_command: git-credential-manager get
+        protocol=https
+        host=github.com
+        path=
+        username=token2
+        password=secret2
+
+    In fact the `username` is ignored for the GitHub provider:
+
+        ❯ %  { echo url=https://token@github.com; echo "" } | git credential fill
+        13:25:06.029084 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        13:25:06.031084 git.c:444               trace: built-in: git credential fill
+        13:25:06.032081 run-command.c:663       trace: run_command: 'git credential-manager get'
+        13:25:06.069085 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+        13:25:06.070086 git.c:704               trace: exec: git-credential-manager get
+        13:25:06.070086 run-command.c:663       trace: run_command: git-credential-manager get
+        protocol=https
+        host=github.com
+        path=
+        username=token2
+        password=secret2
+
+-   Supports namespaces, the default namespace is `git`.
+    The namespace is included in the name of the credential: `namespace:URL`.
+
+-   There is a pull request to include the `username` in the URL as well: <https://github.com/microsoft/Git-Credential-Manager-for-Windows/pull/891>
+
+## `manager` (Basic authority)
+
+-   `Basic` authority can be configured with an env var or config option:
+
+        ❯ $env:GCM_AUTHORITY="Basic"
+
+-   It is compatible with the credentials set by the `GitHub` authority:
+
+        ❯  %  { echo url=https://github.com; echo "" } | git credential fill
+        13:27:17.344396 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        13:27:17.346397 git.c:444               trace: built-in: git credential fill
+        13:27:17.347388 run-command.c:663       trace: run_command: 'git credential-manager get'
+        13:27:17.386388 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+        13:27:17.388386 git.c:704               trace: exec: git-credential-manager get
+        13:27:17.388386 run-command.c:663       trace: run_command: git-credential-manager get
+        protocol=https
+        host=github.com
+        path=
+        username=token2
+        password=secret2
+
+-   But it supports usernames as well.
+    Note that since the username is stored in the URL, it does not return some arbitrary credentials if we query the URL without a username.
+    We need to tell GCM here not to ask for a password, but just fall back to the next credential helper.
+
+        ❯ $env:GCM_INTERACTIVE="Never"
+
+        ❯ % { echo url=https://token2@github.com; echo "" } | git -c credential.helper="! echo protocol=dummy; echo host=dummy;
+         echo username=dummy; echo password=dummy" credential fill
+        13:31:16.682545 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        13:31:16.684473 git.c:444               trace: built-in: git credential fill
+        13:31:16.685471 run-command.c:663       trace: run_command: 'git credential-manager get'
+        13:31:16.725486 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+        13:31:16.727472 git.c:704               trace: exec: git-credential-manager get
+        13:31:16.727472 run-command.c:663       trace: run_command: git-credential-manager get
+        Logon failed, use ctrl+c to cancel basic credential prompt.
+        13:31:16.948468 run-command.c:663       trace: run_command: ' echo protocol=dummy; echo host=dummy; echo username=dummy; echo password=dummy get'
+        protocol=dummy
+        host=dummy
+        username=dummy
+        password=dummy get
+
+-   When setting credentials, usernames are included in the URL:
+
+        ❯ % { echo url=https://github.com; echo username=token; echo password=secret; echo "" } | git credential approve
+        13:34:37.937934 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        13:34:37.940820 git.c:444               trace: built-in: git credential approve
+        13:34:37.940995 run-command.c:663       trace: run_command: 'git credential-manager store'
+        13:34:37.983372 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+        13:34:37.984737 git.c:704               trace: exec: git-credential-manager store
+        13:34:37.984737 run-command.c:663       trace: run_command: git-credential-manager store
+
+    will create this record in the credential store:
+
+        Internet or network address: git:https://token@github.com
+        User name: token
+        Password: ****
+        Persistence: Local computer
+
+    and then this can be queried with an explicit username:
+
+        ❯  %  { echo url=https://token@github.com; echo "" } | git -c credential.helper="! echo protocol=dummy; echo host=dummy; echo username=dummy; echo password=dummy" credential fill
+        13:36:42.789268 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+        13:36:42.791270 git.c:444               trace: built-in: git credential fill
+        13:36:42.792266 run-command.c:663       trace: run_command: 'git credential-manager get'
+        13:36:42.830475 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+        13:36:42.832279 git.c:704               trace: exec: git-credential-manager get
+        13:36:42.832279 run-command.c:663       trace: run_command: git-credential-manager get
+        protocol=https
+        host=github.com
+        path=
+        username=token
+        password=secret
+
+## `manager-core` (on Windows, before version 2.0.246-beta)
+
+-   Not installed by default (git 2.28.0), but this is supposed to be the future canonical implementation.
+    See above for the macOS version.
+
+-   It works similarly to `manager` , I haven't seen any differences in behavior (version was 2.0.194.40577).
+    Instead of authorities, we need to set up providers: <https://github.com/microsoft/Git-Credential-Manager-Core/blob/master/docs/migration.md#gcm_authority.>
+    The `Generic` provider works the same way as the `Basic` authority in `manager`.
+
+-   Unfortunately setting `GCM_AUTHORITY` will make `manager-core` break, so it is not possible to use both `manager` and `manager-core` if you need to set this environment variable.
+
+## `manager-core` (on Windows, from 2.0.246-beta)
+
+-   This is now the version that is the default helper in git 2.29.0 and later. `manager` is still installed, but the default system config sets `manager-core`.
+-   It supports multiple users better: <https://github.com/microsoft/Git-Credential-Manager-Core/issues/160#issuecomment-700544889>
+-   When storing a credential, it first checks if there is a target name without a username. If there is, then it uses the target name without the username. It stores the username in the `username` field of the credential, still. so it is not lost.
+-   When looking up a credential without a username, it will return the first credential it can find, even if the target name contains a username, and there is another credential without a username in the target name.
+-   When looking up a credential with a username, it may return any credential with a matching username, and a target name that matches the host. The username inside the target name does not actually matter.
+
+# Recommendations for multiple accounts
+
+## macOS
+
+1.  Use the `osxkeychain` helper.
+
+2.  FIrst remove all your current credentials for the host you are targeting.
+    E.g. for GitHub, search for "Internet Passwords" for github.com, or use `gitcreds::gitcreds_list()` and the oskeyring package to remove them.
+    You can also use the oskeyring package to back up the tokens and passwords.
+
+3.  Then add the credential that you want to use for "generic access".
+    This is the credential that will be used for URLs without user names.
+    The user name for this credential does not matter, but you can choose something descriptive, e.g. "PersonalAccessToken", "token", or "generic".
+
+4.  Configure git to use this username by default.
+    E.g. if you chose "generic", then run
+
+        git config --global crendetial.username generic
+
+5.  Add all the other credentials, with appropriate user names.
+    These are the user names that you need to put in the URLs for the repositories or operations you want to use them for.
+    (GitHub does not actually use the user names if the password is a PAT.)
+
+## Windows, with git 2.29.0 or later and manager-core
+
+1.  We suggest that you update to the latest git version, but at least 2.29.0, and use the `manager-core` helper which is now default.
+    If you installed `manager-core` separately from git, we suggest that you remove it, because it might cause confusion as to which helper is actually used.
+
+2.  Remove all current credentials first, for the host you are targeting.
+    You can do this in 'Credential Manager' or `gitcreds::gitcreds_list()` to find them and the oskeyring package to remove them.
+    You can also use the oskeyring packaeg to back up the tokens and passwords.
+
+3.  Then add the credential that you want to use for "generic access".
+    This is the credential that will be used for URLs without user names.
+    The user name for this credential does not matter, but you can choose something descriptive, e.g. "PersonalAccessToken", "token", or "generic".
+
+4.   Configure git to use this username by default.
+    E.g. if you chose "generic", then run
+
+        git config --global crendetial.username generic
+
+5.  Add all the other credentials, with appropriate user names.
+    These are the user names that you need to put in the URLs for the repositories or operations you want to use them for.
+    (GitHub does not actually use the user names if the password is a PAT.)
+
+## Windows with older git versions
+
+### At most one github.com credential
+
+If you only need to manage a single github.com credential, together with possibly multiple credentials to other hosts (including GitHub Enterprise hosts), then you can use the default `manager` helper, and get away with the default auto-detected GCM authority setting.
+
+In this case, you can add you github.com credential with an arbitrary user name, and for each other host you can add configure a default user name, and/or include user names in the URLs to these hosts.
+This is how to set a default user name for a host:
+
+    git config --global credential.https://example.com.username myusername
+
+### Multiple GitHub credentials
+
+If you need to manage multiple github.com credentials, then you can still use the `manager` helper, but you need to change the GCM authority by setting an option or an environment variable, see <https://github.com/microsoft/Git-Credential-Manager-for-Windows/blob/master/Docs/Configuration.md#authority.>
+Once <https://github.com/microsoft/Git-Credential-Manager-for-Windows/pull/891> is merged, you won't need to do this.
+(At least in recent git versions, that contain a GCM build with the fix.)
+
+This is how to change the config for this:
+
+    git config --global credential.authority Basic
+
+You can also change it only for github.com:
+
+    git config --global credential.github.com.authority Basic
+
+Then you can configure a default user name, this will be used for URLs without a user name:
+
+    git config --global credential.username generic
+
+Now you can add you credentials, the default one with the "generic" user name, and all the others with their specific user and host names.

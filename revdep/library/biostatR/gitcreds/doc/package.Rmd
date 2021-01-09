@@ -1,0 +1,180 @@
+---
+title: "gitcreds for package authors"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gitcreds for package authors}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+editor_options:
+  markdown:
+    wrap: sentence
+    canonical: true
+---
+
+## Introduction
+
+If you have a package that queries the GitHub API, or uses git with remote git repositories, then most likely you need to let your users specify their GitHub or git credentials.
+There are several benefits of using gitcreds to do this:
+
+-   (Re)use the same credentials as command line git, R and the RStudio IDE., etc.
+    Users can set their GitHub token once and use it everywhere.
+
+-   Users can use the same credentials for multiple R packages.
+
+-   gitcreds has a cache that makes credential lookup very fast.
+
+-   Typically more secure than storing passwords and tokens in `.Renviron` files.
+
+-   gitcreds supports multiple users and multiple hosts.
+
+-   If git or credential helpers are not available, e.g. typically on a Linux server, then gitcreds can still use environment variables, and it still supports multiple users and hosts.
+
+## The simple API
+
+The simplest way to use gitcreds is to call `gitcreds_get()` from your package to query credentials, possibly with a custom URL.
+For setting new credentials, you can point your users to `gitcreds_set()`.
+
+### Errors from the simple API
+
+If you are using the simple API, gitcreds may throw the following classed errors and your package might want to handle:
+
+-   `gitcreds_nogit_error` if git it not available on the system.
+
+-   `gitcreds_no_credentials` if git did not find any credentials for the specified URL.
+    The URL is stored in the error, under `url`.
+
+-   `git_error` if a git command returned some error.
+    The following information is stored in the error object:
+
+    -   `args` the command line arguments to git,
+
+    -   `stdout` standard output,
+
+    -   `stderr` standard error,
+
+    -   `status` the exit status of the git process.
+
+-   `gitcreds_not_interactive_error` if `gitcreds_set()` is called in non-interactive mode.
+
+-   `gitcreds_abort_replace_error` if the user aborted replacing the existing credentials.
+
+## The low level API
+
+Should you need more flexibility, you can use the `gitcreds_approve()`, `gitcreds_fill()` and `gitcreds_reject()` functions, to add/update, query and remove credentials.
+We suggest you use the dummy credential helper (see below) for `gitcreds_fill()`, to avoid git password dialog boxes if a credential is not available.
+
+E.g. the low level API makes it possible to implement an alternative to `gitcreds_set()` , with a different user interface, or a version that also works in non-interactive sessions.
+
+### The dummy credential helper
+
+In a typical setup, if git does not find credentials for the requested host after querying all defined credential helpers, it'll ask for a password in a dialog box, or a terminal prompt.
+It is often best to avoid these, and deal with the situation within R.
+
+gitcreds has a dummy credential helper, that always supplies dummy credentials.
+By default `gitcreds_fill()` adds this dummy helper to the list of configured credential helpers, and code calling `gitcreds_fill()` can check if git returned the dummy credentials, meaning that no real credentials were found.
+This is how the dummy credentials look:
+
+``` {.r}
+gitcreds_fill(list(url="https://impossible.com"))
+#> [1] "protocol=dummy"     "host=dummy"
+#> [3] "username=dummy"     "password=dummy get"
+```
+
+It is best to look for `protocol=dummy` as the first line of the git output.
+
+### Errors from the low level API
+
+-   `git_error` if a git command returned some error.
+    The following information is stored in the error object:
+
+    -   `args` the command line arguments to git,
+
+    -   `stdout` standard output,
+
+    -   `stderr` standard error,
+
+    -   `status` the exit status of the git process.
+
+## Testing
+
+If your package uses gitcreds, either directly, or through another package, then you might want to test your package for the the various possible states of the user's git installation and credential store.
+gitcreds has some facilities to help you with this.
+
+If you want to test your package for a specific output from gitcreds, you can temporarily set the environment variable that gitcreds uses as a cache to the desired value.
+Use the `gitcreds_cache_envvar()` function to see which environment variable you need to set for a url:
+
+```{r}
+gitcreds::gitcreds_cache_envvar("https://github.com")
+```
+
+It is easiest to use the withr package to temporarily change this environment variable in a test case:
+
+```{r}
+library(testthat)
+test_that("bad credentials from git", {
+  withr::local_envvar(c(GITHUB_PAT_GITHUB_COM = "bad"))
+  # Test code that calls gitcreds_get(), potentially downstream.
+  # gitcreds_get() will return `bad` as the password.
+  # Illustration:
+  expect_equal(
+    gitcreds::gitcreds_get("https://github.com")$password,
+    "bad"
+  )
+})
+```
+
+If you want gitcreds to return a specific credential record, then you can specify the fields of the record in the environment variable, separated by colons.
+For example:
+
+```{r}
+library(testthat)
+test_that("another GitHub user", {
+  cred <- paste0(
+    "protocol:https:",
+    "host:github.com:",
+    "username:user1:",
+    "password:secret"
+  )
+  withr::local_envvar(c(GITHUB_PAT_GITHUB_COM = cred))
+  # Your test code comes here. This is just an illustration:
+  print(gitcreds::gitcreds_get())
+  expect_equal(gitcreds::gitcreds_get()$username, "user1")
+})
+```
+
+If you want gitcreds to fail for a specific host, set the corresponding environment variable to `"FAIL"`:
+
+```{r}
+library(testthat)
+test_that("no credentials from git", {
+  withr::local_envvar(c(GITHUB_PAT_GITHUB_COM = "FAIL"))
+  # The test code that calls gitcreds_get() comes here.
+  # It will fail with error "gitcreds_no_credentials"
+  expect_error(
+    gitcreds::gitcreds_get("https://github.com"),
+    class = "gitcreds_no_credentials"
+  )
+})
+```
+
+If you want gitcreds to fail with a specific error, then include the error class after a `"FAIL:"` prefix, in the environment variable.
+See the list of possible error classes above.
+For example:
+
+```{r}
+library(testthat)
+test_that("no git installation", {
+  withr::local_envvar(c(
+    GITHUB_PAT_GITHUB_COM = "FAIL:gitcreds_nogit_error"
+  ))
+  # Test code that calls gitcreds_get() comes here.
+  # Illustration:
+  expect_error(
+    gitcreds::gitcreds_get("https://github.com"),
+    class = "gitcreds_nogit_error"
+  )
+})
+```
+
+It is not currently possible to simulate the additional data in the error object, e.g. the standard output of a failed git command.
+If you need this for a test case, then your test case can call `gitcreds_get()` directly and you can use the mockery package to make gitcreds fail with the desired error object.

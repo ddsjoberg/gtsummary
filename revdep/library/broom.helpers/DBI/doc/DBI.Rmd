@@ -1,0 +1,121 @@
+---
+title: "Introduction to DBI"
+author: "Katharina Brunner"
+date: "14 October 2019"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{"Introduction to DBI"}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The {DBI} package defines a common interface between the R and database management systems (DBMS).
+Hence the name: DBI stands for **d**ata**b**ase **i**nterface.
+
+Using DBI, developers can focus on the functionalities of their code, instead of setting up the infrastructure depending on the underlying database.
+This DBMS-agnostic approach is possible, because DBI works best with several other packages that act as drivers to absorb the peculiarities of the specific DBMSs.
+
+These packages import {DBI} and implement its methods depending on the specific database management system.
+
+Currently, DBI works with the [many different database management systems](https://github.com/r-dbi/DBI/issues/274), e.g.:
+
+* MySQL, using the R-package [RMySQL](https://github.com/r-dbi/RMySQL)
+* MariaDB, using the R-package [RMariaDB](https://github.com/r-dbi/RMariaDB)
+* Postgres, using and the R-package [RPostgres](https://github.com/r-dbi/RPostgres)
+* SQLite, using and the R-package [RSQLite](https://github.com/r-dbi/RSQLite)
+
+DBI offers a set of classes and methods that define what operations are possible and how they are performed:
+
+* connect/disconnect to the DBMS
+* create and execute statements in the DBMS
+* extract results/output from statements
+* error/exception handling
+* information (meta-data) from database objects
+* transaction management (optional)
+
+## Examples
+
+To showcase DBI capabilities, we create a in-memory RSQLite database 
+
+```{r}
+library(DBI)
+
+con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+con
+```
+
+The function `dbListTables()` displays the names tables in the remote database.
+Since we haven't pushed any data to the database, there are no tables to show.
+
+```{r}
+dbListTables(con)
+```
+
+We can write the famous data `mtcars` dataset to the remote database by using `dbWriteTable()`.
+Calling `dbListTables()` displays the table name:
+
+```{r}
+
+dbWriteTable(con, "mtcars", mtcars)
+dbListTables(con)
+
+```
+
+To get all columns names of a remote table, use `dbListFields()`.
+It returns a character vector with all column names in the same order as in the database:
+
+```{r}
+dbListFields(con, "mtcars")
+```
+If you want to import database table from the DBMS as a data frame, `dbReadTable()` helps to do that.
+Basically, it is the result of the most generic SQL call `SELECT * FROM <name>`.
+
+```{r}
+dbReadTable(con, "mtcars")
+```
+
+Of course, you can run more specific SQL queries, too.
+`dbGetQuery()` is the function to send a query to a database and retrieve the result as a data frame.
+Especially when working with large datasets, it is important to free the resources associated with retrieving the result. `dbGetQuery()` cares about this, too.
+
+```{r}
+df <- dbGetQuery(con, "SELECT * FROM mtcars WHERE cyl = 4")
+df
+```
+
+Behind the scences, `dbGetQuery()` is a combination of `dbSendQuery()`, `dbFetch()` and `dbClearResult()`.
+The following snippet leads to the same result as `dbGetQuery()` above:
+
+```{r}
+res <- dbSendQuery(con, "SELECT * FROM mtcars WHERE cyl = 4")
+df <- dbFetch(res)
+dbClearResult(res)
+df
+```
+When working with large datasets it might be smart to fetch the result step by step, not in one big chunk.
+This can be implemented with a `while` loop and a `dbFetch()` call that defines a maximum number of records to retrieve per fetch, here `n = 5`.
+There are eleven cars with four cylinders, so we expect two chunks of five rows and one chuck of one row:
+
+```{r}
+res <- dbSendQuery(con, "SELECT * FROM mtcars WHERE cyl = 4")
+while(!dbHasCompleted(res)){
+  chunk <- dbFetch(res, n = 5)
+  print(nrow(chunk))
+}
+```
+
+Again, call `dbClearResult()` and disconnect from the connection with `dbDisconnect()`, when you are done:
+
+```{r}
+dbClearResult(res)
+dbDisconnect(con)
+```
+
+
+## Further Reading
+
+* An overview on [working with databases in R on Rstudio.com](https://db.rstudio.com/)

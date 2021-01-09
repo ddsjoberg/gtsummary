@@ -999,7 +999,6 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
   # setting the default formatting ---------------------------------------------
   percent_fun <- get_theme_element("tbl_summary-fn:percent_fun") %||%
     getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
-  N_fun <- get_theme_element("tbl_summary-fn:N_fun", default = style_number)
 
   # extracting statistics requested
   fns_names_chr <-
@@ -1010,15 +1009,31 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
   base_stats <- c("p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs",
                   "N_obs_unweighted", "N_miss_unweighted", "N_nonmiss_unweighted",
                   "p_miss_unweighted", "p_nonmiss_unweighted")
+  percent_stats <- c("p_miss", "p_nonmiss", "p_miss_unweighted", "p_nonmiss_unweighted")
+
+  # converting the digits input to a list
+  if (is.numeric(digits[[variable]])) digits[[variable]] <- as.list(digits[[variable]])
+  else if (rlang::is_function(digits[[variable]])) digits[[variable]] <- list(digits[[variable]])
 
   # if user supplied number of digits to round, use them
   if (!is.null(digits[[variable]])) {
     digits[[variable]] <-
       # making the digits passed the same length as stat vector
       rep(digits[[variable]], length.out = length(fns_names_chr)) %>%
-      as.list() %>%
-      rlang::set_names(fns_names_chr)
+      rlang::set_names(fns_names_chr) %>%
+      # converting digits to fns
+      imap(
+        # scale percents by 100
+        ~switch(is.numeric(.x) & .y %in% percent_stats,
+                purrr::partial(style_number, digits = !!.x, scale = 100)) %||%
+          switch(is.numeric(.x) & summary_type %in% c("categorical", "dichotomous") & .y %in% "p" ,
+                 purrr::partial(style_number, digits = !!.x, scale = 100)) %||%
+          # all other stats are not scaled
+          switch(is.numeric(.x), purrr::partial(style_number, digits = !!.x)) %||%
+          .x # if user passed a function, then return the function
+      )
   }
+
   # if no digits supplied and variable is continuous, guess how to summarize
   else if (summary_type %in% c("continuous", "continuous2")) {
     digits[[variable]] <-
@@ -1027,44 +1042,50 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
                               summary_type = summary_type) %>%
       rep(length.out = length(fns_names_chr %>% setdiff(base_stats))) %>%
       as.list() %>%
-      rlang::set_names(fns_names_chr %>% setdiff(base_stats))
+      rlang::set_names(fns_names_chr %>% setdiff(base_stats)) %>%
+      map(~purrr::partial(style_number, digits = !!.x))
   }
 
   # adding the formatting function as an attribute
-  df_stats <- purrr::imap_dfc(
-    df_stats,
-    function(column, colname) {
-      if (colname %in% c("variable", "by")) return(column)
+  df_stats <-
+    purrr::imap_dfc(
+      df_stats,
+      function(column, colname) {
+        if (colname %in% c("by", "variable", "variable_levels", "stat_display"))
+          return(column)
 
-      # if number of digits was passed by user, round to the specified digits
-      if (!is.null(digits[[variable]][[colname]])) {
-        if (summary_type %in% c("continuous", "continuous2") &&
-            colname %in% c("p_miss", "p_nonmiss",
-                           "p_miss_unweighted",
-                           "p_nonmiss_unweighted"))
-          attr(column, "fmt_fun") <-
-            purrr::partial(style_number, scale = 100,
-                           digits = !!digits[[variable]][[colname]])
-        else if (colname %in% c("p", "p_miss", "p_nonmiss",
-                                "p_miss_unweighted", "p_nonmiss_unweighted"))
-          attr(column, "fmt_fun") <-
-            purrr::partial(style_number, scale = 100,
-                           digits = !!digits[[variable]][[colname]])
-        else
-          attr(column, "fmt_fun") <-
-            purrr::partial(style_number, digits = !!digits[[variable]][[colname]])
-      }
-      # if digits not specified, use the default percent and integer formatting
-      else if (colname %in% c("p" ,"p_miss", "p_nonmiss")) {
-        attr(column, "fmt_fun") <- percent_fun
-      }
-      else {
-        attr(column, "fmt_fun") <- N_fun
-      }
+        # if the fmt function is already defined, then add it as attribute
+        else if (!is.null(digits[[variable]][[colname]])) {
+          attr(column, "fmt_fun") <- digits[[variable]][[colname]]
+        }
 
-      column
-    }
-  )
+        # if the variable is categorical and a percent, use `style_percent`
+        else if (summary_type %in% c("categorical", "dichotomous") & colname %in% "p") {
+          attr(column, "fmt_fun") <- percent_fun
+        }
+
+        # if the variable is categorical and an N, use `style_number`
+        else if (summary_type %in% c("categorical", "dichotomous") & colname %in% c("N", "n")) {
+          attr(column, "fmt_fun") <- style_number
+        }
+
+        # if the column is one of the remaining percent cols, use `style_percent`
+        else if (colname %in% percent_stats) {
+          attr(column, "fmt_fun") <- percent_fun
+        }
+
+        # if the column is one of the remaining N cols, use `style_number`
+        else if (colname %in% base_stats) {
+          attr(column, "fmt_fun") <- style_number
+        }
+
+        # that should cove everything, but adding this just in case
+        else attr(column, "fmt_fun") <- style_number
+
+        # return column
+        column
+      }
+    )
 
   df_stats
 }

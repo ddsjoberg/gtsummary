@@ -1,0 +1,237 @@
+
+/* Make sure we use a serif font, unless specified otherwise. In
+   particular, this applies to the headings, which use a monospace
+   font by default. */
+
+body {
+    font-family: sans-serif;
+    font-size: 120%;
+}
+
+/* Style the page header, which is a table. */
+
+body > table:first-child {
+    background-color: #f8f8f8;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #eee;
+}
+
+/* Better styles for headings. */
+
+h1 {
+    font-size: 36px;
+    text-align: left;
+    font-style: normal;
+    border-bottom:1px solid #CCC;
+    padding-bottom:3px;
+}
+
+h2 {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: left;
+    font-style: normal;
+    border-bottom:1px solid #CCC;
+    padding-bottom:3px;
+}
+
+h3 {
+    font-size: 30px;
+    color: rgb(35%, 35%, 35%);
+    font-style: normal;
+    border-bottom:1px solid #CCC;
+    padding-bottom:3px;
+}
+
+h4 {
+    font-size: 20px;
+    color: rgb(35%, 35%, 35%);
+    font-style: normal;
+}
+
+h5 {
+    font-size: 16px;
+    color: rgb(35%, 35%, 35%);
+    font-style: normal;
+}
+
+h6 {
+    font-size: 16px;
+    color: rgb(35%, 35%, 35%);
+    font-style: normal;
+}
+
+/* Add a bit of vertical space between the function arguments. */
+
+table p {
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+/* Better function argument formatting, in particular, leave some space
+   after the argument name. */
+
+table[summary="R argblock"] tr td
+{
+    font-size: 100%;
+}
+
+table[summary="R argblock"] tr td:first-child {
+    min-width: 24px;
+    padding-right: 12px;
+    text-align: right;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+/* Nicer formatting of preformatted code. */
+
+pre {
+    background-color: #f8f8f8;
+    color: #555;
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    line-height: 1.42857143;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    font-style: italic;
+}
+
+/* Nicer formatting of R code. The 'r' class is added by
+   @includeRmd, or it can also be added manually, with ```r ... ```.
+   The Examples section is also highlighted. */
+
+div.r pre, pre.r {
+    color: #333;
+    font-style: normal;
+}
+
+/* Make sure that the manual page is not super wide, because long lines
+   are not readable. */
+
+body {
+    max-width: 970px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Only underline links when we hover over them.
+   Change their default color */
+
+a:link code {
+    color: #375f87;
+}
+
+a:link {
+    text-decoration: none;
+    color: #337ab7;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Make lists a bit more spacious. */
+
+ul p {
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+ol p {
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+/* The rest of this file is a Solarized theme, that is used for syntax
+   highlighting R code, via the rd.js file. */
+
+
+/*
+
+Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmail.com>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #fdf6e3;
+  color: #657b83;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #93a1a1;
+}
+
+/* Solarized Green */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  color: #859900;
+}
+
+/* Solarized Cyan */
+.hljs-number,
+.hljs-string,
+.hljs-meta .hljs-meta-string,
+.hljs-literal,
+.hljs-doctag,
+.hljs-regexp {
+  color: #2aa198;
+}
+
+/* Solarized Blue */
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #268bd2;
+}
+
+/* Solarized Yellow */
+.hljs-attribute,
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-class .hljs-title,
+.hljs-type {
+  color: #b58900;
+}
+
+/* Solarized Orange */
+.hljs-symbol,
+.hljs-bullet,
+.hljs-subst,
+.hljs-meta,
+.hljs-meta .hljs-keyword,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-link {
+  color: #cb4b16;
+}
+
+/* Solarized Red */
+.hljs-built_in,
+.hljs-deletion {
+  color: #dc322f;
+}
+
+.hljs-formula {
+  background: #eee8d5;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}

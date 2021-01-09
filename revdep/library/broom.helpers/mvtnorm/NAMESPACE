@@ -1,0 +1,12 @@
+
+useDynLib(mvtnorm, .registration = TRUE)
+
+importFrom("stats",
+	   pnorm, qnorm, rnorm, runif,
+	   pt, qt,
+	   rchisq, uniroot,
+	   cov2cor, optim, coef, glm, pcauchy, qcauchy, predict, quasi)
+importFrom("methods", hasArg)
+
+export(rmvnorm, dmvnorm, pmvnorm, pmvt, rmvt, qmvnorm, qmvt, dmvt,
+       GenzBretz, Miwa, TVPACK)

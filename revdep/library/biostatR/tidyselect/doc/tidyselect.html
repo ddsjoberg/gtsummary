@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Implementing tidyselect interfaces</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Implementing tidyselect interfaces</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyselect)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(magrittr)</span></code></pre></div>
+<p>tidyselect implements a specialised sublanguage of R for selecting variables from data frames and other data structures. A technical description of the DSL is available in the <a href="https://tidyselect.r-lib.org/articles/syntax.html">syntax vignette</a>.</p>
+<p>In this vignette, we describe how to include tidyselect in your own packages. If you just want to know how to use tidyselect syntax in dplyr or tidyr, please read <a href="https://r4ds.had.co.nz/transform.html#select" class="uri">https://r4ds.had.co.nz/transform.html#select</a> instead.</p>
+<div id="before-we-start" class="section level2">
+<h2>Before we start</h2>
+<div id="selections-as-dots-or-as-named-arguments" class="section level3">
+<h3>Selections as dots or as named arguments</h3>
+<p>There are two major ways of designing a function that takes selections.</p>
+<ul>
+<li><p>Passing <strong>dots</strong> as in <code>dplyr::select()</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(mpg, cyl)</span></code></pre></div></li>
+<li><p>Interpolating <strong>named arguments</strong> as in <code>tidyr::pivot_longer()</code>. In this case, multiple inputs can be provided inside <code>c()</code> or by using boolean operators:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="kw">c</span>(mpg, cyl))</span>
+<span id="cb3-2"><a href="#cb3-2"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(mpg <span class="op">|</span><span class="st"> </span>cyl)</span></code></pre></div></li>
+</ul>
+<p>Our general recommendation is to take dots when the main purpose of the function is to create a new data structure based on a selection. When the selection is accessory to the main purpose of the function, take it as a named argument. In doubt, we recommend using named arguments because it is easier to change a named argument to dots than the other way around. For more advice about this, see the <a href="https://design.tidyverse.org/dots-data.html">Making data with <code>...</code></a> section of the tidyverse design book.</p>
+</div>
+<div id="do-you-need-tidyselect" class="section level3">
+<h3>Do you need tidyselect?</h3>
+<p>The tools described in this vignette are rather low level. Depending on your use case, it may be easier to wrap <code>dplyr::select()</code>. You’ll get a data frame containing the columns selected by your user, which you can then handle in various ways.</p>
+<p>The following examples illustrate how you could write a function that takes a selection of data and returns the corresponding data frame with capitalised names:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Passing dots</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>toupper_dots &lt;-<span class="st"> </span><span class="cf">function</span>(data, ...) {</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  sel &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(data, ...)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  rlang<span class="op">::</span><span class="kw">set_names</span>(sel, toupper)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>}</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># Interpolating a named argument with {{ }}</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>toupper_arg &lt;-<span class="st"> </span><span class="cf">function</span>(data, arg) {</span>
+<span id="cb4-8"><a href="#cb4-8"></a>  sel &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(data, {{ arg }})</span>
+<span id="cb4-9"><a href="#cb4-9"></a>  rlang<span class="op">::</span><span class="kw">set_names</span>(sel, toupper)</span>
+<span id="cb4-10"><a href="#cb4-10"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">toupper_dots</span>(mpg<span class="op">:</span>disp, vs)</span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt; # A tibble: 32 x 4</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt;     MPG   CYL  DISP    VS</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="co">#&gt; 1  21       6   160     0</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="co">#&gt; 2  21       6   160     0</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="co">#&gt; 3  22.8     4   108     1</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="co">#&gt; 4  21.4     6   258     1</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="co">#&gt; # … with 28 more rows</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a></span>
+<span id="cb4-22"><a href="#cb4-22"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">toupper_arg</span>(<span class="kw">c</span>(mpg<span class="op">:</span>disp, vs))</span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="co">#&gt; # A tibble: 32 x 4</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#&gt;     MPG   CYL  DISP    VS</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="co">#&gt; 1  21       6   160     0</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="co">#&gt; 2  21       6   160     0</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a><span class="co">#&gt; 3  22.8     4   108     1</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="co">#&gt; 4  21.4     6   258     1</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+<p>The main advantage of the lower level tidyselect tools is that they offer a bit more information and flexibility. Instead of returning the selected data, they return the <strong>locations</strong> of selected elements inside the input data. If you don’t need the selected locations and can afford the dependency, you may consider wrapping dplyr instead.</p>
+</div>
+</div>
+<div id="the-selection-evaluators" class="section level2">
+<h2>The selection evaluators</h2>
+<p>tidyselect is implemented with non-standard evaluation (NSE). This unique feature of the R language refers to the ability of functions to <strong>defuse</strong> (i.e. delay the execution) some or all of their arguments, and resume evaluation later on<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Crucially, evaluation can be resumed in a different context or according to different rules, which is often how domain-specific languages are created in R.</p>
+<div id="defusing-and-resuming-evaluation-of-r-code" class="section level3">
+<h3>Defusing and resuming evaluation of R code</h3>
+<p>When a function argument is defused, R halts the evaluation of the code and returns a defused expression instead. This expression contains the code that describes how to compute the intended value.</p>
+<p>Defuse <em>your own</em> R code with <code>expr()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>own &lt;-<span class="st"> </span>rlang<span class="op">::</span><span class="kw">expr</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>own</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; 1 + 2</span></span></code></pre></div>
+<p>Defuse <em>the user’s</em> R code with <code>enquo()</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>fn &lt;-<span class="st"> </span><span class="cf">function</span>(arg) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  expr &lt;-<span class="st"> </span>rlang<span class="op">::</span><span class="kw">enquo</span>(arg)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  expr</span>
+<span id="cb6-4"><a href="#cb6-4"></a>}</span>
+<span id="cb6-5"><a href="#cb6-5"></a>user &lt;-<span class="st"> </span><span class="kw">fn</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>user</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; &lt;quosure&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; expr: ^1 + 2</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; env:  global</span></span></code></pre></div>
+<p>To resume the evaluation of the defused R code, use <code>eval_tidy()</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>rlang<span class="op">::</span><span class="kw">eval_tidy</span>(own)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a>rlang<span class="op">::</span><span class="kw">eval_tidy</span>(user)</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+<p>You can resume the evaluation in data context by passing a data frame as <code>data</code> argument:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>with_data &lt;-<span class="st"> </span><span class="cf">function</span>(data, x) {</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  expr &lt;-<span class="st"> </span>rlang<span class="op">::</span><span class="kw">enquo</span>(x)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  rlang<span class="op">::</span><span class="kw">eval_tidy</span>(expr, <span class="dt">data =</span> data)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>}</span></code></pre></div>
+<p>Resuming evaluation in a data context is known as <strong>data masking</strong>. The data-vars inside the data frame are combined with the env-vars of the environment, making it possible for users to refer to their data variables:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="ot">NULL</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">with_data</span>(<span class="kw">mean</span>(cyl) <span class="op">*</span><span class="st"> </span><span class="dv">10</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; [1] 2000</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">with_data</span>(<span class="kw">mean</span>(cyl) <span class="op">*</span><span class="st"> </span><span class="dv">10</span>)</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; [1] 61.875</span></span></code></pre></div>
+</div>
+<div id="resuming-defused-r-code-with-tidyselect-rules" class="section level3">
+<h3>Resuming defused R code with tidyselect rules</h3>
+<p>Taking tidyselect selections in your functions follows the same principles. First defuse an expression, then resume its evaluation. Instead of <code>eval_tidy()</code>, we need the special interpreters <code>eval_select()</code> and <code>eval_rename()</code>. Like <code>eval_tidy()</code>, they take a defused expression and some data. They return a vector of locations for the selected elements:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">eval_select</span>(rlang<span class="op">::</span><span class="kw">expr</span>(mpg), mtcars)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; mpg </span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt;   1</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="kw">eval_select</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(mpg<span class="op">:</span>disp, vs)), mtcars)</span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;  mpg  cyl disp   vs </span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt;    1    2    3    8</span></span></code></pre></div>
+<p>If the user has renamed some of the selected elements, the names of the vector of locations reflect the new names.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">eval_select</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(<span class="dt">foo =</span> mpg, <span class="dt">bar =</span> disp)), mtcars)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; foo bar </span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt;   1   3</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="kw">eval_rename</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(<span class="dt">foo =</span> mpg, <span class="dt">bar =</span> disp)), mtcars)</span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; foo bar </span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt;   1   3</span></span></code></pre></div>
+<p><code>eval_select()</code> is most likely the variant that you’ll need to implement your tidyselect functions.</p>
+<div id="simple-selections-with-dots" class="section level4">
+<h4>Simple selections with dots</h4>
+<p>If your selecting function takes dots:</p>
+<ol style="list-style-type: decimal">
+<li><p>Pass the dots to <code>c()</code> inside a defused expression.</p></li>
+<li><p>Resume evaluation of the defused <code>c()</code> expression with <code>eval_select()</code>.</p></li>
+<li><p>Use the vector of locations returned by <code>eval_select()</code> to subset and rename the input data.</p></li>
+</ol>
+<p>Here is how to reimplement <code>dplyr::select()</code> in 3 lines representing each of the steps above:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>select &lt;-<span class="st"> </span><span class="cf">function</span>(.data, ...) {</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  expr &lt;-<span class="st"> </span>rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(...))</span>
+<span id="cb12-3"><a href="#cb12-3"></a>  pos &lt;-<span class="st"> </span><span class="kw">eval_select</span>(expr, <span class="dt">data =</span> .data)</span>
+<span id="cb12-4"><a href="#cb12-4"></a>  rlang<span class="op">::</span><span class="kw">set_names</span>(.data[pos], <span class="kw">names</span>(pos))</span>
+<span id="cb12-5"><a href="#cb12-5"></a>}</span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a>mtcars <span class="op">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="st">  </span><span class="kw">select</span>(mpg, cyl)</span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt; # A tibble: 32 x 2</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt;     mpg   cyl</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">#&gt; 1  21       6</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="co">#&gt; 2  21       6</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="co">#&gt; 3  22.8     4</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="co">#&gt; 4  21.4     6</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+</div>
+<div id="simple-selections-with-named-arguments" class="section level4">
+<h4>Simple selections with named arguments</h4>
+<p>If your selecting function takes named arguments, the defusing step is a bit different. We need to use <code>enquo()</code> to defuse the function argument itself.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>select &lt;-<span class="st"> </span><span class="cf">function</span>(.data, cols) {</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  expr &lt;-<span class="st"> </span>rlang<span class="op">::</span><span class="kw">enquo</span>(cols)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  pos &lt;-<span class="st"> </span><span class="kw">eval_select</span>(expr, <span class="dt">data =</span> .data)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>  rlang<span class="op">::</span><span class="kw">set_names</span>(.data[pos], <span class="kw">names</span>(pos))</span>
+<span id="cb13-5"><a href="#cb13-5"></a>}</span>
+<span id="cb13-6"><a href="#cb13-6"></a></span>
+<span id="cb13-7"><a href="#cb13-7"></a>mtcars <span class="op">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(mpg, cyl))</span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co">#&gt; # A tibble: 32 x 2</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="co">#&gt;     mpg   cyl</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="co">#&gt; 1  21       6</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="co">#&gt; 2  21       6</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">#&gt; 3  22.8     4</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a><span class="co">#&gt; 4  21.4     6</span></span>
+<span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+</div>
+<div id="renaming-selections" class="section level4">
+<h4>Renaming selections</h4>
+<p>The <code>eval_rename()</code> variant is rarely needed and only mentioned here for completeness. First note that both <code>eval_select()</code> and <code>eval_rename()</code> allow renaming variables:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">eval_select</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(<span class="dt">foo =</span> mpg)), mtcars)</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; foo </span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt;   1</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="kw">eval_rename</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(<span class="dt">foo =</span> mpg)), mtcars)</span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; foo </span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt;   1</span></span></code></pre></div>
+<p><code>eval_rename()</code> is very similar to <code>eval_select()</code> but it has more constraints because it is meant for renaming variables in place. In particular it throws an error if the selected inputs are unnamed. In practice, <code>eval_rename()</code> only accepts a <code>c()</code> expression as <code>expr</code> argument, and all inputs inside the outermost <code>c()</code> must be named:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">eval_rename</span>(rlang<span class="op">::</span><span class="kw">expr</span>(mpg), mtcars)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; Error: All renaming inputs must be named.</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="kw">eval_rename</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(mpg)), mtcars)</span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; Error: All renaming inputs must be named.</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="kw">eval_rename</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(<span class="dt">foo =</span> mpg)), mtcars)</span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt; foo </span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt;   1</span></span></code></pre></div>
+<p>Because of this constraint, it doesn’t make much sense to take a named argument, most of the time you’ll want to pass dots to a defused <code>c()</code> expression. This way the user can easily pass names with the selections:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>wrapper &lt;-<span class="st"> </span><span class="cf">function</span>(data, ...) {</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="kw">eval_rename</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(...)), data)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>}</span>
+<span id="cb16-4"><a href="#cb16-4"></a></span>
+<span id="cb16-5"><a href="#cb16-5"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">wrapper</span>(<span class="dt">foo =</span> mpg, <span class="dt">bar =</span> hp<span class="op">:</span>wt)</span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co">#&gt;  foo bar1 bar2 bar3 </span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt;    1    4    5    6</span></span></code></pre></div>
+<p>As an example of how to use the vector of locations returned by <code>eval_rename()</code>, here is how to implement <code>dplyr::rename()</code>:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>rename &lt;-<span class="st"> </span><span class="cf">function</span>(.data, ...) {</span>
+<span id="cb17-2"><a href="#cb17-2"></a>  pos &lt;-<span class="st"> </span><span class="kw">eval_rename</span>(rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">c</span>(...)), .data)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="kw">names</span>(.data)[pos] &lt;-<span class="st"> </span><span class="kw">names</span>(pos)</span>
+<span id="cb17-4"><a href="#cb17-4"></a>  .data</span>
+<span id="cb17-5"><a href="#cb17-5"></a>}</span>
+<span id="cb17-6"><a href="#cb17-6"></a></span>
+<span id="cb17-7"><a href="#cb17-7"></a>mtcars <span class="op">%&gt;%</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">foo =</span> mpg, <span class="dt">bar =</span> hp<span class="op">:</span>wt)</span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="co">#&gt; # A tibble: 32 x 11</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="co">#&gt;     foo   cyl  disp  bar1  bar2  bar3  qsec    vs    am  gear  carb</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; 1  21       6   160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a><span class="co">#&gt; 2  21       6   160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co">#&gt; 3  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a><span class="co">#&gt; 4  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1</span></span>
+<span id="cb17-16"><a href="#cb17-16"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="creating-selection-helpers" class="section level2">
+<h2>Creating selection helpers</h2>
+<p>Tools like <code>starts_with()</code> or <code>contains()</code> are called <strong>selection helpers</strong>. These tools inspect the variable names currently available for selection with <code>peek_vars()</code>. The variable names are registered automatically by <code>eval_select()</code> for the duration of the evaluation:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>x &lt;-<span class="st"> </span>rlang<span class="op">::</span><span class="kw">expr</span>(<span class="kw">print</span>(<span class="kw">peek_vars</span>()))</span>
+<span id="cb18-2"><a href="#cb18-2"></a></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="kw">invisible</span>(<span class="kw">eval_select</span>(x, <span class="dt">data =</span> mtcars))</span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt;  [1] &quot;mpg&quot;  &quot;cyl&quot;  &quot;disp&quot; &quot;hp&quot;   &quot;drat&quot; &quot;wt&quot;   &quot;qsec&quot; &quot;vs&quot;   &quot;am&quot;   &quot;gear&quot;</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt; [11] &quot;carb&quot;</span></span></code></pre></div>
+<p>Such properties temporarily available by calling a function like <code>peek_vars()</code> are called <strong>descriptors</strong>. Descriptors are useful because they are very easy to compose. For instance, a user could combine <code>starts_with()</code> and <code>ends_with()</code> without having to worry about passing the variables or the environment in which they can be found:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>my_selector &lt;-<span class="st"> </span><span class="cf">function</span>(prefix, suffix) {</span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="kw">intersect</span>(</span>
+<span id="cb19-3"><a href="#cb19-3"></a>    <span class="kw">starts_with</span>(prefix),</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    <span class="kw">ends_with</span>(suffix)</span>
+<span id="cb19-5"><a href="#cb19-5"></a>  )</span>
+<span id="cb19-6"><a href="#cb19-6"></a>}</span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">my_selector</span>(<span class="st">&quot;Sepal&quot;</span>, <span class="st">&quot;Length&quot;</span>))</span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co">#&gt; # A tibble: 150 x 1</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="co">#&gt;   Sepal.Length</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="co">#&gt;          &lt;dbl&gt;</span></span>
+<span id="cb19-12"><a href="#cb19-12"></a><span class="co">#&gt; 1          5.1</span></span>
+<span id="cb19-13"><a href="#cb19-13"></a><span class="co">#&gt; 2          4.9</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="co">#&gt; 3          4.7</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="co">#&gt; 4          4.6</span></span>
+<span id="cb19-16"><a href="#cb19-16"></a><span class="co">#&gt; # … with 146 more rows</span></span></code></pre></div>
+<p>To create a new selection helper:</p>
+<ol style="list-style-type: decimal">
+<li><p>Inspect the variables with <code>peek_vars()</code>. By convention this should be done in an argument that the user can override.</p></li>
+<li><p>Return one of the supported data types: vector of names or locations (the latter is recommended, see section on handling duplicate variables), or a predicate function.</p></li>
+</ol>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>if_width &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span class="dt">vars =</span> <span class="kw">peek_vars</span>(<span class="dt">fn =</span> <span class="st">&quot;if_width&quot;</span>)) {</span>
+<span id="cb20-2"><a href="#cb20-2"></a>  vars[<span class="kw">nchar</span>(vars) <span class="op">==</span><span class="st"> </span>n]</span>
+<span id="cb20-3"><a href="#cb20-3"></a>}</span>
+<span id="cb20-4"><a href="#cb20-4"></a></span>
+<span id="cb20-5"><a href="#cb20-5"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">if_width</span>(<span class="dv">2</span>))</span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="co">#&gt; # A tibble: 32 x 4</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co">#&gt;      hp    wt    vs    am</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; 1   110  2.62     0     1</span></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; 2   110  2.88     0     1</span></span>
+<span id="cb20-11"><a href="#cb20-11"></a><span class="co">#&gt; 3    93  2.32     1     1</span></span>
+<span id="cb20-12"><a href="#cb20-12"></a><span class="co">#&gt; 4   110  3.22     1     0</span></span>
+<span id="cb20-13"><a href="#cb20-13"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+<p>The <code>fn</code> argument makes the error message more informative when the helper is used in the wrong context:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>mtcars[<span class="kw">if_width</span>(<span class="dv">2</span>)]</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co">#&gt; Error: `if_width()` must be used within a *selecting* function.</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt; ℹ See &lt;https://tidyselect.r-lib.org/reference/faq-selection-context.html&gt;.</span></span></code></pre></div>
+<p>Because the variables are inspected in a default argument, it is easy to override. This is mostly useful in unit tests:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">if_width</span>(<span class="dv">2</span>, <span class="dt">vars =</span> <span class="kw">names</span>(mtcars))</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co">#&gt; [1] &quot;hp&quot; &quot;wt&quot; &quot;vs&quot; &quot;am&quot;</span></span></code></pre></div>
+<div id="handling-duplicate-variables" class="section level3">
+<h3>Handling duplicate variables</h3>
+<p>However our current implementation of <code>if_width()</code> has a design flaw. It doesn’t work properly when the input has duplicate names:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>dups &lt;-<span class="st"> </span>vctrs<span class="op">::</span><span class="kw">new_data_frame</span>(<span class="kw">list</span>(<span class="dt">foo =</span> <span class="dv">1</span>, <span class="dt">quux =</span> <span class="dv">2</span>, <span class="dt">foo =</span> <span class="dv">3</span>))</span>
+<span id="cb23-2"><a href="#cb23-2"></a></span>
+<span id="cb23-3"><a href="#cb23-3"></a>dups <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">if_width</span>(<span class="dv">3</span>))</span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co">#&gt;   foo</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="co">#&gt; 1   1</span></span></code></pre></div>
+<p>Supporting duplicates is recommended because data frames in the wild don’t always have unique names. Also, tidyselect can be used with vectors that don’t require unique names, and it might be extended to allow recoding character vectors in the future. In these cases, handling duplicates is part of the normal usage for selection helpers.</p>
+<p>To support duplicates it is recommended to return vectors of locations from selection helpers rather than vector of names. Fixing <code>if_width()</code> is easy:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>if_width &lt;-<span class="st"> </span><span class="cf">function</span>(n, <span class="dt">vars =</span> <span class="kw">peek_vars</span>(<span class="dt">fn =</span> <span class="st">&quot;if_width&quot;</span>)) {</span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="kw">which</span>(<span class="kw">nchar</span>(vars) <span class="op">==</span><span class="st"> </span>n)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>}</span></code></pre></div>
+<p>If the input is a data frame, the user is now informed that their selection should not contain duplicates:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>dups <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">if_width</span>(<span class="dv">3</span>))</span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="co">#&gt; Error: Names must be unique.</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="co">#&gt; ✖ These names are duplicated:</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="co">#&gt;   * &quot;foo&quot; at locations 1 and 2.</span></span></code></pre></div>
+<p>And all the duplicates are selected if the input is not a data frame, as expected:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">as.list</span>(dups) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">if_width</span>(<span class="dv">3</span>))</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="co">#&gt; $foo</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="co">#&gt; </span></span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="co">#&gt; $foo</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The defusing step is also known as <em>quoting</em>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

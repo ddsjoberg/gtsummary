@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting started with httr</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting started with httr</h1>
+
+
+
+<div id="httr-quickstart-guide" class="section level1">
+<h1>httr quickstart guide</h1>
+<p>The goal of this document is to get you up and running with httr as quickly as possible. httr is designed to map closely to the underlying http protocol. I’ll try and explain the basics in this intro, but I’d also recommend “<a href="http://code.tutsplus.com/tutorials/http-the-protocol-every-web-developer-must-know-part-1--net-31177">HTTP: The Protocol Every Web Developer Must Know</a>” or “<a href="http://www.jmarshall.com/easy/http/">HTTP made really easy</a>”.</p>
+<p>This vignette (and parts of the httr API) derived from the excellent “<a href="https://requests.readthedocs.io/en/master/user/quickstart/">Requests quickstart guide</a>” by Kenneth Reitz. Requests is a python library similar in spirit to httr.</p>
+<p>There are two important parts to http: the <strong>request</strong>, the data sent to the server, and the <strong>response</strong>, the data sent back from the server. In the first section, you’ll learn about the basics of constructing a request and accessing the response. In the second and third sections, you’ll dive into more details of each.</p>
+<div id="httr-basics" class="section level2">
+<h2>httr basics</h2>
+<p>To make a request, first load httr, then call <code>GET()</code> with a url:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(httr)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/get&quot;</span>)</span></code></pre></div>
+<p>This gives you a response object. Printing a response object gives you some useful information: the actual url used (after any redirects), the http status, the file (content) type, the size, and if it’s a text file, the first few lines of output.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>r</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; Response [http://httpbin.org/get]</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt;   Date: 2020-07-20 14:19</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;   Status: 200</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;   Content-Type: application/json</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;   Size: 365 B</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; {</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;   &quot;args&quot;: {}, </span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt;   &quot;headers&quot;: {</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt;     &quot;Accept&quot;: &quot;application/json, text/xml, application/xml, */*&quot;, </span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt;     &quot;Accept-Encoding&quot;: &quot;deflate, gzip&quot;, </span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt;     &quot;Host&quot;: &quot;httpbin.org&quot;, </span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt;     &quot;User-Agent&quot;: &quot;libcurl/7.64.1 r-curl/4.3 httr/1.4.2&quot;, </span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt;     &quot;X-Amzn-Trace-Id&quot;: &quot;Root=1-5f15a7db-639798b6a3984d2402ca7808&quot;</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt;   }, </span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt;   &quot;origin&quot;: &quot;73.115.118.38&quot;, </span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; ...</span></span></code></pre></div>
+<p>You can pull out important parts of the response with various helper methods, or dig directly into the object:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">status_code</span>(r)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] 200</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">headers</span>(r)</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; $date</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; [1] &quot;Mon, 20 Jul 2020 14:19:07 GMT&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; </span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; $`content-type`</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; [1] &quot;application/json&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; </span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; $`content-length`</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; [1] &quot;365&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; </span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt; $connection</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt; [1] &quot;keep-alive&quot;</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt; </span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt; $server</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt; [1] &quot;gunicorn/19.9.0&quot;</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt; </span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt; $`access-control-allow-origin`</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt; [1] &quot;*&quot;</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt; </span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt; $`access-control-allow-credentials`</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt; [1] &quot;true&quot;</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#&gt; </span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="co">#&gt; [1] &quot;insensitive&quot; &quot;list&quot;</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="kw">str</span>(<span class="kw">content</span>(r))</span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="co">#&gt; List of 4</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="co">#&gt;  $ args   : Named list()</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="co">#&gt;  $ headers:List of 5</span></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="co">#&gt;   ..$ Accept         : chr &quot;application/json, text/xml, application/xml, */*&quot;</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="co">#&gt;   ..$ Accept-Encoding: chr &quot;deflate, gzip&quot;</span></span>
+<span id="cb3-33"><a href="#cb3-33"></a><span class="co">#&gt;   ..$ Host           : chr &quot;httpbin.org&quot;</span></span>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="co">#&gt;   ..$ User-Agent     : chr &quot;libcurl/7.64.1 r-curl/4.3 httr/1.4.2&quot;</span></span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="co">#&gt;   ..$ X-Amzn-Trace-Id: chr &quot;Root=1-5f15a7db-639798b6a3984d2402ca7808&quot;</span></span>
+<span id="cb3-36"><a href="#cb3-36"></a><span class="co">#&gt;  $ origin : chr &quot;73.115.118.38&quot;</span></span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="co">#&gt;  $ url    : chr &quot;http://httpbin.org/get&quot;</span></span></code></pre></div>
+<p>I’ll use <code>httpbin.org</code> throughout this introduction. It accepts many types of http request and returns json that describes the data that it received. This makes it easy to see what httr is doing.</p>
+<p>As well as <code>GET()</code>, you can also use the <code>HEAD()</code>, <code>POST()</code>, <code>PATCH()</code>, <code>PUT()</code> and <code>DELETE()</code> verbs. You’re probably most familiar with <code>GET()</code> and <code>POST()</code>: <code>GET()</code> is used by your browser when requesting a page, and <code>POST()</code> is (usually) used when submitting a form to a server. <code>PUT()</code>, <code>PATCH()</code> and <code>DELETE()</code> are used most often by web APIs.</p>
+</div>
+<div id="the-response" class="section level2">
+<h2>The response</h2>
+<p>The data sent back from the server consists of three parts: the status line, the headers and the body. The most important part of the status line is the http status code: it tells you whether or not the request was successful. I’ll show you how to access that data, then how to access the body and headers.</p>
+<div id="the-status-code" class="section level3">
+<h3>The status code</h3>
+<p>The status code is a three digit number that summarises whether or not the request was successful (as defined by the server that you’re talking to). You can access the status code along with a descriptive message using <code>http_status()</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/get&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># Get an informative description:</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">http_status</span>(r)</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; $category</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; [1] &quot;Success&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; </span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; $reason</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; [1] &quot;OK&quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; </span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt; $message</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; [1] &quot;Success: (200) OK&quot;</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co"># Or just access the raw code:</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>r<span class="op">$</span>status_code</span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt; [1] 200</span></span></code></pre></div>
+<p>A successful request always returns a status of 200. Common errors are 404 (file not found) and 403 (permission denied). If you’re talking to web APIs you might also see 500, which is a generic failure code (and thus not very helpful). If you’d like to learn more, the most memorable guides are the <a href="https://www.flickr.com/photos/girliemac/sets/72157628409467125">http status cats</a>.</p>
+<p>You can automatically throw a warning or raise an error if a request did not succeed:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">warn_for_status</span>(r)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">stop_for_status</span>(r)</span></code></pre></div>
+<p>I highly recommend using one of these functions whenever you’re using httr inside a function (i.e. not interactively) to make sure you find out about errors as soon as possible.</p>
+</div>
+<div id="the-body" class="section level3">
+<h3>The body</h3>
+<p>There are three ways to access the body of the request, all using <code>content()</code>:</p>
+<ul>
+<li><p><code>content(r, &quot;text&quot;)</code> accesses the body as a character vector:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/get&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">content</span>(r, <span class="st">&quot;text&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; [1] &quot;{\n  \&quot;args\&quot;: {}, \n  \&quot;headers\&quot;: {\n    \&quot;Accept\&quot;: \&quot;application/json, text/xml, application/xml, */*\&quot;, \n    \&quot;Accept-Encoding\&quot;: \&quot;deflate, gzip\&quot;, \n    \&quot;Host\&quot;: \&quot;httpbin.org\&quot;, \n    \&quot;User-Agent\&quot;: \&quot;libcurl/7.64.1 r-curl/4.3 httr/1.4.2\&quot;, \n    \&quot;X-Amzn-Trace-Id\&quot;: \&quot;Root=1-5f15a7db-a7139ff0092b41f867c50042\&quot;\n  }, \n  \&quot;origin\&quot;: \&quot;73.115.118.38\&quot;, \n  \&quot;url\&quot;: \&quot;http://httpbin.org/get\&quot;\n}\n&quot;</span></span></code></pre></div>
+<p>httr will automatically decode content from the server using the encoding supplied in the <code>content-type</code> HTTP header. Unfortunately you can’t always trust what the server tells you, so you can override encoding if needed:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">content</span>(r, <span class="st">&quot;text&quot;</span>, <span class="dt">encoding =</span> <span class="st">&quot;ISO-8859-1&quot;</span>)</span></code></pre></div>
+<p>If you’re having problems figuring out what the correct encoding should be, try <code>stringi::stri_enc_detect(content(r, &quot;raw&quot;))</code>.</p></li>
+<li><p>For non-text requests, you can access the body of the request as a raw vector:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">content</span>(r, <span class="st">&quot;raw&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt;   [1] 7b 0a 20 20 22 61 72 67 73 22 3a 20 7b 7d 2c 20 0a 20 20 22 68 65 61 64 65</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt;  [26] 72 73 22 3a 20 7b 0a 20 20 20 20 22 41 63 63 65 70 74 22 3a 20 22 61 70 70</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt;  [51] 6c 69 63 61 74 69 6f 6e 2f 6a 73 6f 6e 2c 20 74 65 78 74 2f 78 6d 6c 2c 20</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt;  [76] 61 70 70 6c 69 63 61 74 69 6f 6e 2f 78 6d 6c 2c 20 2a 2f 2a 22 2c 20 0a 20</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; [101] 20 20 20 22 41 63 63 65 70 74 2d 45 6e 63 6f 64 69 6e 67 22 3a 20 22 64 65</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; [126] 66 6c 61 74 65 2c 20 67 7a 69 70 22 2c 20 0a 20 20 20 20 22 48 6f 73 74 22</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; [151] 3a 20 22 68 74 74 70 62 69 6e 2e 6f 72 67 22 2c 20 0a 20 20 20 20 22 55 73</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; [176] 65 72 2d 41 67 65 6e 74 22 3a 20 22 6c 69 62 63 75 72 6c 2f 37 2e 36 34 2e</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; [201] 31 20 72 2d 63 75 72 6c 2f 34 2e 33 20 68 74 74 72 2f 31 2e 34 2e 32 22 2c</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; [226] 20 0a 20 20 20 20 22 58 2d 41 6d 7a 6e 2d 54 72 61 63 65 2d 49 64 22 3a 20</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt; [251] 22 52 6f 6f 74 3d 31 2d 35 66 31 35 61 37 64 62 2d 61 37 31 33 39 66 66 30</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; [276] 30 39 32 62 34 31 66 38 36 37 63 35 30 30 34 32 22 0a 20 20 7d 2c 20 0a 20</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; [301] 20 22 6f 72 69 67 69 6e 22 3a 20 22 37 33 2e 31 31 35 2e 31 31 38 2e 33 38</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; [326] 22 2c 20 0a 20 20 22 75 72 6c 22 3a 20 22 68 74 74 70 3a 2f 2f 68 74 74 70</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; [351] 62 69 6e 2e 6f 72 67 2f 67 65 74 22 0a 7d 0a</span></span></code></pre></div>
+<p>This is exactly the sequence of bytes that the web server sent, so this is the highest fidelity way of saving files to disk:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>bin &lt;-<span class="st"> </span><span class="kw">content</span>(r, <span class="st">&quot;raw&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">writeBin</span>(bin, <span class="st">&quot;myfile.txt&quot;</span>)</span></code></pre></div></li>
+<li><p>httr provides a number of default parsers for common file types:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># JSON automatically parsed into named list</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">str</span>(<span class="kw">content</span>(r, <span class="st">&quot;parsed&quot;</span>))</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; List of 4</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt;  $ args   : Named list()</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;  $ headers:List of 5</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;   ..$ Accept         : chr &quot;application/json, text/xml, application/xml, */*&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt;   ..$ Accept-Encoding: chr &quot;deflate, gzip&quot;</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt;   ..$ Host           : chr &quot;httpbin.org&quot;</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;   ..$ User-Agent     : chr &quot;libcurl/7.64.1 r-curl/4.3 httr/1.4.2&quot;</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt;   ..$ X-Amzn-Trace-Id: chr &quot;Root=1-5f15a7db-a7139ff0092b41f867c50042&quot;</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt;  $ origin : chr &quot;73.115.118.38&quot;</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt;  $ url    : chr &quot;http://httpbin.org/get&quot;</span></span></code></pre></div>
+<p>See <code>?content</code> for a complete list.</p>
+<p>These are convenient for interactive usage, but if you’re writing an API wrapper, it’s best to parse the text or raw content yourself and check it is as you expect. See the API wrappers vignette for more details.</p></li>
+</ul>
+</div>
+<div id="the-headers" class="section level3">
+<h3>The headers</h3>
+<p>Access response headers with <code>headers()</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">headers</span>(r)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; $date</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt; [1] &quot;Mon, 20 Jul 2020 14:19:07 GMT&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; </span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt; $`content-type`</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; [1] &quot;application/json&quot;</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; </span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; $`content-length`</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; [1] &quot;365&quot;</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt; </span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; $connection</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; [1] &quot;keep-alive&quot;</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; </span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; $server</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; [1] &quot;gunicorn/19.9.0&quot;</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt; </span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt; $`access-control-allow-origin`</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt; [1] &quot;*&quot;</span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; </span></span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="co">#&gt; $`access-control-allow-credentials`</span></span>
+<span id="cb11-21"><a href="#cb11-21"></a><span class="co">#&gt; [1] &quot;true&quot;</span></span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="co">#&gt; </span></span>
+<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#&gt; [1] &quot;insensitive&quot; &quot;list&quot;</span></span></code></pre></div>
+<p>This is basically a named list, but because http headers are case insensitive, indexing this object ignores case:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">headers</span>(r)<span class="op">$</span>date</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; [1] &quot;Mon, 20 Jul 2020 14:19:07 GMT&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="kw">headers</span>(r)<span class="op">$</span>DATE</span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt; [1] &quot;Mon, 20 Jul 2020 14:19:07 GMT&quot;</span></span></code></pre></div>
+</div>
+<div id="cookies" class="section level3">
+<h3>Cookies</h3>
+<p>You can access cookies in a similar way:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/cookies/set&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">1</span>))</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="kw">cookies</span>(r)</span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt;        domain  flag path secure expiration name value</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt; 1 httpbin.org FALSE    /  FALSE       &lt;NA&gt;    a     1</span></span></code></pre></div>
+<p>Cookies are automatically persisted between requests to the same domain:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/cookies/set&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="dt">b =</span> <span class="dv">1</span>))</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="kw">cookies</span>(r)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt;        domain  flag path secure expiration name value</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; 1 httpbin.org FALSE    /  FALSE       &lt;NA&gt;    a     1</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; 2 httpbin.org FALSE    /  FALSE       &lt;NA&gt;    b     1</span></span></code></pre></div>
+</div>
+</div>
+<div id="the-request" class="section level2">
+<h2>The request</h2>
+<p>Like the response, the request consists of three pieces: a status line, headers and a body. The status line defines the http method (GET, POST, DELETE, etc) and the url. You can send additional data to the server in the url (with the query string), in the headers (including cookies) and in the body of <code>POST()</code>, <code>PUT()</code> and <code>PATCH()</code> requests.</p>
+<div id="the-url-query-string" class="section level3">
+<h3>The url query string</h3>
+<p>A common way of sending simple key-value pairs to the server is the query string: e.g. <code>http://httpbin.org/get?key=val</code>. httr allows you to provide these arguments as a named list with the <code>query</code> argument. For example, if you wanted to pass <code>key1=value1</code> and <code>key2=value2</code> to <code>http://httpbin.org/get</code> you could do:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/get&quot;</span>, </span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">query =</span> <span class="kw">list</span>(<span class="dt">key1 =</span> <span class="st">&quot;value1&quot;</span>, <span class="dt">key2 =</span> <span class="st">&quot;value2&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>)</span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="kw">content</span>(r)<span class="op">$</span>args</span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; $key1</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt; [1] &quot;value1&quot;</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; </span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt; $key2</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt; [1] &quot;value2&quot;</span></span></code></pre></div>
+<p>Any <code>NULL</code> elements are automatically dropped from the list, and both keys and values are escaped automatically.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/get&quot;</span>, </span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">query =</span> <span class="kw">list</span>(<span class="dt">key1 =</span> <span class="st">&quot;value 1&quot;</span>, <span class="st">&quot;key 2&quot;</span> =<span class="st"> &quot;value2&quot;</span>, <span class="dt">key2 =</span> <span class="ot">NULL</span>))</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="kw">content</span>(r)<span class="op">$</span>args</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="co">#&gt; $`key 2`</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="co">#&gt; [1] &quot;value2&quot;</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co">#&gt; </span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt; $key1</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="co">#&gt; [1] &quot;value 1&quot;</span></span></code></pre></div>
+</div>
+<div id="custom-headers" class="section level3">
+<h3>Custom headers</h3>
+<p>You can add custom headers to a request with <code>add_headers()</code>:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/get&quot;</span>, <span class="kw">add_headers</span>(<span class="dt">Name =</span> <span class="st">&quot;Hadley&quot;</span>))</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">str</span>(<span class="kw">content</span>(r)<span class="op">$</span>headers)</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; List of 7</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="co">#&gt;  $ Accept         : chr &quot;application/json, text/xml, application/xml, */*&quot;</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="co">#&gt;  $ Accept-Encoding: chr &quot;deflate, gzip&quot;</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="co">#&gt;  $ Cookie         : chr &quot;b=1; a=1&quot;</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="co">#&gt;  $ Host           : chr &quot;httpbin.org&quot;</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co">#&gt;  $ Name           : chr &quot;Hadley&quot;</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="co">#&gt;  $ User-Agent     : chr &quot;libcurl/7.64.1 r-curl/4.3 httr/1.4.2&quot;</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="co">#&gt;  $ X-Amzn-Trace-Id: chr &quot;Root=1-5f15a7db-9cc30cee85eb44aa2325b738&quot;</span></span></code></pre></div>
+<p>(Note that <code>content(r)$header</code> retrieves the headers that httpbin received. <code>headers(r)</code> gives the headers that it sent back in its response.)</p>
+</div>
+</div>
+<div id="cookies-1" class="section level2">
+<h2>Cookies</h2>
+<p>Cookies are simple key-value pairs like the query string, but they persist across multiple requests in a session (because they’re sent back and forth every time). To send your own cookies to the server, use <code>set_cookies()</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>r &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">&quot;http://httpbin.org/cookies&quot;</span>, <span class="kw">set_cookies</span>(<span class="st">&quot;MeWant&quot;</span> =<span class="st"> &quot;cookies&quot;</span>))</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">content</span>(r)<span class="op">$</span>cookies</span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt; $MeWant</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt; [1] &quot;cookies&quot;</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt; </span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt; $a</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt; [1] &quot;1&quot;</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt; </span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt; $b</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt; [1] &quot;1&quot;</span></span></code></pre></div>
+<p>Note that this response includes the <code>a</code> and <code>b</code> cookies that were added by the server earlier.</p>
+<div id="request-body" class="section level3">
+<h3>Request body</h3>
+<p>When <code>POST()</code>ing, you can include data in the <code>body</code> of the request. httr allows you to supply this in a number of different ways. The most common way is a named list:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>r &lt;-<span class="st"> </span><span class="kw">POST</span>(<span class="st">&quot;http://httpbin.org/post&quot;</span>, <span class="dt">body =</span> <span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">2</span>, <span class="dt">c =</span> <span class="dv">3</span>))</span></code></pre></div>
+<p>You can use the <code>encode</code> argument to determine how this data is sent to the server:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>url &lt;-<span class="st"> &quot;http://httpbin.org/post&quot;</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>body &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">1</span>, <span class="dt">b =</span> <span class="dv">2</span>, <span class="dt">c =</span> <span class="dv">3</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co"># Form encoded</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a>r &lt;-<span class="st"> </span><span class="kw">POST</span>(url, <span class="dt">body =</span> body, <span class="dt">encode =</span> <span class="st">&quot;form&quot;</span>)</span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="co"># Multipart encoded</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a>r &lt;-<span class="st"> </span><span class="kw">POST</span>(url, <span class="dt">body =</span> body, <span class="dt">encode =</span> <span class="st">&quot;multipart&quot;</span>)</span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co"># JSON encoded</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a>r &lt;-<span class="st"> </span><span class="kw">POST</span>(url, <span class="dt">body =</span> body, <span class="dt">encode =</span> <span class="st">&quot;json&quot;</span>)</span></code></pre></div>
+<p>To see exactly what’s being sent to the server, use <code>verbose()</code>. Unfortunately due to the way that <code>verbose()</code> works, knitr can’t capture the messages, so you’ll need to run these from an interactive console to see what’s going on.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">POST</span>(url, <span class="dt">body =</span> body, <span class="dt">encode =</span> <span class="st">&quot;multipart&quot;</span>, <span class="kw">verbose</span>()) <span class="co"># the default</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="kw">POST</span>(url, <span class="dt">body =</span> body, <span class="dt">encode =</span> <span class="st">&quot;form&quot;</span>, <span class="kw">verbose</span>())</span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="kw">POST</span>(url, <span class="dt">body =</span> body, <span class="dt">encode =</span> <span class="st">&quot;json&quot;</span>, <span class="kw">verbose</span>())</span></code></pre></div>
+<p><code>PUT()</code> and <code>PATCH()</code> can also have request bodies, and they take arguments identically to <code>POST()</code>.</p>
+<p>You can also send files off disk:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">POST</span>(url, <span class="dt">body =</span> <span class="kw">upload_file</span>(<span class="st">&quot;mypath.txt&quot;</span>))</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="kw">POST</span>(url, <span class="dt">body =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">upload_file</span>(<span class="st">&quot;mypath.txt&quot;</span>)))</span></code></pre></div>
+<p>(<code>upload_file()</code> will guess the mime-type from the extension - using the <code>type</code> argument to override/supply yourself.)</p>
+<p>These uploads stream the data to the server: the data will be loaded in R in chunks then sent to the remote server. This means that you can upload files that are larger than memory.</p>
+<p>See <code>POST()</code> for more details on the other types of thing that you can send: no body, empty body, and character and raw vectors.</p>
+<div id="built-with" class="section level5">
+<h5>Built with</h5>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">sessionInfo</span>()</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#&gt; R version 3.6.3 (2020-02-29)</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co">#&gt; Running under: macOS Catalina 10.15.5</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="co">#&gt; </span></span>
+<span id="cb23-6"><a href="#cb23-6"></a><span class="co">#&gt; Matrix products: default</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span></span>
+<span id="cb23-9"><a href="#cb23-9"></a><span class="co">#&gt; </span></span>
+<span id="cb23-10"><a href="#cb23-10"></a><span class="co">#&gt; locale:</span></span>
+<span id="cb23-11"><a href="#cb23-11"></a><span class="co">#&gt; [1] C/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span id="cb23-12"><a href="#cb23-12"></a><span class="co">#&gt; </span></span>
+<span id="cb23-13"><a href="#cb23-13"></a><span class="co">#&gt; attached base packages:</span></span>
+<span id="cb23-14"><a href="#cb23-14"></a><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span id="cb23-15"><a href="#cb23-15"></a><span class="co">#&gt; </span></span>
+<span id="cb23-16"><a href="#cb23-16"></a><span class="co">#&gt; other attached packages:</span></span>
+<span id="cb23-17"><a href="#cb23-17"></a><span class="co">#&gt; [1] httr_1.4.2</span></span>
+<span id="cb23-18"><a href="#cb23-18"></a><span class="co">#&gt; </span></span>
+<span id="cb23-19"><a href="#cb23-19"></a><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span id="cb23-20"><a href="#cb23-20"></a><span class="co">#&gt;  [1] compiler_3.6.3       R6_2.4.1             magrittr_1.5        </span></span>
+<span id="cb23-21"><a href="#cb23-21"></a><span class="co">#&gt;  [4] htmltools_0.4.0.9003 tools_3.6.3          curl_4.3            </span></span>
+<span id="cb23-22"><a href="#cb23-22"></a><span class="co">#&gt;  [7] yaml_2.2.1           stringi_1.4.6        rmarkdown_2.3.1     </span></span>
+<span id="cb23-23"><a href="#cb23-23"></a><span class="co">#&gt; [10] knitr_1.28           jsonlite_1.6.1       stringr_1.4.0       </span></span>
+<span id="cb23-24"><a href="#cb23-24"></a><span class="co">#&gt; [13] digest_0.6.25        xfun_0.13            rlang_0.4.7         </span></span>
+<span id="cb23-25"><a href="#cb23-25"></a><span class="co">#&gt; [16] evaluate_0.14</span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

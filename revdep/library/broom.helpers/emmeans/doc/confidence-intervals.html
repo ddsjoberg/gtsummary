@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="emmeans package, Version 1.5.3" />
+
+
+<title>Confidence intervals and tests in emmeans</title>
+
+
+
+
+
+
+<style type="text/css">body {font-size: 11pt; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;margin: 30px 50px 30px 50px; }h1,h2,h3,h4,h5,h6 { font-family: Arial,Helvetica,Sans-serif; }a { text-decoration: none; }a:link { color:darkblue; } a:visited { color:darkblue; } a:hover { color:dodgerblue; }a:active { color:dodgerblue; } code {color: #602000;font-family: "Lucida Console", Monaco, monospace; font-size: 90%;}.r { color: darkred; }.ro { color: darkgreen; background-color: #eeeeee; }.re { color: red;}.r code, a code, .ro code, .re code { color: inherit; }.vigindex ul { list-style-type: none; }.vigindex ul li { list-style: none; }.vigindex a code { color: inherit; }.vigindex li code { color: inherit; }</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Confidence intervals and tests in emmeans</h1>
+<h4 class="author">emmeans package, Version 1.5.3</h4>
+
+
+
+<!-- @index Vignettes!Confidence intervals and tests -->
+<div id="contents" class="section level2">
+<h2>Contents</h2>
+<p>This vignette describes various ways of summarizing <code>emmGrid</code> objects.</p>
+<ol style="list-style-type: decimal">
+<li><a href="#summary"><code>summary()</code>, <code>confint()</code>, and <code>test()</code></a></li>
+<li><a href="#tran">Back-transforming to response scale</a> (See also the <a href="transformations.html">“transformations” vignette</a>)</li>
+<li><a href="#adjust">Multiplicity adjustments</a></li>
+<li><a href="#byvars">Using “by” variables</a></li>
+<li><a href="#joint">Joint (omnibus) tests</a></li>
+<li><a href="#equiv">Testing equivalence, noninferiority, nonsuperiority</a></li>
+<li>Graphics (in <a href="basics.html#plots">“basics” vignette</a>)</li>
+</ol>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+<div id="summary" class="section level2">
+<h2><code>summary()</code>, <code>confint()</code>, and <code>test()</code></h2>
+<!-- @index `summary()`; `summary()`!`infer`; `confint()`; `test()`; 
+    Confidence intervals; `summary()`!Calculated columns; 
+    `summary()`!Show sample size; Sample size, displaying;
+            Tests!One- and two-sided; Tests!Nonzero null;
+            `summary()`!Bayesian models; `summary()`!`hpd.summary()`;
+            Examples!`pigs` -->
+<p>The most important method for <code>emmGrid</code> objects is <code>summary()</code>. For one thing, it is called by default when you display an <code>emmeans()</code> result. The <code>summary()</code> function has a lot of options, and the detailed documentation via <code>help(&quot;summary.emmGrid&quot;)</code> is worth a look.</p>
+<p>For ongoing illustrations, let’s re-create some of the objects in the <a href="basics.html">“basics” vignette</a> for the <code>pigs</code> example:</p>
+<pre class="r"><code>pigs.lm1 &lt;- lm(log(conc) ~ source + factor(percent), data = pigs)
+pigs.rg &lt;- ref_grid(pigs.lm1)
+pigs.emm.s &lt;- emmeans(pigs.rg, &quot;source&quot;)</code></pre>
+<p>Just <code>summary(&lt;object&gt;)</code> by itself will produce a summary that varies somewhat according to context. It does this by setting different defaults for the <code>infer</code> argument, which consists of two logical values, specifying confidence intervals and tests, respectively. [The exception is models fitted using MCMC methods, where <code>summary()</code> is diverted to the <code>hpd.summary()</code> function, a preferable summary for many Bayesians.]</p>
+<p>The summary of a newly made reference grid will show just estimates and standard errors, but not confidence intervals or tests (that is, <code>infer = c(FALSE, FALSE)</code>). The summary of an <code>emmeans()</code> result, as we see above, will have intervals, but no tests (i.e., <code>infer = c(TRUE, FALSE)</code>); and the result of a <code>contrast()</code> call (see <a href="comparisons.html">comparisons and contrasts</a>) will show test statistics and <em>P</em> values, but not intervals (i.e., <code>infer = c(FALSE, TRUE)</code>). There are courtesy methods <code>confint()</code> and <code>test()</code> that just call <code>summary()</code> with the appropriate <code>infer</code> setting; for example,</p>
+<pre class="r"><code>test(pigs.emm.s)</code></pre>
+<pre class="ro"><code>##  source emmean     SE df t.ratio p.value
+##  fish     3.39 0.0367 23 92.540  &lt;.0001 
+##  soy      3.67 0.0374 23 97.929  &lt;.0001 
+##  skim     3.80 0.0394 23 96.407  &lt;.0001 
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale.</code></pre>
+<p>It is not particularly useful, though, to test these EMMs against the default of zero – which is why tests are not usually shown. It makes a lot more sense to test them against some target concentration, say 40. And suppose we want to do a one-sided test to see if the concentration is greater than 40. Remembering that the response is log-transformed in this model,</p>
+<pre class="r"><code>test(pigs.emm.s, null = log(40), side = &quot;&gt;&quot;)</code></pre>
+<pre class="ro"><code>##  source emmean     SE df null t.ratio p.value
+##  fish     3.39 0.0367 23 3.69 -8.026  1.0000 
+##  soy      3.67 0.0374 23 3.69 -0.577  0.7153 
+##  skim     3.80 0.0394 23 3.69  2.740  0.0058 
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## P values are right-tailed</code></pre>
+<p>It is also possible to add calculated columns to the summary, via the <code>calc</code> argument. The calculations can include any columns up through <code>df</code> in the summary, as well as any variable in the object’s <code>grid</code> slot. Among the latter are usually weights in a column named <code>.wgt.</code>, and we can use that to include sample size in the summary:</p>
+<pre class="r"><code>confint(pigs.emm.s, calc = c(n = ~.wgt.))</code></pre>
+<pre class="ro"><code>##  source emmean     SE df  n lower.CL upper.CL
+##  fish     3.39 0.0367 23 10     3.32     3.47
+##  soy      3.67 0.0374 23 10     3.59     3.74
+##  skim     3.80 0.0394 23  9     3.72     3.88
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="tran" class="section level2">
+<h2>Back-transforming</h2>
+<!-- @index Transformations!Back-transforming; `type`; Response scale -->
+<p>Transformations and link functions are supported an several ways in <strong>emmeans</strong>, making this a complex topic worthy of <a href="transformations.html">its own vignette</a>. Here, we show just the most basic approach. Namely, specifying the argument <code>type = &quot;response&quot;</code> will cause the displayed results to be back-transformed to the response scale, when a transformation or link function is incorporated in the model. For example, let’s try the preceding <code>test()</code> call again:</p>
+<pre class="r"><code>test(pigs.emm.s, null = log(40), side = &quot;&gt;&quot;, type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  source response   SE df null t.ratio p.value
+##  fish       29.8 1.09 23   40 -8.026  1.0000 
+##  soy        39.1 1.47 23   40 -0.577  0.7153 
+##  skim       44.6 1.75 23   40  2.740  0.0058 
+## 
+## Results are averaged over the levels of: percent 
+## P values are right-tailed 
+## Tests are performed on the log scale</code></pre>
+<p>Note what changes and what doesn’t change. In the <code>test()</code> call, we <em>still</em> use the log of 40 as the null value; <code>null</code> must always be specified on the linear-prediction scale, in this case the log. In the output, the displayed estimates, as well as the <code>null</code> value, are shown back-transformed. As well, the standard errors are altered (using the delta method). However, the <em>t</em> ratios and <em>P</em> values are identical to the preceding results. That is, the tests themselves are still conducted on the linear-predictor scale (as is noted in the output).</p>
+<p>Similar statements apply to confidence intervals on the response scale:</p>
+<pre class="r"><code>confint(pigs.emm.s, side = &quot;&gt;&quot;, level = .90, type = &quot;response&quot;)</code></pre>
+<pre class="ro"><code>##  source response   SE df lower.CL upper.CL
+##  fish       29.8 1.09 23     28.4      Inf
+##  soy        39.1 1.47 23     37.3      Inf
+##  skim       44.6 1.75 23     42.3      Inf
+## 
+## Results are averaged over the levels of: percent 
+## Confidence level used: 0.9 
+## Intervals are back-transformed from the log scale</code></pre>
+<p>With <code>side = &quot;&gt;&quot;</code>, a <em>lower</em> confidence limit is computed on the log scale, then that limit is back-transformed to the response scale. (We have also illustrated how to change the confidence level.)</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="adjust" class="section level2">
+<h2>Multiplicity adjustments</h2>
+<!-- @index Multiplicity adjustments; `adjust`; 
+     Tukey adjustment; Sidak adjustment -->
+<p>Both tests and confidence intervals may be adjusted for simultaneous inference. Such adjustments ensure that the confidence coefficient for a whole set of intervals is at least the specified level, or to control for multiplicity in a whole family of tests. This is done via the <code>adjust</code> argument. For <code>ref_grid()</code> and <code>emmeans()</code> results, the default is <code>adjust = &quot;none&quot;</code>. For most <code>contrast()</code> results, <code>adjust</code> is often something else, depending on what type of contrasts are created. For example, pairwise comparisons default to <code>adjust = &quot;tukey&quot;</code>, i.e., the Tukey HSD method. The <code>summary()</code> function sometimes <em>changes</em> <code>adjust</code> if it is inappropriate. For example, with</p>
+<pre class="r"><code>confint(pigs.emm.s, adjust = &quot;tukey&quot;)</code></pre>
+<pre><code>## Note: adjust = &quot;tukey&quot; was changed to &quot;sidak&quot;
+## because &quot;tukey&quot; is only appropriate for one set of pairwise comparisons</code></pre>
+<pre class="ro"><code>##  source emmean     SE df lower.CL upper.CL
+##  fish     3.39 0.0367 23     3.30     3.49
+##  soy      3.67 0.0374 23     3.57     3.76
+##  skim     3.80 0.0394 23     3.70     3.90
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95 
+## Conf-level adjustment: sidak method for 3 estimates</code></pre>
+<p>the adjustment is changed to the Sidak method because the Tukey adjustment is inappropriate unless you are doing pairwise comparisons.</p>
+<div id="adjmore" class="section level7">
+<p class="heading"></p>
+<!-- @index **mvtnorm** package; Bonferroni adjustment
+     Multivariate *t* (`"mvt"`) adjustment; Unadjusted tests -->
+<p>An adjustment method that is usually appropriate is Bonferroni; however, it can be quite conservative. Using <code>adjust = &quot;mvt&quot;</code> is the closest to being the “exact” all-around method “single-step” method, as it uses the multivariate <em>t</em> distribution (and the <strong>mvtnorm</strong> package) with the same covariance structure as the estimates to determine the adjustment. However, this comes at high computational expense as the computations are done using simulation techniques. For a large set of tests (and especially confidence intervals), the computational lag becomes noticeable if not intolerable.</p>
+<p>For tests, <code>adjust</code> increases the <em>P</em> values over those otherwise obtained with <code>adjust = &quot;none&quot;</code>. Compare the following adjusted tests with the unadjusted ones previously computed.</p>
+<pre class="r"><code>test(pigs.emm.s, null = log(40), side = &quot;&gt;&quot;, adjust = &quot;bonferroni&quot;)</code></pre>
+<pre class="ro"><code>##  source emmean     SE df null t.ratio p.value
+##  fish     3.39 0.0367 23 3.69 -8.026  1.0000 
+##  soy      3.67 0.0374 23 3.69 -0.577  1.0000 
+##  skim     3.80 0.0394 23 3.69  2.740  0.0175 
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## P value adjustment: bonferroni method for 3 tests 
+## P values are right-tailed</code></pre>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="byvars" class="section level2">
+<h2>“By” variables</h2>
+<!-- @index `by` groups; Grouping into separate sets -->
+<p>Sometimes you want to break a summary down into smaller pieces; for this purpose, the <code>by</code> argument in <code>summary()</code> is useful. For example,</p>
+<pre class="r"><code>confint(pigs.rg, by = &quot;source&quot;)</code></pre>
+<pre class="ro"><code>## source = fish:
+##  percent prediction     SE df lower.CL upper.CL
+##        9       3.22 0.0536 23     3.11     3.33
+##       12       3.40 0.0493 23     3.30     3.50
+##       15       3.44 0.0548 23     3.32     3.55
+##       18       3.52 0.0547 23     3.41     3.63
+## 
+## source = soy:
+##  percent prediction     SE df lower.CL upper.CL
+##        9       3.49 0.0498 23     3.39     3.60
+##       12       3.67 0.0489 23     3.57     3.77
+##       15       3.71 0.0507 23     3.61     3.82
+##       18       3.79 0.0640 23     3.66     3.93
+## 
+## source = skim:
+##  percent prediction     SE df lower.CL upper.CL
+##        9       3.62 0.0501 23     3.52     3.73
+##       12       3.80 0.0494 23     3.70     3.90
+##       15       3.84 0.0549 23     3.73     3.95
+##       18       3.92 0.0646 23     3.79     4.06
+## 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95</code></pre>
+<p>If there is also an <code>adjust</code> in force when <code>by</code> variables are used, the adjustment is made <em>separately</em> on each <code>by</code> group; e.g., in the above, we would be adjusting for sets of 4 intervals, not all 12 together.</p>
+<p>There can be a <code>by</code> specification in <code>emmeans()</code> (or equivalently, a <code>|</code> in the formula); and if so, it is passed on to <code>summary()</code> and used unless overridden by another <code>by</code>. Here are examples, not run:</p>
+<pre class="r"><code>emmeans(pigs.lm, ~ percent | source)     ### same results as above
+summary(.Last.value, by = percent)       ### grouped the other way</code></pre>
+<p>Specifying <code>by = NULL</code> will remove all grouping.</p>
+<div id="simple" class="section level3">
+<h3>Simple comparisons</h3>
+<!-- @index Simple comparisons; `contrast()`!`simple`; `simple = "each"` -->
+<p>There is also a <code>simple</code> argument for <code>contrast()</code> that is in essence the inverse of <code>by</code>; the contrasts are run using everything <em>except</em> the specified variables as <code>by</code> variables. To illustrate, let’s consider the model for <code>pigs</code> that includes the interaction (so that the levels of one factor compare differently at levels of the other factor).</p>
+<pre class="r"><code>pigsint.lm &lt;- lm(log(conc) ~ source * factor(percent), data = pigs)
+pigsint.rg &lt;- ref_grid(pigsint.lm)
+contrast(pigsint.rg, &quot;consec&quot;, simple = &quot;percent&quot;)</code></pre>
+<pre class="ro"><code>## source = fish:
+##  contrast estimate     SE df t.ratio p.value
+##  12 - 9     0.1849 0.1061 17  1.742  0.2356 
+##  15 - 12    0.0045 0.1061 17  0.042  0.9999 
+##  18 - 15    0.0407 0.1061 17  0.383  0.9625 
+## 
+## source = soy:
+##  contrast estimate     SE df t.ratio p.value
+##  12 - 9     0.1412 0.0949 17  1.487  0.3592 
+##  15 - 12   -0.0102 0.0949 17 -0.108  0.9992 
+##  18 - 15    0.0895 0.1342 17  0.666  0.8571 
+## 
+## source = skim:
+##  contrast estimate     SE df t.ratio p.value
+##  12 - 9     0.2043 0.0949 17  2.152  0.1182 
+##  15 - 12    0.1398 0.1061 17  1.317  0.4520 
+##  18 - 15    0.1864 0.1424 17  1.309  0.4569 
+## 
+## Results are given on the log (not the response) scale. 
+## P value adjustment: mvt method for 3 tests</code></pre>
+<p>In fact, we may do <em>all</em> one-factor comparisons by specifying <code>simple = &quot;each&quot;</code>. This typically produces a lot of output, so use it with care.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="joint" class="section level2">
+<h2>Joint tests</h2>
+<!-- @index `test()`!`joint = TRUE`; `joint`; Type III tests -->
+<p>From the above, we already know how to test individual results. For pairwise comparisons (details in <a href="comparisons.html">the “comparisons” vignette</a>), we might do</p>
+<pre class="r"><code>pigs.prs.s &lt;- pairs(pigs.emm.s)
+pigs.prs.s</code></pre>
+<pre class="ro"><code>##  contrast    estimate     SE df t.ratio p.value
+##  fish - soy    -0.273 0.0529 23 -5.153  0.0001 
+##  fish - skim   -0.402 0.0542 23 -7.428  &lt;.0001 
+##  soy - skim    -0.130 0.0530 23 -2.442  0.0570 
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<p>But suppose we want an <em>omnibus</em> test that all these comparisons are zero. Easy enough, using the <code>joint</code> argument in <code>test</code> (note: the <code>joint</code> argument is <em>not</em> available in <code>summary()</code>; only in <code>test()</code>):</p>
+<pre class="r"><code>test(pigs.prs.s, joint = TRUE)</code></pre>
+<pre class="ro"><code>##  df1 df2 F.ratio p.value note
+##    2  23  28.849 &lt;.0001   d  
+## 
+## d: df1 reduced due to linear dependence</code></pre>
+<p>Notice that there are three comparisons, but only 2 d.f. for the test, as cautioned in the message.</p>
+<p>The test produced with <code>joint = TRUE</code> is a “type III” test (assuming the default equal weights are used to obtain the EMMs). See more on these types of tests for higher-order effects in the <a href="interactions.html#contrasts">“interactions” vignette section on contrasts</a>.</p>
+<div id="joint_tests" class="section level7">
+<p class="heading"></p>
+<!-- @index `joint_tests()`; Type III tests; Analysis of variance!Type III -->
+<p>For convenience, there is also a <code>joint_tests()</code> function that performs joint tests of contrasts among each term in a model or <code>emmGrid</code> object.</p>
+<pre class="r"><code>joint_tests(pigsint.rg)</code></pre>
+<pre class="ro"><code>##  model term     df1 df2 F.ratio p.value
+##  source           2  17  30.256 &lt;.0001 
+##  percent          3  17   8.214 0.0013 
+##  source:percent   6  17   0.926 0.5011</code></pre>
+<p>The tests of main effects are of families of contrasts; those for interaction effects are for interaction contrasts. These results are essentially the same as a “Type-III ANOVA”, but may differ in situations where there are empty cells or other non-estimability issues, or if generalizations are present such as unequal weighting. (Another distinction is that sums of squares and mean squares are not shown; that is because these really are tests of contrasts among predictions, and they may or may not correspond to model sums of squares.)</p>
+<p>One may use <code>by</code> variables with <code>joint_tests</code>. For example:</p>
+<pre class="r"><code>joint_tests(pigsint.rg, by = &quot;source&quot;)</code></pre>
+<pre class="ro"><code>## source = fish:
+##  model term df1 df2 F.ratio p.value
+##  percent      3  17   1.712 0.2023 
+## 
+## source = soy:
+##  model term df1 df2 F.ratio p.value
+##  percent      3  17   1.290 0.3097 
+## 
+## source = skim:
+##  model term df1 df2 F.ratio p.value
+##  percent      3  17   6.676 0.0035</code></pre>
+<p>In some models, it is possible to specify <code>submodel = &quot;type2&quot;</code>, thereby obtaining something akin to a Type II analysis of variance. See the <a href="messy-data.html#type2submodel">messy-data vignette</a> for an example.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="equiv" class="section level2">
+<h2>Testing equivalence, noninferiority, and nonsuperiority</h2>
+<!-- @index Tests!Equivalence; Tests!Noninferiority; `test()`!`delta` -->
+<p>The <code>delta</code> argument in <code>summary()</code> or <code>test()</code> allows the user to specify a threshold value to use in a test of equivalence, noninferiority, or nonsuperiority. An equivalence test is kind of a backwards significance test, where small <em>P</em> values are associated with small differences relative to a specified threshold value <code>delta</code>. The help page for <code>summary.emmGrid</code> gives the details of these tests. Suppose in the present example, we consider two sources to be equivalent if they are within 25% of each other. We can test this as follows:</p>
+<pre class="r"><code>test(pigs.prs.s, delta = log(1.25), adjust = &quot;none&quot;)</code></pre>
+<pre class="ro"><code>##  contrast    estimate     SE df t.ratio p.value
+##  fish - soy    -0.273 0.0529 23  0.937  0.8209 
+##  fish - skim   -0.402 0.0542 23  3.308  0.9985 
+##  soy - skim    -0.130 0.0530 23 -1.765  0.0454 
+## 
+## Results are averaged over the levels of: percent 
+## Results are given on the log (not the response) scale. 
+## Statistics are tests of equivalence with a threshold of 0.22314 
+## P values are left-tailed</code></pre>
+<p>By our 25% standard, the <em>P</em> value is quite small for comparing soy and skim, providing statistical evidence that their difference is enough smaller than the threshold to consider them equivalent.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="graphics" class="section level2">
+<h2>Graphics</h2>
+<p>Graphical displays of <code>emmGrid</code> objects are described in the <a href="basics.html#plots">“basics” vignette</a></p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

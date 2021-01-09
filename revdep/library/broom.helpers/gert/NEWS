@@ -1,0 +1,31 @@
+1.0.2
+  - git_branch_list() gains a parameter 'local'
+  - Windows / MacOS: update to libgit2 1.1.0
+  - Do not use bash in configure
+
+1.0.1
+  - git_branch_list() and git_commit_info() gain a date field
+  - Bug fixes
+
+1.0
+  - Lots of new functions
+  - Windows and MacOS now ship with libgit2-1.0.0
+  - Do not advertise HTTPS support in startup message because it should
+    always be supported.
+  - Config setters return previous value invisibly (#37)
+  - Conflicted files are reported by git_status() (#40)
+  - Windows: libgit2 now finds ~/.gitconfig under $USERPROFILE (instead of Documents)
+  - A git_signature object is now stored as a string instead of an externalptr
+  - The 'name' parameter in git_remote_ functions has been renamed to 'remote'
+
+0.3
+  - Support for clone --mirror and push --mirror (#12)
+
+0.2
+  - git_open() now searches parent directories for .git repository
+  - git_push() sets upstream if unset
+  - workaround for ASAN problem in libssh2
+  - lots of tweaks and bug fixes
+
+0.1
+  - Initial CRAN release.

@@ -7,13 +7,14 @@
 #' @importFrom tidyr nest unnest complete spread
 #' @importFrom tibble tibble as_tibble
 #' @importFrom rlang .data .env %||% set_names sym syms parse_expr expr exprs
-#' call2 := inform abort is_function is_string enexpr
+#' call2 := inform abort is_function is_string enexpr inject
 #' @importFrom glue glue as_glue glue_collapse
 #' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
 #' str_split str_detect str_remove str_replace_all str_wrap str_sub str_locate
 #' @importFrom usethis ui_info ui_oops ui_code ui_code_block ui_value ui_field ui_done
 #' @importFrom broom.helpers .formula_list_to_named_list .select_to_varnames
 #' .generic_selector
+#' @importFrom gt md html
 #' @keywords internal
 "_PACKAGE"
 

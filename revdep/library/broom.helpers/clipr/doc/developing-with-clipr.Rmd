@@ -1,0 +1,53 @@
+---
+title: "Developing with clipr"
+author: "Matthew Lincoln"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Developing with clipr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Calling clipr safely
+
+To check whether the system has been properly configured to allow access to the clipboard, you may run `clipr_available()` which will either return `TRUE` or `FALSE`.
+This will be particularly useful for Linux-based systems, where clipr's functionality depends on the installation of additional software.
+If you wish to display system requirements and configuration messages to X11 users, `dr_clipr()` will print these.
+
+## Interactive & non-interactive use
+
+If you use clipr in your own package, **you must not try to call it in non-interactive sessions**, as this goes against [CRAN repository policy](https://cran.r-project.org/web/packages/policies.html):
+
+> Packages should not write in the user’s home filespace (including clipboards), nor anywhere else on the file system apart from the R session’s temporary directory (or during installation in the location pointed to by TMPDIR: and such usage should be cleaned up). Installing into the system’s R installation (e.g., scripts to its bin directory) is not allowed.
+> 
+> Limited exceptions may be allowed in interactive sessions if the package obtains confirmation from the user.
+
+For this reason, `write_clip()` will error by default in non-interactive use, which includes CRAN tests.
+
+If you want to use `write_clip()` non-interactively, you may either set the environment variable `CLIPR_ALLOW=TRUE` or call `write_clip(..., allow_non_interactive = TRUE)`.
+
+## Testing on CRAN and CI
+
+A few best practices will also help you responsibly test your clipr-using package on headless systems like CRAN or other testing infrastructure like Travis:
+
+1. Examples that will try to use `read_clip()` or `write_clip()` ought to be wrapped in `\dontrun{}`
+2. Tests calling clipr should be conditionally skipped, based on the output of `clipr_available()`. This is necessary to pass CRAN checks, as otherwise `write_clip` will error out.
+3. If you are using [Travis.ci](https://travis-ci.org/) to check your package build on Linux, consult the [`.travis.yml`](https://github.com/mdlincoln/clipr/blob/master/.travis.yml) for this package, which includes code for setting the `DISPLAY` and `CLIPR_ALLOW` environment variables, installing `xclip` and `xsel`, and running a pre-build script that will set up `xclip`/`xsel` to run headlessly.
+
+## Using clipr with Shiny
+
+clipr won't do what you expect when you call it with Shiny.
+
+clipr talks to the clipboard of the _system that is running R_.
+If you create a Shiny app and tell one of its functions to either read from or write to the clipboard, it can only access the clipboard of the server it is running on.
+R running on the _remote_ server has no way to access the _local_ clipboard belonging to your end user.
+
+However, you can instruct the user's _internet browser_ to write to the user's clipboard by using [rclipboard](https://cran.r-project.org/package=rclipboard).

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="emmeans package, Version 1.5.3" />
+
+
+<title>FAQs for emmeans</title>
+
+
+
+
+
+
+<style type="text/css">body {font-size: 11pt; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;margin: 30px 50px 30px 50px; }h1,h2,h3,h4,h5,h6 { font-family: Arial,Helvetica,Sans-serif; }a { text-decoration: none; }a:link { color:darkblue; } a:visited { color:darkblue; } a:hover { color:dodgerblue; }a:active { color:dodgerblue; } code {color: #602000;font-family: "Lucida Console", Monaco, monospace; font-size: 90%;}.r { color: darkred; }.ro { color: darkgreen; background-color: #eeeeee; }.re { color: red;}.r code, a code, .ro code, .re code { color: inherit; }.vigindex ul { list-style-type: none; }.vigindex ul li { list-style: none; }.vigindex a code { color: inherit; }.vigindex li code { color: inherit; }</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">FAQs for emmeans</h1>
+<h4 class="author">emmeans package, Version 1.5.3</h4>
+
+
+
+<!-- @index Vignettes!FAQS; Frequently asked questions -->
+<p>This vignette contains answers to questions received from users or posted on discussion boards like <a href="https://stats.stackexchange.com">Cross Validated</a> and <a href="https://stackoverflow.com/">Stack Overflow</a></p>
+<div id="contents" class="section level2">
+<h2>Contents</h2>
+<ol style="list-style-type: decimal">
+<li><a href="#what">What are EMMs/lsmeans?</a></li>
+<li><a href="#fastest">What is the fastest way to obtain EMMs and pairwise comparisons?</a></li>
+<li><a href="#qdrg">The model I fitted is not supported by <strong>emmeans</strong></a></li>
+<li><a href="#interactions">I have three (or two or four) factors that interact</a></li>
+<li><a href="#trends">I have covariate(s) that interact(s) with factor(s)</a></li>
+<li><a href="#polys">I have covariate(s) and am fitting a polynomial model</a></li>
+<li><a href="#CIerror">Some “significant” comparisons have overlapping confidence intervals</a></li>
+<li><a href="#notfactor">All my pairwise comparisons have the same <em>P</em> value</a></li>
+<li><a href="#numeric">emmeans() doesn’t work as expected</a></li>
+<li><a href="#NAs">All or some of the results are NA</a></li>
+<li><a href="#model">If I analyze subsets of the data separately, I get different results</a></li>
+<li><a href="#transformations">My lsmeans/EMMs are way off from what I expected</a></li>
+<li><a href="#asymp">Why do I get <code>Inf</code> for the degrees of freedom?</a></li>
+<li><a href="#additive">I get exactly the same comparisons for each “by” group</a></li>
+<li><a href="#anova">My ANOVA <em>F</em> is significant, but no pairwise comparisons are</a></li>
+<li><a href="#notukey">I asked for a Tukey adjustments, but that’s not what I got</a></li>
+<li><a href="#nowelch"><code>emmeans()</code> gives me pooled <em>t</em> tests, but I expected Welch’s <em>t</em></a></li>
+</ol>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+<div id="what" class="section level2">
+<h2>What are EMMs/lsmeans?</h2>
+<!-- @index EMMs!What are they?; Least-squares means -->
+<p>Estimated marginal means (EMMs), a.k.a. least-squares means, are predictions on a reference grid of predictor settings, or marginal averages thereof. See details in <a href="basics.html">the “basics” vignette</a>.</p>
+</div>
+<div id="fastest" class="section level2">
+<h2>What is the fastest way to obtain EMMs and pairwise comparisons?</h2>
+<!-- @index Model!Importance of; Quick start; -->
+<p>There are two answers to this (i.e., be careful what you wish for):</p>
+<ol style="list-style-type: decimal">
+<li>Don’t think; just fit the first model that comes to mind and run <code>emmeans(model, pairwise ~ treatment)</code>. This is the fastest way; however, the results have a good chance of being invalid.</li>
+<li><em>Do</em> think: Make sure you fit a model that really explains the responses. Do diagnostic residual plots, include appropriate interactions, account for heteroscadesticity if necessary, etc. This is the fastest way to obtain <em>appropriate</em> estimates and comparisons.</li>
+</ol>
+<p>The point here is that <code>emmeans()</code> summarizes the <em>model</em>, not the data directly. If you use a bad model, you will get bad results. And if you use a good model, you will get appropriate results. It’s up to you: it’s your research—is it important?</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="qdrg" class="section level2">
+<h2>The model I fitted is not supported by <strong>emmeans</strong></h2>
+<!-- @index Models!Unsupported; `qdrg()` -->
+<p>You may still be able to get results using <code>qdrg()</code> (quick and dirty reference grid). See <code>?qdrg</code> for details and examples.</p>
+</div>
+<div id="interactions" class="section level2">
+<h2>I have three (or two or four) factors that interact</h2>
+<!-- @index Multi-factor studies; Simple comparisons -->
+<p>Perhaps your question has to do with interacting factors, and you want to do some kind of <em>post hoc</em> analysis comparing levels of one (or more) of the factors on the response. Some specific versions of this question…</p>
+<ul>
+<li>Perhaps you tried to do a simple comparison for one treatment and got a warning message you don’t understand</li>
+<li>You do pairwise comparisons of factor combinations and it’s just too much – want just some of them</li>
+<li>How do I even approach this?</li>
+</ul>
+<p>My first answer is: plots almost always help. If you have factors A, B, and C, try something like <code>emmip(model, A ~ B | C)</code>, which creates an interaction-style plot of the predictions against B, for each A, with separate panels for each C. This will help visualize what effects stand out in a practical way. This can guide you in what post-hoc tests would make sense. See the <a href="interactions.html">“interactions” vignette</a> for more discussion and examples.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="trends" class="section level2">
+<h2>I have covariate(s) that interact(s) with factor(s)</h2>
+<!-- @index Covariates!Interacting with factors -->
+<p>This is a situation where it may well be appropriate to compare the slopes of trend lines, rather than the EMMs. See the <code>help(&quot;emtrends&quot;()</code>&quot;)` and the discussion of this topic in <a href="interactions.html#covariates">the “interactions” vignette</a></p>
+</div>
+<div id="polys" class="section level2">
+<h2>I have covariate(s) and am fitting a polynomial model</h2>
+<p>You need to be careful to define the reference grid consistently. For example, if you use covariates <code>x</code> and <code>xsq</code> (equal to <code>x^2</code>) to fit a quadratic curve, the default reference grid uses the mean of each covariate – and <code>mean(xsq)</code> is usually not the same as <code>mean(x)^2</code>. So you need to use <code>at</code> to ensure that the covariates are set consistently with respect to the model. See <a href="basics.html#depcovs">this subsection of the “basics” vignette</a> for an example.</p>
+</div>
+<div id="CIerror" class="section level2">
+<h2>3. Some “significant” comparisons have overlapping confidence intervals</h2>
+<!-- @index Confidence intervals!Overlapping; Comparisons!with overlapping CIs@over -->
+<p>That can happen because <em>it is just plain wrong to use [non-]overlapping CIs for individual means to do comparisons</em>. Look at the printed results from something like <code>emmeans(mymodel, pairwise ~ treatment)</code>. In particular, note that the <code>SE</code> values are <em>not</em> the same*, and may even have different degrees of freedom. Means are one thing statistically, and differences of means are quite another thing. Don’t ever mix them up, and don’t ever use a CI display for comparing means.</p>
+<p>I’ll add that making hard-line decisions about “significant” and “non-significant” is in itself a poor practice. See <a href="basics.html#pvalues">the discussion in the “basics” vignette</a></p>
+</div>
+<div id="notfactor" class="section level2">
+<h2>All my pairwise comparisons have the same <em>P</em> value</h2>
+<p>This will happen if you fitted a model where the treatments you want to compare were put in as a numeric predictor; for example <code>dose</code>, with values of 1, 2, and 3. If <code>dose</code> is modeled as numeric, you will be fitting a linear trend in those dose values, rather than a model that allows those doses to differ in arbitrary ways. Go back and fit a different model using <code>factor(dose)</code> instead; it will make all the difference. This is closely related to the next topic.</p>
+</div>
+<div id="numeric" class="section level2">
+<h2>emmeans() doesn’t work as expected</h2>
+<!-- @index Covariates!`emmeans()` doesn't work; Covariates!`cov.keep; Covariates!`cov.reduce;  -->
+<p>Equivalently, users ask how to get <em>post hoc</em> comparisons when we have covariates rather than factors. Yes, it does work, but you have to tell it the appropriate reference grid.</p>
+<p>But before saying more, I have a question for you: <em>Are you sure your model is meaningful?</em></p>
+<ul>
+<li>If your question concerns <em>only</em> two-level predictors such as <code>sex</code> (coded 1 for female, 2 for male), no problem. The model will produce the same predictions as you’d get if you’d used these as factors.</li>
+<li>If <em>any</em> of the predictors has 3 or more levels, you may have fitted a nonsense model, in which case you need to fit a different model that does make sense before doing any kind of <em>post hoc</em> analysis. For instance, the model contains a covariate <code>brand</code> (coded 1 for Acme, 2 for Ajax, and 3 for Al’s), this model is implying that the difference between Acme and Ajax is exactly equal to the difference between Ajax and Al’s, owing to the fact that a linear trend in <code>brand</code> has been fitted. If you had instead coded 1 for Ajax, 2 for Al’s, and 3 for Acme, the model would produce different fitted values. Ask yourself if it makes sense to have <code>brand = 2.319</code>. If not, you need to fit another model using <code>factor(brand)</code> in place of <code>brand</code>.</li>
+</ul>
+<p>Assuming that the appropriateness of the model is settled, the current version of <strong>emmeans</strong> automatically casts two-value covariates as factors, but not covariates having higher numbers of unique values. Suppose your model has a covariate <code>dose</code> which was experimentally varied over four levels, but can sensibly be interpreted as a numerical predictor. If you want to include the separate values of <code>dose</code> rather than the mean <code>dose</code>, you can do that using something like <code>emmeans(model, &quot;dose&quot;, at = list(dose = 1:4))</code>, or <code>emmeans(model, &quot;dose&quot;, cov.keep = &quot;dose&quot;)</code>, or <code>emmeans(model, &quot;dose&quot;, cov.keep = &quot;4&quot;)</code>. There are small differences between these. The last one regards any covariate having 4 or fewer unique values as a factor.</p>
+<p>See “altering the reference grid” in the <a href="basics.html#altering">“basics” vignette</a> for more discussion.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="NAs" class="section level2">
+<h2>All or some of the results are NA</h2>
+<!-- @index `NA`s in the output; `NonEst` values; Estimability issues -->
+<p>The <strong>emmeans</strong> package uses tools in the <strong>estimability</strong> package to determine whether its results are uniquely estimable. For example, in a two-way model with interactions included, if there are no observations in a particular cell (factor combination), then we cannot estimate the mean of that cell.</p>
+<p>When <em>some</em> of the EMMs are estimable and others are not, that is information about missing information in the data. If it’s possible to remove some terms from the model (particularly interactions), that may make more things estimable if you re-fit with those terms excluded; but don’t delete terms that are really needed for the model to fit well.</p>
+<p>When <em>all</em> of the estimates are non-estimable, it could be symptomatic of something else. Some possibilities include:</p>
+<ul>
+<li>An overly ambitious model; for example, in a Latin square design, interaction effects are confounded with main effects; so if any interactions are included in the model, you will render main effects inestimable.</li>
+<li>Possibly you have a nested structure that needs to be included in the model or specified via the <code>nesting</code> argument. Perhaps the levels that B can have depend on which level of A is in force. Then B is nested in A and the model should specify <code>A + A:B</code>, with no main effect for <code>B</code>.</li>
+<li>Modeling factors as numeric predictors (see also the <a href="#numeric">related section on covariates</a>). To illustrate, suppose you have data on particular state legislatures, and the model includes the predictors <code>state_name</code> as well as <code>dem_gov</code> which is coded 1 if the governor is a Democrat and 0 otherwise. If the model was fitted with <code>state_name</code> as a factor or character variable, but <code>dem_gov</code> as a numeric predictor, then, chances are, <code>emmeans()</code> will return non-estimable results. If instead, you use <code>factor(dem_gov)</code> in the model, then the fact that <code>state_name</code> is nested in <code>dem_gov</code> will be detected, causing EMMs to be computed separately for each party’s states, thus making things estimable.</li>
+<li>Some other things may in fact be estimable. For illustration, it’s easy to construct an example where all the EMMs are non-estimable, but pairwise comparisons are estimable:</li>
+</ul>
+<pre class="r"><code>pg &lt;- transform(pigs, x = rep(1:3, c(10, 10, 9)))
+pg.lm &lt;- lm(log(conc) ~ x + source + factor(percent), data = pg)
+emmeans(pg.lm, consec ~ percent)</code></pre>
+<pre class="ro"><code>## $emmeans
+##  percent emmean SE df asymp.LCL asymp.UCL
+##        9 nonEst NA NA        NA        NA
+##       12 nonEst NA NA        NA        NA
+##       15 nonEst NA NA        NA        NA
+##       18 nonEst NA NA        NA        NA
+## 
+## Results are averaged over the levels of: source 
+## Results are given on the log (not the response) scale. 
+## Confidence level used: 0.95 
+## 
+## $contrasts
+##  contrast estimate     SE df t.ratio p.value
+##  12 - 9     0.1796 0.0561 23 3.202   0.0111 
+##  15 - 12    0.0378 0.0582 23 0.650   0.8613 
+##  18 - 15    0.0825 0.0691 23 1.194   0.5202 
+## 
+## Results are averaged over the levels of: source 
+## Results are given on the log (not the response) scale. 
+## P value adjustment: mvt method for 3 tests</code></pre>
+<p>The <a href="messy-data.html">“messy-data” vignette</a> has more examples and discussion.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="model" class="section level2">
+<h2>If I analyze subsets of the data separately, I get different results</h2>
+<!-- @index Analysis of subsets of data; Subsets of data -->
+<p>Estimated marginal means summarize the <em>model</em> that you fitted to the data – not the data themselves. Many of the most common models rely on several simplifying assumptions – that certain effects are linear, that the error variance is constant, etc. – and those assumptions are passed forward into the <code>emmeans()</code> results. Doing separate analyses on subsets usually comprises departing from that overall model, so of course the results are different.</p>
+</div>
+<div id="transformations" class="section level2">
+<h2>My lsmeans/EMMs are way off from what I expected</h2>
+<!-- @index `emmeans()`!Surprising results from; Poisson regression!Surprising results
+     Logistic regression!Surprising results -->
+<p>First step: Carefully read the annotations below the output. Do they say something like “results are on the log scale, not the response scale”? If so, that explains it. A Poisson or logistic model involves a link function, and by default, <code>emmeans()</code> produces its results on that same scale. You can add <code>type = &quot;response&quot;</code> to the <code>emmeans()</code> call and it will put the results of the scale you expect. But that is not always the best approach. The <a href="transformations.html">“transformations” vignette</a> has examples and discussion.</p>
+</div>
+<div id="asymp" class="section level2">
+<h2>Why do I get <code>Inf</code> for the degrees of freedom?</h2>
+<!-- @index Infinite degrees of freedom; Degrees of freedom!Infinite 
+     *z* tests!vs. *t* tests; *t* tests vs. *z* tests -->
+<p>This is simply the way that <strong>emmeans</strong> labels asymptotic results (that is, estimates that are tested against the standard normal distribution – <em>z</em> tests – rather than the <em>t</em> distribution). Note that obtaining quantiles or probabilities from the <em>t</em> distribution with infinite degrees of freedom is the same as obtaining the corresponding values from the standard normal. For example:</p>
+<pre class="r"><code>qt(c(.9, .95, .975), df = Inf)</code></pre>
+<pre class="ro"><code>## [1] 1.281552 1.644854 1.959964</code></pre>
+<pre class="r"><code>qnorm(c(.9, .95, .975))</code></pre>
+<pre class="ro"><code>## [1] 1.281552 1.644854 1.959964</code></pre>
+<p>so when you see infinite d.f., that just means its a <em>z</em> test or a <em>z</em> confidence interval.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="additive" class="section level2">
+<h2>I get exactly the same comparisons for each “by” group</h2>
+<!-- @index `by` groups!Identical comparisons -->
+<p>As mentioned elsewhere, EMMs summarize a <em>model</em>, not the data. If your model does not include any interactions between the <code>by</code> variables and the factors for which you want EMMs, then by definition, the effects for the latter will be exactly the same regardless of the <code>by</code> variable settings. So of course the comparisons will all be the same. If you think they should be different, then you are saying that your model should include interactions between the factors of interest and the <code>by</code> factors.</p>
+</div>
+<div id="anova" class="section level2">
+<h2>My ANOVA <em>F</em> is significant, but no pairwise comparisons are</h2>
+<!-- @index *F* test!vs. pairwise comparisons@pairwz
+        Analysis of variance!versus *post hoc* comparisons@post -->
+<p>First of all, you should not be making binary decisions of “significant” or “nonsignificant.” This is a simplistic view of <em>P</em> values that assigns an unmerited magical quality to the value 0.05. It is suggested that you just report the <em>P</em> values actually obtained, and let your readers decide how significant your findings are in the context of the scientific findings.</p>
+<p>But to answer the question: This is a common misunderstanding of ANOVA. If <em>F</em> has a particular <em>P</em> value, this implies only that <em>some contrast</em> among the means (or effects) has the same <em>P</em> value, after applying the Scheffe adjustment. That contrast may be very much unlike a pairwise comparison, especially when there are several means being compared. Having an <em>F</em> statistic with a <em>P</em> value of, say, 0.06, does <em>not</em> imply that any pairwise comparison will have a <em>P</em> value of 0.06 or smaller. Again referring to the paragraph above, just report the <em>P</em> value for each pairwise comparison, and don’t try to relate them to the <em>F</em> statistic.</p>
+<p>Another consideration is that by default, <em>P</em> values for pairwise comparisons are adjusted using the Tukey method, and the adjusted <em>P</em> values can be quite a bit larger than the unadjusted ones. (But I definitely do <em>not</em> advocate using no adjustment to “repair” this problem.)</p>
+</div>
+<div id="notukey" class="section level2">
+<h2>I asked for Tukey adjustments, but that’s not what I got</h2>
+<!-- @index Tukey adjustment!Ignored or changed -->
+<p>There are two reasons this could happen:</p>
+<ol style="list-style-type: decimal">
+<li>There are only two means (or only two in each <code>by</code> group). Thus there is only one comparison. When there is only one thing to test, there is no multiplicity issue, and hence no multiplicity adjustment to the <em>P</em> values.</li>
+<li>A Tukey adjustment is inappropriate. The Tukey adjustment is appropriate for pairwise comparisons of means. When you have some other set of contrasts, the Tukey method is deemed unsuitable and the Sidak method is used instead. A suggestion is to use <code>&quot;mvt&quot;</code> adjustment (which is exact); we don’t default to this because it can require a lot of computing time for a large set of contrasts or comparisons.</li>
+</ol>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="nowelch" class="section level2">
+<h2><code>emmeans()</code> gives me pooled <em>t</em> tests, but I expected Welch’s <em>t</em></h2>
+<!-- @index Welch's *t* comparisons; Pooled *t*!Instead of Welch's *t*;
+            Model!Importance of getting it right; `emmeans()`!And the underlying model;
+            Get the model right first -->
+<p>It is important to note that <code>emmeans()</code> and its relatives produce results based on the <em>model object</em> that you provide – not the data. So if your sample SDs are wildly different, a model fitted using <code>lm()</code> or <code>aov()</code> is not a good model, because those R functions use a statistical model that presumes that the errors have constant variance. That is, the problem isn’t in <code>emmeans()</code>, it’s in handing it an inadequate model object.</p>
+<p>Here is a simple illustrative example. Consider a simple one-way experiment and the following model:</p>
+<pre><code>mod1 &lt;- aov(response ~ treat, data = mydata)
+emmeans(mod1, pairwise ~ treat)</code></pre>
+<p>This code will estimate means and comparisons among treatments. All standard errors, confidence intervals, and <em>t</em> statistics are based on the pooled residual SD with <em>N - k</em> degrees of freedom (assuming <em>N</em> observations and <em>k</em> treatments). These results are useful <em>only</em> if the underlying assumptions of <code>mod1</code> are correct – including the assumption that the error SD is the same for all treatments.</p>
+<p>Alternatively, you could fit the following model using generalized least-squares:</p>
+<pre><code>mod2 = nlme::gls(response ~ treat, data = mydata,
+                 weights = varIdent(form = ~1 | treat))
+emmeans(mod2, pairwise ~ treat)</code></pre>
+<p>This model specifies that the error variance depends on the levels of <code>treat</code>. This would be a much better model to use when you have wildly different sample SDs. The results of the <code>emmeans()</code> call will reflect this improvement in the modeling. The standard errors of the EMMs will depend on the individual sample variances, and the <em>t</em> tests of the comparisons will be in essence the Welch <em>t</em> statistics with Satterthwaite degrees of freedom.</p>
+<p>To obtain appropriate <em>post hoc</em> estimates, contrasts, and comparisons, one must first find a model that successfully explains the peculiarities in the data. This point cannot be emphasized enough. If you give <code>emmeans()</code> a good model, you will obtain correct results; if you give it a bad model, you will obtain incorrect results. Get the model right <em>first</em>.</p>
+<p><a href="#contents">Back to Contents</a></p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

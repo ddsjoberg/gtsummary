@@ -1,8 +1,9 @@
-#' Modify column headers, footnotes, and spanning headers
+#' Modify column headers, footnotes, spanning headers, and table captions
 #'
 #' These functions assist with updating or adding column headers
-#' (`modify_header()`), footnotes (`modify_footnote()`), and spanning
-#' headers (`modify_spanning_header()`). Use `show_header_names()` to learn
+#' (`modify_header()`), footnotes (`modify_footnote()`), spanning
+#' headers (`modify_spanning_header()`), and table captions
+#' (`modify_caption()`). Use `show_header_names()` to learn
 #' the column names.
 #'
 #' @name modify
@@ -12,22 +13,13 @@
 #' The LHS specifies the column(s) to be updated, and the RHS is the updated text.
 #' Use the `show_header_names()` to see the column names that can be modified.
 #' @param abbreviation Logical indicating if an abbreviation is being updated.
-#' @param stat_by Used with `tbl_summary(by=)` objects with a `by=` argument.
-#' String specifying text to include above the summary statistics.
-#' The following fields are available for use in the
-#' headers:
-#' * `{n}` number of observations in each group,
-#' * `{N}` total number of observations,
-#' * `{p}` percentage in each group,
-#' * `{level}` the 'by' variable level,
-#'
-#' Syntax follows [glue::glue()],
-#' e.g. `stat_by = "**{level}**, N = {n} ({style_percent(p)}%)"`.
+#' @param stat_by DEPRECATED, use `update = all_stat_cols() ~ "<label>"` instead.
 #' @param ... Specify a column and updated column label,
 #' e.g. `modify_header(p.value = "Model P-values")`. This is provided as an alternative to the
 #' `update=` argument. They accomplish the same goal of updating column headers.
 #' @param text_interpret String indicates whether text will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
+#' @param caption a string of the table caption/title
 #' @inheritParams add_global_p
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
@@ -35,6 +27,29 @@
 #' @family tbl_uvregression tools
 #' @family tbl_survfit tools
 #' @author Daniel D. Sjoberg
+#'
+#' @section tbl_summary(), tbl_svysummary(), and tbl_cross():
+#' When assigning column headers, footnotes, spanning headers, and captions
+#' for these gtsummary tables,
+#' you may use `{N}` to insert the number of observations.
+#' `tbl_svysummary` objects additionally have `{N_unweighted}` available.
+#'
+#' When there is a stratifying `by=` argument present, the following fields are
+#' additionally available to stratifying columns: `{level}`, `{n}`, and `{p}`
+#' (`{n_unweighted}` and `{p_unweighted}` for `tbl_svysummary` objects)
+#'
+#' Syntax follows [glue::glue()], e.g. `all_stat_cols() ~ "**{level}**, N = {n}"`.
+#' @section tbl_regression():
+#' When assigning column headers for `tbl_regression` tables,
+#' you may use `{N}` to insert the number of observations.
+#'
+#' @section captions:
+#' Captions are assigned based on output type.
+#' - `gt::gt(caption=)`, available in gt version >0.2.2
+#' - `flextable::set_caption(caption=)`
+#' - `huxtable::set_caption(value=)`
+#' - `knitr::kable(caption=)`
+#'
 #' @examples
 #' # create summary table
 #' tbl <- trial[c("age", "grade", "trt")] %>%
@@ -45,7 +60,7 @@
 #' show_header_names(tbl)
 #'
 #' # Example 1 ----------------------------------
-#' # updating column headers and footnote
+#' # updating column headers, footnote, and table caption
 #' modify_ex1 <- tbl %>%
 #'   modify_header(
 #'     update = list(label ~ "**Variable**",
@@ -53,12 +68,13 @@
 #'   ) %>%
 #'   modify_footnote(
 #'     update = all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade"
-#'   )
+#'   ) %>%
+#'   modify_caption("**Patient Characteristics** (N = {N})")
 #'
 #' # Example 2 ----------------------------------
-#' # using `stat_by=` argument to update headers, remove all footnotes, add spanning header
+#' # updating headers, remove all footnotes, add spanning header
 #' modify_ex2 <- tbl %>%
-#'   modify_header(stat_by = "**{level}**, N = {n} ({style_percent(p)}%)") %>%
+#'   modify_header(update = all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}%)") %>%
 #'   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
 #'   modify_footnote(update = everything() ~ NA) %>%
 #'   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
@@ -87,13 +103,11 @@ NULL
 
 #' @name modify
 #' @export
-modify_header <- function(x, update = NULL, stat_by = NULL,
-                          text_interpret = c("md", "html"), quiet = NULL, ...) {
+modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
+                          quiet = NULL, ..., stat_by = NULL) {
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
-
-  # update table_header --------------------------------------------------------
-  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
+  text_interpret <- match.arg(text_interpret)
 
   # converting update arg to a tidyselect list ---------------------------------
   update <-
@@ -103,22 +117,49 @@ modify_header <- function(x, update = NULL, stat_by = NULL,
       arg_name = "update"
     ) %>%
     c(list(...)) # adding the ... to the update list
-    if (identical(list(), update)) update <- NULL
+  if (!is.null(stat_by)) {
+    # will mark this DEPRECATED, but won't print a deprecation note until later
+    # lifecycle::deprecate_warn(
+    #   "1.3.6",
+    #   "gtsummary::modify_header(stat_by=)",
+    #   details = glue("Use {ui_code(rlang::expr(modify_header(update =  all_stat_cols(FALSE) ~ !!stat_by)) %>% deparse(width.cutoff = 500L))} instead."))
+    update <-
+      c(update,
+        .formula_list_to_named_list(x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
+                                    var_info = x$table_header$column,
+                                    arg_name = "update"))
+  }
+  if (identical(list(), update)) update <- NULL
 
-    # if no columns selected, print helpful message
-    if (is.null(update) && is.null(stat_by) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
-    if (is.null(update) && is.null(stat_by)) return(x)
+  # if no columns selected, print helpful message
+  if (is.null(update) && is.null(stat_by) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
+  if (is.null(update) && is.null(stat_by)) return(x)
+  if (purrr::map_lgl(update, ~!rlang::is_string(.)) %>% any())
+    stop("All labels must be strings of length one.")
 
-  # running modify_header_internal function ------------------------------------
-  rlang::call2(
-    modify_header_internal,
-    x = x,
-    stat_by = stat_by,
-    text_interpret = text_interpret,
-    !!!update,
-    .save_call = TRUE
-  ) %>%
-    eval()
+  # updating column headers ----------------------------------------------------
+  df_update <-
+    update %>%
+    unlist() %>%
+    tibble::enframe("column", "label") %>%
+    dplyr::inner_join(.info_tibble(x), by = "column") %>%
+    # if users passes incorrect colname via `...` removing it
+    dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
+    dplyr::rowwise() %>%
+    mutate(
+      label = switch(is.na(.data$label), NA_character_) %||% as.character(glue(.data$label)),
+      text_interpret = glue("gt::{text_interpret}") %>% as.character(),
+      hide = FALSE
+    ) %>%
+    ungroup() %>%
+    select(.data$column, .data$label, .data$text_interpret, .data$hide)
+
+  x$table_header <-
+    x$table_header %>%
+    dplyr::rows_update(df_update, by = "column")
+
+  # returning gtsummary object -------------------------------------------------
+  x
 }
 
 #' @name modify
@@ -148,27 +189,28 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
   # updating footnote ----------------------------------------------------------
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
 
-  # convert named list to a tibble
-  table_header_update <-
+  # updating footnote ----------------------------------------------------------
+  df_update <-
     update %>%
     unlist() %>%
     tibble::enframe(name = "column", value = footnote_column_name) %>%
-    # ensuring the column is a character
-    mutate_at(vars(any_of(footnote_column_name)), as.character) %>%
-    # performing inner join to put the edits in the same order as x$table_header
-    {dplyr::inner_join(
-      x$table_header %>% select(.data$column),
-      .,
-      by = "column"
-    )}
+    dplyr::inner_join(.info_tibble(x), by = "column") %>%
+    # if users passes incorrect colname via `...` removing it
+    dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
+    dplyr::rowwise() %>%
+    mutate(
+      updated_value = switch(is.na(.data[[footnote_column_name]]), NA_character_) %||%
+        as.character(glue(.data[[footnote_column_name]])),
+    ) %>%
+    ungroup() %>%
+    select(.data$column, .data$updated_value) %>%
+    rlang::set_names(c("column", footnote_column_name))
 
-  # updating table_header
-  rows <- x$table_header$column %in% table_header_update$column
-  x$table_header[rows, c("column", footnote_column_name)] <-
-    table_header_update
+  x$table_header <-
+    x$table_header %>%
+    dplyr::rows_update(df_update, by = "column")
 
-  # return updated gtsummary object --------------------------------------------
-  x[["call_list"]] <- list(x[["call_list"]], modify_footnote = match.call())
+  # returning gtsummary object -------------------------------------------------
   x
 }
 
@@ -197,28 +239,50 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
   if (is.null(update)) return(x)
 
-  # updating footnote ----------------------------------------------------------
-  # convert named list to a tibble
-  table_header_update <-
+  # updating spanning header ---------------------------------------------------
+  df_update <-
     update %>%
     unlist() %>%
     tibble::enframe(name = "column", value = "spanning_header") %>%
-    # ensuring the column is a character
-    mutate_at(vars(.data$spanning_header), as.character) %>%
-    # performing inner join to put the edits in the same order as x$table_header
-    {dplyr::inner_join(
-      x$table_header %>% select(.data$column),
-      .,
-      by = "column"
-    )}
+    dplyr::inner_join(.info_tibble(x), by = "column") %>%
+    # if users passes incorrect colname via `...` removing it
+    dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
+    dplyr::rowwise() %>%
+    mutate(
+      spanning_header = switch(is.na(.data$spanning_header), NA_character_) %||%
+        as.character(glue(.data$spanning_header)),
+    ) %>%
+    ungroup() %>%
+    select(.data$column, .data$spanning_header)
 
-  # updating table_header
-  rows <- x$table_header$column %in% table_header_update$column
-  x$table_header[rows, c("column", "spanning_header")] <-
-    table_header_update
+  x$table_header <-
+    x$table_header %>%
+    dplyr::rows_update(df_update, by = "column")
 
   # return updated gtsummary object --------------------------------------------
-  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
+  x
+}
+
+#' @name modify
+#' @export
+modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
+  # checking inputs ------------------------------------------------------------
+  if (!inherits(x, "gtsummary")) abort("`x=` must be class 'gtsummary'.")
+  if (!rlang::is_string(caption)) abort("`caption=` must be a string.")
+  text_interpret <- match.arg(text_interpret)
+
+  # first interpreting caption in case user passed glue args -----------------
+  caption <-
+    .info_tibble(x) %>%
+    filter(.data$column == "label") %>%
+    with(glue(caption)) %>%
+    as.character()
+
+  # adding caption to gtsummary object ----------------------------------------
+  x$list_output$caption <- caption
+  attr(x$list_output$caption, "text_interpret") <- text_interpret
+
+  # returning updated object ---------------------------------------------------
   x
 }
 
@@ -262,3 +326,49 @@ show_header_names <- function(x = NULL, quiet = NULL) {
 
   show_header_names(x)
 }
+
+.info_tibble <- function(x) {
+  # tbl_summary with no by variable
+  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && is.null(x$df_by)) {
+    return(
+      x$meta_data %>%
+        dplyr::slice(1) %>%
+        pluck("df_stats", 1) %>%
+        select(any_of(c("N_obs", "N_unweighted"))) %>%
+        dplyr::slice(1) %>%
+        dplyr::rename(N = .data$N_obs) %>%
+        full_join(
+          select(x$table_header, .data$column),
+          by = character()
+        )
+    )
+  }
+
+  # tbl_summary with by variable
+  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && !is.null(x$df_by)) {
+    return(
+      x$table_header %>%
+        select(.data$column) %>%
+        full_join(
+          x$df_by %>%
+            select(any_of(c("N",  "N_unweighted"))) %>%
+            distinct(),
+          by = character()
+        ) %>%
+        left_join(
+          x$df_by %>%
+            select(column = .data$by_col, level = .data$by_chr,
+                   any_of(c("n", "p", "n_unweighted", "p_unweighted"))),
+          by = "column"
+        )
+    )
+  }
+
+  # otherwise return tibble with N
+  x$table_header %>%
+    select(.data$column) %>%
+    mutate(N = x$N %||% x$n %||% NA_integer_,
+           # in V1.3.6, all documentation about {n} being supported was removed. This can be removed eventually
+           n = .data$N)
+}
+

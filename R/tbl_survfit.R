@@ -19,7 +19,7 @@
 #' is `"{prob} Percentile"` for survival percentiles, and `"Time {time}"` for n-year
 #' survival estimates
 #' @param estimate_fun function to format the Kaplan-Meier estimates. Default
-#' is [style_percent] for survival probabilities and [style_sigfig] for
+#' is [style_percent()] for survival probabilities and [style_sigfig] for
 #' survival times
 #' @param missing text to fill when estimate is not estimable. Default is `"--"`
 #' @param conf.level Confidence level for confidence intervals. Default is 0.95
@@ -27,8 +27,9 @@
 #' Default is `FALSE`.  Does not apply to survival quantile requests
 #' @param y outcome call, e.g. `y = Surv(ttdeath, death)`
 #' @param include Variable to include as stratifying variables.
-#' @param failure DEPRECATED. Use `reverse=` instead.
-#' @param ... Not used
+#' @param ... For [tbl_survfit.data.frame()]  and [tbl_survfit.survfit()] the arguments
+#' are passed to [tbl_survfit.list()]. They are not used when [tbl_survfit.list()]
+#' is called directly.
 #' @inheritParams add_global_p
 #' @export
 #' @rdname tbl_survfit
@@ -49,7 +50,7 @@
 #' # Pass a data frame
 #' tbl_survfit_ex2 <- tbl_survfit(
 #'   trial,
-#'   y = survival::Surv(ttdeath, death),
+#'   y = Surv(ttdeath, death),
 #'   include = c(trt, grade),
 #'   probs = 0.5,
 #'   label_header = "**Median Survival**"
@@ -99,91 +100,6 @@ tbl_survfit <- function(x, ...) {
 
 #' @export
 #' @rdname tbl_survfit
-tbl_survfit.survfit <- function(x, times = NULL, probs = NULL,
-                                statistic = NULL,
-                                label = NULL, label_header = NULL, estimate_fun = NULL,
-                                missing = NULL, conf.level = 0.95, reverse = FALSE,
-                                quiet = NULL, failure = NULL, ...) {
-  # deprecation notes ----------------------------------------------------------
-  if (!is.null(failure)) {
-    lifecycle::deprecate_warn(
-      "1.3.1", "gtsummary::tbl_survfit(failure = )", "tbl_survfit(reverse = )")
-    reverse <- failure
-    rm(failure)
-  }
-
-  # converting inputs to be compatible with the list method
-  x <- list(x)
-  if (rlang::is_string(label)) label <- expr(everything() ~ !!label) %>% eval()
-
-  # passing all args to the list method of `tbl_survfit()`
-  expr(tbl_survfit.list(!!!as.list(environment()))) %>% eval()
-}
-
-#' @export
-#' @rdname tbl_survfit
-tbl_survfit.data.frame <- function(x, y, times = NULL, probs = NULL,
-                                   statistic = NULL,
-                                   label = NULL, label_header = NULL, estimate_fun = NULL,
-                                   missing = NULL, conf.level = 0.95, reverse = FALSE,
-                                   failure = NULL, include = everything(), quiet = NULL, ...) {
-  include <- dplyr::select(x, {{include}}) %>% names()
-
-  # checking inputs ------------------------------------------------------------
-  # able to construct Surv() object?
-  y <- enexpr(y)
-
-  y_surv <-
-    tryCatch(
-      expr(with(!!x, !!y)) %>% eval(),
-      error = function(e) {
-        paste("There was are error constructing the `Surv()` object from the",
-              "data frame passed in `x=`, and the outcome passed in `y=`.",
-              "All columns in `y=` should appear in `x=`.\n\n") %>%
-          stringr::str_wrap() %>%
-          c(as.character(e)) %>%
-          stop(call. = FALSE)
-      }
-    )
-
-  # Surv object is indeed a of class Surv
-  if (!inherits(y_surv, "Surv")) {
-    paste("Together, the data frame in `x=`, and the survival outcome in `y=`",
-          "must construct `Surv` oject, e.g. `with(trial, Surv(ttdeath, death))`") %>%
-      stringr::str_wrap() %>%
-      stop(call. = FALSE)
-  }
-
-  # getting list of all covariates ---------------------------------------------
-  y_vars <- as.list(y)[-1] %>% map(deparse) %>% unlist()
-  x_vars <- include %>% setdiff(y_vars)
-
-  # construct list of survfits -------------------------------------------------
-  survfit_expr_list <-
-    tryCatch(
-      map(
-        x_vars,
-        function(.x) expr(survival::survfit(!!y ~ !!sym(.x), data = !!x)) %>% eval()
-      ),
-      error = function(e) {
-        paste("There was are error constructing the list `survfit()` objects from the",
-              "data frame passed in `x=`, and the outcome passed in `y=`.") %>%
-          stringr::str_wrap() %>%
-          stop(call. = FALSE)
-      }
-    )
-
-  # passing all args to the list method of `tbl_survfit()` ---------------------
-  tbl_survfit_args <-
-    as.list(environment())[!names(as.list(environment())) %in% c("x", "y", "y_surv", "y_vars",
-                                                                 "x_vars", "survfit_expr_list",
-                                                                 "include")]
-
-  expr(tbl_survfit.list(x = survfit_expr_list, !!!tbl_survfit_args)) %>% eval()
-}
-
-#' @export
-#' @rdname tbl_survfit
 tbl_survfit.list <- function(x, times = NULL, probs = NULL,
                              statistic = NULL, label = NULL, label_header = NULL,
                              estimate_fun = NULL, missing = NULL,
@@ -200,6 +116,12 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # input checks ---------------------------------------------------------------
+  if (rlang::is_string(label)) {
+    label <- inject(everything() ~ !!label)
+    # lifecycle::deprecate_warn(
+    #   "1.3.6", "gtsummary::tbl_survfit(label=)",
+    #   details = "`label=` argument no longer accepts a single string. Pass formula list.")
+  }
   assert_package("survival", "tbl_survfit()")
   if (purrr::every(x, ~!inherits(.x, "survfit"))) {
     stop("Argument `x=` must be class 'survfit' created from the `survival::survfit()` function.",
@@ -292,7 +214,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   # applying labels
   lbls <- as.list(unique(meta_data$df_stats[[1]]$col_label)) %>% set_names(unique(meta_data$df_stats[[1]]$col_name))
   results <-
-    expr(modify_header_internal(results, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
+    expr(modify_header(results, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
     eval()
 
   # exporting results ----------------------------------------------------------
@@ -301,6 +223,65 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   class(results) <- c("tbl_survfit", "gtsummary")
 
   results
+}
+
+#' @export
+#' @rdname tbl_survfit
+tbl_survfit.survfit <- function(x, ...) {
+  # passing all args to the list method of `tbl_survfit()`
+  tbl_survfit.list(list(x), ...)
+}
+
+#' @export
+#' @rdname tbl_survfit
+tbl_survfit.data.frame <- function(x, y, include = everything(), ...) {
+  include <- dplyr::select(x, {{include}}) %>% names()
+
+  # checking inputs ------------------------------------------------------------
+  # able to construct Surv() object?
+  y <- enexpr(y)
+
+  y_surv <-
+    tryCatch(
+      expr(with(!!x, !!y)) %>% eval(),
+      error = function(e) {
+        paste("There was are error constructing the `y = Surv()` object from the",
+              "data frame passed in `x=`, and the outcome passed in `y=`.",
+              "All columns in `y=` should appear in `x=`.\n\n") %>%
+          stringr::str_wrap() %>%
+          c(as.character(e)) %>%
+          stop(call. = FALSE)
+      }
+    )
+
+  # Surv object is indeed a of class Surv
+  if (!inherits(y_surv, "Surv")) {
+    paste("Together, the data frame in `x=`, and the survival outcome in `y=`",
+          "must construct `Surv` oject, e.g. `with(trial, Surv(ttdeath, death))`") %>%
+      stringr::str_wrap() %>%
+      stop(call. = FALSE)
+  }
+
+  # getting list of all covariates ---------------------------------------------
+  y_vars <- inject(all.vars(~!!y))
+  x_vars <- include %>% setdiff(y_vars)
+
+  # construct list of survfits -------------------------------------------------
+  survfit_expr_list <-
+    tryCatch(
+      map(
+        x_vars,
+        function(.x) expr(survival::survfit(!!y ~ !!sym(.x), data = !!x)) %>% eval()
+      ),
+      error = function(e) {
+        paste("There was are error constructing the list `survfit()` objects from the",
+              "data frame passed in `x=`, and the outcome passed in `y=`.") %>%
+          stringr::str_wrap() %>%
+          stop(call. = FALSE)
+      }
+    )
+
+  tbl_survfit.list(x = survfit_expr_list, ...)
 }
 
 # function that uses meta_data and inputs to finish tbl ----------------------

@@ -3,6 +3,11 @@
 #' @importFrom tibble as_tibble
 tibble::as_tibble
 
+# survival ---------------------------------------------------------------------
+#' @export
+#' @importFrom survival Surv
+survival::Surv
+
 # knitr ------------------------------------------------------------------------
 #' @export
 #' @importFrom knitr knit_print
@@ -20,6 +25,10 @@ dplyr::vars
 #' @importFrom dplyr select
 #' @export
 dplyr::select
+
+#' @importFrom dplyr mutate
+#' @export
+dplyr::mutate
 
 #' @importFrom dplyr starts_with
 #' @export

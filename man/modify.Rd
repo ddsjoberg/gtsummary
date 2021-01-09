@@ -5,21 +5,24 @@
 \alias{modify_header}
 \alias{modify_footnote}
 \alias{modify_spanning_header}
+\alias{modify_caption}
 \alias{show_header_names}
-\title{Modify column headers, footnotes, and spanning headers}
+\title{Modify column headers, footnotes, spanning headers, and table captions}
 \usage{
 modify_header(
   x,
   update = NULL,
-  stat_by = NULL,
   text_interpret = c("md", "html"),
   quiet = NULL,
-  ...
+  ...,
+  stat_by = NULL
 )
 
 modify_footnote(x, update = NULL, abbreviation = FALSE, quiet = NULL)
 
 modify_spanning_header(x, update = NULL, quiet = NULL)
+
+modify_caption(x, caption, text_interpret = c("md", "html"))
 
 show_header_names(x = NULL, quiet = NULL)
 }
@@ -31,20 +34,6 @@ column header, footnote, or spanning header.
 The LHS specifies the column(s) to be updated, and the RHS is the updated text.
 Use the \code{show_header_names()} to see the column names that can be modified.}
 
-\item{stat_by}{Used with \code{tbl_summary(by=)} objects with a \verb{by=} argument.
-String specifying text to include above the summary statistics.
-The following fields are available for use in the
-headers:
-\itemize{
-\item \code{{n}} number of observations in each group,
-\item \code{{N}} total number of observations,
-\item \code{{p}} percentage in each group,
-\item \code{{level}} the 'by' variable level,
-}
-
-Syntax follows \code{\link[glue:glue]{glue::glue()}},
-e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"}.}
-
 \item{text_interpret}{String indicates whether text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 
@@ -55,17 +44,53 @@ e.g. \code{stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)"}.}
 e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an alternative to the
 \verb{update=} argument. They accomplish the same goal of updating column headers.}
 
+\item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
+
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
+
+\item{caption}{a string of the table caption/title}
 }
 \value{
 Updated gtsummary object
 }
 \description{
 These functions assist with updating or adding column headers
-(\code{modify_header()}), footnotes (\code{modify_footnote()}), and spanning
-headers (\code{modify_spanning_header()}). Use \code{show_header_names()} to learn
+(\code{modify_header()}), footnotes (\code{modify_footnote()}), spanning
+headers (\code{modify_spanning_header()}), and table captions
+(\code{modify_caption()}). Use \code{show_header_names()} to learn
 the column names.
 }
+\section{tbl_summary(), tbl_svysummary(), and tbl_cross()}{
+
+When assigning column headers, footnotes, spanning headers, and captions
+for these gtsummary tables,
+you may use \code{{N}} to insert the number of observations.
+\code{tbl_svysummary} objects additionally have \code{{N_unweighted}} available.
+
+When there is a stratifying \verb{by=} argument present, the following fields are
+additionally available to stratifying columns: \code{{level}}, \code{{n}}, and \code{{p}}
+(\code{{n_unweighted}} and \code{{p_unweighted}} for \code{tbl_svysummary} objects)
+
+Syntax follows \code{\link[glue:glue]{glue::glue()}}, e.g. \code{all_stat_cols() ~ "**{level}**, N = {n}"}.
+}
+
+\section{tbl_regression()}{
+
+When assigning column headers for \code{tbl_regression} tables,
+you may use \code{{N}} to insert the number of observations.
+}
+
+\section{captions}{
+
+Captions are assigned based on output type.
+\itemize{
+\item \code{gt::gt(caption=)}, available in gt version >0.2.2
+\item \code{flextable::set_caption(caption=)}
+\item \code{huxtable::set_caption(value=)}
+\item \code{knitr::kable(caption=)}
+}
+}
+
 \section{Example Output}{
 
 \if{html}{Example 1}
@@ -91,7 +116,7 @@ tbl <- trial[c("age", "grade", "trt")] \%>\%
 show_header_names(tbl)
 
 # Example 1 ----------------------------------
-# updating column headers and footnote
+# updating column headers, footnote, and table caption
 modify_ex1 <- tbl \%>\%
   modify_header(
     update = list(label ~ "**Variable**",
@@ -99,12 +124,13 @@ modify_ex1 <- tbl \%>\%
   ) \%>\%
   modify_footnote(
     update = all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade"
-  )
+  ) \%>\%
+  modify_caption("**Patient Characteristics** (N = {N})")
 
 # Example 2 ----------------------------------
-# using `stat_by=` argument to update headers, remove all footnotes, add spanning header
+# updating headers, remove all footnotes, add spanning header
 modify_ex2 <- tbl \%>\%
-  modify_header(stat_by = "**{level}**, N = {n} ({style_percent(p)}\%)") \%>\%
+  modify_header(update = all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}\%)") \%>\%
   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
   modify_footnote(update = everything() ~ NA) \%>\%
   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")

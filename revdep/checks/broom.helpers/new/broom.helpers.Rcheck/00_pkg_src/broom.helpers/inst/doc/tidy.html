@@ -1,0 +1,2865 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting Started with broom.helpers</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+<style type="text/css">.pagedtable {
+overflow: auto;
+padding-left: 8px;
+padding-right: 8px;
+}
+.pagedtable-wrapper {
+border: 1px solid #ccc;
+border-radius: 4px;
+margin-bottom: 10px;
+}
+.pagedtable table {
+width: 100%;
+max-width: 100%;
+margin: 0;
+}
+.pagedtable th {
+padding: 0 5px 0 5px;
+border: none;
+border-bottom: 2px solid #dddddd;
+min-width: 45px;
+}
+.pagedtable-empty th {
+display: none;
+}
+.pagedtable td {
+padding: 0 4px 0 4px;
+}
+.pagedtable .even {
+background-color: rgba(140, 140, 140, 0.1);
+}
+.pagedtable-padding-col {
+display: none;
+}
+.pagedtable a {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.pagedtable-index-nav {
+cursor: pointer;
+padding: 0 5px 0 5px;
+float: right;
+border: 0;
+}
+.pagedtable-index-nav-disabled {
+cursor: default;
+text-decoration: none;
+color: #999;
+}
+a.pagedtable-index-nav-disabled:hover {
+text-decoration: none;
+color: #999;
+}
+.pagedtable-indexes {
+cursor: pointer;
+float: right;
+border: 0;
+}
+.pagedtable-index-current {
+cursor: default;
+text-decoration: none;
+font-weight: bold;
+color: #333;
+border: 0;
+}
+a.pagedtable-index-current:hover {
+text-decoration: none;
+font-weight: bold;
+color: #333;
+}
+.pagedtable-index {
+width: 30px;
+display: inline-block;
+text-align: center;
+border: 0;
+}
+.pagedtable-index-separator-left {
+display: inline-block;
+color: #333;
+font-size: 9px;
+padding: 0 0 0 0;
+cursor: default;
+}
+.pagedtable-index-separator-right {
+display: inline-block;
+color: #333;
+font-size: 9px;
+padding: 0 4px 0 0;
+cursor: default;
+}
+.pagedtable-footer {
+padding-top: 4px;
+padding-bottom: 5px;
+}
+.pagedtable-not-empty .pagedtable-footer {
+border-top: 2px solid #dddddd;
+}
+.pagedtable-info {
+overflow: hidden;
+color: #999;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+.pagedtable-header-name {
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.pagedtable-header-type {
+color: #999;
+font-weight: 400;
+}
+.pagedtable-na-cell {
+font-style: italic;
+opacity: 0.3;
+}
+</style>
+<script>// Production steps of ECMA-262, Edition 5, 15.4.4.18
+// Reference: http://es5.github.io/#x15.4.4.18
+if (!Array.prototype.forEach) {
+
+  Array.prototype.forEach = function(callback, thisArg) {
+
+    var T, k;
+
+    if (this === null) {
+      throw new TypeError(' this is null or not defined');
+    }
+
+    // 1. Let O be the result of calling toObject() passing the
+    // |this| value as the argument.
+    var O = Object(this);
+
+    // 2. Let lenValue be the result of calling the Get() internal
+    // method of O with the argument "length".
+    // 3. Let len be toUint32(lenValue).
+    var len = O.length >>> 0;
+
+    // 4. If isCallable(callback) is false, throw a TypeError exception.
+    // See: http://es5.github.com/#x9.11
+    if (typeof callback !== "function") {
+      throw new TypeError(callback + ' is not a function');
+    }
+
+    // 5. If thisArg was supplied, let T be thisArg; else let
+    // T be undefined.
+    if (arguments.length > 1) {
+      T = thisArg;
+    }
+
+    // 6. Let k be 0
+    k = 0;
+
+    // 7. Repeat, while k < len
+    while (k < len) {
+
+      var kValue;
+
+      // a. Let Pk be ToString(k).
+      //    This is implicit for LHS operands of the in operator
+      // b. Let kPresent be the result of calling the HasProperty
+      //    internal method of O with argument Pk.
+      //    This step can be combined with c
+      // c. If kPresent is true, then
+      if (k in O) {
+
+        // i. Let kValue be the result of calling the Get internal
+        // method of O with argument Pk.
+        kValue = O[k];
+
+        // ii. Call the Call internal method of callback with T as
+        // the this value and argument list containing kValue, k, and O.
+        callback.call(T, kValue, k, O);
+      }
+      // d. Increase k by 1.
+      k++;
+    }
+    // 8. return undefined
+  };
+}
+
+// Production steps of ECMA-262, Edition 5, 15.4.4.19
+// Reference: http://es5.github.io/#x15.4.4.19
+if (!Array.prototype.map) {
+
+  Array.prototype.map = function(callback, thisArg) {
+
+    var T, A, k;
+
+    if (this == null) {
+      throw new TypeError(' this is null or not defined');
+    }
+
+    // 1. Let O be the result of calling ToObject passing the |this|
+    //    value as the argument.
+    var O = Object(this);
+
+    // 2. Let lenValue be the result of calling the Get internal
+    //    method of O with the argument "length".
+    // 3. Let len be ToUint32(lenValue).
+    var len = O.length >>> 0;
+
+    // 4. If IsCallable(callback) is false, throw a TypeError exception.
+    // See: http://es5.github.com/#x9.11
+    if (typeof callback !== 'function') {
+      throw new TypeError(callback + ' is not a function');
+    }
+
+    // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+    if (arguments.length > 1) {
+      T = thisArg;
+    }
+
+    // 6. Let A be a new array created as if by the expression new Array(len)
+    //    where Array is the standard built-in constructor with that name and
+    //    len is the value of len.
+    A = new Array(len);
+
+    // 7. Let k be 0
+    k = 0;
+
+    // 8. Repeat, while k < len
+    while (k < len) {
+
+      var kValue, mappedValue;
+
+      // a. Let Pk be ToString(k).
+      //   This is implicit for LHS operands of the in operator
+      // b. Let kPresent be the result of calling the HasProperty internal
+      //    method of O with argument Pk.
+      //   This step can be combined with c
+      // c. If kPresent is true, then
+      if (k in O) {
+
+        // i. Let kValue be the result of calling the Get internal
+        //    method of O with argument Pk.
+        kValue = O[k];
+
+        // ii. Let mappedValue be the result of calling the Call internal
+        //     method of callback with T as the this value and argument
+        //     list containing kValue, k, and O.
+        mappedValue = callback.call(T, kValue, k, O);
+
+        // iii. Call the DefineOwnProperty internal method of A with arguments
+        // Pk, Property Descriptor
+        // { Value: mappedValue,
+        //   Writable: true,
+        //   Enumerable: true,
+        //   Configurable: true },
+        // and false.
+
+        // In browsers that support Object.defineProperty, use the following:
+        // Object.defineProperty(A, k, {
+        //   value: mappedValue,
+        //   writable: true,
+        //   enumerable: true,
+        //   configurable: true
+        // });
+
+        // For best browser support, use the following:
+        A[k] = mappedValue;
+      }
+      // d. Increase k by 1.
+      k++;
+    }
+
+    // 9. return A
+    return A;
+  };
+}
+
+var PagedTable = function (pagedTable) {
+  var me = this;
+
+  var source = function(pagedTable) {
+    var sourceElems = [].slice.call(pagedTable.children).filter(function(e) {
+      return e.hasAttribute("data-pagedtable-source");
+    });
+
+    if (sourceElems === null || sourceElems.length !== 1) {
+      throw("A single data-pagedtable-source was not found");
+    }
+
+    return JSON.parse(sourceElems[0].innerHTML);
+  }(pagedTable);
+
+  var options = function(source) {
+    var options = typeof(source.options) !== "undefined" &&
+      source.options !== null ? source.options : {};
+
+    var columns = typeof(options.columns) !== "undefined" ? options.columns : {};
+    var rows = typeof(options.rows) !== "undefined" ? options.rows : {};
+
+    var positiveIntOrNull = function(value) {
+      return parseInt(value) >= 0 ? parseInt(value) : null;
+    };
+
+    return {
+      pages: positiveIntOrNull(options.pages),
+      rows: {
+        min: positiveIntOrNull(rows.min),
+        max: positiveIntOrNull(rows.max),
+        total: positiveIntOrNull(rows.total)
+      },
+      columns: {
+        min: positiveIntOrNull(columns.min),
+        max: positiveIntOrNull(columns.max),
+        total: positiveIntOrNull(columns.total)
+      }
+    };
+  }(source);
+
+  var Measurer = function() {
+
+    // set some default initial values that will get adjusted in runtime
+    me.measures = {
+      padding: 12,
+      character: 8,
+      height: 15,
+      defaults: true
+    };
+
+    me.calculate = function(measuresCell) {
+      if (!me.measures.defaults)
+        return;
+
+      var measuresCellStyle = window.getComputedStyle(measuresCell, null);
+
+      var newPadding = parsePadding(measuresCellStyle.paddingLeft) +
+            parsePadding(measuresCellStyle.paddingRight);
+
+      var sampleString = "ABCDEFGHIJ0123456789";
+      var newCharacter = Math.ceil(measuresCell.clientWidth / sampleString.length);
+
+      if (newPadding <= 0 || newCharacter <= 0)
+        return;
+
+      me.measures.padding = newPadding;
+      me.measures.character = newCharacter;
+      me.measures.height = measuresCell.clientHeight;
+      me.measures.defaults = false;
+    };
+
+    return me;
+  };
+
+  var Page = function(data, options) {
+    var me = this;
+
+    var defaults = {
+      max: 7,
+      rows: 10
+    };
+
+    var totalPages = function() {
+      return Math.ceil(data.length / me.rows);
+    };
+
+    me.number = 0;
+    me.max = options.pages !== null ? options.pages : defaults.max;
+    me.visible = me.max;
+    me.rows = options.rows.min !== null ? options.rows.min : defaults.rows;
+    me.total = totalPages();
+
+    me.setRows = function(newRows) {
+      me.rows = newRows;
+      me.total = totalPages();
+    };
+
+    me.setPageNumber = function(newPageNumber) {
+      if (newPageNumber < 0) newPageNumber = 0;
+      if (newPageNumber >= me.total) newPageNumber = me.total - 1;
+
+      me.number = newPageNumber;
+    };
+
+    me.setVisiblePages = function(visiblePages) {
+      me.visible = Math.min(me.max, visiblePages);
+      me.setPageNumber(me.number);
+    };
+
+    me.getVisiblePageRange = function() {
+      var start = me.number - Math.max(Math.floor((me.visible - 1) / 2), 0);
+      var end = me.number + Math.floor(me.visible / 2) + 1;
+      var pageCount = me.total;
+
+      if (start < 0) {
+        var diffToStart = 0 - start;
+        start += diffToStart;
+        end += diffToStart;
+      }
+
+      if (end > pageCount) {
+        var diffToEnd = end - pageCount;
+        start -= diffToEnd;
+        end -= diffToEnd;
+      }
+
+      start = start < 0 ? 0 : start;
+      end = end >= pageCount ? pageCount : end;
+
+      var first = false;
+      var last = false;
+
+      if (start > 0 && me.visible > 1) {
+        start = start + 1;
+        first = true;
+      }
+
+      if (end < pageCount && me.visible > 2) {
+        end = end - 1;
+        last = true;
+      }
+
+      return {
+        first: first,
+        start: start,
+        end: end,
+        last: last
+      };
+    };
+
+    me.getRowStart = function() {
+      var rowStart = page.number * page.rows;
+      if (rowStart < 0)
+        rowStart = 0;
+
+      return rowStart;
+    };
+
+    me.getRowEnd = function() {
+      var rowStart = me.getRowStart();
+      return Math.min(rowStart + me.rows, data.length);
+    };
+
+    me.getPaddingRows = function() {
+      var rowStart = me.getRowStart();
+      var rowEnd = me.getRowEnd();
+      return data.length > me.rows ? me.rows - (rowEnd - rowStart) : 0;
+    };
+  };
+
+  var Columns = function(data, columns, options) {
+    var me = this;
+
+    me.defaults = {
+      min: 5
+    };
+
+    me.number = 0;
+    me.visible = 0;
+    me.total = columns.length;
+    me.subset = [];
+    me.padding = 0;
+    me.min = options.columns.min !== null ? options.columns.min : me.defaults.min;
+    me.max = options.columns.max !== null ? options.columns.max : null;
+    me.widths = {};
+
+    var widthsLookAhead = Math.max(100, options.rows.min);
+    var paddingColChars = 10;
+
+    me.emptyNames = function() {
+      columns.forEach(function(column) {
+        if (columns.label !== null && columns.label !== "")
+          return false;
+      });
+
+      return true;
+    };
+
+    var parsePadding = function(value) {
+      return parseInt(value) >= 0 ? parseInt(value) : 0;
+    };
+
+    me.calculateWidths = function(measures) {
+      columns.forEach(function(column) {
+        var maxChars = Math.max(
+          column.label.toString().length,
+          column.type.toString().length
+        );
+
+        for (var idxRow = 0; idxRow < Math.min(widthsLookAhead, data.length); idxRow++) {
+          maxChars = Math.max(maxChars, data[idxRow][column.name.toString()].length);
+        }
+
+        me.widths[column.name] = {
+          // width in characters
+          chars: maxChars,
+          // width for the inner html columns
+          inner: maxChars * measures.character,
+          // width adding outer styles like padding
+          outer: maxChars * measures.character + measures.padding
+        };
+      });
+    };
+
+    me.getWidth = function() {
+      var widthOuter = 0;
+      for (var idxCol = 0; idxCol < me.subset.length; idxCol++) {
+        var columnName = me.subset[idxCol].name;
+        widthOuter = widthOuter + me.widths[columnName].outer;
+      }
+
+      widthOuter = widthOuter + me.padding * paddingColChars * measurer.measures.character;
+
+      if (me.hasMoreLeftColumns()) {
+        widthOuter = widthOuter + columnNavigationWidthPX + measurer.measures.padding;
+      }
+
+      if (me.hasMoreRightColumns()) {
+        widthOuter = widthOuter + columnNavigationWidthPX + measurer.measures.padding;
+      }
+
+      return widthOuter;
+    };
+
+    me.updateSlice = function() {
+      if (me.number + me.visible >= me.total)
+        me.number = me.total - me.visible;
+
+      if (me.number < 0) me.number = 0;
+
+      me.subset = columns.slice(me.number, Math.min(me.number + me.visible, me.total));
+
+      me.subset = me.subset.map(function(column) {
+        Object.keys(column).forEach(function(colKey) {
+          column[colKey] = column[colKey] === null ? "" : column[colKey].toString();
+        });
+
+        column.width = null;
+        return column;
+      });
+    };
+
+    me.setVisibleColumns = function(columnNumber, newVisibleColumns, paddingCount) {
+      me.number = columnNumber;
+      me.visible = newVisibleColumns;
+      me.padding = paddingCount;
+
+      me.updateSlice();
+    };
+
+    me.incColumnNumber = function(increment) {
+      me.number = me.number + increment;
+    };
+
+    me.setColumnNumber = function(newNumber) {
+      me.number = newNumber;
+    };
+
+    me.setPaddingCount = function(newPadding) {
+      me.padding = newPadding;
+    };
+
+    me.getPaddingCount = function() {
+      return me.padding;
+    };
+
+    me.hasMoreLeftColumns = function() {
+      return me.number > 0;
+    };
+
+    me.hasMoreRightColumns = function() {
+      return me.number + me.visible < me.total;
+    };
+
+    me.updateSlice(0);
+    return me;
+  };
+
+  var data = source.data;
+  var page = new Page(data, options);
+  var measurer = new Measurer(data, options);
+  var columns = new Columns(data, source.columns, options);
+
+  var table = null;
+  var tableDiv = null;
+  var header = null;
+  var footer = null;
+  var tbody = null;
+
+  // Caches pagedTable.clientWidth, specially for webkit
+  var cachedPagedTableClientWidth = null;
+
+  var onChangeCallbacks = [];
+
+  var clearSelection = function() {
+    if(document.selection && document.selection.empty) {
+      document.selection.empty();
+    } else if(window.getSelection) {
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+    }
+  };
+
+  var columnNavigationWidthPX = 5;
+
+  var renderColumnNavigation = function(increment, backwards) {
+    var arrow = document.createElement("div");
+    arrow.setAttribute("style",
+      "border-top: " + columnNavigationWidthPX + "px solid transparent;" +
+      "border-bottom: " + columnNavigationWidthPX + "px solid transparent;" +
+      "border-" + (backwards ? "right" : "left") + ": " + columnNavigationWidthPX + "px solid;");
+
+    var header = document.createElement("th");
+    header.appendChild(arrow);
+    header.setAttribute("style",
+      "cursor: pointer;" +
+      "vertical-align: middle;" +
+      "min-width: " + columnNavigationWidthPX + "px;" +
+      "width: " + columnNavigationWidthPX + "px;");
+
+    header.onclick = function() {
+      columns.incColumnNumber(backwards ? -1 : increment);
+
+      me.animateColumns(backwards);
+      renderFooter();
+
+      clearSelection();
+      triggerOnChange();
+    };
+
+    return header;
+  };
+
+  var maxColumnWidth = function(width) {
+    var padding = 80;
+    var columnMax = Math.max(cachedPagedTableClientWidth - padding, 0);
+
+    return parseInt(width) > 0 ?
+      Math.min(columnMax, parseInt(width)) + "px" :
+      columnMax + "px";
+  };
+
+  var clearHeader = function() {
+    var thead = pagedTable.querySelectorAll("thead")[0];
+    thead.innerHTML = "";
+  };
+
+  var renderHeader = function(clear) {
+    cachedPagedTableClientWidth = pagedTable.clientWidth;
+
+    var fragment = document.createDocumentFragment();
+
+    header = document.createElement("tr");
+    fragment.appendChild(header);
+
+    if (columns.number > 0)
+      header.appendChild(renderColumnNavigation(-columns.visible, true));
+
+    columns.subset = columns.subset.map(function(columnData) {
+      var column = document.createElement("th");
+      column.setAttribute("align", columnData.align);
+      column.style.textAlign = columnData.align;
+
+      column.style.maxWidth = maxColumnWidth(null);
+      if (columnData.width) {
+        column.style.minWidth =
+          column.style.maxWidth = maxColumnWidth(columnData.width);
+      }
+
+      var columnName = document.createElement("div");
+      columnName.setAttribute("class", "pagedtable-header-name");
+      if (columnData.label === "") {
+        columnName.innerHTML = "&nbsp;";
+      }
+      else {
+        columnName.appendChild(document.createTextNode(columnData.label));
+      }
+      column.appendChild(columnName);
+
+      var columnType = document.createElement("div");
+      columnType.setAttribute("class", "pagedtable-header-type");
+      if (columnData.type === "") {
+        columnType.innerHTML = "&nbsp;";
+      }
+      else {
+        columnType.appendChild(document.createTextNode("<" + columnData.type + ">"));
+      }
+      column.appendChild(columnType);
+
+      header.appendChild(column);
+
+      columnData.element = column;
+
+      return columnData;
+    });
+
+    for (var idx = 0; idx < columns.getPaddingCount(); idx++) {
+      var paddingCol = document.createElement("th");
+      paddingCol.setAttribute("class", "pagedtable-padding-col");
+      header.appendChild(paddingCol);
+    }
+
+    if (columns.number + columns.visible < columns.total)
+      header.appendChild(renderColumnNavigation(columns.visible, false));
+
+    if (typeof(clear) == "undefined" || clear) clearHeader();
+    var thead = pagedTable.querySelectorAll("thead")[0];
+    thead.appendChild(fragment);
+  };
+
+  me.animateColumns = function(backwards) {
+    var thead = pagedTable.querySelectorAll("thead")[0];
+
+    var headerOld = thead.querySelectorAll("tr")[0];
+    var tbodyOld = table.querySelectorAll("tbody")[0];
+
+    me.fitColumns(backwards);
+
+    renderHeader(false);
+
+    header.style.opacity = "0";
+    header.style.transform = backwards ? "translateX(-30px)" : "translateX(30px)";
+    header.style.transition = "transform 200ms linear, opacity 200ms";
+    header.style.transitionDelay = "0";
+
+    renderBody(false);
+
+    if (headerOld) {
+      headerOld.style.position = "absolute";
+      headerOld.style.transform = "translateX(0px)";
+      headerOld.style.opacity = "1";
+      headerOld.style.transition = "transform 100ms linear, opacity 100ms";
+      headerOld.setAttribute("class", "pagedtable-remove-head");
+      if (headerOld.style.transitionEnd) {
+        headerOld.addEventListener("transitionend", function() {
+          var headerOldByClass = thead.querySelector(".pagedtable-remove-head");
+          if (headerOldByClass) thead.removeChild(headerOldByClass);
+        });
+      }
+      else {
+        thead.removeChild(headerOld);
+      }
+    }
+
+    if (tbodyOld) table.removeChild(tbodyOld);
+
+    tbody.style.opacity = "0";
+    tbody.style.transition = "transform 200ms linear, opacity 200ms";
+    tbody.style.transitionDelay = "0ms";
+
+    // force relayout
+    window.getComputedStyle(header).opacity;
+    window.getComputedStyle(tbody).opacity;
+
+    if (headerOld) {
+      headerOld.style.transform = backwards ? "translateX(20px)" : "translateX(-30px)";
+      headerOld.style.opacity = "0";
+    }
+
+    header.style.transform = "translateX(0px)";
+    header.style.opacity = "1";
+
+    tbody.style.opacity = "1";
+  }
+
+  me.onChange = function(callback) {
+    onChangeCallbacks.push(callback);
+  };
+
+  var triggerOnChange = function() {
+    onChangeCallbacks.forEach(function(onChange) {
+      onChange();
+    });
+  };
+
+  var clearBody = function() {
+    if (tbody) {
+      table.removeChild(tbody);
+      tbody = null;
+    }
+  };
+
+  var renderBody = function(clear) {
+    cachedPagedTableClientWidth = pagedTable.clientWidth
+
+    var fragment = document.createDocumentFragment();
+
+    var pageData = data.slice(page.getRowStart(), page.getRowEnd());
+
+    pageData.forEach(function(dataRow, idxRow) {
+      var htmlRow = document.createElement("tr");
+      htmlRow.setAttribute("class", (idxRow % 2 !==0) ? "even" : "odd");
+
+      if (columns.hasMoreLeftColumns())
+        htmlRow.appendChild(document.createElement("td"));
+
+      columns.subset.forEach(function(columnData) {
+        var cellName = columnData.name;
+        var dataCell = dataRow[cellName];
+        var htmlCell = document.createElement("td");
+
+        if (dataCell === "NA") htmlCell.setAttribute("class", "pagedtable-na-cell");
+        if (dataCell === "__NA__") dataCell = "NA";
+
+        var cellText = document.createTextNode(dataCell);
+        htmlCell.appendChild(cellText);
+        if (dataCell.length > 50) {
+          htmlCell.setAttribute("title", dataCell);
+        }
+        htmlCell.setAttribute("align", columnData.align);
+        htmlCell.style.textAlign = columnData.align;
+        htmlCell.style.maxWidth = maxColumnWidth(null);
+        if (columnData.width) {
+          htmlCell.style.minWidth = htmlCell.style.maxWidth = maxColumnWidth(columnData.width);
+        }
+        htmlRow.appendChild(htmlCell);
+      });
+
+      for (var idx = 0; idx < columns.getPaddingCount(); idx++) {
+        var paddingCol = document.createElement("td");
+        paddingCol.setAttribute("class", "pagedtable-padding-col");
+        htmlRow.appendChild(paddingCol);
+      }
+
+      if (columns.hasMoreRightColumns())
+        htmlRow.appendChild(document.createElement("td"));
+
+      fragment.appendChild(htmlRow);
+    });
+
+    for (var idxPadding = 0; idxPadding < page.getPaddingRows(); idxPadding++) {
+      var paddingRow = document.createElement("tr");
+
+      var paddingCellRow = document.createElement("td");
+      paddingCellRow.innerHTML = "&nbsp;";
+      paddingCellRow.setAttribute("colspan", "100%");
+      paddingRow.appendChild(paddingCellRow);
+
+      fragment.appendChild(paddingRow);
+    }
+
+    if (typeof(clear) == "undefined" || clear) clearBody();
+    tbody = document.createElement("tbody");
+    tbody.appendChild(fragment);
+
+    table.appendChild(tbody);
+  };
+
+  var getLabelInfo = function() {
+    var pageStart = page.getRowStart();
+    var pageEnd = page.getRowEnd();
+    var totalRows = data.length;
+
+    var totalRowsLabel = options.rows.total ? options.rows.total : totalRows;
+    var totalRowsLabelFormat = totalRowsLabel.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+
+    var infoText = (pageStart + 1) + "-" + pageEnd + " of " + totalRowsLabelFormat + " rows";
+    if (totalRows < page.rows) {
+      infoText = totalRowsLabel + " row" + (totalRows != 1 ? "s" : "");
+    }
+    if (columns.total > columns.visible) {
+      var totalColumnsLabel = options.columns.total ? options.columns.total : columns.total;
+
+      infoText = infoText + " | " + (columns.number + 1) + "-" +
+        (Math.min(columns.number + columns.visible, columns.total)) +
+        " of " + totalColumnsLabel + " columns";
+    }
+
+    return infoText;
+  };
+
+  var clearFooter = function() {
+    footer = pagedTable.querySelectorAll("div.pagedtable-footer")[0];
+    footer.innerHTML = "";
+
+    return footer;
+  };
+
+  var createPageLink = function(idxPage) {
+    var pageLink = document.createElement("a");
+    pageLinkClass = idxPage === page.number ? "pagedtable-index pagedtable-index-current" : "pagedtable-index";
+    pageLink.setAttribute("class", pageLinkClass);
+    pageLink.setAttribute("data-page-index", idxPage);
+    pageLink.onclick = function() {
+      page.setPageNumber(parseInt(this.getAttribute("data-page-index")));
+      renderBody();
+      renderFooter();
+
+      triggerOnChange();
+    };
+
+    pageLink.appendChild(document.createTextNode(idxPage + 1));
+
+    return pageLink;
+  }
+
+  var renderFooter = function() {
+    footer = clearFooter();
+
+    var next = document.createElement("a");
+    next.appendChild(document.createTextNode("Next"));
+    next.onclick = function() {
+      page.setPageNumber(page.number + 1);
+      renderBody();
+      renderFooter();
+
+      triggerOnChange();
+    };
+    if (data.length > page.rows) footer.appendChild(next);
+
+    var pageNumbers = document.createElement("div");
+    pageNumbers.setAttribute("class", "pagedtable-indexes");
+
+    var pageRange = page.getVisiblePageRange();
+
+    if (pageRange.first) {
+      var pageLink = createPageLink(0);
+      pageNumbers.appendChild(pageLink);
+
+      var pageSeparator = document.createElement("div");
+      pageSeparator.setAttribute("class", "pagedtable-index-separator-left");
+      pageSeparator.appendChild(document.createTextNode("..."))
+      pageNumbers.appendChild(pageSeparator);
+    }
+
+    for (var idxPage = pageRange.start; idxPage < pageRange.end; idxPage++) {
+      var pageLink = createPageLink(idxPage);
+
+      pageNumbers.appendChild(pageLink);
+    }
+
+    if (pageRange.last) {
+      var pageSeparator = document.createElement("div");
+      pageSeparator.setAttribute("class", "pagedtable-index-separator-right");
+      pageSeparator.appendChild(document.createTextNode("..."))
+      pageNumbers.appendChild(pageSeparator);
+
+      var pageLink = createPageLink(page.total - 1);
+      pageNumbers.appendChild(pageLink);
+    }
+
+    if (data.length > page.rows) footer.appendChild(pageNumbers);
+
+    var previous = document.createElement("a");
+    previous.appendChild(document.createTextNode("Previous"));
+    previous.onclick = function() {
+      page.setPageNumber(page.number - 1);
+      renderBody();
+      renderFooter();
+
+      triggerOnChange();
+    };
+    if (data.length > page.rows) footer.appendChild(previous);
+
+    var infoLabel = document.createElement("div");
+    infoLabel.setAttribute("class", "pagedtable-info");
+    infoLabel.setAttribute("title", getLabelInfo());
+    infoLabel.appendChild(document.createTextNode(getLabelInfo()));
+    footer.appendChild(infoLabel);
+
+    var enabledClass = "pagedtable-index-nav";
+    var disabledClass = "pagedtable-index-nav pagedtable-index-nav-disabled";
+    previous.setAttribute("class", page.number <= 0 ? disabledClass : enabledClass);
+    next.setAttribute("class", (page.number + 1) * page.rows >= data.length ? disabledClass : enabledClass);
+  };
+
+  var measuresCell = null;
+
+  var renderMeasures = function() {
+    var measuresTable = document.createElement("table");
+    measuresTable.style.visibility = "hidden";
+    measuresTable.style.position = "absolute";
+    measuresTable.style.whiteSpace = "nowrap";
+    measuresTable.style.height = "auto";
+    measuresTable.style.width = "auto";
+
+    var measuresRow = document.createElement("tr");
+    measuresTable.appendChild(measuresRow);
+
+    measuresCell = document.createElement("td");
+    var sampleString = "ABCDEFGHIJ0123456789";
+    measuresCell.appendChild(document.createTextNode(sampleString));
+
+    measuresRow.appendChild(measuresCell);
+
+    tableDiv.appendChild(measuresTable);
+  }
+
+  me.init = function() {
+    tableDiv = document.createElement("div");
+    pagedTable.appendChild(tableDiv);
+    var pagedTableClass = data.length > 0 ?
+      "pagedtable pagedtable-not-empty" :
+      "pagedtable pagedtable-empty";
+
+    if (columns.total == 0 || (columns.emptyNames() && data.length == 0)) {
+      pagedTableClass = pagedTableClass + " pagedtable-empty-columns";
+    }
+
+    tableDiv.setAttribute("class", pagedTableClass);
+
+    renderMeasures();
+    measurer.calculate(measuresCell);
+    columns.calculateWidths(measurer.measures);
+
+    table = document.createElement("table");
+    table.setAttribute("cellspacing", "0");
+    table.setAttribute("class", "table table-condensed");
+    tableDiv.appendChild(table);
+
+    table.appendChild(document.createElement("thead"));
+
+    var footerDiv = document.createElement("div");
+    footerDiv.setAttribute("class", "pagedtable-footer");
+    tableDiv.appendChild(footerDiv);
+
+    // if the host has not yet provided horizontal space, render hidden
+    if (tableDiv.clientWidth <= 0) {
+      tableDiv.style.opacity = "0";
+    }
+
+    me.render();
+
+    // retry seizing columns later if the host has not provided space
+    function retryFit() {
+      if (tableDiv.clientWidth <= 0) {
+        setTimeout(retryFit, 100);
+      } else {
+        me.render();
+        triggerOnChange();
+      }
+    }
+    if (tableDiv.clientWidth <= 0) {
+      retryFit();
+    }
+  };
+
+  var registerWidths = function() {
+    columns.subset = columns.subset.map(function(column) {
+      column.width = columns.widths[column.name].inner;
+      return column;
+    });
+  };
+
+  var parsePadding = function(value) {
+    return parseInt(value) >= 0 ? parseInt(value) : 0;
+  };
+
+  me.fixedHeight = function() {
+    return options.rows.max != null;
+  }
+
+  me.fitRows = function() {
+    if (me.fixedHeight())
+      return;
+
+    measurer.calculate(measuresCell);
+
+    var rows = options.rows.min !== null ? options.rows.min : 0;
+    var headerHeight = header !== null && header.offsetHeight > 0 ? header.offsetHeight : 0;
+    var footerHeight = footer !== null && footer.offsetHeight > 0 ? footer.offsetHeight : 0;
+
+    if (pagedTable.offsetHeight > 0) {
+      var availableHeight = pagedTable.offsetHeight - headerHeight - footerHeight;
+      rows = Math.floor((availableHeight) / measurer.measures.height);
+    }
+
+    rows = options.rows.min !== null ? Math.max(options.rows.min, rows) : rows;
+
+    page.setRows(rows);
+  }
+
+  // The goal of this function is to add as many columns as possible
+  // starting from left-to-right, when the right most limit is reached
+  // it tries to add columns from the left as well.
+  //
+  // When startBackwards is true columns are added from right-to-left
+  me.fitColumns = function(startBackwards) {
+    measurer.calculate(measuresCell);
+    columns.calculateWidths(measurer.measures);
+
+    if (tableDiv.clientWidth > 0) {
+      tableDiv.style.opacity = 1;
+    }
+
+    var visibleColumns = tableDiv.clientWidth <= 0 ? Math.max(columns.min, 1) : 1;
+    var columnNumber = columns.number;
+    var paddingCount = 0;
+
+    // track a list of added columns as we build the visible ones to allow us
+    // to remove columns when they don't fit anymore.
+    var columnHistory = [];
+
+    var lastTableHeight = 0;
+    var backwards = startBackwards;
+
+    var tableDivStyle = window.getComputedStyle(tableDiv, null);
+    var tableDivPadding = parsePadding(tableDivStyle.paddingLeft) +
+      parsePadding(tableDivStyle.paddingRight);
+
+    var addPaddingCol = false;
+    var currentWidth = 0;
+
+    while (true) {
+      columns.setVisibleColumns(columnNumber, visibleColumns, paddingCount);
+      currentWidth = columns.getWidth();
+
+      if (tableDiv.clientWidth - tableDivPadding < currentWidth) {
+        break;
+      }
+
+      columnHistory.push({
+        columnNumber: columnNumber,
+        visibleColumns: visibleColumns,
+        paddingCount: paddingCount
+      });
+
+      if (columnHistory.length > 100) {
+        console.error("More than 100 tries to fit columns, aborting");
+        break;
+      }
+
+      if (columns.max !== null &&
+        columns.visible + columns.getPaddingCount() >= columns.max) {
+        break;
+      }
+
+      // if we run out of right-columns
+      if (!backwards && columnNumber + columns.visible >= columns.total) {
+        // if we started adding right-columns, try adding left-columns
+        if (!startBackwards && columnNumber > 0) {
+          backwards = true;
+        }
+        else if (columns.min === null || visibleColumns + columns.getPaddingCount() >= columns.min) {
+          break;
+        }
+        else {
+          paddingCount = paddingCount + 1;
+        }
+      }
+
+      // if we run out of left-columns
+      if (backwards && columnNumber == 0) {
+        // if we started adding left-columns, try adding right-columns
+        if (startBackwards && columnNumber + columns.visible < columns.total) {
+          backwards = false;
+        }
+        else if (columns.min === null || visibleColumns + columns.getPaddingCount() >= columns.min) {
+          break;
+        }
+        else {
+          paddingCount = paddingCount + 1;
+        }
+      }
+
+      // when moving backwards try fitting left columns first
+      if (backwards && columnNumber > 0) {
+        columnNumber = columnNumber - 1;
+      }
+
+      if (columnNumber + visibleColumns < columns.total) {
+        visibleColumns = visibleColumns + 1;
+      }
+    }
+
+    var lastRenderableColumn = {
+        columnNumber: columnNumber,
+        visibleColumns: visibleColumns,
+        paddingCount: paddingCount
+    };
+
+    if (columnHistory.length > 0) {
+      lastRenderableColumn = columnHistory[columnHistory.length - 1];
+    }
+
+    columns.setVisibleColumns(
+      lastRenderableColumn.columnNumber,
+      lastRenderableColumn.visibleColumns,
+      lastRenderableColumn.paddingCount);
+
+    if (pagedTable.offsetWidth > 0) {
+      page.setVisiblePages(Math.max(Math.ceil(1.0 * (pagedTable.offsetWidth - 250) / 40), 2));
+    }
+
+    registerWidths();
+  };
+
+  me.fit = function(startBackwards) {
+    me.fitRows();
+    me.fitColumns(startBackwards);
+  }
+
+  me.render = function() {
+    me.fitColumns(false);
+
+    // render header/footer to measure height accurately
+    renderHeader();
+    renderFooter();
+
+    me.fitRows();
+    renderBody();
+
+    // re-render footer to match new rows
+    renderFooter();
+  }
+
+  var resizeLastWidth = -1;
+  var resizeLastHeight = -1;
+  var resizeNewWidth = -1;
+  var resizeNewHeight = -1;
+  var resizePending = false;
+
+  me.resize = function(newWidth, newHeight) {
+
+    function resizeDelayed() {
+      resizePending = false;
+
+      if (
+        (resizeNewWidth !== resizeLastWidth) ||
+        (!me.fixedHeight() && resizeNewHeight !== resizeLastHeight)
+      ) {
+        resizeLastWidth = resizeNewWidth;
+        resizeLastHeight = resizeNewHeight;
+
+        setTimeout(resizeDelayed, 200);
+        resizePending = true;
+      } else {
+        me.render();
+        triggerOnChange();
+
+        resizeLastWidth = -1;
+        resizeLastHeight = -1;
+      }
+    }
+
+    resizeNewWidth = newWidth;
+    resizeNewHeight = newHeight;
+
+    if (!resizePending) resizeDelayed();
+  };
+};
+
+var PagedTableDoc;
+(function (PagedTableDoc) {
+  var allPagedTables = [];
+
+  PagedTableDoc.initAll = function() {
+    allPagedTables = [];
+
+    var pagedTables = [].slice.call(document.querySelectorAll('[data-pagedtable="false"],[data-pagedtable=""]'));
+    pagedTables.forEach(function(pagedTable, idx) {
+      pagedTable.setAttribute("data-pagedtable", "true");
+      pagedTable.setAttribute("pagedtable-page", 0);
+      pagedTable.setAttribute("class", "pagedtable-wrapper");
+
+      var pagedTableInstance = new PagedTable(pagedTable);
+      pagedTableInstance.init();
+
+      allPagedTables.push(pagedTableInstance);
+    });
+  };
+
+  PagedTableDoc.resizeAll = function() {
+    allPagedTables.forEach(function(pagedTable) {
+      pagedTable.render();
+    });
+  };
+
+  window.addEventListener("resize", PagedTableDoc.resizeAll);
+
+  return PagedTableDoc;
+})(PagedTableDoc || (PagedTableDoc = {}));
+
+window.onload = function() {
+  PagedTableDoc.initAll();
+};
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting Started with broom.helpers</h1>
+
+
+
+<p>The <code>broom.helpers</code> package offers a suite of functions that make easy to interact, add information, and manipulate tibbles created with <code>broom::tidy()</code> (and friends).</p>
+<p>The suite includes functions to group regression model terms by variable, insert reference and header rows for categorical variables, add variable labels, and more.</p>
+<p>As a motivating example, let’s summarize a logistic regression model with a forest plot and in a table.</p>
+<p>To begin, let’s load our packages.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(broom.helpers)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(gtsummary)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(dplyr)</span></code></pre></div>
+<p>Our model predicts tumor response using chemotherapy treatment and tumor grade. The data set we’re utilizing has already labelled the columns using the <a href="http://larmarange.github.io/labelled/">labelled package</a>. The column labels will be carried through to our figure and table.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>model_logit &lt;-<span class="st"> </span><span class="kw">glm</span>(response <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>grade, trial, <span class="dt">family =</span> binomial)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>broom<span class="op">::</span><span class="kw">tidy</span>(model_logit)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; # A tibble: 4 x 5</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;   term        estimate std.error statistic p.value</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; 1 (Intercept)  -0.879      0.305    -2.88  0.00400</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; 2 trtDrug B     0.194      0.311     0.625 0.532  </span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; 3 gradeII      -0.0647     0.381    -0.170 0.865  </span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 4 gradeIII      0.0822     0.376     0.219 0.827</span></span></code></pre></div>
+<div id="forest-plot" class="section level2">
+<h2>Forest Plot</h2>
+<p>To create the figure, we’ll need to add some information to the tidy tibble, i.e. we’ll need to group the terms that belong to the same variable, add the reference row, etc. Parsing this information can be difficult, but the <code>broom.helper</code> package has made it simple.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>tidy_forest &lt;-</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span>model_logit <span class="op">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span><span class="co"># perform initial tidying of the model</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span><span class="kw">tidy_and_attach</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  </span><span class="co"># adding in the reference row for categorical variables</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="st">  </span><span class="kw">tidy_add_reference_rows</span>() <span class="op">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="st">  </span><span class="co"># adding a reference value to appear in plot</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="st">  </span><span class="kw">tidy_add_estimate_to_reference_rows</span>() <span class="op">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="st">  </span><span class="co"># adding the variable labels</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="st">  </span><span class="kw">tidy_add_term_labels</span>() <span class="op">%&gt;%</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="st">  </span><span class="co"># removing intercept estimate from model</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="st">  </span><span class="kw">tidy_remove_intercept</span>()</span>
+<span id="cb3-13"><a href="#cb3-13"></a>tidy_forest</span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt; # A tibble: 5 x 16</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt;   term  variable var_label var_class var_type var_nlevels contrasts</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;    </span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt; 1 trtD~ trt      Chemothe~ character dichoto~           2 contr.tr~</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt; 2 trtD~ trt      Chemothe~ character dichoto~           2 contr.tr~</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt; 3 grad~ grade    Grade     factor    categor~           3 contr.tr~</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt; 4 grad~ grade    Grade     factor    categor~           3 contr.tr~</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt; 5 grad~ grade    Grade     factor    categor~           3 contr.tr~</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt; # ... with 9 more variables: contrasts_type &lt;chr&gt;, reference_row &lt;lgl&gt;,</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt; #   label &lt;chr&gt;, estimate &lt;dbl&gt;, std.error &lt;dbl&gt;, statistic &lt;dbl&gt;,</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#&gt; #   p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;</span></span></code></pre></div>
+<p><strong>Note:</strong> we used <code>tidy_and_attach()</code> instead of <code>broom::tidy()</code>. <code>broom.helpers</code> functions needs a copy of the original model. To avoid passing the model at each step, the easier way is to attach the model as an attribute of the tibble with <code>tidy_attach_model()</code>. <code>tidy_and_attach()</code> is simply a shortcut of <code>model %&gt;% broom::tidy() %&gt;% tidy_and_attach(model)</code>.</p>
+<p>We now have a tibble with every piece of information we need to create our forest plot using <code>ggplot2</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>tidy_forest <span class="op">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="dt">plot_label =</span> <span class="kw">paste</span>(var_label, label, <span class="dt">sep =</span> <span class="st">&quot;:&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">      </span>forcats<span class="op">::</span><span class="kw">fct_inorder</span>() <span class="op">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="st">      </span>forcats<span class="op">::</span><span class="kw">fct_rev</span>()</span>
+<span id="cb4-6"><a href="#cb4-6"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> plot_label, <span class="dt">y =</span> estimate, <span class="dt">ymin =</span> conf.low, <span class="dt">ymax =</span> conf.high, <span class="dt">color =</span> variable)) <span class="op">+</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="st">  </span><span class="kw">geom_pointrange</span>() <span class="op">+</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="st">  </span><span class="kw">labs</span>(</span>
+<span id="cb4-13"><a href="#cb4-13"></a>    <span class="dt">y =</span> <span class="st">&quot;Odds Ratio&quot;</span>,</span>
+<span id="cb4-14"><a href="#cb4-14"></a>    <span class="dt">x =</span> <span class="st">&quot; &quot;</span>,</span>
+<span id="cb4-15"><a href="#cb4-15"></a>    <span class="dt">title =</span> <span class="st">&quot;Forest Plot using broom.helpers&quot;</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a>  )</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAABHVBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZrYAv8QzMzM6AAA6ADo6AGY6OmY6ZpA6ZrY6kLY6kNtNTU1NTW5NTY5Nbo5NbqtNjqtNjshmAABmADpmOgBmOmZmkJBmtttmtv9uTU1uTW5uTY5ubo5ubqtujshuq6tuq+SOTU2OTW6OTY6Obk2Obm6ObquOjk2Ojm6Ojo6OyP+QOgCQZgCQZjqQkGaQttuQ27aQ2/+rbk2rbm6rbo6rjk2rq26rq46ryKur5Mir5P+2ZgC2kDq229u22/+2///Ijk3Ijm7I5KvI/+TI///bkDrbtmbbtpDb27bb///kq27k///r6+v4dm3/tmb/yI7/25D/27b/29v/5Kv//7b//8j//9v//+T///8kR5RoAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAKE0lEQVR4nO2dC1sbxxWGF1yLqk1bJMeFug22m1QYN21Fb0B6Ey1WE2gKGCQXBPv/f0bnzG1Hq5G+wZYhGn3vY2u1u7OjnVdzzixPjklRkpkUD30D33UoCEBBAAoCUBCAggAUBKAgQKaCTgrD6puU1sOfu2b2uu/9qSxvdh+flhRkWq/WBBXFVu6C0sxMtLbv/lM8Pl0eQe+eqZg5kphpnBSrR3r/E7Vf3vyhKFY+U8fVjFkfv+5w9Y0R9C5/QZdNCZmVPSXiUVPNjGG1b4JpliB18YPc/0fnxKcgNfzPZF9iRjTc7KpJU37bbJTD5o9P1UsjGmINnYPE3QOO4iNSCdIG1JRY2bvZldEPm3qyKBPD5qNf/Ku0O+PXmQkms62RqyA/5GFzSzaXIkiSymWl4FC2PzqKCPrkqLSCtpZZUPntMzPLJkJMWB5BVYiJICvM8d/fq0eeGYLyD7EwSYsglaTVY/I7lY8ui5+cljf/VFPpRKZT7brck3R0mddPfjbG1t0yrw6eTCzzpf1RI99lPnhQHPoHRS1I7z9Ss8o8KKqlvrx+VjRO69fZiMxU0PygIAAFASgIQEEACgJQEICCABQEoCBAnoLeCua12r4tagf8ifoB2bquKIiCKGiSdA8UREExKAhAQYC4ByZpDwUBKAhAQYB0DxREQTEoCEBBgLgHJmkPBQEoCEBBgHQPFFRt19bmLmjQarWenpdXL49n3o46j5pYbvdbLdNnpI9Z/cvrc7m0O7XV6FXPv48Me00zX0FnT9SN9Z+ez09QOdVEgiB5HW1PNTT4Xce/vx9B5iu53e9evfyN/upG2y2l7Pbgb61WR02ujj0iL1+PNbn65esnx/KNd8vRzl9b7V7Z75ZXn5/70eoGpq2eGV15/029Y3XJX+y5r913oHqRi9W+7kmd+/TXeubcHvzjSz8xJ4e9tlYZmpeggYuEq+cdvdPvlGcbytiGOrKh76+vT8gMGmty9byr9aoTo+2n54MnxwN1ulNNB2lg29p26k+tY92P69/PI9VcLr6yguQG2lqQMtfXs+v7isnBOEHThzuFWYI27Bt7NzKU0c7x7UGvlL9qV+3pOzZfb9XExYt6KzGhWo++PP93LxD0Ul8oDWw7ERR0XPXj49e8qgZOjnzezrG+RHHWqW74nkLMxkQlaFslyXYvGIecMHc83sSMpd+S+JM47XerAKgEmba2XU1Q1U9NkP1Ud0bdohGk0/8Tl8fuPQf5r8t8h9NnkGlixt91c0pan7kUWgmys8e0qwmq+qkJshE3MYP0t9l3GTw67Pkv8+EqVmWcYBxBDhpr4ofwQs2FDZ2c1NuaoLDti964oPF+aquYi0+5PZ+DzsSNj7F0Dx8kKHwOskHR7oUzyK1r++Gq0u6ZsZy1Wp++7o5e/VbH0e1Xx3VBpq1tp/r4Zrxj24/O3noVc89Brvdf7ejP++mB794/Ct2XoDng7vnqi4/1CbEnqMUTdNbuoZbvg6TmWM9xD/xh1UNBAAoCUBAg3QMFUVAMCgJQECDugUnaQ0EACgJQECDdAwVRUAwKAlAQIO6BSdpDQQAKAlAQIN0DBVFQDAoCUBAg7oFJ2kNBAAoCUBAg3QMFUVCMWR7W1uYmaIHqyGtnpwsKShU/WNAi1ZGbujVX5jcjSc9R0ELVkeuztiB4lqCwnvxDBS1UHbnpVn8H44Xka+9DqGGGoEWqIzc5yCe3ewmxhaojNyG2P7NOet5JerHqyM13ggXNc5lfpDpyc/bV7CQ99wfFxakjT38OmqugOfAwdeQL9MPqw9SRL5CgB4KCABQESPdAQRQUg4IAFASIe2CS9lAQgIIAFARI90BBFBSDggAUBIh7YJL2UBCAggAUBEj3QEEUFIOCABQEiHtgkvZQEICCABQESPdAQRQUg4IA0WFfXGQtSKq5NiaOVmWJZVgqFBn2hSZfQQNdytapH6YgixFhy8htkbouI3/ddVXnYb3/5LAvLipDOQryYw+K1HUJpxJlqs59o/hvJHeC7vzJiyIoLNoWpEhdioD3u1VF+jKHmC54fT5epG6Kibu+In2pBZkcZOvsXZG6nUE7TstMQbkv87pefNCu/iHCi16Qg8w/vAGCMn9QlJXLLFau+FyqgO0q1u6hVUzgD6seCgJQEICCAOkeKIiCYlAQgIIAcQ9M0h4KAlAQgIIA6R4oiIJiUBCAggBxD0zSHgoCUBCAggDpHiiIgmJQEICCAHEPTNIeCgJQEICCAOkeKIiCYlAQIDLsi4ucBaUVSc+oDwoK8HIUlFgkvbSCUoukpwsKq6QzFJRaJD1WJ31xd6IfvhCCEouklzbEUoukl1ZQapE0KCTPeJlPLJJe4jrptCJp1kknQ0EACgJQECDdAwVRUAwKAlAQIO6BSdpDQQAKAlAQIN0DBVFQDAoCUBAg7oFJ2kNBAAoCUBAg3QMFUVAMCgJQECDugUnaQ0EACgJQECDdAwVRUAwKAlAQIO6heJvnbwNOriJHBVSuUDEzQelV5Msp6A5V5PCX3VpDeQm6QxV5/Rduv0ct+WRJ+XdfUHoV+XKG2B2qyJdT0B2qyHGddJbLfHoV+bLWSSdXkS+roPeAggAUBEj3QEEUFIOCABQEiHtgkvZQEICCABQESPdAQRQUg4IAFASIe2CS9lAQgIIAFJTCxP+Otn4ANhAoaNaBkoJmHygpaPaBMmtB84GCABQEoCAABQEyFDTabj01NUVnLf1f9YPaInvK7dsGtm5t7FpHfoKkXsbUnZV9W8Y4MJr8KbdvG+i6tRe98Wsd+QmSqiEzQ24PevpIv/13M2PsKb9vGwxEiXZVXevJT5DU7Mmc0PFiQ8cO2p+y+1UDe0V1rSc/QVJSZYerwsZMEivEn3LCfANbZ1xd68lPUG0W6NCZMoN8g9F2J3atkJ+gWh4JBflTNUFSYRy7VshPkESLWYkkYG6/CpZ5fyoIOdXA+wmu9eQnyD7LiIMzWyVcugLQ8DmoaiBPQypZhw0qMhQ0XygIQEEACgJQEICCAHkKuiwUW35v9c3Y1nKzW2jWg2PvjsrhD/bCVlkKOhQT15uPT83uVEFazbC55Q/V5Ag5CjoxZqwAJKg8bPhDyyHoZnfLvBEh15vFyh+D7bDpgy8UpA+vy+u6SJLos9oyFOSngXpzvbmu3Ky+cVt9zgaVFXSpfF1vqiMn5rT6e7PbKOWvkLMgNWwdVWrkbjv8YRVlLklvleX/Ts11VpBubQMya0E/29PpSFlx2/LQx46ZQcOmiTNZ91a8IN3adJOhoDAHTQiSeVWYuWFCTCJMHVvZC2dQ3oIklGQjAlywhEFjMo7PQfJMoI1cVjNI6co4xMLnoOvNhk3SZqtHbeeGfw5qiBu1XdkTdfkn6TJ8kq4v8ybX6EZumT9Rz9IqNa38Wdk5LBr5L/PzhYIAFASgIAAFASgIQEEACgJQEICCAP8HNeXjhQjm2qcAAAAASUVORK5CYII=" /><!-- --></p>
+</div>
+<div id="table-summary" class="section level2">
+<h2>Table Summary</h2>
+<p>In addition to aiding in figure creation, the broom.helpers package can help summarize a model in a table. In the example below, we add header and reference rows, and utilize existing variable labels. Let’s change the labels shown in our summary table as well.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>tidy_table &lt;-</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span>model_logit <span class="op">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span><span class="co"># perform initial tidying of the model</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="st">  </span><span class="kw">tidy_and_attach</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="st">  </span><span class="co"># adding in the reference row for categorical variables</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="st">  </span><span class="kw">tidy_add_reference_rows</span>() <span class="op">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="st">  </span><span class="co"># adding the variable labels</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="st">  </span><span class="kw">tidy_add_term_labels</span>() <span class="op">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="st">  </span><span class="co"># add header row</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="st">  </span><span class="kw">tidy_add_header_rows</span>() <span class="op">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="st">  </span><span class="co"># removing intercept estimate from model</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="st">  </span><span class="kw">tidy_remove_intercept</span>() </span>
+<span id="cb5-13"><a href="#cb5-13"></a></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co"># print summary table</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="kw">options</span>(<span class="dt">knitr.kable.NA =</span> <span class="st">&#39;&#39;</span>)</span>
+<span id="cb5-16"><a href="#cb5-16"></a>tidy_table <span class="op">%&gt;%</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="st">  </span><span class="co"># format model estimates</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="st">  </span><span class="kw">select</span>(label, estimate, conf.low, conf.high, p.value) <span class="op">%&gt;%</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(estimate, conf.low, conf.high), style_ratio) <span class="op">%&gt;%</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(p.value), style_pvalue) <span class="op">%&gt;%</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">label</th>
+<th align="left">estimate</th>
+<th align="left">conf.low</th>
+<th align="left">conf.high</th>
+<th align="left">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Chemotherapy Treatment</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Drug A</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Drug B</td>
+<td align="left">1.21</td>
+<td align="left">0.66</td>
+<td align="left">2.24</td>
+<td align="left">0.5</td>
+</tr>
+<tr class="even">
+<td align="left">Grade</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">I</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">II</td>
+<td align="left">0.94</td>
+<td align="left">0.44</td>
+<td align="left">1.98</td>
+<td align="left">0.9</td>
+</tr>
+<tr class="odd">
+<td align="left">III</td>
+<td align="left">1.09</td>
+<td align="left">0.52</td>
+<td align="left">2.27</td>
+<td align="left">0.8</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note::</strong> for more advanced and nicely formatted tables of model coefficients, look at <code>gtsummary::tbl_regression()</code> and its <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html">dedicated vignette</a>. <code>gtsummary::tbl_regression()</code> internally uses <code>broom.helpers</code>.</p>
+</div>
+<div id="all-in-one-function" class="section level2">
+<h2>All-in-one function</h2>
+<p>There is also a handy wrapper, called <code>tidy_plus_plus()</code>, for the most commonly used <code>tidy_*()</code> functions, and they can be executed with a single line of code:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>model_logit <span class="op">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">tidy_plus_plus</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; # A tibble: 5 x 16</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt;   term  variable var_label var_class var_type var_nlevels contrasts</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;    </span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; 1 trtD~ trt      Chemothe~ character dichoto~           2 contr.tr~</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; 2 trtD~ trt      Chemothe~ character dichoto~           2 contr.tr~</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; 3 grad~ grade    Grade     factor    categor~           3 contr.tr~</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; 4 grad~ grade    Grade     factor    categor~           3 contr.tr~</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; 5 grad~ grade    Grade     factor    categor~           3 contr.tr~</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; # ... with 9 more variables: contrasts_type &lt;chr&gt;, reference_row &lt;lgl&gt;,</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; #   label &lt;chr&gt;, estimate &lt;dbl&gt;, std.error &lt;dbl&gt;, statistic &lt;dbl&gt;,</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt; #   p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>model_logit <span class="op">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">tidy_plus_plus</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="st">  </span>rmarkdown<span class="op">::</span><span class="kw">paged_table</span>()</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["variable"],"name":[2],"type":["chr"],"align":["left"]},{"label":["var_label"],"name":[3],"type":["chr"],"align":["left"]},{"label":["var_class"],"name":[4],"type":["chr"],"align":["left"]},{"label":["var_type"],"name":[5],"type":["chr"],"align":["left"]},{"label":["var_nlevels"],"name":[6],"type":["int"],"align":["right"]},{"label":["contrasts"],"name":[7],"type":["chr"],"align":["left"]},{"label":["contrasts_type"],"name":[8],"type":["chr"],"align":["left"]},{"label":["reference_row"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["label"],"name":[10],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["conf.low"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["conf.high"],"name":[16],"type":["dbl"],"align":["right"]}],"data":[{"1":"trtDrug A","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.treatment","8":"treatment","9":"TRUE","10":"Drug A","11":"1.0000000","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","_row":"trtDrug A"},{"1":"trtDrug B","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.treatment","8":"treatment","9":"FALSE","10":"Drug B","11":"1.2145219","12":"0.3107827","13":"0.6253581","14":"0.5317360","15":"0.6610196","16":"2.242643","_row":"trtDrug B"},{"1":"gradeI","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment","8":"treatment","9":"TRUE","10":"I","11":"1.0000000","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","_row":"gradeI"},{"1":"gradeII","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment","8":"treatment","9":"FALSE","10":"II","11":"0.9373213","12":"0.3810833","13":"-0.1698556","14":"0.8651237","15":"0.4417302","16":"1.980028","_row":"gradeII"},{"1":"gradeIII","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment","8":"treatment","9":"FALSE","10":"III","11":"1.0856429","12":"0.3758553","13":"0.2186277","14":"0.8269401","15":"0.5183386","16":"2.274982","_row":"gradeIII"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[25],"max":[25]},"pages":{}}}
+  </script>
+</div>
+<p>See the documentation of <code>tidy_plus_plus()</code> for the full list of available options.</p>
+</div>
+<div id="advanced-examples" class="section level2">
+<h2>Advanced examples</h2>
+<p><code>broom.helpers</code> can also handle different contrasts for categorical variables and the use of polynomial terms for continuous variables.</p>
+<div id="polynomial-terms" class="section level3">
+<h3>Polynomial terms</h3>
+<p>When polynomial terms of a continuous variable are defined with <code>stats::poly()</code>, <code>broom.helpers</code> will be able to identify the corresponding variable, create appropriate labels and add header rows.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>model_poly &lt;-<span class="st"> </span><span class="kw">glm</span>(response <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(age, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span>ttdeath, <span class="kw">na.omit</span>(trial), <span class="dt">family =</span> binomial)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>model_poly <span class="op">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="st">  </span><span class="kw">tidy_plus_plus</span>(</span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="dt">exponentiate =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="dt">add_header_rows =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="dt">variable_labels =</span> <span class="kw">c</span>(<span class="dt">age =</span> <span class="st">&quot;Age in years&quot;</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="st">  </span>rmarkdown<span class="op">::</span><span class="kw">paged_table</span>()</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["variable"],"name":[2],"type":["chr"],"align":["left"]},{"label":["var_label"],"name":[3],"type":["chr"],"align":["left"]},{"label":["var_class"],"name":[4],"type":["chr"],"align":["left"]},{"label":["var_type"],"name":[5],"type":["chr"],"align":["left"]},{"label":["var_nlevels"],"name":[6],"type":["int"],"align":["right"]},{"label":["header_row"],"name":[7],"type":["lgl"],"align":["right"]},{"label":["contrasts"],"name":[8],"type":["chr"],"align":["left"]},{"label":["contrasts_type"],"name":[9],"type":["chr"],"align":["left"]},{"label":["reference_row"],"name":[10],"type":["lgl"],"align":["right"]},{"label":["label"],"name":[11],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["conf.low"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["conf.high"],"name":[17],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"age","3":"Age in years","4":"nmatrix.3","5":"continuous","6":"NA","7":"TRUE","8":"NA","9":"NA","10":"NA","11":"Age in years","12":"NA","13":"NA","14":"NA","15":"NA","16":"NA","17":"NA","_row":""},{"1":"poly(age, 3)1","2":"age","3":"Age in years","4":"nmatrix.3","5":"continuous","6":"NA","7":"FALSE","8":"NA","9":"NA","10":"NA","11":"Age in years","12":"73.3062595","13":"2.30181235","14":"1.8657672","15":"0.06207394","16":"0.877867149","17":"7995.690992","_row":"poly(age, 3)1"},{"1":"poly(age, 3)2","2":"age","3":"Age in years","4":"nmatrix.3","5":"continuous","6":"NA","7":"FALSE","8":"NA","9":"NA","10":"NA","11":"Age in years²","12":"1.4298872","13":"2.26221357","14":"0.1580733","15":"0.87439903","16":"0.011343886","17":"105.165741","_row":"poly(age, 3)2"},{"1":"poly(age, 3)3","2":"age","3":"Age in years","4":"nmatrix.3","5":"continuous","6":"NA","7":"FALSE","8":"NA","9":"NA","10":"NA","11":"Age in years³","12":"0.4002595","13":"2.23570427","14":"-0.4095543","15":"0.68213295","16":"0.004758251","17":"40.506175","_row":"poly(age, 3)3"},{"1":"ttdeath","2":"ttdeath","3":"Months to Death/Censor","4":"numeric","5":"continuous","6":"NA","7":"NA","8":"NA","9":"NA","10":"NA","11":"Months to Death/Censor","12":"1.1218874","13":"0.03951317","14":"2.9107373","15":"0.00360577","16":"1.042865358","17":"1.219078","_row":"ttdeath"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[25],"max":[25]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="different-type-of-contrasts" class="section level3">
+<h3>Different type of contrasts</h3>
+<p>By default, categorical variables are coded with a treatment contrasts (see <code>stats::contr.treatment()</code>). With such contrasts, model coefficients correspond to the effect of a modality compared with the reference modality (by default, the first one). <code>tidy_add_reference_rows()</code> allows to add a row for this reference modality and <code>tidy_add_estimate_to_reference_rows()</code> will populate the estimate value of these references rows by 0 (or 1 if <code>exponentiate = TRUE</code>). <code>tidy_add_term_labels()</code> is able to retrieve the label of the factor level associated with a specific model term.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>model_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">glm</span>(</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  response <span class="op">~</span><span class="st"> </span>stage <span class="op">+</span><span class="st"> </span>grade <span class="op">*</span><span class="st"> </span>trt,</span>
+<span id="cb9-3"><a href="#cb9-3"></a>  gtsummary<span class="op">::</span>trial,</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="dt">family =</span> binomial</span>
+<span id="cb9-5"><a href="#cb9-5"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a>model_<span class="dv">1</span> <span class="op">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="st">  </span><span class="kw">tidy_and_attach</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="st">  </span><span class="kw">tidy_add_reference_rows</span>() <span class="op">%&gt;%</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="st">  </span><span class="kw">tidy_add_estimate_to_reference_rows</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="st">  </span><span class="kw">tidy_add_term_labels</span>() <span class="op">%&gt;%</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="st">  </span>rmarkdown<span class="op">::</span><span class="kw">paged_table</span>()</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["variable"],"name":[2],"type":["chr"],"align":["left"]},{"label":["var_label"],"name":[3],"type":["chr"],"align":["left"]},{"label":["var_class"],"name":[4],"type":["chr"],"align":["left"]},{"label":["var_type"],"name":[5],"type":["chr"],"align":["left"]},{"label":["var_nlevels"],"name":[6],"type":["int"],"align":["right"]},{"label":["contrasts"],"name":[7],"type":["chr"],"align":["left"]},{"label":["contrasts_type"],"name":[8],"type":["chr"],"align":["left"]},{"label":["reference_row"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["label"],"name":[10],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[14],"type":["dbl"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"(Intercept)","3":"(Intercept)","4":"NA","5":"intercept","6":"NA","7":"NA","8":"NA","9":"NA","10":"(Intercept)","11":"0.3390697","12":"0.4895787","13":"-2.20914307","14":"0.02716469","_row":"(Intercept)"},{"1":"stageT1","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.treatment","8":"treatment","9":"TRUE","10":"T1","11":"1.0000000","12":"NA","13":"NA","14":"NA","_row":"stageT1"},{"1":"stageT2","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.treatment","8":"treatment","9":"FALSE","10":"T2","11":"0.5711409","12":"0.4467837","13":"-1.25367016","14":"0.20996192","_row":"stageT2"},{"1":"stageT3","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.treatment","8":"treatment","9":"FALSE","10":"T3","11":"1.1479106","12":"0.4552943","13":"0.30297648","14":"0.76190779","_row":"stageT3"},{"1":"stageT4","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.treatment","8":"treatment","9":"FALSE","10":"T4","11":"0.7341427","12":"0.4424990","13":"-0.69842376","14":"0.48491222","_row":"stageT4"},{"1":"gradeI","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment","8":"treatment","9":"TRUE","10":"I","11":"1.0000000","12":"NA","13":"NA","14":"NA","_row":"gradeI"},{"1":"gradeII","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment","8":"treatment","9":"FALSE","10":"II","11":"1.0391945","12":"0.6033177","13":"0.06372417","14":"0.94918986","_row":"gradeII"},{"1":"gradeIII","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment","8":"treatment","9":"FALSE","10":"III","11":"2.8780642","12":"0.5562107","13":"1.90057107","14":"0.05735822","_row":"gradeIII"},{"1":"trtDrug A","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.treatment","8":"treatment","9":"TRUE","10":"Drug A","11":"1.0000000","12":"NA","13":"NA","14":"NA","_row":"trtDrug A"},{"1":"trtDrug B","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.treatment","8":"treatment","9":"FALSE","10":"Drug B","11":"2.4343417","12":"0.5466956","13":"1.62737050","14":"0.10365843","_row":"trtDrug B"},{"1":"gradeII:trtDrug B","2":"grade:trt","3":"Grade * Chemotherapy Treatment","4":"NA","5":"interaction","6":"NA","7":"NA","8":"NA","9":"NA","10":"II * Drug B","11":"0.8352000","12":"0.7941115","13":"-0.22677430","14":"0.82059925","_row":"gradeII:trtDrug B"},{"1":"gradeIII:trtDrug B","2":"grade:trt","3":"Grade * Chemotherapy Treatment","4":"NA","5":"interaction","6":"NA","7":"NA","8":"NA","9":"NA","10":"III * Drug B","11":"0.1630675","12":"0.7817367","13":"-2.31995133","14":"0.02034351","_row":"gradeIII:trtDrug B"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[25],"max":[25]},"pages":{}}}
+  </script>
+</div>
+<p>Using <code>stats::contr.treatment()</code>, it is possible to defined alternative reference rows. It will be properly managed by <code>broom.helpers</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>model_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">glm</span>(</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  response <span class="op">~</span><span class="st"> </span>stage <span class="op">+</span><span class="st"> </span>grade <span class="op">*</span><span class="st"> </span>trt,</span>
+<span id="cb10-3"><a href="#cb10-3"></a>  gtsummary<span class="op">::</span>trial,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="dt">family =</span> binomial,</span>
+<span id="cb10-5"><a href="#cb10-5"></a>  <span class="dt">contrasts =</span> <span class="kw">list</span>(</span>
+<span id="cb10-6"><a href="#cb10-6"></a>    <span class="dt">stage =</span> <span class="kw">contr.treatment</span>(<span class="dv">4</span>, <span class="dt">base =</span> <span class="dv">3</span>),</span>
+<span id="cb10-7"><a href="#cb10-7"></a>    <span class="dt">grade =</span> <span class="kw">contr.treatment</span>(<span class="dv">3</span>, <span class="dt">base =</span> <span class="dv">2</span>),</span>
+<span id="cb10-8"><a href="#cb10-8"></a>    <span class="dt">trt =</span> <span class="kw">contr.treatment</span>(<span class="dv">2</span>, <span class="dt">base =</span> <span class="dv">2</span>)</span>
+<span id="cb10-9"><a href="#cb10-9"></a>  )</span>
+<span id="cb10-10"><a href="#cb10-10"></a>)</span>
+<span id="cb10-11"><a href="#cb10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12"></a>model_<span class="dv">2</span> <span class="op">%&gt;%</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="st">  </span><span class="kw">tidy_and_attach</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="st">  </span><span class="kw">tidy_add_reference_rows</span>() <span class="op">%&gt;%</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="st">  </span><span class="kw">tidy_add_estimate_to_reference_rows</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="st">  </span><span class="kw">tidy_add_term_labels</span>() <span class="op">%&gt;%</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="st">  </span>rmarkdown<span class="op">::</span><span class="kw">paged_table</span>()</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["variable"],"name":[2],"type":["chr"],"align":["left"]},{"label":["var_label"],"name":[3],"type":["chr"],"align":["left"]},{"label":["var_class"],"name":[4],"type":["chr"],"align":["left"]},{"label":["var_type"],"name":[5],"type":["chr"],"align":["left"]},{"label":["var_nlevels"],"name":[6],"type":["int"],"align":["right"]},{"label":["contrasts"],"name":[7],"type":["chr"],"align":["left"]},{"label":["contrasts_type"],"name":[8],"type":["chr"],"align":["left"]},{"label":["reference_row"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["label"],"name":[10],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[14],"type":["dbl"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"(Intercept)","3":"(Intercept)","4":"NA","5":"intercept","6":"NA","7":"NA","8":"NA","9":"NA","10":"(Intercept)","11":"0.8223675","12":"0.4869667","13":"-0.4016042","14":"0.68797535","_row":"(Intercept)"},{"1":"stage1","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.treatment(base=3)","8":"treatment","9":"FALSE","10":"T1","11":"0.8711480","12":"0.4552943","13":"-0.3029765","14":"0.76190779","_row":"stage1"},{"1":"stage2","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.treatment(base=3)","8":"treatment","9":"FALSE","10":"T2","11":"0.4975482","12":"0.4712001","13":"-1.4814574","14":"0.13848473","_row":"stage2"},{"1":"stage3","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.treatment(base=3)","8":"treatment","9":"TRUE","10":"T3","11":"1.0000000","12":"NA","13":"NA","14":"NA","_row":"stage3"},{"1":"stage4","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.treatment(base=3)","8":"treatment","9":"FALSE","10":"T4","11":"0.6395470","12":"0.4661781","13":"-0.9588507","14":"0.33763395","_row":"stage4"},{"1":"grade1","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment(base=2)","8":"treatment","9":"FALSE","10":"I","11":"1.1521597","12":"0.5164934","13":"0.2742304","14":"0.78390760","_row":"grade1"},{"1":"grade2","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment(base=2)","8":"treatment","9":"TRUE","10":"II","11":"1.0000000","12":"NA","13":"NA","14":"NA","_row":"grade2"},{"1":"grade3","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.treatment(base=2)","8":"treatment","9":"FALSE","10":"III","11":"0.5407301","12":"0.5504584","13":"-1.1169507","14":"0.26401539","_row":"grade3"},{"1":"trt1","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.SAS","8":"treatment","9":"FALSE","10":"Drug A","11":"0.4918447","12":"0.5750633","13":"-1.2339378","14":"0.21722610","_row":"trt1"},{"1":"trt2","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.SAS","8":"treatment","9":"TRUE","10":"Drug B","11":"1.0000000","12":"NA","13":"NA","14":"NA","_row":"trt2"},{"1":"grade1:trt1","2":"grade:trt","3":"Grade * Chemotherapy Treatment","4":"NA","5":"interaction","6":"NA","7":"NA","8":"NA","9":"NA","10":"I * Drug A","11":"0.8352000","12":"0.7941115","13":"-0.2267743","14":"0.82059925","_row":"grade1:trt1"},{"1":"grade3:trt1","2":"grade:trt","3":"Grade * Chemotherapy Treatment","4":"NA","5":"interaction","6":"NA","7":"NA","8":"NA","9":"NA","10":"III * Drug A","11":"5.1218052","12":"0.8026895","13":"2.0350421","14":"0.04184663","_row":"grade3:trt1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[25],"max":[25]},"pages":{}}}
+  </script>
+</div>
+<p>You can also use sum contrasts (cf. <code>stats::contr.sum()</code>). In that case, each model coefficient corresponds to the difference of that modality with the grand mean. A variable with 4 modalities will be coded with 3 terms. However, a value could be computed (using <code>emmeans::emmeans()</code>) for the last modality, corresponding to the difference of that modality with the grand mean and equal to sum of all other coefficients multiplied by -1. <code>broom.helpers</code> will identify categorical variables coded with sum contrasts and could retrieve an estimate value for the reference term.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>model_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">glm</span>(</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  response <span class="op">~</span><span class="st"> </span>stage <span class="op">+</span><span class="st"> </span>grade <span class="op">*</span><span class="st"> </span>trt,</span>
+<span id="cb11-3"><a href="#cb11-3"></a>  gtsummary<span class="op">::</span>trial,</span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="dt">family =</span> binomial,</span>
+<span id="cb11-5"><a href="#cb11-5"></a>  <span class="dt">contrasts =</span> <span class="kw">list</span>(</span>
+<span id="cb11-6"><a href="#cb11-6"></a>    <span class="dt">stage =</span> contr.sum,</span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="dt">grade =</span> contr.sum,</span>
+<span id="cb11-8"><a href="#cb11-8"></a>    <span class="dt">trt =</span> contr.sum</span>
+<span id="cb11-9"><a href="#cb11-9"></a>  )</span>
+<span id="cb11-10"><a href="#cb11-10"></a>)</span>
+<span id="cb11-11"><a href="#cb11-11"></a></span>
+<span id="cb11-12"><a href="#cb11-12"></a>model_<span class="dv">3</span> <span class="op">%&gt;%</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="st">  </span><span class="kw">tidy_and_attach</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="st">  </span><span class="kw">tidy_add_reference_rows</span>() <span class="op">%&gt;%</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="st">  </span><span class="kw">tidy_add_estimate_to_reference_rows</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="st">  </span><span class="kw">tidy_add_term_labels</span>() <span class="op">%&gt;%</span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="st">  </span>rmarkdown<span class="op">::</span><span class="kw">paged_table</span>()</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["variable"],"name":[2],"type":["chr"],"align":["left"]},{"label":["var_label"],"name":[3],"type":["chr"],"align":["left"]},{"label":["var_class"],"name":[4],"type":["chr"],"align":["left"]},{"label":["var_type"],"name":[5],"type":["chr"],"align":["left"]},{"label":["var_nlevels"],"name":[6],"type":["int"],"align":["right"]},{"label":["contrasts"],"name":[7],"type":["chr"],"align":["left"]},{"label":["contrasts_type"],"name":[8],"type":["chr"],"align":["left"]},{"label":["reference_row"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["label"],"name":[10],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[14],"type":["dbl"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"(Intercept)","3":"(Intercept)","4":"NA","5":"intercept","6":"NA","7":"NA","8":"NA","9":"NA","10":"(Intercept)","11":"0.4553862","12":"0.1608512","13":"-4.8902924","14":"1.006863e-06","_row":"(Intercept)"},{"1":"stage1","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.sum","8":"sum","9":"FALSE","10":"T1","11":"1.2005826","12":"0.2695134","13":"0.6782852","14":"4.975909e-01","_row":"stage1"},{"1":"stage2","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.sum","8":"sum","9":"FALSE","10":"T2","11":"0.6857018","12":"0.2811013","13":"-1.3422651","14":"1.795101e-01","_row":"stage2"},{"1":"stage3","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.sum","8":"sum","9":"FALSE","10":"T3","11":"1.3781615","12":"0.2891714","13":"1.1092050","14":"2.673417e-01","_row":"stage3"},{"1":"stage4","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.sum","8":"sum","9":"TRUE","10":"T4","11":"0.8813990","12":"NA","13":"NA","14":"NA","_row":"stage4"},{"1":"grade1","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.sum","8":"sum","9":"FALSE","10":"I","11":"0.9676268","12":"0.2258518","13":"-0.1457095","14":"8.841507e-01","_row":"grade1"},{"1":"grade2","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.sum","8":"sum","9":"FALSE","10":"II","11":"0.9189672","12":"0.2318470","13":"-0.3644856","14":"7.154954e-01","_row":"grade2"},{"1":"grade3","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.sum","8":"sum","9":"TRUE","10":"III","11":"1.1245845","12":"NA","13":"NA","14":"NA","_row":"grade3"},{"1":"trt1","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.sum","8":"sum","9":"FALSE","10":"Drug A","11":"0.8935446","12":"0.1604902","13":"-0.7013449","14":"4.830878e-01","_row":"trt1"},{"1":"trt2","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.sum","8":"sum","9":"TRUE","10":"Drug B","11":"1.1191383","12":"NA","13":"NA","14":"NA","_row":"trt2"},{"1":"grade1:trt1","2":"grade:trt","3":"Grade * Chemotherapy Treatment","4":"NA","5":"interaction","6":"NA","7":"NA","8":"NA","9":"NA","10":"I * Drug A","11":"0.7172870","12":"0.2260248","13":"-1.4701003","14":"1.415346e-01","_row":"grade1:trt1"},{"1":"grade2:trt1","2":"grade:trt","3":"Grade * Chemotherapy Treatment","4":"NA","5":"interaction","6":"NA","7":"NA","8":"NA","9":"NA","10":"II * Drug A","11":"0.7848700","12":"0.2320641","13":"-1.0438372","14":"2.965607e-01","_row":"grade2:trt1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[25],"max":[25]},"pages":{}}}
+  </script>
+</div>
+<p>Other types of contrasts exist, like Helmert (<code>contr.helmert()</code>) or polynomial (<code>contr.poly()</code>). They are more complex as a modality will be coded with a combination of terms. Therefore, for such contrasts, it will not be possible to associate a specific model term with a level of the original factor. <code>broom.helpers</code> will not add a reference term in such case.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>model_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw">glm</span>(</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  response <span class="op">~</span><span class="st"> </span>stage <span class="op">+</span><span class="st"> </span>grade <span class="op">*</span><span class="st"> </span>trt,</span>
+<span id="cb12-3"><a href="#cb12-3"></a>  gtsummary<span class="op">::</span>trial,</span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="dt">family =</span> binomial,</span>
+<span id="cb12-5"><a href="#cb12-5"></a>  <span class="dt">contrasts =</span> <span class="kw">list</span>(</span>
+<span id="cb12-6"><a href="#cb12-6"></a>    <span class="dt">stage =</span> contr.poly,</span>
+<span id="cb12-7"><a href="#cb12-7"></a>    <span class="dt">grade =</span> contr.helmert,</span>
+<span id="cb12-8"><a href="#cb12-8"></a>    <span class="dt">trt =</span> contr.poly</span>
+<span id="cb12-9"><a href="#cb12-9"></a>  )</span>
+<span id="cb12-10"><a href="#cb12-10"></a>)</span>
+<span id="cb12-11"><a href="#cb12-11"></a></span>
+<span id="cb12-12"><a href="#cb12-12"></a>model_<span class="dv">4</span> <span class="op">%&gt;%</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="st">  </span><span class="kw">tidy_and_attach</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="st">  </span><span class="kw">tidy_add_reference_rows</span>() <span class="op">%&gt;%</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="st">  </span><span class="kw">tidy_add_estimate_to_reference_rows</span>(<span class="dt">exponentiate =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="st">  </span><span class="kw">tidy_add_term_labels</span>() <span class="op">%&gt;%</span></span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="st">  </span>rmarkdown<span class="op">::</span><span class="kw">paged_table</span>()</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["variable"],"name":[2],"type":["chr"],"align":["left"]},{"label":["var_label"],"name":[3],"type":["chr"],"align":["left"]},{"label":["var_class"],"name":[4],"type":["chr"],"align":["left"]},{"label":["var_type"],"name":[5],"type":["chr"],"align":["left"]},{"label":["var_nlevels"],"name":[6],"type":["int"],"align":["right"]},{"label":["contrasts"],"name":[7],"type":["chr"],"align":["left"]},{"label":["contrasts_type"],"name":[8],"type":["chr"],"align":["left"]},{"label":["reference_row"],"name":[9],"type":["lgl"],"align":["right"]},{"label":["label"],"name":[10],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[14],"type":["dbl"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"(Intercept)","3":"(Intercept)","4":"NA","5":"intercept","6":"NA","7":"NA","8":"NA","9":"NA","10":"(Intercept)","11":"0.4553862","12":"0.1608512","13":"-4.8902924","14":"1.006863e-06","_row":"(Intercept)"},{"1":"stage.L","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.poly","8":"poly","9":"NA","10":"stage.L","11":"0.9500633","12":"0.3142542","13":"-0.1630102","14":"8.705104e-01","_row":"stage.L"},{"1":"stage.Q","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.poly","8":"poly","9":"NA","10":"stage.Q","11":"1.0581923","12":"0.3213201","13":"0.1760303","14":"8.602701e-01","_row":"stage.Q"},{"1":"stage.C","2":"stage","3":"T Stage","4":"factor","5":"categorical","6":"4","7":"contr.poly","8":"poly","9":"NA","10":"stage.C","11":"0.5842765","12":"0.3319062","13":"-1.6190747","14":"1.054312e-01","_row":"stage.C"},{"1":"grade1","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.helmert","8":"helmert","9":"NA","10":"grade1","11":"0.9745319","12":"0.1985734","13":"-0.1299170","14":"8.966321e-01","_row":"grade1"},{"1":"grade2","2":"grade","3":"Grade","4":"factor","5":"categorical","6":"3","7":"contr.helmert","8":"helmert","9":"NA","10":"grade2","11":"1.0604643","12":"0.1137965","13":"0.5158930","14":"6.059292e-01","_row":"grade2"},{"1":"trt.L","2":"trt","3":"Chemotherapy Treatment","4":"character","5":"dichotomous","6":"2","7":"contr.poly","8":"poly","9":"NA","10":"trt.L","11":"1.1725519","12":"0.2269674","13":"0.7013449","14":"4.830878e-01","_row":"trt.L"},{"1":"grade1:trt.L","2":"grade:trt","3":"Grade * Chemotherapy Treatment","4":"NA","5":"interaction","6":"NA","7":"NA","8":"NA","9":"NA","10":"grade1 * trt.L","11":"0.9383152","12":"0.2807608","13":"-0.2267743","14":"8.205992e-01","_row":"grade1:trt.L"},{"1":"grade2:trt.L","2":"grade:trt","3":"Grade * Chemotherapy Treatment","4":"NA","5":"interaction","6":"NA","7":"NA","8":"NA","9":"NA","10":"grade2 * trt.L","11":"0.6661473","12":"0.1615993","13":"-2.5138994","14":"1.194045e-02","_row":"grade2:trt.L"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[25],"max":[25]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div id="column-details" class="section level2">
+<h2>Column Details</h2>
+<p>Below is a summary of the additional columns that may be added by a <code>broom.helpers</code> function. The table includes the column name, the function that adds the function, and a short description of the information in the column.</p>
+<style>
+td {vertical-align: top;}
+</style>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#yvpgqdutsq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#yvpgqdutsq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#yvpgqdutsq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#yvpgqdutsq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#yvpgqdutsq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#yvpgqdutsq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#yvpgqdutsq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#yvpgqdutsq .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#yvpgqdutsq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#yvpgqdutsq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#yvpgqdutsq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#yvpgqdutsq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#yvpgqdutsq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#yvpgqdutsq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yvpgqdutsq .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yvpgqdutsq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#yvpgqdutsq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#yvpgqdutsq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yvpgqdutsq .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#yvpgqdutsq .gt_left {
+  text-align: left;
+}
+
+#yvpgqdutsq .gt_center {
+  text-align: center;
+}
+
+#yvpgqdutsq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#yvpgqdutsq .gt_font_normal {
+  font-weight: normal;
+}
+
+#yvpgqdutsq .gt_font_bold {
+  font-weight: bold;
+}
+
+#yvpgqdutsq .gt_font_italic {
+  font-style: italic;
+}
+
+#yvpgqdutsq .gt_super {
+  font-size: 65%;
+}
+
+#yvpgqdutsq .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="yvpgqdutsq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Column</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Function</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Description</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>variable</p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_identify_variables()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>String of variable names from the model. For categorical variables and polynomial terms defined with <code>stats::poly()</code>, terms belonging to the variable are identified.</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>var_class</p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_identify_variables()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Class of the variable.</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>var_type</p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_identify_variables()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>One of 'intercept', 'continuous', 'dichotomous', 'categorical', or 'interaction'</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>var_nlevels</p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_identify_variables()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Number of original levels for categorical variables</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>contrasts</p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_add_contrasts()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Contrasts used for categorical variables.<br /><em>Require 'variable' column. If needed, will automatically apply <code>tidy_identify_variables()</code>.</em></p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>contrasts_type</p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_add_contrasts()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Type of contrasts ('treatment', 'sum', 'poly', 'helmert' or 'other')</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>reference_row</p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_add_reference_rows()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Logical indicating if a row is a reference row for categorical variables using a treatment or a sum contrast. Is equal to <code>NA</code> for variables who do not have a reference row.<br /><em>Require 'contrasts' column. If needed, will automatically apply <code>tidy_add_contrasts()</code>.<br /><code>tidy_add_reference_rows()</code> will not populate the label of the reference term. It is therefore better to apply <code>tidy_add_term_labels()</code> after <code>tidy_add_reference_rows()</code> rather than before.</em></p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>var_label</p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_add_variable_labels()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>String of variable labels from the model. Columns labelled with the <code>labelled</code> package are retained. It is possible to pass a custom label for an interaction term with the <code>labels</code> argument. <br /><em>Require 'variable' column. If needed, will automatically apply <code>tidy_identify_variables()</code>.</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>label</p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_add_term_labels()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>String of term labels based on (1) labels provided in <code>labels</code> argument if provided; (2) factor levels for categorical variables coded with treatment, SAS or sum contrasts; (3) variable labels when there is only one term per variable; and (4) term name otherwise.<br /><em>Require 'variable_label' column. If needed, will automatically apply <code>tidy_add_variable_labels()</code>.<br />Require 'contrasts' column. If needed, will automatically apply <code>tidy_add_contrasts()</code>.</em></p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>header_row</p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>tidy_add_header_rows()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Logical indicating if a row is a header row for variables with several terms. Is equal to <code>NA</code> for variables who do not have an header row.</br><em>Require 'label' column. If needed, will automatically apply <code>tidy_add_term_labels()</code>.<br />It is better to apply <code>tidy_add_header_rows()</code> after other <code>tidy_*</code> functions</em></p>
+</div></td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+<p>Note: <code>tidy_add_estimate_to_reference_rows()</code> does not create an additional column; rather, it populates the ‘estimate’ column for reference rows.</p>
+</div>
+<div id="supported-models" class="section level2">
+<h2>Supported models</h2>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#nhqgwruzob .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#nhqgwruzob .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#nhqgwruzob .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#nhqgwruzob .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#nhqgwruzob .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#nhqgwruzob .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#nhqgwruzob .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#nhqgwruzob .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nhqgwruzob .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#nhqgwruzob .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#nhqgwruzob .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#nhqgwruzob .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#nhqgwruzob .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#nhqgwruzob .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nhqgwruzob .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nhqgwruzob .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#nhqgwruzob .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#nhqgwruzob .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#nhqgwruzob .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#nhqgwruzob .gt_left {
+  text-align: left;
+}
+
+#nhqgwruzob .gt_center {
+  text-align: center;
+}
+
+#nhqgwruzob .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#nhqgwruzob .gt_font_normal {
+  font-weight: normal;
+}
+
+#nhqgwruzob .gt_font_bold {
+  font-weight: bold;
+}
+
+#nhqgwruzob .gt_font_italic {
+  font-style: italic;
+}
+
+#nhqgwruzob .gt_super {
+  font-size: 65%;
+}
+
+#nhqgwruzob .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="nhqgwruzob" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Notes</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>MASS::glm.nb()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>MASS::polr()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>gam::gam()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>geepack::geeglm()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>lavaan::lavaan()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Limited support for categorical variables</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>lme4::glmer()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>broom.mixed</code> package required</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>lme4::glmer.nb()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>broom.mixed</code> package required</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>lme4::lmer()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>broom.mixed</code> package required</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>mice::mira</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Limited support. If <code>mod</code> is a <code>mira</code> object, use <code>tidy_plus_plus(mod, tidy_fun = function(x, ...) mice::pool(x) %&gt;% mice::tidy(...))</code></p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>nnet::multinom()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>ordinal::clm()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Limited support for models with nominal predictors.</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>ordinal::clmm()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Limited support for models with nominal predictors.</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>stats::aov()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p>Reference rows are not relevant for such models.</p>
+</div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>stats::glm()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>stats::lm()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>survey::svycoxph()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>survey::svyglm()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>survey::svyolr()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>survival::clogit()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>survival::coxph()</code></p>
+</div></td>
+      <td class="gt_row gt_left gt_striped" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'><p><code>survival::survreg()</code></p>
+</div></td>
+      <td class="gt_row gt_left" style="vertical-align: top; font-size:  12px;"><div class='gt_from_md'></div></td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+<p>Note: this list of models has been tested. <code>broom.helpers</code> may or may not work properly or partially with other types of models. Do not hesitate to provide feedback on <a href="https://github.com/larmarange/broom.helpers/issues">GitHub</a>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

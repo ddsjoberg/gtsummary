@@ -19,14 +19,12 @@ add_p <- function(x, ...) {
 #' e.g. \code{list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")}.
 #' Common tests include `"t.test"`, `"aov"`, `"wilcox.test"`, `"kruskal.test"`,
 #' `"chisq.test"`, `"fisher.test"`, and `"lme4"` (for clustered data). See [tests]
-#' for details and more tests.
+#' for details, more tests, and instruction for implementing a custom test.
 #'
 #' Tests default to `"kruskal.test"` for continuous variables (`"wilcox.test"`
 #' when "`by`" variable has two levels), `"chisq.test.no.correct"` for
 #' categorical variables with all expected cell counts >=5, and `"fisher.test"`
 #' for categorical variables with any expected cell count <5.
-#' A custom test function can be added for all or some variables. See below for
-#' an example.
 #' @param group Column name (unquoted or quoted) of an ID or grouping variable.
 #' The column can be used to calculate p-values with correlated data.
 #' Default is `NULL`. See [tests] for methods that utilize the `group=` argument.
@@ -199,7 +197,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
           .run_add_p_test_fun(x = test_info, data = .env$x$inputs$data,
                               by = .env$x$by, variable = variable,
                               group = group, type = summary_type,
-                              test.args = test.args[[variable]])
+                              test.args = test.args[[variable]], tbl = x)
       ),
       p.value = map_dbl(.data$test_result, ~pluck(.x, "df_result","p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~pluck(.x, "df_result", "method"))

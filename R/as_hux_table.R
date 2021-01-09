@@ -102,6 +102,13 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable(add_colnames = FALSE))
 
+  # set_caption ----------------------------------------------------------------
+  if (!is.null(x$list_output$caption)) {
+    huxtable_calls[["set_caption"]] <- expr(
+      huxtable::set_caption(value = !!x$list_output$caption)
+    )
+  }
+
   # padding --------------------------------------------------------------------
   df_padding <-
     table_header %>%

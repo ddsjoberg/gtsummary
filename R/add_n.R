@@ -42,11 +42,15 @@ add_n <- function(x, ...) {
 #' @rdname add_n.tbl_summary
 #' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
+#' # Example 1 ----------------------------------
 #' tbl_n_ex <-
 #'   trial[c("trt", "age", "grade", "response")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_n()
 #' @section Example Output:
+#'
+#' \if{html}{Example 1}
+#'
 #' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
 
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
@@ -128,7 +132,7 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
       x$table_header,
       x$table_body
     )
-  x <- modify_header_internal(x, n = col_label)
+  x <- modify_header(x, n = col_label)
 
   # Adding footnote if requested -----------------------------------------------
   if (footnote == TRUE) {
@@ -249,7 +253,7 @@ add_n.tbl_survfit <- function(x, ...) {
     ) %>%
     table_header_fmt_fun(N = style_number)
 
-  x <- modify_header_internal(x, N = "**N**")
+  x <- modify_header(x, N = "**N**")
 
   # adding indicator to output that add_n was run on this data
   x$call_list <- c(x$call_list, list(add_n = match.call()))

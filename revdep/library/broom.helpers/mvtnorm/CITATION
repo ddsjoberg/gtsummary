@@ -1,0 +1,39 @@
+citHeader("To cite package mvtnorm in publications use")
+
+## R >= 2.8.0 passes package metadata to citation().
+if(!exists("meta") || is.null(meta)) meta <- packageDescription("mvtnorm")
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+citEntry(entry = "Manual",
+         title = "{mvtnorm}: Multivariate Normal and t Distributions",
+         author = personList(as.person("Alan Genz"), 
+                             as.person("Frank Bretz"),
+                             as.person("Tetsuhisa Miwa"),
+                             as.person("Xuefei Mi"), 
+                             as.person("Friedrich Leisch"),
+                             as.person("Fabian Scheipl"), 
+                             as.person("Torsten Hothorn")),
+         year = year,
+         note = note,
+         url = "https://CRAN.R-project.org/package=mvtnorm",
+
+         textVersion =
+         paste("Alan Genz, Frank Bretz, Tetsuhisa Miwa, Xuefei Mi, Friedrich Leisch, Fabian Scheipl, Torsten Hothorn",
+   	       sprintf("(%s).", year),	 
+               "mvtnorm: Multivariate Normal and t Distributions.",
+	       paste(note, ".", sep = ""),
+               "URL http://CRAN.R-project.org/package=mvtnorm")
+)
+
+citEntry(entry="Book",
+         title = "Computation of Multivariate Normal and t Probabilities",
+         author = personList(as.person("Alan Genz"),
+                             as.person("Frank Bretz")),
+         series = "Lecture Notes in Statistics",
+         year = "2009",
+         publisher = "Springer-Verlag",
+         address = "Heidelberg",
+         ISBN = "978-3-642-01688-2",
+         textVersion = "Alan Genz, Frank Bretz (2009), Computation of Multivariate Normal and t Probabilities. Lecture Notes in Statistics, Vol. 195., Springer-Verlag, Heidelberg. ISBN 978-3-642-01688-2"
+)

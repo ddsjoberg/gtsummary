@@ -1,0 +1,437 @@
+25 Aug 2020: statmod 1.4.35
+
+- Fix bug in tweedie(link.power=0) so that the resulting functions
+  $linkinv() and $mu.eta() preserve the attributes of their
+  arguments.
+
+16 Feb 2020: statmod 1.4.34
+
+- Improve the model description provided in the remlscoregamma() help
+  page.
+
+- tweedie() now checks whether `var.power` or `link.power` are
+  character strings instead of numeric. If `var.power` is one of the
+  standard family names ("gaussian", "poisson", "gamma" or
+  "inverse.gaussian") or `link.power` is one of the standard link
+  functions ("identity","log","inverse") then the argument is reset
+  to the corresponding numerical value with a message, otherwise an
+  informative error message is given.
+
+- Cleaning up of internal code to avoid partial matching of function
+  arguments, attributes or list component names. The automatic package
+  tests are now run with the warnPartialMatchArgs,
+  warnPartialMatchAttr and warnPartialMatchDollar options all set to
+  TRUE.
+
+ 4 Jan 2020: statmod 1.4.33
+
+- The components returned by mixedModel2Fit() relating to fixed
+  coefficients are now documented explicitly. The help page has been
+  corrected to refer to the argument `only.varcomp` instead of
+  `fixed.estimates`. The vector of `reml.residuals` is no longer
+  part of the output.
+
+- The test file has been slightly revised using zapsmall() so ensure
+  that the test output file remains correct for R with ATLAS BLAS.
+
+29 May 2019: statmod 1.4.32
+
+- Bug fix to glmnb.fit() when all the y values are zero.
+
+24 Feb 2019: statmod 1.4.31
+
+- Add Dunn & Smyth (2018) GLM book as a reference for glm.scoretest()
+  and Randomized Quantile Residuals. Rewrite the Details section of
+  the glm.scoretest help page.
+
+- Update minimum version of R to 3.0.0 in DESCRIPTION file.
+
+16 June 2017: statmod 1.4.30
+
+- Bug fix to qinvgauss(). In some case the gamma approximation used
+  for small right tail probabilities was taking the initial value
+  outside the domain of convergence.
+
+27 February 2017: statmod 1.4.29
+
+- rinvgauss() now accurately handles large or infinite values for the
+  mean or dispersion.
+
+26 February 2017: statmod 1.4.28
+
+- R_registerRoutines is now used to register the Fortran subroutine
+  gaussq2.
+
+- pinvgauss() and qinvgauss() now use a gamma approximation when the
+  coefficient of variation is very small.
+
+17 December 2016: statmod 1.4.27
+
+- qinvgauss() now supports mean=Inf.
+
+28 August 2016: statmod 1.4.26
+
+- Fortran function gaussq2 updated to Fortran 77.
+
+ 5 August 2016: statmod 1.4.25
+
+- Add CITATION file.
+
+- pinvgauss() now uses an asymptotic approximation to compute right
+  tail probabilities for extreme large quantiles.  This allows it to
+  give correct right tail probabilities for virtually any quantile.
+
+- Fix to qinvgauss() to avoid NA values when computing extreme tail
+  quantiles where the inverse Gaussian density is subject to floating
+  underflow.
+
+- Bug fix to qresiduals() and qresid.invgauss() for the inverse
+  Guassian distribution.
+
+ 2 February 2016: statmod 1.4.24
+
+- speedup for rinvgauss() by replacing rchisq() with rnorm() and
+  rbinom() with runif().
+
+- speedup for qinvgauss() by using qgamma as starting approximation
+  for very small right tail probabilities, and inverse chisq as
+  starting approximation for very small left tail probabilities.
+
+- qinvgauss() now computes Newton step using log probabilities
+  and a Taylor series expansion for small steps.  This improves
+  accuracy in extreme cases.  The stopping criterion for the Newton
+  iteration has been revised.
+
+- Bug fix to dinvgauss(), pinvgauss() and qinvgauss() which were not
+  preserving attributes of the first argument.
+
+30 December 2015: statmod 1.4.23
+
+- qinvgauss() has been improved to return best achievable machine
+  accuracy.  It now checks for backtracking of the Newton iteration.
+
+- dinvgauss() and pinvgauss() now check for a wider range of special
+  cases.  This allows them to give valid results in some cases
+  for infinite or missing parameter values and for x outside the
+  support of the distribution.
+
+26 October 2015: statmod 1.4.22
+
+- Functions needed from the stats and graphics packages are now
+  explicitly imported into the package NAMESPACE.
+
+30 March 2015: statmod 1.4.21
+
+- qinvgauss() now treats input arguments of different lengths or NA
+  parameter values more carefully.
+
+- elda() now gracefully removes structural zeros, i.e., rows where
+  the number of cells or the number of assays is zero.
+
+- S3 print and plot methods for "limdil" class now registered.
+
+- Use of require("tweedie") in the qres.tweedie() code replaced by
+  requireNameSpace("tweedie").
+
+31 May 2014: statmod 1.4.20
+
+- Considerable work on the inverse Gaussian functions dinvgauss(),
+  pinvgauss(), qinvgauss() and rinvgauss().  The parameter arguments
+  are changed to mean, shape and dispersion instead of mu and lambda.
+  The functions now include arguments lower.tail and log.p, meaning
+  that right-tailed probabilities can be used and probabilities can
+  be specified on the log-scale.  Good numerical precision is
+  maintained in these cases.  The functions now respect attributes,
+  so that a matrix argument for example will produce a matrix result.
+  Checking is now done for missing values and invalid parameter
+  values on an element-wise basis.  A technical report has been
+  written to describe the methodology behind qinvgauss().
+
+- Change to qresid.invgauss() to compute extreme tail residuals
+  accurately. (This introduced a bug that was fixed in version
+  1.4.25.)
+
+- This file has been renamed to NEWS instead of changelog.txt.
+
+- The introductory help page previously called 1.Introduction is now
+  named statmod-package.
+
+13 April 2014: statmod 1.4.19
+
+- qinvgauss() now uses a globally convergent Newton iteration, which
+  produces accurate values for a greater range of parameter values.
+
+- glmnb.fit() now supports weights.
+
+27 September 2013: statmod 1.4.18
+
+- Update reference for permp().
+
+- bug fix to elda() so that it returns NA for the tests instead of
+  giving an error when the Fisher information for the slope isNA.
+
+- Exact roles of authors specified in DESCRIPTION file.
+
+- All usage lines in help files wrapped at 90 characters to ensure
+  that code is not truncated in pdf manual.
+
+30 January 2013: statmod 1.4.17
+
+- new function eldaOneGroup() to conduct limiting dilution analysis
+  when there is only one treatment group.  This function implements
+  a globally convergent Newton iteration to avoid occasional problems
+  with lack of convergence of the usual glm calculations.
+  
+- elda() (aka limdil) now call eldaOneGroup() to get confidence
+  intervals and score tests.  This improves the numerical reliability
+  of the function. 
+
+- more detail added to the elda() help page about the interpretations
+  of the goodness of fit tests.
+
+- new function forward() for forward selection in multiple regression
+  with an unlimited number of candidate covariates.
+
+- license upgraded to GPL from LGPL.
+
+28 September 2012: statmod 1.4.16
+
+- gauss.quad() and gauss.quad.prob() now use Fortran to solve
+  tridiagonal eigenvalue problem, with considerable gain in speed.
+  Updates to references for the same two functions.
+
+- Formatting of gauss.quad test output to ensure agreement between
+  Unix and Windows.
+
+- mixedModel2 test code no longer prints REML residuals, because
+  these are not reproducible between Windows and Unix.
+
+6 August 2012: statmod 1.4.15
+
+- improvements to glmnb.fit() to make it more numerically robust.
+
+- use of lgamma() in gauss.quad() to avoid floating overflows
+  with kind="jacobi".
+
+19 November 2011: statmod 1.4.14
+
+- power.fisher.test() now accepts a new argument alternative
+  which indicates the rejection region.
+
+25 October 2011: statmod 1.4.13
+
+- bug fix to glmnb.fit() when dispersion is a vector argument.
+
+18 October 2011: statmod 1.4.12
+
+- glmnb.fit() now accepts vector dispersion argument.
+
+- change to residual returned by tweedie glms when var.power=2
+  and y==0.  In this case the theoretical residual is -Inf.
+  The value returned by the tweedie family is finite, but smaller
+  than previous.
+
+29 June 2011: statmod 1.4.11
+
+- updates to help page for sage.test
+
+21 April 2011: statmod 1.4.10
+
+- bug fix to glmnb.fit().
+
+9 March 2011: statmod 1.4.9
+
+- bug fix to glmnb.fit().
+
+- bug correction to sage.test() when library sizes are equal.
+  The p-values returned change slightly.
+
+3 November 2010: statmod 1.4.8
+
+- new function glmnb.fit(), which implements Levenberg-modified
+  Fisher scoring to fit a negative binomial generalized linear
+  model with log-link.
+
+28 May 2010: statmod 1.4.7
+
+- permp() now has two new arguments 'method' and 'twosided'.
+  The function now provides both exact and approximate methods
+  for computing permutation p-values.
+
+19 April 2010: statmod 1.4.6
+
+- psi.hampel() and rho.hampel() renamed to .psi.hampel and
+  .rho.hampel and removed from export function list.
+
+16 April 2010: statmod 1.4.5
+
+- new function mscale() which is the robust estimation of a scale 
+  parameter using Hampel's redescending psi function.
+- new function psi.hampel() which is the Hampel's redescending psi 
+  function.
+- new function rho.hampel() which is the integral of Hampel's 
+  redescending psi function.
+
+30 March 2010: statmod 1.4.4
+
+- remlscore() now returns a component iter giving the number of
+  iterations used.
+
+18 February 2010: statmod 1.4.3
+
+- new function permp() which calculates exact p-values for
+  permutation tests when permutations are sampled with replacement.
+
+5 January 2010: statmod 1.4.2
+
+- new argument 'dispersion' for glm.scoretest(), allowing the
+  user to set a known value for the dispersion parameter.
+- ensure chisq values from limdil() remain positive, even when small.
+- correct the format of chisq value in print.limdil().
+
+29 Sep 2009: statmod 1.4.1
+
+- fixes to documentation links to other packages
+- bug fix to glmgam.fit() when there are exact zeros
+  in the data or fitted values.
+- add more goodness of fit tests to elda().
+- improvements to print.limdil method.
+- argument log added to dinvgauss(), giving the option of
+  returning the density on the log-scale.
+
+6 May 2009: statmod 1.4.0
+
+- new function glm.scoretest() to compute likelihood score tests
+  for terms in generalized linear models.
+- Improvements to elda() and print.limdil() to avoid glm fits in
+  extreme data situations with 0% or 100% positive response,
+  improving speed and avoiding warnings.
+- Improvements to print.limdil method.
+- New function .limdil.allpos(). It calculates lower bound of
+  the limdil confidence interval when all tests respond by using
+  a globally convergent Newton interation.
+- Modify limdil() on lower bound of the confidence interval when all 
+  tests respond. 
+- New methods print.limdil and plot.limdil for limdil objects.
+- The output from limdil() is now a limdil class object.
+- Added \eqn{} markup to equations in pinvgauss.Rd
+  remlscor.Rd and remlscorgamma.Rd.
+- Elso et al (2004) reference added to compareGrowthCurves
+  help page.
+
+18 November 2008: statmod 1.3.8
+
+- qres.nbinom now works in more situations.  It now accepts
+  a model fit from MASS::glm.nb or a model fit using
+  MASS:negative.binomial() when the theta argument is unnamed.
+  Previously the theta argument had to be named, as in
+  negative.binomial(theta=2).
+
+20 July 2008: statmod 1.3.7
+
+- reference added to help page for compareGrowthCurves()
+- the saved output from the automatic tests updated for R 2.7.1
+
+07 April 2008: statmod 1.3.6
+
+- fixes to limdil() on estimate and upper bound of the confidence interval when all 
+  cells respond to all tests.
+- bug fix in limdil() which produced wrong calculation of the upper bound 
+  and lower bound of the confidence interval when there are more than one group and
+  no cells responds or all cells respond to all tests in one of the groups. 
+
+24 March 2008: statmod 1.3.5
+
+- The function remlscoregamma(), removed in 2004, restored to the package
+  with updated references.
+
+11 February 2008: statmod 1.3.4
+
+- bug fix in limdil() which produced error when calculating the confidence
+  intervals of multiple groups and all cells respond in one of the groups. 
+
+12 January 2008: statmod 1.3.3
+
+- the limdil function now has the capability to handle and compare
+  multiple experiments or groups.
+
+24 September 2007: statmod 1.3.1
+
+- non-ascii European characters removed from Rd files
+- Shackleton reference added to limdil.Rd
+- fixed some non-matched brackets in other Rd files
+
+15 October 2006: statmod 1.3.0
+
+- package now has a NAMESPACE which simply exports all objects
+- new function fitNBP()
+- new function plotGrowthCurves()
+
+4 January 2006: statmod 1.2.4
+
+- fixes to gauss.quad.prob when n=1 or n=2
+
+12 December 2005: statmod 1.2.3
+
+- remlscore() was failing when rank of X was only 1, now fixed.
+
+20 October 2005: statmod 1.2.2
+
+- mixedModel2Fit() now outputs REML residuals
+- randomizedBlock() & randomizedBlockFit() renamed to mixedModel2() & mixedModel2Fit()
+
+4 July 2005: statmod 1.2.1
+
+- remlscore() now outputs covariance matrices for estimated coefficients
+- redundant copy of randomizedBlockFit() removed
+
+22 June 2005: statmod 1.2.0
+
+- /inst/doc/index.html created
+- change log (this file) moved to /inst/doc directory of package
+- new function limdil()
+
+14 June 2005: statmod 1.1.1
+
+- change to rinvgauss() to avoid numerical problems with subtractive cancellation when lambda<<mu
+
+5 Oct 2004: statmod 1.1.0
+
+- new wrapper functions qresiduals() and qresid() for quantile residuals
+- bug fixes to qres.nbinom() qres.tweedie(), S-Plus code finally changed to R
+
+27 Sep 2004: statmod 1.0.8
+
+- bug fix in tweedie() - stop linkinv checking for neg or small arguments
+
+19 Sep 2004: statmod 1.0.7
+
+- fix problems with remlscor.Rd and remlscorgamma.Rd.  (The function
+  remlscoregamma documented by remlscorgamma.Rd was removed soon after
+  this.)
+- edits to 1.StatMod.Rd and glmgamfit.Rd
+- lm.fit (effects component) now used to transform to residual space in randomizedBlockFit()
+
+20 Mar 2004: statmod 1.0.6
+
+- new overall help entry 1.StatMod
+- edited welding.Rd
+- output component $sigmasquared from randomizedBlock changed to $varcomp
+- arg fixed.estimated changed to only.varcomp in randomizedBlock()
+- edit glmgamfit.Rd
+- continued work on glmgam.fit() to prevent singularity when some mu are very small
+- glmgam.fit doesn't warn when maxit exceeded but instead records number of iteration
+- arguments tol, maxit, trace added to randomizedBlock() and randomizedBlockFit()
+- edit sagetest.Rd
+- edit randomizedBlock.Rd
+
+11 Feb 2004: statmod 1.0.5
+- mlreg.fit() and mlreg.fit.zero() removed
+
+10 Feb 2004: statmod 1.0.4
+- minor bug fixes to glmgam.fit
+- mlreg.fit and mlreg.fit.zero updated to work in R 1.9.0
+
+6 Jan 2004: statmod 1.0.3
+- function fisher.test2() removed
+- bug fix in sage.test() which produced error with zero counts and equal sized libraries
