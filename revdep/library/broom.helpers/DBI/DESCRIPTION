@@ -1,0 +1,45 @@
+Package: DBI
+Title: R Database Interface
+Version: 1.1.0
+Date: 2019-12-15
+Authors@R: 
+    c(person(given = "R Special Interest Group on Databases (R-SIG-DB)",
+             role = "aut"),
+      person(given = "Hadley",
+             family = "Wickham",
+             role = "aut"),
+      person(given = "Kirill",
+             family = "M\u00fcller",
+             role = c("aut", "cre"),
+             email = "krlmlr+r@mailbox.org",
+             comment = c(ORCID = "0000-0002-1416-3412")),
+      person(given = "R Consortium",
+             role = "fnd"))
+Description: A database interface definition for communication
+    between R and relational database management systems.  All classes in
+    this package are virtual and need to be extended by the various R/DBMS
+    implementations.
+License: LGPL (>= 2.1)
+URL: http://r-dbi.github.io/DBI, https://github.com/r-dbi/DBI
+BugReports: https://github.com/r-dbi/DBI/issues
+Depends: methods, R (>= 3.0.0)
+Suggests: blob, covr, hms, knitr, magrittr, rmarkdown, rprojroot,
+        RSQLite (>= 1.1-2), testthat, xml2
+VignetteBuilder: knitr
+Encoding: UTF-8
+RoxygenNote: 7.0.2
+Collate: 'hidden.R' 'DBObject.R' 'DBDriver.R' 'table.R'
+        'DBConnection.R' 'ANSI.R' 'DBConnector.R' 'DBI-package.R'
+        'DBResult.R' 'data-types.R' 'data.R' 'deprecated.R'
+        'interpolate.R' 'list-pairs.R' 'quote.R' 'rd.R' 'rownames.R'
+        'table-create.R' 'table-insert.R' 'transactions.R'
+NeedsCompilation: no
+Packaged: 2019-12-15 08:59:43 UTC; kirill
+Author: R Special Interest Group on Databases (R-SIG-DB) [aut],
+  Hadley Wickham [aut],
+  Kirill Müller [aut, cre] (<https://orcid.org/0000-0002-1416-3412>),
+  R Consortium [fnd]
+Maintainer: Kirill Müller <krlmlr+r@mailbox.org>
+Repository: CRAN
+Date/Publication: 2019-12-15 09:50:02 UTC
+Built: R 4.0.3; ; 2020-12-30 17:21:38 UTC; windows

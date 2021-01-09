@@ -1,0 +1,274 @@
+This file documents updates and changes in package ordinal since version
+2010.03-04
+
+March 04 2010:
+- First version of the package is created.
+
+2010-04-06:
+- removing class "clm.fit" from results of finalizeRho.
+- moving offset computations from logLik and gradient funtions to
+  newRho function.
+- Bug fixed in grad.lambda
+- checks and warning messages added to profile.clm
+- a warning is now given if the profile fits do not converge
+- profile.clm has grown the argument 'stepWarn', which gives a
+  warning if the no. profile steps in each direction (up or down) is
+  less than stepWarn (default 8), which indicates that the profile is
+  unreliable.
+- Bug in loglog-link for clmm fits fixed.
+- Missing values are handled better in clm and clmm.
+- clmm has grown an argument 'sdFixed' which assigns a fixed value of
+  the standard deviation of the random effects. Optimization is
+  performed with respect to the remaining parameters.
+- profile.clmm, confint.profile.clmm and plot.profile.clmm are now
+  available. Profiling is restricted to the standard deviation
+  parameter of the random effects.
+- control.clm and control.clmm now handles the control parameters.
+
+2010-05-06:
+- allowing the formulas to be constructed outside clm and clmm
+  (the formulas are evaluated in the parent frame before the variable
+  names are extracted)
+
+2010-05-17:
+- Better evaluation in case of non-standard formula usage allowing
+  e.g. clm(data$y ~ data$x).
+- Better handling of ill-defined variance-covariance matrix of the
+  parameters in summary methods for clm and clmm objects.
+
+2010-06-12:
+- Standard Gauss-Hermite quadrature is now available via the nAGQ
+  argument to clmm.
+- Core functions implemented in C for speed. This includes all link
+  functions, update of the conditional modes of the random effects,
+  adaptive Gauss-Hermite quadrature and standard, i.e. non-adaptive
+  Gauss-Hermite quadrature. Select R or C implementation via the
+  argument doFit to clmm.
+- Bug in random effects estimates and their conditional modes
+  corrected.
+
+2010-07-06:
+- Bug in predict when 'newdata' was supplied is now corrected.
+
+2010-07-23:
+- Better descriptions of random effect estimates and fitted values in
+  the clmm help page.
+
+2010-10-22:
+- Updated help page for predict.clm/clmm.
+
+2010-12-13:
+- Bug in predict.clm corrected for models with nominal effects and
+  newdata supplied (thanks to Simon Blomberg for the bug report).
+
+2011-04-21:
+- Better message from summary.clmm when Hess = FALSE
+- endpoint thresholds are now closer to infinity. This is due to a bug
+  report from Ioannis Kosmidis (March 30, 2011); the model estimates
+  weren't right with very large scale effects. Tests are added to
+  testCLM.R
+- gradTol in clm.control now defaults to 1e-5 rather than 1e-4.
+  convTol is retained at 1e-4, so we are asking for closer convergence
+  than we require.
+- getGnll no longer returns Inf if !all(pr > 0)
+- link utility functions are moved from clm.R to linkUtils.R
+- extensive testing for NaN-specials in C-code for the link functions
+  is added.
+- details section added to clmm.control.Rd with comment about using
+  "central" gradients with the ucminf optimizer.
+- examples updated in confint.Rd
+
+2012-01-19:
+- Changed evaluation of formula in clm to make clm more forgiving for
+  evaluation inside other functions.
+
+2012-05-09:
+- Updated evaluation of formula in clmm, cf. resent update of clm.
+
+2012-05-22:
+- Better evaluation of fitted probabilities. This should reduce the
+  occurance of the "sqrt(phi2) : NaNs produced" error message.
+- Improved evaluation of control parameters in clmm using the new
+  function getCtrlArgs.
+- Better warning if intercept is attempted removed in clmm.
+
+2012-05-23:
+- Adding useMatrix argument to clmm.control
+- Using getFitted in clm
+- Implementing getFittedC in C and updating C code for fit.clmm.ssr
+  with better and faster evaluation of fitted values
+- Introduction of links.h, links.c and get_fitted.c in /src
+
+2012-05-29:
+- Correcting formula interpretation in clm to allow for really long
+  formulas.
+- Better evaluation of control arguments in clmm (adjustment of
+  getCtrlAgs).
+- Adding clmm.control.R to ./test
+
+2012-09-10:
+- Computing Newton step in clm with solve() rather than
+  .Call("La_dgesv", ...) to accomodate changes in R base.
+
+2012-09-11:
+- Using globalVariables() conditional on getRversion() >= '2.15.1'.
+
+2013-03-20:
+- Adding symmetric2 threshold function, which restricts the latent
+  mean in the reference group to zero. This means that the central
+  threshold (ylev even) is zero or that the two central thresholds
+  are equal apart from their sign (ylev uneven).
+
+2013-04-08:
+- Allowing zero weights in clm unless there are no observations with a
+  positive weight in one or more response categories.
+
+2013-04-11:
+- clm now computes Theta and alpha.mat tables of thresholds and
+  threshold-parameters if nominal effects are specified.
+
+2013-04-17:
+- anova.clm and anova.clmm now tests for illegal arguments 'test' and
+  'type' (wish from Ben Bolker and Jonathan Dushoff)
+- introducing convergence code 3 in clm: Thresholds are not
+  increasing, which can happen with nominal effects.
+
+2013-06-21:
+- Allowing zero weights in clm even if an entire response category is
+  zeroed out.
+
+2013-07-23:
+- Newton-Raphson fitting algorithm for CLMs has been redesigned:
+  clm.fit.env is now deprecated (and removed from the code base) and
+  all fitting of CLMs take place in a new version of clm.fit.NR
+- Convergence assessment has been improved with a new set of
+  convergence codes and new message handling.
+- clm.control has gained several arguments to accommodate this.
+- in clm the new function conv.check assess convergence and compute
+  the variance-covariance matrix of the parameters. Thus vcov is
+  always part of a clm object.
+- vcov.clm has been redesigned and can now compute the
+  variance-covariance matrix with Cholesky, SVD, EIGEN and QR methods
+  or just grap it from the clm object (default).
+- nominal_test and scale_test functions added: they add all terms in a
+  model to nominal and scale formulae respectively and perform
+  likelihood ratio tests. These functions can be helpful in model
+  development and model/GOF testing, e.g. of non-proportional odds.
+- Lazy-loading of data enabled.
+- MASS moved from Depends to Imports.
+- In clm man-page the 'value' list is ordered alphabetically as are
+  the elements in a clm object.
+- clmm now computes the variance-covariance matrix with the Cholesky
+  decomposition.
+- makeThresholds now take ylevels rather than y as argument.
+- clm.control and clmm.control are moved to control.R
+- drop.cols has gained argument drop.scale which controls whether
+  columns in the scale design matrix are droped if they are linearly
+  dependent of columns in the nominal design matrix. This was
+  previously implicitly TRUE but is now FALSE to allow fits of certain
+  models.
+- The list of control arguments are now storred as part of the clm
+  output.
+- weights, offset and S.offset can now be missing or NULL in clm.fit.
+- predict.clm now allows type="eta".
+
+2013-08-22:
+- Exporting S3 print method for convergence.clm objects.
+
+2013-08-23:
+- Fixing an issue in the Hessian computation for boundary fits with
+  useMatrix=FALSE and a single scalar random-effects term.
+- Allowing control parameters to be passed on to nlminb (when it is
+  used). A bug was fixed in getCtrlArgs and clmm.control now includes
+  method="nlminb".
+- Adding test for no. random effects >= no. observations for each
+  r.e. term.
+
+2013-08-25
+- changing default optimizer from ucminf to nlminb
+- adding grad.ctr4 to the list of gradient functions
+- explicitly computing the number of objective function evaluations
+  rather than relying on the optimizer's count.
+- wrapping calls to optimizers in try() to catch errors that occur
+  here
+- adding test for non-finite parameter values in *.ssr objective
+  functions.
+- adding list of control parameters to list of clmm output.
+- refining test of no. random effects > no. observations.
+- removing ucminf control settings from clmm.control when fitting with
+  nlminb.
+- fixing bug with C version of NRalgv3 (conditional mode update):
+  Hessian (D) values are now initialized to 1 rather than 0.
+
+2013-08-26:
+- registrering global variables.
+- removing use of ':::'.
+
+2013-08-27:
+- documenting list of control parameters in clmm objects.
+
+2013-09-27:
+- no longer importing numDeriv as we now use our own gradient and
+  hessian functions
+- moving Matrix package from Depends to Imports
+
+2013-10-01:
+- Updating convergence checking in clm.fit and simple_clm to the clm
+  standard
+- Removing distinction between (non-S3/4) sclm, eclm and clm model
+  classes
+
+2013-10-31:
+- Now having 'methods' in depends since this is needed to run
+  clmm. This was most likely only a problem when using Rscript where
+  the methods package is not loaded by default.
+
+2014-11-12:
+- Reimplementation of formula, model.frame and design matrix
+  processing motivated by a bug in model.matrix.clm and predict.clm
+  reported by Russell Lenth 2014-11-07 when implementing lsmeans support
+  for clm::ordinal.
+
+2014-11-14:
+- Fixing bug in convergence checking (conv.check) and added test to
+  /tests/test.clm.convergence.R
+- Improved the efficiency (i.e. speed) in the evaluation of standard
+  errors for predictions using predict.clm (based on feature request
+  by Thomas Jagger).
+
+2015-01-21:
+- Updating Citation information per CRAN request.
+
+2015-06-28:
+- Updating maintainer email address
+
+2016-12-12:
+- Fixing a couple of errors in CLM tutorial vignette
+- Correcting description of threshold argument to clmm
+- qgumbel did not respect it's lower.tail argument (thanks to John Fox for 
+  reporting)
+- Test for no. random effects less than the no. observations now gives a warning
+  instead of an error and is now manageable via clmm.control.
+  
+2018-04-19:
+- Fixed insufficient protect in get_fitted
+- Registration of native routines (C-code)
+- Reduce exec time for clmm examples
+- change rBind -> rbind
+
+2018-08-25:
+- Added sign.location and sign.nominal to clm.control()
+- Implemented type I, II and III type ANODE tables for clm fits
+- Implemented flexible link functions for clm()s
+- Added new article submitted to JSS as vignette and moved old vignettes to 
+  GitHub
+
+2019-03-09:
+- Massage tests to check out on R-devel
+
+2019-04-25:
+- Change in formula evaluation in base R prompts this update - very kindly 
+  fixed by Martin Maechler (R core) in PR#18 
+
+2019-12-11:
+- Get rid of S3 class checks with class() - now using inherits() instead.

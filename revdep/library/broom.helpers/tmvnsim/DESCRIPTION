@@ -1,0 +1,20 @@
+Package: tmvnsim
+Version: 1.0-2
+Date: 2016-12-14
+Title: Truncated Multivariate Normal Simulation
+Author: Samsiddhi Bhattacjarjee <sb1@nibmg.ac.in>
+Maintainer: Samsiddhi Bhattacharjee <sb1@nibmg.ac.in>
+Description: Importance sampling from the truncated multivariate normal using the GHK (Geweke-Hajivassiliou-Keane) simulator.
+  Unlike Gibbs sampling which can get stuck in one truncation sub-region depending on initial values, this package allows 
+  truncation based on disjoint regions that are created by truncation of absolute values. The GHK algorithm uses simple Cholesky
+  transformation followed by recursive simulation of univariate truncated normals hence there are also no convergence issues. 
+  Importance sample is returned along with sampling weights, based on which, one can calculate integrals over truncated regions
+  for multivariate normals.
+License: GPL-2
+Repository: CRAN
+URL: https://www.r-project.org
+NeedsCompilation: yes
+Packaged: 2016-12-14 12:02:07 UTC; sb1
+Date/Publication: 2016-12-15 09:05:14
+Built: R 4.0.3; x86_64-w64-mingw32; 2020-10-15 18:12:22 UTC; windows
+Archs: i386, x64

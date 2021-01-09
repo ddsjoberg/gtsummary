@@ -1,0 +1,107 @@
+---
+title: "Skipping tests"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Skipping tests}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Some times you have tests that you don't want to run in certain circumstances.
+This vignette describes how to **skip** tests to avoid execution in undesired environments.
+Skipping is a relatively advanced topic because in most cases you want all your tests to run everywhere.
+The most common exceptions are:
+
+-   You're testing a web service that occasionally fails, and you don't want to run the tests on CRAN.
+    Or maybe the API requires authentication, and you can only run the tests when you've [securely distributed](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html) some secrets.
+
+-   You're relying on features that not all operating systems possess, and want to make sure your code doesn't run on a platform where it doesn't work.
+    This platform tends to be Windows, since amongst other things, it lacks full utf8 support.
+
+-   You're writing your tests for multiple versions of R or multiple versions of a dependency and you want to skip when a feature isn't available.
+    You generally don't need to skip tests if a suggested package is not installed.
+    This is only needed in exceptional circumstances, e.g. when a package is not available on some operating system.
+
+```{r setup}
+library(testthat)
+```
+
+## Basics
+
+testthat comes with a variety of helpers for the most common situations:
+
+-   `skip_on_cran()` skips tests on CRAN.
+    This is useful for slow tests and tests that occasionally fail for reasons outside of your control.
+
+-   `skip_on_os()` allows you to skip tests on a specific operating system.
+    Generally, you should strive to avoid this as much as possible (so your code works the same on all platforms), but sometimes it's just not possible.
+
+-   `skip_on_ci()` skips tests on most continuous integration platforms (e.g. GitHub Actions, Travis, Appveyor).
+
+You can also easily implement your own using either `skip_if()` or `skip_if_not()`, which both take an expression that should yield a single `TRUE` or `FALSE`.
+
+All reporters show which tests as skipped.
+As of testthat 3.0.0, ProgressReporter (used interactively) and CheckReporter (used inside of `R CMD check`) also display a summary of skips across all tests.
+It looks something like this:
+
+    ── Skipped tests  ───────────────────────────────────────────────────────
+    ● No token (3)
+    ● On CRAN (1)
+
+You should keep an on eye this when developing interactively to make sure that you're not accidentally skipping the wrong things.
+
+## Helpers
+
+If you find yourself using the same `skip_if()`/`skip_if_not()` expression across multiple tests, it's a good idea to create a helper function.
+This function should start with `skip_` and live somewhere in your `R/` directory.
+
+```{r}
+skip_if_Tuesday <- function() {
+  if (as.POSIXlt(Sys.Date())$wday != 2) {
+    return(invisible(TRUE))
+  }
+  
+  skip("Not run on Tuesday")
+}
+```
+
+It's important to test your skip helpers because it's easy to miss if you're skipping more often than desired, and the test code is never run.
+This is unlikely to happen locally (since you'll see the skipped tests in the summary), but is quite possible in continuous integration.
+
+For that reason, it's a good idea to add a test that you skip is activated when you expect.
+skips are a special type of condition, so you can test for their presence/absence with `expect_condition()`.
+For example, imagine that you've defined a custom skipper that skips tests whenever an environment variable `DANGER` is set:
+
+```{r}
+skip_if_dangerous <- function() {
+  if (identical(Sys.getenv("DANGER"), "")) {
+    return(invisible(TRUE))
+  }
+  
+  skip("Not run in dangerous enviromnents")
+}
+```
+
+Then you can use `expect_condition()` to test that it skips tests when it should, and doesn't skip when it shouldn't:
+
+```{r}
+test_that("skip_if_dangerous work", {
+  # Test that a skip happens
+  withr::local_envvar(DANGER = "yes")
+  expect_condition(skip_if_dangerous(), class = "skip") 
+
+  # Test that a skip doesn't happen
+  withr::local_envvar(DANGER = "")
+  expect_condition(skip_if_dangerous(), NA, class = "skip")
+})
+```
+
+Testing `skip_if_Tuesday()` is harder because there's no way to control the skipping from the outside.
+That means you'd need to "mock" its behaviour in a test, using the [mockery](https://github.com/r-lib/mockery) or [mockr](https://krlmlr.github.io/mockr/) packages.

@@ -1,0 +1,76 @@
+
+R version 4.0.1 (2020-06-06) -- "See Things Now"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+Warning message:
+package 'testthat' was built under R version 4.0.3 
+> library(broom.helpers)
+
+Attaching package: 'broom.helpers'
+
+The following object is masked from 'package:testthat':
+
+    matches
+
+> 
+> test_check("broom.helpers")
+[90m`label = list(age ~ "Age, years")`[39m
+[90m`statistic = list(all_continuous() ~ "{mean} ({sd})")`[39m
+[90m`type = list(c(response, death) ~ "categorical")`[39m
+[90m`label = list(age ~ "Age, years")`[39m
+[90m`statistic = list(all_continuous() ~ "{mean} ({sd})")`[39m
+[90m`type = list(c(response, death) ~ "categorical")`[39m
+[90m`labels = list(age ~ "Age, years", response ~ "Tumor Response")`[39m
+
+ iter imp variable
+  1   1  age  marker  response
+  1   2  age  marker  response
+  2   1  age  marker  response
+  2   2  age  marker  response
+Stratified Independent Sampling design (with replacement)
+dpbc <- survey::svydesign(id = ~ 1, prob = ~ 1, strata = ~ edema, data = survival::pbc)
+== Warnings ====================================================================
+-- [1m[35mWarning[39m (test-add_coefficients_type.R:1:1): (code run outside of `test_that()`)[22m ---------------------
+package 'survival' was built under R version 4.0.3
+[1mBacktrace:[22m
+[90m 1. [39mbase::library(survival) [90mtest-add_coefficients_type.R:1:0[39m
+[90m 2. [39mbase:::testRversion(pkgInfo, package, pkgpath)
+-- [1m[35mWarning[39m (test-tidy_plus_plus.R:169:3): tidy_plus_plus() works with lme4::glmer.nb[22m ---------------------
+package 'lme4' was built under R version 4.0.3
+[1mBacktrace:[22m
+[90m 1. [39mbase::library(lme4) [90mtest-tidy_plus_plus.R:169:2[39m
+[90m 2. [39mbase:::testRversion(pkgInfo, package, pkgpath)
+-- [1m[35mWarning[39m (test-tidy_plus_plus.R:169:3): tidy_plus_plus() works with lme4::glmer.nb[22m ---------------------
+package 'Matrix' was built under R version 4.0.3
+[1mBacktrace:[22m
+[90m 1. [39mbase::library(lme4) [90mtest-tidy_plus_plus.R:169:2[39m
+[90m 2. [39mbase::.getRequiredPackages2(pkgInfo, quietly = quietly)
+[90m 3. [39mbase::library(...)
+[90m 4. [39mbase:::testRversion(pkgInfo, package, pkgpath)
+-- [1m[35mWarning[39m (test-tidy_plus_plus.R:283:3): tidy_plus_plus() works with MASS::glm.nb[22m ---------------------
+Tidiers for objects of class negbin are not maintained by the broom team, and are only supported through the glmlm tidier method. Please be cautious in interpreting and reporting broom output.
+[1mBacktrace:[22m
+[90m  1. [39mtestthat::expect_error(res <- mod %>% tidy_plus_plus(), NA) [90mtest-tidy_plus_plus.R:283:2[39m
+[90m 13. [39mbroom.helpers::tidy_and_attach(...)
+[90m 26. [39mbroom:::tidy.glm(model, exponentiate = exponentiate, ...)
+[90m 27. [39mbroom:::warn_on_subclass(x)
+
+[ [33mFAIL[39m 0 | [35mWARN[39m 4 | [34mSKIP[39m 0 | [32mPASS[39m 365 ]
+> 
+> proc.time()
+   user  system elapsed 
+ 115.96    1.79  123.96 

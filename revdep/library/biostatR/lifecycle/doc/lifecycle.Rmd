@@ -1,0 +1,245 @@
+---
+title: "Usage of the lifecycle package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{lifecycle}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(lifecycle)
+```
+
+Use lifecycle to document the status of your exported functions and arguments:
+
+* Choose one of the 7 lifecycle stages a function or argument can be in. You can choose from 4 development stages (experimental, maturing, stable, and questioning) and 3 deprecation stages (soft-deprecated, deprecated, and defunct).
+
+* If the function or argument is deprecated, make sure your users know about by calling `deprecate_soft()`, `deprecate_warn()`, or `deprecate_stop()`. These functions try to be informative without being too verbose, with increasing levels of verbosity as the deprecation stage advances.
+
+* Include the relevant lifecycle badge in your documentation.
+
+
+### Stages
+
+The lifecycle stages for functions and arguments are summarised in the figure below. They're designed to closely mirror the lifecycle stages for [packages](https://www.tidyverse.org/lifecycle/).
+
+<img src="figures/lifecycle.svg" width="75%" />
+
+There are two development stages.
+
+* <img src="figures/lifecycle-experimental.svg" alt = "Experimental" style="vertical-align:middle" /> This is a new feature that is in the very early stage of development. It is exported so users can start to use it and report feedback, but its interface and/or behaviour is likely to change in the future. It is generally best to avoid depending on experimental features.
+
+* <img src="figures/lifecycle-maturing.svg" alt = "Maturing" style="vertical-align:middle" /> The interface and behaviour of a maturing feature has been roughed out, but finer details are likely to change. It still needs more feedback to find the optimal API.
+
+The probable end state of most functions is _stable_:
+
+* <img src="figures/lifecycle-stable.svg" alt = "Stable" style="vertical-align:middle" /> A feature is considered stable when the author is happy with its interface and behaviour. Major changes are unlikely, and breaking changes will occur gradually, through a deprecation process.
+
+Sometimes we are no longer certain that a feature follows or implements the right approach. In this case, we mark it as _questioning_. It can then either become _superseded_ once we have implemented an alternative, or _deprecated_. The difference between superseded and deprecated is that a superseded feature is maintained indefinitely for backward compatibility. Alternatively, we may realise that a questioning feature is actually important, and move it back to stable. User feedback is usually important for taking these decisions and always welcome.
+
+1. <img src="figures/lifecycle-questioning.svg" alt = "Questioning" style="vertical-align:middle" /> The author is no longer convinced that the feature is the optimal approach. However, there are no recommended alternatives yet.
+
+1. <img src="figures/lifecycle-superseded.svg" alt = "Superseded" style="vertical-align:middle" /> (Previously called retired) A superseded feature is no longer under active development, and a known better alternative is available. However, it is indefinitely kept in the package for backward compatibility. The author will only make the necessary changes to ensure that the function continues working. No new features will be added, and only critical bugs will be fixed.
+
+The deprecation lifecycle is divided into three stages in order to give time to users to switch to an alternative.
+
+1. <img src="figures/lifecycle-soft-deprecated.svg" alt = "Soft deprecated" style="vertical-align:middle" /> The author is no longer happy with a feature because they consider it sub-optimal compared to some other approach, or simply because they no longer have the time to maintain it. A soft-deprecated feature can still be used without hassle, but users should consider switching to an alternative approach.
+
+1. <img src="figures/lifecycle-deprecated.svg" alt = "Deprecated" style="vertical-align:middle" /> The feature is likely to be discontinued in the next major release. Users should switch to an alternative approach as soon as possible.
+
+1. <img src="figures/lifecycle-defunct.svg" alt = "Defunct" style="vertical-align:middle" /> The feature can no longer be used. A defunct function is still exported, and a defunct argument is still part of the signature. This way an informative error can be thrown.
+
+Finally, when a feature is no longer exposed or mentioned in the released version of the package, it is said to be _archived_.
+
+
+### Badges {#rd-badges}
+
+Make sure your users know what stage a feature is by adding badges in the help topics of your functions.
+
+<img src="figures/example-badge.png" align="center" alt = "badge" />
+
+*   Call `usethis::use_lifecycle()` to import the badges in your package.
+
+*   Use the `lifecycle` Rd macro to insert a badge:
+
+    ```
+    #' \lifecycle{experimental}
+    #' \lifecycle{soft-deprecated}
+    ```
+
+    This badge renders as text in non-HTML documentation. To document the status of a whole function, a good place to include the badge is at the top of the `@description` block. To document an argument, you can put the badge in the argument description.
+
+*   For functions in development, you typically don't need to advertise the status if it is the same as the package as a whole. For instance, if your package is [maturing](https://www.tidyverse.org/lifecycle/#maturing), only signal functions in the experimental, stable, and questioning stages.
+
+
+### Verbosity of deprecation
+
+lifecycle offers three levels of verbosity corresponding to the three deprecation stages.
+
+*   __Soft deprecation__: At this stage, call `deprecate_soft()` to start warning users about the deprecation in the least disruptive way.
+
+    This function only warns (a) users who try the feature from the global workspace, and (b) developers who directly use the feature, when they run unit tests with testthat. No warning is issued outside of unit tests, or when the deprecated feature is called from another package then ther own.
+
+    When a warning does get issued, users only see it once every 8 hours rather than at each invokation.
+
+*   __Deprecation__: At this stage, call `deprecate_warn()` to warn unconditionally about the deprecated feature. The warning is issued only once every 8 hours.
+
+*   __Defunct__: The feature is discontinued. Call `deprecate_stop()` to fail with an error.
+
+
+### Deprecating functions
+
+These functions take the version number starting from which the feature is considered deprecated (it should remain the same across all deprecation stages), and a feature descriptor:
+
+```{r}
+deprecate_warn("1.0.0", "mypkg::foo()")
+```
+
+You can optionally provide a replacement:
+
+```{r}
+deprecate_warn("1.0.0", "mypkg::foo()", "new()")
+```
+
+For the purpose of these examples we explicitly mentioned the namespace with `mypkg::`, however you can typically omit it because lifecycle infers the namespace from the calling environment. Specifying the namespace is mostly useful when the replacement is implemented in a different package.
+
+```{r}
+# The new replacement
+foobar_adder <- function(foo, bar) {
+  foo + bar
+}
+
+# The old function still exported for compatibility
+foobaz_adder <- function(foo, bar) {
+  deprecate_warn("1.0.0", "foobaz_adder()", "foobar_adder()")
+  foobar_adder(foo, bar)
+}
+```
+
+
+### Deprecating arguments
+
+The syntax for deprecating argument is based on the syntax for deprecating functions:
+
+```{r}
+deprecate_warn("1.0.0", "mypkg::foo(arg = )")
+
+deprecate_warn("1.0.0", "mypkg::foo(arg = )", "mypkg::foo(new = )")
+```
+
+An argument can be partially deprecated by disallowing certain input types:
+
+```{r}
+deprecate_warn("1.0.0", "mypkg::foo(arg = 'must be a scalar integer')")
+```
+
+lifecycle also provides the `deprecated()` sentinel to use as default argument. This provides self-documentation for your users and makes it possible for external tools to determine which arguments are deprecated. Test whether the argument was supplied by the caller with `lifecycle::is_present()`:
+
+```{r}
+foobar_adder <- function(foo, bar, baz = deprecated()) {
+  # Check if user has supplied `baz` instead of `bar`
+  if (lifecycle::is_present(baz)) {
+
+    # Signal the deprecation to the user
+    deprecate_warn("1.0.0", "foobar_adder(baz = )", "foobar_adder(bar = )")
+
+    # Deal with the deprecated argument for compatibility
+    bar <- baz
+  }
+
+  foo + bar
+}
+```
+
+
+### Workflow
+
+#### Where do these deprecation warnings come from?
+
+Call `lifecycle::last_warnings()` to see backtraces for all the deprecation warnings that were issued during the last top-level command.
+
+
+#### Bumping deprecation stage
+
+Some manual search and replace is needed to bump the status of deprecated features. We recommend starting with defunct features and work your way up:
+
+1. Search for `deprecate_stop()` and remove the feature from the package. The feature is now archived.
+
+1. Search for `deprecate_warn()` and replace with `deprecate_stop()`.
+
+1. Search for `deprecate_soft()` and replace with `deprecate_warn()`.
+
+1. Call `deprecate_soft()` from newly deprecated functions.
+
+Don't forget to update the badges in the documentation topics.
+
+
+#### Find out what deprecated features you rely on
+
+Test whether your package depends on deprecated features directly or indirectly by setting the verbosity option in the `tests/testthat.R` file just before `test_check()` is called:
+
+```{r, eval = FALSE}
+library(testthat)
+library(mypackage)
+
+options(lifecycle_verbosity = "error")
+test_check("mypackage")
+```
+
+This forces all deprecated features to fail. You can also set the relevant options manually to force warnings or errors in your session:
+
+```{r, eval = FALSE}
+# Force silence
+options(lifecycle_verbosity = "quiet")
+
+# Force warnings
+options(lifecycle_verbosity = "warning")
+
+# Force errors
+options(lifecycle_verbosity = "error")
+```
+
+Forcing warnings can be useful in conjuction with `last_warnings()`, which prints backtraces for all the deprecation warnings issued during the last top-level command.
+
+
+#### Test deprecated features
+
+Test whether a deprecated feature still works by setting `lifecycle_verbosity` to `"quiet"`:
+
+```{r, eval = FALSE}
+test_that("`baz` argument of `foobar_adder()` still works", {
+  withr::local_options(list(lifecycle_verbosity = "quiet"))
+  foobar_adder(1, baz = 2)
+})
+```
+
+You can also set up verbosity for a whole testthat file within `setup()` and `teardown()` blocks:
+
+```{r, eval = FALSE}
+setup(options(lifecycle_verbosity = "quiet"))
+teardown(options(lifecycle_verbosity = NULL))
+```
+
+Test that a feature is correctly deprecated with
+`expect_deprecated()` or `expect_defunct()`:
+
+```{r, eval = FALSE}
+test_that("`baz` argument of `foobar_adder()` is deprecated", {
+  expect_deprecated(foobar_adder(1, baz = 2))
+})
+
+test_that("`foo()` is defunct", {
+  expect_defunct(foo())
+})
+```
+
+More control over verbosity can be exercised with the
+`lifecycle_verbosity` option. See `?verbosity`.

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to readr</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to readr</h1>
+
+
+
+<p>The key problem that readr solves is <strong>parsing</strong> a flat file into a tibble. Parsing is the process of taking a text file and turning it into a rectangular tibble where each column is the appropriate part. Parsing takes place in three basic stages:</p>
+<ol style="list-style-type: decimal">
+<li><p>The flat file is parsed into a rectangular matrix of strings.</p></li>
+<li><p>The type of each column is determined.</p></li>
+<li><p>Each column of strings is parsed into a vector of a more specific type.</p></li>
+</ol>
+<p>It’s easiest to learn how this works in the opposite order Below, you’ll learn how the:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Vector parsers</strong> turn a character vector in to a more specific type.</p></li>
+<li><p><strong>Column specification</strong> describes the type of each column and the strategy readr uses to guess types so you don’t need to supply them all.</p></li>
+<li><p><strong>Rectangular parsers</strong> turn a flat file into a matrix of rows and columns.</p></li>
+</ol>
+<p>Each <code>parse_*()</code> is coupled with a <code>col_*()</code> function, which will be used in the process of parsing a complete tibble.</p>
+<div id="vector-parsers" class="section level2">
+<h2>Vector parsers</h2>
+<p>It’s easiest to learn the vector parses using <code>parse_</code> functions. These all take a character vector and some options. They return a new vector the same length as the old, along with an attribute describing any problems.</p>
+<div id="atomic-vectors" class="section level3">
+<h3>Atomic vectors</h3>
+<p><code>parse_logical()</code>, <code>parse_integer()</code>, <code>parse_double()</code>, and <code>parse_character()</code> are straightforward parsers that produce the corresponding atomic vector.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">parse_integer</span>(<span class="kw">c</span>(<span class="st">&quot;1&quot;</span>, <span class="st">&quot;2&quot;</span>, <span class="st">&quot;3&quot;</span>))</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">parse_double</span>(<span class="kw">c</span>(<span class="st">&quot;1.56&quot;</span>, <span class="st">&quot;2.34&quot;</span>, <span class="st">&quot;3.56&quot;</span>))</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#&gt; [1] 1.56 2.34 3.56</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">parse_logical</span>(<span class="kw">c</span>(<span class="st">&quot;true&quot;</span>, <span class="st">&quot;false&quot;</span>))</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt; [1]  TRUE FALSE</span></span></code></pre></div>
+<p>By default, readr expects <code>.</code> as the decimal mark and <code>,</code> as the grouping mark. You can override this default using <code>locale()</code>, as described in <code>vignette(&quot;locales&quot;)</code>.</p>
+</div>
+<div id="flexible-numeric-parser" class="section level3">
+<h3>Flexible numeric parser</h3>
+<p><code>parse_integer()</code> and <code>parse_double()</code> are strict: the input string must be a single number with no leading or trailing characters. <code>parse_number()</code> is more flexible: it ignores non-numeric prefixes and suffixes, and knows how to deal with grouping marks. This makes it suitable for reading currencies and percentages:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">parse_number</span>(<span class="kw">c</span>(<span class="st">&quot;0%&quot;</span>, <span class="st">&quot;10%&quot;</span>, <span class="st">&quot;150%&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; [1]   0  10 150</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">parse_number</span>(<span class="kw">c</span>(<span class="st">&quot;$1,234.5&quot;</span>, <span class="st">&quot;$12.45&quot;</span>))</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; [1] 1234.50   12.45</span></span></code></pre></div>
+</div>
+<div id="datetimes" class="section level3">
+<h3>Date/times</h3>
+<p>readr supports three types of date/time data:</p>
+<ul>
+<li>dates: number of days since 1970-01-01.</li>
+<li>times: number of seconds since midnight.</li>
+<li>datetimes: number of seconds since midnight 1970-01-01.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">parse_datetime</span>(<span class="st">&quot;2010-10-01 21:45&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] &quot;2010-10-01 21:45:00 UTC&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">parse_date</span>(<span class="st">&quot;2010-10-01&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; [1] &quot;2010-10-01&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">parse_time</span>(<span class="st">&quot;1:00pm&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; 13:00:00</span></span></code></pre></div>
+<p>Each function takes a <code>format</code> argument which describes the format of the string. If not specified, it uses a default value:</p>
+<ul>
+<li><p><code>parse_datetime()</code> recognises <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8601</a> datetimes.</p></li>
+<li><p><code>parse_date()</code> uses the <code>date_format</code> specified by the <code>locale()</code>. The default value is <code>%AD</code> which uses an automatic date parser that recognises dates of the format <code>Y-m-d</code> or <code>Y/m/d</code>.</p></li>
+<li><p><code>parse_time()</code> uses the <code>time_format</code> specified by the <code>locale()</code>. The default value is <code>%At</code> which uses an automatic time parser that recognises times of the form <code>H:M</code> optionally followed by seconds and am/pm.</p></li>
+</ul>
+<p>In most cases, you will need to supply a <code>format</code>, as documented in <code>parse_datetime()</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">parse_datetime</span>(<span class="st">&quot;1 January, 2010&quot;</span>, <span class="st">&quot;%d %B, %Y&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] &quot;2010-01-01 UTC&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">parse_datetime</span>(<span class="st">&quot;02/02/15&quot;</span>, <span class="st">&quot;%m/%d/%y&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; [1] &quot;2015-02-02 UTC&quot;</span></span></code></pre></div>
+</div>
+<div id="factors" class="section level3">
+<h3>Factors</h3>
+<p>When reading a column that has a known set of values, you can read directly into a factor. <code>parse_factor()</code> will generate a warning if a value is not in the supplied levels.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">parse_factor</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;a&quot;</span>), <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>))</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [1] a b a</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; Levels: a b c</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">parse_factor</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;d&quot;</span>), <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>))</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; Warning: 1 parsing failure.</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; row col           expected actual</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt;   3  -- value in level set      d</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; [1] a    b    &lt;NA&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; attr(,&quot;problems&quot;)</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; # A tibble: 1 x 4</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt;     row   col expected           actual</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt;              &lt;chr&gt; </span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt; 1     3    NA value in level set d     </span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">#&gt; Levels: a b c</span></span></code></pre></div>
+</div>
+</div>
+<div id="column-specification" class="section level2">
+<h2>Column specification</h2>
+<p>It would be tedious if you had to specify the type of every column when reading a file. Instead readr, uses some heuristics to guess the type of each column. You can access these results yourself using <code>guess_parser()</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">guess_parser</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>))</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [1] &quot;character&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">guess_parser</span>(<span class="kw">c</span>(<span class="st">&quot;1&quot;</span>, <span class="st">&quot;2&quot;</span>, <span class="st">&quot;3&quot;</span>))</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; [1] &quot;double&quot;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">guess_parser</span>(<span class="kw">c</span>(<span class="st">&quot;1,000&quot;</span>, <span class="st">&quot;2,000&quot;</span>, <span class="st">&quot;3,000&quot;</span>))</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; [1] &quot;number&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="kw">guess_parser</span>(<span class="kw">c</span>(<span class="st">&quot;2001/10/10&quot;</span>))</span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; [1] &quot;date&quot;</span></span></code></pre></div>
+<p>The guessing policies are described in the documentation for the individual functions. Guesses are fairly strict. For example, we don’t guess that currencies are numbers, even though we can parse them:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">guess_parser</span>(<span class="st">&quot;$1,234&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; [1] &quot;character&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">parse_number</span>(<span class="st">&quot;$1,234&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; [1] 1234</span></span></code></pre></div>
+<p>There are two parsers that will never be guessed: <code>col_skip()</code> and <code>col_factor()</code>. You will always need to supply these explicitly.</p>
+<p>You can see the specification that readr would generate for a column file by using <code>spec_csv()</code>, <code>spec_tsv()</code> and so on:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>x &lt;-<span class="st"> </span><span class="kw">spec_csv</span>(<span class="kw">readr_example</span>(<span class="st">&quot;challenge.csv&quot;</span>))</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; </span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt;   x = col_double(),</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt;   y = col_logical()</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; )</span></span></code></pre></div>
+<p>For bigger files, you can often make the specification simpler by changing the default column type using <code>cols_condense()</code></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>mtcars_spec &lt;-<span class="st"> </span><span class="kw">spec_csv</span>(<span class="kw">readr_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>))</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; </span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;   mpg = col_double(),</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;   cyl = col_double(),</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;   disp = col_double(),</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt;   hp = col_double(),</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt;   drat = col_double(),</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt;   wt = col_double(),</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt;   qsec = col_double(),</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt;   vs = col_double(),</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt;   am = col_double(),</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt;   gear = col_double(),</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt;   carb = col_double()</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; )</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a>mtcars_spec</span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt;   mpg = col_double(),</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt;   cyl = col_double(),</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt;   disp = col_double(),</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt;   hp = col_double(),</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt;   drat = col_double(),</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt;   wt = col_double(),</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt;   qsec = col_double(),</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt;   vs = col_double(),</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="co">#&gt;   am = col_double(),</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="co">#&gt;   gear = col_double(),</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="co">#&gt;   carb = col_double()</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">#&gt; )</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a></span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="kw">cols_condense</span>(mtcars_spec)</span>
+<span id="cb9-33"><a href="#cb9-33"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb9-34"><a href="#cb9-34"></a><span class="co">#&gt;   .default = col_double()</span></span>
+<span id="cb9-35"><a href="#cb9-35"></a><span class="co">#&gt; )</span></span></code></pre></div>
+<p>By default readr only looks at the first 1000 rows. This keeps file parsing speedy, but can generate incorrect guesses. For example, in <code>challenge.csv</code> the column types change in row 1001, so readr guesses the wrong types. One way to resolve the problem is to increase the number of rows:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>x &lt;-<span class="st"> </span><span class="kw">spec_csv</span>(<span class="kw">readr_example</span>(<span class="st">&quot;challenge.csv&quot;</span>), <span class="dt">guess_max =</span> <span class="dv">1001</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; </span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;   x = col_double(),</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;   y = col_date(format = &quot;&quot;)</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; )</span></span></code></pre></div>
+<p>Another way is to manually specify the <code>col_type</code>, as described below.</p>
+</div>
+<div id="rectangular-parsers" class="section level2">
+<h2>Rectangular parsers</h2>
+<p>readr comes with five parsers for rectangular file formats:</p>
+<ul>
+<li><code>read_csv()</code> and <code>read_csv2()</code> for csv files</li>
+<li><code>read_tsv()</code> for tabs separated files</li>
+<li><code>read_fwf()</code> for fixed-width files</li>
+<li><code>read_log()</code> for web log files</li>
+</ul>
+<p>Each of these functions firsts calls <code>spec_xxx()</code> (as described above), and then parses the file according to that column specification:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>df1 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">readr_example</span>(<span class="st">&quot;challenge.csv&quot;</span>))</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; </span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt;   x = col_double(),</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt;   y = col_logical()</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; )</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; Warning: 1000 parsing failures.</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt;  row col           expected     actual                                                                                                                file</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt; 1001   y 1/0/T/F/TRUE/FALSE 2015-01-16 &#39;/private/var/folders/9x/_8jnmxwj3rq1t90mlr6_0k1w0000gn/T/RtmpQzf4Ag/Rinstcd9f584b28dd/readr/extdata/challenge.csv&#39;</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; 1002   y 1/0/T/F/TRUE/FALSE 2018-05-18 &#39;/private/var/folders/9x/_8jnmxwj3rq1t90mlr6_0k1w0000gn/T/RtmpQzf4Ag/Rinstcd9f584b28dd/readr/extdata/challenge.csv&#39;</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; 1003   y 1/0/T/F/TRUE/FALSE 2015-09-05 &#39;/private/var/folders/9x/_8jnmxwj3rq1t90mlr6_0k1w0000gn/T/RtmpQzf4Ag/Rinstcd9f584b28dd/readr/extdata/challenge.csv&#39;</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; 1004   y 1/0/T/F/TRUE/FALSE 2012-11-28 &#39;/private/var/folders/9x/_8jnmxwj3rq1t90mlr6_0k1w0000gn/T/RtmpQzf4Ag/Rinstcd9f584b28dd/readr/extdata/challenge.csv&#39;</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; 1005   y 1/0/T/F/TRUE/FALSE 2020-01-13 &#39;/private/var/folders/9x/_8jnmxwj3rq1t90mlr6_0k1w0000gn/T/RtmpQzf4Ag/Rinstcd9f584b28dd/readr/extdata/challenge.csv&#39;</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; .... ... .................. .......... ...................................................................................................................</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt; See problems(...) for more details.</span></span></code></pre></div>
+<p>The rectangular parsing functions almost always succeed; they’ll only fail if the format is severely messed up. Instead, readr will generate a data frame of problems. The first few will be printed out, and you can access them all with <code>problems()</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">problems</span>(df1)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; # A tibble: 1,000 x 5</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt;      row col   expected       actual   file                                     </span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt;                                    </span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt;  1  1001 y     1/0/T/F/TRUE/… 2015-01… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt;  2  1002 y     1/0/T/F/TRUE/… 2018-05… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt;  3  1003 y     1/0/T/F/TRUE/… 2015-09… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt;  4  1004 y     1/0/T/F/TRUE/… 2012-11… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt;  5  1005 y     1/0/T/F/TRUE/… 2020-01… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt;  6  1006 y     1/0/T/F/TRUE/… 2016-04… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt;  7  1007 y     1/0/T/F/TRUE/… 2011-05… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">#&gt;  8  1008 y     1/0/T/F/TRUE/… 2020-07… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="co">#&gt;  9  1009 y     1/0/T/F/TRUE/… 2011-04… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="co">#&gt; 10  1010 y     1/0/T/F/TRUE/… 2010-05… &#39;/private/var/folders/9x/_8jnmxwj3rq1t90…</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="co">#&gt; # … with 990 more rows</span></span></code></pre></div>
+<p>You’ve already seen one way of handling bad guesses: increasing the number of rows used to guess the type of each column.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>df2 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">readr_example</span>(<span class="st">&quot;challenge.csv&quot;</span>), <span class="dt">guess_max =</span> <span class="dv">1001</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; </span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt;   x = col_double(),</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt;   y = col_date(format = &quot;&quot;)</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">#&gt; )</span></span></code></pre></div>
+<p>Another approach is to manually supply the column specification.</p>
+<div id="overriding-the-defaults" class="section level3">
+<h3>Overriding the defaults</h3>
+<p>In the previous examples, you may have noticed that readr printed the column specification that it used to parse the file:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#&gt; Parsed with column specification:</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt;   x = col_integer(),</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt;   y = col_character()</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; )</span></span></code></pre></div>
+<p>You can also access it after the fact using <code>spec()</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">spec</span>(df1)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt;   x = col_double(),</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt;   y = col_logical()</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; )</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="kw">spec</span>(df2)</span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt;   x = col_double(),</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt;   y = col_date(format = &quot;&quot;)</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#&gt; )</span></span></code></pre></div>
+<p>(This also allows you to access the full column specification if you’re reading a very wide file. By default, readr will only print the specification of the first 20 columns.)</p>
+<p>If you want to manually specify the column types, you can start by copying and pasting this code, and then tweaking it fix the parsing problems.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>df3 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="kw">readr_example</span>(<span class="st">&quot;challenge.csv&quot;</span>), </span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="dt">col_types =</span> <span class="kw">cols</span>(</span>
+<span id="cb16-4"><a href="#cb16-4"></a>    <span class="dt">x =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb16-5"><a href="#cb16-5"></a>    <span class="dt">y =</span> <span class="kw">col_date</span>(<span class="dt">format =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb16-6"><a href="#cb16-6"></a>  )</span>
+<span id="cb16-7"><a href="#cb16-7"></a>)</span></code></pre></div>
+<p>In general, it’s good practice to supply an explicit column specification. It is more work, but it ensures that you get warnings if the data changes in unexpected ways. To be really strict, you can use <code>stop_for_problems(df3)</code>. This will throw an error if there are any parsing problems, forcing you to fix those problems before proceeding with the analysis.</p>
+</div>
+<div id="available-column-specifications" class="section level3">
+<h3>Available column specifications</h3>
+<p>The available specifications are: (with string abbreviations in brackets)</p>
+<ul>
+<li><code>col_logical()</code> [l], containing only <code>T</code>, <code>F</code>, <code>TRUE</code> or <code>FALSE</code>.</li>
+<li><code>col_integer()</code> [i], integers.</li>
+<li><code>col_double()</code> [d], doubles.</li>
+<li><code>col_character()</code> [c], everything else.</li>
+<li><code>col_factor(levels, ordered)</code> [f], a fixed set of values.</li>
+<li><code>col_date(format = &quot;&quot;)</code> [D]: with the locale’s <code>date_format</code>.</li>
+<li><code>col_time(format = &quot;&quot;)</code> [t]: with the locale’s <code>time_format</code>.</li>
+<li><code>col_datetime(format = &quot;&quot;)</code> [T]: ISO8601 date times</li>
+<li><code>col_number()</code> [n], numbers containing the <code>grouping_mark</code></li>
+<li><code>col_skip()</code> [_, -], don’t import this column.</li>
+<li><code>col_guess()</code> [?], parse using the “best” type based on the input.</li>
+</ul>
+<p>Use the <code>col_types</code> argument to override the default choices. There are two ways to use it:</p>
+<ul>
+<li><p>With a string: <code>&quot;dc__d&quot;</code>: read first column as double, second as character, skip the next two and read the last column as a double. (There’s no way to use this form with types that take additional parameters.)</p></li>
+<li><p>With a (named) list of col objects:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">read_csv</span>(<span class="st">&quot;iris.csv&quot;</span>, <span class="dt">col_types =</span> <span class="kw">cols</span>(</span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="dt">Sepal.Length =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="dt">Sepal.Width =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="dt">Petal.Length =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="dt">Petal.Width =</span> <span class="kw">col_double</span>(),</span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="dt">Species =</span> <span class="kw">col_factor</span>(<span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>))</span>
+<span id="cb17-7"><a href="#cb17-7"></a>))</span></code></pre></div>
+<p>Or, with their abbreviations:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>  <span class="kw">read_csv</span>(<span class="st">&quot;iris.csv&quot;</span>, <span class="dt">col_types =</span> <span class="kw">cols</span>(</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="dt">Sepal.Length =</span> <span class="st">&quot;d&quot;</span>,</span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="dt">Sepal.Width =</span> <span class="st">&quot;d&quot;</span>,</span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="dt">Petal.Length =</span> <span class="st">&quot;d&quot;</span>,</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="dt">Petal.Width =</span> <span class="st">&quot;d&quot;</span>,</span>
+<span id="cb18-6"><a href="#cb18-6"></a>  <span class="dt">Species =</span> <span class="kw">col_factor</span>(<span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>))</span>
+<span id="cb18-7"><a href="#cb18-7"></a>))</span></code></pre></div></li>
+</ul>
+<p>Any omitted columns will be parsed automatically, so the previous call will lead to the same result as:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">read_csv</span>(<span class="st">&quot;iris.csv&quot;</span>, <span class="dt">col_types =</span> <span class="kw">cols</span>(</span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="dt">Species =</span> <span class="kw">col_factor</span>(<span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>)))</span>
+<span id="cb19-3"><a href="#cb19-3"></a>)</span></code></pre></div>
+<p>You can also set a default type that will be used instead of relying on the automatic detection for columns you don’t specify:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">read_csv</span>(<span class="st">&quot;iris.csv&quot;</span>, <span class="dt">col_types =</span> <span class="kw">cols</span>(</span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="dt">Species =</span> <span class="kw">col_factor</span>(<span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>)),</span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="dt">.default =</span> <span class="kw">col_double</span>())</span>
+<span id="cb20-4"><a href="#cb20-4"></a>)</span></code></pre></div>
+<p>If you only want to read specified columns, use <code>cols_only()</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">read_csv</span>(<span class="st">&quot;iris.csv&quot;</span>, <span class="dt">col_types =</span> <span class="kw">cols_only</span>(</span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="dt">Species =</span> <span class="kw">col_factor</span>(<span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>)))</span>
+<span id="cb21-3"><a href="#cb21-3"></a>)</span></code></pre></div>
+</div>
+<div id="output" class="section level3">
+<h3>Output</h3>
+<p>The output of all these functions is a tibble. Note that characters are never automatically converted to factors (i.e. no more <code>stringsAsFactors = FALSE</code>) and column names are left as is, not munged into valid R identifiers (i.e. there is no <code>check.names = TRUE</code>). Row names are never set.</p>
+<p>Attributes store the column specification (<code>spec()</code>) and any parsing problems (<code>problems()</code>).</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="emmeans package, Version 1.5.3" />
+
+
+<title>For developers: Extending emmeans</title>
+
+
+
+
+
+
+<style type="text/css">body {font-size: 11pt; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;margin: 30px 50px 30px 50px; }h1,h2,h3,h4,h5,h6 { font-family: Arial,Helvetica,Sans-serif; }a { text-decoration: none; }a:link { color:darkblue; } a:visited { color:darkblue; } a:hover { color:dodgerblue; }a:active { color:dodgerblue; } code {color: #602000;font-family: "Lucida Console", Monaco, monospace; font-size: 90%;}.r { color: darkred; }.ro { color: darkgreen; background-color: #eeeeee; }.re { color: red;}.r code, a code, .ro code, .re code { color: inherit; }.vigindex ul { list-style-type: none; }.vigindex ul li { list-style: none; }.vigindex a code { color: inherit; }.vigindex li code { color: inherit; }</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">For developers: Extending <strong>emmeans</strong></h1>
+<h4 class="author">emmeans package, Version 1.5.3</h4>
+
+
+
+<!-- @index Vignettes!Extending **emmeans** -->
+<div id="contents" class="section level2">
+<h2>Contents</h2>
+<p>This vignette explains how developers may incorporate <strong>emmeans</strong> support in their packages. If you are a user looking for a quick way to obtain results for an unsupported model, you are probably better off trying to use the <code>qdrg()</code> function.</p>
+<ol style="list-style-type: decimal">
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#dataex">Data example</a></li>
+<li><a href="#rlm">Supporting <code>rlm</code> objects</a></li>
+<li><a href="#lqs">Supporting <code>lqs</code> objects</a></li>
+<li><a href="#communic">Communication between methods</a></li>
+<li><a href="#hooks">Hook functions</a></li>
+<li><a href="#exported">Exported methods from <strong>emmeans</strong></a></li>
+<li><a href="#rsm">Existing support for <code>rsm</code> objects</a></li>
+<li><a href="#dispatch">Dispatching and restrictions</a></li>
+<li><a href="#exporting">Exporting and registering your methods</a></li>
+<li><a href="#concl">Conclusions</a></li>
+</ol>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+<div id="intro" class="section level2">
+<h2>Introduction</h2>
+<!-- @index `recover_data()`; `emm_basis()` -->
+<p>Suppose you want to use <strong>emmeans</strong> for some type of model that it doesn’t (yet) support. Or, suppose you have developed a new package with a fancy model-fitting function, and you’d like it to work with <strong>emmeans</strong>. What can you do? Well, there is hope because <strong>emmeans</strong> is designed to be extended.</p>
+<p>The first thing to do is to look at the help page for extending the package:</p>
+<pre class="r"><code>help(&quot;extending-emmeans&quot;, package=&quot;emmeans&quot;)</code></pre>
+<p>It gives details about the fact that you need to write two S3 methods, <code>recover_data</code> and <code>emm_basis</code>, for the class of object that your model-fitting function returns. The <code>recover_data</code> method is needed to recreate the dataset so that the reference grid can be identified. The <code>emm_basis</code> method then determines the linear functions needed to evaluate each point in the reference grid and to obtain associated information—such as the variance-covariance matrix—needed to do estimation and testing.</p>
+<p>These methods must also be exported from your package so that they are available to users. See the section on <a href="#exporting">exporting the methods</a> for details and suggestions.</p>
+<p>This vignette presents an example where suitable methods are developed, and discusses a few issues that arise.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="dataex" class="section level2">
+<h2>Data example</h2>
+<p>The <strong>MASS</strong> package contains various functions that do robust or outlier-resistant model fitting. We will cobble together some <strong>emmeans</strong> support for these. But first, let’s create a suitable dataset (a simulated two-factor experiment) for testing.</p>
+<pre class="r"><code>fake = expand.grid(rep = 1:5, A = c(&quot;a1&quot;,&quot;a2&quot;), B = c(&quot;b1&quot;,&quot;b2&quot;,&quot;b3&quot;))
+fake$y = c(11.46,12.93,11.87,11.01,11.92,17.80,13.41,13.96,14.27,15.82,
+           23.14,23.75,-2.09,28.43,23.01,24.11,25.51,24.11,23.95,30.37,
+           17.75,18.28,17.82,18.52,16.33,20.58,20.55,20.77,21.21,20.10)</code></pre>
+<p>The <code>y</code> values were generated using predetermined means and Cauchy-distributed errors. There are some serious outliers in these data.</p>
+</div>
+<div id="rlm" class="section level2">
+<h2>Supporting <code>rlm</code></h2>
+<!-- @index Examples!Robust regression; Examples!`rlm` objects -->
+<p>The <strong>MASS</strong> package provides an <code>rlm</code> function that fits robust-regression models using <em>M</em> estimation. We’ll fit a model using the default settings for all tuning parameters:</p>
+<pre class="r"><code>library(MASS)
+fake.rlm = rlm(y ~ A * B, data = fake)
+
+library(emmeans)
+emmeans(fake.rlm, ~ B | A)</code></pre>
+<pre class="ro"><code>## A = a1:
+##  B  emmean    SE df asymp.LCL asymp.UCL
+##  b1   11.8 0.477 NA      10.9      12.8
+##  b2   23.3 0.477 NA      22.4      24.2
+##  b3   17.8 0.477 NA      16.9      18.7
+## 
+## A = a2:
+##  B  emmean    SE df asymp.LCL asymp.UCL
+##  b1   14.7 0.477 NA      13.7      15.6
+##  b2   24.7 0.477 NA      23.8      25.6
+##  b3   20.6 0.477 NA      19.7      21.6
+## 
+## Confidence level used: 0.95</code></pre>
+<p>The first lesson to learn about extending <strong>emmeans</strong> is that sometimes, it already works! It works here because <code>rlm</code> objects inherit from <code>lm</code>, which is supported by the <strong>emmeans</strong> package, and <code>rlm</code> objects aren’t enough different to create any problems.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="lqs" class="section level2">
+<h2>Supporting <code>lqs</code> objects</h2>
+<!-- @index Examples!`lqs` objects -->
+<p>The <strong>MASS</strong> resistant-regression functions <code>lqs</code>, <code>lmsreg</code>, and <code>ltsreg</code> are another story, however. They create <code>lqs</code> objects that are not extensions of any other class, and have other issues, including not even having a <code>vcov</code> method. So for these, we really do need to write new methods for <code>lqs</code> objects. First, let’s fit a model.</p>
+<pre class="r"><code>fake.lts = ltsreg(y ~ A * B, data = fake)</code></pre>
+<div id="rd.lqs" class="section level3">
+<h3>The <code>recover_data</code> method</h3>
+<!-- @index `recover_data()!for `lqs` objects@lqs -->
+<p>It is usually an easy matter to write a <code>recover_data</code> method. Look at the one for <code>lm</code> objects:</p>
+<pre class="r"><code>emmeans:::recover_data.lm</code></pre>
+<pre class="ro"><code>## function (object, ...) 
+## {
+##     fcall = object$call
+##     recover_data(fcall, delete.response(terms(object)), object$na.action, 
+##         frame = object$model, ...)
+## }
+## &lt;bytecode: 0x000000001f9f22e8&gt;
+## &lt;environment: namespace:emmeans&gt;</code></pre>
+<p>Note that all it does is obtain the <code>call</code> component and call the method for class <code>call</code>, with additional arguments for its <code>terms</code> component and <code>na.action</code>. It happens that we can access these attributes in exactly the same way as for <code>lm</code> objects; so:</p>
+<pre class="r"><code>recover_data.lqs = emmeans:::recover_data.lm</code></pre>
+<p>Let’s test it:</p>
+<pre class="r"><code>rec.fake = recover_data(fake.lts)
+head(rec.fake)</code></pre>
+<pre class="ro"><code>##    A  B
+## 1 a1 b1
+## 2 a1 b1
+## 3 a1 b1
+## 4 a1 b1
+## 5 a1 b1
+## 6 a2 b1</code></pre>
+<p>Our recovered data excludes the response variable <code>y</code> (owing to the <code>delete.response</code> call), and this is fine.</p>
+<div id="rdargs" class="section level4">
+<h4>Special arguments</h4>
+<!-- @index `recover_data()!`data` and `params` arguments;
+    `recover_data.call()`!`frame` argument -->
+<p>By the way, there are two special arguments <code>data</code> and <code>params</code> that may be handed to <code>recover_data</code> via <code>ref_grid</code> or <code>emmeans</code> or a related function; and you may need to provide for if you don’t use the <code>recover_data.call</code> function. The <code>data</code> argument is needed to cover a desperate situation that occurs with certain kinds of models where the underlying data information is not saved with the object—e.g., models that are fitted by iteratively modifying the data. In those cases, the only way to recover the data is to for the user to give it explicitly, and <code>recover_data</code> just adds a few needed attributes to it.</p>
+<p>The <code>params</code> argument is needed when the model formula refers to variables besides predictors. For example, a model may include a spline term, and the knots are saved in the user’s environment as a vector and referred to in the call to fit the model. In trying to recover the data, we try to construct a data frame containing all the variables present on the right-hand side of the model, but if some of those are scalars or of different lengths than the number of observations, an error occurs. So you need to exclude any names in <code>params</code> when reconstructing the data.</p>
+<p>Many model objects contain the model frame as a slot; for example, a model fitted with <code>lm(..., model = TRUE)</code> has a member <code>$model</code> containing the model frame. This can be useful for recovering the data, provided none of the predictors are transformed (when predictors are transformed, the original predictor values are not in the model frame so it’s harder to recover them). Therefore, when the model frame is available in the model object, it should be provided in the <code>frame</code> argument of <code>recover_data.call()</code>; then when <code>data = NULL</code>, a check is made on <code>trms</code>, and if it has no function calls, then <code>data</code> is set to <code>frame</code>. Of course, in the rarer case where the original data are available in the model object, specify that as <code>data</code>.</p>
+</div>
+<div id="rderrs" class="section level4">
+<h4>Error handling</h4>
+<!-- @index `recover_data()!Error handling -->
+<p>If you check for any error conditions in <code>recover_data</code>, simply have it return a character string with the desired message, rather than invoking <code>stop</code>. This provides a cleaner exit. The reason is that whenever <code>recover_data</code> throws an error, an informative message suggesting that <code>data</code> or <code>params</code> be provided is displayed. But a character return value is tested for and throws a different error with your string as the message.</p>
+</div>
+</div>
+<div id="ebreqs" class="section level3">
+<h3>The <code>emm_basis</code> method</h3>
+<!-- @index `emm_basis()`!Arguments and returned value -->
+<p>The <code>emm_basis</code> method has four required arguments:</p>
+<pre class="r"><code>args(emmeans:::emm_basis.lm)</code></pre>
+<pre class="ro"><code>## function (object, trms, xlev, grid, ...) 
+## NULL</code></pre>
+<p>These are, respectively, the model object, its <code>terms</code> component (at least for the right-hand side of the model), a <code>list</code> of levels of the factors, and the grid of predictor combinations that specify the reference grid.</p>
+<p>The function must obtain six things and return them in a named <code>list</code>. They are the matrix <code>X</code> of linear functions for each point in the reference grid, the regression coefficients <code>bhat</code>; the variance-covariance matrix <code>V</code>; a matrix <code>nbasis</code> for non-estimable functions; a function <code>dffun(k,dfargs)</code> for computing degrees of freedom for the linear function <code>sum(k*bhat)</code>; and a list <code>dfargs</code> of arguments to pass to <code>dffun</code>. Optionally, the returned list may include a <code>model.matrix</code> element (the model matrix for the data or a compact version thereof obtained via <code>.cmpMM()</code>), which, if included, enables the <code>submodel</code> option.</p>
+<p>To write your own <code>emm_basis</code> function, examining some of the existing methods can help; but the best resource is the <code>predict</code> method for the object in question, looking carefully to see what it does to predict values for a new set of predictors (e.g., <code>newdata</code> in <code>predict.lm</code>). Following this advice, let’s take a look at it:</p>
+<pre class="r"><code>MASS:::predict.lqs</code></pre>
+<pre class="ro"><code>## function (object, newdata, na.action = na.pass, ...) 
+## {
+##     if (missing(newdata)) 
+##         return(fitted(object))
+##     Terms &lt;- delete.response(terms(object))
+##     m &lt;- model.frame(Terms, newdata, na.action = na.action, xlev = object$xlevels)
+##     if (!is.null(cl &lt;- attr(Terms, &quot;dataClasses&quot;))) 
+##         .checkMFClasses(cl, m)
+##     X &lt;- model.matrix(Terms, m, contrasts = object$contrasts)
+##     drop(X %*% object$coefficients)
+## }
+## &lt;bytecode: 0x00000000333960c8&gt;
+## &lt;environment: namespace:MASS&gt;</code></pre>
+<div id="eblqs" class="section level6">
+<h6></h6>
+<!-- @index `emm_basis()`!for `lqs` objects@lqs -->
+<p>Based on this, here is a listing of an <code>emm_basis</code> method for <code>lqs</code> objects:</p>
+<pre class="r"><code>emm_basis.lqs = function(object, trms, xlev, grid, ...) { 
+    m = model.frame(trms, grid, na.action = na.pass, xlev = xlev)
+    X = model.matrix(trms, m, contrasts.arg = object$contrasts) 
+    bhat = coef(object) 
+    Xmat = model.matrix(trms, data=object$model)                      # 5
+    V = rev(object$scale)[1]^2 * solve(t(Xmat) %*% Xmat)
+    nbasis = matrix(NA) 
+    dfargs = list(df = nrow(Xmat) - ncol(Xmat))
+    dffun = function(k, dfargs) dfargs$df
+    list(X = X, bhat = bhat, nbasis = nbasis, V = V,                  #10
+         dffun = dffun, dfargs = dfargs)
+}</code></pre>
+<p>Before explaining it, let’s verify that it works:</p>
+<pre class="r"><code>emmeans(fake.lts, ~ B | A)</code></pre>
+<pre class="ro"><code>## A = a1:
+##  B  emmean    SE df lower.CL upper.CL
+##  b1   11.9 0.228 24     11.4     12.3
+##  b2   23.1 0.228 24     22.6     23.6
+##  b3   17.8 0.228 24     17.3     18.2
+## 
+## A = a2:
+##  B  emmean    SE df lower.CL upper.CL
+##  b1   13.9 0.228 24     13.4     14.4
+##  b2   24.1 0.228 24     23.6     24.5
+##  b3   20.5 0.228 24     20.0     21.0
+## 
+## Confidence level used: 0.95</code></pre>
+<p>Hooray! Note the results are comparable to those we had for <code>fake.rlm</code>, albeit the standard errors are quite a bit smaller. (In fact, the SEs could be misleading; a better method for estimating covariances should probably be implemented, but that is beyond the scope of this vignette.)</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="dissecting-emm_basis.lqs" class="section level3">
+<h3>Dissecting <code>emm_basis.lqs</code></h3>
+<p>Let’s go through the listing of this method, line-by-line:</p>
+<ul>
+<li><p>Lines 2–3: Construct the linear functions, <code>X</code>. This is a pretty standard two-step process: First obtain a model frame, <code>m</code>, for the grid of predictors, then pass it as data to <code>model.matrix</code> to create the associated design matrix. As promised, this code is essentially identical to what you find in <code>predict.lqs</code>.</p></li>
+<li><p>Line 4: Obtain the coefficients, <code>bhat</code>. Most model objects have a <code>coef</code> method.</p></li>
+<li><p>Lines 5–6: Obtain the covariance matrix, <code>V</code>, of <code>bhat</code>. In many models, this can be obtained using the object’s <code>vcov</code> method. But not in this case. Instead, I cobbled one together using the inverse of the <strong>X’X</strong> matrix as in ordinary regression, and the variance estimate found in the last element of the <code>scale</code> element of the object. This probably under-estimates the variances and distorts the covariances, because robust estimators have some efficiency loss.</p></li>
+<li><p>Line 7: Compute the basis for non-estimable functions. This applies only when there is a possibility of rank deficiency in the model. But <code>lqs</code> methods don’t allow rank deficiencies, so it we have fitted such a model, we can be sure that all linear functions are estimable; we signal that by setting <code>nbasis</code> equal to a 1 x 1 matrix of <code>NA</code>. If rank deficiency were possible, the <strong>estimability</strong> package (which is required by <strong>emmeans</strong>) provides a <code>nonest.basis</code> function that makes this fairly painless—I would have coded <code>nbasis = estimability::nonest.basis(Xmat)</code>.</p>
+<p>There some subtleties you need to know regarding estimability. Suppose the model is rank-deficient, so that the design matrix <strong>X</strong> has <em>p</em> columns but rank <em>r</em> &lt; <em>p</em>. In that case, <code>bhat</code> should be of length <em>p</em> (not <em>r</em>), and there should be <em>p</em> - <em>r</em> elements equal to <code>NA</code>, corresponding to columns of <strong>X</strong> that were excluded from the fit. Also, <code>X</code> should have all <em>p</em> columns. In other words, do not alter or throw-out columns of <code>X</code> or their corresponding elements of <code>bhat</code>—even those with <code>NA</code> coefficients—as they are essential for assessing estimability. <code>V</code> should be <em>r</em> x <em>r</em>, however—the covariance matrix for the non-excluded predictors.</p></li>
+<li><p>Lines 8–9: Obtain <code>dffun</code> and <code>dfargs</code>. This is a little awkward because it is designed to allow support for mixed models, where approximate methods may be used to obtain degrees of freedom. The function <code>dffun</code> is expected to have two arguments: <code>k</code>, the vector of coefficients of <code>bhat</code>, and <code>dfargs</code>, a list containing any additional arguments. In this case (and in many other models), the degrees of freedom are the same regardless of <code>k</code>. We put the required degrees of freedom in <code>dfargs</code> and write <code>dffun</code> so that it simply returns that value. (Note: If asymptotic tests and CIs are desired, return <code>Inf</code> degrees of freedom.)</p></li>
+<li><p>Line 10: Return these results in a named list.</p></li>
+</ul>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+</div>
+<div id="communic" class="section level2">
+<h2>Communication between methods</h2>
+<!-- @index `emm_basis()`!Communicating with `recover_data()`;
+   `recover_data()!Communicating with `emm_basis()`; `misc` attribute and argument -->
+<p>If you need to pass information obtained in <code>recover_data()</code> to the <code>emm_basis()</code> method, simply incorporate it as <code>attr(data, &quot;misc&quot;)</code> where <code>data</code> is the dataset returned by <code>recover_data()</code>. Subsequently, that attribute is available in <code>emm_grid()</code> by adding a <code>misc</code> argument.</p>
+</div>
+<div id="hooks" class="section level2">
+<h2>Hook functions</h2>
+<!-- @index Hook functions; `emm_basis()`!Hook functions 
+     `estHook`; `vcovHook`; `postGridHook` -->
+<p>Most linear models supported by <strong>emmeans</strong> have straightforward structure: Regression coefficients, their covariance matrix, and a set of linear functions that define the reference grid. However, a few are more complex. An example is the <code>clm</code> class in the <strong>ordinal</strong> package, which allows a scale model in addition to the location model. When a scale model is used, the scale parameters are included in the model matrix, regression coefficients, and covariance matrix, and we can’t just use the usual matrix operations to obtain estimates and standard errors. To facilitate using custom routines for these tasks, the <code>emm_basis.clm</code> function function provided in <strong>emmeans</strong> includes, in its <code>misc</code> part, the names (as character constants) of two “hook” functions: <code>misc$estHook</code> has the name of the function to call when computing estimates, standard errors, and degrees of freedom (for the <code>summary</code> method); and <code>misc$vcovHook</code> has the name of the function to call to obtain the covariance matrix of the grid values (used by the <code>vcov</code> method). These functions are called in lieu of the usual built-in routines for these purposes, and return the appropriately sized matrices.</p>
+<p>In addition, you may want to apply some form of special post-processing after the reference grid is constructed. To provide for this, give the name of your function to post-process the object in <code>misc$postGridHook</code>. Again, <code>clm</code> objects (as well as <code>polr</code> in the <strong>MASS</strong> package) serve as an example. They allow a <code>mode</code> specification that in two cases, calls for post-processing. The <code>&quot;cum.prob&quot;</code> mode uses the <code>regrid</code> function to transform the linear predictor to the cumulative-probability scale. And the <code>&quot;prob&quot;</code> mode performs this, as well as applying the contrasts necessary to convert the cumulative probabilities into the class probabilities.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="exported" class="section level2">
+<h2>Exported methods from <strong>emmeans</strong></h2>
+<!-- @index Extending **emmeans**!Exports useful to developers -->
+<p>For package developers’ convenience, <strong>emmeans</strong> exports some of its S3 methods for <code>recover_data</code> and/or <code>emm_basis</code>—use <code>methods(&quot;recover_data&quot;)</code> and <code>methods(&quot;emm_basis&quot;)</code> to discover which ones. It may be that all you need is to invoke one of those methods and perhaps make some small changes—especially if your model-fitting algorithm makes heavy use of an existing model type supported by <strong>emmeans</strong>. For those methods that are not exported, use <code>recover_data()</code> and <code>.emm_basis()</code>, which run in <strong>emmeans</strong>’s namespace, thus providing access to all available methods..</p>
+<p>A few additional functions are exported because they may be useful to developers. They are as follows:</p>
+<ul>
+<li><p><code>emmeans::.all.vars(expr, retain)</code> Some users of your package may include <code>$</code> or <code>[[]]</code> operators in their model formulas. If you need to get the variable names, <code>base::all.vars</code> will probably not give you what you need. For example, if <code>form = ~ data$x + data[[5]]</code>, then <code>base::all.vars(form)</code> returns the names <code>&quot;data&quot;</code> and <code>&quot;x&quot;</code>, whereas <code>emmeans::.all.vars(form)</code> returns the names <code>&quot;data$x&quot;</code> and <code>&quot;data[[5]]&quot;</code>. The <code>retain</code> argument may be used to specify regular expressions for patterns to retain as parts of variable names.</p></li>
+<li><p><code>emmeans::.diag(x, nrow, ncol)</code> The base <code>diag</code> function has a booby trap whereby, for example, <code>diag(57.6)</code> returns a 57 x 57 identity matrix rather than a 1 x 1 matrix with 57.6 as its only element. But <code>emmeans::.diag(57.6)</code> will return the latter. The function works identically to <code>diag</code> except for its tail run around the identity-matrix trap.</p></li>
+<li><p><code>emmeans::.aovlist.dffun(k, dfargs)</code> This function is exported because it is needed for computing degrees of freedom for models fitted using <code>aov</code>, but it may be useful for other cases where Satterthwaite degrees-of-freedom calculations are needed. It requires the <code>dfargs</code> slot to contain analogous contents.</p></li>
+<li><p><code>emmeans::.get.offset(terms, grid)</code> If <code>terms</code> is a model formula containing an <code>offset</code> call, this is will compute that offset in the context of <code>grid</code> (a <code>data.frame</code>).</p></li>
+<li><p><code>emmeans::.my.vcov(object, ...)</code> In a call to <code>ref_grid</code>, <code>emmeans</code>, etc., the user may use <code>vcov.</code> to specify an alternative function or matrix to use as the covariance matrix of the fixed-effects coefficients. This function supports that feature. Calling <code>.my.vcov</code> in place of the <code>vcov</code> method will substitute the user’s <code>vcov.</code> when it is specified.</p></li>
+<li><p><code>emmeans::.std.link.labels(fam, misc)</code> This is useful in <code>emm_basis</code> methods for generalized linear models. Call it with <code>fam</code> equal to the <code>family</code> object for your model, and <code>misc</code> either an existing list, or just <code>list()</code> if none. It returns a new <code>misc</code> list containing the link function and, in some cases, extra features that are used for certain types of link functions (e.g., for a log link, the setups for returning ratio comparisons with <code>type = &quot;response&quot;</code>).</p></li>
+<li><p><code>emmeans::.num.key(levs, key)</code> Returns integer indices of elements of <code>key</code> in <code>levs</code> when <code>key</code> is a character vector; or just returns integer values if already integer. Also throws an error if levels are mismatched or indices exceed legal range. This is useful in custom contrast functions (<code>.emmc</code> functions).</p></li>
+<li><p><code>emmeans::.get.excl(levs, exclude, include)</code> This is support for the <code>exclude</code> and <code>include</code> arguments of contrast functions. It checks legality and returns an integer vector of <code>exclude</code> indices in <code>levs</code>, given specified integer or character arguments <code>exclude</code> and <code>include</code>. In your <code>.emmc</code> function, <code>exclude</code> should default to <code>integer(0)</code> and <code>include</code> should have no default.</p></li>
+<li><p><code>emmeans::.cmpMM(X, weights, assign)</code> creates a compact version of the model matrix <code>X</code> (or, preferably, its QR decomposition). This is useful if we want an <code>emm_basis()</code> method to return a <code>model.matrix</code> element. The returned result is just the R portion of the QR decomposition of <code>diag(sqrt(weights)) %*% X</code>, with the <code>assign</code> attribute added. If <code>X</code> is a <code>qr</code> object, we assume the weights are already incorporated, as is true of the <code>qr</code> slot of a <code>lm</code> object.</p></li>
+</ul>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="rsm" class="section level2">
+<h2>Existing support for <code>rsm</code> objects</h2>
+<!-- @index **rsm** package -->
+<p>As a nontrivial example of how an existing package supports <strong>emmeans</strong>, we show the support offered by the <strong>rsm</strong> package. Its <code>rsm</code> function returns an <code>rsm</code> object which is an extension of the <code>lm</code> class. Part of that extension has to do with <code>coded.data</code> structures whereby, as is typical in response-surface analysis, models are fitted to variables that have been linearly transformed (coded) so that the scope of each predictor is represented by plus or minus 1 on the coded scale.</p>
+<p>Without any extra support in <strong>rsm</strong>, <code>emmeans</code> will work just fine with <code>rsm</code> objects; but if the data are coded, it becomes awkward to present results in terms of the original predictors on their original, uncoded scale. The <code>emmeans</code>-related methods in <strong>rsm</strong> provide a <code>mode</code> argument that may be used to specify whether we want to work with coded or uncoded data. The possible values for <code>mode</code> are <code>&quot;asis&quot;</code> (ignore any codings, if present), <code>&quot;coded&quot;</code> (use the coded scale), and <code>&quot;decoded&quot;</code> (use the decoded scale). The first two are actually the same in that no decoding is done; but it seems clearer to provide separate options because they represent two different situations.</p>
+<div id="rdrsm" class="section level3">
+<h3>The <code>recover_data</code> method</h3>
+<!-- @index `recover_data()`!for `rsm` objects@rsm -->
+<p>Note that coding is a <em>predictor</em> transformation, not a response transformation (we could have that, too, as it’s already supported by the <strong>emmeans</strong> infrastructure). So, to handle the <code>&quot;decode&quot;</code> mode, we will need to actually decode the predictors used to construct he reference grid. That means we need to make <code>recover_data</code> a lot fancier! Here it is:</p>
+<pre class="r"><code>recover_data.rsm = function(object, data, mode = c(&quot;asis&quot;, &quot;coded&quot;, &quot;decoded&quot;), ...) {
+    mode = match.arg(mode)
+    cod = rsm::codings(object)
+    fcall = object$call
+    if(is.null(data))                                                 # 5
+        data = emmeans::recover_data(fcall, 
+                   delete.response(terms(object)), object$na.action, ...)
+    if (!is.null(cod) &amp;&amp; (mode == &quot;decoded&quot;)) {
+        pred = cpred = attr(data, &quot;predictors&quot;)
+        trms = attr(data, &quot;terms&quot;)                                    #10
+        data = rsm::decode.data(rsm::as.coded.data(data, formulas = cod))
+        for (form in cod) {
+            vn = all.vars(form)
+            if (!is.na(idx &lt;- grep(vn[1], pred))) { 
+                pred[idx] = vn[2]                                     #15
+                cpred = setdiff(cpred, vn[1])
+            }
+        }
+        attr(data, &quot;predictors&quot;) = pred
+        new.trms = update(trms, reformulate(c(&quot;1&quot;, cpred)))           #20
+        attr(new.trms, &quot;orig&quot;) = trms
+        attr(data, &quot;terms&quot;) = new.trms
+        attr(data, &quot;misc&quot;) = cod
+    }
+    data
+}</code></pre>
+<p>Lines 2–7 ensure that <code>mode</code> is legal, retrieves the codings from the object, and obtain the results we would get from <code>recover_data</code> had it been an <code>lm</code> object. If <code>mode</code> is not <code>&quot;decoded&quot;</code>, <em>or</em> if no codings were used, that’s all we need. Otherwise, we need to return the decoded data. However, it isn’t quite that simple, because the model equation is still defined on the coded scale. Rather than to try to translate the model coefficients and covariance matrix to the decoded scale, we elected to remember what we will need to do later to put things back on the coded scale. In lines 9–10, we retrieve the attributes of the recovered data that provide the predictor names and <code>terms</code> object on the coded scale. In line 11, we replace the recovered data with the decoded data.</p>
+<p>By the way, the codings comprise a list of formulas with the coded name on the left and the original variable name on the right. It is possible that only some of the predictors are coded (for example, blocking factors will not be). In the <code>for</code> loop in lines 12–18, the coded predictor names are replaced with their decoded names. For technical reasons to be discussed later, we also remove these coded predictor names from a copy, <code>cpred</code>, of the list of all predictors in the coded model. In line 19, the <code>&quot;predictors&quot;</code> attribute of <code>data</code> is replaced with the modified version.</p>
+<p>Now, there is a nasty technicality. The <code>ref_grid</code> function in <strong>emmeans</strong> has a few lines of code after <code>recover_data</code> is called that determine if any terms in the model convert covariates to factors or vice versa; and this code uses the model formula. That formula involves variables on the coded scale, and those variables are no longer present in the data, so an error will occur if it tries to access them. Luckily, if we simply take those terms out of the formula, it won’t hurt because those coded predictors would not have been converted in that way. So in line 20, we update <code>trms</code> with a simpler model with the coded variables excluded (the intercept is explicitly included to ensure there will be a right-hand side even is <code>cpred</code> is empty). We save that as the <code>terms</code> attribute, and the original terms as a new <code>&quot;orig&quot;</code> attribute to be retrieved later. The <code>data</code> object, modified or not, is returned. If data have been decoded, <code>ref_grid</code> will construct its grid using decoded variables.</p>
+<p>In line 23, we save the codings as the <code>&quot;misc&quot;</code> attribute, to be accessed later by <code>emm_basis()</code>.</p>
+</div>
+<div id="ebrsm" class="section level3">
+<h3>The <code>emm_basis</code> method</h3>
+<!-- @index `emm_basis()`!for `rsm` objects@rsm -->
+<p>Now comes the <code>emm_basis</code> method that will be called after the grid is defined. It is listed below:</p>
+<pre class="r"><code>emm_basis.rsm = function(object, trms, xlev, grid, 
+                         mode = c(&quot;asis&quot;, &quot;coded&quot;, &quot;decoded&quot;), misc, ...) {
+    mode = match.arg(mode)
+    cod = misc
+    if(!is.null(cod) &amp;&amp; mode == &quot;decoded&quot;) {                          # 5
+        grid = rsm::coded.data(grid, formulas = cod)
+        trms = attr(trms, &quot;orig&quot;)
+    }
+    
+    m = model.frame(trms, grid, na.action = na.pass, xlev = xlev)     #10
+    X = model.matrix(trms, m, contrasts.arg = object$contrasts)
+    bhat = as.numeric(object$coefficients) 
+    V = emmeans::.my.vcov(object, ...)
+    
+    if (sum(is.na(bhat)) &gt; 0)                                         #15
+        nbasis = estimability::nonest.basis(object$qr)
+    else
+        nbasis = estimability::all.estble
+    dfargs = list(df = object$df.residual)
+    dffun = function(k, dfargs) dfargs$df                             #20
+
+    list(X = X, bhat = bhat, nbasis = nbasis, V = V, 
+         dffun = dffun, dfargs = dfargs, misc = list())
+}</code></pre>
+<p>This is much simpler. The coding formulas are obtained from <code>misc</code> (line 4) so that we don’t have to re-obtain them from the object. All we have to do is determine if decoding was done (line 5); and, if so, convert the grid back to the coded scale (line 6) and recover the original <code>terms</code> attribute (line 7). The rest is borrowed directly from the <code>emm_basis.lm</code> method in <strong>emmeans</strong>. Note that line 13 uses one of the exported functions we described in the preceding section. Lines 15–18 use functions from the <strong>estimability</strong> package to handle the possibility that the model is rank-deficient.</p>
+</div>
+<div id="demo" class="section level3">
+<h3>A demonstration</h3>
+<p>Here’s a demonstration of this <strong>rsm</strong> support. The standard example for <code>rsm</code> fits a second-order model <code>CR.rs2</code> to a dataset organized in two blocks and with two coded predictors.</p>
+<pre class="r"><code>library(&quot;rsm&quot;)
+example(&quot;rsm&quot;)   ### (output is not shown) ###</code></pre>
+<p>First, let’s look at some results on the coded scale—which are the same as for an ordinary <code>lm</code> object.</p>
+<pre class="r"><code>emmeans(CR.rs2, ~ x1 * x2, mode = &quot;coded&quot;, 
+        at = list(x1 = c(-1, 0, 1), x2 = c(-2, 2)))</code></pre>
+<pre class="ro"><code>##  x1 x2 emmean    SE df lower.CL upper.CL
+##  -1 -2   75.0 0.298  7     74.3     75.7
+##   0 -2   77.0 0.240  7     76.4     77.5
+##   1 -2   76.4 0.298  7     75.6     77.1
+##  -1  2   76.8 0.298  7     76.1     77.5
+##   0  2   79.3 0.240  7     78.7     79.9
+##   1  2   79.2 0.298  7     78.5     79.9
+## 
+## Results are averaged over the levels of: Block 
+## Confidence level used: 0.95</code></pre>
+<p>Now, the coded variables <code>x1</code> and <code>x2</code> are derived from these coding formulas for predictors <code>Time</code> and <code>Temp</code>:</p>
+<pre class="r"><code>codings(CR.rs1)</code></pre>
+<pre class="ro"><code>## $x1
+## x1 ~ (Time - 85)/5
+## 
+## $x2
+## x2 ~ (Temp - 175)/5</code></pre>
+<p>Thus, for example, a coded value of <code>x1 = 1</code> corresponds to a time of 85 + 1 x 5 = 90. Here are some results working with decoded predictors. Note that the <code>at</code> list must now be given in terms of <code>Time</code> and <code>Temp</code>:</p>
+<pre class="r"><code>emmeans(CR.rs2, ~ Time * Temp, mode = &quot;decoded&quot;, 
+        at = list(Time = c(80, 85, 90), Temp = c(165, 185)))</code></pre>
+<pre class="ro"><code>##  Time Temp emmean    SE df lower.CL upper.CL
+##    80  165   75.0 0.298  7     74.3     75.7
+##    85  165   77.0 0.240  7     76.4     77.5
+##    90  165   76.4 0.298  7     75.6     77.1
+##    80  185   76.8 0.298  7     76.1     77.5
+##    85  185   79.3 0.240  7     78.7     79.9
+##    90  185   79.2 0.298  7     78.5     79.9
+## 
+## Results are averaged over the levels of: Block 
+## Confidence level used: 0.95</code></pre>
+<p>Since the supplied settings are the same on the decoded scale as were used on the coded scale, the EMMs are identical to those in the previous output.</p>
+</div>
+</div>
+<div id="dispatch" class="section level2">
+<h2>Dispatching and restrictions</h2>
+<!-- @index Extending **emmeans**!Restrictions; 
+    `recover_data()`!Dispatching; `emm_basis()`!Dispatching -->
+<p>The <strong>emmeans</strong> package has internal support for a number of model classes. When <code>recover_data()</code> and <code>emm_basis()</code> are dispatched, a search is made for external methods for a given class; and if found, those methods are used instead of the internal ones. However, certain restrictions apply when you aim to override an existing internal method:</p>
+<ol style="list-style-type: decimal">
+<li>The class name being extended must appear in the first or second position in the results of <code>class(object)</code>. That is, you may have a base class for which you provide <code>recover_data()</code> and <code>emm_basis()</code> methods, and those will also work for <em>direct</em> descendants thereof; but any class in third place or later in the inheritance is ignored.</li>
+<li>Certain classes vital to the correct operation of the package, e.g., <code>&quot;lm&quot;</code>, <code>&quot;glm&quot;</code>, etc., may not be overridden.</li>
+</ol>
+<p>If there are no existing internal methods for the class(es) you provide methods for, there are no restrictions on them.</p>
+</div>
+<div id="exporting" class="section level2">
+<h2>Exporting and registering your methods</h2>
+<!-- @index **emmeans** package!Exporting extensions to 
+     Registering `recover_data` and `emm_basis` methods -->
+<p>To make the methods available to users of your package, the methods must be exported. R and CRAN are evolving in a way that having S3 methods in the registry is increasingly important; so it is a good idea to provide for that. The problem is not all of your package users will have <strong>emmeans</strong> installed.</p>
+<p>Thus, registering the methods must be done conditionally. We provide a courtesy function <code>.emm_register()</code> to make this simple. Suppose that your package offers two model classes <code>foo</code> and <code>bar</code>, and it includes the corresponding functions <code>recover_data.foo</code>, <code>recover_data.bar</code>, <code>emm_basis.foo</code>, and <code>emm_basis.bar</code>. Then to register these methods, add or modify the <code>.onLoad</code> function in your package (traditionally saved in the source file <code>zzz.R</code>):</p>
+<pre class="r"><code>.onLoad &lt;- function(libname, pkgname) {
+    if (requireNamespace(&quot;emmeans&quot;, quietly = TRUE))
+        emmeans::.emm_register(c(&quot;foo&quot;, &quot;bar&quot;), pkgname)
+}
+</code></pre>
+<p>You should also add <code>emmeans (&gt;= 1.4)</code> and <code>estimability</code> (which is required by <strong>emmeans</strong>) to the <code>Suggests</code> field of your <code>DESCRIPTION</code> file.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="concl" class="section level2">
+<h2>Conclusions</h2>
+<p>It is relatively simple to write appropriate methods that work with <strong>emmeans</strong> for model objects it does not support. I hope this vignette is helpful for understanding how. Furthermore, if you are the developer of a package that fits linear models, I encourage you to include <code>recover_data</code> and <code>emm_basis</code> methods for those classes of objects, so that users have access to <strong>emmeans</strong> support.</p>
+<p><a href="#contents">Back to Contents</a></p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

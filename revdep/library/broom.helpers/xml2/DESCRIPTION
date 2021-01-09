@@ -1,0 +1,51 @@
+Package: xml2
+Title: Parse XML
+Version: 1.3.2
+Authors@R: 
+    c(person(given = "Hadley",
+             family = "Wickham",
+             role = "aut",
+             email = "hadley@rstudio.com"),
+      person(given = "Jim",
+             family = "Hester",
+             role = c("aut", "cre"),
+             email = "jim.hester@rstudio.com"),
+      person(given = "Jeroen",
+             family = "Ooms",
+             role = "aut"),
+      person(given = "RStudio",
+             role = "cph"),
+      person(given = "R Foundation",
+             role = "ctb",
+             comment = "Copy of R-project homepage cached as example"))
+Description: Work with XML files using a simple, consistent
+    interface. Built on top of the 'libxml2' C library.
+License: GPL (>= 2)
+URL: https://xml2.r-lib.org/, https://github.com/r-lib/xml2
+BugReports: https://github.com/r-lib/xml2/issues
+Depends: R (>= 3.1.0)
+Imports: methods
+Suggests: covr, curl, httr, knitr, magrittr, mockery, rmarkdown,
+        testthat (>= 2.1.0)
+VignetteBuilder: knitr
+Encoding: UTF-8
+RoxygenNote: 7.1.0
+SystemRequirements: libxml2: libxml2-dev (deb), libxml2-devel (rpm)
+Collate: 'S4.R' 'as_list.R' 'xml_parse.R' 'as_xml_document.R'
+        'classes.R' 'init.R' 'paths.R' 'utils.R' 'xml_attr.R'
+        'xml_children.R' 'xml_find.R' 'xml_modify.R' 'xml_name.R'
+        'xml_namespaces.R' 'xml_path.R' 'xml_schema.R'
+        'xml_serialize.R' 'xml_structure.R' 'xml_text.R' 'xml_type.R'
+        'xml_url.R' 'xml_write.R' 'zzz.R'
+NeedsCompilation: yes
+Packaged: 2020-04-23 15:45:47 UTC; jhester
+Author: Hadley Wickham [aut],
+  Jim Hester [aut, cre],
+  Jeroen Ooms [aut],
+  RStudio [cph],
+  R Foundation [ctb] (Copy of R-project homepage cached as example)
+Maintainer: Jim Hester <jim.hester@rstudio.com>
+Repository: CRAN
+Date/Publication: 2020-04-23 22:00:03 UTC
+Built: R 4.0.3; x86_64-w64-mingw32; 2020-12-30 17:21:41 UTC; windows
+Archs: i386, x64

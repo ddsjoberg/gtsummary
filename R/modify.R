@@ -274,7 +274,7 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
   # first interpreting caption in case user passed glue args -----------------
   caption <-
     .info_tibble(x) %>%
-    filter(column == "label") %>%
+    filter(.data$column == "label") %>%
     with(glue(caption)) %>%
     as.character()
 

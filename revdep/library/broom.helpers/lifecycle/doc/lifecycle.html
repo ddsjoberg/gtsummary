@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Usage of the lifecycle package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Usage of the lifecycle package</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(lifecycle)</span></code></pre></div>
+<p>Use lifecycle to document the status of your exported functions and arguments:</p>
+<ul>
+<li><p>Choose one of the 7 lifecycle stages a function or argument can be in. You can choose from 4 development stages (experimental, maturing, stable, and questioning) and 3 deprecation stages (soft-deprecated, deprecated, and defunct).</p></li>
+<li><p>If the function or argument is deprecated, make sure your users know about by calling <code>deprecate_soft()</code>, <code>deprecate_warn()</code>, or <code>deprecate_stop()</code>. These functions try to be informative without being too verbose, with increasing levels of verbosity as the deprecation stage advances.</p></li>
+<li><p>Include the relevant lifecycle badge in your documentation.</p></li>
+</ul>
+<div id="stages" class="section level3">
+<h3>Stages</h3>
+<p>The lifecycle stages for functions and arguments are summarised in the figure below. They’re designed to closely mirror the lifecycle stages for <a href="https://www.tidyverse.org/lifecycle/">packages</a>.</p>
+<p><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bD0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgNjgwLjMxNDk2IDQ1My41NDMzIiB3aWR0aD0iNjgwLjMxNDk2cHQiIGhlaWdodD0iNDUzLjU0MzNwdCIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIj48bWV0YWRhdGE+IFByb2R1Y2VkIGJ5IE9tbmlHcmFmZmxlIDYuNi4yIDxkYzpkYXRlPjIwMTktMDgtMDggMTM6NDU6MjcgKzAwMDA8L2RjOmRhdGU+PC9tZXRhZGF0YT48ZGVmcz48bWFya2VyIG9yaWVudD0iYXV0byIgb3ZlcmZsb3c9InZpc2libGUiIG1hcmtlclVuaXRzPSJzdHJva2VXaWR0aCIgaWQ9IkZpbGxlZEFycm93X01hcmtlciIgdmlld0JveD0iLTEgLTMgNyA2IiBtYXJrZXJXaWR0aD0iNyIgbWFya2VySGVpZ2h0PSI2IiBjb2xvcj0iZ3JheSI+PGc+PHBhdGggZD0iTSA0LjggMCBMIDAgLTEuOCBMIDAgMS44IFoiIGZpbGw9ImN1cnJlbnRDb2xvciIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjwvZz48L21hcmtlcj48Zm9udC1mYWNlIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSIgZm9udC1zaXplPSIxNiIgcGFub3NlLTE9IjIgMCA1IDMgMCAwIDAgMiAwIDQiIHVuaXRzLXBlci1lbT0iMTAwMCIgdW5kZXJsaW5lLXBvc2l0aW9uPSItMTAwIiB1bmRlcmxpbmUtdGhpY2tuZXNzPSI1MCIgc2xvcGU9IjAiIHgtaGVpZ2h0PSI1MTciIGNhcC1oZWlnaHQ9IjcxNCIgYXNjZW50PSI5NTEuOTk1ODUiIGRlc2NlbnQ9Ii0yMTIuOTk3NDQiIGZvbnQtd2VpZ2h0PSI1MDAiPjxmb250LWZhY2Utc3JjPjxmb250LWZhY2UtbmFtZSBuYW1lPSJIZWx2ZXRpY2FOZXVlIi8+PC9mb250LWZhY2Utc3JjPjwvZm9udC1mYWNlPjxtYXJrZXIgb3JpZW50PSJhdXRvIiBvdmVyZmxvdz0idmlzaWJsZSIgbWFya2VyVW5pdHM9InN0cm9rZVdpZHRoIiBpZD0iRmlsbGVkQXJyb3dfTWFya2VyXzIiIHZpZXdCb3g9Ii0xIC0zIDcgNiIgbWFya2VyV2lkdGg9IjciIG1hcmtlckhlaWdodD0iNiIgY29sb3I9ImJsYWNrIj48Zz48cGF0aCBkPSJNIDQuOCAwIEwgMCAtMS44IEwgMCAxLjggWiIgZmlsbD0iY3VycmVudENvbG9yIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9nPjwvbWFya2VyPjxtYXJrZXIgb3JpZW50PSJhdXRvIiBvdmVyZmxvdz0idmlzaWJsZSIgbWFya2VyVW5pdHM9InN0cm9rZVdpZHRoIiBpZD0iRmlsbGVkQXJyb3dfTWFya2VyXzMiIHZpZXdCb3g9Ii02IC0zIDcgNiIgbWFya2VyV2lkdGg9IjciIG1hcmtlckhlaWdodD0iNiIgY29sb3I9ImJsYWNrIj48Zz48cGF0aCBkPSJNIC00LjggMCBMIDAgMS44IEwgMCAtMS44IFoiIGZpbGw9ImN1cnJlbnRDb2xvciIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMSIvPjwvZz48L21hcmtlcj48L2RlZnM+PGcgc3Ryb2tlPSJub25lIiBzdHJva2Utb3BhY2l0eT0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZmlsbD0ibm9uZSIgZmlsbC1vcGFjaXR5PSIxIj48dGl0bGU+Q2FudmFzIDE8L3RpdGxlPjxnPjx0aXRsZT5MYXllciAxPC90aXRsZT48bGluZSB4MT0iMjU4LjExNDEiIHkxPSI1OC4xOTI5MTMiIHgyPSIzODYuMTMzNTQiIHkyPSIyODYuNzcyNTQiIG1hcmtlci1lbmQ9InVybCgjRmlsbGVkQXJyb3dfTWFya2VyKSIgc3Ryb2tlPSJncmF5IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWRhc2hhcnJheT0iMiwyIi8+PHJlY3QgeD0iMTEuMzM4NTgyNiIgeT0iMjk3LjYzNzgiIHdpZHRoPSIxMzguODk3NjQiIGhlaWdodD0iNDguMTg4OTc2IiBmaWxsPSJ3aGl0ZSIvPjxyZWN0IHg9IjExLjMzODU4MjYiIHk9IjI5Ny42Mzc4IiB3aWR0aD0iMTM4Ljg5NzY0IiBoZWlnaHQ9IjQ4LjE4ODk3NiIgc3Ryb2tlPSIjZmQ4MDA4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMyIvPjx0ZXh0IHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LjMzODU4MyAzMTIuNTA4MjgpIiBmaWxsPSJibGFjayI+PHRzcGFuIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjUwMCIgeD0iMTguMzY4ODE4IiB5PSIxNSIgdGV4dExlbmd0aD0iOTIuMTYiPmV4cGVyaW1lbnRhbDwvdHNwYW4+PC90ZXh0PjxyZWN0IHg9IjExLjMzODU4MjYiIHk9IjExMC41NTExOCIgd2lkdGg9IjEzOC44OTc2NCIgaGVpZ2h0PSI0OC4xODg5NzYiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTEuMzM4NTgyNiIgeT0iMTEwLjU1MTE4IiB3aWR0aD0iMTM4Ljg5NzY0IiBoZWlnaHQ9IjQ4LjE4ODk3NiIgc3Ryb2tlPSIjNmNmIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMyIvPjx0ZXh0IHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LjMzODU4MyAxMjUuNDIxNjcpIiBmaWxsPSJibGFjayI+PHRzcGFuIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjUwMCIgeD0iMzIuODgwODE4IiB5PSIxNSIgdGV4dExlbmd0aD0iNjMuMTM2Ij5tYXR1cmluZzwvdHNwYW4+PC90ZXh0PjxyZWN0IHg9IjE3NC4zMzA3MSIgeT0iOC41MDM5MzciIHdpZHRoPSIxMzguODk3NjQiIGhlaWdodD0iNDguMTg4OTc2IiBmaWxsPSJ3aGl0ZSIvPjxyZWN0IHg9IjE3NC4zMzA3MSIgeT0iOC41MDM5MzciIHdpZHRoPSIxMzguODk3NjQiIGhlaWdodD0iNDguMTg4OTc2IiBzdHJva2U9IiMxMDgwNDAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIzIi8+PHRleHQgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc5LjMzMDcxIDIzLjM3NDQyNikiIGZpbGw9ImJsYWNrIj48dHNwYW4gZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNTAwIiB4PSI0Mi44MTY4MTgiIHk9IjE1IiB0ZXh0TGVuZ3RoPSI0My4yNjQiPnN0YWJsZTwvdHNwYW4+PC90ZXh0PjxyZWN0IHg9IjMzNy4zMjI4MyIgeT0iMjA1LjAzOTM3IiB3aWR0aD0iMTM4Ljg5NzY0IiBoZWlnaHQ9IjQ4LjE4ODk3NiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMzcuMzIyODMiIHk9IjIwNS4wMzkzNyIgd2lkdGg9IjEzOC44OTc2NCIgaGVpZ2h0PSI0OC4xODg5NzYiIHN0cm9rZT0iI2ZkODAwOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjMiLz48dGV4dCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNDIuMzIyODMgMjE5LjkwOTg2KSIgZmlsbD0iYmxhY2siPjx0c3BhbiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIHg9IjcuMTA0ODE4NSIgeT0iMTUiIHRleHRMZW5ndGg9IjY2LjA4Ij5zb2Z0LWRlcHI8L3RzcGFuPjx0c3BhbiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIHg9IjcyLjg5NjgyIiB5PSIxNSIgdGV4dExlbmd0aD0iNDguODk2Ij5lY2F0ZWQ8L3RzcGFuPjwvdGV4dD48cmVjdCB4PSIzMzcuMzIyODMiIHk9IjI5OS41Mjc1NiIgd2lkdGg9IjEzOC44OTc2NCIgaGVpZ2h0PSI0OC4xODg5NzYiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMzM3LjMyMjgzIiB5PSIyOTkuNTI3NTYiIHdpZHRoPSIxMzguODk3NjQiIGhlaWdodD0iNDguMTg4OTc2IiBzdHJva2U9IiNmZDgwMDgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIzIi8+PHRleHQgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQyLjMyMjgzIDMxNC4zOTgwNSkiIGZpbGw9ImJsYWNrIj48dHNwYW4gZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNTAwIiB4PSIyMy42OTY4MTgiIHk9IjE1IiB0ZXh0TGVuZ3RoPSIzMi44OTYiPmRlcHI8L3RzcGFuPjx0c3BhbiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIHg9IjU2LjMwNDgyIiB5PSIxNSIgdGV4dExlbmd0aD0iNDguODk2Ij5lY2F0ZWQ8L3RzcGFuPjwvdGV4dD48cmVjdCB4PSIzMzcuMzIyODMiIHk9IjM5NC4wMTU3NSIgd2lkdGg9IjEzOC44OTc2NCIgaGVpZ2h0PSI0OC4xODg5NzYiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMzM3LjMyMjgzIiB5PSIzOTQuMDE1NzUiIHdpZHRoPSIxMzguODk3NjQiIGhlaWdodD0iNDguMTg4OTc2IiBzdHJva2U9IiNmYzAxMDciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIzIi8+PHRleHQgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQyLjMyMjgzIDQwOC44ODYyMykiIGZpbGw9ImJsYWNrIj48dHNwYW4gZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNTAwIiB4PSIzNy4zMjg4MTgiIHk9IjE1IiB0ZXh0TGVuZ3RoPSI1NC4yNCI+ZGVmdW5jdDwvdHNwYW4+PC90ZXh0PjxsaW5lIHgxPSI4MC43ODc0IiB5MT0iMjk2LjEzNzgiIHgyPSI4MC43ODc0IiB5Mj0iMTczLjE0MDE2IiBtYXJrZXItZW5kPSJ1cmwoI0ZpbGxlZEFycm93X01hcmtlcl8yKSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiLz48bGluZSB4MT0iMTIxLjY2NzQ4NiIgeTE9IjEwOS4wNTExOCIgeDI9IjE5MS45NjU2MSIgeTI9IjY1LjAzODQ0NCIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMikiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjI2NS4wMDU3MiIgeTE9IjU4LjE5MjkxMyIgeDI9IjM3Ny4zMTA1OCIgeTI9IjE5My42MDk3OCIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMikiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjI5NS41OTM0NCIgeTE9IjY1LjAzODQ0NCIgeDI9IjM1NC45NTc3MyIgeTI9IjEwMi4yMDU2NSIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMikiIG1hcmtlci1zdGFydD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMykiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjQwNi43NzE2NSIgeTE9IjI1NC43MjgzNCIgeDI9IjQwNi43NzE2NSIgeTI9IjI4NS4xMjc1NiIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMikiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjQwNi43NzE2NSIgeTE9IjM0OS4yMTY1MyIgeDI9IjQwNi43NzE2NSIgeTI9IjM3OS42MTU3NSIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMikiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjQwNi43NzE2NSIgeTE9IjE2MC4yNDAxNiIgeDI9IjQwNi43NzE2NSIgeTI9IjE5MC42MzkzNyIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMikiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjE1MS43MzYyMiIgeTE9IjMyMi4xNDM1OCIgeDI9IjMyMi45MjMwNSIgeTI9IjMyMy4xMzU5NyIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMikiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjEyNC45Mzc4OSIgeTE9IjE2MC4yNDAxNiIgeDI9IjM1MS40NjA4NSIgeTI9IjI5MS41NTc4MSIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXJfMikiIHN0cm9rZT0iYmxhY2siIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+PGxpbmUgeDE9IjE1MS43MzYyMiIgeTE9IjM0Mi43MDg0NSIgeDI9IjMyMy40NTIxNyIgeTI9IjM5My40NzY2NSIgbWFya2VyLWVuZD0idXJsKCNGaWxsZWRBcnJvd19NYXJrZXIpIiBzdHJva2U9ImdyYXkiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtZGFzaGFycmF5PSIyLDIiLz48cmVjdCB4PSI1MzIuOTEzMzgiIHk9IjExMC41NTExOCIgd2lkdGg9IjEzOC44OTc2NCIgaGVpZ2h0PSI0OC4xODg5NzYiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iNTMyLjkxMzM4IiB5PSIxMTAuNTUxMTgiIHdpZHRoPSIxMzguODk3NjQiIGhlaWdodD0iNDguMTg4OTc2IiBzdHJva2U9IiM2Y2YiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIzIi8+PHRleHQgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTM3LjkxMzM4IDEyNS40MjE2NykiIGZpbGw9ImJsYWNrIj48dHNwYW4gZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNTAwIiB4PSI0MS43NzY4MTgiIHk9IjE1IiB0ZXh0TGVuZ3RoPSI1LjMyOCI+cjwvdHNwYW4+PHRzcGFuIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2EgTmV1ZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjUwMCIgeD0iNDYuODE2ODE4IiB5PSIxNSIgdGV4dExlbmd0aD0iMjIuNTEyIj5ldGlyPC90c3Bhbj48dHNwYW4gZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNTAwIiB4PSI2OS4wNDA4MiIgeT0iMTUiIHRleHRMZW5ndGg9IjE4LjA4Ij5lZDwvdHNwYW4+PC90ZXh0PjxwYXRoIGQ9Ik0gMzE0LjcyODM0IDMyLjU5ODQyNSBMIDQ5My4yMjgzNCAzMi41OTg0MjUgTCA0OTMuMjI4MzQgMzQuMDE1NzQ4IEwgNDkzLjIyODM0IDEzNC42NDU2NyBMIDUxOC41MTMzOCAxMzQuNjQ1NjciIG1hcmtlci1lbmQ9InVybCgjRmlsbGVkQXJyb3dfTWFya2VyXzIpIiBzdHJva2U9ImJsYWNrIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIvPjxsaW5lIHgxPSI0NzcuNzIwNDciIHkxPSIxMzQuNjQ1NjciIHgyPSI1MTguNTEzMzgiIHkyPSIxMzQuNjQ1NjciIG1hcmtlci1lbmQ9InVybCgjRmlsbGVkQXJyb3dfTWFya2VyXzIpIiBzdHJva2U9ImJsYWNrIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjMzNy4zMjI4MyIgeT0iMTEwLjU1MTE4IiB3aWR0aD0iMTM4Ljg5NzY0IiBoZWlnaHQ9IjQ4LjE4ODk3NiIgZmlsbD0id2hpdGUiLz48cmVjdCB4PSIzMzcuMzIyODMiIHk9IjExMC41NTExOCIgd2lkdGg9IjEzOC44OTc2NCIgaGVpZ2h0PSI0OC4xODg5NzYiIHN0cm9rZT0iIzZjZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjMiLz48dGV4dCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNDIuMzIyODMgMTI1LjQyMTY3KSIgZmlsbD0iYmxhY2siPjx0c3BhbiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSI1MDAiIHg9IjIyLjgwODgxOCIgeT0iMTUiIHRleHRMZW5ndGg9IjgzLjI4Ij5xdWVzdGlvbmluZzwvdHNwYW4+PC90ZXh0PjwvZz48L2c+PC9zdmc+Cg==" width="75%" /></p>
+<p>There are two development stages.</p>
+<ul>
+<li><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTM2IiBoZWlnaHQ9IjIwIj48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImEiPjxyZWN0IHdpZHRoPSIxMzYiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjYSkiPjxwYXRoIGZpbGw9IiM1NTUiIGQ9Ik0wIDBoNTN2MjBIMHoiLz48cGF0aCBmaWxsPSIjZmU3ZDM3IiBkPSJNNTMgMGg4M3YyMEg1M3oiLz48cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDEzNnYyMEgweiIvPjwvZz48ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMTAiPjx0ZXh0IHg9IjI3NSIgeT0iMTUwIiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNDMwIj5saWZlY3ljbGU8L3RleHQ+PHRleHQgeD0iMjc1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI0MzAiPmxpZmVjeWNsZTwvdGV4dD48dGV4dCB4PSI5MzUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjczMCI+ZXhwZXJpbWVudGFsPC90ZXh0Pjx0ZXh0IHg9IjkzNSIgeT0iMTQwIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNzMwIj5leHBlcmltZW50YWw8L3RleHQ+PC9nPiA8L3N2Zz4=" alt="Experimental" style="vertical-align:middle" /> This is a new feature that is in the very early stage of development. It is exported so users can start to use it and report feedback, but its interface and/or behaviour is likely to change in the future. It is generally best to avoid depending on experimental features.</p></li>
+<li><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTE0IiBoZWlnaHQ9IjIwIj48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImEiPjxyZWN0IHdpZHRoPSIxMTQiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjYSkiPjxwYXRoIGZpbGw9IiM1NTUiIGQ9Ik0wIDBoNTN2MjBIMHoiLz48cGF0aCBmaWxsPSIjMDA3ZWM2IiBkPSJNNTMgMGg2MXYyMEg1M3oiLz48cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDExNHYyMEgweiIvPjwvZz48ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMTAiPjx0ZXh0IHg9IjI3NSIgeT0iMTUwIiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNDMwIj5saWZlY3ljbGU8L3RleHQ+PHRleHQgeD0iMjc1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI0MzAiPmxpZmVjeWNsZTwvdGV4dD48dGV4dCB4PSI4MjUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjUxMCI+bWF0dXJpbmc8L3RleHQ+PHRleHQgeD0iODI1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI1MTAiPm1hdHVyaW5nPC90ZXh0PjwvZz4gPC9zdmc+" alt="Maturing" style="vertical-align:middle" /> The interface and behaviour of a maturing feature has been roughed out, but finer details are likely to change. It still needs more feedback to find the optimal API.</p></li>
+</ul>
+<p>The probable end state of most functions is <em>stable</em>:</p>
+<ul>
+<li><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iOTYiIGhlaWdodD0iMjAiPjxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDI9IjAiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiYmIiIHN0b3Atb3BhY2l0eT0iLjEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3Atb3BhY2l0eT0iLjEiLz48L2xpbmVhckdyYWRpZW50PjxjbGlwUGF0aCBpZD0iYSI+PHJlY3Qgd2lkdGg9Ijk2IiBoZWlnaHQ9IjIwIiByeD0iMyIgZmlsbD0iI2ZmZiIvPjwvY2xpcFBhdGg+PGcgY2xpcC1wYXRoPSJ1cmwoI2EpIj48cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDUzdjIwSDB6Ii8+PHBhdGggZmlsbD0iIzRjMSIgZD0iTTUzIDBoNDN2MjBINTN6Ii8+PHBhdGggZmlsbD0idXJsKCNiKSIgZD0iTTAgMGg5NnYyMEgweiIvPjwvZz48ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMTAiPjx0ZXh0IHg9IjI3NSIgeT0iMTUwIiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNDMwIj5saWZlY3ljbGU8L3RleHQ+PHRleHQgeD0iMjc1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI0MzAiPmxpZmVjeWNsZTwvdGV4dD48dGV4dCB4PSI3MzUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjMzMCI+c3RhYmxlPC90ZXh0Pjx0ZXh0IHg9IjczNSIgeT0iMTQwIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iMzMwIj5zdGFibGU8L3RleHQ+PC9nPiA8L3N2Zz4=" alt="Stable" style="vertical-align:middle" /> A feature is considered stable when the author is happy with its interface and behaviour. Major changes are unlikely, and breaking changes will occur gradually, through a deprecation process.</li>
+</ul>
+<p>Sometimes we are no longer certain that a feature follows or implements the right approach. In this case, we mark it as <em>questioning</em>. It can then either become <em>superseded</em> once we have implemented an alternative, or <em>deprecated</em>. The difference between superseded and deprecated is that a superseded feature is maintained indefinitely for backward compatibility. Alternatively, we may realise that a questioning feature is actually important, and move it back to stable. User feedback is usually important for taking these decisions and always welcome.</p>
+<ol style="list-style-type: decimal">
+<li><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTI2IiBoZWlnaHQ9IjIwIj48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImEiPjxyZWN0IHdpZHRoPSIxMjYiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjYSkiPjxwYXRoIGZpbGw9IiM1NTUiIGQ9Ik0wIDBoNTN2MjBIMHoiLz48cGF0aCBmaWxsPSIjMDA3ZWM2IiBkPSJNNTMgMGg3M3YyMEg1M3oiLz48cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDEyNnYyMEgweiIvPjwvZz48ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMTAiPjx0ZXh0IHg9IjI3NSIgeT0iMTUwIiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNDMwIj5saWZlY3ljbGU8L3RleHQ+PHRleHQgeD0iMjc1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI0MzAiPmxpZmVjeWNsZTwvdGV4dD48dGV4dCB4PSI4ODUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjYzMCI+cXVlc3Rpb25pbmc8L3RleHQ+PHRleHQgeD0iODg1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI2MzAiPnF1ZXN0aW9uaW5nPC90ZXh0PjwvZz4gPC9zdmc+" alt="Questioning" style="vertical-align:middle" /> The author is no longer convinced that the feature is the optimal approach. However, there are no recommended alternatives yet.</p></li>
+<li><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTI4IiBoZWlnaHQ9IjIwIj48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImEiPjxyZWN0IHdpZHRoPSIxMjgiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjYSkiPjxwYXRoIGZpbGw9IiM1NTUiIGQ9Ik0wIDBoNTV2MjBIMHoiLz48cGF0aCBmaWxsPSIjZmU3ZDM3IiBkPSJNNTUgMGg3M3YyMEg1NXoiLz48cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDEyOHYyMEgweiIvPjwvZz48ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMTAiPiA8dGV4dCB4PSIyODUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjQ1MCI+bGlmZWN5Y2xlPC90ZXh0Pjx0ZXh0IHg9IjI4NSIgeT0iMTQwIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNDUwIj5saWZlY3ljbGU8L3RleHQ+PHRleHQgeD0iOTA1IiB5PSIxNTAiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI2MzAiPnN1cGVyc2VkZWQ8L3RleHQ+PHRleHQgeD0iOTA1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI2MzAiPnN1cGVyc2VkZWQ8L3RleHQ+PC9nPiA8L3N2Zz4=" alt="Superseded" style="vertical-align:middle" /> (Previously called retired) A superseded feature is no longer under active development, and a known better alternative is available. However, it is indefinitely kept in the package for backward compatibility. The author will only make the necessary changes to ensure that the function continues working. No new features will be added, and only critical bugs will be fixed.</p></li>
+</ol>
+<p>The deprecation lifecycle is divided into three stages in order to give time to users to switch to an alternative.</p>
+<ol style="list-style-type: decimal">
+<li><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTUwIiBoZWlnaHQ9IjIwIj48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImEiPjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjYSkiPjxwYXRoIGZpbGw9IiM1NTUiIGQ9Ik0wIDBoNTN2MjBIMHoiLz48cGF0aCBmaWxsPSIjMDA3ZWM2IiBkPSJNNTMgMGg5N3YyMEg1M3oiLz48cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDE1MHYyMEgweiIvPjwvZz48ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMTAiPjx0ZXh0IHg9IjI3NSIgeT0iMTUwIiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNDMwIj5saWZlY3ljbGU8L3RleHQ+PHRleHQgeD0iMjc1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI0MzAiPmxpZmVjeWNsZTwvdGV4dD48dGV4dCB4PSIxMDA1IiB5PSIxNTAiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI4NzAiPnNvZnQtZGVwcmVjYXRlZDwvdGV4dD48dGV4dCB4PSIxMDA1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI4NzAiPnNvZnQtZGVwcmVjYXRlZDwvdGV4dD48L2c+IDwvc3ZnPg==" alt="Soft deprecated" style="vertical-align:middle" /> The author is no longer happy with a feature because they consider it sub-optimal compared to some other approach, or simply because they no longer have the time to maintain it. A soft-deprecated feature can still be used without hassle, but users should consider switching to an alternative approach.</p></li>
+<li><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTI0IiBoZWlnaHQ9IjIwIj48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImEiPjxyZWN0IHdpZHRoPSIxMjQiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjYSkiPjxwYXRoIGZpbGw9IiM1NTUiIGQ9Ik0wIDBoNTN2MjBIMHoiLz48cGF0aCBmaWxsPSIjZmU3ZDM3IiBkPSJNNTMgMGg3MXYyMEg1M3oiLz48cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDEyNHYyMEgweiIvPjwvZz48ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMTAiPjx0ZXh0IHg9IjI3NSIgeT0iMTUwIiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNDMwIj5saWZlY3ljbGU8L3RleHQ+PHRleHQgeD0iMjc1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI0MzAiPmxpZmVjeWNsZTwvdGV4dD48dGV4dCB4PSI4NzUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjYxMCI+ZGVwcmVjYXRlZDwvdGV4dD48dGV4dCB4PSI4NzUiIHk9IjE0MCIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjYxMCI+ZGVwcmVjYXRlZDwvdGV4dD48L2c+IDwvc3ZnPg==" alt="Deprecated" style="vertical-align:middle" /> The feature is likely to be discontinued in the next major release. Users should switch to an alternative approach as soon as possible.</p></li>
+<li><p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjIwIj48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgyPSIwIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+PC9saW5lYXJHcmFkaWVudD48Y2xpcFBhdGggaWQ9ImEiPjxyZWN0IHdpZHRoPSIxMDQiIGhlaWdodD0iMjAiIHJ4PSIzIiBmaWxsPSIjZmZmIi8+PC9jbGlwUGF0aD48ZyBjbGlwLXBhdGg9InVybCgjYSkiPjxwYXRoIGZpbGw9IiM1NTUiIGQ9Ik0wIDBoNTN2MjBIMHoiLz48cGF0aCBmaWxsPSIjZTA1ZDQ0IiBkPSJNNTMgMGg1MXYyMEg1M3oiLz48cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDEwNHYyMEgweiIvPjwvZz48ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMTAiPjx0ZXh0IHg9IjI3NSIgeT0iMTUwIiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIiB0cmFuc2Zvcm09InNjYWxlKC4xKSIgdGV4dExlbmd0aD0iNDMwIj5saWZlY3ljbGU8L3RleHQ+PHRleHQgeD0iMjc1IiB5PSIxNDAiIHRyYW5zZm9ybT0ic2NhbGUoLjEpIiB0ZXh0TGVuZ3RoPSI0MzAiPmxpZmVjeWNsZTwvdGV4dD48dGV4dCB4PSI3NzUiIHk9IjE1MCIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjQxMCI+ZGVmdW5jdDwvdGV4dD48dGV4dCB4PSI3NzUiIHk9IjE0MCIgdHJhbnNmb3JtPSJzY2FsZSguMSkiIHRleHRMZW5ndGg9IjQxMCI+ZGVmdW5jdDwvdGV4dD48L2c+IDwvc3ZnPg==" alt="Defunct" style="vertical-align:middle" /> The feature can no longer be used. A defunct function is still exported, and a defunct argument is still part of the signature. This way an informative error can be thrown.</p></li>
+</ol>
+<p>Finally, when a feature is no longer exposed or mentioned in the released version of the package, it is said to be <em>archived</em>.</p>
+</div>
+<div id="rd-badges" class="section level3">
+<h3>Badges</h3>
+<p>Make sure your users know what stage a feature is by adding badges in the help topics of your functions.</p>
+<p><img src="data:image/png;base64,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" align="center" alt="badge" /></p>
+<ul>
+<li><p>Call <code>usethis::use_lifecycle()</code> to import the badges in your package.</p></li>
+<li><p>Use the <code>lifecycle</code> Rd macro to insert a badge:</p>
+<pre><code>#&#39; \lifecycle{experimental}
+#&#39; \lifecycle{soft-deprecated}</code></pre>
+<p>This badge renders as text in non-HTML documentation. To document the status of a whole function, a good place to include the badge is at the top of the <code>@description</code> block. To document an argument, you can put the badge in the argument description.</p></li>
+<li><p>For functions in development, you typically don’t need to advertise the status if it is the same as the package as a whole. For instance, if your package is <a href="https://www.tidyverse.org/lifecycle/#maturing">maturing</a>, only signal functions in the experimental, stable, and questioning stages.</p></li>
+</ul>
+</div>
+<div id="verbosity-of-deprecation" class="section level3">
+<h3>Verbosity of deprecation</h3>
+<p>lifecycle offers three levels of verbosity corresponding to the three deprecation stages.</p>
+<ul>
+<li><p><strong>Soft deprecation</strong>: At this stage, call <code>deprecate_soft()</code> to start warning users about the deprecation in the least disruptive way.</p>
+<p>This function only warns (a) users who try the feature from the global workspace, and (b) developers who directly use the feature, when they run unit tests with testthat. No warning is issued outside of unit tests, or when the deprecated feature is called from another package then ther own.</p>
+<p>When a warning does get issued, users only see it once every 8 hours rather than at each invokation.</p></li>
+<li><p><strong>Deprecation</strong>: At this stage, call <code>deprecate_warn()</code> to warn unconditionally about the deprecated feature. The warning is issued only once every 8 hours.</p></li>
+<li><p><strong>Defunct</strong>: The feature is discontinued. Call <code>deprecate_stop()</code> to fail with an error.</p></li>
+</ul>
+</div>
+<div id="deprecating-functions" class="section level3">
+<h3>Deprecating functions</h3>
+<p>These functions take the version number starting from which the feature is considered deprecated (it should remain the same across all deprecation stages), and a feature descriptor:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">deprecate_warn</span>(<span class="st">&quot;1.0.0&quot;</span>, <span class="st">&quot;mypkg::foo()&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; Warning: `foo()` is deprecated as of mypkg 1.0.0.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span></span></code></pre></div>
+<p>You can optionally provide a replacement:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">deprecate_warn</span>(<span class="st">&quot;1.0.0&quot;</span>, <span class="st">&quot;mypkg::foo()&quot;</span>, <span class="st">&quot;new()&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; Warning: `foo()` is deprecated as of mypkg 1.0.0.</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; Please use `new()` instead.</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span></span></code></pre></div>
+<p>For the purpose of these examples we explicitly mentioned the namespace with <code>mypkg::</code>, however you can typically omit it because lifecycle infers the namespace from the calling environment. Specifying the namespace is mostly useful when the replacement is implemented in a different package.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># The new replacement</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>foobar_adder &lt;-<span class="st"> </span><span class="cf">function</span>(foo, bar) {</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  foo <span class="op">+</span><span class="st"> </span>bar</span>
+<span id="cb5-4"><a href="#cb5-4"></a>}</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co"># The old function still exported for compatibility</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>foobaz_adder &lt;-<span class="st"> </span><span class="cf">function</span>(foo, bar) {</span>
+<span id="cb5-8"><a href="#cb5-8"></a>  <span class="kw">deprecate_warn</span>(<span class="st">&quot;1.0.0&quot;</span>, <span class="st">&quot;foobaz_adder()&quot;</span>, <span class="st">&quot;foobar_adder()&quot;</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>  <span class="kw">foobar_adder</span>(foo, bar)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>}</span></code></pre></div>
+</div>
+<div id="deprecating-arguments" class="section level3">
+<h3>Deprecating arguments</h3>
+<p>The syntax for deprecating argument is based on the syntax for deprecating functions:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">deprecate_warn</span>(<span class="st">&quot;1.0.0&quot;</span>, <span class="st">&quot;mypkg::foo(arg = )&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; Warning: The `arg` argument of `foo()` is deprecated as of mypkg 1.0.0.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">deprecate_warn</span>(<span class="st">&quot;1.0.0&quot;</span>, <span class="st">&quot;mypkg::foo(arg = )&quot;</span>, <span class="st">&quot;mypkg::foo(new = )&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; Warning: The `arg` argument of `foo()` is deprecated as of mypkg 1.0.0.</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; Please use the `new` argument instead.</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span></span></code></pre></div>
+<p>An argument can be partially deprecated by disallowing certain input types:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">deprecate_warn</span>(<span class="st">&quot;1.0.0&quot;</span>, <span class="st">&quot;mypkg::foo(arg = &#39;must be a scalar integer&#39;)&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; Warning: The `arg` argument of `foo()` must be a scalar integer as of mypkg 1.0.0.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span></span></code></pre></div>
+<p>lifecycle also provides the <code>deprecated()</code> sentinel to use as default argument. This provides self-documentation for your users and makes it possible for external tools to determine which arguments are deprecated. Test whether the argument was supplied by the caller with <code>lifecycle::is_present()</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>foobar_adder &lt;-<span class="st"> </span><span class="cf">function</span>(foo, bar, <span class="dt">baz =</span> <span class="kw">deprecated</span>()) {</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="co"># Check if user has supplied `baz` instead of `bar`</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="cf">if</span> (lifecycle<span class="op">::</span><span class="kw">is_present</span>(baz)) {</span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="co"># Signal the deprecation to the user</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="kw">deprecate_warn</span>(<span class="st">&quot;1.0.0&quot;</span>, <span class="st">&quot;foobar_adder(baz = )&quot;</span>, <span class="st">&quot;foobar_adder(bar = )&quot;</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="co"># Deal with the deprecated argument for compatibility</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>    bar &lt;-<span class="st"> </span>baz</span>
+<span id="cb8-10"><a href="#cb8-10"></a>  }</span>
+<span id="cb8-11"><a href="#cb8-11"></a></span>
+<span id="cb8-12"><a href="#cb8-12"></a>  foo <span class="op">+</span><span class="st"> </span>bar</span>
+<span id="cb8-13"><a href="#cb8-13"></a>}</span></code></pre></div>
+</div>
+<div id="workflow" class="section level3">
+<h3>Workflow</h3>
+<div id="where-do-these-deprecation-warnings-come-from" class="section level4">
+<h4>Where do these deprecation warnings come from?</h4>
+<p>Call <code>lifecycle::last_warnings()</code> to see backtraces for all the deprecation warnings that were issued during the last top-level command.</p>
+</div>
+<div id="bumping-deprecation-stage" class="section level4">
+<h4>Bumping deprecation stage</h4>
+<p>Some manual search and replace is needed to bump the status of deprecated features. We recommend starting with defunct features and work your way up:</p>
+<ol style="list-style-type: decimal">
+<li><p>Search for <code>deprecate_stop()</code> and remove the feature from the package. The feature is now archived.</p></li>
+<li><p>Search for <code>deprecate_warn()</code> and replace with <code>deprecate_stop()</code>.</p></li>
+<li><p>Search for <code>deprecate_soft()</code> and replace with <code>deprecate_warn()</code>.</p></li>
+<li><p>Call <code>deprecate_soft()</code> from newly deprecated functions.</p></li>
+</ol>
+<p>Don’t forget to update the badges in the documentation topics.</p>
+</div>
+<div id="find-out-what-deprecated-features-you-rely-on" class="section level4">
+<h4>Find out what deprecated features you rely on</h4>
+<p>Test whether your package depends on deprecated features directly or indirectly by setting the verbosity option in the <code>tests/testthat.R</code> file just before <code>test_check()</code> is called:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">library</span>(testthat)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">library</span>(mypackage)</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">options</span>(<span class="dt">lifecycle_verbosity =</span> <span class="st">&quot;error&quot;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="kw">test_check</span>(<span class="st">&quot;mypackage&quot;</span>)</span></code></pre></div>
+<p>This forces all deprecated features to fail. You can also set the relevant options manually to force warnings or errors in your session:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Force silence</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">options</span>(<span class="dt">lifecycle_verbosity =</span> <span class="st">&quot;quiet&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># Force warnings</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="kw">options</span>(<span class="dt">lifecycle_verbosity =</span> <span class="st">&quot;warning&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co"># Force errors</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="kw">options</span>(<span class="dt">lifecycle_verbosity =</span> <span class="st">&quot;error&quot;</span>)</span></code></pre></div>
+<p>Forcing warnings can be useful in conjuction with <code>last_warnings()</code>, which prints backtraces for all the deprecation warnings issued during the last top-level command.</p>
+</div>
+<div id="test-deprecated-features" class="section level4">
+<h4>Test deprecated features</h4>
+<p>Test whether a deprecated feature still works by setting <code>lifecycle_verbosity</code> to <code>&quot;quiet&quot;</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">test_that</span>(<span class="st">&quot;`baz` argument of `foobar_adder()` still works&quot;</span>, {</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  withr<span class="op">::</span><span class="kw">local_options</span>(<span class="kw">list</span>(<span class="dt">lifecycle_verbosity =</span> <span class="st">&quot;quiet&quot;</span>))</span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="kw">foobar_adder</span>(<span class="dv">1</span>, <span class="dt">baz =</span> <span class="dv">2</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>})</span></code></pre></div>
+<p>You can also set up verbosity for a whole testthat file within <code>setup()</code> and <code>teardown()</code> blocks:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">setup</span>(<span class="kw">options</span>(<span class="dt">lifecycle_verbosity =</span> <span class="st">&quot;quiet&quot;</span>))</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="kw">teardown</span>(<span class="kw">options</span>(<span class="dt">lifecycle_verbosity =</span> <span class="ot">NULL</span>))</span></code></pre></div>
+<p>Test that a feature is correctly deprecated with <code>expect_deprecated()</code> or <code>expect_defunct()</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">test_that</span>(<span class="st">&quot;`baz` argument of `foobar_adder()` is deprecated&quot;</span>, {</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="kw">expect_deprecated</span>(<span class="kw">foobar_adder</span>(<span class="dv">1</span>, <span class="dt">baz =</span> <span class="dv">2</span>))</span>
+<span id="cb13-3"><a href="#cb13-3"></a>})</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="kw">test_that</span>(<span class="st">&quot;`foo()` is defunct&quot;</span>, {</span>
+<span id="cb13-6"><a href="#cb13-6"></a>  <span class="kw">expect_defunct</span>(<span class="kw">foo</span>())</span>
+<span id="cb13-7"><a href="#cb13-7"></a>})</span></code></pre></div>
+<p>More control over verbosity can be exercised with the <code>lifecycle_verbosity</code> option. See <code>?verbosity</code>.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

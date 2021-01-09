@@ -1,0 +1,314 @@
+---
+title: "Getting Started with broom.helpers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with broom.helpers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  rows.print = 25
+)
+```
+
+The `broom.helpers` package offers a suite of functions that make easy to interact, add information, and manipulate tibbles created with `broom::tidy()` (and friends).
+
+The suite includes functions to group regression model terms by variable, insert reference and header rows for categorical variables, add variable labels, and more.
+
+As a motivating example, let's summarize a logistic regression model with a forest plot and in a table.
+
+To begin, let's load our packages.
+
+```{r setup, warning=FALSE, message=FALSE}
+library(broom.helpers)
+library(gtsummary)
+library(ggplot2)
+library(dplyr)
+```
+
+Our model predicts tumor response using chemotherapy treatment and tumor grade.
+The data set we're utilizing has already labelled the columns using the [labelled package](http://larmarange.github.io/labelled/).
+The column labels will be carried through to our figure and table.
+
+```{r}
+model_logit <- glm(response ~ trt + grade, trial, family = binomial)
+broom::tidy(model_logit)
+```
+
+## Forest Plot
+
+To create the figure, we'll need to add some information to the tidy tibble, i.e. we'll need to group the terms that belong to the same variable, add the reference row, etc.
+Parsing this information can be difficult, but the `broom.helper` package has made it simple.
+
+```{r}
+tidy_forest <-
+  model_logit %>%
+  # perform initial tidying of the model
+  tidy_and_attach(exponentiate = TRUE, conf.int = TRUE) %>%
+  # adding in the reference row for categorical variables
+  tidy_add_reference_rows() %>%
+  # adding a reference value to appear in plot
+  tidy_add_estimate_to_reference_rows() %>%
+  # adding the variable labels
+  tidy_add_term_labels() %>%
+  # removing intercept estimate from model
+  tidy_remove_intercept()
+tidy_forest
+```
+
+**Note:** we used `tidy_and_attach()` instead of `broom::tidy()`. `broom.helpers` functions needs a copy of the original model. To avoid passing the model at each step, the easier way is to attach the model as an attribute of the tibble with `tidy_attach_model()`. `tidy_and_attach()` is simply a shortcut of `model %>% broom::tidy() %>% tidy_and_attach(model)`.
+
+We now have a tibble with every piece of information we need to create our forest plot using `ggplot2`.
+
+```{r, warning=FALSE}
+tidy_forest %>%
+  mutate(
+    plot_label = paste(var_label, label, sep = ":") %>% 
+      forcats::fct_inorder() %>%
+      forcats::fct_rev()
+  ) %>%
+  ggplot(aes(x = plot_label, y = estimate, ymin = conf.low, ymax = conf.high, color = variable)) +
+  geom_hline(yintercept = 1, linetype = 2) +
+  geom_pointrange() +
+  coord_flip() +
+  theme(legend.position = "none") +
+  labs(
+    y = "Odds Ratio",
+    x = " ",
+    title = "Forest Plot using broom.helpers"
+  )
+```
+
+## Table Summary
+
+In addition to aiding in figure creation, the broom.helpers package can help summarize a model in a table.
+In the example below, we add header and reference rows, and utilize existing variable labels.
+Let's change the labels shown in our summary table as well.
+
+```{r}
+tidy_table <-
+  model_logit %>%
+  # perform initial tidying of the model
+  tidy_and_attach(exponentiate = TRUE, conf.int = TRUE) %>%
+  # adding in the reference row for categorical variables
+  tidy_add_reference_rows() %>%
+  # adding the variable labels
+  tidy_add_term_labels() %>%
+  # add header row
+  tidy_add_header_rows() %>%
+  # removing intercept estimate from model
+  tidy_remove_intercept() 
+
+# print summary table
+options(knitr.kable.NA = '')
+tidy_table %>%
+  # format model estimates
+  select(label, estimate, conf.low, conf.high, p.value) %>%
+  mutate_at(vars(estimate, conf.low, conf.high), style_ratio) %>%
+  mutate_at(vars(p.value), style_pvalue) %>%
+  knitr::kable()
+```
+
+**Note::** for more advanced and nicely formatted tables of model coefficients, look at `gtsummary::tbl_regression()` and its [dedicated vignette](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html). `gtsummary::tbl_regression()` internally uses `broom.helpers`.
+
+## All-in-one function
+
+There is also a handy wrapper, called `tidy_plus_plus()`, for the most commonly used `tidy_*()` functions, and they can be executed with a single line of code:
+
+```{r}
+model_logit %>%
+  tidy_plus_plus(exponentiate = TRUE)
+```
+
+```{r}
+model_logit %>%
+  tidy_plus_plus(exponentiate = TRUE) %>%
+  rmarkdown::paged_table()
+```
+
+See the documentation of `tidy_plus_plus()` for the full list of available options.
+
+## Advanced examples
+
+`broom.helpers` can also handle different contrasts for categorical variables and the use of polynomial terms for continuous variables.
+
+### Polynomial terms
+
+When polynomial terms of a continuous variable are defined with `stats::poly()`, `broom.helpers` will be able to identify the corresponding variable, create appropriate labels and add header rows.
+
+```{r}
+model_poly <- glm(response ~ poly(age, 3) + ttdeath, na.omit(trial), family = binomial)
+
+model_poly %>%
+  tidy_plus_plus(
+    exponentiate = TRUE,
+    add_header_rows = TRUE,
+    variable_labels = c(age = "Age in years")
+  ) %>%
+  rmarkdown::paged_table()
+```
+
+### Different type of contrasts
+
+By default, categorical variables are coded with a treatment contrasts (see `stats::contr.treatment()`). With such contrasts, model coefficients correspond to the effect of a modality compared with the reference modality (by default, the first one). `tidy_add_reference_rows()` allows to add a row for this reference modality and `tidy_add_estimate_to_reference_rows()` will populate the estimate value of these references rows by 0 (or 1 if `exponentiate = TRUE`). `tidy_add_term_labels()` is able to retrieve the label of the factor level associated with a specific model term.
+
+```{r}
+model_1 <- glm(
+  response ~ stage + grade * trt,
+  gtsummary::trial,
+  family = binomial
+)
+
+model_1 %>%
+  tidy_and_attach(exponentiate = TRUE) %>%
+  tidy_add_reference_rows() %>%
+  tidy_add_estimate_to_reference_rows(exponentiate = TRUE) %>%
+  tidy_add_term_labels() %>%
+  rmarkdown::paged_table()
+```
+
+Using `stats::contr.treatment()`, it is possible to defined alternative reference rows. It will be properly managed by `broom.helpers`.
+
+```{r}
+model_2 <- glm(
+  response ~ stage + grade * trt,
+  gtsummary::trial,
+  family = binomial,
+  contrasts = list(
+    stage = contr.treatment(4, base = 3),
+    grade = contr.treatment(3, base = 2),
+    trt = contr.treatment(2, base = 2)
+  )
+)
+
+model_2 %>%
+  tidy_and_attach(exponentiate = TRUE) %>%
+  tidy_add_reference_rows() %>%
+  tidy_add_estimate_to_reference_rows(exponentiate = TRUE) %>%
+  tidy_add_term_labels() %>%
+  rmarkdown::paged_table()
+```
+
+You can also use sum contrasts (cf. `stats::contr.sum()`). In that case, each model coefficient corresponds to the difference of that modality with the grand mean. A variable with 4 modalities will be coded with 3 terms. However, a value could be computed (using `emmeans::emmeans()`) for the last modality, corresponding to the difference of that modality with the grand mean and equal to sum of all other coefficients multiplied by -1. `broom.helpers` will identify categorical variables coded with sum contrasts and could retrieve an estimate value for the reference term.
+
+```{r}
+model_3 <- glm(
+  response ~ stage + grade * trt,
+  gtsummary::trial,
+  family = binomial,
+  contrasts = list(
+    stage = contr.sum,
+    grade = contr.sum,
+    trt = contr.sum
+  )
+)
+
+model_3 %>%
+  tidy_and_attach(exponentiate = TRUE) %>%
+  tidy_add_reference_rows() %>%
+  tidy_add_estimate_to_reference_rows(exponentiate = TRUE) %>%
+  tidy_add_term_labels() %>%
+  rmarkdown::paged_table()
+```
+
+Other types of contrasts exist, like Helmert (`contr.helmert()`) or polynomial (`contr.poly()`). They are more complex as a modality will be coded with a combination of terms. Therefore, for such contrasts, it will not be possible to associate a specific model term with a level of the original factor. `broom.helpers` will not add a reference term in such case.
+
+```{r}
+model_4 <- glm(
+  response ~ stage + grade * trt,
+  gtsummary::trial,
+  family = binomial,
+  contrasts = list(
+    stage = contr.poly,
+    grade = contr.helmert,
+    trt = contr.poly
+  )
+)
+
+model_4 %>%
+  tidy_and_attach(exponentiate = TRUE) %>%
+  tidy_add_reference_rows() %>%
+  tidy_add_estimate_to_reference_rows(exponentiate = TRUE) %>%
+  tidy_add_term_labels() %>%
+  rmarkdown::paged_table()
+```
+
+
+## Column Details
+
+Below is a summary of the additional columns that may be added by a `broom.helpers` function.
+The table includes the column name, the function that adds the function, and a short description of the information in the column.
+
+<style>
+td {vertical-align: top;}
+</style>
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Function, ~Description,
+  'variable', '`tidy_identify_variables()`', 'String of variable names from the model. For categorical variables and polynomial terms defined with `stats::poly()`, terms belonging to the variable are identified.',
+  'var_class', '`tidy_identify_variables()`', "Class of the variable.",
+  'var_type', '`tidy_identify_variables()`', "One of 'intercept', 'continuous', 'dichotomous', 'categorical', or 'interaction'",
+  'var_nlevels', '`tidy_identify_variables()`', "Number of original levels for categorical variables",
+  'contrasts', '`tidy_add_contrasts()`', "Contrasts used for categorical variables.<br /><em>Require 'variable' column. If needed, will automatically apply `tidy_identify_variables()`.</em>",
+  'contrasts_type', '`tidy_add_contrasts()`', "Type of contrasts ('treatment', 'sum', 'poly', 'helmert' or 'other')",
+  'reference_row', '`tidy_add_reference_rows()`', "Logical indicating if a row is a reference row for categorical variables using a treatment or a sum contrast. Is equal to `NA` for variables who do not have a reference row.<br /><em>Require 'contrasts' column. If needed, will automatically apply `tidy_add_contrasts()`.<br />`tidy_add_reference_rows()` will not populate the label of the reference term. It is therefore better to apply `tidy_add_term_labels()` after `tidy_add_reference_rows()` rather than before.</em>",
+  'var_label', '`tidy_add_variable_labels()`', "String of variable labels from the model. Columns labelled with the `labelled` package are retained. It is possible to pass a custom label for an interaction term with the `labels` argument. <br /><em>Require 'variable' column. If needed, will automatically apply `tidy_identify_variables()`.",
+  'label', '`tidy_add_term_labels()`', "String of term labels based on (1) labels provided in `labels` argument if provided; (2) factor levels for categorical variables coded with treatment, SAS or sum contrasts; (3) variable labels when there is only one term per variable; and (4) term name otherwise.<br /><em>Require 'variable_label' column. If needed, will automatically apply `tidy_add_variable_labels()`.<br />Require 'contrasts' column. If needed, will automatically apply `tidy_add_contrasts()`.</em>",
+  'header_row', '`tidy_add_header_rows()`', "Logical indicating if a row is a header row for variables with several terms. Is equal to `NA` for variables who do not have an header row.</br><em>Require 'label' column. If needed, will automatically apply `tidy_add_term_labels()`.<br />It is better to apply `tidy_add_header_rows()` after other `tidy_*` functions</em>"
+  
+  
+) %>%
+    gt::gt() %>%
+  gt::fmt_markdown(columns = TRUE) %>%
+  gt::tab_options(
+    column_labels.font.weight = "bold",
+    
+  ) %>%
+  gt::opt_row_striping() %>%
+  gt::tab_style("vertical-align:top; font-size: 12px;", gt::cells_body())
+```
+
+Note: `tidy_add_estimate_to_reference_rows()` does not create an additional column; rather, it populates the 'estimate' column for reference rows.
+
+## Supported models
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Model, ~Notes,
+  '`stats::lm()`', '',
+  '`stats::glm()`', '',
+  '`stats::aov()`', 'Reference rows are not relevant for such models.',
+  '`ordinal::clm()`', 'Limited support for models with nominal predictors.',
+  '`ordinal::clmm()`', 'Limited support for models with nominal predictors.',
+  '`survival::coxph()`', '',
+  '`survival::survreg()`', '',
+  '`survival::clogit()`', '',
+  '`lme4::lmer()`', '`broom.mixed` package required',
+  '`lme4::glmer()`', '`broom.mixed` package required',
+  '`lme4::glmer.nb()`', '`broom.mixed` package required',
+  '`geepack::geeglm()`', '',
+  '`gam::gam()`', '',
+  '`nnet::multinom()`', '',
+  '`survey::svyglm()`', '',
+  '`survey::svycoxph()`', '',
+  '`survey::svyolr()`', '',
+  '`MASS::polr()`', '',
+  '`MASS::glm.nb()`', '',
+  '`mice::mira`', 'Limited support. If `mod` is a `mira` object, use `tidy_plus_plus(mod, tidy_fun = function(x, ...) mice::pool(x) %>% mice::tidy(...))`',
+  '`lavaan::lavaan()`', 'Limited support for categorical variables'
+) %>%
+  dplyr::arrange(Model) %>%
+  gt::gt() %>%
+  gt::fmt_markdown(columns = TRUE) %>%
+  gt::tab_options(column_labels.font.weight = "bold") %>%
+  gt::opt_row_striping() %>%
+  gt::tab_style("vertical-align:top; font-size: 12px;", gt::cells_body())
+```
+
+Note: this list of models has been tested. `broom.helpers` may or may not work properly or partially with other 
+types of models. Do not hesitate to provide feedback on [GitHub](https://github.com/larmarange/broom.helpers/issues).

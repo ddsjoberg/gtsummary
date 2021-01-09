@@ -1,0 +1,72 @@
+---
+title: "Server Log Parsing"
+author: "Jim Hester"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Server Log Parsing}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+Parsing server log files is a common task in server administration.
+[1](http://link.springer.com/article/10.1007/BF03325089),[2](http://stackoverflow.com/search?q=%22Apache+log%22)
+Historically R would not be well suited to this and it would be better
+performed using a scripting language such as perl. Rex, however, makes this
+easy to do and allows you to perform both the data cleaning and analysis in R!
+
+Common server logs consist of space separated fields.
+
+> 198.214.42.14 - - [21/Jul/1995:14:31:46 -0400] "GET /images/ HTTP/1.0" 200 17688
+
+> lahal.ksc.nasa.gov - - [24/Jul/1995:12:42:40 -0400] "GET /images/USA-logosmall.gif HTTP/1.0" 200 234
+
+The logs used in this vignette come from two months of all HTTP requests
+to the NASA Kennedy Space Center WWW server in Florida and are freely available
+for use. [3](https://web.archive.org/web/20181003084945/http://ita.ee.lbl.gov/html/contrib/NASA-HTTP.html)
+
+```{r include = FALSE}
+library(rex)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(magrittr)
+```
+
+```{r show.warnings=FALSE}
+parsed <- scan("NASA.txt", what = "character", sep = "\n") %>%
+  re_matches(
+    rex(
+
+      # Get the time of the request
+      "[",
+        capture(name = "time",
+          except_any_of("]")
+        ),
+      "]",
+
+      space, double_quote, "GET", space,
+
+      # Get the filetype of the request if requesting a file
+      maybe(
+        non_spaces, ".",
+        capture(name = "filetype",
+          except_some_of(space, ".", "?", double_quote)
+        )
+      )
+    )
+  ) %>%
+  mutate(filetype = tolower(filetype),
+         time = as.POSIXct(time, format="%d/%b/%Y:%H:%M:%S %z"))
+```
+
+This gives us a nicely formatted data frame of the time and filetypes of the requests.
+```{r echo = FALSE}
+kable(head(parsed, n = 10))
+```
+
+We can also easily generate a histogram of the filetypes, or a plot of requests over time.
+```{r FALSE, fig.show='hold', warning = FALSE, message = FALSE}
+ggplot(na.omit(parsed)) + stat_count(aes(x=filetype))
+ggplot(na.omit(parsed)) + geom_histogram(aes(x=time)) + ggtitle("Requests over time")
+```

@@ -1,0 +1,32 @@
+2.2
+  - WORDLIST is now sorted with a locale-independent method, which avoids large
+    diffs in version control due to the fact that developpers use different
+    locale, with different lexicographic ordering rules (#48, @bisaloo)
+  - spell_check_package() now loads Rd macros (#42)
+
+2.1
+  - Pre-filter script/style/img tags when checking html files because the huge
+    embedded binary blogs produced by rmarkdown slow down the hunspell parser.
+  - Treat input files in spell_check_files() as UTF-8 on all platforms
+  - Fix a sorting bug in spell_check_files()
+
+2.0
+  - spell_check_package() now also checks README.md and NEWS.md in the package root
+  - Enforce latest hunspell and libhunspell, which include updated dictionaries
+  - Treat all input as UTF-8. Fixes some false positives on Windows
+  - Ignore yaml front matter in markdown except for 'title', 'subtitle', and 'description'
+  - Markdown: filter words that contain an '@' symbol (citation key or email address)
+  - Properly parse authors@R field for ignore list (issue #2)
+  - Use tools::file_ext instead of knitr:::file_ext
+
+1.2
+  - Internally normalize all case of lang strings to lower_UPPER e.g en_US
+  - Only run automatic check when 'spelling' is available and NOT_CRAN is set
+
+1.1
+  - Breaking: Package spell-checker now uses language from DESCRIPTION
+  - Require hunspell 2.9 dependency (better parsing and dicationaries)
+  - Change default lang to 'en_US'
+
+1.0
+  - Initial release

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Stefan Milton Bache" />
+
+
+<title>Introducing magrittr</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+ul > li > .anchor-section {display: none;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '' || x.matches(':empty')) {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introducing magrittr</h1>
+<h4 class="author">Stefan Milton Bache</h4>
+<h4 class="date">November, 2014</h4>
+
+
+
+<div id="abstract" class="section level1">
+<h1>Abstract</h1>
+<p>The <em>magrittr</em> (to be pronounced with a sophisticated french accent) package has two aims: decrease development time and improve readability and maintainability of code. Or even shortr: make your code smokin’ (puff puff)!</p>
+<p>To achieve its humble aims, <em>magrittr</em> (remember the accent) provides a new “pipe”-like operator, <code>%&gt;%</code>, with which you may pipe a value forward into an expression or function call; something along the lines of <code>x %&gt;% f</code>, rather than <code>f(x)</code>. This is not an unknown feature elsewhere; a prime example is the <code>|&gt;</code> operator used extensively in <code>F#</code> (to say the least) and indeed this – along with Unix pipes – served as a motivation for developing the magrittr package.</p>
+<p>This vignette describes the main features of <em>magrittr</em> and demonstrates some features which have been added since the initial release.</p>
+</div>
+<div id="introduction-and-basics" class="section level1">
+<h1>Introduction and basics</h1>
+<p>At first encounter, you may wonder whether an operator such as <code>%&gt;%</code> can really be all that beneficial; but as you may notice, it semantically changes your code in a way that makes it more intuitive to both read and write.</p>
+<p>Consider the following example, in which the <code>mtcars</code> dataset shipped with R is munged a little:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(magrittr)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>car_data &lt;-<span class="st"> </span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="st">  </span>mtcars <span class="op">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="st">  </span><span class="kw">subset</span>(hp <span class="op">&gt;</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="st">  </span><span class="kw">aggregate</span>(. <span class="op">~</span><span class="st"> </span>cyl, <span class="dt">data =</span> ., <span class="dt">FUN =</span> . <span class="op">%&gt;%</span><span class="st"> </span>mean <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">2</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="st">  </span><span class="kw">transform</span>(<span class="dt">kpl =</span> mpg <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">multiply_by</span>(<span class="fl">0.4251</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="st">  </span>print</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt;   cyl   mpg   disp     hp drat   wt  qsec   vs   am gear carb       kpl</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt; 1   4 25.90 108.05 111.00 3.94 2.15 17.75 1.00 1.00 4.50 2.00 11.010090</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt; 2   6 19.74 183.31 122.29 3.59 3.12 17.98 0.57 0.43 3.86 3.43  8.391474</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt; 3   8 15.10 353.10 209.21 3.23 4.00 16.77 0.00 0.14 3.29 3.50  6.419010</span></span></code></pre></div>
+<p>We start with a value, here <code>mtcars</code> (a <code>data.frame</code>). From there, we extract a subset, aggregate the information based on the number of cylinders, and then transform the dataset by adding a variable for kilometers per liter as a supplement to miles per gallon. Finally we print the result before assigning it. Note how the code is arranged in the logical order of how you think about the task: data-&gt;transform-&gt;aggregate, which is also the same order as the code will execute. It’s like a recipe – easy to read, easy to follow!</p>
+<p>A horrific alternative would be to write:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>car_data &lt;-<span class="st"> </span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span><span class="kw">transform</span>(<span class="kw">aggregate</span>(. <span class="op">~</span><span class="st"> </span>cyl, </span>
+<span id="cb2-3"><a href="#cb2-3"></a>                      <span class="dt">data =</span> <span class="kw">subset</span>(mtcars, hp <span class="op">&gt;</span><span class="st"> </span><span class="dv">100</span>), </span>
+<span id="cb2-4"><a href="#cb2-4"></a>                      <span class="dt">FUN =</span> <span class="cf">function</span>(x) <span class="kw">round</span>(<span class="kw">mean</span>(x), <span class="dv">2</span>)), </span>
+<span id="cb2-5"><a href="#cb2-5"></a>            <span class="dt">kpl =</span> mpg<span class="op">*</span><span class="fl">0.4251</span>)</span></code></pre></div>
+<p>There is a lot more clutter with parentheses, and the mental task of deciphering the code is more challenging—particularly if you did not write it yourself.</p>
+<p>Note also how “building” a function on the fly for use in <code>aggregate</code> is very simple in <em>magrittr</em>: rather than an actual value as the left-hand side in the pipeline, just use the placeholder. This is also very useful in R’s <code>*apply</code> family of functions.</p>
+<p>Granted, you may make the second example better, perhaps throw in a few temporary variables (which is often avoided to some degree when using <em>magrittr</em>), but one often sees cluttered lines like the ones presented.</p>
+<p>And here is another selling point: suppose I want to quickly add another step somewhere in the process. This is very easy to do in the pipeline version, but a little more challenging in the “standard” example.</p>
+<p>The combined example shows a few neat features of the pipe (which it is not):</p>
+<ol style="list-style-type: decimal">
+<li>By default the left-hand side (LHS) will be <em>piped in</em> as the first argument of the function appearing on the right-hand side (RHS). This is the case in the <code>subset</code> and <code>transform</code> expressions.</li>
+<li><code>%&gt;%</code> may be used in a nested fashion, e.g. it may appear in expressions within arguments. This is illustrated in the <code>mpg</code> to <code>kpl</code> conversion.</li>
+<li>When the LHS is needed at a position other than the first, one can use the dot,<code>&#39;.&#39;</code>, as placeholder. This is shown in the <code>aggregate</code> expression.</li>
+<li>The dot in e.g. a formula is <em>not</em> confused with a placeholder, which is utilized in the <code>aggregate</code> expression.</li>
+<li>Whenever only <em>one</em> argument (the LHS) is needed, one can omit the empty parentheses. This is shown in the call to <code>print</code> (which also returns its argument). Here, <code>LHS %&gt;% print()</code>, or even <code>LHS %&gt;% print(.)</code> would also work.</li>
+<li>A pipeline with a dot (<code>.</code>) as the LHS will create a unary function. This is used to define the aggregator function.</li>
+</ol>
+<p>One feature, which was not demonstrated above is piping into <em>anonymous functions</em>, or <em>lambdas</em>. This is possible using standard function definitions, e.g.:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>car_data <span class="op">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>(<span class="cf">function</span>(x) {</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="cf">if</span> (<span class="kw">nrow</span>(x) <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span>) </span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="kw">rbind</span>(<span class="kw">head</span>(x, <span class="dv">1</span>), <span class="kw">tail</span>(x, <span class="dv">1</span>))</span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="cf">else</span> x</span>
+<span id="cb3-6"><a href="#cb3-6"></a>})</span></code></pre></div>
+<p>However, <em>magrittr</em> also allows a short-hand notation:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>car_data <span class="op">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>{ </span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="cf">if</span> (<span class="kw">nrow</span>(.) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="kw">rbind</span>(<span class="kw">head</span>(., <span class="dv">1</span>), <span class="kw">tail</span>(., <span class="dv">1</span>))</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="cf">else</span> .</span>
+<span id="cb4-6"><a href="#cb4-6"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt;   cyl  mpg   disp     hp drat   wt  qsec vs   am gear carb      kpl</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; 1   4 25.9 108.05 111.00 3.94 2.15 17.75  1 1.00 4.50  2.0 11.01009</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; 3   8 15.1 353.10 209.21 3.23 4.00 16.77  0 0.14 3.29  3.5  6.41901</span></span></code></pre></div>
+<p>Since all right-hand sides are really “body expressions” of unary functions, this is only the natural extension of the simple right-hand side expressions. Of course, longer and more complex functions can be made using this approach.</p>
+<p>In the first example, the anonymous function is enclosed in parentheses. Whenever you want to use a function- or call-generating statement as right-hand side, parentheses are used to evaluate the right-hand side before piping takes place.</p>
+<p>Another, less useful example is:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%&gt;%</span><span class="st"> </span>(<span class="kw">substitute</span>(<span class="kw">f</span>(), <span class="kw">list</span>(<span class="dt">f =</span> sum)))</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [1] 55</span></span></code></pre></div>
+</div>
+<div id="additional-pipe-operators" class="section level1">
+<h1>Additional pipe operators</h1>
+<p><em>magrittr</em> also provides three related pipe operators. These are not as common as <code>%&gt;%</code> but they become useful in special cases.</p>
+<p>The “tee” pipe, <code>%T&gt;%</code> works like <code>%&gt;%</code>, except it returns the left-hand side value, and not the result of the right-hand side operation. This is useful when a step in a pipeline is used for its side-effect (printing, plotting, logging, etc.). As an example (where the actual plot is omitted here):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">rnorm</span>(<span class="dv">200</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">2</span>) <span class="op">%T&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>plot <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># plot usually does not return anything. </span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>colSums</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; [1] -6.159654  5.111522</span></span></code></pre></div>
+<p>The “exposition” pipe, <code>%$%</code> exposes the names within the left-hand side object to the right-hand side expression. Essentially, it is a short-hand for using the <code>with</code> functions (and the same left-hand side objects are accepted). This operator is handy when functions do not themselves have a data argument, as for example <code>lm</code> and <code>aggregate</code> do. Here are a few examples as illustration:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>iris <span class="op">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">subset</span>(Sepal.Length <span class="op">&gt;</span><span class="st"> </span><span class="kw">mean</span>(Sepal.Length)) <span class="op">%$%</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="st">  </span><span class="kw">cor</span>(Sepal.Length, Sepal.Width)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>   </span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="kw">data.frame</span>(<span class="dt">z =</span> <span class="kw">rnorm</span>(<span class="dv">100</span>)) <span class="op">%$%</span><span class="st"> </span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="st">  </span><span class="kw">ts.plot</span>(z)</span></code></pre></div>
+<p>Finally, the “assignment” pipe <code>%&lt;&gt;%</code> can be used as the first pipe in a chain. The effect will be that the result of the pipeline is assigned to the left-hand side object, rather than returning the result as usual. It is essentially shorthand notation for expressions like <code>foo &lt;- foo %&gt;% bar %&gt;% baz</code>, which boils down to <code>foo %&lt;&gt;% bar %&gt;% baz</code>. Another example is:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>iris<span class="op">$</span>Sepal.Length <span class="op">%&lt;&gt;%</span><span class="st"> </span>sqrt</span></code></pre></div>
+<p>The <code>%&lt;&gt;%</code> can be used whenever <code>expr &lt;- ...</code> makes sense, e.g. </p>
+<ul>
+<li><code>x %&lt;&gt;% foo %&gt;% bar</code></li>
+<li><code>x[1:10] %&lt;&gt;% foo %&gt;% bar</code></li>
+<li><code>x$baz %&lt;&gt;% foo %&gt;% bar</code></li>
+</ul>
+</div>
+<div id="aliases" class="section level1">
+<h1>Aliases</h1>
+<p>In addition to the <code>%&gt;%</code>-operator, <em>magrittr</em> provides some aliases for other operators which make operations such as addition or multiplication fit well into the <em>magrittr</em>-syntax. As an example, consider:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">rnorm</span>(<span class="dv">1000</span>)    <span class="op">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">multiply_by</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="kw">add</span>(<span class="dv">5</span>)         <span class="op">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>{ </span>
+<span id="cb9-5"><a href="#cb9-5"></a>   <span class="kw">cat</span>(<span class="st">&quot;Mean:&quot;</span>, <span class="kw">mean</span>(.), </span>
+<span id="cb9-6"><a href="#cb9-6"></a>       <span class="st">&quot;Variance:&quot;</span>, <span class="kw">var</span>(.), <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>   <span class="kw">head</span>(.)</span>
+<span id="cb9-8"><a href="#cb9-8"></a>}</span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; Mean: 4.811159 Variance: 23.07234</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; [1] -2.221589  6.897375  6.868345  9.569161  3.470477 -1.358098</span></span></code></pre></div>
+<p>which could be written in more compact form as:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">rnorm</span>(<span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> `</span><span class="dt">*</span><span class="st">`</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> `</span><span class="dt">+</span><span class="st">`</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>{</span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="kw">cat</span>(<span class="st">&quot;Mean:&quot;</span>, <span class="kw">mean</span>(.), <span class="st">&quot;Variance:&quot;</span>, <span class="kw">var</span>(.),  <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="kw">head</span>(.)</span>
+<span id="cb10-5"><a href="#cb10-5"></a>}</span></code></pre></div>
+<p>To see a list of the aliases, execute e.g. <code>?multiply_by</code>.</p>
+</div>
+<div id="development" class="section level1">
+<h1>Development</h1>
+<p>The <em>magrittr</em> package is also available in a development version at the GitHub development page: <a href="https://github.com/tidyverse/magrittr">github.com/tidyverse/magrittr</a>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

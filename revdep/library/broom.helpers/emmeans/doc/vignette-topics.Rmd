@@ -1,0 +1,660 @@
+---
+title: "Index of vignette topics"
+author: "emmeans package, Version `r packageVersion('emmeans')`"
+output: emmeans::.emm_vignette
+vignette: >
+  %\VignetteIndexEntry{Index of vignette topics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<div class="vigindex" id="Index follows this line">
+
+
+
+### Jump to:  [A](#a) [B](#b) [C](#c) [D](#d) [E](#e) [F](#f) [G](#g) [H](#h) [I](#i) [J](#j) [K](#k) [L](#l) [M](#m) [N](#n) [O](#o) [P](#p) [Q](#q) [R](#r) [S](#s) [T](#t) [U](#u) [V](#v) [W](#w) [Z](#z)  {#topnav}
+
+
+
+
+### A {#a}
+
+
+  * [`add_grouping()`](utilities.html#groups)
+  * `adjust`
+      * [in *comparisons: pairwise*](comparisons.html#pairwise)
+      * [in *confidence-intervals: adjust*](confidence-intervals.html#adjust)
+  * [`afex_aov` objects](models.html#V)
+  * [Alias matrix](xplanations.html#submodels)
+  * [Analysis of subsets of data](FAQs.html#model)
+  * Analysis of variance
+      * [versus *post hoc* comparisons](FAQs.html#anova)
+      * [Type III](confidence-intervals.html#joint_tests)
+  * [`aovList` objects](models.html#V)
+  * [`appx-satterthwaite` method](models.html#K)
+  * [`as.data.frame()`](utilities.html#data)
+  * `as.mcmc()`
+      * [in *models: S*](models.html#S)
+      * [in *sophisticated: bayesxtra*](sophisticated.html#bayesxtra)
+  * [ASA Statement on *P* values](basics.html#pvalues)
+  * [Asymptotic tests](sophisticated.html#dfoptions)
+  * [ATOM](basics.html#pvalues)
+  * [`averaging` models](models.html#I)
+
+
+[Back to top](#topnav)
+
+### B {#b}
+
+
+  * [Back story of **emmeans**](basics.html#backstory)
+  * [Bayes factor](sophisticated.html#bayesxtra)
+  * Bayesian models
+      * [in *models: S*](models.html#S)
+      * [in *sophisticated: mcmc*](sophisticated.html#mcmc)
+  * [**bayesplot** package](sophisticated.html#bayesxtra)
+  * [**bayestestR** package](sophisticated.html#bayesxtra)
+  * [Beta regression](models.html#B)
+  * [`betareg` models](models.html#B)
+  * Bias adjustment
+      * [For link functions vs. response transformations](transformations.html#link-bias)
+      * [in Bayesian models](sophisticated.html#bias-adj-mcmc)
+      * [In GLMMs and GEE models](transformations.html#cbpp)
+      * [When back-transforming](transformations.html#bias-adj)
+      * [When *not* to use](transformations.html#insects)
+  * [Bonferroni adjustment](confidence-intervals.html#adjmore)
+  * [`boot-satterthwaite` method](models.html#K)
+  * [`[ ]` and `[[ ]]` operators](utilities.html#brackets)
+  * [`brmsfit` objects](models.html#S)
+  * [`by` groups](confidence-intervals.html#byvars)
+      * [Identical comparisons](FAQs.html#additive)
+
+
+[Back to top](#topnav)
+
+### C {#c}
+
+
+  * `CLD()`
+      * [and why it is deprecated](comparisons.html#CLD)
+  * [`clm` models](models.html#O)
+  * [**coda** package](sophisticated.html#bayesxtra)
+  * [`coef()`](comparisons.html#contrasts)
+  * [Cohen's *d*](comparisons.html#pwpm)
+  * [Compact letter displays](comparisons.html#CLD)
+  * Comparison arrows
+      * [Derivation](xplanations.html#arrows)
+  * Comparisons
+      * [Back-transforming](comparisons.html#logs)
+      * [Displaying as groups](comparisons.html#CLD)
+      * [Displaying *P* values](comparisons.html#pwpp)
+      * [Graphical](comparisons.html#graphical)
+          * [How arrows are determined](xplanations.html#arrows)
+      * [with logs](comparisons.html#logs)
+      * [with overlapping CIs](FAQs.html#CIerror)
+  * [Confidence intervals](confidence-intervals.html#summary)
+      * [Overlapping](FAQs.html#CIerror)
+  * [`confint()`](confidence-intervals.html#summary)
+  * [`consec` contrasts](comparisons.html#contrasts)
+  * [Constrained marginal means](xplanations.html#submodels)
+  * [Containment d.f.](models.html#K)
+  * [`contrast()`](comparisons.html#contrasts)
+      * [`adjust`](comparisons.html#linfcns)
+      * [Changing defaults](utilities.html#defaults)
+      * [`combine`](interactions.html#simple)
+      * [`interaction`](interactions.html#contrasts)
+      * [Linear functions](comparisons.html#linfct)
+      * `simple`
+          * [in *confidence-intervals: simple*](confidence-intervals.html#simple)
+          * [in *interactions: simple*](interactions.html#simple)
+  * Contrasts
+      * [of other contrasts](interactions.html#contrasts)
+      * [Custom](comparisons.html#linfcns)
+      * [Formula](comparisons.html#formulas)
+      * [Pairwise](comparisons.html#pairwise)
+      * [Polynomial](comparisons.html#contrasts)
+      * Tests of
+          * [with transformations](comparisons.html#logs)
+  * [Count regression](models.html#C)
+  * [`cov.reduce`](messy-data.html#med.covred)
+  * Covariates
+      * [Adjusted](messy-data.html#adjcov)
+      * [`cov.keep](FAQs.html#numeric)
+      * [`cov.reduce](FAQs.html#numeric)
+      * [Derived](basics.html#depcovs)
+      * [`emmeans()` doesn't work](FAQs.html#numeric)
+      * [Interacting with factors](FAQs.html#trends)
+      * [Mediating](messy-data.html#mediators)
+
+
+[Back to top](#topnav)
+
+### D {#d}
+
+
+  * [Degrees of freedom](sophisticated.html#dfoptions)
+      * [Infinite](FAQs.html#asymp)
+  * [Digits, optimizing](utilities.html#digits)
+  * [Dunnett method](comparisons.html#contrasts)
+
+
+[Back to top](#topnav)
+
+### E {#e}
+
+
+  * [`eff` contrasts](comparisons.html#contrasts)
+  * [`eff_size()`](comparisons.html#pwpm)
+  * [Effect size](comparisons.html#pwpm)
+  * [`emm_basis()`](xtending.html#intro)
+      * [Arguments and returned value](xtending.html#ebreqs)
+      * [Communicating with `recover_data()`](xtending.html#communic)
+      * [Dispatching](xtending.html#dispatch)
+      * [Hook functions](xtending.html#hooks)
+      * [for `lqs` objects](xtending.html#eblqs)
+      * [for `rsm` objects](xtending.html#ebrsm)
+  * [`emm_list` object](comparisons.html#formulas)
+  * [`emm_options()`](utilities.html#defaults)
+  * [`.emmc` functions](comparisons.html#linfcns)
+  * **emmeans** package
+      * [Exporting extensions to](xtending.html#exporting)
+  * [`emmeans()`](basics.html#emmeans)
+      * [And the underlying model](FAQs.html#nowelch)
+      * [Changing defaults](utilities.html#defaults)
+      * [Surprising results from](FAQs.html#transformations)
+      * `weights`
+          * [in *basics: weights*](basics.html#weights)
+          * [in *messy-data: weights*](messy-data.html#weights)
+      * [With transformations](transformations.html#regrid)
+  * [`emmGrid` objects](basics.html#emmobj)
+      * [Accessing data](utilities.html#data)
+      * [Combining and subsetting](utilities.html#rbind)
+      * [Modifying](utilities.html#update)
+      * [Setting defaults for](utilities.html#defaults)
+  * `emmip()`
+      * [in *basics: plots*](basics.html#plots)
+      * [in *interactions: factors*](interactions.html#factors)
+      * [nested factors](messy-data.html#cows)
+  * [EMMs](basics.html#EMMdef)
+      * [Appropriateness of](basics.html#eqwts)
+      * [Projecting to a submodel](xplanations.html#submodels)
+      * [What are they?](FAQs.html#what)
+  * `emtrends()`
+      * [in *interactions: covariates*](interactions.html#covariates)
+      * [in *interactions: oranges*](interactions.html#oranges)
+  * [`estHook`](xtending.html#hooks)
+  * [Estimability](messy-data.html#nonestex)
+  * [Estimability issues](FAQs.html#NAs)
+  * [Estimated marginal means](basics.html#EMMdef)
+      * [Defined](basics.html#emmeans)
+  * Examples
+      * [`auto.noise`](interactions.html#factors)
+      * [Bayesian model](sophisticated.html#mcmc)
+      * `cbpp`
+          * [in *sophisticated: mcmc*](sophisticated.html#mcmc)
+          * [in *transformations: cbpp*](transformations.html#cbpp)
+      * [`cows`](messy-data.html#cows)
+      * [`feedlot`](predictions.html#feedlot)
+      * `fiber`
+          * [in *interactions: covariates*](interactions.html#covariates)
+          * [in *transformations: stdize*](transformations.html#stdize)
+      * [`framing`](messy-data.html#mediators)
+      * [Gamma regression](transformations.html#tranlink)
+      * [`InsectSprays`](transformations.html#insects)
+      * [Insurance claims (SAS)](sophisticated.html#offsets)
+      * [Logistic regression](transformations.html#links)
+      * [`lqs` objects](xtending.html#lqs)
+      * [`MOats`](basics.html#multiv)
+      * [`mtcars`](basics.html#altering)
+      * [Multivariate](basics.html#multiv)
+      * [Nested fixed effects](messy-data.html#cows)
+      * [`neuralgia`](transformations.html#links)
+      * [`nutrition`](messy-data.html#nutrex)
+          * [`submodel`](messy-data.html#submodels)
+          * [`weights`](messy-data.html#weights)
+      * [`Oats`](sophisticated.html#lmer)
+      * `oranges`
+          * [in *comparisons: formulas*](comparisons.html#formulas)
+          * [in *interactions: oranges*](interactions.html#oranges)
+      * [Ordinal model](sophisticated.html#ordinal)
+      * `pigs`
+          * [in *basics: motivation*](basics.html#motivation)
+          * [in *confidence-intervals: summary*](confidence-intervals.html#summary)
+          * [in *transformations: overview*](transformations.html#overview)
+          * [in *transformations: pigs-biasadj*](transformations.html#pigs-biasadj)
+      * [`rlm` objects](xtending.html#rlm)
+      * [Robust regression](xtending.html#rlm)
+      * [Split-plot experiment](sophisticated.html#lmer)
+      * [Unbalanced data](basics.html#motivation)
+      * `warpbreaks`
+          * [in *transformations: tranlink*](transformations.html#tranlink)
+          * [in *utilities: relevel*](utilities.html#relevel)
+      * [Welch's *t* comparisons](utilities.html#relevel)
+      * [`wine`](sophisticated.html#ordinal)
+  * Extending **emmeans**
+      * [Exports useful to developers](xtending.html#exported)
+      * [Restrictions](xtending.html#dispatch)
+
+
+[Back to top](#topnav)
+
+### F {#f}
+
+
+  * *F* test
+      * [vs. pairwise comparisons](FAQs.html#anova)
+  * Factors
+      * [Mediating](messy-data.html#weights)
+  * [Frequently asked questions](FAQs.html)
+
+
+[Back to top](#topnav)
+
+### G {#g}
+
+
+  * [`gam` models](models.html#G)
+  * [`gamlss` models](models.html#H)
+  * [GEE models](models.html#E)
+  * [Generalized additive models](models.html#G)
+  * [Generalized linear models](models.html#G)
+  * [Geometric means](transformations.html#bias-adj)
+  * [Get the model right first](FAQs.html#nowelch)
+  * [`get_emm_option()`](utilities.html#options)
+  * **ggplot2** package
+      * [in *basics: ggplot*](basics.html#ggplot)
+      * [in *messy-data: cows*](messy-data.html#cows)
+  * [`glm`*xxx* models](models.html#G)
+  * [`gls` models](models.html#K)
+  * [Graphical displays](basics.html#plots)
+  * [Grouping factors](utilities.html#groups)
+  * [Grouping into separate sets](confidence-intervals.html#byvars)
+
+
+[Back to top](#topnav)
+
+### H {#h}
+
+
+  * [Hook functions](xtending.html#hooks)
+  * [`hpd.summary()`](sophisticated.html#mcmc)
+  * [`hurdle` models](models.html#C)
+
+
+[Back to top](#topnav)
+
+### I {#i}
+
+
+  * [Infinite degrees of freedom](FAQs.html#asymp)
+  * Interactions
+      * [Analysis](interactions.html)
+      * [Contrasts](interactions.html#contrasts)
+      * [Covariate with factors](interactions.html#covariates)
+      * [Implied](interactions.html#oranges)
+      * [Plotting](interactions.html#factors)
+      * [Possible inappropriateness of marginal means](interactions.html#factors)
+
+
+[Back to top](#topnav)
+
+### J {#j}
+
+
+  * [`joint`](confidence-intervals.html#joint)
+  * `joint_tests()`
+      * [in *confidence-intervals: joint_tests*](confidence-intervals.html#joint_tests)
+      * [in *interactions: contrasts*](interactions.html#contrasts)
+      * [with `submodel = "type2"`](messy-data.html#type2submodel)
+
+
+[Back to top](#topnav)
+
+### K {#k}
+
+
+  * [Kenward-Roger d.f.](models.html#L)
+
+
+[Back to top](#topnav)
+
+### L {#l}
+
+
+  * Labels
+      * [Changing](utilities.html#relevel)
+  * [Least-squares means](FAQs.html#what)
+  * Levels
+      * [Changing](utilities.html#relevel)
+  * [Linear functions](comparisons.html#linfct)
+  * [Link functions](transformations.html#links)
+  * [`lme` models](models.html#K)
+  * `lmerMod` models
+      * [in *models: L*](models.html#L)
+      * [in *sophisticated: lmer*](sophisticated.html#lmer)
+      * [System options for](sophisticated.html#lmerOpts)
+  * Logistic regression
+      * [Odds ratios](transformations.html#oddsrats)
+      * [Surprising results](FAQs.html#transformations)
+  * [**lsmeans**](basics.html#backstory)
+
+
+[Back to top](#topnav)
+
+### M {#m}
+
+
+  * [`make.tran()`](transformations.html#special)
+  * [`mcmc` objects](models.html#S)
+  * Means
+      * [Cell](basics.html#motivation)
+      * [Generalized](transformations.html#bias-adj)
+      * [Marginal](basics.html#motivation)
+          * [Based on a model](basics.html#EMMdef)
+          * [of cell means](basics.html#eqwts)
+      * Weighted
+          * [in *basics: eqwts*](basics.html#eqwts)
+          * [in *basics: weights*](basics.html#weights)
+  * [Mediating covariates](messy-data.html#mediators)
+  * [`mira` models](models.html#I)
+  * [`misc` attribute and argument](xtending.html#communic)
+  * [`mlm` models](models.html#N)
+  * [`mmer` models](models.html#G)
+  * Model
+      * [Importance of](FAQs.html#fastest)
+      * [Importance of getting it right](FAQs.html#nowelch)
+  * [Model averaging](models.html#I)
+  * Models
+      * [Constrained](messy-data.html#submodels)
+      * [Quick reference](models.html#quickref)
+      * [Unsupported](FAQs.html#qdrg)
+  * [Multi-factor studies](FAQs.html#interactions)
+  * [Multinomial models](models.html#N)
+  * [Multiple imputation](models.html#I)
+  * [Multiplicity adjustments](confidence-intervals.html#adjust)
+  * Multivariate models
+      * [in *basics: multiv*](basics.html#multiv)
+      * [in *interactions: oranges*](interactions.html#oranges)
+      * [in *models: M*](models.html#M)
+      * [with `submodel`](xplanations.html#mult.submodel)
+  * [Multivariate *t* (`"mvt"`) adjustment](confidence-intervals.html#adjmore)
+  * [**mvtnorm** package](confidence-intervals.html#adjmore)
+
+
+[Back to top](#topnav)
+
+### N {#n}
+
+
+  * [`NA`s in the output](FAQs.html#NAs)
+  * [Nesting](messy-data.html#nesting)
+      * [Auto-detection](messy-data.html#nest-trap)
+  * Nesting factors
+      * [Creating](utilities.html#groups)
+  * [Non-estimability](messy-data.html#nonestex)
+  * [`NonEst` values](FAQs.html#NAs)
+
+
+[Back to top](#topnav)
+
+### O {#o}
+
+
+  * [Observational data](messy-data.html#issues)
+  * [Odds ratios](transformations.html#oddsrats)
+  * [Offsets](sophisticated.html#offsets)
+  * [`opt.digits` option](utilities.html#digits)
+  * [Options](utilities.html#options)
+      * [Startup](utilities.html#startup)
+  * Ordinal models
+      * [Latent scale](sophisticated.html#ordinal)
+      * [Linear-predictor scale](sophisticated.html#ordlp)
+      * [in *models: O*](models.html#O)
+      * [`prob` and `mean.class`](sophisticated.html#ordprob)
+      * [in *sophisticated: ordinal*](sophisticated.html#ordinal)
+
+
+[Back to top](#topnav)
+
+### P {#p}
+
+
+  * *P* values
+      * [Interpreting](basics.html#pvalues)
+  * [`pairs()`](comparisons.html#pairwise)
+  * [Pairwise comparisons](comparisons.html#pairwise)
+      * [Matrix displays](comparisons.html#pwpm)
+  * [`pairwise` contrasts](comparisons.html#contrasts)
+  * [Pairwise *P*-value plots](comparisons.html#pwpp)
+  * [`params`](basics.html#params)
+  * `plot()`
+      * [nested factors](messy-data.html#cows)
+  * [`plot.emmGrid()`](basics.html#plot.emmGrid)
+  * Plots
+      * [of confidence intervals](basics.html#plot.emmGrid)
+      * [of EMMs](basics.html#plots)
+      * [Interaction-style](basics.html#plots)
+  * [`+` operator](utilities.html#rbind)
+  * Poisson regression
+      * [Surprising results](FAQs.html#transformations)
+  * [`polreg` models](models.html#O)
+  * [Polynomial regression](basics.html#depcovs)
+  * Pooled *t*
+      * [Instead of Welch's *t*](FAQs.html#nowelch)
+  * [`postGridHook`](xtending.html#hooks)
+  * Predictions
+      * Bayesian models
+          * [in *predictions: bayes*](predictions.html#bayes)
+          * [in *sophisticated: predict-mcmc*](sophisticated.html#predict-mcmc)
+      * [Error SD](predictions.html#sd-estimate)
+      * [graphics](predictions.html#feedlot)
+      * [on Particular strata](predictions.html#strata)
+      * [Posterior predictive distribution](sophisticated.html#predict-mcmc)
+      * [Reference grid](predictions.html#ref-grid)
+      * [Total SD](predictions.html#feedlot)
+  * [`print.summary_emm()`](basics.html#emmobj)
+  * [`pwpm()`](comparisons.html#pwpm)
+  * [`pwpp()`](comparisons.html#pwpp)
+
+
+[Back to top](#topnav)
+
+### Q {#q}
+
+
+  * [`qdrg()`](FAQs.html#qdrg)
+  * [Quadratic terms](basics.html#depcovs)
+  * [Quick start](FAQs.html#fastest)
+
+
+[Back to top](#topnav)
+
+### R {#r}
+
+
+  * [`rbind()`](utilities.html#rbind)
+  * [Re-labeling](utilities.html#relevel)
+  * [`recover_data()`](xtending.html#intro)
+      * [Communicating with `emm_basis()`](xtending.html#communic)
+      * [`data` and `params` arguments](xtending.html#rdargs)
+      * [Dispatching](xtending.html#dispatch)
+      * [Error handling](xtending.html#rderrs)
+      * [for `lqs` objects](xtending.html#rd.lqs)
+      * [for `rsm` objects](xtending.html#rdrsm)
+  * `recover_data.call()`
+      * [`frame` argument](xtending.html#rdargs)
+  * [`ref_grid()`](basics.html#ref_grid)
+      * [`at`](basics.html#altering)
+      * [`cov.keep`](basics.html#altering)
+      * [`cov.reduce`](basics.html#altering)
+      * [`mult.name`](basics.html#multiv)
+      * [`nesting`](messy-data.html#nest-trap)
+      * [`offset`](sophisticated.html#offsets)
+  * [Reference grids](basics.html#ref_grid)
+      * [Altering](basics.html#altering)
+      * [Prediction on](predictions.html#ref-grid)
+  * [Region of practical equivalence](sophisticated.html#bayesxtra)
+  * [Registering `recover_data` and `emm_basis` methods](xtending.html#exporting)
+  * [`regrid()`](transformations.html#regrid)
+      * [`transform = "log"`](transformations.html#logs)
+      * [`transform` vs. `type`](transformations.html#regrid)
+  * [Response scale](confidence-intervals.html#tran)
+  * [`revpairwise` contrasts](comparisons.html#contrasts)
+  * [ROPE](sophisticated.html#bayesxtra)
+  * [**rsm** package](xtending.html#rsm)
+  * [`rstanarm`](sophisticated.html#mcmc)
+
+
+[Back to top](#topnav)
+
+### S {#s}
+
+
+  * [Sample size, displaying](confidence-intervals.html#summary)
+  * Satterthwaite d.f.
+      * [in *models: K*](models.html#K)
+      * [in *models: L*](models.html#L)
+  * [`scale()`](transformations.html#stdize)
+  * [Selecting results](utilities.html#brackets)
+  * [Sidak adjustment](confidence-intervals.html#adjust)
+  * Significance
+      * [Assessing](basics.html#pvalues)
+  * "Significant"@significant
+      * [Why you shouldn't say this](basics.html#pvalues)
+  * [`simple = "each"`](confidence-intervals.html#simple)
+  * Simple comparisons
+      * [in *confidence-intervals: simple*](confidence-intervals.html#simple)
+      * [in *FAQs: interactions*](FAQs.html#interactions)
+      * [in *interactions: simple*](interactions.html#simple)
+  * `specs`
+      * [Formula](comparisons.html#formulas)
+  * [Standardized response](transformations.html#stdize)
+  * [`stanreg` objects](models.html#S)
+  * [* gazing (star gazing)](interactions.html#factors)
+  * [Startup options](utilities.html#startup)
+  * [`str()`](basics.html#emmobj)
+  * `submodel`
+      * [`"minimal"` and `"type2"`](messy-data.html#type2submodel)
+      * [in a multivariate model](xplanations.html#mult.submodel)
+      * [in *messy-data: submodels*](messy-data.html#submodels)
+      * [in *xplanations: submodels*](xplanations.html#submodels)
+  * [Subsets of data](FAQs.html#model)
+  * `summary()`
+      * [`adjust`](comparisons.html#pairwise)
+      * [in *basics: emmobj*](basics.html#emmobj)
+      * Bayesian models
+          * [in *confidence-intervals: summary*](confidence-intervals.html#summary)
+          * [in *models: S*](models.html#S)
+      * [Calculated columns](confidence-intervals.html#summary)
+      * [in *confidence-intervals: summary*](confidence-intervals.html#summary)
+      * [HPD intervals](sophisticated.html#mcmc)
+      * [`hpd.summary()`](confidence-intervals.html#summary)
+      * `infer`
+          * [in *comparisons: pairwise*](comparisons.html#pairwise)
+          * [in *confidence-intervals: summary*](confidence-intervals.html#summary)
+      * [Show sample size](confidence-intervals.html#summary)
+      * [`type = "unlink"`](transformations.html#tranlink)
+  * [`summary_emm` object](basics.html#emmobj)
+      * [As a data frame](utilities.html#data)
+
+
+[Back to top](#topnav)
+
+### T {#t}
+
+
+  * [*t* tests vs. *z* tests](FAQs.html#asymp)
+  * [`test()`](confidence-intervals.html#summary)
+      * [`delta`](confidence-intervals.html#equiv)
+      * [`joint = TRUE`](confidence-intervals.html#joint)
+  * Tests
+      * [Equivalence](confidence-intervals.html#equiv)
+      * [Noninferiority](confidence-intervals.html#equiv)
+      * [Nonzero null](confidence-intervals.html#summary)
+      * [One- and two-sided](confidence-intervals.html#summary)
+  * Transformations
+      * [Adding after the fact](transformations.html#after)
+      * [Auto-detected](transformations.html#auto)
+      * [Back-transforming](confidence-intervals.html#tran)
+      * [Bias adjustment](transformations.html#bias-adj)
+      * [Custom](transformations.html#special)
+      * [faking](transformations.html#faking)
+      * [Faking a log transformation](transformations.html#logs)
+      * [with link function](transformations.html#tranlink)
+      * [Log](comparisons.html#logs)
+      * [Overview](transformations.html#overview)
+      * [Re-gridding](transformations.html#regrid)
+      * [Response versus link functions](transformations.html#link-bias)
+      * [`scale()`](transformations.html#stdize)
+      * [Standardizing](transformations.html#stdize)
+      * [Timing is everything](transformations.html#timing)
+  * Trends
+      * [Estimating and comparing](interactions.html#oranges)
+  * [`trt.vs.ctrl` contrasts](comparisons.html#contrasts)
+  * [Tukey adjustment](confidence-intervals.html#adjust)
+      * [Ignored or changed](FAQs.html#notukey)
+  * [`type`](confidence-intervals.html#tran)
+  * [Type II analysis](messy-data.html#type2submodel)
+  * Type III tests
+      * [in *confidence-intervals: joint*](confidence-intervals.html#joint)
+      * [in *confidence-intervals: joint_tests*](confidence-intervals.html#joint_tests)
+
+
+[Back to top](#topnav)
+
+### U {#u}
+
+
+  * [Unadjusted tests](confidence-intervals.html#adjmore)
+  * [University administration](basics.html#backstory)
+  * [`update()`](utilities.html#update)
+      * [`tran`](transformations.html#after)
+  * [Using results](utilities.html#data)
+
+
+[Back to top](#topnav)
+
+### V {#v}
+
+
+  * [Variables that are not predictors](basics.html#params)
+  * [`vcovHook`](xtending.html#hooks)
+  * Vignettes
+      * [Basics](basics.html)
+      * [Comparisons](comparisons.html)
+      * [Confidence intervals and tests](confidence-intervals.html)
+      * [Explanations supplement](xplanations.html)
+      * [Extending **emmeans**](xtending.html)
+      * [FAQS](FAQs.html)
+      * [Interactions](interactions.html)
+      * [Messy data](messy-data.html)
+      * [Models](models.html)
+      * [Predictions](predictions.html)
+      * [Sophisticated models](sophisticated.html)
+      * [Transformations and link functions](transformations.html)
+      * [Utilities and options](utilities.html)
+
+
+[Back to top](#topnav)
+
+### W {#w}
+
+
+  * [`weights`](messy-data.html#weights)
+  * [Welch's *t* comparisons](FAQs.html#nowelch)
+      * [Example](utilities.html#relevel)
+
+
+[Back to top](#topnav)
+
+### Z {#z}
+
+
+  * [*z* tests](sophisticated.html#dfoptions)
+      * [vs. *t* tests](FAQs.html#asymp)
+  * [`zeroinfl` models](models.html#C)
+
+
+[Back to top](#topnav)
+
+
+*Index generated by the [vigindex](https://github.com/rvlenth/vigindex) package.*
