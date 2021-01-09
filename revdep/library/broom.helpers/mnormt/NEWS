@@ -1,0 +1,91 @@
+R package 'mnormt' history file
+-------------------------------
+
+2020-06-24: 2.0.1
+  R version requirement is reduced from 4.0.0 to 2.2.0
+
+2020-06-24: 2.0.1 
+  fixed a bug which effectively prevented using dmtruncnorm and dmtrunct with
+  an argument 'x' of vector type; various improvements in the documentation of
+  recintab and mom2cum.
+  
+2020-06-02: 2.0.0
+  support for the truncated versions of the multivariate normal and the t 
+  distributions is introduced; for the truncated normal distribution, 
+  functions recintab and mom2cum allow computation of corresponding moments 
+  and cumulants; the latter function can also be used for obtaining the 
+  cumulants of other distributions of which the moments are known.
+
+2020-04-29: 1.5-7 
+  improved R coding of sadmvn and sadmvt, with increased use of biv.nt.prob; 
+  fixed a bug of pmnorm affecting a peculiar input set; a new function is 
+  introduced: sample_Mardia_measures.
+  
+2020-02-02: 1.5-6 
+  fixed problem connected to use of 'unintialized' variable in Fortan77 code, 
+  as claimed by valgrind.
+
+2019-12-06: replaced is.matrix(.) with code compliant with R 4.0.0 
+
+2016-10-15: 1.5-5 
+  fix a bug in rmt; this drops the earlier property that repeated calls with 
+  a larger 'n' and reset set.seed(.) started with the shorter sequence.
+
+2016-03-08: 1.5-4 
+  improved NAMESPACE and documentation; more flexible use of  mean in 
+  {d,p,r}mnorm and in {d,p,r}mt; pd.solve transfers dimnames(x) to output.
+
+2015-05-25: 1.5-3 
+  rmt and rmnorm output with d=1 have now the same structure;
+  improved checks on arguments supplied to dmnorm and dmt.                  
+
+2015-04-02: 1.5-2 
+  introduced new argument 'sqrt' of dmnorm and dmt; limited check of 
+  the arguments is introduced (earlier skipped for speed); calls to rmt 
+  with a smaller/larger of 'n' generate a sub/superset of values.
+
+2014-06-30: 1.5-1 fixes a bug of parameter checking in dmnorm and dmt
+
+2014-06-25: 1.5-0 
+  improved coding of dmnorm and dmt functions, avoiding use of 'apply';
+  allow calling pmnorm and pmt with a matrix argument 'x'.
+
+2013-12-04: 1.4-7 .First.lib() removed on request from CRAN, other minor fixes.
+
+2012-01-06: 1.4-5 NAMESPACE introduced on request by the R Core Team.
+
+2011-05-03: 1.4-3 fixed bug similar to the one of 1.4-2 in sadmvn and sadmvt.
+
+2011-04-28: 1.4-2 fixed bug of biv.not.prob if some (lower=-Inf & upper=Inf).
+
+2011-04-06: 1.4-1 
+  fixed documentation; coding of dmnorm & dmt is straightened;
+  log.det in pd.solve is returned only on request.
+
+2011-01-16: 1.4-0 
+  function pd.solve introduced; argument 'mean' can now be a matrix
+  for {d,p}mnorm and {d,p}mt.
+  
+2009-11-25: 1.3-4 fixed a bug affecting the case d>2 & df=Inf.
+
+2009-03-21: 1.3-3 removed check on the R version on request of the R Core team.
+
+2009-01-26: 1.3-2 minor modification to F77 code to avoid GOTO out of IF block.
+
+2008-06-12: 1.3-0 added Fortran code for the bivariate case; improved R coding.
+
+2007-03-16: 1.2-1 some amendments in documentation.
+
+2006-10-26: 1.2-0 fixed a bug in function rmt.
+
+2006-10-09: 1.1-0 adopt amedend Fortran code of Alan Genz (subtroutine TRESTR).
+
+2006-04-26: 1.0-1 fixed a bug of non-compliance to R programming standards.
+
+2006-01-23: 1.0-0 first version uploaded on CRAN. 
+
+2005-nov. : built private version.
+
+
+
+

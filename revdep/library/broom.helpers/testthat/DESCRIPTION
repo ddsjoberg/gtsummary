@@ -1,0 +1,44 @@
+Package: testthat
+Title: Unit Testing for R
+Version: 3.0.1
+Authors@R: 
+    c(person(given = "Hadley",
+             family = "Wickham",
+             role = c("aut", "cre"),
+             email = "hadley@rstudio.com"),
+      person(given = "RStudio",
+             role = c("cph", "fnd")),
+      person(given = "R Core team",
+             role = "ctb",
+             comment = "Implementation of utils::recover()"))
+Description: Software testing is important, but, in part because
+    it is frustrating and boring, many of us avoid it. 'testthat' is a
+    testing framework for R that is easy to learn and use, and integrates
+    with your existing 'workflow'.
+License: MIT + file LICENSE
+URL: https://testthat.r-lib.org, https://github.com/r-lib/testthat
+BugReports: https://github.com/r-lib/testthat/issues
+Depends: R (>= 3.1)
+Imports: brio, callr (>= 3.5.1), cli (>= 2.2.0), crayon (>= 1.3.4),
+        desc, digest, ellipsis (>= 0.2.0), evaluate, jsonlite,
+        lifecycle, magrittr, methods, pkgload, praise, processx, ps (>=
+        1.3.4), R6 (>= 2.2.0), rlang (>= 0.4.9), utils, waldo (>=
+        0.2.1), withr (>= 2.3.0)
+Suggests: covr, curl (>= 0.9.5), diffviewer (>= 0.1.0), knitr, mockery,
+        rmarkdown, rstudioapi, shiny, usethis, vctrs (>= 0.1.0), xml2
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Config/testthat/parallel: true
+Config/testthat/start-first: watcher, parallel*
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+NeedsCompilation: yes
+Packaged: 2020-12-15 17:55:51 UTC; hadley
+Author: Hadley Wickham [aut, cre],
+  RStudio [cph, fnd],
+  R Core team [ctb] (Implementation of utils::recover())
+Maintainer: Hadley Wickham <hadley@rstudio.com>
+Repository: CRAN
+Date/Publication: 2020-12-17 10:00:02 UTC
+Built: R 4.0.3; x86_64-w64-mingw32; 2020-12-31 01:07:42 UTC; windows
+Archs: i386, x64

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="emmeans package, Version 1.5.3" />
+
+
+<title>Prediction in emmeans</title>
+
+
+
+
+
+
+<style type="text/css">body {font-size: 11pt; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;margin: 30px 50px 30px 50px; }h1,h2,h3,h4,h5,h6 { font-family: Arial,Helvetica,Sans-serif; }a { text-decoration: none; }a:link { color:darkblue; } a:visited { color:darkblue; } a:hover { color:dodgerblue; }a:active { color:dodgerblue; } code {color: #602000;font-family: "Lucida Console", Monaco, monospace; font-size: 90%;}.r { color: darkred; }.ro { color: darkgreen; background-color: #eeeeee; }.re { color: red;}.r code, a code, .ro code, .re code { color: inherit; }.vigindex ul { list-style-type: none; }.vigindex ul li { list-style: none; }.vigindex a code { color: inherit; }.vigindex li code { color: inherit; }</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Prediction in <strong>emmeans</strong></h1>
+<h4 class="author">emmeans package, Version 1.5.3</h4>
+
+
+
+<!-- @index Vignettes!Predictions -->
+<p>In this vignette, we discuss <strong>emmeans</strong>’s rudimentary capabilities for constructing prediction intervals.</p>
+<div id="contents" class="section level2">
+<h2>Contents</h2>
+<ol style="list-style-type: decimal">
+<li><a href="#ref-grid">Focus on reference grids</a></li>
+<li><a href="#sd-estimate">Need for an SD estimate</a></li>
+<li><a href="#feedlot">Feedlot example</a></li>
+<li><a href="#strata">Predictions on particular strata</a></li>
+<li><a href="#bayes">Predictions with Bayesian models</a></li>
+</ol>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+<div id="ref-grid" class="section level2">
+<h2>Focus on reference grids</h2>
+<!-- @index Predictions!Reference grid; Reference grids!Prediction on -->
+<p>Prediction is not the central purpose of the <strong>emmeans</strong> package. Even its name refers to the idea of obtaining marginal averages of fitted values; and it is a rare situation where one would want to make a prediction of the average of several observations. We can certainly do that if it is truly desired, but almost always, predictions should be based on the reference grid itself (i.e., <em>not</em> the result of an <code>emmeans()</code> call), inasmuch as a reference grid comprises combinations of model predictors.</p>
+</div>
+<div id="sd-estimate" class="section level2">
+<h2>Need for an SD estimate</h2>
+<!-- @index Predictions!Error SD; -->
+<p>A prediction interval requires an estimate of the error standard deviation, because we need to account for both the uncertainty of our point predictions and the uncertainty of outcomes centered on those estimates. By its current design, we save the value (if any) returned by <code>stats::sigma(object)</code> when a reference grid is constructed for a model <code>object</code>. Not all models provide a <code>sigma()</code> method, in which case an error is thrown if the error SD is not manually specified. Also, in many cases, there may be a <code>sigma()</code> method, but it does not return the appropriate value(s) in the context of the needed predictions. (In an object returned by <code>lme4::glmer(), for example,</code>sigma()` seems to always returns 1.0.) Indeed, as will be seen in the example that follows, one usually needs to construct a manual SD estimate when the model is a mixed-effects model.</p>
+<p>So it is essentially always important to think very specifically about whether we are using an appropriate value. You may check the value being assumed by looking at the <code>misc</code> slot in the reference grid:</p>
+<pre class="r"><code>rg &lt;- ref_grid(model)
+rg@misc$sigma</code></pre>
+<p>Finally, <code>sigma</code> may be a vector, as long as it is conformable with the estimates in the reference grid. This would be appropriate, for example, with a model fitted by <code>nlme::gls()</code> with some kind of non-homogeneous error structure. It may take some effort, as well as a clear understanding of the model and its structure, to obtain suitable SD estimates. It was suggested to me that the function <code>insight::get_variance()</code> may be helpful – especially when working with an unfamiliar model class. Personally, I prefer to make sure I understand the structure of the model object and/or its summary to ensure I am not going astray.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="feedlot" class="section level2">
+<h2>Feedlot example</h2>
+<!-- @index Examples!`feedlot`; Predictions!Total SD; Predictions!graphics -->
+<p>To illustrate, consider the <code>feedlot</code> dataset provided with the package. Here we have several herds of feeder cattle that are sent to feed lots and given one of three diets. The weights of the cattle are measured at time of entry (<code>ewt</code>) and at time of slaughter (<code>swt</code>). Different herds have possibly different entry weights, based on breed and ranching practices, so we will center each herd’s <code>ewt</code> measurements, then use that as a covariate in a mixed model:</p>
+<pre class="r"><code>feedlot = transform(feedlot, adj.ewt = ewt - predict(lm(ewt ~ herd)))
+require(lme4)
+feedlot.lmer &lt;- lmer(swt ~ adj.ewt + diet + (1|herd), data = feedlot)
+feedlot.rg &lt;- ref_grid(feedlot.lmer, at = list(adj.ewt = 0))
+summary(feedlot.rg)  ## point predictions</code></pre>
+<pre class="ro"><code>##  adj.ewt diet   prediction   SE   df
+##        0 Low          1029 25.5 12.0
+##        0 Medium        998 26.4 13.7
+##        0 High         1031 29.4 19.9
+## 
+## Degrees-of-freedom method: kenward-roger</code></pre>
+<p>Now, as advised, let’s look at the SDs involved in this model:</p>
+<pre class="r"><code>lme4::VarCorr(feedlot.lmer)  ## for the model</code></pre>
+<pre class="ro"><code>##  Groups   Name        Std.Dev.
+##  herd     (Intercept) 77.087  
+##  Residual             57.832</code></pre>
+<pre class="r"><code>feedlot.rg@misc$sigma  ## default in the ref. grid</code></pre>
+<pre class="ro"><code>## [1] 57.83221</code></pre>
+<p>So the residual SD will be assumed in our prediction intervals if we don’t specify something else. And we <em>do</em> want something else, because in order to predict the slaughter weight of an arbitrary animal, without regard to its herd, we need to account for the variation among herds too, which is seen to be considerable. The two SDs reported by <code>VarCorr()</code> are assumed to represent independent sources of variation, so they may be combined into a total SD using the Pythagorean Theorem. We will update the reference grid with the new value:</p>
+<pre class="r"><code>feedlot.rg &lt;- update(feedlot.rg, sigma = sqrt(77.087^2 + 57.832^2))</code></pre>
+<p>We are now ready to form prediction intervals. To do so, simply call the <code>predict()</code> function with an <code>interval</code> argument:</p>
+<pre class="r"><code>predict(feedlot.rg, interval = &quot;prediction&quot;)</code></pre>
+<pre class="ro"><code>##  adj.ewt diet   prediction    SE   df lower.PL upper.PL
+##        0 Low          1029  99.7 12.0      812     1247
+##        0 Medium        998  99.9 13.7      783     1213
+##        0 High         1031 100.7 19.9      821     1241
+## 
+## Degrees-of-freedom method: kenward-roger 
+## Prediction intervals and SEs are based on an error SD of 96.369 
+## Confidence level used: 0.95</code></pre>
+<p>These results may also be displayed graphically:</p>
+<pre class="r"><code>plot(feedlot.rg, PIs = TRUE)</code></pre>
+<p><img src="data:image/png;base64,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" width="432" /></p>
+<p>The inner intervals are confidence intervals, and the outer ones are the prediction intervals.</p>
+<p>Note that the SEs for prediction are considerably greater than the SEs for estimation in the original summary of <code>feedlot.rg</code>. Also, as a sanity check, observe that these prediction intervals cover about the same ground as the original data:</p>
+<pre class="r"><code>range(feedlot$swt)</code></pre>
+<pre class="ro"><code>## [1]  816 1248</code></pre>
+<p>By the way, we could have specified the desired <code>sigma</code> value as an additional <code>sigma</code> argument in the <code>predict()</code> call, rather than updating the <code>feedlot.rg</code> object.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="strata" class="section level2">
+<h2>Predictions on particular strata</h2>
+<!-- @index Predictions!on Particular strata -->
+<p>Suppose, in our example, we want to predict <code>swt</code> for one or more particular herds. Then the total SD we computed is not appropriate for that purpose, because that includes variation among herds.</p>
+<p>But more to the point, if we are talking about particular herds, then we are really regarding <code>herd</code> as a fixed effect of interest; so the expedient thing to do is to fit a different model where <code>herd</code> is a fixed effect:</p>
+<pre class="r"><code>feedlot.lm &lt;- lm(swt ~ adj.ewt + diet + herd, data = feedlot)</code></pre>
+<p>So to predict slaughter weight for herds <code>9</code> and <code>19</code>:</p>
+<pre class="r"><code>newrg &lt;- ref_grid(feedlot.lm, at = list(adj.ewt = 0, herd = c(&quot;9&quot;, &quot;19&quot;)))
+predict(newrg, interval = &quot;prediction&quot;, by = &quot;herd&quot;)</code></pre>
+<pre class="ro"><code>## herd = 9:
+##  adj.ewt diet   prediction   SE df lower.PL upper.PL
+##        0 Low           867 63.6 53      740      995
+##        0 Medium        835 64.1 53      707      964
+##        0 High          866 66.3 53      733      999
+## 
+## herd = 19:
+##  adj.ewt diet   prediction   SE df lower.PL upper.PL
+##        0 Low          1069 62.1 53      945     1194
+##        0 Medium       1037 62.8 53      911     1163
+##        0 High         1068 64.0 53      940     1197
+## 
+## Prediction intervals and SEs are based on an error SD of 57.782 
+## Confidence level used: 0.95</code></pre>
+<p>This is an instance where the default <code>sigma</code> was already correct (being the only error SD we have available). The SD value is comparable to the residual SD in the previous model, and the prediction SEs are smaller than those for predicting over all herds.</p>
+<p><a href="#contents">Back to Contents</a></p>
+</div>
+<div id="bayes" class="section level2">
+<h2>Predictions with Bayesian models</h2>
+<!-- @index Predictions!Bayesian models -->
+<p>For models fitted using Bayesian methods, these kinds of prediction intervals are available only by forcing a frequentist analysis (<code>frequentist = TRUE</code>).</p>
+<p>However, a better and more flexible approach with Bayesian models is to simulate observations from the posterior predictive distribution. This is done via <code>as.mcmc()</code> and specifying a <code>likelihood</code> argument. An example is given in the <a href="sophisticated.html#predict-mcmc">“sophisticated models” vignette</a>.</p>
+<p><a href="#contents">Back to Contents</a></p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

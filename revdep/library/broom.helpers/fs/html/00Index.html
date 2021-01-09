@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Cross-Platform File System Operations Based on 'libuv'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Cross-Platform File System Operations Based on 'libuv'
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;fs&rsquo; version 1.5.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="fs_bytes.html">as_fs_bytes</a></td>
+<td>Human readable file sizes</td></tr>
+<tr><td style="width: 25%;"><a href="fs_path.html">as_fs_path</a></td>
+<td>File paths</td></tr>
+<tr><td style="width: 25%;"><a href="fs_perms.html">as_fs_perms</a></td>
+<td>Create, modify and view file permissions</td></tr>
+<tr><td style="width: 25%;"><a href="copy.html">copy</a></td>
+<td>Copy files, directories or links</td></tr>
+<tr><td style="width: 25%;"><a href="create.html">create</a></td>
+<td>Create files, directories, or links</td></tr>
+<tr><td style="width: 25%;"><a href="delete.html">delete</a></td>
+<td>Delete files, directories, or links</td></tr>
+<tr><td style="width: 25%;"><a href="copy.html">dir_copy</a></td>
+<td>Copy files, directories or links</td></tr>
+<tr><td style="width: 25%;"><a href="create.html">dir_create</a></td>
+<td>Create files, directories, or links</td></tr>
+<tr><td style="width: 25%;"><a href="delete.html">dir_delete</a></td>
+<td>Delete files, directories, or links</td></tr>
+<tr><td style="width: 25%;"><a href="file_access.html">dir_exists</a></td>
+<td>Query for existence and access permissions</td></tr>
+<tr><td style="width: 25%;"><a href="dir_ls.html">dir_info</a></td>
+<td>List files</td></tr>
+<tr><td style="width: 25%;"><a href="dir_ls.html">dir_ls</a></td>
+<td>List files</td></tr>
+<tr><td style="width: 25%;"><a href="dir_ls.html">dir_map</a></td>
+<td>List files</td></tr>
+<tr><td style="width: 25%;"><a href="dir_tree.html">dir_tree</a></td>
+<td>Print contents of directories in a tree-like format</td></tr>
+<tr><td style="width: 25%;"><a href="dir_ls.html">dir_walk</a></td>
+<td>List files</td></tr>
+<tr><td style="width: 25%;"><a href="file_access.html">file_access</a></td>
+<td>Query for existence and access permissions</td></tr>
+<tr><td style="width: 25%;"><a href="file_chmod.html">file_chmod</a></td>
+<td>Change file permissions</td></tr>
+<tr><td style="width: 25%;"><a href="file_chown.html">file_chown</a></td>
+<td>Change owner or group of a file</td></tr>
+<tr><td style="width: 25%;"><a href="copy.html">file_copy</a></td>
+<td>Copy files, directories or links</td></tr>
+<tr><td style="width: 25%;"><a href="create.html">file_create</a></td>
+<td>Create files, directories, or links</td></tr>
+<tr><td style="width: 25%;"><a href="delete.html">file_delete</a></td>
+<td>Delete files, directories, or links</td></tr>
+<tr><td style="width: 25%;"><a href="file_access.html">file_exists</a></td>
+<td>Query for existence and access permissions</td></tr>
+<tr><td style="width: 25%;"><a href="file_info.html">file_info</a></td>
+<td>Query file metadata</td></tr>
+<tr><td style="width: 25%;"><a href="file_move.html">file_move</a></td>
+<td>Move or rename files</td></tr>
+<tr><td style="width: 25%;"><a href="file_show.html">file_show</a></td>
+<td>Open files or directories</td></tr>
+<tr><td style="width: 25%;"><a href="file_info.html">file_size</a></td>
+<td>Query file metadata</td></tr>
+<tr><td style="width: 25%;"><a href="file_temp.html">file_temp</a></td>
+<td>Create names for temporary files</td></tr>
+<tr><td style="width: 25%;"><a href="file_temp.html">file_temp_pop</a></td>
+<td>Create names for temporary files</td></tr>
+<tr><td style="width: 25%;"><a href="file_temp.html">file_temp_push</a></td>
+<td>Create names for temporary files</td></tr>
+<tr><td style="width: 25%;"><a href="file_touch.html">file_touch</a></td>
+<td>Change file access and modification times</td></tr>
+<tr><td style="width: 25%;"><a href="fs_bytes.html">fs_bytes</a></td>
+<td>Human readable file sizes</td></tr>
+<tr><td style="width: 25%;"><a href="fs_path.html">fs_path</a></td>
+<td>File paths</td></tr>
+<tr><td style="width: 25%;"><a href="fs_perms.html">fs_perms</a></td>
+<td>Create, modify and view file permissions</td></tr>
+<tr><td style="width: 25%;"><a href="id.html">group_ids</a></td>
+<td>Lookup Users and Groups on a system</td></tr>
+<tr><td style="width: 25%;"><a href="id.html">id</a></td>
+<td>Lookup Users and Groups on a system</td></tr>
+<tr><td style="width: 25%;"><a href="is_absolute_path.html">is_absolute_path</a></td>
+<td>Test if a path is an absolute path</td></tr>
+<tr><td style="width: 25%;"><a href="is_file.html">is_dir</a></td>
+<td>Functions to test for file types</td></tr>
+<tr><td style="width: 25%;"><a href="is_file.html">is_file</a></td>
+<td>Functions to test for file types</td></tr>
+<tr><td style="width: 25%;"><a href="is_file.html">is_file_empty</a></td>
+<td>Functions to test for file types</td></tr>
+<tr><td style="width: 25%;"><a href="is_file.html">is_link</a></td>
+<td>Functions to test for file types</td></tr>
+<tr><td style="width: 25%;"><a href="copy.html">link_copy</a></td>
+<td>Copy files, directories or links</td></tr>
+<tr><td style="width: 25%;"><a href="create.html">link_create</a></td>
+<td>Create files, directories, or links</td></tr>
+<tr><td style="width: 25%;"><a href="delete.html">link_delete</a></td>
+<td>Delete files, directories, or links</td></tr>
+<tr><td style="width: 25%;"><a href="file_access.html">link_exists</a></td>
+<td>Query for existence and access permissions</td></tr>
+<tr><td style="width: 25%;"><a href="link_path.html">link_path</a></td>
+<td>Read the value of a symbolic link</td></tr>
+<tr><td style="width: 25%;"><a href="path.html">path</a></td>
+<td>Construct path to a file or directory</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_abs</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_common</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="path_file.html">path_dir</a></td>
+<td>Manipulate file paths</td></tr>
+<tr><td style="width: 25%;"><a href="path_expand.html">path_expand</a></td>
+<td>Finding the User Home Directory</td></tr>
+<tr><td style="width: 25%;"><a href="path_expand.html">path_expand_r</a></td>
+<td>Finding the User Home Directory</td></tr>
+<tr><td style="width: 25%;"><a href="path_file.html">path_ext</a></td>
+<td>Manipulate file paths</td></tr>
+<tr><td style="width: 25%;"><a href="path_file.html">path_ext&lt;-</a></td>
+<td>Manipulate file paths</td></tr>
+<tr><td style="width: 25%;"><a href="path_file.html">path_ext_remove</a></td>
+<td>Manipulate file paths</td></tr>
+<tr><td style="width: 25%;"><a href="path_file.html">path_ext_set</a></td>
+<td>Manipulate file paths</td></tr>
+<tr><td style="width: 25%;"><a href="path_file.html">path_file</a></td>
+<td>Manipulate file paths</td></tr>
+<tr><td style="width: 25%;"><a href="path_filter.html">path_filter</a></td>
+<td>Filter paths</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_has_parent</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="path_expand.html">path_home</a></td>
+<td>Finding the User Home Directory</td></tr>
+<tr><td style="width: 25%;"><a href="path_expand.html">path_home_r</a></td>
+<td>Finding the User Home Directory</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_join</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_math</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_norm</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="path_package.html">path_package</a></td>
+<td>Construct a path to a location within an installed or development package</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_real</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_rel</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="path_sanitize.html">path_sanitize</a></td>
+<td>Sanitize a filename by removing directory paths and invalid characters</td></tr>
+<tr><td style="width: 25%;"><a href="path_math.html">path_split</a></td>
+<td>Path computations</td></tr>
+<tr><td style="width: 25%;"><a href="file_temp.html">path_temp</a></td>
+<td>Create names for temporary files</td></tr>
+<tr><td style="width: 25%;"><a href="path_tidy.html">path_tidy</a></td>
+<td>Tidy paths</td></tr>
+<tr><td style="width: 25%;"><a href="path.html">path_wd</a></td>
+<td>Construct path to a file or directory</td></tr>
+<tr><td style="width: 25%;"><a href="id.html">user_ids</a></td>
+<td>Lookup Users and Groups on a system</td></tr>
+</table>
+</body></html>

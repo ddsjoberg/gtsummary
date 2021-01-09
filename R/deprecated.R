@@ -11,9 +11,9 @@ NULL
 # tentative deprecation schedule
 # "warn" for at least 9 month
 # "stop" after 12 months
-# "delete" after 18 months?
+# "delete" after 24 months?
 
-# v1.1.0 -----------------------------------------------------------------------
+# v1.1.0 (2019-08-08) ----------------------------------------------------------
 #' @rdname deprecated
 #' @export
 add_comparison <- function(...) {

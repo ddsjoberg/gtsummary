@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Column data types</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Column data types</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tibble)</span></code></pre></div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This vignette shows an overview of known data types and their abbreviations, and their origin. For example, <code>&lt;int&gt;</code> in the header of a column indicates an integer column, and <code>&lt;chr&gt;</code> denotes a character column.</p>
+<pre><code>#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.
+
+#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.
+
+#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.
+
+#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.
+
+#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.
+
+#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.
+
+#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.
+
+#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.</code></pre>
+<pre><code>#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.
+
+#&gt; Warning: `as_character()` is deprecated as of rlang 0.4.0
+#&gt; Please use `vctrs::vec_cast()` instead.</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Class</th>
+<th align="left">Data type</th>
+<th align="left">Example</th>
+<th align="left">Column header</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Atomic</td>
+<td align="left">logical</td>
+<td align="left"><code>TRUE</code></td>
+<td align="left">lgl</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">integer</td>
+<td align="left"><code>1L</code></td>
+<td align="left">int</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">double</td>
+<td align="left"><code>1.5</code></td>
+<td align="left">dbl</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">character</td>
+<td align="left"><code>&quot;A&quot;</code></td>
+<td align="left">chr</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">complex</td>
+<td align="left"><code>0+1i</code></td>
+<td align="left">cpl</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">raw</td>
+<td align="left"><code>as.raw(1)</code></td>
+<td align="left">raw</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">list</td>
+<td align="left"><code>list(1)</code></td>
+<td align="left">list</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">named list</td>
+<td align="left"><code>list(a = 1)</code></td>
+<td align="left">named list</td>
+</tr>
+<tr class="odd">
+<td align="left">Built-in objects</td>
+<td align="left">factor</td>
+<td align="left"><code>factor(&quot;A&quot;)</code></td>
+<td align="left">fct</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">ordered</td>
+<td align="left"><code>ordered(&quot;a&quot;)</code></td>
+<td align="left">ord</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">Date</td>
+<td align="left"><code>Sys.Date()</code></td>
+<td align="left">date</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">POSIXt</td>
+<td align="left"><code>Sys.time()</code></td>
+<td align="left">dttm</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">difftime</td>
+<td align="left"><code>vctrs::new_duration(1)</code></td>
+<td align="left">drtn</td>
+</tr>
+<tr class="even">
+<td align="left">Objects from other packages</td>
+<td align="left">hms</td>
+<td align="left"><code>hms::hms(1)</code></td>
+<td align="left">time</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">integer64</td>
+<td align="left"><code>bit64::as.integer64(1e+10)</code></td>
+<td align="left">int64</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">blob</td>
+<td align="left"><code>blob::blob(raw(1))</code></td>
+<td align="left">blob</td>
+</tr>
+<tr class="odd">
+<td align="left">Data frames</td>
+<td align="left">data.frame</td>
+<td align="left"><code>data.frame(a = 1)</code></td>
+<td align="left">df[,1]</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">tbl_df</td>
+<td align="left"><code>tibble(a = 1)</code></td>
+<td align="left">tibble</td>
+</tr>
+<tr class="odd">
+<td align="left">Unchanged</td>
+<td align="left">AsIs</td>
+<td align="left"><code>I(1L)</code></td>
+<td align="left">I<int></td>
+</tr>
+<tr class="even">
+<td align="left">vctrs types</td>
+<td align="left">unspecified</td>
+<td align="left"><code>vctrs::unspecified(1)</code></td>
+<td align="left">???</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">vctrs_list_of</td>
+<td align="left"><code>vctrs::list_of(c(1L))</code></td>
+<td align="left">list<int></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">vctrs_vctr</td>
+<td align="left"><code>vctrs::new_vctr(1L)</code></td>
+<td align="left">vctrs_vc</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">vctrs_partial_factor</td>
+<td align="left"><code>vctrs::partial_factor(letters)</code></td>
+<td align="left">prtl_fctr</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">vctrs_partial_frame</td>
+<td align="left"><code>vctrs::partial_frame(a = 1)</code></td>
+<td align="left">prtl</td>
+</tr>
+<tr class="odd">
+<td align="left">Language objects</td>
+<td align="left">function</td>
+<td align="left"><code>function() NULL</code></td>
+<td align="left">fn</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">symbol</td>
+<td align="left"><code>quote(a)</code></td>
+<td align="left">sym</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">expression</td>
+<td align="left"><code>parse(text = &quot;a &lt;- 1\nb&lt;- 2&quot;)</code></td>
+<td align="left">expression</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">quosures</td>
+<td align="left"><code>rlang::quos(a = 1)</code></td>
+<td align="left">quos</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="example-values" class="section level2">
+<h2>Example values</h2>
+<p>The following overview contains example values for each type:</p>
+<pre><code>#&gt; Rows: 1
+#&gt; Columns: 23
+#&gt; Warning: Subsetting quosures with `[[` is deprecated as of rlang 0.4.0
+#&gt; Please use `quo_get_expr()` instead.
+#&gt; $ [1mlogical      [22m [3m[38;5;246m&lt;lgl&gt;[39m[23m TRUE
+#&gt; $ [1minteger      [22m [3m[38;5;246m&lt;int&gt;[39m[23m 1
+#&gt; $ [1mdouble       [22m [3m[38;5;246m&lt;dbl&gt;[39m[23m 1.5
+#&gt; $ [1mcharacter    [22m [3m[38;5;246m&lt;chr&gt;[39m[23m &quot;A&quot;
+#&gt; $ [1mcomplex      [22m [3m[38;5;246m&lt;cpl&gt;[39m[23m 0+1i
+#&gt; $ [1mraw          [22m [3m[38;5;246m&lt;raw&gt;[39m[23m 01
+#&gt; $ [1mlist         [22m [3m[38;5;246m&lt;list&gt;[39m[23m [1]
+#&gt; $ [1m`named list` [22m [3m[38;5;246m&lt;named list&gt;[39m[23m [1]
+#&gt; $ [1mfactor       [22m [3m[38;5;246m&lt;fct&gt;[39m[23m A
+#&gt; $ [1mordered      [22m [3m[38;5;246m&lt;ord&gt;[39m[23m a
+#&gt; $ [1mDate         [22m [3m[38;5;246m&lt;date&gt;[39m[23m 2020-10-11
+#&gt; $ [1mPOSIXt       [22m [3m[38;5;246m&lt;dttm&gt;[39m[23m 2020-10-11 20:10:52
+#&gt; $ [1mdifftime     [22m [3m[38;5;246m&lt;drtn&gt;[39m[23m 1 secs
+#&gt; $ [1mhms          [22m [3m[38;5;246m&lt;time&gt;[39m[23m 00:00:01
+#&gt; $ [1minteger64    [22m [3m[38;5;246m&lt;int64&gt;[39m[23m 10000000000
+#&gt; $ [1mblob         [22m [3m[38;5;246m&lt;blob&gt;[39m[23m [00]
+#&gt; $ [1mdata.frame   [22m [3m[38;5;246m&lt;df[,1]&gt;[39m[23m &lt;data.frame[1 x 1]&gt;
+#&gt; $ [1mtbl_df       [22m [3m[38;5;246m&lt;tibble&gt;[39m[23m &lt;tbl_df[1 x 1]&gt;
+#&gt; $ [1mAsIs         [22m [3m[38;5;246m&lt;I&lt;int&gt;&gt;[39m[23m 1
+#&gt; $ [1munspecified  [22m [3m[38;5;246m&lt;???&gt;[39m[23m NA
+#&gt; $ [1mvctrs_list_of[22m [3m[38;5;246m&lt;list&lt;int&gt;&gt;[39m[23m [1]
+#&gt; $ [1mvctrs_vctr   [22m [3m[38;5;246m&lt;vctrs_vc&gt;[39m[23m 1
+#&gt; $ [1mquosures     [22m [3m[38;5;246m&lt;quos&gt;[39m[23m [~1]</code></pre>
+</div>
+<div id="implementation" class="section level2">
+<h2>Implementation</h2>
+<p>The column header is obtained by calling <code>pillar::type_sum()</code> on the column. This is an S3 method that can be overridden, but most of the time it is more useful to override <code>vctrs::vec_ptype_abbr()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>pillar<span class="op">:::</span>type_sum.default</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; function(x) {</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt;   if (is.object(x) || vctrs::vec_is(x)) return(vctrs::vec_ptype_abbr(x))</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt;   switch(typeof(x),</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt;     builtin = ,</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt;     special = ,</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt;     closure = &quot;fn&quot;,</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt;     environment = &quot;env&quot;,</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt;     symbol =</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt;       if (is_missing(x)) {</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt;         &quot;missing&quot;</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt;       } else {</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">#&gt;         &quot;sym&quot;</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">#&gt;       },</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt; </span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt;     typeof(x)</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="co">#&gt;   )</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">#&gt; }</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">#&gt; &lt;bytecode: 0x563a89c99820&gt;</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="co">#&gt; &lt;environment: namespace:pillar&gt;</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

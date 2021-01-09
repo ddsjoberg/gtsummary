@@ -34,4 +34,12 @@ test_that("modify_footnote works", {
       modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE),
     NA
   )
+
+  expect_true(
+    tbl_summary %>%
+      modify_footnote(everything() ~ NA) %>%
+      purrr::pluck("table_header", "footnote") %>%
+      is.na() %>%
+      all()
+  )
 })

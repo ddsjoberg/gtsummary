@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Helpers for Model Coefficients Tibbles</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Helpers for Model Coefficients Tibbles
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;broom.helpers&rsquo; version 1.1.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="dot-clean_backticks.html">.clean_backticks</a></td>
+<td>Remove backticks around variable names</td></tr>
+<tr><td style="width: 25%;"><a href="dot-escape_regex.html">.escape_regex</a></td>
+<td>Escapes any characters that would have special meaning in a regular expression</td></tr>
+<tr><td style="width: 25%;"><a href="dot-formula_list_to_named_list.html">.formula_list_to_named_list</a></td>
+<td>Convert formula selector to a named list</td></tr>
+<tr><td style="width: 25%;"><a href="dot-generic_selector.html">.generic_selector</a></td>
+<td>Generate a custom selector function</td></tr>
+<tr><td style="width: 25%;"><a href="dot-select_to_varnames.html">.select_to_varnames</a></td>
+<td>Variable selector</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_categorical</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_continuous</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_contrasts</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_dichotomous</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_interaction</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">all_intercepts</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.clm</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.clmm</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.clogit</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.coxph</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.default</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.geeglm</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.glm</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.glmerMod</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.multinom</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.negbin</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.polr</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_coefficients_type.html">model_get_coefficients_type.svyolr</a></td>
+<td>Get coefficient type</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_contrasts.html">model_get_contrasts</a></td>
+<td>Get contrasts used in the model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_contrasts.html">model_get_contrasts.default</a></td>
+<td>Get contrasts used in the model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model.html">model_get_model</a></td>
+<td>Get the model from model objects</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model.html">model_get_model.default</a></td>
+<td>Get the model from model objects</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model.html">model_get_model.mira</a></td>
+<td>Get the model from model objects</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model_frame.html">model_get_model_frame</a></td>
+<td>Get the model frame of a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model_frame.html">model_get_model_frame.coxph</a></td>
+<td>Get the model frame of a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model_frame.html">model_get_model_frame.default</a></td>
+<td>Get the model frame of a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model_frame.html">model_get_model_frame.survreg</a></td>
+<td>Get the model frame of a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model_matrix.html">model_get_model_matrix</a></td>
+<td>Get the model matrix of a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model_matrix.html">model_get_model_matrix.clm</a></td>
+<td>Get the model matrix of a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model_matrix.html">model_get_model_matrix.default</a></td>
+<td>Get the model matrix of a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_model_matrix.html">model_get_model_matrix.multinom</a></td>
+<td>Get the model matrix of a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_nlevels.html">model_get_nlevels</a></td>
+<td>Get the number of levels for each factor used in 'xlevels'</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_nlevels.html">model_get_nlevels.default</a></td>
+<td>Get the number of levels for each factor used in 'xlevels'</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_xlevels.html">model_get_xlevels</a></td>
+<td>Get xlevels used in the model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_xlevels.html">model_get_xlevels.default</a></td>
+<td>Get xlevels used in the model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_xlevels.html">model_get_xlevels.glmerMod</a></td>
+<td>Get xlevels used in the model</td></tr>
+<tr><td style="width: 25%;"><a href="model_get_xlevels.html">model_get_xlevels.lmerMod</a></td>
+<td>Get xlevels used in the model</td></tr>
+<tr><td style="width: 25%;"><a href="model_identify_variables.html">model_identify_variables</a></td>
+<td>Identify for each coefficient of a model the corresponding variable</td></tr>
+<tr><td style="width: 25%;"><a href="model_identify_variables.html">model_identify_variables.aov</a></td>
+<td>Identify for each coefficient of a model the corresponding variable</td></tr>
+<tr><td style="width: 25%;"><a href="model_identify_variables.html">model_identify_variables.clm</a></td>
+<td>Identify for each coefficient of a model the corresponding variable</td></tr>
+<tr><td style="width: 25%;"><a href="model_identify_variables.html">model_identify_variables.clmm</a></td>
+<td>Identify for each coefficient of a model the corresponding variable</td></tr>
+<tr><td style="width: 25%;"><a href="model_identify_variables.html">model_identify_variables.default</a></td>
+<td>Identify for each coefficient of a model the corresponding variable</td></tr>
+<tr><td style="width: 25%;"><a href="model_identify_variables.html">model_identify_variables.lavaan</a></td>
+<td>Identify for each coefficient of a model the corresponding variable</td></tr>
+<tr><td style="width: 25%;"><a href="model_list_contrasts.html">model_list_contrasts</a></td>
+<td>List contrasts used by a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_list_contrasts.html">model_list_contrasts.default</a></td>
+<td>List contrasts used by a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_list_terms_levels.html">model_list_terms_levels</a></td>
+<td>List levels of categorical terms</td></tr>
+<tr><td style="width: 25%;"><a href="model_list_terms_levels.html">model_list_terms_levels.default</a></td>
+<td>List levels of categorical terms</td></tr>
+<tr><td style="width: 25%;"><a href="model_list_variables.html">model_list_variables</a></td>
+<td>List all the variables used in a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_list_variables.html">model_list_variables.default</a></td>
+<td>List all the variables used in a model</td></tr>
+<tr><td style="width: 25%;"><a href="model_list_variables.html">model_list_variables.lavaan</a></td>
+<td>List all the variables used in a model</td></tr>
+<tr><td style="width: 25%;"><a href="select_helpers.html">select_helpers</a></td>
+<td>Select helper functions</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_add_coefficients_type.html">tidy_add_coefficients_type</a></td>
+<td>Add coefficients type and label as attributes</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_add_contrasts.html">tidy_add_contrasts</a></td>
+<td>Add contrasts type for categorical variables</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_add_estimate_to_reference_rows.html">tidy_add_estimate_to_reference_rows</a></td>
+<td>Add an estimate value to references rows for categorical variables</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_add_header_rows.html">tidy_add_header_rows</a></td>
+<td>Add header rows variables with several terms</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_add_reference_rows.html">tidy_add_reference_rows</a></td>
+<td>Add references rows for categorical variables</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_add_term_labels.html">tidy_add_term_labels</a></td>
+<td>Add term labels</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_add_variable_labels.html">tidy_add_variable_labels</a></td>
+<td>Add variable labels</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_attach_model.html">tidy_and_attach</a></td>
+<td>Attach a full model to the tibble of model terms</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_attach_model.html">tidy_attach_model</a></td>
+<td>Attach a full model to the tibble of model terms</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_attach_model.html">tidy_detach_model</a></td>
+<td>Attach a full model to the tibble of model terms</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_attach_model.html">tidy_get_model</a></td>
+<td>Attach a full model to the tibble of model terms</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_identify_variables.html">tidy_identify_variables</a></td>
+<td>Identify the variable corresponding to each model coefficient</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_plus_plus.html">tidy_plus_plus</a></td>
+<td>Tidy a model and compute additional informations</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_remove_intercept.html">tidy_remove_intercept</a></td>
+<td>Remove intercept(s)</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_select_variables.html">tidy_select_variables</a></td>
+<td>Select variables to keep/drop</td></tr>
+</table>
+</body></html>

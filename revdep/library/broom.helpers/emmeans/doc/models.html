@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="emmeans package, Version 1.5.3" />
+
+
+<title>Models supported by emmeans</title>
+
+
+
+
+
+
+<style type="text/css">body {font-size: 11pt; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;margin: 30px 50px 30px 50px; }h1,h2,h3,h4,h5,h6 { font-family: Arial,Helvetica,Sans-serif; }a { text-decoration: none; }a:link { color:darkblue; } a:visited { color:darkblue; } a:hover { color:dodgerblue; }a:active { color:dodgerblue; } code {color: #602000;font-family: "Lucida Console", Monaco, monospace; font-size: 90%;}.r { color: darkred; }.ro { color: darkgreen; background-color: #eeeeee; }.re { color: red;}.r code, a code, .ro code, .re code { color: inherit; }.vigindex ul { list-style-type: none; }.vigindex ul li { list-style: none; }.vigindex a code { color: inherit; }.vigindex li code { color: inherit; }</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Models supported by emmeans</h1>
+<h4 class="author">emmeans package, Version 1.5.3</h4>
+
+
+
+<!-- @index Vignettes!Models -->
+<p>Here we document what model objects may be used with <strong>emmeans</strong>, and some special features of some of them that may be accessed by passing additional arguments through <code>ref_grid</code> or <code>emmeans()</code>.</p>
+<p>Certain objects are affected by optional arguments to functions that construct <code>emmGrid</code> objects, including <code>ref_grid()</code>, <code>emmeans()</code>, <code>emtrends()</code>, and <code>emmip()</code>. When “<em>arguments</em>” are mentioned in the subsequent quick reference and object-by-object documentation, we are talking about arguments in these constructors.</p>
+<p>If a model type is not included here, users may be able to obtain usable results via the <code>qdrg()</code> function; see its help page. Package developers may support their models by writing appropriate <code>recover_data</code> and <code>emm_basis</code> methods. See the package documentation for <code>extending-emmeans</code> and <code>vignette(&quot;xtending&quot;)</code> for details.</p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+<div id="quickref" class="section level2">
+<h2>Quick reference for supported objects and options</h2>
+<!-- @index Models!Quick reference -->
+<p>Here is an alphabetical list of model classes that are supported, and the arguments that apply. Detailed documentation follows, with objects grouped by the code in the “Group” column. Scroll down or follow the links to those groups for more information.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Object.class</th>
+<th align="left">Package</th>
+<th align="center">Group</th>
+<th align="left">Arguments / notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">aov</td>
+<td align="left">stats</td>
+<td align="center"><a href="#A">A</a></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">aovList</td>
+<td align="left">stats</td>
+<td align="center"><a href="#V">V</a></td>
+<td align="left">Best with balanced designs, orthogonal coding</td>
+</tr>
+<tr class="odd">
+<td align="left">averaging</td>
+<td align="left">MuMIn</td>
+<td align="center"><a href="#I">I</a></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">betareg</td>
+<td align="left">betareg</td>
+<td align="center"><a href="#B">B</a></td>
+<td align="left"><code>mode = c(&quot;link&quot;, &quot;precision&quot;, &quot;phi.link&quot;,</code></td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>&quot;variance&quot;, &quot;quantile&quot;)</code></td>
+</tr>
+<tr class="even">
+<td align="left">brmsfit</td>
+<td align="left">brms</td>
+<td align="center"><a href="#P">P</a></td>
+<td align="left">Supported in <strong>brms</strong> package</td>
+</tr>
+<tr class="odd">
+<td align="left">carbayes</td>
+<td align="left">CARBayes</td>
+<td align="center"><a href="#S">S</a></td>
+<td align="left"><code>data</code> is required</td>
+</tr>
+<tr class="even">
+<td align="left">clm</td>
+<td align="left">ordinal</td>
+<td align="center"><a href="#O">O</a></td>
+<td align="left"><code>mode = c(&quot;latent&quot;, &quot;linear.predictor&quot;, &quot;cum.prob&quot;,</code></td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>&quot;exc.prob&quot;, &quot;prob&quot;, &quot;mean.class&quot;, &quot;scale&quot;)</code></td>
+</tr>
+<tr class="even">
+<td align="left">clmm</td>
+<td align="left">ordinal</td>
+<td align="center"><a href="#O">O</a></td>
+<td align="left">Like <code>clm</code> but no <code>&quot;scale&quot;</code> mode</td>
+</tr>
+<tr class="odd">
+<td align="left">coxme</td>
+<td align="left">coxme</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">coxph</td>
+<td align="left">survival</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">gam</td>
+<td align="left">mgcv</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left"><code>freq = FALSE</code>, <code>unconditional = FALSE</code>,</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>what = c(&quot;location&quot;, &quot;scale&quot;, &quot;shape&quot;, &quot;rate&quot;, &quot;prob.gt.0&quot;)</code></td>
+</tr>
+<tr class="odd">
+<td align="left">gamm</td>
+<td align="left">mgcv</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left"><code>call = object$gam$call</code></td>
+</tr>
+<tr class="even">
+<td align="left">Gam</td>
+<td align="left">gam</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left"><code>nboot = 800</code></td>
+</tr>
+<tr class="odd">
+<td align="left">gamlss</td>
+<td align="left">gamlss</td>
+<td align="center"><a href="#H">H</a></td>
+<td align="left"><code>what = c(&quot;mu&quot;, &quot;sigma&quot;, &quot;nu&quot;, &quot;tau&quot;)</code></td>
+</tr>
+<tr class="even">
+<td align="left">gee</td>
+<td align="left">gee</td>
+<td align="center"><a href="#E">E</a></td>
+<td align="left"><code>vcov.method = c(&quot;naive&quot;, &quot;robust&quot;)</code></td>
+</tr>
+<tr class="odd">
+<td align="left">geeglm</td>
+<td align="left">geepack</td>
+<td align="center"><a href="#E">E</a></td>
+<td align="left"><code>vcov.method = c(&quot;vbeta&quot;, &quot;vbeta.naiv&quot;, &quot;vbeta.j1s&quot;,</code></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>&quot;vbeta.fij&quot;, &quot;robust&quot;, &quot;naive&quot;)</code> or a matrix</td>
+</tr>
+<tr class="odd">
+<td align="left">geese</td>
+<td align="left">geepack</td>
+<td align="center"><a href="#E">E</a></td>
+<td align="left">Like <code>geeglm</code></td>
+</tr>
+<tr class="even">
+<td align="left">glm</td>
+<td align="left">stats</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">glm.nb</td>
+<td align="left">MASS</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left">Requires <code>data</code> argument</td>
+</tr>
+<tr class="even">
+<td align="left">glmerMod</td>
+<td align="left">lme4</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">glmmadmb</td>
+<td align="left">glmmADMB</td>
+<td align="center"></td>
+<td align="left">No longer supported</td>
+</tr>
+<tr class="even">
+<td align="left">glmmPQL</td>
+<td align="left">MASS</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left">inherits <code>lm</code> support</td>
+</tr>
+<tr class="odd">
+<td align="left">glmmTMB</td>
+<td align="left">glmmTMB</td>
+<td align="center"><a href="#P">P</a></td>
+<td align="left">Supported in <strong>glmmTMB</strong> package (dev. version only?)</td>
+</tr>
+<tr class="even">
+<td align="left">gls</td>
+<td align="left">nlme</td>
+<td align="center"><a href="#K">K</a></td>
+<td align="left"><code>mode = c(&quot;auto&quot;, &quot;df.error&quot;, &quot;satterthwaite&quot;)</code></td>
+</tr>
+<tr class="odd">
+<td align="left">hurdle</td>
+<td align="left">pscl</td>
+<td align="center"><a href="#C">C</a></td>
+<td align="left"><code>mode = c(&quot;response&quot;, &quot;count&quot;, &quot;zero&quot;, &quot;prob0&quot;),</code></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>lin.pred = c(FALSE, TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td align="left">lm</td>
+<td align="left">stats</td>
+<td align="center"><a href="#A">A</a></td>
+<td align="left">Several other classes inherit from this and may be supported</td>
+</tr>
+<tr class="even">
+<td align="left">lme</td>
+<td align="left">nlme</td>
+<td align="center"><a href="#K">K</a></td>
+<td align="left"><code>sigmaAdjust = c(TRUE, FALSE),</code></td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>mode = c(&quot;auto&quot;, containment&quot;, &quot;satterthwaite&quot;)</code></td>
+</tr>
+<tr class="even">
+<td align="left">lmerMod</td>
+<td align="left">lme4</td>
+<td align="center"><a href="#L">L</a></td>
+<td align="left"><code>lmer.df = c(&quot;kenward-roger&quot;, &quot;satterthwaite&quot;, &quot;asymptotic&quot;)</code>,</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>pbkrtest.limit = 3000</code>, <code>disable.pbkrtest = FALSE</code>.</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>emm_options(lmer.df =, pbkrtest.limit =, disable.pbkrtest =)</code></td>
+</tr>
+<tr class="odd">
+<td align="left">lqm,lqmm</td>
+<td align="left">lqmm</td>
+<td align="center"><a href="#A">A</a></td>
+<td align="left"><code>tau = &quot;0.5&quot;</code> (must match an entry in <code>object$tau</code>)</td>
+</tr>
+<tr class="even">
+<td align="left">manova</td>
+<td align="left">stats</td>
+<td align="center"><a href="#M">M</a></td>
+<td align="left"><code>mult.name</code>, <code>mult.levs</code></td>
+</tr>
+<tr class="odd">
+<td align="left">maov</td>
+<td align="left">stats</td>
+<td align="center"><a href="#M">M</a></td>
+<td align="left"><code>mult.name</code>, <code>mult.levs</code></td>
+</tr>
+<tr class="even">
+<td align="left">mcmc</td>
+<td align="left">mcmc</td>
+<td align="center"><a href="#S">S</a></td>
+<td align="left">May require <code>formula</code>, <code>data</code></td>
+</tr>
+<tr class="odd">
+<td align="left">MCMCglmm</td>
+<td align="left">MCMCglmm</td>
+<td align="center"><a href="#S">S</a></td>
+<td align="left">(see also <a href="#M#">M</a>) <code>mult.name</code>, <code>mult.levs</code>, <code>trait</code>,</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>mode = c(&quot;default&quot;, &quot;multinomial&quot;)</code>; <code>data</code> is required</td>
+</tr>
+<tr class="odd">
+<td align="left">mira</td>
+<td align="left">mice</td>
+<td align="center"><a href="#I">I</a></td>
+<td align="left">Optional arguments per class of <code>$analyses</code> elements</td>
+</tr>
+<tr class="even">
+<td align="left">mixed</td>
+<td align="left">afex</td>
+<td align="center"><a href="#P">P</a></td>
+<td align="left">Supported in <strong>afex</strong> package</td>
+</tr>
+<tr class="odd">
+<td align="left">mlm</td>
+<td align="left">stats</td>
+<td align="center"><a href="#M">M</a></td>
+<td align="left"><code>mult.name</code>, <code>mult.levs</code></td>
+</tr>
+<tr class="even">
+<td align="left">mmer</td>
+<td align="left">sommer</td>
+<td align="center"><a href="#G">G</a></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">multinom</td>
+<td align="left">nnet</td>
+<td align="center"><a href="#N">N</a></td>
+<td align="left"><code>mode = c(&quot;prob&quot;, &quot;latent&quot;)</code></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left">Always include response in specs for <code>emmeans()</code></td>
+</tr>
+<tr class="odd">
+<td align="left">nauf</td>
+<td align="left">nauf.<em>xxx</em></td>
+<td align="center"><a href="#P">P</a></td>
+<td align="left">Supported in <strong>nauf</strong> package</td>
+</tr>
+<tr class="even">
+<td align="left">nlme</td>
+<td align="left">nlme</td>
+<td align="center"><a href="#A">A</a></td>
+<td align="left">Supports fixed part. Requires <code>param</code></td>
+</tr>
+<tr class="odd">
+<td align="left">polr</td>
+<td align="left">MASS</td>
+<td align="center"><a href="#O">O</a></td>
+<td align="left"><code>mode = c(&quot;latent&quot;, &quot;linear.predictor&quot;, &quot;cum.prob&quot;,</code></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>&quot;exc.prob&quot;, &quot;prob&quot;, &quot;mean.class&quot;)</code></td>
+</tr>
+<tr class="odd">
+<td align="left">rlm</td>
+<td align="left">MASS</td>
+<td align="center"><a href="#A">A</a></td>
+<td align="left">inherits <code>lm</code> support</td>
+</tr>
+<tr class="even">
+<td align="left">rms</td>
+<td align="left">rms</td>
+<td align="center"><a href="#O">O</a></td>
+<td align="left"><code>mode = (&quot;middle&quot;, &quot;latent&quot;, &quot;linear.predictor&quot;,</code></td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>&quot;cum.prob&quot;, &quot;exc.prob&quot;, &quot;prob&quot;, &quot;mean.class&quot;)</code></td>
+</tr>
+<tr class="even">
+<td align="left">rsm</td>
+<td align="left">rsm</td>
+<td align="center"><a href="#P">P</a></td>
+<td align="left">Supported in <strong>rsm</strong> package</td>
+</tr>
+<tr class="odd">
+<td align="left">stanreg</td>
+<td align="left">rstanarm</td>
+<td align="center"><a href="#S">S</a></td>
+<td align="left">Args for <code>stanreg_</code><em>xxx</em> similar to those for <em>xxx</em></td>
+</tr>
+<tr class="even">
+<td align="left">survreg</td>
+<td align="left">survival</td>
+<td align="center"><a href="#A">A</a></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">zeroinfl</td>
+<td align="left">pscl</td>
+<td align="center"><a href="#C">C</a></td>
+<td align="left"><code>mode = c(&quot;response&quot;, &quot;count&quot;, &quot;zero&quot;, &quot;prob0&quot;)</code>,</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="center"></td>
+<td align="left"><code>lin.pred = c(FALSE, TRUE)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="A" class="section level2">
+<h2>Group A – “Standard” or minimally supported models</h2>
+<p>Models in this group, such as <code>lm</code>, do not have unusual features that need special support; hence no extra arguments are needed. Some may require <code>data</code> in the call.</p>
+</div>
+<div id="B" class="section level2">
+<h2>B – Beta regression</h2>
+<!-- @index Beta regression; `betareg` models -->
+<p>The additional <code>mode</code> argument for <code>betareg</code> objects has possible values of <code>&quot;response&quot;</code>, <code>&quot;link&quot;</code>, <code>&quot;precision&quot;</code>, <code>&quot;phi.link&quot;</code>, <code>&quot;variance&quot;</code>, and <code>&quot;quantile&quot;</code>, which have the same meaning as the <code>type</code> argument in <code>predict.betareg</code> – with the addition that <code>&quot;phi.link&quot;</code> is like <code>&quot;link&quot;</code>, but for the precision portion of the model. When <code>mode = &quot;quantile&quot;</code> is specified, the additional argument <code>quantile</code> (a numeric scalar or vector) specifies which quantile(s) to compute; the default is 0.5 (the median). Also in <code>&quot;quantile&quot;</code> mode, an additional variable <code>quantile</code> is added to the reference grid, and its levels are the values supplied.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+</div>
+<div id="C" class="section level2">
+<h2>Group C – Count models</h2>
+<!-- @index Count regression; `hurdle` models; `zeroinfl` models -->
+<p>Two optional arguments – <code>mode</code> and <code>lin.pred</code> – are provided. The <code>mode</code> argument has possible values <code>&quot;response&quot;</code> (the default), <code>&quot;count&quot;</code>, <code>&quot;zero&quot;</code>, or <code>&quot;prob0&quot;</code>. <code>lin.pred</code> is logical and defaults to <code>FALSE</code>.</p>
+<p>With <code>lin.pred = FALSE</code>, the results are comparable to those returned by <code>predict(..., type = &quot;response&quot;)</code>, <code>predict(..., type = &quot;count&quot;)</code>, <code>predict(..., type = &quot;zero&quot;)</code>, or <code>predict(..., type = &quot;prob&quot;)[, 1]</code>. See the documentation for <code>predict.hurdle</code> and <code>predict.zeroinfl</code>.</p>
+<p>The option <code>lin.pred = TRUE</code> only applies to <code>mode = &quot;count&quot;</code> and <code>mode = &quot;zero&quot;</code>. The results returned are on the linear-predictor scale, with the same transformation as the link function in that part of the model. The predictions for a reference grid with <code>mode = &quot;count&quot;</code>, <code>lin.pred = TRUE</code>, and <code>type = &quot;response&quot;</code> will be the same as those obtained with <code>lin.pred = FALSE</code> and <code>mode = &quot;count&quot;</code>; however, any EMMs derived from these grids will be different, because the averaging is done on the log-count scale and the actual count scale, respectively – thereby producing geometric means versus arithmetic means of the predictions.</p>
+<p>If the <code>vcov.</code> argument is used (see details in the documentation for <code>ref_grid</code>), it must yield a matrix of the same size as would be obtained using <code>vcov.hurdle</code> or <code>vcov.zeroinfl</code> with its <code>model</code> argument set to <code>(&quot;full&quot;, &quot;count&quot;, &quot;zero&quot;)</code> in respective correspondence with <code>mode</code> of <code>(&quot;mean&quot;, &quot;count&quot;, &quot;zero&quot;)</code>. If <code>vcov.</code> is a function, it must support the <code>model</code> argument.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+</div>
+<div id="E" class="section level2">
+<h2>Group E – GEE models</h2>
+<!-- @index GEE models -->
+<p>These models all have more than one covariance estimate available, and it may be selected by supplying a string as the <code>vcov.method</code> argument. It is partially matched with the available choices shown in the quick reference. In <code>geese</code> and <code>geeglm</code>, the aliases <code>&quot;robust&quot;</code> (for <code>&quot;vbeta&quot;</code>) and <code>&quot;naive&quot;</code> (for <code>&quot;vbeta.naiv&quot;</code> are also accepted.</p>
+<p>If a matrix or function is supplied as <code>vcov.method</code>, it is interpreted as a <code>vcov.</code> specification as described for <code>...</code> in the documentation for <code>ref_grid</code>.</p>
+</div>
+<div id="G" class="section level2">
+<h2>Group G – Generalized linear models and relatives</h2>
+<!-- @index Generalized linear models; `glm`*xxx* models; 
+    Generalized additive models; `gam` models; `mmer` models -->
+<p>Most models in this group receive only standard support as in <a href="#A">Group A</a>, but typically the tests and confidence intervals are asymptotic. Thus the <code>df</code> column for tabular results will be <code>Inf</code>.</p>
+<p>Some objects in this group <em>require</em> that the original or reference dataset be provided when calling <code>ref_grid()</code> or <code>emmeans()</code>.</p>
+<p>In the case of <code>mgcv::gam</code> objects, there are optional <code>freq</code> and <code>unconditional</code> arguments as is detailed in the documentation for <code>mgcv::vcov.gam()</code>. Both default to <code>FALSE</code>. The value of <code>unconditional</code> matters only if <code>freq = FALSE</code> and <code>object$Vc</code> is non-null.</p>
+<p>For <code>mgcv::gamm</code> objects, <code>emmeans()</code> results are based on the <code>object$gam</code> part. Unfortunately, that is missing its <code>call</code> component, so the user must supply it in the <code>call</code> argument (e.g., <code>call = quote(gamm(y ~ s(x), data = dat))</code>) or give the dataset in the <code>data</code> argument. Alternatively (and recommended), you may first set <code>object$gam$call</code> to the quoted call ahead of time. The <code>what</code> arguments are used to select which model formula to use: <code>&quot;location&quot;, &quot;scale&quot;</code> apply to <code>gaulss</code> and <code>gevlss</code> families, <code>&quot;shape&quot;</code> applies only to <code>gevlss</code>, and <code>&quot;rate&quot;, &quot;prob.gt.0&quot;</code> apply to <code>ziplss</code>.</p>
+<p>With <code>gam::Gam</code> objects, standard errors are estimated using a bootstrap method when there are any smoothers involved. Accordingly, there is an optional <code>nboot</code> argument that sets the number of bootstrap replications used to estimate the variances and covariances of the smoothing portions of the model. Generally, it is better to use models fitted via <code>mgcv::gam()</code> rather than <code>gam::gam()</code>.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+</div>
+<div id="H" class="section level2">
+<h2>Group H – <code>gamlss</code> models</h2>
+<!-- @index `gamlss` models -->
+<p>The <code>what</code> argument has possible values of <code>&quot;mu&quot;</code> (default), <code>&quot;sigma&quot;</code>, <code>&quot;nu&quot;</code>, or <code>&quot;tau&quot;</code> depending on which part of the model you want results for. Currently, there is no support when the selected part of the model contains a smoothing method like <code>pb()</code>.</p>
+</div>
+<div id="I" class="section level2">
+<h2>Group I – Multiple models (via imputation or averaging)</h2>
+<!-- @index Multiple imputation; Model averaging; `averaging` models; `mira` models -->
+<p>These objects are the results of fitting several models with different predictor subsets or imputed values. The <code>bhat</code> and <code>V</code> slots are obtained via averaging and, in the case of multiple imputation, adding a multiple of the between-imputation covariance per Rubin’s rules.</p>
+<p>Support for <code>MuMIn::averaging</code> objects may be somewhat dodgy, as it is not clear that all supported model classes will work. The object <em>must</em> have a <code>&quot;modelList&quot;</code> attribute (obtained by constructing the object explicitly from a model list or by including <code>fit = TRUE</code> in the call). And each model should be fitted with <code>data</code> as a <strong>named</strong> argument in the call; or else provide a <code>data</code> argument in the call to <code>emmeans()</code> or <code>ref_grid()</code>. No estimability checking is done at present: if/when it is added, a linear function will be estimable only if it is estimable in <em>all</em> models included in the averaging.</p>
+</div>
+<div id="K" class="section level2">
+<h2>Group K – <code>gls</code> and <code>lme</code> models</h2>
+<!-- @index `lme` models; `gls` models; Satterthwaite d.f.; Containment d.f.; 
+     `appx-satterthwaite` method; `boot-satterthwaite` method -->
+<p>The <code>sigmaAdjust</code> argument is a logical value that defaults to <code>TRUE</code>. It is comparable to the <code>adjustSigma</code> option in <code>nlme::summary.lme</code> (the name-mangling is to avoid conflicts with the often-used <code>adjust</code> argument), and determines whether or not a degrees-of-freedom adjustment is performed with models fitted using the ML method.</p>
+<p>The optional <code>mode</code> argument affects the degrees of freedom. The <code>mode = &quot;satterthwaite&quot;</code> option determines degrees of freedom via the Satterthwaite method: If <code>s^2</code> is the estimate of some variance, then its Satterthwaite d.f. is <code>2*s^4 / Var(s^2)</code>. In case our numerical methods for this fail, we also offer <code>mode = &quot;appx-satterthwaite&quot;</code> as a backup, by which quantities related to <code>Var(s^2)</code> are obtained by randomly perturbing the response values. Currently, only <code>&quot;appx-satterthwaite&quot;</code> is available for <code>lme</code> objects, and it is used if <code>&quot;satterthwaite&quot;</code> is requested. (Note: Previously, <code>&quot;appx-satterthwaite&quot;</code> was termed <code>&quot;boot-satterthwaite&quot;</code>; this is still supported for backward compatibility. The “boot” was abandoned because it is really an approximation method, not a bootstrap method in the sense as many statistical methods.)</p>
+<p>The alternative method is <code>&quot;df.error&quot;</code> (for <code>gls</code>) and <code>&quot;containment&quot;</code> (for <code>lme</code>). <code>df.error</code> is just the error degrees of freedom for the model, minus the number of extra random effects estimated; it generally over-estimates the degrees of freedom. <code>&quot;containment&quot;</code> determines the degrees of freedom for the coarsest grouping involved in the contrast or linear function involved, so it tends to under-estimate the degrees of freedom. The default is <code>mode = &quot;auto&quot;</code>, which uses Satterthwaite if there are estimated random effects and the non-Satterthwaite option otherwise.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+</div>
+<div id="L" class="section level2">
+<h2>Group L – <code>lmerMod</code> models</h2>
+<!-- @index `lmerMod` models; Kenward-Roger d.f.; Satterthwaite d.f. -->
+<p>There is an optional <code>lmer.df</code> argument that defaults to <code>get_EMM_option(&quot;lmer.df&quot;)</code> (which in turn defaults to <code>&quot;kenward-roger&quot;</code>). The possible values are <code>&quot;kenward-roger&quot;</code>, <code>&quot;satterthwaite&quot;</code>, and <code>&quot;asymptotic&quot;</code> (these are partially matched and case-insensitive). With <code>&quot;kenward-roger&quot;</code>, d.f. are obtained using code from the <strong>pbkrtest</strong> package, if installed. With <code>&quot;satterthwaite&quot;</code>, d.f. are obtained using code from the <strong>lmerTest</strong> package, if installed. With <code>&quot;asymptotic&quot;</code>, or if the needed package is not installed, d.f. are set to <code>Inf</code>. (For backward compatibility, the user may specify <code>mode</code> in lieu of <code>lmer.df</code>.)</p>
+<p>A by-product of the Kenward-Roger method is that the covariance matrix is adjusted using <code>pbkrtest::vcovAdj()</code>. This can require considerable computation; so to avoid that overhead, the user should opt for the Satterthwaite or asymptotic method; or, for backward compatibility, may disable the use of <strong>pbkrtest</strong> via <code>emm_options(disable.pbkrtest = TRUE)</code> (this does not disable the <strong>pbkrtest</strong> package entirely, just its use in <strong>emmeans</strong>). The computation time required depends roughly on the number of observations, <em>N</em>, in the design matrix (because a major part of the computation involves inverting an <em>N</em> x <em>N</em> matrix). Thus, <strong>pbkrtest</strong> is automatically disabled if <em>N</em> exceeds the value of <code>get_emm_option(&quot;pbkrtest.limit&quot;)</code>, for which the factory default is 3000. (The user may also specify <code>pbkrtest.limit</code> or <code>disable.pbkrtest</code> as an argument in the call to <code>emmeans()</code> or <code>ref_grid()</code>)</p>
+<p>Similarly to the above, the <code>disable.lmerTest</code> and <code>lmerTest.limit</code> options or arguments affect whether Satterthwaite methods can be implemented.</p>
+<p>The <code>df</code> argument may be used to specify some other degrees of freedom. Note that if <code>df</code> and <code>method = &quot;kenward-roger&quot;</code> are both specified, the covariance matrix is adjusted but the K-R degrees of freedom are not used.</p>
+<p>Finally, note that a user-specified covariance matrix (via the <code>vcov.</code> argument) will also disable the Kenward-Roger method; in that case, the Satterthwaite method is used in place of Kenward-Roger.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+</div>
+<div id="M" class="section level2">
+<h2>Group M – Multivariate models</h2>
+<!-- @index Multivariate models -->
+<p>When there is a multivariate response, the different responses are treated as if they were levels of a factor – named <code>rep.meas</code> by default. The <code>mult.name</code> argument may be used to change this name. The <code>mult.levs</code> argument may specify a named list of one or more sets of levels. If this has more than one element, then the multivariate levels are expressed as combinations of the named factor levels via the function <code>base::expand.grid</code>.</p>
+</div>
+<div id="N" class="section level2">
+<h2>N - Multinomial responses</h2>
+<!-- @index `mlm` models; Multinomial models -->
+<p>The reference grid includes a pseudo-factor with the same name and levels as the multinomial response. There is an optional <code>mode</code> argument which should match <code>&quot;prob&quot;</code> or <code>&quot;latent&quot;</code>. With <code>mode = &quot;prob&quot;</code>, the reference-grid predictions consist of the estimated multinomial probabilities. The <code>&quot;latent&quot;</code> mode returns the linear predictor, recentered so that it averages to zero over the levels of the response variable (similar to sum-to-zero contrasts). Thus each latent variable can be regarded as the log probability at that level minus the average log probability over all levels.</p>
+<p>There are two optional arguments: <code>mode</code> and <code>rescale</code> (which defaults to <code>c(0, 1)</code>).</p>
+<p>Please note that, because the probabilities sum to 1 (and the latent values sum to 0) over the multivariate-response levels, all sensible results from <code>emmeans()</code> must involve that response as one of the factors. For example, if <code>resp</code> is a response with <em>k</em> levels, <code>emmeans(model, ~ resp | trt)</code> will yield the estimated multinomial distribution for each <code>trt</code>; but <code>emmeans(model, ~ trt)</code> will just yield the average probability of 1/<em>k</em> for each <code>trt</code>.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+</div>
+<div id="O" class="section level2">
+<h2>Group O - Ordinal responses</h2>
+<!-- @index Ordinal models; `clm` models; `polreg` models -->
+<p>The reference grid for ordinal models will include all variables that appear in the main model as well as those in the <code>scale</code> or <code>nominal</code> models (if provided). There are two optional arguments: <code>mode</code> (a character string) and <code>rescale</code> (which defaults to <code>c(0, 1)</code>). <code>mode</code> should match one of <code>&quot;latent&quot;</code> (the default), <code>&quot;linear.predictor&quot;</code>, <code>&quot;cum.prob&quot;</code>, <code>&quot;exc.prob&quot;</code>, <code>&quot;prob&quot;</code>, <code>&quot;mean.class&quot;</code>, or <code>&quot;scale&quot;</code> – see the quick reference and note which are supported.</p>
+<p>With <code>mode = &quot;latent&quot;</code>, the reference-grid predictions are made on the scale of the latent variable implied by the model. The scale and location of this latent variable are arbitrary, and may be altered via <code>rescale</code>. The predictions are multiplied by <code>rescale[2]</code>, then added to <code>rescale[1]</code>. Keep in mind that the scaling is related to the link function used in the model; for example, changing from a probit link to a logistic link will inflate the latent values by around <span class="math inline">\(\pi/\sqrt{3}\)</span>, all other things being equal. <code>rescale</code> has no effect for other values of <code>mode</code>.</p>
+<p>With <code>mode = &quot;linear.predictor&quot;</code>, <code>mode = &quot;cum.prob&quot;</code>, and <code>mode = &quot;exc.prob&quot;</code>, the boundaries between categories (i.e., thresholds) in the ordinal response are included in the reference grid as a pseudo-factor named <code>cut</code>. The reference-grid predictions are then of the cumulative probabilities at each threshold (for <code>mode = &quot;cum.prob&quot;</code>), exceedance probabilities (one minus cumulative probabilities, for <code>mode = &quot;exc.prob&quot;</code>), or the link function thereof (for <code>mode = &quot;linear.predictor&quot;</code>).</p>
+<p>With <code>mode = &quot;prob&quot;</code>, a pseudo-factor with the same name as the model’s response variable is created, and the grid predictions are of the probabilities of each class of the ordinal response. With <code>&quot;mean.class&quot;</code>, the returned results are means of the ordinal response, interpreted as a numeric value from 1 to the number of classes, using the <code>&quot;prob&quot;</code> results as the estimated probability distribution for each case.</p>
+<p>With <code>mode = &quot;scale&quot;</code>, and the fitted object incorporates a scale model, EMMs are obtained for the factors in the scale model (with a log response) instead of the response model. The grid is constructed using only the factors in the scale model.</p>
+<p>Any grid point that is non-estimable by either the location or the scale model (if present) is set to <code>NA</code>, and any EMMs involving such a grid point will also be non-estimable. A consequence of this is that if there is a rank-deficient <code>scale</code> model, then <em>all</em> latent responses become non-estimable because the predictions are made using the average log-scale estimate.</p>
+<p><code>rms</code> models have an additional <code>mode</code>. With <code>mode = &quot;middle&quot;</code> (this is the default), the middle intercept is used, comparable to the default for <code>rms::Predict()</code>. This is quite similar in concept to <code>mode = &quot;latent&quot;</code>, where all intercepts are averaged together.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+</div>
+<div id="P" class="section level2">
+<h2>P – Other packages</h2>
+<p>Models in this group have their <strong>emmeans</strong> support provided by the package that implements the model-fitting procedure. Users should refer to the package documentation for details on <strong>emmeans</strong> support.</p>
+</div>
+<div id="S" class="section level2">
+<h2>S – Sampling (MCMC) methods</h2>
+<!-- @index Bayesian models; `mcmc` objects; `stanreg` objects; `brmsfit` objects
+  `as.mcmc()`; `summary()`!Bayesian models -->
+<p>Models fitted using MCMC methods contain a sample from the posterior distribution of fixed-effect coefficients. In some cases (e.g., results of <code>MCMCpack::MCMCregress()</code> and <code>MCMCpack::MCMCpoisson()</code>), the object may include a <code>&quot;call&quot;</code> attribute that <code>emmeans()</code> can use to reconstruct the data and obtain a basis for the EMMs. If not, a <code>formula</code> and <code>data</code> argument are provided that may help produce the right results. In addition, the <code>contrasts</code> specifications are not necessarily recoverable from the object, so the system default must match what was actually used in fitting the model.</p>
+<p>The <code>summary.emmGrid()</code> method provides credibility intervals (HPD intervals) of the results, and ignores the frequentist-oriented arguments (<code>infer</code>, <code>adjust</code>, etc.) An <code>as.mcmc()</code> method is provided that creates an <code>mcmc</code> object that can be summarized or plotted using the <strong>coda</strong> package (or others that support those objects). It provides a posterior sample of EMMs, or contrasts thereof, for the given reference grid, based on the posterior sample of the fixed effects from the model object.</p>
+<p>In <code>MCMCglmm</code> objects, the <code>data</code> argument is required; however, if you save it as a member of the model object (e.g., <code>object$data = quote(mydata)</code>), that removes the necessity of specifying it in each call. The special keyword <code>trait</code> is used in some models. When the response is multivariate and numeric, <code>trait</code> is generated automatically as a factor in the reference grid, and the arguments <code>mult.levels</code> can be used to name its levels. In other models such as a multinomial model, use the <code>mode</code> argument to specify the type of model, and <code>trait = &lt;factor name&gt;</code> to specify the name of the data column that contains the levels of the factor response.</p>
+<p>The <strong>brms</strong> package version 2.13 and later, has its own <code>emmeans</code> support. Refer to the documentation in that package.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+</div>
+<div id="V" class="section level2">
+<h2>Group V – <code>aovList</code> objects (also used with <code>afex_aov</code> objects)</h2>
+<!-- @index `aovList` objects; `afex_aov` objects -->
+<p>Support for these objects is limited. To avoid strong biases in the predictions, it is strongly recommended that when fitting the model, the <code>contrasts</code> attribute of all factors should be of a type that sums to zero – for example, <code>&quot;contr.sum&quot;</code>, <code>&quot;contr.poly&quot;</code>, or <code>&quot;contr.helmert&quot;</code> but <em>not</em> <code>&quot;contr.treatment&quot;</code>. If that is found not to be the case, the model is re-fitted using sum-to-zero contrasts (thus requiring additional computation). Doing so does <em>not</em> remove all bias in the EMMs unless the design is perfectly balanced, and an annotation is added to warn of that. This bias cancels out when doing comparisons and contrasts.</p>
+<p>Only intra-block estimates of covariances are used. That is, if a factor appears in more than one error stratum, only the covariance structure from its lowest stratum is used in estimating standard errors. Degrees of freedom are obtained using the Satterthwaite method. In general, <code>aovList</code> support is best with balanced designs, with due caution in the use of contrasts. If a <code>vcov.</code> argument is supplied, it must yield a single covariance matrix for the unique fixed effects (not a set of them for each error stratum). In that case, the degrees of freedom are set to <code>NA</code>.</p>
+<p><a href="#quickref">Back to quick reference</a></p>
+<p><a href="vignette-topics.html">Index of all vignette topics</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

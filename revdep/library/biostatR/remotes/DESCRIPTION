@@ -1,0 +1,44 @@
+Package: remotes
+Title: R Package Installation from Remote Repositories, Including
+        'GitHub'
+Version: 2.2.0
+Authors@R: c(
+    person("Jim", "Hester", , "jim.hester@rstudio.com", role = c("aut", "cre")),
+    person("Gábor", "Csárdi", , "csardi.gabor@gmail.com", role = c("aut")),
+    person("Hadley", "Wickham", role = c("aut")),
+    person("Winston", "Chang", role = "aut"),
+    person("RStudio", role = "cph"),
+    person("Martin", "Morgan", role = "aut"),
+    person("Dan", "Tenenbaum", role = "aut"),
+    person("Mango Solutions", role = "cph")
+    )
+Description: Download and install R packages stored in 'GitHub', 'GitLab', 
+    'Bitbucket', 'Bioconductor', or plain 'subversion' or 'git' repositories. 
+    This package provides the 'install_*' functions in 'devtools'. Indeed most 
+    of the code was copied over from 'devtools'.
+License: GPL (>= 2)
+URL: https://remotes.r-lib.org, https://github.com/r-lib/remotes#readme
+BugReports: https://github.com/r-lib/remotes/issues
+Imports: methods, stats, tools, utils
+Suggests: brew, callr, codetools, curl, covr, git2r (>= 0.23.0), knitr,
+        mockery, pkgbuild (>= 1.0.1), pingr, rmarkdown, rprojroot,
+        testthat, withr
+Depends: R (>= 3.0.0)
+VignetteBuilder: knitr
+RoxygenNote: 7.1.1
+SystemRequirements: Subversion for install_svn, git for install_git
+Encoding: UTF-8
+NeedsCompilation: no
+Packaged: 2020-07-20 18:04:55 UTC; jhester
+Author: Jim Hester [aut, cre],
+  Gábor Csárdi [aut],
+  Hadley Wickham [aut],
+  Winston Chang [aut],
+  RStudio [cph],
+  Martin Morgan [aut],
+  Dan Tenenbaum [aut],
+  Mango Solutions [cph]
+Maintainer: Jim Hester <jim.hester@rstudio.com>
+Repository: CRAN
+Date/Publication: 2020-07-21 08:40:07 UTC
+Built: R 4.0.3; ; 2020-12-30 17:32:12 UTC; windows

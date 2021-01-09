@@ -1,0 +1,152 @@
+## export functions
+export(
+  acfplot,
+  HPDinterval,
+  as.array.mcmc.list,
+  as.mcmc,
+  as.mcmc.list,
+  autocorr,
+  ##RGA
+  autocorr.diag,
+  autocorr.plot,
+  ##RGA
+  batchSE,
+  bugs2jags,
+  chanames,
+  coda.options,
+  codamenu,
+  crosscorr,
+  crosscorr.plot,
+  cumuplot,
+  densplot,
+  display.coda.options,
+  effectiveSize,
+  gelman.diag,
+  gelman.plot,
+  geweke.diag,
+  geweke.plot,
+  heidel.diag,
+  is.mcmc,
+  is.mcmc.list,
+  mcmc,
+  mcmc.list,
+  mcmcUpgrade,
+  mcpar,
+  multi.menu,
+  nchain,
+  niter,
+  nvar,
+  pcramer,
+  raftery.diag,
+  read.and.check,
+  read.coda.interactive,
+  read.coda,
+  read.jags,
+  read.openbugs,
+  ##RGA
+  rejectionRate,
+  spectrum0,
+  spectrum0.ar,
+  thin,
+  traceplot,
+  varnames,
+  "varnames<-")
+
+## export data
+# export(line) 
+# this doesn't need to be exported, not sure why, but it works fine
+# as is.
+
+# [1] [.mcmc         as.matrix.mcmc end.mcmc       frequency.mcmc plot.mcmc     
+# [6] print.mcmc     start.mcmc     summary.mcmc   thin.mcmc      time.mcmc     
+# [11] window.mcmc   
+
+# [1] [.mcmc.list         as.matrix.mcmc.list as.mcmc.mcmc.list  
+# [4] end.mcmc.list       plot.mcmc.list      start.mcmc.list    
+# [7] summary.mcmc.list   thin.mcmc.list      time.mcmc.list     
+# [10] window.mcmc.list   
+
+## register S3 methods
+S3method(as.mcmc, default)
+S3method(as.mcmc.list, default)
+S3method(as.ts, mcmc)
+## as.matrix
+S3method(as.matrix, mcmc)
+S3method(as.matrix, mcmc.list)
+## mcmc
+S3method("[", mcmc)
+S3method(end, mcmc) 
+S3method(frequency, mcmc)
+S3method(plot, mcmc)
+S3method(print, mcmc)
+S3method(start, mcmc) 
+S3method(summary, mcmc)
+S3method(thin, mcmc) 
+S3method(time, mcmc)
+S3method(window, mcmc)
+S3method(head, mcmc)
+S3method(tail, mcmc)
+##RGA
+S3method(autocorr.diag, mcmc)
+S3method(rejectionRate, mcmc)
+S3method(batchSE,mcmc)
+S3method(as.data.frame,mcmc)
+##DMB
+S3method(HPDinterval, mcmc)
+
+## mcmc.list
+S3method("[", mcmc.list)
+S3method(as.matrix, mcmc.list)
+S3method(as.mcmc, mcmc.list)
+S3method(as.array, mcmc.list)
+S3method(end, mcmc.list)
+S3method(plot, mcmc.list)
+S3method(start, mcmc.list)
+S3method(summary, mcmc.list)
+S3method(thin, mcmc.list)
+S3method(time, mcmc.list)
+S3method(window, mcmc.list)
+S3method(head, mcmc.list)
+S3method(tail, mcmc.list)
+##RGA
+S3method(autocorr.diag, mcmc.list)
+S3method(rejectionRate, mcmc.list)
+S3method(batchSE,mcmc.list)
+##DMB
+S3method(HPDinterval, mcmc.list)
+
+## misc
+S3method(print, gelman.diag)
+S3method(print, geweke.diag)
+S3method(print, heidel.diag)
+S3method(print, raftery.diag)
+S3method(print, summary.mcmc)
+
+## Imports
+importFrom(grDevices, dev.cur, dev.interactive, dev.off, postscript,
+           topo.colors, nclass.Sturges)
+importFrom(graphics, abline, axis, hist, legend, lines, matplot, par,
+           plot, polygon, text, title, barplot)
+importFrom(lattice, xyplot, qqmath, densityplot, levelplot,
+           panel.abline, panel.xyplot, trellis.par.get, do.breaks,
+           panel.superpose, prepanel.qqmathline, splom)
+importFrom(stats, Gamma, IQR, acf, aggregate, ar, as.formula, as.ts,
+           cor, density, end, fft, frequency, glm, lm, lowess, predict, qf,
+           qnorm, quantile, residuals, sd, start, time, ts, var, window)
+importFrom(utils, head, menu, read.table, tail)
+
+## lattice methods
+
+S3method(xyplot, mcmc)
+S3method(qqmath, mcmc)
+S3method(densityplot, mcmc)
+S3method(acfplot, mcmc)
+S3method(levelplot, mcmc)
+
+S3method(xyplot, mcmc.list)
+S3method(qqmath, mcmc.list)
+S3method(densityplot, mcmc.list)
+S3method(acfplot, mcmc.list)
+
+
+

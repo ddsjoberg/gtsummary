@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Katharina Brunner" />
+
+<meta name="date" content="2019-10-14" />
+
+<title>Introduction to DBI</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to DBI</h1>
+<h4 class="author">Katharina Brunner</h4>
+<h4 class="date">14 October 2019</h4>
+
+
+
+<p>The {DBI} package defines a common interface between the R and database management systems (DBMS). Hence the name: DBI stands for <strong>d</strong>ata<strong>b</strong>ase <strong>i</strong>nterface.</p>
+<p>Using DBI, developers can focus on the functionalities of their code, instead of setting up the infrastructure depending on the underlying database. This DBMS-agnostic approach is possible, because DBI works best with several other packages that act as drivers to absorb the peculiarities of the specific DBMSs.</p>
+<p>These packages import {DBI} and implement its methods depending on the specific database management system.</p>
+<p>Currently, DBI works with the <a href="https://github.com/r-dbi/DBI/issues/274">many different database management systems</a>, e.g.:</p>
+<ul>
+<li>MySQL, using the R-package <a href="https://github.com/r-dbi/RMySQL">RMySQL</a></li>
+<li>MariaDB, using the R-package <a href="https://github.com/r-dbi/RMariaDB">RMariaDB</a></li>
+<li>Postgres, using and the R-package <a href="https://github.com/r-dbi/RPostgres">RPostgres</a></li>
+<li>SQLite, using and the R-package <a href="https://github.com/r-dbi/RSQLite">RSQLite</a></li>
+</ul>
+<p>DBI offers a set of classes and methods that define what operations are possible and how they are performed:</p>
+<ul>
+<li>connect/disconnect to the DBMS</li>
+<li>create and execute statements in the DBMS</li>
+<li>extract results/output from statements</li>
+<li>error/exception handling</li>
+<li>information (meta-data) from database objects</li>
+<li>transaction management (optional)</li>
+</ul>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<p>To showcase DBI capabilities, we create a in-memory RSQLite database</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(DBI)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite<span class="op">::</span><span class="kw">SQLite</span>(), <span class="dt">dbname =</span> <span class="st">&quot;:memory:&quot;</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">con</a></code></pre></div>
+<pre><code>## &lt;SQLiteConnection&gt;
+##   Path: :memory:
+##   Extensions: TRUE</code></pre>
+<p>The function <code>dbListTables()</code> displays the names tables in the remote database. Since we haven’t pushed any data to the database, there are no tables to show.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">dbListTables</span>(con)</a></code></pre></div>
+<pre><code>## character(0)</code></pre>
+<p>We can write the famous data <code>mtcars</code> dataset to the remote database by using <code>dbWriteTable()</code>. Calling <code>dbListTables()</code> displays the table name:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">dbWriteTable</span>(con, <span class="st">&quot;mtcars&quot;</span>, mtcars)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">dbListTables</span>(con)</a></code></pre></div>
+<pre><code>## [1] &quot;mtcars&quot;</code></pre>
+<p>To get all columns names of a remote table, use <code>dbListFields()</code>. It returns a character vector with all column names in the same order as in the database:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">dbListFields</span>(con, <span class="st">&quot;mtcars&quot;</span>)</a></code></pre></div>
+<pre><code>##  [1] &quot;mpg&quot;  &quot;cyl&quot;  &quot;disp&quot; &quot;hp&quot;   &quot;drat&quot; &quot;wt&quot;   &quot;qsec&quot; &quot;vs&quot;   &quot;am&quot;   &quot;gear&quot;
+## [11] &quot;carb&quot;</code></pre>
+<p>If you want to import database table from the DBMS as a data frame, <code>dbReadTable()</code> helps to do that. Basically, it is the result of the most generic SQL call <code>SELECT * FROM &lt;name&gt;</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">dbReadTable</span>(con, <span class="st">&quot;mtcars&quot;</span>)</a></code></pre></div>
+<pre><code>##     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## 2  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## 3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 4  21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## 5  18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## 6  18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## 7  14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## 8  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 9  22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 10 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## 11 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## 12 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## 13 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## 14 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## 15 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## 16 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## 17 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## 18 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## 19 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## 20 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## 21 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## 22 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## 23 15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## 24 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## 25 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## 26 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## 27 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 28 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 29 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## 30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## 31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+## 32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
+<p>Of course, you can run more specific SQL queries, too. <code>dbGetQuery()</code> is the function to send a query to a database and retrieve the result as a data frame. Especially when working with large datasets, it is important to free the resources associated with retrieving the result. <code>dbGetQuery()</code> cares about this, too.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars WHERE cyl = 4&quot;</span>)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">df</a></code></pre></div>
+<pre><code>##     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 2  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 3  22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 4  32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## 5  30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## 6  33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## 7  21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## 8  27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## 9  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 10 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 11 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
+<p>Behind the scences, <code>dbGetQuery()</code> is a combination of <code>dbSendQuery()</code>, <code>dbFetch()</code> and <code>dbClearResult()</code>. The following snippet leads to the same result as <code>dbGetQuery()</code> above:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">res &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars WHERE cyl = 4&quot;</span>)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(res)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">dbClearResult</span>(res)</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">df</a></code></pre></div>
+<pre><code>##     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## 1  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## 2  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## 3  22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## 4  32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## 5  30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## 6  33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## 7  21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## 8  27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## 9  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## 10 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## 11 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
+<p>When working with large datasets it might be smart to fetch the result step by step, not in one big chunk. This can be implemented with a <code>while</code> loop and a <code>dbFetch()</code> call that defines a maximum number of records to retrieve per fetch, here <code>n = 5</code>. There are eleven cars with four cylinders, so we expect two chunks of five rows and one chuck of one row:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">res &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;SELECT * FROM mtcars WHERE cyl = 4&quot;</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="cf">while</span>(<span class="op">!</span><span class="kw">dbHasCompleted</span>(res)){</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">  chunk &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(res, <span class="dt">n =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">  <span class="kw">print</span>(<span class="kw">nrow</span>(chunk))</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">}</a></code></pre></div>
+<pre><code>## [1] 5
+## [1] 5
+## [1] 1</code></pre>
+<p>Again, call <code>dbClearResult()</code> and disconnect from the connection with <code>dbDisconnect()</code>, when you are done:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">dbClearResult</span>(res)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">dbDisconnect</span>(con)</a></code></pre></div>
+</div>
+<div id="further-reading" class="section level2">
+<h2>Further Reading</h2>
+<ul>
+<li>An overview on <a href="https://db.rstudio.com/">working with databases in R on Rstudio.com</a></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

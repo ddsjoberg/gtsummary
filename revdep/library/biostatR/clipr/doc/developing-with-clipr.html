@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Matthew Lincoln" />
+
+<meta name="date" content="2020-10-08" />
+
+<title>Developing with clipr</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      </style>
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Developing with clipr</h1>
+<h4 class="author">Matthew Lincoln</h4>
+<h4 class="date">2020-10-08</h4>
+
+
+
+<div id="calling-clipr-safely" class="section level2">
+<h2>Calling clipr safely</h2>
+<p>To check whether the system has been properly configured to allow access to the clipboard, you may run <code>clipr_available()</code> which will either return <code>TRUE</code> or <code>FALSE</code>. This will be particularly useful for Linux-based systems, where clipr’s functionality depends on the installation of additional software. If you wish to display system requirements and configuration messages to X11 users, <code>dr_clipr()</code> will print these.</p>
+</div>
+<div id="interactive-non-interactive-use" class="section level2">
+<h2>Interactive &amp; non-interactive use</h2>
+<p>If you use clipr in your own package, <strong>you must not try to call it in non-interactive sessions</strong>, as this goes against <a href="https://cran.r-project.org/web/packages/policies.html">CRAN repository policy</a>:</p>
+<blockquote>
+<p>Packages should not write in the user’s home filespace (including clipboards), nor anywhere else on the file system apart from the R session’s temporary directory (or during installation in the location pointed to by TMPDIR: and such usage should be cleaned up). Installing into the system’s R installation (e.g., scripts to its bin directory) is not allowed.</p>
+<p>Limited exceptions may be allowed in interactive sessions if the package obtains confirmation from the user.</p>
+</blockquote>
+<p>For this reason, <code>write_clip()</code> will error by default in non-interactive use, which includes CRAN tests.</p>
+<p>If you want to use <code>write_clip()</code> non-interactively, you may either set the environment variable <code>CLIPR_ALLOW=TRUE</code> or call <code>write_clip(..., allow_non_interactive = TRUE)</code>.</p>
+</div>
+<div id="testing-on-cran-and-ci" class="section level2">
+<h2>Testing on CRAN and CI</h2>
+<p>A few best practices will also help you responsibly test your clipr-using package on headless systems like CRAN or other testing infrastructure like Travis:</p>
+<ol style="list-style-type: decimal">
+<li>Examples that will try to use <code>read_clip()</code> or <code>write_clip()</code> ought to be wrapped in <code>\dontrun{}</code></li>
+<li>Tests calling clipr should be conditionally skipped, based on the output of <code>clipr_available()</code>. This is necessary to pass CRAN checks, as otherwise <code>write_clip</code> will error out.</li>
+<li>If you are using <a href="https://travis-ci.org/">Travis.ci</a> to check your package build on Linux, consult the <a href="https://github.com/mdlincoln/clipr/blob/master/.travis.yml"><code>.travis.yml</code></a> for this package, which includes code for setting the <code>DISPLAY</code> and <code>CLIPR_ALLOW</code> environment variables, installing <code>xclip</code> and <code>xsel</code>, and running a pre-build script that will set up <code>xclip</code>/<code>xsel</code> to run headlessly.</li>
+</ol>
+</div>
+<div id="using-clipr-with-shiny" class="section level2">
+<h2>Using clipr with Shiny</h2>
+<p>clipr won’t do what you expect when you call it with Shiny.</p>
+<p>clipr talks to the clipboard of the <em>system that is running R</em>. If you create a Shiny app and tell one of its functions to either read from or write to the clipboard, it can only access the clipboard of the server it is running on. R running on the <em>remote</em> server has no way to access the <em>local</em> clipboard belonging to your end user.</p>
+<p>However, you can instruct the user’s <em>internet browser</em> to write to the user’s clipboard by using <a href="https://cran.r-project.org/package=rclipboard">rclipboard</a>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

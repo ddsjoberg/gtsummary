@@ -98,9 +98,12 @@ table_header_to_kable_calls <- function(x, ...) {
   df_col_labels <-
     dplyr::filter(table_header, .data$hide == FALSE)
 
-  kable_calls[["kable"]] <- expr(
-    knitr::kable(col.names = !!df_col_labels$label, !!!dots)
-  )
+  if (!is.null(x$list_output$caption))
+    kable_calls[["kable"]] <-
+    expr(knitr::kable(caption = !!x$list_output$caption, col.names = !!df_col_labels$label, !!!dots))
+  else
+    kable_calls[["kable"]] <-
+    expr(knitr::kable(col.names = !!df_col_labels$label, !!!dots))
 
   kable_calls
 }

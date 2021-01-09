@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Joseph Larmarange" />
+
+
+<title>Generate a data dictionnary and search for variables with look_for()</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Generate a data dictionnary and search for variables with <code>look_for()</code></h1>
+<h4 class="author">Joseph Larmarange</h4>
+
+
+
+<div id="showing-a-summary-of-a-data-frame" class="section level2">
+<h2>Showing a summary of a data frame</h2>
+<div id="default-printing-of-tibbles" class="section level3">
+<h3>Default printing of tibbles</h3>
+<p>It is a common need to easily get a description of all variables in a data frame.</p>
+<p>When a data frame is converted into a tibble (e.g. with <code>dplyr::as_tibble()</code>), it as a nice printing showing the first rows of the data frame as well as the type of column.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dplyr)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 150 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # ... with 140 more rows</code></pre>
+<p>However, when you have too many variables, all of them cannot be printed and their are just listed.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">data</span>(fertility, <span class="dt">package =</span> <span class="st">&quot;questionr&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>women</span></code></pre></div>
+<pre><code>## # A tibble: 2,000 x 17
+##    id_woman id_household weight interview_date date_of_birth   age residency
+##       &lt;dbl&gt;        &lt;dbl&gt;  &lt;dbl&gt; &lt;date&gt;         &lt;date&gt;        &lt;dbl&gt; &lt;dbl+lbl&gt;
+##  1      391          381  1.80  2012-05-05     1997-03-07       15 2 [rural]
+##  2     1643         1515  1.80  2012-01-23     1982-01-06       30 2 [rural]
+##  3       85           85  1.80  2012-01-21     1979-01-01       33 2 [rural]
+##  4      881          844  1.80  2012-01-06     1968-03-29       43 2 [rural]
+##  5     1981         1797  1.80  2012-05-11     1986-05-25       25 2 [rural]
+##  6     1072         1015  0.998 2012-02-20     1993-07-03       18 2 [rural]
+##  7     1978         1794  0.998 2012-02-23     1967-01-28       45 2 [rural]
+##  8     1607         1486  0.998 2012-02-20     1989-01-21       23 2 [rural]
+##  9      738          711  0.192 2012-03-09     1962-07-24       49 2 [rural]
+## 10     1656         1525  0.192 2012-03-15     1980-12-25       31 2 [rural]
+## # ... with 1,990 more rows, and 10 more variables: region &lt;dbl+lbl&gt;,
+## #   instruction &lt;dbl+lbl&gt;, employed &lt;dbl+lbl&gt;, matri &lt;dbl+lbl&gt;,
+## #   religion &lt;dbl+lbl&gt;, newspaper &lt;dbl+lbl&gt;, radio &lt;dbl+lbl&gt;, tv &lt;dbl+lbl&gt;,
+## #   ideal_nb_children &lt;dbl+lbl&gt;, test &lt;dbl+lbl&gt;</code></pre>
+<p>Note: in <strong>R</strong> console, value labels (if defined) are usually printed but they do not appear in a R markdown document like this vignette.</p>
+</div>
+<div id="dplyrglimpse" class="section level3">
+<h3><code>dplyr::glimpse()</code></h3>
+<p>The function <code>dplyr::glimpse()</code> allows you to have a quick look at all the variables in a data frame.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">glimpse</span>(iris)</span></code></pre></div>
+<pre><code>## Rows: 150
+## Columns: 5
+## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4,...
+## $ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7,...
+## $ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5,...
+## $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2,...
+## $ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, setosa...</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">glimpse</span>(women)</span></code></pre></div>
+<pre><code>## Rows: 2,000
+## Columns: 17
+## $ id_woman          &lt;dbl&gt; 391, 1643, 85, 881, 1981, 1072, 1978, 1607, 738, ...
+## $ id_household      &lt;dbl&gt; 381, 1515, 85, 844, 1797, 1015, 1794, 1486, 711, ...
+## $ weight            &lt;dbl&gt; 1.803150, 1.803150, 1.803150, 1.803150, 1.803150,...
+## $ interview_date    &lt;date&gt; 2012-05-05, 2012-01-23, 2012-01-21, 2012-01-06, ...
+## $ date_of_birth     &lt;date&gt; 1997-03-07, 1982-01-06, 1979-01-01, 1968-03-29, ...
+## $ age               &lt;dbl&gt; 15, 30, 33, 43, 25, 18, 45, 23, 49, 31, 26, 45, 2...
+## $ residency         &lt;dbl+lbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, ...
+## $ region            &lt;dbl+lbl&gt; 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, ...
+## $ instruction       &lt;dbl+lbl&gt; 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, ...
+## $ employed          &lt;dbl+lbl&gt; 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, ...
+## $ matri             &lt;dbl+lbl&gt; 0, 2, 2, 2, 1, 0, 1, 1, 2, 5, 2, 3, 0, 2, 1, ...
+## $ religion          &lt;dbl+lbl&gt; 1, 3, 2, 3, 2, 2, 3, 1, 3, 3, 2, 3, 2, 2, 2, ...
+## $ newspaper         &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, ...
+## $ radio             &lt;dbl+lbl&gt; 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, ...
+## $ tv                &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, ...
+## $ ideal_nb_children &lt;dbl+lbl&gt;  4,  4,  4,  4,  4,  5, 10,  5,  4,  5,  6, 1...
+## $ test              &lt;dbl+lbl&gt; 0, 9, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, ...</code></pre>
+<p>It will show you the first values of each variable as well as the type of each variable. However, some important informations are not displayed:</p>
+<ul>
+<li>variable labels, when defined;</li>
+<li>value labels for labelled vectors;</li>
+<li>the list of levels for factors;</li>
+<li>the range of values for numerical variables.</li>
+</ul>
+</div>
+<div id="labelledlook_for" class="section level3">
+<h3><code>labelled::look_for()</code></h3>
+<p><code>look_for()</code> provided by the <code>labelled</code> package will print in the console a data dictionnary of all variables, showing variable labels when available, the type of variable and a list of values corresponding to:</p>
+<ul>
+<li>levels for factors;</li>
+<li>value labels for labelled vectors;</li>
+<li>the range of observed values in the vector otherwise.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">library</span>(labelled)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">look_for</span>(iris)</span></code></pre></div>
+<pre><code>## pos   variable     label           col_type values          
+## &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt;           
+## 1     Sepal.Length —               dbl      range: 4.3 - 7.9
+## 2     Sepal.Width  —               dbl      range: 2 - 4.4  
+## 3     Petal.Length Length of petal dbl      range: 1 - 6.9  
+## 4     Petal.Width  Width of Petal  dbl      range: 0.1 - 2.5
+## 5     Species      —               fct      setosa          
+## &lt;U+200B&gt;      &lt;U+200B&gt;             &lt;U+200B&gt;                &lt;U+200B&gt;         versicolor      
+## &lt;U+200B&gt;      &lt;U+200B&gt;             &lt;U+200B&gt;                &lt;U+200B&gt;         virginica</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">look_for</span>(women)</span></code></pre></div>
+<pre><code>## pos   variable        label                     col_type values                 
+## &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;                     &lt;chr&gt;    &lt;chr&gt;                  
+## 1     id_woman        Woman Id                  dbl      range: 1 - 2000        
+## 2     id_household    Household Id              dbl      range: 1 - 1814        
+## 3     weight          Sample weight             dbl      range: 0.044629 - 4.39~
+## 4     interview_date  Interview date            date     range: 2011-12-01 - 20~
+## 5     date_of_birth   Date of birth             date     range: 1962-02-07 - 19~
+## 6     age             Age at last anniversary ~ dbl      range: 14 - 49         
+## 7     residency       Urban / rural residency   dbl+lbl  [1] urban              
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [2] rural              
+## 8     region          Region                    dbl+lbl  [1] North              
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [2] East               
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [3] South              
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [4] West               
+## 9     instruction     Level of instruction      dbl+lbl  [0] none               
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [1] primary            
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [2] secondary          
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [3] higher             
+## 10    employed        Employed?                 dbl+lbl  [0] no                 
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [1] yes                
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [9] missing            
+## 11    matri           Matrimonial status        dbl+lbl  [0] single             
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [1] married            
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [2] living together    
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [3] windowed           
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [4] divorced           
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [5] separated          
+## 12    religion        Religion                  dbl+lbl  [1] Muslim             
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [2] Christian          
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [3] Protestant         
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [4] no religion        
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [5] other              
+## 13    newspaper       Read newspaper?           dbl+lbl  [0] no                 
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [1] yes                
+## 14    radio           Listen to radio?          dbl+lbl  [0] no                 
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [1] yes                
+## 15    tv              Watch TV?                 dbl+lbl  [0] no                 
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [1] yes                
+## 16    ideal_nb_child~ Ideal number of children  dbl+lbl  [96] don&#39;t know        
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [99] missing           
+## 17    test            Ever tested for HIV?      dbl+lbl  [0] no                 
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [1] yes                
+## &lt;U+200B&gt;      &lt;U+200B&gt;                &lt;U+200B&gt;                          &lt;U+200B&gt;         [9] missing</code></pre>
+<p>Note that <code>lookfor()</code> and <code>generate_dictionary()</code> are synonyms of <code>look_for()</code> and works exactly in the same way.</p>
+</div>
+</div>
+<div id="searching-variables-by-key" class="section level2">
+<h2>Searching variables by key</h2>
+<p>When a data frame has dozens or even hundreds of variables, it could become difficult to find a specific variable. In such case, you can provide an optional list of keywords, which can be simple character strings or regular expression, to search for specific variables.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Look for a single keyword.</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="kw">look_for</span>(iris, <span class="st">&quot;petal&quot;</span>)</span></code></pre></div>
+<pre><code>## pos   variable     label           col_type values          
+## &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt;           
+## 3     Petal.Length Length of petal dbl      range: 1 - 6.9  
+## 4     Petal.Width  Width of Petal  dbl      range: 0.1 - 2.5</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">look_for</span>(iris, <span class="st">&quot;s&quot;</span>)</span></code></pre></div>
+<pre><code>## pos   variable     label col_type values          
+## &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;           
+## 1     Sepal.Length —     dbl      range: 4.3 - 7.9
+## 2     Sepal.Width  —     dbl      range: 2 - 4.4  
+## 5     Species      —     fct      setosa          
+## &lt;U+200B&gt;      &lt;U+200B&gt;             &lt;U+200B&gt;      &lt;U+200B&gt;         versicolor      
+## &lt;U+200B&gt;      &lt;U+200B&gt;             &lt;U+200B&gt;      &lt;U+200B&gt;         virginica</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Look for with a regular expression</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">look_for</span>(iris, <span class="st">&quot;petal|species&quot;</span>)</span></code></pre></div>
+<pre><code>## pos   variable     label           col_type values          
+## &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt;           
+## 3     Petal.Length Length of petal dbl      range: 1 - 6.9  
+## 4     Petal.Width  Width of Petal  dbl      range: 0.1 - 2.5
+## 5     Species      —               fct      setosa          
+## &lt;U+200B&gt;      &lt;U+200B&gt;             &lt;U+200B&gt;                &lt;U+200B&gt;         versicolor      
+## &lt;U+200B&gt;      &lt;U+200B&gt;             &lt;U+200B&gt;                &lt;U+200B&gt;         virginica</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">look_for</span>(iris, <span class="st">&quot;s$&quot;</span>)</span></code></pre></div>
+<pre><code>## pos   variable label col_type values    
+## &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;     
+## 5     Species  —     fct      setosa    
+## &lt;U+200B&gt;      &lt;U+200B&gt;         &lt;U+200B&gt;      &lt;U+200B&gt;         versicolor
+## &lt;U+200B&gt;      &lt;U+200B&gt;         &lt;U+200B&gt;      &lt;U+200B&gt;         virginica</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Look for with several keywords</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="kw">look_for</span>(iris, <span class="st">&quot;pet&quot;</span>, <span class="st">&quot;sp&quot;</span>)</span></code></pre></div>
+<pre><code>## pos   variable     label           col_type values          
+## &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt;           
+## 3     Petal.Length Length of petal dbl      range: 1 - 6.9  
+## 4     Petal.Width  Width of Petal  dbl      range: 0.1 - 2.5
+## 5     Species      —               fct      setosa          
+## &lt;U+200B&gt;      &lt;U+200B&gt;             &lt;U+200B&gt;                &lt;U+200B&gt;         versicolor      
+## &lt;U+200B&gt;      &lt;U+200B&gt;             &lt;U+200B&gt;                &lt;U+200B&gt;         virginica</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Look_for will take variable labels into account</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="kw">look_for</span>(women, <span class="st">&quot;read&quot;</span>, <span class="st">&quot;level&quot;</span>)</span></code></pre></div>
+<pre><code>## pos   variable    label                col_type values       
+## &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;                &lt;chr&gt;    &lt;chr&gt;        
+## 9     instruction Level of instruction dbl+lbl  [0] none     
+## &lt;U+200B&gt;      &lt;U+200B&gt;            &lt;U+200B&gt;                     &lt;U+200B&gt;         [1] primary  
+## &lt;U+200B&gt;      &lt;U+200B&gt;            &lt;U+200B&gt;                     &lt;U+200B&gt;         [2] secondary
+## &lt;U+200B&gt;      &lt;U+200B&gt;            &lt;U+200B&gt;                     &lt;U+200B&gt;         [3] higher   
+## 13    newspaper   Read newspaper?      dbl+lbl  [0] no       
+## &lt;U+200B&gt;      &lt;U+200B&gt;            &lt;U+200B&gt;                     &lt;U+200B&gt;         [1] yes</code></pre>
+<p>By default, <code>look_for()</code> will look through both variable names and variables labels. Use <code>labels = FALSE</code> to look only through variable names.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">look_for</span>(women, <span class="st">&quot;read&quot;</span>)</span></code></pre></div>
+<pre><code>## pos   variable  label           col_type values 
+## &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt;  
+## 13    newspaper Read newspaper? dbl+lbl  [0] no 
+## &lt;U+200B&gt;      &lt;U+200B&gt;          &lt;U+200B&gt;                &lt;U+200B&gt;         [1] yes</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">look_for</span>(women, <span class="st">&quot;read&quot;</span>, <span class="dt">labels =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## Nothing found. Sorry.</code></pre>
+<p>Similarly, the search is by default case insensitive. To make the search case sensitive, use <code>ignore.case = FALSE</code>.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="kw">look_for</span>(iris, <span class="st">&quot;sepal&quot;</span>)</span></code></pre></div>
+<pre><code>## pos   variable     label col_type values          
+## &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;           
+## 1     Sepal.Length —     dbl      range: 4.3 - 7.9
+## 2     Sepal.Width  —     dbl      range: 2 - 4.4</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw">look_for</span>(iris, <span class="st">&quot;sepal&quot;</span>, <span class="dt">ignore.case =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## Nothing found. Sorry.</code></pre>
+</div>
+<div id="advanced-usages-of-look_for" class="section level2">
+<h2>Advanced usages of <code>look_for()</code></h2>
+<p><code>look_for()</code> returns a detailed tibble which is summarized before printing. To deactivate default printing and see full results, simply use <code>dplyr::as_tibble()</code>, <code>dplyr::glimpse()</code> or even <code>utils::View()</code>.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">look_for</span>(iris) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 13
+##     pos variable label col_type class type  levels value_labels na_values
+##   &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;nam&gt; &lt;chr&gt; &lt;name&gt; &lt;named list&gt; &lt;named l&gt;
+## 1     1 Sepal.L~ &lt;NA&gt;  dbl      &lt;chr~ doub~ &lt;NULL&gt; &lt;NULL&gt;       &lt;NULL&gt;   
+## 2     2 Sepal.W~ &lt;NA&gt;  dbl      &lt;chr~ doub~ &lt;NULL&gt; &lt;NULL&gt;       &lt;NULL&gt;   
+## 3     3 Petal.L~ Leng~ dbl      &lt;chr~ doub~ &lt;NULL&gt; &lt;NULL&gt;       &lt;NULL&gt;   
+## 4     4 Petal.W~ Widt~ dbl      &lt;chr~ doub~ &lt;NULL&gt; &lt;NULL&gt;       &lt;NULL&gt;   
+## 5     5 Species  &lt;NA&gt;  fct      &lt;chr~ inte~ &lt;chr ~ &lt;NULL&gt;       &lt;NULL&gt;   
+## # ... with 4 more variables: na_range &lt;named list&gt;, unique_values &lt;int&gt;,
+## #   n_na &lt;int&gt;, range &lt;named list&gt;</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">glimpse</span>(<span class="kw">look_for</span>(iris))</span></code></pre></div>
+<pre><code>## Rows: 5
+## Columns: 13
+## $ pos           &lt;int&gt; 1, 2, 3, 4, 5
+## $ variable      &lt;chr&gt; &quot;Sepal.Length&quot;, &quot;Sepal.Width&quot;, &quot;Petal.Length&quot;, &quot;Petal...
+## $ label         &lt;chr&gt; NA, NA, &quot;Length of petal&quot;, &quot;Width of Petal&quot;, NA
+## $ col_type      &lt;chr&gt; &quot;dbl&quot;, &quot;dbl&quot;, &quot;dbl&quot;, &quot;dbl&quot;, &quot;fct&quot;
+## $ class         &lt;named list&gt; [&quot;numeric&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;...
+## $ type          &lt;chr&gt; &quot;double&quot;, &quot;double&quot;, &quot;double&quot;, &quot;double&quot;, &quot;integer&quot;
+## $ levels        &lt;named list&gt; [NULL, NULL, NULL, NULL, &lt;&quot;setosa&quot;, &quot;versicolo...
+## $ value_labels  &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL]
+## $ na_values     &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL]
+## $ na_range      &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL]
+## $ unique_values &lt;int&gt; 35, 23, 43, 22, 3
+## $ n_na          &lt;int&gt; 0, 0, 0, 0, 0
+## $ range         &lt;named list&gt; [&lt;4.3, 7.9&gt;, &lt;2.0, 4.4&gt;, &lt;1.0, 6.9&gt;, &lt;0.1, 2.5...</code></pre>
+<p>The tibble returned by <code>look_for()</code> could be easily manipulated for advanced programming.</p>
+<p>When a column has several values for one variable (e.g. <code>levels</code> or <code>value_labels</code>), results as stored with nested named list. You can convert named lists into simpler character vectors, you can use <code>convert_list_columns_to_character()</code>.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">look_for</span>(iris) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">convert_list_columns_to_character</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 13
+##     pos variable label col_type class type  levels value_labels na_values
+##   &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;    
+## 1     1 Sepal.L~ &lt;NA&gt;  dbl      nume~ doub~ &quot;&quot;     &quot;&quot;           &quot;&quot;       
+## 2     2 Sepal.W~ &lt;NA&gt;  dbl      nume~ doub~ &quot;&quot;     &quot;&quot;           &quot;&quot;       
+## 3     3 Petal.L~ Leng~ dbl      nume~ doub~ &quot;&quot;     &quot;&quot;           &quot;&quot;       
+## 4     4 Petal.W~ Widt~ dbl      nume~ doub~ &quot;&quot;     &quot;&quot;           &quot;&quot;       
+## 5     5 Species  &lt;NA&gt;  fct      fact~ inte~ &quot;seto~ &quot;&quot;           &quot;&quot;       
+## # ... with 4 more variables: na_range &lt;chr&gt;, unique_values &lt;int&gt;, n_na &lt;int&gt;,
+## #   range &lt;chr&gt;</code></pre>
+<p>Alternatively, you can use <code>lookfor_to_long_format()</code> to transform results into a long format with one row per factor level and per value label.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="kw">look_for</span>(iris) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">lookfor_to_long_format</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 7 x 13
+##     pos variable label col_type class type  levels value_labels na_values
+##   &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;nam&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;named l&gt;
+## 1     1 Sepal.L~ &lt;NA&gt;  dbl      &lt;chr~ doub~ &lt;NA&gt;   &lt;NA&gt;         &lt;NULL&gt;   
+## 2     2 Sepal.W~ &lt;NA&gt;  dbl      &lt;chr~ doub~ &lt;NA&gt;   &lt;NA&gt;         &lt;NULL&gt;   
+## 3     3 Petal.L~ Leng~ dbl      &lt;chr~ doub~ &lt;NA&gt;   &lt;NA&gt;         &lt;NULL&gt;   
+## 4     4 Petal.W~ Widt~ dbl      &lt;chr~ doub~ &lt;NA&gt;   &lt;NA&gt;         &lt;NULL&gt;   
+## 5     5 Species  &lt;NA&gt;  fct      &lt;chr~ inte~ setosa &lt;NA&gt;         &lt;NULL&gt;   
+## 6     5 Species  &lt;NA&gt;  fct      &lt;chr~ inte~ versi~ &lt;NA&gt;         &lt;NULL&gt;   
+## 7     5 Species  &lt;NA&gt;  fct      &lt;chr~ inte~ virgi~ &lt;NA&gt;         &lt;NULL&gt;   
+## # ... with 4 more variables: na_range &lt;named list&gt;, unique_values &lt;int&gt;,
+## #   n_na &lt;int&gt;, range &lt;named list&gt;</code></pre>
+<p>Both can be combined:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">look_for</span>(women) <span class="op">%&gt;%</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="st">  </span><span class="kw">lookfor_to_long_format</span>() <span class="op">%&gt;%</span></span>
+<span id="cb42-3"><a href="#cb42-3"></a><span class="st">  </span><span class="kw">convert_list_columns_to_character</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 41 x 13
+##      pos variable label col_type class type  levels value_labels na_values
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;    
+##  1     1 id_woman Woma~ dbl      nume~ doub~ &lt;NA&gt;   &lt;NA&gt;         &quot;&quot;       
+##  2     2 id_hous~ Hous~ dbl      nume~ doub~ &lt;NA&gt;   &lt;NA&gt;         &quot;&quot;       
+##  3     3 weight   Samp~ dbl      nume~ doub~ &lt;NA&gt;   &lt;NA&gt;         &quot;&quot;       
+##  4     4 intervi~ Inte~ date     Date  doub~ &lt;NA&gt;   &lt;NA&gt;         &quot;&quot;       
+##  5     5 date_of~ Date~ date     Date  doub~ &lt;NA&gt;   &lt;NA&gt;         &quot;&quot;       
+##  6     6 age      Age ~ dbl      nume~ doub~ &lt;NA&gt;   &lt;NA&gt;         &quot;&quot;       
+##  7     7 residen~ Urba~ dbl+lbl  have~ doub~ &lt;NA&gt;   [1] urban    &quot;&quot;       
+##  8     7 residen~ Urba~ dbl+lbl  have~ doub~ &lt;NA&gt;   [2] rural    &quot;&quot;       
+##  9     8 region   Regi~ dbl+lbl  have~ doub~ &lt;NA&gt;   [1] North    &quot;&quot;       
+## 10     8 region   Regi~ dbl+lbl  have~ doub~ &lt;NA&gt;   [2] East     &quot;&quot;       
+## # ... with 31 more rows, and 4 more variables: na_range &lt;chr&gt;,
+## #   unique_values &lt;int&gt;, n_na &lt;int&gt;, range &lt;chr&gt;</code></pre>
+<p>If you just want to use the search feature of <code>look_for()</code> without computing the details of each variable, simply indicate <code>details = FALSE</code>.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="kw">look_for</span>(women, <span class="st">&quot;id&quot;</span>, <span class="dt">details =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>##   pos variable          label                   
+## &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;                   
+##     1 id_woman          Woman Id                
+##     2 id_household      Household Id            
+##     7 residency         Urban / rural residency 
+##    16 ideal_nb_children Ideal number of children</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

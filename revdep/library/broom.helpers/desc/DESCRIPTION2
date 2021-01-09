@@ -1,0 +1,62 @@
+Package: roxygen2
+Title: In-Source Documentation for R
+Description: A 'Doxygen'-like in-source documentation system
+    for Rd, collation, and 'NAMESPACE' files.
+URL: https://github.com/klutometis/roxygen
+Version: 4.1.1.9000
+License: GPL (>= 2)
+Authors@R: c(
+    person("Hadley", "Wickham",, "h.wickham@gmail.com", c("aut", "cre", "cph")),
+    person("Peter", "Danenberg",, "pcd@roxygen.org", c("aut", "cph")),
+    person("Manuel", "Eugster", role = c("aut", "cph")),
+    person("RStudio", role = "cph")
+    )
+Depends:
+    R (>= 3.0.2)
+Imports:
+    stringr (>= 0.5),
+    brew,
+    digest,
+    methods,
+    Rcpp (>= 0.11.0)
+Suggests:
+    testthat (>= 0.8.0),
+    knitr
+VignetteBuilder: knitr
+LinkingTo: Rcpp
+Collate:
+    'RcppExports.R'
+    'alias.R'
+    'description.R'
+    'family.R'
+    'inherit-params.R'
+    'minidesc.R'
+    'object-defaults.R'
+    'object-from-call.R'
+    'object.R'
+    'order-params.R'
+    'parse-preref.R'
+    'parse-registry.R'
+    'parse.R'
+    'rc.R'
+    'rd-escape.R'
+    'rd-file-api.R'
+    'rd-parse.R'
+    'rd-tag-api.R'
+    'roclet-collate.R'
+    'roclet-namespace.R'
+    'roclet-rd.R'
+    'roclet-vignette.R'
+    'roclet.R'
+    'roxygen.R'
+    'roxygenize.R'
+    's3.R'
+    'safety.R'
+    'source.R'
+    'template.R'
+    'topic-name.R'
+    'topo-sort.R'
+    'usage.R'
+    'util-locale.R'
+    'utils.R'
+RoxygenNote: 4.1.1.9000

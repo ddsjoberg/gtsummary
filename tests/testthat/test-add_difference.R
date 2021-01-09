@@ -19,6 +19,12 @@ test_that("add_difference-basic use", {
     t.test(marker ~ trt, trial, var.equal = TRUE) %>% broom::tidy() %>% select(estimate, conf.low, conf.high, p.value)
   )
 
+  expect_message(
+    trial %>%
+      select(trt, response, grade) %>%
+      tbl_summary(by = trt, percent = "row") %>%
+      add_difference()
+  )
 })
 
 test_that("p-values are replicated within tbl_summary()", {

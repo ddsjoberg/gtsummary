@@ -5,8 +5,9 @@
 \alias{modify_header}
 \alias{modify_footnote}
 \alias{modify_spanning_header}
+\alias{modify_caption}
 \alias{show_header_names}
-\title{Modify column headers, footnotes, and spanning headers}
+\title{Modify column headers, footnotes, spanning headers, and table captions}
 \usage{
 modify_header(
   x,
@@ -20,6 +21,8 @@ modify_header(
 modify_footnote(x, update = NULL, abbreviation = FALSE, quiet = NULL)
 
 modify_spanning_header(x, update = NULL, quiet = NULL)
+
+modify_caption(x, caption, text_interpret = c("md", "html"))
 
 show_header_names(x = NULL, quiet = NULL)
 }
@@ -44,19 +47,23 @@ e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an al
 \item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
+
+\item{caption}{a string of the table caption/title}
 }
 \value{
 Updated gtsummary object
 }
 \description{
 These functions assist with updating or adding column headers
-(\code{modify_header()}), footnotes (\code{modify_footnote()}), and spanning
-headers (\code{modify_spanning_header()}). Use \code{show_header_names()} to learn
+(\code{modify_header()}), footnotes (\code{modify_footnote()}), spanning
+headers (\code{modify_spanning_header()}), and table captions
+(\code{modify_caption()}). Use \code{show_header_names()} to learn
 the column names.
 }
 \section{tbl_summary(), tbl_svysummary(), and tbl_cross()}{
 
-When assigning column headers for these gtsummary tables,
+When assigning column headers, footnotes, spanning headers, and captions
+for these gtsummary tables,
 you may use \code{{N}} to insert the number of observations.
 \code{tbl_svysummary} objects additionally have \code{{N_unweighted}} available.
 
@@ -71,6 +78,17 @@ Syntax follows \code{\link[glue:glue]{glue::glue()}}, e.g. \code{all_stat_cols()
 
 When assigning column headers for \code{tbl_regression} tables,
 you may use \code{{N}} to insert the number of observations.
+}
+
+\section{captions}{
+
+Captions are assigned based on output type.
+\itemize{
+\item \code{gt::gt(caption=)}, available in gt version >0.2.2
+\item \code{flextable::set_caption(caption=)}
+\item \code{huxtable::set_caption(value=)}
+\item \code{knitr::kable(caption=)}
+}
 }
 
 \section{Example Output}{
@@ -98,7 +116,7 @@ tbl <- trial[c("age", "grade", "trt")] \%>\%
 show_header_names(tbl)
 
 # Example 1 ----------------------------------
-# updating column headers and footnote
+# updating column headers, footnote, and table caption
 modify_ex1 <- tbl \%>\%
   modify_header(
     update = list(label ~ "**Variable**",
@@ -106,7 +124,8 @@ modify_ex1 <- tbl \%>\%
   ) \%>\%
   modify_footnote(
     update = all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade"
-  )
+  ) \%>\%
+  modify_caption("**Patient Characteristics** (N = {N})")
 
 # Example 2 ----------------------------------
 # updating headers, remove all footnotes, add spanning header

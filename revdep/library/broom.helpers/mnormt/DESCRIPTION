@@ -1,0 +1,31 @@
+Package: mnormt
+Version: 2.0.2
+Date: 2020-08-31
+Title: The Multivariate Normal and t Distributions, and Their Truncated
+        Versions
+Author: Adelchi Azzalini [aut, cre],
+   Alan Genz [aut] (most Fortran code),
+   Alan Miller [ctb] (Fortran routine PHI),
+   Michael J. Wichura  [ctb] (Fortran routine PHINV),
+   G. W. Hill [ctb] (Fortran routine STDINV),
+   Yihong Ge [ctb] (Fortran routines BNVU and MVBVU).
+Maintainer: Adelchi Azzalini <adelchi.azzalini@unipd.it>
+Depends: R (>= 2.2.0)
+Imports: tmvnsim (>= 1.0-2)
+Description: Functions are provided for computing the density and the
+  distribution function of d-dimensional normal and "t" random variables,
+  possibly truncated (on one side or two sides),  and for generating random 
+  vectors sampled from these distributions, except sampling from the truncated
+  "t". Moments of arbitrary order of a multivariate truncated normal are
+  computed, and converted to cumulants up to order 4. 
+  Probabilities are computed via non-Monte Carlo methods; different routines 
+  are used in the case d=1, d=2, d=3, d>3, if d denotes the dimensionality.
+License: GPL-2 | GPL-3
+URL: http://azzalini.stat.unipd.it/SW/Pkg-mnormt/
+NeedsCompilation: yes
+Encoding: UTF-8
+Packaged: 2020-09-01 10:22:47 UTC; aa
+Repository: CRAN
+Date/Publication: 2020-09-01 12:50:07 UTC
+Built: R 4.0.3; x86_64-w64-mingw32; 2020-10-15 20:07:34 UTC; windows
+Archs: i386, x64
