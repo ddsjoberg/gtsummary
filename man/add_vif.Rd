@@ -9,7 +9,7 @@ add_vif(x, statistic = NULL, estimate_fun = NULL)
 \arguments{
 \item{x}{\code{'tbl_regression'} object}
 
-\item{statistic}{One of \code{c("VIF", "GVIF", "aGVIF")}.
+\item{statistic}{\code{"VIF"} (variance inflation factors, for models with no categorical terms) or one of/combination of \code{"GVIF"} (generalized variance inflation factors), \code{"aGVIF"} 'adjusted GVIF, i.e. \verb{GVIF^[1/(2*df)]} and/or \code{"df"} (degrees of freedom).
 See \code{\link[car:vif]{car::vif()}} for details.}
 
 \item{estimate_fun}{Default is \code{\link[=style_sigfig]{style_sigfig()}}.}
@@ -25,6 +25,9 @@ Function uses \code{car::vif()} to calculate the VIF.
 \if{html}{Example 1}
 
 \if{html}{\figure{add_vif_ex1.png}{options: width=45\%}}
+\if{html}{Example 2}
+
+\if{html}{\figure{add_vif_ex2.png}{options: width=45\%}}
 }
 
 \examples{
@@ -33,4 +36,10 @@ add_vif_ex1 <-
   lm(age ~ grade + marker, trial) \%>\%
   tbl_regression() \%>\%
   add_vif()
+
+# Example 2 ----------------------------------
+add_vif_ex2 <-
+  lm(age ~ grade + marker, trial) \%>\%
+  tbl_regression() \%>\%
+  add_vif(c("aGVIF", "df"))
 }

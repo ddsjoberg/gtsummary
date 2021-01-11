@@ -6,7 +6,7 @@
 #' Function uses `car::vif()` to calculate the VIF.
 #'
 #' @param x `'tbl_regression'` object
-#' @param statistic One of `c("VIF", "GVIF", "aGVIF")`.
+#' @param statistic `"VIF"` (variance inflation factors, for models with no categorical terms) or one of/combination of `"GVIF"` (generalized variance inflation factors), `"aGVIF"` 'adjusted GVIF, i.e. `GVIF^[1/(2*df)]` and/or `"df"` (degrees of freedom).
 #' See [`car::vif()`] for details.
 #' @param estimate_fun Default is [`style_sigfig()`].
 #' @export
@@ -17,11 +17,20 @@
 #'   lm(age ~ grade + marker, trial) %>%
 #'   tbl_regression() %>%
 #'   add_vif()
+#'
+#' # Example 2 ----------------------------------
+#' add_vif_ex2 <-
+#'   lm(age ~ grade + marker, trial) %>%
+#'   tbl_regression() %>%
+#'   add_vif(c("aGVIF", "df"))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
 #' \if{html}{\figure{add_vif_ex1.png}{options: width=45\%}}
-
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{add_vif_ex2.png}{options: width=45\%}}
+#'
 add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_regression"))
@@ -36,33 +45,43 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   statistic <-
     statistic %||%
     switch("VIF" %in% names(df_vif), "VIF") %||%
-    switch("GVIF" %in% names(df_vif), "GVIF") %>%
-    match.arg(choices = c("VIF", "GVIF", "aGVIF"))
-  if (!statistic %in% names(df_vif))
+    switch("GVIF" %in% names(df_vif), c("GVIF", "aGVIF")) %>%
+    match.arg(choices = c("VIF", "GVIF", "aGVIF", "df"), several.ok = TRUE)
+  if (any(!statistic %in% names(df_vif)))
     glue("Statistic '{statistic}' not available for this model. ",
-         "Select from {quoted_list(names(df_vif) %>% intersect(c('VIF', 'GVIF', 'aGVIF')))}.") %>%
+         "Select from {quoted_list(names(df_vif) %>% intersect(c('VIF', 'GVIF', 'aGVIF', 'df')))}.") %>%
     stop(call. = FALSE)
 
   # merging VIF with gtsummary table -------------------------------------------
   # merge in VIF stats
-  x %>%
+  x <- x %>%
     modify_table_body(
       dplyr::left_join,
       df_vif %>%
-        select(any_of(c("variable", "row_type", statistic))) %>%
-        dplyr::rename(vif = all_of(statistic)),
+        select(any_of(c("variable", "row_type", statistic))),
       by = c("variable", "row_type")
-    ) %>%
-    # add column header
-    modify_table_header(
-      "vif",
-      label = switch(statistic,
-                     "VIF" = "**VIF**",
-                     "GVIF" = "**GVIF**",
-                     "aGVIF" = "**Adjusted GVIF**"),
-      fmt_fun = estimate_fun,
-      hide = FALSE
     )
+
+    # add column header
+    for (s in statistic) {
+      x <- x %>%
+        modify_table_header(
+          s,
+          label = switch(s,
+                         "VIF" = "**VIF**",
+                         "GVIF" = "**GVIF**",
+                         "aGVIF" = "**Adjusted GVIF**",
+                         "df" = "**df**"),
+          footnote = switch(s,
+                         "VIF" = "Variance Inflation Factors",
+                         "GVIF" = "Generalized Variance Inflation Factors",
+                         "aGVIF" = "GVIF^[1/(2*df)]",
+                         "df" = "degrees of freedom"),
+          fmt_fun = estimate_fun,
+          hide = FALSE
+        )
+    }
+  x
 }
 
 # put VIF results in data frame
@@ -89,7 +108,10 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
       as.data.frame() %>%
       tibble::rownames_to_column(var = "variable") %>%
       tibble::as_tibble() %>%
-      dplyr::rename(aGVIF = .data$`GVIF^(1/(2*Df))`)
+      dplyr::rename(
+        aGVIF = .data$`GVIF^(1/(2*Df))`,
+        df = .data$Df
+      )
 
   result <-
     result %>%
