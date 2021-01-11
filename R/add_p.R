@@ -529,6 +529,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 
 #' Adds p-values to svysummary tables
 #'
+#' \lifecycle{experimental}
 #' Adds p-values to tables created by `tbl_svysummary` by comparing values across groups.
 #'
 #' @param x Object with class `tbl_svysummary` from the [tbl_svysummary] function
