@@ -170,7 +170,7 @@ print_stack_differences <- function(tbls) {
 
   if (nrow(tbl_differences) > 0) {
     paste("When tables are stacked,",
-          "attributes from the first table are used.",
+          "attributes (e.g. header, footnotes, etc.) from the first table are used.",
           "Use {ui_code('quiet = TRUE')} to supress this message.") %>%
       stringr::str_wrap() %>%
       usethis::ui_info()
