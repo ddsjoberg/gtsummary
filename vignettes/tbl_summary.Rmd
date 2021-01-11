@@ -121,14 +121,15 @@ The `tbl_summary()` function includes many input options for modifying the appea
 ```{r echo=FALSE}
 tibble::tribble(
   ~Argument,       ~Description,
-  "`label`",       "specify the variable labels printed in table",
-  "`type`",        "specify the variable type (e.g. continuous, categorical, etc.)",
-  "`statistic`",   "change the summary statistics presented",
-  "`digits`",      "number of digits the summary statistics will be rounded to",
-  "`missing`",     "whether to display a row with the number of missing observations",
-  "`missing_text`","text label for the missing number row",
-  "`sort`",        "change the sorting of categorical levels by frequency",
-  "`percent`",     "print column, row, or cell percentages"
+  "`label=`",       "specify the variable labels printed in table",
+  "`type=`",        "specify the variable type (e.g. continuous, categorical, etc.)",
+  "`statistic=`",   "change the summary statistics presented",
+  "`digits=`",      "number of digits the summary statistics will be rounded to",
+  "`missing=`",     "whether to display a row with the number of missing observations",
+  "`missing_text=`","text label for the missing number row",
+  "`sort=`",        "change the sorting of categorical levels by frequency",
+  "`percent=`",     "print column, row, or cell percentages",
+  "`include=`",     "list of variables to include in summary table"
 ) %>%
   gt::gt() %>%
   gt::fmt_markdown(columns = vars(Argument)) %>%
@@ -184,11 +185,13 @@ The {gtsummary} package has functions to adding information or statistics to `tb
 ```{r echo = FALSE}
 tibble::tribble(
   ~Function,             ~Description,
-  "`add_p()`",           "add p-values to the output comparing values across groups",   
-  "`add_overall()`",     "add a column with overall summary statistics",   
-  "`add_n()`",           "add a column with N (or N missing) for each variable",   
-  "`add_stat_label()`",  "add label for the summary statistics shown in each row",   
-  "`add_q()`",           "add a column of q values to control for multiple comparisons"   
+  "`add_p()`",           "add p-values to the output comparing values across groups",
+  "`add_overall()`",     "add a column with overall summary statistics",
+  "`add_n()`",           "add a column with N (or N missing) for each variable",
+  "`add_difference()`",  "add column for difference between two group, confidence interval, and p-value",
+  "`add_stat_label()`",  "add label for the summary statistics shown in each row",
+  "`add_stat()`",        "generic function to add a column with user-defined values",
+  "`add_q()`",           "add a column of q values to control for multiple comparisons"
 ) %>%
   gt::gt() %>%
   gt::fmt_markdown(columns = vars(Function)) %>%

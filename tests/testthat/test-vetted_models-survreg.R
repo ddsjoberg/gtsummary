@@ -31,6 +31,8 @@
 
 context("test-vetted_models-survreg")
 testthat::skip_on_cran()
+# vetted models checks take a long time--only perform on CI checks
+testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 library(dplyr)
 library(survival)
 

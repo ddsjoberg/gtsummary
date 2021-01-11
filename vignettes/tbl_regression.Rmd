@@ -121,15 +121,15 @@ The `tbl_regression()` function includes many arguments for modifying the appear
 ```{r, echo = FALSE}
 tibble::tribble(
   ~Argument,          ~Description,
-  "`label`",            "modify variable labels in table", 
-  "`exponentiate`",     "exponentiate model coefficients",
-  "`include`",          "names of variables to include in output. Default is all variables",
-  "`show_single_row`",  "By default, categorical variables are printed on multiple rows. If a variable is dichotomous and you wish to print the regression coefficient on a single row, include the variable name(s) here.", 
-  "`conf.level`",       "confidence level of confidence interval",  
-  "`intercept`",        "indicates whether to include the intercept",  
-  "`estimate_fun`",     "function to round and format coefficient estimates",  
-  "`pvalue_fun`",       "function to round and format p-values",
-  "`tidy_fun`",         "function to specify/customize tidier function"
+  "`label=`",            "modify variable labels in table", 
+  "`exponentiate=`",     "exponentiate model coefficients",
+  "`include=`",          "names of variables to include in output. Default is all variables",
+  "`show_single_row=`",  "By default, categorical variables are printed on multiple rows. If a variable is dichotomous and you wish to print the regression coefficient on a single row, include the variable name(s) here.", 
+  "`conf.level=`",       "confidence level of confidence interval",  
+  "`intercept=`",        "indicates whether to include the intercept",  
+  "`estimate_fun=`",     "function to round and format coefficient estimates",  
+  "`pvalue_fun=`",       "function to round and format p-values",
+  "`tidy_fun=`",         "function to specify/customize tidier function"
 ) %>%
   gt::gt() %>%
   gt::fmt_markdown(columns = vars(Argument)) %>%
@@ -143,9 +143,11 @@ The following functions add columns and/or information to the regression table.
 
 ```{r echo = FALSE}
 tibble::tribble(
-  ~Function,             ~Description,
-  "`add_global_p()`",    "adds the global p-value for a categorical variables",   
-  "`add_q()`",           "add a column of q values to control for multiple comparisons"   
+  ~Function,                     ~Description,
+  "`add_global_p()`",           "adds the global p-value for a categorical variables",  
+  "`add_glance_source_note()`", "adds statistics from `broom::glance()` as source note",
+  "`add_vif()`",                "adds column of the variance inflation factors (VIF)",
+  "`add_q()`",                  "add a column of q values to control for multiple comparisons"   
 ) %>%
   gt::gt() %>%
   gt::fmt_markdown(columns = vars(Function)) %>%

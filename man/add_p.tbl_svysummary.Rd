@@ -57,6 +57,7 @@ use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
 A \code{tbl_svysummary} object
 }
 \description{
+\lifecycle{experimental}
 Adds p-values to tables created by \code{tbl_svysummary} by comparing values across groups.
 }
 \section{Example Output}{
