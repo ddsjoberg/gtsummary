@@ -117,7 +117,7 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   result <-
     result %>%
     mutate(
-      variable = broom.helpers::.clean_backticks(variable),
+      variable = broom.helpers::.clean_backticks(.data$variable),
       row_type = "label"
     )
   return(result)
