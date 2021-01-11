@@ -104,7 +104,7 @@ Example basic table:
 ``` r
 library(gtsummary)
 # make dataset with a few variables to summarize
-trial2 <- trial %>% select(trt, age, grade, response)
+trial2 <- trial %>% select(age, grade, response, trt)
 
 # summarize the data with our package
 table1 <- tbl_summary(trial2)
@@ -157,7 +157,7 @@ You can also present side-by-side regression model results using
 
 ``` r
 library(survival)
-#> Warning: package 'survival' was built under R version 4.0.2
+#> Warning: package 'survival' was built under R version 4.0.3
 
 # build survival model table
 t2 <-
@@ -199,43 +199,58 @@ Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms. A big
 thank you to all contributors\!  
 [@ablack3](https://github.com/ablack3),
+[@aghaynes](https://github.com/aghaynes),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
 [@alexis-catherine](https://github.com/alexis-catherine),
+[@anaavu](https://github.com/anaavu),
+[@angelgar](https://github.com/angelgar),
+[@asshah4](https://github.com/asshah4),
 [@barthelmes](https://github.com/barthelmes),
 [@benediktclaus](https://github.com/benediktclaus),
 [@calebasaraba](https://github.com/calebasaraba),
+[@CarolineXGao](https://github.com/CarolineXGao),
 [@CodieMonster](https://github.com/CodieMonster),
+[@ctlamb](https://github.com/ctlamb),
 [@davidgohel](https://github.com/davidgohel),
 [@davidkane9](https://github.com/davidkane9),
 [@dax44](https://github.com/dax44),
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@DeFilippis](https://github.com/DeFilippis),
 [@denis-or](https://github.com/denis-or),
+[@djbirke](https://github.com/djbirke),
 [@emilyvertosick](https://github.com/emilyvertosick),
 [@gorkang](https://github.com/gorkang),
 [@GuiMarthe](https://github.com/GuiMarthe),
 [@hughjonesd](https://github.com/hughjonesd),
+[@IsadoraBM](https://github.com/IsadoraBM),
+[@j-tamad](https://github.com/j-tamad),
 [@jalavery](https://github.com/jalavery),
 [@jeanmanguy](https://github.com/jeanmanguy),
 [@jemus42](https://github.com/jemus42),
 [@jennybc](https://github.com/jennybc),
+[@JeremyPasco](https://github.com/JeremyPasco),
 [@JesseRop](https://github.com/JesseRop),
 [@jflynn264](https://github.com/jflynn264),
+[@jjallaire](https://github.com/jjallaire),
 [@joelgautschi](https://github.com/joelgautschi),
 [@juseer](https://github.com/juseer),
 [@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
 [@khizzr](https://github.com/khizzr),
+[@kmdono02](https://github.com/kmdono02),
 [@larmarange](https://github.com/larmarange),
 [@leejasme](https://github.com/leejasme),
 [@ltin1214](https://github.com/ltin1214),
 [@margarethannum](https://github.com/margarethannum),
+[@Marsus1972](https://github.com/Marsus1972),
 [@matthieu-faron](https://github.com/matthieu-faron),
+[@mbac](https://github.com/mbac),
 [@MelissaAssel](https://github.com/MelissaAssel),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@moleps](https://github.com/moleps),
 [@MyKo101](https://github.com/MyKo101),
 [@oranwutang](https://github.com/oranwutang),
+[@Pascal-Schmidt](https://github.com/Pascal-Schmidt),
 [@proshano](https://github.com/proshano),
 [@ryzhu75](https://github.com/ryzhu75),
 [@sammo3182](https://github.com/sammo3182),
@@ -243,8 +258,10 @@ thank you to all contributors\!
 [@simonpcouch](https://github.com/simonpcouch),
 [@slb2240](https://github.com/slb2240),
 [@slobaugh](https://github.com/slobaugh),
+[@storopoli](https://github.com/storopoli),
 [@tjmeyers](https://github.com/tjmeyers),
 [@tormodb](https://github.com/tormodb),
 [@UAB-BST-680](https://github.com/UAB-BST-680),
+[@Uriahf](https://github.com/Uriahf),
 [@zabore](https://github.com/zabore), and
 [@zeyunlu](https://github.com/zeyunlu)
