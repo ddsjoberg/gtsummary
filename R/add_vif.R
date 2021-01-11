@@ -72,12 +72,13 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
                          "GVIF" = "**GVIF**",
                          "aGVIF" = "**Adjusted GVIF**",
                          "df" = "**df**"),
-          footnote = switch(s,
-                         "VIF" = "Variance Inflation Factors",
-                         "GVIF" = "Generalized Variance Inflation Factors",
-                         "aGVIF" = "GVIF^[1/(2*df)]",
-                         "df" = "degrees of freedom"),
-          fmt_fun = estimate_fun,
+          footnote = switch(s,"aGVIF" = "GVIF^[1/(2*df)]"),
+          footnote_abbrev = switch(s,
+                                   "VIF" = "VIF = Variance Inflation Factor",
+                                   "GVIF" = "GVIF = Generalized Variance Inflation Factor",
+                                   "aGVIF" = "GVIF = Generalized Variance Inflation Factor",
+                                   "df" = "df = degrees of freedom"),
+          fmt_fun = switch(s, "df" = style_number) %||% estimate_fun,
           hide = FALSE
         )
     }
