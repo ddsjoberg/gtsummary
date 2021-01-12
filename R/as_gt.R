@@ -308,6 +308,8 @@ table_header_to_gt_calls <- function(x, ...) {
   x %>%
     .convert_header_to_rows_one_column("fmt_fun") %>%
     .convert_header_to_rows_one_column("footnote") %>%
+    .convert_header_to_rows_one_column("footnote_abbrev") %>%
+    .convert_header_to_rows_one_column("indent") %>%
     .convert_header_to_rows_one_column("bold") %>%
     .convert_header_to_rows_one_column("italic") %>%
     .convert_header_to_rows_one_column("missing_emdash")
@@ -317,7 +319,7 @@ table_header_to_gt_calls <- function(x, ...) {
 .convert_header_to_rows_one_column <- function(x, column) {
   if (!column %in% names(x$table_header)) return(x)
 
-  if (column %in% c("fmt_fun", "footnote")) {
+  if (column %in% c("fmt_fun", "footnote", "footnote_abbrev")) {
     table_rows_update <-
       x$table_header %>%
       select(.data$column, all_of(.env$column)) %>%
@@ -330,7 +332,7 @@ table_header_to_gt_calls <- function(x, ...) {
       select(.data$column, .data$format_type, .data$rows, .data$format_value) %>%
       filter(!purrr::map_lgl(format_value, is.null))
   }
-  else if (column %in% c("bold", "italic", "missing_emdash")) {
+  else if (column %in% c("bold", "italic", "indent", "missing_emdash")) {
     table_rows_update <-
       x$table_header %>%
       select(.data$column, all_of(.env$column)) %>%
