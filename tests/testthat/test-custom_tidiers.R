@@ -34,5 +34,15 @@ test_that("no errors/warnings with tbl_regression.multinom", {
   )
 })
 
+test_that("no errors/warnings with tbl_regression.gam", {
+  skip_if(!require("mgcv"))
+  mod <- mgcv::gam(response ~ s(marker, age) + grade, data = trial, family = binomial)
+  expect_output(
+    mod %>%
+      tbl_regression(exponentiate = TRUE,
+                     label = `s(marker,age)` ~ "Smoothed marker/age")
+  )
+})
+
 
 
