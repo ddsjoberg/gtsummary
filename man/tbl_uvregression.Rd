@@ -27,7 +27,8 @@ tbl_uvregression(
 }
 \arguments{
 \item{data}{Data frame to be used in univariate regression modeling.  Data
-frame includes the outcome variable(s) and the independent variables.}
+frame includes the outcome variable(s) and the independent variables.
+Survey design is also accepted.}
 
 \item{method}{Regression method (e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph}, and more).}
 
