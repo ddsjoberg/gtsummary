@@ -120,7 +120,7 @@
 #'
 #' \if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
 
-add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
+add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
                      footnote = NULL, new_col_name = NULL,
                      location = c("label", "level")) {
   # checking inputs ------------------------------------------------------------
@@ -130,20 +130,20 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
     abort("Argument `x=` must be of class 'tbl_summary'")
   }
 
-  if (!is.null(fmt_fun) && !is_function(fmt_fun)) {
-    abort("Argument `fmt_fun=` must be NULL or a function.")
+  if (!is.null(fmt_fun) && !is_function(fmt_fun) && !purrr::every(fmt_fun, is_function)) {
+    abort("Argument `fmt_fun=` must be a function or list of functions.")
   }
 
-  if (!is.null(new_col_name) && !is_string(new_col_name)) {
-    abort("Argument `new_col_name=` must be NULL or a string")
+  if (!is.null(new_col_name) && !is.character(new_col_name)) {
+    abort("Argument `new_col_name=` must be a character string or vector.")
   }
 
-  if (!is_string(header)) {
-    abort("Argument `header=` must be a string.")
+  if (!is.null(new_col_name) && !is.character(header)) {
+    abort("Argument `header=` must be a character string or vector.")
   }
 
-  if (!is.null(footnote) && !is_string(footnote)) {
-    abort("Argument `footnote=` must be NULL or a string.")
+  if (!is.null(footnote) && !is.character(footnote)) {
+    abort("Argument `footnote=` must be a character string or vector.")
   }
 
   # convert fns to named list --------------------------------------------------
@@ -170,50 +170,92 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
     mutate(
       row_type = ifelse(.data$summary_type %in% c("categorical", "continuous2"),
                         .env$location,
-                        "label")
+                        "label"),
+      label = map2(
+        variable, row_type,
+        ~filter(x$table_body, .data$variable == .x, .data$row_type == .y)$label
+      )
     ) %>%
-    left_join(
-      x$table_body %>% select(.data$variable, .data$row_type, .data$label),
-      by = c("variable", "row_type")
-    ) %>%
-    tidyr::nest(data = .data$label) %>%
     mutate(
-      !!stat_col_name := purrr::imap(fns, ~eval_fn_safe(tbl = x, variable = .y, fn = .x))
+      df_add_stats = purrr::imap(fns, ~eval_fn_safe(tbl = x, variable = .y, fn = .x))
     ) %>%
     select(-.data$summary_type)
 
-  # check dims of calculated statistics ----
+  # converting returned statistics to a tibble if not already ------------------
+  df_new_stat$df_add_stats <-
+    df_new_stat$df_add_stats %>%
+    map(~switch(is.data.frame(.x), .x) %||% tibble(!!stat_col_name := .x))
+
+  # check dims of calculated statistics ----------------------------------------
   purrr::pwalk(
-    list(df_new_stat$variable, df_new_stat$data, df_new_stat[[stat_col_name]]),
-    function(variable, data, stat) {
-      if (nrow(data) != length(stat))
+    list(df_new_stat$variable, df_new_stat$label, df_new_stat$df_add_stats),
+    function(variable, label, df_add_stats) {
+      if (nrow(df_add_stats) != length(label))
         glue("Dimension of '{variable}' and the added statistic do not match. ",
-             "Expecting statistic to be length {nrow(data)}.") %>%
+             "Expecting statistic/data frame to be length/no. rows {length(label)}.") %>%
         abort()
     }
   )
 
-  # un-nesting, preparing to merge
-  df_new_stat <- df_new_stat %>% unnest(cols = all_of(c("data", stat_col_name)))
+  # table attributes -----------------------------------------------------------
+  df_new_tibble_to_add <- bind_rows(df_new_stat$df_add_stats)
+  new_col_names <- names(df_new_tibble_to_add)
+  if (!rlang::is_empty(intersect(new_col_names, names(x$table_body)))) {
+    glue("New added columns {quoted_list(intersect(new_col_names, names(x$table_body)))} ",
+         "already exist in `x$table_body`.") %>%
+      stringr::str_wrap() %>%
+      abort()
+  }
+
+  table_header_updates <-
+    tibble(
+      column = new_col_names,
+      label =
+        switch(!is.null(header), rep_len(header, length(new_col_names))) %||%
+        switch(is.null(header) && length(new_col_names) == 1, "**Statistic**") %||%
+        new_col_names,
+      footnote = rep_len(footnote %||% NA_character_, length(new_col_names)),
+      column_is_character = map_lgl(column, ~is.character(df_new_tibble_to_add[[.x]]))
+    )
+  table_header_updates$fmt_fun <-
+    # if user passes a single formatting function, apply it to all new columns
+    switch(!is.null(fmt_fun) && is.function(fmt_fun), rep_len(list(fmt_fun), length(new_col_names))) %||%
+    # if users passed a list of formatting function, apply them all to the new columns
+    switch(!is.null(fmt_fun) && is.list(fmt_fun), rep_len(fmt_fun, length(new_col_names))) %||%
+    # if the user did not pass a fmt_fun, use style_sigfig as default (NULL for character columns)
+    switch(is.null(fmt_fun),
+           map(table_header_updates$column_is_character,
+               ~switch(!.x, style_sigfig)))
+    # creating an expression of the updates
+  expr_table_header_updates <-
+    pmap(
+      list(table_header_updates$column,
+           table_header_updates$label,
+           table_header_updates$footnote,
+           table_header_updates$fmt_fun),
+      function(column, label, footnote, fmt_fun) {
+        expr(modify_table_header(column = !!column, label = !!label,
+                                 hide = FALSE, footnote = !!footnote,
+                                 fmt_fun = !!fmt_fun))
+      }
+    )
 
   # updating tbl_summary object ------------------------------------------------
   x <- x %>%
     modify_table_body(
       dplyr::left_join,
-      df_new_stat,
+      unnest(df_new_stat, cols = all_of(c("label", "df_add_stats"))),
       by = c("variable", "row_type", "label")
-    ) %>%
-    modify_table_header(
-      all_of(stat_col_name),
-      hide = FALSE,
-      label = header,
-      fmt_fun = fmt_fun,
-      footnote = footnote %||% NA_character_
     )
+
+  # applying table_header updates
+  x <- expr_table_header_updates %>% reduce(function(x, y) expr(!!x %>% !!y), .init = x) %>% eval()
 
   # return tbl_summary object --------------------------------------------------
   x
 }
+
+
 
 eval_fn_safe <- function(variable, tbl, fn) {
 

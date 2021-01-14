@@ -80,28 +80,6 @@ test_that("expect errors", {
       add_stat(
         fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
         fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = c("**Treatment Comparison**", "**Treatment Comparison**"),       # column header
-        footnote = "T-test statistic and p-value"  # footnote
-      ),
-    NULL
-  )
-
-  expect_error(
-    tbl %>%
-      add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-        fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = c("T-test statistic and p-value", "T-test statistic and p-value")  # footnote
-      ),
-    NULL
-  )
-
-  expect_error(
-    tbl %>%
-      add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-        fmt_fun = NULL, # fn returns and chr, so no formatting function needed
         header = "**Treatment Comparison**",       # column header
         new_col_name = mean,
         footnote = "T-test statistic and p-value"  # footnote
