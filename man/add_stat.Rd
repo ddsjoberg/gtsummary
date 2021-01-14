@@ -8,7 +8,7 @@ add_stat(
   x,
   fns,
   fmt_fun = NULL,
-  header = "**Statistic**",
+  header = NULL,
   footnote = NULL,
   new_col_name = NULL,
   location = c("label", "level")
