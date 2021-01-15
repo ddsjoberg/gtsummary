@@ -26,7 +26,8 @@
 #' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
 #' Survey design is also accepted.
-#' @param method Regression method (e.g. [lm], [glm], [survival::coxph], and more).
+#' @param method Regression method (e.g. [lm], [glm], [survival::coxph],
+#' [survey::svyglm], and more).
 #' @param y Model outcome (e.g. `y = recurrence` or `y = Surv(time, recur)`).
 #' All other column in `data` will be regressed on `y`.
 #' Specify one and only one of `y` or `x`
