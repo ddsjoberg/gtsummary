@@ -83,9 +83,8 @@ the user's function, e.g. \code{foo(data, variable, by, ...)}
 }
 
 \examples{
+library(dplyr); library(stringr)
 # Example 1 ----------------------------------
-# this example replicates `add_p()`
-
 # fn returns t-test pvalue
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
@@ -95,23 +94,23 @@ add_stat_ex1 <-
   trial \%>\%
   select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
-  add_p(test = everything() ~ t.test) \%>\%
-  # replicating result of `add_p()` with `add_stat()`
   add_stat(
     fns = everything() ~ my_ttest, # all variables compared with with t-test
     fmt_fun = style_pvalue,        # format result with style_pvalue()
-    header = "**My p-value**"      # new column header
-  )
+    header = "**My p-value**",     # new column header
+    footnote = "Welch's two-sample t-test"
+  ) \%>\%
+  modify_header(all_stat_cols() ~ "**{level}**")
 
 # Example 2 ----------------------------------
 # fn returns t-test test statistic and pvalue
 my_ttest2 <- function(data, variable, by, ...) {
-  tt <- t.test(data[[variable]] ~ as.factor(data[[by]]))
-
-  # returning test statistic and pvalue
-  stringr::str_glue(
-    "t={style_sigfig(tt$statistic)}, {style_pvalue(tt$p.value, prepend_p = TRUE)}"
-  )
+  t.test(data[[variable]] ~ as.factor(data[[by]])) \%>\%
+    broom::tidy() \%>\%
+    mutate(
+      stat = str_glue("t={style_sigfig(statistic)}, {style_pvalue(p.value, prepend_p = TRUE)}")
+    ) \%>\%
+    pull(stat)
 }
 
 add_stat_ex2 <-
@@ -121,32 +120,25 @@ add_stat_ex2 <-
   add_stat(
     fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
     fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-    header = "**Treatment Comparison**",       # column header
-    footnote = "T-test statistic and p-value"  # footnote
+    header = "**Treatment Comparison**"       # column header
   )
 
 # Example 3 ----------------------------------
-# Add CI for categorical variables
-categorical_ci <- function(variable, tbl, ...) {
-  dplyr::filter(tbl$meta_data, variable == .env$variable) \%>\%
-    purrr::pluck("df_stats", 1) \%>\%
-    dplyr::mutate(
-      # calculate and format 95\% CI
-      prop_ci = purrr::map2(n, N, ~prop.test(.x, .y)$conf.int \%>\% style_percent(symbol = TRUE)),
-      ci = purrr::map_chr(prop_ci, ~glue::glue("{.x[1]}, {.x[2]}"))
-    ) \%>\%
-    dplyr::pull(ci)
+# return test statistic and p-value is separate columns
+my_ttest3 <- function(data, variable, by, ...) {
+  t.test(data[[variable]] ~ as.factor(data[[by]])) \%>\%
+    broom::tidy() \%>\%
+    select(statistic, p.value)
 }
 
 add_stat_ex3 <-
   trial \%>\%
-  select(grade) \%>\%
-  tbl_summary(statistic = everything() ~ "{p}\%") \%>\%
+  select(trt, age, marker) \%>\%
+  tbl_summary(by = trt, missing = "no") \%>\%
   add_stat(
-    fns = everything() ~ "categorical_ci",
-    location = "level",
-    header = "**95\% CI**"
-  ) \%>\%
-  modify_footnote(everything() ~ NA)
+    fns = everything() ~ my_ttest3,    # all variables will be compared by t-test
+    fmt_fun = list(style_sigfig, style_pvalue),
+    header = c("**t-statistic**", "**p-value**")       # column header
+  )
 
 }
