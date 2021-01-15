@@ -1,16 +1,18 @@
 #' Add a custom statistic column
 #'
 #' \lifecycle{experimental}
-#' The function allows a user to add a new column with a custom, user-defined statistic.
+#' The function allows a user to add a new column (or columns) of statistics
 #'
 #' @param x `tbl_summary` or `tbl_svysummary` object
-#' @param fns list of formulas indicating the functions that create the statistic
+#' @param fns list of formulas indicating the functions that create the statistic.
+#' See details below.
 #' @param fmt_fun for numeric statistics, `fmt_fun=` is the styling/formatting
-#' function. Default is `NULL`
-#' @param header Column header of new column. Default is `"**Statistic**"`
-#' @param footnote Footnote associated with new column. Default is no
-#' footnote (i.e. NULL)
-#' @param new_col_name name of new column to be created in `.$table_body`.
+#' function. When multiple columns are added, supply a list of styling functions.
+#' @param header Column header of new column(s). Default is `"**Statistic**"`
+#' when a single column is returned; otherwise, the column name.
+#' @param footnote Footnote associated with new column. Supply vector of footnotes
+#' if more than one column added.
+#' @param new_col_name DEPRECATED. name of new column to be created in `.$table_body`.
 #' Default is `"add_stat_1"`, unless that column exists then it is `"add_stat_2"`, etc.
 #' @param location Must be one of `c("label", "level")` and indicates which
 #' row(s) the new statistics are placed on. When `"label"` a single statistic
@@ -21,18 +23,21 @@
 #'
 #' @section Details:
 #'
-#' The custom functions passed in `fns=` are required to follow a specified
-#' format. Each of these function will execute on a single variable from
+#' The returns from custom functions passed in `fns=` are required to follow a
+#' specified format. Each of these function will execute on a single variable from
 #' `tbl_summary()`/`tbl_svysummary()`.
-#' 1. Each function must return a single scalar or character value of length one when
-#' `location = "label"`. When `location = "level"`, the returned statistic
-#' must be a vector of the length of the number of levels (excluding the
+#' 1. Each function must return a tibble or a vector. If a vector is returned,
+#' it will be converted to a tibble with one column and number of rows equal
+#' to the length of the vector.
+#' 1. When `location = "label"`, the returned statistic from the custom function
+#' must be a tibble with one row. When `location = "level"` the tibble must have
+#' the same number of rows as there are levels in the variable (excluding the
 #' row for unknown values).
-#' 1. Each function may take the following arguments: `foo(data, variable, by, tbl)`
-#'   - `data=` is the input data frame passed to `tbl_summary()`
-#'   - `variable=` is a string indicating the variable to perform the calculation on
-#'   - `by=` is a string indicating the by variable from `tbl_summary=`, if present
-#'   - `tbl=` the original `tbl_summary()` object is also available to utilize
+#' 1. Each function may take the following arguments: `foo(data, variable, by, tbl, ...)`
+#'     - `data=` is the input data frame passed to `tbl_summary()`
+#'     - `variable=` is a string indicating the variable to perform the calculation on
+#'     - `by=` is a string indicating the by variable from `tbl_summary=`, if present
+#'     - `tbl=` the original `tbl_summary()`/`tbl_svysummary()` object is also available to utilize
 #'
 #' The user-defined does not need to utilize each of these inputs. It's
 #' encouraged the user-defined function accept `...` as each of the arguments
@@ -113,8 +118,9 @@
 #' \if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
 
 add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
-                     footnote = NULL, new_col_name = NULL,
-                     location = c("label", "level")) {
+                     footnote = NULL,
+                     location = c("label", "level"),
+                     new_col_name = NULL) {
   # checking inputs ------------------------------------------------------------
   location <- match.arg(location)
 
@@ -126,11 +132,14 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
     abort("Argument `fmt_fun=` must be a function or list of functions.")
   }
 
-  if (!is.null(new_col_name) && !is.character(new_col_name)) {
-    abort("Argument `new_col_name=` must be a character string or vector.")
+  if (!is.null(new_col_name)) {
+    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(new_col_name=)")
+    if (!is.character(new_col_name)) {
+      abort("Argument `new_col_name=` must be a character string or vector.")
+    }
   }
 
-  if (!is.null(new_col_name) && !is.character(header)) {
+  if (!is.null(header) && !is.character(header)) {
     abort("Argument `header=` must be a character string or vector.")
   }
 

@@ -10,25 +10,24 @@ add_stat(
   fmt_fun = NULL,
   header = NULL,
   footnote = NULL,
-  new_col_name = NULL,
-  location = c("label", "level")
+  location = c("label", "level"),
+  new_col_name = NULL
 )
 }
 \arguments{
 \item{x}{\code{tbl_summary} or \code{tbl_svysummary} object}
 
-\item{fns}{list of formulas indicating the functions that create the statistic}
+\item{fns}{list of formulas indicating the functions that create the statistic.
+See details below.}
 
 \item{fmt_fun}{for numeric statistics, \verb{fmt_fun=} is the styling/formatting
-function. Default is \code{NULL}}
+function. When multiple columns are added, supply a list of styling functions.}
 
-\item{header}{Column header of new column. Default is \code{"**Statistic**"}}
+\item{header}{Column header of new column(s). Default is \code{"**Statistic**"}
+when a single column is returned; otherwise, the column name.}
 
-\item{footnote}{Footnote associated with new column. Default is no
-footnote (i.e. NULL)}
-
-\item{new_col_name}{name of new column to be created in \code{.$table_body}.
-Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}
+\item{footnote}{Footnote associated with new column. Supply vector of footnotes
+if more than one column added.}
 
 \item{location}{Must be one of \code{c("label", "level")} and indicates which
 row(s) the new statistics are placed on. When \code{"label"} a single statistic
@@ -36,29 +35,35 @@ is placed on the variable label row. When \code{"level"} the statistics are plac
 on the variable level rows. The length of the vector of statistics returned from the
 \code{fns} function must match the dimension of levels. Continuous and dichotomous
 statistics are placed on the variable label row.}
+
+\item{new_col_name}{DEPRECATED. name of new column to be created in \code{.$table_body}.
+Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}
 }
 \description{
 \lifecycle{experimental}
-The function allows a user to add a new column with a custom, user-defined statistic.
+The function allows a user to add a new column (or columns) of statistics
 }
 \section{Details}{
 
 
-The custom functions passed in \verb{fns=} are required to follow a specified
-format. Each of these function will execute on a single variable from
+The returns from custom functions passed in \verb{fns=} are required to follow a
+specified format. Each of these function will execute on a single variable from
 \code{tbl_summary()}/\code{tbl_svysummary()}.
 \enumerate{
-\item Each function must return a single scalar or character value of length one when
-\code{location = "label"}. When \code{location = "level"}, the returned statistic
-must be a vector of the length of the number of levels (excluding the
+\item Each function must return a tibble or a vector. If a vector is returned,
+it will be converted to a tibble with one column and number of rows equal
+to the length of the vector.
+\item When \code{location = "label"}, the returned statistic from the custom function
+must be a tibble with one row. When \code{location = "level"} the tibble must have
+the same number of rows as there are levels in the variable (excluding the
 row for unknown values).
-\item Each function may take the following arguments: \code{foo(data, variable, by, tbl)}
-}
+\item Each function may take the following arguments: \code{foo(data, variable, by, tbl, ...)}
 \itemize{
 \item \verb{data=} is the input data frame passed to \code{tbl_summary()}
 \item \verb{variable=} is a string indicating the variable to perform the calculation on
 \item \verb{by=} is a string indicating the by variable from \verb{tbl_summary=}, if present
-\item \verb{tbl=} the original \code{tbl_summary()} object is also available to utilize
+\item \verb{tbl=} the original \code{tbl_summary()}/\code{tbl_svysummary()} object is also available to utilize
+}
 }
 
 The user-defined does not need to utilize each of these inputs. It's
