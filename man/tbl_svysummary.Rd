@@ -16,7 +16,7 @@ tbl_svysummary(
   missing_text = NULL,
   sort = NULL,
   percent = NULL,
-  include = NULL
+  include = everything()
 )
 }
 \arguments{
