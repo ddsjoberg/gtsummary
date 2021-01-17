@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Added a custom tidier for `mgcv::gam()` models, `tidy_gam()`, and a `tbl_regression.gam()` function that uses it by default. (#745)
+* Added a custom tidier for `mgcv::gam()` models (`tidy_gam()`) and a method function (`tbl_regression.gam()`) that uses the new tidier by default. (#745)
 
 * `tbl_uvregression()` now accepts both data frames and survey design objects as input. (#742)
 
