@@ -157,3 +157,19 @@ pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
   # evaluating tidy expression
   expr(mice::pool(!!x, !!!pool.args) %>% mice::tidy(!!!dots)) %>% eval()
 }
+
+#' @rdname custom_tidiers
+#' @export
+tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...) {
+  broom::tidy(x,
+              conf.int = conf.int,
+              conf.level = conf.level,
+              exponentiate = exponentiate,
+              parametric = TRUE,  ...) %>%
+    dplyr::mutate(parametric = TRUE) %>%
+    dplyr::bind_rows(
+      broom::tidy(x, parametric = FALSE, ...) %>%
+        dplyr::mutate(parametric = FALSE)
+    ) %>%
+    dplyr::relocate(.data$parametric, .after = dplyr::last_col())
+}

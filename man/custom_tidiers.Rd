@@ -5,6 +5,7 @@
 \alias{tidy_standardize}
 \alias{tidy_bootstrap}
 \alias{pool_and_tidy_mice}
+\alias{tidy_gam}
 \title{Collection of custom tidiers}
 \usage{
 tidy_standardize(
@@ -26,6 +27,8 @@ tidy_bootstrap(
 )
 
 pool_and_tidy_mice(x, pool.args = NULL, ..., quiet = FALSE)
+
+tidy_gam(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...)
 }
 \arguments{
 \item{x}{a regression model object}
