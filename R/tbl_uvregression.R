@@ -25,7 +25,9 @@
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
-#' @param method Regression method (e.g. [lm], [glm], [survival::coxph], and more).
+#' Survey design objects are also accepted.
+#' @param method Regression method (e.g. [lm], [glm], [survival::coxph],
+#' [survey::svyglm], and more).
 #' @param y Model outcome (e.g. `y = recurrence` or `y = Surv(time, recur)`).
 #' All other column in `data` will be regressed on `y`.
 #' Specify one and only one of `y` or `x`
@@ -106,6 +108,12 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     )
   }
 
+  # checking input -------------------------------------------------------------
+  # data is a data frame
+  if (!is.data.frame(data) && !is_survey(data)) {
+    stop("`data` argument must be a data frame or survey object.", call. = FALSE)
+  }
+
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
@@ -138,14 +146,18 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   y <- rlang::enexpr(y)
   x <-
     tryCatch({
-      .select_to_varnames(select = !!x, data = data, arg_name = "x")
+      .select_to_varnames(select = !!x,
+                          data = switch(is.data.frame(data), data) %||% .remove_survey_cols(data),
+                          arg_name = "x")
     }, error = function(e) {
       rlang::expr_text(x)
     })
 
   y <-
     tryCatch({
-      .select_to_varnames(select = !!y, data = data, arg_name = "y")
+      .select_to_varnames(select = !!y,
+                          data = switch(is.data.frame(data), data) %||% .remove_survey_cols(data),
+                          arg_name = "y")
     }, error = function(e) {
       rlang::expr_text(y)
     })
@@ -163,19 +175,19 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   include <-
     .select_to_varnames(
       select = {{ include }},
-      data = data,
+      data = switch(is.data.frame(data), data) %||% .remove_survey_cols(data),
       arg_name =  "include"
     )
   exclude <-
     .select_to_varnames(
       select = {{ exclude }},
-      data = data,
+      data = switch(is.data.frame(data), data) %||% .remove_survey_cols(data),
       arg_name =  "exclude"
     )
   show_single_row <-
     .select_to_varnames(
       select = {{ show_single_row }},
-      data = data,
+      data = switch(is.data.frame(data), data) %||% .remove_survey_cols(data),
       arg_name =  "show_single_row"
     )
 
@@ -205,19 +217,13 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   label <-
     .formula_list_to_named_list(
       x = label,
-      data = data,
+      data = switch(is.data.frame(data), data) %||% .remove_survey_cols(data),
       arg_name = "label"
     )
 
   # all specified labels must be a string of length 1
   if (!every(label, ~ rlang::is_string(.x))) {
     stop("Each `label` specified must be a string of length 1.", call. = FALSE)
-  }
-
-  # data -----------------------------------------------------------------------
-  # data is a data frame
-  if (!is.data.frame(data)) {
-    stop("`data` argument must be a data frame.", call. = FALSE)
   }
 
   # will return call, and all object passed to in table1 call
@@ -229,7 +235,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
 
   # get all vars not specified -------------------------------------------------
   all_vars <-
-    names(data) %>%
+    names(switch(is.data.frame(data), data) %||% .remove_survey_cols(data)) %>%
     # removing x or y variable
     setdiff(paste(c(y, x), "~ 1") %>% stats::as.formula() %>% all.vars()) %>%
     # removing any other variables listed in the formula
@@ -263,10 +269,17 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       formula_chr = glue(formula),
       model = map(
         .data$formula_chr,
-        ~list(method, formula = as.formula(.x), data = data) %>%
+        function(.x) {
+          call_list1 <- # defining formula and data call (or formula and design)
+            switch(is.data.frame(data),
+                   list(method, formula = as.formula(.x), data = data)) %||%
+            list(method, formula = as.formula(.x), design = data)
+
+          call_list1 %>%
           c(as.list(method.args)[-1]) %>%
           as.call() %>%
           eval()
+        }
       ),
       # removing backticks
       y = switch(is.null(.env$y), all_vars) %||% y,
