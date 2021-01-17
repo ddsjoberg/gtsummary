@@ -277,3 +277,25 @@ test_that("tbl_uvregression throw error with odd variable names in `data=`", {
     trial %>% dplyr::rename(`age person` = age) %>% tbl_uvregression(method = lm, y = `age person`)
   )
 })
+
+test_that("tbl_uvregression works with survey object", {
+  svy <- survey::svydesign(ids = ~1, data = trial, weights = ~1)
+
+  expect_error(
+    tbl_uvreg <-
+      svy %>%
+      tbl_uvregression(
+        y = response,
+        method = survey::svyglm,
+        method.args = list(family = binomial),
+        hide_n = TRUE,
+        include = c(response, age, marker, grade)
+      ),
+    NA
+  )
+
+  expect_equal(
+    tbl_uvreg$tbls$age$model_obj %>% broom::tidy(),
+    survey::svyglm(response ~ age, design = svy, family = binomial) %>% broom::tidy()
+  )
+})

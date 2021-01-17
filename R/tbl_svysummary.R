@@ -91,7 +91,7 @@
 tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
-                        percent = NULL, include = NULL) {
+                        percent = NULL, include = everything()) {
   # checking for survey package ------------------------------------------------
   assert_package("survey", "tbl_svysummary()")
 
@@ -99,24 +99,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   if (!is_survey(data)) stop("'data' should be a survey object (see svydesign()).", call. = FALSE)
 
   # eval -----------------------------------------------------------------------
-  include <- select(data$variables, {{ include }}) %>% names()
-
-  # default selection for include
-  if (length(include) == 0) {
-    # look at data$call
-    if (is.null(data$call)) {
-      include <- names(data$variables)
-    } else {
-      exclude <- c(
-        all.vars(data$call$id),
-        all.vars(data$call$probs),
-        all.vars(data$call$strata),
-        all.vars(data$call$fpc),
-        all.vars(data$call$weights)
-      )
-      include <- setdiff(names(data$variables), exclude)
-    }
-  }
+  include <- select(.remove_survey_cols(data), {{ include }}) %>% names()
 
   # setting defaults from gtsummary theme --------------------------------------
   label <- label %||%
@@ -575,4 +558,18 @@ c_form <- function(left = NULL, right = 1) {
   left <- paste(left, collapse = "+")
   right <- paste(right, collapse = "+")
   stats::as.formula(paste(left, "~", right))
+}
+
+
+# this function removes the weight/survey columns from x$variables
+# used when columns must be selected from the survey object, and we dont want users
+# to select the weighting columns
+.remove_survey_cols <- function(x) {
+  if (is.data.frame(x)) return(x)
+  x$variables %>%
+    select(-any_of(c(all.vars(x$call$id),
+                     all.vars(x$call$probs),
+                     all.vars(x$call$strata),
+                     all.vars(x$call$fpc),
+                     all.vars(x$call$weights))))
 }
