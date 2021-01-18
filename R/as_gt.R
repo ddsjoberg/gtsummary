@@ -306,49 +306,63 @@ table_header_to_gt_calls <- function(x, ...) {
 .convert_header_to_rows <- function(x) {
   # convert columns that use row and values to format --------------------------
   x %>%
-    .convert_header_to_rows_one_column("fmt_fun") %>%
+    .convert_header_to_rows_one_column("hide") %>%
+    .convert_header_to_rows_one_column("align") %>%
+    .convert_header_to_rows_one_column("label") %>%
+    .convert_header_to_rows_one_column("spanning_header") %>%
     .convert_header_to_rows_one_column("footnote") %>%
     .convert_header_to_rows_one_column("footnote_abbrev") %>%
+    .convert_header_to_rows_one_column("missing_emdash") %>%
     .convert_header_to_rows_one_column("indent") %>%
     .convert_header_to_rows_one_column("bold") %>%
-    .convert_header_to_rows_one_column("italic") %>%
-    .convert_header_to_rows_one_column("missing_emdash")
+    .convert_header_to_rows_one_column("italic")
 }
 
 
 .convert_header_to_rows_one_column <- function(x, column) {
-  if (!column %in% names(x$table_header)) return(x)
 
-  if (column %in% c("fmt_fun", "footnote", "footnote_abbrev")) {
-    table_rows_update <-
+  if (column %in% "label") {
+    x$table_body_styling[[column]] <-
       x$table_header %>%
-      select(.data$column, all_of(.env$column)) %>%
-      rlang::set_names(c("column", "format_value")) %>%
-      mutate(
-        format_type = .env$column,
-        rows = NA_character_,
-        format_value = map(.data$format_value, ~switch(!is_empty(na.omit(.x)), .x))
-      ) %>%
-      select(.data$column, .data$format_type, .data$rows, .data$format_value) %>%
-      filter(!purrr::map_lgl(format_value, is.null))
+      filter(!is.na(.data[[column]])) %>%
+      select(.data$column, .data$text_interpret, .data$label)
   }
-  else if (column %in% c("bold", "italic", "indent", "missing_emdash")) {
-    table_rows_update <-
+  else if (column %in% "spanning_header") {
+    x$table_body_styling[[column]] <-
+      x$table_header %>% select(.data$column, .data$spanning_header) %>%
+      filter(!is.na(.data[[column]])) %>%
+      mutate(text_interpret = "gt::md") %>%
+      select(.data$column, .data$text_interpret, .data$spanning_header)
+  }
+  else if (column %in% c("hide", "align")) {
+    x$table_body_styling[[column]] <-
+      x$table_header %>% select(all_of(c("column", .env$column)))
+  }
+  else if (column %in% c("footnote", "footnote_abbrev")) {
+    x$table_body_styling[[column]] <-
       x$table_header %>%
-      select(.data$column, all_of(.env$column)) %>%
-      rlang::set_names(c("column", "rows")) %>%
-      mutate(
-        format_type = .env$column,
-        format_value = list(NULL)
-      ) %>%
-      select(.data$column, .data$format_type, .data$rows, .data$format_value) %>%
-      filter(!is.na(.data$rows))
+      select(all_of(c("column", .env$column))) %>%
+      filter(!is.na(.data[[column]])) %>%
+      mutate(rows = NA_character_,
+             text_interpret = "gt::md") %>%
+      select(all_of(c("column", "rows", "text_interpret", .env$column)))
+  }
+  else if (column %in% c("missing_emdash", "indent", "bold", "italic")) {
+    x$table_body_styling[[column]] <-
+      x$table_header %>%
+      select(all_of(c("column", .env$column))) %>%
+      filter(!is.na(.data[[column]])) %>%
+      mutate(rows = NA_character_)
+  }
+  else if (column %in% "fmt_fun") {
+    x$table_body_styling[[column]] <-
+      x$table_header %>%
+      select(all_of(c("column", .env$column))) %>%
+      filter(!map_lgl(.data[[column]], is.null)) %>%
+      mutate(rows = NA_character_)  %>%
+      select(all_of(c("column", "rows", .env$column)))
   }
 
-  # remove column from table_header --------------------------------------------
-  x$table_header <- x$table_header %>% select(-all_of(.env$column))
-
-  # combining into a new table_rows tibble -------------------------------------
-  x$table_rows <- bind_rows(x$table_rows, table_rows_update)
+  # return gtsummary table
   x
 }
