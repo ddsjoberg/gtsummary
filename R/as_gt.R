@@ -64,16 +64,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
     )
   }
 
-  # print message if old printing style object exists --------------------------
-  if (!is.null(x$table_header)) {
-    if (!is.null(x$table_body_styling))
-      paste("'gtsummary' object was created with code from with <v1.4.0 and >=v1.4.0.",
-            "Unexpected formatting may occur.") %>%
-      str_wrap() %>%
-      ui_info()
-    x <- .convert_table_header_to_styling(x)
-  }
-
   # creating list of gt calls --------------------------------------------------
   gt_calls <- table_header_to_gt_calls(x = x, ...)
   # adding other calls from x$list_output$source_note
@@ -132,6 +122,16 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
 
 # creating gt calls from table_header ------------------------------------------
 table_header_to_gt_calls <- function(x, ...) {
+  # print message if old printing style object exists --------------------------
+  if (!is.null(x$table_header)) {
+    if (!is.null(x$table_body_styling))
+      paste("'gtsummary' object was created with code from with <v1.4.0 and >=v1.4.0.",
+            "Unexpected formatting may occur.") %>%
+      str_wrap() %>%
+      ui_info()
+    x <- .convert_table_header_to_styling(x)
+  }
+
   # table_header <- .clean_table_header(x$table_header)
   gt_calls <- list()
 
@@ -338,7 +338,7 @@ table_header_to_gt_calls <- function(x, ...) {
     .convert_header_to_rows_one_column("italic") %>%
     .convert_header_to_rows_one_column("fmt_fun")
 
-  x$table_header <- NULL
+  # x$table_header <- NULL
   x
 }
 
