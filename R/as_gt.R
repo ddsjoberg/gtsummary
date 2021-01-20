@@ -132,7 +132,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
 
 # creating gt calls from table_header ------------------------------------------
 table_header_to_gt_calls <- function(x, ...) {
-  table_header <- .clean_table_header(x$table_header)
+  # table_header <- .clean_table_header(x$table_header)
   gt_calls <- list()
 
   # gt -------------------------------------------------------------------------
@@ -148,11 +148,8 @@ table_header_to_gt_calls <- function(x, ...) {
   # fmt_missing ----------------------------------------------------------------
   gt_calls[["fmt_missing"]] <- expr(
     gt::fmt_missing(columns = gt::everything(), missing_text = '')
-  )
-
-  # fmt_missing_emdash ---------------------------------------------------------
-  gt_calls[["fmt_missing"]] <-
-    c(gt_calls[["fmt_missing"]],
+  ) %>%
+    c(
       map(
         seq_len(nrow(x$table_body_styling$fmt_missing)),
         ~ expr(gt::fmt_missing(columns = gt::vars(!!!syms(x$table_body_styling$fmt_missing$column[[.x]])),
@@ -163,7 +160,8 @@ table_header_to_gt_calls <- function(x, ...) {
 
   # cols_align -----------------------------------------------------------------
   df_cols_align <-
-    x$table_body_styling$align %>%
+    x$table_body_styling$header %>%
+    select(.data$column, .data$align) %>%
     group_by(.data$align) %>%
     nest() %>%
     mutate(cols = map(.data$data, ~ pull(.x, column)))
@@ -217,14 +215,13 @@ table_header_to_gt_calls <- function(x, ...) {
     )
 
   # cols_label -----------------------------------------------------------------
-  # gt table_header to gt cols_label code
   gt_calls[["cols_label"]] <-
     map2(
-      x$table_body_styling$label$text_interpret,
-      x$table_body_styling$label$label,
+      x$table_body_styling$header$interpret_label,
+      x$table_body_styling$header$label,
       ~ call2(parse_expr(.x), .y)
     ) %>%
-    set_names(x$table_body_styling$label$column) %>%
+    set_names(x$table_body_styling$header$column) %>%
     {call2(expr(gt::cols_label), !!!.)}
 
   # tab_footnote ---------------------------------------------------------------
@@ -282,19 +279,24 @@ table_header_to_gt_calls <- function(x, ...) {
 
   # spanning_header ------------------------------------------------------------
   df_spanning_header <-
-    x$table_body_styling$spanning_header %>%
-    filter(.data$column %in% .cols_to_show(x)) %>%
+    x$table_body_styling$header %>%
+    select(.data$column, .data$interpret_spanning_header, .data$spanning_header) %>%
     filter(!is.na(.data$spanning_header)) %>%
-    select(.data$column, .data$spanning_header) %>%
-    group_by(.data$spanning_header) %>%
-    nest() %>%
-    mutate(cols = map(.data$data, ~ pull(.x, column)))
+    nest(cols = .data$column) %>%
+    mutate(
+      spanning_header = map2(
+        .data$interpret_spanning_header, .data$spanning_header,
+        ~call2(parse_expr(.x), .y)
+      ),
+      cols = map(cols, pull)
+    ) %>%
+    select(.data$spanning_header, .data$cols)
 
   gt_calls[["tab_spanner"]] <-
     map(
       seq_len(nrow(df_spanning_header)),
       ~ expr(gt::tab_spanner(columns = gt::vars(!!!syms(df_spanning_header$cols[[.x]])),
-                            label = gt::md(!!df_spanning_header$spanning_header[[.x]])))
+                             label = gt::md(!!df_spanning_header$spanning_header[[.x]])))
     )
 
   # cols_hide ------------------------------------------------------------------
@@ -320,11 +322,14 @@ table_header_to_gt_calls <- function(x, ...) {
 
 # convert columns that use row and values to format ----------------------------
 .convert_table_header_to_styling <- function(x) {
-  x %>%
-    .convert_header_to_rows_one_column("hide") %>%
-    .convert_header_to_rows_one_column("align") %>%
-    .convert_header_to_rows_one_column("label") %>%
-    .convert_header_to_rows_one_column("spanning_header") %>%
+  x$table_body_styling$header <-
+    x$table_header %>%
+    mutate(interpret_spanning_header = "gt::md") %>%
+    select(.data$column, .data$hide, .data$align,
+           interpret_label = .data$text_interpret, .data$label,
+           .data$interpret_spanning_header, .data$spanning_header)
+
+  x <- x %>%
     .convert_header_to_rows_one_column("footnote") %>%
     .convert_header_to_rows_one_column("footnote_abbrev") %>%
     .convert_header_to_rows_one_column("missing_emdash") %>%
@@ -332,29 +337,15 @@ table_header_to_gt_calls <- function(x, ...) {
     .convert_header_to_rows_one_column("bold") %>%
     .convert_header_to_rows_one_column("italic") %>%
     .convert_header_to_rows_one_column("fmt_fun")
+
+  x$table_header <- NULL
+  x
 }
 
 
 .convert_header_to_rows_one_column <- function(x, column) {
 
-  if (column %in% "label") {
-    x$table_body_styling[[column]] <-
-      x$table_header %>%
-      filter(!is.na(.data[[column]])) %>%
-      select(.data$column, .data$text_interpret, .data$label)
-  }
-  else if (column %in% "spanning_header") {
-    x$table_body_styling[[column]] <-
-      x$table_header %>% select(.data$column, .data$spanning_header) %>%
-      filter(!is.na(.data[[column]])) %>%
-      mutate(text_interpret = "gt::md") %>%
-      select(.data$column, .data$text_interpret, .data$spanning_header)
-  }
-  else if (column %in% c("hide", "align")) {
-    x$table_body_styling[[column]] <-
-      x$table_header %>% select(all_of(c("column", .env$column)))
-  }
-  else if (column %in% c("footnote", "footnote_abbrev")) {
+  if (column %in% c("footnote", "footnote_abbrev")) {
     x$table_body_styling[[column]] <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
@@ -404,7 +395,7 @@ table_header_to_gt_calls <- function(x, ...) {
 }
 
 .cols_to_show <- function(x) {
-  x$table_body_styling$hide %>%
+  x$table_body_styling$header %>%
     filter(!.data$hide) %>%
     pull(column)
 }
