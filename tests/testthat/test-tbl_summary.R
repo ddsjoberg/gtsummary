@@ -528,3 +528,20 @@ test_that("tbl_summary(digits=) tests with fn inputs", {
   )
 
 })
+
+
+test_that("tbl_summary() continuous vars with cat summary vars only", {
+  expect_error(
+    tbl1 <- trial %>% select(age) %>% tbl_summary(statistic = age ~ "{N_obs}"),
+    NA
+  )
+  expect_equal(tbl1$table_body$stat_0, c("200", "11"))
+
+  expect_error(
+    tbl2 <- trial %>% select(age, trt) %>% tbl_summary(by = trt, statistic = age ~ "{N_obs}"),
+    NA
+  )
+  expect_equal(tbl2$meta_data$df_stats %>% pluck(1, "N_obs"), c(98, 102),
+               check.attributes = FALSE)
+
+})

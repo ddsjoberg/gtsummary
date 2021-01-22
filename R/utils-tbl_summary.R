@@ -901,10 +901,12 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
     if (!is.null(by)) {
       df_stats <- tibble(
         by = unique(data[[by]]) %>% sort(),
-        variable = variable
+        variable = variable,
+        stat_display = .env$stat_display
       )
     }
-    else df_stats <- tibble(variable = variable)
+    else df_stats <- tibble(variable = variable,
+                            stat_display = .env$stat_display)
     return(df_stats)
   }
 
