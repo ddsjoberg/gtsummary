@@ -105,7 +105,7 @@ test_that("expect errors", {
       tbl_summary() %>%
       add_stat(
         fns = everything() ~ return_three_10s,
-        location = "level"
+        location = all_categorical() ~ "level"
       ),
     NA
   )
@@ -119,7 +119,7 @@ test_that("expect errors", {
       ) %>%
       add_stat(
         fns = everything() ~ return_three_10s,
-        location = "level"
+        location = everything() ~ "level"
       ),
     NA
   )
@@ -130,7 +130,7 @@ test_that("expect errors", {
       tbl_svysummary(include = Sex) %>%
       add_stat(
         fns = everything() ~ return_two_10s,
-        location = "level"
+        location = all_categorical() ~ "level"
       ),
     NA
   )

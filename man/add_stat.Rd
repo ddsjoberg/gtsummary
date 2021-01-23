@@ -10,7 +10,7 @@ add_stat(
   fmt_fun = NULL,
   header = NULL,
   footnote = NULL,
-  location = c("label", "level"),
+  location = NULL,
   new_col_name = NULL
 )
 }
@@ -29,12 +29,13 @@ when a single column is returned; otherwise, the column name.}
 \item{footnote}{Footnote associated with new column. Supply vector of footnotes
 if more than one column added.}
 
-\item{location}{Must be one of \code{c("label", "level")} and indicates which
-row(s) the new statistics are placed on. When \code{"label"} a single statistic
+\item{location}{list of formulas indicating the location the new statistics
+are placed. The RHS of the formula must be one of \code{c("label", "level", "missing")}.
+When \code{"label"} a single statistic
 is placed on the variable label row. When \code{"level"} the statistics are placed
 on the variable level rows. The length of the vector of statistics returned from the
-\code{fns} function must match the dimension of levels. Continuous and dichotomous
-statistics are placed on the variable label row.}
+\code{fns} function must match the dimension of levels. Default is to place the
+new statistics on the label row.}
 
 \item{new_col_name}{DEPRECATED. name of new column to be created in \code{.$table_body}.
 Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}

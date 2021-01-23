@@ -14,12 +14,13 @@
 #' if more than one column added.
 #' @param new_col_name DEPRECATED. name of new column to be created in `.$table_body`.
 #' Default is `"add_stat_1"`, unless that column exists then it is `"add_stat_2"`, etc.
-#' @param location Must be one of `c("label", "level")` and indicates which
-#' row(s) the new statistics are placed on. When `"label"` a single statistic
+#' @param location list of formulas indicating the location the new statistics
+#' are placed. The RHS of the formula must be one of `c("label", "level", "missing")`.
+#' When `"label"` a single statistic
 #' is placed on the variable label row. When `"level"` the statistics are placed
 #' on the variable level rows. The length of the vector of statistics returned from the
-#' `fns` function must match the dimension of levels. Continuous and dichotomous
-#' statistics are placed on the variable label row.
+#' `fns` function must match the dimension of levels. Default is to place the
+#' new statistics on the label row.
 #'
 #' @section Details:
 #'
@@ -118,12 +119,9 @@
 #' \if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
 
 add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
-                     footnote = NULL,
-                     location = c("label", "level"),
+                     footnote = NULL, location = NULL,
                      new_col_name = NULL) {
   # checking inputs ------------------------------------------------------------
-  location <- match.arg(location)
-
   if (!inherits(x, c("tbl_summary", "tbl_svysummary"))) {
     abort("Argument `x=` must be of class 'tbl_summary'")
   }
@@ -147,7 +145,25 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
     abort("Argument `footnote=` must be a character string or vector.")
   }
 
-  # convert fns to named list --------------------------------------------------
+  # convert to named lists -----------------------------------------------------
+  if (rlang::is_string(location)) {
+    lifecycle::deprecate_warn(
+      "1.4.0",
+      "gtsummary::add_stat(location = 'must be a formula list, e.g. `everything() ~ \"label\"`,')")
+    location <- inject(everything() ~ !!location)
+  }
+  location <- .formula_list_to_named_list(
+    x = location,
+    data = switch(class(x)[1],
+                  "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+                  "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))) ,
+    var_info = x$table_body,
+    arg_name = "location"
+  )
+  imap(location,
+       ~switch(!is_string(.x) || !.x %in% c("label", "level", "missing"),
+                stop("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")))
+
   fns <-
     .formula_list_to_named_list(
       x = fns,
@@ -169,9 +185,7 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
     left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
               by = "variable") %>%
     mutate(
-      row_type = ifelse(.data$summary_type %in% c("categorical", "continuous2"),
-                        .env$location,
-                        "label"),
+      row_type = map_chr(.data$variable, ~location[[.x]] %||% "label"),
       label = map2(
         variable, row_type,
         ~filter(x$table_body, .data$variable == .x, .data$row_type == .y)$label
