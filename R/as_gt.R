@@ -132,6 +132,9 @@ table_header_to_gt_calls <- function(x, ...) {
     x <- .convert_table_header_to_styling(x)
   }
 
+  # converting row specifications to row numbers, and removing old cmds
+  x <- .clean_table_body_stylings(x)
+
   # table_header <- .clean_table_header(x$table_header)
   gt_calls <- list()
 
@@ -178,9 +181,9 @@ table_header_to_gt_calls <- function(x, ...) {
   gt_calls[["tab_style_indent"]] <-
     map(
       seq_len(nrow(df_indent)),
-      ~ expr(gt::tab_style(style = gt::cell_text(indent = gt::px(10), align = 'left'),
-                           locations = gt::cells_body(columns = gt::vars(!!!syms(df_indent$column[[.x]])),
-                                                      rows = !!parse_expr(df_indent$rows[[.x]]))))
+      ~expr(gt::tab_style(style = gt::cell_text(indent = gt::px(10), align = 'left'),
+                          locations = gt::cells_body(columns = gt::vars(!!!syms(df_indent$column[[.x]])),
+                                                     rows = !!df_indent$row_numbers[[.x]])))
     )
 
   # fmt ------------------------------------------------------------------------
@@ -188,8 +191,8 @@ table_header_to_gt_calls <- function(x, ...) {
     map(
       seq_len(nrow(x$table_body_styling$fmt_fun)),
       ~ expr(gt::fmt(columns = gt::vars(!!sym(x$table_body_styling$fmt_fun$column[[.x]])),
-                     rows = !!switch(!is.na(x$table_body_styling$fmt_fun$rows[[.x]]),
-                                     parse_expr(x$table_body_styling$fmt_fun$rows[[.x]])),
+                     rows = !!switch(!is.na(x$table_body_styling$fmt_fun$row_numbers[[.x]]),
+                                     x$table_body_styling$fmt_fun$row_numbers[[.x]]),
                      fns = !!x$table_body_styling$fmt_fun$fmt_fun[[.x]]))
     )
 
@@ -201,8 +204,7 @@ table_header_to_gt_calls <- function(x, ...) {
       ~ expr(gt::tab_style(style = gt::cell_text(weight = 'bold'),
                            locations = gt::cells_body(
                              columns = gt::vars(!!sym(df_bold$column[[.x]])),
-                             rows = !!switch(!is.na(df_bold$rows[[.x]]),
-                                             parse_expr(df_bold$rows[[.x]])))))
+                             rows = !!df_bold$row_numbers[[.x]])))
     )
 
   # tab_style_italic -----------------------------------------------------------
@@ -213,8 +215,7 @@ table_header_to_gt_calls <- function(x, ...) {
       ~ expr(gt::tab_style(style = gt::cell_text(style = 'italic'),
                            locations = gt::cells_body(
                              columns = gt::vars(!!sym(df_italic$column[[.x]])),
-                             rows = !!switch(!is.na(df_italic$rows[[.x]]),
-                                             parse_expr(df_italic$rows[[.x]])))))
+                             rows = !!df_italic$row_numbers[[.x]])))
     )
 
   # cols_label -----------------------------------------------------------------
@@ -228,57 +229,44 @@ table_header_to_gt_calls <- function(x, ...) {
     {call2(expr(gt::cols_label), !!!.)}
 
   # tab_footnote ---------------------------------------------------------------
-  .footnote_to_location_expr <- function(column, row_numbers, tab_location) {
-    if (tab_location == "header")
-      return(expr(gt::cells_column_labels(columns = gt::vars(!!sym(column)))) %>% eval())
-    if (tab_location == "body")
-      return(expr(gt::cells_body(columns = gt::vars(!!sym(column)), rows = !!row_numbers)) %>% eval())
-  }
-  .loc_to_footnote_expr <- function(footnote, location) {
-    expr(gt::tab_footnote(footnote = !!footnote, locations = eval(!!location)))
-  }
-  .table_styling_to_gt_footnote_call <- function(x, footnote_type) {
-    if (.cols_to_show(x) %>%
-        intersect(x$table_body_styling[[footnote_type]]$column) %>%
-        rlang::is_empty())
-      return(list())
+  df_footnotes <-
+    bind_rows(
+      x$table_body_styling$footnote,
+      x$table_body_styling$footnote_abbrev
+    ) %>%
+    nest(data = c(.data$column, .data$row_numbers)) %>%
+    rowwise() %>%
+    mutate(
+      columns = data %>% pull(.data$column) %>% list(),
+      rows = data %>% pull(.data$row_numbers) %>% list()
+    ) %>%
+    ungroup()
+  df_footnotes$footnote_exp <-
+    map2(
+      df_footnotes$text_interpret,
+      df_footnotes$footnote,
+      ~ call2(parse_expr(.x), .y)
+    )
 
-    part1 <-
-      x$table_body_styling[[footnote_type]] %>%
-      rename(footnote = !!sym(footnote_type)) %>%
-      filter(.data$column %in% .cols_to_show(x)) %>%
-      rowwise() %>%
-      mutate(
-        tab_location = ifelse(is.na(rows), "header", "body"),
-        row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list(),
-      ) %>%
-      unnest(cols = .data$row_numbers) %>%
-      group_by(column, tab_location, row_numbers) %>%
-      dplyr::slice_tail() %>% # keeping the most recent addition
-      filter(!is.na(footnote)) # keep non-missing additions
-    if (nrow(part1) == 0) return(list())
 
-    if (footnote_type == "footnote_abbrev") {
-      part1$footnote <- paste(part1$footnote, collapse = ", ")
+  gt_calls[["tab_footnote"]] <- pmap(
+    list(df_footnotes$tab_location, df_footnotes$footnote_exp,
+         df_footnotes$columns, df_footnotes$rows),
+    function(tab_location, footnote, columns, rows) {
+      if (tab_location == "header") return(expr(
+        gt::tab_footnote(
+          footnote = !!footnote,
+          locations = gt::cells_column_labels(columns = vars(!!!syms(columns)))
+        )
+      ))
+      if (tab_location == "body") return(expr(
+        gt::tab_footnote(
+          footnote = !!footnote,
+          locations = gt::cells_body(columns = vars(!!!syms(columns)), rows = !!!rows)
+        )
+      ))
     }
-
-    part1 %>%
-      mutate(
-        location_expr = pmap(list(column, row_numbers, tab_location), .footnote_to_location_expr)
-      ) %>%
-      ungroup() %>%
-      select(footnote, text_interpret, location_expr) %>%
-      nest(df_exprs = c(location_expr)) %>%
-      mutate(
-        location_expr_list = map(df_exprs, pluck, "location_expr"),
-        footnote_expr = map2(text_interpret, footnote, ~call2(rlang::parse_expr(.x), .y)),
-        final_expr =  map2(footnote_expr, location_expr_list, .loc_to_footnote_expr)
-      ) %>%
-      pull(.data$final_expr)
-  }
-
-  gt_calls[["tab_footnote"]] <- c(.table_styling_to_gt_footnote_call(x, "footnote"),
-                                  .table_styling_to_gt_footnote_call(x, "footnote_abbrev"))
+  )
 
   # spanning_header ------------------------------------------------------------
   df_spanning_header <-
@@ -310,199 +298,4 @@ table_header_to_gt_calls <- function(x, ...) {
 
   # return list of gt expressions
   gt_calls
-}
-
-# this function cleans up table_header (i.e. removes formatting for hidden columns, etc.)
-.clean_table_header <- function(x) {
-  # removing instructions for hidden columns
-  dplyr::mutate_at(
-    x,
-    vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
-    ~ifelse(.data$hide, NA_character_, .)
-  )
-}
-
-# convert columns that use row and values to format ----------------------------
-.convert_table_header_to_styling <- function(x) {
-  x$table_body_styling$header <-
-    x$table_header %>%
-    mutate(interpret_spanning_header = "gt::md") %>%
-    select(.data$column, .data$hide, .data$align,
-           interpret_label = .data$text_interpret, .data$label,
-           .data$interpret_spanning_header, .data$spanning_header)
-
-  x <- x %>%
-    .convert_header_to_rows_one_column("footnote") %>%
-    .convert_header_to_rows_one_column("footnote_abbrev") %>%
-    .convert_header_to_rows_one_column("missing_emdash") %>%
-    .convert_header_to_rows_one_column("indent") %>%
-    .convert_header_to_rows_one_column("bold") %>%
-    .convert_header_to_rows_one_column("italic") %>%
-    .convert_header_to_rows_one_column("fmt_fun")
-
-  # x$table_header <- NULL
-  x
-}
-
-
-.convert_header_to_rows_one_column <- function(x, column) {
-
-  if (column %in% c("footnote", "footnote_abbrev")) {
-    x$table_body_styling[[column]] <-
-      x$table_header %>%
-      select(all_of(c("column", .env$column))) %>%
-      filter(!is.na(.data[[column]])) %>%
-      mutate(rows = NA_character_,
-             text_interpret = "gt::md") %>%
-      select(all_of(c("column", "rows", "text_interpret", .env$column)))
-  }
-  else if (column %in% c("indent", "bold", "italic")) {
-    x$table_body_styling$text_format <-
-      x$table_header %>%
-      select(all_of(c("column", .env$column))) %>%
-      filter(!is.na(.data[[column]])) %>%
-      set_names(c("column", "rows")) %>%
-      mutate(format_type = .env$column) %>%
-      bind_rows(x$table_body_styling$text_format)
-  }
-  else if (column %in% "missing_emdash") {
-    x$table_body_styling[["fmt_missing"]] <-
-      x$table_header %>%
-      select(all_of(c("column", .env$column))) %>%
-      filter(!is.na(.data[[column]])) %>%
-      set_names(c("column", "rows")) %>%
-      mutate(symbol = get_theme_element("tbl_regression-str:ref_row_text",
-                                        default = "---"))
-  }
-  else if (column %in% "fmt_fun") {
-    x$table_body_styling[[column]] <-
-      x$table_header %>%
-      select(all_of(c("column", .env$column))) %>%
-      filter(!map_lgl(.data[[column]], is.null)) %>%
-      mutate(rows = NA_character_)  %>%
-      select(all_of(c("column", "rows", .env$column)))
-  }
-
-  # return gtsummary table
-  x
-}
-
-# takes a table_body and a character rows expression, and returns the resulting row numbers
-.rows_expr_to_row_numbers <- function(table_body, rows) {
-  if (is.na(rows)) return(NA)
-
-  df <- as.data.frame(table_body) %>% tibble::remove_rownames()
-
-  expr(subset(df, !!rlang::parse_expr(rows))) %>%
-    eval() %>%
-    rownames() %>%
-    as.integer()
-}
-
-.cols_to_show <- function(x) {
-  x$table_body_styling$header %>%
-    filter(!.data$hide) %>%
-    pull(column)
-}
-
-
-# 1. Converts row expressions to row numbers, and only keeps the most recent.
-# 2. Deletes NA footnote, text_formatting, etc. as they will not be used
-.clean_table_body_stylings <- function(x) {
-  # text_format ----------------------
-  x$table_body_styling$text_format %>%
-    filter(.data$column %in% .cols_to_show(x)) %>%
-    rowwise() %>%
-    mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list()
-    ) %>%
-    select(-.data$rows) %>%
-    unnest(row_numbers) %>%
-    group_by(column, row_numbers, format_type) %>%
-    dplyr::slice_tail() %>%
-    group_by(column, format_type) %>%
-    nest(row_numbers = row_numbers) %>%
-    mutate(row_numbers = map(row_numbers, as.list))
-
-  # footnote ---------------------------------
-  x$table_body_styling$footnote <-
-    .clean_table_body_stylings_footnote(x, "footnote")
-
-  # footnote_abbrev ---------------------------------
-  x$table_body_styling$footnote_abbrev <-
-    .clean_table_body_stylings_footnote(x, "footnote_abbrev")
-
-  # fmt_fun --------------------------------------
-  x$table_body_styling$fmt_fun <-
-    x$table_body_styling$fmt_fun %>%
-    filter(.data$column %in% .cols_to_show(x)) %>%
-    rowwise() %>%
-    mutate(
-      tab_location = ifelse(is.na(rows), "header", "body"),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list()
-    ) %>%
-    select(-.data$rows) %>%
-    unnest(row_numbers) %>%
-    group_by(column, tab_location, row_numbers) %>%
-    dplyr::slice_tail() %>%
-    ungroup()
-
-  x
-}
-
-
-
-.clean_table_body_stylings_footnote <- function(x, footnote_type) {
-  df_clean <-
-    x$table_body_styling[[footnote_type]] %>%
-    filter(.data$column %in% .cols_to_show(x))
-  if (nrow(df_clean) == 0) return(df_clean)
-
-  df_clean <-
-    df_clean %>%
-    rename(footnote = !!sym(footnote_type)) %>%
-    rowwise() %>%
-    mutate(
-      tab_location = ifelse(is.na(rows), "header", "body"),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list(),
-    ) %>%
-    select(-.data$rows) %>%
-    unnest(cols = .data$row_numbers) %>%
-    group_by(column, tab_location, row_numbers) %>%
-    dplyr::slice_tail() %>% # keeping the most recent addition
-    filter(!is.na(footnote)) # keep non-missing additions
-
-  if (footnote_type == "footnote_abbrev") {
-    df_clean$footnote <- paste(df_clean$footnote, collapse = ", ")
-    df_clean <- rename(df_clean, footnote_abbrev = .data$footnote)
-  }
-}
-
-
-.table_styling_to_gt_footnote_call <- function(x, footnote_type) {
-  if (.cols_to_show(x) %>%
-      intersect(x$table_body_styling[[footnote_type]]$column) %>%
-      rlang::is_empty())
-    return(list())
-
-  part1 <-
-    x$table_body_styling[[footnote_type]] %>%
-    rename(footnote = !!sym(footnote_type)) %>%
-    filter(.data$column %in% .cols_to_show(x)) %>%
-    rowwise() %>%
-    mutate(
-      tab_location = ifelse(is.na(rows), "header", "body"),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list(),
-    ) %>%
-    unnest(cols = .data$row_numbers) %>%
-    group_by(column, tab_location, row_numbers) %>%
-    dplyr::slice_tail() %>% # keeping the most recent addition
-    filter(!is.na(footnote)) # keep non-missing additions
-  if (nrow(part1) == 0) return(list())
-
-  if (footnote_type == "footnote_abbrev") {
-    part1$footnote <- paste(part1$footnote, collapse = ", ")
-  }
-
-
 }
