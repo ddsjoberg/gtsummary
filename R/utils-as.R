@@ -150,12 +150,12 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      tab_location = ifelse(is.na(rows), "header", "body"),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list()
+      tab_location = ifelse(is.na(.data$rows), "header", "body"),
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list()
     ) %>%
     select(-.data$rows) %>%
-    unnest(row_numbers) %>%
-    group_by(column, tab_location, row_numbers) %>%
+    unnest(.data$row_numbers) %>%
+    group_by(.data$column, .data$tab_location, .data$row_numbers) %>%
     dplyr::slice_tail() %>%
     ungroup()
 

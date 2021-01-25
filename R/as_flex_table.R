@@ -229,8 +229,8 @@ table_header_to_flextable_calls <- function(x, ...) {
     select(.data$footnote_id, .data$footnote, .data$tab_location,
            .data$row_numbers, .data$column_id) %>%
     nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
-    mutate(row_numbers = map(location_ids, ~pluck(.x, "row_numbers") %>% unique()),
-           column_id = map(location_ids, ~pluck(.x, "column_id") %>% unique()))
+    mutate(row_numbers = map(.data$location_ids, ~pluck(.x, "row_numbers") %>% unique()),
+           column_id = map(.data$location_ids, ~pluck(.x, "column_id") %>% unique()))
 
   flextable_calls[["footnote"]] <-
     map(
@@ -252,10 +252,10 @@ table_header_to_flextable_calls <- function(x, ...) {
     inner_join(x$table_body_styling$header %>%
                  select(.data$column, column_id = .data$id),
                by = "column") %>%
-    select(symbol, row_numbers, column_id) %>%
+    select(.data$symbol, .data$row_numbers, .data$column_id) %>%
     nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
-    mutate(row_numbers = map(location_ids, ~pluck(.x, "row_numbers") %>% unique()),
-           column_id = map(location_ids, ~pluck(.x, "column_id") %>% unique()))
+    mutate(row_numbers = map(.data$location_ids, ~pluck(.x, "row_numbers") %>% unique()),
+           column_id = map(.data$location_ids, ~pluck(.x, "column_id") %>% unique()))
 
   flextable_calls[["fmt_missing"]] <-
     map(
