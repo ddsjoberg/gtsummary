@@ -296,7 +296,8 @@ table_header_to_gt_calls <- function(x, ...) {
   # removing instructions for hidden columns
   dplyr::mutate_at(
     x,
-    vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
+    vars(any_of(c("bold", "italic", "missing_emdash", "indent",
+                  "footnote_abbrev", "footnote", "spanning_header"))),
     ~ifelse(.data$hide, NA_character_, .)
   )
 }
