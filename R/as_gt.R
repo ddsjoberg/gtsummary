@@ -233,8 +233,8 @@ table_header_to_gt_calls <- function(x, ...) {
       nest(data = c(.data$column, .data$row_numbers)) %>%
       rowwise() %>%
       mutate(
-        columns = data %>% pull(.data$column) %>% list(),
-        rows = data %>% pull(.data$row_numbers) %>% list()
+        columns = .data$data %>% pull(.data$column) %>% list(),
+        rows = .data$data %>% pull(.data$row_numbers) %>% list()
       ) %>%
       ungroup()
     df_footnotes$footnote_exp <-
@@ -276,7 +276,7 @@ table_header_to_gt_calls <- function(x, ...) {
         .data$interpret_spanning_header, .data$spanning_header,
         ~call2(parse_expr(.x), .y)
       ),
-      cols = map(cols, pull)
+      cols = map(.data$cols, pull)
     ) %>%
     select(.data$spanning_header, .data$cols)
 

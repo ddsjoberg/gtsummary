@@ -226,7 +226,8 @@ table_header_to_flextable_calls <- function(x, ...) {
     mutate(row_numbers = ifelse(.data$tab_location == "header",
                                 header_i_index,
                                 .data$row_numbers)) %>%
-    select(footnote_id, footnote, tab_location, row_numbers, column_id) %>%
+    select(.data$footnote_id, .data$footnote, .data$tab_location,
+           .data$row_numbers, .data$column_id) %>%
     nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
     mutate(row_numbers = map(location_ids, ~pluck(.x, "row_numbers") %>% unique()),
            column_id = map(location_ids, ~pluck(.x, "column_id") %>% unique()))

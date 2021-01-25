@@ -93,7 +93,7 @@
 .cols_to_show <- function(x) {
   x$table_body_styling$header %>%
     filter(!.data$hide) %>%
-    pull(column)
+    pull(.data$column)
 }
 
 
@@ -108,16 +108,16 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list()
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list()
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
     group_by(.data$column, .data$row_numbers, .data$format_type) %>%
     dplyr::slice_tail() %>%
     filter(.data$undo_text_format == FALSE) %>% # dropping undoing cmds
-    group_by(column, format_type) %>%
-    nest(row_numbers = row_numbers) %>%
-    mutate(row_numbers = map(row_numbers, ~unlist(.x) %>% unname())) %>%
+    group_by(.data$column, .data$format_type) %>%
+    nest(row_numbers = .data$row_numbers) %>%
+    mutate(row_numbers = map(.data$row_numbers, ~unlist(.x) %>% unname())) %>%
     select(.data$column, .data$row_numbers, everything()) %>%
     ungroup()
 
@@ -127,7 +127,7 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list()
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list()
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
