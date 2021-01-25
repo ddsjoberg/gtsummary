@@ -23,10 +23,13 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
   # must have kableExtra package installed to use this function ----------------
   assert_package("kableExtra", "as_kable_extra()")
 
+  # converting row specifications to row numbers, and removing old cmds --------
+  x <- .clean_table_body_stylings(x)
+
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
-    x$table_header <-
-      x$table_header %>%
+    x$table_body_styling$header <-
+      x$table_body_styling$header %>%
       mutate(
         label = str_replace_all(
           .data$label, pattern = fixed("**"), replacement = fixed("")
@@ -82,30 +85,23 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 }
 
 table_header_to_kable_extra_calls <- function(x, ...) {
-  table_header <- .clean_table_header(x$table_header)
-
   # getting kable calls
   kable_extra_calls <-
     table_header_to_kable_calls(x = x, ...)
 
   # add_indent -----------------------------------------------------------------
-  tab_style_indent <-
-    table_header %>%
-    filter(!is.na(.data$indent), .data$column == "label") %>%
-    pull(.data$indent)
+  df_indent <-
+    x$table_body_styling$text_format %>%
+    filter(.data$format_type == "indent", .data$column == "label")
 
-  if (length(tab_style_indent) > 0) {
-    indent_index <-
-      expr(with(x$table_body, !!parse_expr(tab_style_indent))) %>%
-      eval() %>%
-      which()
-
-    kable_extra_calls[["add_indent"]] <- expr(kableExtra::add_indent(!!indent_index))
+  if (nrow(df_indent) > 0) {
+    kable_extra_calls[["add_indent"]] <-
+      expr(kableExtra::add_indent(!!df_indent$row_numbers[[1]]))
   }
 
   # add_header_above -----------------------------------------------------------
-  if (sum(!is.na(table_header$spanning_header)) > 0) {
-    header0 <- table_header %>%
+  if (any(!is.na(x$table_body_styling$header$spanning_header))) {
+    header0 <- x$table_body_styling$header %>%
       filter(.data$hide == FALSE) %>%
       select(.data$spanning_header) %>%
       mutate(spanning_header = ifelse(is.na(.data$spanning_header),
@@ -121,18 +117,12 @@ table_header_to_kable_extra_calls <- function(x, ...) {
   }
 
   # footnote -------------------------------------------------------------------
-  vct_footnote_abbrev <- table_header %>%
-    filter(!is.na(.data$footnote_abbrev)) %>%
-    pull(.data$footnote_abbrev)
-  if (length(vct_footnote_abbrev) > 0)
-    vct_footnote_abbrev <- paste(vct_footnote_abbrev, collapse = ", ")
-  vct_footnote <- table_header %>%
-    filter(!is.na(.data$footnote)) %>%
+  vct_footnote <-
+    .number_footnotes(x) %>%
     pull(.data$footnote) %>%
-    unique() %>%
-    c(vct_footnote_abbrev)
+    unique()
 
-  if( length(vct_footnote > 0))
+  if(length(vct_footnote > 0))
     kable_extra_calls[["footnote"]] <-
     expr(kableExtra::footnote(number = !!vct_footnote))
 

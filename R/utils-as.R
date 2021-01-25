@@ -10,6 +10,12 @@
 
 # convert columns that use row and values to format ----------------------------
 .convert_table_header_to_styling <- function(x) {
+  if (!is.null(x$table_header))
+    paste("'gtsummary' object was created with code from with <v1.4.0 and >=v1.4.0.",
+          "Unexpected formatting may occur.") %>%
+    str_wrap() %>%
+    ui_info()
+
   x$table_body_styling$header <-
     x$table_header %>%
     mutate(interpret_spanning_header = "gt::md") %>%
@@ -62,7 +68,7 @@
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
       mutate(symbol = get_theme_element("tbl_regression-str:ref_row_text",
-                                        default = "---"))
+                                        default = "\U2014"))
   }
   else if (column %in% "fmt_fun") {
     x$table_body_styling[[column]] <-
@@ -79,14 +85,9 @@
 
 # takes a table_body and a character rows expression, and returns the resulting row numbers
 .rows_expr_to_row_numbers <- function(table_body, rows) {
-  if (is.na(rows)) return(NA)
-
-  df <- as.data.frame(table_body) %>% tibble::remove_rownames()
-
-  expr(subset(df, !!rlang::parse_expr(rows))) %>%
-    eval() %>%
-    rownames() %>%
-    as.integer()
+  if (all(is.na(rows))) return(NA)
+  with(table_body, eval(rlang::parse_expr(rows))) %>%
+    which()
 }
 
 .cols_to_show <- function(x) {
@@ -99,6 +100,8 @@
 # 1. Converts row expressions to row numbers, and only keeps the most recent.
 # 2. Deletes NA footnote, text_formatting undoings, etc. as they will not be used
 .clean_table_body_stylings <- function(x) {
+  if (is.null(x$table_body_styling)) x <- .convert_table_header_to_styling(x)
+
   # text_format ----------------------
   x$table_body_styling$text_format <-
     x$table_body_styling$text_format %>%
@@ -117,6 +120,21 @@
     mutate(row_numbers = map(row_numbers, ~unlist(.x) %>% unname())) %>%
     select(.data$column, .data$row_numbers, everything()) %>%
     ungroup()
+
+  # fmt_missing ------------------------------
+  x$table_body_styling$fmt_missing <-
+    x$table_body_styling$fmt_missing %>%
+    filter(.data$column %in% .cols_to_show(x)) %>%
+    rowwise() %>%
+    mutate(
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list()
+    ) %>%
+    select(-.data$rows) %>%
+    unnest(.data$row_numbers) %>%
+    group_by(.data$column, .data$row_numbers) %>%
+    dplyr::slice_tail() %>%
+    ungroup() %>%
+    select(.data$column, .data$row_numbers, .data$symbol)
 
   # footnote ---------------------------------
   x$table_body_styling$footnote <-
@@ -173,5 +191,29 @@
     select(all_of(c("column", "tab_location", "row_numbers", "text_interpret", "footnote")))
 }
 
-
-
+# this function orders the footnotes by where they first appear in the table,
+# and assigns them an sequential ID
+.number_footnotes <- function(x) {
+  if (nrow(x$table_body_styling$footnote) == 0 &&
+      nrow(x$table_body_styling$footnote_abbrev) == 0)
+    return(tibble(footnote_id = integer(), footnote = character(), column = character(),
+                  tab_location = character(), row_numbers = integer()))
+  bind_rows(
+    x$table_body_styling$footnote,
+    x$table_body_styling$footnote_abbrev
+  ) %>%
+    inner_join(
+      x$table_body_styling$header %>%
+        select(.data$column) %>%
+        mutate(column_id = row_number()),
+      by = "column"
+    ) %>%
+    arrange(desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
+    group_by(.data$footnote) %>%
+    nest() %>%
+    ungroup() %>%
+    mutate(footnote_id = row_number()) %>%
+    unnest(cols = .data$data) %>%
+    select(.data$footnote_id, .data$footnote, .data$column,
+           .data$tab_location, .data$row_numbers)
+}

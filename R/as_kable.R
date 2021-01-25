@@ -46,6 +46,9 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
     )
   }
 
+  # converting row specifications to row numbers, and removing old cmds --------
+  x <- .clean_table_body_stylings(x)
+
   # creating list of kable calls --------------------------------------------------
   kable_calls <-
     table_header_to_kable_calls(x = x, ...)
@@ -87,16 +90,15 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
 table_header_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
-  table_header <- .clean_table_header(x$table_header)
+  kable_calls <- table_header_to_tibble_calls(x, col_labels =  FALSE)
 
-  kable_calls <- as_tibble(x, return_calls = TRUE, include = -c("cols_label"))
 
   # fmt_missing ----------------------------------------------------------------
   kable_calls[["fmt_missing"]] <- expr(dplyr::mutate_all(~ifelse(is.na(.), "", .)))
 
   # kable ----------------------------------------------------------------------
   df_col_labels <-
-    dplyr::filter(table_header, .data$hide == FALSE)
+    dplyr::filter(x$table_body_styling$header, .data$hide == FALSE)
 
   if (!is.null(x$list_output$caption))
     kable_calls[["kable"]] <-

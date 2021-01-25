@@ -64,6 +64,9 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
     )
   }
 
+  # converting row specifications to row numbers, and removing old cmds --------
+  x <- .clean_table_body_stylings(x)
+
   # creating list of gt calls --------------------------------------------------
   gt_calls <- table_header_to_gt_calls(x = x, ...)
   # adding other calls from x$list_output$source_note
@@ -122,19 +125,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
 
 # creating gt calls from table_header ------------------------------------------
 table_header_to_gt_calls <- function(x, ...) {
-  # print message if old printing style object exists --------------------------
-  if (!is.null(x$table_header)) {
-    if (!is.null(x$table_body_styling))
-      paste("'gtsummary' object was created with code from with <v1.4.0 and >=v1.4.0.",
-            "Unexpected formatting may occur.") %>%
-      str_wrap() %>%
-      ui_info()
-    x <- .convert_table_header_to_styling(x)
-  }
-
-  # converting row specifications to row numbers, and removing old cmds
-  x <- .clean_table_body_stylings(x)
-
   # table_header <- .clean_table_header(x$table_header)
   gt_calls <- list()
 
@@ -149,14 +139,15 @@ table_header_to_gt_calls <- function(x, ...) {
     expr(gt::gt(data = x$table_body, !!!list(...)))
 
   # fmt_missing ----------------------------------------------------------------
-  gt_calls[["fmt_missing"]] <- expr(
-    gt::fmt_missing(columns = gt::everything(), missing_text = '')
-  ) %>%
+  gt_calls[["fmt_missing"]] <-
+    expr(
+      gt::fmt_missing(columns = gt::everything(), missing_text = '')
+    ) %>%
     c(
       map(
         seq_len(nrow(x$table_body_styling$fmt_missing)),
         ~ expr(gt::fmt_missing(columns = gt::vars(!!!syms(x$table_body_styling$fmt_missing$column[[.x]])),
-                               rows = !!parse_expr(x$table_body_styling$fmt_missing$rows[[.x]]),
+                               rows = !!x$table_body_styling$fmt_missing$row_numbers[[.x]],
                                missing_text = !!x$table_body_styling$fmt_missing$symbol[[.x]]))
       )
     )
@@ -229,44 +220,50 @@ table_header_to_gt_calls <- function(x, ...) {
     {call2(expr(gt::cols_label), !!!.)}
 
   # tab_footnote ---------------------------------------------------------------
-  df_footnotes <-
-    bind_rows(
-      x$table_body_styling$footnote,
-      x$table_body_styling$footnote_abbrev
-    ) %>%
-    nest(data = c(.data$column, .data$row_numbers)) %>%
-    rowwise() %>%
-    mutate(
-      columns = data %>% pull(.data$column) %>% list(),
-      rows = data %>% pull(.data$row_numbers) %>% list()
-    ) %>%
-    ungroup()
-  df_footnotes$footnote_exp <-
-    map2(
-      df_footnotes$text_interpret,
-      df_footnotes$footnote,
-      ~ call2(parse_expr(.x), .y)
+  if (nrow(x$table_body_styling$footnote) == 0 &&
+      nrow(x$table_body_styling$footnote_abbrev) == 0) {
+    gt_calls[["tab_footnote"]] <- list()
+  }
+  else {
+    df_footnotes <-
+      bind_rows(
+        x$table_body_styling$footnote,
+        x$table_body_styling$footnote_abbrev
+      ) %>%
+      nest(data = c(.data$column, .data$row_numbers)) %>%
+      rowwise() %>%
+      mutate(
+        columns = data %>% pull(.data$column) %>% list(),
+        rows = data %>% pull(.data$row_numbers) %>% list()
+      ) %>%
+      ungroup()
+    df_footnotes$footnote_exp <-
+      map2(
+        df_footnotes$text_interpret,
+        df_footnotes$footnote,
+        ~ call2(parse_expr(.x), .y)
+      )
+
+
+    gt_calls[["tab_footnote"]] <- pmap(
+      list(df_footnotes$tab_location, df_footnotes$footnote_exp,
+           df_footnotes$columns, df_footnotes$rows),
+      function(tab_location, footnote, columns, rows) {
+        if (tab_location == "header") return(expr(
+          gt::tab_footnote(
+            footnote = !!footnote,
+            locations = gt::cells_column_labels(columns = vars(!!!syms(columns)))
+          )
+        ))
+        if (tab_location == "body") return(expr(
+          gt::tab_footnote(
+            footnote = !!footnote,
+            locations = gt::cells_body(columns = vars(!!!syms(columns)), rows = !!!rows)
+          )
+        ))
+      }
     )
-
-
-  gt_calls[["tab_footnote"]] <- pmap(
-    list(df_footnotes$tab_location, df_footnotes$footnote_exp,
-         df_footnotes$columns, df_footnotes$rows),
-    function(tab_location, footnote, columns, rows) {
-      if (tab_location == "header") return(expr(
-        gt::tab_footnote(
-          footnote = !!footnote,
-          locations = gt::cells_column_labels(columns = vars(!!!syms(columns)))
-        )
-      ))
-      if (tab_location == "body") return(expr(
-        gt::tab_footnote(
-          footnote = !!footnote,
-          locations = gt::cells_body(columns = vars(!!!syms(columns)), rows = !!!rows)
-        )
-      ))
-    }
-  )
+  }
 
   # spanning_header ------------------------------------------------------------
   df_spanning_header <-
