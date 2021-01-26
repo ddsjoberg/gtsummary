@@ -11,14 +11,12 @@ modify_table_styling(
   label = NULL,
   spanning_header = NULL,
   hide = NULL,
-  align = NULL,
   footnote = NULL,
   footnote_abbrev = NULL,
+  align = NULL,
   missing_symbol = NULL,
   fmt_fun = NULL,
-  indent = FALSE,
-  bold = FALSE,
-  italic = FALSE,
+  text_format = c("bold", "italic", "indent"),
   undo_text_format = FALSE,
   text_interpret = c("gt::md", "gt::html")
 )
@@ -36,24 +34,21 @@ modify_table_styling(
 
 \item{hide}{logical indicating whether to hide column from output}
 
-\item{align}{string indicating alignment of column, must be one of
-\code{c("left", "right", "center")}}
-
 \item{footnote}{string with text for footnote}
 
 \item{footnote_abbrev}{string with abbreviation definition, e.g.
 \code{"CI = Confidence Interval"}}
+
+\item{align}{string indicating alignment of column, must be one of
+\code{c("left", "right", "center")}}
 
 \item{missing_symbol}{string indicating how missing values are formatted.}
 
 \item{fmt_fun}{function that formats the statistics in the
 columns/rows in \verb{columns=} and \verb{rows=}}
 
-\item{indent}{logical indicating if the rows selected in \verb{rows=} should be indented}
-
-\item{bold}{logical indicating if the rows selected in \verb{rows=} should be bold}
-
-\item{italic}{logical indicating if the rows selected in \verb{rows=} should be italic}
+\item{text_format}{string indicated which type of text formatting to apply to the rows and columns.
+Must be one of \code{c("bold", "italic", "indent")}}
 
 \item{undo_text_format}{rarely used. Logical that undoes the indent, bold,
 and italic styling when \code{TRUE}}

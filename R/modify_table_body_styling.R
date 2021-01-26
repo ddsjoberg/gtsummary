@@ -15,9 +15,8 @@
 #' @param hide logical indicating whether to hide column from output
 #' @param align string indicating alignment of column, must be one of
 #' `c("left", "right", "center")`
-#' @param indent logical indicating if the rows selected in `rows=` should be indented
-#' @param bold logical indicating if the rows selected in `rows=` should be bold
-#' @param italic logical indicating if the rows selected in `rows=` should be italic
+#' @param text_format string indicated which type of text formatting to apply to the rows and columns.
+#' Must be one of `c("bold", "italic", "indent")`
 #' @param text_interpret string, must be one of `"gt::md"` or `"gt::html"`
 #' @param fmt_fun function that formats the statistics in the
 #' columns/rows in `columns=` and `rows=`
@@ -37,14 +36,12 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
                                  label = NULL,
                                  spanning_header = NULL,
                                  hide = NULL,
-                                 align = NULL,
                                  footnote = NULL,
                                  footnote_abbrev = NULL,
+                                 align = NULL,
                                  missing_symbol = NULL,
                                  fmt_fun = NULL,
-                                 indent = FALSE,
-                                 bold = FALSE,
-                                 italic = FALSE,
+                                 text_format = c("bold", "italic", "indent"),
                                  undo_text_format = FALSE,
                                  text_interpret = c("gt::md", "gt::html")
                                  ) {
@@ -52,6 +49,9 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
   if (is.null(x$table_body_styling)) x <- .convert_table_header_to_styling(x)
   text_interpret <- match.arg(text_interpret)
+  text_format <- match.arg(text_format,
+                           choices = c("bold", "italic", "indent"),
+                           several.ok = TRUE)
 
   # update table_header --------------------------------------------------------
   x <- .update_table_body_styling(x)
@@ -61,7 +61,7 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
     .select_to_varnames(
       select = {{ columns }},
       var_info = x$table_header$column,
-      arg_name = "column"
+      arg_name = "columns"
     )
 
   # if no columns selected, returning unaltered
@@ -154,10 +154,7 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
     list(
       column = columns,
       rows = rows,
-      format_type =
-        list(bold = bold, italic = italic, indent = indent) %>%
-        purrr::imap(~switch(.x, .y)) %>%
-        unlist(),
+      format_type = text_format,
       undo_text_format = undo_text_format
     ) %>%
     purrr::cross_df() %>%

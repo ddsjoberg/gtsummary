@@ -69,6 +69,14 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
   # if no columns selected, returning unaltered
   if (is.null(column)) return(x)
 
+  .convert_call_to_table_body_styling(
+    column = column, label = label, hide = hide, align = align,
+    missing_emdash = missing_emdash, indent = indent,
+    text_interpret = text_interpret, bold = bold, italic = italic,
+    fmt_fun = fmt_fun, footnote_abbrev = footnote_abbrev,
+    footnote = footnote, spanning_header = spanning_header
+  )
+
   # label ----------------------------------------------------------------------
   x <- .update_table_header_element(
     x = x, column = column, element = "label", update = label,
@@ -177,3 +185,57 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
   # return gtsummary object ----------------------------------------------------
   x
 }
+
+.convert_call_to_table_body_styling <- function(column, label, hide, align,
+                                                missing_emdash, indent,
+                                                text_interpret, bold, italic,
+                                                fmt_fun, footnote_abbrev,
+                                                footnote, spanning_header) {
+  call_list <- list()
+
+  if (!is.null(label)) {
+    if (!is.null(text_interpret))
+      call_list[["label"]] <- expr(modify_table_body_styling(columns = !!column, label = !!label, text_interpret = !!text_interpret))
+    else
+      call_list[["label"]] <- expr(modify_table_body_styling(columns = !!column, label = !!label))
+  }
+  if (!is.null(spanning_header)) {
+    call_list[["spanning_header"]] <- expr(modify_table_body_styling(columns = !!column, label = !!spanning_header))
+  }
+  if (!is.null(hide)) {
+    call_list[["hide"]] <- expr(modify_table_body_styling(columns = !!column, hide = !!hide))
+  }
+  if (!is.null(hide)) {
+    call_list[["align"]] <- expr(modify_table_body_styling(columns = !!column, hide = !!align))
+  }
+  if (!is.null(missing_emdash)) {
+    call_list[["missing_emdash"]] <- expr(modify_table_body_styling(columns = !!column, rows = !!missing_emdash, symbol = "---"))
+  }
+  if (!is.null(indent)) {
+    call_list[["indent"]] <- expr(modify_table_body_styling(columns = !!column, rows = !!indent, text_format = "indent"))
+  }
+  if (!is.null(bold)) {
+    call_list[["bold"]] <- expr(modify_table_body_styling(columns = !!column, rows = !!bold, text_format = "bold"))
+  }
+  if (!is.null(italic)) {
+    call_list[["italic"]] <- expr(modify_table_body_styling(columns = !!column, rows = !!italic, text_format = "italic"))
+  }
+  if (!is.null(fmt_fun)) {
+    call_list[["fmt_fun"]] <- expr(modify_table_body_styling(columns = !!column, rows = NA, fmt_fun = fmt_fun))
+  }
+  if (!is.null(footnote_abbrev)) {
+    call_list[["footnote_abbrev"]] <- expr(modify_table_body_styling(columns = !!column, rows = NA, footnote_abbrev = !!footnote_abbrev))
+  }
+  if (!is.null(footnote)) {
+    call_list[["footnote"]] <- expr(modify_table_body_styling(columns = !!column, rows = NA, footnote = !!footnote))
+  }
+
+  ui_info("Run this instead:")
+  c(list(expr(x)), call_list) %>%
+    map(deparse) %>%
+    unlist() %>%
+    paste(collapse = " %>% ") %>%
+    ui_code() %>%
+    print()
+}
+
