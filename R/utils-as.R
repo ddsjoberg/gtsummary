@@ -174,14 +174,14 @@
     df_clean %>%
     rowwise() %>%
     mutate(
-      tab_location = ifelse(is.na(rows), "header", "body"),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, rows) %>% list(),
+      tab_location = ifelse(is.na(.data$rows), "header", "body"),
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(cols = .data$row_numbers) %>%
-    group_by(column, tab_location, row_numbers) %>%
+    group_by(.data$column, .data$tab_location, .data$row_numbers) %>%
     dplyr::slice_tail() %>% # keeping the most recent addition
-    filter(!is.na(footnote)) # keep non-missing additions
+    filter(!is.na(.data$footnote)) # keep non-missing additions
 
   if (footnote_type == "footnote_abbrev") {
     df_clean$footnote <- paste(df_clean$footnote, collapse = ", ")

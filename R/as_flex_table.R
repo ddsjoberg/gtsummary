@@ -274,7 +274,7 @@ table_header_to_flextable_calls <- function(x, ...) {
     inner_join(x$table_body_styling$header %>%
                  select(.data$column, column_id = .data$id),
                by = "column") %>%
-    select(format_type, row_numbers, column_id)
+    select(.data$format_type, .data$row_numbers, .data$column_id)
 
   flextable_calls[["bold"]] <-
     map(
@@ -291,7 +291,7 @@ table_header_to_flextable_calls <- function(x, ...) {
     inner_join(x$table_body_styling$header %>%
                  select(.data$column, column_id = .data$id),
                by = "column") %>%
-    select(format_type, row_numbers, column_id)
+    select(.data$format_type, .data$row_numbers, .data$column_id)
 
   flextable_calls[["italic"]] <-
     map(
