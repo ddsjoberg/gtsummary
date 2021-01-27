@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages("remotes")
-          remotes::install_deps(dependencies = TRUE)
+          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
           remotes::install_github("r-lib/bench")
         shell: Rscript {0}
 
