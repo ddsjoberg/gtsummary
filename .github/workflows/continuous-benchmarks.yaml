@@ -4,7 +4,7 @@ name: Continuous Benchmarks
 
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: ubuntu-16.04
     steps:
       - name: Checkout repo
         uses: actions/checkout@master
@@ -13,6 +13,15 @@ jobs:
         uses: r-lib/actions/setup-r@master
         with:
           r-version: 'release'
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        env:
+          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+        run: |
+          Rscript -e "remotes::install_github('r-hub/sysreqs')"
+          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+          sudo -s eval "$sysreqs"
 
       - name: Install dependencies
         run: |
