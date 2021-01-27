@@ -20,10 +20,9 @@
 #       - without errors, warnings, messages
 #       - works with add_global_p(), add_nevent(), add_q()
 
-context("test-vetted_models")
-testthat::skip_on_cran()
+skip_on_cran()
 # vetted models checks take a long time--only perform on CI checks
-testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
+skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 library(dplyr)
 
 # geeglm() --------------------------------------------------------------------
@@ -66,47 +65,47 @@ test_that("vetted_models geeglm()", {
     tbl_geeglm_log, NA
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     coef(mod_geeglm_lin)[-1],
     coefs_in_gt(tbl_geeglm_lin)
   )
-  expect_equivalent(
+  expect_equal(
     coef(mod_geeglm_int)[-1],
     coefs_in_gt(tbl_geeglm_int)
   )
-  expect_equivalent(
+  expect_equal(
     coef(mod_geeglm_log)[-1],
     coefs_in_gt(tbl_geeglm_log)
   )
 
   #       - labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_geeglm_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
     c("Age", "Chemotherapy Treatment", "Grade")
   )
-  expect_equivalent(
+  expect_equal(
     tbl_geeglm_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
     c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
-  expect_equivalent(
+  expect_equal(
     tbl_geeglm_log$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
     c("Age", "Chemotherapy Treatment", "Grade")
   )
   # 2.  If applicable, runs as expected with logit and log link
-  expect_equivalent(
+  expect_equal(
     coef(mod_geeglm_log)[-1] %>% exp(),
     coefs_in_gt(mod_geeglm_log %>% tbl_regression(exponentiate = TRUE))
   )
 
   # 3.  Interaction terms are correctly printed in output table
   #       - interaction labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_geeglm_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
@@ -143,7 +142,7 @@ test_that("vetted_models geeglm()", {
     tbl_geeglm_log4 <- tbl_geeglm_lin %>% add_nevent(), NULL
   )
   #       - numbers in table are correct
-  # expect_equivalent(
+  # expect_equal(
   #   tbl_geeglm_lin2$table_body %>%
   #     pull(p.value) %>%
   #     na.omit() %>%
@@ -152,7 +151,7 @@ test_that("vetted_models geeglm()", {
   #     as.data.frame() %>%
   #     pull(`Pr(>Chisq)`)
   # )
-  # expect_equivalent(
+  # expect_equal(
   #   tbl_geeglm_int2$table_body %>%
   #     pull(p.value) %>%
   #     na.omit() %>%
@@ -161,7 +160,7 @@ test_that("vetted_models geeglm()", {
   #     as.data.frame() %>%
   #     pull(`Pr(>Chisq)`)
   # )
-  expect_equivalent(
+  expect_equal(
     tbl_geeglm_log3$table_body %>% filter(variable == "trt") %>% pull(p.value),
     update(mod_geeglm_log, formula. = . ~ . - trt) %>%
       {anova(mod_geeglm_log, .)} %>%

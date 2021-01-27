@@ -20,10 +20,9 @@
 #       - without errors, warnings, messages
 #       - works with add_global_p(), add_nevent(), add_q()
 
-context("test-vetted_models-glmer")
-testthat::skip_on_cran()
+skip_on_cran()
 # vetted models checks take a long time--only perform on CI checks
-testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
+skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 library(dplyr)
 
 # glmer() --------------------------------------------------------------------
@@ -48,24 +47,24 @@ test_that("vetted_models glmer()", {
     tbl_glmer_int, NA
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     summary(mod_glmer_lin)$coefficients[-1, 1],
     coefs_in_gt(tbl_glmer_lin)
   )
-  expect_equivalent(
+  expect_equal(
     summary(mod_glmer_int)$coefficients[-1, 1],
     coefs_in_gt(tbl_glmer_int)
   )
-  expect_equivalent(
+  expect_equal(
     summary(mod_glmer_lin)$coefficients[, 1],
     coefs_in_gt(tbl_regression(mod_glmer_lin, intercept = TRUE))
   )
-  expect_equivalent(
+  expect_equal(
     summary(mod_glmer_int)$coefficients[, 1],
     coefs_in_gt(tbl_regression(mod_glmer_int, intercept = TRUE))
   )
   #       - labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_glmer_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),

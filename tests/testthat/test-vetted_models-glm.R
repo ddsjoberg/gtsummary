@@ -21,10 +21,9 @@
 #       - works with add_global_p(), add_nevent(), add_q()
 
 
-context("test-vetted_models-glm")
-testthat::skip_on_cran()
+skip_on_cran()
 # vetted models checks take a long time--only perform on CI checks
-testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
+skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 library(dplyr)
 
 # glm() ------------------------------------------------------------------------
@@ -66,47 +65,47 @@ test_that("vetted_models glm()", {
     tbl_glm_log, NA
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     coef(mod_glm_lin)[-1],
     coefs_in_gt(tbl_glm_lin)
   )
-  expect_equivalent(
+  expect_equal(
     coef(mod_glm_int)[-1],
     coefs_in_gt(tbl_glm_int)
   )
-  expect_equivalent(
+  expect_equal(
     coef(mod_glm_log)[-1],
     coefs_in_gt(tbl_glm_log)
   )
 
   #       - labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_glm_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
     c("Age", "Chemotherapy Treatment", "Grade")
   )
-  expect_equivalent(
+  expect_equal(
     tbl_glm_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
     c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
-  expect_equivalent(
+  expect_equal(
     tbl_glm_log$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
     c("Age", "Chemotherapy Treatment", "Grade")
   )
   # 2.  If applicable, runs as expected with logit and log link
-  expect_equivalent(
+  expect_equal(
     coef(mod_glm_log)[-1] %>% exp(),
     coefs_in_gt(mod_glm_log %>% tbl_regression(exponentiate = TRUE))
   )
 
   # 3.  Interaction terms are correctly printed in output table
   #       - interaction labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_glm_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
@@ -142,7 +141,7 @@ test_that("vetted_models glm()", {
     tbl_glm_log4 <- tbl_glm_lin %>% add_nevent(), NULL
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     tbl_glm_lin2$table_body %>%
       pull(p.value) %>%
       na.omit() %>%
@@ -151,7 +150,7 @@ test_that("vetted_models glm()", {
       as.data.frame() %>%
       pull(`Pr(>Chisq)`)
   )
-  expect_equivalent(
+  expect_equal(
     tbl_glm_int2$table_body %>%
       pull(p.value) %>%
       na.omit() %>%
@@ -160,7 +159,7 @@ test_that("vetted_models glm()", {
       as.data.frame() %>%
       pull(`Pr(>Chisq)`)
   )
-  expect_equivalent(
+  expect_equal(
     tbl_glm_log3$table_body %>% filter(variable == "trt") %>% pull(p.value),
     update(mod_glm_log, formula. = . ~ . - trt) %>%
       {anova(mod_glm_log, ., test = "LRT")} %>%

@@ -20,10 +20,9 @@
 #       - without errors, warnings, messages
 #       - works with add_global_p(), add_nevent(), add_q()
 
-context("test-vetted_models")
-testthat::skip_on_cran()
+skip_on_cran()
 # vetted models checks take a long time--only perform on CI checks
-testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
+skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 library(dplyr)
 library(survival)
 
@@ -49,37 +48,37 @@ test_that("vetted_models clogit()", {
     tbl_clogit_int, NA
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     coef(mod_clogit_lin),
     coefs_in_gt(tbl_clogit_lin)
   )
-  expect_equivalent(
+  expect_equal(
     coef(mod_clogit_int),
     coefs_in_gt(tbl_clogit_int)
   )
 
   #       - labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_clogit_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
     c("Age", "Chemotherapy Treatment", "Grade")
   )
-  expect_equivalent(
+  expect_equal(
     tbl_clogit_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
     c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
   )
   # 2.  If applicable, runs as expected with logit and log link
-  expect_equivalent(
+  expect_equal(
     coef(mod_clogit_lin) %>% exp(),
     coefs_in_gt(mod_clogit_lin %>% tbl_regression(exponentiate = TRUE))
   )
 
   # 3.  Interaction terms are correctly printed in output table
   #       - interaction labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_clogit_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
@@ -115,7 +114,7 @@ test_that("vetted_models clogit()", {
   #       - numbers in table are correct
   # clogit models fail in car::Anova on old versions
   if (r_version >= "3.5.0") {
-    expect_equivalent(
+    expect_equal(
       tbl_clogit_lin2$table_body %>%
         pull(p.value) %>%
         na.omit() %>%
@@ -124,7 +123,7 @@ test_that("vetted_models clogit()", {
         as.data.frame() %>%
         pull(`Pr(>Chisq)`)
     )
-    expect_equivalent(
+    expect_equal(
       tbl_clogit_int2$table_body %>%
         pull(p.value) %>%
         na.omit() %>%
@@ -134,7 +133,7 @@ test_that("vetted_models clogit()", {
         pull(`Pr(>Chisq)`)
     )
     # anova() and car::Anova() do not match
-    # expect_equivalent(
+    # expect_equal(
     #   tbl_clogit_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
     #   car::Anova(mod_clogit_lin, type = "III", test = "Wald") %>%
     #     as.data.frame() %>%

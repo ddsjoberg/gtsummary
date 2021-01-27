@@ -1,5 +1,4 @@
-context("test-add_overall")
-testthat::skip_on_cran()
+skip_on_cran()
 library(survival)
 
 test_that("no errors/warnings with standard use", {

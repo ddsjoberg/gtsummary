@@ -1,5 +1,4 @@
-context("test-assign_dichotomous_value")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_df <-
   tibble::tibble(

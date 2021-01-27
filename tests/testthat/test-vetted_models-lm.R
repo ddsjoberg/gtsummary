@@ -20,8 +20,7 @@
 #       - without errors, warnings, messages
 #       - works with add_global_p(), add_nevent(), add_q()
 
-context("test-vetted_models-lm")
-testthat::skip_on_cran()
+skip_on_cran()
 # vetted models checks take a long time--only perform on CI checks
 testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 library(dplyr)
