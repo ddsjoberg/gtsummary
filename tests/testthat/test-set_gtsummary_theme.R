@@ -4,61 +4,75 @@ testthat::skip_on_cran()
 test_that("setting themes", {
   expect_error(
     theme_gtsummary_journal("jama"),
-    NA)
+    NA
+  )
 
   expect_error(
     set_gtsummary_theme(theme_gtsummary_journal("jama")),
-    NA)
+    NA
+  )
 
   expect_error(
     set_gtsummary_theme(theme_gtsummary_journal("nejm")),
-    NA)
+    NA
+  )
 
   expect_error(
     set_gtsummary_theme(theme_gtsummary_journal("lancet")),
-    NA)
+    NA
+  )
 
   expect_error(
     theme_gtsummary_continuous2(),
-    NA)
+    NA
+  )
 
   expect_error(
     theme_gtsummary_printer(),
-    NA)
+    NA
+  )
 
   expect_error(
     theme_gtsummary_mean_sd(),
-    NA)
+    NA
+  )
 
   expect_error(
     theme_gtsummary_compact(),
-    NA)
+    NA
+  )
 
   expect_error(
     set_gtsummary_theme(theme_gtsummary_language("fr", big.mark = " ", decimal.mark = ",")),
-    NA)
+    NA
+  )
 
   expect_error(
     tbl_summary(trial, by = trt) %>% add_p() %>% add_stat_label(),
-    NA)
+    NA
+  )
 
   expect_error(
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
       as_gt(),
-    NA)
+    NA
+  )
 
   expect_error(
     reset_gtsummary_theme(),
-    NA)
+    NA
+  )
 
   expect_error(
     set_gtsummary_theme(list("not_a_theme_element" = 0)),
-    "*")
+    "*"
+  )
 
   expect_error(
     get_theme_element("not_a_theme_element"),
-    "*")
+    "*"
+  )
 
   # setting a continuous2 default stat
   list(
@@ -69,9 +83,9 @@ test_that("setting themes", {
     set_gtsummary_theme()
 
   expect_error(tbl_theme <- tbl_summary(trial[c("trt", "age")]), NA)
-  expect_equal(tbl_theme$meta_data$stat_display,
-               list("{n} / {N} ({p}%)", c("{median} ({p25} - {p75})", "{mean} ({sd})")))
+  expect_equal(
+    tbl_theme$meta_data$stat_display,
+    list("{n} / {N} ({p}%)", c("{median} ({p25} - {p75})", "{mean} ({sd})"))
+  )
   reset_gtsummary_theme()
 })
-
-

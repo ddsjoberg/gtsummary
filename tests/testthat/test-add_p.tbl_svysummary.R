@@ -2,7 +2,7 @@ context("test-add_p.tbl_svyummary")
 testthat::skip_on_cran()
 
 strial <- trial %>%
-  survey::svydesign(data = ., ids = ~ 1, weights = ~1)
+  survey::svydesign(data = ., ids = ~1, weights = ~1)
 d <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 
 test_that("add_p creates output without error/warning", {
@@ -41,7 +41,6 @@ test_that("add_p creates output without error/warning", {
     tbl_svysummary(d, by = Survived) %>% add_p(),
     NA
   )
-
 })
 
 
@@ -81,7 +80,6 @@ test_that("add_p creates output without error/warning with continuous2", {
     tbl_svysummary(d, by = Survived, type = all_continuous() ~ "continuous2") %>% add_p(),
     NA
   )
-
 })
 
 test_that("add_p creates errors with bad args", {
@@ -113,7 +111,7 @@ test_that("add_p works well", {
         age ~ "svy.t.test",
         marker ~ "svy.wilcox.test",
         trt ~ "svy.chisq.test",
-        stage ~"svy.adj.chisq.test",
+        stage ~ "svy.adj.chisq.test",
         death ~ "svy.wald.test"
       )),
     NA
@@ -131,20 +129,20 @@ test_that("add_p works well", {
 
   expect_equivalent(
     dplyr::filter(tbl1$meta_data, variable == "trt")$p.value,
-    survey::svychisq(~trt + response, strial, statistic = "F")$p.value %>% rlang::set_names(NULL),
-    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+    survey::svychisq(~ trt + response, strial, statistic = "F")$p.value %>% rlang::set_names(NULL),
+    tolerance = 10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 
   expect_equivalent(
     dplyr::filter(tbl1$meta_data, variable == "stage")$p.value,
-    survey::svychisq(~stage + response, strial, statistic = "Chisq")$p.value %>% rlang::set_names(NULL)
+    survey::svychisq(~ stage + response, strial, statistic = "Chisq")$p.value %>% rlang::set_names(NULL)
   )
 
 
   expect_equivalent(
     dplyr::filter(tbl1$meta_data, variable == "death")$p.value,
-    survey::svychisq(~death + response, strial, statistic = "Wald")$p.value %>% rlang::set_names(NULL),
-    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+    survey::svychisq(~ death + response, strial, statistic = "Wald")$p.value %>% rlang::set_names(NULL),
+    tolerance = 10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 
 
@@ -157,7 +155,7 @@ test_that("add_p works well", {
         ttdeath ~ "svy.kruskal.test",
         marker ~ "svy.median.test",
         trt ~ "svy.adj.wald.test",
-        stage ~"svy.lincom.test",
+        stage ~ "svy.lincom.test",
         death ~ "svy.saddlepoint.test"
       )),
     NA
@@ -180,19 +178,19 @@ test_that("add_p works well", {
 
   expect_equivalent(
     dplyr::filter(tbl2$meta_data, variable == "trt")$p.value,
-    survey::svychisq(~trt + response, strial, statistic = "adjWald")$p.value %>% as.numeric(),
-    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+    survey::svychisq(~ trt + response, strial, statistic = "adjWald")$p.value %>% as.numeric(),
+    tolerance = 10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 
   expect_equivalent(
     dplyr::filter(tbl2$meta_data, variable == "stage")$p.value,
-    survey::svychisq(~stage + response, strial, statistic = "lincom")$p.value %>% as.numeric(),
-    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+    survey::svychisq(~ stage + response, strial, statistic = "lincom")$p.value %>% as.numeric(),
+    tolerance = 10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 
   expect_equivalent(
     dplyr::filter(tbl2$meta_data, variable == "death")$p.value,
-    survey::svychisq(~death + response, strial, statistic = "saddlepoint")$p.value %>% as.numeric(),
-    tolerance =10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+    survey::svychisq(~ death + response, strial, statistic = "saddlepoint")$p.value %>% as.numeric(),
+    tolerance = 10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 })

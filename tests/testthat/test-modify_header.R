@@ -61,9 +61,11 @@ test_that("checking glue inserts to headers", {
 
   expect_equal(
     tbl2$table_header %>% filter(hide == FALSE) %>% pull(label),
-    c("Variable (N = 2201: Unweighted 32)",
+    c(
+      "Variable (N = 2201: Unweighted 32)",
       "No (1490/2201; 68%): Unweighted 16/32; 50%",
-      "Yes (711/2201; 32%): Unweighted 16/32; 50%")
+      "Yes (711/2201; 32%): Unweighted 16/32; 50%"
+    )
   )
 
   expect_error(

@@ -63,8 +63,10 @@
 #' # updating column headers, footnote, and table caption
 #' modify_ex1 <- tbl %>%
 #'   modify_header(
-#'     update = list(label ~ "**Variable**",
-#'                   p.value ~ "**P**")
+#'     update = list(
+#'       label ~ "**Variable**",
+#'       p.value ~ "**P**"
+#'     )
 #'   ) %>%
 #'   modify_footnote(
 #'     update = all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade"
@@ -85,7 +87,6 @@
 #'   glm(response ~ age + grade, trial, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE)
-#'
 #' @return Updated gtsummary object
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -124,18 +125,25 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     #   "gtsummary::modify_header(stat_by=)",
     #   details = glue("Use {ui_code(rlang::expr(modify_header(update =  all_stat_cols(FALSE) ~ !!stat_by)) %>% deparse(width.cutoff = 500L))} instead."))
     update <-
-      c(update,
-        .formula_list_to_named_list(x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
-                                    var_info = x$table_header$column,
-                                    arg_name = "update"))
+      c(
+        update,
+        .formula_list_to_named_list(
+          x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
+          var_info = x$table_header$column,
+          arg_name = "update"
+        )
+      )
   }
   if (identical(list(), update)) update <- NULL
 
   # if no columns selected, print helpful message
   if (is.null(update) && is.null(stat_by) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
-  if (is.null(update) && is.null(stat_by)) return(x)
-  if (purrr::map_lgl(update, ~!rlang::is_string(.)) %>% any())
+  if (is.null(update) && is.null(stat_by)) {
+    return(x)
+  }
+  if (purrr::map_lgl(update, ~ !rlang::is_string(.)) %>% any()) {
     stop("All labels must be strings of length one.")
+  }
 
   # updating column headers ----------------------------------------------------
   df_update <-
@@ -184,7 +192,9 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
     )
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
-  if (is.null(update)) return(x)
+  if (is.null(update)) {
+    return(x)
+  }
 
   # updating footnote ----------------------------------------------------------
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
@@ -237,7 +247,9 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
 
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
-  if (is.null(update)) return(x)
+  if (is.null(update)) {
+    return(x)
+  }
 
   # updating spanning header ---------------------------------------------------
   df_update <-
@@ -293,8 +305,9 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # checking input -------------------------------------------------------------
-  if (!inherits(x, "gtsummary"))
+  if (!inherits(x, "gtsummary")) {
     stop("Pass a 'gtsummary' object in `x=` to print current column names and headers.")
+  }
 
   df_cols <- x$table_header %>%
     filter(.data$hide == FALSE) %>%
@@ -306,7 +319,9 @@ show_header_names <- function(x = NULL, quiet = NULL) {
     block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
       pull(.data$formula) %>%
       paste0("", collapse = ",\n") %>%
-      {glue("modify_header(update = list(\n{.}\n))")}
+      {
+        glue("modify_header(update = list(\n{.}\n))")
+      }
 
     ui_code_block(block)
 
@@ -319,8 +334,10 @@ show_header_names <- function(x = NULL, quiet = NULL) {
 
 # prints a helpful message when no columns were selected in the modfiy functions
 .modify_no_selected_vars <- function(x) {
-  paste("No columns were selected.",
-        "Use {ui_code('quiet = TRUE')} to supress these messages.") %>%
+  paste(
+    "No columns were selected.",
+    "Use {ui_code('quiet = TRUE')} to supress these messages."
+  ) %>%
     stringr::str_wrap() %>%
     usethis::ui_info()
 
@@ -351,14 +368,16 @@ show_header_names <- function(x = NULL, quiet = NULL) {
         select(.data$column) %>%
         full_join(
           x$df_by %>%
-            select(any_of(c("N",  "N_unweighted"))) %>%
+            select(any_of(c("N", "N_unweighted"))) %>%
             distinct(),
           by = character()
         ) %>%
         left_join(
           x$df_by %>%
-            select(column = .data$by_col, level = .data$by_chr,
-                   any_of(c("n", "p", "n_unweighted", "p_unweighted"))),
+            select(
+              column = .data$by_col, level = .data$by_chr,
+              any_of(c("n", "p", "n_unweighted", "p_unweighted"))
+            ),
           by = "column"
         )
     )
@@ -367,8 +386,9 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   # otherwise return tibble with N
   x$table_header %>%
     select(.data$column) %>%
-    mutate(N = x$N %||% x$n %||% NA_integer_,
-           # in V1.3.6, all documentation about {n} being supported was removed. This can be removed eventually
-           n = .data$N)
+    mutate(
+      N = x$N %||% x$n %||% NA_integer_,
+      # in V1.3.6, all documentation about {n} being supported was removed. This can be removed eventually
+      n = .data$N
+    )
 }
-

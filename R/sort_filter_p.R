@@ -45,13 +45,15 @@ sort_p <- function(x, q = FALSE) {
   # checking input table has a p.value column
   if (q == FALSE && !"p.value" %in% names(x$table_body)) {
     stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # checking input table has a q.value column
   if (q == TRUE && !"q.value" %in% names(x$table_body)) {
     stop("There is no q-value column. `x$table_body` must have a column called 'q.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # update table_body ---------------------------------------------------------
@@ -85,13 +87,15 @@ filter_p <- function(x, q = FALSE, t = 0.05) {
   # checking input table has a p.value column
   if (q == FALSE && !"p.value" %in% names(x$table_body)) {
     stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # checking input table has a q.value column
   if (q == TRUE && !"q.value" %in% names(x$table_body)) {
     stop("There is no q-value column. `x$table_body` must have a column called 'q.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # update table_body ---------------------------------------------------------

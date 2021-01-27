@@ -89,9 +89,9 @@
 #'
 #' \if{html}{\figure{tbl_svysummary_ex2.png}{options: width=36\%}}
 tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
-                        digits = NULL, type = NULL, value = NULL,
-                        missing = NULL, missing_text = NULL, sort = NULL,
-                        percent = NULL, include = everything()) {
+                           digits = NULL, type = NULL, value = NULL,
+                           missing = NULL, missing_text = NULL, sort = NULL,
+                           percent = NULL, include = everything()) {
   # checking for survey package ------------------------------------------------
   assert_package("survey", "tbl_svysummary()")
 
@@ -123,7 +123,8 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   missing_text <- missing_text %||%
     get_theme_element("tbl_svysummary-arg:missing_text") %||%
     get_theme_element("tbl_summary-arg:missing_text",
-                      default = translate_text("Unknown"))
+      default = translate_text("Unknown")
+    )
   sort <- sort %||%
     get_theme_element("tbl_svysummary-arg:sort") %||%
     get_theme_element("tbl_summary-arg:sort")
@@ -199,8 +200,10 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     meta_data %>%
     mutate(
       tbl_stats = pmap(
-        list(.data$summary_type, .data$variable,
-             .data$var_label, .data$stat_display, .data$df_stats),
+        list(
+          .data$summary_type, .data$variable,
+          .data$var_label, .data$stat_display, .data$df_stats
+        ),
         function(summary_type, variable, var_label, stat_display, df_stats) {
           df_stats_to_tbl(
             data = data, variable = variable, summary_type = summary_type, by = by,
@@ -279,13 +282,15 @@ is_survey <- function(data) {
 summarize_categorical_survey <- function(data, variable, by, class,
                                          dichotomous_value, sort, percent, stat_display) {
   df_stats <-
-    summarize_categorical(data = data$variables, variable = variable, by = by,
-                          class = class, dichotomous_value = dichotomous_value,
-                          sort = sort, percent = percent, stat_display = stat_display) %>%
+    summarize_categorical(
+      data = data$variables, variable = variable, by = by,
+      class = class, dichotomous_value = dichotomous_value,
+      sort = sort, percent = percent, stat_display = stat_display
+    ) %>%
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
 
   # if there is a dichotomous value, it needs to be present as a level of the variable for svytable
-  if(!is.null(dichotomous_value) && !dichotomous_value %in% unique(data$variables[[variable]])) {
+  if (!is.null(dichotomous_value) && !dichotomous_value %in% unique(data$variables[[variable]])) {
     data$variables[[variable]] <- as.factor(data$variables[[variable]])
     levels(data$variables[[variable]]) <- c(levels(data$variables[[variable]]), dichotomous_value)
   }
@@ -349,9 +354,11 @@ summarize_continuous_survey <- function(data, variable, by, stat_display,
   fns_names_chr <-
     extracting_function_calls_from_stat_display(stat_display, variable) %>%
     # removing stats that are calculated later
-    setdiff(c("p_miss", "N_obs", "N_miss", "p_miss_unweighted", "N_obs_unweighted",
-              "N_miss_unweighted", "N_nonmiss", "p_nonmiss", "N_nonmiss_unweighted",
-              "p_nonmiss_unweighted"))
+    setdiff(c(
+      "p_miss", "N_obs", "N_miss", "p_miss_unweighted", "N_obs_unweighted",
+      "N_miss_unweighted", "N_nonmiss", "p_nonmiss", "N_nonmiss_unweighted",
+      "p_nonmiss_unweighted"
+    ))
 
 
   # preparing df_stats
@@ -374,8 +381,10 @@ summarize_continuous_survey <- function(data, variable, by, stat_display,
     return <-
       left_join(
         df_stats,
-        tibble(variable_levels = map_chr(stat_display, ~stat_label_match(.x) %>% unlist()),
-               stat_display = .env$stat_display),
+        tibble(
+          variable_levels = map_chr(stat_display, ~ stat_label_match(.x) %>% unlist()),
+          stat_display = .env$stat_display
+        ),
         by = character()
       ) %>%
       select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
@@ -393,8 +402,9 @@ summarize_continuous_survey <- function(data, variable, by, stat_display,
 
 compute_survey_stat <- function(data, variable, by, f) {
   # difftime variable needs to be transformed into numeric for svyquantile
-  if (inherits(data$variables[[variable]], "difftime"))
+  if (inherits(data$variables[[variable]], "difftime")) {
     data$variables[[variable]] <- unclass(data$variables[[variable]])
+  }
 
   args <- list(
     design = data,
@@ -403,8 +413,9 @@ compute_survey_stat <- function(data, variable, by, f) {
   )
 
   # if all values are NA, turn na.rm to FALSE to avoid error
-  if (all(is.na(data$variables[[variable]])))
+  if (all(is.na(data$variables[[variable]]))) {
     args$na.rm <- FALSE
+  }
 
   fun <- NULL
   if (f == "mean") {
@@ -433,8 +444,9 @@ compute_survey_stat <- function(data, variable, by, f) {
     args$quantiles <- as.numeric(stringr::str_replace(f, pattern = "^p", "")) / 100
   }
 
-  if (is.null(fun))
+  if (is.null(fun)) {
     stop(paste0("'", f, "' statistic is not supported for survey objects."), call. = FALSE)
+  }
 
   if (is.null(by)) {
     args$x <- c_form(right = variable)
@@ -453,8 +465,9 @@ compute_survey_stat <- function(data, variable, by, f) {
       mutate(variable = variable)
   }
 
-  if (f == "sd")
+  if (f == "sd") {
     stat$sd <- sqrt(stat$sd)
+  }
 
   stat
 }
@@ -467,22 +480,30 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
   # first table are the standard stats
   t1 <- switch(
     summary_type,
-    "continuous" = summarize_continuous_survey(data = data, variable = variable,
-                                               by = by, stat_display = stat_display,
-                                               digits = digits, summary_type = summary_type),
-    "continuous2" = summarize_continuous_survey(data = data, variable = variable,
-                                                by = by, stat_display = stat_display,
-                                                digits = digits, summary_type = summary_type),
-    "categorical" = summarize_categorical_survey(data = data, variable = variable,
-                                                 by = by, class = class,
-                                                 dichotomous_value = dichotomous_value,
-                                                 sort = sort, percent = percent,
-                                                 stat_display = stat_display),
-    "dichotomous" = summarize_categorical_survey(data = data, variable = variable,
-                                                 by = by, class = class,
-                                                 dichotomous_value = dichotomous_value,
-                                                 sort = sort, percent = percent,
-                                                 stat_display = stat_display)
+    "continuous" = summarize_continuous_survey(
+      data = data, variable = variable,
+      by = by, stat_display = stat_display,
+      digits = digits, summary_type = summary_type
+    ),
+    "continuous2" = summarize_continuous_survey(
+      data = data, variable = variable,
+      by = by, stat_display = stat_display,
+      digits = digits, summary_type = summary_type
+    ),
+    "categorical" = summarize_categorical_survey(
+      data = data, variable = variable,
+      by = by, class = class,
+      dichotomous_value = dichotomous_value,
+      sort = sort, percent = percent,
+      stat_display = stat_display
+    ),
+    "dichotomous" = summarize_categorical_survey(
+      data = data, variable = variable,
+      by = by, class = class,
+      dichotomous_value = dichotomous_value,
+      sort = sort, percent = percent,
+      stat_display = stat_display
+    )
   )
 
   # adding the N_obs and N_missing, etc
@@ -490,23 +511,29 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
   # for svytable, we need to be sure that the factor has two levels
   data_is_na$variables <- mutate_at(data$variables, vars(all_of(variable)), ~ factor(is.na(.), c(F, T)))
 
-  t2 <- summarize_categorical_survey(data = data_is_na,
-                                     variable = variable,
-                                     by = by, class = "logical",
-                                     dichotomous_value = TRUE,
-                                     sort = "alphanumeric", percent = "column",
-                                     stat_display = "{n}") %>%
+  t2 <- summarize_categorical_survey(
+    data = data_is_na,
+    variable = variable,
+    by = by, class = "logical",
+    dichotomous_value = TRUE,
+    sort = "alphanumeric", percent = "column",
+    stat_display = "{n}"
+  ) %>%
     select(-.data$stat_display) %>%
-    rename(p_miss = .data$p,
-           N_obs = .data$N,
-           N_miss = .data$n,
-           p_miss_unweighted = .data$p_unweighted,
-           N_obs_unweighted = .data$N_unweighted,
-           N_miss_unweighted = .data$n_unweighted) %>%
-    mutate(N_nonmiss = .data$N_obs - .data$N_miss,
-           p_nonmiss = 1 - .data$p_miss,
-           N_nonmiss_unweighted = .data$N_obs_unweighted - .data$N_miss_unweighted,
-           p_nonmiss_unweighted = 1 - .data$p_miss_unweighted)
+    rename(
+      p_miss = .data$p,
+      N_obs = .data$N,
+      N_miss = .data$n,
+      p_miss_unweighted = .data$p_unweighted,
+      N_obs_unweighted = .data$N_unweighted,
+      N_miss_unweighted = .data$n_unweighted
+    ) %>%
+    mutate(
+      N_nonmiss = .data$N_obs - .data$N_miss,
+      p_nonmiss = 1 - .data$p_miss,
+      N_nonmiss_unweighted = .data$N_obs_unweighted - .data$N_miss_unweighted,
+      p_nonmiss_unweighted = 1 - .data$p_miss_unweighted
+    )
 
   # returning table will all stats
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
@@ -542,10 +569,13 @@ calculate_missing_row_survey <- function(data, variable, by, missing_text) {
       data = data, variable = variable,
       summary_type = "dichotomous", stat_display = "{n}", digits = NULL
     ) %>%
-    {df_stats_to_tbl(
-      data = data, variable = variable, summary_type = "dichotomous", by = by,
-      var_label = missing_text, stat_display = "{n}", df_stats = .,
-      missing = "no", missing_text = "Doesn't Matter -- Text should never appear")} %>%
+    {
+      df_stats_to_tbl(
+        data = data, variable = variable, summary_type = "dichotomous", by = by,
+        var_label = missing_text, stat_display = "{n}", df_stats = .,
+        missing = "no", missing_text = "Doesn't Matter -- Text should never appear"
+      )
+    } %>%
     # changing row_type to missing
     mutate(row_type = "missing")
 }
@@ -565,11 +595,15 @@ c_form <- function(left = NULL, right = 1) {
 # used when columns must be selected from the survey object, and we dont want users
 # to select the weighting columns
 .remove_survey_cols <- function(x) {
-  if (is.data.frame(x)) return(x)
+  if (is.data.frame(x)) {
+    return(x)
+  }
   x$variables %>%
-    select(-any_of(c(all.vars(x$call$id),
-                     all.vars(x$call$probs),
-                     all.vars(x$call$strata),
-                     all.vars(x$call$fpc),
-                     all.vars(x$call$weights))))
+    select(-any_of(c(
+      all.vars(x$call$id),
+      all.vars(x$call$probs),
+      all.vars(x$call$strata),
+      all.vars(x$call$fpc),
+      all.vars(x$call$weights)
+    )))
 }

@@ -7,13 +7,16 @@ test_that("modify_table_header works properly", {
   expect_error(
     updated <-
       modify_table_header(tbl_r,
-                          column = estimate,
-                          label = "estimate test",
-                          fmt_fun = function(x) style_sigfig(x, digits = 5),
-                          footnote_abbrev = "test = unit test",
-                          footnote = "this is a footnote") %>%
-      modify_table_header(column = "p.value",
-                          hide = TRUE),
+        column = estimate,
+        label = "estimate test",
+        fmt_fun = function(x) style_sigfig(x, digits = 5),
+        footnote_abbrev = "test = unit test",
+        footnote = "this is a footnote"
+      ) %>%
+      modify_table_header(
+        column = "p.value",
+        hide = TRUE
+      ),
     NA
   )
 

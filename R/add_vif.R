@@ -33,8 +33,9 @@
 #'
 add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "tbl_regression"))
+  if (!inherits(x, "tbl_regression")) {
     stop("`x=` must be class 'tbl_regression'")
+  }
   assert_package("car")
   estimate_fun <- estimate_fun %||% style_sigfig %>% gts_mapper()
 
@@ -47,10 +48,13 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
     switch("VIF" %in% names(df_vif), "VIF") %||%
     switch("GVIF" %in% names(df_vif), c("GVIF", "aGVIF")) %>%
     match.arg(choices = c("VIF", "GVIF", "aGVIF", "df"), several.ok = TRUE)
-  if (any(!statistic %in% names(df_vif)))
-    glue("Statistic '{statistic}' not available for this model. ",
-         "Select from {quoted_list(names(df_vif) %>% intersect(c('VIF', 'GVIF', 'aGVIF', 'df')))}.") %>%
-    stop(call. = FALSE)
+  if (any(!statistic %in% names(df_vif))) {
+    glue(
+      "Statistic '{statistic}' not available for this model. ",
+      "Select from {quoted_list(names(df_vif) %>% intersect(c('VIF', 'GVIF', 'aGVIF', 'df')))}."
+    ) %>%
+      stop(call. = FALSE)
+  }
 
   # merging VIF with gtsummary table -------------------------------------------
   # merge in VIF stats
@@ -62,26 +66,28 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
       by = c("variable", "row_type")
     )
 
-    # add column header
-    for (s in statistic) {
-      x <- x %>%
-        modify_table_header(
-          s,
-          label = switch(s,
-                         "VIF" = "**VIF**",
-                         "GVIF" = "**GVIF**",
-                         "aGVIF" = "**Adjusted GVIF**",
-                         "df" = "**df**"),
-          footnote = switch(s,"aGVIF" = "GVIF^[1/(2*df)]"),
-          footnote_abbrev = switch(s,
-                                   "VIF" = "VIF = Variance Inflation Factor",
-                                   "GVIF" = "GVIF = Generalized Variance Inflation Factor",
-                                   "aGVIF" = "GVIF = Generalized Variance Inflation Factor",
-                                   "df" = "df = degrees of freedom"),
-          fmt_fun = switch(s, "df" = style_number) %||% estimate_fun,
-          hide = FALSE
-        )
-    }
+  # add column header
+  for (s in statistic) {
+    x <- x %>%
+      modify_table_header(
+        s,
+        label = switch(s,
+          "VIF" = "**VIF**",
+          "GVIF" = "**GVIF**",
+          "aGVIF" = "**Adjusted GVIF**",
+          "df" = "**df**"
+        ),
+        footnote = switch(s, "aGVIF" = "GVIF^[1/(2*df)]"),
+        footnote_abbrev = switch(s,
+          "VIF" = "VIF = Variance Inflation Factor",
+          "GVIF" = "GVIF = Generalized Variance Inflation Factor",
+          "aGVIF" = "GVIF = Generalized Variance Inflation Factor",
+          "df" = "df = degrees of freedom"
+        ),
+        fmt_fun = switch(s, "df" = style_number) %||% estimate_fun,
+        hide = FALSE
+      )
+  }
   x
 }
 
@@ -90,20 +96,23 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   vif <- tryCatch(
     car::vif(x),
     error = function(e) {
-      paste("The {ui_code('add_vif()')} uses {ui_code('car::vif()')} to",
-            "calculate the VIF, and the function returned an error (see below).") %>%
-        stringr::str_wrap() %>%  ui_oops()
+      paste(
+        "The {ui_code('add_vif()')} uses {ui_code('car::vif()')} to",
+        "calculate the VIF, and the function returned an error (see below)."
+      ) %>%
+        stringr::str_wrap() %>%
+        ui_oops()
       stop(e)
     }
   )
 
   # if VIF is returned
-  if (!is.matrix(vif))
+  if (!is.matrix(vif)) {
     result <-
       vif %>%
       tibble::enframe("variable", "VIF")
-  # if Generalized VIF is returned
-  else
+  } # if Generalized VIF is returned
+  else {
     result <-
       vif %>%
       as.data.frame() %>%
@@ -113,6 +122,7 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
         aGVIF = .data$`GVIF^(1/(2*Df))`,
         df = .data$Df
       )
+  }
 
   result <-
     result %>%

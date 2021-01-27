@@ -29,7 +29,6 @@
 #'   tbl_summary(by = trt) %>%
 #'   bold_labels() %>%
 #'   as_kable()
-
 as_kable <- function(x, include = everything(), return_calls = FALSE,
                      exclude = NULL, ...) {
   # DEPRECATION notes ----------------------------------------------------------
@@ -49,7 +48,9 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
   # creating list of kable calls --------------------------------------------------
   kable_calls <-
     table_header_to_kable_calls(x = x, ...)
-  if (return_calls == TRUE) return(kable_calls)
+  if (return_calls == TRUE) {
+    return(kable_calls)
+  }
 
   # converting to charcter vector ----------------------------------------------
   include <-
@@ -92,19 +93,19 @@ table_header_to_kable_calls <- function(x, ...) {
   kable_calls <- as_tibble(x, return_calls = TRUE, include = -c("cols_label"))
 
   # fmt_missing ----------------------------------------------------------------
-  kable_calls[["fmt_missing"]] <- expr(dplyr::mutate_all(~ifelse(is.na(.), "", .)))
+  kable_calls[["fmt_missing"]] <- expr(dplyr::mutate_all(~ ifelse(is.na(.), "", .)))
 
   # kable ----------------------------------------------------------------------
   df_col_labels <-
     dplyr::filter(table_header, .data$hide == FALSE)
 
-  if (!is.null(x$list_output$caption))
+  if (!is.null(x$list_output$caption)) {
     kable_calls[["kable"]] <-
-    expr(knitr::kable(caption = !!x$list_output$caption, col.names = !!df_col_labels$label, !!!dots))
-  else
+      expr(knitr::kable(caption = !!x$list_output$caption, col.names = !!df_col_labels$label, !!!dots))
+  } else {
     kable_calls[["kable"]] <-
-    expr(knitr::kable(col.names = !!df_col_labels$label, !!!dots))
+      expr(knitr::kable(col.names = !!df_col_labels$label, !!!dots))
+  }
 
   kable_calls
 }
-

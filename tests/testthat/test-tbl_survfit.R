@@ -161,12 +161,15 @@ test_that("no errors/warnings with competing events", {
   )
 
   # output is identical in tbl_survfit and summary
-  summod <- summary(cr_2, times = c(12,24))
+  summod <- summary(cr_2, times = c(12, 24))
 
-  summod1b <- data.frame(strata = summod$strata,Time = summod$time,
-                         cancerdeath = summod$pstate[,2])
+  summod1b <- data.frame(
+    strata = summod$strata, Time = summod$time,
+    cancerdeath = summod$pstate[, 2]
+  )
 
-  expect_equal(summod1b$cancerdeath,
-               summod2$meta_data$df_stats[[1]]$estimate)
+  expect_equal(
+    summod1b$cancerdeath,
+    summod2$meta_data$df_stats[[1]]$estimate
+  )
 })
-

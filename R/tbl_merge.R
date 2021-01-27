@@ -38,7 +38,7 @@
 #' t3 <-
 #'   trial[c("age", "grade", "response")] %>%
 #'   tbl_summary(missing = "no") %>%
-#'   add_n %>%
+#'   add_n() %>%
 #'   modify_header(stat_0 ~ "**Summary Statistics**")
 #' t4 <-
 #'   tbl_uvregression(
@@ -52,7 +52,6 @@
 #' tbl_merge_ex2 <-
 #'   tbl_merge(tbls = list(t3, t4)) %>%
 #'   modify_spanning_header(everything() ~ NA_character_)
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -75,7 +74,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   }
 
   # checking all inputs are class gtsummary
-  if (!purrr::every(tbls, ~inherits(.x, "gtsummary"))) {
+  if (!purrr::every(tbls, ~ inherits(.x, "gtsummary"))) {
     stop("All objects in 'tbls' must be class 'gtsummary'", call. = FALSE)
   }
 
@@ -104,7 +103,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           vars(-c("variable", "row_type", "var_label", "label")),
           ~ glue("{.}_{y}")
         )
-    })
+    }
+  )
 
   # nesting results within variable
   nested_table <- map(
@@ -158,7 +158,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
         # that is can be properly pasred in the next step
         mutate_at(
           vars(.data$missing_emdash, .data$indent, .data$bold, .data$italic),
-          ~map_chr(., function(t) ifelse(is.na(t), t, rlang::parse_expr(t) %>% rlang::expr_deparse()))
+          ~ map_chr(., function(t) ifelse(is.na(t), t, rlang::parse_expr(t) %>% rlang::expr_deparse()))
         ) %>%
         # updating code with new variable names
         mutate_at(
@@ -214,15 +214,19 @@ tbl_merge_update_chr_code <- function(code, names, n) {
   code %>%
     map_chr(
       function(code) {
-        if (is.na(code)) return(code)
+        if (is.na(code)) {
+          return(code)
+        }
         stringr::str_split_fixed(code, pattern = " ", n = Inf) %>%
-        as.vector() %>%
-        purrr::map_chr(function(x) {
-          lgl_match <- names %in% x
-          if (!any(lgl_match)) return(x)
-          new_names[lgl_match]
-        }) %>%
-        paste(collapse = " ")
+          as.vector() %>%
+          purrr::map_chr(function(x) {
+            lgl_match <- names %in% x
+            if (!any(lgl_match)) {
+              return(x)
+            }
+            new_names[lgl_match]
+          }) %>%
+          paste(collapse = " ")
       }
     )
 }

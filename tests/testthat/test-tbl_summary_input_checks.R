@@ -55,5 +55,4 @@ test_that("input check", {
     tbl_summary(trial, digits = list(is.character)),
     NULL
   )
-
 })

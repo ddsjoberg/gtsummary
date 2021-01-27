@@ -4,12 +4,14 @@ library(survival)
 
 test_that("add_p.tbl_survfit works", {
   survfit_list <-
-    list(survfit(Surv(ttdeath, death) ~ trt, trial),
-         survfit(Surv(trial$ttdeath, trial$death) ~ trial$trt))
+    list(
+      survfit(Surv(ttdeath, death) ~ trt, trial),
+      survfit(Surv(trial$ttdeath, trial$death) ~ trial$trt)
+    )
 
   expect_error(
     survfit_list %>%
-      purrr::map(~tbl_survfit(.x, times = c(12, 24)) %>% add_p()),
+      purrr::map(~ tbl_survfit(.x, times = c(12, 24)) %>% add_p()),
     NA
   )
 
@@ -37,9 +39,11 @@ test_that("add_p.tbl_survfit works", {
 
 test_that("add_p.tbl_survfit survdiff family checks", {
   tbl_survfit <-
-    list(survfit(Surv(ttdeath, death) ~ trt, trial),
-         survfit(Surv(ttdeath, death) ~ response, trial),
-         survfit(Surv(ttdeath, death) ~ grade, trial)) %>%
+    list(
+      survfit(Surv(ttdeath, death) ~ trt, trial),
+      survfit(Surv(ttdeath, death) ~ response, trial),
+      survfit(Surv(ttdeath, death) ~ grade, trial)
+    ) %>%
     tbl_survfit(times = c(12, 24))
 
   # logrank
@@ -63,10 +67,14 @@ test_that("add_p.tbl_survfit survdiff family checks", {
 
   expect_equivalent(
     tbl_survfit %>%
-      add_p(test = list(trt ~ "logrank",
-                        response ~ "survdiff",
-                        grade ~ "petopeto_gehanwilcoxon"),
-            test.args = response ~ list(rho = 0.5)) %>%
+      add_p(
+        test = list(
+          trt ~ "logrank",
+          response ~ "survdiff",
+          grade ~ "petopeto_gehanwilcoxon"
+        ),
+        test.args = response ~ list(rho = 0.5)
+      ) %>%
       purrr::pluck("meta_data", "p.value"),
     c(logrank_trt, grho_response, peto_grade)
   )
@@ -75,9 +83,11 @@ test_that("add_p.tbl_survfit survdiff family checks", {
 
 test_that("add_p.tbl_survfit coxph family checks", {
   tbl_survfit <-
-    list(survfit(Surv(ttdeath, death) ~ trt, trial),
-         survfit(Surv(ttdeath, death) ~ response, trial),
-         survfit(Surv(ttdeath, death) ~ grade, trial)) %>%
+    list(
+      survfit(Surv(ttdeath, death) ~ trt, trial),
+      survfit(Surv(ttdeath, death) ~ response, trial),
+      survfit(Surv(ttdeath, death) ~ grade, trial)
+    ) %>%
     tbl_survfit(times = c(12, 24))
 
   # LRT
@@ -101,13 +111,12 @@ test_that("add_p.tbl_survfit coxph family checks", {
 
   expect_equivalent(
     tbl_survfit %>%
-      add_p(test = list(trt ~ "coxph_lrt",
-                        response ~ "coxph_wald",
-                        grade ~ "coxph_score")) %>%
+      add_p(test = list(
+        trt ~ "coxph_lrt",
+        response ~ "coxph_wald",
+        grade ~ "coxph_score"
+      )) %>%
       purrr::pluck("meta_data", "p.value"),
     c(lrt_trt, wald_response, score_grade)
   )
 })
-
-
-

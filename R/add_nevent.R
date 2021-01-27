@@ -68,7 +68,7 @@ add_nevent.tbl_regression <- function(x, quiet = NULL, ...) {
     # GLM or GEE
     (inherits(x$model_obj, c("glm", "geeglm"))) |
       # lme4 GLM
-      (inherits(x$model_obj, c("glmerMod"))  &
+      (inherits(x$model_obj, c("glmerMod")) &
         attr(class(x$model_obj), "package") %||% "NULL" == "lme4")) {
     # checking family (must be binomial)
     if (inherits(x$model_obj, c("glm", "geeglm"))) {
@@ -236,9 +236,11 @@ add_nevent.tbl_uvregression <- function(x, ...) {
 add_nevent.tbl_survfit <- function(x, ...) {
 
   # checking survfit is a standard (not multi-state)
-  if (!purrr::every(x$meta_data$survfit, ~identical(class(.x), "survfit"))) {
-    paste("Each of the `survfit()` objects must have class 'survfit' only.",
-          "Multi-state models are not supported by this function.") %>%
+  if (!purrr::every(x$meta_data$survfit, ~ identical(class(.x), "survfit"))) {
+    paste(
+      "Each of the `survfit()` objects must have class 'survfit' only.",
+      "Multi-state models are not supported by this function."
+    ) %>%
       stringr::str_wrap() %>%
       stop(call. = FALSE)
   }
@@ -253,10 +255,12 @@ add_nevent.tbl_survfit <- function(x, ...) {
         row_type = "label"
       )
     ) %>%
-    {left_join(
-      x$table_body, .,
-      by = c("variable", "row_type")
-    )} %>%
+    {
+      left_join(
+        x$table_body, .,
+        by = c("variable", "row_type")
+      )
+    } %>%
     select(any_of(c("variable", "row_type", "label", "N", "nevent")), everything())
 
   # adding N to table_header and assigning header label ------------------------
@@ -273,4 +277,3 @@ add_nevent.tbl_survfit <- function(x, ...) {
 
   x
 }
-

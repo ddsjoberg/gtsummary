@@ -36,12 +36,16 @@
 #' modify_table_header_ex1 <-
 #'   lm(mpg ~ factor(cyl), mtcars) %>%
 #'   tbl_regression() %>%
-#'   modify_table_header(column = estimate,
-#'                       label = "**Coefficient**",
-#'                       fmt_fun = function(x) style_sigfig(x, digits = 5),
-#'                       footnote = "Regression Coefficient") %>%
-#'   modify_table_header(column = "p.value",
-#'                       hide = TRUE)
+#'   modify_table_header(
+#'     column = estimate,
+#'     label = "**Coefficient**",
+#'     fmt_fun = function(x) style_sigfig(x, digits = 5),
+#'     footnote = "Regression Coefficient"
+#'   ) %>%
+#'   modify_table_header(
+#'     column = "p.value",
+#'     hide = TRUE
+#'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -67,7 +71,9 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
     )
 
   # if no columns selected, returning unaltered
-  if (is.null(column)) return(x)
+  if (is.null(column)) {
+    return(x)
+  }
 
   # label ----------------------------------------------------------------------
   x <- .update_table_header_element(
@@ -149,7 +155,9 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
                                          class_check = NULL, in_check = NULL,
                                          in_list = FALSE) {
   # return unaltered if no change requested ------------------------------------
-  if (is.null(update)) return(x)
+  if (is.null(update)) {
+    return(x)
+  }
 
   # checking inputs ------------------------------------------------------------
   if (length(update) != 1) {

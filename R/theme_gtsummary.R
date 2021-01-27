@@ -114,20 +114,22 @@ theme_gtsummary_journal <- function(journal = c("jama", "nejm", "lancet"), set_t
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
-theme_gtsummary_compact <- function(set_theme = TRUE){
+theme_gtsummary_compact <- function(set_theme = TRUE) {
   lst_theme <-
     list(
       "pkgwide-str:theme_name" = "Compact",
       # compact gt tables
       "as_gt-lst:addl_cmds" = list(
         tab_spanner = rlang::expr(
-          gt::tab_options(table.font.size = 'small',
-                          data_row.padding = gt::px(1),
-                          summary_row.padding = gt::px(1),
-                          grand_summary_row.padding = gt::px(1),
-                          footnotes.padding = gt::px(1),
-                          source_notes.padding = gt::px(1),
-                          row_group.padding = gt::px(1))
+          gt::tab_options(
+            table.font.size = "small",
+            data_row.padding = gt::px(1),
+            summary_row.padding = gt::px(1),
+            grand_summary_row.padding = gt::px(1),
+            footnotes.padding = gt::px(1),
+            source_notes.padding = gt::px(1),
+            row_group.padding = gt::px(1)
+          )
         )
       ),
       # compact flextables
@@ -163,9 +165,8 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
 #' @param print_engine String indicating the print method. Must be one of
 #' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"tibble"`#' @export
 theme_gtsummary_printer <- function(
-  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
-  set_theme = TRUE) {
-
+                                    print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
+                                    set_theme = TRUE) {
   lst_theme <- list("pkgwide-str:print_engine" = match.arg(print_engine))
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
@@ -192,13 +193,14 @@ theme_gtsummary_printer <- function(
 #' will default to an en dash
 #' @inheritParams style_number
 #' @export
-theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", "hi", "ja",
-                                                  "mr", "pt", "se", "zh-cn", "zh-tw"),
+theme_gtsummary_language <- function(language = c(
+                                       "de", "en", "es", "fr", "gu", "hi", "ja",
+                                       "mr", "pt", "se", "zh-cn", "zh-tw"
+                                     ),
                                      decimal.mark = NULL, big.mark = NULL,
                                      iqr.sep = NULL,
                                      ci.sep = NULL,
                                      set_theme = TRUE) {
-
   language <- match.arg(language)
   ret <- list(
     "pkgwide-str:theme_name" = paste("language:", language),
@@ -210,14 +212,19 @@ theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", 
   if (!is.null(big.mark)) ret <- c(ret, list("style_number-arg:big.mark" = big.mark))
 
   # setting themes for separators
-  if (is.null(iqr.sep) && identical(decimal.mark, ","))
+  if (is.null(iqr.sep) && identical(decimal.mark, ",")) {
     iqr.sep <- " \U2013 "
-  if (!is.null(iqr.sep))
-    ret <- c(ret, list("tbl_summary-str:continuous_stat" =
-                         paste0("{median} ({p25}", iqr.sep, "{p75})")))
+  }
+  if (!is.null(iqr.sep)) {
+    ret <- c(ret, list(
+      "tbl_summary-str:continuous_stat" =
+        paste0("{median} ({p25}", iqr.sep, "{p75})")
+    ))
+  }
 
-  if (is.null(ci.sep) && identical(decimal.mark, ","))
+  if (is.null(ci.sep) && identical(decimal.mark, ",")) {
     ci.sep <- " \U2013 "
+  }
   if (!is.null(ci.sep)) ret <- c(ret, list("pkgwide-str:ci.sep" = ci.sep))
 
   # either returning list OR setting theme and returning list
@@ -230,11 +237,10 @@ theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", 
 #' @param statistic Default statistic continuous variables
 #' @export
 theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25, {p75})", set_theme = TRUE) {
-
   lst_theme <- list(
     "tbl_summary-str:default_con_type" = "continuous2",
     "tbl_summary-str:continuous_stat" = statistic
-    )
+  )
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
   return(invisible(lst_theme))
@@ -245,7 +251,6 @@ theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25, {p75})", se
 #' @param statistic Default statistic continuous variables
 #' @export
 theme_gtsummary_mean_sd <- function(set_theme = TRUE) {
-
   lst_theme <- list(
     "tbl_summary-str:continuous_stat" = "{mean} ({sd})",
     "add_p.tbl_summary-attr:test.continuous_by2" = "t.test",

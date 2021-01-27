@@ -19,5 +19,4 @@ test_that("modify_table_body with standard use", {
       modify_header(n_nonevent = "**Control N**", nevent = "**Case N**"),
     NA
   )
-
 })

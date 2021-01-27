@@ -41,13 +41,15 @@ bold_p <- function(x, t = 0.05, q = FALSE) {
   # checking input table has a p.value column
   if (q == FALSE && !"p.value" %in% names(x$table_body)) {
     stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # checking input table has a q.value column
   if (q == TRUE && !"q.value" %in% names(x$table_body)) {
     stop("There is no q-value column. `x$table_body` must have a column called 'q.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
 
@@ -58,9 +60,9 @@ bold_p <- function(x, t = 0.05, q = FALSE) {
   # modifying table_header with bold threshold
   x$table_header$bold <- case_when(
     x$table_header$column == col_name & is.na(x$table_header$bold) ~
-      glue("{col_name} <= {t}") %>% as.character(),
+    glue("{col_name} <= {t}") %>% as.character(),
     x$table_header$column == col_name & !is.na(x$table_header$bold) ~
-      paste(x$table_header$bold, glue("{col_name} <= {t}"), sep = " | "),
+    paste(x$table_header$bold, glue("{col_name} <= {t}"), sep = " | "),
     TRUE ~ x$table_header$bold
   )
 

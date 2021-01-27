@@ -51,7 +51,8 @@ table_header_fill_missing <- function(table_header, table_body = NULL) {
   # results in logical vector indicating which cells to indent in table_body
   if (!"indent" %in% names(table_header)) {
     table_header$indent <- ifelse(table_header$column == "label",
-                                  "row_type != 'label'", NA_character_)
+      "row_type != 'label'", NA_character_
+    )
   }
 
   # text_interpret -------------------------------------------------------------

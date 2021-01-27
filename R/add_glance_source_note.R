@@ -32,7 +32,7 @@
 #'   lm(age ~ marker + grade, trial) %>%
 #'   tbl_regression() %>%
 #'   add_glance_source_note(
-#'     label = list(df  ~ "Degrees of Freedom", sigma ~ "\U03C3"),
+#'     label = list(df ~ "Degrees of Freedom", sigma ~ "\U03C3"),
 #'     fmt_fun = df ~ style_number,
 #'     include = c(r.squared, AIC, sigma, df)
 #'   )
@@ -45,16 +45,19 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
                                    fmt_fun = NULL, glance_fun = broom::glance,
                                    sep1 = " = ", sep2 = "; ", ...) {
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "tbl_regression"))
+  if (!inherits(x, "tbl_regression")) {
     stop("`x=` must be class 'tbl_regression'")
+  }
 
   # prepping table -------------------------------------------------------------
   df_glance_orig <- glance_fun(x$model_obj, ...)
   df_glance <-
     df_glance_orig %>%
-    tidyr::pivot_longer(cols = everything(),
-                        names_to = "statistic_name",
-                        values_to = "statistic")
+    tidyr::pivot_longer(
+      cols = everything(),
+      names_to = "statistic_name",
+      values_to = "statistic"
+    )
 
   language <- get_theme_element("pkgwide-str:language", default = "en")
 
@@ -68,12 +71,13 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     dplyr::rows_update(
       # keeping labels in current glance
       inner_join(df_default_glance_labels,
-                 select(df_glance, .data$statistic_name),
-                 by = "statistic_name"),
+        select(df_glance, .data$statistic_name),
+        by = "statistic_name"
+      ),
       by = "statistic_name"
     ) %>%
     # translating statistic names
-    mutate(label = map_chr(.data$label, ~translate_text(.x, language)))
+    mutate(label = map_chr(.data$label, ~ translate_text(.x, language)))
 
   # evaluating tidyselects -----------------------------------------------------
   include <-
@@ -129,7 +133,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
   x$list_output$source_note <-
     df_results %>%
     mutate(
-      statistic_fmt = map2_chr(.data$fmt_fun, .data$statistic, ~.x(.y)),
+      statistic_fmt = map2_chr(.data$fmt_fun, .data$statistic, ~ .x(.y)),
       statistic_label = paste0(.data$label, sep1, .data$statistic_fmt)
     ) %>%
     pull(.data$statistic_label) %>%
@@ -155,5 +159,3 @@ df_default_glance_labels <-
     "concordance", "c-index",
     "std.error.concordance", "c-index SE"
   )
-
-

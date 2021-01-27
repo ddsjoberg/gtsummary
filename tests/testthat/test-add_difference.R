@@ -31,27 +31,30 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_test.args <-
     trial %>%
     select(trt,
-           var_t.test = age,
-           var_t.test_dots = age,
-           var_wilcox.test = age,
-           var_wilcox.test_dots = age,
-           var_prop.test = response,
-           var_prop.test_dots = response,
-           var_ancova = age,
-           var_cohens_d = age
+      var_t.test = age,
+      var_t.test_dots = age,
+      var_wilcox.test = age,
+      var_wilcox.test_dots = age,
+      var_prop.test = response,
+      var_prop.test_dots = response,
+      var_ancova = age,
+      var_cohens_d = age
     ) %>%
     tbl_summary(by = trt, missing = "no") %>%
     add_difference(
-      test = list(contains("t.test") ~ t.test,
-                  contains("wilcox.test") ~ wilcox.test,
-                  contains("prop.test") ~ prop.test,
-                  contains("ancova") ~ "ancova",
-                  contains("cohens_d") ~ "cohens_d"
+      test = list(
+        contains("t.test") ~ t.test,
+        contains("wilcox.test") ~ wilcox.test,
+        contains("prop.test") ~ prop.test,
+        contains("ancova") ~ "ancova",
+        contains("cohens_d") ~ "cohens_d"
       ),
-      test.args = list(var_t.test_dots = list(var.equal = TRUE),
-                       var_wilcox.test_dots = list(correct = FALSE),
-                       var_prop.test_dots = list(alternative = "greater"),
-                       var_mcnemar.test_dots = list(correct = FALSE))
+      test.args = list(
+        var_t.test_dots = list(var.equal = TRUE),
+        var_wilcox.test_dots = list(correct = FALSE),
+        var_prop.test_dots = list(alternative = "greater"),
+        var_mcnemar.test_dots = list(correct = FALSE)
+      )
     )
 
   expect_equal(
@@ -135,7 +138,10 @@ test_that("p-values are replicated within tbl_summary()", {
   )
 
 
-  trial_group <- trial %>% group_by(trt) %>% mutate(id = dplyr::row_number()) %>% ungroup()
+  trial_group <- trial %>%
+    group_by(trt) %>%
+    mutate(id = dplyr::row_number()) %>%
+    ungroup()
   trial_group_wide <-
     trial_group %>%
     dplyr::filter(trt == "Drug A") %>%
@@ -148,8 +154,9 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_groups <-
     trial_group %>%
     select(trt, id, stage, marker,
-           age_ancova_lme4 = age) %>%
-    tbl_summary(by = trt, missing = "no", include = -c("id", "stage", "marker"),) %>%
+      age_ancova_lme4 = age
+    ) %>%
+    tbl_summary(by = trt, missing = "no", include = -c("id", "stage", "marker"), ) %>%
     add_difference(
       test = list(contains("ancova_lme4") ~ "ancova_lme4"),
       group = "id",
@@ -160,7 +167,7 @@ test_that("p-values are replicated within tbl_summary()", {
     filter(tbl_groups$meta_data, variable == "age_ancova_lme4") %>%
       purrr::pluck("test_result", 1, "df_result") %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    lme4::lmer(age ~ stage + marker + forcats::fct_rev(factor(trt)) + (1|id), trial_group) %>%
+    lme4::lmer(age ~ stage + marker + forcats::fct_rev(factor(trt)) + (1 | id), trial_group) %>%
       broom.mixed::tidy(conf.int = TRUE, effects = "fixed") %>%
       dplyr::slice(dplyr::n()) %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),

@@ -50,8 +50,10 @@ test_that("add_overall-works with ordered factors", {
   expect_error(
     trial %>%
       select(response, trt) %>%
-      dplyr::mutate_at(vars(response, trt),
-                       ~factor(., ordered = TRUE)) %>%
+      dplyr::mutate_at(
+        vars(response, trt),
+        ~ factor(., ordered = TRUE)
+      ) %>%
       tbl_summary(by = trt) %>%
       add_overall(),
     NA
@@ -60,7 +62,7 @@ test_that("add_overall-works with ordered factors", {
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
   t <- trial %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt)
 
   expect_error(t %>% add_overall(), NA)
@@ -71,7 +73,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 
   t <- Titanic %>%
     as.data.frame() %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~Freq) %>%
     tbl_svysummary(by = Survived)
 
   expect_error(t %>% add_overall(), NA)
@@ -80,7 +82,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 
 test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
   t <- trial %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")
 
   expect_error(t %>% add_overall(), NA)
@@ -91,7 +93,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
 
   t <- Titanic %>%
     as.data.frame() %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~Freq) %>%
     tbl_svysummary(by = Survived, type = all_continuous() ~ "continuous2")
 
   expect_error(t %>% add_overall(), NA)
@@ -101,5 +103,5 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
 test_that("errors produced when expected", {
   expect_error(mtcars %>% select(am, mpg) %>% tbl_summary() %>% add_overall(), "*")
   expect_error(mtcars %>% select(am, mpg) %>% tbl_summary(by = am) %>%
-                 add_stat_label() %>% add_overall(), "*")
+    add_stat_label() %>% add_overall(), "*")
 })

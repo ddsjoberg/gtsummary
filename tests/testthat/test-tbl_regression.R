@@ -147,7 +147,9 @@ test_that("All labels print with cubic splines", {
   rsc_mod <- lm(age ~ spline_fun(marker, inclx = TRUE) + response, trial)
 
   expect_equal(
-    tbl_regression(rsc_mod) %>% purrr::pluck("table_body", "label") %>% {sum(is.na(.))},
+    tbl_regression(rsc_mod) %>% purrr::pluck("table_body", "label") %>% {
+      sum(is.na(.))
+    },
     0
   )
 })
@@ -158,14 +160,19 @@ test_that("Testing lme4 results", {
 
   # tbl_regerssion runs without error
   expect_error(
-    tbl_lme4 <- tbl_regression(mod_glmer, exponentiate = TRUE,
-                               conf.level = 0.90),
+    tbl_lme4 <- tbl_regression(mod_glmer,
+      exponentiate = TRUE,
+      conf.level = 0.90
+    ),
     NA
   )
 
   # coefs are exponentiated properly
   expect_equivalent(
-    coef(mod_glmer)[[1]] %>% {.[1, 2:ncol(.)]} %>% purrr::map_dbl(exp),
+    coef(mod_glmer)[[1]] %>%
+      {
+        .[1, 2:ncol(.)]
+      } %>% purrr::map_dbl(exp),
     tbl_lme4$table_body %>% pull(estimate) %>% discard(is.na)
   )
 })
@@ -195,5 +202,3 @@ test_that("Interaction modifications", {
     1L
   )
 })
-
-

@@ -19,16 +19,14 @@ tbl <- trial %>%
   tbl_summary(by = trt, missing = "no")
 
 test_that("no errors/warnings with standard use", {
-
-
   expect_error(
     test1 <- tbl %>%
       add_p(test = everything() ~ t.test) %>%
       # replicating result of `add_p()` with `add_stat()`
       add_stat(
         fns = everything() ~ my_ttest, # all variables compared with with t-test
-        fmt_fun = style_pvalue,        # format result with style_pvalue()
-        header = "**My p-value**"      # new column header
+        fmt_fun = style_pvalue, # format result with style_pvalue()
+        header = "**My p-value**" # new column header
       ),
     NA
   )
@@ -43,10 +41,10 @@ test_that("no errors/warnings with standard use", {
   expect_error(
     tbl %>%
       add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
+        fns = everything() ~ my_ttest2, # all variables will be compared by t-test
         fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = "T-test statistic and p-value"  # footnote
+        header = "**Treatment Comparison**", # column header
+        footnote = "T-test statistic and p-value" # footnote
       ),
     NA
   )
@@ -56,10 +54,10 @@ test_that("expect errors", {
   expect_message(
     tbl %>%
       add_stat(
-        fns = everything() ~ mean,    # all variables will be compared by t-test
+        fns = everything() ~ mean, # all variables will be compared by t-test
         fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = "T-test statistic and p-value"  # footnote
+        header = "**Treatment Comparison**", # column header
+        footnote = "T-test statistic and p-value" # footnote
       ),
     NULL
   )
@@ -67,10 +65,10 @@ test_that("expect errors", {
   expect_error(
     tbl %>%
       add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
+        fns = everything() ~ my_ttest2, # all variables will be compared by t-test
         fmt_fun = "string", # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = "T-test statistic and p-value"  # footnote
+        header = "**Treatment Comparison**", # column header
+        footnote = "T-test statistic and p-value" # footnote
       ),
     NULL
   )
@@ -78,10 +76,10 @@ test_that("expect errors", {
   expect_error(
     tbl %>%
       add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
+        fns = everything() ~ my_ttest2, # all variables will be compared by t-test
         fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = c("**Treatment Comparison**", "**Treatment Comparison**"),       # column header
-        footnote = "T-test statistic and p-value"  # footnote
+        header = c("**Treatment Comparison**", "**Treatment Comparison**"), # column header
+        footnote = "T-test statistic and p-value" # footnote
       ),
     NULL
   )
@@ -89,10 +87,10 @@ test_that("expect errors", {
   expect_error(
     tbl %>%
       add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
+        fns = everything() ~ my_ttest2, # all variables will be compared by t-test
         fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = c("T-test statistic and p-value", "T-test statistic and p-value")  # footnote
+        header = "**Treatment Comparison**", # column header
+        footnote = c("T-test statistic and p-value", "T-test statistic and p-value") # footnote
       ),
     NULL
   )
@@ -100,11 +98,11 @@ test_that("expect errors", {
   expect_error(
     tbl %>%
       add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
+        fns = everything() ~ my_ttest2, # all variables will be compared by t-test
         fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
+        header = "**Treatment Comparison**", # column header
         new_col_name = mean,
-        footnote = "T-test statistic and p-value"  # footnote
+        footnote = "T-test statistic and p-value" # footnote
       ),
     NULL
   )
@@ -112,10 +110,10 @@ test_that("expect errors", {
   expect_error(
     mtcars %>%
       add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
+        fns = everything() ~ my_ttest2, # all variables will be compared by t-test
         fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = "T-test statistic and p-value"  # footnote
+        header = "**Treatment Comparison**", # column header
+        footnote = "T-test statistic and p-value" # footnote
       ),
     NULL
   )

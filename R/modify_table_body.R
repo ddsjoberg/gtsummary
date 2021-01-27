@@ -25,11 +25,13 @@
 #' modify_table_body_ex1 <-
 #'   trial %>%
 #'   select(response, age, marker) %>%
-#'   tbl_uvregression(y = response,
-#'                    method = glm,
-#'                    method.args = list(family = binomial),
-#'                    exponentiate = TRUE,
-#'                    hide_n = TRUE) %>%
+#'   tbl_uvregression(
+#'     y = response,
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE,
+#'     hide_n = TRUE
+#'   ) %>%
 #'   add_nevent() %>%
 #'   # adding number of non-events to table
 #'   modify_table_body(dplyr::mutate, n_nonevent = N - nevent) %>%
@@ -53,7 +55,3 @@ modify_table_body <- function(x, fun, ...) {
   # return gtsummary object
   x
 }
-
-
-
-

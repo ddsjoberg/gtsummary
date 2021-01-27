@@ -82,7 +82,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   }
 
   # checking all inputs are class gtsummary
-  if (!purrr::every(tbls, ~inherits(.x, "gtsummary"))) {
+  if (!purrr::every(tbls, ~ inherits(.x, "gtsummary"))) {
     stop("All objects in 'tbls' must be class 'gtsummary'", call. = FALSE)
   }
 
@@ -99,14 +99,14 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   results <- list()
   if (is.null(group_header)) {
     results$table_body <-
-      map_dfr(tbls, ~pluck(.x, "table_body"))
+      map_dfr(tbls, ~ pluck(.x, "table_body"))
   }
   else if (!is.null(group_header)) {
     # adding grouping column
     results$table_body <-
       purrr::map2_dfr(
         tbls, seq_along(tbls),
-        ~pluck(.x, "table_body") %>% mutate(groupname_col = group_header[.y])
+        ~ pluck(.x, "table_body") %>% mutate(groupname_col = group_header[.y])
       ) %>%
       select(.data$groupname_col, everything()) %>%
       group_by(.data$groupname_col)
@@ -117,7 +117,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   if (identical(quiet, FALSE)) print_stack_differences(tbls)
 
   results$table_header <-
-    map_dfr(tbls, ~pluck(.x, "table_header")) %>%
+    map_dfr(tbls, ~ pluck(.x, "table_header")) %>%
     group_by(.data$column) %>%
     filter(dplyr::row_number() == 1) %>%
     ungroup() %>%
@@ -133,7 +133,6 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
     results$table_header <-
       results$table_header %>%
       mutate(align = ifelse(.data$column == "groupname_col", "left", .data$align))
-
   }
 
   # returning results ----------------------------------------------------------
@@ -149,29 +148,37 @@ print_stack_differences <- function(tbls) {
   tbl_differences <-
     purrr::map2_dfr(
       tbls, seq_len(length(tbls)),
-      ~pluck(.x, "table_header") %>%
+      ~ pluck(.x, "table_header") %>%
         mutate(..tbl_id.. = .y)
     ) %>%
-    select(.data$..tbl_id.., .data$column, .data$label, .data$footnote,
-           .data$footnote_abbrev, .data$spanning_header) %>%
-    tidyr::pivot_longer(cols = c(.data$label, .data$footnote, .data$footnote_abbrev,
-                                 .data$spanning_header)) %>%
+    select(
+      .data$..tbl_id.., .data$column, .data$label, .data$footnote,
+      .data$footnote_abbrev, .data$spanning_header
+    ) %>%
+    tidyr::pivot_longer(cols = c(
+      .data$label, .data$footnote, .data$footnote_abbrev,
+      .data$spanning_header
+    )) %>%
     group_by(.data$column, .data$name) %>%
     mutate(
       new_value = .data$value[1],
-      name_fmt = case_when(name == "label" ~ "Column header",
-                           name == "footnote" ~ "Column footnote",
-                           name == "footnote_abbrev" ~ "Column abbreviation footnote",
-                           name == "spanning_header" ~ "Spanning column header")
+      name_fmt = case_when(
+        name == "label" ~ "Column header",
+        name == "footnote" ~ "Column footnote",
+        name == "footnote_abbrev" ~ "Column abbreviation footnote",
+        name == "spanning_header" ~ "Spanning column header"
+      )
     ) %>%
     filter(.data$new_value != .data$value) %>%
     ungroup() %>%
     arrange(.data$name != "label", .data$name_fmt, .data$..tbl_id..)
 
   if (nrow(tbl_differences) > 0) {
-    paste("When tables are stacked,",
-          "attributes (e.g. header, footnotes, etc.) from the first table are used.",
-          "Use {ui_code('quiet = TRUE')} to supress this message.") %>%
+    paste(
+      "When tables are stacked,",
+      "attributes (e.g. header, footnotes, etc.) from the first table are used.",
+      "Use {ui_code('quiet = TRUE')} to supress this message."
+    ) %>%
       stringr::str_wrap() %>%
       usethis::ui_info()
 

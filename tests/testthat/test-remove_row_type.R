@@ -2,7 +2,9 @@ context("test-remove_row_type")
 testthat::skip_on_cran()
 
 test_that("no errors/warnings with standard use", {
-  tbl_sum <- trial %>% select(trt, age, grade, stage) %>% tbl_summary(by = trt)
+  tbl_sum <- trial %>%
+    select(trt, age, grade, stage) %>%
+    tbl_summary(by = trt)
   tbl_reg <- lm(age ~ grade + stage, trial) %>% tbl_regression()
 
   expect_error(tbl1 <- remove_row_type(tbl_sum, type = "header"), NA)
@@ -27,5 +29,4 @@ test_that("no errors/warnings with standard use", {
   )
 
   expect_error(remove_row_type(tbl_sum, type = "reference"))
-
 })

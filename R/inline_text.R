@@ -32,7 +32,9 @@ inline_text <- function(x, ...) {
 #' @export
 #' @return A string reporting results from a gtsummary table
 #' @examples
-#' t1 <- trial[c("trt", "grade")] %>% tbl_summary(by = trt) %>% add_p()
+#' t1 <- trial[c("trt", "grade")] %>%
+#'   tbl_summary(by = trt) %>%
+#'   add_p()
 #'
 #' inline_text(t1, variable = grade, level = "I", column = "Drug A", pattern = "{n}/{N} ({p})%")
 #' inline_text(t1, variable = grade, column = "p.value")
@@ -56,9 +58,10 @@ inline_text.tbl_summary <-
       .select_to_varnames(
         select = !!variable,
         data = switch(class(x[1]),
-                      "tbl_summary" = x$inputs$data,
-                      "tbl_cross" = x$inputs$data,
-                      "tbl_svysummary" = x$inputs$data$variables),
+          "tbl_summary" = x$inputs$data,
+          "tbl_cross" = x$inputs$data,
+          "tbl_svysummary" = x$inputs$data$variables
+        ),
         var_info = x$table_body,
         arg_name = "variable",
         select_single = TRUE
@@ -253,7 +256,7 @@ inline_text.tbl_regression <-
     filter_expr <-
       result <-
       x$table_body %>%
-      filter(.data$variable ==  !!variable)
+      filter(.data$variable == !!variable)
 
     # select variable level ----------------------------------------------------
     if (rlang::quo_is_null(level)) {
@@ -377,10 +380,12 @@ inline_text.tbl_survival <-
            ...) {
 
     # setting defaults ---------------------------------------------------------
-    if (is.null(estimate_fun)) estimate_fun <- x$table_header %>%
+    if (is.null(estimate_fun)) {
+      estimate_fun <- x$table_header %>%
         filter(.data$column == "estimate") %>%
         pull("fmt_fun") %>%
         purrr::pluck(1)
+    }
 
     # input checks -------------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
@@ -542,37 +547,55 @@ inline_text.tbl_survfit <-
 
     # selecting column ---------------------------------------------------------
     if (!is.null(time)) {
-      if (!time %in% x$inputs$times)
+      if (!time %in% x$inputs$times) {
         glue("`time=` must be one of {quoted_list(x$inputs$times)}") %>% abort()
-      column <- which(x$inputs$times %in% time) %>% {paste0("stat_", .)}
+      }
+      column <- which(x$inputs$times %in% time) %>% {
+        paste0("stat_", .)
+      }
     }
     if (!is.null(prob)) {
-      if (!prob %in% x$inputs$probs)
+      if (!prob %in% x$inputs$probs) {
         glue("`prob=` must be one of {quoted_list(x$inputs$probs)}") %>% abort()
-      column <- which(x$inputs$probs %in% prob) %>% {paste0("stat_", .)}
+      }
+      column <- which(x$inputs$probs %in% prob) %>% {
+        paste0("stat_", .)
+      }
     }
-    column <- x$table_body %>% select({{ column }}) %>% names()
+    column <- x$table_body %>%
+      select({{ column }}) %>%
+      names()
 
     # selecting variable -------------------------------------------------------
     variable <- .select_to_varnames(select = !!variable, var_info = x$meta_data)
-    if (length(variable) == 0)
+    if (length(variable) == 0) {
       variable <- .select_to_varnames(select = 1, var_info = x$meta_data)
+    }
 
     # selecting level ----------------------------------------------------------
-    level <- .select_to_varnames(select = !!level,
-                                 var_info = filter(x$table_body, .data$variable == .env$variable) %>%
-                                   dplyr::pull(.data$label))
-    if (length(level) == 0)
-      level <- .select_to_varnames(select = 1,
-                                   var_info = filter(x$table_body, .data$variable == .env$variable) %>%
-                                     dplyr::pull(.data$label))
+    level <- .select_to_varnames(
+      select = !!level,
+      var_info = filter(x$table_body, .data$variable == .env$variable) %>%
+        dplyr::pull(.data$label)
+    )
+    if (length(level) == 0) {
+      level <- .select_to_varnames(
+        select = 1,
+        var_info = filter(x$table_body, .data$variable == .env$variable) %>%
+          dplyr::pull(.data$label)
+      )
+    }
 
     # if pattern specified, then construct the stat to display
     if (!is.null(pattern)) {
-      stat_cols <- select(x$meta_data, .data$df_stats) %>% unnest(cols = .data$df_stats) %>% pull(.data$col_name) %>% unique()
-      if (!column %in% stat_cols)
+      stat_cols <- select(x$meta_data, .data$df_stats) %>%
+        unnest(cols = .data$df_stats) %>%
+        pull(.data$col_name) %>%
+        unique()
+      if (!column %in% stat_cols) {
         glue("When `pattern=` specified, column must be one of {quoted_list(stat_cols)}") %>%
-        abort()
+          abort()
+      }
 
       result <-
         dplyr::filter(x$meta_data, .data$variable == .env$variable) %>%
@@ -594,7 +617,7 @@ inline_text.tbl_survfit <-
     }
 
     result
-}
+  }
 
 
 #' Report statistics from cross table inline
@@ -621,7 +644,6 @@ inline_text.tbl_survfit <-
 #' inline_text(tbl_cross, row_level = "Drug A", col_level = "1")
 #' inline_text(tbl_cross, row_level = "Total", col_level = "1")
 #' inline_text(tbl_cross, col_level = "p.value")
-
 inline_text.tbl_cross <-
   function(x, col_level = NULL, row_level = NULL,
            pvalue_fun = NULL, ...) {
@@ -653,7 +675,9 @@ inline_text.tbl_cross <-
       variable <- "..total.."
       row_level <- NULL
     }
-    else variable <- x$inputs$row
+    else {
+      variable <- x$inputs$row
+    }
 
     # col_level ----------------------------------------------------------------
     col_lookup_table <-
@@ -695,8 +719,10 @@ inline_text.tbl_cross <-
 
     # evaluating inline_text for tbl_summary -----------------------------------
     expr(
-      inline_text.tbl_summary(x, variable = !!variable, level = !!row_level,
-                              column = {{ col_level }}, pvalue_fun = !!pvalue_fun)
+      inline_text.tbl_summary(x,
+        variable = !!variable, level = !!row_level,
+        column = {{ col_level }}, pvalue_fun = !!pvalue_fun
+      )
     ) %>%
       eval()
   }

@@ -2,27 +2,37 @@ context("test-combine_terms")
 testthat::skip_on_cran()
 
 library(Hmisc)
-mod1 <- lm(age ~ marker + I(marker^2) + stage,
-           trial[c("age", "marker", "stage")] %>% na.omit())
+mod1 <- lm(
+  age ~ marker + I(marker^2) + stage,
+  trial[c("age", "marker", "stage")] %>% na.omit()
+)
 
 # adding splines
-mod2 <- lm(age ~ rcspline.eval(marker, inclx = TRUE) + stage,
-           trial[c("age", "marker", "stage")] %>% na.omit())
-mod_reduce <- lm(age ~ stage,
-                 trial[c("age", "marker", "stage")] %>% na.omit())
+mod2 <- lm(
+  age ~ rcspline.eval(marker, inclx = TRUE) + stage,
+  trial[c("age", "marker", "stage")] %>% na.omit()
+)
+mod_reduce <- lm(
+  age ~ stage,
+  trial[c("age", "marker", "stage")] %>% na.omit()
+)
 
 test_that("combine_terms works without error", {
   expect_error(
     tbl1 <- tbl_regression(mod1, label = stage ~ "Stage") %>%
-      combine_terms(formula_update = . ~ . -marker -I(marker^2),
-                    label = "Marker (non-linear terms)"),
+      combine_terms(
+        formula_update = . ~ . - marker - I(marker^2),
+        label = "Marker (non-linear terms)"
+      ),
     NA
   )
 
   expect_error(
     tbl2 <- tbl_regression(mod2, label = stage ~ "Stage") %>%
-      combine_terms(formula_update = . ~ . -rcspline.eval(marker, inclx = TRUE),
-                    label = "Marker (non-linear terms)"),
+      combine_terms(
+        formula_update = . ~ . - rcspline.eval(marker, inclx = TRUE),
+        label = "Marker (non-linear terms)"
+      ),
     NA
   )
 
@@ -49,24 +59,25 @@ test_that("combine_terms works without error", {
     lm(age ~ marker + I(marker^2) + stage, na.omit(trial)) %>%
       tbl_regression() %>%
       add_global_p() %>%
-      combine_terms(formula = . ~ . -marker - I(marker^2)),
+      combine_terms(formula = . ~ . - marker - I(marker^2)),
     NA
   )
 
   # Confirm logistic regression model works (test option must be specified)
   expect_error(
     glm(response ~ age + marker + sp2marker + sp3marker,
-        data = trial %>%
-          bind_cols(
-            rcspline.eval(.$marker, nk = 4, inclx = FALSE, norm = 0) %>%
-              as.data.frame() %>%
-              set_names("sp2marker", "sp3marker")
-          ) %>%
-          filter(complete.cases(.) == TRUE),
-        family = "binomial") %>%
+      data = trial %>%
+        bind_cols(
+          rcspline.eval(.$marker, nk = 4, inclx = FALSE, norm = 0) %>%
+            as.data.frame() %>%
+            set_names("sp2marker", "sp3marker")
+        ) %>%
+        filter(complete.cases(.) == TRUE),
+      family = "binomial"
+    ) %>%
       tbl_regression(exponentiate = TRUE) %>%
       combine_terms(
-        formula_update = . ~ . -marker -sp2marker -sp3marker,
+        formula_update = . ~ . - marker - sp2marker - sp3marker,
         test = "LRT"
       ),
     NA
@@ -75,10 +86,11 @@ test_that("combine_terms works without error", {
   # Confirm Cox model works
   expect_error(
     survival::coxph(survival::Surv(ttdeath, death) ~ grade + rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0),
-                    data = na.omit(trial)) %>%
+      data = na.omit(trial)
+    ) %>%
       tbl_regression() %>%
       combine_terms(
-        formula_update = . ~ . -rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
+        formula_update = . ~ . - rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
       ),
     NA
   )
@@ -86,10 +98,11 @@ test_that("combine_terms works without error", {
   # Confirm survreg model works
   expect_error(
     survival::survreg(survival::Surv(ttdeath, death) ~ grade + rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0),
-                      data = na.omit(trial)) %>%
+      data = na.omit(trial)
+    ) %>%
       tbl_regression() %>%
       combine_terms(
-        formula_update = . ~ . -rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
+        formula_update = . ~ . - rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0)
       ),
     NA
   )
@@ -111,41 +124,44 @@ test_that("combine_terms works without error", {
     ) %>%
       tbl_regression() %>%
       combine_terms(
-        formula_update = . ~ . -Time -sp2Time -sp3Time
+        formula_update = . ~ . - Time - sp2Time - sp3Time
       ),
     NA
   )
 
   expect_message(
     tbl_regression(mod1, label = stage ~ "Stage") %>%
-      combine_terms(formula_update = . ~ . -marker -I(marker^2),
-                    label = "Marker (non-linear terms)",
-                    quiet = TRUE),
+      combine_terms(
+        formula_update = . ~ . - marker - I(marker^2),
+        label = "Marker (non-linear terms)",
+        quiet = TRUE
+      ),
     NA
   )
 
   expect_message(
     tbl_regression(mod1, label = stage ~ "Stage") %>%
-      combine_terms(formula_update = . ~ . -marker -I(marker^2),
-                    label = "Marker (non-linear terms)",
-                    quiet = FALSE),
+      combine_terms(
+        formula_update = . ~ . - marker - I(marker^2),
+        label = "Marker (non-linear terms)",
+        quiet = FALSE
+      ),
     NULL
   )
-
 })
 
 test_that("error catching working properly", {
   expect_error(
     lm(age ~ marker + stage, trial) %>%
       tbl_regression() %>%
-      combine_terms(formula = . ~ . -marker),
+      combine_terms(formula = . ~ . - marker),
     NULL
   )
 
   expect_error(
     lm(age ~ marker + stage, trial) %>%
       tbl_regression() %>%
-      combine_terms(formula = . ~ . -marker, label = c("marker", "marker2")),
+      combine_terms(formula = . ~ . - marker, label = c("marker", "marker2")),
     NULL
   )
 
@@ -169,12 +185,16 @@ test_that("error catching working properly", {
 expect_error(
   tibble(outcome = "marker", exp = FALSE, test = "F") %>%
     mutate(
-      mod = purrr::map(outcome,
-                       ~glm(formula = paste0(.x, " ~ age + stage") %>% as.formula(),
-                            data = trial, family = gaussian)),
-      tbl = purrr::map2(mod, exp, ~tbl_regression(.x, exponentiate = .y)),
+      mod = purrr::map(
+        outcome,
+        ~ glm(
+          formula = paste0(.x, " ~ age + stage") %>% as.formula(),
+          data = trial, family = gaussian
+        )
+      ),
+      tbl = purrr::map2(mod, exp, ~ tbl_regression(.x, exponentiate = .y)),
       tbl2 = purrr::map2(
-        tbl, test, ~combine_terms(..1, formula_update = . ~ . - stage, test = ..2)
+        tbl, test, ~ combine_terms(..1, formula_update = . ~ . - stage, test = ..2)
       )
     ),
   NA

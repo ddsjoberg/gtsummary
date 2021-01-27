@@ -28,4 +28,3 @@ test_that("tbl_survfit", {
   expect_error(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% as_gt(), NA)
   expect_warning(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% as_gt(), NA)
 })
-

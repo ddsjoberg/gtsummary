@@ -14,7 +14,6 @@
 #'   tbl_regression() %>%
 #'   modify_column_hide(column = ci) %>%
 #'   modify_column_unhide(column = std.error)
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

@@ -21,7 +21,7 @@
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
-                                return_calls = FALSE, exclude = NULL,  ...) {
+                                return_calls = FALSE, exclude = NULL, ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_warn(
@@ -62,7 +62,9 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   include <- "tibble" %>% union(include)
 
   # return calls, if requested -------------------------------------------------
-  if (return_calls == TRUE) return(tibble_calls[include])
+  if (return_calls == TRUE) {
+    return(tibble_calls[include])
+  }
 
   # taking each gt function call, concatenating them with %>% separating them
   tibble_calls[include] %>%
@@ -76,7 +78,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 }
 
 
-table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
+table_header_to_tibble_calls <- function(x, col_labels = TRUE) {
   table_header <- .clean_table_header(x$table_header)
   tibble_calls <- list()
 
@@ -86,12 +88,15 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   # ungroup --------------------------------------------------------------------
   group_var <- select(x$table_body, dplyr::group_cols()) %>% names()
   if (length(group_var) > 0) {
-    if (group_var != "groupname_col")
+    if (group_var != "groupname_col") {
       stop("`.$table_body` may only be grouped by column 'groupname_col'")
+    }
 
     tibble_calls[["ungroup"]] <- list(
-      expr(mutate(groupname_col =
-                    ifelse(dplyr::row_number() == 1, .data$groupname_col, NA))),
+      expr(mutate(
+        groupname_col =
+          ifelse(dplyr::row_number() == 1, .data$groupname_col, NA)
+      )),
       expr(ungroup())
     )
   }
@@ -106,34 +111,38 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   df_tab_style_bold <-
     table_header %>%
     filter(!is.na(.data$bold)) %>%
-    mutate(# lgl indicating the rows to bold
-      row_id = map(.data$bold, ~with(x$table_body, eval(parse_expr(.x))))
+    mutate( # lgl indicating the rows to bold
+      row_id = map(.data$bold, ~ with(x$table_body, eval(parse_expr(.x))))
     )
 
   tibble_calls[["tab_style_bold"]] <-
     map(
       seq_len(nrow(df_tab_style_bold)),
-      ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_bold$column[[.x]])),
-                       ~ifelse(!!df_tab_style_bold$row_id[[.x]], paste0("__", ., "__"), .)))
+      ~ expr(mutate_at(
+        gt::vars(!!!syms(df_tab_style_bold$column[[.x]])),
+        ~ ifelse(!!df_tab_style_bold$row_id[[.x]], paste0("__", ., "__"), .)
+      ))
     )
 
   # tab_style_italic -------------------------------------------------------------
   df_tab_style_italic <- table_header %>%
     filter(!is.na(.data$italic)) %>%
-    mutate(# lgl indicating the rows to italicize
-      row_id = map(.data$italic, ~with(x$table_body, eval(parse_expr(.x))))
+    mutate( # lgl indicating the rows to italicize
+      row_id = map(.data$italic, ~ with(x$table_body, eval(parse_expr(.x))))
     )
 
   tibble_calls[["tab_style_italic"]] <-
     map(
       seq_len(nrow(df_tab_style_italic)),
-      ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_italic$column[[.x]])),
-                       ~ifelse(!!df_tab_style_italic$row_id[[.x]], paste0("_", ., "_"), .)))
+      ~ expr(mutate_at(
+        gt::vars(!!!syms(df_tab_style_italic$column[[.x]])),
+        ~ ifelse(!!df_tab_style_italic$row_id[[.x]], paste0("_", ., "_"), .)
+      ))
     )
 
   # fmt (part 2) ---------------------------------------------------------------
   df_fmt <- table_header %>%
-    filter(map_lgl(.data$fmt_fun, ~!is.null(.x)))
+    filter(map_lgl(.data$fmt_fun, ~ !is.null(.x)))
 
   tibble_calls[["fmt"]] <- map(
     seq_len(nrow(df_fmt)),

@@ -54,5 +54,4 @@ test_that("tbl_merge/tbl_stack", {
   expect_warning(tbl_merge_ex1 %>% as_kable(), NA)
   expect_error(tbl_stack_ex1 %>% as_kable(), NA)
   expect_warning(tbl_stack_ex1 %>% as_kable(), NA)
-
 })

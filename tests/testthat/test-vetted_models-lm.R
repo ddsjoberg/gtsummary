@@ -30,26 +30,34 @@ library(dplyr)
 test_that("vetted_models lm()", {
   # building models to check
   mod_lm_lin <- lm(marker ~ age + trt + grade,
-                     data = trial)
+    data = trial
+  )
   mod_lm_int <- lm(marker ~ age + trt * grade,
-                     data = trial)
+    data = trial
+  )
 
   # 1.  Runs as expected with standard use
   #       - without errors, warnings, messages
   expect_error(
     tbl_lm_lin <- tbl_regression(mod_lm_lin,
-                                  label = list(age ~ "Age",
-                                               trt ~ "Chemotherapy Treatment",
-                                               grade ~ "Grade")), NA
+      label = list(
+        age ~ "Age",
+        trt ~ "Chemotherapy Treatment",
+        grade ~ "Grade"
+      )
+    ), NA
   )
   expect_warning(
     tbl_lm_lin, NA
   )
   expect_error(
     tbl_lm_int <- tbl_regression(mod_lm_int,
-                                  label = list(age ~ "Age",
-                                               trt ~ "Chemotherapy Treatment",
-                                               grade ~ "Grade")), NA
+      label = list(
+        age ~ "Age",
+        trt ~ "Chemotherapy Treatment",
+        grade ~ "Grade"
+      )
+    ), NA
   )
   expect_warning(
     tbl_lm_int, NA

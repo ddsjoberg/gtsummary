@@ -11,7 +11,7 @@ test_that("modify_footnote works", {
     tbl_summary %>%
       modify_footnote(
         update = starts_with("stat_") ~
-          "median (IQR) for continuous variables; n (%) categorical variables"
+        "median (IQR) for continuous variables; n (%) categorical variables"
       ),
     NA
   )

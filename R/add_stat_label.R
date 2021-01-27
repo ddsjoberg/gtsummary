@@ -47,7 +47,6 @@
 #'     statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
 #'   ) %>%
 #'   add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -74,9 +73,11 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
 
   # no column stat label with continuous2 variables ----------------------------
   if (location == "column" && "continuous2" %in% x$meta_data$summary_type) {
-    paste("add_stat_label: Cannot combine `location = \"column\"` with multi-line summaries",
-          "of continuous variables, e.g. summary types \"continuous2\".",
-          "Updating argument value to `location = \"row\"`") %>%
+    paste(
+      "add_stat_label: Cannot combine `location = \"column\"` with multi-line summaries",
+      "of continuous variables, e.g. summary types \"continuous2\".",
+      "Updating argument value to `location = \"row\"`"
+    ) %>%
       str_wrap() %>%
       inform()
     location <- "row"
@@ -86,7 +87,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   # stat_label default
   stat_label <- as.list(x$meta_data$stat_label) %>% set_names(x$meta_data$variable)
   # converting input to named list
-  if (!is_survey(x$inputs$data))
+  if (!is_survey(x$inputs$data)) {
     label <-
       .formula_list_to_named_list(
         x = label,
@@ -94,7 +95,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
         var_info = meta_data_to_var_info(x$meta_data),
         arg_name = "label"
       )
-  else
+  } else {
     label <-
       .formula_list_to_named_list(
         x = label,
@@ -102,16 +103,17 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
         var_info = meta_data_to_var_info(x$meta_data),
         arg_name = "label"
       )
+  }
 
   # updating the default values with values in label
-  stat_label <- imap(stat_label, ~label[[.y]] %||% .x)
+  stat_label <- imap(stat_label, ~ label[[.y]] %||% .x)
 
   # adding some meta data needed for merging with table_body (i.e. the row_type)
   meta_data_stat_label <-
     x$meta_data %>%
     select(c("variable", "summary_type")) %>%
     left_join(
-      imap_dfr(stat_label, ~tibble(stat_label = .x, variable = .y)),
+      imap_dfr(stat_label, ~ tibble(stat_label = .x, variable = .y)),
       by = "variable"
     ) %>%
     mutate(
@@ -129,10 +131,11 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
     distinct()
 
   x$table_body$stat_label <- NA_character_
-  for(i in seq_len(nrow(meta_data_row_types))) {
+  for (i in seq_len(nrow(meta_data_row_types))) {
     x$table_body$stat_label[
       x$table_body$variable == meta_data_row_types$variable[i] &
-        x$table_body$row_type == meta_data_row_types$row_type[i]] <-
+        x$table_body$row_type == meta_data_row_types$row_type[i]
+    ] <-
       filter(meta_data_stat_label, .data$variable == meta_data_row_types$variable[i])$stat_label
   }
 
@@ -141,7 +144,8 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
     x$table_body <-
       x$table_body %>%
       left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
-                by = "variable") %>%
+        by = "variable"
+      ) %>%
       mutate(
         label = case_when(
           .data$summary_type == "continuous2" & .data$row_type == "level" ~ stat_label,
@@ -180,7 +184,8 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
     # removing statistics presented footnote
     mutate(
       footnote = ifelse(startsWith(.data$column, "stat_"),
-                        NA_character_, .data$footnote)
+        NA_character_, .data$footnote
+      )
     )
 
   # keeping track of all functions previously run

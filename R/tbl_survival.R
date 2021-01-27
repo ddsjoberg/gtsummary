@@ -242,7 +242,9 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     )
 
   # creating object to return
-  level_label <- intersect("level_label", names(table_body)) %>% list() %>% compact()
+  level_label <- intersect("level_label", names(table_body)) %>%
+    list() %>%
+    compact()
   result <- list()
   result[["table_body"]] <- table_body %>% group_by(!!!syms(level_label))
   result[["table_header"]] <- table_header

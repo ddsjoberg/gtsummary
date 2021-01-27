@@ -56,7 +56,8 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
   # checking input table has a p.value column
   if (!"p.value" %in% names(x$table_body)) {
     stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # setting defaults from gtsummary theme --------------------------------------
@@ -78,8 +79,9 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
   expr_p.adjust <-
     rlang::expr(stats::p.adjust(x$table_body$p.value, method = !!method)) %>%
     deparse()
-  if (quiet == FALSE)
+  if (quiet == FALSE) {
     rlang::inform(glue("add_q: Adjusting p-values with\n`{expr_p.adjust}`"))
+  }
 
   x$table_body$q.value <- x$table_body$p.value %>% stats::p.adjust(method = method)
 
@@ -97,8 +99,9 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
     table_header_fmt_fun(q.value = pvalue_fun) %>%
     mutate(
       footnote = ifelse(.data$column == "q.value",
-                        footnote_text,
-                        .data$footnote)
+        footnote_text,
+        .data$footnote
+      )
     )
 
   # adding  column header

@@ -50,8 +50,9 @@ set_gtsummary_theme <- function(x) {
   }
 
   # print name of theme if present ---------------------------------------------
-  if (!is.null(x$`pkgwide-str:theme_name`))
+  if (!is.null(x$`pkgwide-str:theme_name`)) {
     rlang::inform(glue("Setting `{x$`pkgwide-str:theme_name`}` theme"))
+  }
 
   # adding theme elements to environment ---------------------------------------
   rlang::env_bind(.env = env_gtsummary_theme, !!!x)
@@ -71,8 +72,9 @@ get_theme_element <- function(x, default = NULL, eval = TRUE) {
 
   # returning theme element
   # if eval is FALSE, then returning the unevaluated theme element
-  if (eval == FALSE)
+  if (eval == FALSE) {
     return(env_gtsummary_theme[[x]] %||% default)
+  }
 
   # the theme element is evaluated in the caller env so it may conditionally
   # set a default depending on other objects only known at the time it is called
@@ -84,8 +86,10 @@ get_theme_element <- function(x, default = NULL, eval = TRUE) {
 #' @export
 reset_gtsummary_theme <- function() {
   # deleting theme environment if it exists
-  rm(list = ls(envir = env_gtsummary_theme),
-     envir = env_gtsummary_theme)
+  rm(
+    list = ls(envir = env_gtsummary_theme),
+    envir = env_gtsummary_theme
+  )
 
   invisible()
 }

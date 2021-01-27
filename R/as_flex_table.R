@@ -58,7 +58,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
       x$table_header %>%
       mutate_at(
         vars(.data$label, .data$spanning_header),
-        ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
+        ~ str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
       )
   }
 
@@ -70,10 +70,14 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   flextable_calls <-
     purrr::reduce(
       .x = seq_along(insert_expr_after),
-      .f = function(x, y) add_expr_after(calls = x,
-                                         add_after = names(insert_expr_after[y]),
-                                         expr = insert_expr_after[[y]],
-                                         new_name = paste0("user_added", y)),
+      .f = function(x, y) {
+        add_expr_after(
+          calls = x,
+          add_after = names(insert_expr_after[y]),
+          expr = insert_expr_after[[y]],
+          new_name = paste0("user_added", y)
+        )
+      },
       .init = flextable_calls
     )
 
@@ -86,7 +90,9 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
     )
 
   # return calls, if requested -------------------------------------------------
-  if (return_calls == TRUE) return(flextable_calls[include])
+  if (return_calls == TRUE) {
+    return(flextable_calls[include])
+  }
 
   # taking each kable function call, concatenating them with %>% separating them
   flextable_calls[include] %>%
@@ -113,8 +119,10 @@ table_header_to_flextable_calls <- function(x, ...) {
   # flextable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
   flextable_calls <-
-    as_tibble(x, return_calls = TRUE,
-              include = -c("cols_label", "tab_style_bold", "tab_style_italic"))
+    as_tibble(x,
+      return_calls = TRUE,
+      include = -c("cols_label", "tab_style_bold", "tab_style_italic")
+    )
 
   # flextable ------------------------------------------------------------------
   flextable_calls[["flextable"]] <- expr(flextable::flextable())
@@ -123,7 +131,9 @@ table_header_to_flextable_calls <- function(x, ...) {
   col_labels <-
     table_header %>%
     filter(.data$hide == FALSE) %>%
-    {set_names(as.list(.[["label"]]), .[["column"]])}
+    {
+      set_names(as.list(.[["label"]]), .[["column"]])
+    }
 
   flextable_calls[["set_header_labels"]] <- expr(
     flextable::set_header_labels(!!!col_labels)
@@ -139,19 +149,23 @@ table_header_to_flextable_calls <- function(x, ...) {
   # add_header_row -------------------------------------------------------------
   # this is the spanning rows
   any_spanning_header <- sum(!is.na(table_header$spanning_header)) > 0
-  if (any_spanning_header == FALSE) flextable_calls[["add_header_row"]] <- list()
-  else {
+  if (any_spanning_header == FALSE) {
+    flextable_calls[["add_header_row"]] <- list()
+  } else {
     df_header0 <-
       table_header %>%
       filter(.data$hide == FALSE) %>%
       select(.data$spanning_header) %>%
-      mutate(spanning_header = ifelse(is.na(.data$spanning_header),
-                                      " ", .data$spanning_header),
-             spanning_header_id = dplyr::row_number())
+      mutate(
+        spanning_header = ifelse(is.na(.data$spanning_header),
+          " ", .data$spanning_header
+        ),
+        spanning_header_id = dplyr::row_number()
+      )
     # assigning an ID for each spanning header group
     for (i in seq(2, nrow(df_header0))) {
-      if(df_header0$spanning_header[i] == df_header0$spanning_header[i-1]) {
-        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i-1]
+      if (df_header0$spanning_header[i] == df_header0$spanning_header[i - 1]) {
+        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i - 1]
       }
     }
 
@@ -184,7 +198,7 @@ table_header_to_flextable_calls <- function(x, ...) {
 
   flextable_calls[["align"]] <- map2(
     df_align$align, df_align$data,
-    ~expr(flextable::align(align = !!.x, j = !!.y$id, part = "all"))
+    ~ expr(flextable::align(align = !!.x, j = !!.y$id, part = "all"))
   )
 
   # padding --------------------------------------------------------------------
@@ -195,13 +209,13 @@ table_header_to_flextable_calls <- function(x, ...) {
     mutate(
       i_index = map(
         .data$indent,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
+        ~ rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
       )
     )
 
   flextable_calls[["padding"]] <- map2(
     df_padding$id, df_padding$i_index,
-    ~expr(flextable::padding(i = !!.y, j = !!.x, padding.left = 15))
+    ~ expr(flextable::padding(i = !!.y, j = !!.x, padding.left = 15))
   )
 
   # fontsize -------------------------------------------------------------------
@@ -238,15 +252,15 @@ table_header_to_flextable_calls <- function(x, ...) {
     ungroup() %>%
     bind_rows(footnote_abbrev) %>%
     mutate(
-      j_index = map(.data$data, ~.x$id),
-      min_id = purrr::map_int(.data$j_index,~min(.x))
+      j_index = map(.data$data, ~ .x$id),
+      min_id = purrr::map_int(.data$j_index, ~ min(.x))
     ) %>%
     arrange(.data$min_id) %>%
     mutate(row_number = dplyr::row_number())
 
   flextable_calls[["footnote"]] <- pmap(
     list(df_footnote$j_index, df_footnote$footnote, df_footnote$row_number),
-    ~expr(
+    ~ expr(
       flextable::footnote(
         i = !!i_index, j = !!..1,
         value = flextable::as_paragraph(!!..2),
@@ -263,17 +277,19 @@ table_header_to_flextable_calls <- function(x, ...) {
     mutate(
       i_index = map(
         .data$missing_emdash,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
+        ~ rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
       )
     )
 
   flextable_calls[["fmt_missing_emdash"]] <-
     map2(
       df_na_emdash$i_index, df_na_emdash$id,
-      ~expr(
-        flextable::colformat_char(j = !!.y, i = !!.x,
-                                  na_str = !!get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014"))
+      ~ expr(
+        flextable::colformat_char(
+          j = !!.y, i = !!.x,
+          na_str = !!get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
         )
+      )
     )
 
   # bold -----------------------------------------------------------------------
@@ -284,13 +300,13 @@ table_header_to_flextable_calls <- function(x, ...) {
     mutate(
       i_index = map(
         .data$bold,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
+        ~ rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
       )
     )
 
   flextable_calls[["bold"]] <- map2(
     df_bold$id, df_bold$i_index,
-    ~expr(flextable::bold(i = !!.y, j = !!.x, part = "body"))
+    ~ expr(flextable::bold(i = !!.y, j = !!.x, part = "body"))
   )
 
   # italic ---------------------------------------------------------------------
@@ -301,13 +317,13 @@ table_header_to_flextable_calls <- function(x, ...) {
     mutate(
       i_index = map(
         .data$italic,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
+        ~ rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
       )
     )
 
   flextable_calls[["italic"]] <- map2(
     df_italic$id, df_italic$i_index,
-    ~expr(flextable::italic(i = !!.y, j = !!.x, part = "body"))
+    ~ expr(flextable::italic(i = !!.y, j = !!.x, part = "body"))
   )
 
   # source note ----------------------------------------------------------------
@@ -362,4 +378,3 @@ table_header_to_flextable_calls <- function(x, ...) {
 
   flextable_calls
 }
-

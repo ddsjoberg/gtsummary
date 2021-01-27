@@ -56,13 +56,16 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
 add_overall_merge <- function(x, overall, last, col_label) {
   # checking the original tbl_summary and the added overall,
   # are the same before binding (excluding headers)
-  if (!identical(select(x$table_body, c("row_type", "variable", "label")),
-                 select(overall, c("row_type", "variable", "label")) %>% as_tibble())) {
+  if (!identical(
+    select(x$table_body, c("row_type", "variable", "label")),
+    select(overall, c("row_type", "variable", "label")) %>% as_tibble()
+  )) {
     paste(
       "An error occured in `add_overall()`, and overall statistics cannot be merged.",
       "Has the variable label changed since the original call of `tbl_summary()` or",
       "`tbl_svysummary()`, for example, via `add_stat_label()`?",
-      "If so, run `add_overall()` before the variable label is updated.") %>%
+      "If so, run `add_overall()` before the variable label is updated."
+    ) %>%
       stringr::str_wrap() %>%
       stop(call. = FALSE)
   }
@@ -95,8 +98,9 @@ add_overall_merge <- function(x, overall, last, col_label) {
     filter(x$table_header, startsWith(.data$column, "stat_") & .data$column != "stat_0") %>%
     pull(.data$footnote) %>%
     unique()
-  if (length(consistent_footnote) == 1)
+  if (length(consistent_footnote) == 1) {
     x$table_header$footnote[x$table_header$column == "stat_0"] <- consistent_footnote
+  }
 
   x
 }

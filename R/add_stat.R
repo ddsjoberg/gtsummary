@@ -57,8 +57,8 @@
 #'   # replicating result of `add_p()` with `add_stat()`
 #'   add_stat(
 #'     fns = everything() ~ my_ttest, # all variables compared with with t-test
-#'     fmt_fun = style_pvalue,        # format result with style_pvalue()
-#'     header = "**My p-value**"      # new column header
+#'     fmt_fun = style_pvalue, # format result with style_pvalue()
+#'     header = "**My p-value**" # new column header
 #'   )
 #'
 #' # Example 2 ----------------------------------
@@ -77,10 +77,10 @@
 #'   select(trt, age, marker) %>%
 #'   tbl_summary(by = trt, missing = "no") %>%
 #'   add_stat(
-#'     fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
+#'     fns = everything() ~ my_ttest2, # all variables will be compared by t-test
 #'     fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-#'     header = "**Treatment Comparison**",       # column header
-#'     footnote = "T-test statistic and p-value"  # footnote
+#'     header = "**Treatment Comparison**", # column header
+#'     footnote = "T-test statistic and p-value" # footnote
 #'   )
 #'
 #' # Example 3 ----------------------------------
@@ -90,8 +90,8 @@
 #'     purrr::pluck("df_stats", 1) %>%
 #'     dplyr::mutate(
 #'       # calculate and format 95% CI
-#'       prop_ci = purrr::map2(n, N, ~prop.test(.x, .y)$conf.int %>% style_percent(symbol = TRUE)),
-#'       ci = purrr::map_chr(prop_ci, ~glue::glue("{.x[1]}, {.x[2]}"))
+#'       prop_ci = purrr::map2(n, N, ~ prop.test(.x, .y)$conf.int %>% style_percent(symbol = TRUE)),
+#'       ci = purrr::map_chr(prop_ci, ~ glue::glue("{.x[1]}, {.x[2]}"))
 #'     ) %>%
 #'     dplyr::pull(ci)
 #' }
@@ -106,7 +106,6 @@
 #'     header = "**95% CI**"
 #'   ) %>%
 #'   modify_footnote(everything() ~ NA)
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -151,8 +150,9 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
     .formula_list_to_named_list(
       x = fns,
       data = switch(class(x)[1],
-                    "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
-                    "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))) ,
+        "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+        "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
+      ),
       var_info = x$table_body,
       arg_name = "fns"
     )
@@ -160,17 +160,21 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
   # setting new column name ----------------------------------------------------
   stat_col_name <-
     switch(!is.null(new_col_name), new_col_name) %||%
-    (names(x$table_body) %>% .[startsWith(., "add_stat_")] %>% length() %>% {paste0("add_stat_", . + 1)})
+    (names(x$table_body) %>% .[startsWith(., "add_stat_")] %>% length() %>% {
+      paste0("add_stat_", . + 1)
+    })
 
   # calculating statistics -----------------------------------------------------
   df_new_stat <-
     tibble(variable = names(fns)) %>%
     left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
-              by = "variable") %>%
+      by = "variable"
+    ) %>%
     mutate(
       row_type = ifelse(.data$summary_type %in% c("categorical", "continuous2"),
-                        .env$location,
-                        "label")
+        .env$location,
+        "label"
+      )
     ) %>%
     left_join(
       x$table_body %>% select(.data$variable, .data$row_type, .data$label),
@@ -178,7 +182,7 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
     ) %>%
     tidyr::nest(data = .data$label) %>%
     mutate(
-      !!stat_col_name := purrr::imap(fns, ~eval_fn_safe(tbl = x, variable = .y, fn = .x))
+      !!stat_col_name := purrr::imap(fns, ~ eval_fn_safe(tbl = x, variable = .y, fn = .x))
     ) %>%
     select(-.data$summary_type)
 
@@ -186,10 +190,13 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
   purrr::pwalk(
     list(df_new_stat$variable, df_new_stat$data, df_new_stat[[stat_col_name]]),
     function(variable, data, stat) {
-      if (nrow(data) != length(stat))
-        glue("Dimension of '{variable}' and the added statistic do not match. ",
-             "Expecting statistic to be length {nrow(data)}.") %>%
-        abort()
+      if (nrow(data) != length(stat)) {
+        glue(
+          "Dimension of '{variable}' and the added statistic do not match. ",
+          "Expecting statistic to be length {nrow(data)}."
+        ) %>%
+          abort()
+      }
     }
   )
 
@@ -216,34 +223,35 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
 }
 
 eval_fn_safe <- function(variable, tbl, fn) {
-
   tryCatch(
-    withCallingHandlers({
-      # initializing to NA
-      stat <- NA_real_
-      stat <- rlang::call2(
-        fn,
-        data = tbl$inputs$data,
-        variable = variable,
-        by = tbl$inputs$by,
-        tbl = tbl
-      ) %>%
-        eval()
-    },
-    # printing warning and errors as message
-    warning = function(w) {
-      message(glue(
-        "There was an warning for variable '{variable}':\n ", as.character(w)
-      ))
-      invokeRestart("muffleWarning")
-    }
+    withCallingHandlers(
+      {
+        # initializing to NA
+        stat <- NA_real_
+        stat <- rlang::call2(
+          fn,
+          data = tbl$inputs$data,
+          variable = variable,
+          by = tbl$inputs$by,
+          tbl = tbl
+        ) %>%
+          eval()
+      },
+      # printing warning and errors as message
+      warning = function(w) {
+        message(glue(
+          "There was an warning for variable '{variable}':\n ", as.character(w)
+        ))
+        invokeRestart("muffleWarning")
+      }
     ),
     error = function(e) {
       message(glue(
         "There was an error for variable '{variable}':\n", as.character(e)
       ))
       return(NA_real_)
-    })
+    }
+  )
 
   stat
 }
