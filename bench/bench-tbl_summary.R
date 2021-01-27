@@ -2,17 +2,18 @@ library(gtsummary, warn.conflicts = FALSE)
 library(bench)
 
 # setup code
-big_trial <- purrr::map_dfr(seq_len(500), ~trial)
+big_trial <- purrr::map_dfr(seq_len(5000), ~trial)
 
 bench::mark(
   # simple summary
-  tbl_summary(trial),
+  simple = tbl_summary(trial),
 
   # simple calculation with comparisons+others
-  tbl_summary(trial, by = trt) %>% add_p() %>% add_q() %>% add_n(),
+  complex = tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
 
   # big summary
-  big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p(),
+  big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p(),
 
-  check = FALSE
+  check = FALSE,
+  min_iterations = 30
 )
