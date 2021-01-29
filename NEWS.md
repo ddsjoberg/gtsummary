@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix for column ordering when spanning columns added with `tbl_merge()`
+
 * Added a custom tidier for `mgcv::gam()` models (`tidy_gam()`) and a method function (`tbl_regression.gam()`) that uses the new tidier by default. (#745)
 
 * `tbl_uvregression()` now accepts both data frames and survey design objects as input. (#742)
