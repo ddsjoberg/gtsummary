@@ -288,14 +288,12 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
     fmt_fun <span class='op'>=</span> <span class='va'>style_pvalue</span>,        <span class='co'># format result with style_pvalue()</span>
     header <span class='op'>=</span> <span class='st'>"**My p-value**"</span>      <span class='co'># new column header</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error: Problem with `mutate()` input `test_info`.</span>
-#&gt; <span class='error'><span style='color: #BB0000;'>✖</span><span> Problem with `filter()` input `..1`.</span>
-#&gt; <span class='error'></span><span style='color: #BB0000;'>✖</span><span> unable to load shared object '/Users/runner/work/_temp/Library/statmod/libs/statmod.so':</span>
-#&gt; <span class='error'>  dlopen(/Users/runner/work/_temp/Library/statmod/libs/statmod.so, 6): Library not loaded: /usr/local/gfortran/lib/libgfortran.5.dylib</span>
-#&gt; <span class='error'>  Referenced from: /Users/runner/work/_temp/Library/statmod/libs/statmod.so</span>
-#&gt; <span class='error'>  Reason: image not found</span>
-#&gt; <span class='error'></span><span style='color: #0000BB;'>ℹ</span><span> Input `..1` is `map_lgl(.data$test_fun, ~identical(eval(.x), test))`.</span>
-#&gt; <span class='error'></span><span style='color: #0000BB;'>ℹ</span><span> Input `test_info` is `map(...)`.</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'lme4':</span>
+#&gt; <span class='message'>  method                          from</span>
+#&gt; <span class='message'>  cooks.distance.influence.merMod car </span>
+#&gt; <span class='message'>  influence.merMod                car </span>
+#&gt; <span class='message'>  dfbeta.influence.merMod         car </span>
+#&gt; <span class='message'>  dfbetas.influence.merMod        car </span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># fn returns t-test test statistic and pvalue</span>
 <span class='va'>my_ttest2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
@@ -343,7 +341,7 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
   <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>There was an error for variable 'grade':</span>
 #&gt; <span class='message'>Error in categorical_ci(data = structure(list(grade = structure(c(2L, : could not find function "categorical_ci"</span></div><div class='output co'>#&gt; <span class='error'>Error: Dimension of 'grade' and the added statistic do not match. Expecting statistic to be length 3.</span></div><div class='input'>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
