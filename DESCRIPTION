@@ -1,7 +1,7 @@
 Package: gtsummary
 Title: Presentation-Ready Data Summary and Analytic Result
     Tables
-Version: 1.3.6.9000
+Version: 1.3.6.9004
 Authors@R: 
     c(person(given = "Daniel D.",
              family = "Sjoberg",
@@ -64,7 +64,7 @@ Depends:
     R (>= 3.4)
 Imports: 
     broom (>= 0.7.3),
-    broom.helpers  (>= 1.1.0),
+    broom.helpers  (>= 1.1.0.9001),
     dplyr (>= 1.0.1),
     forcats (>= 0.5.0),
     glue (>= 1.4.1),
@@ -89,6 +89,7 @@ Suggests:
     huxtable (>= 5.0.0),
     kableExtra,
     lme4,
+    mgcv,
     mice,
     nnet,
     officer,
@@ -99,6 +100,8 @@ Suggests:
     spelling (>= 2.2),
     survey,
     testthat
+Remotes:
+    larmarange/broom.helpers
 VignetteBuilder: 
     knitr
 RdMacros: 
