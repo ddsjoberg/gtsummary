@@ -296,3 +296,14 @@ table_header_to_gt_calls <- function(x, ...) {
   # return list of gt expressions
   gt_calls
 }
+
+# this function cleans up table_header (i.e. removes formatting for hidden columns, etc.)
+.clean_table_header <- function(x) {
+  # removing instructions for hidden columns
+  dplyr::mutate_at(
+    x,
+    vars(any_of(c("bold", "italic", "missing_emdash", "indent",
+                  "footnote_abbrev", "footnote", "spanning_header"))),
+    ~ifelse(.data$hide, NA_character_, .)
+  )
+}
