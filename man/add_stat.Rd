@@ -42,7 +42,8 @@ Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_
 }
 \description{
 \lifecycle{experimental}
-The function allows a user to add a new column (or columns) of statistics
+The function allows a user to add a new column (or columns) of statistics to an
+existing \code{tbl_summary} or \code{tbl_svysummary} object.
 }
 \section{Details}{
 
