@@ -141,7 +141,7 @@ test_that("add_p works well", {
   expect_equal(
     dplyr::filter(tbl1$meta_data, variable == "death")$p.value,
     survey::svychisq(~ death + response, strial, statistic = "Wald")$p.value %>% rlang::set_names(NULL) %>% .[[1]],
-    tolerance = 10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+    tolerance = 10^-2 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 
 
@@ -191,6 +191,6 @@ test_that("add_p works well", {
   expect_equal(
     dplyr::filter(tbl2$meta_data, variable == "death")$p.value,
     survey::svychisq(~ death + response, strial, statistic = "saddlepoint")$p.value %>% as.numeric(),
-    tolerance = 10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+    tolerance = 10^-2 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 })
