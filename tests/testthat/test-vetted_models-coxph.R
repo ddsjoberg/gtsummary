@@ -48,11 +48,13 @@ test_that("vetted_models coxph()", {
   #       - numbers in table are correct
   expect_equal(
     coef(mod_coxph_lin),
-    coefs_in_gt(tbl_coxph_lin)
+    coefs_in_gt(tbl_coxph_lin),
+    ignore_attr = TRUE
   )
   expect_equal(
     coef(mod_coxph_int),
-    coefs_in_gt(tbl_coxph_int)
+    coefs_in_gt(tbl_coxph_int),
+    ignore_attr = TRUE
   )
 
   #       - labels are correct
@@ -60,18 +62,21 @@ test_that("vetted_models coxph()", {
     tbl_coxph_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade"),
+    ignore_attr = TRUE
   )
   expect_equal(
     tbl_coxph_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade"),
+    ignore_attr = TRUE
   )
   # 2.  If applicable, runs as expected with logit and log link
   expect_equal(
     coef(mod_coxph_lin) %>% exp(),
-    coefs_in_gt(mod_coxph_lin %>% tbl_regression(exponentiate = TRUE))
+    coefs_in_gt(mod_coxph_lin %>% tbl_regression(exponentiate = TRUE)),
+    ignore_attr = TRUE
   )
 
   # 3.  Interaction terms are correctly printed in output table
@@ -80,7 +85,8 @@ test_that("vetted_models coxph()", {
     tbl_coxph_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
-    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III")
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III"),
+    ignore_attr = TRUE
   )
   # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
   #       - without errors, warnings, messages
@@ -116,7 +122,8 @@ test_that("vetted_models coxph()", {
       as.vector(),
     car::Anova(mod_coxph_lin, type = "III") %>%
       as.data.frame() %>%
-      pull(`Pr(>Chisq)`)
+      pull(`Pr(>Chisq)`),
+    ignore_attr = TRUE
   )
   expect_equal(
     tbl_coxph_int2$table_body %>%
@@ -125,7 +132,8 @@ test_that("vetted_models coxph()", {
       as.vector(),
     car::Anova(mod_coxph_int, type = "III") %>%
       as.data.frame() %>%
-      pull(`Pr(>Chisq)`)
+      pull(`Pr(>Chisq)`),
+    ignore_attr = TRUE
   )
   expect_equal(
     tbl_coxph_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
@@ -133,11 +141,13 @@ test_that("vetted_models coxph()", {
       as.data.frame() %>%
       tibble::rownames_to_column() %>%
       filter(rowname == "trt") %>%
-      pull(`Pr(>Chisq)`)
+      pull(`Pr(>Chisq)`),
+    ignore_attr = TRUE
   )
   expect_equal(
     trial %>% select(death, age, trt, grade) %>% na.omit() %>% pull(death) %>% sum(),
-    tbl_coxph_lin4$table_body %>% slice(1) %>% pull(nevent)
+    tbl_coxph_lin4$table_body %>% slice(1) %>% pull(nevent),
+    ignore_attr = TRUE
   )
   # 5.  tbl_uvregression() works as expected
   #       - without errors, warnings, messages

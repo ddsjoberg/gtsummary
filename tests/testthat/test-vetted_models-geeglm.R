@@ -67,15 +67,18 @@ test_that("vetted_models geeglm()", {
   #       - numbers in table are correct
   expect_equal(
     coef(mod_geeglm_lin)[-1],
-    coefs_in_gt(tbl_geeglm_lin)
+    coefs_in_gt(tbl_geeglm_lin),
+    ignore_attr = TRUE
   )
   expect_equal(
     coef(mod_geeglm_int)[-1],
-    coefs_in_gt(tbl_geeglm_int)
+    coefs_in_gt(tbl_geeglm_int),
+    ignore_attr = TRUE
   )
   expect_equal(
     coef(mod_geeglm_log)[-1],
-    coefs_in_gt(tbl_geeglm_log)
+    coefs_in_gt(tbl_geeglm_log),
+    ignore_attr = TRUE
   )
 
   #       - labels are correct
@@ -83,24 +86,28 @@ test_that("vetted_models geeglm()", {
     tbl_geeglm_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade"),
+    ignore_attr = TRUE
   )
   expect_equal(
     tbl_geeglm_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade"),
+    ignore_attr = TRUE
   )
   expect_equal(
     tbl_geeglm_log$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade"),
+    ignore_attr = TRUE
   )
   # 2.  If applicable, runs as expected with logit and log link
   expect_equal(
     coef(mod_geeglm_log)[-1] %>% exp(),
-    coefs_in_gt(mod_geeglm_log %>% tbl_regression(exponentiate = TRUE))
+    coefs_in_gt(mod_geeglm_log %>% tbl_regression(exponentiate = TRUE)),
+    ignore_attr = TRUE
   )
 
   # 3.  Interaction terms are correctly printed in output table
@@ -109,7 +116,8 @@ test_that("vetted_models geeglm()", {
     tbl_geeglm_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
-    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III")
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III"),
+    ignore_attr = TRUE
   )
   # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
   #       - without errors, warnings, messages
@@ -165,7 +173,8 @@ test_that("vetted_models geeglm()", {
     update(mod_geeglm_log, formula. = . ~ . - trt) %>%
       {anova(mod_geeglm_log, .)} %>%
       as.data.frame() %>%
-      pull(`P(>|Chi|)`)
+      pull(`P(>|Chi|)`),
+    ignore_attr = TRUE
   )
   # 5.  tbl_uvregression() works as expected
   #       - without errors, warnings, messages

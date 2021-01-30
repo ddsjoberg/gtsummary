@@ -50,11 +50,13 @@ test_that("vetted_models clogit()", {
   #       - numbers in table are correct
   expect_equal(
     coef(mod_clogit_lin),
-    coefs_in_gt(tbl_clogit_lin)
+    coefs_in_gt(tbl_clogit_lin),
+    ignore_attr = TRUE
   )
   expect_equal(
     coef(mod_clogit_int),
-    coefs_in_gt(tbl_clogit_int)
+    coefs_in_gt(tbl_clogit_int),
+    ignore_attr = TRUE
   )
 
   #       - labels are correct
@@ -62,18 +64,21 @@ test_that("vetted_models clogit()", {
     tbl_clogit_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade"),
+    ignore_attr = TRUE
   )
   expect_equal(
     tbl_clogit_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade"),
+    ignore_attr = TRUE
   )
   # 2.  If applicable, runs as expected with logit and log link
   expect_equal(
     coef(mod_clogit_lin) %>% exp(),
-    coefs_in_gt(mod_clogit_lin %>% tbl_regression(exponentiate = TRUE))
+    coefs_in_gt(mod_clogit_lin %>% tbl_regression(exponentiate = TRUE)),
+    ignore_attr = TRUE
   )
 
   # 3.  Interaction terms are correctly printed in output table
@@ -82,7 +87,8 @@ test_that("vetted_models clogit()", {
     tbl_clogit_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
-    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III")
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III"),
+    ignore_attr = TRUE
   )
   # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms(), add_nevent()
   #       - without errors, warnings, messages
