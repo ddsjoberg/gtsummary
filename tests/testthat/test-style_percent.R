@@ -1,5 +1,4 @@
-context("test-style_percent")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("no errors/warnings with standard use", {
   percent_vals <- c(-1, 0, 0.00001, 0.0001, 0.005, 0.01, 0.10, 0.45356, 0.99, 1.45)

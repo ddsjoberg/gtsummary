@@ -1,5 +1,4 @@
-context("test-add_p.tbl_summary")
-testthat::skip_on_cran()
+skip_on_cran()
 library(dplyr)
 
 test_that("add_p creates output without error/warning", {

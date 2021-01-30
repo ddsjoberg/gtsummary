@@ -1,5 +1,4 @@
-context("test-modify_caption")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("no errors/warnings with all output types", {
   tbl <- trial %>% select(age) %>% tbl_summary() %>% modify_caption("test caption")
@@ -21,6 +20,6 @@ test_that("no errors/warnings with all output types", {
   expect_equal(
     tbl_reg %>% modify_caption("{N}") %>% purrr::pluck("list_output", "caption"),
     "32",
-    check.attributes = FALSE
+    ignore_attr = TRUE
   )
 })

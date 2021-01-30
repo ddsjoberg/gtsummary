@@ -1,5 +1,4 @@
-context("test-add_difference")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("add_difference-basic use", {
   expect_error(
@@ -121,7 +120,7 @@ test_that("p-values are replicated within tbl_summary()", {
       broom::tidy(conf.int = TRUE) %>%
       dplyr::slice(dplyr::n()) %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    check.attributes = FALSE
+    ignore_attr = TRUE
   )
 
   expect_equal(
@@ -164,6 +163,6 @@ test_that("p-values are replicated within tbl_summary()", {
       broom.mixed::tidy(conf.int = TRUE, effects = "fixed") %>%
       dplyr::slice(dplyr::n()) %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    check.attributes = FALSE
+    ignore_attr = TRUE
   )
 })

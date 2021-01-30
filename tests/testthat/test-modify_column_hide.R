@@ -1,5 +1,4 @@
-context("test-modify_column_hide")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("input checks", {
   expect_error(

@@ -1,5 +1,4 @@
-context("test-style_ratio")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("correct rounding near one", {
 

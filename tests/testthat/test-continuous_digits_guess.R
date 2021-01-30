@@ -1,5 +1,4 @@
-context("test-continuous_digits_guess")
-testthat::skip_on_cran()
+skip_on_cran()
 
 continuous_digits_guess(
   data = mtcars,

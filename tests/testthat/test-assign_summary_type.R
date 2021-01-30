@@ -1,5 +1,4 @@
-context("test-assign_summary_type")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("auto-assign continuous: mtcars$hp", {
   expect_equal(

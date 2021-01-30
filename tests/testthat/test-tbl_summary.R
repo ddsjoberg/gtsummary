@@ -1,5 +1,4 @@
-context("test-tbl_summary")
-testthat::skip_on_cran()
+skip_on_cran()
 library(glue)
 
 test_that("tbl_summary creates output without error/warning (no by var)", {
@@ -427,7 +426,7 @@ test_that("tbl_summary-complex environments check", {
   }
 
   expect_error(tbl_env <- no_fun(), NA)
-  expect_equivalent(
+  expect_equal(
     tbl_env$meta_data$var_label[tbl_env$meta_data$variable == "grade"],
     "Grade I"
   )
@@ -440,7 +439,7 @@ test_that("tbl_summary-complex environments check", {
       )
   }
   expect_error(tbl_env2 <- no_fun2(), NA)
-  expect_equivalent(
+  expect_equal(
     tbl_env2$meta_data$var_label[tbl_env2$meta_data$variable == "grade"],
     "Grade, oof"
   )
@@ -542,6 +541,6 @@ test_that("tbl_summary() continuous vars with cat summary vars only", {
     NA
   )
   expect_equal(tbl2$meta_data$df_stats %>% pluck(1, "N_obs"), c(98, 102),
-               check.attributes = FALSE)
+               ignore_attr = TRUE)
 
 })

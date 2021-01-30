@@ -1,5 +1,4 @@
-context("test-bold_p")
-testthat::skip_on_cran()
+skip_on_cran()
 
 #### new comment
 test_that("no errors/warnings with standard use in tbl_summary() and add_p()", {

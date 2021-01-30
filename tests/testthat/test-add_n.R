@@ -1,5 +1,4 @@
-context("test-add_n")
-testthat::skip_on_cran()
+skip_on_cran()
 
 t1 <- trial %>% tbl_summary()
 t2 <- trial %>% tbl_summary(by = trt)

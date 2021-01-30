@@ -1,5 +1,5 @@
 # test-add_p.tbl_survfit -------------------------------------------------------
-context("test-add_p.tbl_survfit")
+
 library(survival)
 
 test_that("add_p.tbl_survfit works", {
@@ -61,7 +61,7 @@ test_that("add_p.tbl_survfit survdiff family checks", {
     dplyr::pull(p.value)
 
 
-  expect_equivalent(
+  expect_equal(
     tbl_survfit %>%
       add_p(test = list(trt ~ "logrank",
                         response ~ "survdiff",
@@ -99,13 +99,13 @@ test_that("add_p.tbl_survfit coxph family checks", {
     dplyr::pull(p.value.sc)
 
 
-  expect_equivalent(
+  expect_equal(
     tbl_survfit %>%
       add_p(test = list(trt ~ "coxph_lrt",
                         response ~ "coxph_wald",
                         grade ~ "coxph_score")) %>%
       purrr::pluck("meta_data", "p.value"),
-    c(lrt_trt, wald_response, score_grade)
+    c(lrt_trt[[1]], wald_response[[1]], score_grade[[1]])
   )
 })
 

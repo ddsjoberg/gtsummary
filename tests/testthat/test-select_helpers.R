@@ -1,5 +1,4 @@
-context("test-select_helpers")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("test-select helpers", {
   expect_equal(

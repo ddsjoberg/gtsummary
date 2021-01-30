@@ -1,5 +1,4 @@
-context("test-modify_spanning_header")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("modify_spanning_header works", {
   expect_error(

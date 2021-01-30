@@ -1,5 +1,4 @@
-context("test-add_stat_label")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("no errors/warnings with standard use", {
   tbl <- mtcars %>% tbl_summary(by = am)

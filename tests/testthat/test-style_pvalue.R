@@ -1,5 +1,4 @@
-context("test-style_pvalue")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("no errors/warnings with standard use", {
   pvals <- c(

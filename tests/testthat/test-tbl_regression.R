@@ -1,5 +1,4 @@
-context("test-tbl_regression")
-testthat::skip_on_cran()
+skip_on_cran()
 library(survival)
 library(lme4)
 
@@ -164,8 +163,8 @@ test_that("Testing lme4 results", {
   )
 
   # coefs are exponentiated properly
-  expect_equivalent(
-    coef(mod_glmer)[[1]] %>% {.[1, 2:ncol(.)]} %>% purrr::map_dbl(exp),
+  expect_equal(
+    coef(mod_glmer)[[1]] %>% {.[1, 2:ncol(.)]} %>% purrr::map_dbl(exp) %>% as.numeric(),
     tbl_lme4$table_body %>% pull(estimate) %>% discard(is.na)
   )
 })
@@ -183,13 +182,13 @@ test_that("Interaction modifications", {
   )
 
   # checking modifications to table
-  expect_equivalent(
+  expect_equal(
     dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
-      dplyr::pull(label),
+      dplyr::pull(label) %>% .[[1]],
     "Interaction"
   )
 
-  expect_equivalent(
+  expect_equal(
     dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
       nrow(),
     1L

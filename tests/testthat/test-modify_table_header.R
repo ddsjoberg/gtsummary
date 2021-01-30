@@ -1,5 +1,4 @@
-context("test-modify_table_header")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("modify_table_header works properly", {
   tbl_r <- lm(mpg ~ factor(cyl), mtcars) %>% tbl_regression()
@@ -17,27 +16,27 @@ test_that("modify_table_header works properly", {
     NA
   )
 
-  expect_equivalent(
+  expect_equal(
     dplyr::filter(updated$table_header, column == "estimate") %>% pull(label),
     "estimate test"
   )
 
-  expect_equivalent(
+  expect_equal(
     dplyr::filter(updated$table_header, column == "estimate") %>% pull(fmt_fun),
     list(function(x) style_sigfig(x, digits = 5))
   )
 
-  expect_equivalent(
+  expect_equal(
     dplyr::filter(updated$table_header, column == "estimate") %>% pull(footnote_abbrev),
     "test = unit test"
   )
 
-  expect_equivalent(
+  expect_equal(
     dplyr::filter(updated$table_header, column == "estimate") %>% pull(footnote),
     "this is a footnote"
   )
 
-  expect_equivalent(
+  expect_equal(
     dplyr::filter(updated$table_header, column == "p.value") %>% pull(hide),
     TRUE
   )

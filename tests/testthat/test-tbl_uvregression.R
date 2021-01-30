@@ -1,5 +1,4 @@
-context("test-tbl_uvregression")
-testthat::skip_on_cran()
+skip_on_cran()
 library(survival)
 library(lme4)
 
@@ -153,8 +152,8 @@ test_that("tbl_uvregression x= argument tests", {
     NA
   )
 
-  expect_equivalent(
-    ux_x$meta_data$label[1],
+  expect_equal(
+    ux_x$meta_data$label[1] %>% .[[1]],
     "PATIENT AGE"
   )
 
@@ -265,8 +264,8 @@ test_that("tbl_uvregression estimate_fun and pvalue_fun respected", {
     estimate_fun = ~style_number(.x, digits = 3)
   )
 
-  expect_equivalent(
-    tbl_fmt %>% as_tibble(col_labels = FALSE) %>% purrr::map_chr(I),
+  expect_equal(
+    tbl_fmt %>% as_tibble(col_labels = FALSE) %>% purrr::map_chr(I) %>% as.vector(),
     c("inst", "227", "0.001", "-0.143, 0.144", "0.993")
   )
 })

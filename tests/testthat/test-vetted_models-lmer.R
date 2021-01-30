@@ -20,10 +20,9 @@
 #       - without errors, warnings, messages
 #       - works with add_global_p(), add_nevent(), add_q()
 
-context("test-vetted_models-lmer")
-testthat::skip_on_cran()
+skip_on_cran()
 # vetted models checks take a long time--only perform on CI checks
-testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
+skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 library(dplyr)
 
 # lmer() -----------------------------------------------------------------------
@@ -46,43 +45,50 @@ test_that("vetted_models lmer()", {
     tbl_lmer_int, NA
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     summary(mod_lmer_lin)$coefficients[-1, 1],
-    coefs_in_gt(tbl_lmer_lin)
+    coefs_in_gt(tbl_lmer_lin),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     summary(mod_lmer_int)$coefficients[-1, 1],
-    coefs_in_gt(tbl_lmer_int)
+    coefs_in_gt(tbl_lmer_int),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     summary(mod_lmer_lin)$coefficients[, 1],
-    coefs_in_gt(tbl_regression(mod_lmer_lin, intercept = TRUE))
+    coefs_in_gt(tbl_regression(mod_lmer_lin, intercept = TRUE)),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     summary(mod_lmer_int)$coefficients[, 1],
-    coefs_in_gt(tbl_regression(mod_lmer_int, intercept = TRUE))
+    coefs_in_gt(tbl_regression(mod_lmer_int, intercept = TRUE)),
+    ignore_attr = TRUE
   )
   #       - labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_lmer_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "trt", "Grade")
+    c("Age", "trt", "Grade"),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     tbl_lmer_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "trt", "Grade", "trt * Grade")
+    c("Age", "trt", "Grade", "trt * Grade"),
+    ignore_attr = TRUE
   )
   # 2.  If applicable, runs as expected with logit and log link (NOT APPLICABLE)
   # 3.  Interaction terms are correctly printed in output table
   #       - interaction labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_lmer_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
-    c("trt * Grade", "Drug B * II", "Drug B * III")
+    c("trt * Grade", "Drug B * II", "Drug B * III"),
+    ignore_attr = TRUE
   )
   # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms()
   #       - without errors, warnings, messages
@@ -105,7 +111,7 @@ test_that("vetted_models lmer()", {
     tbl_lmer_lin3, NA
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     tbl_lmer_lin2$table_body %>%
       pull(p.value) %>%
       na.omit() %>%
@@ -113,9 +119,10 @@ test_that("vetted_models lmer()", {
     car::Anova(mod_lmer_lin, type = "III") %>%
       as.data.frame() %>%
       slice(-1) %>%
-      pull(`Pr(>Chisq)`)
+      pull(`Pr(>Chisq)`),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     tbl_lmer_int2$table_body %>%
       pull(p.value) %>%
       na.omit() %>%
@@ -123,10 +130,11 @@ test_that("vetted_models lmer()", {
     car::Anova(mod_lmer_int, type = "III") %>%
       as.data.frame() %>%
       slice(-1) %>%
-      pull(`Pr(>Chisq)`)
+      pull(`Pr(>Chisq)`),
+    ignore_attr = TRUE
   )
   # See Issue #406
-  # expect_equivalent(
+  # expect_equal(
   #   tbl_lmer_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
   #   car::Anova(mod_lmer_lin, type = "III") %>%
   #     as.data.frame() %>%

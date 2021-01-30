@@ -1,5 +1,4 @@
-context("test-add_global_p")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("no errors/warnings with standard use after tbl_regression", {
   mod1 <- lm(hp ~ factor(cyl) + mpg + factor(am), mtcars)
@@ -87,7 +86,7 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
   # testing that using non-standard characters don't change the global p-values
   expect_equal(
     tbl1 %>% add_global_p(include = everything(), type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na),
-    tbl2 %>% add_global_p(include = everything(), type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na),
+    tbl2 %>% add_global_p(include = everything(), type = "III") %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
 
   expect_message(tbl1 %>% add_global_p(quiet = TRUE), NA)
