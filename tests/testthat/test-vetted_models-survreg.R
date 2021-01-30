@@ -29,10 +29,9 @@
 # geepack::geeglm()     DONE
 # survival::clogit()    DONE
 
-context("test-vetted_models-survreg")
-testthat::skip_on_cran()
+skip_on_cran()
 # vetted models checks take a long time--only perform on CI checks
-testthat::skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
+skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 library(dplyr)
 library(survival)
 
@@ -57,43 +56,50 @@ test_that("vetted_models survreg()", {
     tbl_survreg_int, NA
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     coef(mod_survreg_lin)[-1],
-    coefs_in_gt(tbl_survreg_lin)
+    coefs_in_gt(tbl_survreg_lin),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     coef(mod_survreg_int)[-1],
-    coefs_in_gt(tbl_survreg_int)
+    coefs_in_gt(tbl_survreg_int),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     coef(mod_survreg_lin),
-    coefs_in_gt(tbl_regression(mod_survreg_lin, intercept = TRUE))
+    coefs_in_gt(tbl_regression(mod_survreg_lin, intercept = TRUE)),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     coef(mod_survreg_int),
-    coefs_in_gt(tbl_regression(mod_survreg_int, intercept = TRUE))
+    coefs_in_gt(tbl_regression(mod_survreg_int, intercept = TRUE)),
+    ignore_attr = TRUE
   )
   #       - labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_survreg_lin$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade")
+    c("Age", "Chemotherapy Treatment", "Grade"),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     tbl_survreg_int$table_body %>%
       filter(row_type == "label") %>%
       pull(label),
-    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade")
+    c("Age", "Chemotherapy Treatment", "Grade", "Chemotherapy Treatment * Grade"),
+    ignore_attr = TRUE
   )
   # 2.  If applicable, runs as expected with logit and log link (NOT APPLICABLE)
   # 3.  Interaction terms are correctly printed in output table
   #       - interaction labels are correct
-  expect_equivalent(
+  expect_equal(
     tbl_survreg_int$table_body %>%
       filter(var_type == "interaction") %>%
       pull(label),
-    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III")
+    c("Chemotherapy Treatment * Grade", "Drug B * II", "Drug B * III"),
+    ignore_attr = TRUE
   )
   # 4.  Other gtsummary functions work with model: add_global_p(), combine_terms()
   #       - without errors, warnings, messages
@@ -116,31 +122,34 @@ test_that("vetted_models survreg()", {
     tbl_survreg_lin3, NA
   )
   #       - numbers in table are correct
-  expect_equivalent(
+  expect_equal(
     tbl_survreg_lin2$table_body %>%
       pull(p.value) %>%
       na.omit() %>%
       as.vector(),
     car::Anova(mod_survreg_lin, type = "III") %>%
       as.data.frame() %>%
-      pull(`Pr(>Chisq)`)
+      pull(`Pr(>Chisq)`),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     tbl_survreg_int2$table_body %>%
       pull(p.value) %>%
       na.omit() %>%
       as.vector(),
     car::Anova(mod_survreg_int, type = "III") %>%
       as.data.frame() %>%
-      pull(`Pr(>Chisq)`)
+      pull(`Pr(>Chisq)`),
+    ignore_attr = TRUE
   )
-  expect_equivalent(
+  expect_equal(
     tbl_survreg_lin3$table_body %>% filter(variable == "trt") %>% pull(p.value),
     car::Anova(mod_survreg_lin, type = "III") %>%
       as.data.frame() %>%
       tibble::rownames_to_column() %>%
       filter(rowname == "trt") %>%
-      pull(`Pr(>Chisq)`)
+      pull(`Pr(>Chisq)`),
+    ignore_attr = TRUE
   )
   # 5.  tbl_uvregression() works as expected
   #       - without errors, warnings, messages

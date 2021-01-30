@@ -1,5 +1,4 @@
-context("test-as_tibble")
-testthat::skip_on_cran()
+skip_on_cran()
 
 t1 <- trial %>%
   tbl_summary() %>%

@@ -1,5 +1,4 @@
-context("test-tbl_merge")
-testthat::skip_on_cran()
+skip_on_cran()
 
 library(survival)
 library(purrr)
