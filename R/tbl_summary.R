@@ -304,7 +304,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       table_body = table_body,
       meta_data = meta_data,
       inputs = tbl_summary_inputs,
-
       N = nrow(data),
       call_list = list(tbl_summary = match.call()),
       by = by,

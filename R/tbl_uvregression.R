@@ -342,10 +342,12 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                                        tbl$table_body$N, NA)
 
             # adding a format function to the N column
-            tbl$table_header <- table_header_fmt_fun(
-              tbl$table_header,
-              N = function(x) style_number(x, digits = 0)
-            )
+            tbl <-
+              modify_table_styling(
+                tbl,
+                columns = "N",
+                fmt_fun = function(x) style_number(x, digits = 0)
+              )
 
             tbl
           }

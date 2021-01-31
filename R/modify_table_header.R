@@ -209,7 +209,7 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
     call_list[["align"]] <- expr(modify_table_styling(columns = !!column, hide = !!align))
   }
   if (!is.null(missing_emdash)) {
-    call_list[["missing_emdash"]] <- expr(modify_table_styling(columns = !!column, rows = !!missing_emdash, symbol = "---"))
+    call_list[["missing_emdash"]] <- expr(modify_table_styling(columns = !!column, rows = !!missing_emdash, missing_symbol = "---"))
   }
   if (!is.null(indent)) {
     call_list[["indent"]] <- expr(modify_table_styling(columns = !!column, rows = !!indent, text_format = "indent"))
