@@ -47,7 +47,7 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
   }
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_body_stylings(x)
+  x <- .clean_table_styling(x)
 
   # creating list of kable calls --------------------------------------------------
   kable_calls <-
@@ -98,7 +98,7 @@ table_header_to_kable_calls <- function(x, ...) {
 
   # kable ----------------------------------------------------------------------
   df_col_labels <-
-    dplyr::filter(x$table_body_styling$header, .data$hide == FALSE)
+    dplyr::filter(x$table_styling$header, .data$hide == FALSE)
 
   if (!is.null(x$list_output$caption))
     kable_calls[["kable"]] <-

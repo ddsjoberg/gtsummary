@@ -69,7 +69,7 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
   # if no columns selected, returning unaltered
   if (is.null(column)) return(x)
 
-  .convert_call_to_table_body_styling(
+  .convert_call_to_table_styling(
     x = x, column = column, label = label, hide = hide, align = align,
     missing_emdash = missing_emdash, indent = indent,
     text_interpret = text_interpret, bold = bold, italic = italic,
@@ -186,7 +186,7 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
   x
 }
 
-.convert_call_to_table_body_styling <- function(x, column, label, hide, align,
+.convert_call_to_table_styling <- function(x, column, label, hide, align,
                                                 missing_emdash, indent,
                                                 text_interpret, bold, italic,
                                                 fmt_fun, footnote_abbrev,

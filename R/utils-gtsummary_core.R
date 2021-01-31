@@ -4,7 +4,58 @@
 
 # LAST UPDATED: 2020-12-19
 
-# table_header_fill_missing -----------------------------------------------------
+# .create_gtsummary_object -----------------------------------------------------
+#' Function uses `table_body` to create a gtsummary object
+#'
+#' @param table_body the table_body tibble
+#' @param ... other objects that will be added to the gtsummary object list
+#'
+#' @return gtsummary object
+.create_gtsummary_object <- function(table_body, ...) {
+  x <- list() # empty gtsummary object
+
+  # table_body -----------------------------------------------------------------
+  x$table_body <- table_body
+
+  # table_styling --------------------------------------------------------------
+  x$table_styling$header <-
+    tibble(
+      column = names(x$table_body),
+      hide = TRUE,
+      align = "center",
+      interpret_label = "gt::md",
+      label = names(x$table_body),
+      interpret_spanning_header = "gt::md",
+      spanning_header = NA_character_
+    ) %>%
+    mutate(
+      hide = ifelse(.data$column == "label", FALSE, .data$hide),
+      align = ifelse(.data$column == "label", "left", .data$align)
+    )
+
+  x$table_styling$footnote <-
+    tibble(column = character(), rows = character(),
+           text_interpret = character(), footnote = character())
+  x$table_styling$footnote_abbrev <-
+    tibble(column = character(), rows = character(),
+           text_interpret = character(), footnote = character())
+  x$table_styling$text_format <-
+    tibble(column = character(), rows = character(),
+           format_type = character(), undo_text_format = logical())
+  x$table_styling$fmt_missing <-
+    tibble(column = character(), rows = character(), symbol = character())
+  x$table_styling$fmt_fun <-
+    tibble(column = character(), rows = character(), fmt_fun = list())
+
+  # adding other objects to list -----------------------------------------------
+  x <- c(x, list(...))
+
+  # returning gtsummary object -------------------------------------------------
+  class(x) <- "gtsummary"
+  x
+}
+
+# table_header_fill_missing ----------------------------------------------------
 #' Function fills out table_header when there are missing columns
 #'
 #' @param table_header A table_header object
@@ -13,6 +64,8 @@
 #' @keywords internal
 #' @noRd
 table_header_fill_missing <- function(table_header, table_body = NULL) {
+  warning("Someone ran `table_header_fill_missing()` !!!! Ewww!")
+
   # if table_body is not null,
   # ensuring table_header has a row for each col in table_body
   if (!is.null(table_body)) {
@@ -125,7 +178,9 @@ table_header_fill_missing <- function(table_header, table_body = NULL) {
 #'   estimate = style_sigfig
 #' )
 table_header_fmt_fun <- function(table_header, ...) {
-  # saving passed_dots arguments as a named list
+  warning("Someone ran `table_header_fmt_fun()` !!!! Ewww!")
+
+    # saving passed_dots arguments as a named list
   passed_dots <- list(...)
 
   # ordering the names to be the same as in table_header

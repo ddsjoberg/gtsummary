@@ -44,13 +44,13 @@
 modify_table_body <- function(x, fun, ...) {
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
 
-  # execute function on x$table_body
+  # execute function on x$table_body -------------------------------------------
   x$table_body <- fun(x$table_body, ...)
 
-  # update table_header
-  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
+  # update table_styling -------------------------------------------------------
+  x <- .update_table_styling(x)
 
-  # return gtsummary object
+  # return gtsummary object ----------------------------------------------------
   x
 }
 

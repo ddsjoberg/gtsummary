@@ -37,7 +37,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   }
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_body_stylings(x)
+  x <- .clean_table_styling(x)
 
   # creating list of calls to get formatted tibble -----------------------------
   tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels)
@@ -105,7 +105,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls[["fmt"]] <- list()
 
   # tab_style_bold -------------------------------------------------------------
-  df_bold <- x$table_body_styling$text_format %>% filter(.data$format_type == "bold")
+  df_bold <- x$table_styling$text_format %>% filter(.data$format_type == "bold")
 
   tibble_calls[["tab_style_bold"]] <-
     map(
@@ -116,7 +116,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
     )
 
   # tab_style_italic -------------------------------------------------------------
-  df_italic <- x$table_body_styling$text_format %>% filter(.data$format_type == "italic")
+  df_italic <- x$table_styling$text_format %>% filter(.data$format_type == "italic")
 
   tibble_calls[["tab_style_italic"]] <-
     map(
@@ -130,11 +130,11 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls[["fmt"]] <-
     list(expr(mutate_at(vars(!!!syms(.cols_to_show(x))), as.character))) %>%
     c(map(
-      seq_len(nrow(x$table_body_styling$fmt_fun)),
+      seq_len(nrow(x$table_styling$fmt_fun)),
       ~expr(gtsummary:::.apply_fmt_fun(
-        columns = !!x$table_body_styling$fmt_fun$column[[.x]],
-        row_numbers = !!x$table_body_styling$fmt_fun$row_numbers[[.x]],
-        fmt_fun = !!x$table_body_styling$fmt_fun$fmt_fun[[.x]],
+        columns = !!x$table_styling$fmt_fun$column[[.x]],
+        row_numbers = !!x$table_styling$fmt_fun$row_numbers[[.x]],
+        fmt_fun = !!x$table_styling$fmt_fun$fmt_fun[[.x]],
         update_from = !!x$table_body
       ))
     ))
@@ -146,7 +146,7 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   # cols_label -----------------------------------------------------------------
   if (col_labels) {
     df_col_labels <-
-      dplyr::filter(x$table_body_styling$header, .data$hide == FALSE)
+      dplyr::filter(x$table_styling$header, .data$hide == FALSE)
 
     tibble_calls[["cols_label"]] <-
       expr(rlang::set_names(!!df_col_labels$label))

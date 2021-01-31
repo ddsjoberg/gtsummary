@@ -203,7 +203,7 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = "**Statistic**",
       df_new_stat,
       by = c("variable", "row_type", "label")
     ) %>%
-    modify_table_header(
+    modify_table_styling(
       all_of(stat_col_name),
       hide = FALSE,
       label = header,

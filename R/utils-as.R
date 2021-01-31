@@ -16,7 +16,7 @@
     str_wrap() %>%
     ui_info()
 
-  x$table_body_styling$header <-
+  x$table_styling$header <-
     x$table_header %>%
     mutate(interpret_spanning_header = "gt::md") %>%
     select(.data$column, .data$hide, .data$align,
@@ -40,7 +40,7 @@
 .convert_header_to_rows_one_column <- function(x, column) {
 
   if (column %in% c("footnote", "footnote_abbrev")) {
-    x$table_body_styling[[column]] <-
+    x$table_styling[[column]] <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
       set_names(c("column", "footnote")) %>%
@@ -50,7 +50,7 @@
       select(all_of(c("column", "rows", "text_interpret", "footnote")))
   }
   else if (column %in% c("indent", "bold", "italic")) {
-    x$table_body_styling$text_format <-
+    x$table_styling$text_format <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
       filter(!is.na(.data[[column]])) %>%
@@ -59,10 +59,10 @@
         format_type = .env$column,
         undo_text_format = FALSE
       ) %>%
-      bind_rows(x$table_body_styling$text_format)
+      bind_rows(x$table_styling$text_format)
   }
   else if (column %in% "missing_emdash") {
-    x$table_body_styling[["fmt_missing"]] <-
+    x$table_styling[["fmt_missing"]] <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
       filter(!is.na(.data[[column]])) %>%
@@ -71,7 +71,7 @@
                                         default = "\U2014"))
   }
   else if (column %in% "fmt_fun") {
-    x$table_body_styling[[column]] <-
+    x$table_styling[[column]] <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
       filter(!map_lgl(.data[[column]], is.null)) %>%
@@ -91,7 +91,7 @@
 }
 
 .cols_to_show <- function(x) {
-  x$table_body_styling$header %>%
+  x$table_styling$header %>%
     filter(!.data$hide) %>%
     pull(.data$column)
 }
@@ -99,12 +99,12 @@
 
 # 1. Converts row expressions to row numbers, and only keeps the most recent.
 # 2. Deletes NA footnote, text_formatting undoings, etc. as they will not be used
-.clean_table_body_stylings <- function(x) {
-  if (is.null(x$table_body_styling)) x <- .convert_table_header_to_styling(x)
+.clean_table_styling <- function(x) {
+  if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
 
   # text_format ----------------------
-  x$table_body_styling$text_format <-
-    x$table_body_styling$text_format %>%
+  x$table_styling$text_format <-
+    x$table_styling$text_format %>%
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
@@ -122,8 +122,8 @@
     ungroup()
 
   # fmt_missing ------------------------------
-  x$table_body_styling$fmt_missing <-
-    x$table_body_styling$fmt_missing %>%
+  x$table_styling$fmt_missing <-
+    x$table_styling$fmt_missing %>%
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
@@ -137,16 +137,16 @@
     select(.data$column, .data$row_numbers, .data$symbol)
 
   # footnote ---------------------------------
-  x$table_body_styling$footnote <-
-    .clean_table_body_stylings_footnote(x, "footnote")
+  x$table_styling$footnote <-
+    .clean_table_styling_footnote(x, "footnote")
 
   # footnote_abbrev ---------------------------------
-  x$table_body_styling$footnote_abbrev <-
-    .clean_table_body_stylings_footnote(x, "footnote_abbrev")
+  x$table_styling$footnote_abbrev <-
+    .clean_table_styling_footnote(x, "footnote_abbrev")
 
   # fmt_fun --------------------------------------
-  x$table_body_styling$fmt_fun <-
-    x$table_body_styling$fmt_fun %>%
+  x$table_styling$fmt_fun <-
+    x$table_styling$fmt_fun %>%
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
@@ -162,9 +162,9 @@
   x
 }
 
-.clean_table_body_stylings_footnote <- function(x, footnote_type) {
+.clean_table_styling_footnote <- function(x, footnote_type) {
   df_clean <-
-    x$table_body_styling[[footnote_type]] %>%
+    x$table_styling[[footnote_type]] %>%
     filter(.data$column %in% .cols_to_show(x))
   if (nrow(df_clean) == 0)
     return(tibble(column = character(0), tab_location = character(0), row_numbers = logical(0),
@@ -194,16 +194,16 @@
 # this function orders the footnotes by where they first appear in the table,
 # and assigns them an sequential ID
 .number_footnotes <- function(x) {
-  if (nrow(x$table_body_styling$footnote) == 0 &&
-      nrow(x$table_body_styling$footnote_abbrev) == 0)
+  if (nrow(x$table_styling$footnote) == 0 &&
+      nrow(x$table_styling$footnote_abbrev) == 0)
     return(tibble(footnote_id = integer(), footnote = character(), column = character(),
                   tab_location = character(), row_numbers = integer()))
   bind_rows(
-    x$table_body_styling$footnote,
-    x$table_body_styling$footnote_abbrev
+    x$table_styling$footnote,
+    x$table_styling$footnote_abbrev
   ) %>%
     inner_join(
-      x$table_body_styling$header %>%
+      x$table_styling$header %>%
         select(.data$column) %>%
         mutate(column_id = row_number()),
       by = "column"

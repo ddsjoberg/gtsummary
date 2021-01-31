@@ -65,7 +65,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
   }
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_body_stylings(x)
+  x <- .clean_table_styling(x)
 
   # creating list of gt calls --------------------------------------------------
   gt_calls <- table_header_to_gt_calls(x = x, ...)
@@ -145,16 +145,16 @@ table_header_to_gt_calls <- function(x, ...) {
     ) %>%
     c(
       map(
-        seq_len(nrow(x$table_body_styling$fmt_missing)),
-        ~ expr(gt::fmt_missing(columns = gt::vars(!!!syms(x$table_body_styling$fmt_missing$column[[.x]])),
-                               rows = !!x$table_body_styling$fmt_missing$row_numbers[[.x]],
-                               missing_text = !!x$table_body_styling$fmt_missing$symbol[[.x]]))
+        seq_len(nrow(x$table_styling$fmt_missing)),
+        ~ expr(gt::fmt_missing(columns = gt::vars(!!!syms(x$table_styling$fmt_missing$column[[.x]])),
+                               rows = !!x$table_styling$fmt_missing$row_numbers[[.x]],
+                               missing_text = !!x$table_styling$fmt_missing$symbol[[.x]]))
       )
     )
 
   # cols_align -----------------------------------------------------------------
   df_cols_align <-
-    x$table_body_styling$header %>%
+    x$table_styling$header %>%
     select(.data$column, .data$align) %>%
     group_by(.data$align) %>%
     nest() %>%
@@ -168,7 +168,7 @@ table_header_to_gt_calls <- function(x, ...) {
     )
 
   # indent ---------------------------------------------------------------------
-  df_indent <- x$table_body_styling$text_format %>% filter(.data$format_type == "indent")
+  df_indent <- x$table_styling$text_format %>% filter(.data$format_type == "indent")
   gt_calls[["tab_style_indent"]] <-
     map(
       seq_len(nrow(df_indent)),
@@ -180,15 +180,15 @@ table_header_to_gt_calls <- function(x, ...) {
   # fmt ------------------------------------------------------------------------
   gt_calls[["fmt"]] <-
     map(
-      seq_len(nrow(x$table_body_styling$fmt_fun)),
-      ~ expr(gt::fmt(columns = gt::vars(!!sym(x$table_body_styling$fmt_fun$column[[.x]])),
-                     rows = !!switch(!is.na(x$table_body_styling$fmt_fun$row_numbers[[.x]]),
-                                     x$table_body_styling$fmt_fun$row_numbers[[.x]]),
-                     fns = !!x$table_body_styling$fmt_fun$fmt_fun[[.x]]))
+      seq_len(nrow(x$table_styling$fmt_fun)),
+      ~ expr(gt::fmt(columns = gt::vars(!!sym(x$table_styling$fmt_fun$column[[.x]])),
+                     rows = !!switch(!is.na(x$table_styling$fmt_fun$row_numbers[[.x]]),
+                                     x$table_styling$fmt_fun$row_numbers[[.x]]),
+                     fns = !!x$table_styling$fmt_fun$fmt_fun[[.x]]))
     )
 
   # tab_style_bold -------------------------------------------------------------
-  df_bold <- x$table_body_styling$text_format %>% filter(.data$format_type == "bold")
+  df_bold <- x$table_styling$text_format %>% filter(.data$format_type == "bold")
   gt_calls[["tab_style_bold"]] <-
     map(
       seq_len(nrow(df_bold)),
@@ -199,7 +199,7 @@ table_header_to_gt_calls <- function(x, ...) {
     )
 
   # tab_style_italic -----------------------------------------------------------
-  df_italic <- x$table_body_styling$text_format %>% filter(.data$format_type == "italic")
+  df_italic <- x$table_styling$text_format %>% filter(.data$format_type == "italic")
   gt_calls[["tab_style_italic"]] <-
     map(
       seq_len(nrow(df_italic)),
@@ -212,23 +212,23 @@ table_header_to_gt_calls <- function(x, ...) {
   # cols_label -----------------------------------------------------------------
   gt_calls[["cols_label"]] <-
     map2(
-      x$table_body_styling$header$interpret_label,
-      x$table_body_styling$header$label,
+      x$table_styling$header$interpret_label,
+      x$table_styling$header$label,
       ~ call2(parse_expr(.x), .y)
     ) %>%
-    set_names(x$table_body_styling$header$column) %>%
+    set_names(x$table_styling$header$column) %>%
     {call2(expr(gt::cols_label), !!!.)}
 
   # tab_footnote ---------------------------------------------------------------
-  if (nrow(x$table_body_styling$footnote) == 0 &&
-      nrow(x$table_body_styling$footnote_abbrev) == 0) {
+  if (nrow(x$table_styling$footnote) == 0 &&
+      nrow(x$table_styling$footnote_abbrev) == 0) {
     gt_calls[["tab_footnote"]] <- list()
   }
   else {
     df_footnotes <-
       bind_rows(
-        x$table_body_styling$footnote,
-        x$table_body_styling$footnote_abbrev
+        x$table_styling$footnote,
+        x$table_styling$footnote_abbrev
       ) %>%
       nest(data = c(.data$column, .data$row_numbers)) %>%
       rowwise() %>%
@@ -267,7 +267,7 @@ table_header_to_gt_calls <- function(x, ...) {
 
   # spanning_header ------------------------------------------------------------
   df_spanning_header <-
-    x$table_body_styling$header %>%
+    x$table_styling$header %>%
     select(.data$column, .data$interpret_spanning_header, .data$spanning_header) %>%
     filter(!is.na(.data$spanning_header)) %>%
     nest(cols = .data$column) %>%

@@ -113,7 +113,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
   update <-
     .formula_list_to_named_list(
       x = update,
-      var_info = x$table_header$column,
+      var_info = x$table_styling$header$column,
       arg_name = "update"
     ) %>%
     c(list(...)) # adding the ... to the update list
@@ -137,26 +137,29 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
   if (purrr::map_lgl(update, ~!rlang::is_string(.)) %>% any())
     stop("All labels must be strings of length one.")
 
-  # updating column headers ----------------------------------------------------
-  df_update <-
-    update %>%
-    unlist() %>%
+  # evaluating update with glue ------------------------------------------------
+  update <-
+    unlist(update) %>%
     tibble::enframe("column", "label") %>%
-    dplyr::inner_join(.info_tibble(x), by = "column") %>%
-    # if users passes incorrect colname via `...` removing it
-    dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
+    inner_join(.info_tibble(x), by = "column") %>%
     dplyr::rowwise() %>%
     mutate(
-      label = switch(is.na(.data$label), NA_character_) %||% as.character(glue(.data$label)),
+      updated_value = switch(is.na(.data$label), NA_character_) %||%
+        as.character(glue(.data$label)),
+    ) %>%
+    select(.data$column, .data$updated_value) %>%
+    tibble::deframe() %>%
+    as.list()
+
+  # updating column headers ----------------------------------------------------
+  x <-
+    modify_table_styling(
+      x,
+      columns = names(update),
+      label = unlist(update),
       text_interpret = glue("gt::{text_interpret}") %>% as.character(),
       hide = FALSE
-    ) %>%
-    ungroup() %>%
-    select(.data$column, .data$label, .data$text_interpret, .data$hide)
-
-  x$table_header <-
-    x$table_header %>%
-    dplyr::rows_update(df_update, by = "column")
+    )
 
   # returning gtsummary object -------------------------------------------------
   x
@@ -164,7 +167,8 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
 
 #' @name modify
 #' @export
-modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL) {
+modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
+                            text_interpret = c("md", "html"), quiet = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
@@ -172,14 +176,14 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
-  # update table_header --------------------------------------------------------
-  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
+  # update table_style --------------------------------------------------------
+  # x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # converting update arg to a tidyselect list ---------------------------------
   update <-
     .formula_list_to_named_list(
       x = {{ update }},
-      var_info = x$table_header$column,
+      var_info = x$table_styling$header$column,
       arg_name = "update"
     )
   # if no columns selected, print helpful message
@@ -190,25 +194,41 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
 
   # updating footnote ----------------------------------------------------------
-  df_update <-
-    update %>%
-    unlist() %>%
-    tibble::enframe(name = "column", value = footnote_column_name) %>%
+  update <-
+    unlist(update) %>%
+    tibble::enframe(name = "column", value = "footnote") %>%
     dplyr::inner_join(.info_tibble(x), by = "column") %>%
-    # if users passes incorrect colname via `...` removing it
-    dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
     dplyr::rowwise() %>%
     mutate(
-      updated_value = switch(is.na(.data[[footnote_column_name]]), NA_character_) %||%
-        as.character(glue(.data[[footnote_column_name]])),
+      updated_value = switch(is.na(.data$footnote), NA_character_) %||%
+        as.character(glue(.data$footnote)),
     ) %>%
     ungroup() %>%
     select(.data$column, .data$updated_value) %>%
-    rlang::set_names(c("column", footnote_column_name))
+    tibble::deframe() %>%
+    as.list()
 
-  x$table_header <-
-    x$table_header %>%
-    dplyr::rows_update(df_update, by = "column")
+  # updating footnotes ---------------------------------------------------------
+  if (abbreviation == FALSE) {
+    x <-
+      modify_table_styling(
+        x,
+        columns = names(update),
+        footnote = unlist(update),
+        text_interpret = glue("gt::{text_interpret}") %>% as.character(),
+        hide = FALSE
+      )
+  }
+  else if (abbreviation == TRUE) {
+    x <-
+      modify_table_styling(
+        x,
+        columns = names(update),
+        footnote_abbrev = unlist(update),
+        text_interpret = glue("gt::{text_interpret}") %>% as.character(),
+        hide = FALSE
+      )
+  }
 
   # returning gtsummary object -------------------------------------------------
   x
@@ -216,7 +236,8 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, quiet = NULL
 
 #' @name modify
 #' @export
-modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
+modify_spanning_header <- function(x, update = NULL,
+                                   text_interpret = c("md", "html"), quiet = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
@@ -231,7 +252,7 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
   update <-
     .formula_list_to_named_list(
       x = {{ update }},
-      var_info = x$table_header$column,
+      var_info = x$table_styling$header$column,
       arg_name = "update"
     )
 
@@ -246,7 +267,7 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
     tibble::enframe(name = "column", value = "spanning_header") %>%
     dplyr::inner_join(.info_tibble(x), by = "column") %>%
     # if users passes incorrect colname via `...` removing it
-    dplyr::inner_join(select(x$table_header, .data$column), by = "column") %>%
+    dplyr::inner_join(select(x$table_styling$header, .data$column), by = "column") %>%
     dplyr::rowwise() %>%
     mutate(
       spanning_header = switch(is.na(.data$spanning_header), NA_character_) %||%
@@ -255,8 +276,8 @@ modify_spanning_header <- function(x, update = NULL, quiet = NULL) {
     ungroup() %>%
     select(.data$column, .data$spanning_header)
 
-  x$table_header <-
-    x$table_header %>%
+  x$table_styling$header <-
+    x$table_styling$header %>%
     dplyr::rows_update(df_update, by = "column")
 
   # return updated gtsummary object --------------------------------------------
@@ -296,7 +317,7 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   if (!inherits(x, "gtsummary"))
     stop("Pass a 'gtsummary' object in `x=` to print current column names and headers.")
 
-  df_cols <- x$table_header %>%
+  df_cols <- x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
     select(.data$column, .data$label)
 
@@ -317,7 +338,7 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   return(invisible(df_cols))
 }
 
-# prints a helpful message when no columns were selected in the modfiy functions
+# prints a helpful message when no columns were selected in the modify functions
 .modify_no_selected_vars <- function(x) {
   paste("No columns were selected.",
         "Use {ui_code('quiet = TRUE')} to supress these messages.") %>%
@@ -338,7 +359,7 @@ show_header_names <- function(x = NULL, quiet = NULL) {
         dplyr::slice(1) %>%
         dplyr::rename(N = .data$N_obs) %>%
         full_join(
-          select(x$table_header, .data$column),
+          select(x$table_styling$header, .data$column),
           by = character()
         )
     )
@@ -347,7 +368,7 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   # tbl_summary with by variable
   if (inherits(x, c("tbl_summary", "tbl_svysummary")) && !is.null(x$df_by)) {
     return(
-      x$table_header %>%
+      x$table_styling$header %>%
         select(.data$column) %>%
         full_join(
           x$df_by %>%
@@ -365,7 +386,7 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   }
 
   # otherwise return tibble with N
-  x$table_header %>%
+  x$table_styling$header %>%
     select(.data$column) %>%
     mutate(N = x$N %||% x$n %||% NA_integer_,
            # in V1.3.6, all documentation about {n} being supported was removed. This can be removed eventually

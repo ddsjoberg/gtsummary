@@ -38,7 +38,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
   assert_package("huxtable", "as_hux_table()")
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_body_stylings(x)
+  x <- .clean_table_styling(x)
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
@@ -96,8 +96,8 @@ table_header_to_huxtable_calls <- function(x, ...) {
   #   ungroup()
 
   # adding id number for columns not hidden
-  x$table_body_styling$header <-
-    x$table_body_styling$header %>%
+  x$table_styling$header <-
+    x$table_styling$header %>%
     group_by(.data$hide) %>%
     mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
     ungroup()
@@ -119,10 +119,10 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # padding --------------------------------------------------------------------
   df_padding <-
-    x$table_body_styling$header %>%
+    x$table_styling$header %>%
     select(.data$id, .data$column) %>%
     inner_join(
-      x$table_body_styling$text_format %>%
+      x$table_styling$text_format %>%
         filter(.data$format_type == "indent"),
       by = "column"
     )
@@ -167,9 +167,9 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # bold -----------------------------------------------------------------------
   df_bold <-
-    x$table_body_styling$text_format %>%
+    x$table_styling$text_format %>%
     filter(.data$format_type == "bold") %>%
-    inner_join(x$table_body_styling$header %>%
+    inner_join(x$table_styling$header %>%
                  select(.data$column, column_id = .data$id),
                by = "column") %>%
     select(.data$format_type, .data$row_numbers, .data$column_id)
@@ -184,9 +184,9 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # italic ---------------------------------------------------------------------
   df_italic <-
-    x$table_body_styling$text_format %>%
+    x$table_styling$text_format %>%
     filter(.data$format_type == "italic") %>%
-    inner_join(x$table_body_styling$header %>%
+    inner_join(x$table_styling$header %>%
                  select(.data$column, column_id = .data$id),
                by = "column") %>%
     select(.data$format_type, .data$row_numbers, .data$column_id)
@@ -201,8 +201,8 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # set_na_string -------------------------------------------------------
   df_fmt_missing <-
-    x$table_body_styling$fmt_missing %>%
-    inner_join(x$table_body_styling$header %>%
+    x$table_styling$fmt_missing %>%
+    inner_join(x$table_styling$header %>%
                  select(.data$column, column_id = .data$id),
                by = "column") %>%
     select(.data$symbol, .data$row_numbers, .data$column_id) %>%
@@ -226,7 +226,7 @@ table_header_to_huxtable_calls <- function(x, ...) {
   # insert_row ----------------------------------------------------------
   # we do this last so as to not mess up row indexes before
   col_labels <-
-    x$table_body_styling$header %>%
+    x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
     select(.data$column, .data$label) %>%
     tibble::deframe()
@@ -236,9 +236,9 @@ table_header_to_huxtable_calls <- function(x, ...) {
   huxtable_calls[["insert_row"]] <- append(huxtable_calls[["insert_row"]],
     expr(huxtable::insert_row(after = 0, !!!col_labels)))
 
-  any_spanning_header <- sum(!is.na(x$table_body_styling$header$spanning_header)) > 0
+  any_spanning_header <- sum(!is.na(x$table_styling$header$spanning_header)) > 0
   if (any_spanning_header) {
-    header_content <- x$table_body_styling$header$spanning_header[x$table_body_styling$header$hide == FALSE]
+    header_content <- x$table_styling$header$spanning_header[x$table_styling$header$hide == FALSE]
     huxtable_calls[["insert_row"]] <- append(huxtable_calls[["insert_row"]],
       expr(huxtable::insert_row(after = 0, !!! header_content)))
 
@@ -262,7 +262,7 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # align ----------------------------------------------------------------------
   df_align <-
-    x$table_body_styling$header %>%
+    x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
     select(.data$id, .data$align) %>%
     group_by(.data$align) %>%

@@ -1,4 +1,4 @@
-#' Modify table_body_styling
+#' Modify table_styling
 #'
 #' This is a function meant for advanced users to gain
 #' more control over the characteristics of the resulting
@@ -47,20 +47,20 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
                                  ) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
-  if (is.null(x$table_body_styling)) x <- .convert_table_header_to_styling(x)
+  if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
   text_interpret <- match.arg(text_interpret)
   text_format <- match.arg(text_format,
                            choices = c("bold", "italic", "indent"),
                            several.ok = TRUE)
 
   # update table_header --------------------------------------------------------
-  x <- .update_table_body_styling(x)
+  x <- .update_table_styling(x)
 
   # convert column input to string ---------------------------------------------
   columns <-
     .select_to_varnames(
       select = {{ columns }},
-      var_info = x$table_header$column,
+      var_info = x$table_styling$header$column,
       arg_name = "columns"
     )
 
@@ -69,8 +69,8 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
 
   # label ----------------------------------------------------------------------
   if (!is.null(label)) {
-    x$table_body_styling$header <-
-      x$table_body_styling$header %>%
+    x$table_styling$header <-
+      x$table_styling$header %>%
       dplyr::rows_update(
         tibble(column = columns, interpret_label = text_interpret, label = label),
         by = "column"
@@ -79,8 +79,8 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
 
   # spanning_header ------------------------------------------------------------
   if (!is.null(spanning_header)) {
-    x$table_body_styling$header <-
-      x$table_body_styling$header %>%
+    x$table_styling$header <-
+      x$table_styling$header %>%
       dplyr::rows_update(
         tibble(column = columns, interpret_label = text_interpret, spanning_header = spanning_header),
         by = "column"
@@ -89,8 +89,8 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
 
   # hide -----------------------------------------------------------------------
   if (!is.null(hide)) {
-    x$table_body_styling$header <-
-      x$table_body_styling$header %>%
+    x$table_styling$header <-
+      x$table_styling$header %>%
       dplyr::rows_update(
         tibble(column = columns, hide = hide),
         by = "column"
@@ -99,8 +99,8 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
 
   # align ----------------------------------------------------------------------
   if (!is.null(align)) {
-    x$table_body_styling$header <-
-      x$table_body_styling$header %>%
+    x$table_styling$header <-
+      x$table_styling$header %>%
       dplyr::rows_update(
         tibble(column = columns, align = align),
         by = "column"
@@ -109,9 +109,9 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
 
   # footnote -------------------------------------------------------------------
   if (!is.null(footnote)) {
-    x$table_body_styling$footnote <-
+    x$table_styling$footnote <-
       bind_rows(
-        x$table_body_styling$footnote,
+        x$table_styling$footnote,
         tibble(
           column = columns,
           rows = rows,
@@ -123,9 +123,9 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
 
   # footnote_abbrev ------------------------------------------------------------
   if (!is.null(footnote_abbrev)) {
-    x$table_body_styling$footnote_abbrev <-
+    x$table_styling$footnote_abbrev <-
       bind_rows(
-        x$table_body_styling$footnote_abbrev,
+        x$table_styling$footnote_abbrev,
         tibble(
           column = columns,
           rows = rows,
@@ -138,9 +138,9 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
   # fmt_fun --------------------------------------------------------------------
   if (!is.null(fmt_fun)) {
     if (rlang::is_function(fmt_fun)) fmt_fun <- list(fmt_fun)
-    x$table_body_styling$fmt_fun <-
+    x$table_styling$fmt_fun <-
       bind_rows(
-        x$table_body_styling$fmt_fun,
+        x$table_styling$fmt_fun,
         tibble(
           column = columns,
           rows = rows,
@@ -150,7 +150,7 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
   }
 
   # text_format ----------------------------------------------------------------
-  x$table_body_styling$text_format <-
+  x$table_styling$text_format <-
     list(
       column = columns,
       rows = rows,
@@ -158,16 +158,16 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
       undo_text_format = undo_text_format
     ) %>%
     purrr::cross_df() %>%
-    {bind_rows(x$table_body_styling$text_format, .)}
+    {bind_rows(x$table_styling$text_format, .)}
 
   # return x -------------------------------------------------------------------
   x
 }
 
-# this fn updates `table_body_styling` list to match `table_body`
-.update_table_body_styling <- function(x) {
+# this fn updates `table_styling` list to match `table_body`
+.update_table_styling <- function(x) {
 
-  x$table_body_styling$header <-
+  x$table_styling$header <-
     tibble(
       column = names(x$table_body),
       hide = TRUE,
@@ -178,7 +178,7 @@ modify_table_styling <- function(x,columns, rows = NA_character_,
       spanning_header = NA_character_
     ) %>%
     dplyr::rows_update(
-      x$table_body_styling$header,
+      x$table_styling$header,
       by = "column"
     )
 

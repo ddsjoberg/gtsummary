@@ -24,12 +24,12 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
   assert_package("kableExtra", "as_kable_extra()")
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_body_stylings(x)
+  x <- .clean_table_styling(x)
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
-    x$table_body_styling$header <-
-      x$table_body_styling$header %>%
+    x$table_styling$header <-
+      x$table_styling$header %>%
       mutate(
         label = str_replace_all(
           .data$label, pattern = fixed("**"), replacement = fixed("")
@@ -91,7 +91,7 @@ table_header_to_kable_extra_calls <- function(x, ...) {
 
   # add_indent -----------------------------------------------------------------
   df_indent <-
-    x$table_body_styling$text_format %>%
+    x$table_styling$text_format %>%
     filter(.data$format_type == "indent", .data$column == "label")
 
   if (nrow(df_indent) > 0) {
@@ -100,8 +100,8 @@ table_header_to_kable_extra_calls <- function(x, ...) {
   }
 
   # add_header_above -----------------------------------------------------------
-  if (any(!is.na(x$table_body_styling$header$spanning_header))) {
-    header0 <- x$table_body_styling$header %>%
+  if (any(!is.na(x$table_styling$header$spanning_header))) {
+    header0 <- x$table_styling$header %>%
       filter(.data$hide == FALSE) %>%
       select(.data$spanning_header) %>%
       mutate(spanning_header = ifelse(is.na(.data$spanning_header),

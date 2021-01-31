@@ -126,23 +126,14 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
       select(x$table_body, any_of(c("variable", "row_type", "label", "n")), everything())
   }
 
-  # updating table_header ------------------------------------------------------
-  x$table_header <-
-    table_header_fill_missing(
-      x$table_header,
-      x$table_body
-    )
-  x <- modify_header(x, n = col_label)
+  # updating table_styling -----------------------------------------------------
+  x <-
+    .update_table_styling(x) %>%
+    modify_header(n = col_label)
 
   # Adding footnote if requested -----------------------------------------------
   if (footnote == TRUE) {
-    x$table_header <-
-      x$table_header %>%
-      mutate(
-        footnote = ifelse(.data$column == "n",
-                          stat_to_label(statistic),
-                          .data$footnote)
-      )
+    x <- modify_footnote(x, n ~ stat_to_label(statistic))
   }
 
   # adding indicator to output that add_n was run on this data
@@ -245,15 +236,15 @@ add_n.tbl_survfit <- function(x, ...) {
     )} %>%
     select(any_of(c("variable", "row_type", "label", "N")), everything())
 
-  # adding N to table_header and assigning header label ------------------------
-  x$table_header <-
-    table_header_fill_missing(
-      x$table_header,
-      x$table_body
-    ) %>%
-    table_header_fmt_fun(N = style_number)
-
-  x <- modify_header(x, N = "**N**")
+  # adding styling data for N column -------------------------------------------
+  x <-
+    modify_table_styling(
+      x,
+      columns = "N",
+      label = "**N**",
+      fmt_fun = style_number,
+      hide = FALSE
+    )
 
   # adding indicator to output that add_n was run on this data
   x$call_list <- c(x$call_list, list(add_n = match.call()))
