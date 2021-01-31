@@ -1,5 +1,4 @@
-context("test-tbl_svysummary")
-testthat::skip_on_cran()
+skip_on_cran()
 
 d <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 data(api, package = "survey")

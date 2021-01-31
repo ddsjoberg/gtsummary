@@ -1,5 +1,4 @@
-context("test-add_stat")
-testthat::skip_on_cran()
+skip_on_cran()
 
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
@@ -34,7 +33,7 @@ test_that("no errors/warnings with standard use", {
   )
 
   # checking the pvalues match
-  expect_equivalent(
+  expect_equal(
     test1$table_body$p.value,
     test1$table_body$add_stat_1
   )
