@@ -68,7 +68,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
   x <- .clean_table_styling(x)
 
   # creating list of gt calls --------------------------------------------------
-  gt_calls <- table_header_to_gt_calls(x = x, ...)
+  gt_calls <- table_styling_to_gt_calls(x = x, ...)
   # adding other calls from x$list_output$source_note
   if (!is.null(x$list_output$source_note)) {
     gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!x$list_output$source_note))
@@ -86,7 +86,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
       .init = gt_calls
     )
 
-  # converting to charcter vector ----------------------------------------------
+  # converting to character vector ---------------------------------------------
   include <-
     .select_to_varnames(
       select = {{ include }},
@@ -124,7 +124,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
 }
 
 # creating gt calls from table_header ------------------------------------------
-table_header_to_gt_calls <- function(x, ...) {
+table_styling_to_gt_calls <- function(x, ...) {
   # table_header <- .clean_table_header(x$table_header)
   gt_calls <- list()
 

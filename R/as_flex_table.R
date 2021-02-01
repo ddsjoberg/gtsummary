@@ -66,7 +66,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   }
 
   # creating list of flextable calls -------------------------------------------
-  flextable_calls <- table_header_to_flextable_calls(x = x)
+  flextable_calls <- table_styling_to_flextable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
@@ -103,7 +103,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
 }
 
 # creating flextable calls from table_header -----------------------------------
-table_header_to_flextable_calls <- function(x, ...) {
+table_styling_to_flextable_calls <- function(x, ...) {
 
   # adding id number for columns not hidden
   x$table_styling$header <-

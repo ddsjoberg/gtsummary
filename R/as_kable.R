@@ -49,12 +49,12 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .clean_table_styling(x)
 
-  # creating list of kable calls --------------------------------------------------
+  # creating list of kable calls -----------------------------------------------
   kable_calls <-
-    table_header_to_kable_calls(x = x, ...)
+    table_styling_to_kable_calls(x = x, ...)
   if (return_calls == TRUE) return(kable_calls)
 
-  # converting to charcter vector ----------------------------------------------
+  # converting to character vector ---------------------------------------------
   include <-
     .select_to_varnames(
       select = {{ include }},
@@ -87,7 +87,7 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-table_header_to_kable_calls <- function(x, ...) {
+table_styling_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
   kable_calls <- table_header_to_tibble_calls(x, col_labels =  FALSE)

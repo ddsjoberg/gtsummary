@@ -51,7 +51,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
   }
 
   # creating list of huxtable calls -------------------------------------------
-  huxtable_calls <- table_header_to_huxtable_calls(x = x)
+  huxtable_calls <- table_styling_to_huxtable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds")
@@ -87,14 +87,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 }
 
 # creating huxtable calls from table_header ------------------------------------
-table_header_to_huxtable_calls <- function(x, ...) {
-
-  # table_header <-
-  #   .clean_table_header(x$table_header) %>%
-  #   group_by(.data$hide) %>%
-  #   mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
-  #   ungroup()
-
+table_styling_to_huxtable_calls <- function(x, ...) {
   # adding id number for columns not hidden
   x$table_styling$header <-
     x$table_styling$header %>%

@@ -42,7 +42,7 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 
   # creating list of kableExtra calls ------------------------------------------
   kable_extra_calls <-
-    table_header_to_kable_extra_calls(x = x, ...)
+    table_styling_to_kable_extra_calls(x = x, ...)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
@@ -84,7 +84,7 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-table_header_to_kable_extra_calls <- function(x, ...) {
+table_styling_to_kable_extra_calls <- function(x, ...) {
   # getting kable calls
   kable_extra_calls <-
     table_header_to_kable_calls(x = x, ...)

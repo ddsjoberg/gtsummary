@@ -40,7 +40,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   x <- .clean_table_styling(x)
 
   # creating list of calls to get formatted tibble -----------------------------
-  tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels)
+  tibble_calls <- table_styling_to_tibble_calls(x = x, col_labels = col_labels)
 
   # converting to character vector ---------------------------------------------
   include <-
@@ -79,7 +79,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 }
 
 
-table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
+table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls <- list()
 
   # tibble ---------------------------------------------------------------------
