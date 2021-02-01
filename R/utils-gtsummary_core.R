@@ -40,8 +40,8 @@
     tibble(column = character(), rows = character(),
            text_interpret = character(), footnote = character())
   x$table_styling$text_format <-
-    tibble(column = character(), rows = character(),
-           format_type = character(), undo_text_format = logical())
+    tibble(column = "label", rows = "row_type != 'label'",
+           format_type = "indent", undo_text_format = FALSE)
   x$table_styling$fmt_missing <-
     tibble(column = character(), rows = character(), symbol = character())
   x$table_styling$fmt_fun <-
