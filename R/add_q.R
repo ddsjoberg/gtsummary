@@ -83,7 +83,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
 
   x$table_body$q.value <- x$table_body$p.value %>% stats::p.adjust(method = method)
 
-  # update table_header --------------------------------------------------------
+  # update table_styling -------------------------------------------------------
   # footnote text
   footnote_text <-
     add_q_method_lookup[add_q_method_lookup$method == method, ]$method_label %>%

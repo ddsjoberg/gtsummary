@@ -86,8 +86,7 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 
 table_styling_to_kable_extra_calls <- function(x, ...) {
   # getting kable calls
-  kable_extra_calls <-
-    table_header_to_kable_calls(x = x, ...)
+  kable_extra_calls <- table_styling_to_kable_calls(x = x, ...)
 
   # add_indent -----------------------------------------------------------------
   df_indent <-

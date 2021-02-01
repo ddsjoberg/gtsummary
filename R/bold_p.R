@@ -51,18 +51,18 @@ bold_p <- function(x, t = 0.05, q = FALSE) {
   }
 
 
-  # update table_header --------------------------------------------------------
+  # update table_styling -------------------------------------------------------
   # storing column name to bold
   col_name <- ifelse(q == FALSE, "p.value", "q.value")
 
-  # modifying table_header with bold threshold
-  x$table_header$bold <- case_when(
-    x$table_header$column == col_name & is.na(x$table_header$bold) ~
-      glue("{col_name} <= {t}") %>% as.character(),
-    x$table_header$column == col_name & !is.na(x$table_header$bold) ~
-      paste(x$table_header$bold, glue("{col_name} <= {t}"), sep = " | "),
-    TRUE ~ x$table_header$bold
-  )
+  # modifying table_styling with bold threshold
+  x <-
+    modify_table_styling(
+      x,
+      columns = col_name,
+      rows = expr(!!col_name <= !!t),
+      text_format = "bold"
+    )
 
   # returning results ----------------------------------------------------------
   x$call_list <- c(x$call_list, list(bold_p = match.call()))

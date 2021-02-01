@@ -225,7 +225,8 @@ inline_text.tbl_regression <-
 
     # setting defaults ---------------------------------------------------------
     estimate_fun <- estimate_fun %||%
-      (filter(x$table_header, .data$column == "estimate") %>% pluck("fmt_fun", 1)) %>%
+      (filter(x$table_styling$fmt_fun, .data$column == "estimate") %>%
+         dplyr::slice_tail() %>% pluck("fmt_fun", 1)) %>%
       gts_mapper("inline_text(estimate_fun=)")
 
     # table_body preformatting -------------------------------------------------
@@ -377,8 +378,9 @@ inline_text.tbl_survival <-
            ...) {
 
     # setting defaults ---------------------------------------------------------
-    if (is.null(estimate_fun)) estimate_fun <- x$table_header %>%
+    if (is.null(estimate_fun)) estimate_fun <- x$table_styling$fmt_fun %>%
         filter(.data$column == "estimate") %>%
+        dplyr::slice_tail() %>%
         pull("fmt_fun") %>%
         purrr::pluck(1)
 

@@ -44,9 +44,9 @@ NULL
 #' @rdname tbl_survival
 #' @export
 tbl_survival <- function(x, ...) {
-  # lifecycle::deprecate_warn(when = "1.4.0",
-  #                           what = "gtsummary::tbl_survival()",
-  #                           with = "tbl_survfit()")
+  lifecycle::deprecate_warn(when = "1.4.0",
+                            what = "gtsummary::tbl_survival()",
+                            with = "tbl_survfit()")
   UseMethod("tbl_survival")
 }
 

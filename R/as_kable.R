@@ -90,7 +90,7 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
 table_styling_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
-  kable_calls <- table_header_to_tibble_calls(x, col_labels =  FALSE)
+  kable_calls <- table_styling_to_tibble_calls(x, col_labels =  FALSE)
 
 
   # fmt_missing ----------------------------------------------------------------

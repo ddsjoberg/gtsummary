@@ -1,13 +1,3 @@
-# this function cleans up table_header (i.e. removes formatting for hidden columns, etc.)
-.clean_table_header <- function(x) {
-  # removing instructions for hidden columns
-  dplyr::mutate_at(
-    x,
-    vars(any_of(c("bold", "italic", "missing_emdash", "indent", "footnote_abbrev", "footnote"))),
-    ~ifelse(.data$hide, NA_character_, .)
-  )
-}
-
 # convert columns that use row and values to format ----------------------------
 .convert_table_header_to_styling <- function(x) {
   if (!is.null(x$table_header))
@@ -16,6 +6,12 @@
     str_wrap() %>%
     ui_info()
 
+  paste("Updating gtsummary object from {ui_code('x$table_header')} to",
+        "{ui_code('x$table_styling')} introduced in v1.4.0.") %>%
+    str_wrap() %>%
+    ui_info()
+
+
   x$table_styling$header <-
     x$table_header %>%
     mutate(interpret_spanning_header = "gt::md") %>%
@@ -23,7 +19,8 @@
            interpret_label = .data$text_interpret, .data$label,
            .data$interpret_spanning_header, .data$spanning_header)
 
-  x <- x %>%
+  x <-
+    x %>%
     .convert_header_to_rows_one_column("footnote") %>%
     .convert_header_to_rows_one_column("footnote_abbrev") %>%
     .convert_header_to_rows_one_column("missing_emdash") %>%
@@ -32,7 +29,7 @@
     .convert_header_to_rows_one_column("italic") %>%
     .convert_header_to_rows_one_column("fmt_fun")
 
-  # x$table_header <- NULL
+  x$table_header <- NULL
   x
 }
 

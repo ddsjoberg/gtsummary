@@ -6,7 +6,7 @@
 #'
 #' Review the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
-#' vignette for information on `.$table_header` objects.
+#' vignette for information on `.$table_styling` objects.
 #'
 #' @param x gtsummary object
 #' @param columns vector or selector of columns in `x$table_body`
@@ -62,7 +62,7 @@ modify_table_styling <- function(x,columns,
   rows <- quo_text(rows, width = 500L) %>% {switch(. != "NULL", .)}
 
 
-  # update table_header --------------------------------------------------------
+  # update table_styling -------------------------------------------------------
   x <- .update_table_styling(x)
 
   # convert column input to string ---------------------------------------------
@@ -187,23 +187,4 @@ modify_table_styling <- function(x,columns,
   x
 }
 
-# this fn updates `table_styling` list to match `table_body`
-.update_table_styling <- function(x) {
 
-  x$table_styling$header <-
-    tibble(
-      column = names(x$table_body),
-      hide = TRUE,
-      align = "center",
-      interpret_label = "gt::md",
-      label = names(x$table_body),
-      interpret_spanning_header = "gt::md",
-      spanning_header = NA_character_
-    ) %>%
-    dplyr::rows_update(
-      x$table_styling$header,
-      by = "column"
-    )
-
-  x
-}

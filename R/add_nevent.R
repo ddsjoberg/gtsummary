@@ -254,7 +254,7 @@ add_nevent.tbl_survfit <- function(x, ...) {
     )} %>%
     select(any_of(c("variable", "row_type", "label", "N", "nevent")), everything())
 
-  # adding N to table_header and assigning header label ------------------------
+  # adding N to table_styling and assigning header label -----------------------
   x <-
     modify_table_styling(
       x,

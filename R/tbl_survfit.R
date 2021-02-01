@@ -191,7 +191,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
       rlang::inform()
   }
 
-  # table_header ---------------------------------------------------------------
+  # table_body -----------------------------------------------------------------
   table_body <-
     meta_data %>%
     select(.data$var_label, .data$table_body) %>%

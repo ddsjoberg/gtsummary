@@ -42,8 +42,8 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
-    x$table_header <-
-      x$table_header %>%
+    x$table_styling$header <-
+      x$table_styling$header %>%
       mutate_at(
         vars(.data$label, .data$spanning_header),
         ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
@@ -86,7 +86,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-# creating huxtable calls from table_header ------------------------------------
+# creating huxtable calls from table_styling -----------------------------------
 table_styling_to_huxtable_calls <- function(x, ...) {
   # adding id number for columns not hidden
   x$table_styling$header <-
@@ -98,7 +98,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
-  huxtable_calls <- table_header_to_tibble_calls(x, col_labels =  FALSE)
+  huxtable_calls <- table_styling_to_tibble_calls(x, col_labels =  FALSE)
   huxtable_calls$tab_style_bold <- huxtable_calls$tab_style_italic <- NULL
 
   huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable(add_colnames = FALSE))

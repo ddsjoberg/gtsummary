@@ -102,7 +102,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-# creating flextable calls from table_header -----------------------------------
+# creating flextable calls from table_styling ----------------------------------
 table_styling_to_flextable_calls <- function(x, ...) {
 
   # adding id number for columns not hidden
@@ -115,7 +115,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # tibble ---------------------------------------------------------------------
   # flextable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
-  flextable_calls <- table_header_to_tibble_calls(x, col_labels =  FALSE)
+  flextable_calls <- table_styling_to_tibble_calls(x, col_labels =  FALSE)
   flextable_calls$tab_style_bold <- flextable_calls$tab_style_italic <- NULL
 
   # flextable ------------------------------------------------------------------
