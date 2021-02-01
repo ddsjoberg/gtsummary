@@ -65,7 +65,7 @@ The `header` table has the following columns and is one row per column found in 
 The table contains styling information that applies to entire column or the columns headers.
 
 ```{r, echo=FALSE}
-tribble(
+tibble::tribble(
   ~Column, ~Description,
   "column", "Column name from table_body",
   "hide", "Logical indicating whether the column is hidden in the output",
@@ -86,7 +86,7 @@ Updates/changes to footnote are appended to the bottom of the tibble.
 A footnote of `NA_character_` deletes an existing footnote.
 
 ```{r, echo=FALSE}
-tribble(
+tibble::tribble(
   ~Column, ~Description,
   "column", "Column name from table_body",
   "rows", "expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header",
@@ -102,7 +102,7 @@ Updates/changes to styling functions are appended to the bottom of the tibble.
 
 
 ```{r, echo=FALSE}
-tribble(
+tibble::tribble(
   ~Column, ~Description,
   "column", "Column name from table_body",
   "rows", "expression selecting rows in `.$table_body`",
@@ -118,7 +118,7 @@ Updates/changes to styling functions are appended to the bottom of the tibble.
 
 
 ```{r, echo=FALSE}
-tribble(
+tibble::tribble(
   ~Column, ~Description,
   "column", "Column name from table_body",
   "rows", "expression selecting rows in `.$table_body`",
@@ -136,7 +136,7 @@ For example, reference rows in `tbl_regression()` are shown with an em-dash.
 Updates/changes to styling functions are appended to the bottom of the tibble.
 
 ```{r, echo=FALSE}
-tribble(
+tibble::tribble(
   ~Column, ~Description,
   "column", "Column name from table_body",
   "rows", "expression selecting rows in `.$table_body`",
@@ -164,7 +164,7 @@ The `"variable"` column is often used in the `inline_text()` family of functions
 
 ```{r}
 tbl_regression_ex %>%
-  pluck("table_body") %>%
+  purrr::pluck("table_body") %>%
   select(variable, row_type, label)
 ```
 
