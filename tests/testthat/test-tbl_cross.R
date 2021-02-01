@@ -1,5 +1,4 @@
-context("test-tbl_cross")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("tbl_cross- throws error if both `col` and `row`` are not specified", {
   expect_error(

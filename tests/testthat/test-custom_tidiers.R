@@ -1,5 +1,4 @@
-context("test-add_n")
-testthat::skip_on_cran()
+skip_on_cran()
 
 mod <- lm(age ~ marker + grade, trial)
 
