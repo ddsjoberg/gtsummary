@@ -69,7 +69,7 @@ modify_table_styling <- function(x,columns,
   columns <-
     .select_to_varnames(
       select = {{ columns }},
-      var_info = x$table_styling$header$column,
+      data = x$table_body,
       arg_name = "columns"
     )
 

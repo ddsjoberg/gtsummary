@@ -1,13 +1,7 @@
 #' Modify table_header
 #'
 #' \lifecycle{deprecated}
-#' This is a function meant for advanced users to gain
-#' more control over the characteristics of the resulting
-#' gtsummary table.
-#'
-#' Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
-#' vignette for information on `.$table_header` objects.
+#' Use `modify_table_styling()` instead.
 #'
 #' @param x gtsummary object
 #' @param column vector or selector of columns in `x$table_body`
@@ -26,27 +20,7 @@
 #' `"CI = Confidence Interval"`
 #' @param footnote string with text for column footnote
 #' @param spanning_header string with text for spanning header
-#'
-#' @seealso `modify_table_body()`
-#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #' @export
-#'
-#'
-#' @examples
-#' # Example 1 ----------------------------------
-#' modify_table_header_ex1 <-
-#'   lm(mpg ~ factor(cyl), mtcars) %>%
-#'   tbl_regression() %>%
-#'   modify_table_header(column = estimate,
-#'                       label = "**Coefficient**",
-#'                       fmt_fun = function(x) style_sigfig(x, digits = 5),
-#'                       footnote = "Regression Coefficient") %>%
-#'   modify_table_header(column = "p.value",
-#'                       hide = TRUE)
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\figure{modify_table_header_ex1.png}{options: width=50\%}}
 
 modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NULL,
                                 missing_emdash = NULL, indent = NULL,

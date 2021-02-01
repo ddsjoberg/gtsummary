@@ -105,7 +105,7 @@ test_that("tbl_merge throws errors", {
     split(.$trt) %>%
     purrr::map(tbl_summary, by = stage) %>%
     tbl_merge(tab_spanner = c("Drug A", "Drug B")) %>%
-    purrr::pluck("table_header", "spanning_header") %>%
+    purrr::pluck("table_styling", "header", "spanning_header") %>%
     unique(),
     c(NA, "Drug A", "Drug B")
   )

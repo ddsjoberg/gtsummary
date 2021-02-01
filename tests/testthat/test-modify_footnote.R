@@ -37,7 +37,8 @@ test_that("modify_footnote works", {
   expect_true(
     tbl_summary %>%
       modify_footnote(everything() ~ NA) %>%
-      purrr::pluck("table_header", "footnote") %>%
+      purrr::pluck("table_styling", "header"
+                   , "footnote") %>%
       is.na() %>%
       all()
   )

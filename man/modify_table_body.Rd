@@ -21,7 +21,7 @@ It allow users to modify the \code{.$table_body} data frame included
 in each gtsummary object.
 
 If a new column is added to the table, default printing instructions will then
-be added to \code{.$table_header}. By default, columns are hidden.
+be added to \code{.$table_styling}. By default, columns are hidden.
 To show a column, add a column header with \code{modify_header()}.
 }
 \section{Example Output}{
@@ -50,7 +50,7 @@ modify_table_body_ex1 <-
   modify_header(n_nonevent = "**Control N**", nevent = "**Case N**")
 }
 \seealso{
-\code{modify_table_header()}
+\code{modify_table_styling()}
 
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 }

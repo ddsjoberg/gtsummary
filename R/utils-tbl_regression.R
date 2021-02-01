@@ -171,18 +171,13 @@ gtsummary_model_frame <- function(x) {
       )
 
   # finally adding style_sigfig(x, digits = 3) as default for all other columns
-  for (v in names(x$table_body)) {
-    if (
-      is.numeric(x$table_body[[v]]) && # is a numeric column
-      is.null(x$table_styling$fmt_fun[x$table_styling$header$column == v][[1]]) # fmt_fun is empty
+  x <-
+    modify_table_styling(
+      x,
+      columns =
+        vars(where(is.numeric), -any_of(c("estimate", "conf.low", "conf.high", "p.value", "std.error", "statistic"))),
+      fmt_fun = purrr::partial(style_sigfig, digits = 3)
     )
-      x <-
-        modify_table_styling(
-          x,
-          column = v,
-          fmt_fun = purrr::partial(style_sigfig, digits = 3)
-        )
-  }
 
   x
 }

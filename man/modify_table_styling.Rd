@@ -63,7 +63,7 @@ gtsummary table.
 \details{
 Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
-vignette for information on \code{.$table_header} objects.
+vignette for information on \code{.$table_styling} objects.
 }
 \seealso{
 \code{modify_table_body()}
