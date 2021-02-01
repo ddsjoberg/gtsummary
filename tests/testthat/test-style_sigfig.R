@@ -1,5 +1,4 @@
-context("test-style_sigfig")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("correct rounding near thresholds", {
 
