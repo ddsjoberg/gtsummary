@@ -18,9 +18,20 @@ modify_header(
   stat_by = NULL
 )
 
-modify_footnote(x, update = NULL, abbreviation = FALSE, quiet = NULL)
+modify_footnote(
+  x,
+  update = NULL,
+  abbreviation = FALSE,
+  text_interpret = c("md", "html"),
+  quiet = NULL
+)
 
-modify_spanning_header(x, update = NULL, quiet = NULL)
+modify_spanning_header(
+  x,
+  update = NULL,
+  text_interpret = c("md", "html"),
+  quiet = NULL
+)
 
 modify_caption(x, caption, text_interpret = c("md", "html"))
 

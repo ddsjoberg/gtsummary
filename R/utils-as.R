@@ -180,11 +180,11 @@
     select(-.data$rows) %>%
     unnest(cols = .data$row_numbers) %>%
     group_by(.data$column, .data$tab_location, .data$row_numbers) %>%
-    dplyr::slice_tail() %>% # keeping the most recent addition
+    filter(row_number() == n()) %>% # keeping the most recent addition
     filter(!is.na(.data$footnote)) # keep non-missing additions
 
   if (footnote_type == "footnote_abbrev") {
-    df_clean$footnote <- paste(df_clean$footnote, collapse = ", ")
+    df_clean$footnote <- paste(unique(df_clean$footnote), collapse = ", ")
   }
 
   df_clean %>%

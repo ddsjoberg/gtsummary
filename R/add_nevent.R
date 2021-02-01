@@ -115,16 +115,14 @@ add_nevent.tbl_regression <- function(x, quiet = NULL, ...) {
   x$table_body <- dplyr::relocate(x$table_body, any_of("nevent"), .before = any_of("estimate"))
 
   # column label
-  x$table_header <-
-    tibble(column = names(x$table_body)) %>%
-    left_join(x$table_header, by = "column") %>%
-    table_header_fill_missing()
-
-  # adding a format function to the N event column
-  x$table_header <- table_header_fmt_fun(
-    x$table_header,
-    nevent = function(x) style_number(x, digits = 0)
-  )
+  x <-
+    modify_table_styling(
+      x,
+      column = "nevent",
+      label = "**Event N**",
+      hide = FALSE,
+      fmt_fun = function(x) style_number(x, digits = 0)
+    )
 
   x$call_list <- c(x$call_list, list(add_nevent = match.call()))
 
@@ -192,17 +190,14 @@ add_nevent.tbl_uvregression <- function(x, ...) {
     )
 
   # column label
-  x$table_header <-
-    tibble(column = names(x$table_body)) %>%
-    left_join(x$table_header, by = "column") %>%
-    table_header_fill_missing()
-  x <- modify_header(x, nevent = "**Event N**")
-
-  # adding a format function to the N event column
-  x$table_header <- table_header_fmt_fun(
-    x$table_header,
-    nevent = function(x) style_number(x, digits = 0)
-  )
+  x <-
+    modify_table_styling(
+      x,
+      column = "nevent",
+      label = "**Event N**",
+      hide = FALSE,
+      fmt_fun = function(x) style_number(x, digits = 0)
+    )
 
   x
 }

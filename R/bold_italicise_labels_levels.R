@@ -30,14 +30,12 @@ bold_labels <- function(x) {
   }
 
   # bold labels ----------------------------------------------------------------
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      bold = case_when(
-        .data$column == "label" & is.na(bold) ~ "row_type == 'label'",
-        .data$column == "label" & !is.na(bold) ~ paste(bold, "row_type == 'label'", sep = " | "),
-        TRUE ~ bold
-      )
+  x <-
+    modify_table_styling(
+      x,
+      columns = "label",
+      rows = row_type == 'label',
+      text_format = "bold"
     )
 
   x$call_list <- c(x$call_list, list(bold_labels = match.call()))
@@ -54,15 +52,12 @@ bold_levels <- function(x) {
   }
 
   # bold levels ----------------------------------------------------------------
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      bold = case_when(
-        .data$column == "label" & is.na(bold) ~ "row_type != 'label'",
-        # appending condition to existing condition
-        .data$column == "label" & !is.na(bold) ~ paste(bold, "row_type != 'label'", sep = " | "),
-        TRUE ~ bold
-      )
+  x <-
+    modify_table_styling(
+      x,
+      columns = "label",
+      rows = row_type != 'label',
+      text_format = "bold"
     )
 
   x$call_list <- c(x$call_list, list(bold_levels = match.call()))
@@ -80,14 +75,12 @@ italicize_labels <- function(x) {
   }
 
   # italicize labels -----------------------------------------------------------
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      italic = case_when(
-        .data$column == "label" & is.na(italic) ~ "row_type == 'label'",
-        .data$column == "label" & !is.na(italic) ~ paste(italic, "row_type == 'label'", sep = " | "),
-        TRUE ~ italic
-      )
+  x <-
+    modify_table_styling(
+      x,
+      columns = "label",
+      rows = row_type == 'label',
+      text_format = "italic"
     )
 
   x$call_list <- c(x$call_list, list(italicize_labels = match.call()))
@@ -105,15 +98,12 @@ italicize_levels <- function(x) {
   }
 
   # italicize levels -----------------------------------------------------------
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      italic = case_when(
-        .data$column == "label" & is.na(italic) ~ "row_type != 'label'",
-        # appending condition to existing condition
-        .data$column == "label" & !is.na(italic) ~ paste(italic, "row_type != 'label'", sep = " | "),
-        TRUE ~ italic
-      )
+  x <-
+    modify_table_styling(
+      x,
+      columns = "label",
+      rows = row_type != 'label',
+      text_format = "italic"
     )
 
   x$call_list <- c(x$call_list, list(italicize_levels = match.call()))

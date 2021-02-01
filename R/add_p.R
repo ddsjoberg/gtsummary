@@ -366,22 +366,22 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
   # updating footnote
   test_name <- x$meta_data$stat_test_lbl %>% discard(is.na)
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      footnote = ifelse(.data$column == "p.value",
-                        test_name, .data$footnote)
+  x <-
+    modify_table_styling(
+      x,
+      columns = "p.value",
+      footnote = test_name
     )
-
 
   if (source_note == TRUE) {
     #  report p-value as a source_note
     # hiding p-value from output
-    x$table_header <-
-      x$table_header %>%
-      mutate(
-        hide = ifelse(.data$column == "p.value", TRUE, .data$hide),
-        footnote = ifelse(.data$column == "p.value", NA_character_, .data$footnote),
+    x <-
+      modify_table_styling(
+        x,
+        columns = "p.value",
+        footnote = NA_character_,
+        hide = TRUE
       )
 
     x$list_output$source_note <-

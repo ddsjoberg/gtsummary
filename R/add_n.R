@@ -154,6 +154,7 @@ stat_to_label <- function(x) {
       "{p}%", "% not Missing",
       "{p}", "% not Missing",
       "{p_miss}%", "% Missing",
+      "{p_miss}", "% Missing",
       "{N_obs}", "Total N",
       "{N_miss}", "N Missing",
       "{N_nonmiss}", "N not Missing",

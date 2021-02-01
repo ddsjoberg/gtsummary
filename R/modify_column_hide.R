@@ -20,7 +20,7 @@
 #'
 #' \if{html}{\figure{modify_column_hide_ex1.png}{options: width=45\%}}
 modify_column_hide <- function(x, column) {
-  modify_table_header(
+  modify_table_styling(
     x = x,
     column = {{ column }},
     hide = TRUE
@@ -30,7 +30,7 @@ modify_column_hide <- function(x, column) {
 #' @name modify_column_hide
 #' @export
 modify_column_unhide <- function(x, column) {
-  modify_table_header(
+  modify_table_styling(
     x = x,
     column = {{ column }},
     hide = FALSE

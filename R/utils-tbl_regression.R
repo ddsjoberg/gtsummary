@@ -71,8 +71,10 @@ gtsummary_model_frame <- function(x) {
     modify_table_styling(
       x,
       column = "label",
+      rows = row_type != 'label',
       label = paste0("**", translate_text("Characteristic"), "**"),
-      hide = FALSE
+      hide = FALSE,
+      text_format = "indent"
     )
 
   # estimate -------------------------------------------------------------------
@@ -89,8 +91,8 @@ gtsummary_model_frame <- function(x) {
       ) %>%
       modify_table_styling(
         column = "estimate",
-        rows = "reference_row == TRUE",
-        missing_symbol = "---"
+        rows = reference_row == TRUE,
+        missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
       )
 
   # N --------------------------------------------------------------------------
@@ -115,8 +117,8 @@ gtsummary_model_frame <- function(x) {
       ) %>%
       modify_table_styling(
         column = "ci",
-        rows = "reference_row == TRUE",
-        missing_symbol = "---"
+        rows = reference_row == TRUE,
+        missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
       )
 
     x <-
@@ -148,8 +150,8 @@ gtsummary_model_frame <- function(x) {
       ) %>%
       modify_table_styling(
         column = "std.error",
-        rows = "reference_row == TRUE",
-        missing_symbol = "---"
+        rows = reference_row == TRUE,
+        missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
       )
 
   # statistic ------------------------------------------------------------------
@@ -164,8 +166,8 @@ gtsummary_model_frame <- function(x) {
       ) %>%
       modify_table_styling(
         column = "statistic",
-        rows = "reference_row == TRUE",
-        missing_symbol = "---"
+        rows = reference_row == TRUE,
+        missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
       )
 
   # finally adding style_sigfig(x, digits = 3) as default for all other columns

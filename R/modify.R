@@ -126,7 +126,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     update <-
       c(update,
         .formula_list_to_named_list(x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
-                                    var_info = x$table_header$column,
+                                    var_info = x$table_styling$header$column,
                                     arg_name = "update"))
   }
   if (identical(list(), update)) update <- NULL
@@ -157,7 +157,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
       x,
       columns = names(update),
       label = unlist(update),
-      text_interpret = glue("gt::{text_interpret}") %>% as.character(),
+      text_interpret = as.character(text_interpret),
       hide = FALSE
     )
 
@@ -176,8 +176,8 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
-  # update table_style --------------------------------------------------------
-  # x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
+  # update table_styling -------------------------------------------------------
+  x <- .update_table_styling(x)
 
   # converting update arg to a tidyselect list ---------------------------------
   update <-
@@ -215,7 +215,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
         x,
         columns = names(update),
         footnote = unlist(update),
-        text_interpret = glue("gt::{text_interpret}") %>% as.character(),
+        text_interpret = text_interpret,
         hide = FALSE
       )
   }
@@ -245,8 +245,8 @@ modify_spanning_header <- function(x, update = NULL,
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
-  # update table_header --------------------------------------------------------
-  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
+  # update table_styling --------------------------------------------------------
+  x <- .update_table_styling(x)
 
   # converting update arg to a tidyselect list ---------------------------------
   update <-
