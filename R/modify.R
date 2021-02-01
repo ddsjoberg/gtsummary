@@ -225,7 +225,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
         x,
         columns = names(update),
         footnote_abbrev = unlist(update),
-        text_interpret = glue("gt::{text_interpret}") %>% as.character(),
+        text_interpret = text_interpret,
         hide = FALSE
       )
   }

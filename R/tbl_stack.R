@@ -153,7 +153,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
       any_of("groupname_col"),
       label = get_theme_element("tbl_stack-str:group_header", default = "**Group**"),
       align = "left",
-      hide = "FALSE"
+      hide = FALSE
     )
 
   # returning results ----------------------------------------------------------

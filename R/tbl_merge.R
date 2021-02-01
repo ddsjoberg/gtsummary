@@ -78,15 +78,16 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   tbls_length <- length(tbls)
   if (tbls_length < 2) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
 
+  # if tab spanner is null, default is Table 1, Table 2, etc....
+  if (is.null(tab_spanner)) {
+    tab_spanner <- paste0(c("**Table "), seq_len(length(tbls)), "**")
+  }
+
   # length of spanning header matches number of models passed
   if (tbls_length != length(tab_spanner)) {
     stop("'tbls' and 'tab_spanner' must be the same length")
   }
 
-  # if tab spanner is null, default is Table 1, Table 2, etc....
-  if (is.null(tab_spanner)) {
-    tab_spanner <- paste0(c("**Table "), seq_len(length(tbls)), "**")
-  }
   # adding tab_spanners
   tbls <-
     map2(
@@ -224,7 +225,12 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
             mutate(
               # tidying the code in these columns (giving it space to breathe),
               # that is can be properly parsed in the next step
-              rows = ifelse(is.na(.data$rows), .data$rows, rlang::parse_expr(.data$rows) %>% rlang::expr_deparse()),
+              rows = ifelse(is.na(.data$rows),
+                            .data$rows,
+                            rlang::parse_expr(.data$rows) %>%
+                              rlang::expr_deparse() %>%
+                              stringr::str_replace_all(fixed("("), fixed(" ( ")) %>%
+                              stringr::str_replace_all(fixed(")"), fixed(" ) "))),
               # updating code with new variable names
               rows = .tbl_merge_update_chr_code(code = .data$rows, names = tbls[[i]]$table_styling$header$column, n = i),
               column = ifelse(

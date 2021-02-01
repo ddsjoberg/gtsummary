@@ -173,14 +173,6 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     select(starts_with("level_label"), c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
   table_body <- table_long %>% mutate(row_type = "label")
 
-  cols_hide_list <-
-    c(
-      "prob", "time", "strata", "n.risk", "n.event", "n", "n.event.tot",
-      "n.event.strata", "variable", "level", "conf.low", "conf.high", "row_type"
-    ) %>%
-    intersect(names(table_body)) %>%
-    paste(collapse = ", ")
-
   # table of column headers
   table_header <-
     tibble(column = names(table_body)) %>%
@@ -211,7 +203,8 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
         "label", glue("{header_label}") %>% as.character(),
         "estimate", glue("{header_estimate}") %>% as.character(),
         "ci", glue("**{x$conf.int*100}% CI**") %>% as.character()
-      ),
+      ) %>%
+        mutate(hide = FALSE),
       by = "column"
     )
 
@@ -220,8 +213,8 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       result$table_header %>%
       dplyr::rows_update(
         tibble::tribble(
-          ~column, ~label,
-          "level_label", "**Group**"
+          ~column, ~label, ~hide,
+          "level_label", "**Group**", FALSE
         ),
         by = "column"
       )

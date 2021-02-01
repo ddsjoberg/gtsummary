@@ -378,9 +378,8 @@ inline_text.tbl_survival <-
            ...) {
 
     # setting defaults ---------------------------------------------------------
-    if (is.null(estimate_fun)) estimate_fun <- x$table_styling$fmt_fun %>%
+    if (is.null(estimate_fun)) estimate_fun <- x$table_header %>%
         filter(.data$column == "estimate") %>%
-        dplyr::slice_tail() %>%
         pull("fmt_fun") %>%
         purrr::pluck(1)
 
@@ -468,7 +467,6 @@ inline_text.tbl_survival <-
 
     result
   }
-
 
 #' Report statistics from survfit tables inline
 #'

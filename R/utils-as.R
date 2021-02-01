@@ -1,6 +1,6 @@
 # convert columns that use row and values to format ----------------------------
 .convert_table_header_to_styling <- function(x) {
-  if (!is.null(x$table_header))
+  if (!is.null(x$table_styling))
     paste("'gtsummary' object was created with code from with <v1.4.0 and >=v1.4.0.",
           "Unexpected formatting may occur.") %>%
     str_wrap() %>%
@@ -10,7 +10,6 @@
         "{ui_code('x$table_styling')} introduced in v1.4.0.") %>%
     str_wrap() %>%
     ui_info()
-
 
   x$table_styling$header <-
     x$table_header %>%
