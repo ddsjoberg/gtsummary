@@ -195,7 +195,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
             filter(!(.data$column %in% c("label", "variable", "var_label", "row_type") & i != 1)) %>%
             rowwise() %>%
             mutate(
-              rows = .rename_variables_in_expression(rows, i, tbls[[i]]$table_styling$header$column),
+              rows = .rename_variables_in_expression(.data$rows, i, tbls[[i]]$table_styling$header$column),
               column = ifelse(
                 .data$column %in% c("label", "variable", "var_label", "row_type") & i == 1,
                 .data$column,
