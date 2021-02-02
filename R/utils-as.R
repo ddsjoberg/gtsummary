@@ -82,7 +82,7 @@
 # takes a table_body and a character rows expression, and returns the resulting row numbers
 .rows_expr_to_row_numbers <- function(table_body, rows) {
   if (all(is.na(rows))) return(NA)
-  with(table_body, eval(rlang::parse_expr(rows))) %>%
+  rlang::eval_tidy(rlang::parse_expr(rows), data = table_body) %>%
     which()
 }
 

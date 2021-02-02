@@ -150,7 +150,7 @@ gtsummary_model_frame <- function(x) {
       ) %>%
       modify_table_styling(
         columns = "std.error",
-        rows = reference_row == TRUE,
+        rows = .data$reference_row == TRUE,
         missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
       )
 
@@ -166,7 +166,7 @@ gtsummary_model_frame <- function(x) {
       ) %>%
       modify_table_styling(
         columns = "statistic",
-        rows = reference_row == TRUE,
+        rows = .data$reference_row == TRUE,
         missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
       )
 

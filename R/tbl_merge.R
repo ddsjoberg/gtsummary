@@ -169,34 +169,6 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   x
 }
 
-# this function names a chr code string, variable names, and the merge number,
-# and returns the updated code string with updated variable names
-# > .tbl_merge_update_chr_code("longvarname == 'label' & varname == TRUE",
-#                             c("varname", "longvarname"), 2)
-# [1] "longvarname_2 == 'label' & varname_2 == TRUE"
-.tbl_merge_update_chr_code <- function(code, names, n) {
-  new_names <- ifelse(
-    names %in% c("label", "variable", "var_label", "row_type"),
-    names, paste(names, n, sep = "_")
-  )
-
-  code %>%
-    map_chr(
-      function(code) {
-        if (is.na(code)) return(code)
-        stringr::str_split_fixed(code, pattern = " ", n = Inf) %>%
-          as.vector() %>%
-          purrr::map_chr(function(x) {
-            lgl_match <- names %in% x
-            if (!any(lgl_match)) return(x)
-            new_names[lgl_match]
-          }) %>%
-          paste(collapse = " ")
-      }
-    )
-}
-
-
 .tbl_merge_update_table_styling <- function(x, tbls) {
   # update table_styling$header
   x$table_styling$header <-
@@ -223,16 +195,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
             filter(!(.data$column %in% c("label", "variable", "var_label", "row_type") & i != 1)) %>%
             rowwise() %>%
             mutate(
-              # tidying the code in these columns (giving it space to breathe),
-              # that is can be properly parsed in the next step
-              rows = ifelse(is.na(.data$rows),
-                            .data$rows,
-                            rlang::parse_expr(.data$rows) %>%
-                              rlang::expr_deparse() %>%
-                              stringr::str_replace_all(fixed("("), fixed(" ( ")) %>%
-                              stringr::str_replace_all(fixed(")"), fixed(" ) "))),
-              # updating code with new variable names
-              rows = .tbl_merge_update_chr_code(code = .data$rows, names = tbls[[i]]$table_styling$header$column, n = i),
+              rows = .rename_variables_in_expression(rows, i, tbls[[i]]$table_styling$header$column),
               column = ifelse(
                 .data$column %in% c("label", "variable", "var_label", "row_type") & i == 1,
                 .data$column,
@@ -247,3 +210,24 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   x
 }
+
+.rename_variables_in_expression <- function(expr_char, id, columns) {
+  if (identical(expr_char, character()) || identical(expr_char, NA_character_)) return(expr_char)
+  # convert str exp to proper expression
+  expr <- parse_expr(expr_char)
+
+  # get all variable names in expression to be renamed
+  var_list <-
+    expr(~!!expr) %>% eval() %>% all.vars() %>%
+    setdiff(c("label", "variable", "var_label", "row_type")) %>%
+    intersect(columns)
+  if (identical(var_list, character())) return(expr_char)
+
+  # creating arguments list for `substitute()`
+  substitute_args <- paste0(var_list, "_", id) %>% map(~expr(as.name(!!.x))) %>% set_names(var_list)
+
+  expr(do.call("substitute", list(expr, list(!!!substitute_args)))) %>%
+    eval() %>%
+    rlang::expr_text()
+}
+
