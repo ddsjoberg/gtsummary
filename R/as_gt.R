@@ -181,8 +181,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     map(
       seq_len(nrow(x$table_styling$fmt_fun)),
       ~ expr(gt::fmt(columns = gt::vars(!!sym(x$table_styling$fmt_fun$column[[.x]])),
-                     rows = !!switch(!is.na(x$table_styling$fmt_fun$row_numbers[[.x]]),
-                                     x$table_styling$fmt_fun$row_numbers[[.x]]),
+                     rows = !!x$table_styling$fmt_fun$row_numbers[[.x]],
                      fns = !!x$table_styling$fmt_fun$fmt_fun[[.x]]))
     )
 

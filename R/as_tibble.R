@@ -156,7 +156,6 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
 }
 
 .apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from) {
-  if (all(is.na(row_numbers))) row_numbers <- seq_len(nrow(data))
   data[row_numbers, columns, drop = FALSE] <-
     update_from[row_numbers, columns, drop = FALSE] %>%
     purrr::map_dfc(~fmt_fun(.x))

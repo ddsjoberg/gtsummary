@@ -109,7 +109,7 @@
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
     group_by(.data$column, .data$row_numbers, .data$format_type) %>%
-    dplyr::slice_tail() %>%
+    filter(row_number() == n()) %>%
     filter(.data$undo_text_format == FALSE) %>% # dropping undoing cmds
     group_by(.data$column, .data$format_type) %>%
     nest(row_numbers = .data$row_numbers) %>%
@@ -128,9 +128,9 @@
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
     group_by(.data$column, .data$row_numbers) %>%
-    dplyr::slice_tail() %>%
-    ungroup() %>%
-    select(.data$column, .data$row_numbers, .data$symbol)
+    filter(row_number() == n()) %>%
+    select(.data$column, .data$row_numbers, .data$symbol) %>%
+    ungroup()
 
   # footnote ---------------------------------
   x$table_styling$footnote <-
@@ -146,14 +146,17 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      tab_location = ifelse(is.na(.data$rows), "header", "body"),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list()
+      row_numbers = ifelse(is.na(.data$rows),
+                           seq_len(nrow(x$table_body)) %>% list(),
+                           .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list())
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
-    group_by(.data$column, .data$tab_location, .data$row_numbers) %>%
-    dplyr::slice_tail() %>%
-    ungroup()
+    group_by(.data$column, .data$row_numbers) %>%
+    filter(row_number() == n()) %>%
+    ungroup() %>%
+    nest(row_numbers = .data$row_numbers) %>%
+    mutate(row_numbers = map(.data$row_numbers, ~unlist(.x) %>% unname()))
 
   x
 }
