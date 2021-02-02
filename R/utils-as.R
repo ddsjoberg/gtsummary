@@ -146,9 +146,12 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      row_numbers = ifelse(is.na(.data$rows),
-                           seq_len(nrow(x$table_body)) %>% list(),
-                           .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list())
+      row_numbers = ifelse(
+        is.na(.data$rows),
+        seq_len(nrow(x$table_body)),
+        .rows_expr_to_row_numbers(x$table_body, .data$rows)
+      ) %>%
+        list()
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
