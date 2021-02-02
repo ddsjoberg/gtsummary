@@ -215,8 +215,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
         x,
         columns = names(update),
         footnote = unlist(update),
-        text_interpret = text_interpret,
-        hide = FALSE
+        text_interpret = text_interpret
       )
   }
   else if (abbreviation == TRUE) {
@@ -225,8 +224,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
         x,
         columns = names(update),
         footnote_abbrev = unlist(update),
-        text_interpret = text_interpret,
-        hide = FALSE
+        text_interpret = text_interpret
       )
   }
 
@@ -261,24 +259,27 @@ modify_spanning_header <- function(x, update = NULL,
   if (is.null(update)) return(x)
 
   # updating spanning header ---------------------------------------------------
-  df_update <-
-    update %>%
-    unlist() %>%
+  update <-
+    unlist(update) %>%
     tibble::enframe(name = "column", value = "spanning_header") %>%
     dplyr::inner_join(.info_tibble(x), by = "column") %>%
-    # if users passes incorrect colname via `...` removing it
-    dplyr::inner_join(select(x$table_styling$header, .data$column), by = "column") %>%
     dplyr::rowwise() %>%
     mutate(
-      spanning_header = switch(is.na(.data$spanning_header), NA_character_) %||%
+      updated_value = switch(is.na(.data$spanning_header), NA_character_) %||%
         as.character(glue(.data$spanning_header)),
     ) %>%
     ungroup() %>%
-    select(.data$column, .data$spanning_header)
+    select(.data$column, .data$updated_value) %>%
+    tibble::deframe() %>%
+    as.list()
 
-  x$table_styling$header <-
-    x$table_styling$header %>%
-    dplyr::rows_update(df_update, by = "column")
+  x <-
+    modify_table_styling(
+      x,
+      columns = names(update),
+      spanning_header = unlist(update),
+      text_interpret = text_interpret
+    )
 
   # return updated gtsummary object --------------------------------------------
   x
